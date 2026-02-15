@@ -1,0 +1,42 @@
+
+# Changelog
+
+All notable changes to the **Alti.Code.Studio** project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-02-14 (Enterprise Release)
+
+### Added
+- **Global**: Unified "Universe" Architecture combining Desktop (Developer) and Web (Manager) experiences.
+- **Security**: Introduced `The Network` (Phase 32) with rigorous RBAC (`admin` vs `user`) and JWT-based auth.
+- **Roles**: Launched `The Triumvirate` (Phase 31) defining User (Architect), Admin (Auditor), and Owner (Strategist) personas.
+- **Analytics**: Added `The Analyst` (Phase 28) for cost/velocity tracking and anomaly detection.
+- **Docs**: Implemented `The Librarian` (Phase 27) for auto-generating JSDoc and updating `ARCHITECTURE.md`.
+- **Localization**: Deployed `The Polyglot` (Phase 26) for realtime AI translation and i18n support.
+- **Git Integration**: Added `The Weaver` (Phase 25) for autonomous commit/push/PR workflows.
+- **Security Audit**: Activated `The Sentinel` (Phase 24) for dependency scanning and secret detection.
+- **Cost Tracking**: Created `The Auditor` (Phase 23) for granular token usage monitoring.
+- **DevOps**: Built `The Overseer` (Phase 22) for CI/CD pipeline automation via GitHub Actions.
+- **Orchestration**: Established `The Architect` (Phase 21) as the central brain for multi-agent coordination.
+- **Core**: Initial 20 phases building the fundamental file editing, terminal execution, and project management capabilities.
+
+### Changed
+- **Refactor**: Complete backend overhaul to modular `src/app/modules/` architecture.
+- **Frontend**: Migrated to "Premium Engineer" aesthetic using Glassmorphism and specialized scrollbars.
+- **Logging**: Centralized logs via `AuditService` replacing scattered console outputs.
+- **Config**: Standardized `.env` and `config/index.js` across all microservices.
+
+### Fixed
+- **Performance**: Optimized Redis integration (`Synapse`) for sub-10ms agent communication.
+- **Security**: Patched all critical vulnerabilities found during `npm audit`.
+- **RBAC**: Resolved permission leaks between Admin and User routes.
+
+## [0.9.0] - 2026-02-10 (Beta)
+- **Beta Launch**: First stable integration of Frontend and Backend.
+- **Feature**: Basic File Explorer and Code Editor functional.
+- **Feature**: Terminal Emulation active.
+
+## [0.1.0] - 2026-01-01 (Alpha)
+- **Alpha**: Initial prototype. Basic "Hello World" capability.
