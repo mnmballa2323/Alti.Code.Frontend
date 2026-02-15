@@ -1,0 +1,6 @@
+[submodule "alti.code.studio.backend"]
+	path = alti.code.studio.backend
+	url = https://github.com/mnmballa2323/Alti.Code.Studio.Backend.git
+[submodule "alti.code.studio.frontend"]
+	path = alti.code.studio.frontend
+	url = https://github.com/mnmballa2323/Alti.Code.Studio.Frontend.git
