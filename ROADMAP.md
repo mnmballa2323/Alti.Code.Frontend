@@ -22,3 +22,8 @@ To become the premier AI-native development environment that seamlessly bridges 
 - **v1.1.0 (Q2 2026)**: Enhanced Memory & Collaboration
 - **v1.2.0 (Q3 2026)**: Marketplace Beta
 - **v2.0.0 (2027)**: Fully Autonomous Development Loops
+
+## ✅ Completed (Recent)
+- [x] **Version Display**: Backend and Frontend UIs now display the global project version (v1.0.1).
+- [x] **Documentation Standardization**: Consolidated agent instructions into `docs/LLM_INSTRUCTIONS.md`.
+- [x] **Submodule Dashboard**: Automated generation of `SUBMODULE_DASHBOARD.md`.
