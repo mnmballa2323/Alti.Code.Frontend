@@ -6,6 +6,7 @@ steps:
   image: node:20
   commands:
   - cd alti.code.studio.backend
+  - git submodule update --init --recursive
   - npm ci
   - npm test
 
@@ -13,6 +14,7 @@ steps:
   image: node:20
   commands:
   - cd alti.code.studio.frontend
+  - git submodule update --init --recursive
   - npm ci
   - npm run build
 
