@@ -1,0 +1,35 @@
+kind: pipeline
+name: default
+
+steps:
+- name: backend-test
+  image: node:20
+  commands:
+  - cd alti.code.studio.backend
+  - npm ci
+  - npm test
+
+- name: frontend-build
+  image: node:20
+  commands:
+  - cd alti.code.studio.frontend
+  - npm ci
+  - npm run build
+
+- name: build-backend-image
+  image: plugins/docker
+  settings:
+    dry_run: true
+    repo: inso-backend
+    dockerfile: alti.code.studio.backend/Dockerfile
+    context: alti.code.studio.backend
+    tags: latest
+
+- name: build-frontend-image
+  image: plugins/docker
+  settings:
+    dry_run: true
+    repo: inso-frontend
+    dockerfile: alti.code.studio.frontend/Dockerfile
+    context: alti.code.studio.frontend
+    tags: latest
