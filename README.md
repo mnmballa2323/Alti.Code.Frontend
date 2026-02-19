@@ -1,7 +1,7 @@
 
 # 🌌 Alti.Code.Studio: The Enterprise AI Development Platform
 
-> **Version 1.0 (Enterprise Edition)**  
+> **Version 2.0 (The Hive Mind)**  
 > *Built for Developers, Managed by Leaders.*
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -21,13 +21,14 @@ The system is composed of localized "Planetary" Agents:
 | Agent | Role | Responsibility |
 |-------|------|----------------|
 | **The Architect** | Orchestrator | Coordination & Planning |
+| **The Strategist** | Planning | Goal Decomposition |
+| **The Guardian** | Security | Policy Enforcement & Review |
+| **The Diplomat** | External | API Negotiation & Requests |
+| **The Historian** | Memory | Persistent Activity Logging |
+| **The Analyst** | Intelligence | Data Trends & Reporting |
+| **The Composer** | Builder | Code Scaffolding |
 | **The Overseer** | DevOps | CI/CD Pipelines |
-| **The Sentinel** | Security | Vulnerability Scanning |
-| **The Auditor** | Finance | Cost Tracking |
-| **The Weaver** | Git | Version Control |
-| **The Polyglot** | i18n | Localization |
-| **The Librarian** | Docs | Auto-Documentation |
-| **The Analyst** | BI | Data Visualization |
+
 
 ## 🚀 Key Features
 -   **Unified RBAC**: secure separation of Admin/User routes.
