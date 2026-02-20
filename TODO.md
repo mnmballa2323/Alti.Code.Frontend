@@ -1,7 +1,7 @@
 # Alti.Code.Studio TODO
 
 ## 🔴 High Priority
-- [ ] **Verification**: Verify "The Polyglot" translation features in the Frontend UI.
+- [x] **Verification**: Verify "The Polyglot" translation features in the Frontend UI.
 - [ ] **Submodule Sync**: Ensure all submodules are recursively updated in CI pipelines.
 
 ## 🟡 Medium Priority
