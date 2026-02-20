@@ -6,7 +6,7 @@ To become the premier AI-native development environment that seamlessly bridges 
 ## 🚀 Upcoming Milestones
 
 ### Phase 2: Enhanced Agent Autonomy (Current Focus)
-- [ ] **Agent Memory Persistence**: Implement long-term vector memory for agents to recall past project context.
+- [x] **Agent Memory Persistence**: Implement long-term vector memory for agents to recall past project context.
 - [ ] **Cross-Agent Collaboration**: Formalize the protocol for "The Architect" to delegate tasks to "The Weaver" and "The Sentinel" autonomously.
 - [ ] **Self-Healing Code**: "The Overseer" should not just report CI/CD failures but attempt to fix simple linting/type errors.
 
