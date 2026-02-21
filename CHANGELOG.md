@@ -7,6 +7,28 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [3.1.0] - 2026-02-21 — Agent Store & Plugin System
+
+### Added
+- **Marketplace Service v2**: File-based JSON registry (`plugins/registry.json`) replacing hardcoded stub. Supports full CRUD: install, uninstall, list catalog, list installed, and search by keyword/category.
+- **YAML DSL Agent Loader** (`agents/yaml_agent_loader.js`): Define new specialist agents via `.agent.yaml` files without writing JavaScript. Hot-reloads via `fs.watch` — no server restart required.
+- **Example YAML Definitions**: `python.datascience.agent.yaml` and `solidity.auditor.agent.yaml` shipped as reference implementations in `agents/definitions/`.
+- **Marketplace Mongoose Model** (`marketplace.model.js`): Persistent DB-backed tracking of installed agents with semver validation, category indexing, and full-text search.
+- **New API Routes**:
+  - `GET  /api/v1/marketplace/agents?search=&category=` — filtered catalog
+  - `GET  /api/v1/marketplace/agents/:agentId` — single agent detail
+  - `GET  /api/v1/marketplace/installed` — installed agents list
+  - `DELETE /api/v1/marketplace/uninstall/:agentId` — remove agent + registry entry
+- **Frontend `/marketplace` Page**: Browse catalog with search (debounced), category filter pills, animated cards, optimistic install/uninstall, and toast notifications.
+- **AgentCard Component** (`components/marketplace/AgentCard.tsx`): Reusable animated card with install/uninstall CTA and animated state transitions.
+- **Borg Unit Tests**: `Director.test.js` (7 test cases), `GrandUnification.test.js` (4 integration tests) using Vitest.
+
+### Fixed
+- Sidebar Marketplace link corrected from `/enterprise/marketplace` → `/marketplace`
+- Sidebar version display updated to `v3.1.0`
+
+---
+
 ## [3.0.0] - 2026-02-20 — The Grand Swarm
 
 ### Added — Agent Expansion
