@@ -1,60 +1,133 @@
 # Changelog
 
-All notable changes to the **Alti.Code.Studio** project will be documented in this file.
+All notable changes to **Alti.Code.Studio** will be documented here.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
+Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+---
+
+## [3.0.0] - 2026-02-20 — The Grand Swarm
+
+### Added — Agent Expansion
+
+#### Cloud Agents Wave 2 (8 new providers — total: 21)
+- `render.agent.js` — Render.com PaaS (web services, workers, Blueprints IaC)
+- `linode.agent.js` — Linode/Akamai Cloud (LKE, Object Storage, StackScripts)
+- `vultr.agent.js` — Vultr (VKE Kubernetes, Bare Metal, Object Storage)
+- `scaleway.agent.js` — Scaleway (Kapsule K8s, Serverless, GDPR-compliant EU)
+- `ovhcloud.agent.js` — OVHcloud (Public Cloud, Dedicated Servers, OpenStack)
+- `neon.agent.js` — Neon (serverless Postgres, database branching, zero-scale)
+- `fastly.agent.js` — Fastly (VCL, Compute@Edge WASM, origin shielding, NGWAF)
+- `backblaze.agent.js` — Backblaze B2 (S3-compatible, Bandwidth Alliance, lifecycle)
+
+#### Language Agents — Tier 17: Systems (8 agents)
+C · C++ · C# · Java · Kotlin · Swift · Zig · Nim
+
+#### Language Agents — Tier 18: Dynamic/Scripting (8 agents)
+Ruby · PHP · Perl · R · Julia · MATLAB · PowerShell · Groovy
+
+#### Language Agents — Tier 19: Functional (8 agents)
+Haskell · Elixir · Erlang · Scala · F# · OCaml · Clojure · Racket
+
+#### Language Agents — Tier 20: Legacy & Specialized (15 agents)
+COBOL · Fortran · Ada · Assembly (x86-64/ARM64) · Objective-C · Crystal · Lua · APL/J/K/Q · VHDL/SystemVerilog · Apex (Salesforce) · ABAP (SAP) · Prolog · Dart · Wolfram Language · PL/SQL
+
+### Added — System Infrastructure
+- `base_specialist.agent.js` — Fully hardened base class with retry, timeout, circuit breaker, input validation, context truncation, typed `AgentError`, and per-agent metrics
+- `capability.router.js` — Completely rewritten with 114 routing entries covering all tiers (Tier 6/7 through Tier 20)
+- `test_hardening.js` — Integration test suite: 54/55 assertions covering hardening + all new agents
+- `test_phase15.js` — Language agent validation: 39/39 passing
+- **All documentation** updated to reflect v3.0 platform state
+
+### Changed
+- All language agents migrated to use `_invoke()` pattern for hardening compatibility
+- `capability.router.js` imports now use aligned column spacing for readability
+- Backend `README.md` completely rewritten (was stale AONS CODE content)
+- Backend `ARCHITECTURE.md` completely rewritten (was mock Gemini stub)
+
+---
+
+## [2.1.0] - 2026-02-20 — System Architecture (Phase 14)
+
+### Added
+- `capability.router.js` — Semantic routing engine (keyword scoring, fan-out)
+- `swarm.health.js` — Live health monitoring with periodic sweeps
+- `agent.index.js` — Searchable agent catalog
+- `swarm.controller.js` — REST API surface at `/api/swarm`
+- Swarm routes mounted at `/api/swarm` in `routes/index.js`
+- `specialist: capabilityRouter` integration in `executeNode`
+- `swarmHealthMonitor.start()` on orchestrator initialization
+- `test_system_improvements.js` — 20/20 passing integration tests
+
+### Added — Cloud Agents Wave 1 (Tier 16 — 10 providers)
+Cloudflare · Vercel · Netlify · DigitalOcean · Oracle Cloud · IBM Cloud · Alibaba · Hetzner · Fly.io · Railway
+
+---
+
+## [2.0.0] - 2026-02-19 — The Hive Mind
+
+### Added
+- **Phase 9 — Autonomic Self-Repair**: SurferAgent (live web), SchemaAgent, DebugAgent, SurgeonAgent, GuardianAgent
+- **Phase 26–32 — Grand Swarm**: 80+ domain specialist agents across 7 tiers
+  - Tier 9: SEO, Accessibility, Onboarding, API Design, Incident, Migration, Cost
+  - Tier 12: Docker, Kubernetes, Nginx, GraphQL, Bash, Cron, FFmpeg, JWT, Three.js, Regex
+  - Tier 13: Stripe, Redis, Supabase, Prisma, WebRTC, Solidity, Svelte, Vue, Storybook, OpenTelemetry, Ansible, Terraform
+  - Tier 14: LangChain, MLOps, Prompt Engineering, React Native, Flutter, PWA, Vitest, Playwright, SQL, Elasticsearch, Kafka
+  - Tier 15: Pentest, GitHub Actions, Figma, WebAssembly, Deno, MongoDB, gRPC, Tailwind, i18n, WebSocket
+- **Agentic UI Canvas** (`AgentCanvas.tsx`) — React Flow visualization of agent pipelines
+- **Electron Split-Screen**: Developer IDE + production browser side-by-side
+- **Backend Health Service**: periodic monitoring of all critical system components
+- LangGraph `GraphOrchestrator` as the central planning and execution engine
+
+### Changed
+- Complete frontend redesign with premium Glassmorphism aesthetic
+- Centralized logging via `AuditService`
+- MongoDB integration hardened with Mongoose schemas
+
+---
 
 ## [1.0.2] - 2026-02-19
 
 ### Changed
-- **Submodules**: Synchronized `alti.code.studio.backend` and `alti.code.studio.frontend` to their latest remote commits.
-- **Backend**: Resolved merge conflicts and removed accidental submodule tracking of `.borg` worktree directories.
-- **Sync**: Improved synchronization workflow for large-scale submodule updates.
+- Submodules synchronized to latest remote commits
+- Resolved merge conflicts in `.borg` worktree directories
+
+---
 
 ## [1.0.1] - 2026-02-15
 
 ### Added
-- **Dashboard**: Introduced `SUBMODULE_DASHBOARD.md` generated by `scripts/generate_dashboard.js` to visualize submodule status.
-- **Documentation**: Created `docs/LLM_INSTRUCTIONS.md`, `docs/VISION.md`, `docs/MEMORY.md`, and `docs/DEPLOY.md` to standardize agent behavior.
-- **Version Display**: Implemented version display in the Frontend Sidebar (`v1.0.1`) and Backend (`/api/version` endpoint).
-- **Roadmap**: Established `ROADMAP.md` and `TODO.md` to track project milestones.
+- `SUBMODULE_DASHBOARD.md` generated by `scripts/generate_dashboard.js`
+- `docs/LLM_INSTRUCTIONS.md`, `docs/VISION.md`, `docs/MEMORY.md`, `docs/DEPLOY.md`
+- Version display in Frontend Sidebar (`v1.0.1`)
+- `/api/version` endpoint in backend
+- `ROADMAP.md` and `TODO.md`
 
-### Changed
-- **Submodules**: Synchronized `alti.code.studio.backend` and `alti.code.studio.frontend` to version `1.0.0` (internally).
-- **Agent Instructions**: Refactored `CLAUDE.md`, `GEMINI.md`, and `GPT.md` to reference the master instruction file.
+---
 
-## [1.0.0] - 2026-02-14 (Enterprise Release)
+## [1.0.0] - 2026-02-14 — Enterprise Release
 
 ### Added
-- **Global**: Unified "Universe" Architecture combining Desktop (Developer) and Web (Manager) experiences.
-- **Security**: Introduced `The Network` (Phase 32) with rigorous RBAC (`admin` vs `user`) and JWT-based auth.
-- **Roles**: Launched `The Triumvirate` (Phase 31) defining User (Architect), Admin (Auditor), and Owner (Strategist) personas.
-- **Analytics**: Added `The Analyst` (Phase 28) for cost/velocity tracking and anomaly detection.
-- **Docs**: Implemented `The Librarian` (Phase 27) for auto-generating JSDoc and updating `ARCHITECTURE.md`.
-- **Localization**: Deployed `The Polyglot` (Phase 26) for realtime AI translation and i18n support.
-- **Git Integration**: Added `The Weaver` (Phase 25) for autonomous commit/push/PR workflows.
-- **Security Audit**: Activated `The Sentinel` (Phase 24) for dependency scanning and secret detection.
-- **Cost Tracking**: Created `The Auditor` (Phase 23) for granular token usage monitoring.
-- **DevOps**: Built `The Overseer` (Phase 22) for CI/CD pipeline automation via GitHub Actions.
-- **Orchestration**: Established `The Architect` (Phase 21) as the central brain for multi-agent coordination.
-- **Core**: Initial 20 phases building the fundamental file editing, terminal execution, and project management capabilities.
+- Unified "Universe" Architecture (Desktop + Web)
+- RBAC with `admin` / `user` roles and JWT auth
+- The Triumvirate personas (User, Admin, Owner)
+- The Analyst (cost/velocity tracking)
+- The Librarian (auto JSDoc + ARCHITECTURE.md generation)
+- The Polyglot (realtime AI translation + i18n)
+- The Weaver (autonomous commit/push/PR)
+- The Sentinel (dependency scanning + secret detection)
+- The Auditor (token usage monitoring)
+- The Overseer (CI/CD via GitHub Actions)
+- The Architect (multi-agent orchestrator)
 
-### Changed
-- **Refactor**: Complete backend overhaul to modular `src/app/modules/` architecture.
-- **Frontend**: Migrated to "Premium Engineer" aesthetic using Glassmorphism and specialized scrollbars.
-- **Logging**: Centralized logs via `AuditService` replacing scattered console outputs.
-- **Config**: Standardized `.env` and `config/index.js` across all microservices.
+---
 
-### Fixed
-- **Performance**: Optimized Redis integration (`Synapse`) for sub-10ms agent communication.
-- **Security**: Patched all critical vulnerabilities found during `npm audit`.
-- **RBAC**: Resolved permission leaks between Admin and User routes.
+## [0.9.0] - 2026-02-10 — Beta
 
-## [0.9.0] - 2026-02-10 (Beta)
-- **Beta Launch**: First stable integration of Frontend and Backend.
-- **Feature**: Basic File Explorer and Code Editor functional.
-- **Feature**: Terminal Emulation active.
+- First stable Frontend + Backend integration
+- File Explorer, Code Editor, Terminal Emulation
 
-## [0.1.0] - 2026-01-01 (Alpha)
-- **Alpha**: Initial prototype. Basic "Hello World" capability.
+## [0.1.0] - 2026-01-01 — Alpha
+
+- Initial prototype — basic "Hello World" proof of concept
