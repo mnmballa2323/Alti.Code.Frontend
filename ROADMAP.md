@@ -33,16 +33,16 @@ To be the premier AI-native development platform where a swarm of 120+ hyper-spe
 
 ## 🚀 Upcoming
 
-### v3.1.0 — Agent Store & Plugin System (Q2 2026)
-- [ ] **Agent Marketplace**: Discover, install, and publish community specialist agents
-- [ ] **Custom DSL**: Define new agents via YAML config without writing JS
-- [ ] **Agent Versioning**: Pin specific agent versions per project
-- [ ] **Plugin API**: Third-party IDE extensions with agent access
+### v3.1.0 — Agent Store & Plugin System ✅ (2026-02-21)
+- [x] **Agent Marketplace**: Discover, install, and publish community specialist agents
+- [x] **Custom DSL**: Define new agents via YAML config without writing JS (`yaml_agent_loader.js`)
+- [x] **Agent Versioning**: Pin specific agent versions per project (`marketplace.model.js`)
+- [x] **Plugin API**: Uninstall, search, detail routes + Mongoose-backed registry
 
 ### v3.2.0 — Autonomous Feedback Loops (Q3 2026)
+- [x] **Drift Detection**: `swarm.health.js` automatically triggers `autonomicService` when agent quality drops
 - [ ] **Self-Evaluation**: `promptfoo` integration for automated agent response quality testing
 - [ ] **A/B Agent Testing**: Compare different agent preambles on real tasks to optimize performance
-- [ ] **Drift Detection**: `swarm.health.js` automatically triggers surgeon when agent quality drops
 - [ ] **Auto-Scaling Swarm**: Dynamic agent pool scaling based on queue depth
 
 ### v3.3.0 — Enterprise Governance (Q4 2026)
