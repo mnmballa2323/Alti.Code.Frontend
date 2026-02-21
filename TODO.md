@@ -2,15 +2,15 @@
 
 ## 🔴 High Priority
 - [x] **Verification**: Verify "The Polyglot" translation features in the Frontend UI.
-- [ ] **Submodule Sync**: Ensure all submodules are recursively updated in CI pipelines.
+- [x] **Submodule Sync**: CI pipeline added (`.github/workflows/ci.yml`) — recursive submodule sync + Vitest + Next.js build on every push/PR.
 
 ## 🟡 Medium Priority
-- [ ] **Test Coverage**: Increase unit test coverage for `alti.code.studio.backend/src/app/modules/borg`.
-- [ ] **Error Handling**: Improve error messages in the Frontend for failed websocket connections.
+- [x] **Test Coverage**: Borg module — added `Director.test.js` (7 tests) and `GrandUnification.test.js` (4 tests). Debug agent test expanded with VectorMemory mocks and new field coverage.
+- [x] **Error Handling**: Frontend WS reconnect — `useSocket` exponential backoff + `WsBanner` component wired into `ChatBotLayout`.
 
 ## 🟢 Low Priority
-- [ ] **Refactor**: Clean up unused assets in `alti.code.studio.frontend/public`.
-- [ ] **Style**: Standardize button styles across all settings pages.
+- [x] **Refactor**: Cleaned up unused assets in `alti.code.studio.frontend/public` (removed vercel.svg, next.svg, insoBlack.png, insoWhite.png, insocode1-4.png).
+- [x] **Style**: Standardized button styles — `lib/buttonStyles.ts` provides `btn.primary`, `btn.danger`, `btn.secondary`, `btn.ghost`, `btn.icon` constants.
 
 ## ✅ Completed
 - [x] **Version Display**: Backend and Frontend UIs now display the global project version.

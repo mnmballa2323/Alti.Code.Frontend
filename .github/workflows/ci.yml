@@ -1,0 +1,87 @@
+name: CI — Submodule Sync & Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  submodule-sync:
+    name: Submodule Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify submodule integrity
+        run: |
+          echo "=== Submodule status ==="
+          git submodule status --recursive
+          echo "=== Checking for un-staged submodule changes ==="
+          git diff --exit-code --name-only || (echo "❌ Submodule pointers are dirty" && exit 1)
+          echo "✅ All submodule pointers are clean"
+
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    needs: submodule-sync
+    defaults:
+      run:
+        working-directory: alti.code.studio.backend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: alti.code.studio.backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Vitest unit tests
+        run: npx vitest run --reporter=verbose
+        env:
+          NODE_ENV: test
+
+  frontend-build:
+    name: Frontend Build Check
+    runs-on: ubuntu-latest
+    needs: submodule-sync
+    defaults:
+      run:
+        working-directory: alti.code.studio.frontend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: alti.code.studio.frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+      - name: Next.js build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:5000/api/v1
+          NEXT_PUBLIC_SOCKET_URL: http://localhost:5000
+          NEXTAUTH_SECRET: ci-test-secret
+          NEXTAUTH_URL: http://localhost:3000
