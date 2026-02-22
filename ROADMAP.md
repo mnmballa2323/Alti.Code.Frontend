@@ -101,6 +101,16 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **Sprint memory**: full outcome (status, cost, test results, heal log, review score) persisted to vector store for cross-sprint learning
 - [x] **6 new SSE events**: `sprint:sandbox`, `sprint:auto_test`, `sprint:heal`, `sprint:tests`, `sprint:doc_updated`, `sprint:deploy_failed`
 
+### v6.3.0 — Autonomous Goal Synthesis & Sprint Scheduler ✅ (2026-02-22)
+- [x] **CodebaseObserver**: walks repo tree scanning for `TODO/FIXME/HACK/UNSAFE/@deprecated` signals + vector memory failure signals
+- [x] **GoalSynthesizer**: Gemini converts raw signals → ranked, deduplicated sprint goals (respects past sprint outcome memory to avoid re-doing completed work)
+- [x] **SprintSchedulerService**: cron-based cycle (configurable interval, default 1h) + event-triggered `triggerNow()`
+- [x] **Priority backlog**: deduped goal queue (cap 10), sorted by severity (critical→low), pops one goal per cycle
+- [x] **Test-gated sprint launch**: delegates to `AutonomousSprintService.launchSprint()` with autoDoc=true
+- [x] **Governance digest**: daily `reports/scheduler_digest_YYYY-MM-DD.md` written after every cycle
+- [x] **REST API** (`/api/v1/scheduler`): start, stop, trigger, status, backlog CRUD, history, SSE events stream
+- [x] **Manual override**: `POST /scheduler/backlog/add` injects human-specified goals into the autonomous queue
+
 
 ## 📅 Release Schedule
 
