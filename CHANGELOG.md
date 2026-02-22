@@ -7,6 +7,53 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [4.0.0] - 2026-02-21 — The Industry Armada
+
+### Added — Industry Vertical Agents (Phases 7–10)
+
+#### Phase 7: Real Estate & PropTech (5 new agents)
+- `zillow.agent.js` — Bridge Interactive MLS API, Zestimate AVM, Walk Score, GreatSchools ratings, mortgage formula with PMI
+- `buildium.agent.js` — Property/unit/lease/tenant CRUD, rent charges + GL accounting, maintenance request lifecycle
+- `procore.agent.js` — Construction RFIs, Submittals, Daily Logs (crew/weather), Budget + change orders, Punch List QA
+- `guesty.agent.js` — STR/Airbnb channel manager, calendar blocking, dynamic pricing, automated guest messages, cleaning tasks
+- `attom.agent.js` — Property AVM with FSD confidence, sale comps (CMA), neighborhood demographics, hazard risk (FEMA/wildfire/EQ)
+
+#### Phase 8: EdTech & Education (4 new agents) + Alpha Vantage FinTech depth
+- `canvas_lms.agent.js` — PKCE OAuth2, courses/assignments + grade passback, Module sequencing, Quiz engine, LTI 1.3 AGS
+- `google_classroom.agent.js` — Scoped OAuth2, Coursework ASSIGNMENT/MCQ, submission grading + return, Pub/Sub push notifications
+- `zoom_sdk.agent.js` — Server-to-Server OAuth, Meeting + Video SDK custom UI, webinars, cloud recordings, HMAC webhook
+- `brightspace.agent.js` — LE/LP API versioning, GradeBook PointsNumerator grade passback, SCORM upload + tracking, BDP analytics
+- `alpha_vantage.agent.js` — 50+ technical indicators (RSI/MACD/BBANDS/ATR), fundamental income/earnings, forex/crypto, news sentiment
+
+#### Phase 9: Cybersecurity & Threat Intel (5 new agents) + Klaviyo Marketing
+- `virustotal.agent.js` — File/URL/IP scan, YARA Livehunt rules, behavioral sandbox MITRE ATT&CK, IOC pivot graph
+- `shodan.agent.js` — Host lookup (ports/banners/CVEs/SSL), advanced search, continuous monitoring alerts, exploit DB cross-reference
+- `crowdstrike.agent.js` — OAuth2 Detections API, RTR remote command execution, host containment, custom IOC prevent/detect
+- `splunk.agent.js` — SPL queries (failed logins/Sysmon/geo), HEC log ingestion, saved search cron alerts, KV Store, SOAR trigger
+- `hibp.agent.js` — Email breach lookup, k-anonymity Pwned Passwords SHA-1 prefix, domain monitoring
+- `klaviyo.agent.js` — Revision-header API, profile upsert, ecommerce Flows (abandoned cart/winback), campaign send-job, SMS
+
+#### Phase 10: Gaming + FinTech Depth (2 new agents)
+- `agora.agent.js` — AccessToken2, in-game voice chat, Spatial Audio 3D, Cloud Recording S3 composite, RTMP push to Twitch
+- `stripe_treasury.agent.js` — Financial accounts, InboundTransfer ACH, OutboundPayment to unverified bank, Issuing virtual card
+
+#### Phase 11: Orchestrator Wiring — capability.router.js
+- **141 keyword routes** (up from 114) — 22 new entries for all Phase 7-10 industry agents
+- Auto-routing examples: `"Guesty calendar block"` → GuestyAgent; `"YARA rule CobaltStrike"` → VirusTotalAgent; `"Canvas LMS grade passback LTI"` → CanvasLmsAgent
+
+### Added — Documentation
+- `INDUSTRY_AGENTS.md` — New comprehensive deep-dive reference for all 16 industry vertical agents with auth patterns, API endpoints, SDK usage, capabilities, and environment variable consolidation
+- `AGENTS.md` — Updated to reflect 245+ agents and 16 industry verticals with full table coverage
+- Monorepo `README.md` — Updated to v4.0 "The Industry Armada" with 141 capability router routes
+
+### Changed
+- Platform version bumped to **v4.0** — "The Industry Armada"
+- Total agent count: **245+** (up from 120+)
+- Capability Router: **141 routes** (up from 114)
+- Frontend agents-showcase: **16 sections** (up from 14)
+
+---
+
 ## [3.1.0] - 2026-02-21 — Agent Store & Plugin System
 
 ### Added

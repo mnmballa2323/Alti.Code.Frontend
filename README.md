@@ -1,11 +1,12 @@
 # 🌌 Alti.Code.Studio — Enterprise AI Development Platform
 
-> **Version 3.0 — The Grand Swarm**
-> *120+ Specialist AI Agents. 21 Cloud Providers. 46 Programming Languages. Production-Hardened.*
+> **Version 4.0 — The Industry Armada**
+> *245+ Specialist AI Agents. 16 Industry Verticals. 21 Cloud Providers. 46 Programming Languages. Production-Hardened.*
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)]()
-[![Agents](https://img.shields.io/badge/agents-120%2B-purple.svg)]()
+[![Agents](https://img.shields.io/badge/agents-245%2B-purple.svg)]()
+[![Verticals](https://img.shields.io/badge/verticals-16-orange.svg)]()
 [![Languages](https://img.shields.io/badge/languages-46-orange.svg)]()
 [![Cloud](https://img.shields.io/badge/cloud_providers-21-blue.svg)]()
 
@@ -13,23 +14,23 @@
 
 ## 📖 Overview
 
-Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating swarm of 120+ hyper-specialized AI agents. It functions as a God-tier AI Engineer living inside your development environment — capable of writing, reviewing, testing, deploying, securing, and monitoring code across any language and any cloud.
+Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 245+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to **16 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
-- 🌐 **Web Dashboard** — Management console for admins and team leads
+- 🌐 **Web Dashboard** — Management console with 16-section agent showcase
 - 🤖 **API** — Headless REST API for CI/CD and programmatic access
 
 ---
 
-## 🏗️ Architecture — The Universe
+## 🏗️ Architecture — The Industry Armada
 
 ### Core Orchestration Layer
 | Component | Role |
 |-----------|------|
 | `graph.orchestrator.js` | LangGraph-powered multi-agent orchestrator with plan → guard → execute → review pipeline |
-| `capability.router.js` | Semantic routing engine — 114 keyword-scored routes mapping queries to the right specialist |
-| `swarm.health.js` | Live health monitoring and circuit breaker status for all 120+ agents |
+| `capability.router.js` | Semantic routing engine — **141 keyword-scored routes** mapping queries to the right specialist |
+| `swarm.health.js` | Live health monitoring and circuit breaker status for all 245+ agents |
 | `agent.index.js` | Searchable catalog of all agents with capability metadata |
 | `swarm.controller.js` | REST API surface — `/api/swarm` endpoints for health, routing, dispatch, fan-out |
 
@@ -37,25 +38,39 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 
 | Tier | Category | Count | Examples |
 |------|----------|-------|---------|
-| 1–8 | Core Orchestration | 8 | Strategist, Guardian, Historian, Analyst, Surgeon, Surfer, Schema, Debug |
+| 1–8 | Core Orchestration | 19 | Guardian, Surgeon, Surfer, Schema, Debug, HiveMind, Sentinel, Chaos |
 | 9 | Growth & Operations | 7 | SEO, Accessibility, API Design, Cost, Migration, Incident |
 | 12 | Micro Specialists | 10 | Docker, Kubernetes, Nginx, GraphQL, JWT, FFmpeg, Regex, Three.js |
 | 13 | Enterprise SDKs | 12 | Stripe, Redis, Supabase, Prisma, Solidity, Svelte, Vue, Terraform, Ansible |
 | 14 | AI / ML / Mobile | 11 | LangChain, MLOps, Prompt Engineering, React Native, Flutter, Kafka |
 | 15 | Security & Platform | 10 | Pentest, GitHub Actions, WebAssembly, Figma, MongoDB, gRPC, Tailwind |
-| 16 | **Cloud Providers** | **21** | AWS, GCP, Azure, Cloudflare, Vercel, Netlify, DigitalOcean, Render, Linode, Vultr, Scaleway, OVHcloud, Neon, Fastly, Backblaze + 6 more |
+| 16 | **Cloud Providers** | **21** | AWS, GCP, Azure, Cloudflare, Vercel, Netlify, DigitalOcean, Render, Linode, Neon, Fastly + 10 more |
 | 17 | **Systems Languages** | **8** | C, C++, C#, Java, Kotlin, Swift, Zig, Nim |
 | 18 | **Dynamic Languages** | **8** | Ruby, PHP, Perl, R, Julia, MATLAB, PowerShell, Groovy |
 | 19 | **Functional Languages** | **8** | Haskell, Elixir, Erlang, Scala, F#, OCaml, Clojure, Racket |
 | 20 | **Legacy & Specialized** | **15** | COBOL, Fortran, Ada, Assembly, Obj-C, Crystal, Lua, APL, VHDL, Apex, ABAP, Prolog, Dart, Wolfram, PL/SQL |
+| **Industry** | **FinTech** | **7** | Alpaca, Polygon.io, Alpha Vantage, Plaid, Modern Treasury, Stripe Treasury, Persona KYC |
+| **Industry** | **Healthcare** | **3** | FHIR R4, HL7 v2, Medplum |
+| **Industry** | **Gaming & GameFi** | **7** | Unity SDK, PlayFab, Photon Fusion 2, Nakama, Steam, Immutable zkEVM, Agora |
+| **Industry** | **E-Commerce** | **6** | WooCommerce, Amazon SP-API, EasyPost, Klarna, BigCommerce, eBay |
+| **Industry** | **IoT** | **5** | AWS IoT Core, MQTT v5, InfluxDB v3, Home Assistant, Raspberry Pi |
+| **Industry** | **Real Estate** | **5** | Zillow, Buildium, Procore, Guesty, ATTOM |
+| **Industry** | **EdTech** | **4** | Canvas LMS, Google Classroom, Zoom SDK, D2L Brightspace |
+| **Industry** | **Legal** | **2** | DocuSign, Clio |
+| **Industry** | **Media** | **4** | Spotify, YouTube, Twitch, Discord |
+| **Industry** | **HR & Workforce** | **3** | BambooHR, Greenhouse ATS, Rippling |
+| **Industry** | **Cybersecurity** | **5** | VirusTotal, Shodan, CrowdStrike Falcon, Splunk, Have I Been Pwned |
+| **Industry** | **Marketing** | **4** | HubSpot CRM, Klaviyo, Segment CDP, Mixpanel |
+| External | Tool Agents | 19 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant |
 
 ---
 
 ## ✨ Key Features
 
-### 🧠 The Grand Swarm Intelligence
-- **120+ specialist agents** each with deep domain expertise and production-grade preambles
-- **Semantic capability routing** — natural language queries automatically dispatched to the best agent
+### 🧠 The Industry Armada Intelligence
+- **245+ specialist agents** each with deep domain expertise and production-grade preambles
+- **16 industry verticals** with dedicated specialist agents — from Real Estate to Cybersecurity
+- **141 keyword-scored routes** automatically dispatch every query to the most capable agent
 - **Fan-out execution** — simultaneous multi-agent consultation for complex problems
 - **Circuit breaker protection** — automatic fallback when agents are overloaded
 
@@ -66,6 +81,9 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 - Circuit breaker: opens after 5 failures, auto-resets after 60 seconds
 - Per-agent metrics: call count, error rate, average latency
 - Typed `AgentError` with error codes and retryable flags
+
+### 🏢 Industry Verticals (16 Sectors Covered)
+Real Estate · EdTech · Cybersecurity · Marketing · FinTech · Healthcare · Gaming · E-Commerce · IoT · Legal · Media · HR & Workforce · Crypto/Web3 · (+ Engineering + Cloud + Languages)
 
 ### ☁️ Universal Cloud Coverage (21 Providers)
 AWS · GCP · Azure · Cloudflare · Vercel · Netlify · DigitalOcean · Oracle Cloud · IBM Cloud · Alibaba · Hetzner · Fly.io · Railway · **Render · Linode · Vultr · Scaleway · OVHcloud · Neon · Fastly · Backblaze B2**
@@ -123,7 +141,7 @@ cd alti.code.studio.frontend && npm run dev
 | Endpoint | Description |
 |----------|-------------|
 | `POST /api/orchestrate` | Submit a task to the multi-agent orchestrator |
-| `GET /api/swarm/health` | Live health status of all 120+ agents |
+| `GET /api/swarm/health` | Live health status of all 245+ agents |
 | `GET /api/swarm/agents` | Browse and search all registered agents |
 | `POST /api/swarm/route` | Find the best agent for a given query |
 | `POST /api/swarm/dispatch` | Route + auto-consult the best agent |
@@ -138,13 +156,16 @@ cd alti.code.studio.frontend && npm run dev
 alti.code.studio/               ← Monorepo root
 ├── alti.code.studio.backend/  ← Node.js/Express API + Agent Swarm
 │   ├── src/app/modules/
-│   │   ├── agents/            ← 120+ specialist agent files
-│   │   ├── orchestrator/      ← LangGraph workflow engine
+│   │   ├── agents/            ← 245+ specialist agent files
+│   │   │   ├── capability.router.js   ← 141-route semantic router
+│   │   │   ├── graph.orchestrator.js  ← LangGraph workflow engine
+│   │   │   └── *.agent.js            ← Individual specialist agents
 │   │   ├── memory/            ← RAG, vector store, Mem0
 │   │   └── ...
 │   ├── scripts/               ← Test harnesses, utilities
 │   └── docs/                  ← Architecture, ADRs, reports
 └── alti.code.studio.frontend/ ← Next.js 14 dashboard + Electron IDE
+    └── app/agents-showcase/   ← 16-section agent showcase page
 ```
 
 ---
@@ -155,7 +176,8 @@ alti.code.studio/               ← Monorepo root
 |----------|-------------|
 | [Backend README](alti.code.studio.backend/README.md) | Backend setup, API reference |
 | [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture |
-| [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with capabilities |
+| [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with 16 industry verticals |
+| [INDUSTRY_AGENTS.md](alti.code.studio.backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [ROADMAP.md](ROADMAP.md) | Planned features |
 | [docs/LLM_INSTRUCTIONS.md](docs/LLM_INSTRUCTIONS.md) | LLM agent operating instructions |

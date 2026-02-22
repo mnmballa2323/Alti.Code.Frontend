@@ -2,7 +2,7 @@
 
 ## 🌌 Long-Term Vision
 
-To be the premier AI-native development platform where a swarm of 120+ hyper-specialized agents autonomously handles the full software delivery lifecycle — from idea to production — while giving engineers and leaders total visibility and control.
+To be the premier AI-native development platform where a self-orchestrating armada of **245+ hyper-specialized agents** spanning **16 industry verticals** autonomously handles the full software delivery lifecycle — from idea to production — while giving engineers and leaders total visibility and control across every technology stack and industry domain.
 
 ---
 
@@ -39,19 +39,39 @@ To be the premier AI-native development platform where a swarm of 120+ hyper-spe
 - [x] **Agent Versioning**: Pin specific agent versions per project (`marketplace.model.js`)
 - [x] **Plugin API**: Uninstall, search, detail routes + Mongoose-backed registry
 
-### v3.2.0 — Autonomous Feedback Loops (Q3 2026)
-- [x] **Drift Detection**: `swarm.health.js` automatically triggers `autonomicService` when agent quality drops
-- [ ] **Self-Evaluation**: `promptfoo` integration for automated agent response quality testing
+### v4.0.0 — The Industry Armada ✅ (2026-02-21)
+- [x] **Real Estate & PropTech (5)**: Zillow (MLS/Zestimate), Buildium (PM), Procore (construction), Guesty (STR/Airbnb), ATTOM (AVM+hazard)
+- [x] **EdTech & Education (4)**: Canvas LMS, Google Classroom, Zoom SDK, D2L Brightspace
+- [x] **Cybersecurity & Threat Intel (5)**: VirusTotal (YARA/sandbox), Shodan (ASM), CrowdStrike Falcon (EDR), Splunk (SIEM), HaveIBeenPwned
+- [x] **Marketing & Analytics (2+)**: HubSpot CRM, Klaviyo (ecommerce flows + SMS)
+- [x] **FinTech depth**: Alpha Vantage (50+ indicators), Stripe Treasury (embedded finance/Issuing)
+- [x] **Gaming depth**: Agora (voice/Spatial Audio 3D/Cloud Recording)
+- [x] **141-Route Capability Router**: 22 new keyword routes wired in `capability.router.js`
+- [x] **16-Section Showcase**: Frontend agents-showcase page with all 16 industry verticals
+- [x] **INDUSTRY_AGENTS.md**: Comprehensive auth + API reference for all 16 verticals
+
+### v4.1.0 — DevSecOps & Supply Chain Verticals (Q1 2026)
+- [ ] **DevSecOps**: Snyk (SAST), Semgrep, OWASP ZAP, Veracode, SonarQube
+- [ ] **Supply Chain & Logistics**: FedEx/UPS Shipping API, ShipBob, Flexport, SAP Ariba
+- [ ] **Agent quality scoring**: Promptfoo integration to A/B test agent preambles automatically
+
+### v4.2.0 — Agriculture, Energy & Heavy Industry (Q2 2026)
+- [ ] **AgriTech**: John Deere Operations Center API, Trimble Ag, The Climate Corporation
+- [ ] **Energy & Utilities**: Siemens MindSphere, OSDU (Open Subsurface Data Universe), EV/grid APIs
+- [ ] **Auto/Manufacturing**: Volkswagen Group Digital Services, TRC APIs, CATIA/SolidWorks bridge
+
+### v4.3.0 — Autonomous Feedback Loops (Q3 2026)
+- [ ] **Self-Evaluation**: Promptfoo integration for automated agent response quality testing
 - [ ] **A/B Agent Testing**: Compare different agent preambles on real tasks to optimize performance
 - [ ] **Auto-Scaling Swarm**: Dynamic agent pool scaling based on queue depth
 
-### v3.3.0 — Enterprise Governance (Q4 2026)
+### v5.0.0 — Enterprise Governance (Q4 2026)
 - [ ] **Policy-as-Code**: YAML-defined development policies enforced by Guardian in real time
 - [ ] **Immutable Audit Log**: Blockchain-backed log for all agent actions (SOC2 Type II)
 - [ ] **Data Residency Controls**: Route agent calls to specific geographic Gemini endpoints
 - [ ] **SSO / SAML**: Enterprise identity provider integration
 
-### v4.0.0 — Fully Autonomous Loops (2027)
+### v6.0.0 — Fully Autonomous Loops (2027)
 - [ ] **Zero-Human Sprint**: Agent swarm autonomously plans, implements, reviews, and deploys features
 - [ ] **Multi-Repo Orchestration**: Coordinate changes across microservices in a single task
 - [ ] **Vision-Driven UI Generation**: Screenshot → requirement extraction → SwiftUI/Compose/React code
@@ -61,9 +81,11 @@ To be the premier AI-native development platform where a swarm of 120+ hyper-spe
 
 ## 📅 Release Schedule
 
-| Version | Target | Theme |
-|---------|--------|-------|
-| v3.1.0 | Q2 2026 | Agent Marketplace |
-| v3.2.0 | Q3 2026 | Autonomous Feedback |
-| v3.3.0 | Q4 2026 | Enterprise Governance |
-| v4.0.0 | 2027 | Zero-Human Loops |
+| Version | Target | Theme | Status |
+|---------|--------|-------|---------|
+| v4.0.0 | Feb 2026 | Industry Armada (16 verticals) | ✅ Done |
+| v4.1.0 | Q1 2026 | DevSecOps + Supply Chain | 🔜 Next |
+| v4.2.0 | Q2 2026 | AgriTech + Energy + Manufacturing | Planned |
+| v4.3.0 | Q3 2026 | Autonomous Feedback Loops | Planned |
+| v5.0.0 | Q4 2026 | Enterprise Governance | Planned |
+| v6.0.0 | 2027 | Zero-Human Sprint | Vision |
