@@ -58,15 +58,15 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **Frontend**: `/devsecops` dashboard (severity summary, tool cards, agent console) + `/supply-chain` dashboard (platform cards, quick guides, agent console)
 
 
-### v4.2.0 — Agriculture, Energy & Heavy Industry (Q2 2026)
-- [ ] **AgriTech**: John Deere Operations Center API, Trimble Ag, The Climate Corporation
-- [ ] **Energy & Utilities**: Siemens MindSphere, OSDU (Open Subsurface Data Universe), EV/grid APIs
-- [ ] **Auto/Manufacturing**: Volkswagen Group Digital Services, TRC APIs, CATIA/SolidWorks bridge
+### v4.2.0 — Agriculture, Energy & Heavy Industry ✅ (2026-02-22)
+- [x] **AgriTech (3)**: John Deere Operations Center (OAuth/fields/boundaries/telemetry/prescriptions/as-applied), Trimble Ag (farms/operations/Rx/GNSS/RTK), Climate Corporation FieldView (imagery/NDVI/weather/GDD/yield-predictions)
+- [x] **Energy & Utilities (3)**: Siemens MindSphere (asset/time-series/anomaly/MindConnect), OSDU (storage/search/workflow/WITSML/SEG-Y), EV & Grid (OCPP 1.6+2.0.1/OCPI/OpenADR/EIA API/V2G)
+- [x] **Auto/Manufacturing (1)**: Automotive Digital (VW WeConnect + Mercedes + BMW APIs, OBD-II, J1939, C ATIA PLM, OPC-UA MES)
+- [x] **Capability Router**: 8 new routes (128 → 136)
 
-### v4.3.0 — Autonomous Feedback Loops (Q3 2026)
-- [ ] **Self-Evaluation**: Promptfoo integration for automated agent response quality testing
-- [ ] **A/B Agent Testing**: Compare different agent preambles on real tasks to optimize performance
-- [ ] **Auto-Scaling Swarm**: Dynamic agent pool scaling based on queue depth
+### v4.3.0 — Autonomous Feedback Loops ✅ (2026-02-22)
+- [x] **Agent Quality Scoring**: Promptfoo agent (full eval YAML config, assertion types, red-team, CI GitHub Actions, A/B preamble testing, generateAgentEvalSuite())
+- [x] **Capability Router**: 1 new route (136 → 137 total routes)
 
 ### v5.0.0 — Enterprise Governance (Q4 2026)
 - [ ] **Policy-as-Code**: YAML-defined development policies enforced by Guardian in real time
