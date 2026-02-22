@@ -129,6 +129,20 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **REST API** (`/api/v1/agents`): all profiles, single profile, leaderboard, surge view, manual record, flush, surge clear, SSE events stream
 - [x] **5 SSE events**: `profiler:recorded`, `profiler:surge`, `profiler:self_tune:started`, `profiler:self_tune:done`, `profiler:self_tune:failed`
 
+### v6.6.0 — Mission Control Dashboard & Autonomous Knowledge Base ✅ (2026-02-22)
+- [x] **Mission Control page** (`/mission-control`): unified live dashboard subscribing to all 5 SSE buses simultaneously (sprint, telemetry, scheduler, agent profiler, wiki)
+- [x] **Sprint Monitor**: live phase display, step progress bar, heal counter, cost tracker, test gate indicator
+- [x] **Health Monitor**: live HTTP error rate, P95 latency, LLM error rate, active incidents panel
+- [x] **Scheduler panel**: live backlog with priority badges, goal inject input, manual trigger button
+- [x] **Agent Leaderboard**: live score bars, surge indicator with one-click surge-clear button
+- [x] **Knowledge Base panel**: lists auto-generated sprint articles chronologically
+- [x] **Human Controls**: Inject Goal, Trigger Cycle, Run Detection, Clear Surge — all fire REST commands
+- [x] **`wikiService.createSprintArticle()`**: Gemini-authored knowledge article per sprint (goal, steps, test results, heals, review score, lessons) → `docs/sprint-articles/sprint-<id>.md`
+- [x] **`wikiService.listArticles()`**: frontmatter-parsed article index served via `GET /api/v1/wiki/articles`
+- [x] **Auto-hook**: `sprintBus.on('sprint:completed')` → auto-creates article + indexes to vector store (GoalSynthesizer dedup)
+- [x] **`GET /api/v1/wiki/articles`** and **`GET /api/v1/wiki/adrs`** inline REST endpoints
+- [x] **Sidebar nav**: Mission Control (🔭 violet) added under Autonomous v6 section
+
 
 ## 📅 Release Schedule
 
