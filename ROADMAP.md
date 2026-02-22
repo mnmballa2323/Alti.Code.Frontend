@@ -68,11 +68,13 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **Agent Quality Scoring**: Promptfoo agent (full eval YAML config, assertion types, red-team, CI GitHub Actions, A/B preamble testing, generateAgentEvalSuite())
 - [x] **Capability Router**: 1 new route (136 → 137 total routes)
 
-### v5.0.0 — Enterprise Governance (Q4 2026)
-- [ ] **Policy-as-Code**: YAML-defined development policies enforced by Guardian in real time
-- [ ] **Immutable Audit Log**: Blockchain-backed log for all agent actions (SOC2 Type II)
-- [ ] **Data Residency Controls**: Route agent calls to specific geographic Gemini endpoints
-- [ ] **SSO / SAML**: Enterprise identity provider integration
+### v5.0.0 — Enterprise Governance ✅ (2026-02-22)
+- [x] **Policy-as-Code**: OPA/Rego policies + YAML policy DSL (block/route/audit actions per event)
+- [x] **Immutable Audit Log**: SOC2 Type II event schema, QLDB + Azure Confidential Ledger patterns
+- [x] **Data Residency Controls**: Route Gemini inference to US/EU/APAC/UK endpoints by user region
+- [x] **SSO / SAML + OIDC**: Passport-SAML + OIDC+PKCE integration, RBAC group→role mapping
+- [x] **GDPR Article 30**: Records of processing, right-to-erasure endpoint, PII stripping middleware
+- [x] **Capability Router**: 1 new route (137 → 138)
 
 ### v6.0.0 — Fully Autonomous Loops (2027)
 - [ ] **Zero-Human Sprint**: Agent swarm autonomously plans, implements, reviews, and deploys features
@@ -86,9 +88,9 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 | Version | Target | Theme | Status |
 |---------|--------|-------|---------|
-| v4.0.0 | Feb 2026 | Industry Armada (16 verticals) | ✅ Done |
-| v4.1.0 | Q1 2026 | DevSecOps + Supply Chain | 🔜 Next |
-| v4.2.0 | Q2 2026 | AgriTech + Energy + Manufacturing | Planned |
-| v4.3.0 | Q3 2026 | Autonomous Feedback Loops | Planned |
-| v5.0.0 | Q4 2026 | Enterprise Governance | Planned |
+| v4.0.0 | Feb 2026 | Industry Armada (16 verticals, 119 routes) | ✅ Done |
+| v4.1.0 | Feb 2026 | DevSecOps (5) + Supply Chain (4) = 9 agents | ✅ Done |
+| v4.2.0 | Feb 2026 | AgriTech (3) + Energy (3) + Auto (1) = 7 agents | ✅ Done |
+| v4.3.0 | Feb 2026 | Promptfoo quality scoring agent | ✅ Done |
+| v5.0.0 | Feb 2026 | Enterprise Governance (OPA, SOC2, SSO, GDPR) | ✅ Done |
 | v6.0.0 | 2027 | Zero-Human Sprint | Vision |
