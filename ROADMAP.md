@@ -83,7 +83,23 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **Self-Expanding Swarm** (`self_expanding_swarm.service.js`): gap detection → domain classification → LLM agent synthesis → guardian vetting → hot-load via dynamic import
 - [x] **REST APIs**: `POST /sprint/launch`, `GET /sprint/events` (SSE), `POST /multi-repo/run`, `GET /multi-repo/swarm-report`
 - [x] **Frontend**: `/autonomous` page (overview, sprint launcher with SSE stream, all-systems console)
-- [x] **Capability Router**: 139 total routes
+- [x] **Capability Router**: 140 total routes
+
+### v6.1.0 — Real-Time Collaboration ✅ (2026-02-22)
+- [x] **CollaborationService** (`collaboration.service.js`): Socket.IO rooms, session presence, Monaco cursor sharing (10s TTL), shared context buffer, agent token streaming
+- [x] **QA Service v2** (`qa.service.js`): multi-file suite gen, API integration tests, vitest subprocess runner, coverage threshold enforcement
+- [x] **QA REST API** (`qa.controller.js`): 5 endpoints (spec, suite, api-tests, run, coverage)
+- [x] **Studio Page v6.1.0**: QA Suite + Collab tabs added to Engineering Deck
+- [x] **Composer wired**: CAPABILITY_TABLE entry (scaffold feature, compose code, etc.)
+
+### v6.2.0 — Closed-Loop Autonomous Validation ✅ (2026-02-22)
+- [x] **Sandbox smoke-test**: after each EXECUTE step, run generated code in Node `vm` — catch runtime errors before commit
+- [x] **Auto-test**: after all execute steps, `qaService.generateSpec()` + `runTests()` on all written files
+- [x] **Self-heal loop**: test failure → `surferAgent.surfWeb()` (live web lookup) → LLM patch → re-run (≤3 retries per file)
+- [x] **Test-gated deploy**: DEPLOY blocked if any file has unresolved test failures
+- [x] **Auto-doc**: `docGenService` regenerates relevant docs after successful deploy
+- [x] **Sprint memory**: full outcome (status, cost, test results, heal log, review score) persisted to vector store for cross-sprint learning
+- [x] **6 new SSE events**: `sprint:sandbox`, `sprint:auto_test`, `sprint:heal`, `sprint:tests`, `sprint:doc_updated`, `sprint:deploy_failed`
 
 
 ## 📅 Release Schedule
