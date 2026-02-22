@@ -111,6 +111,14 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **REST API** (`/api/v1/scheduler`): start, stop, trigger, status, backlog CRUD, history, SSE events stream
 - [x] **Manual override**: `POST /scheduler/backlog/add` injects human-specified goals into the autonomous queue
 
+### v6.4.0 — Runtime Observability & Autonomous Incident Response ✅ (2026-02-22)
+- [x] **TelemetryCollector**: Express middleware + ring buffer (2000 events, 60s window); tracks HTTP latency/errors, LLM call latency/failures, novel exceptions; `recordLlmCall()` + `recordException()` manual APIs
+- [x] **AnomalyDetector**: sliding-window checks — HTTP error rate >5%, P95 latency >3s, LLM error rate >20%, novel exception class; 5-min per-type suppression to prevent alert storms
+- [x] **IncidentResponder**: anomaly → `surferAgent.surfWeb()` (live error lookup) → Gemini fix goal synthesis → `guardianAgent` approval gate → `sprintSchedulerService.addGoalToBacklog(priority=1)` → vector store persistence
+- [x] **Continuous detection loop**: `startDetection(intervalMs=10s)` — runs every 10 seconds, auto-responds to all anomalies
+- [x] **REST API** (`/api/v1/telemetry`): metrics, incidents, manual recording, detect trigger, detection control, SSE live stream
+- [x] **SSE events**: `telemetry:event`, `anomaly:detected`, `incident:resolved`, `incident:vetoed`, `incident:injected`
+
 
 ## 📅 Release Schedule
 
