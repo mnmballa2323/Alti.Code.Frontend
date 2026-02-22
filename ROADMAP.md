@@ -50,10 +50,13 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **16-Section Showcase**: Frontend agents-showcase page with all 16 industry verticals
 - [x] **INDUSTRY_AGENTS.md**: Comprehensive auth + API reference for all 16 verticals
 
-### v4.1.0 — DevSecOps & Supply Chain Verticals (Q1 2026)
-- [ ] **DevSecOps**: Snyk (SAST), Semgrep, OWASP ZAP, Veracode, SonarQube
-- [ ] **Supply Chain & Logistics**: FedEx/UPS Shipping API, ShipBob, Flexport, SAP Ariba
-- [ ] **Agent quality scoring**: Promptfoo integration to A/B test agent preambles automatically
+### v4.1.0 — DevSecOps & Supply Chain Verticals ✅ (2026-02-22)
+- [x] **DevSecOps (5)**: Snyk (SCA/SAST/Container/IaC), Semgrep (SAST rules/taint), SonarQube (quality gates/Web API), OWASP ZAP (DAST/active-passive scan), Veracode (SAST/DAST/SCA/pipeline scan)
+- [x] **Supply Chain & Logistics (4)**: FedEx (OAuth/rate-quotes/shipment/tracking/labels), ShipBob (3PL fulfillment/inventory/returns/webhooks), Flexport (ocean/air/truck bookings/milestones/documents/carbon), SAP Ariba (PO/invoices/supplier-onboarding/Ariba-Network)
+- [x] **Capability Router**: 9 new keyword routes wired in `capability.router.js` (119 → 128 routes)
+- [x] **Developer Action Methods**: All agents inherit `generateSDKSetup`, `generateWebhookHandler`, `generateApiCall`, `explainError`, `generateTests`, `debugIntegration` from `BaseSpecialistAgent`
+- [x] **Frontend**: `/devsecops` dashboard (severity summary, tool cards, agent console) + `/supply-chain` dashboard (platform cards, quick guides, agent console)
+
 
 ### v4.2.0 — Agriculture, Energy & Heavy Industry (Q2 2026)
 - [ ] **AgriTech**: John Deere Operations Center API, Trimble Ag, The Climate Corporation
