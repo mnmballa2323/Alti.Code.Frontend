@@ -76,13 +76,15 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **GDPR Article 30**: Records of processing, right-to-erasure endpoint, PII stripping middleware
 - [x] **Capability Router**: 1 new route (137 → 138)
 
-### v6.0.0 — Fully Autonomous Loops (2027)
-- [ ] **Zero-Human Sprint**: Agent swarm autonomously plans, implements, reviews, and deploys features
-- [ ] **Multi-Repo Orchestration**: Coordinate changes across microservices in a single task
-- [ ] **Vision-Driven UI Generation**: Screenshot → requirement extraction → SwiftUI/Compose/React code
-- [ ] **Self-Expanding Swarm**: Agents that create new specialist agents when a capability gap is detected
+### v6.0.0 — Fully Autonomous Loops ✅ (2026-02-22)
+- [x] **Zero-Human Sprint** (`autonomousSprint.service.js`): PLAN → GUARDIAN → BRANCH → EXECUTE×N → REVIEW → DEPLOY, cost budget, SSE event bus
+- [x] **Multi-Repo Orchestration** (`multiRepoOrchestration.service.js`): parallel repo scanning, LLM relevance detection, cross-repo atomic execution with rollback
+- [x] **Vision-to-UI** (`vision_to_ui.agent.js`): Gemini Vision → layout/color/component analysis → React/SwiftUI/Compose code + WCAG 2.1 AA audit
+- [x] **Self-Expanding Swarm** (`self_expanding_swarm.service.js`): gap detection → domain classification → LLM agent synthesis → guardian vetting → hot-load via dynamic import
+- [x] **REST APIs**: `POST /sprint/launch`, `GET /sprint/events` (SSE), `POST /multi-repo/run`, `GET /multi-repo/swarm-report`
+- [x] **Frontend**: `/autonomous` page (overview, sprint launcher with SSE stream, all-systems console)
+- [x] **Capability Router**: 139 total routes
 
----
 
 ## 📅 Release Schedule
 
