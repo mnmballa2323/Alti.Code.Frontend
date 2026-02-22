@@ -143,6 +143,18 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **`GET /api/v1/wiki/articles`** and **`GET /api/v1/wiki/adrs`** inline REST endpoints
 - [x] **Sidebar nav**: Mission Control (🔭 violet) added under Autonomous v6 section
 
+### v6.7.0 — Live Code Browser, Inline LLM Editor & Secure Terminal ✅ (2026-02-22)
+- [x] **`/studio/files` page**: 3-pane layout — file browser | Monaco Editor | secured terminal
+- [x] **Sprint File Browser**: `GET /code-browser/sprint/:id/files` — lists all files written during a sprint with CREATED/MODIFIED/HEALED/FAILED badges
+- [x] **Monaco Editor integration**: view/edit any sprint-written file, language auto-detected from extension
+- [x] **Git Diff view**: `GET /code-browser/diff?path=` — toggle between code and unified git diff
+- [x] **AI Suggest bar**: `POST /code-browser/suggest {code, instruction}` → Gemini inline suggestion → apply overlay replaces Monaco content
+- [x] **Guardian-gated Patch Submit**: `POST /code-browser/patch` → static scan + AI audit → backup → write → autonomic AST sweep → git commit
+- [x] **Secure Terminal**: `POST /code-browser/exec` — command allowlist (npm test, npm run lint, git status, npx vitest, ls, pwd, cat package.json); 30s timeout; 512KB output cap
+- [x] **`CodeBrowserService`**: safe path resolution (traversal prevention), sprint file registry (populated by sprint events), `readFile`, `getDiff`, `applyPatch` with full audit chain
+- [x] **REST API** (`/api/v1/code-browser`): 6 endpoints — sprint files, file read, diff, patch, suggest, exec
+- [x] **Sidebar nav**: Code Browser (💻 teal) added under Autonomous v6 section
+
 
 ## 📅 Release Schedule
 
