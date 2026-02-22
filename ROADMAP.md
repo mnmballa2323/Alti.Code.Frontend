@@ -119,6 +119,16 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **REST API** (`/api/v1/telemetry`): metrics, incidents, manual recording, detect trigger, detection control, SSE live stream
 - [x] **SSE events**: `telemetry:event`, `anomaly:detected`, `incident:resolved`, `incident:vetoed`, `incident:injected`
 
+### v6.5.0 — Adaptive Agent Performance Profiling & Self-Optimization ✅ (2026-02-22)
+- [x] **AgentProfiler**: per-agent metrics (success rate, avg latency, test-pass rate, composite 0-100 score); in-memory Map + 5-min vector-store flush
+- [x] **Composite score formula**: `successRate×40 + testPassRate×30 + latencyScore×30`
+- [x] **SurgeProtection**: circuit breaker — 3 consecutive failures → 15-min demotion; auto-reset on expiry
+- [x] **RouteOptimizer**: patches `capabilityRouter.dispatch()` — `agentProfiler.selectBest()` applies profile weighting; 10% exploration budget for under-sampled agents; surged agents skipped
+- [x] **Outcome recording**: every `dispatch()` call records success/fail, latency, optional `testPassed` + `costUsd` into profiler
+- [x] **Self-Tuner**: agent score <40 after ≥5 samples → `selfExpandingSwarmService.synthesizeAgent()` → replacement file written → `autonomicService.commenceProactiveSweep()` quality check
+- [x] **REST API** (`/api/v1/agents`): all profiles, single profile, leaderboard, surge view, manual record, flush, surge clear, SSE events stream
+- [x] **5 SSE events**: `profiler:recorded`, `profiler:surge`, `profiler:self_tune:started`, `profiler:self_tune:done`, `profiler:self_tune:failed`
+
 
 ## 📅 Release Schedule
 
