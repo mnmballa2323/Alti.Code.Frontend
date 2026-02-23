@@ -1,0 +1,42 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   .gitmodules
+	new file:   submodules/12-factor-agents
+	new file:   submodules/langflow
+	new file:   submodules/next-devtools-mcp
+	new file:   submodules/openclaw/.github
+	new file:   submodules/openclaw/barnacle
+	new file:   submodules/openclaw/butter.bot
+	new file:   submodules/openclaw/casa
+	new file:   submodules/openclaw/clawdinators
+	new file:   submodules/openclaw/clawgo
+	new file:   submodules/openclaw/clawhub
+	new file:   submodules/openclaw/flawd-bot
+	new file:   submodules/openclaw/homebrew-tap
+	new file:   submodules/openclaw/lobster
+	new file:   submodules/openclaw/maintainers
+	new file:   submodules/openclaw/nix-openclaw
+	new file:   submodules/openclaw/nix-steipete-tools
+	new file:   submodules/openclaw/openclaw
+	new file:   submodules/openclaw/openclaw-ansible
+	new file:   submodules/openclaw/openclaw.ai
+	new file:   submodules/openclaw/skills
+	new file:   submodules/openclaw/trust
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+  (commit or discard the untracked or modified content in submodules)
+	modified:   README.md
+	modified:   alti.code.studio.backend (modified content, untracked content)
+	modified:   alti.code.studio.frontend (modified content, untracked content)
+	modified:   submodules/openclaw/skills (modified content)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	git_status.txt
+	submodules/openclaw/voice-community/
+

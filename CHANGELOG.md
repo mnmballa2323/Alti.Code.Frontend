@@ -7,6 +7,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [7.2.0] - 2026-02-23 — OpenClaw Deep Integration & Autonomic Reliability
+### Added
+- **Phases 43 & 44: OpenClaw Deep Integration**: Cloned and integrated 19 core submodules from the OpenClaw ecosystem (Flawd-bot, Barnacle, Lobster, Trust, Voice, etc.) into the `submodules/openclaw` directory. Enhanced backend and frontend UI to support and visualize realtime WebSocket/SSE bridging and status monitoring for these specialized bots.
+- **Phase 45: Autonomic Distribution & Reliability Upgrade**: Hardened the Orchestrator with distributed state persistence. Rewrote the `OrchestratorAgent` from using volatile memory to fully mapping internal agent states to Redis hashes. Hardened `AutonomicService` to require Redis `SETNX` distributed mutex locks prior to performing AST code sweeps, preventing dual-job collisions during horizontal scaling.
+
 ## [7.1.0] - 2026-02-23 — Third-Party Autonomy Integrations
 ### Added
 - **Phase 3: PentAGI Integration**: Deep integration with `vxcontrol/pentagi` for autonomous penetration testing and container security scanning. Added `pentagi.service.js` and `pentagi.agent.js`, alongside the new frontend `PentagiSessionPanel` and backend container routing.

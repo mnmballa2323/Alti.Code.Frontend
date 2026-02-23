@@ -1,7 +1,7 @@
 # 🌌 Alti.Code.Studio — Enterprise AI Development Platform
 
-> **Version 7.1.0 — Third-Party Autonomy Integrations**
-> *247+ Specialist AI Agents. 16 Industry Verticals. 21 Cloud Providers. 46 Programming Languages. Mission Control & True RAG.*
+> **Version 7.2.0 — OpenClaw Deep Integration & Autonomic Reliability**
+> *247+ Specialist AI Agents. 16 Industry Verticals. 19 OpenClaw Bots. Mission Control & True RAG.*
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)]()
@@ -61,7 +61,8 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 | **Industry** | **HR & Workforce** | **3** | BambooHR, Greenhouse ATS, Rippling |
 | **Industry** | **Cybersecurity** | **5** | VirusTotal, Shodan, CrowdStrike Falcon, Splunk, Have I Been Pwned |
 | **Industry** | **Marketing** | **4** | HubSpot CRM, Klaviyo, Segment CDP, Mixpanel |
-| External | Tool Agents | 21 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant, PentAGI, FossFLOW |
+| External | Tool Agents | 40 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant, PentAGI, FossFLOW |
+| External | OpenClaw Bots | 19 | Flawd-bot, Barnacle, Lobster, Trust, Voice-community, Clawdinators, etc. |
 
 ---
 
@@ -178,6 +179,7 @@ alti.code.studio/               ← Monorepo root
 | [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture |
 | [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with 16 industry verticals |
 | [INDUSTRY_AGENTS.md](alti.code.studio.backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
+| [OPENCLAW_INTEGRATION.md](alti.code.studio.backend/docs/OPENCLAW_INTEGRATION.md) | Deep integration guide for 19 OpenClaw submodules |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [ROADMAP.md](ROADMAP.md) | Planned features |
 | [docs/LLM_INSTRUCTIONS.md](docs/LLM_INSTRUCTIONS.md) | LLM agent operating instructions |
