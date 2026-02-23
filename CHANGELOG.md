@@ -7,6 +7,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [6.9.0] - 2026-02-22 — The Singularity Era (Phases 25, 26, 27, 28)
+
+### Added
+- **Phase 25: The Omniscient FinOps**: Autonomous cloud-cost arbitrage and carbon intensity workload routing via `finops.agent.js`.
+- **Phase 26: The Synthetic Demographics**: Phantom user generation using vision-capable Playwright sessions for heuristic UX debugging via `syntheticUser.agent.js`.
+- **Phase 27: The Cryptographic Vanguard**: Codebase scanning and automatic refactoring of weak encryption to Modern/PQC standards via `quantumSec.agent.js`.
+- **Phase 28: The Physical Bridge**: Real-World IoT integration via C/C++ FreeRTOS payload generation and MQTT OTA flashing via `hardware.agent.js`.
+
+---
+
 ## [6.8.0] - 2026-02-22 — The Final Odyssey (Phases 22, 23, 24)
 
 ### Added
