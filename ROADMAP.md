@@ -155,6 +155,11 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **REST API** (`/api/v1/code-browser`): 6 endpoints — sprint files, file read, diff, patch, suggest, exec
 - [x] **Sidebar nav**: Code Browser (💻 teal) added under Autonomous v6 section
 
+### v6.8.0 — The Final Odyssey (Phases 22, 23, 24) ✅ (2026-02-22)
+- [x] **Autonomous SRE & Production Healing** (`sre.agent.js`): Phase 22 remote Axiom cloud telemetry ingestion, Sev-1 root-cause triage + live Priority 0 hotfix sprint injection (`sprintSchedulerService`).
+- [x] **Sub-Second Vercel Auto-Rollback**: Integrated REST API `rollbackVercelDeployment(projectId)` into DevOps Agent to re-alias deployments on Sev-1 detected spikes immediately.
+- [x] **The Visual Cortex (Figma-to-Code)** (`designer.agent.js`): Phase 23 Figma REST API hook + recursive component hierarchy extraction into Tailwind/React boilerplate via Gemini. Active hook inside `genesis.service.js` ignition loop.
+- [x] **Enterprise Knowledge Graph (The Corporate Brain)** (`knowledge.agent.js`): Phase 24 Jira sprint constraint ingestion (`extractTicketContext(ticketId)`), Jira auto-transitions to DONE, and Slack broadcast notification closures (`broadcastToSlack(channelId)`).
 
 ## 📅 Release Schedule
 
