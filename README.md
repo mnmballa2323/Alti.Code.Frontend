@@ -1,11 +1,11 @@
 # 🌌 Alti.Code.Studio — Enterprise AI Development Platform
 
-> **Version 6.7.0 — The Panopticon & Cortex Memory**
-> *245+ Specialist AI Agents. 16 Industry Verticals. 21 Cloud Providers. 46 Programming Languages. Mission Control & True RAG.*
+> **Version 7.1.0 — Third-Party Autonomy Integrations**
+> *247+ Specialist AI Agents. 16 Industry Verticals. 21 Cloud Providers. 46 Programming Languages. Mission Control & True RAG.*
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)]()
-[![Agents](https://img.shields.io/badge/agents-245%2B-purple.svg)]()
+[![Agents](https://img.shields.io/badge/agents-247%2B-purple.svg)]()
 [![Verticals](https://img.shields.io/badge/verticals-16-orange.svg)]()
 [![Languages](https://img.shields.io/badge/languages-46-orange.svg)]()
 [![Cloud](https://img.shields.io/badge/cloud_providers-21-blue.svg)]()
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 245+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to **16 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
+Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 247+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to **16 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
@@ -30,7 +30,7 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 |-----------|------|
 | `graph.orchestrator.js` | LangGraph-powered multi-agent orchestrator with plan → guard → execute → review pipeline |
 | `capability.router.js` | Semantic routing engine — **141 keyword-scored routes** mapping queries to the right specialist |
-| `swarm.health.js` | Live health monitoring and circuit breaker status for all 245+ agents |
+| `swarm.health.js` | Live health monitoring and circuit breaker status for all 247+ agents |
 | `agent.index.js` | Searchable catalog of all agents with capability metadata |
 | `swarm.controller.js` | REST API surface — `/api/swarm` endpoints for health, routing, dispatch, fan-out |
 
@@ -61,14 +61,14 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 | **Industry** | **HR & Workforce** | **3** | BambooHR, Greenhouse ATS, Rippling |
 | **Industry** | **Cybersecurity** | **5** | VirusTotal, Shodan, CrowdStrike Falcon, Splunk, Have I Been Pwned |
 | **Industry** | **Marketing** | **4** | HubSpot CRM, Klaviyo, Segment CDP, Mixpanel |
-| External | Tool Agents | 19 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant |
+| External | Tool Agents | 21 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant, PentAGI, FossFLOW |
 
 ---
 
 ## ✨ Key Features
 
 ### 🧠 The Industry Armada Intelligence
-- **245+ specialist agents** each with deep domain expertise and production-grade preambles
+- **247+ specialist agents** each with deep domain expertise and production-grade preambles
 - **16 industry verticals** with dedicated specialist agents — from Real Estate to Cybersecurity
 - **141 keyword-scored routes** automatically dispatch every query to the most capable agent
 - **Fan-out execution** — simultaneous multi-agent consultation for complex problems
@@ -141,7 +141,7 @@ cd alti.code.studio.frontend && npm run dev
 | Endpoint | Description |
 |----------|-------------|
 | `POST /api/orchestrate` | Submit a task to the multi-agent orchestrator |
-| `GET /api/swarm/health` | Live health status of all 245+ agents |
+| `GET /api/swarm/health` | Live health status of all 247+ agents |
 | `GET /api/swarm/agents` | Browse and search all registered agents |
 | `POST /api/swarm/route` | Find the best agent for a given query |
 | `POST /api/swarm/dispatch` | Route + auto-consult the best agent |

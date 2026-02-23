@@ -29,7 +29,15 @@ services:
       - REDIS_HOST=synapse
       - REDIS_PORT=6379
       - NODE_ENV=production
+      # Open-Inspect Background Agent Settings (Phase 2)
+      - MODAL_TOKEN_ID=${MODAL_TOKEN_ID:-}
+      - MODAL_TOKEN_SECRET=${MODAL_TOKEN_SECRET:-}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-}
+      - GITHUB_APP_ID=${GITHUB_APP_ID:-}
+      - GITHUB_APP_PRIVATE_KEY=${GITHUB_APP_PRIVATE_KEY:-}
       # Secrets should be injected via .env in production
+      # PentAGI API Configuration (Phase 3)
+      - PENTAGI_API_URL=http://pentagi:8443/api/v1
     depends_on:
       synapse:
         condition: service_healthy
@@ -49,9 +57,97 @@ services:
     networks:
       - alti_net
 
+  # 🛡️ PentAGI Autonomous Penetration Testing Server
+  pentagi:
+    image: vxcontrol/pentagi:latest
+    restart: unless-stopped
+    container_name: pentagi
+    hostname: pentagi
+    expose:
+      - 8443/tcp
+    ports:
+      - "8443:8443"
+    depends_on:
+      pgvector:
+        condition: service_started
+    environment:
+      - DEBUG=false
+      - SERVER_USE_SSL=false
+      - SERVER_PORT=8443
+      - SERVER_HOST=0.0.0.0
+      - DATABASE_URL=postgres://postgres:postgres@pgvector:5432/pentagidb?sslmode=disable
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - DOCKER_INSIDE=true
+      - PENTAGI_POSTGRES_USER=postgres
+      - PENTAGI_POSTGRES_PASSWORD=postgres
+      - PENTAGI_POSTGRES_DB=pentagidb
+      # Note: Set OPEN_AI_KEY within your internal environment or proxy
+    volumes:
+      - pentagi-data:/opt/pentagi/data
+      - pentagi-ssl:/opt/pentagi/ssl
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root:root
+    networks:
+      - pentagi-network
+      - alti_net
+
+  pgvector:
+    image: vxcontrol/pgvector:latest
+    restart: unless-stopped
+    container_name: pgvector
+    hostname: pgvector
+    expose:
+      - 5432/tcp
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: pentagidb
+    volumes:
+      - pentagi-postgres-data:/var/lib/postgresql/data
+    networks:
+      - pentagi-network
+
+  scraper:
+    image: vxcontrol/scraper:latest
+    restart: unless-stopped
+    container_name: scraper
+    hostname: scraper
+    expose:
+      - 443/tcp
+    environment:
+      - MAX_CONCURRENT_SESSIONS=10
+    volumes:
+      - scraper-ssl:/usr/src/app/ssl
+    networks:
+      - pentagi-network
+    shm_size: 2g
+
+  # 🏗️ FossFLOW - Isometric Architecture Designer
+  fossflow:
+    image: stnsmith/fossflow:latest
+    container_name: fossflow
+    restart: unless-stopped
+    ports:
+      - "8090:80"
+    environment:
+      - NODE_ENV=production
+      - ENABLE_SERVER_STORAGE=true
+      - STORAGE_PATH=/data/diagrams
+    volumes:
+      - fossflow-data:/data/diagrams
+    networks:
+      - alti_net
+
 networks:
   alti_net:
+    driver: bridge
+  pentagi-network:
     driver: bridge
 
 volumes:
   redis_data:
+  pentagi-data:
+  pentagi-ssl:
+  scraper-ssl:
+  pentagi-postgres-data:
+  fossflow-data:

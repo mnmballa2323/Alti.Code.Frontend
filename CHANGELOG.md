@@ -7,6 +7,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [7.1.0] - 2026-02-23 — Third-Party Autonomy Integrations
+### Added
+- **Phase 3: PentAGI Integration**: Deep integration with `vxcontrol/pentagi` for autonomous penetration testing and container security scanning. Added `pentagi.service.js` and `pentagi.agent.js`, alongside the new frontend `PentagiSessionPanel` and backend container routing.
+- **Phase 5: FossFLOW Integration**: Integration with `stan-smith/fossflow` for autonomous isometric architectural diagramming graphic canvas. Added `fossflow.service.js` and `fossflow.agent.js`, with the new frontend `FossflowSessionPanel` iframe PWA.
+
 ## [7.0.0] - 2026-02-22 — The Transcendence Era (Phases 29, 30, 31, 32)
 ### Added
 - **Phase 29: The Autonomous Board of Directors**: AI C-Suite simulation (CEO, CTO, CFO) via `board.service.js` which synthesizes macro market trends and infrastructure stats into Autonomous Epics injected straight into the Sprint Scheduler.

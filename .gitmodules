@@ -4,3 +4,9 @@
 [submodule "alti.code.studio.frontend"]
 	path = alti.code.studio.frontend
 	url = https://github.com/mnmballa2323/Alti.Code.Studio.Frontend.git
+[submodule "background-agents"]
+	path = background-agents
+	url = https://github.com/ColeMurray/background-agents
+[submodule "submodules/fossflow"]
+	path = submodules/fossflow
+	url = https://github.com/stan-smith/FossFLOW
