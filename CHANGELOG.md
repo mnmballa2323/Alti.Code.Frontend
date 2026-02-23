@@ -7,6 +7,20 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [6.7.0] - 2026-02-22 — The Panopticon & Cortex Memory
+
+### Added
+- **Phase 5: Cortex Long-Term Memory & Enterprise RAG**: 
+  - Integrated Google Cloud Vertex AI text embeddings with native PostgreSQL \`pgvector\`.
+  - Added Organization Wiki (\`wiki.service.js\`) to auto-embed Architecture Decision Records (ADRs).
+  - Tacked RAG queries into \`autonomousSprint.service.js\` so the Swarm fetches past constraints before sprinting.
+  - Finalized syntax fixes across all 245+ agents for unescaped GitHub Actions variables.
+- **Phase 6: Global Verification & Release**:
+  - Validated all 419 vitest cases covering hardening, routing, and language agents.
+  - Validated TypeScript compiling and strict linting for the Electron Next.js frontend UI.
+
+---
+
 ## [4.0.0] - 2026-02-21 — The Industry Armada
 
 ### Added — Industry Vertical Agents (Phases 7–10)
