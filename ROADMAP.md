@@ -8,6 +8,26 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 ## ✅ Completed
 
+### v8.1.0 — Enterprise Observability & Tenant FinOps (2026-02-25)
+- [x] **Prometheus Custom Metrics**: Google Managed Prometheus `PodMonitoring` scraping custom metrics natively.
+- [x] **SIEM Integration**: Real-time Pub/Sub log routers feeding Splunk/Datadog with high-severity K8s audit events.
+- [x] **FinOps Dataset**: BigQuery billing analytics with tenant-level multi-dimensional label tagging.
+
+### v8.0.0 — Zero Trust & DevSecOps Hardening (2026-02-25)
+- [x] **Anthos Service Mesh (ASM)**: Enforced strict mTLS for all pod-to-pod communications.
+- [x] **Identity Substrate**: Zero-Trust `NetworkPolicy` default-deny isolation protecting API gateways.
+- [x] **Kyverno Gatekeeper**: Validating Admission Controller webhooks blocking unsigned/latest image tags.
+
+### v7.5.0 — Multi-Region Global Resilience (2026-02-25)
+- [x] **Multi-Cluster GKE Fleet**: Provisioned identical autonomous rings across US, EU, and APAC.
+- [x] **Global Cloud Load Balancing**: Replaced regional IP with Google Premium Anycast networking (`MultiClusterIngress`).
+- [x] **Database Disaster Recovery**: Deployed cross-region PostgreSQL and MongoDB read-replicas for instant M-M failover.
+
+### v7.4.0 — Absolute GitOps Evolution (2026-02-25)
+- [x] **ArgoCD App of Apps**: Hard-synced `k8s/` declarative repository state directly into the Swarm cluster.
+- [x] **GCP Workload Identity**: Terminated static credential risk using OIDC JWT federation for GitHub Actions.
+- [x] **Automated CI/CD**: Seamless branch-to-production deployment to Google Artifact Registry.
+
 ### v7.3.0 — Enterprise Infrastructure Go-Live (2026-02-25)
 - [x] **GCP Native Deployment**: Migrated from monolithic docker-compose to highly-available Google Cloud Platform architecture.
 - [x] **Terraform Modules**: Created enterprise-grade modules for GKE Autopilot, Cloud SQL (PostgreSQL), Memorystore (Redis), and MongoDB Atlas.
@@ -195,3 +215,7 @@ To be the premier AI-native development platform where a self-orchestrating arma
 | v7.1.0 | 2026-02-23 | Third-Party Autonomy Integrations (PentAGI & FossFLOW) | ✅ Done |
 | v7.2.0 | 2026-02-23 | OpenClaw Deep Integration & Autonomic Reliability | ✅ Done |
 | v7.3.0 | 2026-02-25 | Enterprise Infrastructure Go-Live (GCP/GKE) | ✅ Done |
+| v7.4.0 | 2026-02-25 | Absolute GitOps Evolution (ArgoCD & Workload Identity) | ✅ Done |
+| v7.5.0 | 2026-02-25 | Multi-Region Global Resilience (GCLB + Secondary Rings) | ✅ Done |
+| v8.0.0 | 2026-02-25 | Zero Trust & DevSecOps Hardening (ASM + Kyverno) | ✅ Done |
+| v8.1.0 | 2026-02-25 | Enterprise Observability & Tenant FinOps (BigQuery) | ✅ Done |

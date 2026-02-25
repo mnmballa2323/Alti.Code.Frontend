@@ -7,6 +7,30 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [8.1.0] - 2026-02-25 — Enterprise Observability & Tenant FinOps
+### Added
+- **Managed Prometheus**: Google Managed Prometheus (`PodMonitoring` CRD) continuously scraping custom agent metrics natively.
+- **SIEM Exporting**: Real-time GKE log export to Pub/Sub to feed enterprise Splunk/Datadog SIEMs via Log Router sinks.
+- **FinOps Billing**: Automatic Kubernetes cluster usage exported to a BigQuery dataset with tenant-mapping labels for multi-dimensional cost dashboards.
+
+## [8.0.0] - 2026-02-25 — Zero Trust & DevSecOps Hardening
+### Added
+- **Anthos Service Mesh**: Enabled global Google Managed Istio across the GKE fleet for strict pod-to-pod mTLS encryption.
+- **Network Policies**: Overhauled internal security with a default-deny layer, exclusively whitelisting verified service paths.
+- **Kyverno Admission Control**: Deployed validating Webhooks that immediately block unvetted `latest` images and untrusted remote registries.
+
+## [7.5.0] - 2026-02-25 — Multi-Region Global Resilience
+### Added
+- **Multi-Region GKE**: Authored Terraform templates orchestrating identical instances of autonomous Swarms seamlessly extending to EU and APAC.
+- **Global Cloud Load Balancing**: Added `MultiClusterIngress` enabling unified, edge-based Anycast premium tier networking that routes traffic to the physically nearest healthy compute ring.
+- **Disaster Recovery Replicas**: Provisioned cross-region autonomous read-replicas for both PostgreSQL and MongoDB to trigger failovers during Datacenter Blackout events.
+
+## [7.4.0] - 2026-02-25 — Absolute GitOps Evolution
+### Added
+- **ArgoCD Control Loop**: Swapped out explicit kubectl imperatives for continuous declarative GitOps pull deployments.
+- **GCP Workload Identity**: Destroyed static Google Service Accounts bridging GitHub-to-GCP authentication natively via ephemeral JWT federations.
+- **Automated CI/CD**: Streamlined `deploy.yml` pipeline triggering secure OIDC push behaviors straight into Google Artifact Registry.
+
 ## [7.3.0] - 2026-02-25 — Enterprise Infrastructure Go-Live
 ### Added
 - **GCP Native Architecture**: Migrated production workloads from a single VM to Google Kubernetes Engine (GKE) Autopilot for autonomous scaling.

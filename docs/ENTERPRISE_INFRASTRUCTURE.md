@@ -1,6 +1,6 @@
 # Enterprise Infrastructure
 
-As of **v7.3.0**, Alti.Code.Studio is deployed natively on **Google Cloud Platform (GCP)** using a highly available, declarative infrastructure stack defined in Terraform and Kubernetes.
+As of **v8.1.0**, Alti.Code.Studio is deployed natively on **Google Cloud Platform (GCP)** using a highly available, declarative infrastructure stack defined in Terraform, with continuous deployment managed via **ArgoCD (GitOps)**.
 
 This document serves as a guide for platform engineers managing the production deployment.
 
@@ -9,8 +9,8 @@ This document serves as a guide for platform engineers managing the production d
 ## 🏗️ Architecture Overview
 
 The system is split into two halves:
-1. **Terraform (`/terraform`)**: Provisions the raw cloud primitives (Clusters, Databases, IAM).
-2. **Kubernetes (`/k8s`)**: Provisions the application workloads and networking layer on top of the cluster.
+1. **Terraform (`/terraform`)**: Provisions the raw cloud primitives (Multi-Region Clusters, Databases, IAM, OIDC).
+2. **Kubernetes (`/k8s`)**: Provisions the application workloads, service mesh, and zero-trust policies via ArgoCD.
 
 ### 1. The Terraform Modules
 
@@ -19,28 +19,34 @@ terraform/
 ├── main.tf
 ├── variables.tf
 └── modules/
-    ├── gke/       # Google Kubernetes Engine (Autopilot)
-    ├── database/  # Cloud SQL (PostgreSQL), Memorystore (Redis), MongoDB Atlas
-    └── secrets/   # GCP Secret Manager
+    ├── gke_multi_region/ # Global GKE Autopilot Fleet (US, EU, APAC)
+    ├── database/         # Cloud SQL (PostgreSQL), Memorystore (Redis), MongoDB Atlas
+    ├── secrets/          # GCP Secret Manager
+    ├── workload_identity/# GitHub Actions OIDC Auth
+    ├── asm/              # Anthos Service Mesh (Managed Istio)
+    └── observability/    # BigQuery FinOps and Pub/Sub SIEM Log Sinks
 ```
 
-- **GKE Autopilot**: We use GKE Autopilot to eliminate node management overhead. Nodes scale dynamically based on the requested CPU/RAM of the pods. The cluster is configured as a *Private Cluster*, meaning worker nodes do not have public IP addresses.
-- **Managed Databases**: We rely on Cloud SQL for PostgreSQL, Memorystore for Redis, and MongoDB Atlas to guarantee 99.99% availability and automated point-in-time recovery.
-- **Secret Manager**: Production secrets are injected dynamically into the cluster. Never commit `.env` files to production.
+- **Global GKE Fleet**: We use multi-region GKE Autopilot clusters to eliminate node management overhead and provide regional disaster recovery.
+- **Cross-Region Databases**: Cloud SQL and MongoDB are configured with cross-region read replicas.
+- **Workload Identity**: GitHub Actions authenticates natively via ephemeral JWTs—no static `.env` keys.
 
-### 2. The Kubernetes Manifests
+### 2. The Kubernetes Manifests (GitOps Managed)
 
 ```text
 k8s/
-├── backend.yaml   # Node.js Express + Agents (HPA: 3-30 replicas)
-├── frontend.yaml  # Next.js Dashboard (HPA: 3-15 replicas)
-├── services.yaml  # PentAGI, Scraper, and FossFLOW deployments
-└── ingress.yaml   # GCLB Ingress + Managed Certificate + Cloud Armor
+├── backend.yaml        # Node.js Express + Agents (HPA: 3-30 replicas)
+├── frontend.yaml       # Next.js Dashboard (HPA: 3-15 replicas)
+├── services.yaml       # PentAGI, Scraper, and FossFLOW deployments
+├── argocd/             # The Root App of Apps manifest
+├── multi_region/       # MultiClusterIngress and Global Load Balancing
+├── observability/      # Managed Prometheus PodMonitoring
+└── security/           # Default-Deny Network Policies and Kyverno Admission
 ```
 
-- **Cloud Load Balancing**: The `ingress.yaml` creates an L7 external HTTP/S load balancer.
-- **Cloud Armor**: The `FrontendConfig` custom resource attaches a Cloud Armor WAF policy to mitigate DDoS attacks.
-- **Autoscaling**: `HorizontalPodAutoscaler` limits ensure the Swarm has enough compute during massive code generation sprints while scaling down to save costs.
+- **GitOps Continuous Deployment**: ArgoCD runs inside the default cluster, watching the `k8s/` folder on GitHub and syncing state automatically.
+- **Global Load Balancing**: `MultiClusterIngress` creates an L7 external HTTP/S load balancer that routes traffic globally.
+- **Zero Trust Security**: See `docs/ZERO_TRUST_SECURITY.md` for details on ASM, Kyverno, and Network Policies.
 
 ---
 
@@ -60,28 +66,27 @@ k8s/
    terraform apply \
      -var="project_id=your-gcp-project" \
      -var="environment=prod" \
+     -var="github_repository=yourorg/yourrepo" \
      -var="atlas_public_key=..." \
      -var="atlas_private_key=..." \
      -var="stripe_secret_key=..." \
      -var="stripe_webhook_secret_key=..."
    ```
-4. *Important*: Note the output variables, specifically the database connection strings.
 
-### Step 2: Deploy Workloads (Kubernetes)
-1. Fetch cluster credentials:
+### Step 2: Bootstrap GitOps (ArgoCD)
+Instead of applying manifests manually, we seed the cluster with ArgoCD:
+1. Fetch cluster credentials for the primary cluster:
    ```bash
-   gcloud container clusters get-credentials alti-code-studio-gke-prod --region us-central1
+   gcloud container clusters get-credentials alti-gke-prod-primary --region us-central1
    ```
-2. Apply the manifests:
+2. Install ArgoCD:
    ```bash
-   cd ../k8s
-   kubectl apply -f .
+   kubectl create namespace argocd
+   kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
    ```
-3. Watch the rollout:
+3. Apply the root application:
    ```bash
-   kubectl get pods -w
-   kubectl get hpa
-   kubectl get ingress
+   kubectl apply -f ../k8s/argocd/application.yaml
    ```
 
-*(Wait approximately 15 minutes for the Google-managed SSL certificate to provision and turn generic `HTTP(S)` to `Active`.)*
+From this point forward, all code pushed to the `main` branch is validated and subsequently deployed autonomously by ArgoCD.
