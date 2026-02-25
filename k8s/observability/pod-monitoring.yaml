@@ -1,0 +1,43 @@
+# -------------------------------------------------------------
+# Google Managed Prometheus (GMP) Custom Metrics Scraper
+# -------------------------------------------------------------
+
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: alti-backend-metrics
+  namespace: default
+  labels:
+    app.kubernetes.io/name: alti-backend
+spec:
+  selector:
+    matchLabels:
+      app: alti-backend
+  endpoints:
+  - port: 5000
+    interval: 30s
+    path: /metrics
+    # Scrape timeout
+    timeout: 15s
+
+---
+# -------------------------------------------------------------
+# FinOps: Example Tenant-Level Cost Attribution via K8s Labels
+# -------------------------------------------------------------
+# Note: On GKE Autopilot, Google automatically translates Pod `labels` into 
+# GCP Billing metrics if GKE Usage Metering is enabled.
+#
+# Below is an example patch showing how a tenant deployment 
+# is labeled for granular cost accounting in BigQuery.
+# 
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: agent-worker-tenant-acme
+# spec:
+#   template:
+#     metadata:
+#       labels:
+#         tenant_id: "acme-corp"
+#         tier: "enterprise"
+#         cost_center: "ai-compute"
