@@ -53,6 +53,22 @@ resource "random_password" "pg_password" {
 }
 
 # -------------------------------------------------------------
+# Cloud SQL Cross-Region Read Replica (Disaster Recovery)
+# -------------------------------------------------------------
+resource "google_sql_database_instance" "postgres_replica" {
+  name                 = "alti-postgres-${var.environment}-replica"
+  database_version     = "POSTGRES_15"
+  region               = "us-east4" # Secondary Region
+  master_instance_name = google_sql_database_instance.postgres.name
+
+  settings {
+    tier              = "db-custom-4-15360"
+    availability_type = "REGIONAL"
+    disk_autoresize   = true
+  }
+}
+
+# -------------------------------------------------------------
 # Memorystore for Redis (Synapse Cache & Memory)
 # -------------------------------------------------------------
 resource "google_redis_instance" "cache" {
