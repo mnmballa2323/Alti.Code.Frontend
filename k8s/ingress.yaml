@@ -1,0 +1,74 @@
+# -------------------------------------------------------------
+# Managed SSL Certificate for Google Cloud
+# -------------------------------------------------------------
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: alti-code-studio-cert
+spec:
+  domains:
+    - alti.code.studio
+    - api.alti.code.studio
+    - fossflow.alti.code.studio
+
+---
+# -------------------------------------------------------------
+# Google Cloud Load Balancer (GCLB) Ingress
+# -------------------------------------------------------------
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alti-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "alti-production-ip"
+    networking.gke.io/managed-certificates: "alti-code-studio-cert"
+    kubernetes.io/ingress.class: "gce"
+    # Enable Cloud Armor for DDoS protection and WAF
+    networking.gke.io/v1beta1.FrontendConfig: "alti-frontend-config"
+spec:
+  rules:
+  - host: albi.code.studio
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: alti-frontend
+            port:
+              number: 80
+  
+  - host: api.alti.code.studio
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: alti-backend
+            port:
+              number: 80
+  
+  - host: fossflow.alti.code.studio
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: fossflow
+            port:
+              number: 80
+
+---
+# -------------------------------------------------------------
+# FrontendConfig (Google Cloud Armor / HTTPS redirection)
+# -------------------------------------------------------------
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: alti-frontend-config
+spec:
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT

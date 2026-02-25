@@ -107,32 +107,34 @@ VHDL/SystemVerilog · Apex · ABAP · Prolog · Dart · Wolfram · PL/SQL**
 
 ## 🛠️ Installation & Setup
 
-### Prerequisites
-- Node.js v20+
-- MongoDB
-- Redis
-- Git
-
-### Quick Start
+### Local Development (Docker Compose)
+For local testing and development, you can use the provided Docker Compose stack:
 
 ```bash
-# 1. Clone with submodules
 git clone --recurse-submodules https://github.com/mnmballa2323/alti.code.studio.git
 cd alti.code.studio
-
-# 2. Setup environment
 cp alti.code.studio.backend/.env.example alti.code.studio.backend/.env
-# Edit .env with your GEMINI_API_KEY, MONGO_URI, REDIS_URL
+docker-compose up --build
+```
 
-# 3. Install dependencies
-cd alti.code.studio.backend && npm install
-cd ../alti.code.studio.frontend && npm install
+### Enterprise Production (GCP / GKE)
+For production deployments requiring 99.99% SLAs and SOC2 compliance, Alti.Code.Studio is deployed exclusively on Google Cloud Platform using Terraform and Kubernetes.
 
-# 4. Start backend (dev)
-cd alti.code.studio.backend && npm run dev
+#### 1. Provision Infrastructure
+Deploy the Google Kubernetes Engine (GKE) Autopilot cluster, Cloud SQL for PostgreSQL, Memorystore for Redis, MongoDB Atlas, and GCP Secret Manager:
 
-# 5. Start frontend (dev)
-cd alti.code.studio.frontend && npm run dev
+```bash
+cd terraform
+terraform init
+terraform apply -var="project_id=your-gcp-project" -var="environment=prod"
+```
+
+#### 2. Deploy Workloads
+Apply the Kubernetes manifests for the backend, frontend, Ingress (Google Cloud Load Balancer with Cloud Armor), and auxiliary services (PentAGI/Scraper).
+
+```bash
+cd k8s
+kubectl apply -f .
 ```
 
 ---

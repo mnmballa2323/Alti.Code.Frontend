@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alti-frontend
+  namespace: default
+  labels:
+    app: alti-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: alti-frontend
+  template:
+    metadata:
+      labels:
+        app: alti-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: gcr.io/PROJECT_ID/alti-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        # Assumes routing happens through the same domain via Ingress rules
+        - name: NEXT_PUBLIC_API_URL
+          value: "https://api.alti.code.studio/v1"
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alti-frontend
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+spec:
+  type: ClusterIP
+  selector:
+    app: alti-frontend
+  ports:
+  - port: 80
+    targetPort: 3000
+    protocol: TCP
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: alti-frontend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: alti-frontend
+  minReplicas: 3
+  maxReplicas: 15
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70

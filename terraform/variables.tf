@@ -1,24 +1,43 @@
 variable "project_id" {
-  description = "Google Cloud Project ID"
+  description = "The GCP Project ID"
   type        = string
 }
 
 variable "region" {
-  description = "GCP Region"
+  description = "The GCP Region (e.g., us-central1)"
+  type        = string
   default     = "us-central1"
 }
 
-variable "zone" {
-  description = "GCP Zone"
-  default     = "us-central1-a"
-}
-
 variable "environment" {
-  description = "Deployment Environment (dev, staging, prod)"
+  description = "Deployment environment (e.g., prod, staging)"
+  type        = string
   default     = "prod"
 }
 
-variable "machine_type" {
-  description = "Compute Engine Machine Type"
-  default     = "e2-medium"
+# MongoDB Atlas
+variable "atlas_project_id" {
+  description = "MongoDB Atlas Project ID"
+  type        = string
+}
+
+variable "atlas_public_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "atlas_private_key" {
+  type      = string
+  sensitive = true
+}
+
+# Stripe API Keys (Injected into Secret Manager)
+variable "stripe_secret_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "stripe_webhook_secret_key" {
+  type      = string
+  sensitive = true
 }
