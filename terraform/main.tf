@@ -92,8 +92,20 @@ module "secrets" {
 }
 
 # -------------------------------------------------------------
+# Workload Identity Federation (GitHub Actions)
+# -------------------------------------------------------------
+module "workload_identity" {
+  source = "./modules/workload_identity"
+
+  project_id        = var.project_id
+  github_repository = var.github_repository
+}
+
+# -------------------------------------------------------------
 # Outputs
 # -------------------------------------------------------------
 output "gke_cluster_endpoint" { value = module.gke.cluster_endpoint }
 output "redis_host" { value = module.database.redis_host }
 output "mongo_uri_base" { value = module.database.mongo_uri }
+output "workload_identity_provider" { value = module.workload_identity.workload_identity_provider }
+output "service_account_email" { value = module.workload_identity.service_account_email }

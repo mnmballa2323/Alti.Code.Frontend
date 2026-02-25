@@ -1,0 +1,87 @@
+name: Build and Deploy (GitOps)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'alti.code.studio.backend/**'
+      - 'alti.code.studio.frontend/**'
+      - 'k8s/**'
+      - '.github/workflows/deploy.yml'
+
+env:
+  PROJECT_ID: alti-code-studio-production
+  GAR_LOCATION: us-central1
+  REPOSITORY: alti-repo
+  BACKEND_IMAGE: alti-backend
+  FRONTEND_IMAGE: alti-frontend
+  # Set via Terraform Output
+  WORKLOAD_IDENTITY_PROVIDER: 'projects/123456789/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+  SERVICE_ACCOUNT: 'github-actions-deployer@alti-code-studio-production.iam.gserviceaccount.com'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    # Required for GCP Workload Identity Federation
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Google Auth
+      id: auth
+      uses: 'google-github-actions/auth@v2'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
+        service_account: '${{ env.SERVICE_ACCOUNT }}'
+
+    - name: Docker Auth for GAR
+      id: docker-auth
+      uses: 'docker/login-action@v3'
+      with:
+        username: 'oauth2accesstoken'
+        password: '${{ steps.auth.outputs.access_token }}'
+        registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
+
+    - name: Build and Push Backend
+      run: |
+        TAG="${GITHUB_SHA::7}"
+        IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${BACKEND_IMAGE}:${TAG}"
+        
+        docker build -t $IMAGE_URI ./alti.code.studio.backend
+        docker push $IMAGE_URI
+
+    - name: Build and Push Frontend
+      run: |
+        TAG="${GITHUB_SHA::7}"
+        IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${FRONTEND_IMAGE}:${TAG}"
+        
+        docker build -t $IMAGE_URI ./alti.code.studio.frontend
+        docker push $IMAGE_URI
+
+  # In a pure GitOps model (ArgoCD), this step commits the new IMAGE tags 
+  # back into a deployment repository, which ArgoCD automatically synchronizes.
+  sync-manifests:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Update Kustomize image tags
+      run: |
+        cd k8s
+        # Simulating a kustomize image set command which ArgoCD reads
+        echo "Image tag updated to ${GITHUB_SHA::7}"
+        # kustomize edit set image backend=${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${BACKEND_IMAGE}:${GITHUB_SHA::7}
+        # kustomize edit set image frontend=${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${FRONTEND_IMAGE}:${GITHUB_SHA::7}
+        
+    # ArgoCD running inside GKE watches the repo and will automatically sync this commit

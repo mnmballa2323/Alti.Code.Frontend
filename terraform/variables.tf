@@ -41,3 +41,10 @@ variable "stripe_webhook_secret_key" {
   type      = string
   sensitive = true
 }
+
+# GitHub Integration
+variable "github_repository" {
+  description = "The GitHub repository for Workload Identity Federation (e.g. mnmballa2323/alti.code.studio)"
+  type        = string
+  default     = "mnmballa2323/alti.code.studio"
+}
