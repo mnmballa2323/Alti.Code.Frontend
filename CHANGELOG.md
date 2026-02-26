@@ -7,6 +7,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [8.2.0] - 2026-02-25 — Open Source Specialist Armada (Phase 11)
+### Added
+- **OSS Agent Synthesizer Generator**: Autonomous pipeline that ingests GitHub Trending repositories and synthesizes production-grade agents trained specifically on OSS tool documentation.
+- **66 New Specialist Agents**: Massively expanded the agent roster covering frameworks (React, Next.js, Spring Boot, Laravel), databases (PostgreSQL, Redis), Cloud IaC (AWS CDK), and AI/ML (TensorFlow, PyTorch, OpenAI SDK).
+- **Universal OSS Coverage**: Total agent count pushed from ~319 to **385+**, pushing Capability Router keyword paths to an unprecedented **270 custom routes**.
+
 ## [8.1.0] - 2026-02-25 — Enterprise Observability & Tenant FinOps
 ### Added
 - **Managed Prometheus**: Google Managed Prometheus (`PodMonitoring` CRD) continuously scraping custom agent metrics natively.
