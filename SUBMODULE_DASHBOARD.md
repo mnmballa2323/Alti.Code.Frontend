@@ -1,17 +1,47 @@
 # 📊 Submodule Dashboard
 
-> **Last Updated:** 2026-02-19T06:37:18.836Z
+> **Last Updated:** 2026-02-26 (Deep OS Integration Sprint)
 
-| Path | Commit | Last Update |
-|------|--------|-------------|
-| `alti.code.studio.backend` | `3fb7751` | Thu Feb 19 01:34:34 2026 -0500 |
-| `alti.code.studio.frontend` | `c0e49ca` | Thu Feb 19 01:34:45 2026 -0500 |
-| `background-agents` | `35a615d` | Mon Feb 23 01:05:50 2026 -0500 |
-| `pentagi` | `763cb17` | Sun Feb 22 13:56:03 2026 +0300 |
-| `fossflow` | `8f307cd` | Sun Mar 09 17:39:46 2025 +0000 |
+## Core Platform Components
+
+| Path | Description | Last Updated |
+|------|-------------|-------------|
+| `alti.code.studio.backend` | Backend API + Agent Swarm | 2026-02-26 |
+| `alti.code.studio.frontend` | Next.js Frontend | 2026-02-19 |
+| `background-agents` | Open-Inspect Background Agents | 2026-02-23 |
+| `pentagi` | PentAGI Autonomous Pentesting | 2026-02-22 |
+| `fossflow` | FossFLOW Isometric Architecture | 2025-03-09 |
+
+## OpenClaw Ecosystem (MIT)
+
+| Submodule | Description | Stars |
+|-----------|-------------|-------|
+| `submodules/openclaw/openclaw` | Core OpenClaw engine | — |
+| `submodules/openclaw/acpx` | Agent Client Protocol CLI | — |
+| `submodules/openclaw/lobster` | Typed workflow shell | — |
+| `submodules/openclaw/skills` | Skill collection (SKILL.md files) | — |
+| `submodules/openclaw/clawdinators` | Nix clawdinators | — |
+| `submodules/openclaw/clawhub` | Skill directory | — |
+| `submodules/openclaw/butter.bot` | Butter bot | — |
+| `submodules/openclaw/clawgo` | Go client | — |
+| `submodules/openclaw/openclaw-ansible` | Ansible automation | — |
+
+## Deep Integration: New Open Source Repos (MIT)
+
+| Submodule | Description | Stars | Integration |
+|-----------|-------------|-------|-------------|
+| `submodules/agent-skills-context` | [Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) — SCRATCHPAD, COMPRESSOR, TOKEN-BUDGET patterns | 10.7k ⭐ | `agent-skills.service.js`, `agent-skills-context.agent.js` |
+| `submodules/deer-flow` | [deer-flow](https://github.com/bytedance/deer-flow) — ByteDance SuperAgent harness for deep research (LangGraph) | 20.5k ⭐ | `deer-flow.service.js`, `deer-flow.agent.js` |
+| `submodules/pageindex` | [PageIndex](https://github.com/VectifyAI/PageIndex) — Vectorless reasoning RAG, page-level citation | 17.7k ⭐ | `pageindex.service.js`, `pageindex.agent.js` |
+| `submodules/learn-claude-code` | [learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) — Nano agent bash tool loop | 18k ⭐ | `nano-agent.service.js`, `learn-claude-code.agent.js` |
 
 ## 📂 Directory Structure
 
 - **Root**: Project Configuration & Orchestration
-- **alti.code.studio.backend**: Component Source Code
-- **alti.code.studio.frontend**: Component Source Code
+- **alti.code.studio.backend**: Backend API + 319+ Agent Swarm
+- **alti.code.studio.frontend**: Next.js Chat Frontend
+- **submodules/openclaw/**: OpenClaw MIT ecosystem (9 repos)
+- **submodules/agent-skills-context/**: Context engineering skill library
+- **submodules/deer-flow/**: ByteDance SuperAgent research harness
+- **submodules/pageindex/**: Vectorless RAG system
+- **submodules/learn-claude-code/**: Nano code agent patterns

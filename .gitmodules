@@ -73,3 +73,15 @@
 [submodule "submodules/openclaw/butter.bot"]
 	path = submodules/openclaw/butter.bot
 	url = https://github.com/openclaw/butter.bot.git
+[submodule "submodules/agent-skills-context"]
+	path = submodules/agent-skills-context
+	url = https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering.git
+[submodule "submodules/deer-flow"]
+	path = submodules/deer-flow
+	url = https://github.com/bytedance/deer-flow.git
+[submodule "submodules/pageindex"]
+	path = submodules/pageindex
+	url = https://github.com/VectifyAI/PageIndex.git
+[submodule "submodules/learn-claude-code"]
+	path = submodules/learn-claude-code
+	url = https://github.com/shareAI-lab/learn-claude-code.git
