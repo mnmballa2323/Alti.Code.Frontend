@@ -2,11 +2,21 @@
 
 ## 🌌 Long-Term Vision
 
-To be the premier AI-native development platform where a self-orchestrating armada of **245+ hyper-specialized agents** spanning **16 industry verticals** autonomously handles the full software delivery lifecycle — from idea to production — while giving engineers and leaders total visibility and control across every technology stack and industry domain.
+To be the premier AI-native development platform where a self-orchestrating armada of **319+ hyper-specialized agents** spanning **16 industry verticals** autonomously handles the full software delivery lifecycle — from idea to production — while giving engineers and leaders total visibility and control across every technology stack and industry domain.
 
 ---
 
 ## ✅ Completed
+
+### v7.6.0 — Deep Open Source Integration (2026-02-26)
+- [x] **4 New Open-Source Submodules**: Added `Agent-Skills-for-Context-Engineering` (10.7k ⭐), `deer-flow` (20.5k ⭐), `PageIndex` (17.7k ⭐), `learn-claude-code` (18k ⭐) — all MIT licensed.
+- [x] **Real ACP Dispatch**: `core.integration.js` now uses real `acpxService.exec()` / `acpxService.prompt()` replacing the `setTimeout` mock; Lobster workflow support added.
+- [x] **3 New OpenClaw Services**: `acpx.service.js` (ACP session manager), `lobster.service.js` (workflow pipeline bridge), `clawhub.service.js` (skill directory REST client).
+- [x] **4 New Open Source Services**: `agent-skills.service.js`, `deer-flow.service.js`, `pageindex.service.js`, `nano-agent.service.js`.
+- [x] **4 New Specialist Agents**: Context Engineering, Deep Research (deer-flow), PageIndex RAG, Nano Code Agent.
+- [x] **204-Route Capability Router**: Added 44 new keywords across 4 route entries.
+- [x] **skills.bridge.js Upgraded**: Real recursive SKILL.md scanner replacing 2-item hardcoded stub.
+- [x] **OPEN_SOURCE_INTEGRATIONS.md**: New deep-dive reference document for all 4 integrated repos.
 
 ### v8.1.0 — Enterprise Observability & Tenant FinOps (2026-02-25)
 - [x] **Prometheus Custom Metrics**: Google Managed Prometheus `PodMonitoring` scraping custom metrics natively.
@@ -219,3 +229,4 @@ To be the premier AI-native development platform where a self-orchestrating arma
 | v7.5.0 | 2026-02-25 | Multi-Region Global Resilience (GCLB + Secondary Rings) | ✅ Done |
 | v8.0.0 | 2026-02-25 | Zero Trust & DevSecOps Hardening (ASM + Kyverno) | ✅ Done |
 | v8.1.0 | 2026-02-25 | Enterprise Observability & Tenant FinOps (BigQuery) | ✅ Done |
+| v7.6.0 | 2026-02-26 | Deep OS Integration (acpx, lobster, deer-flow, pageindex, learn-claude-code) | ✅ Done |
