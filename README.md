@@ -1,11 +1,11 @@
 # 🌌 Alti.Code.Studio — Enterprise AI Development Platform
 
-> **Version 8.2.0 — Open Source Specialist Armada & Autonomic Generation**
-> *385+ Hyper-Specialized AI Agents. 16 Industry Verticals. Advanced Distributed Cognition.*
+> **Version 8.3.0 — The Elite Architect Armada**
+> *435+ Hyper-Specialized AI Agents. 16 Industry Verticals. Advanced Distributed Cognition.*
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)]()
-[![Agents](https://img.shields.io/badge/agents-385%2B-purple.svg)]()
+[![Agents](https://img.shields.io/badge/agents-435%2B-purple.svg)]()
 [![Verticals](https://img.shields.io/badge/verticals-16-orange.svg)]()
 [![Languages](https://img.shields.io/badge/languages-46-orange.svg)]()
 [![Cloud](https://img.shields.io/badge/cloud_providers-21-blue.svg)]()
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 385+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **16 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
+Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 435+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **16 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
@@ -30,7 +30,7 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 |-----------|------|
 | `graph.orchestrator.js` | LangGraph-powered multi-agent orchestrator with plan → guard → execute → review pipeline |
 | `capability.router.js` | Semantic routing engine — **270 keyword-scored routes** mapping queries to the right specialist |
-| `swarm.health.js` | Live health monitoring and circuit breaker status for all 385+ agents |
+| `swarm.health.js` | Live health monitoring and circuit breaker status for all 435+ agents |
 | `agent.index.js` | Searchable catalog of all agents with capability metadata |
 | `swarm.controller.js` | REST API surface — `/api/swarm` endpoints for health, routing, dispatch, fan-out |
 
@@ -49,7 +49,7 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 | 18 | **Dynamic Languages** | **8** | Ruby, PHP, Perl, R, Julia, MATLAB, PowerShell, Groovy |
 | 19 | **Functional Languages** | **8** | Haskell, Elixir, Erlang, Scala, F#, OCaml, Clojure, Racket |
 | 20 | **Legacy & Specialized** | **15** | COBOL, Fortran, Ada, Assembly, Obj-C, Crystal, Lua, APL, VHDL, Apex, ABAP, Prolog, Dart, Wolfram, PL/SQL |
-| **OSS** | **Open Source Specialists** | **66** | React, Vue, Svelte, Next.js, Django, FastAPI, TensorFlow, PyTorch, LangChain, PostgreSQL, Redis, Docker, CDK, Playwright, React Native |
+| **OSS** | **Open Source Specialists** | **116** | React, Vue, Svelte, Next.js, Django, FastAPI, TensorFlow, PyTorch, LangChain, PostgreSQL, Redis, Docker, CDK, Playwright, React Native, HTMX, Alpine.js, SolidJS, Fastify, ElysiaJS, Qwik, XState, Meilisearch, Nuxt.js, Deno, Appwrite, AdonisJS, Three.js, Puppeteer, Strapi, Gin, Axios, Vite, Express, Redux, Bootstrap, D3.js, MUI, Ant Design, Chroma, Milvus, Qdrant, ClickHouse, Prisma, Drizzle, TypeORM, SQLAlchemy, Zustand, Cypress, Docusaurus, Gatsby, Hugo, Ghost, OpenCV, Ray, Spark, Airflow, Terraform, Pulumi, Crossplane, Helm, Kafka, RabbitMQ, gRPC, NATS |
 | **Industry** | **FinTech** | **9** | Alpaca, Polygon.io, Alpha Vantage, Plaid, Modern Treasury, Stripe Treasury, Persona KYC, Brex, Yodlee |
 | **Industry** | **Healthcare** | **5** | FHIR R4, HL7 v2, Medplum, Epic MyChart, Cerner |
 | **Industry** | **Gaming & GameFi** | **7** | Unity SDK, PlayFab, Photon Fusion 2, Nakama, Steam, Immutable zkEVM, Agora |
@@ -70,7 +70,7 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 ## ✨ Key Features
 
 ### 🧠 The Industry Armada Intelligence
-- **385+ specialist agents** each with deep domain expertise and production-grade preambles
+- **435+ specialist agents** each with deep domain expertise and production-grade preambles
 - **16 industry verticals** with dedicated specialist agents — from Real Estate to Cybersecurity
 - **270 keyword-scored routes** automatically dispatch every query to the most capable agent
 - **Fan-out execution** — simultaneous multi-agent consultation for complex problems
@@ -145,7 +145,7 @@ kubectl apply -f .
 | Endpoint | Description |
 |----------|-------------|
 | `POST /api/orchestrate` | Submit a task to the multi-agent orchestrator |
-| `GET /api/swarm/health` | Live health status of all 385+ agents |
+| `GET /api/swarm/health` | Live health status of all 435+ agents |
 | `GET /api/swarm/agents` | Browse and search all registered agents |
 | `POST /api/swarm/route` | Find the best agent for a given query |
 | `POST /api/swarm/dispatch` | Route + auto-consult the best agent |
@@ -179,10 +179,11 @@ alti.code.studio/               ← Monorepo root
 | Document | Description |
 |----------|-------------|
 | [Backend README](alti.code.studio.backend/README.md) | Backend setup, API reference |
-| [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture |
+| [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture (v8.3.0) |
 | [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with 16 industry verticals |
 | [INDUSTRY_AGENTS.md](alti.code.studio.backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
-| [OPEN_SOURCE_AGENTS.md](alti.code.studio.backend/docs/OPEN_SOURCE_AGENTS.md) | Deep-dive into all 66 new Open Source specialist agents |
+| [ELITE_ARCHITECT_PREAMBLES.md](alti.code.studio.backend/docs/ELITE_ARCHITECT_PREAMBLES.md) | v8.3.0 agent preamble standard & upgraded agent reference |
+| [OPEN_SOURCE_AGENTS.md](alti.code.studio.backend/docs/OPEN_SOURCE_AGENTS.md) | Deep-dive into all 116 new Open Source specialist agents |
 | [OPENCLAW_INTEGRATION.md](alti.code.studio.backend/docs/OPENCLAW_INTEGRATION.md) | Deep integration guide for 19 OpenClaw submodules |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [ROADMAP.md](ROADMAP.md) | Planned features |

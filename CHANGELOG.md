@@ -7,6 +7,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [8.3.0] - 2026-02-27 — The Elite Architect Armada
+### Added
+- **Elite Architect Preambles**: Rewrote and hardened the system instructions for 60+ specialist agents across Cloud, Data, Analytics, Marketing, Real-Time Video, and CMS domains.
+- **Deep Domain Immersion**: Agents now possess sub-specialized knowledge mapping (e.g., Sanity GROQ queries, AWS CDK infrastructure patterns, WebRTC connection states, FinOps arbitrage).
+- **Security & Reliability Guardrails**: Embedded absolute instructions enforcing server-side credential isolation, API key rotation awareness, and framework-specific anti-patterns into the core agent identities.
+
 ## [8.2.0] - 2026-02-25 — Open Source Specialist Armada (Phase 11)
 ### Added
 - **OSS Agent Synthesizer Generator**: Autonomous pipeline that ingests GitHub Trending repositories and synthesizes production-grade agents trained specifically on OSS tool documentation.
