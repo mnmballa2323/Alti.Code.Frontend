@@ -8,6 +8,30 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 ## ✅ Completed
 
+### v8.7.0 — OSS Agent Armada Expansion IV (2026-02-28)
+- [x] **Python AI & Data Apps**: Created 4 agents for rapid prototyping and classical ML (`streamlit`, `gradio`, `scikit_learn`, `xgboost`).
+- [x] **Enterprise JVM & Concurrency**: Created 4 agents for reactive, high-performance Java (`quarkus`, `micronaut`, `vert_x`, `akka`).
+- [x] **OSS Infrastructure & Platform**: Created 4 agents for IAM, Observability, and BI (`keycloak`, `sentry`, `posthog`, `metabase`).
+- [x] **Swarm Integration**: Pushed the 12 new agents into `capability.router.js`, expanding the platform to 471+ agents and 306 keyword routes.
+
+### v8.6.0 — OSS Agent Armada Expansion III (2026-02-28)
+- [x] **GitOps & Advanced CI/CD**: Created 4 agents focused on declarative pipelines and GitOps reconciliation (`gitlab_ci`, `jenkins`, `argocd`, `fluxcd`).
+- [x] **Game Engines & Web Graphics**: Created 4 agents for high-performance interactive experiences (`godot`, `bevy`, `phaser`, `webgpu`).
+- [x] **Serverless & Cloud Emulation**: Created 4 agents for cloud-native configurations and local emulation (`sst`, `serverless_fw`, `localstack`, `aws_sam`).
+- [x] **Swarm Integration**: Added and mapped the 12 new agents into `capability.router.js`, expanding the platform to 459+ agents and 294 keyword routes.
+
+### v8.5.0 — OSS Agent Armada Expansion II (2026-02-28)
+- [x] **LLMOps & Local AI Specialists**: Created 4 agents focused on configuring, quantizing, and serving LLMs (`vllm`, `ollama`, `hf_transformers`, `gguf`). 
+- [x] **Data Engineering**: Created 4 agents for data pipelines (`dbt`, `airflow`, `snowflake`, `databricks`).
+- [x] **Web3 & Blockchain**: Created 4 agents for smart contracts and blockchain (`solidity`, `hardhat`, `ethers.js`, `anchor`).
+- [x] **Swarm Integration**: Added and mapped the 12 new agents into `capability.router.js`, expanding the platform to 447+ agents and 282 keyword routes.
+
+### v8.4.0 — The Omniscient Weaver & Predictive Sentinel (2026-02-28)
+- [x] **Autonomous Cross-Repo Orchestration**: `multiRepoOrchestration.service.js` proactively tracks submodule dependencies and auto-forks/propagates breaking AST changes.
+- [x] **Predictive Performance Auditing**: Introduced `performanceAuditor.service.js` which performs Big-O complexity analysis during the GUARDIAN sprint phase prior to sandbox execution.
+- [x] **Continuous Chaos Engineering (The Sentinel)**: Deployed `redTeam.agent.js`, an ephemeral swarm simulating IAM breakouts and piping penetration telemetry to the `/mission-control` dashboard.
+- [x] **Cognitive Traceability ("The Glass Box")**: Added a 3D visualization graph in the Frontend Code Browser (`/studio/files`) mapping generated code back to LLM prompts, active Agent Identities, Jira Epics, and Security Policies.
+
 ### v8.3.0 — The Elite Architect Armada (2026-02-27)
 - [x] **Agent Preamble Hardening**: Upgraded 60+ specialist agents (Cloud, Systems, Real-Time, CMS, E-Commerce, Security, FinTech) into deeply knowledgeable context-aware Integration Architects.
 - [x] **Domain-Specific Constraints**: Injected deep expertise covering AWS CDK, GCP Anthos, Terraform, Contentful GROQ, WebRTC protocols, and HIPAA/SOC2 compliance patterns directly into agent prompt geometries.
@@ -242,3 +266,7 @@ To be the premier AI-native development platform where a self-orchestrating arma
 | v7.6.0 | 2026-02-26 | Deep OS Integration (acpx, lobster, deer-flow, pageindex, learn-claude-code) | ✅ Done |
 | v8.2.0 | 2026-02-25 | Open Source Specialist Armada & Autonomic Generation (66 new agents) | ✅ Done |
 | v8.3.0 | 2026-02-27 | The Elite Architect Armada (Preamble Hardening across 60+ agents) | ✅ Done |
+| v8.4.0 | 2026-02-28 | The Omniscient Weaver & Predictive Sentinel | ✅ Done |
+| v8.5.0 | 2026-02-28 | OSS Agent Armada Expansion II (LLMOps, Big Data, Web3) | ✅ Done |
+| v8.6.0 | 2026-02-28 | OSS Agent Armada Expansion III (GitOps, Game Engines, Serverless) | ✅ Done |
+| v8.7.0 | 2026-02-28 | OSS Agent Armada Expansion IV (Python AI, Enterprise JVM, OSS Infra) | ✅ Done |

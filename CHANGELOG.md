@@ -7,6 +7,34 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [8.7.0] - 2026-02-28 — OSS Agent Armada Expansion IV
+### Added
+- **Python AI & Data Apps**: Introduced `streamlit`, `gradio`, `scikit_learn`, and `xgboost` agents for declarative interfaces and robust classical machine learning processing.
+- **Enterprise JVM & Concurrency**: Introduced `quarkus`, `micronaut`, `vert_x`, and `akka` agents focusing on AOT compilation, actor models, and extreme throughput polyglot systems.
+- **OSS Infrastructure & Platform**: Introduced `keycloak`, `sentry`, `posthog`, and `metabase` agents handling heavy self-hosted enterprise capabilities for observability, IAM, and analytics.
+- **Swarm Intelligence**: Expanded the `capability.router.js` dictionary with 12 new routing paths, bringing the Swarm's total hyper-specialized agent count to 471+.
+
+## [8.6.0] - 2026-02-28 — OSS Agent Armada Expansion III
+### Added
+- **GitOps & Advanced CI/CD Specialists**: Introduced `gitlab_ci`, `jenkins`, `argocd`, and `fluxcd` agents for continuous delivery, declarative pipelines, and native Kubernetes state reconciliation.
+- **Game Engines & Web Graphics**: Introduced `godot`, `bevy`, `phaser`, and `webgpu` agents for high-performance interactive application generation across Rust, HTML5 Canvas, and native engines.
+- **Serverless & Cloud Emulation**: Introduced `sst`, `serverless_fw`, `localstack`, and `aws_sam` agents for robust cloud-native configuration synthesis and local testing logic.
+- **Swarm Intelligence**: Expanded the `capability.router.js` dictionary with 12 new routing paths, bringing the Swarm's total hyper-specialized agent count to 459+.
+
+## [8.5.0] - 2026-02-28 — OSS Agent Armada Expansion II
+### Added
+- **LLMOps & Local AI Specialists**: Introduced `vllm`, `ollama`, `hf_transformers`, and `gguf` agents for configuring, serving, and quantizing local LLMs.
+- **Data Engineering**: Introduced `dbt`, `airflow`, `snowflake`, and `databricks` agents for managing advanced data pipelines and data lakes.
+- **Web3 & Blockchain**: Introduced `solidity`, `hardhat`, `ethers.js`, and `anchor` agents for accelerating smart contract development across Ethereum and Solana ecosystems.
+- **Swarm Intelligence**: Expanded the `capability.router.js` dictionary with 12 new routing paths, bringing the Swarm's total hyper-specialized agent count to 447+.
+
+## [8.4.0] - 2026-02-28 — The Omniscient Weaver & Predictive Sentinel
+### Added
+- **Autonomous Cross-Repo Meta-Orchestration**: The `multiRepoOrchestration.service.js` now tracks upstream submodule AST breakpoints and autonomously propagates dual-repo PR modifications via `forkAndPropagate()`.
+- **Predictive AST-Level Performance Auditing**: Swarm execution now rejects inherent memory leaks and React cascading re-renders before runtime test pipelines via `performanceAuditor.service.js`.
+- **Continuous Chaos Engineering (Red Teaming)**: Provisioned `redTeam.agent.js` which actively probes Gatekeeper environments and continuously pipes real-time penetration reports to the `/mission-control` frontend.
+- **Cognitive Traceability ("The Glass Box")**: Enabled `react-force-graph-3d` in the Code Browser UI (`GlassBoxGraph.tsx`) establishing full visual pedigree connecting lines of code directly to original prompts, assigned orchestrators, and governing Jira Epics.
+
 ## [8.3.0] - 2026-02-27 — The Elite Architect Armada
 ### Added
 - **Elite Architect Preambles**: Rewrote and hardened the system instructions for 60+ specialist agents across Cloud, Data, Analytics, Marketing, Real-Time Video, and CMS domains.
