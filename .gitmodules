@@ -85,3 +85,6 @@
 [submodule "submodules/learn-claude-code"]
 	path = submodules/learn-claude-code
 	url = https://github.com/shareAI-lab/learn-claude-code.git
+[submodule "alti.code.studio.desktop"]
+	path = alti.code.studio.desktop
+	url = https://github.com/mnmballa2323/Alti.Code.Studio.Desktop.git
