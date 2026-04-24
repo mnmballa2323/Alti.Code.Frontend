@@ -49,6 +49,13 @@ resource "google_project_iam_member" "gke_developer" {
   member  = "serviceAccount:${google_service_account.cicd_sa.email}"
 }
 
+# Grant Vertex AI API Permissions
+resource "google_project_iam_member" "vertex_ai_user" {
+  project = var.project_id
+  role    = "roles/aiplatform.user"
+  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+}
+
 # -------------------------------------------------------------
 # Bind the GitHub Repository to the Service Account
 # -------------------------------------------------------------
