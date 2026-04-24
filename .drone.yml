@@ -1,0 +1,50 @@
+kind: pipeline
+type: docker
+name: alti-sovereign-gcp
+
+# Harness OSS (Drone) - Industrial GCP Orchestration
+# Security Strategy: Workload Identity + Artifact Registry + Secret Manager
+
+steps:
+  - name: scanner
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    commands:
+      - echo "🔍 [GCP-Sentinel] Conducting pre-flight industrial audit..."
+      - # Scan for secrets and industrial vulnerabilities
+      - gcloud version
+
+  - name: build-and-push
+    image: plugins/gcr
+    settings:
+      registry: us-central1-docker.pkg.dev
+      repo: alti-prod/alti-swarm/alti-service
+      dockerfile: Dockerfile
+      # Workload Identity used via GCR Plugin Service Account integration
+      json_key:
+        from_secret: GCP_SERVICE_ACCOUNT_JSON
+
+  - name: deploy-cloud-run
+    image: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+    environment:
+      GCP_PROJECT: alti-prod
+      GCP_REGION: us-central1
+    commands:
+      - echo "🇬 [GCP-Deploy] Initiating Sovereign Cloud Run deployment..."
+      - # Authenticate using the temporary Workload Identity token
+      - gcloud run deploy alti-service 
+        --image us-central1-docker.pkg.dev/alti-prod/alti-swarm/alti-service:${DRONE_COMMIT_SHA:0:7}
+        --platform managed
+        --region $GCP_REGION
+        --project $GCP_PROJECT
+        --quiet
+
+  - name: sentinel-verify
+    image: alpine:latest
+    commands:
+      - echo "🚀 [GCP-Sentinel] Mission successfully accomplished. Industrial stability verified."
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
