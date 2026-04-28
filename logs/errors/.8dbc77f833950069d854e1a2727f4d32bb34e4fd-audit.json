@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/michaelmeram/workspace/alti.code.studio/logs/errors/.8dbc77f833950069d854e1a2727f4d32bb34e4fd-audit.json",
+    "files": [
+        {
+            "date": 1777412811285,
+            "name": "/Users/michaelmeram/workspace/alti.code.studio/logs/errors/RH-2026-04-28-17-error.log",
+            "hash": "7353d6dd411cf459b98d5e632937e74b619b6a11457d020484655411546fbd6a"
+        }
+    ],
+    "hashType": "sha256"
+}
