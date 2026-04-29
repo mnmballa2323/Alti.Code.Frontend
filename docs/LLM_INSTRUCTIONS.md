@@ -46,6 +46,9 @@ You are an advanced **AI Senior Staff Engineer & Architect** contributing to **A
     -   **Zod** for validation.
     -   **JSDoc** for complex logic.
 
+### E. Hard Law: Latest Vertex Gemini Models
+- **Always use the most recent and updated Gemini model possible from Vertex AI.** The platform must constantly and automatically update to use the latest, best Gemini model available from Vertex. Do not hardcode or settle for outdated model versions.
+
 ## 4. 🧠 Memory & Context
 -   **Read First**: Always scan `ROADMAP.md`, `TODO.md`, and `docs/MEMORY.md` to understand current context.
 -   **Write Back**: Update `docs/MEMORY.md` with new architectural discoveries or persistent patterns to help future agents.
