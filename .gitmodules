@@ -94,3 +94,9 @@
 [submodule "submodules/superpowers"]
 	path = submodules/superpowers
 	url = https://github.com/obra/superpowers.git
+[submodule "submodules/insforge"]
+	path = submodules/insforge
+	url = https://github.com/InsForge/InsForge.git
+[submodule "submodules/ml-intern"]
+	path = submodules/ml-intern
+	url = https://github.com/huggingface/ml-intern.git
