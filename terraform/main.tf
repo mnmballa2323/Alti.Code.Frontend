@@ -5,10 +5,6 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 5.0"
     }
-    mongodbatlas = {
-      source  = "mongodb/mongodbatlas"
-      version = "~> 1.10"
-    }
     random = {
       source  = "hashicorp/random"
       version = "~> 3.5"
@@ -26,17 +22,24 @@ provider "google" {
   region  = var.region
 }
 
-provider "mongodbatlas" {
-  public_key  = var.atlas_public_key
-  private_key = var.atlas_private_key
-}
-
 # -------------------------------------------------------------
 # Google Cloud APIs
 # -------------------------------------------------------------
 resource "google_project_service" "vertex_ai_api" {
   project = var.project_id
   service = "aiplatform.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "gemini_api" {
+  project = var.project_id
+  service = "generativelanguage.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "cloud_ai_companion_api" {
+  project = var.project_id
+  service = "cloudaicompanion.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -80,7 +83,6 @@ module "database" {
   environment      = var.environment
   region           = var.region
   network_id       = module.network.network_name
-  atlas_project_id = var.atlas_project_id
 }
 
 # -------------------------------------------------------------
@@ -94,8 +96,6 @@ module "secrets" {
     "STRIPE_SECRET_KEY"         = var.stripe_secret_key
     "STRIPE_WEBHOOK_SECRET_KEY" = var.stripe_webhook_secret_key
     "REDIS_URL"                 = "redis://default:${module.database.redis_auth_string}@${module.database.redis_host}:${module.database.redis_port}"
-    "MONGO_URI"                 = module.database.mongo_uri
-    "MONGO_PASSWORD"            = module.database.mongo_password
     "PENTAGI_DB_PASSWORD"       = module.database.pg_password
   }
 }
@@ -111,10 +111,29 @@ module "workload_identity" {
 }
 
 # -------------------------------------------------------------
+# Vertex AI Context Storage (Multimodal Inputs)
+# -------------------------------------------------------------
+resource "google_storage_bucket" "gemini_context" {
+  name          = "alti-gemini-context-${var.environment}"
+  location      = var.region
+  force_destroy = true
+  
+  uniform_bucket_level_access = true
+}
+
+# -------------------------------------------------------------
+# Agentic Swarm Event Bus (Pub/Sub)
+# -------------------------------------------------------------
+resource "google_pubsub_topic" "swarm_events" {
+  name = "alti-swarm-events-${var.environment}"
+}
+
+# -------------------------------------------------------------
 # Outputs
 # -------------------------------------------------------------
 output "gke_cluster_endpoint" { value = module.gke.cluster_endpoint }
 output "redis_host" { value = module.database.redis_host }
-output "mongo_uri_base" { value = module.database.mongo_uri }
 output "workload_identity_provider" { value = module.workload_identity.workload_identity_provider }
 output "service_account_email" { value = module.workload_identity.service_account_email }
+output "gemini_context_bucket" { value = google_storage_bucket.gemini_context.name }
+output "swarm_events_topic" { value = google_pubsub_topic.swarm_events.name }

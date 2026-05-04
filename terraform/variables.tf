@@ -15,22 +15,6 @@ variable "environment" {
   default     = "prod"
 }
 
-# MongoDB Atlas
-variable "atlas_project_id" {
-  description = "MongoDB Atlas Project ID"
-  type        = string
-}
-
-variable "atlas_public_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "atlas_private_key" {
-  type      = string
-  sensitive = true
-}
-
 # Stripe API Keys (Injected into Secret Manager)
 variable "stripe_secret_key" {
   type      = string
