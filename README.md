@@ -101,7 +101,8 @@ VHDL/SystemVerilog · Apex · ABAP · Prolog · Dart · Wolfram · PL/SQL**
 - **Live web intelligence**: The Surfer agent browses and resolves unknown errors in real time
 - **Self-modification**: The Surgeon autonomously patches and refactors agent logic
 - **Observability**: Full OpenTelemetry integration with distributed tracing
-- **RAG-powered memory**: Vector store + Qdrant for persistent knowledge retrieval
+- **Ultimate RAG Pipeline**: Triple-threat context retrieval (Spanner Graph, Vertex AI, OS CLI) synthesized with inline citations by Gemini 3.1 Pro
+- **Unified Conversational UI**: Flawless ChatGPT-style interface powering both standard chat and sovereign codebase search
 - **Voice I/O**: Multimodal voice agent with LiveKit + ElevenLabs integration
 
 ---
@@ -182,6 +183,7 @@ alti.code.studio/               ← Monorepo root
 | [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture (v8.3.0) |
 | [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with 16 industry verticals |
 | [INDUSTRY_AGENTS.md](alti.code.studio.backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
+| [ULTIMATE_RAG_ARCHITECTURE.md](docs/ULTIMATE_RAG_ARCHITECTURE.md) | Triple-threat Retrieval Pipeline & UI architecture |
 | [ELITE_ARCHITECT_PREAMBLES.md](alti.code.studio.backend/docs/ELITE_ARCHITECT_PREAMBLES.md) | v8.3.0 agent preamble standard & upgraded agent reference |
 | [OPEN_SOURCE_AGENTS.md](alti.code.studio.backend/docs/OPEN_SOURCE_AGENTS.md) | Deep-dive into all 116 new Open Source specialist agents |
 | [OPENCLAW_INTEGRATION.md](alti.code.studio.backend/docs/OPENCLAW_INTEGRATION.md) | Deep integration guide for 19 OpenClaw submodules |
