@@ -28,7 +28,13 @@ steps:
 
   # 4. Containerize Frontend for Cloud Run
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/alti-code-studio-frontend', '.']
+    args: 
+      - 'build'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_API_URL=$_NEXT_PUBLIC_API_URL'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/alti-code-studio-frontend'
+      - '.'
     dir: 'alti.code.studio.frontend'
     id: 'docker-build-frontend'
 
@@ -79,6 +85,7 @@ steps:
 
 substitutions:
   _REGION: 'us-central1'
+  _NEXT_PUBLIC_API_URL: 'https://alti-code-studio-backend-xxxx.a.run.app' # REPLACE THIS WITH ACTUAL DEPLOYED BACKEND URL
 
 images:
   - 'gcr.io/$PROJECT_ID/alti-code-studio-backend'
