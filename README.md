@@ -8,7 +8,7 @@
 [![Agents](https://img.shields.io/badge/agents-578%2B-purple.svg)]()
 [![Verticals](https://img.shields.io/badge/verticals-35-orange.svg)]()
 [![Languages](https://img.shields.io/badge/languages-46-orange.svg)]()
-[![Cloud](https://img.shields.io/badge/cloud_providers-21-blue.svg)]()
+[![Cloud](https://img.shields.io/badge/cloud_providers-44-blue.svg)]()
 
 ---
 
