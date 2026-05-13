@@ -1,0 +1,76 @@
+[dotenv@17.3.1] injecting env (12) from .env -- tip: ΓÜí∩╕Å secrets for agents: https://dotenvx.com/as2
+{
+  message: 'VertexService: Initialized for project alti-code-studio using model gemini-1.5-pro-preview-0409',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:35.263Z'
+}
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ΓÜÖ∩╕Å  suppress all logs with { quiet: true }
+{
+  message: '≡ƒæü∩╕Å Sentinel Log Watcher Activated',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:36.067Z'
+}
+--- Attempting Real MongoDB Connection ---
+(node:6780) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  message: 'ΓÜá∩╕Å Redis unreachable. Switching to local Nervous System (Mock Mode).',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.173Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: sys.log.error',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.185Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: guardian.audit.rejected',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.187Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: generator.project.created',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.188Z'
+}
+--- Real MongoDB Failed. Entering Falback ---
+{
+  message: 'ΓÜá∩╕Å Local MongoDB connection failed: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.435Z'
+}
+{
+  message: 'ΓÜá∩╕Å Switching to In-Memory MongoDB (Mock Mode)...',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:38.437Z'
+}
+--- Importing MongoMemoryServer ---
+--- Creating MongoMemoryServer Instance ---
+--- Getting URI ---
+--- Connecting Mongoose to mongodb://127.0.0.1:59967/ ---
+{
+  message: 'Γ£à Connected to In-Memory MongoDB at mongodb://127.0.0.1:59967/',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-15T01:06:43.005Z'
+}
+Uncaught Exception detected: Error: listen EADDRINUSE: address already in use :::5000
+    at Server.setupListenHandle [as _listen2] (node:net:2016:16)
+    at listenInCluster (node:net:2073:12)
+    at Server.listen (node:net:2178:7)
+    at main (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/server.js:55:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  code: 'EADDRINUSE',
+  errno: -4091,
+  syscall: 'listen',
+  address: '::',
+  port: 5000
+}

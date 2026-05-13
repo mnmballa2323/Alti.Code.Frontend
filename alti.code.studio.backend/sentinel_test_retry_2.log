@@ -1,0 +1,1628 @@
+[dotenv@17.3.1] injecting env (11) from .env -- tip: ≡ƒöÉ prevent committing .env to code: https://dotenvx.com/precommit
+{
+  message: 'ΓÜá∩╕Å No Valid API Key found. Vector Memory operating in MOCK mode.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.855Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.warn',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.860Z'
+}
+{
+  message: '≡ƒæü∩╕Å Sentinel Log Watcher Activated',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.861Z'
+}
+{
+  message: 'Event Bus Disconnected. Cannot subscribe to: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.861Z'
+}
+{
+  message: 'Event Bus Disconnected. Cannot subscribe to: guardian.audit.rejected',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.865Z'
+}
+{
+  message: 'Event Bus Disconnected. Cannot subscribe to: generator.project.created',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.866Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.904Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:07.905Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.159Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.160Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.393Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.393Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.621Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:08.622Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:09.063Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:09.063Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:09.956Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:09.957Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:11.670Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:11.671Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:13.732Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:13.733Z'
+}
+Γ¥î Cannot connect to Elasticsearch: ConnectionError
+    at SniffingTransport._request (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:652:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:712:32
+    at async SniffingTransport.request (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:708:20)
+    at async Client.PingApi [as ping] (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/elasticsearch/esm/api/api/ping.js:42:12) {
+  options: { redaction: { type: 'replace', additionalKeys: [] } },
+  meta: {
+    body: undefined,
+    statusCode: 0,
+    headers: {},
+    meta: {
+      context: null,
+      request: [Object],
+      name: 'elasticsearch-js',
+      connection: [Object],
+      attempts: 3,
+      aborted: false,
+      duration: 3.0969
+    },
+    warnings: null
+  }
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:15.755Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:15.755Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:17.840Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:17.841Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:19.925Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:19.925Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:21.992Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:21.993Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:24.160Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:24.161Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:26.252Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:26.253Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:28.324Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:28.324Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:30.337Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:30.338Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:32.451Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:32.452Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:34.565Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:34.565Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:36.758Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:36.759Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:38.766Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:38.767Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:40.777Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:40.778Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:42.914Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:42.914Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:44.978Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:44.978Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:47.006Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:47.007Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:49.122Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:49.122Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:51.219Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:51.220Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:53.381Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:53.382Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:55.545Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:55.545Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:57.624Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:57.625Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:59.706Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:21:59.707Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:01.800Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:01.800Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:03.813Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:03.813Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:05.943Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:05.943Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:07.990Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:07.990Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:10.190Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:10.190Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:12.282Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:12.282Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:14.342Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:14.342Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:16.512Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:16.513Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:18.625Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:18.626Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:20.659Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:20.659Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:22.776Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:22.776Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:24.811Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:24.812Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:26.880Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:26.880Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:29.021Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:29.022Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:31.170Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:31.170Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:33.194Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:33.194Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:35.298Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:35.298Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:37.401Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:37.401Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:39.504Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:39.504Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:41.691Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:41.691Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:43.699Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:43.699Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:45.819Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:45.820Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:47.923Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:47.923Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:50.109Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:50.109Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:52.172Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:52.172Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:54.282Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:54.283Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:56.353Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:56.354Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:58.430Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:58.431Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:00.523Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:00.525Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:02.596Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:02.596Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:04.648Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:04.649Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:06.850Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:06.851Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:08.891Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:08.892Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:10.945Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:10.945Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:12.981Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:12.981Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:15.155Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:15.156Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:17.262Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:17.263Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:19.343Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:19.344Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:21.488Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:21.489Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:23.666Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:23.667Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:25.742Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:25.743Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:27.946Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:27.946Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:30.007Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:30.007Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:32.152Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:32.152Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:34.237Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:34.237Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:36.341Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:36.342Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:38.380Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:38.380Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:40.505Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:40.506Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:42.518Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:42.518Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:44.550Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:44.551Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:46.563Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:46.564Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:48.691Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:48.692Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:50.890Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:50.890Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:52.987Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:52.987Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:55.053Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:55.054Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:57.182Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:57.182Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:59.288Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:59.288Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:01.359Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:01.359Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:03.377Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:03.377Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:05.575Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:05.575Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:07.635Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:07.635Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:09.813Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:09.813Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:11.889Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:11.889Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:13.971Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:13.971Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:16.052Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:16.052Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:18.195Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:18.196Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:20.320Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:20.321Z'
+}
+{
+  code: 'ECONNREFUSED',
+  level: 'error',
+  message: 'Redis Publisher Error',
+  stack: 'AggregateError [ECONNREFUSED]: \n' +
+    '    at internalConnectMultiple (node:net:1201:49)\n' +
+    '    at afterConnectMultiple (node:net:1791:7)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:22.422Z'
+}
+{
+  message: 'Event Bus Disconnected. Dropping event: sys.log.error',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:22.422Z'
+}

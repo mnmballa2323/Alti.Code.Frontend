@@ -1,0 +1,128 @@
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ΓÜí∩╕Å secrets for agents: https://dotenvx.com/as2
+{
+  message: '≡ƒö¡ Observability: Langfuse keys missing. Tracing disabled. (GCP Logging client initialized for deployment)',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.022Z'
+}
+{
+  message: '≡ƒö¡ Observability: GCP Logging client not initialized (not in production).',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.034Z'
+}
+{
+  message: '≡ƒö¡ Observability: OpenTelemetry initialization failed or not configured.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.034Z'
+}
+{
+  message: 'VertexService: Initialized for project alti-code-studio using model gemini-3.1-pro',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.203Z'
+}
+{
+  message: '≡ƒº¼ SelfExpandingSwarm: Initialized. Ready to detect capability gaps and synthesize new agents.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.222Z'
+}
+{
+  message: '≡ƒî│ AST: Babel parser initialized for profound codebase traversal.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.542Z'
+}
+{
+  message: '≡ƒö¼ AutonomicService: Proactive Surgeon initialized. Ready to hunt technical debt.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.556Z'
+}
+{
+  message: '≡ƒôè AgentProfiler v6.5.0: Initialized.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.557Z'
+}
+{
+  message: '≡ƒù║∩╕Å CapabilityRouter: Initialized ΓÇö 154 routes covering 154 specialist agents.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.572Z'
+}
+{
+  message: '≡ƒÅâ AutonomousSprintService v6.2.0: Closed-Loop Autonomous Validation initialized.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.911Z'
+}
+{
+  message: '≡ƒùô∩╕Å SprintSchedulerService v6.3.0: Autonomous Goal Synthesis initialized.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:15.916Z'
+}
+≡ƒîî Initializing Phase 7: Universal Autopoiesis Verification...
+
+≡ƒæö 1. The Ambassador: Simulating Stakeholder Intake...
+[Stakeholder]: "Hey swarm, we need a Redis caching layer immediately because our latency is spiking heavily on the feed endpoints. Make it happen."
+{
+  code: 'ETIMEDOUT',
+  level: 'error',
+  message: 'Γ¥î VectorStore init failed. Is PostgreSQL running?',
+  stack: 'AggregateError [ETIMEDOUT]: \n' +
+    '    at C:\\Users\\hyper\\Desktop\\workspace\\alti.code.studio\\alti.code.studio.backend\\node_modules\\pg-pool\\index.js:45:11\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at async VectorStoreService.init (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/memory/vector.store.js:26:13)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:16.572Z'
+}
+{
+  status: 400,
+  statusText: 'Bad Request',
+  errorDetails: [
+    {
+      '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+      reason: 'API_KEY_INVALID',
+      domain: 'googleapis.com',
+      metadata: { service: 'generativelanguage.googleapis.com' }
+    },
+    {
+      '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+      locale: 'en-US',
+      message: 'API key not valid. Please pass a valid API key.'
+    }
+  ],
+  level: 'error',
+  message: 'Gemini generateContent error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]',
+  stack: 'Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]\n' +
+    '    at handleResponseNotOk (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:432:11)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at async makeRequest (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:401:9)\n' +
+    '    at async generateContent (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:865:22)\n' +
+    '    at async _generateContent (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/gemini/gemini.service.js:131:20)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:16.841Z'
+}
+{
+  message: 'ΓÜá∩╕Å Circuit Breaker fallback triggered for GeminiAPI.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-23T00:59:16.843Z'
+}
+file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/shared/circuitBreaker.js:27
+        throw new Error(msg);
+              ^
+
+Error: Service GeminiAPI is currently unavailable. Please try again later.
+    at Function.<anonymous> (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/shared/circuitBreaker.js:27:15)
+    at fallback (C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.backend\node_modules\opossum\lib\circuit.js:666:10)
+    at handleError (C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.backend\node_modules\opossum\lib\circuit.js:657:14)
+    at C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.backend\node_modules\opossum\lib\circuit.js:546:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v25.6.1
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76

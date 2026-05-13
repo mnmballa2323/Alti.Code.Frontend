@@ -1,0 +1,80 @@
+[dotenv@17.3.1] injecting env (12) from .env -- tip: ΓÜÖ∩╕Å  enable debug logging with { debug: true }
+JobQueueService: Constructor started
+JobQueueService: Config object: { url: 'redis://localhost:6379', maxRetriesPerRequest: null }
+JobQueueService: Creating testRedis...
+DEBUG (Module Scope): treeSitterService: TreeSitterService {
+  parser: null,
+  languages: Map(0) {},
+  isInitialized: false
+}
+DEBUG (Module Scope): ensureReady type: function
+≡ƒñû Testing Refactor Agent...
+Step 1: Initializing Service...
+JobQueueService: testRedis error: 
+{
+  message: 'ΓÜá∩╕Å JobQueue: Redis not available. Switching to MOCK MODE.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:00.033Z'
+}
+{
+  message: '≡ƒñû RefactorService: Initialized and listening for jobs',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:00.039Z'
+}
+Step 2: Submitting Task...
+{
+  message: '[MockQueue] Added job refactor.request to refactor-tasks',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.023Z'
+}
+{
+  message: '≡ƒñû RefactorService: Task submitted (Job ID: jeftms)',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.024Z'
+}
+Γ£à Task Submitted. Job ID: jeftms
+Step 3: Waiting for worker to process...
+{
+  message: '≡ƒñû RefactorService: Processing job jeftms - "Rename function start to init"',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.130Z'
+}
+DEBUG: treeSitterService keys: [ 'parser', 'languages', 'isInitialized' ]
+DEBUG: treeSitterService proto: {}
+{
+  message: '≡ƒî▓ Tree-sitter Initialized (WASM)',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.146Z'
+}
+{
+  message: '≡ƒî▓ Loaded language: javascript',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.156Z'
+}
+{
+  message: "   - Parsed src/index.js: Root node type is 'program'",
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.179Z'
+}
+{
+  message: '   - Applying transformation: Rename function start to init',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.180Z'
+}
+{
+  message: '≡ƒñû RefactorService: Job jeftms Completed Successfully',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T22:10:01.180Z'
+}
+Γ¥î Refactor Agent Test Failed: TypeError: jobQueueService.getJob is not a function
+    at runTest (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/check_refactor_agent.js:33:43)

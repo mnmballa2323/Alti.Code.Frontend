@@ -1,0 +1,36 @@
+[dotenv@17.3.1] injecting env (12) from .env -- tip: ΓÜÖ∩╕Å  override existing env vars with { override: true }
+{
+  message: 'ΓÜá∩╕Å No Valid API Key found. Vector Memory operating in MOCK mode.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:25.735Z'
+}
+{
+  message: '≡ƒæü∩╕Å Sentinel Log Watcher Activated',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:22:25.739Z'
+}
+Γ¥î Cannot connect to Elasticsearch: ConnectionError
+    at SniffingTransport._request (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:652:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:712:32
+    at async SniffingTransport.request (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/transport/esm/Transport.js:708:20)
+    at async Client.PingApi [as ping] (file:///C:/Users/hyper/Desktop/alti.code.studio/alti.code.studio.backend/node_modules/@elastic/elasticsearch/esm/api/api/ping.js:42:12) {
+  options: { redaction: { type: 'replace', additionalKeys: [] } },
+  meta: {
+    body: undefined,
+    statusCode: 0,
+    headers: {},
+    meta: {
+      context: null,
+      request: [Object],
+      name: 'elasticsearch-js',
+      connection: [Object],
+      attempts: 3,
+      aborted: false,
+      duration: 3.5915
+    },
+    warnings: null
+  }
+}

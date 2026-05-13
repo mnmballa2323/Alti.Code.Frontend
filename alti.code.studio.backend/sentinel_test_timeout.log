@@ -1,0 +1,63 @@
+[dotenv@17.3.1] injecting env (12) from .env -- tip: ≡ƒöÉ encrypt with Dotenvx: https://dotenvx.com
+{
+  message: 'ΓÜá∩╕Å No Valid API Key found. Vector Memory operating in MOCK mode.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:58.248Z'
+}
+{
+  message: '≡ƒæü∩╕Å Sentinel Log Watcher Activated',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:23:58.253Z'
+}
+{
+  message: 'ΓÜá∩╕Å Redis unreachable. Switching to local Nervous System (Mock Mode).',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.289Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: sys.log.error',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.291Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: guardian.audit.rejected',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.292Z'
+}
+{
+  message: '≡ƒæé [MOCK BUS] Subscribed to: generator.project.created',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.293Z'
+}
+≡ƒº¬ Triggering System Error...
+{
+  label: 'INSO Code Service',
+  level: 'error',
+  message: 'Test Critical System Failure',
+  timestamp: '2026-02-14T20:24:00.294Z'
+}
+{
+  message: '≡ƒæü∩╕Å Sentinel detected ERROR #1: undefined',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.295Z'
+}
+{
+  message: '≡ƒºá Vector Memory Initialized (MOCK MODE)',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.295Z'
+}
+Γ£à Error triggered. Check logs for "≡ƒæü∩╕Å Sentinel detected ERROR".
+{
+  message: '≡ƒºá Memory Added (MOCK)',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-14T20:24:00.296Z'
+}

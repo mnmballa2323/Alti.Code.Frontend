@@ -1,0 +1,52 @@
+=== STARTING TIER 8 MICRO-AGENT TESTS ===
+
+-> Testing FormatterAgent:
+{
+  message: '≡ƒôÉ Formatter Agent: Formatting string [Parser: typescript]...',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:52.754Z'
+}
+{
+  message: '≡ƒôÉ Formatter Agent: Output stabilized.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:52.918Z'
+}
+Γ£à Formatter PASS
+
+-> Testing SecretScannerAgent:
+Γ¥î SecretScanner FAIL (Missed leak)
+
+-> Testing EnvValidatorAgent:
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ΓÜÖ∩╕Å  write to custom object with { processEnv: myObject }
+{
+  message: '≡ƒ¢í∩╕Å EnvValidator Agent: Auditing [C:\\Users\\hyper\\Desktop\\workspace\\alti.code.studio\\alti.code.studio.backend\\mock_test.env]...',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:55.515Z'
+}
+{
+  message: '≡ƒ¢í∩╕Å EnvValidator Agent: Validation complete. Valid=false',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:55.521Z'
+}
+Γ£à EnvValidator PASS (Caught bad keys)
+
+-> Testing ImportSorterAgent:
+{
+  message: '≡ƒùé∩╕Å ImportSorter Agent: Restructuring modules in: C:\\Users\\hyper\\Desktop\\workspace\\alti.code.studio\\alti.code.studio.backend\\mock_test_imports.js',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:55.527Z'
+}
+{
+  message: '≡ƒùé∩╕Å ImportSorter Agent: Successfully ordered imports.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-20T22:34:55.540Z'
+}
+Γ£à ImportSorter PASS
+
+=== ALL TESTS COMPLETED ===

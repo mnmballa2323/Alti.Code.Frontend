@@ -1,0 +1,199 @@
+[dotenv@17.3.1] injecting env (12) from .env -- tip: ≡ƒöÉ encrypt with Dotenvx: https://dotenvx.com
+{
+  message: '≡ƒö¡ Observability: Langfuse keys missing. Tracing disabled.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:44:55.794Z'
+}
+{
+  message: 'Γ£à AuditService: Connected to Google Cloud Logging',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:44:57.751Z'
+}
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ΓÜí∩╕Å secrets for agents: https://dotenvx.com/as2
+--- Attempting Real MongoDB Connection ---
+Cannot instantiate a collection with the DefaultEmbeddingFunction. Please install @chroma-core/default-embed, or provide a different embedding function
+(node:20984) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  cause: undefined,
+  name: 'ChromaConnectionError',
+  level: 'error',
+  message: 'Γ¥î VectorStore init failed. Is Chroma running? Failed to connect to chromadb. Make sure your server is running and try again. If you are running from a browser, make sure that your chromadb instance is configured to allow requests from the current origin using the CHROMA_SERVER_CORS_ALLOW_ORIGINS environment variable.',
+  stack: 'ChromaConnectionError: Failed to connect to chromadb. Make sure your server is running and try again. If you are running from a browser, make sure that your chromadb instance is configured to allow requests from the current origin using the CHROMA_SERVER_CORS_ALLOW_ORIGINS environment variable.\n' +
+    '    at chromaFetch (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/chromadb/dist/chromadb.mjs:4592:13)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at async o (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/chromadb/dist/chromadb.mjs:338:26)\n' +
+    '    at async ChromaClient.getOrCreateCollection (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/chromadb/dist/chromadb.mjs:5104:22)\n' +
+    '    at async VectorStoreService.init (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/memory/vector.store.js:16:31)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:44:58.062Z'
+}
+--- Real MongoDB Failed. Entering Falback ---
+{
+  message: 'ΓÜá∩╕Å Local MongoDB connection failed: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:44:59.962Z'
+}
+{
+  message: 'ΓÜá∩╕Å Switching to In-Memory MongoDB (Mock Mode)...',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:44:59.963Z'
+}
+--- Importing MongoMemoryServer ---
+--- Creating MongoMemoryServer Instance ---
+--- Getting URI ---
+--- Connecting Mongoose to mongodb://127.0.0.1:58104/ ---
+{
+  message: 'Γ£à Connected to In-Memory MongoDB at mongodb://127.0.0.1:58104/',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:02.392Z'
+}
+{
+  message: '≡ƒÜÇ Server listening on port 5001',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:02.397Z'
+}
+{
+  message: '≡ƒöî Socket.io: Initializing...',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:02.555Z'
+}
+{
+  message: '≡ƒöî Socket.io: Wired to GraphOrchestrator',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:02.559Z'
+}
+[REQUEST] GET /
+[EARLY LOG] GET /
+[REQUEST] GET /api/v1/agents/status
+[EARLY LOG] GET /api/v1/agents/status
+[REQUEST] POST /api/v1/agents/chaos
+[EARLY LOG] POST /api/v1/agents/chaos
+toggleChaos Request:
+Body: {"enabled":true}
+Global Chaos Mode set to: true
+[REQUEST] POST /api/v1/agents/mission
+[EARLY LOG] POST /api/v1/agents/mission
+{
+  message: '≡ƒÜÇ API: Starting mission for user anonymous: Research the current state of Quantum Computing and save a summary to memory.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.524Z'
+}
+{
+  message: '≡ƒù║∩╕Å Graph: Planning for goal: "Research the current state of Quantum Computing and save a summary to memory."',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.551Z'
+}
+{
+  message: 'ΓÜá∩╕Å Chaos Mode Detect: Bypassing Gemini Planning to ensure execution reaches Chaos Monkey.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.552Z'
+}
+{
+  message: '≡ƒ¢í∩╕Å Graph: Guardian reviewing plan...',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.558Z'
+}
+{
+  message: '≡ƒ¢í∩╕Å Guardian: Reviewing plan for goal: "Research the current state of Quantum Computing and save a summary to memory."',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.559Z'
+}
+{
+  message: '≡ƒöî Socket.io: Client connected HrNss1Aazb-RDEmJAAAB',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.598Z'
+}
+{
+  status: 400,
+  statusText: 'Bad Request',
+  errorDetails: [
+    {
+      '@type': 'type.googleapis.com/google.rpc.ErrorInfo',
+      reason: 'API_KEY_INVALID',
+      domain: 'googleapis.com',
+      metadata: { service: 'generativelanguage.googleapis.com' }
+    },
+    {
+      '@type': 'type.googleapis.com/google.rpc.LocalizedMessage',
+      locale: 'en-US',
+      message: 'API key not valid. Please pass a valid API key.'
+    }
+  ],
+  level: 'error',
+  message: 'Gemini generateContent error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-preview-0409:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]',
+  stack: 'Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-preview-0409:generateContent: [400 Bad Request] API key not valid. Please pass a valid API key. [{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"API_KEY_INVALID","domain":"googleapis.com","metadata":{"service":"generativelanguage.googleapis.com"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"API key not valid. Please pass a valid API key."}]\n' +
+    '    at handleResponseNotOk (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:432:11)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at async makeRequest (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:401:9)\n' +
+    '    at async generateContent (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@google/generative-ai/dist/index.mjs:865:22)\n' +
+    '    at async _generateContent (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/gemini/gemini.service.js:216:20)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.838Z'
+}
+{
+  message: '≡ƒöÑ Circuit Breaker OPEN: GeminiAPI',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.840Z'
+}
+{
+  message: 'ΓÜá∩╕Å Circuit Breaker Open for GeminiAPI. Returning fallback response.',
+  level: 'warn',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.840Z'
+}
+{
+  level: 'error',
+  message: 'Guardian failed to review plan response.replace is not a function',
+  stack: 'TypeError: response.replace is not a function\n' +
+    '    at GuardianAgent.reviewPlan (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/guardian.agent.js:39:40)\n' +
+    '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+    '    at async GraphOrchestrator.guardianNode (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/graph.orchestrator.js:105:24)\n' +
+    '    at async RunnableCallable.invoke (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/utils.js:38:22)\n' +
+    '    at async RunnableSequence.invoke (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/core/dist/runnables/base.js:944:21)\n' +
+    '    at async _runWithRetry (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/pregel/retry.js:48:13)\n' +
+    '    at async PregelRunner._executeTasksWithRetry (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/pregel/runner.js:140:24)\n' +
+    '    at async PregelRunner.tick (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/pregel/runner.js:61:49)\n' +
+    '    at async CompiledStateGraph._runLoop (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/pregel/index.js:1133:5)\n' +
+    '    at async createAndRunLoop (file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@langchain/langgraph/dist/pregel/index.js:1032:5)',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.841Z'
+}
+{
+  message: 'Γ£à Graph: Mission Complete. Reviewing results.',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.849Z'
+}
+[REQUEST] POST /api/v1/agents/chaos
+[EARLY LOG] POST /api/v1/agents/chaos
+toggleChaos Request:
+Body: {"enabled":false}
+Global Chaos Mode set to: false
+{
+  message: '≡ƒöî Socket.io: Client disconnected HrNss1Aazb-RDEmJAAAB',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:04.863Z'
+}
+{
+  message: 'ΓÅ│ Circuit Breaker HALF-OPEN: GeminiAPI',
+  level: 'info',
+  label: 'INSO Code Service',
+  timestamp: '2026-02-16T19:45:14.848Z'
+}
