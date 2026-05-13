@@ -31,4 +31,27 @@ router.get('/telemetry/:providerName', async (req, res) => {
   }
 });
 
+import { omniCloudRouter } from './omni_cloud_router.service.js';
+
+// Smart Autonomous Routing Endpoint
+router.post('/route-workload', async (req, res) => {
+  try {
+    const { workloadProfile } = req.body;
+    if (!workloadProfile) {
+      return res.status(400).json({ error: 'workloadProfile is required for smart routing' });
+    }
+    
+    const result = await omniCloudRouter.deployWorkload(workloadProfile);
+    res.json(result);
+  } catch (error) {
+    console.error(`[CloudRoutes] Omni-Router error:`, error);
+    res.status(500).json({ error: 'Failed to smartly route the workload.' });
+  }
+});
+
+// Get Global Citadel Topology
+router.get('/omni-topology', (req, res) => {
+    res.json(omniCloudRouter.getGlobalTopology());
+});
+
 export const cloudAgentsRoutes = router;
