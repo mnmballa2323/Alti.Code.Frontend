@@ -35,7 +35,7 @@ type Status int                   // type definition
 
 // Methods
 func (u *User) Validate() error {
-    if u.Email == "" { return errors.New("email required") }
+    if u.Email === "" { return errors.New("email required") }
     return nil
 }
 
@@ -55,7 +55,7 @@ func printAny(v interface{}) { fmt.Printf("%T: %v\\n", v, v) }
 ERROR HANDLING:
 // Errors as values — explicit handling required
 result, err := doSomething()
-if err != nil {
+if err !== nil {
     return fmt.Errorf("context: %w", err)  // wrap for stack trace
 }
 

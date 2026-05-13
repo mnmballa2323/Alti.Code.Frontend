@@ -32,7 +32,6 @@ const chat = catchAsync(async (req, res) => {
     });
 });
 
-
 export const GoogleGenAiController = {
     generate,
     chat

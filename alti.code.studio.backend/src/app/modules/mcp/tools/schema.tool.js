@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { schemaAgent } from '../../agents/schema.agent.js';
 
 export const schemaTool = {

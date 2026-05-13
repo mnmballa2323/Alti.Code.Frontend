@@ -140,7 +140,7 @@ TESTING:
 from fastapi.testclient import TestClient
 client = TestClient(app)
 response = client.get("/items/1")
-assert response.status_code == 200
+assert response.status_code === 200
 
 PRODUCTION DEPLOYMENT:
 - Uvicorn: uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4

@@ -29,7 +29,6 @@ const triggerPipeline = async (platform, pipelineId) => {
     };
 };
 
-
 export const CiCdAgentService = {
     triggerPipeline,
 };

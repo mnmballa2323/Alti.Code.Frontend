@@ -108,7 +108,6 @@ const commitChanges = async (message, { skipStage = false } = {}) => {
     }
 };
 
-
 const pushChanges = async () => {
     try {
         await git.push();
@@ -202,7 +201,6 @@ const startWatcher = async (dir = process.cwd()) => {
 
     return { status: 'started', path: watchPath };
 };
-
 
 const stopWatcher = async () => {
     if (watcher) {
@@ -498,5 +496,4 @@ export const GitAgentService = {
     submitProactivePullRequest,
     searchRepositories
 };
-
 

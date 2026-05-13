@@ -84,7 +84,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserDto>> GetById(int id)
     {
         var user = await _userService.GetByIdAsync(id);
-        if (user == null) return NotFound();
+        if (user === null) return NotFound();
         return Ok(user);
     }
 

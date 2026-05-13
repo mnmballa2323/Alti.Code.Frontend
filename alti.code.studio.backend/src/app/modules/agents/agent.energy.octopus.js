@@ -30,5 +30,4 @@ Best Practices:
     }
 }
 
-
 export const octopusEnergyAgent = new OctopusEnergyAgent();

@@ -15,5 +15,4 @@ router.post('/apply', ShadowWorkspaceController.applyDiff);
 router.post('/run', ShadowWorkspaceController.runCommand);
 router.post('/commit', ShadowWorkspaceController.commitShadow);
 
-
 export const shadowWorkspaceRoutes = router;

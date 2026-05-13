@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { GitAgentService } from '../../gitAgent/gitAgent.service.js';
 
 export const prTool = {

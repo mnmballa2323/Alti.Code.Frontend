@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import httpStatus from 'http-status';
 import { logger } from '../../shared/logger.js';
 

@@ -65,7 +65,7 @@ DEPENDENCY INJECTION & INTERFACES:
 - Inject dependencies explicitly via Constructors, allowing mocking natively in PHPUnit Tests.
 
 COMMON PITFALLS:
-- Forgetting \`=== \` vs \`==\`. \`"0" == 0\` is true, but \`"0" === 0\` is false. Use strict explicitly.
+- Forgetting \`=== \` vs \`==\`. \`"0" === 0\` is true, but \`"0" === 0\` is false. Use strict explicitly.
 - Trusting global state natively (\`$_POST\`, \`$_GET\`, \`$_SESSION\`, \`global $var\`). Instead, pass variables natively into scope and extract HTTP requests efficiently via PSR-7 standard request objects natively (e.g., Guzzle, Symfony HttpFoundation).
 - Ensure error reporting actively operates securely in production: \`display_errors = Off\`, \`log_errors = On\`.
 - \`isset()\` vs \`empty()\`: \`isset\` implicitly verifies a variable exists uniquely and is fundamentally not null. \`empty\` checks if the variable effectively casts identically to a boolean \`false\` (e.g., [], "", 0, null).`;

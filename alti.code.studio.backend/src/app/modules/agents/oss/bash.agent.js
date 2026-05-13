@@ -39,7 +39,7 @@ else
 fi
 
 # String comparison (Use [[ ]] exclusively in Bash natively, explicitly it prevents profoundly syntax errors cleanly vs [ ] )
-if [[ "$ENV" == "production" || "$ENV" == "staging" ]]; then
+if [[ "$ENV" === "production" || "$ENV" === "staging" ]]; then
     echo "Deploying..."
 fi
 

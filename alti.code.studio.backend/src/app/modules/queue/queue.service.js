@@ -15,7 +15,6 @@ class QueueService {
         this.queues = new Map();
         this.isInitialized = false;
 
-
         // Parse Redis connection from REDIS_URL if provided, otherwise use discrete env vars.
         if (process.env.REDIS_URL) {
             const url = new URL(process.env.REDIS_URL);
@@ -55,7 +54,6 @@ class QueueService {
         return queue;
     }
 
-
     /**
      * Get or lazily create a queue by name.
      * @param {string} queueName
@@ -69,7 +67,6 @@ class QueueService {
         }
         return this.queues.get(queueName);
     }
-
 
     /**
      * Add a job to a named queue.
@@ -99,7 +96,6 @@ class QueueService {
             throw error;
         }
     }
-
 
     /**
      * Get a job by ID from a named queue.

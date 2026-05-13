@@ -164,7 +164,7 @@ Act as a Staff Site Reliability Engineer.
                     logger.info(`✅ [Auto-Repair] Sentinel generated Strangler Fig decoupling plan for ${worstNode.name}.`);
                     
                     // Push to standard output or slack
-                    console.log(`[SENTINEL REPORT]: \n${refactorPlan.substring(0, 500)}...`);
+                    logger.info(`[SENTINEL REPORT]: \n${refactorPlan.substring(0, 500)}...`);
                 }
             }
         } catch (error) {

@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { indexerService } from '../../cortex/indexer.service.js';
 
 export const indexerTool = {

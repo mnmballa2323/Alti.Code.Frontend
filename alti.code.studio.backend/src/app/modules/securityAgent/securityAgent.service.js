@@ -22,7 +22,6 @@ const AUDIT_LOG_PATH = path.join(LOGS_DIR, 'military_audit_trail.log');
 /** Ensure the logs directory exists before the first write. */
 const ensureLogsDir = async () => mkdir(LOGS_DIR, { recursive: true });
 
-
 const auditCodebase = async (repoPath, userId = 'system', sessionId = 'security-audit') => {
     if (!repoPath || typeof repoPath !== 'string' || repoPath.trim().length === 0) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'SecurityAgent: repoPath must be a non-empty string.');

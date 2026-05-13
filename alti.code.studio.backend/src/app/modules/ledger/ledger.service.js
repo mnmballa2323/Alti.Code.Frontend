@@ -35,7 +35,6 @@ class LedgerService {
             const lastLog = await AuditLog.findOne().sort({ createdAt: -1 });
             const previousHash = lastLog ? lastLog.hash : '0000000000000000000000000000000000000000000000000000000000000000';
 
-
             // 2. Prepare payload for hashing
             const payload = JSON.stringify({
                 timestamp: new Date().toISOString(),

@@ -50,7 +50,7 @@ const generateApp = async (prompt) => {
       },
       {
         "path": "script.js",
-        "content": "console.log('...')"
+        "content": "logger.info('...')"
       }
     ]
   }
@@ -329,7 +329,6 @@ const refineProject = async (targetDir, prompt) => {
     throw error;
   }
 };
-
 
 const writeApp = async (fileTree, targetDir) => {
   logger.info(`Writing generated app to ${targetDir}`);

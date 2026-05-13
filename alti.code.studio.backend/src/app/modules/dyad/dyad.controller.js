@@ -34,7 +34,7 @@ const ClaudeAiGetResponse = catchAsync(async (req, res) => {
 const LlamaAiGetResponseFromDbByUserId = catchAsync(async (req, res) => {
   const userId = req.user?._id;
 
-  console.log(userId, 'userId from token in controller');
+  logger.info(userId, 'userId from token in controller');
   const responseData =
     await ClaudeServices.getAiResponsesByUserIdService(userId);
   logger.info(responseData, 'LlamaAiGetResponseFromDbByUserId');
@@ -81,7 +81,7 @@ const deleteOneAiSession = catchAsync(async (req, res) => {
 
 const deleteAllAiSessions = catchAsync(async (req, res) => {
   const userId = req.user?._id;
-  console.log(userId, 'userId from token in controller');
+  logger.info(userId, 'userId from token in controller');
   const result = await ClaudeServices.deleteAllAiSessionsService(userId);
   // logger.info(result, 'resultttt');
 

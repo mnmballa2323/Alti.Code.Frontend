@@ -39,8 +39,8 @@ POLICY-AS-CODE — Open Policy Agent (OPA):
   allow {
     role := data.roles[input.user]
     permission := data.permissions[role][_]
-    permission.action == input.action
-    permission.resource == input.resource
+    permission.action === input.action
+    permission.resource === input.resource
   }
   
   # Data file (data.json):

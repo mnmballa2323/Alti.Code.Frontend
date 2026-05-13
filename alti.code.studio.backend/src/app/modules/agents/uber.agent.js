@@ -37,5 +37,4 @@ You specialize in integrating Uber Rides and Uber Direct (Delivery) APIs.
     }
 }
 
-
 export const uberAgent = new UberAgent();

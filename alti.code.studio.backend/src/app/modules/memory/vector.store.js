@@ -5,13 +5,11 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import pg from 'pg';
 const { Pool } = pg;
 import { vertexService } from '../ai/vertex.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
-
 
 class VectorStoreService {
     constructor() {
@@ -64,7 +62,6 @@ class VectorStoreService {
             throw error;
         }
     }
-
 
     /**
      * Search memory
@@ -144,6 +141,5 @@ class VectorStoreService {
         }
     }
 }
-
 
 export const vectorStoreService = new VectorStoreService();

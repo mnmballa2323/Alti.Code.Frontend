@@ -6,7 +6,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 

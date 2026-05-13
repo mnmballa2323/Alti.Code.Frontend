@@ -9,7 +9,6 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 
-
 /** Maximum number of entries kept in the translation cache. */
 const CACHE_MAX_SIZE = 512;
 

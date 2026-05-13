@@ -36,5 +36,4 @@ You specialize in integrating the Persefoni APIs for carbon footprint calculatio
     }
 }
 
-
 export const persefoniAgent = new PersefoniAgent();

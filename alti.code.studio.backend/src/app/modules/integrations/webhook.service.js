@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 

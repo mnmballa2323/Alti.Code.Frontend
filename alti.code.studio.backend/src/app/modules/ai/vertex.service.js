@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { VertexAI } from '@google-cloud/vertexai';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
@@ -153,7 +152,7 @@ function recursiveFunction(n) {
                     ]
                 });
             } else {
-                return "// Composer Mock Content\nconsole.log('Composer Works!');";
+                return "// Composer Mock Content\nlogger.info('Composer Works!');";
             }
         }
 

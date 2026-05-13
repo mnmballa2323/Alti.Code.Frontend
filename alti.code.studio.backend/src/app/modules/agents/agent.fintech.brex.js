@@ -33,5 +33,4 @@ Best Practices:
     }
 }
 
-
 export const brexAgent = new BrexAgent();

@@ -31,5 +31,4 @@ Best Practices:
     }
 }
 
-
 export const everlawAgent = new EverlawAgent();

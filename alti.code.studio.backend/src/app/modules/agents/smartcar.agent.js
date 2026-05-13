@@ -39,5 +39,4 @@ You specialize in integrating the Smartcar API to securely access vehicle teleme
     }
 }
 
-
 export const smartcarAgent = new SmartcarAgent();

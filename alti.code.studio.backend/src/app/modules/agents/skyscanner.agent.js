@@ -37,5 +37,4 @@ You specialize in integrating the Skyscanner Travel API for global flight pricin
     }
 }
 
-
 export const skyscannerAgent = new SkyscannerAgent();

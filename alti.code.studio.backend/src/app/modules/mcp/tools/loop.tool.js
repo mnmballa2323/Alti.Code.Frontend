@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { autonomicSurgeon } from '../../surgeon/autonomic.service.js';
 
 export const loopTool = {

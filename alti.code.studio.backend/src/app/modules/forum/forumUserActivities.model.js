@@ -5,10 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 const mongoose = require("mongoose");
 // const validator = require("validator");
-
 
 const forumUserActivitiesSchema = mongoose.Schema(
     {
@@ -57,6 +55,5 @@ const forumUserActivitiesSchema = mongoose.Schema(
 );
 
 const UserForumActivities = mongoose.model("forum-User-Activities", forumUserActivitiesSchema);
-
 
 module.exports = UserForumActivities;

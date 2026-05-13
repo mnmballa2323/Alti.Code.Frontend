@@ -12,7 +12,6 @@ const { catchAsync } = require('../../../shared/catchAsync');
 const { livekit_secret_key, livekit_api_key } = require('../../../../config');
 // const { logger } = require('../../../shared/logger');
 
-
 const generateRandomParticipantName = (length) => {
     const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let result = '';
@@ -22,9 +21,6 @@ const generateRandomParticipantName = (length) => {
     }
     return result;
 }
-
-
-
 
 module.exports.authStreamingController = catchAsync(async (req, res) => {
     const { AccessToken } = await import('livekit-server-sdk');
@@ -42,7 +38,6 @@ module.exports.authStreamingController = catchAsync(async (req, res) => {
         ttl: '60m',
     });
     at.addGrant({ roomJoin: true, room: roomName });
-
 
     const result = await at.toJwt();
     // logger.info(result, 'resulttttttttt')

@@ -1,21 +1,65 @@
 import { PrismaClient } from '@prisma/client';
 import { logger } from '../shared/logger.js';
+import { memorystoreService } from '../app/modules/googleCloud/memorystore.service.js';
+import crypto from 'crypto';
 
-export const prisma = new PrismaClient({
+const basePrisma = new PrismaClient({
   log: ['error', 'warn'],
+});
+
+export const prisma = basePrisma.$extends({
+  query: {
+    $allModels: {
+      async $allOperations({ model, operation, args, query }) {
+        // 1. Identify Read Operations
+        const isReadOperation = ['findUnique', 'findMany', 'findFirst', 'count'].includes(operation);
+        
+        // 2. Bypass cache if it's a mutation or if Redis is offline
+        if (!isReadOperation || !memorystoreService.isInitialized) {
+          // Ideally, mutations would invalidate the cache. For universal safety, we rely on short TTLs.
+          return query(args);
+        }
+
+        // 3. Cryptographic Cache Key Generation
+        const hash = crypto.createHash('sha256').update(JSON.stringify(args || {})).digest('hex');
+        const cacheKey = `pg_cache:${model}:${operation}:${hash}`;
+
+        // 4. Redis Cache Retrieval (Sub-millisecond latency)
+        const cachedStr = await memorystoreService.getCache(cacheKey);
+        if (cachedStr) {
+            try {
+                const cachedData = JSON.parse(cachedStr);
+                // logger.info(\`⚡ [DataLayer] Redis Cache HIT for \${model}.\${operation}\`);
+                return cachedData;
+            } catch(e) {
+                /* Malformed cache, fall through */
+            }
+        }
+
+        // 5. Cache Miss: Execute heavy Postgres Query
+        const result = await query(args);
+
+        // 6. Asynchronous Redis Write (60s TTL to prevent staleness while absorbing traffic spikes)
+        if (result !== undefined && result !== null) {
+             memorystoreService.setCache(cacheKey, JSON.stringify(result), 60).catch(() => {});
+        }
+
+        return result;
+      }
+    }
+  }
 });
 
 export async function connectPrisma() {
   try {
-    await prisma.$connect();
+    await basePrisma.$connect();
     
     // Prepare GodMode Memory Layer (pgvector initialization)
-    await prisma.$executeRawUnsafe('CREATE EXTENSION IF NOT EXISTS vector;');
+    await basePrisma.$executeRawUnsafe('CREATE EXTENSION IF NOT EXISTS vector;');
     
     logger.info('✅ PostgreSQL (via Prisma) connected successfully. pgvector extension active.');
-    console.log('✅ PostgreSQL (via Prisma) connected successfully. pgvector extension active.');
+    logger.info('🚀 Universal Redis Caching Layer injected into Prisma Client.');
   } catch (error) {
-    logger.error('❌ Failed to connect to PostgreSQL or initialize extensions:', error);
-    console.error('❌ Failed to connect to PostgreSQL:', error);
+    logger.error('❌ Failed to connect to PostgreSQL:', error);
   }
 }

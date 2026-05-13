@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 /**
  * Standard Interface for Alti.Code.Studio Plugins
  * @interface

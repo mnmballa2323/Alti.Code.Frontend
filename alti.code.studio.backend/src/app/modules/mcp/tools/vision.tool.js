@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { visionService } from '../../senses/vision.service.js';
 
 export const visionTool = {

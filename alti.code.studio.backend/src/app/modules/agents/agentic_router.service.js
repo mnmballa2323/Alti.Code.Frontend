@@ -78,8 +78,6 @@ class AgenticRouterService {
         }
     }
 
-
-
     fallbackPlan(prompt) {
         return {
             plan: 'General Assistance',

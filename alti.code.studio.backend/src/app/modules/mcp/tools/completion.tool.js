@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { completionService } from '../../ai/completion.service.js';
 
 export const completionTool = {

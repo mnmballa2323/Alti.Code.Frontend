@@ -30,5 +30,4 @@ Best Practices:
     }
 }
 
-
 export const capellaAgent = new CapellaAgent();

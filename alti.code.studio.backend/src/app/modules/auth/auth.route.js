@@ -110,8 +110,6 @@ router
     authController.socialLogin,
   );
 
-
-
 /**
  * @swagger
  * /auth/refresh-token:

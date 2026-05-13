@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import httpStatus from 'http-status';
 import ApiError from '../../errors/ApiError.js';
 import { jwtHelpers } from '../helpers/jwtHelpers.js';

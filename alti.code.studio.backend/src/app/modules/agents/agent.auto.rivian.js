@@ -30,5 +30,4 @@ Best Practices:
     }
 }
 
-
 export const rivianAgent = new RivianAgent();

@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { specKitService } from '../../speckit/speckit.service.js';
 
 export const specKitTool = {

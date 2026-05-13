@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import pg from 'pg';
 import pgvector from 'pgvector/pg';
 import { logger } from '../../shared/logger.js';

@@ -174,7 +174,7 @@ Future<String> fetchData() async {
 FutureBuilder<String>(
   future: fetchData(),
   builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
+    if (snapshot.connectionState === ConnectionState.waiting) {
       return const CircularProgressIndicator();
     } else if (snapshot.hasError) {
       return Text('Error: \${snapshot.error}');

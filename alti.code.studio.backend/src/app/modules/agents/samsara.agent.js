@@ -37,5 +37,4 @@ You specialize in integrating the Samsara REST API for fleet management, ELD com
     }
 }
 
-
 export const samsaraAgent = new SamsaraAgent();

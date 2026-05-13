@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { contextService } from '../../cortex/context.service.js';
 
 export const contextTool = {

@@ -39,7 +39,7 @@ const runTest = async () => {
         if (status.status === 'completed') {
             logger.info(`[PASS] Mission completed successfully.`);
             logger.info("Mission Logs:");
-            status.logs.forEach(log => console.log(`  - ${log.timestamp.toISOString()}: ${log.message}`));
+            status.logs.forEach(log => logger.info(`  - ${log.timestamp.toISOString()}: ${log.message}`));
         } else {
             logger.error(`[FAIL] Mission failed: ${status.error}`);
             process.exit(1);
@@ -50,7 +50,7 @@ const runTest = async () => {
 
     } catch (e) {
         logger.error(`GRAND UNIFICATION FAILED: ${e.message}`);
-        console.error(e);
+        logger.error(e);
         process.exit(1);
     }
 };

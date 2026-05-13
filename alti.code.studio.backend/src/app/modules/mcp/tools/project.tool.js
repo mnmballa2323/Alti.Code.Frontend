@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { projectAgent } from '../../agents/project.agent.js';
 
 export const projectTool = {

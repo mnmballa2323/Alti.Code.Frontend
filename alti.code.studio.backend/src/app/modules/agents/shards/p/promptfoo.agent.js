@@ -168,7 +168,7 @@ PROGRAMMATIC API (Node.js):
         assert: [{ type: 'contains', value: 'stripe.paymentIntents.create' }] }
     ]
   }, { repeat: 3, showProgressBar: true });
-  console.log(results.stats); // { successes, failures, tokenUsage, totalCost }
+  logger.info(results.stats); // { successes, failures, tokenUsage, totalCost }
 
 METRIC COLLECTION:
   npx promptfoo eval --output results.json --metrics

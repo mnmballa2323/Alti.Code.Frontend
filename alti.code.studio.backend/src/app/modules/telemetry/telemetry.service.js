@@ -431,7 +431,7 @@ export class TelemetryService {
         if (process.env.AXIOM_TOKEN && process.env.AXIOM_DATASET) {
             try {
                 // Fetch recent error level logs from Axiom
-                const query = `['${process.env.AXIOM_DATASET}'] | where _time > now(-1m) and level == "error"`;
+                const query = `['${process.env.AXIOM_DATASET}'] | where _time > now(-1m) and level === "error"`;
                 const res = await fetch(`https://api.axiom.co/v1/datasets/${process.env.AXIOM_DATASET}/query`, {
                     method: 'POST',
                     headers: {

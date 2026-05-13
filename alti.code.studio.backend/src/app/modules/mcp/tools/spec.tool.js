@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { specAgent } from '../../agents/spec.agent.js';
 
 export const specTool = {

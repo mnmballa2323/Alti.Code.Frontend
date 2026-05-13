@@ -13,10 +13,6 @@ import path from 'path';
 
 class AgentRegistry {
 
-
-
-
-
     constructor() {
         /** @type {Map<string, AgentDefinition>} */
         this.agents = new Map();
@@ -250,17 +246,8 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
-
-
-
-
 // Define all agents with their capabilities
 agentRegistry.register({
-
-
-
-
-
 
     name: 'audit',
     description: 'Cryptographically seals every system action into an immutable ledger.',
@@ -2957,7 +2944,6 @@ agentRegistry.register({
     capabilities: ['dockerfile', 'programming-language', 'polyglot'],
     version: '1.0.0'
 });
-
 
 // ── Swarm Intelligence Expansion (Wave 24: The Ultimate Software Matrix) ──
 
@@ -5960,7 +5946,6 @@ agentRegistry.register({
     capabilities: ['backend', 'compliance', 'planner', 'software-engineering', 'ultimate-matrix'],
     version: '1.0.0'
 });
-
 
 // ── Swarm Intelligence Expansion (Wave 25: The 10k Vanguard Scale) ──
 

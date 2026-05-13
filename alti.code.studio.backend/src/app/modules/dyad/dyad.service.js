@@ -28,7 +28,6 @@ const anthropic = new Anthropic({
 const SESSION_MEMORY_MAX = 500;
 const sessionMemoryStore = new Map();
 
-
 const claudeResponseService = async (prompt, userId, sessionId) => {
   let memory = sessionMemoryStore.get(sessionId);
   if (!memory) {
@@ -42,7 +41,6 @@ const claudeResponseService = async (prompt, userId, sessionId) => {
     }
     sessionMemoryStore.set(sessionId, memory);
   }
-
 
   try {
     await memory.chatHistory.addMessage(new HumanMessage(prompt));
@@ -109,7 +107,7 @@ const claudeResponseService = async (prompt, userId, sessionId) => {
     }
 
     const payload = { sessionId, prompt, reply };
-    // console.log('Claude Response Payload:', payload);
+    // logger.info('Claude Response Payload:', payload);
     logger.info('Claude Response Payload:', payload);
     return payload;
   } catch (error) {

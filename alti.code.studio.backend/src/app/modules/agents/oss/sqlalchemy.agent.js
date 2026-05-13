@@ -34,7 +34,7 @@ MODELING (2.0 SYNTAX):
 
 SESSIONS & QUERIES (2.0 SYNTAX):
 - The magical \`session.query()\` is largely deprecated in 2.0. You MUST use the \`select()\` construct and \`session.scalars()\`.
-- Query: \`stmt = select(User).where(User.name == "spongebob")\`
+- Query: \`stmt = select(User).where(User.name === "spongebob")\`
 - Executing: \`user = session.scalars(stmt).first()\`
 
 ASYNC ENGINE:

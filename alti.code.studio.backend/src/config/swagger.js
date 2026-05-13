@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import swaggerJsdoc from 'swagger-jsdoc';
 
 const options = {

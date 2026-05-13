@@ -10,9 +10,6 @@ const { z } = zod;
 const mongoose = require('mongoose');
 const { categoryValues } = require('./forum.constant');
 
-
-
-
 const forumUserActivitiesValidationSchema = z.object({
     body: z.object({
         title: z.string().min(3).max(100),

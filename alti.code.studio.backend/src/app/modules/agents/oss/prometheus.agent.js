@@ -148,7 +148,7 @@ groups:
           summary: "P99 latency is {{ $value }}s"
 
       - alert: ServiceDown
-        expr: up == 0
+        expr: up === 0
         for: 1m
         labels:
           severity: page

@@ -31,5 +31,4 @@ Best Practices:
     }
 }
 
-
 export const frameioAgent = new FrameioAgent();

@@ -99,18 +99,18 @@ class MockWorker extends EventEmitter {
 
 class JobQueueService {
     constructor() {
-        console.log('JobQueueService: Constructor started');
+        logger.info('JobQueueService: Constructor started');
         this.queues = new Map();
         this.workers = new Map();
         this.isMockMode = false;
 
         try {
             const configObj = this.getConnectionConfig();
-            console.log('JobQueueService: Config object:', configObj);
+            logger.info('JobQueueService: Config object:', configObj);
 
             // Initial connection check
             this.readinessPromise = new Promise((resolve) => {
-                console.log('JobQueueService: Creating testRedis...');
+                logger.info('JobQueueService: Creating testRedis...');
                 const testRedis = new IORedis(configObj.url, {
                     maxRetriesPerRequest: 0,
                     retryStrategy: () => null,
@@ -125,14 +125,14 @@ class JobQueueService {
                 });
 
                 testRedis.on('error', (err) => {
-                    console.log('JobQueueService: testRedis error:', err.message);
+                    logger.info('JobQueueService: testRedis error:', err.message);
                     logger.warn('⚠️ JobQueue: Redis not available. Switching to MOCK MODE.');
                     this.isMockMode = true;
                     resolve(); // Resolve anyway, we are ready in mock mode
                 });
             });
         } catch (e) {
-            console.error('JobQueueService: Constructor CRASHed:', e);
+            logger.error('JobQueueService: Constructor CRASHed:', e);
         }
     }
 

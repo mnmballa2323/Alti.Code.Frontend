@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { logger } from '../../../shared/logger.js';
 // import { redisClient } from '../../../shared/redis.js'; // Assuming Redis client exists
 // import { PrismaClient } from '@prisma/client'; // Assuming Prisma
@@ -25,7 +24,6 @@ class CostService {
         /** @type {Map<string, number>} model → accumulated cost */
         this._modelTotals = new Map();
     }
-
 
     /**
      * Track token usage and calculate cost.

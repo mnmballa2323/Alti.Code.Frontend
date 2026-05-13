@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import puppeteer from 'puppeteer';
 import { logger } from '../../../shared/logger.js';
 

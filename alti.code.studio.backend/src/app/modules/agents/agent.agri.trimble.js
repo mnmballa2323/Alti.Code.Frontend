@@ -29,5 +29,4 @@ Best Practices:
     }
 }
 
-
 export const trimbleAgent = new TrimbleAgent();

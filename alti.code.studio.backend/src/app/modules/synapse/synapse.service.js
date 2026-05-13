@@ -11,7 +11,6 @@ import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { EventEmitter } from 'events';
 
-
 // Imports for Local/Mock Mode
 // import { surferAgent } from '../agents/surfer.agent.js';
 import { healerAgent } from '../agents/healer.agent.js';
@@ -250,7 +249,6 @@ const directMessage = async (fromAgent, toAgentName, payload) => {
     return { status: delivered > 0 ? 'delivered' : 'no_subscribers', to: toAgentName };
 };
 
-
 const swarm = async (taskDescription, requiredCapabilities = []) => {
     if (!isConnected) await init();
 
@@ -283,7 +281,6 @@ const swarm = async (taskDescription, requiredCapabilities = []) => {
             return { agent: agent.agentName, error: e.message, status: 'failed' };
         }
     }));
-
 
     return {
         swarmId: crypto.randomUUID(),

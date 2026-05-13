@@ -142,7 +142,7 @@ Flasgger: Swagger/OpenAPI docs from docstrings
 TESTING:
 def test_get_users(client, auth_headers):
     resp = client.get('/api/v1/users', headers=auth_headers)
-    assert resp.status_code == 200
+    assert resp.status_code === 200
     data = resp.get_json()
     assert 'users' in data
 

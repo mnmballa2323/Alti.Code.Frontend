@@ -33,7 +33,6 @@ const getWorkflowResult = async (workflowId) => {
     }
 };
 
-
 export const TemporalAgentService = {
     startWorkflow,
     getWorkflowResult,

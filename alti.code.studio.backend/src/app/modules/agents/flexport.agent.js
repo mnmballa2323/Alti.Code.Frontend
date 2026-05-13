@@ -38,5 +38,4 @@ You specialize in integrating the Flexport API for global freight forwarding, oc
   }
 }
 
-
 export const flexportAgent = new FlexportAgent();

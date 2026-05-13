@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import crypto from 'crypto';
 import { StateGraph, END, Send } from "@langchain/langgraph";
 import { GeminiAiService } from '../geminiOpenMemory/geminiOpenMemo.service.js';
@@ -563,7 +562,6 @@ class GraphOrchestrator {
         };
     }
 
-
     async reviewNode(state) {
         if (state.error) {
             logger.error("❌ Graph: Mission Failed after retries.");
@@ -613,7 +611,6 @@ class GraphOrchestrator {
         }
         return results;
     }
-
 
 }
 

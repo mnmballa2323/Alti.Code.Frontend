@@ -32,5 +32,4 @@ Best Practices:
     }
 }
 
-
 export const shopifyHydrogenAgent = new ShopifyHydrogenAgent();

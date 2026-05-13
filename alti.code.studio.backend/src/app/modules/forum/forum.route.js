@@ -13,7 +13,6 @@ const { validateRequest } = require("../../middlewares/validateRequest/validateR
 const forumUserActivitiesValidationSchema = require("./forum.validation");
 // const { authController } = require("../auth/auth.controller");
 
-
 router
   .route("/:id")
   .get(forumController.getForumById)
@@ -35,6 +34,5 @@ router.route("/")
 router.route("/blog-suggestion/:suggestion").get(forumController.getForumSuggestion)
 
 router.route("/userForumActivity").post(commentController.addUserForumActivity);
-
 
 module.exports = router;

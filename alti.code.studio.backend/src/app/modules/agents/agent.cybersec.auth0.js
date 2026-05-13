@@ -30,5 +30,4 @@ Best Practices:
     }
 }
 
-
 export const auth0Agent = new Auth0Agent();

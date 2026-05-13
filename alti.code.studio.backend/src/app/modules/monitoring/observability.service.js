@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { Langfuse } from 'langfuse';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
@@ -25,7 +24,6 @@ const { SemanticResourceAttributes } = otelSemantic;
 import pkgApi from '@opentelemetry/api';
 const { trace, context, SpanStatusCode } = pkgApi;
 import EventEmitter from 'events';
-
 
 class ObservabilityService extends EventEmitter {
     constructor() {
@@ -130,7 +128,6 @@ class ObservabilityService extends EventEmitter {
         }
     }
 
-
     /**
      * Update the status of a local trace (e.g. to 'COMPLETED' or 'FAILED').
      * @param {string} traceId - The UUID returned by emitTrace()
@@ -145,7 +142,6 @@ class ObservabilityService extends EventEmitter {
             Object.assign(t, metadata);
         }
     }
-
 
     /**
      * Create a generation span for an AI call
@@ -171,7 +167,6 @@ class ObservabilityService extends EventEmitter {
             input: params.prompt,
         });
     }
-
 
     async flush() {
         if (this.langfuse) {

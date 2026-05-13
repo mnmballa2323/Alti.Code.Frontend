@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { VertexAI } from '@google-cloud/vertexai';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
@@ -60,7 +59,6 @@ class CompletionService {
             return this.mockComplete(prefix);
         }
 
-
         const prompt = `
         Complete the code.
         PREFIX:
@@ -91,7 +89,7 @@ class CompletionService {
     mockComplete(prefix) {
         // Simple heuristic mock
         if (prefix.trim().endsWith('function')) {
-            return ' myNewFunction() {\n    console.log("Hello World");\n}';
+            return ' myNewFunction() {\n    logger.info("Hello World");\n}';
         }
         if (prefix.trim().endsWith('console.')) {
             return 'log("Debug");';

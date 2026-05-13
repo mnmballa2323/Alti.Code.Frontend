@@ -5,6 +5,5 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import nodemailer from 'nodemailer';
 console.log('Nested Nodemailer loaded:', !!nodemailer);

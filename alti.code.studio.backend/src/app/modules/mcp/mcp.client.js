@@ -110,7 +110,6 @@ class McpClientService {
         return await client.callTool({ name: toolName, arguments: args ?? {} });
     }
 
-
     /**
      * Get all available tools from all connected servers.
      * @returns {Promise<Array>}
@@ -163,7 +162,6 @@ class McpClientService {
         });
     }
 
-
     /** Connect to a dynamic server config object. */
     async connectDynamic(config) {
         if (!config?.name || !config?.command) {
@@ -171,7 +169,6 @@ class McpClientService {
         }
         return this.connect(config.name, config.command, config.args ?? []);
     }
-
 
     /** @private */
     _getClient(serverName) {

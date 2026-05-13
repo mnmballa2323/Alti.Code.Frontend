@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { dependencyAgent } from '../../agents/dependency.agent.js';
 
 export const depTool = {

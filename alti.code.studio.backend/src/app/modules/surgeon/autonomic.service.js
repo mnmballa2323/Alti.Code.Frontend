@@ -14,7 +14,6 @@ import simpleGit from 'simple-git';
 import crypto from 'crypto';
 import { redisClient } from '../../../shared/redis.client.js';
 
-
 const git = simpleGit();
 
 export class AutonomicService {
@@ -44,7 +43,6 @@ export class AutonomicService {
             throw new Error('AutonomicService: targetFiles must be a non-empty array of file paths.');
         }
         logger.info(`🔬 AutonomicService: Commencing deep AST structural sweep of ${targetFiles.length} files...`);
-
 
         let debtEliminated = 0;
         const patches = [];
@@ -83,7 +81,6 @@ export class AutonomicService {
                         .replace(/^```[a-z]*\n?/im, '')
                         .replace(/\n?```$/m, '')
                         .trim();
-
 
                     // 3. Compute diff; only apply if meaningfully different
                     const diff = this._generateDiff(sourceCode, engineeredPatch);

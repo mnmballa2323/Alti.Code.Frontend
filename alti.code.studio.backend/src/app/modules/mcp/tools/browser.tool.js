@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { browserService } from '../../senses/browser.service.js';
 
 export const browserTool = {

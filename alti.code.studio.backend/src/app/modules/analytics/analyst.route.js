@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import express from 'express';
 import { AnalystController } from './analyst.controller.js';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';

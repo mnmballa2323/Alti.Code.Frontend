@@ -161,7 +161,7 @@ app.get('/stream', (c) => {
 ERROR HANDLING:
 app.onError((err, c) => {
   if (err instanceof HTTPException) return c.json({ error: err.message }, err.status)
-  console.error(err)
+  logger.error(err)
   return c.json({ error: 'Internal server error' }, 500)
 })
 app.notFound((c) => c.json({ error: 'Not found' }, 404))

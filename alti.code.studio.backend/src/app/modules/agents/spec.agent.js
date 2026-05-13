@@ -60,7 +60,6 @@ class SpecAgent {
         }
         logger.info(`📝 SpecAgent: Drafting specification for "${request}"...`);
 
-
         const prompt = `
         You are a Senior Technical Architect for this project.
         Draft a comprehensive technical specification for the following feature request:

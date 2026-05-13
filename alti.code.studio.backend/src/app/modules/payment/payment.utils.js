@@ -7,7 +7,6 @@
 
 import moment from 'moment';
 
-
 export const purchasePlanTemplate = async (email, user, subscription) => {
     const mailData = {
       userEmail: email,

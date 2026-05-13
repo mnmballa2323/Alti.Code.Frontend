@@ -34,7 +34,6 @@ const generate = catchAsync(async (req, res) => {
     });
 });
 
-
 const generateProject = catchAsync(async (req, res) => {
     const { prompt, type } = req.body;
     const targetDirName = req.body.targetDir || `generated-project-${Date.now()}`;

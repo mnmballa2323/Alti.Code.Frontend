@@ -142,7 +142,7 @@ BUILD & PUBLISH DOCKER:
         with:
           context: .
           platforms: linux/amd64,linux/arm64
-          push: \${{ github.event_name != 'pull_request' }}
+          push: \${{ github.event_name !== 'pull_request' }}
           tags: \${{ steps.meta.outputs.tags }}
           labels: \${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -155,7 +155,7 @@ DEPLOY JOB:
     environment:
       name: production
       url: https://api.example.com
-    if: github.ref == 'refs/heads/main'
+    if: github.ref === 'refs/heads/main'
 
     steps:
       - name: Deploy to production
@@ -186,9 +186,9 @@ KEY SYNTAX:
 \${{ github.event.inputs.environment }} # workflow_dispatch input
 
 CONDITIONALS:
-if: github.ref == 'refs/heads/main'
+if: github.ref === 'refs/heads/main'
 if: contains(github.event.head_commit.message, '[skip ci]')  # skip CI
-if: failure() && github.event_name == 'push'
+if: failure() && github.event_name === 'push'
 if: success() || failure()   # always run
 
 USEFUL ACTIONS:

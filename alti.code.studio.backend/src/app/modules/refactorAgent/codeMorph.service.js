@@ -36,7 +36,6 @@ class CodeMorphService {
         return this.project.addSourceFileAtPath(filePath);
     }
 
-
     /**
      * Adds an import declaration to a source file.
      * @param {import('ts-morph').SourceFile} sourceFile 
@@ -116,7 +115,6 @@ class CodeMorphService {
             throw error;
         }
     }
-
 
     /**
      * Gets the modified source code.

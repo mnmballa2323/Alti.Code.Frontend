@@ -31,5 +31,4 @@ Best Practices:
     }
 }
 
-
 export const cernerAgent = new CernerAgent();

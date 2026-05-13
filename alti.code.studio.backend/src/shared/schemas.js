@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { z } from 'zod';
 
 // Schema for an Agent Configuration

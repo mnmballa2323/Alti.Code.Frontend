@@ -43,7 +43,7 @@ export const sendMailForRegisterWithGmail = async data => {
   let info = await transporter.sendMail(mailData);
 
   // logger.info('Message sent: %s', info.messageId);
-  console.log('Message sent: %s', info.messageId);
+  logger.info('Message sent: %s', info.messageId);
 
   // logger.info('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 

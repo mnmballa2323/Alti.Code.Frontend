@@ -41,7 +41,7 @@ impl User {
     pub fn new(id: u64, email: &str) -> Self {
         User { id, email: email.to_string(), name: None }
     }
-    pub fn is_admin(&self) -> bool { self.id == 1 }
+    pub fn is_admin(&self) -> bool { self.id === 1 }
 }
 
 ENUMS + PATTERN MATCHING:
@@ -90,7 +90,7 @@ let f = move || println!("{}", s);  // s moved into closure
 
 ITERATORS (zero-cost abstractions):
 vec![1,2,3].iter().filter(|x| **x > 1).map(|x| x * 2).collect::<Vec<_>>()
-(0..100).filter(|n| n % 2 == 0).sum::<i32>()
+(0..100).filter(|n| n % 2 === 0).sum::<i32>()
 data.chunks(100).enumerate().for_each(|(i, batch)| process(i, batch))
 
 ERROR HANDLING WITH ?:

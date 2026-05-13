@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -21,8 +20,8 @@ if (resourcesPkg.Resource) {
     Resource = resourcesPkg.default.Resource;
 } else {
     // If we can't find Resource class, we might be in a version where we use a factory or it's named differently
-    console.log('OTel Resources Pkg Keys:', Object.keys(resourcesPkg));
-    if (resourcesPkg.default) console.log('OTel Resources Default Keys:', Object.keys(resourcesPkg.default));
+    logger.info('OTel Resources Pkg Keys:', Object.keys(resourcesPkg));
+    if (resourcesPkg.default) logger.info('OTel Resources Default Keys:', Object.keys(resourcesPkg.default));
 
     // Fallback: Use a mock or try to use defaultResource() if available to get a Resource instance
     // For now, let's try to grab it from default if it exists, otherwise throw/warn

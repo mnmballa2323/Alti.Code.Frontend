@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 export const authTools = [
     {
         name: 'auth_login',

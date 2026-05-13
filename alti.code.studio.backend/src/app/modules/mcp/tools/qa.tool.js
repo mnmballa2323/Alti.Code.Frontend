@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { qaService } from '../../qa/qa.service.js';
 
 export const generateTestsTool = {

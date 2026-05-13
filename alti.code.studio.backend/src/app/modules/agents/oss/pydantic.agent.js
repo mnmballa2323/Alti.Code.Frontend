@@ -91,7 +91,7 @@ class CreateUser(BaseModel):
 
     @model_validator(mode='after')
     def check_passwords_match(self) -> 'CreateUser':
-        if self.password != self.password2:
+        if self.password !== self.password2:
             raise ValueError('Passwords do not match')
         return self
 

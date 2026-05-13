@@ -36,5 +36,4 @@ You specialize in integrating the Enphase API for solar inverter telemetry, micr
     }
 }
 
-
 export const enphaseAgent = new EnphaseAgent();

@@ -271,7 +271,6 @@ If you require assistance from another specialized agent to complete your task, 
         // 🧠 AGENTMEMORY: Capture the user's prompt
         AgentMemoryHooks.captureUserPrompt('system', prompt).catch(() => {});
 
-
         // 1. Pre-flight Governance (Google Cloud Data Catalog)
         const combinedContext = context.join('\n');
         const governanceCheck = await dataCatalogService.governFileIngestion('runtime_context_memory', combinedContext);

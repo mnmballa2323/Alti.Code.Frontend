@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Only export as static HTML when explicitly building for Desktop/Tauri
-  ...(process.env.BUILD_TARGET === 'desktop' ? { output: "export" } : {}),
+  // Use standalone mode for optimized Docker builds, export for Desktop
+  output: process.env.BUILD_TARGET === 'desktop' ? "export" : "standalone",
   devIndicators: false,
   images: {
     unoptimized: true,

@@ -36,5 +36,4 @@ You specialize in integrating the Planet Labs APIs for high-frequency satellite 
     }
 }
 
-
 export const planetlabsAgent = new PlanetLabsAgent();

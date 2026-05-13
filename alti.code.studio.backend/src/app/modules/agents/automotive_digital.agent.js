@@ -80,7 +80,7 @@ OBD-II (On-Board Diagnostics) — J1979 / ISO 14229:
   Node.js OBD library:
   import OBDReader from 'obd-reader';
   const reader = new OBDReader('/dev/ttyUSB0', 9600);
-  reader.on('data', (data) => console.log(data)); // { mode, pid, name, value, unit }
+  reader.on('data', (data) => logger.info(data)); // { mode, pid, name, value, unit }
   reader.connect().then(() => reader.startPolling(['ENGINE_RPM', 'VEHICLE_SPEED']));
 
 J1939 (Heavy Duty Vehicles — SAE):

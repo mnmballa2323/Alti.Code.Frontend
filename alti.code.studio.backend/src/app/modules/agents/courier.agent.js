@@ -33,7 +33,7 @@ class CourierAgent {
                     break;
                 case 'console':
                 default:
-                    console.log(`\n📨 [COURIER MESSAGE]: ${message}\n`);
+                    logger.info(`\n📨 [COURIER MESSAGE]: ${message}\n`);
                     break;
             }
 

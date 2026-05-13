@@ -13,6 +13,8 @@ import { BaseSpecialistAgent, AgentError } from './base_specialist.agent.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
 import { GeminiExtensionService } from '../geminiExtensions/geminiExtension.service.js';
 import { logger } from '../../../shared/logger.js';
+import { semanticCacheService } from '../memory/semantic_cache.service.js';
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
 export class GeminiCliBaseAgent extends BaseSpecialistAgent {
     constructor(name, description, preamble = '') {
@@ -65,17 +67,24 @@ TASK:
 ${safePrompt}
         `.trim();
 
+        // 🧠 Semantic Cache Interception (PgVector)
+        const cachedOutput = await semanticCacheService.getCachedResponse(fullPayload);
+        if (cachedOutput) {
+            logger.info(`⚡ [${this.name}] [cid:${correlationId}] Elite Specialist Cache Hit! Bypassing Vertex AI.`);
+            return cachedOutput;
+        }
+
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                logger.info(`⚡ [${this.name}] [cid:${correlationId}] Executing native Gemini CLI subprocess (Attempt ${attempt}/${maxRetries})...`);
+                logger.info(`⚡ [${this.name}] [cid:${correlationId}] Executing Vertex AI generation via GoogleGenAiService (Attempt ${attempt}/${maxRetries})...`);
                 
-                // Wrap execution in a hard timeout to prevent hanging processes
-                const cliPromise = GeminiCliService.runGeminiCLI('ask', [fullPayload]);
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('CLI Execution Timed Out')), timeoutMs)
-                );
-
-                const output = await Promise.race([cliPromise, timeoutPromise]);
+                // Use GoogleGenAiService (Vertex AI integrated) instead of the raw native CLI
+                const result = await GoogleGenAiService.generateContent(fullPayload);
+                const output = result.content;
+                
+                // 🧠 Store the successful outcome into the pgvector semantic cache
+                semanticCacheService.setCachedResponse(fullPayload, output).catch(() => {});
+                
                 return output;
                 
             } catch (err) {

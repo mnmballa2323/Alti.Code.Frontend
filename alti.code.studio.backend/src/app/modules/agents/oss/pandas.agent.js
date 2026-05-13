@@ -45,9 +45,9 @@ df.iloc[0:10, 0:3]                  # first 10 rows, first 3 cols
 df.loc[df['age'] > 30, 'name']      # filter + select
 
 # Boolean filtering:
-mask = (df['status'] == 'active') & (df['age'] >= 18)
+mask = (df['status'] === 'active') & (df['age'] >= 18)
 df_filtered = df[mask]
-df.query('age >= 18 and status == "active"')  # string query
+df.query('age >= 18 and status === "active"')  # string query
 
 # .where() and .mask():
 df['value'].where(df['value'] > 0, other=0)   # keep if condition, else 0

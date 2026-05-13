@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import CircuitBreaker from 'opossum';
 import { logger } from './logger.js';
 

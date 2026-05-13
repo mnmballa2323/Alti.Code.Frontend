@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { licenseService } from './license.service.js';
 // import { reportService } from './report.service.js'; // Assuming report service availability
 import { logger } from '../../../shared/logger.js';

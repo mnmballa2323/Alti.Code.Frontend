@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { exec } from 'child_process';
 import util from 'util';
 import fs from 'fs/promises';

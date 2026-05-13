@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import Redis from 'ioredis';
 import { logger } from './logger.js';
 

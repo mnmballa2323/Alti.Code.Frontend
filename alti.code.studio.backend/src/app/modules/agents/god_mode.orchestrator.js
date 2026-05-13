@@ -75,7 +75,7 @@ class GodModeOrchestrator {
 
             // Step 2: Synthesize the Code Fix (Simulated LLM call)
             logger.info('🧠 [GOD MODE] Synthesizing fix via Gemini 3.1 Pro Swarm...');
-            const codeFix = `function patched() { console.log('Fixed autonomously!'); }`;
+            const codeFix = `function patched() { logger.info('Fixed autonomously!'); }`;
             const testCode = `test('UI Fix verified', async ({ page }) => { await page.goto('/'); });`;
             result.fix = codeFix;
 

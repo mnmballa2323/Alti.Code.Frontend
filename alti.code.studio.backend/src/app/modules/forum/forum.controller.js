@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 const pick = require("../../middlewares/other/pick");
 const { paginationFields } = require("./forum.constant");
 const {
@@ -84,7 +83,6 @@ module.exports.getForumById = async (req, res) => {
     });
   }
 };
-
 
 module.exports.getForumByEmail = async (req, res) => {
   const { email } = req.params;

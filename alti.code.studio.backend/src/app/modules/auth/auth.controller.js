@@ -87,7 +87,6 @@ const login = catchAsync(async (req, res) => {
   };
   res.cookie('refreshToken', refreshToken, cookieOption);
 
-
   logger.info(`User logged in: ${email}`);
 
   // KMS Encrypt the payload before sending to client
@@ -116,7 +115,6 @@ const refreshToken = catchAsync(async (req, res) => {
   };
 
   res.cookie('refreshToken', refreshToken, cookieOptions);
-
 
   sendResponse(res, {
     statusCode: 200,
@@ -328,7 +326,7 @@ const changePassword = async (req, res, next) => {
   try {
     // const userId = req.params?.userId;
     const userId = req.user?._id;
-    // console.log(userId, 'userId from token in controller'); 
+    // logger.info(userId, 'userId from token in controller'); 
     const { newPassword, oldPassword } = req.body;
     if (!oldPassword || !newPassword) {
       await session.abortTransaction();
@@ -410,7 +408,7 @@ const updateUser = catchAsync(async (req, res) => {
   const userId = req.params?.userId;
   const data = req.body;
   const result = await authService.updateUserService(userId, data);
-  if (result.modifiedCount == !1) {
+  if (result.modifiedCount === !1) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
       'User not found or no changes made',
@@ -446,7 +444,6 @@ const googleAuthCallback = catchAsync(async (req, res) => {
   };
   res.cookie('refreshToken', refreshToken, cookieOption);
 
-
   // Redirect to frontend
   const frontendUrl = config.client_url || 'http://localhost:3000';
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
@@ -462,7 +459,6 @@ const socialLogin = catchAsync(async (req, res) => {
     sameSite: 'strict',
   };
   res.cookie('refreshToken', refreshToken, cookieOption);
-
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

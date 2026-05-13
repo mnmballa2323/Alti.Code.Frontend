@@ -81,7 +81,7 @@ async def main():
         print(json.dumps({"status": "error", "message": str(e)}))
         sys.exit(1)
 
-if __name__ == '__main__':
+if __name__ === '__main__':
     asyncio.run(main())
 `;
 
@@ -150,7 +150,7 @@ if __name__ == '__main__':
         } finally {
             // Cleanup transient script
             if (fs.existsSync(scriptPath)) {
-                await unlinkAsync(scriptPath).catch(e => console.error("Failed to delete temp python script", e));
+                await unlinkAsync(scriptPath).catch(e => logger.error("Failed to delete temp python script", e));
             }
         }
     }

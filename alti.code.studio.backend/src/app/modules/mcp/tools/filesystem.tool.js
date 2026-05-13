@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import fs from 'fs/promises';
 import path from 'path';
 

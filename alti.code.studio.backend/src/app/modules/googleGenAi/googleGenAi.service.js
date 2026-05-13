@@ -10,6 +10,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
+import { semanticCacheService } from '../memory/semantic_cache.service.js';
 
 // Initialize Vertex AI or Fallback client
 let vertex_ai = null;
@@ -74,6 +75,19 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
         logger.info(`🛡️ [AgenticHub] Scrubbing raw intent through Google Cloud DLP...`);
         const redactedPrompt = await GoogleDlpService.redactText(prompt);
 
+        // ⚡ Semantic Cache Check
+        const cachedOutput = await semanticCacheService.getCachedResponse(redactedPrompt);
+        if (cachedOutput) {
+            return {
+                model: primaryModel,
+                content: cachedOutput,
+                plan: "Bypassed via pgvector Semantic Cache",
+                usage: { promptTokenCount: 0, candidatesTokenCount: 0, totalTokenCount: 0 },
+                prompt: redactedPrompt,
+                cached: true
+            };
+        }
+
         // 1. Fully Agentic Smart Routing 
         const { agenticRouter } = await import('../agents/agentic_router.service.js');
         const plan = await agenticRouter.routePrompt(redactedPrompt);
@@ -111,6 +125,9 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
         const result = await generativeModel.generateContent(synthPrompt);
         const response = await result.response;
         const text = response.candidates[0].content.parts[0].text;
+
+        // 🧠 Asynchronously Vectorize and Cache the execution outcome
+        semanticCacheService.setCachedResponse(redactedPrompt, text).catch(() => {});
 
         return {
             model: primaryModel,
@@ -182,5 +199,4 @@ export const GoogleGenAiService = {
     generateEmbedding,
     PRIMARY_MODEL
 };
-
 

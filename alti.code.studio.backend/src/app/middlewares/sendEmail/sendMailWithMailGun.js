@@ -30,11 +30,11 @@ export const sendMailWithMailGun = async mailData => {
       })
       .then(msg => {
         // logger.info(msg); // logs response data
-        console.log(msg); // logs response data
+        logger.info(msg); // logs response data
         resolve(msg);
       })
       .catch(err => {
-        console.error(err); // logs any error
+        logger.error(err); // logs any error
         reject(err);
       });
   });

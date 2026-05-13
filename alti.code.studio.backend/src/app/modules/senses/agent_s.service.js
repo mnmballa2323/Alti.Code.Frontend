@@ -58,7 +58,7 @@ async def main():
     try:
         # Detect platform
         current_platform = "windows"
-        if sys.platform == "darwin":
+        if sys.platform === "darwin":
             current_platform = "darwin"
         elif sys.platform.startswith("linux"):
             current_platform = "linux"
@@ -132,7 +132,7 @@ async def main():
         print(json.dumps({"status": "error", "message": str(e), "trace": traceback.format_exc()}))
         sys.exit(1)
 
-if __name__ == '__main__':
+if __name__ === '__main__':
     asyncio.run(main())
 `;
 
@@ -197,7 +197,7 @@ if __name__ == '__main__':
             throw error;
         } finally {
             if (fs.existsSync(scriptPath)) {
-                await unlinkAsync(scriptPath).catch(e => console.error("Failed to delete temp python script", e));
+                await unlinkAsync(scriptPath).catch(e => logger.error("Failed to delete temp python script", e));
             }
         }
     }

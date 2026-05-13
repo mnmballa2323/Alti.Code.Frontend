@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { analystService } from './analyst.service.js';
 import { logger } from '../../../shared/logger.js';
 

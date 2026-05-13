@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { z } from 'zod';
 import { logger } from '../../../shared/logger.js';
 import { jobQueueService } from '../../../shared/jobQueue.service.js';
@@ -96,7 +95,6 @@ class RefactorService {
             throw error;
         }
     }
-
 
     /**
      * Scan a directory for files with high complexity

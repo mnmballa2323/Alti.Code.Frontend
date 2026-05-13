@@ -26,7 +26,6 @@ const GeminiOpenMemoryAiGetResponse = catchAsync(async (req, res) => {
   });
 });
 
-
 export const GeminiAiController = {
   GeminiOpenMemoryAiGetResponse,
 };

@@ -36,5 +36,4 @@ You specialize in integrating the Climate FieldView API for digital agriculture 
     }
 }
 
-
 export const climatefieldviewAgent = new ClimateFieldViewAgent();

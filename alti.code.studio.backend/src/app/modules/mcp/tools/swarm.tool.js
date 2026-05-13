@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import { Orchestrator } from '../../agents/orchestrator.agent.js';
 
 export const swarmTool = {

@@ -11,7 +11,6 @@ import ApiError from '../../../errors/ApiError.js';
 import { jwtHelpers } from '../../helpers/jwtHelpers.js';
 import { iapService } from '../../modules/googleCloud/iap.service.js';
 
-
 const auth = (...requiredRoles) => {
   return async (req, res, next) => {
     try {

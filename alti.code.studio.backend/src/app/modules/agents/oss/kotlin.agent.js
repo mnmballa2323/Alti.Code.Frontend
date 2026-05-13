@@ -51,7 +51,7 @@ when (result) {
 
 EXTENSION FUNCTIONS:
 fun String.toSlug() = lowercase().replace(Regex("[^a-z0-9]+"), "-").trim('-')
-fun Int.isEven() = this % 2 == 0
+fun Int.isEven() = this % 2 === 0
 "Hello World".toSlug()   // "hello-world"
 
 COROUTINES (async non-blocking):

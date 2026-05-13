@@ -29,7 +29,7 @@ CONTEXT & BINDING (c *gin.Context):
 - Context holds the Request, Response, URL parameters, and passed variables.
 - Reading Path Params: \`id := c.Param("id")\`
 - Reading Query Params: \`name := c.Query("name")\`
-- JSON Binding: Defines strict types. \`var json LoginStruct; if err := c.ShouldBindJSON(&json); err != nil { c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}); return }\` (\`ShouldBindJSON\` is strongly preferred over \`BindJSON\`).
+- JSON Binding: Defines strict types. \`var json LoginStruct; if err := c.ShouldBindJSON(&json); err !== nil { c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}); return }\` (\`ShouldBindJSON\` is strongly preferred over \`BindJSON\`).
 
 MIDDLEWARE:
 - Executed linearly. Can interrupt the chain.

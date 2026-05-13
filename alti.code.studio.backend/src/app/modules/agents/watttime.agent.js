@@ -36,5 +36,4 @@ You specialize in integrating the WattTime API for real-time grid emissions trac
     }
 }
 
-
 export const watttimeAgent = new WattTimeAgent();

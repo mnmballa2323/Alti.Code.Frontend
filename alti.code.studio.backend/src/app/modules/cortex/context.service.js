@@ -78,7 +78,6 @@ class ContextService {
                 this.conversationHistory = this.conversationHistory.slice(-MAX_HISTORY);
             }
 
-
             // 1. Retrieve Vector Context (Semantic Search)
             let results = [];
             try {
@@ -144,7 +143,6 @@ class ContextService {
             if (this.conversationHistory.length > MAX_HISTORY) {
                 this.conversationHistory = this.conversationHistory.slice(-MAX_HISTORY);
             }
-
 
             return {
                 answer,

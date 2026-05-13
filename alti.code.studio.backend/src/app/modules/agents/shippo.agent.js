@@ -38,5 +38,4 @@ You specialize in integrating the Shippo REST API for multi-carrier shipping, ra
     }
 }
 
-
 export const shippoAgent = new ShippoAgent();
