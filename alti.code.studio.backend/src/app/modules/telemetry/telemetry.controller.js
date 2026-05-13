@@ -13,11 +13,6 @@
  */
 
 import express from 'express';
-<<<<<<< HEAD
-import { telemetryService } from './telemetry.service.js';
-import { telemetryBus } from './telemetry.bus.js';
-import { logger } from '../../../shared/logger.js';
-=======
 import multer from 'multer';
 import { telemetryService } from './telemetry.service.js';
 import { telemetryBus } from './telemetry.bus.js';
@@ -25,7 +20,6 @@ import { logger } from '../../../shared/logger.js';
 import { magikaService } from '../security/magika.service.js';
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB max
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const telemetryRoutes = express.Router();
 
@@ -90,8 +84,6 @@ telemetryRoutes.post('/detection/stop', (req, res) => {
     return res.json({ success: true, message: 'Anomaly detection stopped.' });
 });
 
-<<<<<<< HEAD
-=======
 // POST /video-debug — VideoEye Agent entrypoint
 telemetryRoutes.post('/video-debug', upload.single('video'), async (req, res) => {
     try {
@@ -119,7 +111,6 @@ telemetryRoutes.post('/video-debug', upload.single('video'), async (req, res) =>
     }
 });
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 // GET /events — SSE stream
 telemetryRoutes.get('/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');

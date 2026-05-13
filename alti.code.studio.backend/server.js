@@ -5,10 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-<<<<<<< HEAD
-import http from 'http';
-import mongoose from 'mongoose';
-=======
 // MUST BE THE VERY FIRST LINE: Google Cloud Trace initialization
 // import traceAgent from '@google-cloud/trace-agent';
 // traceAgent.start({ ignoreUrls: [/^\/healthz/, /^\/metrics/] });
@@ -20,27 +16,12 @@ import http from 'http';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
+
 import config from './config/index.js';
 import app from './index.js'; // Make sure this exists and exports an Express app
 import { logger } from './src/shared/logger.js';
 import { agentRegistry } from './src/app/modules/agents/agent.registry.js';
-// import { RedisClient } from './src/shared/redis.js';
 
-<<<<<<< HEAD
-process.on('uncaughtException', error => {
-  logger.fatal('🚨 Uncaught Exception detected! Shutting down gracefully...', error);
-  console.error('🚨 Uncaught Exception detected:', error);
-  if (server) {
-    server.close(() => {
-      process.exit(1);
-    });
-  } else {
-    process.exit(1);
-  }
-});
-
-=======
 // Initialize Google Cloud Error Reporting
 const errors = new ErrorReporting();
 
@@ -67,27 +48,18 @@ profiler.start({
 
 import { connectPrisma } from './src/config/prisma.js';
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 let server;
 mongoose.set('strictQuery', true);
 mongoose.set('bufferCommands', false);
+
 async function main() {
   try {
-<<<<<<< HEAD
-    // await RedisClient.connect();
-    // logger.info('✅ Redis is connected successfully');
-    // console.log('✅ Redis is connected successfully');
-
-    try {
-      console.log('--- Attempting Real MongoDB Connection ---');
-=======
     // 1. Initialize PostgreSQL (Prisma)
     await connectPrisma();
 
     // 2. Initialize Legacy MongoDB (Mongoose) - Phased Deprecation
     try {
       console.log('--- Attempting Legacy MongoDB Connection ---');
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
       await mongoose.connect(config.database_local, { serverSelectionTimeoutMS: 2000 });
       logger.info('✅ MongoDB connected successfully');
       logger.info("Test log entry from INSOCODE");
@@ -122,11 +94,7 @@ async function main() {
       logger.error('❌ Failed to load dynamic marketplace plugins', e);
     }
 
-<<<<<<< HEAD
-    // Initialize Background Workers
-=======
     // Initialize Background Workers (BullMQ Async Agents)
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     import('./src/app/modules/queue/worker.service.js').then(({ workerService }) => {
       workerService.init();
     }).catch(err => logger.error('❌ Failed to start WorkerService', err));
@@ -155,11 +123,6 @@ async function main() {
       logger.info('✅ OpenClaw Deep Integration Active');
     }).catch(err => logger.error('❌ Failed to start OpenClaw Integration', err));
 
-    // Initialize OSS Trending Agent System (v7.7.0)
-<<<<<<< HEAD
-    // Rehydrates all existing OSS agents into the CapabilityRouter and starts the daily cron
-=======
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     import('./src/app/modules/ossAgents/oss.trending.scheduler.js').then(({ ossTrendingScheduler }) => {
       ossTrendingScheduler.start().catch(err => logger.error('❌ OssTrendingScheduler start error', err));
       logger.info('✅ OSS Trending Agent System Active');
@@ -170,8 +133,6 @@ async function main() {
       logger.error('❌ Failed to initialize Ledger Anchor Cron', err);
     });
 
-<<<<<<< HEAD
-=======
     // Initialize Phase 6 Chaos Fuzzer Service
     import('./src/app/modules/qa/chaos_fuzzer.service.js').then(({ chaosFuzzerService }) => {
       chaosFuzzerService.init();
@@ -236,7 +197,6 @@ async function main() {
       await neo4jGraphQLService.init(app);
     }).catch(err => logger.error('❌ Failed to start Neo4j GraphQL Service', err));
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     server = http.createServer(app).listen(config.port, '0.0.0.0', () => {
       logger.info(`🚀 Server listening on port ${config.port}`);
       // Initialize Socket.io
@@ -247,13 +207,10 @@ async function main() {
       import('./src/app/modules/agents/crdt.socket.service.js').then(({ crdtSocketService }) => {
         crdtSocketService.init(server);
       });
-<<<<<<< HEAD
-=======
       // Initialize Phase 5 Live LSP Telepathy Engine
       import('./src/app/modules/lsp/lsp.gateway.js').then(({ lspGateway }) => {
         lspGateway.initialize(server);
       });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     });
   } catch (error) {
     logger.error(`❌ Failed to start server: ${error}`);
@@ -262,28 +219,6 @@ async function main() {
   }
 
   process.on('unhandledRejection', (reason, promise) => {
-<<<<<<< HEAD
-    logger.fatal('🚨 Unhandled Rejection detected at promise:', promise, 'reason:', reason);
-    console.error('🚨 Unhandled Rejection:', reason);
-    if (server) {
-      server.close(() => {
-        process.exit(1);
-      });
-    } else {
-      process.exit(1);
-    }
-  });
-
-  main();
-
-  process.on('SIGTERM', () => {
-    // logger.info('Signal Termination is received');
-    console.log('Signal Termination is received');
-    if (server) {
-      server.close();
-    }
-  });
-=======
     logger.error('🚨 Unhandled Rejection detected at promise:', promise, 'reason:', reason);
     console.error('🚨 Unhandled Rejection:', reason);
     // Pipe critical rejections directly to Google Cloud Console
@@ -346,4 +281,3 @@ const gracefulShutdown = async (signal) => {
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

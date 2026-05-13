@@ -11,11 +11,8 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { graphOrchestrator } from './graph.orchestrator.js';
 import { logger } from '../../../shared/logger.js';
-<<<<<<< HEAD
-=======
 import { puppeteerAgent } from './puppeteer.agent.js';
 import { cloudBatchService } from '../googleCloud/batch.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const startMission = catchAsync(async (req, res) => {
     const { goal } = req.body;
@@ -83,9 +80,6 @@ export const AgentController = {
             });
         }
     },
-<<<<<<< HEAD
-    getAgentStatus
-=======
     getAgentStatus,
     exploreUrl: catchAsync(async (req, res) => {
         const { url } = req.body;
@@ -116,5 +110,4 @@ export const AgentController = {
             data: result,
         });
     })
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

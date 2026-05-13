@@ -10,11 +10,7 @@ import { logger } from '../../../shared/logger.js';
 import puppeteer from 'puppeteer';
 
 /** Current latest stable Gemini vision-capable model. Update when new versions ship. */
-<<<<<<< HEAD
-const VISION_MODEL = 'gemini-1.5-pro';
-=======
 const VISION_MODEL = 'gemini-3.1-pro';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 class VisionService {
 

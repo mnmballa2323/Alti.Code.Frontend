@@ -9,11 +9,7 @@ const routeCompletion = async (model, messages, parameters = {}) => {
     try {
         // LiteLLM exposes a standard OpenAI-compatible completions endpoint
         const response = await axios.post(`${LITELLM_URL}/v1/chat/completions`, {
-<<<<<<< HEAD
-            model: model, // e.g., 'gpt-4o', 'claude-3-opus', 'gemini-1.5-pro'
-=======
             model: model, // e.g., 'gpt-4o', 'claude-3-opus', 'gemini-3.1-pro'
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             messages: messages,
             ...parameters,
         });

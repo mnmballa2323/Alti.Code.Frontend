@@ -10,11 +10,7 @@ import CircuitBreaker from 'opossum';
 import { logger } from './logger.js';
 
 const options = {
-<<<<<<< HEAD
-    timeout: 5000,               // Trigger failure if function takes > 5 seconds
-=======
     timeout: 60000,               // Trigger failure if function takes > 60 seconds (AI models are slow)
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     errorThresholdPercentage: 50, // Trip when >= 50% of requests fail
     resetTimeout: 10000,          // After 10 seconds, transition to half-open
     volumeThreshold: 5,           // Min request count before trip logic applies (prevents single-failure trips in dev)

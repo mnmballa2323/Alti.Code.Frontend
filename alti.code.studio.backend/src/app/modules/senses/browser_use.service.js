@@ -47,11 +47,7 @@ async def main():
     try:
         # Initialize the Gemini 2.0 model
         llm = ChatGoogleGenerativeAI(
-<<<<<<< HEAD
-            model='gemini-2.5-flash',
-=======
             model='gemini-3.1-flash',
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             api_key='${this.apiKey}'
         )
         

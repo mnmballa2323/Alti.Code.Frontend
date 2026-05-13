@@ -14,20 +14,6 @@ import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { logger } from '../../../shared/logger.js';
 import UserModel from '../auth/auth.model.js';
-<<<<<<< HEAD
-// import Llama from '../groq/groq.model.js';
-import { paymentController } from '../payment/payment.controller.js';
-import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
-// import { RedisClient } from '../../../shared/redis.js';
-import Llama from './geminiOpenMemo.model.js';
-
-const client = new GoogleGenerativeAI(config.gemini_secret_key);
-const model = client.getGenerativeModel({ model:  'gemini-2.5-flash-preview-05-20' });
-
-const sessionMemoryStore = {};
-
-const geminiOpenMemoryService = async (sessionId, prompt, userId) => {
-=======
 import { paymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
 import Llama from './geminiOpenMemo.model.js';
@@ -39,7 +25,6 @@ const model = client.getGenerativeModel({ model:  'gemini-3.1-pro' });
 const sessionMemoryStore = {};
 
 const geminiOpenMemoryService = async (sessionId, prompt, userId, language, mode = 'Agent', domain) => {
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   let memory = sessionMemoryStore[sessionId];
   if (!memory) {
     memory = new BufferMemory({
@@ -50,16 +35,6 @@ const geminiOpenMemoryService = async (sessionId, prompt, userId, language, mode
     sessionMemoryStore[sessionId] = memory;
   }
 
-<<<<<<< HEAD
-  try {
-    await memory.chatHistory.addMessage(new HumanMessage(prompt));
-
-    // Call Gemini AI to generate a response
-    const result = await model.generateContent(prompt);
-    const reply =
-      result?.response?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      'No reply generated';
-=======
   let systemPrompt = '';
   switch (mode.toLowerCase()) {
     case 'agent':
@@ -218,7 +193,6 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     }
 
     if (!reply) reply = 'No reply generated';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     try {
       const paymentResult =
@@ -239,14 +213,9 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
 
     const responseData = {
       prompt,
-<<<<<<< HEAD
-      model:  'gemini-2.5-flash-preview',
-      reply,
-=======
       model:  'gemini-3.1-pro',
       reply,
       toolExecutions: allToolExecutions,
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
       total_time: result?.usage?.total_time || 0,
     };
 
@@ -266,35 +235,18 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
       });
     }
 
-<<<<<<< HEAD
-    const payload = { prompt, sessionId, reply };
-    // if (payload) {
-    //   await RedisClient.publish(
-    //     GEMINI_RESPONSE_SERVICE_POST,
-    //     JSON.stringify(payload),
-    //   );
-    // }
-=======
     const payload = { prompt, sessionId, reply, mode, toolExecutions: allToolExecutions };
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     return payload;
   } catch (err) {
     logger.error('Gemini Service Error:', err);
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
-<<<<<<< HEAD
-      'Gemini Service failed',
-=======
       'Gemini Service failed: ' + err.message,
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     );
   }
 };
 
 export const GeminiAiService = {
   geminiOpenMemoryService,
-<<<<<<< HEAD
-=======
   geminiService: geminiOpenMemoryService,
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

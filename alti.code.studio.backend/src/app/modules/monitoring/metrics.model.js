@@ -22,11 +22,7 @@ const LLMMetricsSchema = new mongoose.Schema({
     model: {
         type: String,
         required: true,
-<<<<<<< HEAD
-        default: 'gemini-1.5-pro'
-=======
         default: 'gemini-3.1-pro'
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     },
     promptTokens: {
         type: Number,

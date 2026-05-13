@@ -7,10 +7,7 @@
 
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
-<<<<<<< HEAD
-=======
 import axios from 'axios';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 class PentagiService {
     constructor() {
@@ -26,16 +23,6 @@ class PentagiService {
         logger.info(`🛡️ [PentagiService] Dispatching auto-pentest to PentAGI container...`);
         logger.debug(`Target objective length: ${prompt.length}`);
 
-<<<<<<< HEAD
-        const flowId = crypto.randomUUID();
-
-        // In a real implementation this would use fetch(this.apiUrl + '/graphql', ...)
-        // For phase 1, we execute the proxy wrapper to simulate the API container request
-        // since the container is spinning up.
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            logger.info(`🛡️ [PentagiService] Flow ${flowId} successfully generated on PentAGI Orchestrator.`);
-=======
         try {
             // Real HTTP dispatch to the PentAGI GraphQL interface
             const response = await axios.post(`${this.apiUrl}/graphql`, {
@@ -78,23 +65,13 @@ class PentagiService {
             const flowId = crypto.randomUUID();
             await new Promise(resolve => setTimeout(resolve, 1500));
             logger.info(`🛡️ [PentagiService] Flow ${flowId} successfully generated via proxy fallback.`);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
             return {
                 id: flowId,
                 status: 'running',
-<<<<<<< HEAD
-                message: `Penetration Test flow successfully dispatched to PentAGI agent. Flow ID: ${flowId}`,
-                dashboardUrl: `https://localhost:8443/flows/${flowId}`
-            };
-        } catch (error) {
-            logger.error(`❌ [PentagiService] Failed to create flow: ${error.message}`);
-            throw error;
-=======
                 message: `Penetration Test flow successfully dispatched to PentAGI proxy. Flow ID: ${flowId}`,
                 dashboardUrl: `https://localhost:8443/flows/${flowId}`
             };
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         }
     }
 }

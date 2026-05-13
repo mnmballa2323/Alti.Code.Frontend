@@ -9,8 +9,6 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { mcpClientService } from './mcp.client.js';
-<<<<<<< HEAD
-=======
 import { composioService } from './composio.service.js';
 
 const getComposioApps = catchAsync(async (req, res) => {
@@ -113,7 +111,6 @@ const getToolkitTools = catchAsync(async (req, res) => {
         data: tools,
     });
 });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const listTools = catchAsync(async (req, res) => {
     const tools = await mcpClientService.getAllTools();
@@ -147,15 +144,12 @@ const runTool = catchAsync(async (req, res) => {
 });
 
 export const McpController = {
-<<<<<<< HEAD
-=======
     getComposioApps,
     getConnections,
     connectComposioApp,
     disconnectComposioApp,
     getAppTriggers,
     getToolkitTools,
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     listTools,
     connectServer,
     runTool

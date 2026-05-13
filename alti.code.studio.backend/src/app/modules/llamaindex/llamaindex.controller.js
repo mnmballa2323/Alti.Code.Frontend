@@ -6,11 +6,7 @@
  */
 
 import fs from 'node:fs/promises';
-<<<<<<< HEAD
-import { ragService } from './llamaindex.service.js';
-=======
 import { llamaIndexService } from './llamaindex.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const uploadAndIndexDocument = async (req, res) => {
   try {
@@ -18,11 +14,7 @@ export const uploadAndIndexDocument = async (req, res) => {
       return res.status(400).json({ error: 'No files uploaded' });
 
     const filePaths = req.files.map(f => f.path);
-<<<<<<< HEAD
-    const result = await ragService.uploadAndIndexDocumentService(filePaths);
-=======
     const result = await llamaIndexService.uploadAndIndexDocument(filePaths[0]);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     // Optional: delete files after indexing
     await Promise.all(filePaths.map(p => fs.unlink(p)));
@@ -43,11 +35,7 @@ export const uploadAndIndexDocument = async (req, res) => {
 export const queryIndex = async (req, res) => {
   try {
     const { query } = req.body;
-<<<<<<< HEAD
-    const answer = await ragService.queryDocument(query);
-=======
     const answer = await llamaIndexService.queryDocument(query);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     res.status(200).json({ answer });
   } catch (error) {
     res.status(500).json({ error: error.message });

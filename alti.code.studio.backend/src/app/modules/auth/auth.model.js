@@ -13,13 +13,9 @@ const UserSchema = new mongoose.Schema(
   {
     provider: { type: String, default: 'local' },
     googleId: { type: String },
-<<<<<<< HEAD
-    avatar: { type: String },
-=======
     githubId: { type: String },
     avatar: { type: String },
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     email: {
       type: String,
       required: [true, 'Please provide a unique email'],

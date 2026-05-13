@@ -58,8 +58,6 @@ const refreshTokenZodSchema = z.object({
   }),
 });
 
-<<<<<<< HEAD
-=======
 const socialLoginZodSchema = z.object({
   body: z.object({
     email: z.string().email(),
@@ -69,15 +67,10 @@ const socialLoginZodSchema = z.object({
   }),
 });
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const AuthValidation = {
   UserValidationSchema,
   loginZodSchema,
   refreshTokenZodSchema,
-<<<<<<< HEAD
-};
-=======
   socialLoginZodSchema,
 };
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

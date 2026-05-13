@@ -110,8 +110,6 @@ export class AutonomousSprintService {
             logger.info(`🧠 Sprint [${sprintId}]: Consulting Enterprise Memory for context...`);
             const ragContext = await ragService.query(`Architectural guidelines and past lessons for: ${goal}`, 3);
 
-<<<<<<< HEAD
-=======
             // #6: Gemini File Search — Indexed Document Context for Sprint Planning
             let fileSearchContext = '';
             try {
@@ -138,7 +136,6 @@ export class AutonomousSprintService {
                 logger.warn(`⚠️ Sprint [${sprintId}]: File Search context failed (non-blocking): ${e.message}`);
             }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             // Phase 24: Enterprise Knowledge Digestion (Jira/Confluence)
             let jiraContext = '';
             const jiraMatch = goal.match(/[A-Z]+-[0-9]+/); // e.g. "Fix ENG-1234"
@@ -164,11 +161,7 @@ export class AutonomousSprintService {
                 uxContext = `\n[SYNTHETIC USER UX FEEDBACK]:\n${uxData.feedback}\n*The Swarm MUST refactor the frontend codebase to fix these specific heuristic UX errors.*`;
             }
 
-<<<<<<< HEAD
-            const combinedContext = `${ragContext}\n\n${jiraContext}\n\n${finopsContext}\n\n${uxContext}`;
-=======
             const combinedContext = `${ragContext}\n\n${fileSearchContext}\n\n${jiraContext}\n\n${finopsContext}\n\n${uxContext}`;
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
             const plan = await this._generatePlan(goal, combinedContext);
             sprintState.plan = plan;

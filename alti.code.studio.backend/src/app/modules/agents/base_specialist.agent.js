@@ -257,8 +257,6 @@ export class BaseSpecialistAgent {
         this._cbOpenSince = null;
     }
 
-<<<<<<< HEAD
-=======
     // ── AST Mutation Method (Phase 3) ──────────────────────────────────────────
 
     /**
@@ -286,7 +284,6 @@ Return only the JSON block.
         return this.consult(astPrompt, contextData);
     }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     // ── Standard Developer Action Methods (inherited by all SDK agents) ─────────
 
     /**

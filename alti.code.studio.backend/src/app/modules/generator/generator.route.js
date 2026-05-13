@@ -16,14 +16,11 @@ router.post(
     authMiddleware('user', 'developer', 'admin', 'owner'),
     GeneratorController.generateProject
 );
-<<<<<<< HEAD
-=======
 router.post(
     '/app',
     authMiddleware('user', 'developer', 'admin', 'owner'),
     GeneratorController.generateProject
 );
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 router.post('/refine', authMiddleware('user', 'developer', 'admin', 'owner'), GeneratorController.refine);
 
 export const generatorRoutes = router;

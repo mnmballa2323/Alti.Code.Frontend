@@ -1,14 +1,9 @@
 import { WebSocketServer } from 'ws';
-<<<<<<< HEAD
-import setupWSConnection from 'y-websocket/bin/utils.js';
-import { logger } from '../../../shared/logger.js';
-=======
 import setupWSConnection, { setPersistence } from 'y-websocket/bin/utils';
 import { logger } from '../../../shared/logger.js';
 import * as Y from 'yjs';
 import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
 import { memorystoreService } from '../googleCloud/memorystore.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 class CrdtSocketService {
     constructor() {
@@ -19,8 +14,6 @@ class CrdtSocketService {
     init(server) {
         logger.info('🔗 Initializing Yjs CRDT WebSocket Bridge on /api/internal/crdt');
 
-<<<<<<< HEAD
-=======
         // 🔥 Universe-Scale Multiplayer Persistence via Google Firestore & Cloud KMS
         setPersistence({
             bindState: async (docName, ydoc) => {
@@ -35,7 +28,6 @@ class CrdtSocketService {
             }
         });
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         this.wss = new WebSocketServer({ noServer: true });
 
         this.wss.on('connection', (conn, req) => {
@@ -44,8 +36,6 @@ class CrdtSocketService {
 
             // Wire the connection to the y-websocket server logic
             setupWSConnection.setupWSConnection(conn, req, { docName });
-<<<<<<< HEAD
-=======
             
             // Get the server-side Y.Doc instance
             const docs = setupWSConnection.docs || new Map();
@@ -71,7 +61,6 @@ class CrdtSocketService {
                     }
                 });
             }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         });
 
         // Upgrade specific HTTP connections to the CRDT WebSocket server

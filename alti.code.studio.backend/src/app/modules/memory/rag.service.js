@@ -8,8 +8,6 @@
 import { vertexService } from '../ai/vertex.service.js';
 import { logger } from '../../../shared/logger.js';
 import { vectorStoreService } from './vector.store.js';
-<<<<<<< HEAD
-=======
 import { magikaService } from '../agents/magika.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { sccService } from '../googleCloud/scc.service.js';
@@ -20,7 +18,6 @@ import { GcsService } from '../googleCloud/gcs.service.js';
 import fs from 'fs';
 import path from 'path';
 import { AgentMemoryHooks } from './agentmemory.hooks.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 /** Maximum number of documents to index concurrently. */
 const BATCH_SIZE = 8;
@@ -54,9 +51,6 @@ class RagService {
                         return;
                     }
                     try {
-<<<<<<< HEAD
-                        await vectorStoreService.add(text, { source: 'rag_service', chunkIndex: i + idx, ...meta });
-=======
                         // ZERO-TRUST RAG STEP 1: Audit chunk for critical PII / API Key leakage
                         const findings = await GoogleDlpService.inspectText(text);
                         if (findings && findings.length > 0) {
@@ -80,7 +74,6 @@ class RagService {
                         const embedding = await vertexService.getEmbeddings(sanitizedText);
                         await vertexVectorSearch.upsertEmbeddings([{ id: docId, embedding }]);
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                         indexed++;
                     } catch (err) {
                         logger.warn(`RAG: Failed to index chunk ${i + idx} — skipping. Reason: ${err.message}`);
@@ -91,8 +84,6 @@ class RagService {
         }
 
         logger.info(`✅ RAG: Indexing complete. ${indexed} indexed, ${skipped} skipped.`);
-<<<<<<< HEAD
-=======
 
         // 🧠 AgentMemory Bridge: Record the RAG indexing event
         AgentMemoryHooks.captureToolUse(
@@ -150,7 +141,6 @@ class RagService {
         } catch (error) {
             logger.error(`❌ RAG: Failed to ingest file ${filePath}: ${error.message}`);
         }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 
     /**
@@ -166,30 +156,6 @@ class RagService {
             return 'Query must be a non-empty string.';
         }
 
-<<<<<<< HEAD
-        let results;
-        try {
-            results = await vectorStoreService.search(query, topK);
-        } catch (storeError) {
-            logger.error(`RAG: Vector store search failed for query "${query}". Error: ${storeError.message}`);
-            return 'The knowledge base is temporarily unavailable. Please try again shortly.';
-        }
-
-        // Normalize results — different vector stores return different shapes:
-        //   ChromaDB: { documents: [[...]] }
-        //   Pinecone/Weaviate: { matches: [{ metadata: { text } }] }
-        //   Custom fallback: plain string[]
-        let docs = [];
-        if (Array.isArray(results?.documents?.[0])) {
-            docs = results.documents[0];
-        } else if (Array.isArray(results?.matches)) {
-            docs = results.matches.map(m => m?.metadata?.text ?? m?.text ?? '').filter(Boolean);
-        } else if (Array.isArray(results)) {
-            docs = results.map(r => (typeof r === 'string' ? r : r?.text ?? JSON.stringify(r)));
-        }
-
-        if (docs.length === 0) {
-=======
         let docs = [];
         let fileSearchContext = '';
 
@@ -238,7 +204,6 @@ class RagService {
         [docs, fileSearchContext] = await Promise.all([vectorPromise, fileSearchPromise]);
 
         if (docs.length === 0 && !fileSearchContext) {
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             return 'No relevant context found in Enterprise Memory to answer the query.';
         }
 
@@ -246,17 +211,11 @@ class RagService {
         const prompt = `You are the Omni-Mind querying the Global Enterprise Memory bank.
 Answer the user's query strictly using the semantic context provided below.
 If the context does not contain enough information, say so honestly.
-<<<<<<< HEAD
-
-Context:
-${contextStr}
-=======
 When referencing document sources from Gemini File Search, include the document title and page number.
 
 Context:
 ${contextStr}
 ${fileSearchContext}
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 Query: ${query}`;
 
@@ -266,11 +225,7 @@ Query: ${query}`;
         } catch (aiError) {
             logger.error(`RAG: AI synthesis failed. Error: ${aiError.message}`);
             // Return raw context as a useful fallback instead of an opaque error
-<<<<<<< HEAD
-            return `Found relevant context but AI synthesis failed:\n\n${contextStr}`;
-=======
             return `Found relevant context but AI synthesis failed:\n\n${contextStr}${fileSearchContext}`;
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         }
     }
 

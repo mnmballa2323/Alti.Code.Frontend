@@ -103,8 +103,6 @@ router.route('/register/confirmation/:token').get(authController.confirmEmail); 
  *         description: Invalid credentials
  */
 router.route('/login').post(createRateLimiter(5, 5), authController.login); // login in app
-<<<<<<< HEAD
-=======
 router
   .route('/social-login')
   .post(
@@ -113,7 +111,6 @@ router
   );
 
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 /**
  * @swagger

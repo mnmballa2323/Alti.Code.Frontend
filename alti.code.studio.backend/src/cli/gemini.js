@@ -16,15 +16,6 @@ const __dirname = path.dirname(__filename);
 // Construct absolute path to service
 const servicePath = path.resolve(__dirname, '../app/modules/googleGenAi/googleGenAi.service.js');
 
-<<<<<<< HEAD
-// Helper to load service
-const getService = async () => {
-    try {
-        const module = await import(pathToFileURL(servicePath));
-        return module.GoogleGenAiService;
-    } catch (error) {
-        console.error('❌ Error loading Google GenAI Service:', error.message);
-=======
 // Helper to load services
 const getServices = async () => {
     try {
@@ -40,7 +31,6 @@ const getServices = async () => {
         };
     } catch (error) {
         console.error('❌ Error loading Google Cloud Services:', error.message);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         process.exit(1);
     }
 };
@@ -50,18 +40,12 @@ const help = () => {
 Alti Code Studio Gemini CLI (Native)
 
 Usage:
-<<<<<<< HEAD
-  gemini ask <prompt>    Ask Gemini a question
-  gemini chat <message>  Chat with Gemini (single turn)
-  gemini help            Show this help message
-=======
   gemini ask <prompt>          Ask Gemini a question
   gemini chat <message>        Chat with Gemini (single turn)
   gemini deploy <path>         Trigger autonomous GCP Universal Deployment
   gemini ingest <filepath>     Ingest a source file into Google Spanner AST Graph
   gemini traverse <nodeId>     Traverse the Spanner AST Graph for execution path
   gemini help                  Show this help message
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 `);
 };
 
@@ -75,19 +59,6 @@ const main = async () => {
         return;
     }
 
-<<<<<<< HEAD
-    const GoogleGenAiService = await getService();
-
-    if (command === 'ask') {
-        if (!input) {
-            console.error('❌ Error: Please provide a prompt.');
-            return;
-        }
-        try {
-            const result = await GoogleGenAiService.generateContent(input);
-            console.log('\n🌌 Gemini Response:\n');
-            console.log(result.content);
-=======
     const { GoogleGenAiService, uDeploymentService, spannerGraphService, fs } = await getServices();
 
     if (command === 'ask') {
@@ -95,24 +66,10 @@ const main = async () => {
         try {
             const result = await GoogleGenAiService.generateContent(input);
             console.log('\n🌌 Gemini Response:\n\n', result.content);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         } catch (error) {
             console.error('❌ Error:', error.message);
         }
     } else if (command === 'chat') {
-<<<<<<< HEAD
-        if (!input) {
-            console.error('❌ Error: Please provide a message.');
-            return;
-        }
-        try {
-            const result = await GoogleGenAiService.chatSession([], input);
-            console.log('\n💬 Chat Response:\n');
-            console.log(result.response);
-        } catch (error) {
-            console.error('❌ Error:', error.message);
-        }
-=======
         if (!input) return console.error('❌ Error: Please provide a message.');
         try {
             const result = await GoogleGenAiService.chatSession([], input);
@@ -149,7 +106,6 @@ const main = async () => {
         } catch (error) {
             console.error('❌ Graph Traversal Error:', error.message);
         }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     } else {
         console.error(`❌ Unknown command: ${command}`);
         help();

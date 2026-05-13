@@ -28,23 +28,16 @@ import EventEmitter from 'events';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
-<<<<<<< HEAD
-import { surferAgent } from '../agents/surfer.agent.js';
-=======
 // import { surferAgent } from '../agents/surfer.agent.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import { sprintSchedulerService } from '../sprintScheduler/sprintScheduler.service.js';
 import { guardianAgent } from '../agents/guardian.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
 import { telemetryBus } from './telemetry.bus.js';
 import { sreAgent } from '../agents/sre.agent.js';
-<<<<<<< HEAD
-=======
 import { videoIntelligenceService } from '../googleCloud/video_intelligence.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { cloudMonitoringService } from '../googleCloud/monitoring.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -99,15 +92,12 @@ class TelemetryCollector {
      */
     recordLlmCall({ model = 'gemini', latencyMs = 0, success = true, error = null, tokens = 0 } = {}) {
         this._record({ type: 'llm', model, latencyMs, success, error, tokens });
-<<<<<<< HEAD
-=======
         
         // ☁️ Google Cloud Monitoring: Emit Custom FinOps Metrics
         if (tokens > 0) {
             cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/tokens_consumed', tokens, { model: model });
         }
         cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/latency_ms', latencyMs, { model: model });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 
     /**
@@ -294,12 +284,8 @@ class IncidentResponder {
                 const query = anomaly.exClass
                     ? `Node.js ${anomaly.exClass}: ${anomaly.message}`
                     : `${anomaly.type}: ${anomaly.message}`;
-<<<<<<< HEAD
-                const report = await surferAgent.surfWeb(query);
-=======
                 // const report = await surferAgent.surfWeb(query);
                 const report = "Mock Surfer Agent Output: Surfer agent is currently offline.";
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                 incident.webInsight = report.synthesizedSolution || '';
                 logger.info(`🚨 Incident: Web insight gathered — ${incident.webInsight.substring(0, 80)}`);
             } catch (e) {
@@ -479,8 +465,6 @@ export class TelemetryService {
             logger.debug('SREAgent: Datadog pipeline ready for remote log ingestion.');
         }
     }
-<<<<<<< HEAD
-=======
 
     /**
      * 👁️ VIDEO_EYE Autonomous Visual Debugger (The "World Best" Agent)
@@ -572,7 +556,6 @@ export class TelemetryService {
             throw new Error('Video Intelligence Analysis failed: ' + error.message);
         }
     }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 }
 
 export const telemetryService = new TelemetryService();

@@ -20,15 +20,9 @@ async function verifyObservability() {
 
         const demoTenant = 'tenant_sp500_demo';
 
-<<<<<<< HEAD
-        await metricsService.recordLLMUsage(demoTenant, 'RefactorAgent', 'gemini-1.5-pro', 1500, 300, 2400);
-        await metricsService.recordLLMUsage(demoTenant, 'SecurityAgent', 'gemini-1.5-pro', 850, 100, 1200);
-        await metricsService.recordLLMUsage(demoTenant, 'RefactorAgent', 'gemini-1.5-pro', 2000, 500, 3100);
-=======
         await metricsService.recordLLMUsage(demoTenant, 'RefactorAgent', 'gemini-3.1-pro', 1500, 300, 2400);
         await metricsService.recordLLMUsage(demoTenant, 'SecurityAgent', 'gemini-3.1-pro', 850, 100, 1200);
         await metricsService.recordLLMUsage(demoTenant, 'RefactorAgent', 'gemini-3.1-pro', 2000, 500, 3100);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
         console.log('✅ Token usage recorded in metrics service.');
 

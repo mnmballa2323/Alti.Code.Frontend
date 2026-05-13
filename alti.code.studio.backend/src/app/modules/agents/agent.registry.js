@@ -12,14 +12,11 @@ import fs from 'fs/promises';
 import path from 'path';
 
 class AgentRegistry {
-<<<<<<< HEAD
-=======
 
 
 
 
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     constructor() {
         /** @type {Map<string, AgentDefinition>} */
         this.agents = new Map();
@@ -27,11 +24,7 @@ class AgentRegistry {
     }
 
     /**
-<<<<<<< HEAD
-     * Register an agent
-=======
      * Register an agent with industrial governance policy.
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
      * @param {AgentDefinition} definition
      */
     register(definition) {
@@ -40,11 +33,6 @@ class AgentRegistry {
         }
         this.agents.set(definition.name, {
             ...definition,
-<<<<<<< HEAD
-            registeredAt: new Date().toISOString()
-        });
-        logger.info(`🤖 AgentRegistry: Registered [${definition.name}] — ${definition.description}`);
-=======
             registeredAt: new Date().toISOString(),
             policy: definition.policy || { accessLevel: 'DEVELOPER' } // Default to low-privilege
         });
@@ -69,7 +57,6 @@ class AgentRegistry {
         }
         
         return isAllowed;
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 
     /** Get a specific agent */
@@ -153,10 +140,6 @@ class AgentRegistry {
 // Register all known agents
 export const agentRegistry = new AgentRegistry();
 
-<<<<<<< HEAD
-// Define all agents with their capabilities
-agentRegistry.register({
-=======
 agentRegistry.register({
     name: 'jules',
     description: 'Autonomous Software Engineering Agent — Repository-scale reasoning and flawless asynchronous coding.',
@@ -279,7 +262,6 @@ agentRegistry.register({
 
 
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     name: 'audit',
     description: 'Cryptographically seals every system action into an immutable ledger.',
     queue: 'audit-queue',
@@ -665,10 +647,6 @@ agentRegistry.register({
 
 // ──── TIER 9: CORE SYSTEM AGENTS ────
 agentRegistry.register({
-<<<<<<< HEAD
-    name: 'surfer',
-    description: 'Web browsing agent. Visits URLs, extracts content, and performs research.',
-=======
     name: 'googleSearch',
     description: 'Grounds prompts and outputs in real-time web data using Google Custom Search.',
     queue: 'google-search-queue',
@@ -680,7 +658,6 @@ agentRegistry.register({
     name: 'surfer',
     description: 'Web browsing agent. Visits URLs, extracts content, and performs research.',
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     queue: 'surfer-queue',
     capabilities: ['research', 'browsing', 'extraction', 'scraping'],
     version: '1.0.0'
@@ -1189,8 +1166,6 @@ agentRegistry.register({
     capabilities: ['autonomous-execution', 'tool-loop', 'bash-agent', 'self-correcting'],
     version: '1.0.0'
 });
-<<<<<<< HEAD
-=======
 
 // ── Google Cloud Native Lifecycle Swarm ──
 agentRegistry.register({
@@ -85234,4 +85209,3 @@ agentRegistry.register({
     capabilities: ['quantum-computing', 'qiskit', 'cirq', 'algorithms', 'vqe', 'physics'],
     version: '1.0.0'
 });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

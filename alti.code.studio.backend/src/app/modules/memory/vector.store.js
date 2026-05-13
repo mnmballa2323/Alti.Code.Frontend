@@ -79,24 +79,13 @@ class VectorStoreService {
             const embedding = await vertexService.getEmbeddings(query);
 
             const { rows } = await this.pool.query(
-<<<<<<< HEAD
-                'SELECT id, metadata, document FROM alti_memory ORDER BY embedding <-> $1 LIMIT $2',
-=======
                 'SELECT id, metadata, document, (embedding <-> $1) as distance FROM alti_memory ORDER BY embedding <-> $1 LIMIT $2',
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                 [JSON.stringify(embedding), nResults]
             );
 
             return {
                 documents: [rows.map(r => r.document)],
                 metadatas: [rows.map(r => r.metadata)],
-<<<<<<< HEAD
-                ids: [rows.map(r => r.id)]
-            };
-        } catch (error) {
-            logger.error('VectorStore: Memory search failed', error);
-            return { documents: [], metadatas: [], ids: [] };
-=======
                 ids: [rows.map(r => r.id)],
                 distances: [rows.map(r => r.distance)]
             };
@@ -121,7 +110,6 @@ class VectorStoreService {
         } catch (error) {
             logger.error('VectorStore: getByIds failed', error);
             return [];
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         }
     }
 

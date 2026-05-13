@@ -9,29 +9,12 @@ import httpStatus from 'http-status';
 import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { jwtHelpers } from '../../helpers/jwtHelpers.js';
-<<<<<<< HEAD
-=======
 import { iapService } from '../../modules/googleCloud/iap.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 
 const auth = (...requiredRoles) => {
   return async (req, res, next) => {
     try {
-<<<<<<< HEAD
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
-      }
-
-      const token = authHeader.split(' ')[1];
-
-      const verifiedUser = jwtHelpers.verifyToken(
-        token,
-        config.jwt.access_token,
-      );
-
-=======
       // 🛡️ BEYONDCORP ZERO-TRUST INTEGRATION
       const iapJwt = req.headers['x-goog-iap-jwt-assertion'];
       let verifiedUser;
@@ -56,7 +39,6 @@ const auth = (...requiredRoles) => {
           verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
       }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
       // 👇 Assign user to request object
       req.user = verifiedUser;
 

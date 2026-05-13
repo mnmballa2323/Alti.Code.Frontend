@@ -117,8 +117,6 @@ const handleGithubWebhook = catchAsync(async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-=======
 const listRepositories = catchAsync(async (req, res) => {
     const { q } = req.query;
     const result = await GitAgentService.searchRepositories(q);
@@ -130,7 +128,6 @@ const listRepositories = catchAsync(async (req, res) => {
     });
 });
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const GitAgentController = {
     commit,
     push,
@@ -140,10 +137,6 @@ export const GitAgentController = {
     createBranch,
     initializeRepository,
     handleGithubWebhook,
-<<<<<<< HEAD
-};
-=======
     listRepositories,
 };
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

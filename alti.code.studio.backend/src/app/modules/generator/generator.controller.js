@@ -10,13 +10,10 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { GeneratorService } from './generator.service.js';
 import path from 'path';
-<<<<<<< HEAD
-=======
 import { logger } from '../../../shared/logger.js';
 import { gkeService } from '../googleCloud/gke.service.js';
 import { driveBackupService } from '../googleCloud/drive.service.js';
 import { fcmService } from '../googleCloud/fcm.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const generate = catchAsync(async (req, res) => {
     const prompt = req.body.prompt;
@@ -60,12 +57,6 @@ const generateProject = catchAsync(async (req, res) => {
         installResult = await GeneratorService.installDependencies(targetPath);
     }
 
-<<<<<<< HEAD
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: 'Project generated and installed successfully',
-=======
     // 4. ☁️ Trigger Autonomous Sovereign Backup to Google Drive (Encrypted)
     driveBackupService.autonomousBackup(targetPath, targetDirName).catch(err => {
         logger.error('Sovereign Drive Backup failed in background', err);
@@ -95,7 +86,6 @@ const generateProject = catchAsync(async (req, res) => {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Project generated and installed successfully. Sovereign Backup & GKE Cluster initiated.',
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         data: {
             ...writeResult,
             install: installResult,

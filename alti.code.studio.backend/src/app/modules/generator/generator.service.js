@@ -11,17 +11,6 @@ import { exec } from 'child_process';
 import util from 'util';
 
 const execAsync = util.promisify(exec);
-<<<<<<< HEAD
-import OpenAI from 'openai';
-import config from '../../../../config/index.js';
-import { logger } from '../../../shared/logger.js';
-import { GuardianService } from '../guardian/guardian.service.js';
-import { EventBus } from '../../shared/eventBus.js';
-
-// Initialize OpenAI client
-const apiKey = config.openai_api_key || process.env.OPENAI_API_KEY || 'sk-placeholder';
-const openai = new OpenAI({ apiKey });
-=======
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
@@ -36,7 +25,6 @@ import { EventBus } from '../../shared/eventBus.js';
 import { discoveryEngineService } from '../googleCloud/discovery.service.js';
 import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const generateApp = async (prompt) => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
@@ -151,19 +139,6 @@ const generateProject = async (prompt, type = 'react') => {
     `;
 
   try {
-<<<<<<< HEAD
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: prompt }
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0.2,
-    });
-
-    const result = JSON.parse(response.choices[0].message.content);
-=======
     // 🧠 The Ultimate Google RAG: Vertex AI Discovery Engine + Spanner Graph
     logger.info(`🔍 [RAG] Querying Google Vertex AI Discovery Engine...`);
     const discoveryResults = await discoveryEngineService.searchCodebase(prompt);
@@ -214,7 +189,6 @@ const generateProject = async (prompt, type = 'react') => {
     }
 
     const result = JSON.parse(contentToParse);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the generated project...');
@@ -228,8 +202,6 @@ const generateProject = async (prompt, type = 'react') => {
 
     logger.info(`👼 Guardian Approved (Score: ${auditResult.score})`);
 
-<<<<<<< HEAD
-=======
     // ⚡ Google Wireit: Auto-Inject Caching Engine into Generated package.json
     for (const file of result.files) {
         if (file.path === 'package.json') {
@@ -237,7 +209,6 @@ const generateProject = async (prompt, type = 'react') => {
         }
     }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     await EventBus.publish('generator.project.created', {
       type,
       prompt,
@@ -332,9 +303,6 @@ const refineProject = async (targetDir, prompt) => {
 
     logger.info(`👼 Guardian Approved Refinement (Score: ${auditResult.score})`);
 
-<<<<<<< HEAD
-    // Apply changes
-=======
     // 🔍 Google Diff-Match-Patch: Granular Audit Trailing
     for (const newFile of result.files) {
       const oldFile = currentFiles.find(f => f.path === newFile.path);
@@ -352,7 +320,6 @@ const refineProject = async (targetDir, prompt) => {
     }
 
     // Apply changes (will invoke Closure Compiler downstream via writeApp)
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     await writeApp(result, targetDir);
 
     return result;
@@ -374,9 +341,6 @@ const writeApp = async (fileTree, targetDir) => {
     const dir = path.dirname(filePath);
 
     await fs.mkdir(dir, { recursive: true });
-<<<<<<< HEAD
-    await fs.writeFile(filePath, file.content);
-=======
 
     // ⚙️ Google Closure Compiler AI Code Optimization
     let finalContent = file.content;
@@ -385,7 +349,6 @@ const writeApp = async (fileTree, targetDir) => {
     }
 
     await fs.writeFile(filePath, finalContent);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     logger.info(`Wrote ${file.path}`);
   }
 

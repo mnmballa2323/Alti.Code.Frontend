@@ -7,56 +7,6 @@
 
 
 import crypto from 'crypto';
-<<<<<<< HEAD
-import { StateGraph, END } from "@langchain/langgraph";
-import { GeminiAiService } from '../gemini/gemini.service.js';
-import { logger } from '../../../shared/logger.js';
-
-import { surferAgent } from './surfer.agent.js';
-import { vectorStoreService } from '../memory/vector.store.js';
-import { memoryPalaceService } from '../memory/memory_palace.service.js';
-import { ragService } from '../memory/rag.service.js';
-import { sirenAgent } from './siren.agent.js';
-import { guardianAgent } from './guardian.agent.js';
-import { sentinelAgent } from './sentinel.agent.js';
-import { chaosAgent } from './chaos.agent.js';
-import { releaseAgent } from './release.agent.js';
-import { complianceAgent } from './compliance.agent.js';
-import { economistAgent } from './economist.agent.js';
-import { codeReviewAgent } from './code_review.agent.js';
-import { architectureAgent } from './architecture.agent.js';
-import { performanceAgent } from './performance.agent.js';
-import { e2eTestAgent } from './e2e_test.agent.js';
-import { databaseAgent } from './database.agent.js';
-import { analyticsAgent } from './analytics.agent.js';
-import { integrationAgent } from './integration.agent.js';
-import { hiveMindAgent } from './hive_mind.agent.js';
-import { schemaAgent } from './schema.agent.js';
-import { debugAgent } from './debug.agent.js';
-import { surgeonAgent } from './surgeon.agent.js';
-
-// Phase 24: Enterprise Swarm Service Bridges
-import { TemporalAgentService } from '../temporalAgent/temporalAgent.service.js';
-import { LangGraphAgentService } from '../langGraphAgent/langGraphAgent.service.js';
-import { Mem0AgentService } from '../mem0Agent/mem0Agent.service.js';
-import { LangfuseAgentService } from '../langfuseAgent/langfuseAgent.service.js';
-import { TabbyAgentService } from '../tabbyAgent/tabbyAgent.service.js';
-import { BrowserUseAgentService } from '../browserUseAgent/browserUseAgent.service.js';
-import { Crawl4AiAgentService } from '../crawl4aiAgent/crawl4aiAgent.service.js';
-import { McpAgentService } from '../mcpAgent/mcpAgent.service.js';
-import { DspyAgentService } from '../dspyAgent/dspyAgent.service.js';
-import { UnstructuredAgentService } from '../unstructuredAgent/unstructuredAgent.service.js';
-import { PromptfooAgentService } from '../promptfooAgent/promptfooAgent.service.js';
-import { GeminiExtensionService } from '../geminiExtensions/geminiExtension.service.js';
-import { LitellmGatewayService } from '../litellmGateway/litellmGateway.service.js';
-import { QdrantService } from '../qdrantAgent/qdrant.service.js';
-import { OllamaAgentService } from '../ollamaAgent/ollamaAgent.service.js';
-import { SearxngAgentService } from '../searxngAgent/searxngAgent.service.js';
-import { OpenInterpreterAgentService } from '../openInterpreterAgent/openInterpreterAgent.service.js';
-import { ObservabilityService } from '../observability/observability.service.js';
-import { VoiceAgentService } from '../voiceAgent/voiceAgent.service.js';
-import { agentSAgent } from './agent_s.agent.js'; // Phase 16: Agent S GUI Control
-=======
 import { StateGraph, END, Send } from "@langchain/langgraph";
 import { GeminiAiService } from '../geminiOpenMemory/geminiOpenMemo.service.js';
 import { logger } from '../../../shared/logger.js';
@@ -128,7 +78,6 @@ const OpenInterpreterAgentService = {};
 const ObservabilityService = {};
 const VoiceAgentService = {};
 const agentSAgent = {};
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 // ── Capability Router: bridges all Tier 9-16 specialist agents ────────────────
 import { capabilityRouter } from './capability.router.js';
@@ -137,13 +86,10 @@ import { swarmHealthMonitor } from './swarm.health.js';
 // ── Kiro-feature integrations: Steering + Hooks ──────────────────────────────
 import { steeringService } from '../steering/steering.service.js';
 import { hooksService } from '../hooks/hooks.service.js';
-<<<<<<< HEAD
-=======
 import { knowledgeGraphService } from '../memory/knowledge_graph.service.js';
 // import { mcpPluginLoader } from './mcp_plugin_loader.service.js';
 import { googleSkillsLoaderService } from './google_skills_loader.service.js';
 import { pocockSkillsLoaderService } from './pocock_skills_loader.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 // Define the state interface
 const agentState = {
@@ -155,15 +101,6 @@ const agentState = {
         value: (x, y) => y,
         default: () => ""
     },
-<<<<<<< HEAD
-    plan: {
-        value: (x, y) => y,
-        default: () => []
-    },
-    currentStepIndex: {
-        value: (x, y) => y,
-        default: () => 0
-=======
     activeTasks: {
         value: (x, y) => y,
         default: () => []
@@ -171,7 +108,6 @@ const agentState = {
     completedTasks: {
         value: (x, y) => x.concat(y),
         default: () => []
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     },
     results: {
         value: (x, y) => x.concat(y),
@@ -188,8 +124,6 @@ const agentState = {
     retryCount: {
         value: (x, y) => y,
         default: () => 0
-<<<<<<< HEAD
-=======
     },
     isComplete: {
         value: (x, y) => y,
@@ -198,7 +132,6 @@ const agentState = {
     task: {
         value: (x, y) => y,
         default: () => null
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 };
 
@@ -226,40 +159,17 @@ class GraphOrchestrator {
         workflow.addNode("planning", this.planNode.bind(this));
         workflow.addNode("guardian", this.guardianNode.bind(this));
         workflow.addNode("execute", this.executeNode.bind(this));
-<<<<<<< HEAD
-=======
         workflow.addNode("holodeck", this.holodeckNode.bind(this));
         workflow.addNode("evaluate", this.evaluateNode.bind(this));
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         workflow.addNode("review", this.reviewNode.bind(this));
         workflow.addNode("recovery", this.recoveryNode.bind(this));
 
         // Edges
         workflow.addEdge("planning", "guardian");
-<<<<<<< HEAD
-        workflow.addEdge("recovery", "execute"); // Retry after recovery
-=======
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
         // Guardian Decision
         workflow.addConditionalEdges(
             "guardian",
-<<<<<<< HEAD
-            (state) => state.guardianApproved ? "execute" : "review",
-            { execute: "execute", review: "review" }
-        );
-
-        workflow.addConditionalEdges(
-            "execute",
-            this.shouldContinue.bind(this),
-            {
-                continue: "execute",
-                recovery: "recovery",
-                review: "review",
-                end: END
-            }
-        );
-=======
             (state) => {
                 if (!state.guardianApproved) return "review";
                 if (state.isComplete) return "review";
@@ -281,7 +191,6 @@ class GraphOrchestrator {
         );
 
         workflow.addEdge("recovery", "planning");
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         workflow.addEdge("review", END);
 
         workflow.setEntryPoint("planning");
@@ -290,8 +199,6 @@ class GraphOrchestrator {
 
         // Start background swarm health monitoring (sweep every 5 minutes)
         swarmHealthMonitor.start(5 * 60 * 1000);
-<<<<<<< HEAD
-=======
         
         // Initialize agent skills and plugins
         try {
@@ -301,7 +208,6 @@ class GraphOrchestrator {
         } catch (e) {
             logger.warn(`Loader init skipped: ${e.message}`);
         }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 
     async guardianNode(state) {
@@ -334,8 +240,6 @@ class GraphOrchestrator {
         logger.info(`🗺️ Graph: Planning for goal: "${state.goal}"`);
         this.emit('agent:thought', { message: `Planning for goal: ${state.goal}` });
 
-<<<<<<< HEAD
-=======
         // 🧠 AgentMemory: Capture the user's mission goal
         AgentMemoryHooks.captureUserPrompt('graph_orchestrator', state.goal, { source: 'graph_orchestrator' }).catch(() => {});
 
@@ -351,7 +255,6 @@ class GraphOrchestrator {
             logger.debug(`[AgentMemory] Graph recall skipped: ${e.message}`);
         }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         this.emit('agent:thought', { message: `Retrieving context from Global Enterprise Memory...` });
         const memoryContext = await ragService.query(state.goal, 5);
 
@@ -360,8 +263,6 @@ class GraphOrchestrator {
         const episodicMemories = await memoryPalaceService.searchMemory(state.goal, 3);
         const episodicContext = episodicMemories.map(mem => `Past Sprint [${mem.status}]: ${mem.goal}\nContext: ${mem.textIndex || 'N/A'}\nSteps: ${mem.stepsLength || 0}`).join('\n\n');
 
-<<<<<<< HEAD
-=======
         // Hive Mind: Pre-Cognitive Recall
         this.emit('agent:thought', { message: `Querying Hive Mind Vector DB for exact historical patches...` });
         const exactMatchPatch = await knowledgeGraphService.recallSimilarFix(state.goal);
@@ -394,7 +295,6 @@ class GraphOrchestrator {
             logger.debug(`[FileSearch] Graph planning context skipped: ${e.message}`);
         }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         // Register agents with swarmService (assuming swarmService is available and has a registerAgent method)
         // This part of the instruction seems to imply a `swarmService` object exists and needs these registrations.
         // Since `swarmService` is not defined in the provided document, I'm adding a placeholder comment.
@@ -442,45 +342,14 @@ class GraphOrchestrator {
         ${memoryContext}
         -----------------------------------------------
 
-<<<<<<< HEAD
-=======
         --- Hive Mind Pre-Cognitive Recall ---
         ${hiveMindContext}
         -----------------------------------------------
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         --- Episodic Context (from The Memory Palace) ---
         ${episodicContext || "No highly relevant past sprints found."}
         -----------------------------------------------
 
-<<<<<<< HEAD
-        Create a sequential JSON plan with steps to achieve this goal.
-        
-        Available Tools/Agents:
-        - "surfer": calls research(url, query)
-        - "vector": calls add(text, metadata) to save info
-        - "siren": calls speak(text) to announce results
-        - "debug": internal logging
-        - "product_owner": Ingests bugs, locates root files, and commands Swarms to fix them.
-        - "gitops": Abstracts code changes into AI branches, commits, and Markdown Pull Requests.
-        - "sentinel": Omnipresent SRE Observer tracking telemetry logs for anomaly storms.
-        - "chaos": Injects platform faults (Chaos Monkey) to validate SRE resilience.
-        - "browser": calls runBrowserTask(task) to visually surf web apps.
-        - "crawl4ai": calls crawlAndExtract(url, strategy) to rip markdown from URLs.
-        - "mcp": calls executeMcpTool(serverName, toolName, args) to hit universal endpoints.
-        - "openInterpreter": calls executeCode(language, code) to securely sandbox python/bash testing.
-        - "searxng": calls searchWeb(query) for private metasearch without telemetry.
-        - "tabby": calls getCodeCompletion(promptText) for offline LLM code gen.
-        - "dspy": calls optimizePrompt(promptText) to algorithmically re-compile instructions.
-        - "geminiExt": calls listExtensions() to interact with the community registry.
-        - "qdrant": calls createCollection(collectionName) or searchVectors().
-        - "ollama": calls generateCompletion(prompt) for local edge reasoning.
-        - "observability": calls getContainerCpuUsage(containerName) for hardware metrics.
-        - "voice": calls transcribeAudio(filePath) for local Whisper transcription.
-        - "agent_s": calls executeGUITask(taskInstruction) to physically control the host Desktop GUI.
-        
-        Return STRICT JSON format: { "steps": [{ "agent": "surfer|vector|siren|debug|product_owner|gitops|sentinel|chaos|browser|crawl4ai|mcp|openInterpreter|searxng|tabby|dspy|geminiExt|qdrant|ollama|observability|voice|agent_s", "action": "functionName", "args": { ... } }] }
-=======
         --- Persistent Agent Memory (Cross-Session Recall) ---
         ${agentMemoryContext || "No cross-session memories available."}
         -----------------------------------------------
@@ -494,7 +363,6 @@ class GraphOrchestrator {
         If not, determine the NEXT BATCH of independent tasks that can be executed in PARALLEL right now.
         Return STRICT JSON format: { "isComplete": false, "steps": [{ "agent": "specialist|surfer|gitops|sentinel|browser|openInterpreter|mcp", "action": "dispatch", "args": { "query": "Specific instructions for the specialist expert" } }] }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         `;
 
         let response;
@@ -505,13 +373,6 @@ class GraphOrchestrator {
             response = '```json\n{ "steps": [{ "agent": "surfer", "action": "research", "args": { "url": "https://chaos-test.com", "query": "chaos" } }] }\n```';
         } else {
             try {
-<<<<<<< HEAD
-                const result = await GeminiAiService.generateContent(prompt);
-                // Handle case where result is not a string (e.g. error object returned)
-                response = typeof result === 'string' ? result : JSON.stringify(result);
-            } catch (apiError) {
-                logger.warn("⚠️ Gemini API Failed (Mocking Plan for Testing):", apiError.message);
-=======
                 // The Triad: Send the master prompt into the Adversarial Debate Chamber instead of a single instance
                 this.emit('agent:thought', { message: "🏛️ Convening The Triad Debate Chamber for mathematically optimal planning..." });
                 const { triadDebateChamberService } = await import('./triad_debate_chamber.service.js');
@@ -522,7 +383,6 @@ class GraphOrchestrator {
                 response = typeof result === 'string' ? result : JSON.stringify(result);
             } catch (apiError) {
                 logger.warn("⚠️ Triad Debate Chamber Failed (Falling back to mock Plan):", apiError.message);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                 response = '```json\n{ "steps": [{ "agent": "surfer", "action": "research", "args": { "url": "https://example.com", "query": "test" } }] }\n```';
             }
         }
@@ -537,20 +397,6 @@ class GraphOrchestrator {
             plan = { steps: [] };
         }
 
-<<<<<<< HEAD
-        return { plan: plan.steps || [], currentStepIndex: 0 };
-    }
-
-    async executeNode(state) {
-        const step = state.plan[state.currentStepIndex];
-        if (!step) return { currentStepIndex: state.currentStepIndex + 1 };
-
-        logger.info(`⚙️ Graph: Executing step ${state.currentStepIndex + 1}: ${step.agent}.${step.action}`);
-        this.emit('agent:action', {
-            agent: step.agent,
-            action: step.action,
-            stepIndex: state.currentStepIndex + 1
-=======
         return { activeTasks: plan.steps || [], isComplete: plan.isComplete || false };
     }
 
@@ -563,7 +409,6 @@ class GraphOrchestrator {
             agent: step.agent,
             action: step.action,
             stepIndex: "parallel"
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         });
 
         let result = "";
@@ -616,30 +461,15 @@ class GraphOrchestrator {
                 unstructured: UnstructuredAgentService,
                 promptfoo: PromptfooAgentService,
                 agent_s: agentSAgent,
-<<<<<<< HEAD
-                // ── Tier 9-16: 80+ domain specialist agents via CapabilityRouter ──
-                specialist: capabilityRouter,
-=======
                 specialist: capabilityRouter,
                 fileSearch: (await import('../fileSearch/fileSearch.service.js').catch(() => ({}))).fileSearchService || {},
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             };
 
             const agentInstance = availableAgents[step.agent];
 
             if (agentInstance) {
                 if (typeof agentInstance[step.action] === 'function') {
-<<<<<<< HEAD
-                    // Pass args as a single object — spreading Object.values() is unsafe:
-                    // JS object key order is insertion-order, but LLM-generated plans may
-                    // emit keys in any order, causing args to land in the wrong parameter positions.
                     result = await agentInstance[step.action](step.args || {});
-
-
-                    // Specific return handling if needed, otherwise result is returned
-=======
-                    result = await agentInstance[step.action](step.args || {});
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                     if (step.agent === 'vector' && step.action === 'add') result = "Saved to memory.";
                     if (step.agent === 'siren' && step.action === 'speak') result = "Spoken.";
                 } else {
@@ -649,21 +479,6 @@ class GraphOrchestrator {
                 result = `Executed generic step: ${step.action} (Simulated)`;
             }
 
-<<<<<<< HEAD
-            // ── Fire agent-turn-complete hook ─────────────────────────────────────
-            hooksService.triggerEvent('agent-turn-complete', {
-                agent: step.agent,
-                action: step.action,
-                stepIndex: String(state.currentStepIndex + 1),
-            }).catch(() => { });
-
-            // Success: Clear any previous errors and retry count
-            return {
-                results: [result],
-                currentStepIndex: state.currentStepIndex + 1,
-                error: null,
-                retryCount: 0
-=======
             hooksService.triggerEvent('agent-turn-complete', {
                 agent: step.agent,
                 action: step.action,
@@ -682,37 +497,10 @@ class GraphOrchestrator {
                 results: [result],
                 completedTasks: [step],
                 error: null
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             };
 
         } catch (error) {
             logger.error(`❌ Graph Execution Error: ${error.message}`);
-<<<<<<< HEAD
-            return { error: error.message }; // Trigger recovery
-        }
-    }
-
-    shouldContinue(state) {
-        if (state.error) {
-            if (state.retryCount < 3) {
-                return "recovery";
-            }
-            // Exhausted retries — go to review to surface the failure
-            return "review";
-        }
-
-        if (state.currentStepIndex < state.plan.length) {
-            return "continue";
-        }
-        // All steps complete — go straight to 'end' (was incorrectly going to 'review')
-        return "end";
-    }
-
-
-    async recoveryNode(state) {
-        const attempt = state.retryCount + 1;
-        logger.warn(`❤️‍🩹 Graph: Self-Healing activated. Retrying step ${state.currentStepIndex + 1}... (Attempt ${attempt})`);
-=======
 
             // 🧠 AgentMemory: Capture the failure for pattern detection
             AgentMemoryHooks.captureToolFailure(
@@ -762,52 +550,14 @@ class GraphOrchestrator {
     async recoveryNode(state) {
         const attempt = state.retryCount + 1;
         logger.warn(`❤️‍🩹 Graph: Self-Healing activated. Retrying batch... (Attempt ${attempt})`);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         this.emit('agent:thought', { message: `⚠️ Error detected: ${state.error}. Self-healing in progress (Attempt ${attempt})...` });
 
         // Exponential back-off
         await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
 
-<<<<<<< HEAD
-        // Ask the AI to suggest corrected arguments for the failing step
-        const failingStep = state.plan[state.currentStepIndex];
-        // Build corrected plan immutably — do NOT mutate state.plan directly
-        // (LangGraph treats state as immutable; in-place mutation causes stale references)
-        let updatedPlan = state.plan;
-        if (failingStep) {
-            try {
-                const repairPrompt = `
-                You are an AI orchestrator recovery agent.
-                The following step failed with the error below. Suggest corrected arguments.
-
-                Step: ${JSON.stringify(failingStep)}
-                Error: ${state.error}
-
-                Return ONLY a valid JSON object representing the corrected "args" field, e.g.: { "url": "...", "query": "..." }
-                `;
-                const suggestion = await GeminiAiService.generateContent(repairPrompt);
-                const cleanSuggestion = suggestion.replace(/```json\n?|```/g, '').trim();
-                const newArgs = JSON.parse(cleanSuggestion);
-                // Create a new plan array with the patched step (immutable update)
-                updatedPlan = [
-                    ...state.plan.slice(0, state.currentStepIndex),
-                    { ...failingStep, args: newArgs },
-                    ...state.plan.slice(state.currentStepIndex + 1),
-                ];
-                this.emit('agent:thought', { message: `🔧 Recovery: Patched step args → ${JSON.stringify(newArgs)}` });
-                logger.info(`❤️‍🩹 Graph: Recovery patched step ${state.currentStepIndex + 1} with new args.`);
-            } catch (repairError) {
-                logger.warn(`❤️‍🩹 Graph: AI recovery suggestion failed — retrying with original args. (${repairError.message})`);
-            }
-        }
-
-        return {
-            plan: updatedPlan,
-=======
         // Return empty activeTasks to force replanning on the next cycle
         return {
             activeTasks: [],
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             retryCount: attempt,
             error: null, // Clear error to allow retry
         };
@@ -817,11 +567,6 @@ class GraphOrchestrator {
     async reviewNode(state) {
         if (state.error) {
             logger.error("❌ Graph: Mission Failed after retries.");
-<<<<<<< HEAD
-            return { messages: [`Mission Failed: ${state.error}`] };
-        }
-        logger.info("✅ Graph: Mission Complete. Reviewing results.");
-=======
 
             // 🧠 AgentMemory: Record mission failure
             AgentMemoryHooks.captureWorkflowExecution(
@@ -851,7 +596,6 @@ class GraphOrchestrator {
             { source: 'graph_orchestrator' }
         ).catch(() => {});
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         return { messages: ["Mission Accomplished"] };
     }
 

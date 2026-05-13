@@ -7,33 +7,11 @@
   "bin": {
     "gemini": "./src/cli/gemini.js"
   },
-<<<<<<< HEAD
-  "license": "ISC",
-=======
   "license": "MIT",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   "scripts": {
     "start": "node server.js",
     "start:dev": "nodemon server.js",
     "dev": "nodemon server.js",
-<<<<<<< HEAD
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.74.0",
-    "@babel/parser": "^7.29.0",
-    "@babel/traverse": "^7.29.0",
-    "@elastic/elasticsearch": "^9.3.1",
-    "@google-cloud/dlp": "^6.5.0",
-    "@google-cloud/firestore": "^8.3.0",
-    "@google-cloud/kms": "^5.4.0",
-    "@google-cloud/logging": "^11.2.1",
-    "@google-cloud/monitoring": "^5.3.1",
-    "@google-cloud/pubsub": "^5.3.0",
-    "@google-cloud/storage": "^7.19.0",
-    "@google-cloud/vertexai": "^1.10.0",
-    "@google/generative-ai": "^0.24.1",
-=======
     "postinstall": "node scripts/patch-agentmemory.js",
     "test": "wireit",
     "lint": "wireit"
@@ -60,6 +38,7 @@
     "@babel/parser": "^7.29.0",
     "@babel/traverse": "^7.29.0",
     "@composio/core": "^0.8.0",
+    "@elastic/elasticsearch": "^9.3.1",
     "@genkit-ai/core": "^1.33.0",
     "@genkit-ai/googleai": "^1.28.0",
     "@genkit-ai/vertexai": "^1.33.0",
@@ -115,30 +94,17 @@
     "@googlemaps/google-maps-services-js": "^3.4.2",
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "@huggingface/transformers": "^3.8.1",
     "@langchain/community": "^1.1.17",
     "@langchain/core": "^1.1.27",
     "@langchain/langgraph": "^1.1.4",
     "@langchain/openai": "^1.2.7",
     "@llamaindex/openai": "^0.4.22",
-<<<<<<< HEAD
-    "@modelcontextprotocol/sdk": "^1.26.0",
-=======
     "@modelcontextprotocol/sdk": "^1.29.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "@octokit/rest": "^22.0.1",
     "@openai/agents": "^0.4.10",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.69.0",
-<<<<<<< HEAD
-    "@opentelemetry/exporter-trace-otlp-proto": "^0.212.0",
-    "@opentelemetry/resources": "^2.5.1",
-    "@opentelemetry/sdk-node": "^0.212.0",
-    "@opentelemetry/semantic-conventions": "^1.39.0",
-    "@slack/bolt": "^4.6.0",
-    "@slack/web-api": "^7.14.1",
-=======
     "@opentelemetry/core": "^1.30.1",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.212.0",
     "@opentelemetry/resources": "^1.30.1",
@@ -147,7 +113,6 @@
     "@slack/bolt": "^4.6.0",
     "@slack/web-api": "^7.14.1",
     "@steipete/peekaboo": "^3.1.2",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "@trpc/server": "^11.10.0",
     "apache-arrow": "^21.1.0",
     "axios": "^1.13.5",
@@ -158,19 +123,13 @@
     "chalk": "^5.6.2",
     "chokidar": "^5.0.0",
     "chromadb": "^3.3.0",
-<<<<<<< HEAD
-=======
     "chrome-launcher": "^1.2.1",
     "chrome-remote-interface": "^0.34.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "commander": "^14.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dependency-cruiser": "^17.3.8",
-<<<<<<< HEAD
-=======
     "diff-match-patch": "^1.0.5",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "dockerode": "^4.0.9",
     "dotenv": "^17.3.1",
     "email-validator": "^2.0.4",
@@ -179,15 +138,11 @@
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^8.2.1",
     "figlet": "^1.10.0",
-<<<<<<< HEAD
-    "google-auth-library": "^10.5.0",
-=======
     "firebase-admin": "^13.8.0",
     "flatbuffers": "^25.9.23",
     "genkit": "^1.33.0",
     "google-auth-library": "^10.6.2",
     "google-closure-compiler": "^20260422.0.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "googleapis": "^171.4.0",
     "googlethis": "^1.8.0",
     "helmet": "^7.2.0",
@@ -199,13 +154,6 @@
     "langchain": "^0.1.37",
     "langfuse": "^3.38.6",
     "langsmith": "^0.5.4",
-<<<<<<< HEAD
-    "linkifyjs": "^4.3.2",
-    "llamaindex": "^0.12.1",
-    "madge": "^8.0.0",
-    "mailgun.js": "^12.7.0",
-    "minipass": "^7.1.3",
-=======
     "level": "^10.0.0",
     "lighthouse": "^13.1.0",
     "linkifyjs": "^4.3.2",
@@ -215,7 +163,6 @@
     "mailgun.js": "^12.7.0",
     "minipass": "^7.1.3",
     "moment": "^2.30.1",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "mongodb-memory-server": "^11.0.1",
     "mongoose": "^8.0.0",
     "multer": "^2.0.2",
@@ -231,15 +178,10 @@
     "pg": "^8.18.0",
     "pgvector": "^0.2.1",
     "prettier": "^3.8.1",
-<<<<<<< HEAD
-    "puppeteer": "^24.37.3",
-    "rate-limiter-flexible": "^9.1.1",
-=======
     "protobufjs": "^8.0.3",
     "puppeteer": "^24.37.3",
     "rate-limiter-flexible": "^9.1.1",
     "re2": "^1.24.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "redis": "^5.10.0",
     "rehype": "^13.0.2",
     "say": "^0.16.0",
@@ -250,10 +192,7 @@
     "stripe": "^20.3.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-<<<<<<< HEAD
-=======
     "tink-crypto": "^0.1.1",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "toobusy-js": "^0.5.1",
     "tree-sitter-wasms": "^0.1.13",
     "ts-morph": "^27.0.2",
@@ -264,16 +203,8 @@
     "vscode-uri": "^3.1.0",
     "web-tree-sitter": "^0.20.8",
     "winston": "^3.19.0",
-<<<<<<< HEAD
     "winston-daily-rotate-file": "^5.0.0",
     "winston-elasticsearch": "^0.19.0",
-    "winston-transport": "^4.9.0",
-    "xss-clean": "^0.1.4",
-    "zod": "^3.25.76"
-  },
-  "devDependencies": {
-    "json-server": "^1.0.0-beta.9",
-=======
     "winston-transport": "^4.9.0",
     "wireit": "^0.14.12",
     "xss-clean": "^0.1.4",
@@ -287,7 +218,6 @@
     "@prisma/client": "^5.22.0",
     "json-server": "^1.0.0-beta.9",
     "prisma": "^5.22.0",
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     "vitest": "^4.0.18"
   }
 }

@@ -95,8 +95,6 @@ qaRoutes.get('/coverage', async (req, res) => {
         return res.status(500).json({ success: false, message: e.message });
     }
 });
-<<<<<<< HEAD
-=======
 
 // POST /api/v1/qa/sprint
 // Trigger an autonomous self-healing test sprint
@@ -122,4 +120,3 @@ qaRoutes.post('/sprint', async (req, res) => {
         return res.status(500).json({ success: false, message: e.message });
     }
 });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

@@ -93,8 +93,6 @@ router.post('/chaos', AgentController.toggleChaos);
  */
 router.get('/status', AgentController.getAgentStatus);
 
-<<<<<<< HEAD
-=======
 /**
  * @swagger
  * /agents/explore:
@@ -143,5 +141,4 @@ router.post('/explore', AgentController.exploreUrl);
  */
 router.post('/batch', AgentController.allocateComputeCluster);
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const AgentRoutes = router;

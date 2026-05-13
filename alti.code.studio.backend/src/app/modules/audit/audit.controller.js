@@ -9,12 +9,9 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { AuditLog } from './audit.model.js';
-<<<<<<< HEAD
-=======
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { lighthouseService } from './lighthouse.service.js';
 import { genkitService } from '../genkit/genkit.service.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const getLogs = catchAsync(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
@@ -75,11 +72,6 @@ const exportLogsToGCS = catchAsync(async (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-export const AuditController = {
-    getLogs,
-    exportLogsToGCS
-=======
 const analyzeLogs = catchAsync(async (req, res) => {
     const { query } = req.body;
     
@@ -157,5 +149,4 @@ export const AuditController = {
     analyzeLogs,
     runLighthouseAudit,
     runGenkitAudit
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

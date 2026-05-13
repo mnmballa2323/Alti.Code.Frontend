@@ -63,15 +63,11 @@ export class OssTrendingScheduler {
         const stats = ossAgentRegistry.getStats();
         if (stats.total === 0) {
             logger.info('📅 OssTrendingScheduler: No existing OSS agents — running seed scan now…');
-<<<<<<< HEAD
-            setTimeout(() => this._runScan('seed').catch(e => logger.error('OssTrendingScheduler seed error:', e)), 5000);
-=======
             if (process.env.NODE_ENV === 'production') {
                 setTimeout(() => this._runScan('seed').catch(e => logger.error('OssTrendingScheduler seed error:', e)), 5000);
             } else {
                 logger.info('📅 OssTrendingScheduler: Skipped seed scan (Local Development mode)');
             }
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         }
 
         // Schedule daily runs

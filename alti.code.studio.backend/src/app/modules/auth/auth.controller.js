@@ -8,30 +8,12 @@
 import bcrypt from 'bcryptjs';
 import formData from 'form-data';
 import httpStatus from 'http-status';
-<<<<<<< HEAD
-import Mailgun from 'mailgun.js';
-=======
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import mongoose from 'mongoose';
 import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import { logger } from '../../../shared/logger.js';
 import sendResponse from '../../../shared/sendResponse.js';
-<<<<<<< HEAD
-import { sendMailWithMailGun } from '../../middlewares/sendEmail/sendMailWithMailGun.js';
-import UserModel from './auth.model.js';
-import { authService } from './auth.service.js';
-import {
-  deleteUserOtpTemplate,
-  forgetPassOtpTemplate,
-  generateOTP,
-} from './auth.utils.js';
-
-const mailgun = new Mailgun(formData);
-
-const register = catchAsync(async (req, res) => {
-=======
 import UserModel from './auth.model.js';
 import { authService } from './auth.service.js';
 import {
@@ -56,7 +38,6 @@ const register = catchAsync(async (req, res) => {
       }
   }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   const result = await authService.registerService(req);
   logger.info(`User registered successfully: ${req.body.email}`);
   sendResponse(res, {
@@ -84,9 +65,6 @@ const confirmEmail = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-<<<<<<< HEAD
-  const { email, password } = req.body;
-=======
   const { email, password, recaptchaToken } = req.body;
 
   if (recaptchaToken) {
@@ -96,7 +74,6 @@ const login = catchAsync(async (req, res) => {
       }
   }
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   // logger.info(`Login attempt for: ${email}`); // safe to log email, but not password
   const result = await authService.loginService(email, password);
 
@@ -104,15 +81,6 @@ const login = catchAsync(async (req, res) => {
 
   // Set Refresh Token into cookie
   const cookieOption = {
-<<<<<<< HEAD
-    secure: config.env === 'production' ? true : false,
-    httpOnly: true,
-  };
-  res.cookie('refreshToken', refreshToken, cookieOption);
-
-  logger.info(`User logged in: ${email}`);
-
-=======
     secure: config.env === 'production',
     httpOnly: true,
     sameSite: 'strict',
@@ -125,19 +93,14 @@ const login = catchAsync(async (req, res) => {
   // KMS Encrypt the payload before sending to client
   const encryptedPayload = await kmsService.encryptPayload(JSON.stringify(others));
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Login Successfully',
-<<<<<<< HEAD
-    data: others,
-=======
     data: {
       encryptedPayload,
       ...others // We keep others for backward compatibility right now, ideally we only send the encrypted string
     },
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   });
 });
 
@@ -146,25 +109,15 @@ const refreshToken = catchAsync(async (req, res) => {
 
   const result = await authService.refreshToken(refreshToken);
 
-<<<<<<< HEAD
-  // set refresh token into cookie
-  const cookieOptions = {
-    secure: config.env === 'production',
-    httpOnly: true,
-=======
   const cookieOptions = {
     secure: config.env === 'production',
     httpOnly: true,
     sameSite: 'strict',
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   };
 
   res.cookie('refreshToken', refreshToken, cookieOptions);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -194,13 +147,8 @@ const forgetPassword = async (req, res) => {
     user.resetPasswordExpires = OTPExpiration;
     await user.save({ session });
 
-<<<<<<< HEAD
-    const mailData = await forgetPassOtpTemplate(email, user, OTP);
-    await sendMailWithMailGun(mailData);
-=======
     const mailData = { to: email, subject: 'Password Reset', body: `OTP: ${OTP}` };
     await sendMailWithGoogleWorkspace(mailData);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     await session.commitTransaction();
     session.endSession();
@@ -292,14 +240,8 @@ const deleteUserAccountOTP = async (req, res, next) => {
     user.deleteAccountExpires = OTPExpiration;
     await user.save({ session });
 
-<<<<<<< HEAD
-    const mailData = await deleteUserOtpTemplate(user, OTP);
-
-    await sendMailWithMailGun(mailData);
-=======
     const mailData = { to: user.email, subject: 'Delete Account', body: `OTP: ${OTP}` };
     await sendMailWithGoogleWorkspace(mailData);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     await session.commitTransaction();
     session.endSession();
@@ -482,30 +424,6 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
-<<<<<<< HEAD
-const mg = mailgun.client({
-  username: 'api',
-  key: `${config.mailgun?.mailgun_key}`,
-});
-
-const sendMailWithMailGunController = async (req, res) => {
-  try {
-    const result = await mg.messages.create(config.mailgun?.mailgun_domain, {
-      from: config.mailgun?.mailgun_from,
-      to: [
-        'anikh499@gmail.com',
-        'anik561460@gmail.com',
-        'rana286090@gmail.com ',
-      ],
-      subject: 'Verify Email',
-      // text: 'Testing some Mailgun awesomeness!',
-      html: '<h1>Testing some Mailgun awesomeness!</h1>',
-    });
-    res.status(201).send(result);
-    // logger.info(result); // logs response data
-  } catch (error) {
-    logger.error("Mailgun Error:", error); // logs any error
-=======
 const sendMailWithGoogleController = async (req, res) => {
   try {
     const mailData = { to: 'test@example.com', subject: 'Verify Email' };
@@ -513,7 +431,6 @@ const sendMailWithGoogleController = async (req, res) => {
     res.status(201).send(result);
   } catch (error) {
     logger.error("Google Workspace Email Error:", error);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   }
 };
 
@@ -525,27 +442,16 @@ const googleAuthCallback = catchAsync(async (req, res) => {
   const cookieOption = {
     secure: config.env === 'production',
     httpOnly: true,
-<<<<<<< HEAD
-  };
-  res.cookie('refreshToken', refreshToken, cookieOption);
-
-=======
     sameSite: 'strict',
   };
   res.cookie('refreshToken', refreshToken, cookieOption);
 
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   // Redirect to frontend
   const frontendUrl = config.client_url || 'http://localhost:3000';
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
-<<<<<<< HEAD
-export const authController = {
-  register,
-  login,
-=======
 const socialLogin = catchAsync(async (req, res) => {
   const result = await authService.socialLoginService(req.body);
   const { refreshToken, ...others } = result;
@@ -570,7 +476,6 @@ export const authController = {
   register,
   login,
   socialLogin,
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   refreshToken,
   confirmEmail,
   getUser,
@@ -580,13 +485,7 @@ export const authController = {
   deleteUserAccount,
   deleteUserAccountOTP,
   changePassword,
-<<<<<<< HEAD
-  sendMailWithMailGunController,
-  googleAuthCallback,
-};
-=======
   sendMailWithGoogleController,
   googleAuthCallback,
 };
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

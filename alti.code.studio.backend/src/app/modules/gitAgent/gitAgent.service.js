@@ -15,11 +15,7 @@ import gitIsomorphic from 'isomorphic-git';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 import { qaService } from '../qa/qa.service.js';
-<<<<<<< HEAD
-import { Orchestrator } from '../agents/orchestrator.agent.js';
-=======
 // import { Orchestrator } from '../agents/orchestrator.agent.js';
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const git = simpleGit();
 let watcher = null;
@@ -237,18 +233,12 @@ const getDiff = async () => {
 };
 
 const createBranch = async (name) => {
-<<<<<<< HEAD
-    // Validate branch name against Git's naming rules
-    // Disallow: spaces, ~, ^, :, ?, *, [, \, .., @{, consecutive dots, leading/trailing dot or slash
-    const SAFE_BRANCH_RE = /^(?!.*\.\.|.*@\{|.*[~^:?*\\\[\s])[^./][\w./\-]{0,99}[^./]?$/;
-=======
     // Validate branch name against Git's naming rules using Google's C++ RE2 Engine
     // RE2 prevents Regular Expression Denial of Service (ReDoS) by enforcing linear time execution.
     // Disallow: spaces, ~, ^, :, ?, *, [, \, .., @{, consecutive dots, leading/trailing dot or slash
     const RE2 = (await import('re2')).default;
     const SAFE_BRANCH_RE = new RE2('^(?!.*\\.\\.|.*@\\{|.*[~^:?*\\\\\\[\\s])[^./][\\w./\\-]{0,99}[^./]?$');
     
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     if (!name || typeof name !== 'string') {
         throw new Error('GitAgentService: branch name must be a non-empty string.');
     }
@@ -374,15 +364,9 @@ Stop when the tests pass.
 `;
 
             // Dispatch in background
-<<<<<<< HEAD
-            Orchestrator.execute(missionPrompt.trim(), 'system-gitops', sessionId).catch(e => {
-                logger.error(`GitOps Swarm Healing failed for PR ${prNumber}`, e);
-            });
-=======
             // Orchestrator.execute(missionPrompt.trim(), 'system-gitops', sessionId).catch(e => {
             //     logger.error(`GitOps Swarm Healing failed for PR ${prNumber}`, e);
             // });
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
             return { status: 'self_healing_initiated', prNumber };
         } else {
@@ -456,8 +440,6 @@ ${issueNumber ? 'Resolves #' + issueNumber : 'Proactive Vulnerability Patch'}
     }
 };
 
-<<<<<<< HEAD
-=======
 const searchRepositories = async (query = '') => {
     if (!process.env.GITHUB_PAT) throw new Error("GITHUB_PAT is required for repository search.");
     const octokit = new Octokit({ auth: process.env.GITHUB_PAT });
@@ -500,7 +482,6 @@ const searchRepositories = async (query = '') => {
     }
 };
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const GitAgentService = {
     startWatcher,
     stopWatcher,
@@ -514,14 +495,8 @@ export const GitAgentService = {
     createBranch,
     initializeRepository,
     processPullRequestWebhook,
-<<<<<<< HEAD
-    submitProactivePullRequest
-};
-
-=======
     submitProactivePullRequest,
     searchRepositories
 };
 
 
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

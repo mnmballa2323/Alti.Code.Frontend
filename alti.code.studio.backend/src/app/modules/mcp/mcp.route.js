@@ -4,14 +4,6 @@
 
 import express from 'express';
 import { McpController } from './mcp.controller.js';
-<<<<<<< HEAD
-
-const router = express.Router();
-
-router.get('/tools', McpController.listTools);
-router.post('/connect', McpController.connectServer);
-router.post('/run', McpController.runTool);
-=======
 import authMiddleware from '../../middlewares/auth/auth.js';
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 
@@ -29,6 +21,5 @@ router.get('/tools/local', requireAuth, McpController.listTools);
 router.post('/connect', requireAuth, McpController.connectServer);
 router.post('/run', requireAuth, McpController.runTool);
 router.post('/execute/local', requireAuth, McpController.runTool);
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const mcpRoutes = router;
