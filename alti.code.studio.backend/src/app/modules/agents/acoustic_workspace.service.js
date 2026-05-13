@@ -13,6 +13,7 @@ class AcousticWorkspaceService {
      * @param {Buffer} audioBuffer 
      */
     async processAudioCommand(audioBuffer) {
+<<<<<<< HEAD
         logger.info(`🎙️ AcousticWorkspace: Received audio stream (${audioBuffer.byteLength} bytes). Processing...`);
 
         try {
@@ -39,6 +40,37 @@ class AcousticWorkspaceService {
 
             if (!transcript || transcript.toLowerCase().includes('failed to parse')) {
                 throw new Error("Voice unrecognized.");
+=======
+        logger.info(`🎙️ AcousticWorkspace: Received audio stream (${audioBuffer.byteLength} bytes). Processing via Google Cloud STT...`);
+
+        try {
+            // Unmocked: Using Google Cloud Speech-to-Text V2 API
+            const { speechClient } = await import('../googleCloud/speech.service.js');
+            
+            const audioBytes = audioBuffer.toString('base64');
+
+            const request = {
+                config: {
+                    encoding: 'WEBM_OPUS',
+                    sampleRateHertz: 48000,
+                    languageCode: 'en-US',
+                    model: 'latest_long', // Optimized for dictation
+                },
+                audio: {
+                    content: audioBytes,
+                },
+            };
+
+            const [response] = await speechClient.recognize(request);
+            const transcript = response.results
+                .map(result => result.alternatives[0].transcript)
+                .join('\n');
+
+            logger.info(`🎙️ [Transcript]: "${transcript}"`);
+
+            if (!transcript || transcript.trim() === '') {
+                throw new Error("Voice unrecognized by Google STT.");
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             }
 
             // Route transcription directly into the Graph Orchestrator for an autonomous sprint
@@ -62,7 +94,11 @@ class AcousticWorkspaceService {
             };
 
         } catch (error) {
+<<<<<<< HEAD
             logger.error(`🎙️ AcousticWorkspace: Failed to process audio: ${error.message}`);
+=======
+            logger.error(`🎙️ AcousticWorkspace: Failed to process audio via Google STT: ${error.message}`);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             throw error;
         }
     }

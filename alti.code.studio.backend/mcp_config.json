@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "local-sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db", "alti_swarm.db"],
+      "env": {}
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {}
+    },
+    "peekaboo": {
+      "command": "npx",
+      "args": ["-y", "@steipete/peekaboo"],
+      "env": {
+        "PEEKABOO_AI_PROVIDERS": "anthropic/claude-3-5-sonnet"
+      }
+    },
+    "graphify": {
+      "command": "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/submodules/graphify/.venv/bin/python",
+      "args": ["-m", "graphify", "mcp"],
+      "env": {}
+    }
+  }
+}

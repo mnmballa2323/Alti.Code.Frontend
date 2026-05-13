@@ -28,13 +28,23 @@ import EventEmitter from 'events';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
+<<<<<<< HEAD
 import { surferAgent } from '../agents/surfer.agent.js';
+=======
+// import { surferAgent } from '../agents/surfer.agent.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import { sprintSchedulerService } from '../sprintScheduler/sprintScheduler.service.js';
 import { guardianAgent } from '../agents/guardian.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
 import { telemetryBus } from './telemetry.bus.js';
 import { sreAgent } from '../agents/sre.agent.js';
+<<<<<<< HEAD
+=======
+import { videoIntelligenceService } from '../googleCloud/video_intelligence.service.js';
+import { GoogleDlpService } from '../googleCloud/dlp.service.js';
+import { cloudMonitoringService } from '../googleCloud/monitoring.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
@@ -89,6 +99,15 @@ class TelemetryCollector {
      */
     recordLlmCall({ model = 'gemini', latencyMs = 0, success = true, error = null, tokens = 0 } = {}) {
         this._record({ type: 'llm', model, latencyMs, success, error, tokens });
+<<<<<<< HEAD
+=======
+        
+        // ☁️ Google Cloud Monitoring: Emit Custom FinOps Metrics
+        if (tokens > 0) {
+            cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/tokens_consumed', tokens, { model: model });
+        }
+        cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/latency_ms', latencyMs, { model: model });
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     }
 
     /**
@@ -275,7 +294,12 @@ class IncidentResponder {
                 const query = anomaly.exClass
                     ? `Node.js ${anomaly.exClass}: ${anomaly.message}`
                     : `${anomaly.type}: ${anomaly.message}`;
+<<<<<<< HEAD
                 const report = await surferAgent.surfWeb(query);
+=======
+                // const report = await surferAgent.surfWeb(query);
+                const report = "Mock Surfer Agent Output: Surfer agent is currently offline.";
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
                 incident.webInsight = report.synthesizedSolution || '';
                 logger.info(`🚨 Incident: Web insight gathered — ${incident.webInsight.substring(0, 80)}`);
             } catch (e) {
@@ -455,6 +479,100 @@ export class TelemetryService {
             logger.debug('SREAgent: Datadog pipeline ready for remote log ingestion.');
         }
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * 👁️ VIDEO_EYE Autonomous Visual Debugger (The "World Best" Agent)
+     * Takes a WebM video buffer of a UI glitch, analyzes it using Multimodal AI,
+     * and returns the exact code fix.
+     */
+    async analyzeVideoGlitch(videoBuffer, contextPrompt, domSnapshot = '') {
+        logger.info(`👁️ VIDEO_EYE: Received UI Glitch Recording (${videoBuffer.length} bytes). Analyzing...`);
+        
+        try {
+            // Convert the WebM buffer to Base64 for the Multimodal LLM
+            const base64Video = videoBuffer.toString('base64');
+            
+            // 🛡️ Google Cloud DLP: Scrub PII from the DOM Snapshot and Context using Native SDK
+            logger.info("🛡️ Google Cloud DLP: Scrubbing UI context for PII using advanced Infotype redaction...");
+            
+            const scrubbedContext = await GoogleDlpService.redactText(contextPrompt);
+            const scrubbedDom = domSnapshot ? await GoogleDlpService.redactText(domSnapshot) : '';
+            
+            // Format the DOM Snapshot string block if provided
+            const domContextBlock = scrubbedDom && scrubbedDom.trim().length > 0 
+                ? `\n\n--- LIVE DOM SNAPSHOT AT TIME OF RECORDING ---\n\`\`\`html\n${scrubbedDom}\n\`\`\`\n----------------------------------------------` 
+                : '';
+            
+            // 👁️ 1. Google Cloud Video Intelligence: Frame-by-frame autonomous extraction
+            logger.info("👁️ Google Cloud Video Intelligence: Initiating structural video extraction...");
+            const videoIntellRes = await videoIntelligenceService.analyzeUiGlitch(videoBuffer);
+            
+            const structuralInsights = videoIntellRes.success 
+                ? `\n\n--- GOOGLE CLOUD VIDEO INTELLIGENCE OCR EXACT --- \n${videoIntellRes.diagnostic}\n----------------------------------------------` 
+                : '';
+
+            // Construct the World's Best Visual Debugging Prompt
+            const prompt = `
+                You are the 'VIDEO_EYE' Agent, the most advanced UI/UX debugging AI in the universe.
+                You have been provided a high-framerate video recording of a user's screen encountering a visual glitch, layout shift, or rendering bug in a React/Tailwind application.
+                CRITICAL: The video contains an AUDIO TRACK. You MUST listen to the user's voice-over instructions as they will physically point to and explain the exact issue they are experiencing.
+                NOTE: The structural DOM and Context have been scrubbed by Google Cloud DLP. PII has been replaced with [REDACTED] tokens.
+                
+                USER CONTEXT: "${scrubbedContext}"${domContextBlock}${structuralInsights}
+                
+                YOUR TASK:
+                1. Analyze the video frame-by-frame, read the Video Intelligence OCR extracts, and listen to the audio track. Look for CSS misalignments, z-index collisions, hydration mismatches, or state-driven render lag.
+                2. Cross-reference your visual findings with the provided LIVE DOM SNAPSHOT. Use the structural HTML and active Tailwind classes in the snapshot to precisely pinpoint the failing component.
+                3. Synthesize the EXACT code fix (Tailwind classes, CSS, or React state adjustment) required to perfectly resolve the issue.
+                4. Write a robust Playwright End-to-End (E2E) Test that physically interacts with the DOM to assert this visual bug never regresses.
+                
+                Format your response with the following Markdown structure:
+                ### 👁️ Visual Diagnosis
+                [Explanation of what visually broke and what the user said in the audio]
+                
+                ### 🛠️ The Fix
+                \`\`\`tsx
+                // [Suspected component name or exact code fix snippet]
+                \`\`\`
+                
+                ### 🛡️ Playwright Regression Test
+                \`\`\`typescript
+                import { test, expect } from '@playwright/test';
+                // [Playwright test to prevent regression]
+                \`\`\`
+            `;
+
+            // We use the central GeminiAiService (gemini-3.1-pro supports video natively via inline data)
+            const geminiService = new GeminiAiService();
+            
+            // Note: For production, we'd upload to GCS and pass the URI. Here we use inline base64
+            // assuming the Gemini abstraction handles multimodal parts.
+            const response = await geminiService.generateResponse(prompt, null, {
+                // We pass the video as a multimodal payload
+                inlineData: {
+                    mimeType: "video/webm",
+                    data: base64Video
+                }
+            });
+
+            logger.info(`👁️ VIDEO_EYE: Analysis complete. Fix synthesized.`);
+            
+            return {
+                agent: "VIDEO_EYE_AGENT",
+                status: "resolved",
+                analysis: response,
+                recordedBytes: videoBuffer.length,
+                timestamp: new Date().toISOString()
+            };
+
+        } catch (error) {
+            logger.error(`👁️ VIDEO_EYE Analysis Failed: ${error.message}`);
+            throw new Error('Video Intelligence Analysis failed: ' + error.message);
+        }
+    }
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 }
 
 export const telemetryService = new TelemetryService();

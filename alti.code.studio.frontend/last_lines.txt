@@ -1,0 +1,99 @@
+253:11  Warning: Avoid non-native interactive elements. If using native HTML is not possible, add an appropriate role and support for tabbing, mouse, keyboard, and touch inputs to an interactive content element.  jsx-a11y/no-static-element-interactions
+
+./components/landing-page/pricing/pricing.tsx
+23:7  Warning: 'stripePromise' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+28:9  Warning: 'dispatch' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+33:3  Warning: Unexpected console statement.  no-console
+34:10  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/landing-page/two-powerfull-modes.tsx
+2:9  Warning: 'items' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/landing-page/VerticalSteps.tsx
+61:10  Warning: 'CheckIcon' is defined but never used.  @typescript-eslint/no-unused-vars
+102:25  Warning: 'setCurrentStep' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/message-card.tsx
+24:7  Warning: 'avatar' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+26:7  Warning: 'showFeedback' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+27:7  Warning: 'attempts' is assigned a value but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+28:7  Warning: 'currentAttempt' is assigned a value but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+31:7  Warning: 'onAttemptChange' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+32:7  Warning: 'onFeedback' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+33:7  Warning: 'onAttemptFeedback' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+42:13  Warning: 'copied' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+44:11  Warning: 'hasFailed' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+46:11  Warning: 'handleCopy' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/modals/login.tsx
+23:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/modals/logout.tsx
+17:9  Warning: 'router' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/navbar.tsx
+27:3  Warning: Unexpected console statement.  no-console
+28:3  Warning: Unexpected console statement.  no-console
+66:9  Warning: 'handleAuthClick' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+86:9  Warning: 'drawerVariants' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+105:9  Warning: 'overlayVariants' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+120:9  Warning: 'linkVariants' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+137:9  Warning: 'buttonVariants' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/prompt-input-full-line.tsx
+86:9  Warning: 'dispatch' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+180:9  Warning: The autoFocus prop should not be used, as it can reduce usability and accessibility for users.  jsx-a11y/no-autofocus
+
+./components/providers/I18nProvider.tsx
+47:7  Warning: Unexpected console statement.  no-console
+
+./components/providers/SSEProvider.tsx
+16:7  Warning: Unexpected console statement.  no-console
+21:9  Warning: Unexpected console statement.  no-console
+34:13  Warning: Unexpected console statement.  no-console
+39:11  Warning: Unexpected console statement.  no-console
+52:11  Warning: Unexpected console statement.  no-console
+57:9  Warning: Unexpected console statement.  no-console
+68:7  Warning: Unexpected console statement.  no-console
+
+./components/RightSideNav.tsx
+107:9  Warning: 'visible' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./components/ShadowToggle.tsx
+34:7  Warning: Unexpected console statement.  no-console
+
+./components/sidebar-drawer.tsx
+19:7  Warning: 'onOpenChange' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+
+./components/sidebar.tsx
+63:6  Warning: 'ApiResponse' is defined but never used.  @typescript-eslint/no-unused-vars
+219:10  Warning: 'AvatarDropdownIcon' is defined but never used.  @typescript-eslint/no-unused-vars
+252:10  Warning: 'RecentPromptDropdown' is defined but never used.  @typescript-eslint/no-unused-vars
+292:19  Warning: 'onOpenChange' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+296:23  Warning: 'setCurrentMode' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+304:5  Warning: 'error' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+327:9  Warning: 'getCurrentHistory' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+666:39  Warning: 'index' is defined but never used. Allowed unused args must match /^_.*?$/u.  @typescript-eslint/no-unused-vars
+
+./components/ui/card.tsx
+36:3  Warning: Headings must have content and the content must be accessible by a screen reader.  jsx-a11y/heading-has-content
+
+./lib/user.ts
+16:5  Warning: Unexpected console statement.  no-console
+24:5  Warning: Unexpected console statement.  no-console
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+Failed to compile.
+
+./app/code/page.tsx:94:13
+Type error: Type '{ currentFile: string; onSelectFile: (path: string) => Promise<void>; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'currentFile' does not exist on type 'IntrinsicAttributes'.
+
+  92 |         <div className="w-64 flex-shrink-0 bg-[#0d1117] border-r border-gray-800">
+  93 |           <FileTree
+> 94 |             currentFile={currentFile || ""}
+     |             ^
+  95 |             onSelectFile={handleFileSelect}
+  96 |           />
+  97 |         </div>
+Next.js build worker exited with code: 1 and signal: null

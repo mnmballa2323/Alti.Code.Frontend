@@ -1,0 +1,137 @@
+/**
+ * Copyright (c) 2024 Alti.Code.Studio
+ * 
+ * Omni-Cloud Ingestion Engine
+ * Massively overhauls the AI's Cloud knowledge by autonomously syncing every single
+ * Open-Source repository from AWS, GCP, and Azure that strictly adheres to the
+ * MIT or Apache 2.0 Hard Law licenses.
+ */
+
+import { logger } from '../../../shared/logger.js';
+import axios from 'axios';
+import cron from 'node-cron';
+import { capabilityRouter } from './capability.router.js';
+
+class OmniCloudIngestionService {
+    constructor() {
+        this.name = 'OmniCloudIngestionService';
+        this.isActive = false;
+        this.targetOrgs = [
+            // Hyperscalers
+            'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
+            // AI & GPU Compute
+            'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',
+            // Developer & PaaS
+            'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
+            // Global & Regional
+            'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'exoscale',
+            // Bare Metal & Edge
+            'cherryservers', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cloudflare',
+            // VPS
+            'ionos-cloud', 'hetznercloud', 'linode', 'UpCloudLtd', 'vultr', 'liquidweb',
+            // Enterprise Clouds
+            'aiven', 'cloudera', 'databricks', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb'
+        ];
+        this.approvedLicenses = ['mit', 'apache-2.0'];
+        this.processedRepos = new Set();
+    }
+
+    init() {
+        if (!process.env.GITHUB_PAT) {
+            logger.warn('⚠️ [Omni-Cloud Ingestion] Missing GITHUB_PAT. Massive Overhaul disabled.');
+            return;
+        }
+
+        logger.info('🌌 [Omni-Cloud Ingestion] Initialized. Beginning strict MIT/Apache 2.0 sync for AWS, GCP, and Azure...');
+
+        // Schedule to run weekly for continuous updates
+        cron.schedule('0 0 * * 0', () => {
+            this.syncOmniCloud();
+        });
+
+        // Trigger immediate background sync
+        setTimeout(() => this.syncOmniCloud(), 10000);
+        this.isActive = true;
+    }
+
+    async syncOmniCloud() {
+        if (!this.isActive) return;
+
+        logger.info('🌌 [Omni-Cloud Ingestion] Starting massive multi-cloud repository scan...');
+        let totalIngested = 0;
+
+        for (const org of this.targetOrgs) {
+            logger.info(`🔍 [Omni-Cloud Ingestion] Scanning organization: ${org}`);
+            let page = 1;
+            let hasMore = true;
+
+            while (hasMore) {
+                try {
+                    // Fetch repositories for the organization
+                    const response = await axios.get(`https://api.github.com/orgs/${org}/repos?per_page=100&page=${page}`, {
+                        headers: {
+                            'Authorization': `token ${process.env.GITHUB_PAT}`,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+
+                    const repos = response.data;
+                    if (repos.length === 0) {
+                        hasMore = false;
+                        break;
+                    }
+
+                    for (const repo of repos) {
+                        if (this.processedRepos.has(repo.full_name)) continue;
+                        this.processedRepos.add(repo.full_name);
+
+                        // Strict License Verification (Hard Law)
+                        if (!repo.license || !repo.license.key) {
+                            continue; // No license found
+                        }
+
+                        const licenseKey = repo.license.key.toLowerCase();
+                        if (!this.approvedLicenses.includes(licenseKey)) {
+                            // Reject mixtures or non-compliant licenses (e.g., GPL, BSD)
+                            continue; 
+                        }
+
+                        // Repository is compliant! Trigger autonomous ingestion via SwarmBrain
+                        logger.info(`✅ [Omni-Cloud Ingestion] Compliant Repo Found: ${repo.full_name} (${licenseKey.toUpperCase()})`);
+                        
+                        const prompt = `Omni-Cloud Directive: Autonomously clone, parse, and generate AST/Vector embeddings for the following strictly compliant Cloud repository: ${repo.clone_url}. \nThis will feed the Alti Code Studio "Cloud" graph.`;
+
+                        const contextData = {
+                            source: "OMNI_CLOUD_INGESTION",
+                            repository: repo.full_name,
+                            cloneUrl: repo.clone_url,
+                            license: licenseKey,
+                            stars: repo.stargazers_count,
+                            timestamp: Date.now()
+                        };
+
+                        // Dispatch to the AI Engine for heavy-duty Graph/AST ingestion
+                        // Fire and forget to avoid blocking the crawler
+                        capabilityRouter.dispatch(prompt, [contextData]).catch(e => {
+                            logger.error(`[Omni-Cloud] Failed to dispatch ingestion for ${repo.full_name}: ${e.message}`);
+                        });
+
+                        totalIngested++;
+                        
+                        // Prevent GitHub rate limits during massive overhaul
+                        await new Promise(r => setTimeout(r, 1000));
+                    }
+
+                    page++;
+                } catch (error) {
+                    logger.error(`❌ [Omni-Cloud Ingestion] Failed scanning ${org} on page ${page}: ${error.message}`);
+                    hasMore = false; // Stop this org on failure
+                }
+            }
+        }
+
+        logger.info(`🌌 [Omni-Cloud Ingestion] Massive Overhaul Sync Complete. Dispatched ${totalIngested} compliant repositories to the Swarm.`);
+    }
+}
+
+export const omniCloudIngestionService = new OmniCloudIngestionService();

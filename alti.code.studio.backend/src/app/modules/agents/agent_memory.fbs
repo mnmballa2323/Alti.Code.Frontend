@@ -1,0 +1,24 @@
+// AgentMemory Schema for Zero-Copy IPC
+// This schema represents the mathematical extreme of inter-process communication.
+// By using FlatBuffers, the Swarm can pass gigabytes of codebase AST context 
+// across threads instantly without allocating JSON objects in the V8 heap.
+// This is critical for beating the context-window latency of legacy IDEs like Cursor and Copilot.
+
+namespace AltiSwarm;
+
+table ASTNode {
+  node_id: string;
+  type: string;
+  content: string;
+  start_line: int;
+  end_line: int;
+}
+
+table ContextWindow {
+  session_id: string;
+  files_loaded: [string];
+  ast_tree: [ASTNode];
+  timestamp: long;
+}
+
+root_type ContextWindow;

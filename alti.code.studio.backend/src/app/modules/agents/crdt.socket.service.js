@@ -1,6 +1,14 @@
 import { WebSocketServer } from 'ws';
+<<<<<<< HEAD
 import setupWSConnection from 'y-websocket/bin/utils.js';
 import { logger } from '../../../shared/logger.js';
+=======
+import setupWSConnection, { setPersistence } from 'y-websocket/bin/utils';
+import { logger } from '../../../shared/logger.js';
+import * as Y from 'yjs';
+import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
+import { memorystoreService } from '../googleCloud/memorystore.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 class CrdtSocketService {
     constructor() {
@@ -11,6 +19,23 @@ class CrdtSocketService {
     init(server) {
         logger.info('🔗 Initializing Yjs CRDT WebSocket Bridge on /api/internal/crdt');
 
+<<<<<<< HEAD
+=======
+        // 🔥 Universe-Scale Multiplayer Persistence via Google Firestore & Cloud KMS
+        setPersistence({
+            bindState: async (docName, ydoc) => {
+                const persistedState = await FirestoreSyncService.loadDocState(docName);
+                if (persistedState) {
+                    Y.applyUpdate(ydoc, persistedState);
+                }
+            },
+            writeState: async (docName, ydoc) => {
+                const state = Y.encodeStateAsUpdate(ydoc);
+                await FirestoreSyncService.persistCrdtUpdate(docName, state);
+            }
+        });
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         this.wss = new WebSocketServer({ noServer: true });
 
         this.wss.on('connection', (conn, req) => {
@@ -19,6 +44,34 @@ class CrdtSocketService {
 
             // Wire the connection to the y-websocket server logic
             setupWSConnection.setupWSConnection(conn, req, { docName });
+<<<<<<< HEAD
+=======
+            
+            // Get the server-side Y.Doc instance
+            const docs = setupWSConnection.docs || new Map();
+            const ydoc = docs.get(docName);
+
+            if (ydoc) {
+                // 1. Publish local changes to Cloud Memorystore (Redis)
+                ydoc.on('update', (update, origin) => {
+                    // Prevent infinite loops by checking origin
+                    if (origin !== 'memorystore-pubsub') {
+                        const base64Update = Buffer.from(update).toString('base64');
+                        memorystoreService.publishCrdtUpdate(docName, base64Update);
+                    }
+                });
+
+                // 2. Subscribe to remote changes from other Cloud Run nodes
+                memorystoreService.subscribeToCrdt(docName, (base64Update) => {
+                    try {
+                        const update = Buffer.from(base64Update, 'base64');
+                        Y.applyUpdate(ydoc, update, 'memorystore-pubsub');
+                    } catch (e) {
+                        logger.error(`❌ Failed to apply remote CRDT update: ${e.message}`);
+                    }
+                });
+            }
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         });
 
         // Upgrade specific HTTP connections to the CRDT WebSocket server

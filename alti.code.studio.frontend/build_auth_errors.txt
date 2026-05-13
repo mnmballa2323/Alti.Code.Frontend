@@ -1,0 +1,28 @@
+
+> next-app-template@1.0.2 build
+> next build
+
+ ΓÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\hyper\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.frontend\package-lock.json
+
+   Γû▓ Next.js 15.5.12
+   - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 76s
+   Linting and checking validity of types ...
+ Γ¿» ESLint: Cannot find package '@eslint/compat' imported from C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.frontend\eslint.config.mjs
+   Collecting page data ...
+
+> Build error occurred
+[Error: Cannot find module 'C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.frontend\.next\server\middleware-manifest.json'
+Require stack:
+- C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.frontend\node_modules\next\dist\build\index.js
+- C:\Users\hyper\Desktop\workspace\alti.code.studio\alti.code.studio.frontend\node_modules\next\dist\cli\next-build.js] {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}

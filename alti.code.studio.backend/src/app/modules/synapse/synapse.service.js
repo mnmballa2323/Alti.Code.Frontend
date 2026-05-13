@@ -13,7 +13,11 @@ import { EventEmitter } from 'events';
 
 
 // Imports for Local/Mock Mode
+<<<<<<< HEAD
 import { surferAgent } from '../agents/surfer.agent.js';
+=======
+// import { surferAgent } from '../agents/surfer.agent.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import { healerAgent } from '../agents/healer.agent.js';
 import { prophetAgent } from '../agents/prophet.agent.js';
 import { breakerAgent } from '../agents/breaker.agent.js';
@@ -115,7 +119,11 @@ const init = async () => {
         isMock = true;
 
         // Auto-register local agents in Mock Mode
+<<<<<<< HEAD
         registerLocalAgent(surferAgent);
+=======
+        // registerLocalAgent(surferAgent);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         registerLocalAgent(healerAgent);
         registerLocalAgent(prophetAgent);
         registerLocalAgent(breakerAgent);

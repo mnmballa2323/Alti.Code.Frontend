@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "./node_modules/gts/",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2022
+  },
+  "env": {
+    "node": true,
+    "es2022": true
+  },
+  "rules": {
+    "no-console": "warn",
+    "prettier/prettier": "error"
+  }
+}

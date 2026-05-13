@@ -1,0 +1,43 @@
+app/agents/page.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+app/agents/page.tsx(18,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+app/agents/page.tsx(19,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+app/code/page.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+app/code/page.tsx(29,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+app/code/page.tsx(30,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+app/dashboard/memory/page.tsx(14,11): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+app/dashboard/memory/page.tsx(14,21): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+app/knowledge/page.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+app/knowledge/page.tsx(18,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+app/knowledge/page.tsx(19,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/agents/MissionControl.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/agents/MissionControl.tsx(2,19): error TS2440: Import declaration conflicts with local declaration of 'SOCKET_URL'.
+components/agents/MissionControl.tsx(13,23): error TS2307: Cannot find module 'sonner' or its corresponding type declarations.
+components/agents/MissionControl.tsx(15,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/agents/MissionControl.tsx(16,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/code/FileTree.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/code/FileTree.tsx(10,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/code/FileTree.tsx(11,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/code/Terminal.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/code/Terminal.tsx(8,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/code/Terminal.tsx(9,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/dashboard/AgentStatusGrid.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/dashboard/AgentStatusGrid.tsx(46,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/dashboard/AgentStatusGrid.tsx(47,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/GenesisPrompt.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/GenesisPrompt.tsx(13,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/GenesisPrompt.tsx(14,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/governance/AuditLogViewer.tsx(46,13): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/governance/AuditLogViewer.tsx(47,9): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+components/marketplace/AgentStore.tsx(9,23): error TS2307: Cannot find module 'sonner' or its corresponding type declarations.
+components/ShadowToggle.tsx(2,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+components/ShadowToggle.tsx(16,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+components/ShadowToggle.tsx(17,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+hooks/useAgentStatus.ts(1,10): error TS2440: Import declaration conflicts with local declaration of 'API_URL'.
+hooks/useAgentStatus.ts(5,7): error TS7022: 'API_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+hooks/useAgentStatus.ts(6,3): error TS2448: Block-scoped variable 'API_URL' used before its declaration.
+hooks/useCRDT.ts(1,19): error TS2440: Import declaration conflicts with local declaration of 'SOCKET_URL'.
+hooks/useCRDT.ts(5,7): error TS7022: 'SOCKET_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+hooks/useCRDT.ts(5,20): error TS2448: Block-scoped variable 'SOCKET_URL' used before its declaration.
+hooks/useSocket.ts(1,19): error TS2440: Import declaration conflicts with local declaration of 'SOCKET_URL'.
+hooks/useSocket.ts(5,7): error TS7022: 'SOCKET_URL' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+hooks/useSocket.ts(5,20): error TS2448: Block-scoped variable 'SOCKET_URL' used before its declaration.

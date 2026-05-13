@@ -93,4 +93,55 @@ router.post('/chaos', AgentController.toggleChaos);
  */
 router.get('/status', AgentController.getAgentStatus);
 
+<<<<<<< HEAD
+=======
+/**
+ * @swagger
+ * /agents/explore:
+ *   post:
+ *     summary: Trigger Autonomous Puppeteer Web Scraper
+ *     tags: [Agents]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               url:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Web exploration completed
+ */
+router.post('/explore', AgentController.exploreUrl);
+
+/**
+ * @swagger
+ * /agents/batch:
+ *   post:
+ *     summary: Allocate Autonomous Compute Cluster via Google Cloud Batch
+ *     tags: [Agents]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               jobId:
+ *                 type: string
+ *               dockerImage:
+ *                 type: string
+ *               commands:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Compute cluster allocation initiated
+ */
+router.post('/batch', AgentController.allocateComputeCluster);
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const AgentRoutes = router;

@@ -1,0 +1,29 @@
+components/audit/ForensicDashboard.tsx(64,17): error TS2345: Argument of type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }[]' is not assignable to type 'never[]'.
+    Type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }' is not assignable to type 'never'.
+components/audit/ForensicDashboard.tsx(68,15): error TS2345: Argument of type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }[]' is not assignable to parameter of type 'SetStateAction<never[]>'.
+  Type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }[]' is not assignable to type 'never[]'.
+    Type '{ id: string; actor: string; action: string; status: string; timestamp: string; kmsSignature: string; threatScore: number; }' is not assignable to type 'never'.
+components/audit/ForensicDashboard.tsx(128,29): error TS7006: Parameter 'status' implicitly has an 'any' type.
+components/audit/ForensicDashboard.tsx(140,16): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ SUCCESS: string; FAILURE: string; DENIED: string; WARNING: string; DENIED_BY_POLICY: string; }'.
+components/audit/ForensicDashboard.tsx(149,34): error TS7006: Parameter 'hasKms' implicitly has an 'any' type.
+components/audit/ForensicDashboard.tsx(165,30): error TS7006: Parameter 'score' implicitly has an 'any' type.
+components/audit/ForensicDashboard.tsx(225,37): error TS2322: Type '{ children: string; key: string; value: string; }' is not assignable to type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+components/audit/ForensicDashboard.tsx(228,41): error TS2322: Type '{ children: string; key: string; value: string; }' is not assignable to type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+components/audit/ForensicDashboard.tsx(231,40): error TS2322: Type '{ children: string; key: string; value: string; }' is not assignable to type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+components/audit/ForensicDashboard.tsx(234,50): error TS2322: Type '{ children: string; key: string; value: string; }' is not assignable to type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+  Property 'value' does not exist on type 'IntrinsicAttributes & Omit<ListboxItemBaseProps<object>, "value">'.
+components/audit/ForensicDashboard.tsx(261,36): error TS2339: Property 'id' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(261,46): error TS2339: Property '_id' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(263,35): error TS2339: Property 'timestamp' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(266,26): error TS2339: Property 'actor' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(269,26): error TS2339: Property 'action' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(271,52): error TS2339: Property 'status' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(273,48): error TS2339: Property 'kmsSignature' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(278,27): error TS2339: Property 'threatScore' does not exist on type 'never'.
+components/audit/ForensicDashboard.tsx(278,46): error TS2339: Property 'metadata' does not exist on type 'never'.
+components/dashboard/AgentStatusGrid.tsx(82,12): error TS2339: Property 'on' does not exist on type 'SocketState'.
+components/dashboard/AgentStatusGrid.tsx(89,14): error TS2339: Property 'off' does not exist on type 'SocketState'.

@@ -22,4 +22,12 @@ const router = express.Router();
  */
 router.get('/', MemoryController.listMemory);
 
+<<<<<<< HEAD
+=======
+router.post('/rag/ingest', MemoryController.ragIngest);
+router.post('/rag/query', MemoryController.ragQuery);
+router.post('/palace/index', MemoryController.palaceIndex);
+router.post('/palace/search', MemoryController.palaceSearch);
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 export const memoryRoutes = router;

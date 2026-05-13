@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Autonomous Sprint Controller — v6.0.0 REST API
  *
@@ -91,3 +92,7 @@ sprintRouter.get('/events', (req, res) => {
         logger.info('Sprint SSE client disconnected.');
     });
 });
+=======
+import express from 'express';
+export const sprintRouter = express.Router();
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

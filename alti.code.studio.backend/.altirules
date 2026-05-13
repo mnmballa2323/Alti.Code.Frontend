@@ -1,0 +1,16 @@
+# Alti Code Studio Backend - Agentic Rules
+
+## Instructions (What to do)
+- Always use **PostgreSQL** via the **Prisma ORM** as the singular data foundation for the application.
+- Leverage **Google Cloud Native APIs** (Vertex AI, Cloud Storage, Pub/Sub, Cloud SQL pgvector) exclusively for infrastructure dependencies.
+- Write modern **Node.js (ES Modules)** using strictly typed or heavily JSDoc-commented JavaScript.
+- Use the established **Data Access Layer (DAL)** pattern (e.g., `UserRepository`) for database interactions instead of writing raw queries in services/controllers.
+- Utilize the global `logger` utility (`../../../shared/logger.js`) for all application logging and telemetry.
+- Maintain the enterprise WORM (Write Once Read Many) Audit Logging standard for sensitive operations.
+
+## Guardrails (What NOT to do)
+- **Do NOT** use or re-introduce Mongoose, MongoDB Atlas, or NoSQL query semantics; the platform is exclusively PostgreSQL now.
+- **Do NOT** write secrets, API keys, or database credentials directly into the code. Always use `process.env` and the `config/index.js` abstraction.
+- **Do NOT** bypass the existing auth and middleware validators (`auth.service.js`, `jwtHelpers.js`) when implementing new routes.
+- **Do NOT** use `cat` inside bash commands or bypass explicit tool configurations when executing shell operations.
+- **Do NOT** force-push or bypass standard `git-proxy` testing and verification protocols on the `main` branch.

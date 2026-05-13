@@ -1,0 +1,18 @@
+# Alti Code Studio Frontend - Agentic Rules
+
+## Instructions (What to do)
+- Always use **Tailwind CSS** and **HeroUI** components for styling and layout.
+- Follow **Next.js App Router** conventions (`app/` directory).
+- Maintain responsive, adaptive designs that support both dark and light modes cleanly.
+- Ensure all React components are strongly typed with **TypeScript**.
+- Use the central Redux store (`store/`) via `useDispatch` and `useSelector` for global application state.
+- Write modular, reusable UI components in the `components/` directory.
+
+## Guardrails (What NOT to do)
+- **Do NOT** use generic or plain colors; always rely on the existing design system variables (e.g., `bg-default-50`, `text-primary`).
+- **Do NOT** use inline CSS styles unless dynamically calculated and absolutely necessary.
+- **Do NOT** bypass the `useAppDispatch` or `useAppSelector` hooks for state management.
+- **Do NOT** introduce new UI component libraries; strictly stick to HeroUI.
+- **Do NOT** use React Class components; exclusively use functional components with Hooks.
+- **Do NOT** commit sensitive tokens, API keys, or hardcoded passwords to the repository.
+re

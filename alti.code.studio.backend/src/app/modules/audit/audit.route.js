@@ -6,7 +6,11 @@
  */
 
 import express from 'express';
+<<<<<<< HEAD
 // import auth from '../../middlewares/auth/auth.js';
+=======
+import { authMiddleware } from '../../middlewares/auth.middleware.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 import { AuditController } from './audit.controller.js';
 
@@ -54,10 +58,14 @@ const router = express.Router();
  *       403:
  *         description: Forbidden (Non-Admins)
  */
+<<<<<<< HEAD
 // router.get('/', auth(ENUM_USER_ROLE.ADMIN), AuditController.getLogs);
 
 // Temporarily Open for Development/Testing until Auth Middleware is fully verified in unit tests
 router.get('/', AuditController.getLogs);
+=======
+router.get('/', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.getLogs);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 /**
  * @swagger
@@ -68,6 +76,13 @@ router.get('/', AuditController.getLogs);
  *     security:
  *       - bearerAuth: []
  */
+<<<<<<< HEAD
 router.post('/export/gcs', AuditController.exportLogsToGCS);
+=======
+router.post('/export/gcs', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.exportLogsToGCS);
+router.post('/analyze', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.analyzeLogs);
+router.post('/lighthouse', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.runLighthouseAudit);
+router.post('/genkit', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.runGenkitAudit);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const AuditRoutes = router;

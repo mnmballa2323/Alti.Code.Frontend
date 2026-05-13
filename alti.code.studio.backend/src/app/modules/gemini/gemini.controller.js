@@ -8,12 +8,20 @@
 import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
+<<<<<<< HEAD
 // import { ConversationChain } from 'langchain/chains';
+=======
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import validatePromptRequest from '../../../shared/validatePromptRequest.js';
 import { GeminiAiService } from './gemini.service.js';
 
 const GeminiAiGetResponse = catchAsync(async (req, res) => {
+<<<<<<< HEAD
   const { prompt, userId, sessionId, language, errorResponse } =
+=======
+  const { prompt, userId, sessionId, language, mode, domain, errorResponse } =
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     await validatePromptRequest(req);
 
   const result = await GeminiAiService.geminiService(
@@ -21,6 +29,11 @@ const GeminiAiGetResponse = catchAsync(async (req, res) => {
     prompt,
     userId,
     language,
+<<<<<<< HEAD
+=======
+    mode,
+    domain
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   );
 
   sendResponse(res, {

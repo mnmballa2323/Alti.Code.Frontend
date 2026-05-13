@@ -5,6 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
+<<<<<<< HEAD
 import aws from 'aws-sdk';
 import multer from 'multer';
 import multerS3 from 'multer-s3';
@@ -34,6 +35,17 @@ const imgUploader = options => {
     },
     contentType: multerS3.AUTO_CONTENT_TYPE,
   });
+=======
+import multer from 'multer';
+import path from 'path';
+
+const imgUploader = options => {
+  const { supportedExtensions, maxFileSize } = options;
+
+  // Utilize memory storage to keep the file buffer in RAM.
+  // The route handler is responsible for piping this buffer to Google Cloud Storage.
+  const storage = multer.memoryStorage();
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
   return multer({
     storage: storage,

@@ -257,6 +257,36 @@ export class BaseSpecialistAgent {
         this._cbOpenSince = null;
     }
 
+<<<<<<< HEAD
+=======
+    // ── AST Mutation Method (Phase 3) ──────────────────────────────────────────
+
+    /**
+     * Generates an AST JSON Patch for precise tree-sitter mutation.
+     * @param {object} opts - { prompt }
+     * @param {Array} contextData
+     */
+    async mutateAst(opts = {}, contextData = []) {
+        const { prompt = '' } = opts;
+        const astPrompt = `
+${prompt}
+
+--- AST NATIVE MUTATION REQUIRED ---
+You are an AST Native code generator. You must NOT return raw markdown code blocks.
+You must return a STRICT JSON object representing a tree-sitter AST patch.
+Format:
+\`\`\`json
+{
+  "nodeQuery": "(function_declaration name: (identifier) @name (#eq? @name \\"myFunction\\")) @target",
+  "replacementCode": "function myFunction() { /* new code */ }"
+}
+\`\`\`
+Return only the JSON block.
+        `.trim();
+        return this.consult(astPrompt, contextData);
+    }
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     // ── Standard Developer Action Methods (inherited by all SDK agents) ─────────
 
     /**

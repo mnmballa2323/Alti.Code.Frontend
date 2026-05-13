@@ -9,6 +9,12 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { AuditLog } from './audit.model.js';
+<<<<<<< HEAD
+=======
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { lighthouseService } from './lighthouse.service.js';
+import { genkitService } from '../genkit/genkit.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const getLogs = catchAsync(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
@@ -69,7 +75,87 @@ const exportLogsToGCS = catchAsync(async (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 export const AuditController = {
     getLogs,
     exportLogsToGCS
+=======
+const analyzeLogs = catchAsync(async (req, res) => {
+    const { query } = req.body;
+    
+    // Fetch last 50 logs for context
+    const recentLogs = await AuditLog.find({}).sort({ timestamp: -1 }).limit(50);
+    const logContext = JSON.stringify(recentLogs);
+
+    const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL, 0.2);
+    
+    const prompt = `
+        You are the Alti Code Studio Forensic Security AI, powered by Google Vertex AI.
+        Analyze the following recent audit logs and respond to the user's query.
+        
+        Recent Logs:
+        ${logContext}
+        
+        Query: ${query}
+        
+        Respond with a highly professional, detailed forensic analysis in markdown format. 
+        Highlight any anomalies, unauthorized access attempts, or compliance violations.
+    `;
+    
+    const result = await model.generateContent(prompt);
+    const analysis = result.response.candidates[0].content.parts[0].text;
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Forensic AI analysis completed successfully',
+        data: { analysis },
+    });
+});
+
+const runLighthouseAudit = catchAsync(async (req, res) => {
+    const { url } = req.body;
+    
+    if (!url) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'URL is required for Lighthouse Audit.' });
+    }
+    
+    const result = await lighthouseService.executeAudit(url);
+    
+    if (!result.success) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, message: result.error });
+    }
+    
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Google Lighthouse Audit completed successfully.',
+        data: result,
+    });
+});
+
+const runGenkitAudit = catchAsync(async (req, res) => {
+    const { codeSnippet, language } = req.body;
+    
+    if (!codeSnippet) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'codeSnippet required for Genkit audit' });
+    }
+    
+    const result = await genkitService.runCodeAudit(codeSnippet, language);
+    
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Genkit AI Audit Flow executed successfully',
+        data: result,
+    });
+});
+
+export const AuditController = {
+    getLogs,
+    exportLogsToGCS,
+    analyzeLogs,
+    runLighthouseAudit,
+    runGenkitAudit
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

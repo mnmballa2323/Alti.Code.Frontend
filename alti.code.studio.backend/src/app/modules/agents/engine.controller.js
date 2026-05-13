@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import { engineAgent } from './engine.agent.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
@@ -36,4 +37,12 @@ export const engineController = {
     analyzeGraph,
     indexDocs,
     askOracle
+=======
+export const engineController = {
+  healthCheck: (req, res) => res.json({}),
+  ingestFile: (req, res) => res.json({}),
+  analyzeGraph: (req, res) => res.json({}),
+  indexDocs: (req, res) => res.json({}),
+  askOracle: (req, res) => res.json({})
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

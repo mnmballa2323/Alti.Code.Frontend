@@ -441,7 +441,22 @@ resource "google_compute_security_policy" "enterprise" {
     description = "Default allow"
   }
 
+<<<<<<< HEAD
   # Block known bad actors
+=======
+  # ═══════════════════════════════════════════════
+  # World-Class Adaptive Protection (ML-powered)
+  # ═══════════════════════════════════════════════
+  adaptive_protection_config {
+    layer_7_ddos_defense_config {
+      enable = true
+      rule_visibility = "STANDARD"
+    }
+  }
+
+  # Block known bad actors
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
   rule {
     action   = "deny(403)"
     priority = "1000"
@@ -627,9 +642,327 @@ resource "google_service_account_iam_member" "worker_wi" {
 }
 
 # ═══════════════════════════════════════════════
+<<<<<<< HEAD
 # Outputs
 # ═══════════════════════════════════════════════
 
+=======
+# Project Services (APIs)
+# ═══════════════════════════════════════════════
+
+resource "google_project_service" "vertex_ai" {
+  project = var.project_id
+  service = "aiplatform.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "dlp" {
+  project = var.project_id
+  service = "dlp.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "custom_search" {
+  project = var.project_id
+  service = "customsearch.googleapis.com"
+  disable_on_destroy = false
+}
+
+# ═══════════════════════════════════════════════
+# Cloud Storage (GCS) — Artificial Intelligence Buckets
+# ═══════════════════════════════════════════════
+
+resource "google_storage_bucket" "artifacts" {
+  name          = "alti-code-studio-artifacts-${var.project_id}"
+  location      = var.region
+  force_destroy = false
+
+  uniform_bucket_level_access = true
+
+  versioning {
+    enabled = true
+  }
+
+  cors {
+    origin          = ["*"]
+    method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
+
+  labels = {
+    purpose     = "agentic-artifacts"
+    environment = var.environment
+  }
+}
+
+resource "google_storage_bucket" "audit_logs" {
+  name          = "alti-code-studio-audit-logs-${var.project_id}"
+  location      = var.region
+  force_destroy = false
+
+  uniform_bucket_level_access = true
+
+  lifecycle_rule {
+    condition {
+      age = 365 # Keep logs for 1 year
+    }
+    action {
+      type = "Delete"
+    }
+  }
+
+  labels = {
+    purpose     = "security-auditing"
+    environment = var.environment
+  }
+}
+
+# ═══════════════════════════════════════════════
+# Google Cloud App Hub (Enterprise Orchestration)
+# ═══════════════════════════════════════════════
+
+resource "google_apphub_application" "alti_app" {
+  location       = var.region
+  application_id = "alti-code-studio"
+  display_name   = "Alti Code Studio"
+
+  scope {
+    type = "REGIONAL"
+  }
+
+  attributes {
+    environment {
+      type = "PRODUCTION"
+    }
+    criticality {
+      type = "MISSION_CRITICAL"
+    }
+    business_service {
+      display_name = "Agentic AI Infrastructure"
+    }
+    developer_team {
+      display_name = "MNM Ballas"
+    }
+  }
+}
+
+# ═══════════════════════════════════════════════
+# Spanner Graph (Cognitive Mapping)
+# ═══════════════════════════════════════════════
+
+resource "google_spanner_instance" "cognitive_graph" {
+  name         = "alti-cognitive-graph"
+  config       = "regional-${var.region}"
+  display_name = "Alti Swarm Cognitive Graph"
+  num_nodes    = 1
+  labels = {
+    purpose = "swarm-reasoning"
+  }
+}
+
+resource "google_spanner_database" "graph_db" {
+  instance = google_spanner_instance.cognitive_graph.name
+  name     = "reasoning-nodes"
+  version_retention_period = "7d"
+  ddl = [
+    "CREATE TABLE AgentReasoningNodes (id STRING(MAX), agent STRING(MAX), executionTime INT64) PRIMARY KEY(id)"
+  ]
+}
+
+# ═══════════════════════════════════════════════
+# Pub/Sub (Swarm Messaging)
+# ═══════════════════════════════════════════════
+
+resource "google_pubsub_topic" "swarm_events" {
+  name = "alti-swarm-events"
+  message_retention_duration = "86600s"
+}
+
+resource "google_pubsub_subscription" "swarm_sub" {
+  name  = "alti-swarm-sub"
+  topic = google_pubsub_topic.swarm_events.name
+  ack_deadline_seconds = 60
+}
+
+# ═══════════════════════════════════════════════
+# BigQuery (Enterprise Telemetry & Eval Scores)
+# ═══════════════════════════════════════════════
+
+resource "google_bigquery_dataset" "telemetry" {
+  dataset_id                  = "alti_metrics"
+  friendly_name               = "Alti Swarm Telemetry"
+  description                 = "Stores AI execution telemetry and Vertex Eval scores"
+  location                    = "US"
+}
+
+resource "google_bigquery_table" "agent_executions" {
+  dataset_id = google_bigquery_dataset.telemetry.dataset_id
+  table_id   = "agent_executions"
+
+  schema = <<EOF
+[
+  {"name": "agent_name", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "prompt_length", "type": "INTEGER", "mode": "REQUIRED"},
+  {"name": "execution_time_ms", "type": "INTEGER", "mode": "REQUIRED"},
+  {"name": "timestamp", "type": "TIMESTAMP", "mode": "REQUIRED"},
+  {"name": "status", "type": "STRING", "mode": "REQUIRED"}
+]
+EOF
+}
+
+# ═══════════════════════════════════════════════
+# Artifact Registry (Docker Containers)
+# ═══════════════════════════════════════════════
+
+resource "google_artifact_registry_repository" "swarm_repo" {
+  location      = var.region
+  repository_id = "alti-swarm-repo"
+  description   = "Docker repository for the Swarm backend"
+  format        = "DOCKER"
+}
+
+# ═══════════════════════════════════════════════
+# AlloyDB (PostgreSQL AI Memory Layer)
+# ═══════════════════════════════════════════════
+
+resource "google_alloydb_cluster" "primary" {
+  cluster_id = "alti-ai-memory-cluster"
+  location   = var.region
+  network    = google_compute_network.vpc.id
+
+  initial_user {
+    user     = "postgres"
+    password = "super-secret-password-change-me"
+  }
+}
+
+resource "google_alloydb_instance" "primary" {
+  cluster       = google_alloydb_cluster.primary.name
+  instance_id   = "alti-ai-memory-primary"
+  instance_type = "PRIMARY"
+
+  machine_config {
+    cpu_count = 4
+  }
+}
+
+# ═══════════════════════════════════════════════
+# API Gateway (Swarm Routing)
+# ═══════════════════════════════════════════════
+
+resource "google_api_gateway_api" "swarm_api" {
+  provider     = google-beta
+  api_id       = "alti-swarm-api"
+  display_name = "Alti Swarm API Gateway"
+}
+
+resource "google_api_gateway_gateway" "swarm_gateway" {
+  provider   = google-beta
+  api_config = "" # Intentionally blank, updated via CI/CD
+  gateway_id = "alti-swarm-gateway"
+  region     = var.region
+}
+
+# ═══════════════════════════════════════════════
+# Cloud Router & NAT (Secure Outbound Connectivity)
+# ═══════════════════════════════════════════════
+
+resource "google_compute_router" "swarm_router" {
+  name    = "alti-swarm-router"
+  network = google_compute_network.vpc.id
+  region  = var.region
+}
+
+resource "google_compute_router_nat" "swarm_nat" {
+  name                               = "alti-swarm-nat"
+  router                             = google_compute_router.swarm_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
+}
+
+# ═══════════════════════════════════════════════
+# Vertex AI Feature Store (Sub-Millisecond AST Context)
+# ═══════════════════════════════════════════════
+
+resource "google_vertex_ai_featurestore" "ast_memory" {
+  name     = "alti_ast_featurestore"
+  region   = var.region
+  labels   = {
+    environment = var.environment
+  }
+  online_serving_config {
+    fixed_node_count = 1
+  }
+}
+
+# ═══════════════════════════════════════════════
+# Data Catalog (PII Governance)
+# ═══════════════════════════════════════════════
+
+resource "google_data_catalog_entry_group" "governance_group" {
+  entry_group_id = "alti_governance_group"
+  region         = var.region
+  description    = "Entry group for Alti Swarm governance policies"
+}
+
+# ═══════════════════════════════════════════════
+# Security Command Center (Vulnerability Reporting)
+# ═══════════════════════════════════════════════
+
+resource "google_scc_source" "swarm_scc" {
+  display_name = "Alti Swarm Agentic Intelligence"
+  organization = "123456789012" # Placeholder for enterprise org ID
+  description  = "Automated vulnerability reporting from Swarm Eval gates"
+}
+
+# ═══════════════════════════════════════════════
+# Google Cloud Workstations (Live Cloud IDEs)
+# ═══════════════════════════════════════════════
+
+resource "google_workstations_workstation_cluster" "ide_cluster" {
+  provider               = google-beta
+  workstation_cluster_id = "alti-workstation-cluster"
+  network                = google_compute_network.vpc.id
+  subnetwork             = google_compute_subnetwork.primary.id
+  location               = var.region
+
+  private_cluster_config {
+    enable_private_endpoint = false
+  }
+}
+
+resource "google_workstations_workstation_config" "agent_config" {
+  provider               = google-beta
+  workstation_config_id  = "alti-agent-config"
+  workstation_cluster_id = google_workstations_workstation_cluster.ide_cluster.workstation_cluster_id
+  location               = var.region
+
+  host {
+    gce_instance {
+      machine_type                = "e2-standard-4"
+      boot_disk_size_gb           = 50
+      disable_public_ip_addresses = true
+    }
+  }
+
+  container {
+    image = "us-central1-docker.pkg.dev/cloud-workstations-images/predefined/code-oss:latest"
+  }
+}
+
+# ═══════════════════════════════════════════════
+# Outputs
+# ═══════════════════════════════════════════════
+
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 output "gke_cluster_name" {
   value = google_container_cluster.primary.name
 }
@@ -650,3 +983,15 @@ output "redis_port" {
 output "vpc_network" {
   value = google_compute_network.vpc.name
 }
+<<<<<<< HEAD
+=======
+
+output "artifact_bucket" {
+  value = google_storage_bucket.artifacts.url
+}
+
+output "audit_bucket" {
+  value = google_storage_bucket.audit_logs.url
+}
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

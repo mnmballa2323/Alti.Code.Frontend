@@ -13,9 +13,19 @@
  */
 
 import express from 'express';
+<<<<<<< HEAD
 import { telemetryService } from './telemetry.service.js';
 import { telemetryBus } from './telemetry.bus.js';
 import { logger } from '../../../shared/logger.js';
+=======
+import multer from 'multer';
+import { telemetryService } from './telemetry.service.js';
+import { telemetryBus } from './telemetry.bus.js';
+import { logger } from '../../../shared/logger.js';
+import { magikaService } from '../security/magika.service.js';
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB max
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const telemetryRoutes = express.Router();
 
@@ -80,6 +90,36 @@ telemetryRoutes.post('/detection/stop', (req, res) => {
     return res.json({ success: true, message: 'Anomaly detection stopped.' });
 });
 
+<<<<<<< HEAD
+=======
+// POST /video-debug — VideoEye Agent entrypoint
+telemetryRoutes.post('/video-debug', upload.single('video'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No video file provided.' });
+        }
+        
+        // 🛡️ Sovereign Security Boundary: Magika AI Deep-Learning File Scan
+        // Ensures the uploaded buffer is authentically a WebM or MP4, blocking malicious spoofing.
+        try {
+            await magikaService.enforceFileType(req.file.buffer, ['webm', 'mp4'], req.file.originalname);
+        } catch (scanError) {
+            return res.status(403).json({ success: false, message: scanError.message });
+        }
+
+        const { context, domSnapshot } = req.body;
+        
+        // Pass the video buffer and the DOM Snapshot to the Telemetry Service for Video Intelligence Analysis
+        const analysisResult = await telemetryService.analyzeVideoGlitch(req.file.buffer, context, domSnapshot);
+        
+        return res.json({ success: true, data: analysisResult });
+    } catch (e) {
+        logger.error('Telemetry /video-debug error:', e.message);
+        return res.status(500).json({ success: false, message: e.message });
+    }
+});
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 // GET /events — SSE stream
 telemetryRoutes.get('/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');

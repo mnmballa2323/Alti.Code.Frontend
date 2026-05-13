@@ -16,6 +16,10 @@ import { agentRegistry } from './agent.registry.js';
 import { queueService } from '../queue/queue.service.js';
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
+<<<<<<< HEAD
+=======
+import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 /** Agents that require human approval in HYBRID mode */
 const CRITICAL_AGENTS = new Set([
@@ -66,6 +70,16 @@ class Orchestrator {
             status: 'planned'
         });
 
+<<<<<<< HEAD
+=======
+        // 🧠 AgentMemory: Record the orchestration decision
+        AgentMemoryHooks.captureDecision(
+            `Orchestrator [${this.mode}] planned workflow with ${plan.length} agents`,
+            `Task: "${task.substring(0, 200)}". Agents: ${plan.map(s => s.agent).join(', ')}`,
+            { planId, mode: this.mode, agentCount: plan.length }
+        ).catch(() => {});
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         // 3. Execute based on mode
         switch (this.mode) {
             case 'AUTONOMOUS':
@@ -192,12 +206,55 @@ class Orchestrator {
             `- ${a.name}: ${a.description} [${a.capabilities.join(', ')}]`
         ).join('\n');
 
+<<<<<<< HEAD
+=======
+        // #5: Enterprise Memory RAG — inject past decision context into planning
+        let ragContext = '';
+        try {
+            const { ragService } = await import('../memory/rag.service.js');
+            ragContext = await Promise.race([
+                ragService.query(`Past orchestration decisions and architectural guidelines for: ${task}`, 3),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+            ]);
+            if (ragContext) {
+                logger.info(`🧠 [Orchestrator] Injected ${ragContext.length} chars of enterprise memory into planning.`);
+            }
+        } catch (e) {
+            logger.warn(`⚠️ [Orchestrator] RAG context injection failed (non-blocking): ${e.message}`);
+        }
+
+        // #5b: File Search — inject indexed document context into planning
+        let fileSearchContext = '';
+        try {
+            const { fileSearchService } = await import('../fileSearch/fileSearch.service.js');
+            const stores = await fileSearchService.listStores();
+            if (stores && stores.length > 0) {
+                const storeNames = stores.slice(0, 3).map(s => s.name);
+                const fsResult = await Promise.race([
+                    fileSearchService.query(task, storeNames),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+                ]);
+                if (fsResult && fsResult.text) {
+                    fileSearchContext = fsResult.text.substring(0, 2000);
+                    logger.info(`📚 [Orchestrator] File Search injected ${fileSearchContext.length} chars into planning.`);
+                }
+            }
+        } catch (e) {
+            logger.warn(`⚠️ [Orchestrator] File Search planning context failed (non-blocking): ${e.message}`);
+        }
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         const response = await aiProvider.reason(`
 You are the Orchestrator of a ${agents.length}-agent AI swarm. Given a task, determine which agents to invoke and in what order.
 
 Available Agents:
 ${manifest}
 
+<<<<<<< HEAD
+=======
+${ragContext ? `Enterprise Memory Context (Past Decisions & Guidelines):\n${ragContext}\n` : ''}
+${fileSearchContext ? `Indexed Document Context (Gemini File Search):\n${fileSearchContext}\n` : ''}
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 Task: "${task}"
 
 Rules:
@@ -205,6 +262,10 @@ Rules:
 - For complex tasks, chain agents (output of one feeds the next).
 - Micro-agents (linter, formatter, etc.) can run in parallel.
 - Add a "description" field explaining what each agent should do.
+<<<<<<< HEAD
+=======
+- If enterprise memory context is provided, use it to inform agent selection and avoid repeating past mistakes.
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 Respond ONLY with a JSON array: [{"agent": "name", "data": {}, "description": "what to do", "parallel": false}]
 No explanation. JSON only.
@@ -279,8 +340,29 @@ No explanation. JSON only.
                 orchestrated: true
             });
             logger.info(`📬 Orchestrator: → [${agent.name}] → Job ${job.id}`);
+<<<<<<< HEAD
             return { agent: agent.name, jobId: job.id, status: 'dispatched' };
         } catch (err) {
+=======
+
+            // 🧠 AgentMemory: Capture dispatch
+            AgentMemoryHooks.captureToolUse(
+                agent.name,
+                step.description || 'orchestrated dispatch',
+                `Job ${job.id} dispatched`,
+                { jobId: job.id, orchestrated: true }
+            ).catch(() => {});
+
+            return { agent: agent.name, jobId: job.id, status: 'dispatched' };
+        } catch (err) {
+            // 🧠 AgentMemory: Capture failure
+            AgentMemoryHooks.captureToolFailure(
+                agent.name,
+                step.description || 'orchestrated dispatch',
+                err
+            ).catch(() => {});
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             return { agent: agent.name, error: err.message };
         }
     }

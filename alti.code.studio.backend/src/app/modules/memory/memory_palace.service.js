@@ -2,6 +2,10 @@ import { ChromaClient } from 'chromadb';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
+<<<<<<< HEAD
+=======
+import { AgentMemoryHooks } from './agentmemory.hooks.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const logger = winston.createLogger({
     level: 'info',
@@ -67,6 +71,18 @@ class MemoryPalaceService {
             });
 
             logger.info(`[Memory Palace] Indexed episodic memory. ID: ${docId}`);
+<<<<<<< HEAD
+=======
+
+            // 🧠 AgentMemory Bridge: Also persist into AgentMemory for cross-system recall
+            AgentMemoryHooks.captureToolUse(
+                'memory_palace',
+                `Indexed sprint memory: ${memoryPayload.type || 'sprint_outcome'}`,
+                memoryString.substring(0, 2000),
+                { docId, type: memoryPayload.type, bridge: 'memory_palace_to_agentmemory' }
+            ).catch(() => {});
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             return docId;
         } catch (error) {
             logger.error(`[Memory Palace] Failed to index memory: ${error.message}`);

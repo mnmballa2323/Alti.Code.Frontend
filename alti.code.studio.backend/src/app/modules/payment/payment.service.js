@@ -9,13 +9,21 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 import Stripe from 'stripe';
 import config from '../../../../config/index.js';
+<<<<<<< HEAD
 import { sendMailWithMailGun } from '../../middlewares/sendEmail/sendMailWithMailGun.js';
+=======
+import { sendMailWithGoogleWorkspace } from '../../middlewares/sendEmail/sendMailWithGoogleWorkspace.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 import UserModel from '../auth/auth.model.js';
 import SubscriptionModel from './payment.model.js';
 import { purchasePlanTemplate } from './payment.utils.js';
 import { logger } from '../../../shared/logger.js';
 
+<<<<<<< HEAD
 const stripe = new Stripe(config.stripe.stripe_secret_key);
+=======
+const stripe = new Stripe(config.stripe.stripe_secret_key || 'sk_test_dummy_key_to_prevent_crashes');
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const createCheckoutSessionService = async (user, plan) => {
   if (!user || !user.email) {
@@ -179,7 +187,11 @@ const handleWebhookService = async (req, res) => {
           user,
           newSubscription,
         );
+<<<<<<< HEAD
         await sendMailWithMailGun(mailData);
+=======
+        await sendMailWithGoogleWorkspace(mailData);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         logger.info('Confirmation email sent', { email: user.email });
       } catch (emailError) {
         logger.error('Failed to send confirmation email', {

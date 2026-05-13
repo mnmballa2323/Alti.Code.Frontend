@@ -11,6 +11,7 @@ import { exec } from 'child_process';
 import util from 'util';
 
 const execAsync = util.promisify(exec);
+<<<<<<< HEAD
 import OpenAI from 'openai';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
@@ -20,6 +21,22 @@ import { EventBus } from '../../shared/eventBus.js';
 // Initialize OpenAI client
 const apiKey = config.openai_api_key || process.env.OPENAI_API_KEY || 'sk-placeholder';
 const openai = new OpenAI({ apiKey });
+=======
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import config from '../../../../config/index.js';
+import { logger } from '../../../shared/logger.js';
+import { GuardianService } from '../guardian/guardian.service.js';
+import { closureService } from './closure.service.js';
+import { patchService } from './patch.service.js';
+import { wireitService } from './wireit.service.js';
+import { driveBackupService } from '../googleCloud/drive.service.js';
+import { gkeService } from '../googleCloud/gke.service.js';
+import { sentinelService } from '../security/sentinel.service.js';
+import { EventBus } from '../../shared/eventBus.js';
+import { discoveryEngineService } from '../googleCloud/discovery.service.js';
+import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
+import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const generateApp = async (prompt) => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
@@ -134,6 +151,7 @@ const generateProject = async (prompt, type = 'react') => {
     `;
 
   try {
+<<<<<<< HEAD
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -145,6 +163,58 @@ const generateProject = async (prompt, type = 'react') => {
     });
 
     const result = JSON.parse(response.choices[0].message.content);
+=======
+    // 🧠 The Ultimate Google RAG: Vertex AI Discovery Engine + Spanner Graph
+    logger.info(`🔍 [RAG] Querying Google Vertex AI Discovery Engine...`);
+    const discoveryResults = await discoveryEngineService.searchCodebase(prompt);
+    
+    logger.info(`🕸️ [RAG] Querying Google Cloud Spanner Graph for architectural topology...`);
+    const graphResults = await spannerGraphService.queryArchitectureDependencies(type);
+
+    let ragContext = '';
+    if (discoveryResults.length > 0) {
+        ragContext += `\n\n### Google Discovery Engine Context (Highly Relevant Proprietary Code):\n`;
+        discoveryResults.slice(0, 3).forEach((res) => {
+           const snippet = res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
+           if (snippet) ragContext += `\n${snippet}\n`;
+        });
+    }
+
+    if (graphResults.length > 0) {
+        ragContext += `\n\n### Google Spanner Graph Context (Architectural Topology):\n`;
+        ragContext += JSON.stringify(graphResults, null, 2);
+    }
+
+    logger.info(`💻 [RAG] Querying Google Gemini CLI for best practices...`);
+    try {
+        const cliQuery = `What are the absolute universe-best practices for architecting this system: ${prompt}`;
+        const cliResult = await GeminiCliService.runGeminiCLI('ask', [`"${cliQuery}"`]);
+        if (cliResult) {
+            ragContext += `\n\n### Google Gemini CLI Context (Autonomous Best Practices):\n${cliResult}`;
+        }
+    } catch (cliErr) {
+        logger.warn(`⚠️ [RAG] Gemini CLI query failed (is the CLI installed?): ${cliErr.message}`);
+    }
+
+    // Inject the Ultimate Google RAG context into the prompt
+    let finalPrompt = prompt;
+    if (ragContext) {
+        finalPrompt = `${prompt}\n\nUSE THE FOLLOWING RAG CONTEXT STRICTLY TO IMPLEMENT BEST PRACTICES:\n${ragContext}`;
+    }
+
+    // Execute the generation using Google Vertex AI (Gemini) instead of OpenAI
+    const geminiPrompt = `${systemPrompt}\n\n${finalPrompt}\n\nOUTPUT ONLY VALID JSON.`;
+    const response = await GoogleGenAiService.generateContent(geminiPrompt, 'gemini-3.1-pro', 0.2);
+
+    let contentToParse = response.content;
+    
+    // Clean up markdown formatting if Gemini returns it
+    if (contentToParse.startsWith('\`\`\`json')) {
+        contentToParse = contentToParse.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '');
+    }
+
+    const result = JSON.parse(contentToParse);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the generated project...');
@@ -158,6 +228,16 @@ const generateProject = async (prompt, type = 'react') => {
 
     logger.info(`👼 Guardian Approved (Score: ${auditResult.score})`);
 
+<<<<<<< HEAD
+=======
+    // ⚡ Google Wireit: Auto-Inject Caching Engine into Generated package.json
+    for (const file of result.files) {
+        if (file.path === 'package.json') {
+            file.content = wireitService.injectWireitConfig(file.content);
+        }
+    }
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     await EventBus.publish('generator.project.created', {
       type,
       prompt,
@@ -252,7 +332,27 @@ const refineProject = async (targetDir, prompt) => {
 
     logger.info(`👼 Guardian Approved Refinement (Score: ${auditResult.score})`);
 
+<<<<<<< HEAD
     // Apply changes
+=======
+    // 🔍 Google Diff-Match-Patch: Granular Audit Trailing
+    for (const newFile of result.files) {
+      const oldFile = currentFiles.find(f => f.path === newFile.path);
+      if (oldFile) {
+        const diffPatch = patchService.computePatch(oldFile.content, newFile.content);
+        if (diffPatch) {
+          logger.info(`🔍 [DiffMatchPatch] Computed semantic patch for ${newFile.path}. Logging to Sentinel.`);
+          sentinelService.reportEvent('SWARM_CODE_MUTATION', 'LOW', {
+            file: newFile.path,
+            patchLength: diffPatch.length,
+            patchContent: diffPatch
+          });
+        }
+      }
+    }
+
+    // Apply changes (will invoke Closure Compiler downstream via writeApp)
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     await writeApp(result, targetDir);
 
     return result;
@@ -274,7 +374,18 @@ const writeApp = async (fileTree, targetDir) => {
     const dir = path.dirname(filePath);
 
     await fs.mkdir(dir, { recursive: true });
+<<<<<<< HEAD
     await fs.writeFile(filePath, file.content);
+=======
+
+    // ⚙️ Google Closure Compiler AI Code Optimization
+    let finalContent = file.content;
+    if (file.path.endsWith('.js')) {
+      finalContent = await closureService.optimizeCode(file.content);
+    }
+
+    await fs.writeFile(filePath, finalContent);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
     logger.info(`Wrote ${file.path}`);
   }
 

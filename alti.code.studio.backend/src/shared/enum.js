@@ -10,4 +10,12 @@ export const ENUM_USER_ROLE = {
   ADMIN: 'admin',
   DEVELOPER: 'developer',
   USER: 'user',
+<<<<<<< HEAD
+=======
+  ANALYST: 'analyst',
+  GOVERNANCE: 'governance',
+  AUDITOR: 'auditor',
+  OPERATOR: 'operator',
+  OWNER: 'owner',
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

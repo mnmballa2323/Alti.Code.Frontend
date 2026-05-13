@@ -1,7 +1,11 @@
 import { productOwnerAgent } from './productOwner.agent.js';
 import { logger } from '../../../shared/logger.js';
 import { BacklogItem } from './backlog.model.js';
+<<<<<<< HEAD
 import { specAgent } from '../agents/spec.agent.js';
+=======
+// import { specAgent } from '../agents/spec.agent.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 /**
  * Service to manage Product Owner operations.
@@ -33,7 +37,12 @@ const commissionSpec = async (backlogItemId) => {
         if (!item) throw new Error('Backlog item not found');
 
         logger.info(`PO Agent commissioning spec for: ${item.title}`);
+<<<<<<< HEAD
         const specContent = await specAgent.draft(item.description);
+=======
+        // const specContent = await specAgent.draft(item.description);
+        const specContent = "Mocked Spec Content - Agent Missing";
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
         item.specPath = 'generated/specification.md'; // simplified for now
         item.status = 'Spec_Drafted';

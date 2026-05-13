@@ -67,7 +67,11 @@ async def main():
         # We use Gemini for both logic and grounding out of the box for simplicity in the Cloud OS
         engine_params = {
             "engine_type": "gemini",
+<<<<<<< HEAD
             "model": "gemini-2.5-flash",
+=======
+            "model": "gemini-3.1-flash",
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             "api_key": "${this.apiKey}"
         }
 
@@ -76,7 +80,11 @@ async def main():
         # the grounding engine to also just mock/fallback if it fails, or use Gemini Vision.
         engine_params_for_grounding = {
             "engine_type": "gemini",
+<<<<<<< HEAD
             "model": "gemini-2.5-flash", 
+=======
+            "model": "gemini-3.1-flash", 
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             "api_key": "${this.apiKey}",
             "grounding_width": 1920,
             "grounding_height": 1080,

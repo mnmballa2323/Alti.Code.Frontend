@@ -1,0 +1,355 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+// -----------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------
+enum Role {
+  user
+  buyer
+  admin
+  unauthorized
+}
+
+enum SubscriptionStatus {
+  paid
+  expired
+}
+
+enum SubscriptionDuration {
+  month
+  year
+}
+
+// -----------------------------------------------------------------
+// Foundation: Identity & Access Management
+// -----------------------------------------------------------------
+model User {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  provider  String   @default("local")
+  googleId  String?
+  githubId  String?
+  avatar    String?
+
+  email     String   @unique
+  password  String?
+  
+  role      Role     @default(unauthorized)
+
+  // Subscription Details
+  isSubscribed      Boolean              @default(false)
+  subscriptionPrice Float?
+  subscriptionPlan  String?
+  subscriptionDur   SubscriptionDuration?
+  subscriptionExp   DateTime?
+  subscriptionStat  SubscriptionStatus?
+  invoiceUrl        String?
+
+  // Free Tier Usage
+  promptsUsed       Int      @default(0)
+  imagesUsed        Int      @default(0)
+  lastResetAt       DateTime @default(now())
+
+  // Security & OTP
+  confirmationToken        String?
+  confirmationTokenExpires DateTime?
+  resetPasswordOTP         String?
+  resetPasswordExpires     DateTime?
+  deleteAccountOTP         String?
+  deleteAccountExpires     DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  agentMemories AgentMemory[]
+  chatHistories ChatHistory[]
+  workflows     Workflow[]
+  subscriptions Subscription[]
+  forums        Forum[]
+}
+
+// -----------------------------------------------------------------
+// Commerce & Subscriptions
+// -----------------------------------------------------------------
+model Subscription {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String   @db.Uuid
+  transactionId String
+  price         Float
+  planName      String   // launch, build, scale, command
+  duration      String   // month, year
+  expiresAt     DateTime
+  paymentStatus String   // paid, canceled, expired, pending
+  invoiceUrl    String?
+  promptsUsed   Int      @default(0)
+  imagesUsed    Int      @default(0)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------
+// Community: Forums & Blogs
+// -----------------------------------------------------------------
+model Forum {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  img         String
+  category    String
+  authorId    String   @db.Uuid
+  authorEmail String?
+  
+  // Complex description layout mapped to JSON array
+  description Json     @default("[]")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------
+// Ecosystem: Marketplace Plugins
+// -----------------------------------------------------------------
+model MarketplacePlugin {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  agentId     String   @unique @db.VarChar(255)
+  name        String
+  version     String
+  author      String
+  category    String   @default("other")
+  description String?  @db.Text
+  pluginPath  String?
+  enabled     Boolean  @default(true)
+  installedBy String   @default("system")
+  yamlPath    String?
+  metadata    Json     @default("{}")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, enabled])
+}
+
+// -----------------------------------------------------------------
+// Security: Immutable Audit Logs (SOX/IRS Compliance)
+// -----------------------------------------------------------------
+model AuditLog {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  timestamp     DateTime @default(now())
+  actor         String   @db.VarChar(255)
+  action        String   @db.VarChar(255)
+  metadata      Json     @default("{}")
+  status        String   @default("SUCCESS") // SUCCESS, FAILURE, DENIED, WARNING
+  environment   String   @default("development")
+  ipAddress     String?
+  userAgent     String?
+  
+  // Cryptographic Proof (WORM)
+  hash          String
+  previousHash  String
+  kmsSignature  String?
+  kmsKeyId      String?
+
+  // AI Provenance
+  aiProvenance  Json?    // promptId, responseId, modelName, etc.
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([timestamp])
+  @@index([actor])
+  @@index([action])
+  @@index([hash])
+}
+
+// -----------------------------------------------------------------
+// Graph DB Simulation: Architecture & Submodules
+// -----------------------------------------------------------------
+model ArchitectureNode {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  repoId       String
+  type         String   // file, function, class, service, module
+  name         String
+  path         String
+  layer        String   @default("unknown") // frontend, backend, api, database, infrastructure
+  metadata     Json?    // language, loc, exports, imports
+  aiEnrichment Json?    // summary, purpose, role
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Edges where this node is the source or target
+  sourceEdges  ArchitectureEdge[] @relation("EdgeSource")
+  targetEdges  ArchitectureEdge[] @relation("EdgeTarget")
+
+  @@index([repoId])
+}
+
+model ArchitectureEdge {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  repoId            String
+  sourceId          String   @db.Uuid
+  targetId          String   @db.Uuid
+  relationshipType  String   // imports, calls, depends_on, implements
+  weight            Float    @default(1)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  sourceNode        ArchitectureNode @relation("EdgeSource", fields: [sourceId], references: [id], onDelete: Cascade)
+  targetNode        ArchitectureNode @relation("EdgeTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([repoId])
+}
+
+// -----------------------------------------------------------------
+// Product Management: AI Backlog & User Stories
+// -----------------------------------------------------------------
+model BacklogItem {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String   @db.Text
+  priority    String   @default("Medium") // High, Medium, Low
+  status      String   @default("Backlog") // Backlog, Analysis, Spec_Drafted, Planned, In_Progress, Done
+  
+  // Complex structures mapped to JSON
+  userStories Json     @default("[]") // title, acceptance_criteria, estimation_points
+  aiAnalysis  Json?    // alignment_score, alignment_reasoning, suggested_features
+  
+  specPath    String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------
+// Enterprise FinOps: LLM Cost & Telemetry
+// -----------------------------------------------------------------
+model LLMMetrics {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @default("default_enterprise_tenant")
+  agentName        String
+  model            String   @default("gemini-3.1-pro")
+  promptTokens     Int      @default(0)
+  completionTokens Int      @default(0)
+  totalTokens      Int      @default(0)
+  estimatedCostUsd Float    @default(0)
+  executionTimeMs  Int      @default(0)
+  timestamp        DateTime @default(now())
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([tenantId, timestamp(sort: Desc)])
+  @@index([agentName])
+}
+
+// -----------------------------------------------------------------
+// Foundation: Agentic Swarm Memory (Vector DB Replacement)
+// -----------------------------------------------------------------
+model AgentMemory {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  agentId   String   @db.VarChar(255)
+  content   String   @db.Text
+  
+  // High-dimensional vector embedding (768 for Google Gemini / Vertex models)
+  embedding Unsupported("vector(768)")?
+  
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------
+// Core AI: LLM Chat History & Vertex Telemetry
+// -----------------------------------------------------------------
+model ChatHistory {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  sessionId String?
+  
+  // Storing the arrays of objects as JSONB in Postgres 
+  // (contains: prompt, model, reply, search_results, total_time)
+  responses Json     @default("[]")
+  
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------
+// AI Workflows: Autonomous Execution Engine
+// -----------------------------------------------------------------
+enum TriggerType {
+  schedule
+  webhook
+}
+
+enum WorkflowStatus {
+  active
+  paused
+  failed
+}
+
+model Workflow {
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String         @db.Uuid
+  name             String
+  triggerType      TriggerType
+  frequency        String?        // raw cron string
+  webhookEvent     String?
+  prompt           String         @db.Text
+  tools            String[]       // Array of strings in PG
+  status           WorkflowStatus @default(active)
+  schedulerJobName String?        // GCP Scheduler ID
+  
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  runs             WorkflowRun[]
+  
+  @@index([userId])
+}
+
+enum RunStatus {
+  running
+  success
+  failed
+}
+
+model WorkflowRun {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workflowId String   @db.Uuid
+  status     RunStatus @default(running)
+  
+  // Logs stored as JSONB for dynamic structure
+  logs       Json     @default("[]")
+  error      String?  @db.Text
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  
+  @@index([workflowId, createdAt(sort: Desc)])
+}

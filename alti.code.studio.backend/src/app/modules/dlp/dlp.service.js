@@ -13,8 +13,21 @@
 import { DlpServiceClient } from '@google-cloud/dlp';
 import { logger } from '../../../shared/logger.js';
 
+<<<<<<< HEAD
 const dlpClient = new DlpServiceClient();
 const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
+=======
+const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
+let dlpClient = null;
+
+if (PROJECT_ID && PROJECT_ID !== 'none' && PROJECT_ID !== 'your-gcp-project-id') {
+    try {
+        dlpClient = new DlpServiceClient();
+    } catch (err) {
+        logger.warn('Failed to initialize DlpServiceClient', err);
+    }
+}
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 class DlpService {
     constructor() {
@@ -89,6 +102,13 @@ class DlpService {
     }
 
     async _cloudDlpScan(text) {
+<<<<<<< HEAD
+=======
+        if (!dlpClient) {
+            throw new Error("DLP Client not initialized (Missing credentials)");
+        }
+        
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         const request = {
             parent: `projects/${PROJECT_ID}/locations/global`,
             item: { value: text },

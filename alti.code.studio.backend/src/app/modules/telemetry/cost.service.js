@@ -14,11 +14,19 @@ class CostService {
     constructor() {
         // Prices per 1M tokens (USD) — source: Google AI pricing page
         this.prices = {
+<<<<<<< HEAD
             'gemini-1.5-pro': { input: 3.50, output: 10.50 },
             'gemini-1.5-flash': { input: 0.35, output: 1.05 },
             'gemini-1.0-pro': { input: 0.50, output: 1.50 },
             'gemini-1.5-pro-002': { input: 3.50, output: 10.50 },
             'gemini-1.5-flash-002': { input: 0.35, output: 1.05 },
+=======
+            'gemini-3.1-pro': { input: 3.50, output: 10.50 },
+            'gemini-3.1-pro': { input: 0.35, output: 1.05 },
+            'gemini-3.1-pro': { input: 0.50, output: 1.50 },
+            'gemini-3.1-pro-002': { input: 3.50, output: 10.50 },
+            'gemini-3.1-pro-002': { input: 0.35, output: 1.05 },
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         };
         /** @type {Map<string, number>} userId → accumulated cost */
         this._userTotals = new Map();
@@ -29,7 +37,11 @@ class CostService {
 
     /**
      * Track token usage and calculate cost.
+<<<<<<< HEAD
      * @param {string} model - Model name (e.g., 'gemini-1.5-pro')
+=======
+     * @param {string} model - Model name (e.g., 'gemini-3.1-pro')
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
      * @param {number} inputTokens - Number of input tokens
      * @param {number} outputTokens - Number of output tokens
      * @param {string} userId - User ID

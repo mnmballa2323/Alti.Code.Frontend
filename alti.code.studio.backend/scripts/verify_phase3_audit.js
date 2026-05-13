@@ -23,7 +23,11 @@ async function verifyPhase3() {
         const aiProvenance = {
             promptId: 'prompt_99x_finance_patch',
             responseId: 'res_001_vertex_gemini',
+<<<<<<< HEAD
             modelName: 'gemini-1.5-pro',
+=======
+            modelName: 'gemini-3.1-pro',
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             temperature: 0.1,
             systemInstruction: 'You are an S&P500 Refactor Agent. Ensure all variables are typed.',
             reasoningTokenCount: 1540

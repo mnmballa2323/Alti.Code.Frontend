@@ -10,6 +10,13 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { GeneratorService } from './generator.service.js';
 import path from 'path';
+<<<<<<< HEAD
+=======
+import { logger } from '../../../shared/logger.js';
+import { gkeService } from '../googleCloud/gke.service.js';
+import { driveBackupService } from '../googleCloud/drive.service.js';
+import { fcmService } from '../googleCloud/fcm.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const generate = catchAsync(async (req, res) => {
     const prompt = req.body.prompt;
@@ -53,10 +60,42 @@ const generateProject = catchAsync(async (req, res) => {
         installResult = await GeneratorService.installDependencies(targetPath);
     }
 
+<<<<<<< HEAD
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Project generated and installed successfully',
+=======
+    // 4. ☁️ Trigger Autonomous Sovereign Backup to Google Drive (Encrypted)
+    driveBackupService.autonomousBackup(targetPath, targetDirName).catch(err => {
+        logger.error('Sovereign Drive Backup failed in background', err);
+    });
+
+    // 5. 🚢 Autonomous GKE Autopilot Provisioning (For enterprise-scale tasks)
+    if (prompt.toLowerCase().includes('enterprise') || prompt.toLowerCase().includes('production') || prompt.toLowerCase().includes('gke')) {
+        const gkeName = `alti-gke-${targetDirName.replace(/[^a-z0-9-]/g, '-').slice(0, 20)}`;
+        gkeService.provisionAutopilotCluster(gkeName).catch(err => {
+            logger.error('GKE Autopilot provisioning failed', err);
+        });
+        
+        // 📲 Autonomous Stakeholder Notification via Firebase Cloud Messaging
+        fcmService.broadcastPushNotification(
+            '🚀 Enterprise Deployment Initiated',
+            `The Swarm has successfully generated ${targetDirName} and is provisioning GKE cluster ${gkeName}.`
+        );
+    } else {
+        // Standard App Generation Notification
+        fcmService.broadcastPushNotification(
+            '✨ New Swarm App Generated',
+            `The Swarm successfully generated and installed: ${targetDirName}`
+        );
+    }
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Project generated and installed successfully. Sovereign Backup & GKE Cluster initiated.',
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
         data: {
             ...writeResult,
             install: installResult,

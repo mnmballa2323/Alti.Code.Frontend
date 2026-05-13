@@ -15,7 +15,11 @@ class AuditAnomalyService {
     constructor() {
         this.projectId = config.gcp.project_id;
         this.location = config.gcp.location || 'us-central1';
+<<<<<<< HEAD
         this.modelName = config.gcp.model_name || 'gemini-1.5-pro-preview-0409';  // Use primary analytical model
+=======
+        this.modelName = config.gcp.model_name || 'gemini-3.1-pro';  // Use primary analytical model
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
         try {
             if (this.projectId) {

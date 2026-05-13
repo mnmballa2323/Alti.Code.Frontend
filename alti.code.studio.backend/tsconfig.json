@@ -1,0 +1,17 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": false
+  },
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts"
+  ]
+}

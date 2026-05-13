@@ -11,6 +11,11 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { graphOrchestrator } from './graph.orchestrator.js';
 import { logger } from '../../../shared/logger.js';
+<<<<<<< HEAD
+=======
+import { puppeteerAgent } from './puppeteer.agent.js';
+import { cloudBatchService } from '../googleCloud/batch.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 const startMission = catchAsync(async (req, res) => {
     const { goal } = req.body;
@@ -78,5 +83,38 @@ export const AgentController = {
             });
         }
     },
+<<<<<<< HEAD
     getAgentStatus
+=======
+    getAgentStatus,
+    exploreUrl: catchAsync(async (req, res) => {
+        const { url } = req.body;
+        if (!url) return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'URL required' });
+        
+        const content = await puppeteerAgent.scrapeRenderedContext(url);
+        
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Web exploration completed successfully',
+            data: { content },
+        });
+    }),
+    allocateComputeCluster: catchAsync(async (req, res) => {
+        const { jobId, dockerImage, commands } = req.body;
+        
+        if (!jobId || !dockerImage || !commands) {
+            return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'jobId, dockerImage, and commands required' });
+        }
+        
+        const result = await cloudBatchService.submitComputeJob(jobId, dockerImage, commands);
+        
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Compute cluster allocation initiated',
+            data: result,
+        });
+    })
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 };

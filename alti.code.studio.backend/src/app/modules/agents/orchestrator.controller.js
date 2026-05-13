@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Copyright (c) 2024 Alti.Code.Studio
  * 
@@ -222,3 +223,10 @@ export class OrchestratorController {
     });
 }
 
+=======
+export const OrchestratorController = {
+  startMission: async (req, res) => res.json({}),
+  getMissionStatus: async (req, res) => res.json({}),
+  listMissions: async (req, res) => res.json([])
+};
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

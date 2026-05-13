@@ -1,0 +1,1 @@
+components/providers/I18nProvider.tsx(4,30): error TS2307: Cannot find module 'react-intl' or its corresponding type declarations.

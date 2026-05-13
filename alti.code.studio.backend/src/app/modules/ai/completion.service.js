@@ -14,7 +14,11 @@ class CompletionService {
     constructor() {
         this.project = config.gcp.project_id;
         this.location = config.gcp.location;
+<<<<<<< HEAD
         this.modelName = 'gemini-1.5-flash'; // Speed model: gemini-3.1-flash does not exist
+=======
+        this.modelName = 'gemini-3.1-pro'; // Used for high-quality code completion
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
         this.vertexAI = null;
         this.generativeModel = null;
@@ -25,6 +29,13 @@ class CompletionService {
 
     init() {
         try {
+<<<<<<< HEAD
+=======
+            if (!this.project || this.project === 'none' || this.project === 'your-gcp-project-id') {
+                throw new Error("GCP credentials not configured. Skipping Vertex AI initialization.");
+            }
+
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
             this.vertexAI = new VertexAI({
                 project: this.project,
                 location: this.location

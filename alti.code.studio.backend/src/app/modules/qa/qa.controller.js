@@ -95,3 +95,31 @@ qaRoutes.get('/coverage', async (req, res) => {
         return res.status(500).json({ success: false, message: e.message });
     }
 });
+<<<<<<< HEAD
+=======
+
+// POST /api/v1/qa/sprint
+// Trigger an autonomous self-healing test sprint
+qaRoutes.post('/sprint', async (req, res) => {
+    const { prompt } = req.body;
+    try {
+        // Dynamically import the autonomousSprintService to avoid circular deps
+        const { autonomousSprintService } = await import('../autonomousSprint/autonomousSprint.service.js');
+        
+        logger.info(`🧪 QA Sprint API: Launching self-healing sprint for: "${prompt}"`);
+        
+        // This launches the background sprint loop. We return the sprint ID immediately.
+        // A true frontend would connect via WebSocket to stream the phases.
+        const sprintId = await autonomousSprintService.launchSprint(prompt || "Run tests and autonomously heal any failures.");
+        
+        return res.json({ 
+            success: true, 
+            message: "Self-healing test sprint launched successfully.", 
+            data: { sprintId } 
+        });
+    } catch (e) {
+        logger.error('QA /sprint error:', e.message);
+        return res.status(500).json({ success: false, message: e.message });
+    }
+});
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

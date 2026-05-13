@@ -4,11 +4,31 @@
 
 import express from 'express';
 import { McpController } from './mcp.controller.js';
+<<<<<<< HEAD
 
 const router = express.Router();
 
 router.get('/tools', McpController.listTools);
 router.post('/connect', McpController.connectServer);
 router.post('/run', McpController.runTool);
+=======
+import authMiddleware from '../../middlewares/auth/auth.js';
+import { ENUM_USER_ROLE } from '../../../shared/enum.js';
+
+const router = express.Router();
+const requireAuth = authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN);
+
+router.get('/composio/apps', requireAuth, McpController.getComposioApps);
+router.get('/composio/connections', requireAuth, McpController.getConnections);
+router.get('/composio/triggers/:appName', requireAuth, McpController.getAppTriggers);
+router.get('/composio/tools/:appName', requireAuth, McpController.getToolkitTools);
+router.post('/composio/connect', requireAuth, McpController.connectComposioApp);
+router.post('/composio/disconnect', requireAuth, McpController.disconnectComposioApp);
+router.get('/tools', requireAuth, McpController.listTools);
+router.get('/tools/local', requireAuth, McpController.listTools);
+router.post('/connect', requireAuth, McpController.connectServer);
+router.post('/run', requireAuth, McpController.runTool);
+router.post('/execute/local', requireAuth, McpController.runTool);
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
 
 export const mcpRoutes = router;

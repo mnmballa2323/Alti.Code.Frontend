@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Copyright (c) 2024 Alti.Code.Studio
  *
@@ -216,3 +217,6 @@ export const GeminiAiService = {
   getEmbeddings,
 };
 
+=======
+export { GeminiAiService } from '../geminiOpenMemory/geminiOpenMemo.service.js';
+>>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
