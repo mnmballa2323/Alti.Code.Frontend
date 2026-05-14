@@ -1,4 +1,4 @@
-import prisma from '../../../config/prisma.js';
+import { prisma } from '../../../config/prisma.js';
 import { vertexService } from '../ai/vertex.service.js';
 import { logger } from '../../../shared/logger.js';
 
