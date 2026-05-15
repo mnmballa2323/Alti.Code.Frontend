@@ -19,18 +19,18 @@ interface MessagesState {
   messages: MessageType[];
   sessionId: string | null;
   loading: boolean;
-  isChatting: boolean;
   error: string | null;
   model: string;
+  pendingRooms: any[];
 }
 
 const initialState: MessagesState = {
   messages: [],
   sessionId: null,
   loading: false,
-  isChatting: false,
   error: null,
   model: "default",
+  pendingRooms: [],
 };
 
 interface SendMessagePayload {
@@ -164,6 +164,9 @@ const messagesSlice = createSlice({
     addMessage(state, action: PayloadAction<MessageType>) {
       state.messages.push(action.payload);
     },
+    addPendingRoom(state, action: PayloadAction<any>) {
+      state.pendingRooms.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -211,7 +214,7 @@ const messagesSlice = createSlice({
   },
 });
 
-export const { setMessages, setChatContext, startNewChat, addMessage } =
+export const { setMessages, setChatContext, startNewChat, addMessage, addPendingRoom } =
   messagesSlice.actions;
 
 export default messagesSlice.reducer;

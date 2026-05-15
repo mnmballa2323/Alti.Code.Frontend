@@ -1,17 +1,27 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import MessageContainer from "@/components/message-container";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAppDispatch, useAppSelector } from "@/store";
 import {
   sendMessage,
   setChatContext,
   startNewChat,
 } from "@/store/messagesSlice";
+
+const BOARDROOM_AGENTS = [
+  "Chairman", "Lawyer", "Accountant",
+  "CEO", "COO", "CFO", "CMO", "CRO",
+  "CTO", "CISO", "Database Admin", "AI Engineer",
+  "Product Manager", "Scrum Master", "UX/UI Designer",
+  "Frontend Developer", "Backend Developer", "DevOps Engineer",
+  "QA Engineer", "Technical Writer", "Support Engineer",
+];
 
 export default function Boardroom() {
   const dispatch = useAppDispatch();
@@ -39,7 +49,7 @@ export default function Boardroom() {
     dispatch(
       sendMessage({
         prompt,
-        model: mode || "ceo", // Default to CEO or specific model in Boardroom
+        model: mode || "ceo",
         domain,
         language,
         sessionId: sessionId,
@@ -49,9 +59,11 @@ export default function Boardroom() {
     );
   };
 
+
+
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans w-full">
+      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans w-full relative">
         {/* Standardized Header */}
         <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
           <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
@@ -101,10 +113,10 @@ export default function Boardroom() {
                 />
               </div>
             </div>
-
           </div>
         )}
       </div>
     </ChatBotLayout>
   );
 }
+

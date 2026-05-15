@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, use } from "react";
 import { useParams } from "next/navigation";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -40,35 +40,44 @@ const executives: Record<string, { name: string, role: string }> = {
   "support": { name: "Support Engineer", role: "Customer Success" },
 };
 
-export default function BoardroomChat() {
+export default function MeetingRoom({ 
+  params, 
+  searchParams 
+}: { 
+  params: Promise<{ roomId: string }>; 
+  searchParams: Promise<{ agents?: string; name?: string }>; 
+}) {
+  const resolvedParams = use(params);
+  const resolvedSearchParams = use(searchParams);
+  
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const params = useParams();
-  const agentId = params.agentId as string;
-  const exec = executives[agentId] || { name: "Executive", role: "Consultant" };
+  const roomId = resolvedParams.roomId;
+  const agentsQuery = resolvedSearchParams.agents || "";
+  const meetingNameQuery = resolvedSearchParams.name || "Boardroom Meeting";
+  const agentsArray = agentsQuery.split(",").filter(Boolean);
 
   const { data: session } = useSession();
   const token = session?.user?.accessToken ?? null;
-  const fixedSessionId = `boardroom_${agentId}`;
-  const isChatting = useAppSelector((state) => state.messages.isChatting);
+  const fixedSessionId = roomId;
+  const messages = useAppSelector((state) => state.messages.messages);
 
-  // Fetch the infinite thread data for this agent
+  // Fetch the infinite thread data for this room
   const { chat, singleLoading, singleError } = useFetchSingleData(
-    agentId,
+    "boardroom_meeting",
     fixedSessionId,
     token,
   );
 
   useEffect(() => {
     if (chat && chat.responses && chat.responses.length > 0) {
-      dispatch(setChatContext({ sessionId: fixedSessionId, model: agentId }));
+      dispatch(setChatContext({ sessionId: fixedSessionId, model: "boardroom_meeting" }));
       dispatch(setMessages(chat.responses));
     } else {
-      // If no history exists yet, prepare a fresh state with the fixed session ID
       dispatch(startNewChat());
-      dispatch(setChatContext({ sessionId: fixedSessionId, model: agentId }));
+      dispatch(setChatContext({ sessionId: fixedSessionId, model: "boardroom_meeting" }));
     }
-  }, [chat, dispatch, agentId, fixedSessionId]);
+  }, [chat, dispatch, fixedSessionId]);
 
   const handleFirstMessageSend = (
     prompt: string,
@@ -76,11 +85,10 @@ export default function BoardroomChat() {
     domain?: string,
     language?: string,
   ) => {
-    // We do NOT navigate to /chat. We stay in the boardroom view to keep the infinite thread.
     dispatch(
       sendMessage({
-        prompt,
-        model: agentId, // Lock the model to the selected executive
+        prompt: `[Committee: ${agentsQuery}]\n\n${prompt}`,
+        model: "boardroom_meeting",
         domain,
         language,
         sessionId: fixedSessionId,
@@ -97,14 +105,14 @@ export default function BoardroomChat() {
           <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
             <div className="flex items-center gap-3">
               <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
-                {exec.name} <span className="text-default-400 font-normal text-xs ml-2">— {exec.role}</span>
+                {meetingNameQuery} <span className="text-default-400 font-normal text-xs ml-2">— {agentsArray.length} Executives</span>
               </h1>
             </div>
           </div>
         </div>
 
         {/* Dynamic Content */}
-        {isChatting ? (
+        {messages.length > 0 ? (
           <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
             <div className="flex flex-col w-full h-full max-w-3xl">
               <div className="w-full flex-grow overflow-y-auto scroll-smooth scrollbar-none pb-4">
@@ -128,7 +136,7 @@ export default function BoardroomChat() {
                   className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                   style={{ fontFamily: "var(--font-secondary)" }}
                 >
-                  Consult {exec.name}
+                  {meetingNameQuery}
                 </h1>
               </div>
 

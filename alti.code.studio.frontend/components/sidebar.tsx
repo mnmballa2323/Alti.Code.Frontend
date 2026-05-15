@@ -86,7 +86,12 @@ import {
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
-import { startNewChat } from "@/store/messagesSlice";
+import {
+  sendMessage,
+  setChatContext,
+  startNewChat,
+  addPendingRoom,
+} from "@/store/messagesSlice";
 import { AppDispatch } from "@/store";
 
 const API_URL =
@@ -402,7 +407,14 @@ export default function Sidebar() {
   const [isSecondarySidebarOpen, setIsSecondarySidebarOpen] = useState(true);
   const toggleSecondarySidebar = () =>
     setIsSecondarySidebarOpen(!isSecondarySidebarOpen);
+  const [activeBoardroomTab, setActiveBoardroomTab] = useState<"agents" | "rooms">(
+    pathname?.startsWith("/boardroom/meeting") ? "rooms" : "agents"
+  );
   const [isNewWorkflowModalOpen, setIsNewWorkflowModalOpen] = useState(false);
+  const [isBoardroomMeetingModalOpen, setIsBoardroomMeetingModalOpen] = useState(false);
+  const [selectedMeetingAgents, setSelectedMeetingAgents] = useState<string[]>([]);
+  const [meetingName, setMeetingName] = useState("");
+  const pendingRooms = useSelector((state: RootState) => state.messages.pendingRooms || []);
   const [newWorkflowName, setNewWorkflowName] = useState("");
   const [isCreatingWorkflow, setIsCreatingWorkflow] = useState(false);
   const [dataFolders, setDataFolders] = useState<
@@ -533,6 +545,9 @@ export default function Sidebar() {
     window.addEventListener("update-guardrail", handleUpdateGuardrail);
     window.addEventListener("delete-guardrail", handleDeleteGuardrail);
 
+    const handleOpenMeetingModal = () => setIsBoardroomMeetingModalOpen(true);
+    window.addEventListener("open-boardroom-meeting-modal", handleOpenMeetingModal);
+
     return () => {
       window.removeEventListener("add-instruction", handleAddInstruction);
       window.removeEventListener("update-instruction", handleUpdateInstruction);
@@ -540,6 +555,7 @@ export default function Sidebar() {
       window.removeEventListener("add-guardrail", handleAddGuardrail);
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
+      window.removeEventListener("open-boardroom-meeting-modal", handleOpenMeetingModal);
     };
   }, []);
   const token = session?.user?.accessToken ?? null;
@@ -1267,73 +1283,75 @@ export default function Sidebar() {
           {pathname !== "/instructions" &&
             pathname !== "/guardrails" &&
             pathname !== "/cloud" && (
-              <Button
-                isIconOnly
-                className="bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-                size="sm"
-                title="New"
-                variant="flat"
-                onClick={() => {
-                  if (
-                    pathname === "/workflows" ||
-                    pathname === "/workflow-builder"
-                  ) {
-                    setIsNewWorkflowModalOpen(true);
-                  } else if (pathname === "/vault") {
-                    window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                  } else if (pathname === "/domains") {
-                    window.dispatchEvent(new CustomEvent("open-domain-modal"));
-                  } else if (pathname === "/testing") {
-                    const newTest = {
-                      id: "test-" + Date.now(),
-                      name: "New Test Session",
-                    };
+              <>
 
-                    setTestSessions((prev) => [...prev, newTest]);
-                    window.dispatchEvent(
-                      new CustomEvent("select-test-session", {
-                        detail: newTest.name,
-                      }),
-                    );
-                  } else if (pathname === "/security") {
-                    const newAudit = {
-                      id: "sec-" + Date.now(),
-                      name: "New Security Audit",
-                    };
+                <Button
+                  isIconOnly
+                  className="bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+                  size="sm"
+                  title="New"
+                  variant="flat"
+                  onClick={() => {
+                    if (
+                      pathname === "/workflows" ||
+                      pathname === "/workflow-builder"
+                    ) {
+                      setIsNewWorkflowModalOpen(true);
+                    } else if (pathname === "/vault") {
+                      window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                    } else if (pathname === "/domains") {
+                      window.dispatchEvent(new CustomEvent("open-domain-modal"));
+                    } else if (pathname === "/testing") {
+                      const newTest = {
+                        id: "test-" + Date.now(),
+                        name: "New Test Session",
+                      };
 
-                    setSecuritySessions((prev) => [...prev, newAudit]);
-                    window.dispatchEvent(
-                      new CustomEvent("select-security-session", {
-                        detail: newAudit.name,
-                      }),
-                    );
-                  } else if (pathname === "/research") {
-                    window.dispatchEvent(
-                      new CustomEvent("select-research-session", {
-                        detail: null, // null means "New Mission"
-                      }),
-                    );
-                  } else if (pathname === "/repositories") {
-                    window.dispatchEvent(
-                      new CustomEvent("open-repository-modal"),
-                    );
-                  } else if (pathname === "/documents") {
-                    window.dispatchEvent(
-                      new CustomEvent("open-document-modal"),
-                    );
-                  } else if (pathname === "/assets") {
-                    window.dispatchEvent(new CustomEvent("open-asset-modal"));
-                  } else if (pathname.startsWith("/boardroom")) {
-                    dispatch(startNewChat());
-                    router.push("/boardroom");
-                  } else {
-                    dispatch(startNewChat());
-                    router.push("/");
-                  }
-                }}
-              >
-                <Plus className="size-3.5" />
-              </Button>
+                      setTestSessions((prev) => [...prev, newTest]);
+                      window.dispatchEvent(
+                        new CustomEvent("select-test-session", {
+                          detail: newTest.name,
+                        }),
+                      );
+                    } else if (pathname === "/security") {
+                      const newAudit = {
+                        id: "sec-" + Date.now(),
+                        name: "New Security Audit",
+                      };
+
+                      setSecuritySessions((prev) => [...prev, newAudit]);
+                      window.dispatchEvent(
+                        new CustomEvent("select-security-session", {
+                          detail: newAudit.name,
+                        }),
+                      );
+                    } else if (pathname === "/research") {
+                      window.dispatchEvent(
+                        new CustomEvent("select-research-session", {
+                          detail: null, // null means "New Mission"
+                        }),
+                      );
+                    } else if (pathname === "/repositories") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-repository-modal"),
+                      );
+                    } else if (pathname === "/documents") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-document-modal"),
+                      );
+                    } else if (pathname === "/assets") {
+                      window.dispatchEvent(new CustomEvent("open-asset-modal"));
+                    } else if (pathname.startsWith("/boardroom")) {
+                      setIsBoardroomMeetingModalOpen(true);
+                    } else {
+                      dispatch(startNewChat());
+                      router.push("/");
+                    }
+                  }}
+                >
+                  <Plus className="size-3.5" />
+                </Button>
+              </>
             )}
         </div>
 
@@ -1953,82 +1971,155 @@ export default function Sidebar() {
               )}
             </div>
           ) : pathname?.startsWith("/boardroom") ? (
-            <div className="flex flex-col px-2 mt-2 pb-4 space-y-4">
-              {[
-                {
-                  name: "Governance",
-                  execs: [
-                    { id: "chairman", name: "Chairman", icon: Crown },
-                    { id: "counsel", name: "Lawyer", icon: Scale },
-                    { id: "accountant", name: "Accountant", icon: Calculator },
-                  ]
-                },
-                {
-                  name: "Strategy",
-                  execs: [
-                    { id: "ceo", name: "CEO", icon: Briefcase },
-                    { id: "coo", name: "COO", icon: Activity },
-                    { id: "cfo", name: "CFO", icon: Landmark },
-                    { id: "cmo", name: "CMO", icon: Megaphone },
-                    { id: "cro", name: "CRO", icon: TrendingUp },
-                  ]
-                },
-                {
-                  name: "Architecture",
-                  execs: [
-                    { id: "cto", name: "CTO", icon: Cpu },
-                    { id: "ciso", name: "CISO", icon: ShieldCheck },
-                    { id: "dba", name: "Database Admin", icon: Database },
-                    { id: "ai", name: "AI Engineer", icon: Bot },
-                  ]
-                },
-                {
-                  name: "Execution",
-                  execs: [
-                    { id: "pm", name: "Product Manager", icon: Target },
-                    { id: "scrum", name: "Scrum Master", icon: ListTodo },
-                    { id: "designer", name: "UX/UI Designer", icon: Palette },
-                  ]
-                },
-                {
-                  name: "Delivery",
-                  execs: [
-                    { id: "frontend", name: "Frontend Developer", icon: Layout },
-                    { id: "backend", name: "Backend Developer", icon: Server },
-                    { id: "devops", name: "DevOps Engineer", icon: Settings2 },
-                  ]
-                },
-                {
-                  name: "Quality & Support",
-                  execs: [
-                    { id: "qa", name: "QA Engineer", icon: Bug },
-                    { id: "writer", name: "Technical Writer", icon: FileText },
-                    { id: "support", name: "Support Engineer", icon: LifeBuoy },
-                  ]
-                }
-              ].map((category) => (
-                <div key={category.name} className="flex flex-col gap-0.5">
-                  <span className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-3 mb-1">
-                    {category.name}
-                  </span>
-                  {category.execs.map((exec) => (
-                    <button
-                      key={exec.id}
-                      className={cn(
-                        "w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-xl text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate",
-                        pathname === `/boardroom/${exec.id}` ? "bg-black/5 dark:bg-white/5 text-default-900 font-medium" : "text-gray-600 dark:text-gray-300"
-                      )}
-                      onClick={() => {
-                        dispatch(startNewChat());
-                        router.push(`/boardroom/${exec.id}`);
-                      }}
-                    >
-                      <exec.icon size={14} className={cn("flex-shrink-0", pathname === `/boardroom/${exec.id}` ? "text-default-900" : "text-gray-400")} />
-                      <span className="truncate">{exec.name}</span>
-                    </button>
-                  ))}
+            <div className="flex flex-col w-full h-full">
+              <div className="px-3 pb-2 pt-1 border-b border-default-200 sticky top-0 bg-white dark:bg-background z-10">
+                <div className="flex p-0.5 bg-default-100 dark:bg-default-50/50 rounded-lg">
+                  <button
+                    className={cn(
+                      "flex-1 text-[11px] font-semibold py-1.5 rounded-md transition-all tracking-wide uppercase",
+                      activeBoardroomTab === "agents"
+                        ? "bg-zinc-700 shadow-sm text-white"
+                        : "text-default-500 hover:text-default-700"
+                    )}
+                    onClick={() => setActiveBoardroomTab("agents")}
+                  >
+                    Agents
+                  </button>
+                  <button
+                    className={cn(
+                      "flex-1 text-[11px] font-semibold py-1.5 rounded-md transition-all tracking-wide uppercase",
+                      activeBoardroomTab === "rooms"
+                        ? "bg-zinc-700 shadow-sm text-white"
+                        : "text-default-500 hover:text-default-700"
+                    )}
+                    onClick={() => setActiveBoardroomTab("rooms")}
+                  >
+                    Rooms
+                  </button>
                 </div>
-              ))}
+              </div>
+
+              <div className="flex flex-col px-2 mt-4 pb-4 space-y-4">
+                {activeBoardroomTab === "agents" && [
+                  {
+                    name: "Governance",
+                    execs: [
+                      { id: "chairman", name: "Chairman", icon: Crown },
+                      { id: "counsel", name: "Lawyer", icon: Scale },
+                      { id: "accountant", name: "Accountant", icon: Calculator },
+                    ],
+                  },
+                  {
+                    name: "Strategy",
+                    execs: [
+                      { id: "ceo", name: "CEO", icon: Briefcase },
+                      { id: "coo", name: "COO", icon: Activity },
+                      { id: "cfo", name: "CFO", icon: Landmark },
+                      { id: "cmo", name: "CMO", icon: Megaphone },
+                      { id: "cro", name: "CRO", icon: TrendingUp },
+                    ],
+                  },
+                  {
+                    name: "Architecture",
+                    execs: [
+                      { id: "cto", name: "CTO", icon: Cpu },
+                      { id: "ciso", name: "CISO", icon: ShieldCheck },
+                      { id: "dba", name: "Database Admin", icon: Database },
+                      { id: "ai", name: "AI Engineer", icon: Bot },
+                    ],
+                  },
+                  {
+                    name: "Execution",
+                    execs: [
+                      { id: "pm", name: "Product Manager", icon: Target },
+                      { id: "scrum", name: "Scrum Master", icon: ListTodo },
+                      { id: "designer", name: "UX/UI Designer", icon: Palette },
+                    ],
+                  },
+                  {
+                    name: "Delivery",
+                    execs: [
+                      { id: "frontend", name: "Frontend Developer", icon: Layout },
+                      { id: "backend", name: "Backend Developer", icon: Server },
+                      { id: "devops", name: "DevOps Engineer", icon: Settings2 },
+                    ],
+                  },
+                  {
+                    name: "Quality & Support",
+                    execs: [
+                      { id: "qa", name: "QA Engineer", icon: Bug },
+                      { id: "writer", name: "Technical Writer", icon: FileText },
+                      { id: "support", name: "Support Engineer", icon: LifeBuoy },
+                    ],
+                  },
+                ].map((category) => (
+                  <div key={category.name} className="flex flex-col gap-0.5">
+                    <span className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-3 mb-1">
+                      {category.name}
+                    </span>
+                    {category.execs.map((exec) => (
+                      <button
+                        key={exec.id}
+                        className={cn(
+                          "w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-xl text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate",
+                          pathname === `/boardroom/${exec.id}` ? "bg-black/5 dark:bg-white/5 text-default-900 font-medium" : "text-gray-600 dark:text-gray-300"
+                        )}
+                        onClick={() => {
+                          dispatch(startNewChat());
+                          router.push(`/boardroom/${exec.id}`);
+                        }}
+                      >
+                        <exec.icon size={14} className={cn("flex-shrink-0", pathname === `/boardroom/${exec.id}` ? "text-default-900" : "text-gray-400")} />
+                        <span className="truncate">{exec.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                ))}
+                {activeBoardroomTab === "rooms" && (
+                  <div className="flex flex-col gap-0.5 px-1">
+                    {(() => {
+                      const dbRoomSessions = aiSessions ? [...aiSessions].filter(chat => chat.sessionId?.startsWith("room_")) : [];
+                      
+                      // Merge db rooms and pending rooms, ensuring no duplicates by sessionId
+                      const allRoomsMap = new Map();
+                      
+                      // Add pending rooms first (they might be newer)
+                      pendingRooms.forEach(room => {
+                        allRoomsMap.set(room.sessionId, room);
+                      });
+                      
+                      // Add DB rooms, which will overwrite pending rooms if they have the same sessionId (meaning they are now saved)
+                      dbRoomSessions.forEach(room => {
+                        allRoomsMap.set(room.sessionId, room);
+                      });
+
+                      const roomSessions = Array.from(allRoomsMap.values());
+
+                      return roomSessions.length > 0 ? (
+                        roomSessions
+                          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                          .map((room) => (
+                            <button
+                              key={room._id}
+                              className={cn(
+                                "w-full text-left px-3 py-2.5 rounded-xl text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate",
+                                pathname === `/boardroom/meeting/${room.sessionId}` ? "bg-black/5 dark:bg-white/5 text-default-900 font-medium" : "text-gray-600 dark:text-gray-300"
+                              )}
+                              onClick={() => {
+                                dispatch(startNewChat());
+                                router.push(`/boardroom/meeting/${room.sessionId}?name=${encodeURIComponent(room.responses?.[0]?.prompt || "Boardroom Meeting")}`);
+                              }}
+                            >
+                              <span className="truncate">{room.responses?.[0]?.prompt || "Untitled Board Meeting"}</span>
+                            </button>
+                          ))
+                      ) : (
+                        <div className="text-xs text-default-400 text-center py-4">No rooms created yet.</div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
             </div>
           ) : isLoading ? (
             <div className="space-y-4 px-4 mt-2">
@@ -2136,6 +2227,99 @@ export default function Sidebar() {
               onPress={handleCreateWorkflow}
             >
               Create
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isBoardroomMeetingModalOpen}
+        onClose={() => setIsBoardroomMeetingModalOpen(false)}
+        size="2xl"
+      >
+        <ModalContent className="bg-white dark:bg-default-50 border border-default-200 shadow-2xl rounded-2xl p-2">
+          <ModalHeader className="flex flex-col gap-1 text-black dark:text-white">
+            <h2 className="text-xl font-bold tracking-tight">Call a Board Meeting</h2>
+            <p className="text-sm text-default-500 font-normal">
+              Select the executive experts you want to invite to this roundtable discussion.
+            </p>
+          </ModalHeader>
+          <ModalBody className="max-h-[60vh] overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col gap-1 mb-2">
+              <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                Meeting Name
+              </label>
+              <input
+                className="w-full px-3 py-2 border border-default-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-white dark:bg-black"
+                placeholder="e.g. Q3 Strategy Planning"
+                type="text"
+                value={meetingName}
+                onChange={(e) => setMeetingName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+              {[
+                "Chairman", "CEO", "COO", "CFO", "CMO", "CRO", 
+                "General Counsel", "Accountant", "CTO", "CISO", 
+                "PM", "Scrum Master", "QA Engineer", "Database Admin", 
+                "AI Engineer", "Writer", "Support", "Frontend Dev", "Backend Dev"
+              ].map((agent) => (
+                <div 
+                  key={agent}
+                  className={cn(
+                    "p-3 rounded-xl border cursor-pointer transition-all duration-200 flex items-center justify-between",
+                    selectedMeetingAgents.includes(agent)
+                      ? "border-black bg-black/5 dark:border-white dark:bg-white/10"
+                      : "border-default-200 hover:border-default-400"
+                  )}
+                  onClick={() => {
+                    setSelectedMeetingAgents(prev => 
+                      prev.includes(agent) ? prev.filter(a => a !== agent) : [...prev, agent]
+                    );
+                  }}
+                >
+                  <span className="text-sm font-medium">{agent}</span>
+                  <div className={cn(
+                    "size-4 rounded-full border flex items-center justify-center",
+                    selectedMeetingAgents.includes(agent)
+                      ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                      : "border-default-300"
+                  )}>
+                    {selectedMeetingAgents.includes(agent) && <CheckCircle size={12} />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-xl transition-colors"
+              onPress={() => setIsBoardroomMeetingModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="px-4 py-2 bg-black hover:bg-gray-900 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              isDisabled={selectedMeetingAgents.length === 0 || meetingName.trim() === ""}
+              onPress={() => {
+                setIsBoardroomMeetingModalOpen(false);
+                dispatch(startNewChat());
+                const roomId = `room_${Date.now()}`;
+                
+                // Add to pending rooms so it persists in the UI even before the first message is sent
+                dispatch(addPendingRoom({
+                  _id: "temp_" + roomId,
+                  sessionId: roomId,
+                  createdAt: new Date().toISOString(),
+                  responses: [{ prompt: meetingName }]
+                }));
+
+                // Switch the tab to rooms
+                setActiveBoardroomTab("rooms");
+
+                router.push(`/boardroom/meeting/${roomId}?agents=${encodeURIComponent(selectedMeetingAgents.join(","))}&name=${encodeURIComponent(meetingName)}`);
+              }}
+            >
+              Start Meeting ({selectedMeetingAgents.length})
             </Button>
           </ModalFooter>
         </ModalContent>

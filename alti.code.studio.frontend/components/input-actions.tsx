@@ -247,6 +247,7 @@ function PromptInputFullLineComponent({
   isTestWorkspace = false,
   placeholder = "Enter your prompt here...",
   customActions,
+  rightActions,
 }: {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
@@ -265,6 +266,7 @@ function PromptInputFullLineComponent({
   isTestWorkspace?: boolean;
   placeholder?: string;
   customActions?: React.ReactNode;
+  rightActions?: React.ReactNode;
 }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
@@ -953,6 +955,8 @@ function PromptInputFullLineComponent({
             </>
           )}
 
+          {rightActions}
+
           {prompt ? (
             <ArrowUp
               className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white transition-transform hover:scale-110 active:scale-95"
@@ -980,6 +984,7 @@ export default function PromptInputFullLineWithBottomActions({
   value,
   onChange,
   customActions,
+  rightActions,
 }: {
   onSend?: (
     prompt: string,
@@ -998,6 +1003,7 @@ export default function PromptInputFullLineWithBottomActions({
   value?: string;
   onChange?: (val: string) => void;
   customActions?: React.ReactNode;
+  rightActions?: React.ReactNode;
 }) {
   const [internalPrompt, setInternalPrompt] = useState("");
   const prompt = value !== undefined ? value : internalPrompt;
@@ -1007,6 +1013,7 @@ export default function PromptInputFullLineWithBottomActions({
     <div className="flex w-full flex-col gap-4 mb-6 !z-50">
       <PromptInputFullLineComponent
         customActions={customActions}
+        rightActions={rightActions}
         hideAgents={hideAgents}
         hideDropdown={hideDropdown}
         hideRunLocally={hideRunLocally}
