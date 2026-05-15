@@ -2243,7 +2243,7 @@ export default function Sidebar() {
               Select the executive experts you want to invite to this roundtable discussion.
             </p>
           </ModalHeader>
-          <ModalBody className="max-h-[60vh] overflow-y-auto custom-scrollbar">
+          <ModalBody className="pb-4 overflow-hidden">
             <div className="flex flex-col gap-1 mb-2">
               <label className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                 Meeting Name
@@ -2260,8 +2260,9 @@ export default function Sidebar() {
               {[
                 "Chairman", "CEO", "COO", "CFO", "CMO", "CRO", 
                 "General Counsel", "Accountant", "CTO", "CISO", 
-                "PM", "Scrum Master", "QA Engineer", "Database Admin", 
-                "AI Engineer", "Writer", "Support", "Frontend Dev", "Backend Dev"
+                "PM", "UX/UI Designer", "Scrum Master", "DevOps Engineer", 
+                "QA Engineer", "Database Admin", "AI Engineer", 
+                "Writer", "Support", "Frontend Dev", "Backend Dev"
               ].map((agent) => (
                 <div 
                   key={agent}
