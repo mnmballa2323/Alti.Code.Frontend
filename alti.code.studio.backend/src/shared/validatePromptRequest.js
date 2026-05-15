@@ -17,6 +17,7 @@ const validatePromptRequest = async (req, res) => {
   const sessionId = req.body?.sessionId || randomUUID();
   const mode = req.body?.mode || 'Agent';
   const domain = req.body?.domain;
+  const model = req.body?.model || 'claude-sonnet-4-5-20250929';
 
   if (!prompt) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Prompt is required.');
@@ -38,6 +39,6 @@ const validatePromptRequest = async (req, res) => {
     if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  return { prompt, userId: activeUserId, sessionId, language, mode, domain };
+  return { prompt, userId: activeUserId, sessionId, language, mode, domain, model };
 };
 export default validatePromptRequest;

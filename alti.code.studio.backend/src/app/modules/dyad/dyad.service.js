@@ -28,7 +28,7 @@ const anthropic = new Anthropic({
 const SESSION_MEMORY_MAX = 500;
 const sessionMemoryStore = new Map();
 
-const claudeResponseService = async (prompt, userId, sessionId) => {
+const claudeResponseService = async (prompt, userId, sessionId, model = 'claude-sonnet-4-5-20250929') => {
   let memory = sessionMemoryStore.get(sessionId);
   if (!memory) {
     memory = new BufferMemory({
@@ -85,7 +85,7 @@ const claudeResponseService = async (prompt, userId, sessionId) => {
 
     const responseData = {
       prompt,
-      model: 'claude-sonnet-4-5-20250929',
+      model: model,
       reply,
       total_time: totalTime,
     };
@@ -106,7 +106,7 @@ const claudeResponseService = async (prompt, userId, sessionId) => {
       });
     }
 
-    const payload = { sessionId, prompt, reply };
+    const payload = { sessionId, prompt, reply, model };
     // logger.info('Claude Response Payload:', payload);
     logger.info('Claude Response Payload:', payload);
     return payload;

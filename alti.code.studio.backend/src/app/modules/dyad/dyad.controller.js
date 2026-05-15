@@ -15,12 +15,13 @@ import { ClaudeServices } from './dyad.service.js';
 const ClaudeAiGetResponse = catchAsync(async (req, res) => {
   // const sessionId = req.body?.sessionId || randomUUID();
   // const { userId, prompt } = req.body;
-  const { prompt, userId, sessionId } = await validatePromptRequest(req);
+  const { prompt, userId, sessionId, model } = await validatePromptRequest(req);
 
   const result = await ClaudeServices.claudeResponseService(
     prompt,
     userId,
     sessionId,
+    model
   );
 
   sendResponse(res, {
