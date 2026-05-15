@@ -11,27 +11,13 @@ import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 import cron from 'node-cron';
 import { capabilityRouter } from './capability.router.js';
+import { CORE_OMNI_CLOUD_PROVIDERS } from '../cloudAgents/core_providers.const.js';
 
 class OmniCloudIngestionService {
     constructor() {
         this.name = 'OmniCloudIngestionService';
         this.isActive = false;
-        this.targetOrgs = [
-            // Hyperscalers
-            'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
-            // AI & GPU Compute
-            'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',
-            // Developer & PaaS
-            'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
-            // Global & Regional
-            'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'exoscale',
-            // Bare Metal & Edge
-            'cherryservers', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cloudflare',
-            // VPS
-            'ionos-cloud', 'hetznercloud', 'linode', 'UpCloudLtd', 'vultr', 'liquidweb',
-            // Enterprise Clouds
-            'aiven', 'cloudera', 'databricks', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb'
-        ];
+        this.targetOrgs = CORE_OMNI_CLOUD_PROVIDERS;
         this.approvedLicenses = ['mit', 'apache-2.0'];
         this.processedRepos = new Set();
     }

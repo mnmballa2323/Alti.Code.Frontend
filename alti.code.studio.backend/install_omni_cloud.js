@@ -3,25 +3,10 @@ import path from 'path';
 import { exec } from 'child_process';
 import axios from 'axios';
 import { promisify } from 'util';
+import { CORE_OMNI_CLOUD_PROVIDERS as ORGS } from './src/app/modules/cloudAgents/core_providers.const.js';
 
 const execAsync = promisify(exec);
 const TARGET_DIR = path.join(process.cwd(), 'cloud_sovereign_repos');
-const ORGS = [
-    // Hyperscalers
-    'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
-    // AI & GPU Compute
-    'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',
-    // Developer & PaaS
-    'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
-    // Global & Regional
-    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'exoscale',
-    // Bare Metal & Edge
-    'cherryservers', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cloudflare',
-    // VPS
-    'ionos-cloud', 'hetznercloud', 'linode', 'UpCloudLtd', 'vultr', 'liquidweb',
-    // Enterprise Clouds
-    'aiven', 'cloudera', 'databricks', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb'
-];
 const APPROVED_LICENSES = ['mit', 'apache-2.0'];
 
 // To prevent destroying the hard drive, we will use shallow clones (--depth 1)
