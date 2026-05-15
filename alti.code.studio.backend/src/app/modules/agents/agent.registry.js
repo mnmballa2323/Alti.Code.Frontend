@@ -798,6 +798,177 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+// ──── TIER 14: THE SOVEREIGN BOARDROOM ────
+agentRegistry.register({
+    name: 'chairman',
+    description: 'Chairman of the Board — Governance, Risk, and Long-term Strategy.',
+    queue: 'chairman-queue',
+    capabilities: ['governance', 'risk-management', 'strategy'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ceo',
+    description: 'Chief Executive Officer — Vision, Execution, and Leadership.',
+    queue: 'ceo-queue',
+    capabilities: ['vision', 'execution', 'leadership'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'coo',
+    description: 'Chief Operating Officer — Operations, Logistics, and Efficiency.',
+    queue: 'coo-queue',
+    capabilities: ['operations', 'efficiency', 'logistics'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cfo',
+    description: 'Chief Financial Officer — FinOps, Capital, and Profitability.',
+    queue: 'cfo-queue',
+    capabilities: ['finops', 'capital', 'profitability'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cmo',
+    description: 'Chief Marketing Officer — Growth, Branding, and User Acquisition.',
+    queue: 'cmo-queue',
+    capabilities: ['marketing', 'branding', 'growth'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cro',
+    description: 'Chief Revenue Officer — Enterprise Sales, Monetization, and Pricing.',
+    queue: 'cro-queue',
+    capabilities: ['sales', 'monetization', 'pricing'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'lawyer',
+    description: 'General Counsel — Hard Law, Compliance, and Liability.',
+    queue: 'lawyer-queue',
+    capabilities: ['law', 'compliance', 'liability'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'accountant',
+    description: 'Chief Accountant — Audits, Immutable Ledger, and Financial Records.',
+    queue: 'accountant-queue',
+    capabilities: ['audit', 'ledger', 'accounting'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'pm',
+    description: 'Product Manager — PRDs, User Stories, and Backlog Prioritization.',
+    queue: 'pm-queue',
+    capabilities: ['product', 'prd', 'agile'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'scrum',
+    description: 'Scrum Master — Sprint Orchestration, Blocking, and Swarm Sync.',
+    queue: 'scrum-queue',
+    capabilities: ['scrum', 'agile', 'facilitation'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'designer',
+    description: 'UX/UI Designer — Pixel-perfect interfaces, Tailwind, and Design Systems.',
+    queue: 'designer-queue',
+    capabilities: ['ui', 'ux', 'design'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'qa',
+    description: 'QA Engineer — Destructive testing, Playwright, and release stability.',
+    queue: 'qa-engineer-queue',
+    capabilities: ['qa', 'testing', 'playwright'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'frontend',
+    description: 'Frontend Developer — React, Next.js, and complex client-side state.',
+    queue: 'frontend-queue',
+    capabilities: ['frontend', 'react', 'nextjs'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'backend',
+    description: 'Backend Developer — APIs, Microservices, Node.js, and Go.',
+    queue: 'backend-queue',
+    capabilities: ['backend', 'api', 'microservices'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'dba',
+    description: 'Database Admin — Schema design, SQL optimization, and migrations.',
+    queue: 'dba-queue',
+    capabilities: ['database', 'sql', 'migrations'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ai',
+    description: 'AI Engineer — Prompt Engineering, LLMs, RAG, and Swarm AI.',
+    queue: 'ai-engineer-queue',
+    capabilities: ['ai', 'llm', 'rag'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'writer',
+    description: 'Technical Writer — Swagger, READMEs, and technical documentation.',
+    queue: 'writer-queue',
+    capabilities: ['documentation', 'swagger', 'writing'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'support',
+    description: 'Support Engineer — Triage, Incident Response, and User Mitigations.',
+    queue: 'support-queue',
+    capabilities: ['support', 'triage', 'incident'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cto',
+    description: 'Chief Technology Officer — Architecture, Tech Stack, and Technical Debt.',
+    queue: 'cto-queue',
+    capabilities: ['architecture', 'tech-stack', 'engineering'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ciso',
+    description: 'Chief Information Security Officer — Zero-Trust, Pen-testing, and Security.',
+    queue: 'ciso-queue',
+    capabilities: ['security', 'zero-trust', 'pen-testing'],
+    policy: { accessLevel: 'ADMIN' },
+    version: '1.0.0'
+});
+
 agentRegistry.register({
     name: 'prisma',
     description: 'ORM specialist for Prisma schema design, migrations, and query optimization.',

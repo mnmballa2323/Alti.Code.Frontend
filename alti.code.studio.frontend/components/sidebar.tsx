@@ -1323,6 +1323,9 @@ export default function Sidebar() {
                     );
                   } else if (pathname === "/assets") {
                     window.dispatchEvent(new CustomEvent("open-asset-modal"));
+                  } else if (pathname.startsWith("/boardroom")) {
+                    dispatch(startNewChat());
+                    router.push("/boardroom");
                   } else {
                     dispatch(startNewChat());
                     router.push("/");
