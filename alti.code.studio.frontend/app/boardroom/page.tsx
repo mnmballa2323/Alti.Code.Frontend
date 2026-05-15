@@ -72,8 +72,9 @@ export default function Boardroom() {
               </div>
               <div className="w-full mt-auto">
                 <PromptInputFullLineWithBottomActions
-                  hideAgents={false}
-                  hideDropdown={false}
+                  hideAgents={true}
+                  hideDropdown={true}
+                  hideRunLocally={true}
                   onSend={handleFirstMessageSend}
                 />
               </div>
@@ -89,21 +90,18 @@ export default function Boardroom() {
                 >
                   The Boardroom
                 </h1>
-                <p className="text-default-500 mt-2">Consult with your autonomous digital C-Suite.</p>
               </div>
 
               <div className="flex w-full flex-col gap-4 max-w-2xl">
                 <PromptInputFullLineWithBottomActions
-                  hideAgents={false}
-                  hideDropdown={false}
+                  hideAgents={true}
+                  hideDropdown={true}
+                  hideRunLocally={true}
                   onSend={handleFirstMessageSend}
                 />
               </div>
             </div>
 
-            <p className="absolute bottom-8 text-xs font-medium text-default-400 opacity-60 z-20">
-              Boardroom consultations are strictly confidential and zero-trust secured.
-            </p>
           </div>
         )}
       </div>

@@ -868,84 +868,88 @@ function PromptInputFullLineComponent({
                 </Tooltip>
               )}
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Github
-                    className={cn(
-                      "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
-                      githubSelected
-                        ? "bg-indigo-500 border-indigo-500"
-                        : "bg-black border-gray-300",
-                    )}
-                    onClick={() => {
-                      setGithubSelected(!githubSelected);
-                      if (!githubSelected) console.log("Pushing to GitHub...");
-                    }}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Push to GitHub</p>
-                </TooltipContent>
-              </Tooltip>
+              {!hideRunLocally && (
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Github
+                        className={cn(
+                          "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
+                          githubSelected
+                            ? "bg-indigo-500 border-indigo-500"
+                            : "bg-black border-gray-300",
+                        )}
+                        onClick={() => {
+                          setGithubSelected(!githubSelected);
+                          if (!githubSelected) console.log("Pushing to GitHub...");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Push to GitHub</p>
+                    </TooltipContent>
+                  </Tooltip>
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <CloudUpload
-                    className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                    onClick={() => {
-                      // Check if any cloud providers are connected in the global Redux store
-                      const hasConnectedCloud =
-                        connectedClouds && connectedClouds.length > 0;
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <CloudUpload
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          // Check if any cloud providers are connected in the global Redux store
+                          const hasConnectedCloud =
+                            connectedClouds && connectedClouds.length > 0;
 
-                      if (!hasConnectedCloud) {
-                        onOpen({ type: "connect-cloud" });
+                          if (!hasConnectedCloud) {
+                            onOpen({ type: "connect-cloud" });
 
-                        return;
-                      }
+                            return;
+                          }
 
-                      const deployPrompt =
-                        prompt.trim() ||
-                        "Analyze the workspace and autonomously deploy this application to production.";
+                          const deployPrompt =
+                            prompt.trim() ||
+                            "Analyze the workspace and autonomously deploy this application to production.";
 
-                      if (onSend) {
-                        onSend(
-                          deployPrompt,
-                          "Deploy",
-                          selectedModel === "Stack" ||
-                            selectedModel === "Framework"
-                            ? "Full Stack"
-                            : selectedModel,
-                          selectedProgLang === "Language"
-                            ? undefined
-                            : selectedProgLang,
-                        );
-                      } else {
-                        dispatch(
-                          sendMessage({
-                            prompt: deployPrompt,
-                            model: "Deploy",
-                            domain:
+                          if (onSend) {
+                            onSend(
+                              deployPrompt,
+                              "Deploy",
                               selectedModel === "Stack" ||
-                              selectedModel === "Framework"
+                                selectedModel === "Framework"
                                 ? "Full Stack"
                                 : selectedModel,
-                            language:
                               selectedProgLang === "Language"
                                 ? undefined
                                 : selectedProgLang,
-                            sessionId,
-                            token,
-                          }),
-                        );
-                      }
-                      setPrompt("");
-                    }}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  <p>Deploy to Cloud</p>
-                </TooltipContent>
-              </Tooltip>
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: deployPrompt,
+                                model: "Deploy",
+                                domain:
+                                  selectedModel === "Stack" ||
+                                  selectedModel === "Framework"
+                                    ? "Full Stack"
+                                    : selectedModel,
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Deploy to Cloud</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </>
+              )}
             </>
           )}
 
