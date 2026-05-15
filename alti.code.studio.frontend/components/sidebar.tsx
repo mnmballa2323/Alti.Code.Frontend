@@ -51,6 +51,28 @@ import {
   ImageIcon,
   PenTool,
   Boxes,
+  Users,
+  Briefcase,
+  Activity,
+  Cpu,
+  ShieldCheck,
+  Landmark,
+  Megaphone,
+  Server,
+  Layout,
+  Crown,
+  Scale,
+  Calculator,
+  Target,
+  Palette,
+  Settings2,
+  Bug,
+  TrendingUp,
+  Bot,
+  Database,
+  FileText,
+  ListTodo,
+  LifeBuoy,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -322,6 +344,7 @@ export default function Sidebar() {
   const { data: session, status } = useSession();
 
   const getHistoryTitle = () => {
+    if (pathname?.startsWith("/boardroom")) return "Board Members";
     if (pathname?.startsWith("/chat/")) return "Chat";
 
     switch (pathname) {
@@ -741,6 +764,25 @@ export default function Sidebar() {
               className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
             >
               Chat
+            </span>
+          </button>
+          <button
+            className={cn(
+              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
+              pathname.startsWith("/boardroom")
+                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
+                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
+              !isSidebarOpen && "px-0 justify-center min-w-auto",
+            )}
+            onClick={() => {
+              router.push("/boardroom");
+            }}
+          >
+            <Users className={cn("size-4", isSidebarOpen && "mr-2")} />
+            <span
+              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
+            >
+              Boardroom
             </span>
           </button>
           <button
@@ -1905,6 +1947,84 @@ export default function Sidebar() {
                   No domains configured yet.
                 </div>
               )}
+            </div>
+          ) : pathname?.startsWith("/boardroom") ? (
+            <div className="flex flex-col px-2 mt-2 pb-4 space-y-4">
+              {[
+                {
+                  name: "Governance",
+                  execs: [
+                    { id: "chairman", name: "Chairman", icon: Crown },
+                    { id: "counsel", name: "Lawyer", icon: Scale },
+                    { id: "accountant", name: "Accountant", icon: Calculator },
+                  ]
+                },
+                {
+                  name: "Strategy",
+                  execs: [
+                    { id: "ceo", name: "CEO", icon: Briefcase },
+                    { id: "coo", name: "COO", icon: Activity },
+                    { id: "cfo", name: "CFO", icon: Landmark },
+                    { id: "cmo", name: "CMO", icon: Megaphone },
+                    { id: "cro", name: "CRO", icon: TrendingUp },
+                  ]
+                },
+                {
+                  name: "Architecture",
+                  execs: [
+                    { id: "cto", name: "CTO", icon: Cpu },
+                    { id: "ciso", name: "CISO", icon: ShieldCheck },
+                    { id: "dba", name: "Database Admin", icon: Database },
+                    { id: "ai", name: "AI Engineer", icon: Bot },
+                  ]
+                },
+                {
+                  name: "Execution",
+                  execs: [
+                    { id: "pm", name: "Product Manager", icon: Target },
+                    { id: "scrum", name: "Scrum Master", icon: ListTodo },
+                    { id: "designer", name: "UX/UI Designer", icon: Palette },
+                  ]
+                },
+                {
+                  name: "Delivery",
+                  execs: [
+                    { id: "frontend", name: "Frontend Developer", icon: Layout },
+                    { id: "backend", name: "Backend Developer", icon: Server },
+                    { id: "devops", name: "DevOps Engineer", icon: Settings2 },
+                  ]
+                },
+                {
+                  name: "Quality & Support",
+                  execs: [
+                    { id: "qa", name: "QA Engineer", icon: Bug },
+                    { id: "writer", name: "Technical Writer", icon: FileText },
+                    { id: "support", name: "Support Engineer", icon: LifeBuoy },
+                  ]
+                }
+              ].map((category) => (
+                <div key={category.name} className="flex flex-col gap-0.5">
+                  <span className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-3 mb-1">
+                    {category.name}
+                  </span>
+                  {category.execs.map((exec) => (
+                    <button
+                      key={exec.id}
+                      className={cn(
+                        "w-full flex items-center gap-2 text-left px-3 py-2.5 rounded-xl text-[13px] hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate",
+                        pathname === `/boardroom/${exec.id}` ? "bg-black/5 dark:bg-white/5 text-default-900 font-medium" : "text-gray-600 dark:text-gray-300"
+                      )}
+                      onClick={() => {
+                        dispatch(startNewChat());
+                        router.push(`/boardroom/${exec.id}`);
+                      }}
+                    >
+                      <exec.icon size={14} className={cn("flex-shrink-0", pathname === `/boardroom/${exec.id}` ? "text-default-900" : "text-gray-400")} />
+                      <span className="truncate">{exec.name}</span>
+                    </button>
+                  ))}
+                </div>
+              ))}
             </div>
           ) : isLoading ? (
             <div className="space-y-4 px-4 mt-2">

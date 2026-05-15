@@ -85194,3 +85194,30 @@ agentRegistry.register({
     capabilities: ['quantum-computing', 'qiskit', 'cirq', 'algorithms', 'vqe', 'physics'],
     version: '1.0.0'
 });
+
+agentRegistry.register({
+    name: 'cicero_law_enforcement',
+    importPath: './cicero_law_enforcement.agent.js',
+    description: 'Fully automates the penalization of non-compliant sovereign smart contracts, mapping SLA breaches directly to auto-generated legal notices via Azure.',
+    queue: 'cicero-law-enforcement-queue',
+    capabilities: ['legal', 'compliance', 'smart-contracts', 'sla-enforcement'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'neuromorphic_hermes',
+    importPath: './neuromorphic_hermes.agent.js',
+    description: 'Enables persistent cross-agent debate pipelines utilizing the Hermes model to critically evaluate architectural decisions before deployment.',
+    queue: 'neuromorphic-hermes-queue',
+    capabilities: ['debate', 'evaluation', 'architecture', 'socratic'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'global_enterprise_spec',
+    importPath: './global_enterprise_spec.agent.js',
+    description: 'Expands the Spec Kit integration to automatically generate compliance architectures based on region (e.g., EU GDPR vs. US HIPAA).',
+    queue: 'global-enterprise-spec-queue',
+    capabilities: ['spec-driven-development', 'compliance-architecture', 'gdpr', 'hipaa'],
+    version: '1.0.0'
+});
