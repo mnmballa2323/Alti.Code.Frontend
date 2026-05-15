@@ -368,8 +368,7 @@ export default function Sidebar() {
         return "Cloud";
       case "/research":
         return "Research";
-      case "/hive-mind":
-        return "Hive-Mind";
+
       default:
         return "Code";
     }
@@ -821,25 +820,7 @@ export default function Sidebar() {
               Graph
             </span>
           </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/hive-mind"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/hive-mind");
-            }}
-          >
-            <Network className={cn("size-4 text-indigo-400 animate-pulse", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Hive-Mind
-            </span>
-          </button>
+
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
