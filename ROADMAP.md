@@ -291,6 +291,11 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 ## 🚀 Upcoming
 
+### v40.0.0 — The Sovereign Neuromorphic Epic (Draft)
+- [ ] **Advanced Hermes Integration**: Enable persistent cross-agent debate pipelines utilizing the Hermes model to critically evaluate architectural decisions before deployment.
+- [ ] **Cicero Law Enforcement Matrix**: Fully automate the penalization of non-compliant sovereign smart contracts, mapping SLA breaches directly to auto-generated legal notices via Azure.
+- [ ] **The Global Enterprise Spec Matrix**: Expand the Spec Kit integration to automatically generate compliance architectures based on region (e.g., EU GDPR vs. US HIPAA).
+
 ### v3.1.0 — Agent Store & Plugin System ✅ (2026-02-21)
 - [x] **Agent Marketplace**: Discover, install, and publish community specialist agents
 - [x] **Custom DSL**: Define new agents via YAML config without writing JS (`yaml_agent_loader.js`)
@@ -437,6 +442,7 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 | Version | Target | Theme | Status |
 |---------|--------|-------|---------|
+| v40.0.0 | Jun 2026 | The Sovereign Neuromorphic Epic | 🏃 In Progress |
 | v4.0.0 | Feb 2026 | Industry Armada (16 verticals, 119 routes) | ✅ Done |
 | v4.1.0 | Feb 2026 | DevSecOps (5) + Supply Chain (4) = 9 agents | ✅ Done |
 | v4.2.0 | Feb 2026 | AgriTech (3) + Energy (3) + Auto (1) = 7 agents | ✅ Done |
