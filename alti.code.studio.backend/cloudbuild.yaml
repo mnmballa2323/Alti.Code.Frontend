@@ -49,6 +49,16 @@ steps:
       - '2Gi'
       - '--cpu'
       - '2'
+      - '--min-instances'
+      - '1'
+      - '--max-instances'
+      - '20'
+      - '--concurrency'
+      - '80'
+      - '--execution-environment'
+      - 'gen2'
+      - '--set-env-vars'
+      - 'NODE_ENV=production,ENABLE_GCP_APM=true'
 
 images:
   - 'gcr.io/$PROJECT_ID/alti-code-studio-backend:$COMMIT_SHA'

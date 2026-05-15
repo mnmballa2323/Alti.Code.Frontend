@@ -6,8 +6,10 @@
  */
 
 // MUST BE THE VERY FIRST LINE: Google Cloud Trace initialization
-// import traceAgent from '@google-cloud/trace-agent';
-// traceAgent.start({ ignoreUrls: [/^\/healthz/, /^\/metrics/] });
+import traceAgent from '@google-cloud/trace-agent';
+if (process.env.NODE_ENV === 'production' || process.env.ENABLE_GCP_APM === 'true') {
+  traceAgent.start({ ignoreUrls: [/^\/healthz/, /^\/metrics/] });
+}
 
 import './polyfill.js';
 import { ErrorReporting } from '@google-cloud/error-reporting';
@@ -64,8 +66,14 @@ async function main() {
       logger.info('✅ MongoDB connected successfully');
       logger.info("Test log entry from INSOCODE");
     } catch (dbError) {
-      console.log('--- Real MongoDB Failed. Entering Falback ---');
+      console.log('--- Real MongoDB Failed. ---');
       logger.warn(`⚠️ Local MongoDB connection failed: ${dbError.message}`);
+      
+      if (process.env.NODE_ENV === 'production') {
+        logger.error('❌ FATAL: Database connection failed in production. Proceeding with zero-db fallback is forbidden to prevent data loss.', dbError);
+        process.exit(1);
+      }
+
       logger.warn('⚠️ Switching to In-Memory MongoDB (Mock Mode)...');
       try {
         console.log('--- Importing MongoMemoryServer ---');

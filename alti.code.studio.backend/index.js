@@ -223,6 +223,35 @@ app.use('/api/v1', router);
 // tRPC routes
 app.use('/api/trpc', trpcExpress.createExpressMiddleware({ router: appRouter }));
 
+import { prisma } from './src/config/prisma.js';
+import { redisClient } from './src/shared/redis.client.js';
+
+// GCP Native Health Check (Liveness & Readiness Probes)
+app.get('/healthz', async (req, res) => {
+    try {
+        // Deep ping the primary database
+        await prisma.$queryRawUnsafe('SELECT 1');
+        
+        // Ping the caching layer (soft fail if redis is down but we check it)
+        const redisStatus = redisClient.isEnabled ? 'connected' : 'disconnected';
+        
+        res.status(200).json({
+            status: 'OK',
+            database: 'connected',
+            redis: redisStatus,
+            timestamp: new Date().toISOString()
+        });
+    } catch (e) {
+        // Return 503 Service Unavailable so Kubernetes/Cloud Run knows the pod is unhealthy
+        res.status(503).json({
+            status: 'ERROR',
+            database: 'unreachable',
+            error: e.message,
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
 app.get('/api/version', (req, res) => {
     res.json({ version: '1.0.2' });
 });

@@ -25,7 +25,10 @@ async function cloneRepo(org, repoName, cloneUrl) {
 
     try {
         console.log(`[CLONING] ${org}/${repoName}...`);
-        await execAsync(`git clone --depth 1 ${cloneUrl} ${repoDir}`);
+        await execAsync(`git clone --depth 1 --single-branch --quiet ${cloneUrl} ${repoDir}`, { 
+            timeout: 300000, 
+            maxBuffer: 1024 * 1024 * 10 
+        });
         console.log(`[SUCCESS] Installed ${repoName}`);
     } catch (e) {
         console.error(`[ERROR] Failed to install ${repoName}: ${e.message}`);
@@ -53,6 +56,17 @@ async function startInstallation() {
                 }
 
                 const response = await axios.get(`https://api.github.com/orgs/${org}/repos?per_page=100&page=${page}`, { headers });
+                
+                const remaining = response.headers['x-ratelimit-remaining'];
+                if (remaining && parseInt(remaining) < 5) {
+                    const resetTime = parseInt(response.headers['x-ratelimit-reset']) * 1000;
+                    const waitTime = resetTime - Date.now();
+                    if (waitTime > 0) {
+                        console.warn(`⚠️ Rate limit approaching. Sleeping for ${Math.ceil(waitTime / 1000)} seconds...`);
+                        await new Promise(r => setTimeout(r, waitTime));
+                    }
+                }
+
                 const repos = response.data;
 
                 if (repos.length === 0) {
@@ -60,20 +74,37 @@ async function startInstallation() {
                     break;
                 }
 
+                const cloneTasks = [];
                 for (const repo of repos) {
                     if (!repo.license || !repo.license.key) continue;
                     
                     const licenseKey = repo.license.key.toLowerCase();
                     if (APPROVED_LICENSES.includes(licenseKey)) {
-                        // Wait for clone to finish before proceeding to avoid overloading system
-                        await cloneRepo(org, repo.name, repo.clone_url);
+                        cloneTasks.push(() => cloneRepo(org, repo.name, repo.clone_url));
                         installedCount++;
                     }
+                }
+
+                // Execute clones concurrently in batches of 10 to maximize network throughput
+                // without overwhelming the host system's file descriptors or disk IO.
+                const CONCURRENCY_LIMIT = 10;
+                for (let i = 0; i < cloneTasks.length; i += CONCURRENCY_LIMIT) {
+                    const chunk = cloneTasks.slice(i, i + CONCURRENCY_LIMIT);
+                    await Promise.allSettled(chunk.map(task => task()));
                 }
                 
                 page++;
             } catch (error) {
-                console.error(`❌ Failed to fetch page ${page} for ${org}. Rate limit exceeded? Error: ${error.message}`);
+                if (error.response && error.response.status === 403) {
+                    const resetTime = parseInt(error.response.headers['x-ratelimit-reset']) * 1000;
+                    const waitTime = resetTime - Date.now();
+                    if (waitTime > 0) {
+                        console.warn(`🛑 Rate limit hit. Waiting for ${Math.ceil(waitTime / 1000)} seconds...`);
+                        await new Promise(r => setTimeout(r, waitTime));
+                        continue; // Retry the same page
+                    }
+                }
+                console.error(`❌ Failed to fetch page ${page} for ${org}. Error: ${error.message}`);
                 hasMore = false; // Stop this org, try next
             }
         }

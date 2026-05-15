@@ -58,6 +58,9 @@ RUN npm install -g @google/gemini-cli-a2a-server @google/genai firebase-tools
 # Source Code Copy (ignores node_modules via .dockerignore)
 COPY . .
 
+# Generate Prisma Data Access Layer for PostgreSQL
+RUN npx prisma generate
+
 # Expose backend REST port (Cloud Run defaults traffic over 8080 if PORT isn't overridden)
 EXPOSE 5000
 
@@ -72,7 +75,7 @@ USER node
 
 # Healthcheck to self-monitor within Kubernetes/Run environments
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/api/v1/ping || exit 1
+    CMD curl -f http://localhost:5000/healthz || exit 1
 
 # Start execution loop
 CMD [ "npm", "start" ]

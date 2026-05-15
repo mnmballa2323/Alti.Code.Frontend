@@ -140,4 +140,25 @@ router.post('/explore', AgentController.exploreUrl);
  */
 router.post('/batch', AgentController.allocateComputeCluster);
 
+/**
+ * @swagger
+ * /agents/hermes:
+ *   post:
+ *     summary: Trigger the Sovereign Hermes AI Coder
+ *     tags: [Agents]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               prompt:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Hermes agent executed successfully
+ */
+router.post('/hermes', AgentController.triggerHermes);
+
 export const AgentRoutes = router;

@@ -61,5 +61,9 @@ export async function connectPrisma() {
     logger.info('🚀 Universal Redis Caching Layer injected into Prisma Client.');
   } catch (error) {
     logger.error('❌ Failed to connect to PostgreSQL:', error);
+    if (process.env.NODE_ENV === 'production') {
+      logger.error('❌ FATAL: PostgreSQL connection is mandatory in production. Exiting process.');
+      process.exit(1);
+    }
   }
 }
