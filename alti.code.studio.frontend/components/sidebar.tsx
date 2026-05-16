@@ -982,6 +982,7 @@ export default function Sidebar() {
               Security
             </span>
           </button>
+
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",

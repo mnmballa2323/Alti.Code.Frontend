@@ -281,6 +281,14 @@ agentRegistry.register({
 });
 
 agentRegistry.register({
+    name: 'sandyaa',
+    description: 'Autonomous autonomous security auditing tool that navigates the file system and AST to find structural vulnerabilities.',
+    queue: 'sandyaa-queue',
+    capabilities: ['security-audit', 'ast-vulnerability-scan', 'sandyaa', 'autonomous-auditing'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
     name: 'devops',
     description: 'Deploys to cloud infrastructure and logs deployment history.',
     queue: 'devops-queue',

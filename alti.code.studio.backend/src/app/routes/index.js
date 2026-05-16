@@ -21,6 +21,7 @@ import { iapService } from '../modules/googleCloud/iap.service.js';
 import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
+import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 
 // 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection)
 router.use(enterpriseWAF.rateLimiter);
@@ -39,6 +40,7 @@ router.use(rbacService.enforceModelTierPolicy());
 router.use('/mcp', mcpRoutes);
 router.use('/ai', aiRoutes);
 router.use('/research', ResearchRoutes);
+router.use('/sandyaa', SandyaaRoutes);
 
 try {
   const modulesDir = fs.readdirSync(modulesPath);
@@ -49,7 +51,7 @@ try {
       for (const file of files) {
         if (file.endsWith('.route.js') || file.endsWith('.routes.js')) {
           // Skip the ones we explicitly imported above
-          if (file === 'auth.route.js' || file === 'mcp.route.js' || file === 'ai.route.js') continue;
+          if (file === 'auth.route.js' || file === 'mcp.route.js' || file === 'ai.route.js' || file === 'sandyaa.route.js') continue;
 
           try {
             const routeModule = await import(`../modules/${moduleDir}/${file}`);
