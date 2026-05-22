@@ -35,6 +35,14 @@ import { iacTool } from './tools/iac.tool.js';
 import { devopsTool } from './tools/devops.tool.js';
 import { geminiCliTool } from './tools/geminiCli.tool.js';
 import { auditService } from '../audit/audit.service.js';
+import { promisify } from 'util';
+import { execFile } from 'child_process';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const execFileAsync = promisify(execFile);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class AltiMCPServer {
     constructor() {
@@ -201,6 +209,30 @@ class AltiMCPServer {
                 description: geminiCliTool.description,
                 inputSchema: geminiCliTool.inputSchema
             },
+            {
+                name: "codegraph_query",
+                description: "Search for symbols (classes, functions, methods, routes) in the codebase using Colby McHenry's CodeGraph index",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        search: { type: "string", description: "The symbol name or query to search for" },
+                        limit: { type: "number", description: "Maximum results to return (default 10)", default: 10 },
+                        kind: { type: "string", description: "Filter by kind (class, function, method, file, route, etc.)" }
+                    },
+                    required: ["search"]
+                }
+            },
+            {
+                name: "codegraph_explore",
+                description: "Explore file structure or subdirectory file list using CodeGraph",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        filterDir: { type: "string", description: "Filter to files under this directory (relative to workspace root)" },
+                        pattern: { type: "string", description: "Filter files matching this glob pattern" }
+                    }
+                }
+            },
             ...authTools
         ];
 
@@ -316,6 +348,38 @@ class AltiMCPServer {
                     return await devopsTool.handler(args);
                 case "run_gemini_cli":
                     return await geminiCliTool.handler(args);
+                case "codegraph_query": {
+                    const { search, limit, kind } = args;
+                    const backendDir = path.resolve(__dirname, '../../../../');
+                    const cliArgs = ['codegraph', 'query', '-j', search];
+                    if (limit) cliArgs.push('--limit', limit.toString());
+                    if (kind) cliArgs.push('--kind', kind);
+                    const { stdout } = await execFileAsync('npx', cliArgs, { cwd: backendDir });
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: stdout.trim()
+                            }
+                        ]
+                    };
+                }
+                case "codegraph_explore": {
+                    const { filterDir, pattern } = args;
+                    const backendDir = path.resolve(__dirname, '../../../../');
+                    const cliArgs = ['codegraph', 'files', '-j'];
+                    if (filterDir) cliArgs.push('--filter', filterDir);
+                    if (pattern) cliArgs.push('--pattern', pattern);
+                    const { stdout } = await execFileAsync('npx', cliArgs, { cwd: backendDir });
+                    return {
+                        content: [
+                            {
+                                type: "text",
+                                text: stdout.trim()
+                            }
+                        ]
+                    };
+                }
                 default:
                     throw new Error(`Unknown tool: ${name}`);
             }

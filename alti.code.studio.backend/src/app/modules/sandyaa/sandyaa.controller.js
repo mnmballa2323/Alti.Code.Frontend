@@ -1,4 +1,4 @@
-import catchAsync from '../../../shared/catchAsync.js';
+import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { execFile } from 'child_process';
 import path from 'path';
