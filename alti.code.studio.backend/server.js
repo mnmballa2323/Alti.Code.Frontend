@@ -190,6 +190,11 @@ async function main() {
       agentMemoryService.init();
     }).catch(err => logger.error('❌ Failed to start AgentMemory Service', err));
 
+    // 🪐 GitHub Docs: Ingestion Engine for Developer Documentation
+    import('./src/app/modules/githubDocs/githubDocs.service.js').then(({ githubDocsService }) => {
+      githubDocsService.init();
+    }).catch(err => logger.error('❌ Failed to start GitHub Docs Service', err));
+
     // 🔌 Model Context Protocol (MCP) Epic: Boot the dynamic tool discovery bridge
     import('./src/app/modules/agents/mcp.service.js').then(({ mcpBridgeService }) => {
       mcpBridgeService.init();

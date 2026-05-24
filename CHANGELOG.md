@@ -7,6 +7,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ---
 
+## [39.1.0] - 2026-05-24 — The GitHub Developer Documentation Ingestion Engine
+### Added
+- **GitHub Docs Ingestion Service**: Developed `githubDocs.service.js` which fetches the official Page List API from GitHub, pulls markdown bodies concurrently, and indexes them into the local RAG vector store and persistence agentic memory layer.
+- **REST Controller and Routes**: Created `githubDocs.controller.js` and `githubDocs.route.js` exposing endpoints to manually trigger background syncs, monitor status, perform similarity searches, and cancel active sessions safely.
+- **Dynamic Registration & Zero-Trust**: Registered the weekly cron scheduler on boot in `server.js` and dynamically mounted routes secured behind BeyondCorp Google Identity-Aware Proxy (IAP) verification.
+- **Robust Integration Testing**: Wrote a complete suite inside `tests/integration/githubDocs.test.js` validating the end-to-end ingestion and cancellation flow under mocked endpoints.
+
+---
+
 ## [40.0.0] - 2026-05-13 — The Sovereign Omni-Cloud Engine
 ### Added
 - **Sovereign Cloud Orchestrator**: Developed `omni_cloud_orchestrator.js` background daemon for continuous execution.
