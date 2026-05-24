@@ -5,6 +5,17 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.3.0] - 2026-05-24 — The Official GitHub Swarm Nexus
+### Added
+- **GitHub Swarm Nexus**: Created a highly specialized swarm of dynamic marketplace plugins to cover the entire developer landscape on GitHub:
+  - **GitHub Actions & CI/CD Specialist (`githubActionsSpecialist`)**: Focuses on workflow YAML optimizations, custom action configurations, self-hosted runner settings, and workflow permissions.
+  - **GitHub App & Security Auditor (`githubAppAuditor`)**: Focuses on secure OAuth flow architectures, App fine-grained authorization, crytographically verified webhooks, and security sweeps.
+  - **GitHub Projects & Collaboration Manager (`githubProjectsManager`)**: Focuses on Projects v2 API automation, Discussions templates, CODEOWNERS rules, and branch protection configurations.
+- **Dynamic Swarm Grounding Lookups**: Tailored search queries for each specialist, retrieving domain-specific documentation chunks directly from `githubDocsService` to ensure precision.
+- **Swarm Integration Test Suite**: Developed a dedicated Vitest suite at `tests/integration/githubSwarm.test.js` validating schema manifests, динамик scanning, and parallel grounded consultations.
+
+---
+
 ## [39.2.0] - 2026-05-24 — The Swarm Entrenchment & GitHub Expert Agent
 ### Added
 - **Dynamic GitHub Expert Agent**: Developed `github_expert.agent.js` inside the dynamic plugin directory. This specialist inherits from `BaseSpecialistAgent` and implements automatic retrieval-grounding logic utilizing the new indexing service.
