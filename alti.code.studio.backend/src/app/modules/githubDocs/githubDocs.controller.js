@@ -60,6 +60,30 @@ export class GithubDocsController {
     });
 
     /**
+     * POST /api/v1/githubDocs/consult
+     * Dynamically routes user query to the correct specialized GitHub agent in the swarm.
+     */
+    static consultSwarm = catchAsync(async (req, res) => {
+        const { query, agentId } = req.body;
+        if (!query) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'A query string is required.'
+            });
+        }
+
+        const consultResult = await githubDocsService.dispatchQueryToSwarm(query, agentId);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'GitHub Swarm consultation successfully completed.',
+            data: consultResult
+        });
+    });
+
+    /**
      * POST /api/v1/githubDocs/cancel
      * Cancels the active documentation sync process.
      */

@@ -13,6 +13,7 @@ const router = express.Router();
 router.post('/sync', GithubDocsController.triggerSync);
 router.get('/status', GithubDocsController.getStatus);
 router.post('/search', GithubDocsController.search);
+router.post('/consult', GithubDocsController.consultSwarm);
 router.post('/cancel', GithubDocsController.cancelSync);
 
 export const githubDocsRoutes = router;

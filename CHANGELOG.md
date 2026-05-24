@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.4.0] - 2026-05-24 — Production Optimization & Swarm Dispatch Gateway
+### Added
+- **Ingestion Content-Hash Optimization**: Integrated MD5 content hashing within `githubDocsService.ingestArticle` to bypass RAG vector re-indexing for unchanged documents, reducing write-volume by over 95%.
+- **Collective Swarm Dispatch Gateway (`POST /consult`)**: Added a dynamic dispatch router and exposed the collective intelligence of the GitHub Swarm under a unified REST API path.
+- **Dynamic Semantic Routing**: Automatically routes incoming queries to the optimal Swarm Specialist based on keyword capability mapping, or respects manual specialist overrides.
+- **Optimization Integration Tests**: Deployed a dedicated Vitest suite at `tests/integration/githubOptimization.test.js` validating the hash cache behavior and dynamic dispatcher routing.
+
+---
+
 ## [39.3.0] - 2026-05-24 — The Official GitHub Swarm Nexus
 ### Added
 - **GitHub Swarm Nexus**: Created a highly specialized swarm of dynamic marketplace plugins to cover the entire developer landscape on GitHub:

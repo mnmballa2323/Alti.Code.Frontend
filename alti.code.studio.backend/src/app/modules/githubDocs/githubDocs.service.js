@@ -1,6 +1,7 @@
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 import cron from 'node-cron';
+import crypto from 'crypto';
 import { ragService } from '../memory/rag.service.js';
 import { agentMemoryService } from '../memory/agentmemory.service.js';
 
@@ -14,6 +15,9 @@ class GithubDocsService {
         this.lastSyncTime = null;
         this.syncError = null;
         this.cancelRequested = false;
+
+        // Ingestion caching layer to avoid duplicate RAG vector writes
+        this.hashCache = new Map();
 
         // Throttling configurations
         this.batchSize = 5;
@@ -54,7 +58,7 @@ class GithubDocsService {
     }
 
     /**
-     * Ingest a single article by path
+     * Ingest a single article by path, optimized via MD5 caching
      */
     async ingestArticle(pathName) {
         try {
@@ -64,6 +68,14 @@ class GithubDocsService {
 
             if (!markdownContent || typeof markdownContent !== 'string' || markdownContent.trim().length === 0) {
                 this.failedArticles++;
+                return;
+            }
+
+            // Production Optimization: check if article has changed
+            const contentHash = crypto.createHash('md5').update(markdownContent).digest('hex');
+            if (this.hashCache.get(pathName) === contentHash) {
+                logger.info(`🪐 [GitHub Docs] Skipping unchanged article indexing: ${pathName}`);
+                this.syncedArticles++;
                 return;
             }
 
@@ -87,6 +99,8 @@ class GithubDocsService {
                 });
             }
 
+            // Save hash
+            this.hashCache.set(pathName, contentHash);
             this.syncedArticles++;
         } catch (error) {
             this.failedArticles++;
@@ -151,6 +165,42 @@ class GithubDocsService {
         logger.info(`🪐 [GitHub Docs] Searching GitHub Documentation RAG for: "${query}"`);
         // Leverage the core RAG service query capability
         return await ragService.query(query, limit);
+    }
+
+    /**
+     * Dispatch a user query dynamically to the correct specialist in our GitHub Swarm.
+     * @param {string} query
+     * @param {string} [preferredAgentId] - Manually override the router and target a specific agent
+     * @returns {Promise<object>} - Telemetry wrapped specialist consultation response
+     */
+    async dispatchQueryToSwarm(query, preferredAgentId = null) {
+        let agentId = preferredAgentId;
+
+        // If no preferred agent, automatically route using semantic capability matching rules
+        if (!agentId) {
+            const lowerQuery = query.toLowerCase();
+            if (lowerQuery.includes('action') || lowerQuery.includes('workflow') || lowerQuery.includes('yaml') || lowerQuery.includes('runner') || lowerQuery.includes('ci/cd')) {
+                agentId = 'githubActionsSpecialist';
+            } else if (lowerQuery.includes('app') || lowerQuery.includes('oauth') || lowerQuery.includes('webhook') || lowerQuery.includes('security') || lowerQuery.includes('permissions') || lowerQuery.includes('secret')) {
+                agentId = 'githubAppAuditor';
+            } else if (lowerQuery.includes('project') || lowerQuery.includes('discussion') || lowerQuery.includes('issue') || lowerQuery.includes('codeowner') || lowerQuery.includes('template')) {
+                agentId = 'githubProjectsManager';
+            } else {
+                // Fallback to central coordinator
+                agentId = 'githubExpert';
+            }
+        }
+
+        const { agentRegistry } = await import('../agents/agent.registry.js');
+        await agentRegistry.loadPlugins();
+
+        const agentDef = agentRegistry.get(agentId);
+        if (!agentDef || !agentDef.instance) {
+            throw new Error(`The requested GitHub Swarm agent [${agentId}] is not registered or loaded.`);
+        }
+
+        logger.info(`🪐 [GitHub Docs Gateway] Dispatching query to specialist agent: [${agentId}]`);
+        return await agentDef.instance.consult(query, []);
     }
 
     /**
