@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.2.0] - 2026-05-24 — The Swarm Entrenchment & GitHub Expert Agent
+### Added
+- **Dynamic GitHub Expert Agent**: Developed `github_expert.agent.js` inside the dynamic plugin directory. This specialist inherits from `BaseSpecialistAgent` and implements automatic retrieval-grounding logic utilizing the new indexing service.
+- **RAG-based Prompt Grounding**: Integrated dynamic similarity lookups (`githubDocsService.searchDocs`) directly into the agent's LLM invocation sequence, ensuring exceptionally precise and authoritative answers about GitHub APIs, Actions, and CLI.
+- **Dynamic Plugin Scanning Integration**: Verified dynamic loading on server bootstrap, dynamically scanning and auto-registering the agent capability mapping into the central registry.
+- **Comprehensive Integration Tests**: Implemented a complete Vitest suite inside `tests/integration/githubExpert.test.js` validating schema standards, plugin registration, and document-grounded fallback runs.
+- **Unified Swarm Orchestration Healing**: Patched a dormant signature mismatch in `src/app/modules/gemini/gemini.service.js` to correctly merge `GeminiAiService` with the `GoogleGenAiService.generateContent` orchestration engine, unblocking the entire agent swarm execution pipeline.
+
 ---
 
 ## [39.1.0] - 2026-05-24 — The GitHub Developer Documentation Ingestion Engine
