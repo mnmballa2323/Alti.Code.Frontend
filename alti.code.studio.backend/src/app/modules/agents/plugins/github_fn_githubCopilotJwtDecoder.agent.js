@@ -1,0 +1,67 @@
+/**
+ * Copyright (c) 2026 Alti.Code.Studio
+ *
+ * github_fn_githubCopilotJwtDecoder.agent.js — Swarm Marketplace Dynamic Specialist Plugin
+ * Specialized agent for GitHub Copilot — copilot gateway jwt signature verification, public keys fetch
+ */
+
+import { BaseSpecialistAgent } from '../base_specialist.agent.js';
+import { GeminiAiService } from '../../gemini/gemini.service.js';
+import { githubDocsService } from '../../githubDocs/githubDocs.service.js';
+import { logger } from '../../../../shared/logger.js';
+
+class GithubFnGithubCopilotJwtDecoderAgent extends BaseSpecialistAgent {
+    constructor() {
+        super();
+        this.name = 'githubCopilotJwtDecoder';
+        this.description = 'Specialist GitHub Copilot JWT Decoder expert in verifying copilot signature headers and public keys.';
+        this.manifest = {
+            id: 'githubCopilotJwtDecoder',
+            capabilities: ["github-verify-copilot-signature"],
+            version: '39.6.0'
+        };
+        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot JWT Decoder expert in verifying copilot signature headers and public keys.
+This agent is the absolute authority on the specific operational boundary of: copilot gateway jwt signature verification, public keys fetch.
+
+# GROUNDED COPILOT CAPABILITIES
+1. **Domain Focus**: Provide highly accurate and precise developer guidance strictly within the scope of: copilot gateway jwt signature verification, public keys fetch.
+2. **REST/GraphQL API Execution**: Orchestrate the exact REST and GraphQL operations mapping to capabilities: github-verify-copilot-signature.
+3. **Secure Administration**: Enforce zero-trust credentials administration, least privilege roles, and strict parameter validations.
+
+# BEHAVIORAL PROTOCOLS
+- Ground all designs and explanations strictly in the official grounded developer documentation context provided.
+- Never invent parameters, workflow properties, or API endpoints that are not documented.
+- Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs, YAML for Actions).`;
+    }
+
+    /**
+     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+     */
+    async _invoke(prompt, contextBlock) {
+        logger.info(`🐙 [githubCopilotJwtDecoder] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
+        
+        let docsContext = '';
+        try {
+            // Retrieve domain-specific documentation chunks
+            docsContext = await githubDocsService.searchDocs(`GitHub Copilot copilot gateway jwt signature verification, public keys fetch ${prompt}`, 5);
+        } catch (err) {
+            logger.warn(`🐙 [githubCopilotJwtDecoder] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
+        }
+
+        const groundedPrompt = `${this.preamble}
+
+=== GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
+${docsContext || 'No documentation found in local RAG vector store.'}
+
+=== ADDITIONAL CONTEXT ===
+${contextBlock || 'No additional file context provided.'}
+
+=== REQUEST ===
+${prompt}`;
+
+        return await GeminiAiService.generateContent(groundedPrompt);
+    }
+}
+
+export const pluginInstance = new GithubFnGithubCopilotJwtDecoderAgent();
+export default GithubFnGithubCopilotJwtDecoderAgent;

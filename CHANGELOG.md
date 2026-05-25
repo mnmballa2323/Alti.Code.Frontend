@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.6.0] - 2026-05-24 — Autonomous GitHub Swarm Factory (120+ Specialists Swarm)
+### Added
+- **Swarm Factory Generation Engine**: Designed and deployed the dynamic compiler [github_swarm_factory.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/github_swarm_factory.js) containing a highly structured, granular database taxonomy of **120+ specialized GitHub agents**. Programmatically compiled and wrote all 120+ dynamic specialist agent `.agent.js` files into `src/app/modules/agents/plugins/`.
+- **Complete API Coverage (12 Domains)**: Scaffolded 10 custom specialists under each of the 12 primary developer domains (Repositories, Pull Requests, Actions CI/CD, Apps & Integrations, Projects v2, Governance & Enterprise, Gists & Snippets, Discussions, Issues, Security & Compliance, Copilot Extensions, Billing & Administration).
+- **Specificity-Weighted Semantic Routing**: Refactored the dynamic capability matcher in `dispatchQueryToSwarm` inside `githubDocsService` to score and rank query relevance dynamically based on matched core capability and name keywords. Employs a custom `Math.max()` capability filter with exact word boundary matching (e.g. `\b${word}s?\b`) to avoid duplicate keyword weighting, ensuring flawless semantic routing to the single most specific specialist.
+- **Factory Integration Tests**: Authoritative Vitest suite inside [githubSwarmFactory.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubSwarmFactory.test.js) asserting file-compilation on disk, dynamic registry bootstrap loading, and high-precision query routing for all 120+ generated agents.
+
+---
+
 ## [39.5.0] - 2026-05-24 — Repository-Scale Swarm Expansion (8-Node Ecosystem)
 ### Added
 - **Swarm Expansion (4 New Specialized Agents)**: Designed and fully integrated four new dynamic specialist agents:

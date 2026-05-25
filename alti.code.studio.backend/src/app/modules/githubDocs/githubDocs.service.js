@@ -174,32 +174,83 @@ class GithubDocsService {
      * @returns {Promise<object>} - Telemetry wrapped specialist consultation response
      */
     async dispatchQueryToSwarm(query, preferredAgentId = null) {
+        const { agentRegistry } = await import('../agents/agent.registry.js');
+        await agentRegistry.loadPlugins();
+
         let agentId = preferredAgentId;
 
         // If no preferred agent, automatically route using semantic capability matching rules
         if (!agentId) {
-            if (/\b(actions?|workflows?|yaml|runners?|ci\/cd)\b/i.test(query)) {
-                agentId = 'githubActionsSpecialist';
-            } else if (/\b(apps?|oauth|webhooks?|security|permissions?|secrets?)\b/i.test(query)) {
-                agentId = 'githubAppAuditor';
-            } else if (/\b(projects?|discussions?|issues?|codeowners?|templates?)\b/i.test(query)) {
-                agentId = 'githubProjectsManager';
-            } else if (/\b(enterprise|governance|polic(y|ies)|saml|scim|sso|organizations?|audit log)\b/i.test(query)) {
-                agentId = 'githubEnterpriseAuditor';
-            } else if (/\b(packages?|containers?|ghcr|docker|maven|npm|registries|registry)\b/i.test(query)) {
-                agentId = 'githubPackagesRegistry';
-            } else if (/\b(gists?|snippets?|scratchpads?|embeds?)\b/i.test(query)) {
-                agentId = 'githubGistDeveloper';
-            } else if (/\b(copilot|extensions?|sse|chat schema)\b/i.test(query)) {
-                agentId = 'githubCopilotEngineer';
+            const lowerQuery = query.toLowerCase();
+            const allAgents = agentRegistry.list();
+            
+            let bestAgentId = null;
+            let highestMatchScore = 0;
+
+            // 1. Dynamic precision capability and keyword mapping over all registered specialist plugins
+            for (const agent of allAgents) {
+                if (agent.isPlugin && agent.name.toLowerCase().startsWith('github')) {
+                    let score = 0;
+                    
+                    // Match by granular capabilities (e.g. github-create-repository)
+                    let maxCapScore = 0;
+                    if (agent.capabilities && agent.capabilities.length > 0) {
+                        for (const cap of agent.capabilities) {
+                            const capClean = cap.replace(/-/g, ' ');
+                            const words = capClean.split(' ').filter(w => w !== 'github');
+                            
+                            // Score for this specific capability
+                            const matchedWords = words.filter(word => new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery));
+                            if (matchedWords.length > 0) {
+                                const capScore = 10 * matchedWords.length;
+                                if (capScore > maxCapScore) {
+                                    maxCapScore = capScore;
+                                }
+                            }
+                        }
+                    }
+                    score += maxCapScore;
+                    
+                    // Match by CamelCase Agent Name (e.g. githubRepoCreator)
+                    const idClean = agent.name.replace(/github/i, '').replace(/([A-Z])/g, ' $1').toLowerCase();
+                    const idWords = idClean.split(' ').filter(w => w.trim().length > 0);
+                    const matchedIdWords = idWords.filter(word => new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery));
+                    if (matchedIdWords.length > 0) {
+                        score += 5 * matchedIdWords.length;
+                    }
+
+                    if (score > highestMatchScore) {
+                        highestMatchScore = score;
+                        bestAgentId = agent.name;
+                    }
+                }
+            }
+
+            if (bestAgentId && highestMatchScore >= 5) {
+                agentId = bestAgentId;
+                logger.info(`🪐 [GitHub Docs Gateway] Dynamic semantic match routed query to granular agent: [${agentId}] (Score: ${highestMatchScore})`);
             } else {
-                // Fallback to central coordinator
-                agentId = 'githubExpert';
+                // 2. High-Level Regex Fallback Router to 8 Primary Swarm Nodes
+                if (/\b(actions?|workflows?|yaml|runners?|ci\/cd)\b/i.test(query)) {
+                    agentId = 'githubActionsSpecialist';
+                } else if (/\b(apps?|oauth|webhooks?|security|permissions?|secrets?)\b/i.test(query)) {
+                    agentId = 'githubAppAuditor';
+                } else if (/\b(projects?|discussions?|issues?|codeowners?|templates?)\b/i.test(query)) {
+                    agentId = 'githubProjectsManager';
+                } else if (/\b(enterprise|governance|polic(y|ies)|saml|scim|sso|organizations?|audit log)\b/i.test(query)) {
+                    agentId = 'githubEnterpriseAuditor';
+                } else if (/\b(packages?|containers?|ghcr|docker|maven|npm|registries|registry)\b/i.test(query)) {
+                    agentId = 'githubPackagesRegistry';
+                } else if (/\b(gists?|snippets?|scratchpads?|embeds?)\b/i.test(query)) {
+                    agentId = 'githubGistDeveloper';
+                } else if (/\b(copilot|extensions?|sse|chat schema)\b/i.test(query)) {
+                    agentId = 'githubCopilotEngineer';
+                } else {
+                    // Fallback to central coordinator
+                    agentId = 'githubExpert';
+                }
             }
         }
-
-        const { agentRegistry } = await import('../agents/agent.registry.js');
-        await agentRegistry.loadPlugins();
 
         const agentDef = agentRegistry.get(agentId);
         if (!agentDef || !agentDef.instance) {
