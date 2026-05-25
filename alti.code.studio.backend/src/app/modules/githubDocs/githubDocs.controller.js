@@ -237,5 +237,30 @@ export class GithubDocsController {
             data: sessionResult
         });
     });
+
+    /**
+     * GET /api/v1/githubDocs/thought-stream
+     * Streams real-time swarm thought telemetry to clients using Server-Sent Events (SSE).
+     */
+    static streamSwarmThoughts = catchAsync(async (req, res) => {
+        const { githubSweeperService } = await import('./githubSweeper.service.js');
+        githubSweeperService.subscribeThoughtStream(req, res);
+    });
+
+    /**
+     * POST /api/v1/githubDocs/sweeper/run
+     * Executes background dependency vulnerability security scanning and patches compiled updates.
+     */
+    static triggerSecuritySweep = catchAsync(async (req, res) => {
+        const { githubSweeperService } = await import('./githubSweeper.service.js');
+        const sweepResult = await githubSweeperService.executeSecuritySweep();
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Autonomous security sweep execution completed.',
+            data: sweepResult
+        });
+    });
 }
 

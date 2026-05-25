@@ -26,5 +26,9 @@ router.post('/blast-radius', GithubDocsController.analyzeBlastRadius);
 router.post('/autopilot/create-pr', GithubDocsController.triggerAutopilotPr);
 router.post('/session/consult', GithubDocsController.consultStatefulSession);
 
+// Sweeper & Telemetry Thought Stream Endpoints
+router.get('/thought-stream', GithubDocsController.streamSwarmThoughts);
+router.post('/sweeper/run', GithubDocsController.triggerSecuritySweep);
+
 export const githubDocsRoutes = router;
 export default router;

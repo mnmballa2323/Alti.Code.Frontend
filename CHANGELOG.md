@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.9.0] - 2026-05-25 — Continuous CI/CD Autonomous Sweeper & Live Streaming Thought Telemetry
+### Added
+- **Continuous Vulnerability Sweeper Daemon (`executeSecuritySweep`)**: Engineered a background security scanner in `githubSweeper.service.js` that checks dependency matrices, logs CVE security findings, triages vulnerability upgrades to `githubSecurityDependabotAlertsPatcher`, and compiles self-healing patches.
+- **Server-Sent Events Thought Telemetry Stream (`subscribeThoughtStream`)**: Designed a real-time SSE streaming manager that allows developers to watch the swarm's inner cognitive thoughts, task assignments, and execution logs dynamically.
+- **Thought-Stream Controllers**: Added `streamSwarmThoughts` and `triggerSecuritySweep` static actions inside `githubDocs.controller.js`.
+- **Exposed Gateway Routes**: Mounted `/thought-stream` and `/sweeper/run` POST endpoints under `githubDocs.route.js`.
+- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubSweeper.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubSweeper.test.js) validating the background sweeps and SSE streams. Verified 100% green test success.
+
 ## [39.8.0] - 2026-05-25 — Swarm Repository Autopilot & Stateful Conversational Memory
 ### Added
 - **Autonomous PR Generator Autopilot Loop (`createPullRequestAutopilot`)**: Engineered an execution-oriented workspace coordinator inside `githubAutopilot.service.js` that checks out a feature branch, spawns the Swarm DAG Planner to compute layout updates, runs Vitest baseline tests, and automatically creates standard GitHub Pull Requests with detailed telemetry reports.
