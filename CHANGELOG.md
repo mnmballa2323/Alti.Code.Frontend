@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.8.0] - 2026-05-25 — Swarm Repository Autopilot & Stateful Conversational Memory
+### Added
+- **Autonomous PR Generator Autopilot Loop (`createPullRequestAutopilot`)**: Engineered an execution-oriented workspace coordinator inside `githubAutopilot.service.js` that checks out a feature branch, spawns the Swarm DAG Planner to compute layout updates, runs Vitest baseline tests, and automatically creates standard GitHub Pull Requests with detailed telemetry reports.
+- **Stateful Conversational Memory (`consultStatefulSession`)**: Implemented dynamic session-based state management that maintains persistent conversation history context. Automatically enriches multi-turn user queries with historical assistant thoughts, allowing users to direct the specialized swarm progressively.
+- **Controller Action Methods**: Implemented `triggerAutopilotPr` and `consultStatefulSession` inside `githubDocs.controller.js` to process client validations and return rich payload states.
+- **Exposed Gateway Routes**: Mounted `/autopilot/create-pr` and `/session/consult` POST endpoints within `githubDocs.route.js`.
+- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubAutopilot.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubAutopilot.test.js) validating the workspace autopilot pipeline and stateful session caching. Verified 100% green test success.
+
 ## [39.7.0] - 2026-05-25 — Swarm Cognitive Intelligence & Self-Healing Webhook Loop
 ### Added
 - **Topological Swarm DAG Planner (`orchestrateSwarmWorkflow`)**: Engineered an advanced multi-agent execution pipeline in `githubDocs.service.js` that uses Gemini to decompose complex user prompts into topological Directed Acyclic Graphs (DAGs) of task nodes. Executes independent tasks concurrently and dependent tasks sequentially, systematically passing parent outputs as structured context blocks to children.

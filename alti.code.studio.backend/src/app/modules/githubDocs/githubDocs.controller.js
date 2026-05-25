@@ -187,5 +187,55 @@ export class GithubDocsController {
             data: blastRadiusResult
         });
     });
+
+    /**
+     * POST /api/v1/githubDocs/autopilot/create-pr
+     * Launches the autonomous repository editing and PR generation autopilot loop.
+     */
+    static triggerAutopilotPr = catchAsync(async (req, res) => {
+        const { userIntent } = req.body;
+        if (!userIntent) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'userIntent string is required.'
+            });
+        }
+
+        const { githubAutopilotService } = await import('./githubAutopilot.service.js');
+        const autopilotResult = await githubAutopilotService.createPullRequestAutopilot(userIntent);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Autopilot repository PR generation run completed.',
+            data: autopilotResult
+        });
+    });
+
+    /**
+     * POST /api/v1/githubDocs/session/consult
+     * Multi-turn stateful conversational chat with persistent session memory.
+     */
+    static consultStatefulSession = catchAsync(async (req, res) => {
+        const { sessionId, message } = req.body;
+        if (!sessionId || !message) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'sessionId and message strings are required.'
+            });
+        }
+
+        const { githubAutopilotService } = await import('./githubAutopilot.service.js');
+        const sessionResult = await githubAutopilotService.consultStatefulSession(sessionId, message);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Stateful session consultation successfully completed.',
+            data: sessionResult
+        });
+    });
 }
 

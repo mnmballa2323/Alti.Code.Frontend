@@ -22,5 +22,9 @@ router.post('/visual-audit', GithubDocsController.auditPrVisualLayout);
 router.post('/orchestrate', GithubDocsController.orchestrate);
 router.post('/blast-radius', GithubDocsController.analyzeBlastRadius);
 
+// Autopilot & Stateful Session Memory Endpoints
+router.post('/autopilot/create-pr', GithubDocsController.triggerAutopilotPr);
+router.post('/session/consult', GithubDocsController.consultStatefulSession);
+
 export const githubDocsRoutes = router;
 export default router;
