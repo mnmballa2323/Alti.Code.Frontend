@@ -2,6 +2,19 @@
 
 All notable changes to the backend will be documented here.
 
+## [39.5.0] — 2026-05-24
+
+### Swarm Expansion (8-Node Ecosystem)
+- **Swarm Expansion (4 New Specialized Agents)**: Designed and fully integrated four new dynamic specialist agents inside the plugins directory:
+  - **`githubEnterpriseAuditor`**: Organization settings, SAML/SCIM SSO integration, organization policies, and audit log analysis.
+  - **`githubPackagesRegistry`**: Package repository configurations (npm, Maven, etc.), OCI/ghcr.io container publishing, and security scanning.
+  - **`githubGistDeveloper`**: Multi-file Gists APIs, secret/public scratchpads, and code share embeds.
+  - **`githubCopilotEngineer`**: Copilot custom extensions design, streamed SSE chat response protocols, token handshakes, and chat JSON schemas.
+- **Dynamic Semantic Router Upgrades**: Enhanced `dispatchQueryToSwarm` inside `githubDocsService` to route user intents across all 8 specialized swarm agents. Added precise regex word boundary matching rules (e.g. `\b(gists?|snippets?)\b`) to prevent false-positive substring collisions (such as "register" matching "gist").
+- **Exhaustive Integration Tests**: Created `tests/integration/githubSwarmExpansion.test.js` validating schema manifests, dynamic registry scan, grounded RAG search query generation, and exact semantic router mapping for all 8 agents. Verified 100% test success across all existing suites with zero regressions.
+
+---
+
 ## [v7.6.0] — 2026-02-26
 
 ### Deep Open Source Integration Sprint

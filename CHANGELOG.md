@@ -5,6 +5,18 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.5.0] - 2026-05-24 — Repository-Scale Swarm Expansion (8-Node Ecosystem)
+### Added
+- **Swarm Expansion (4 New Specialized Agents)**: Designed and fully integrated four new dynamic specialist agents:
+  - **GitHub Enterprise & Governance Auditor (`githubEnterpriseAuditor`)**: Handles organization settings, SAML/SCIM SSO integration, organization policies, and audit log analysis.
+  - **GitHub Packages & Container Registry Architect (`githubPackagesRegistry`)**: Manages package repository configuration (npm, Maven, etc.), OCI/ghcr.io container publishing, and security scanning.
+  - **GitHub Gists & Snippets Developer (`githubGistDeveloper`)**: Manages multi-file Gists APIs, secret/public scratchpads, and code share embeds.
+  - **GitHub Copilot Chat Extensions Engineer (`githubCopilotEngineer`)**: Handles Copilot custom extensions design, streamed SSE chat response protocols, token handshakes, and chat JSON schemas.
+- **Dynamic Semantic Router Upgrades**: Enhanced `dispatchQueryToSwarm` inside `githubDocsService` to route user intents across all 8 specialized swarm agents. Added precise regex word boundary matching rules (e.g. `\b(gists?|snippets?)\b`) to prevent false-positive substring collisions (such as "register" matching "gist").
+- **Exhaustive Integration Tests**: Created `tests/integration/githubSwarmExpansion.test.js` validating schema manifests, dynamic registry scan, grounded RAG search query generation, and exact semantic router mapping for all 8 agents. Verified 100% test success across all existing suites with zero regressions.
+
+---
+
 ## [39.4.0] - 2026-05-24 — Production Optimization & Swarm Dispatch Gateway
 ### Added
 - **Ingestion Content-Hash Optimization**: Integrated MD5 content hashing within `githubDocsService.ingestArticle` to bypass RAG vector re-indexing for unchanged documents, reducing write-volume by over 95%.

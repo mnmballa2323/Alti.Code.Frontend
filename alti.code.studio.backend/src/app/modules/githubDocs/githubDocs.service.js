@@ -178,13 +178,20 @@ class GithubDocsService {
 
         // If no preferred agent, automatically route using semantic capability matching rules
         if (!agentId) {
-            const lowerQuery = query.toLowerCase();
-            if (lowerQuery.includes('action') || lowerQuery.includes('workflow') || lowerQuery.includes('yaml') || lowerQuery.includes('runner') || lowerQuery.includes('ci/cd')) {
+            if (/\b(actions?|workflows?|yaml|runners?|ci\/cd)\b/i.test(query)) {
                 agentId = 'githubActionsSpecialist';
-            } else if (lowerQuery.includes('app') || lowerQuery.includes('oauth') || lowerQuery.includes('webhook') || lowerQuery.includes('security') || lowerQuery.includes('permissions') || lowerQuery.includes('secret')) {
+            } else if (/\b(apps?|oauth|webhooks?|security|permissions?|secrets?)\b/i.test(query)) {
                 agentId = 'githubAppAuditor';
-            } else if (lowerQuery.includes('project') || lowerQuery.includes('discussion') || lowerQuery.includes('issue') || lowerQuery.includes('codeowner') || lowerQuery.includes('template')) {
+            } else if (/\b(projects?|discussions?|issues?|codeowners?|templates?)\b/i.test(query)) {
                 agentId = 'githubProjectsManager';
+            } else if (/\b(enterprise|governance|polic(y|ies)|saml|scim|sso|organizations?|audit log)\b/i.test(query)) {
+                agentId = 'githubEnterpriseAuditor';
+            } else if (/\b(packages?|containers?|ghcr|docker|maven|npm|registries|registry)\b/i.test(query)) {
+                agentId = 'githubPackagesRegistry';
+            } else if (/\b(gists?|snippets?|scratchpads?|embeds?)\b/i.test(query)) {
+                agentId = 'githubGistDeveloper';
+            } else if (/\b(copilot|extensions?|sse|chat schema)\b/i.test(query)) {
+                agentId = 'githubCopilotEngineer';
             } else {
                 // Fallback to central coordinator
                 agentId = 'githubExpert';
