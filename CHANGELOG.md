@@ -5,6 +5,16 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.7.0] - 2026-05-25 — Swarm Cognitive Intelligence & Self-Healing Webhook Loop
+### Added
+- **Topological Swarm DAG Planner (`orchestrateSwarmWorkflow`)**: Engineered an advanced multi-agent execution pipeline in `githubDocs.service.js` that uses Gemini to decompose complex user prompts into topological Directed Acyclic Graphs (DAGs) of task nodes. Executes independent tasks concurrently and dependent tasks sequentially, systematically passing parent outputs as structured context blocks to children.
+- **Active Self-Healing Webhook Loop (`processSelfHealingWebhook`)**: Implemented a triage system to parse Actions runner failures or Dependabot vulnerability payloads, automatically routing them to target specialists (`githubActionsWorkflowCompiler` or `githubSecurityDependabotAlertsPatcher`) to compile immediate self-healing unified git diff patches and remediation analyses.
+- **Live Search Grounding Fallback**: Integrated real-time Google search grounding via `GoogleSearchService.getSearchContext` into `searchDocs()`, dynamically falling back to the live index if local vector database search yields low confidence or empty results.
+- **AST Dependency Blast-Radius Calculator (`analyzePullRequestBlastRadius`)**: Built an AST import dependency traversal mechanism leveraging Google Cloud Spanner Graph GQL queries, recursively analyzing files impacted by pull requests and cross-referencing against parsed repo-level `CODEOWNERS` rules to output precise reviewer assignments.
+- **Multimodal Visual PR Layout Auditor (`auditPrVisualLayout`)**: Added layout auditing on base64 screenshots of deployment previews using Gemini Pro Vision, validating design system tokens compliance, CSS centerings/margins alignment, and reporting visual regressions.
+- **Mounted Gateway Routes**: Registered and exposed `/webhook/healing`, `/visual-audit`, `/orchestrate`, and `/blast-radius` POST endpoints under `githubDocs.route.js` and `githubDocs.controller.js`.
+- **Exhaustive Integration Tests**: Deployed a comprehensive suite at [githubCognitiveIntelligence.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubCognitiveIntelligence.test.js) asserting all five capabilities. Isolated existing router tests to guarantee 100% successful backward compatibility across all 31 tests.
+
 ## [39.6.0] - 2026-05-24 — Autonomous GitHub Swarm Factory (120+ Specialists Swarm)
 ### Added
 - **Swarm Factory Generation Engine**: Designed and deployed the dynamic compiler [github_swarm_factory.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/github_swarm_factory.js) containing a highly structured, granular database taxonomy of **120+ specialized GitHub agents**. Programmatically compiled and wrote all 120+ dynamic specialist agent `.agent.js` files into `src/app/modules/agents/plugins/`.

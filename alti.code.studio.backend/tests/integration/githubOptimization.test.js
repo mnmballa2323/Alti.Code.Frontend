@@ -62,9 +62,9 @@ describe('GitHub Swarm Production Optimization & Dispatch Gateway', () => {
     });
 
     describe('Swarm Dispatch API Gateway (/consult)', () => {
-        it('should automatically route a YAML or CI/CD query to githubActionsSpecialist', async () => {
+        it('should automatically route a YAML or CI/CD query to githubActionsVariablesManager', async () => {
             const query = 'How do I add environment variables to my build Actions workflow yaml?';
-            const mockAiResponse = 'Route completed successfully by githubActionsSpecialist';
+            const mockAiResponse = 'Route completed successfully by githubActionsVariablesManager';
 
             // Spy on searchDocs
             vi.spyOn(githubDocsService, 'searchDocs').mockResolvedValue('actions grounded content');
@@ -77,14 +77,14 @@ describe('GitHub Swarm Production Optimization & Dispatch Gateway', () => {
             // Dispatch query
             const result = await githubDocsService.dispatchQueryToSwarm(query);
 
-            expect(result.agent).toBe('githubActionsSpecialist');
+            expect(result.agent).toBe('githubActionsVariablesManager');
             expect(result.content).toBe(mockAiResponse);
             expect(generateContentSpy).toHaveBeenCalled();
         });
 
-        it('should automatically route a Webhook or App query to githubAppAuditor', async () => {
+        it('should automatically route a Webhook or App query to githubAppWebhookVerifier', async () => {
             const query = 'Validate x-hub-signature-256 webhook signatures using a secret key';
-            const mockAiResponse = 'Route completed successfully by githubAppAuditor';
+            const mockAiResponse = 'Route completed successfully by githubAppWebhookVerifier';
 
             vi.spyOn(githubDocsService, 'searchDocs').mockResolvedValue('security app webhooks grounded content');
             
@@ -94,14 +94,14 @@ describe('GitHub Swarm Production Optimization & Dispatch Gateway', () => {
 
             const result = await githubDocsService.dispatchQueryToSwarm(query);
 
-            expect(result.agent).toBe('githubAppAuditor');
+            expect(result.agent).toBe('githubAppWebhookVerifier');
             expect(result.content).toBe(mockAiResponse);
             expect(generateContentSpy).toHaveBeenCalled();
         });
 
-        it('should automatically route a project board or CODEOWNERS query to githubProjectsManager', async () => {
+        it('should automatically route a project board or CODEOWNERS query to githubBranchProtector', async () => {
             const query = 'How to structure branch protection rules and CODEOWNERS matrices?';
-            const mockAiResponse = 'Route completed successfully by githubProjectsManager';
+            const mockAiResponse = 'Route completed successfully by githubBranchProtector';
 
             vi.spyOn(githubDocsService, 'searchDocs').mockResolvedValue('collaboration projects board grounded content');
             
@@ -111,7 +111,7 @@ describe('GitHub Swarm Production Optimization & Dispatch Gateway', () => {
 
             const result = await githubDocsService.dispatchQueryToSwarm(query);
 
-            expect(result.agent).toBe('githubProjectsManager');
+            expect(result.agent).toBe('githubBranchProtector');
             expect(result.content).toBe(mockAiResponse);
             expect(generateContentSpy).toHaveBeenCalled();
         });

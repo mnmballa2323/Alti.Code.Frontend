@@ -99,4 +99,93 @@ export class GithubDocsController {
             data: githubDocsService.getStatus()
         });
     });
+
+    /**
+     * POST /api/v1/githubDocs/orchestrate
+     * Decomposes a complex request into a topological task DAG and runs the swarm.
+     */
+    static orchestrate = catchAsync(async (req, res) => {
+        const { query } = req.body;
+        if (!query) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'A query string is required for orchestration.'
+            });
+        }
+
+        const orchestrationResult = await githubDocsService.orchestrateSwarmWorkflow(query);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'GitHub Swarm DAG workflow completed successfully.',
+            data: orchestrationResult
+        });
+    });
+
+    /**
+     * POST /api/v1/githubDocs/webhook/healing
+     * Triages incoming Actions failures/Dependabot webhooks and generates self-healing patches.
+     */
+    static processSelfHealingWebhook = catchAsync(async (req, res) => {
+        const payload = req.body;
+        const healingResult = await githubDocsService.processSelfHealingWebhook(payload);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'Self-healing webhook processed successfully.',
+            data: healingResult
+        });
+    });
+
+    /**
+     * POST /api/v1/githubDocs/visual-audit
+     * Audits visual PR screenshot for design and CSS token compliance.
+     */
+    static auditPrVisualLayout = catchAsync(async (req, res) => {
+        const { base64Image, layoutParams } = req.body;
+        if (!base64Image) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'A base64 image string is required.'
+            });
+        }
+
+        const auditResult = await githubDocsService.auditPrVisualLayout(base64Image, layoutParams);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'PR visual layout audit completed successfully.',
+            data: auditResult
+        });
+    });
+
+    /**
+     * POST /api/v1/githubDocs/blast-radius
+     * Calculates the AST import dependency blast radius of changed files.
+     */
+    static analyzeBlastRadius = catchAsync(async (req, res) => {
+        const { filesChanged } = req.body;
+        if (!filesChanged) {
+            return sendResponse(res, {
+                statusCode: httpStatus.BAD_REQUEST,
+                success: false,
+                message: 'filesChanged array is required.'
+            });
+        }
+
+        const blastRadiusResult = await githubDocsService.analyzePullRequestBlastRadius(filesChanged);
+
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'AST import blast radius calculated successfully.',
+            data: blastRadiusResult
+        });
+    });
 }
+

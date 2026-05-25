@@ -113,6 +113,19 @@ describe('GitHub Swarm 8-Node Ecosystem Expansion Integration', () => {
             { query: 'general query on pull request reviews and branches', expectedAgent: 'githubExpert' }
         ];
 
+        const primaryAgents = [
+            { name: 'githubExpert', isPlugin: true, capabilities: ['github-documentation', 'github-api', 'github-actions', 'github-cli'] },
+            { name: 'githubActionsSpecialist', isPlugin: true, capabilities: ['github-actions-workflow', 'github-actions-runner', 'github-custom-actions', 'ci-cd-optimization'] },
+            { name: 'githubAppAuditor', isPlugin: true, capabilities: ['github-apps', 'github-oauth', 'github-webhooks', 'github-security-audit'] },
+            { name: 'githubProjectsManager', isPlugin: true, capabilities: ['github-projects-v2', 'github-discussions', 'github-issues-management', 'github-collaboration-docs'] },
+            { name: 'githubEnterpriseAuditor', isPlugin: true, capabilities: ['github-enterprise-governance', 'github-saml-sso', 'github-audit-logs', 'github-policies'] },
+            { name: 'githubPackagesRegistry', isPlugin: true, capabilities: ['github-packages', 'github-container-registry', 'package-deployment', 'container-security'] },
+            { name: 'githubGistDeveloper', isPlugin: true, capabilities: ['github-gists', 'github-gists-api', 'scratchpad-snippets', 'gist-collaboration'] },
+            { name: 'githubCopilotEngineer', isPlugin: true, capabilities: ['github-copilot-extensions', 'github-copilot-skills', 'copilot-token-management', 'chat-schemas'] }
+        ];
+
+        const listSpy = vi.spyOn(agentRegistry, 'list').mockReturnValue(primaryAgents);
+
         const searchDocsSpy = vi
             .spyOn(githubDocsService, 'searchDocs')
             .mockResolvedValue('Mocked documentation context');
@@ -127,6 +140,7 @@ describe('GitHub Swarm 8-Node Ecosystem Expansion Integration', () => {
             expect(result.content).toBe('Mocked Swarm specialist synthesis');
         }
 
+        listSpy.mockRestore();
         searchDocsSpy.mockRestore();
         generateContentSpy.mockRestore();
     });
