@@ -8,6 +8,7 @@ import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { logger } from '../../../shared/logger.js';
 import ApiError from '../../../errors/ApiError.js';
 import httpStatus from 'http-status';
+import { RulesService } from '../rules/rules.service.js';
 
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
@@ -80,6 +81,32 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
     const scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
 
+    // Load codebase instructions and guardrails dynamically
+    let rulesContext = '';
+    try {
+        const rules = await RulesService.parseRules();
+        if ((rules.instructions && rules.instructions.length > 0) || (rules.guardrails && rules.guardrails.length > 0)) {
+            rulesContext += '=== CODEBASE RULES & GUARDRAILS ===\n';
+            if (rules.instructions && rules.instructions.length > 0) {
+                rulesContext += 'INSTRUCTIONS (What to do):\n';
+                rules.instructions.forEach(inst => {
+                    rulesContext += `- ${inst.name}\n`;
+                });
+            }
+            if (rules.guardrails && rules.guardrails.length > 0) {
+                rulesContext += '\nGUARDRAILS (What NOT to do):\n';
+                rules.guardrails.forEach(gr => {
+                    rulesContext += `- ${gr.name}\n`;
+                });
+            }
+            rulesContext += '====================================\n\n';
+        }
+    } catch (err) {
+        logger.warn('Failed to load rules context for LLM Gateway:', err);
+    }
+
+    const finalPrompt = rulesContext ? `${rulesContext}${scrubbedPrompt}` : scrubbedPrompt;
+
     // Secure key loading from Vault
     const creds = await VaultService.getRawCredentials(userId);
 
@@ -99,7 +126,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
                 location: 'us-central1'
             });
             const model = vertex.getGenerativeModel({ model: modelName });
-            const result = await model.generateContent(scrubbedPrompt);
+            const result = await model.generateContent(finalPrompt);
             const response = await result.response;
             reply = response.candidates[0].content.parts[0].text;
         } else if (geminiApiKey) {
@@ -107,7 +134,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             logger.info('🧠 [LlmGateway] Using Google Generative AI with fallback API Key...');
             const ai = new GoogleGenerativeAI(geminiApiKey);
             const model = ai.getGenerativeModel({ model: modelName });
-            const result = await model.generateContent(scrubbedPrompt);
+            const result = await model.generateContent(finalPrompt);
             const response = await result.response;
             reply = response.candidates[0].content.parts[0].text;
         } else {
@@ -136,7 +163,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
         const response = await anthropic.messages.create({
             model: modelName,
             max_tokens: 4096,
-            messages: [{ role: 'user', content: scrubbedPrompt }],
+            messages: [{ role: 'user', content: finalPrompt }],
             temperature: temperature
         });
 
@@ -165,7 +192,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
 
         const response = await openai.chat.completions.create({
             model: cleanModelName,
-            messages: [{ role: 'user', content: scrubbedPrompt }],
+            messages: [{ role: 'user', content: finalPrompt }],
             temperature: temperature
         });
 
@@ -190,7 +217,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
 
         const response = await openai.chat.completions.create({
             model: modelName || 'gpt-4o',
-            messages: [{ role: 'user', content: scrubbedPrompt }],
+            messages: [{ role: 'user', content: finalPrompt }],
             temperature: temperature
         });
 

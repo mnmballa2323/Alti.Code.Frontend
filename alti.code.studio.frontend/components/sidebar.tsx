@@ -22,7 +22,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "@heroui/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Search,
   ChevronDown,
@@ -442,11 +442,78 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
+
+  const { data: rulesData } = useQuery({
+    queryKey: ["codebase-rules", token, selectedRepo],
+    queryFn: async () => {
+      if (!token) return { instructions: [], guardrails: [] };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/rules`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await res.json();
+      return data.success ? data.data : { instructions: [], guardrails: [] };
+    },
+    enabled: !!token,
+  });
+
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (rulesData) {
+      setInstructions(rulesData.instructions || []);
+      setGuardrails(rulesData.guardrails || []);
+      setIsInitialLoad(false);
+    }
+  }, [rulesData]);
+
+  useEffect(() => {
+    if (isInitialLoad || !token) return;
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        await axios.post(
+          `${API_URL}/rules`,
+          {
+            instructions,
+            guardrails
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } catch (err) {
+        console.error("Failed to save codebase rules:", err);
+      }
+    }, 500);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [instructions, guardrails, token, isInitialLoad]);
+
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],
   );
   const assets = useSelector((state: RootState) => state.system.assets || []);
   const [domains, setDomains] = useState<{ id: string; name: string }[]>([]);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     isOpen: isDeleteModalOpen,
@@ -2155,6 +2222,12 @@ export default function Sidebar() {
       </div>
     </div>
   );
+
+  if (!mounted) {
+    return (
+      <div className="flex h-full border-r border-default-200 bg-white dark:bg-[#0A0A0A] w-[56px] transition-all" />
+    );
+  }
 
   return (
     <div className="flex h-full border-r border-default-200">

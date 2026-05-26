@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.11.0] - 2026-05-26 — Workspace Rules (Instructions & Guardrails) & Next.js Hydration Mismatch Resolution
+### Added
+- **Global Codebase Rules API**: Built a comprehensive `/api/v1/rules` endpoint in the backend supporting both `GET` and `POST` actions to query and persist instructions (things to do) and guardrails (things NOT to do) directly to the active selected workspace's `.altirules` or `.cursorrules` configuration files.
+- **Rules Ingestion LLM Gateway**: Modified `LlmGatewayService.routeCompletion` to dynamically parse the codebase rules and automatically prepend them to the prompt context. This guarantees that all model completions (Gemini, Claude, GPT, Azure) conform securely to the target repository's policies.
+- **Frontend Real-time Rules Sync**: Refactored `components/sidebar.tsx` with TanStack `useQuery` and a debounced auto-saving `useEffect` hook, enabling seamless real-time bi-directional synchronization of the Instructions and Guardrails pages with backend files.
+- **Next.js SSR Hydration Resolution**: Resolved the React 18 / Next.js hydration error in `components/sidebar.tsx` by implementing a clean client-side mount check state and rendering a placeholder sidebar skeleton during server-side pre-rendering, correcting Lucide icon mismatches.
+
 ## [39.10.0] - 2026-05-26 — Agent-Native Swarm Compiler (CLI-Anything) Integration
 ### Added
 - **CLI-Anything 7-Phase Compilation Pipeline**: Developed `cliAnything.service.js` to autonomously map, design, and bootstrap target codebases into agent-native applications by generating Click/REPL CLIs, structured JSON schemas, E2E test suites, and discovery documents (`SKILL.md`).
