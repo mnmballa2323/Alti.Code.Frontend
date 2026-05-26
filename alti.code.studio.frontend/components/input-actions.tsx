@@ -274,6 +274,32 @@ function PromptInputFullLineComponent({
   const router = useRouter();
   const { onOpen } = useModalStore();
   const { defaultModel, setDefaultModel } = useSettingsStore();
+
+  const getModelDisplayName = (modelKey: string): string => {
+    switch (modelKey) {
+      case "gemini-3.5-flash":
+        return "Gemini 3.5 Flash";
+      case "gemini-3.5-pro":
+        return "Gemini 3.5 Pro";
+      case "gemini-omni-flash":
+        return "Gemini Omni Flash";
+      case "claude-4.7-opus":
+        return "Claude 4.7 Opus";
+      case "sonnet-5":
+        return "Sonnet 5";
+      case "claude-4.5-haiku":
+        return "Claude 4.5 Haiku";
+      case "gpt-5.5-pro":
+        return "GPT-5.5 Pro";
+      case "gpt-5.5":
+        return "GPT-5.5";
+      case "gpt-5.5-instant":
+        return "GPT-5.5 Instant";
+      default:
+        return "Select Model";
+    }
+  };
+
   const connectedClouds = useSelector(
     (state: RootState) => state.system.connectedClouds,
   );
@@ -520,13 +546,7 @@ function PromptInputFullLineComponent({
                   }
                 />
                 <span className="transition-colors duration-200">
-                  {defaultModel
-                    ? ((defaultModel || "").includes("gemini") || (defaultModel || "").includes("omni")
-                      ? "Gemini"
-                      : (defaultModel || "").includes("claude") || (defaultModel || "").includes("sonnet")
-                      ? "Claude"
-                      : "GPT")
-                    : "Select Model"}
+                  {getModelDisplayName(defaultModel)}
                 </span>
               </button>
 
