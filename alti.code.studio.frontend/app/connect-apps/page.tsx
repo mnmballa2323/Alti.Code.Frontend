@@ -191,8 +191,8 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   const specialLogoUrls: Record<string, string> = {
     "1password": "https://logo.clearbit.com/1password.com",
-    "21risk": "https://logo.clearbit.com/21risk.com",
-    "2chat": "https://logo.clearbit.com/2chat.co",
+    "21risk": "https://github.com/21RISK.png",
+    "2chat": "https://github.com/2ChatCo.png",
     "accredible_certificates": "https://logo.clearbit.com/accredible.com",
     "active_campaign": "https://logo.clearbit.com/activecampaign.com",
     "activecampaign": "https://logo.clearbit.com/activecampaign.com",

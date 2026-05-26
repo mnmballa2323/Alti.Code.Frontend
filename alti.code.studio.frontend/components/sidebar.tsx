@@ -173,8 +173,8 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   const specialLogoUrls: Record<string, string> = {
     "1password": "https://logo.clearbit.com/1password.com",
-    "21risk": "https://logo.clearbit.com/21risk.com",
-    "2chat": "https://logo.clearbit.com/2chat.co",
+    "21risk": "https://github.com/21RISK.png",
+    "2chat": "https://github.com/2ChatCo.png",
     "accredible_certificates": "https://logo.clearbit.com/accredible.com",
     "active_campaign": "https://logo.clearbit.com/activecampaign.com",
     "activecampaign": "https://logo.clearbit.com/activecampaign.com",
@@ -1732,10 +1732,6 @@ export default function Sidebar() {
         >
           {pathname === "/connect-apps" ? (
             <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
-              <span className="text-[9px] font-bold uppercase tracking-wider text-default-400 px-3 py-2 select-none">
-                Composio Apps
-              </span>
-
               {loadingApps ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">
                   <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
