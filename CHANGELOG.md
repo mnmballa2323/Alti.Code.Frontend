@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.16.0] - 2026-05-26 — Prompt Toolbar Play Button Deletion
+### Removed
+- **Run Locally (Play Button) Removal**: Removed the dedicated `Play` icon button ("Run Locally") from the prompt box actions bar (`components/input-actions.tsx`) since local execution and server startup commands can be easily initiated via standard conversational prompts, fully decluttering the prompt input interface.
+- **Unused Lucide Cleanups**: Removed the unused `Play` icon import in `components/input-actions.tsx`.
+
 ## [39.15.0] - 2026-05-26 — Prompt Box Security Sweep & Codebase Menu Streamlining
 ### Added
 - **Security Audit Toolbar Integration**: Integrated a premium `Shield` icon button into the prompt box bottom actions bar (`components/input-actions.tsx`). Clicking it triggers the background security sweep or auto-submits a sweep request directly into the active chat session.

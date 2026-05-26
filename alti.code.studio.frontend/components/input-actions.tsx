@@ -9,7 +9,6 @@ import {
   ChevronDown,
   Github,
   CloudUpload,
-  Play,
   Figma,
   Codesandbox,
   MonitorSmartphone,
@@ -707,56 +706,7 @@ function PromptInputFullLineComponent({
           )}
           {!hideAgents && (
             <>
-              {!hideRunLocally && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Play
-                      className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                      onClick={() => {
-                        const runPrompt =
-                          prompt.trim() ||
-                          "Analyze the workspace and run the application locally.";
 
-                        if (onSend) {
-                          onSend(
-                            runPrompt,
-                            "Deploy",
-                            selectedModel === "Stack" ||
-                              selectedModel === "Framework"
-                              ? "Full Stack"
-                              : selectedModel,
-                            selectedProgLang === "Language"
-                              ? undefined
-                              : selectedProgLang,
-                          );
-                        } else {
-                          dispatch(
-                            sendMessage({
-                              prompt: runPrompt,
-                              model: "Deploy",
-                              domain:
-                                selectedModel === "Stack" ||
-                                selectedModel === "Framework"
-                                  ? "Full Stack"
-                                  : selectedModel,
-                              language:
-                                selectedProgLang === "Language"
-                                  ? undefined
-                                  : selectedProgLang,
-                              sessionId,
-                              token,
-                            }),
-                          );
-                        }
-                        setPrompt("");
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Run Locally</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
 
               {showFigmaButton && (
                 <Tooltip>
