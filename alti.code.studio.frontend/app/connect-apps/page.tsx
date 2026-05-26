@@ -6,11 +6,12 @@ import { Icon } from "@iconify/react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Search } from "lucide-react";
+import { Input, Button, Chip } from "@heroui/react";
 
 import { SAAS_MOCKS } from "./catalog";
-
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { API_URL } from "@/lib/config";
+import { AlertWrapper } from "@/components/ui/AlertWrapper";
 
 type AppIntegration = {
   id: string;
@@ -21,6 +22,171 @@ type AppIntegration = {
   color: string;
   status: "connected" | "disconnected" | "connecting";
   type: "official" | "custom";
+};
+
+type Tool = {
+  name: string;
+  description: string;
+  server?: string;
+  inputSchema?: any;
+};
+
+// Command Preset Registry for MCP & Google MCP Toolbox
+const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
+  "mcp_sqlite": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-sqlite", "--file", "database.sqlite"]
+  },
+  "mcp_github": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-github"]
+  },
+  "mcp_fetch": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-fetch"]
+  },
+  "mcp_postgresql": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-postgres"]
+  },
+  "mcp_puppeteer": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-puppeteer"]
+  },
+  "mcp_brave_search": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-brave-search"]
+  },
+  "mcp_everything": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-everything"]
+  },
+  "mcp_memory": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-memory"]
+  },
+  "mcp_sequential_thinking": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+  },
+  "mcp_time": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-time"]
+  },
+  "mcp_git": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-git"]
+  },
+  "mcp_gitlab": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-gitlab"]
+  },
+  "mcp_google_calendar": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-google-calendar"]
+  },
+  "mcp_google_maps": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-google-maps"]
+  },
+  "mcp_evernote": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-evernote"]
+  },
+
+  // Google MCP Toolbox Preset Databases
+  "mcp_toolbox_alloydb": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=alloydb"]
+  },
+  "mcp_toolbox_spanner": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=spanner"]
+  },
+  "mcp_toolbox_bigquery": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=bigquery"]
+  },
+  "mcp_toolbox_bigtable": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=bigtable"]
+  },
+  "mcp_toolbox_cloudsql": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cloudsql"]
+  },
+  "mcp_toolbox_looker": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=looker"]
+  },
+  "mcp_toolbox_dataproc": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=dataproc"]
+  },
+  "mcp_toolbox_monitoring": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=monitoring"]
+  },
+  "mcp_toolbox_logging": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=logging"]
+  },
+  "mcp_toolbox_healthcare": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=healthcare"]
+  },
+  "mcp_toolbox_knowledge_catalog": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=knowledge_catalog"]
+  },
+  "mcp_toolbox_mssql": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=mssql"]
+  },
+  "mcp_toolbox_cockroachdb": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cockroachdb"]
+  },
+  "mcp_toolbox_yugabytedb": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=yugabytedb"]
+  },
+  "mcp_toolbox_clickhouse": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=clickhouse"]
+  },
+  "mcp_toolbox_tidb": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=tidb"]
+  },
+  "mcp_toolbox_oceanbase": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=oceanbase"]
+  },
+  "mcp_toolbox_firebird": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=firebird"]
+  },
+  "mcp_toolbox_singlestore": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=singlestore"]
+  },
+  "mcp_toolbox_mariadb": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=mariadb"]
+  },
+  "mcp_toolbox_couchbase": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=couchbase"]
+  },
+  "mcp_toolbox_cassandra": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cassandra"]
+  },
+  "mcp_toolbox_dgraph": {
+    command: "npx",
+    args: ["-y", "@google/mcp-toolbox", "--prebuilt=dgraph"]
+  }
 };
 
 const CORE_APPS: AppIntegration[] = [
@@ -63,8 +229,7 @@ const CORE_APPS: AppIntegration[] = [
   {
     id: "linear",
     name: "Linear",
-    description:
-      "Modern issue tracking and project management for software teams.",
+    description: "Modern issue tracking and project management for software teams.",
     icon: "logos:linear",
     color: "bg-white border border-gray-200",
     status: "disconnected",
@@ -82,8 +247,7 @@ const CORE_APPS: AppIntegration[] = [
   {
     id: "salesforce",
     name: "Salesforce",
-    description:
-      "CRM integration to manage leads, contacts, and custom objects.",
+    description: "CRM integration to manage leads, contacts, opportunities, and accounts.",
     icon: "logos:salesforce",
     color: "bg-white border border-gray-200",
     status: "disconnected",
@@ -92,8 +256,7 @@ const CORE_APPS: AppIntegration[] = [
   {
     id: "discord",
     name: "Discord",
-    description:
-      "Interact with community channels, manage roles, and deploy bots.",
+    description: "Interact with community channels, manage roles, and deploy bots.",
     icon: "logos:discord-icon",
     color: "bg-white border border-gray-200",
     status: "disconnected",
@@ -103,14 +266,15 @@ const CORE_APPS: AppIntegration[] = [
 
 const coreAppIds = new Set(CORE_APPS.map((app) => app.id));
 
-// Remove duplicates from SAAS_MOCKS that are already in CORE_APPS
 const FALLBACK_APPS: AppIntegration[] = [
   ...CORE_APPS,
   ...SAAS_MOCKS.filter((mockApp) => !coreAppIds.has(mockApp.slug)).map(
-    (mockApp, i) => ({
+    (mockApp) => ({
       id: `app-${mockApp.slug}`,
       name: mockApp.name,
-      description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+      description: mockApp.slug.startsWith("mcp_toolbox_")
+        ? `Connect and explore data dynamically within ${mockApp.name} powered by the Google Cloud MCP Toolbox.`
+        : `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
       icon: mockApp.icon,
       color: "bg-white border border-gray-200",
       status: "disconnected" as const,
@@ -132,7 +296,6 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   }
   
   const localLogoMappings: Record<string, string> = {
-    // Core Apps
     "github": "github.png",
     "slack": "slack.svg",
     "jira": "jira.svg",
@@ -143,53 +306,18 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "salesforce": "salesforce.svg",
     "discord": "discord.svg",
     "gmail": "gmail.svg",
-    
-    // A Apps
     "ably": "ably.svg",
-    "acculynx": "acculynx.jpeg",
-    "active_campaign": "activecampaign.png",
     "activecampaign": "activecampaign.png",
-    "affinity": "affinity.jpeg",
-    "agencyzoom": "agencyzoom_logo.jpeg",
-    "ahrefs": "ahrefs.png",
     "airtable": "airtable.svg",
-    "amcards": "amcards.svg",
-    "amplitude": "amplitude.svg",
-    "apaleo": "apaleo.png",
-    "apollo": "apollo.jpg",
     "asana": "asana.png",
-    "attio": "attio.webp",
-    
-    // B Apps
-    "baselinker": "baselinker-logo.png",
-    "baserow": "baserow-logo.jpeg",
     "bitbucket": "bitbucket.svg",
-    "bolna": "bolna-logo.png",
-    "borneo": "borneo.jpeg",
-    "brandfetch": "brandfetch-logo.png",
-    "brex": "brex-staging-logo.png",
-    "browseai": "browseai.svg",
-    
-    // C Apps
-    "cal": "cal-logo.png",
-    "calendarhero": "calendarhero_fixed_20250722.png",
-    "calendly": "calendly.svg",
     "canva": "canva.jpeg",
-    "canvas": "canvas.jpeg",
-    "capsule_crm": "capsule_crm-logo.png",
     "clickup": "clickup.png",
-    "coda": "coda.png",
-    
-    // Other standard integrations
-    "docusign": "docusign.svg",
-    "dropbox": "dropbox.svg",
     "figma": "figma.svg",
     "hubspot": "hubspot.webp",
-    "linkedin": "linkedin.svg",
     "shopify": "shopify.svg",
     "supabase": "supabase.jpeg",
     "trello": "trello.svg",
-    "twitter": "twitter.png",
     "youtube": "youtube.svg",
     "zoom": "zoom.svg",
   };
@@ -212,113 +340,54 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "mcp_aws_knowledge_base": "https://logo.clearbit.com/aws.amazon.com",
     "mcp_chromadb": "https://logo.clearbit.com/trychroma.com",
     "mcp_everything": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "accredible_certificates": "https://logo.clearbit.com/accredible.com",
-    "active_campaign": "https://logo.clearbit.com/activecampaign.com",
-    "activecampaign": "https://logo.clearbit.com/activecampaign.com",
-    "active_trail": "https://logo.clearbit.com/activetrail.com",
-    "activetrail": "https://logo.clearbit.com/activetrail.com",
-    "addepar": "https://logo.clearbit.com/addepar.com",
-    "addressfinder": "https://logo.clearbit.com/addressfinder.com.au",
-    "addresszen": "https://logo.clearbit.com/addresszen.com",
-    "adrapid": "https://logo.clearbit.com/adrapid.com",
-    "adyntel": "https://logo.clearbit.com/adyntel.com",
-    "aeroleads": "https://logo.clearbit.com/aeroleads.com",
-    "affinda": "https://logo.clearbit.com/affinda.com",
-    "affinity": "https://logo.clearbit.com/affinity.co",
-  };
-
-  const customMappings: Record<string, string> = {
-    googledrive: "google-drive",
-    googlesheets: "google-sheets",
-    gmail: "gmail",
   };
 
   const getUrlsToTry = () => {
     const urls: string[] = [];
     const addUrl = (url: string) => {
-      if (url && !urls.includes(url)) {
-        urls.push(url);
-      }
+      if (url && !urls.includes(url)) urls.push(url);
     };
 
-    // 1. Try local logo mapping first
     const localFile = localLogoMappings[cleanSlug] || localLogoMappings[slug];
-    if (localFile) {
-      addUrl(`/assets/apps-logos/${localFile}`);
-    }
+    if (localFile) addUrl(`/assets/apps-logos/${localFile}`);
 
-    // 2. Try special logo URLs
     const specialUrl = specialLogoUrls[cleanSlug] || specialLogoUrls[slug];
-    if (specialUrl) {
-      addUrl(specialUrl);
-    }
+    if (specialUrl) addUrl(specialUrl);
 
-    // 3. Try Composio URL mapped
-    const mappedSlug = customMappings[cleanSlug] || customMappings[slug] || cleanSlug.replace(/_/g, "-");
-    addUrl(`https://logos.composio.dev/api/${mappedSlug}`);
+    addUrl(`https://logos.composio.dev/api/${cleanSlug.replace(/_/g, "-")}`);
     addUrl(`https://logos.composio.dev/api/${cleanSlug}`);
 
-    // 4. Try Clearbit Domain Mappings
-    const suffixToStrip = [
-      "_certificates", "_administrator", "_mcp", "_tool", "_crm", "_email", 
-      "_weather", "_browser", "_ai", "_api", "_service", "_server", "_database",
-      "_integration", "_toolkit", "_apps", "_app", "_platform", "_software"
-    ];
-    
-    let coreBrand = cleanSlug;
+    const suffixToStrip = ["_search", "_database", "_integration", "_server", "_toolbox"];
+    let brand = cleanSlug;
     for (const suffix of suffixToStrip) {
-      if (coreBrand.endsWith(suffix)) {
-        coreBrand = coreBrand.slice(0, -suffix.length);
+      if (brand.endsWith(suffix)) {
+        brand = brand.slice(0, -suffix.length);
         break;
       }
     }
-    
+
     const cleanName = app.name.toLowerCase().trim().replace(/[^a-z0-9\s-_]/g, "");
     const firstWord = cleanName.split(/\s+/)[0];
 
     const candidateDomains = [
-      `${coreBrand}.com`,
+      `${brand}.com`,
       `${firstWord}.com`,
-      `${cleanSlug.replace(/_/g, "")}.com`,
-      `${cleanSlug.replace(/_/g, "-")}.com`,
-      `${coreBrand}.io`,
-      `${coreBrand}.co`,
-      `${coreBrand}.ai`,
+      `${brand}.io`,
+      `${brand}.org`,
       `${firstWord}.io`,
-      `${firstWord}.co`,
-      `${firstWord}.ai`,
     ];
 
     for (const dom of candidateDomains) {
       addUrl(`https://logo.clearbit.com/${dom}`);
     }
 
-    // 5. Composio fallback with core brand
-    addUrl(`https://logos.composio.dev/api/${coreBrand}`);
-    addUrl(`https://logos.composio.dev/api/${coreBrand.replace(/_/g, "-")}`);
+    addUrl("https://avatars.githubusercontent.com/u/150796347?s=200&v=4");
 
     return urls;
   };
 
   const urlsToTry = getUrlsToTry();
   const currentLogoUrl = urlsToTry[urlIndex];
-
-  const getAvatarColor = (name: string) => {
-    const colors = [
-      "from-blue-500 to-indigo-600 text-white",
-      "from-purple-500 to-pink-600 text-white",
-      "from-emerald-500 to-teal-600 text-white",
-      "from-amber-500 to-orange-600 text-white",
-      "from-rose-500 to-red-600 text-white",
-      "from-cyan-500 to-blue-600 text-white",
-    ];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const index = Math.abs(hash) % colors.length;
-    return colors[index];
-  };
 
   const handleImageError = () => {
     if (urlIndex < urlsToTry.length - 1) {
@@ -333,18 +402,15 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
       <img
         src={currentLogoUrl}
         alt={`${app.name} logo`}
-        className={`${className} object-contain p-0.5 rounded-lg`}
+        className={`${className} object-contain p-0.5`}
         onError={handleImageError}
       />
     );
   }
 
-  const initials = app.name.slice(0, 2).toUpperCase();
-  const gradientClass = getAvatarColor(app.name);
-
   return (
-    <div className={`rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight ${gradientClass} ${className}`}>
-      {initials}
+    <div className={`rounded-xl flex items-center justify-center font-bold text-xs bg-gradient-to-br from-indigo-500 to-purple-600 text-white ${className}`}>
+      {app.name.slice(0, 2).toUpperCase()}
     </div>
   );
 };
@@ -357,16 +423,24 @@ export default function ConnectAppsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
-  // New States
+  // States
   const [activeTab, setActiveTab] = useState("all");
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => setIsOpen(true);
-  const onClose = () => setIsOpen(false);
   const [selectedApp, setSelectedApp] = useState<AppIntegration | null>(null);
   const [appTriggers, setAppTriggers] = useState<any[]>([]);
   const [appTools, setAppTools] = useState<any[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [modalTab, setModalTab] = useState("tools");
+
+  // Dynamic Stdio MCP Server Config States
+  const [activeTools, setActiveTools] = useState<Tool[]>([]);
+  const [command, setCommand] = useState("npx");
+  const [argsInput, setArgsInput] = useState("");
+  const [isMcpConnecting, setIsMcpConnecting] = useState(false);
+  const [mcpError, setMcpError] = useState<string | null>(null);
+
+  const cleanSlug = selectedApp ? selectedApp.id.replace("app-", "").toLowerCase() : "";
+  const isMcp = cleanSlug.startsWith("mcp_") || cleanSlug.startsWith("mcp_toolbox_");
+  const isServerActive = activeTools.some((t) => t.server === cleanSlug);
 
   // Synchronize dynamic active app with the Sidebar column 2
   useEffect(() => {
@@ -392,7 +466,20 @@ export default function ConnectAppsPage() {
     };
     window.addEventListener("select-connect-app", handleSelectApp);
     return () => window.removeEventListener("select-connect-app", handleSelectApp);
-  }, []);
+  }, [activeTools]);
+
+  const fetchActiveTools = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/mcp/tools/local`, {
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+      });
+      if (res.data.success) {
+        setActiveTools(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch active tools", err);
+    }
+  };
 
   const openAppDetailsModal = async (app: AppIntegration) => {
     setSelectedApp(app);
@@ -400,13 +487,27 @@ export default function ConnectAppsPage() {
     setAppTools([]);
     setModalTab("tools");
     setLoadingDetails(true);
-    onOpen();
+    setMcpError(null);
+
+    const slug = app.id.replace("app-", "");
+    const isLocalMcp = slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_");
+
+    if (isLocalMcp) {
+      // Ingest Launcher Presets dynamically
+      const preset = COMMAND_PRESETS[slug];
+      if (preset) {
+        setCommand(preset.command);
+        setArgsInput(preset.args.join(" "));
+      } else {
+        setCommand("npx");
+        setArgsInput(`-y @modelcontextprotocol/server-${slug.replace("mcp_", "")}`);
+      }
+      setLoadingDetails(false);
+      return;
+    }
 
     try {
-      const slug = app.id.replace("app-", "");
-      const headers = accessToken
-        ? { Authorization: `Bearer ${accessToken}` }
-        : {};
+      const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
       const [triggersRes, toolsRes] = await Promise.all([
         axios
           .get(`${API_URL}/mcp/composio/triggers/${slug}`, { headers })
@@ -431,11 +532,13 @@ export default function ConnectAppsPage() {
     const fetchConnections = async () => {
       if (!accessToken) {
         setLoading(false);
-
         return;
       }
 
       try {
+        // Sync local active tools first
+        await fetchActiveTools();
+
         const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -450,6 +553,12 @@ export default function ConnectAppsPage() {
           setApps((prev) => {
             const nextApps = prev.map((app) => {
               const slug = app.id.replace("app-", "").toLowerCase();
+
+              // For local/remote MCP Servers, determine status dynamically based on registered tools
+              if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
+                const active = activeTools.some((t) => t.server === slug);
+                return { ...app, status: active ? "connected" : "disconnected" };
+              }
 
               if (connectedIds.has(slug)) {
                 return { ...app, status: "connected" };
@@ -469,18 +578,15 @@ export default function ConnectAppsPage() {
       }
     };
 
-    // Always fetch initially to establish state
     fetchConnections();
 
-    // Start 3-second polling if any app is currently in the 'connecting' state
     const isConnecting = apps.some((a) => a.status === "connecting");
-
     if (isConnecting) {
       pollInterval = setInterval(fetchConnections, 3000);
     }
 
     return () => clearInterval(pollInterval);
-  }, [apps.some((a) => a.status === "connecting"), accessToken]);
+  }, [apps.some((a) => a.status === "connecting"), accessToken, activeTools.length]);
 
   const handleConnect = async (id: string) => {
     setApps((prev) => {
@@ -495,27 +601,20 @@ export default function ConnectAppsPage() {
       const slug = id.replace("app-", "");
       const res = await axios.post(
         `${API_URL}/mcp/composio/connect`,
+        { appName: slug },
         {
-          appName: slug,
-        },
-        {
-          headers: accessToken
-            ? { Authorization: `Bearer ${accessToken}` }
-            : {},
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
         },
       );
 
       if (res.data && res.data.success && res.data.data?.redirectUrl) {
-        // Open the OAuth URL in a new tab so the user can securely authenticate
         window.open(res.data.data.redirectUrl, "_blank");
-        // State remains "connecting", the auto-poll effect will flip it to "connected" automatically!
         window.dispatchEvent(new CustomEvent("sync-connect-apps"));
       } else {
         throw new Error("No redirect URL returned from backend");
       }
     } catch (err) {
       console.error("Connection failed:", err);
-      // Revert status to disconnected if something failed
       setApps((prev) => {
         const next = prev.map((app) =>
           app.id === id ? { ...app, status: "disconnected" } : app,
@@ -526,8 +625,69 @@ export default function ConnectAppsPage() {
     }
   };
 
+  const handleLaunchMcpServer = async () => {
+    if (!selectedApp) return;
+    setIsMcpConnecting(true);
+    setMcpError(null);
+    const slug = selectedApp.id.replace("app-", "");
+    const parsedArgs = argsInput.trim() ? argsInput.split(/\s+/) : [];
+
+    try {
+      await axios.post(
+        `${API_URL}/mcp/connect`,
+        {
+          name: slug,
+          command,
+          args: parsedArgs
+        },
+        {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        }
+      );
+      await fetchActiveTools();
+      // Sync local status mapping
+      setApps((prev) =>
+        prev.map((app) =>
+          app.id === selectedApp.id ? { ...app, status: "connected" } : app
+        )
+      );
+      window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+    } catch (err: any) {
+      setMcpError(err.response?.data?.message || "Launch failed. Ensure paths and commands are accurate.");
+    } finally {
+      setIsMcpConnecting(false);
+    }
+  };
+
+  const handleDisconnectMcpServer = async () => {
+    if (!selectedApp) return;
+    setIsMcpConnecting(true);
+    const slug = selectedApp.id.replace("app-", "");
+
+    try {
+      // Direct REST dynamic transport disconnect triggers
+      await axios.post(
+        `${API_URL}/mcp/composio/disconnect`,
+        { appName: slug },
+        {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        }
+      );
+      await fetchActiveTools();
+      setApps((prev) =>
+        prev.map((app) =>
+          app.id === selectedApp.id ? { ...app, status: "disconnected" } : app
+        )
+      );
+      window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+    } catch (err) {
+      console.error("Failed to disconnect server", err);
+    } finally {
+      setIsMcpConnecting(false);
+    }
+  };
+
   const handleDisconnect = async (id: string) => {
-    // Show spinner while disconnecting
     setApps((prev) => {
       const next = prev.map((app) =>
         app.id === id ? { ...app, status: "connecting" } : app,
@@ -542,9 +702,7 @@ export default function ConnectAppsPage() {
         `${API_URL}/mcp/composio/disconnect`,
         { appName: slug },
         {
-          headers: accessToken
-            ? { Authorization: `Bearer ${accessToken}` }
-            : {},
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
         },
       );
       setApps((prev) => {
@@ -556,7 +714,6 @@ export default function ConnectAppsPage() {
       });
     } catch (err) {
       console.error("Disconnect failed:", err);
-      // Revert back to connected on failure
       setApps((prev) => {
         const next = prev.map((app) =>
           app.id === id ? { ...app, status: "connected" } : app,
@@ -577,6 +734,9 @@ export default function ConnectAppsPage() {
 
     return matchesSearch && matchesTab;
   });
+
+  // Extract tools belonging to the active MCP server
+  const activeMcpTools = activeTools.filter((t) => t.server === cleanSlug);
 
   return (
     <ChatBotLayout>
@@ -645,6 +805,158 @@ export default function ConnectAppsPage() {
                       <p className="text-xs text-default-500 leading-normal">
                         Universal OAuth management handles complex authentications seamlessly.
                       </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : isMcp ? (
+                /* MCP Server Details Panel (Studio Presets + Stdio Transport Configs) */
+                <motion.div
+                  key={selectedApp.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
+                >
+                  {mcpError && (
+                    <AlertWrapper className="w-full" variant="danger">
+                      <div className="flex items-center gap-2 text-xs">
+                        <Icon icon="solar:danger-triangle-bold" />
+                        <span>{mcpError}</span>
+                      </div>
+                    </AlertWrapper>
+                  )}
+
+                  {/* Connect Server Card Wrapper */}
+                  <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center gap-6">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
+                      <AppIcon app={selectedApp} className="w-full h-full object-contain" />
+                    </div>
+
+                    <div className="flex flex-col gap-1 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <h2 className="text-xl font-bold text-default-900">
+                          {selectedApp.name}
+                        </h2>
+                        {isServerActive && (
+                          <Chip size="sm" color="success" variant="flat" className="h-5 text-[10px] font-semibold">
+                            Active
+                          </Chip>
+                        )}
+                      </div>
+                      <p className="text-xs text-default-400 font-mono">
+                        source: {cleanSlug}
+                      </p>
+                      <p className="text-xs text-default-500 leading-relaxed px-2 mt-2">
+                        {selectedApp.description}
+                      </p>
+                    </div>
+
+                    {/* Stdio Transport Parameters input fields */}
+                    <div className="w-full flex flex-col gap-3">
+                      <div className="flex gap-3">
+                        <Input
+                          className="w-1/3"
+                          label="Command"
+                          placeholder="npx"
+                          value={command}
+                          variant="bordered"
+                          onValueChange={setCommand}
+                        />
+                        <Input
+                          className="w-2/3"
+                          label="Arguments"
+                          placeholder="-y @modelcontextprotocol/server-sqlite"
+                          value={argsInput}
+                          variant="bordered"
+                          onValueChange={setArgsInput}
+                        />
+                      </div>
+
+                      {isServerActive ? (
+                        <button
+                          type="button"
+                          disabled={isMcpConnecting}
+                          onClick={handleDisconnectMcpServer}
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20"
+                        >
+                          {isMcpConnecting ? (
+                            <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
+                          ) : (
+                            <Icon icon="solar:stop-circle-bold" className="text-base" />
+                          )}
+                          Stop MCP Server
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled={isMcpConnecting}
+                          onClick={handleLaunchMcpServer}
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10"
+                        >
+                          {isMcpConnecting ? (
+                            <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
+                          ) : (
+                            <Icon icon="solar:play-circle-bold" className="text-base" />
+                          )}
+                          Launch MCP Server
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
+                      <Icon icon="solar:server-square-bold" className="text-xs text-primary" />
+                      Ingested seamlessly via secure Stdio pipeline
+                    </div>
+                  </div>
+
+                  {/* Ingested Server Tools Tab list */}
+                  <div className="w-full flex flex-col gap-4 mt-2">
+                    <div className="flex border-b border-default-200 dark:border-default-100/50">
+                      <button
+                        type="button"
+                        className="pb-2.5 text-xs font-bold border-b-2 border-primary text-primary px-1"
+                      >
+                        Ingested Capabilities ({activeMcpTools.length})
+                      </button>
+                    </div>
+
+                    <div className="w-full">
+                      {activeMcpTools.length === 0 ? (
+                        <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                          <span className="text-xs text-default-400 italic">
+                            {isServerActive 
+                              ? "No tools registered for this active server."
+                              : "Launch the MCP server to dynamically ingest its standard capabilities."}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2">
+                          {activeMcpTools.map((tool) => (
+                            <div
+                              key={tool.name}
+                              className="flex flex-col p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                            >
+                              <div className="flex items-center gap-2 mb-1">
+                                <Icon className="text-primary text-base shrink-0" icon="solar:bolt-circle-bold" />
+                                <p className="font-bold text-xs text-default-800 truncate">{tool.name}</p>
+                              </div>
+                              <p className="text-[11px] text-default-500 leading-normal pl-6">
+                                {tool.description}
+                              </p>
+                              {tool.inputSchema?.required && (
+                                <div className="flex gap-1.5 flex-wrap mt-2 pl-6">
+                                  {tool.inputSchema.required.map((req: string) => (
+                                    <Chip key={req} size="sm" color="danger" variant="flat" className="h-4 text-[8px] px-1.5 font-mono">
+                                      {req}*
+                                    </Chip>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
