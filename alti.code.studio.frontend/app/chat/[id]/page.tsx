@@ -132,10 +132,10 @@ const SingleChatPage = () => {
                     <TooltipTrigger asChild>
                       <Search
                         className={cn(
-                          "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
+                          "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-all active:scale-95",
                           isResearchMode
-                            ? "bg-primary border-primary shadow-sm shadow-primary/40 scale-105"
-                            : "bg-black border-gray-300 hover:border-primary hover:text-primary",
+                            ? "bg-primary border-primary shadow-sm shadow-primary/40"
+                            : "bg-black border-gray-300",
                         )}
                         onClick={() => setIsResearchMode(!isResearchMode)}
                       />
