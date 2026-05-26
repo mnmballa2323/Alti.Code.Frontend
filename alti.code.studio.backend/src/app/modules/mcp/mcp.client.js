@@ -29,6 +29,12 @@ const PRESETS = [
         args: ['-y', '@modelcontextprotocol/server-sqlite', '--file', 'database.sqlite'],
         envKey: 'MCP_ENABLE_SQLITE',
     },
+    {
+        name: 'github',
+        command: 'npx',
+        args: ['-y', '@modelcontextprotocol/server-github'],
+        envKey: 'MCP_ENABLE_GITHUB',
+    },
 ];
 
 class McpClientService {

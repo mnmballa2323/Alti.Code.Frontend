@@ -690,6 +690,8 @@ export default function Sidebar() {
       case "/connect-apps":
       case "/integrations":
         return "Integrations";
+      case "/mcp":
+        return "Nervous System";
       case "/workflows":
         return "Automations";
       case "/workflow-builder":
@@ -1509,6 +1511,25 @@ export default function Sidebar() {
               className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
             >
               Integrations
+            </span>
+          </button>
+          <button
+            className={cn(
+              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
+              pathname === "/mcp"
+                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
+                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
+              !isSidebarOpen && "px-0 justify-center min-w-auto",
+            )}
+            onClick={() => {
+              router.push("/mcp");
+            }}
+          >
+            <Cpu className={cn("size-4", isSidebarOpen && "mr-2")} />
+            <span
+              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
+            >
+              Nervous System
             </span>
           </button>
           <button
