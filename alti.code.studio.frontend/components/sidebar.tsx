@@ -45,7 +45,6 @@ import {
   CheckCircle,
   Github,
   ImageIcon,
-  PenTool,
   Boxes,
   Users,
   Briefcase,
@@ -796,8 +795,6 @@ export default function Sidebar() {
     switch (pathname) {
       case "/":
         return "Code";
-      case "/design":
-        return "Design";
       case "/search":
         return "Search";
       case "/chat":
@@ -1400,27 +1397,6 @@ export default function Sidebar() {
               className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
             >
               Chat
-            </span>
-          </button>
-
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/design"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              dispatch(startNewChat());
-              router.push("/design");
-            }}
-          >
-            <PenTool className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Design
             </span>
           </button>
           {/* <button
