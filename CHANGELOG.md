@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.2] - 2026-05-26 — Secure RAG Sandbox and Chat-Only Guardrails
+### Added
+- **Frontend RAG Active Session Binding**: Integrated the codebase RAG search sub-panels into active single-session chat pages (`app/chat/[id]/page.tsx`) with the same premium sliding pill header toggle, unifying RAG codebase search across the entire chat experience.
+### Changed
+- **Backend RAG Guardrails**: Hardened `ultimate_rag.service.js` RAG synthesis by injecting strict isolated Chat Workspace guardrails whenever a query originates from the Chat page (`domain === 'Chat'` or `mode === 'chat'`), preventing raw code blocks, file edits, or git commands and politely redirecting users to the Code Workspace page for coding tasks.
+- **Frontend RAG Binding**: Configured `UltimateRagTerminal.tsx` to explicitly pass `domain: "Chat"` to all RAG search queries, locking the RAG syntheses to the secure chat-only sandboxed boundaries.
+- **Project Version bump**: Incremented root `VERSION` to `39.37.2` and staged all files for Git push.
+
 ## [39.37.1] - 2026-05-26 — Next.js dev server recovery and cache collision guardrails
 ### Fixed
 - **Frontend & Backend Recovery**: Terminated and started clean dev servers for both the frontend (Next.js Turbopack) on port 3000 and the backend (Node.js/Express) on port 5000, recovering the platform successfully.

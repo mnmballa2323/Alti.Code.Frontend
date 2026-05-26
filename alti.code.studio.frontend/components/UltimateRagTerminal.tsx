@@ -32,7 +32,8 @@ export function UltimateRagTerminal() {
     setError(null);
     setResult(null);
 
-    const res = await queryUltimateRAG(q, mode, domain, language);
+    // Force domain to 'Chat' to enforce chat-only RAG synthesis rules
+    const res = await queryUltimateRAG(q, mode, "Chat", language);
 
     if (res.success) {
       setResult(res.data);

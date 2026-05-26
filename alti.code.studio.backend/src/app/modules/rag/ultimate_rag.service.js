@@ -292,6 +292,16 @@ Example: ["original query", "specific technical term query", "architectural patt
         5. Format your response using clean Markdown with proper code blocks, headers, and bullet points.
         6. If multiple sources agree on an answer, note the convergence to indicate high confidence.`;
 
+        // Strict isolation boundary for Chat Page: prohibit code generation & modifications
+        if (domain === 'Chat' || mode === 'chat') {
+            systemPrompt = `=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===
+1. You are operating in the isolated, sandboxed CHAT workspace under RAG codebase search.
+2. You are allowed to answer codebase architecture queries, search the web, explain concepts, and assist with non-development questions.
+3. SECURITY ENFORCEMENT: You are strictly PROHIBITED from writing, generating, or outputting any raw source code, code blocks, git commit commands, file creation payloads, or codebase modifications. You MUST NOT output code or write code under any circumstances. DO NOT INCLUDE any code blocks (no \`\`\` blocks with code) in your output.
+4. If the user requests code generation, writing code, or codebase edits, you MUST politely guide them to switch to the "Code Workspace" page to perform coding tasks, explaining that the Chat page is strictly for discussion, queries, and conceptual explanations, not code output or execution.
+==============================================================\n\n` + systemPrompt;
+        }
+
         if (mode && mode.trim() !== '' && mode !== 'Mode') {
             systemPrompt += `\nYour interaction style should be strictly aligned with the role of a: ${mode}.`;
         }
