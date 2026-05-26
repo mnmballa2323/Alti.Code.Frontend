@@ -56,7 +56,7 @@ export const useSettingsStore = create<SettingsState>()(
       anthropicApiKey: "",
       geminiApiKey: "",
       githubToken: "",
-      defaultModel: "gemini-3.1-pro",
+      defaultModel: "",
       telemetryLevel: "standard",
       openClawEnabled: false,
       

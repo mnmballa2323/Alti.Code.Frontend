@@ -514,15 +514,19 @@ function PromptInputFullLineComponent({
                       ? "simple-icons:googlegemini"
                       : (defaultModel || "").includes("claude")
                       ? "simple-icons:anthropic"
-                      : "simple-icons:openai"
+                      : (defaultModel || "").includes("gpt")
+                      ? "simple-icons:openai"
+                      : "lucide:sparkles"
                   }
                 />
                 <span className="transition-colors duration-200">
-                  {(defaultModel || "").includes("gemini") || (defaultModel || "").includes("omni")
-                    ? "Gemini"
-                    : (defaultModel || "").includes("claude") || (defaultModel || "").includes("sonnet")
-                    ? "Claude"
-                    : "GPT"}
+                  {defaultModel
+                    ? ((defaultModel || "").includes("gemini") || (defaultModel || "").includes("omni")
+                      ? "Gemini"
+                      : (defaultModel || "").includes("claude") || (defaultModel || "").includes("sonnet")
+                      ? "Claude"
+                      : "GPT")
+                    : "Select Model"}
                 </span>
               </button>
 
