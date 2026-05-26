@@ -5,6 +5,16 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.0] - 2026-05-26 — RAG Search & Chat Workspace Integration
+### Added
+- **Frontend: Dynamic RAG & Chat Triage Switch**: Refactored the core chat route (`app/chat/page.tsx`) to support both standard messaging conversations and codebase RAG search sub-panels using a premium sliding pill toggle in the header.
+- **Frontend: Stdio RAG Panel Integration**: Embedded `UltimateRagTerminal` directly inside the unified Chat Page, letting developers execute deep codebase indexing and synthesis without context switching.
+### Removed
+- **Frontend: Standalone Search Page Deletion**: Completely removed the redundant `/search` page (`app/search/page.tsx`) to eliminate duplicate routes.
+- **Frontend: Navigation Streamlining**: Stripped the "Search" button, route cases, and duplicate headers in `sidebar.tsx` and `UltimateRagTerminal.tsx`.
+### Changed
+- **Project Version bump**: Incremented root `VERSION` to `39.37.0` and successfully backed up all updates to GitHub.
+
 ## [39.36.0] - 2026-05-26 — Design Workspace Consolidation & Clean Removal
 ### Removed
 - **Frontend: Standalone Design Page Deletion**: Completely deleted the redundant, mock `/design` route page (`app/design/page.tsx`) to eliminate duplicate views.

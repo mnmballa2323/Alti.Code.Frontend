@@ -795,8 +795,6 @@ export default function Sidebar() {
     switch (pathname) {
       case "/":
         return "Code";
-      case "/search":
-        return "Search";
       case "/chat":
         return "Chat";
       case "/documents":
@@ -1418,25 +1416,6 @@ export default function Sidebar() {
               Canvas
             </span>
           </button> */}
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/search"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/search");
-            }}
-          >
-            <Search className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Search
-            </span>
-          </button>
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",

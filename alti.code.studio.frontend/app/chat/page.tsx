@@ -1,7 +1,9 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { cn } from "@heroui/react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
@@ -13,13 +15,22 @@ import {
   startNewChat,
 } from "@/store/messagesSlice";
 
+const UltimateRagTerminal = dynamic(
+  () =>
+    import("@/components/UltimateRagTerminal").then(
+      (mod) => mod.UltimateRagTerminal
+    ),
+  { ssr: false }
+);
+
 export default function ChatHome() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { data: session } = useSession();
-  const token = session?.user.accessToken ?? null;
+  const token = session?.user?.accessToken ?? null;
   const sessionId = useAppSelector((state) => state.messages.sessionId);
   const isChatting = useAppSelector((state) => state.messages.isChatting);
+  const [isRagMode, setIsRagMode] = useState(false);
 
   useEffect(() => {
     dispatch(startNewChat());
@@ -30,7 +41,7 @@ export default function ChatHome() {
     prompt: string,
     mode?: string,
     domain?: string,
-    language?: string,
+    language?: string
   ) => {
     const onNavigationFulfilled = (newSessionId: string) => {
       router.push(`/chat/${newSessionId}`);
@@ -45,7 +56,7 @@ export default function ChatHome() {
         sessionId: sessionId,
         ...(sessionId === null ? { onFulfilled: onNavigationFulfilled } : {}),
         token,
-      }),
+      })
     );
   };
 
@@ -54,17 +65,46 @@ export default function ChatHome() {
       <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans w-full">
         {/* Standardized Header */}
         <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
-          <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
+          <div className="flex items-center justify-between max-w-3xl mx-auto w-full">
             <div className="flex items-center gap-3">
               <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
-                New Chat Session
+                {isRagMode ? "Codebase Search (RAG)" : "New Chat Session"}
               </h1>
+            </div>
+
+            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/5 p-1 rounded-xl">
+              <button
+                type="button"
+                onClick={() => setIsRagMode(false)}
+                className={cn(
+                  "px-3 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer border-none outline-none",
+                  !isRagMode
+                    ? "bg-white dark:bg-default-200 text-foreground shadow-sm font-semibold"
+                    : "text-default-400 hover:text-default-600 bg-transparent"
+                )}
+              >
+                Standard Chat
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsRagMode(true)}
+                className={cn(
+                  "px-3 py-1 text-xs font-medium rounded-lg transition-all cursor-pointer border-none outline-none",
+                  isRagMode
+                    ? "bg-white dark:bg-default-200 text-foreground shadow-sm font-semibold"
+                    : "text-default-400 hover:text-default-600 bg-transparent"
+                )}
+              >
+                RAG Search
+              </button>
             </div>
           </div>
         </div>
 
         {/* Dynamic Content */}
-        {isChatting ? (
+        {isRagMode ? (
+          <UltimateRagTerminal />
+        ) : isChatting ? (
           <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
             <div className="flex flex-col w-full h-full max-w-3xl">
               <div className="w-full flex-grow overflow-y-auto scroll-smooth scrollbar-none pb-4">
