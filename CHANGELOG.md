@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.11.4] - 2026-05-26 — Custom Domains Navigation Relocation
+### Changed
+- **Relocating Custom Domains Entrance**: Commented out the primary sidebar navigation link for `/domains` (Domains) in `components/sidebar.tsx` to simplify the core layout.
+- **Embedded Entrypoint in Cloud Workspace**: Added a premium custom domains navigation button inside `app/cloud/page.tsx`, grouping custom domain DNS setup intuitively inside the infrastructure provider panel where it conceptually belongs, fully preserving this high-end feature.
+
 ## [39.11.3] - 2026-05-26 — Sidebar Canvas Link Simplification
 ### Changed
 - **Hiding Visual Canvas Navigation**: Commented out the primary sidebar navigation link for `/workflow-builder` (Canvas) in `components/sidebar.tsx` to streamline the product layout onto the production-grade, highly cohesive developer spaces. The underlying workflow builder engine is fully preserved in the codebase for future Swarm Graph execution sprints.

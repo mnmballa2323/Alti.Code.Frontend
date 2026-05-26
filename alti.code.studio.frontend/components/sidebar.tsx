@@ -1056,7 +1056,7 @@ export default function Sidebar() {
             </span>
           </button>
 
-          <button
+          {/* <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
               pathname === "/domains"
@@ -1074,7 +1074,7 @@ export default function Sidebar() {
             >
               Domains
             </span>
-          </button>
+          </button> */}
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",

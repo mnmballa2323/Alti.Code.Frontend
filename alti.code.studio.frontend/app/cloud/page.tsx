@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Cloud,
   Server,
@@ -32,6 +33,7 @@ import { connectCloud } from "@/store/systemSlice";
 import { AppDispatch } from "@/store";
 
 export default function CloudPage() {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const [telemetry, setTelemetry] = useState<any>(null);
@@ -193,16 +195,27 @@ export default function CloudPage() {
                     </Chip>
                   </div>
                 </div>
-                <Button
-                  className="bg-black text-white dark:bg-white dark:text-black font-medium"
-                  isDisabled={isAuthenticated}
-                  isLoading={isAuthenticating}
-                  size="sm"
-                  startContent={<Lock size={14} />}
-                  onClick={initiateAuthentication}
-                >
-                  {isAuthenticated ? "Authenticated" : "Authenticate"}
-                </Button>
+                <div className="flex gap-2 shrink-0">
+                  <Button
+                    className="text-gray-600 dark:text-gray-300 border-default-300"
+                    size="sm"
+                    startContent={<Globe2 size={14} />}
+                    variant="bordered"
+                    onClick={() => router.push("/domains")}
+                  >
+                    Custom Domains
+                  </Button>
+                  <Button
+                    className="bg-black text-white dark:bg-white dark:text-black font-medium"
+                    isDisabled={isAuthenticated}
+                    isLoading={isAuthenticating}
+                    size="sm"
+                    startContent={<Lock size={14} />}
+                    onClick={initiateAuthentication}
+                  >
+                    {isAuthenticated ? "Authenticated" : "Authenticate"}
+                  </Button>
+                </div>
               </div>
 
               <div className="space-y-6">
