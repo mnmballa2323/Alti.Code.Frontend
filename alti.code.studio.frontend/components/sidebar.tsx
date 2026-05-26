@@ -771,14 +771,12 @@ export default function Sidebar() {
 
   // States and dynamic handlers for integrations / connect-apps catalog
   const [secondarySearch, setSecondarySearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<"all" | "saas" | "mcp" | "toolbox">("all");
   const [apps, setApps] = useState<AppIntegration[]>([]);
   const [loadingApps, setLoadingApps] = useState(true);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
 
   useEffect(() => {
     setSecondarySearch("");
-    setActiveCategory("all");
   }, [pathname]);
 
   useEffect(() => {
@@ -1766,33 +1764,6 @@ export default function Sidebar() {
             )}
         </div>
 
-        {pathname === "/connect-apps" && isSecondarySidebarOpen && (
-          <div className="px-3 pb-2 flex gap-1 overflow-x-auto min-w-[256px] scrollbar-hide shrink-0 border-b border-default-200/50 pt-1">
-            {[
-              { id: "all", label: "All" },
-              { id: "saas", label: "SaaS Platforms" },
-              { id: "mcp", label: "MCP Servers" },
-              { id: "toolbox", label: "Google Databases" },
-            ].map((cat) => {
-              const active = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id as any)}
-                  className={cn(
-                    "px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-tight transition-all duration-200 whitespace-nowrap shrink-0 border",
-                    active
-                      ? "bg-primary/10 text-primary border-primary/20"
-                      : "bg-default-50 dark:bg-default-100/50 hover:bg-default-100 dark:hover:bg-default-100/80 text-default-500 hover:text-default-700 border-transparent"
-                  )}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
-
         <ScrollShadow
           hideScrollBar
           className="flex-1 px-2 mt-1 min-w-[256px] scrollbar-hide"
@@ -1805,25 +1776,10 @@ export default function Sidebar() {
                   <span className="text-xs text-default-400">Loading catalog...</span>
                 </div>
               ) : (() => {
-                const filtered = apps.filter((app) => {
-                  const slug = app.id.replace("app-", "").toLowerCase();
-                  const matchesSearch =
-                    app.name.toLowerCase().includes(secondarySearch.toLowerCase()) ||
-                    app.description.toLowerCase().includes(secondarySearch.toLowerCase());
-                  
-                  if (!matchesSearch) return false;
-
-                  if (activeCategory === "saas") {
-                    return !slug.startsWith("mcp_") && !slug.startsWith("mcp_toolbox_");
-                  }
-                  if (activeCategory === "mcp") {
-                    return slug.startsWith("mcp_") && !slug.startsWith("mcp_toolbox_");
-                  }
-                  if (activeCategory === "toolbox") {
-                    return slug.startsWith("mcp_toolbox_");
-                  }
-                  return true;
-                });
+                const filtered = apps.filter((app) =>
+                  app.name.toLowerCase().includes(secondarySearch.toLowerCase()) ||
+                  app.description.toLowerCase().includes(secondarySearch.toLowerCase())
+                );
                 
                 if (filtered.length === 0) {
                   return <span className="text-xs text-default-400 text-center py-12">No apps found</span>;
