@@ -4989,14 +4989,4 @@ export const SAAS_MOCKS = [
     slug: "_1password",
     icon: "logos:_1password",
   },
-  {
-    name: " 21Risk",
-    slug: "_21risk",
-    icon: "logos:_21risk",
-  },
-  {
-    name: " 2Chat",
-    slug: "_2chat",
-    icon: "logos:_2chat",
-  },
 ];
