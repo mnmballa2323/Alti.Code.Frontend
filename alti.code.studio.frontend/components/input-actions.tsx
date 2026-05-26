@@ -496,162 +496,166 @@ function PromptInputFullLineComponent({
           </Tooltip>
 
           {showModelDropdown && (
-            <Dropdown
-              className="bg-white/95 dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-1.5 z-[100] min-w-[130px]"
-              placement="bottom-start"
-            >
-              <DropdownTrigger>
-                <button
-                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
-                  type="button"
-                >
-                  <Icon
-                    className={cn(
-                      "size-4 shrink-0 transition-colors duration-200",
-                      (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
-                      (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
-                      (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
-                    )}
-                    icon={
-                      (defaultModel || "").includes("gemini")
-                        ? "simple-icons:googlegemini"
-                        : (defaultModel || "").includes("claude")
-                        ? "simple-icons:anthropic"
-                        : "simple-icons:openai"
-                    }
-                  />
-                  <span className="transition-colors duration-200">
-                    {(defaultModel || "").includes("gemini") || (defaultModel || "").includes("omni")
-                      ? "Gemini"
-                      : (defaultModel || "").includes("claude") || (defaultModel || "").includes("sonnet")
-                      ? "Claude"
-                      : "GPT"}
-                  </span>
-                </button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Select AI Model"
-                className="p-1 max-h-[380px] overflow-y-auto"
-                onAction={(key) => setDefaultModel(key as string)}
+            <div ref={modelDropdownRef} className="relative inline-block">
+              <button
+                className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
+                type="button"
+                onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
               >
-                <DropdownSection title="Gemini" showDivider>
-                  <DropdownItem
-                    key="gemini-3.5-flash"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
-                    startContent={
-                      <Icon className="size-4 text-purple-500 dark:text-purple-400" icon="logos:google-gemini-icon" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Gemini 3.5 Flash</span>
-                      <span className="text-[10px] text-default-400">Latest default agent & code model</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gemini-3.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
-                    startContent={
-                      <Icon className="size-4 text-purple-400" icon="logos:google-gemini-icon" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Gemini 3.5 Pro</span>
-                      <span className="text-[10px] text-default-400">Flagship deep reasoning & software logic</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gemini-omni-flash"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
-                    startContent={
-                      <Icon className="size-4 text-purple-400" icon="logos:google-gemini-icon" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Gemini Omni Flash</span>
-                      <span className="text-[10px] text-default-400">Multimodal omni-world coding</span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
+                <Icon
+                  className={cn(
+                    "size-4 shrink-0 transition-colors duration-200",
+                    (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+                    (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
+                    (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
+                  )}
+                  icon={
+                    (defaultModel || "").includes("gemini")
+                      ? "simple-icons:googlegemini"
+                      : (defaultModel || "").includes("claude")
+                      ? "simple-icons:anthropic"
+                      : "simple-icons:openai"
+                  }
+                />
+                <span className="transition-colors duration-200">
+                  {(defaultModel || "").includes("gemini") || (defaultModel || "").includes("omni")
+                    ? "Gemini"
+                    : (defaultModel || "").includes("claude") || (defaultModel || "").includes("sonnet")
+                    ? "Claude"
+                    : "GPT"}
+                </span>
+              </button>
 
-                <DropdownSection title="Claude" showDivider>
-                  <DropdownItem
-                    key="claude-4.7-opus"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
-                    startContent={
-                      <Icon className="size-4 text-orange-500 dark:text-orange-400" icon="simple-icons:anthropic" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Claude 4.7 Opus</span>
-                      <span className="text-[10px] text-default-400">Deep software engineering with 1M context</span>
+              {modelDropdownOpen && (
+                <div 
+                  className="absolute left-0 bottom-full mb-2 bg-white/95 dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-2.5 z-[100] min-w-[245px] max-h-[380px] overflow-y-auto flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
+                  {/* Gemini Section */}
+                  <div className="flex flex-col gap-0.5">
+                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
+                      Gemini
                     </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="sonnet-5"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
-                    startContent={
-                      <Icon className="size-4 text-orange-400" icon="simple-icons:anthropic" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Sonnet 5</span>
-                      <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-4.5-haiku"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
-                    startContent={
-                      <Icon className="size-4 text-orange-400" icon="simple-icons:anthropic" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Claude 4.5 Haiku</span>
-                      <span className="text-[10px] text-default-400">Fast low-latency agent automation</span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gemini-3.5-flash"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-purple-500 dark:text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Gemini 3.5 Flash</span>
+                        <span className="text-[10px] text-default-400">Latest default agent & code model</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gemini-3.5-pro"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Gemini 3.5 Pro</span>
+                        <span className="text-[10px] text-default-400">Flagship deep reasoning & software logic</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gemini-omni-flash"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Gemini Omni Flash</span>
+                        <span className="text-[10px] text-default-400">Multimodal omni-world coding</span>
+                      </div>
+                    </button>
+                  </div>
 
-                <DropdownSection title="GPT">
-                  <DropdownItem
-                    key="gpt-5.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
-                    startContent={
-                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">GPT-5.5 Pro</span>
-                      <span className="text-[10px] text-default-400">Parallel reasoning coding flagship</span>
+                  <div className="h-px bg-default-200/50 dark:bg-gray-800" />
+
+                  {/* Claude Section */}
+                  <div className="flex flex-col gap-0.5">
+                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
+                      Claude
                     </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.5"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
-                    startContent={
-                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">GPT-5.5</span>
-                      <span className="text-[10px] text-default-400">Frontier omnimodal developer model</span>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("claude-4.7-opus"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-orange-500 dark:text-orange-400 shrink-0" icon="simple-icons:anthropic" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Claude 4.7 Opus</span>
+                        <span className="text-[10px] text-default-400">Deep software engineering with 1M context</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("sonnet-5"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Sonnet 5</span>
+                        <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("claude-4.5-haiku"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">Claude 4.5 Haiku</span>
+                        <span className="text-[10px] text-default-400">Fast low-latency agent automation</span>
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="h-px bg-default-200/50 dark:bg-gray-800" />
+
+                  {/* GPT Section */}
+                  <div className="flex flex-col gap-0.5">
+                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
+                      GPT
                     </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.5-instant"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
-                    startContent={
-                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">GPT-5.5 Instant</span>
-                      <span className="text-[10px] text-default-400">Fast low-latency editing</span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-              </DropdownMenu>
-            </Dropdown>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gpt-5.5-pro"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">GPT-5.5 Pro</span>
+                        <span className="text-[10px] text-default-400">Parallel reasoning coding flagship</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gpt-5.5"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">GPT-5.5</span>
+                        <span className="text-[10px] text-default-400">Frontier omnimodal developer model</span>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setDefaultModel("gpt-5.5-instant"); setModelDropdownOpen(false); }}
+                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    >
+                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium text-foreground">GPT-5.5 Instant</span>
+                        <span className="text-[10px] text-default-400">Fast low-latency editing</span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
 
 
