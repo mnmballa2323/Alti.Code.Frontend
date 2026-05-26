@@ -296,6 +296,7 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   }
   
   const localLogoMappings: Record<string, string> = {
+    // Core Apps
     "github": "github.png",
     "slack": "slack.svg",
     "jira": "jira.svg",
@@ -306,18 +307,53 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "salesforce": "salesforce.svg",
     "discord": "discord.svg",
     "gmail": "gmail.svg",
+    
+    // A Apps
     "ably": "ably.svg",
+    "acculynx": "acculynx.jpeg",
+    "active_campaign": "activecampaign.png",
     "activecampaign": "activecampaign.png",
+    "affinity": "affinity.jpeg",
+    "agencyzoom": "agencyzoom_logo.jpeg",
+    "ahrefs": "ahrefs.png",
     "airtable": "airtable.svg",
+    "amcards": "amcards.svg",
+    "amplitude": "amplitude.svg",
+    "apaleo": "apaleo.png",
+    "apollo": "apollo.jpg",
     "asana": "asana.png",
+    "attio": "attio.webp",
+    
+    // B Apps
+    "baselinker": "baselinker-logo.png",
+    "baserow": "baserow-logo.jpeg",
     "bitbucket": "bitbucket.svg",
+    "bolna": "bolna-logo.png",
+    "borneo": "borneo.jpeg",
+    "brandfetch": "brandfetch-logo.png",
+    "brex": "brex-staging-logo.png",
+    "browseai": "browseai.svg",
+    
+    // C Apps
+    "cal": "cal-logo.png",
+    "calendarhero": "calendarhero_fixed_20250722.png",
+    "calendly": "calendly.svg",
     "canva": "canva.jpeg",
+    "canvas": "canvas.jpeg",
+    "capsule_crm": "capsule_crm-logo.png",
     "clickup": "clickup.png",
+    "coda": "coda.png",
+    
+    // Other standard integrations
+    "docusign": "docusign.svg",
+    "dropbox": "dropbox.svg",
     "figma": "figma.svg",
     "hubspot": "hubspot.webp",
+    "linkedin": "linkedin.svg",
     "shopify": "shopify.svg",
     "supabase": "supabase.jpeg",
     "trello": "trello.svg",
+    "twitter": "twitter.png",
     "youtube": "youtube.svg",
     "zoom": "zoom.svg",
   };
@@ -340,6 +376,19 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "mcp_aws_knowledge_base": "https://logo.clearbit.com/aws.amazon.com",
     "mcp_chromadb": "https://logo.clearbit.com/trychroma.com",
     "mcp_everything": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
+    "accredible_certificates": "https://logo.clearbit.com/accredible.com",
+    "active_campaign": "https://logo.clearbit.com/activecampaign.com",
+    "activecampaign": "https://logo.clearbit.com/activecampaign.com",
+    "active_trail": "https://logo.clearbit.com/activetrail.com",
+    "activetrail": "https://logo.clearbit.com/activetrail.com",
+    "addepar": "https://logo.clearbit.com/addepar.com",
+    "addressfinder": "https://logo.clearbit.com/addressfinder.com.au",
+    "addresszen": "https://logo.clearbit.com/addresszen.com",
+    "adrapid": "https://logo.clearbit.com/adrapid.com",
+    "adyntel": "https://logo.clearbit.com/adyntel.com",
+    "aeroleads": "https://logo.clearbit.com/aeroleads.com",
+    "affinda": "https://logo.clearbit.com/affinda.com",
+    "affinity": "https://logo.clearbit.com/affinity.co",
   };
 
   const getUrlsToTry = () => {
