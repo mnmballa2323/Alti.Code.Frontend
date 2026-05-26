@@ -794,6 +794,46 @@ function PromptInputFullLineComponent({
                 <>
                   <Tooltip>
                     <TooltipTrigger asChild>
+                      <Shield
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const sweepPrompt =
+                            prompt.trim() ||
+                            "Security Sweep: Audit my repository coordinates for dependency vulnerabilities, CVE threat coordinates, and compile secure self-healing patches.";
+                          setPrompt(sweepPrompt);
+                          if (onSend) {
+                            onSend(
+                              sweepPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: sweepPrompt,
+                                model: "default",
+                                domain: "Security",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Security Audit</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
                       <Github
                         className={cn(
                           "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
@@ -868,46 +908,6 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>Deploy to Cloud</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Shield
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-red-400 hover:text-red-400"
-                        onClick={() => {
-                          const sweepPrompt =
-                            prompt.trim() ||
-                            "Security Sweep: Audit my repository coordinates for dependency vulnerabilities, CVE threat coordinates, and compile secure self-healing patches.";
-                          setPrompt(sweepPrompt);
-                          if (onSend) {
-                            onSend(
-                              sweepPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: sweepPrompt,
-                                model: "default",
-                                domain: "Security",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Security Audit</p>
                     </TooltipContent>
                   </Tooltip>
                 </>

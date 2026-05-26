@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.17.0] - 2026-05-26 — Prompt Toolbar Layout Refinement
+### Changed
+- **Security Audit Position Relocation**: Repositioned the newly added "Security Audit" (`Shield`) toolbar action button to render to the left of the "Push to GitHub" (`Github`) button in `components/input-actions.tsx`.
+- **Aesthetic Refinement (Highlight Color Removal)**: Removed the custom red hover highlight styles (`hover:border-red-400 hover:text-red-400`) from the `Shield` button to conform perfectly to the elegant, minimalist gray styling of standard action buttons.
+
 ## [39.16.0] - 2026-05-26 — Prompt Toolbar Play Button Deletion
 ### Removed
 - **Run Locally (Play Button) Removal**: Removed the dedicated `Play` icon button ("Run Locally") from the prompt box actions bar (`components/input-actions.tsx`) since local execution and server startup commands can be easily initiated via standard conversational prompts, fully decluttering the prompt input interface.
