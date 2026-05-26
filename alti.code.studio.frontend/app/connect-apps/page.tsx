@@ -121,8 +121,10 @@ const FALLBACK_APPS: AppIntegration[] = [
 
 const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
   const [imageError, setImageError] = useState(false);
+  const [urlIndex, setUrlIndex] = useState(0);
   
   const slug = app.id.replace("app-", "").toLowerCase();
+  const cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
   
   const localLogoMappings: Record<string, string> = {
     // Core Apps
@@ -191,9 +193,11 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "1password": "https://logo.clearbit.com/1password.com",
     "21risk": "https://logo.clearbit.com/21risk.com",
     "2chat": "https://logo.clearbit.com/2chat.co",
-    "accredible_certificates": "https://logos.composio.dev/api/accredible",
-    "active_campaign": "https://logos.composio.dev/api/activecampaign",
-    "active_trail": "https://logos.composio.dev/api/activetrail",
+    "accredible_certificates": "https://logo.clearbit.com/accredible.com",
+    "active_campaign": "https://logo.clearbit.com/activecampaign.com",
+    "activecampaign": "https://logo.clearbit.com/activecampaign.com",
+    "active_trail": "https://logo.clearbit.com/activetrail.com",
+    "activetrail": "https://logo.clearbit.com/activetrail.com",
     "addepar": "https://logo.clearbit.com/addepar.com",
     "addressfinder": "https://logo.clearbit.com/addressfinder.com.au",
     "addresszen": "https://logo.clearbit.com/addresszen.com",
@@ -209,17 +213,76 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     googlesheets: "google-sheets",
     gmail: "gmail",
   };
-  
-  const logoUrl = (() => {
-    if (localLogoMappings[slug]) {
-      return `/assets/apps-logos/${localLogoMappings[slug]}`;
+
+  const getUrlsToTry = () => {
+    const urls: string[] = [];
+    const addUrl = (url: string) => {
+      if (url && !urls.includes(url)) {
+        urls.push(url);
+      }
+    };
+
+    // 1. Try local logo mapping first
+    const localFile = localLogoMappings[cleanSlug] || localLogoMappings[slug];
+    if (localFile) {
+      addUrl(`/assets/apps-logos/${localFile}`);
     }
-    if (specialLogoUrls[slug]) {
-      return specialLogoUrls[slug];
+
+    // 2. Try special logo URLs
+    const specialUrl = specialLogoUrls[cleanSlug] || specialLogoUrls[slug];
+    if (specialUrl) {
+      addUrl(specialUrl);
     }
-    const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
-    return `https://logos.composio.dev/api/${mappedSlug}`;
-  })();
+
+    // 3. Try Composio URL mapped
+    const mappedSlug = customMappings[cleanSlug] || customMappings[slug] || cleanSlug.replace(/_/g, "-");
+    addUrl(`https://logos.composio.dev/api/${mappedSlug}`);
+    addUrl(`https://logos.composio.dev/api/${cleanSlug}`);
+
+    // 4. Try Clearbit Domain Mappings
+    const suffixToStrip = [
+      "_certificates", "_administrator", "_mcp", "_tool", "_crm", "_email", 
+      "_weather", "_browser", "_ai", "_api", "_service", "_server", "_database",
+      "_integration", "_toolkit", "_apps", "_app", "_platform", "_software"
+    ];
+    
+    let coreBrand = cleanSlug;
+    for (const suffix of suffixToStrip) {
+      if (coreBrand.endsWith(suffix)) {
+        coreBrand = coreBrand.slice(0, -suffix.length);
+        break;
+      }
+    }
+    
+    const cleanName = app.name.toLowerCase().trim().replace(/[^a-z0-9\s-_]/g, "");
+    const firstWord = cleanName.split(/\s+/)[0];
+
+    const candidateDomains = [
+      `${coreBrand}.com`,
+      `${firstWord}.com`,
+      `${cleanSlug.replace(/_/g, "")}.com`,
+      `${cleanSlug.replace(/_/g, "-")}.com`,
+      `${coreBrand}.io`,
+      `${coreBrand}.co`,
+      `${coreBrand}.ai`,
+      `${firstWord}.io`,
+      `${firstWord}.co`,
+      `${firstWord}.ai`,
+    ];
+
+    for (const dom of candidateDomains) {
+      addUrl(`https://logo.clearbit.com/${dom}`);
+    }
+
+    // 5. Composio fallback with core brand
+    addUrl(`https://logos.composio.dev/api/${coreBrand}`);
+    addUrl(`https://logos.composio.dev/api/${coreBrand.replace(/_/g, "-")}`);
+
+    return urls;
+  };
+
+  const urlsToTry = getUrlsToTry();
+  const currentLogoUrl = urlsToTry[urlIndex];
 
   const getAvatarColor = (name: string) => {
     const colors = [
@@ -238,13 +301,21 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     return colors[index];
   };
 
-  if (!imageError) {
+  const handleImageError = () => {
+    if (urlIndex < urlsToTry.length - 1) {
+      setUrlIndex(urlIndex + 1);
+    } else {
+      setImageError(true);
+    }
+  };
+
+  if (!imageError && currentLogoUrl) {
     return (
       <img
-        src={logoUrl}
+        src={currentLogoUrl}
         alt={`${app.name} logo`}
         className={`${className} object-contain p-0.5 rounded-lg`}
-        onError={() => setImageError(true)}
+        onError={handleImageError}
       />
     );
   }
