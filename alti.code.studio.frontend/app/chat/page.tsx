@@ -80,7 +80,7 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
-                  placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
+                  placeholder="Enter prompt here..."
                   onSend={handleFirstMessageSend}
                   rightActions={
                     <Tooltip>
@@ -119,7 +119,7 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
-                  placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
+                  placeholder="Enter prompt here..."
                   onSend={handleFirstMessageSend}
                   rightActions={
                     <Tooltip>

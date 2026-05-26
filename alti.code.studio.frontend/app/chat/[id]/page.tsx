@@ -125,7 +125,7 @@ const SingleChatPage = () => {
               <PromptInputFullLineWithBottomActions
                 hideAgents={true}
                 hideDropdown={true}
-                placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
+                placeholder="Enter prompt here..."
                 onSend={handleSend}
                 rightActions={
                   <Tooltip>
