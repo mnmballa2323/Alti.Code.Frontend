@@ -502,7 +502,7 @@ function PromptInputFullLineComponent({
             >
               <DropdownTrigger>
                 <button
-                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-normal select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
+                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
                   type="button"
                 >
                   <Icon
