@@ -72,6 +72,40 @@ const saveChatResponse = async (userId, sessionId, prompt, model, reply, toolExe
 };
 
 /**
+ * Sanitize sensitive credentials from error messages to prevent logs/stack-trace leakage.
+ */
+const sanitizeErrorMessage = (message) => {
+    if (!message) return 'An error occurred during LLM generation.';
+    return message
+        .replace(/AIzaSy[A-Za-z0-9_-]{30,40}/g, 'AIzaSy...[MASKED]')
+        .replace(/sk-[A-Za-z0-9]{32,}/g, 'sk-...[MASKED]')
+        .replace(/Bearer\s+[A-Za-z0-9._-]+/gi, 'Bearer [MASKED]')
+        .replace(/api-key['"]?\s*:\s*['"]?[A-Za-z0-9_-]+/gi, 'api-key: [MASKED]')
+        .replace(/https:\/\/[A-Za-z0-9.-]+\.openai\.azure\.com/gi, 'https://[AZURE_ENDPOINT_MASKED]');
+};
+
+/**
+ * Execute request with transient error retry.
+ */
+const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
+    let attempt = 0;
+    while (attempt <= maxRetries) {
+        try {
+            return await fn();
+        } catch (err) {
+            attempt++;
+            const status = err.status || err.statusCode || 0;
+            const isTransient = status === 429 || status >= 500 || err.message?.includes('timeout') || err.message?.includes('ETIMEDOUT');
+            if (attempt > maxRetries || !isTransient) {
+                throw err;
+            }
+            logger.warn(`⚠️ [LlmGateway] Transient error encountered (attempt ${attempt}/${maxRetries}). Retrying in ${delay * attempt}ms...`);
+            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+        }
+    }
+};
+
+/**
  * In-memory client connection router based on secure Vault key states.
  */
 const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperature = 0.5) => {
@@ -119,44 +153,52 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
         const gcpProjectId = creds.gcpProjectId || process.env.GCP_PROJECT_ID;
         const cleanModelName = modelName.replace(/^google\//, '');
 
-        if (gcpProjectId && (creds.gcpPrivateKey || process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-            // Native GCP Vertex AI initialization
-            logger.info('🧠 [LlmGateway] Initializing Vertex AI client natively...');
-            const config = {
-                project: gcpProjectId,
-                location: 'us-central1'
-            };
-
-            if (creds.gcpClientEmail && creds.gcpPrivateKey) {
-                let cleanPrivateKey = creds.gcpPrivateKey;
-                if (typeof cleanPrivateKey === 'string') {
-                    cleanPrivateKey = cleanPrivateKey.replace(/\\n/g, '\n');
-                }
-                config.googleAuthOptions = {
-                    credentials: {
-                        client_email: creds.gcpClientEmail,
-                        private_key: cleanPrivateKey
-                    }
+        try {
+            if (gcpProjectId && (creds.gcpPrivateKey || process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+                // Native GCP Vertex AI initialization
+                logger.info('🧠 [LlmGateway] Initializing Vertex AI client natively...');
+                const config = {
+                    project: gcpProjectId,
+                    location: 'us-central1'
                 };
-            }
 
-            const vertex = new VertexAI(config);
-            const model = vertex.getGenerativeModel({ model: cleanModelName });
-            const result = await model.generateContent(finalPrompt);
-            const response = await result.response;
-            reply = response.candidates[0].content.parts[0].text;
-        } else if (geminiApiKey) {
-            // Standard API Key fallback
-            logger.info('🧠 [LlmGateway] Using Google Generative AI with fallback API Key...');
-            const ai = new GoogleGenerativeAI(geminiApiKey);
-            const model = ai.getGenerativeModel({ model: cleanModelName });
-            const result = await model.generateContent(finalPrompt);
-            const response = await result.response;
-            reply = response.candidates[0].content.parts[0].text;
-        } else {
+                if (creds.gcpClientEmail && creds.gcpPrivateKey) {
+                    let cleanPrivateKey = creds.gcpPrivateKey;
+                    if (typeof cleanPrivateKey === 'string') {
+                        cleanPrivateKey = cleanPrivateKey.replace(/\\n/g, '\n');
+                    }
+                    config.googleAuthOptions = {
+                        credentials: {
+                            client_email: creds.gcpClientEmail,
+                            private_key: cleanPrivateKey
+                        }
+                    };
+                }
+
+                const vertex = new VertexAI(config);
+                const model = vertex.getGenerativeModel({ model: cleanModelName });
+                const result = await callWithRetry(() => model.generateContent(finalPrompt));
+                const response = await result.response;
+                reply = response.candidates[0].content.parts[0].text;
+            } else if (geminiApiKey) {
+                // Standard API Key fallback
+                logger.info('🧠 [LlmGateway] Using Google Generative AI with fallback API Key...');
+                const ai = new GoogleGenerativeAI(geminiApiKey);
+                const model = ai.getGenerativeModel({ model: cleanModelName });
+                const result = await callWithRetry(() => model.generateContent(finalPrompt));
+                const response = await result.response;
+                reply = response.candidates[0].content.parts[0].text;
+            } else {
+                throw new ApiError(
+                    httpStatus.BAD_REQUEST,
+                    'Google Vertex / Gemini credentials are missing in the secure Vault.'
+                );
+            }
+        } catch (err) {
+            logger.error(`❌ [LlmGateway] Gemini/Vertex AI execution failed: ${sanitizeErrorMessage(err.message)}`);
             throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'Google Vertex / Gemini credentials are missing in the secure Vault.'
+                err.status || httpStatus.INTERNAL_SERVER_ERROR,
+                sanitizeErrorMessage(err.message)
             );
         }
     }
@@ -172,18 +214,29 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             );
         }
 
-        const anthropic = new Anthropic({
-            apiKey: anthropicApiKey
-        });
+        try {
+            const anthropic = new Anthropic({
+                apiKey: anthropicApiKey,
+                timeout: 20 * 1000 // 20s secure timeout
+            });
 
-        const response = await anthropic.messages.create({
-            model: modelName,
-            max_tokens: 4096,
-            messages: [{ role: 'user', content: finalPrompt }],
-            temperature: temperature
-        });
+            const response = await callWithRetry(() =>
+                anthropic.messages.create({
+                    model: modelName,
+                    max_tokens: 4096,
+                    messages: [{ role: 'user', content: finalPrompt }],
+                    temperature: temperature
+                })
+            );
 
-        reply = response.content[0].text;
+            reply = response.content[0].text;
+        } catch (err) {
+            logger.error(`❌ [LlmGateway] Anthropic execution failed: ${sanitizeErrorMessage(err.message)}`);
+            throw new ApiError(
+                err.status || httpStatus.INTERNAL_SERVER_ERROR,
+                sanitizeErrorMessage(err.message)
+            );
+        }
     }
     // 3. Azure OpenAI Foundry Proxy Connection
     else if (modelName.startsWith('azure/') || creds.azureEndpoint) {
@@ -205,22 +258,33 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
 
         const cleanModelName = modelName.replace(/^azure\//, '');
         
-        // standard deployment extraction or custom endpoint parsing
-        const openai = new OpenAI({
-            apiKey: creds.azureApiKey,
-            baseURL: `${endpoint}/openai/deployments/${cleanModelName}`,
-            defaultHeaders: { 'api-key': creds.azureApiKey },
-            defaultQuery: { 'api-version': '2024-02-15-preview' }
-        });
+        try {
+            // standard deployment extraction or custom endpoint parsing
+            const openai = new OpenAI({
+                apiKey: creds.azureApiKey,
+                baseURL: `${endpoint}/openai/deployments/${cleanModelName}`,
+                defaultHeaders: { 'api-key': creds.azureApiKey },
+                defaultQuery: { 'api-version': '2024-02-15-preview' },
+                timeout: 20 * 1000 // 20s secure timeout
+            });
 
-        const response = await openai.chat.completions.create({
-            model: cleanModelName,
-            messages: [{ role: 'user', content: finalPrompt }],
-            temperature: temperature
-        });
+            const response = await callWithRetry(() =>
+                openai.chat.completions.create({
+                    model: cleanModelName,
+                    messages: [{ role: 'user', content: finalPrompt }],
+                    temperature: temperature
+                })
+            );
 
-        reply = response.choices[0].message.content;
-        usedModelName = `azure/${cleanModelName}`;
+            reply = response.choices[0].message.content;
+            usedModelName = `azure/${cleanModelName}`;
+        } catch (err) {
+            logger.error(`❌ [LlmGateway] Azure OpenAI Foundry execution failed: ${sanitizeErrorMessage(err.message)}`);
+            throw new ApiError(
+                err.status || httpStatus.INTERNAL_SERVER_ERROR,
+                sanitizeErrorMessage(err.message)
+            );
+        }
     }
     // 3. OpenAI Direct Client Connection (GPT-4o, GPT-4, o1-pro)
     else {
@@ -234,17 +298,28 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             );
         }
 
-        const openai = new OpenAI({
-            apiKey: openaiApiKey
-        });
+        try {
+            const openai = new OpenAI({
+                apiKey: openaiApiKey,
+                timeout: 20 * 1000 // 20s secure timeout
+            });
 
-        const response = await openai.chat.completions.create({
-            model: modelName || 'gpt-4o',
-            messages: [{ role: 'user', content: finalPrompt }],
-            temperature: temperature
-        });
+            const response = await callWithRetry(() =>
+                openai.chat.completions.create({
+                    model: modelName || 'gpt-4o',
+                    messages: [{ role: 'user', content: finalPrompt }],
+                    temperature: temperature
+                })
+            );
 
-        reply = response.choices[0].message.content;
+            reply = response.choices[0].message.content;
+        } catch (err) {
+            logger.error(`❌ [LlmGateway] OpenAI direct execution failed: ${sanitizeErrorMessage(err.message)}`);
+            throw new ApiError(
+                err.status || httpStatus.INTERNAL_SERVER_ERROR,
+                sanitizeErrorMessage(err.message)
+            );
+        }
     }
 
     if (!reply) {
@@ -267,5 +342,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
 
 export const LlmGatewayService = {
     routeCompletion,
-    saveChatResponse
+    saveChatResponse,
+    sanitizeErrorMessage,
+    callWithRetry
 };

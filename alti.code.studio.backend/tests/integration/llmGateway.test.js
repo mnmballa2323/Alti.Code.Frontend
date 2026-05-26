@@ -108,4 +108,51 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
         expect(chat.responses).toBeInstanceOf(Array);
         expect(chat.responses[0].reply).toBe('Mock secure synthesis reply.');
     });
+
+    it('LLM Gateway Defense: should sanitize sensitive credentials from error messages', () => {
+        const rawMessage = 'Error connecting with API Key AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6 and key sk-abcdefghijklmnopqrstuvwxyz0123456789 or Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 and headers api-key: my-azure-secret-key-1234 on endpoint https://my-resource.openai.azure.com';
+        const sanitized = LlmGatewayService.sanitizeErrorMessage(rawMessage);
+
+        expect(sanitized).not.toContain('AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6');
+        expect(sanitized).not.toContain('sk-abcdefghijklmnopqrstuvwxyz0123456789');
+        expect(sanitized).not.toContain('Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
+        expect(sanitized).not.toContain('my-azure-secret-key-1234');
+        expect(sanitized).not.toContain('https://my-resource.openai.azure.com');
+
+        expect(sanitized).toContain('AIzaSy...[MASKED]');
+        expect(sanitized).toContain('sk-...[MASKED]');
+        expect(sanitized).toContain('Bearer [MASKED]');
+        expect(sanitized).toContain('api-key: [MASKED]');
+        expect(sanitized).toContain('https://[AZURE_ENDPOINT_MASKED]');
+    });
+
+    it('LLM Gateway Agility: should retry transient errors and recover', async () => {
+        let calls = 0;
+        const fn = async () => {
+            calls++;
+            if (calls < 3) {
+                const err = new Error('Rate limit exceeded (timeout)');
+                err.status = 429;
+                throw err;
+            }
+            return 'Success after retry';
+        };
+
+        const result = await LlmGatewayService.callWithRetry(fn, 2, 10);
+        expect(calls).toBe(3);
+        expect(result).toBe('Success after retry');
+    });
+
+    it('LLM Gateway Agility: should fail immediately on non-transient errors', async () => {
+        let calls = 0;
+        const fn = async () => {
+            calls++;
+            const err = new Error('Invalid credentials');
+            err.status = 401; // Not transient
+            throw err;
+        };
+
+        await expect(LlmGatewayService.callWithRetry(fn, 2, 10)).rejects.toThrow('Invalid credentials');
+        expect(calls).toBe(1); // No retry
+    });
 });
