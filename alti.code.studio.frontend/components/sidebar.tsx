@@ -106,7 +106,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   const [urlIndex, setUrlIndex] = useState(0);
   
   const slug = app.id.replace("app-", "").toLowerCase();
-  const cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+  let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+  if (cleanSlug.startsWith("mcp_toolbox_")) {
+    cleanSlug = cleanSlug.slice(12);
+  } else if (cleanSlug.startsWith("mcp_")) {
+    cleanSlug = cleanSlug.slice(4);
+  }
   
   const localLogoMappings: Record<string, string> = {
     // Core Apps
@@ -1691,9 +1696,9 @@ export default function Sidebar() {
             <input
               className="w-full bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
               placeholder="Search..."
-              value={pathname === "/connect-apps" ? secondarySearch : ""}
+              value={pathname === "/connect-apps" || pathname === "/mcp" ? secondarySearch : ""}
               onChange={(e) => {
-                if (pathname === "/connect-apps") {
+                if (pathname === "/connect-apps" || pathname === "/mcp") {
                   setSecondarySearch(e.target.value);
                 }
               }}
@@ -1765,7 +1770,71 @@ export default function Sidebar() {
           hideScrollBar
           className="flex-1 px-2 mt-1 min-w-[256px] scrollbar-hide"
         >
-          {pathname === "/connect-apps" ? (
+          {pathname === "/mcp" ? (
+            <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+              {(() => {
+                const mcpApps = FALLBACK_APPS.filter((app) => 
+                  app.id.startsWith("app-mcp_") || app.id.startsWith("app-mcp_toolbox_")
+                );
+                
+                const filtered = mcpApps.filter((app) =>
+                  app.name.toLowerCase().includes(secondarySearch.toLowerCase()) ||
+                  app.description.toLowerCase().includes(secondarySearch.toLowerCase())
+                );
+
+                if (filtered.length === 0) {
+                  return <span className="text-xs text-default-400 text-center py-12">No servers found</span>;
+                }
+
+                return filtered.map((app) => {
+                  const isActive = selectedAppId === app.id;
+                  return (
+                    <button
+                      key={app.id}
+                      onClick={() => {
+                        setSelectedAppId(app.id);
+                        window.dispatchEvent(
+                          new CustomEvent("select-mcp-server", { detail: app })
+                        );
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                        isActive
+                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                          : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div
+                          className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                            isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
+                          )}
+                        >
+                          <AppIcon app={app} className="w-full h-full object-contain" />
+                        </div>
+                        <span className="text-xs text-left truncate pr-2">
+                          {app.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {app.status === "connected" && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                        )}
+                        <Icon
+                          icon="solar:alt-arrow-right-linear"
+                          className={cn(
+                            "text-xs text-default-400 transition-transform",
+                            isActive ? "translate-x-0.5 text-primary" : ""
+                          )}
+                        />
+                      </div>
+                    </button>
+                  );
+                });
+              })()}
+            </div>
+          ) : pathname === "/connect-apps" ? (
             <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
               {loadingApps ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3">

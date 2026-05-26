@@ -124,7 +124,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   const [urlIndex, setUrlIndex] = useState(0);
   
   const slug = app.id.replace("app-", "").toLowerCase();
-  const cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+  let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+  if (cleanSlug.startsWith("mcp_toolbox_")) {
+    cleanSlug = cleanSlug.slice(12);
+  } else if (cleanSlug.startsWith("mcp_")) {
+    cleanSlug = cleanSlug.slice(4);
+  }
   
   const localLogoMappings: Record<string, string> = {
     // Core Apps

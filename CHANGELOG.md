@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.27.0] - 2026-05-26 — Model Context Protocol (MCP) 97+ Servers & Google MCP Toolbox Integration
+### Added
+- **MCP Sidebar Menu Navigation integration**: Dynamically lists all 97+ official MCP servers in the sidebar's secondary column when the user is on the Nervous System page (`/mcp`), enabling live catalog search and real-time filtering.
+- **Google MCP Toolbox Suite Integration**: Installed 23 enterprise database and cloud platform integrations (including Google Cloud Spanner, AlloyDB, BigQuery, Bigtable, Cloud SQL, CockroachDB, ClickHouse, TiDB, Cassandra, Couchbase, Looker, etc.) from `googleapis/mcp-toolbox` directly into the Alti integrations catalog and left-side menu.
+- **Dynamic Connection & Launcher Presets**: Pre-populated full, official stdio connection commands and argument presets (e.g., `npx -y @modelcontextprotocol/server-sqlite` for SQLite, `npx -y @google/mcp-toolbox --prebuilt=alloydb` for AlloyDB, etc.) in a premium launch modal.
+- **Prefix-Free Naming & High-Fidelity Logo Resolution**: Removed the generic `"MCP "` prefix from all 97+ servers (e.g., matching `Brave Search` instead of `MCP Brave Search`, `PostgreSQL` instead of `MCP PostgreSQL`). Updated the brand logo parser to strip `mcp_` and `mcp_toolbox_` prefixes from slugs, allowing the **Clearbit** and **Composio** CDN engines to retrieve official corporate brand assets with zero initial/placeholder fallbacks.
+
 ## [39.26.0] - 2026-05-26 — Left Sidebar Clickability & Layout Layering Fix
 ### Fixed
 - **Sidebar Clickability Z-Index Stack**: Resolved the unclickable left side navigation menu issue on the Integrations page by elevating the `ChatBotLayout` sidebar wrapper from `z-50` to `z-[100]`.
