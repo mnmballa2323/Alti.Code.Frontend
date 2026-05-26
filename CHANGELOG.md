@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.36.0] - 2026-05-26 — Design Workspace Consolidation & Clean Removal
+### Removed
+- **Frontend: Standalone Design Page Deletion**: Completely deleted the redundant, mock `/design` route page (`app/design/page.tsx`) to eliminate duplicate views.
+- **Frontend: Sidebar Navigation Simplification**: Stripped the "Design" navigation button, case routing statements, and `PenTool` icon imports from `components/sidebar.tsx` to streamline the layout.
+### Changed
+- **Backend & Core Verification**: Re-compiled the entire Next.js production build cleanly (succeeding in 52s) to verify that all 77 pages are fully generated without any dead references or broken compile-time paths.
+- **Project Version bump**: Incremented root `VERSION` to `39.36.0` and successfully backed up all updates to GitHub.
+
 ## [39.35.2] - 2026-05-26 — Vertex AI & Azure OpenAI Foundry Integration Upgrades
 ### Changed
 - **Backend: Vertex AI Native Credentials Integration**: Enhanced `LlmGatewayService` to pass decrypted Vault service account credentials (`gcpClientEmail`, `gcpPrivateKey`) to the `VertexAI` constructor, correctly converting double-escaped newlines to enable 100% stable IAM authorization.
