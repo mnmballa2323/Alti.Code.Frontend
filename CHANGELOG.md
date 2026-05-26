@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.11.3] - 2026-05-26 — Sidebar Canvas Link Simplification
+### Changed
+- **Hiding Visual Canvas Navigation**: Commented out the primary sidebar navigation link for `/workflow-builder` (Canvas) in `components/sidebar.tsx` to streamline the product layout onto the production-grade, highly cohesive developer spaces. The underlying workflow builder engine is fully preserved in the codebase for future Swarm Graph execution sprints.
+
 ## [39.11.2] - 2026-05-26 — Sidebar selectedRepo Reference Hotfix
 ### Fixed
 - **selectedRepo ReferenceError**: Resolved a ReferenceError ("Cannot access 'selectedRepo' before initialization") in `components/sidebar.tsx` by correctly declaring `repoSearch` and `selectedRepo` states at the very top of the Sidebar component before they are accessed by the codebase rules query.

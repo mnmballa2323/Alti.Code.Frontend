@@ -874,7 +874,7 @@ export default function Sidebar() {
               Design
             </span>
           </button>
-          <button
+          {/* <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
               pathname === "/workflow-builder"
@@ -892,7 +892,7 @@ export default function Sidebar() {
             >
               Canvas
             </span>
-          </button>
+          </button> */}
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
