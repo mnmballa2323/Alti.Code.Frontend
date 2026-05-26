@@ -89,8 +89,18 @@ export default function AudioRecorder({
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Google Cloud Speech error:", event.error);
-      toast.error(`☁️ GCP Microphone error: ${event.error}`);
+      console.warn("GCP Speech Recognition warning:", event.error);
+      
+      let friendlyMessage = `Microphone error: ${event.error}`;
+      if (event.error === "not-allowed") {
+        friendlyMessage = "Microphone access is blocked. Please click the mic icon in your browser URL bar to grant permission.";
+      } else if (event.error === "no-speech") {
+        friendlyMessage = "No speech was detected. Please try speaking again.";
+      } else if (event.error === "network") {
+        friendlyMessage = "A network error occurred. Please check your internet connection.";
+      }
+      
+      toast.error(friendlyMessage);
       setRecording(false);
       setLoadingText(false);
     };
@@ -144,7 +154,7 @@ export default function AudioRecorder({
         <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
       ) : !recording && !loadingText ? (
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Mic
               className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
               onClick={startRecording}
