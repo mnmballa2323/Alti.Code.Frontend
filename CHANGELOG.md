@@ -5,6 +5,18 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.25.0] - 2026-05-26 — Integrations Page Master-Detail Layout Refactor
+### Changed
+- **Split-Pane Master-Detail Redesign**: Overhauled the Integrations (`/connect-apps`) page from a static grid & popup modal architecture to a premium split-pane master-detail layout matching the high-end dashboard screenshots.
+- **Dynamic Catalog Left Sidebar**: Added a dedicated `w-80` search-filtered catalog sidebar featuring:
+  - **Five-Icon Segmented Tab Triggers**: Renders a segmented tab control row (`Chat`, `Files`, `Settings`, `Apps` [selected], `Zap`).
+  - **Composio Apps Catalog List**: Displays scrollable lists of available integrations featuring caret navigation and active-link row selections.
+  - **My Account Stretched Footer**: Stretches a rounded-xl `My Account` utility action button at the bottom of the sidebar.
+- **Premium Right Presentation Panel**:
+  - **Isolated Action Hub (Idle Hub)**: Renders a beautiful blue gradient Sparkles banner, descriptive copy, and dual bottom cards ("100% Isolated Scoping" and "Composio MCP Auth") when no app is selected.
+  - **Connect App Presentation Card**: Installs a centered rounded-3xl connection card showing the app's logo in a rounded-2xl container, "Authorize Connection" action triggers, and protocol footnotes when an integration is chosen.
+  - **Capabilities Tabs Retention**: Maintains full Webhook triggers and Tool capability indexing panels inline below the connection card, ensuring 100% feature parity.
+
 ## [39.24.0] - 2026-05-26 — Assets Live Preview Relocation & Vertical Scaling
 ### Changed
 - **Live Preview Relocation**: Repositioned the dynamic `Live Preview` frame to sit elegantly at the very top of the centered Company Assets form column (`app/assets/page.tsx`), right above the `Asset Name` field.

@@ -314,350 +314,352 @@ export default function ConnectAppsPage() {
       <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
         {/* Standardized Header */}
         <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
-          <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
-            <div className="flex items-center gap-3 shrink-0">
-              <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <h1 className="text-[14px] font-semibold tracking-tight text-default-900 flex items-center gap-2">
                 Integrations
               </h1>
             </div>
+          </div>
+        </div>
 
-            <div className="flex items-center gap-4 flex-1 justify-end ml-8">
-              <div className="relative max-w-sm w-full hidden md:block">
+        {/* Master-Detail Split Screen Container */}
+        <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
+          {/* Left Column: App Catalog Sidebar */}
+          <div className="w-80 shrink-0 border-r border-default-200 dark:border-default-100/50 bg-[#F9F9FB] dark:bg-[#0E0E10] flex flex-col h-full overflow-hidden select-none">
+            {/* Search Input Box */}
+            <div className="p-4 flex flex-col gap-3 bg-white dark:bg-[#0A0A0A] border-b border-default-200 dark:border-default-100/50">
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4 z-10 pointer-events-none" />
                 <input
-                  className="w-full bg-default-50 dark:bg-background border border-default-200 rounded-full h-8 pl-9 pr-8 text-sm font-medium placeholder:font-normal focus:outline-none focus:border-indigo-500 transition-all relative z-0"
+                  className="w-full bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-[#e4e4e7] dark:hover:bg-[#3f3f46] border border-transparent rounded-xl h-9 pl-9 pr-8 text-xs font-semibold placeholder:font-normal focus:outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-[#27272a] transition-all duration-200"
                   placeholder="Search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
                 {search && (
                   <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-600"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-600 transition-colors"
                     onClick={() => setSearch("")}
                   >
-                    <Icon
-                      className="text-base"
-                      icon="solar:close-circle-bold"
-                    />
+                    <Icon className="text-base" icon="solar:close-circle-bold" />
                   </button>
                 )}
               </div>
 
-              <div className="flex bg-default-50 dark:bg-background border border-default-200 h-8 p-0.5 rounded-full shrink-0">
+              {/* 5-Icon Tab Switcher segmented triggers */}
+              <div className="flex bg-[#f4f4f5] dark:bg-[#27272a]/50 p-0.5 rounded-xl justify-between items-center w-full">
                 <button
-                  className={`h-full px-4 rounded-full text-xs font-medium transition-colors ${activeTab === "all" ? "bg-white dark:bg-default-200 text-black dark:text-white shadow-sm border border-default-200" : "text-default-500 hover:text-black dark:hover:text-white border border-transparent"}`}
-                  onClick={() => setActiveTab("all")}
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
                 >
-                  All Apps
+                  <Icon icon="solar:chat-round-line-bold" className="text-base" />
                 </button>
                 <button
-                  className={`h-full px-4 rounded-full text-xs font-medium transition-colors ${activeTab === "connected" ? "bg-white dark:bg-default-200 text-black dark:text-white shadow-sm border border-default-200" : "text-default-500 hover:text-black dark:hover:text-white border border-transparent"}`}
-                  onClick={() => setActiveTab("connected")}
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
                 >
-                  Connected
+                  <Icon icon="solar:folder-bold" className="text-base" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
+                >
+                  <Icon icon="solar:settings-bold" className="text-base" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg bg-white dark:bg-[#27272a] text-primary dark:text-white shadow-sm"
+                >
+                  <Icon icon="solar:widget-bold" className="text-base" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
+                >
+                  <Icon icon="solar:bolt-bold" className="text-base" />
                 </button>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Dynamic Content */}
-        <div className="relative flex flex-1 w-full bg-default-50 overflow-hidden">
-          <div className="container mx-auto max-w-7xl h-full overflow-y-auto relative flex flex-col pt-6">
-            {/* Grid Layout */}
-            <div className="px-6 pb-12">
+            {/* Catalog List */}
+            <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-1">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-default-400 px-3 py-2 select-none">
+                Composio Apps
+              </span>
+
               {loading ? (
-                <div className="flex flex-col items-center justify-center h-64 gap-4">
-                  <Icon
-                    className="text-4xl text-indigo-500"
-                    icon="line-md:loading-twotone-loop"
-                  />
-                  <p className="text-default-400 text-sm">
-                    Syncing Composio Catalog...
-                  </p>
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+                  <span className="text-xs text-default-400">Loading catalog...</span>
                 </div>
+              ) : filteredApps.length === 0 ? (
+                <span className="text-xs text-default-400 text-center py-12">No apps found</span>
               ) : (
-                <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <AnimatePresence>
-                    {filteredApps.map((app) => (
-                      <motion.div
-                        key={app.id}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="group relative flex flex-col justify-between p-5 bg-white dark:bg-default-50 rounded-2xl border border-default-200 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all duration-300 cursor-pointer"
-                        exit={{ opacity: 0, scale: 0.98 }}
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.15 }}
-                        onClick={() => openAppDetailsModal(app)}
-                      >
-                        <div className="flex justify-between items-center mb-4">
-                          <h3 className="text-lg font-bold text-default-900 m-0 truncate pr-4">
-                            {app.name}
-                          </h3>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {app.status === "connected" && (
-                              <span className="flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase bg-success/15 text-success border border-success/30 rounded-full">
-                                <Icon icon="solar:check-circle-bold" />
-                                Connected
-                              </span>
-                            )}
-                            {app.type === "custom" &&
-                              app.status !== "connected" && (
-                                <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase bg-secondary/15 text-secondary border border-secondary/20 rounded-full">
-                                  Custom
-                                </span>
-                              )}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-end mt-2 pt-4 border-t border-default-100">
-                          {app.status === "disconnected" ? (
-                            <button
-                              className="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold transition-colors w-full h-10 rounded-lg text-sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleConnect(app.id);
-                              }}
-                            >
-                              Connect
-                            </button>
-                          ) : app.status === "connecting" ? (
-                            <button
-                              disabled
-                              className="bg-indigo-50 text-indigo-500 font-semibold w-full h-10 rounded-lg text-sm flex items-center justify-center gap-2 cursor-wait"
-                            >
-                              <Icon
-                                className="text-lg"
-                                icon="line-md:loading-twotone-loop"
-                              />
-                              Authenticating
-                            </button>
-                          ) : (
-                            <button
-                              className="font-semibold bg-danger/5 hover:bg-danger/10 text-danger w-full h-10 rounded-lg text-sm transition-colors"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDisconnect(app.id);
-                              }}
-                            >
-                              Disconnect
-                            </button>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </motion.div>
-              )}
-
-              {!loading && filteredApps.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-32 text-default-400">
-                  <Icon
-                    className="text-6xl mb-4 opacity-50"
-                    icon={
-                      activeTab === "connected"
-                        ? "solar:plug-circle-bold"
-                        : "solar:ghost-bold"
-                    }
-                  />
-                  <h3 className="text-xl font-bold text-default-600 mb-1">
-                    No integrations found
-                  </h3>
-                  <p className="text-center mb-6 max-w-md">
-                    {activeTab === "connected"
-                      ? "You haven't connected any apps yet. Switch to 'All Integrations' to explore the catalog."
-                      : "Try searching for something else."}
-                  </p>
-                  {activeTab === "connected" && (
+                filteredApps.map((app) => {
+                  const isActive = selectedApp?.id === app.id;
+                  return (
                     <button
-                      className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-6 h-11 rounded-full font-bold transition-colors"
-                      onClick={() => setActiveTab("all")}
+                      key={app.id}
+                      onClick={() => openAppDetailsModal(app)}
+                      className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                          : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
+                      }`}
                     >
-                      Browse Integrations
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* Dynamic Mini App Logo/Icon */}
+                        <div
+                          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 ${
+                            isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
+                          }`}
+                        >
+                          <Icon className="text-lg" icon={app.icon || "solar:box-bold"} />
+                        </div>
+                        <span className="text-xs text-left truncate pr-2">
+                          {app.name}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {app.status === "connected" && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                        )}
+                        <Icon
+                          icon="solar:alt-arrow-right-linear"
+                          className={`text-xs text-default-400 transition-transform ${
+                            isActive ? "translate-x-0.5 text-primary" : ""
+                          }`}
+                        />
+                      </div>
                     </button>
-                  )}
-                </div>
+                  );
+                })
               )}
             </div>
+
+            {/* Stretched My Account Footer Button */}
+            <div className="p-4 border-t border-default-200 dark:border-default-100/50 bg-white dark:bg-[#0E0E10]/30">
+              <button
+                type="button"
+                className="w-full font-bold text-xs h-10 rounded-xl bg-default-100 dark:bg-default-200 hover:bg-default-200 dark:hover:bg-default-300 transition-all text-default-700 dark:text-default-300 border border-transparent dark:border-default-100/30 flex items-center justify-center"
+              >
+                My Account
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Center Presentation Area */}
+          <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
+            <AnimatePresence mode="wait">
+              {!selectedApp ? (
+                /* Idle Hub View */
+                <motion.div
+                  key="idle"
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full"
+                >
+                  <div className="flex flex-col items-center gap-4">
+                    {/* Blue Spars Circle Icon */}
+                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
+                      <Icon icon="solar:stars-line-bold" className="text-3xl" />
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-default-900 tracking-tight">
+                      Isolated Action Hub
+                    </h2>
+                    <p className="text-sm text-default-500 max-w-md leading-relaxed">
+                      Connect and prompt individual web applications securely. Select an application in the sidebar to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
+                    </p>
+                  </div>
+
+                  {/* Dual Bottom Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
+                      <div className="flex items-center gap-2 text-primary">
+                        <Icon icon="solar:shield-keyhole-bold" className="text-xl" />
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          100% Isolated Scoping
+                        </span>
+                      </div>
+                      <p className="text-xs text-default-500 leading-normal">
+                        Tools are locked dynamically to ensure strict deterministic execution.
+                      </p>
+                    </div>
+
+                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
+                      <div className="flex items-center gap-2 text-primary">
+                        <Icon icon="solar:key-bold" className="text-xl" />
+                        <span className="text-xs font-bold uppercase tracking-wider">
+                          Composio MCP Auth
+                        </span>
+                      </div>
+                      <p className="text-xs text-default-500 leading-normal">
+                        Universal OAuth management handles complex authentications seamlessly.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : (
+                /* Selected App Connection details & Capabilities */
+                <motion.div
+                  key={selectedApp.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
+                >
+                  {/* Connect App Card Wrapper */}
+                  <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center text-center gap-6">
+                    {/* App logo inside custom box */}
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0">
+                      <Icon className="text-3xl text-default-800 dark:text-white" icon={selectedApp.icon || "solar:box-bold"} />
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                      <h2 className="text-xl font-bold text-default-900">
+                        Connect {selectedApp.name}
+                      </h2>
+                      <p className="text-xs text-default-500 leading-relaxed px-2">
+                        Integrate {selectedApp.name} to seamlessly execute automated workflows, synchronize data, and orchestrate {selectedApp.name} actions directly within Alti.
+                      </p>
+                    </div>
+
+                    {/* Authorize button triggers */}
+                    <div className="w-full">
+                      {selectedApp.status === "disconnected" ? (
+                        <button
+                          type="button"
+                          onClick={() => handleConnect(selectedApp.id)}
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10"
+                        >
+                          <Icon icon="solar:key-bold" className="text-base" />
+                          Authorize Connection
+                        </button>
+                      ) : selectedApp.status === "connecting" ? (
+                        <button
+                          disabled
+                          type="button"
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-default-100 dark:bg-default-200 text-default-400 flex items-center justify-center gap-2 cursor-wait"
+                        >
+                          <Icon icon="line-md:loading-twotone-loop" className="text-base" />
+                          Authenticating Connection...
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleDisconnect(selectedApp.id)}
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20"
+                        >
+                          Disconnect Connection
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Footnote */}
+                    <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
+                      <Icon icon="solar:lock-bold" className="text-xs" />
+                      Authenticated securely via Composio protocol
+                    </div>
+                  </div>
+
+                  {/* Capabilities Accordion Tab Views inside the details page */}
+                  <div className="w-full flex flex-col gap-4 mt-2">
+                    <div className="flex border-b border-default-200 dark:border-default-100/50">
+                      <button
+                        type="button"
+                        className={`pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
+                          modalTab === "tools"
+                            ? "border-primary text-primary"
+                            : "border-transparent text-default-400 hover:text-default-700"
+                        }`}
+                        onClick={() => setModalTab("tools")}
+                      >
+                        Capabilities (Tools)
+                      </button>
+                      <button
+                        type="button"
+                        className={`ml-6 pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
+                          modalTab === "triggers"
+                            ? "border-primary text-primary"
+                            : "border-transparent text-default-400 hover:text-default-700"
+                        }`}
+                        onClick={() => setModalTab("triggers")}
+                      >
+                        Webhooks (Triggers)
+                      </button>
+                    </div>
+
+                    {/* Tab contents list */}
+                    <div className="w-full">
+                      {loadingDetails ? (
+                        <div className="flex flex-col items-center py-8 gap-3">
+                          <Icon className="text-xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+                          <span className="text-[11px] text-default-400">Syncing with Composio...</span>
+                        </div>
+                      ) : modalTab === "tools" ? (
+                        appTools.length === 0 ? (
+                          <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                            <span className="text-xs text-default-400">No capabilities found</span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-2">
+                            {appTools.map((tool) => (
+                              <div
+                                key={tool.id}
+                                className="flex flex-col p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                              >
+                                <div className="flex items-center gap-2 mb-1">
+                                  <Icon className="text-primary text-base shrink-0" icon="solar:bolt-circle-bold" />
+                                  <p className="font-bold text-xs text-default-800 truncate">{tool.name}</p>
+                                </div>
+                                <p className="text-[11px] text-default-500 leading-normal pl-6">
+                                  {tool.description}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )
+                      ) : appTriggers.length === 0 ? (
+                        <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                          <span className="text-xs text-default-400">No webhooks found</span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2">
+                          {appTriggers.map((trigger) => (
+                            <div
+                              key={trigger.id}
+                              className="flex items-center justify-between p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                            >
+                              <div className="min-w-0 pr-3">
+                                <p className="font-bold text-xs text-default-800 truncate mb-0.5">{trigger.name}</p>
+                                <p className="text-[9px] text-default-400 font-mono truncate">{trigger.id}</p>
+                              </div>
+                              <button className="px-3 h-7 bg-default-100 hover:bg-success hover:text-white rounded-lg text-[10px] font-bold transition-colors uppercase tracking-wider shrink-0">
+                                Enable
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
-
-      {/* App Details Modal */}
-      {isOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 99999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          {/* Backdrop */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0,0,0,0.4)",
-              backdropFilter: "blur(4px)",
-            }}
-            onClick={onClose}
-          />
-          {/* Modal Content */}
-          <motion.div
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="dark:bg-default-50 border border-default-200"
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            style={{
-              position: "relative",
-              background: "white",
-              borderRadius: "24px",
-              width: "100%",
-              maxWidth: "600px",
-              maxHeight: "85vh",
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)",
-            }}
-          >
-            <div className="flex flex-col gap-1 p-6 pb-2">
-              <div className="flex justify-between items-start w-full">
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`w-14 h-14 flex items-center justify-center rounded-2xl shrink-0 ${selectedApp?.color}`}
-                  >
-                    <Icon
-                      className="text-3xl"
-                      icon={selectedApp?.icon || "solar:box-bold"}
-                    />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold">{selectedApp?.name}</h2>
-                    <p className="text-sm text-default-500 font-medium">
-                      Integration Capabilities & Settings
-                    </p>
-                  </div>
-                </div>
-                <button
-                  className="p-2 text-default-400 hover:text-default-600 hover:bg-default-100 rounded-full transition-colors"
-                  onClick={onClose}
-                >
-                  <Icon className="text-2xl" icon="solar:close-circle-bold" />
-                </button>
-              </div>
-            </div>
-            <div className="px-6 border-b border-default-100 mt-4">
-              <div className="flex gap-8">
-                <button
-                  className={`pb-3 text-sm font-bold border-b-2 transition-colors ${modalTab === "tools" ? "border-indigo-500 text-indigo-600" : "border-transparent text-default-500 hover:text-default-800"}`}
-                  onClick={() => setModalTab("tools")}
-                >
-                  Capabilities (Tools)
-                </button>
-                <button
-                  className={`pb-3 text-sm font-bold border-b-2 transition-colors ${modalTab === "triggers" ? "border-indigo-500 text-indigo-600" : "border-transparent text-default-500 hover:text-default-800"}`}
-                  onClick={() => setModalTab("triggers")}
-                >
-                  Webhooks (Triggers)
-                </button>
-              </div>
-            </div>
-            <div className="p-6 overflow-y-auto flex-1 bg-default-50/30">
-              {loadingDetails ? (
-                <div className="flex flex-col items-center py-16 gap-4">
-                  <Icon
-                    className="text-4xl text-indigo-500"
-                    icon="line-md:loading-twotone-loop"
-                  />
-                  <p className="text-default-500 font-medium text-sm">
-                    Syncing with Composio...
-                  </p>
-                </div>
-              ) : modalTab === "tools" ? (
-                appTools.length === 0 ? (
-                  <div className="text-center py-16">
-                    <Icon
-                      className="text-5xl text-default-300 mx-auto mb-4"
-                      icon="solar:magic-stick-3-bold"
-                    />
-                    <h3 className="font-bold text-default-700 text-lg mb-1">
-                      No Capabilities Found
-                    </h3>
-                    <p className="text-default-500">
-                      This integration doesn't expose any actions yet.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="flex flex-col gap-3">
-                    {appTools.map((tool) => (
-                      <div
-                        key={tool.id}
-                        className="flex flex-col p-4 rounded-xl border border-default-200 bg-white hover:border-indigo-500/30 hover:shadow-sm transition-all"
-                      >
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <Icon
-                            className="text-indigo-500 text-xl"
-                            icon="solar:bolt-circle-bold"
-                          />
-                          <p className="font-bold text-default-800">
-                            {tool.name}
-                          </p>
-                        </div>
-                        <p className="text-sm text-default-500 leading-relaxed pl-7">
-                          {tool.description}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                )
-              ) : appTriggers.length === 0 ? (
-                <div className="text-center py-16">
-                  <Icon
-                    className="text-5xl text-default-300 mx-auto mb-4"
-                    icon="solar:bell-off-bold"
-                  />
-                  <h3 className="font-bold text-default-700 text-lg mb-1">
-                    No Webhooks Found
-                  </h3>
-                  <p className="text-default-500">
-                    This integration doesn't expose any triggers yet.
-                  </p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-3">
-                  {appTriggers.map((trigger) => (
-                    <div
-                      key={trigger.id}
-                      className="flex items-center justify-between p-4 rounded-xl border border-default-200 bg-white hover:border-indigo-500/30 hover:shadow-sm transition-all"
-                    >
-                      <div>
-                        <p className="font-bold text-default-800 mb-0.5">
-                          {trigger.name}
-                        </p>
-                        <p className="text-xs text-default-500 font-mono">
-                          {trigger.id}
-                        </p>
-                      </div>
-                      <button className="px-4 py-1.5 bg-default-100 hover:bg-success hover:text-white rounded-lg text-xs font-bold transition-colors uppercase tracking-wide">
-                        Enable
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </div>
-      )}
     </ChatBotLayout>
   );
 }
