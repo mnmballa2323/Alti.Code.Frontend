@@ -78,24 +78,15 @@ export default function GraphPage() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-white flex flex-col h-full font-sans">
-        {/* Top Header */}
-        <div className="flex-none h-[72px] px-8 border-b border-default-200 bg-white/80 backdrop-blur-xl flex items-center justify-between z-50 relative">
-          
-          {/* Left: Title & Branding */}
-          <div className="flex items-center gap-4">
-            <div className="p-2.5 rounded-xl bg-purple-100 text-purple-600 border border-purple-200">
-              <Network className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="text-[16px] font-bold tracking-tight text-default-900">
+        {/* Standardized Header */}
+        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
+          <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
+            <div className="flex items-center gap-3">
+              <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
                 Cognitive Graph
               </h1>
-              <p className="text-xs text-default-500 tracking-wider uppercase mt-0.5 font-medium">
-                The Swarm Brain
-              </p>
             </div>
           </div>
-          
         </div>
 
         {/* Main Canvas Area */}
