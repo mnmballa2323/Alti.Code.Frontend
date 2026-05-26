@@ -1,6 +1,7 @@
 import { VertexAI } from '@google-cloud/vertexai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { prisma } from '../../../config/prisma.js';
 import { VaultService } from '../vault/vault.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
@@ -116,7 +117,32 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             );
         }
     }
-    // 2. Azure OpenAI Foundry Proxy Connection
+    // 2. Anthropic Claude Direct Connection
+    else if (modelName.startsWith('claude-') || modelName.startsWith('sonnet-')) {
+        logger.info('🧠 [LlmGateway] Calling Anthropic direct endpoint...');
+        const anthropicApiKey = creds.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
+
+        if (!anthropicApiKey) {
+            throw new ApiError(
+                httpStatus.BAD_REQUEST,
+                'Anthropic API Key is missing in the secure Vault.'
+            );
+        }
+
+        const anthropic = new Anthropic({
+            apiKey: anthropicApiKey
+        });
+
+        const response = await anthropic.messages.create({
+            model: modelName,
+            max_tokens: 4096,
+            messages: [{ role: 'user', content: scrubbedPrompt }],
+            temperature: temperature
+        });
+
+        reply = response.content[0].text;
+    }
+    // 3. Azure OpenAI Foundry Proxy Connection
     else if (modelName.startsWith('azure/') || creds.azureEndpoint) {
         logger.info('🧠 [LlmGateway] Calling Azure OpenAI Foundry direct endpoint...');
         if (!creds.azureApiKey || !creds.azureEndpoint) {
