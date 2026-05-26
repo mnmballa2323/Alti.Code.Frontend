@@ -14,5 +14,6 @@ const router = express.Router();
 router.post('/generate', CliAnythingController.generate);
 router.post('/refine', CliAnythingController.refine);
 router.get('/discover', CliAnythingController.discover);
+router.post('/execute', CliAnythingController.execute);
 
 export const CliAnythingRoutes = router;

@@ -119,8 +119,32 @@ const discover = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * Execute a Click command programmatically on the compiled app
+ */
+const execute = catchAsync(async (req, res) => {
+  const { workspacePath, appName, command, args = [] } = req.body;
+
+  if (!workspacePath || !appName || !command) {
+    return sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'workspacePath, appName, and command are required.'
+    });
+  }
+
+  const result = await CliAnythingService.executeCLICommand(workspacePath, appName, command, args);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `CLI command '${command}' successfully executed.`,
+    data: result
+  });
+});
+
 export const CliAnythingController = {
   generate,
   refine,
-  discover
+  discover,
+  execute
 };

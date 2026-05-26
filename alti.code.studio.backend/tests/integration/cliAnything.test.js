@@ -88,3 +88,52 @@ test('CLI-Anything Swarm Agent: Dynamic Registration & Capabilities', () => {
   expect(registeredAgent.capabilities).toContain('cli-generation');
   expect(registeredAgent.capabilities).toContain('agentic-compiler');
 });
+
+test('CLI-Anything Service: Programmatic Click Execution & State Machine', async () => {
+  const appName = 'MyTestApplication';
+
+  // 1. Ingest initial status command
+  const statusRes = await CliAnythingService.executeCLICommand(TEST_DIR, appName, 'status');
+  expect(statusRes.app).toBe(appName);
+  expect(statusRes.status).toBe('idle');
+  expect(statusRes.history_depth).toBe(0);
+
+  // 2. Ingest state-changing action mutation
+  const execRes = await CliAnythingService.executeCLICommand(TEST_DIR, appName, 'execute', [
+    '--action',
+    'resize',
+    '--payload',
+    '{"w":1920}'
+  ]);
+  expect(execRes.success).toBe(true);
+  expect(execRes.status).toBe('active_action_resize');
+  expect(execRes.executed_action.action).toBe('resize');
+
+  // 3. Verify history depth increments
+  const statusRes2 = await CliAnythingService.executeCLICommand(TEST_DIR, appName, 'status');
+  expect(statusRes2.history_depth).toBe(1);
+  expect(statusRes2.status).toBe('active_action_resize');
+
+  // 4. Ingest undo state change
+  const undoRes = await CliAnythingService.executeCLICommand(TEST_DIR, appName, 'undo');
+  expect(undoRes.success).toBe(true);
+  expect(undoRes.new_pointer).toBe(-1);
+
+  // 5. Verify status reverted
+  const statusRes3 = await CliAnythingService.executeCLICommand(TEST_DIR, appName, 'status');
+  expect(statusRes3.status).toBe('undid_action_resize');
+});
+
+test('CLI-Anything Swarm Agent: Agentic Command Routing', async () => {
+  const appName = 'MyTestApplication';
+  const agent = new CliAnythingAgent();
+
+  // Route an execution query through the dynamic specialist agent
+  const prompt = `check status in path ${TEST_DIR} and app MyTestApplication`;
+  const result = await agent._invoke(prompt, {});
+
+  expect(result).toContain('cliAnything Command Executed Successfully!');
+  expect(result).toContain('Stateful Execution Result:');
+  expect(result).toContain('undid_action_resize');
+});
+

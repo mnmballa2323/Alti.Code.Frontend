@@ -7,7 +7,11 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { logger } from '../../../shared/logger.js';
+
+const execPromise = promisify(exec);
 
 /**
  * Ensures a directory exists.
@@ -606,8 +610,66 @@ const discoverCLIs = async (workspacePath) => {
   return matches;
 };
 
+/**
+ * Programmatically execute a generated Click/REPL CLI command inside the target workspace.
+ * Auto-injects `--json-out` to capture structured state telemetry.
+ */
+const executeCLICommand = async (workspacePath, appName, command, args = []) => {
+  const finalWorkspacePath = path.isAbsolute(workspacePath)
+    ? workspacePath
+    : path.resolve(process.cwd(), workspacePath);
+
+  const harnessPath = path.join(finalWorkspacePath, 'cli_harness.py');
+  
+  logger.info(`⚡ [CLI-Anything] Executing command: '${command}' on ${appName} inside ${finalWorkspacePath}`);
+  
+  // Validate that the harness exists
+  try {
+    await fs.access(harnessPath);
+  } catch (err) {
+    throw new Error(`Stateful CLI harness 'cli_harness.py' does not exist. Run compilation first.`);
+  }
+
+  // Construct shell command argument array
+  const argString = args.map(arg => {
+    if (typeof arg === 'string' && (arg.includes(' ') || arg.includes('{') || arg.includes('"'))) {
+      return `'${arg.replace(/'/g, "'\\''")}'`;
+    }
+    return arg;
+  }).join(' ');
+
+  // We enforce python3 or python command, and auto-inject the --json-out flag
+  const cmd = `python3 cli_harness.py --json-out ${command} ${argString}`;
+
+  try {
+    const { stdout, stderr } = await execPromise(cmd, { cwd: finalWorkspacePath });
+    
+    if (stderr && stderr.trim()) {
+      logger.warn(`⚠️ [CLI-Anything] Command stderr: ${stderr}`);
+    }
+
+    // Parse the stdout JSON
+    let parsedResult;
+    try {
+      parsedResult = JSON.parse(stdout.trim());
+    } catch (parseErr) {
+      parsedResult = {
+        success: true,
+        rawOutput: stdout.trim(),
+        message: 'Executed command returned raw text.'
+      };
+    }
+
+    return parsedResult;
+  } catch (execErr) {
+    logger.error(`❌ [CLI-Anything] Command execution failed: ${execErr.message}`);
+    throw new Error(`CLI Execution failed: ${execErr.message}`);
+  }
+};
+
 export const CliAnythingService = {
   generateCLI,
   refineCLI,
-  discoverCLIs
+  discoverCLIs,
+  executeCLICommand
 };

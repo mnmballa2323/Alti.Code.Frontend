@@ -5,6 +5,7 @@ import { Button, Input, ScrollShadow } from "@heroui/react";
 import {
   Play,
   Check,
+  CheckCircle,
   Loader2,
   Terminal as TerminalIcon,
   ChevronRight,
@@ -105,9 +106,21 @@ export default function CliAnythingPage() {
   ]);
   const [doneData, setDoneData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<"harness" | "skill" | "test" | "setup" | "schema">("harness");
+  
+  // Gap analysis and command refinement state
   const [refinementPrompt, setRefinementPrompt] = useState("");
   const [refining, setRefining] = useState(false);
   const [refinementOutput, setRefinementOutput] = useState<string | null>(null);
+
+  // Live state execution metrics state
+  const [customAction, setCustomAction] = useState("resize");
+  const [customPayload, setCustomPayload] = useState('{"width": 1024}');
+  const [executingCommand, setExecutingCommand] = useState(false);
+  const [cliState, setCliState] = useState<any>({
+    status: "idle",
+    historyDepth: 0,
+    historyPointer: -1,
+  });
 
   const logsEndRef = useRef<HTMLDivElement>(null);
 
@@ -129,6 +142,11 @@ export default function CliAnythingPage() {
     setLogs([
       "[SYSTEM] Compiler state reset. Ready for target codebase compilation."
     ]);
+    setCliState({
+      status: "idle",
+      historyDepth: 0,
+      historyPointer: -1,
+    });
   };
 
   const triggerCompile = async () => {
@@ -197,7 +215,6 @@ export default function CliAnythingPage() {
                     if (p.id === phase) {
                       return { ...p, status, message, data: data || p.data };
                     }
-                    // If a phase completes, auto-process the next one in anticipation
                     if (p.id === phase + 1 && status === "COMPLETED") {
                       return { ...p, status: "PROCESSING", message: "Activating phase..." };
                     }
@@ -213,6 +230,29 @@ export default function CliAnythingPage() {
                 );
                 setDoneData(event.data);
                 setCompilingStatus("done");
+
+                // Auto-sync liveness status immediately
+                setTimeout(() => {
+                  fetch(`${apiUrl}/cli-anything/execute`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      workspacePath,
+                      appName,
+                      command: "status",
+                      args: []
+                    })
+                  }).then(res => res.json()).then(resJson => {
+                    if (resJson.success && resJson.data) {
+                      setCliState({
+                        status: resJson.data.status,
+                        historyDepth: resJson.data.history_depth,
+                        historyPointer: resJson.data.history_pointer
+                      });
+                    }
+                  }).catch(() => {});
+                }, 400);
+
               } else if (event.type === "error") {
                 addLog(`[ERROR] Compile failure: ${event.message}`);
                 setPhases((prev) =>
@@ -236,6 +276,60 @@ export default function CliAnythingPage() {
           p.status === "PROCESSING" ? { ...p, status: "FAILED", message: err.message } : p
         )
       );
+    }
+  };
+
+  const runCLICommand = async (commandName: string, args: string[] = []) => {
+    setExecutingCommand(true);
+    addLog(`[EXECUTION] Invoking subcommand: '${commandName}' ${args.join(" ")}`);
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const response = await fetch(`${apiUrl}/cli-anything/execute`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          workspacePath,
+          appName,
+          command: commandName,
+          args,
+        }),
+      });
+
+      const resJson = await response.json();
+      if (resJson.success && resJson.data) {
+        const payload = resJson.data;
+        addLog(`[EXECUTION] Subcommand '${commandName}' executed successfully!`);
+        
+        // Sync response payloads to local UI state values
+        if (commandName === "status") {
+          setCliState({
+            status: payload.status,
+            historyDepth: payload.history_depth,
+            historyPointer: payload.history_pointer,
+          });
+        } else if (payload.status) {
+          setCliState((prev: any) => ({
+            ...prev,
+            status: payload.status,
+            historyPointer: payload.new_pointer !== undefined ? payload.new_pointer : prev.historyPointer,
+            historyDepth: payload.executed_action ? prev.historyDepth + 1 : prev.historyDepth
+          }));
+        } else if (commandName === "undo" || commandName === "redo") {
+          // If undo or redo completes, trigger status query in background to sync state values
+          setTimeout(() => runCLICommand("status"), 200);
+        } else if (commandName === "history") {
+          addLog(`[EXECUTION HISTORY] Found ${Array.isArray(payload) ? payload.length : 0} actions recorded.`);
+        }
+      } else {
+        addLog(`[EXECUTION ERROR] ${resJson.message || "Failed to execute Click subcommand."}`);
+      }
+    } catch (err: any) {
+      addLog(`[EXECUTION FATAL] Connection lost: ${err.message}`);
+    } finally {
+      setExecutingCommand(false);
     }
   };
 
@@ -265,7 +359,6 @@ export default function CliAnythingPage() {
         addLog("[REFINEMENT] Successfully completed gap analysis and extended Click commands!");
         setRefinementOutput(resJson.data.explanation || "CLI Extended successfully.");
         
-        // Optionally update doneData if backend returned new file structures
         if (resJson.data.harnessCode) {
           setDoneData((prev: any) => ({
             ...prev,
@@ -707,50 +800,174 @@ export default function CliAnythingPage() {
                   </ScrollShadow>
                 </div>
 
-                {/* Bottom: Swarm Gap Analysis & Command Refinement Panel */}
-                <div className="flex-none border-t border-default-100 dark:border-white/5 bg-content1/20 p-6 space-y-4">
-                  <div className="flex items-center gap-2 text-foreground font-semibold text-xs uppercase tracking-wide">
-                    <Sparkles className="size-4 text-primary animate-pulse" />
-                    Gap-Analysis & Command Refinement
-                  </div>
+                {/* Bottom: Runtime Command Controller & Swarm Refinement */}
+                <div className="flex-none border-t border-default-100 dark:border-white/5 bg-content1/20 p-6 space-y-6">
                   
-                  <form onSubmit={handleRefine} className="flex gap-3">
-                    <Input
-                      size="sm"
-                      radius="lg"
-                      placeholder="e.g. Add a scan command for SQL vulnerability markers or add test hooks..."
-                      value={refinementPrompt}
-                      onChange={(e) => setRefinementPrompt(e.target.value)}
-                      disabled={refining}
-                      classNames={{
-                        inputWrapper: "bg-default-100/50 dark:bg-white/5 border border-default-100 dark:border-white/10 hover:border-default-200 focus-within:border-primary/50"
-                      }}
-                    />
-                    <Button
-                      type="submit"
-                      color="primary"
-                      size="sm"
-                      className="rounded-xl px-6 font-semibold shadow-md shadow-primary/10"
-                      disabled={refining}
-                      startContent={refining ? <Loader2 className="size-3.5 animate-spin" /> : <MessageSquare className="size-3.5" />}
-                    >
-                      {refining ? "Refining..." : "Refine Commands"}
-                    </Button>
-                  </form>
-
-                  {refinementOutput && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="p-4 rounded-xl bg-primary/5 border border-primary/10 text-xs text-foreground/90 leading-relaxed space-y-2 font-sans animate-in slide-in-from-bottom-2 duration-300"
-                    >
-                      <div className="font-semibold text-primary flex items-center gap-1.5">
-                        <Check className="size-3.5" />
-                        Refinement Expansion Explanation
+                  {/* Two column grid for Execution Console & Refinement Panel */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    {/* Column 1: Stateful Command Execution Console */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-foreground font-semibold text-xs uppercase tracking-wide">
+                          <Cpu className="size-4 text-primary animate-pulse" />
+                          Stateful Execution Console
+                        </div>
+                        
+                        {/* Live status badge */}
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-full bg-success/10 border border-success/20 text-success uppercase">
+                          <span className="size-1.5 rounded-full bg-success animate-ping" />
+                          status: {cliState.status}
+                        </div>
                       </div>
-                      <p>{refinementOutput}</p>
-                    </motion.div>
-                  )}
+
+                      {/* State status details */}
+                      <div className="grid grid-cols-3 gap-3 p-3 bg-default-100/50 dark:bg-white/5 rounded-xl border border-default-100 dark:border-white/5 text-[11px] font-mono">
+                        <div>
+                          <span className="text-default-400 block text-[9px] uppercase tracking-wider">State status</span>
+                          <span className="font-semibold text-foreground truncate block">{cliState.status}</span>
+                        </div>
+                        <div>
+                          <span className="text-default-400 block text-[9px] uppercase tracking-wider">History depth</span>
+                          <span className="font-semibold text-foreground block">{cliState.historyDepth} actions</span>
+                        </div>
+                        <div>
+                          <span className="text-default-400 block text-[9px] uppercase tracking-wider">History pointer</span>
+                          <span className="font-semibold text-foreground block">index {cliState.historyPointer}</span>
+                        </div>
+                      </div>
+
+                      {/* Operational buttons */}
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          className="text-[11px] font-semibold flex-1 rounded-xl h-8 bg-default-100 dark:bg-white/5 border border-default-100 dark:border-white/5 hover:border-primary/50"
+                          disabled={executingCommand}
+                          onPress={() => runCLICommand("status")}
+                          startContent={executingCommand ? <Loader2 className="size-3 animate-spin text-primary" /> : <RefreshCw className="size-3" />}
+                        >
+                          Status
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          className="text-[11px] font-semibold flex-1 rounded-xl h-8 bg-default-100 dark:bg-white/5 border border-default-100 dark:border-white/5 hover:border-primary/50"
+                          disabled={executingCommand || cliState.historyPointer < 0}
+                          onPress={() => runCLICommand("undo")}
+                          startContent={<ArrowRight className="size-3 rotate-180 text-warning" />}
+                        >
+                          Undo
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          className="text-[11px] font-semibold flex-1 rounded-xl h-8 bg-default-100 dark:bg-white/5 border border-default-100 dark:border-white/5 hover:border-primary/50"
+                          disabled={executingCommand || cliState.historyPointer >= cliState.historyDepth - 1}
+                          onPress={() => runCLICommand("redo")}
+                          startContent={<ArrowRight className="size-3 text-success" />}
+                        >
+                          Redo
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="flat"
+                          className="text-[11px] font-semibold flex-1 rounded-xl h-8 bg-default-100 dark:bg-white/5 border border-default-100 dark:border-white/5 hover:border-primary/50"
+                          disabled={executingCommand}
+                          onPress={() => runCLICommand("history")}
+                          startContent={<TerminalIcon className="size-3 text-primary" />}
+                        >
+                          History
+                        </Button>
+                      </div>
+
+                      {/* Custom action form */}
+                      <div className="flex gap-2">
+                        <Input
+                          size="sm"
+                          radius="lg"
+                          placeholder="Action (e.g. resize)"
+                          value={customAction}
+                          onChange={(e) => setCustomAction(e.target.value)}
+                          disabled={executingCommand}
+                          className="w-[120px] shrink-0"
+                          classNames={{
+                            inputWrapper: "bg-default-100/50 dark:bg-white/5 border border-default-100 dark:border-white/10 hover:border-default-200 focus-within:border-primary/50"
+                          }}
+                        />
+                        <Input
+                          size="sm"
+                          radius="lg"
+                          placeholder="Payload JSON string"
+                          value={customPayload}
+                          onChange={(e) => setCustomPayload(e.target.value)}
+                          disabled={executingCommand}
+                          classNames={{
+                            inputWrapper: "bg-default-100/50 dark:bg-white/5 border border-default-100 dark:border-white/10 hover:border-default-200 focus-within:border-primary/50"
+                          }}
+                        />
+                        <Button
+                          color="primary"
+                          size="sm"
+                          className="rounded-xl font-semibold px-4 h-9 shadow-md shadow-primary/10 shrink-0"
+                          disabled={executingCommand || !customAction.trim()}
+                          onPress={() => runCLICommand("execute", ["--action", customAction, "--payload", customPayload])}
+                          startContent={executingCommand ? <Loader2 className="size-3.5 animate-spin" /> : <Play className="size-3.5" />}
+                        >
+                          Run Action
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Column 2: Swarm Gap Analysis & Command Refinement Panel */}
+                    <div className="space-y-4 flex flex-col justify-between">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-2 text-foreground font-semibold text-xs uppercase tracking-wide">
+                          <Sparkles className="size-4 text-primary animate-pulse" />
+                          Gap-Analysis & Command Refinement
+                        </div>
+                        
+                        <form onSubmit={handleRefine} className="flex gap-3">
+                          <Input
+                            size="sm"
+                            radius="lg"
+                            placeholder="e.g. Add a scan command for SQL vulnerability markers or add test hooks..."
+                            value={refinementPrompt}
+                            onChange={(e) => setRefinementPrompt(e.target.value)}
+                            disabled={refining}
+                            classNames={{
+                              inputWrapper: "bg-default-100/50 dark:bg-white/5 border border-default-100 dark:border-white/10 hover:border-default-200 focus-within:border-primary/50"
+                            }}
+                          />
+                          <Button
+                            type="submit"
+                            color="primary"
+                            size="sm"
+                            className="rounded-xl px-6 font-semibold shadow-md shadow-primary/10 shrink-0 h-9"
+                            disabled={refining}
+                            startContent={refining ? <Loader2 className="size-3.5 animate-spin" /> : <MessageSquare className="size-3.5" />}
+                          >
+                            {refining ? "Refining..." : "Refine Commands"}
+                          </Button>
+                        </form>
+                      </div>
+
+                      {refinementOutput && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="p-3.5 rounded-xl bg-primary/5 border border-primary/10 text-xs text-foreground/90 leading-relaxed space-y-1 font-sans animate-in slide-in-from-bottom-2 duration-300"
+                        >
+                          <div className="font-semibold text-primary flex items-center gap-1.5">
+                            <Check className="size-3.5 font-bold" />
+                            Refinement Expansion Explanation
+                          </div>
+                          <p>{refinementOutput}</p>
+                        </motion.div>
+                      )}
+                    </div>
+
+                  </div>
                 </div>
 
               </div>
