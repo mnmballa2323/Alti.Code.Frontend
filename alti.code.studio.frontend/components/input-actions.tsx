@@ -534,7 +534,7 @@ function PromptInputFullLineComponent({
                 className="p-1 max-h-[380px] overflow-y-auto"
                 onAction={(key) => setDefaultModel(key as string)}
               >
-                <DropdownSection title="Gemini (Vertex AI)" showDivider>
+                <DropdownSection title="Gemini" showDivider>
                   <DropdownItem
                     key="gemini-3.5-flash"
                     className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
@@ -573,7 +573,7 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
 
-                <DropdownSection title="Claude (Anthropic)" showDivider>
+                <DropdownSection title="Claude" showDivider>
                   <DropdownItem
                     key="claude-4.7-opus"
                     className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
@@ -612,7 +612,7 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
 
-                <DropdownSection title="GPT (OpenAI & Foundry)">
+                <DropdownSection title="GPT">
                   <DropdownItem
                     key="gpt-5.5-pro"
                     className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
