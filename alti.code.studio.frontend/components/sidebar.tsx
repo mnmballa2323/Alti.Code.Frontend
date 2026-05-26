@@ -348,6 +348,8 @@ export default function Sidebar() {
   const dispatch = useDispatch<AppDispatch>();
   const { data: session, status } = useSession();
   const token = session?.user?.accessToken ?? null;
+  const [repoSearch, setRepoSearch] = useState("");
+  const [selectedRepo, setSelectedRepo] = useState("alti.code.studio");
 
   const getHistoryTitle = () => {
     if (pathname?.startsWith("/boardroom")) return "Board Members";
@@ -664,9 +666,6 @@ export default function Sidebar() {
   const toggleLeftSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
-  const [repoSearch, setRepoSearch] = useState("");
-  const [selectedRepo, setSelectedRepo] = useState("alti.code.studio");
 
   const { data: repos = [], isFetching: isRepoLoading } = useQuery({
     queryKey: ["repos", token, repoSearch],

@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.11.2] - 2026-05-26 — Sidebar selectedRepo Reference Hotfix
+### Fixed
+- **selectedRepo ReferenceError**: Resolved a ReferenceError ("Cannot access 'selectedRepo' before initialization") in `components/sidebar.tsx` by correctly declaring `repoSearch` and `selectedRepo` states at the very top of the Sidebar component before they are accessed by the codebase rules query.
+
 ## [39.11.1] - 2026-05-26 — Sidebar Token Reference Hotfix
 ### Fixed
 - **Sidebar ReferenceError**: Resolved a ReferenceError ("Cannot access 'token' before initialization") in `components/sidebar.tsx` by correctly declaring the `token` hooks assignment at the top of the Sidebar component before it is accessed by the codebase rules query.
