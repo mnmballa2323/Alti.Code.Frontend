@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.21.0] - 2026-05-26 — Premium Centered Assets Form & Header Refinement
+### Changed
+- **Smooth & Centered Card Layout**: Wrapped the streamlined Assets creation form (`app/assets/page.tsx`) in a premium centered card with soft rounded corners (`rounded-3xl`), drop shadows, and comfortable grid gap spacing.
+- **Smooth Transition Micro-Animations**: Configured border-active color animations on input focus and smooth icon hover transitions on the dashed upload container.
+- **Header Icon Removal**: Removed the duplicate `ImageIcon` next to the `Company Assets` title in the standardized main header to create an extremely clean, modern typographic layout.
+
 ## [39.19.0] - 2026-05-26 — Assets Page Form Streamlining & Decluttering
 ### Removed
 - **Asset Form Textareas Deletion**: Completely removed the redundant and duplicate `Custom Instructions` and `Safety Guardrails` Textarea fields from the Assets page creation form (`app/assets/page.tsx`).
