@@ -5,6 +5,30 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.8] - 2026-05-26 — Brand Identity Logo Refresh
+### Changed
+- **New Faded Canvas Logo**: Updated `/public/assets/logo-icon.png`, `/public/assets/logo-icon-black.png`, and `/public/assets/logo-icon-white.png` to the new official brand logo (the stylized black-and-white butterfly/cube hexagon shape).
+- **Workspace Idle Canvas Consistency**: Verified that the workflows engine idle state correctly renders the new transparent butterfly logo with elegant faded branding aesthetics (`opacity-20`).
+
+## [39.37.7] - 2026-05-26 — Knowledge Graph Workspace Consolidation
+### Added
+- **Generate Knowledge Graph Toolbar Action**: Integrated the custom **Generate Knowledge Graph** (`Network`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated swarm visualization prompts.
+### Removed
+- **Standalone Graph Page Deletion**: Completely removed the redundant legacy `/graph` route directory.
+- **Sidebar Graph Cleanups**: Stripped all `/graph` route handlers and navigation sidebar buttons from `components/sidebar.tsx`.
+
+## [39.37.6] - 2026-05-26 — Autonomous QA & Testing Workspace Consolidation
+### Added
+- **Autonomous QA Swarm Toolbar Action**: Integrated the custom **Autonomous QA Loop** (`FlaskConical`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to pre-populated QA automation swarms.
+### Removed
+- **Standalone Testing Page Deletion**: Completely removed the redundant legacy `/testing` route directory.
+- **Sidebar Test Cleanups**: Stripped all `/testing` route handlers and navigation sidebar buttons from `components/sidebar.tsx`.
+
+## [39.37.5] - 2026-05-26 — Microphone Permission & Audio Recording Polish
+### Changed
+- **Speech Graceful Block Handling**: Captured Web Speech API `"not-allowed"` errors in `components/AudioRecorder.tsx` to display helpful user toasts guiding mic access instead of crashing.
+- **Aesthetic Refinements**: Changed error level logs to warnings to eliminate Next.js dev server overlays, and resolved nested button warnings by using the Radix/HeroUI `asChild` prop on the microphone icon.
+
 ## [39.37.4] - 2026-05-26 — Research Merge and Dynamic Deep Research Workspace
 ### Added
 - **Circular Right-Action Search Button**: Added a custom circular **Search** icon button in the prompt box's right actions bar (directly next to the send arrow) on both `app/chat/page.tsx` and `app/chat/[id]/page.tsx`, styled exactly like the GitHub and Cloud buttons on the Code workspace.
