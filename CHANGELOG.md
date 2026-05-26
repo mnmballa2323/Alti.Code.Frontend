@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.35.2] - 2026-05-26 — Vertex AI & Azure OpenAI Foundry Integration Upgrades
+### Changed
+- **Backend: Vertex AI Native Credentials Integration**: Enhanced `LlmGatewayService` to pass decrypted Vault service account credentials (`gcpClientEmail`, `gcpPrivateKey`) to the `VertexAI` constructor, correctly converting double-escaped newlines to enable 100% stable IAM authorization.
+- **Backend: Azure OpenAI Foundry Robust URL Parsing**: Integrated automatic copy-paste URL parser in `LlmGatewayService` to extract the base resource URL even if a developer pastes their full deployment/API URL directly from Azure portal, eliminating baseURL duplication crash errors.
+
 ## [39.35.1] - 2026-05-26 — Custom MCP Launcher Removal
 ### Removed
 - **Frontend: Add Custom MCP Server Deletion**: Completely removed the "+ Add Custom MCP Server" launcher item from the integrations catalog sidebar and details page list to restrict custom stdio MCP creations.

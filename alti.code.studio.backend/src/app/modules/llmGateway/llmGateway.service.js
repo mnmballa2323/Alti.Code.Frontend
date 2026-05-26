@@ -117,15 +117,31 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     if (modelName.startsWith('gemini-') || modelName.startsWith('google/')) {
         const geminiApiKey = creds.geminiApiKey || process.env.GEMINI_API_KEY;
         const gcpProjectId = creds.gcpProjectId || process.env.GCP_PROJECT_ID;
+        const cleanModelName = modelName.replace(/^google\//, '');
 
-        if (gcpProjectId && creds.gcpPrivateKey) {
+        if (gcpProjectId && (creds.gcpPrivateKey || process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
             // Native GCP Vertex AI initialization
             logger.info('🧠 [LlmGateway] Initializing Vertex AI client natively...');
-            const vertex = new VertexAI({
+            const config = {
                 project: gcpProjectId,
                 location: 'us-central1'
-            });
-            const model = vertex.getGenerativeModel({ model: modelName });
+            };
+
+            if (creds.gcpClientEmail && creds.gcpPrivateKey) {
+                let cleanPrivateKey = creds.gcpPrivateKey;
+                if (typeof cleanPrivateKey === 'string') {
+                    cleanPrivateKey = cleanPrivateKey.replace(/\\n/g, '\n');
+                }
+                config.googleAuthOptions = {
+                    credentials: {
+                        client_email: creds.gcpClientEmail,
+                        private_key: cleanPrivateKey
+                    }
+                };
+            }
+
+            const vertex = new VertexAI(config);
+            const model = vertex.getGenerativeModel({ model: cleanModelName });
             const result = await model.generateContent(finalPrompt);
             const response = await result.response;
             reply = response.candidates[0].content.parts[0].text;
@@ -133,7 +149,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             // Standard API Key fallback
             logger.info('🧠 [LlmGateway] Using Google Generative AI with fallback API Key...');
             const ai = new GoogleGenerativeAI(geminiApiKey);
-            const model = ai.getGenerativeModel({ model: modelName });
+            const model = ai.getGenerativeModel({ model: cleanModelName });
             const result = await model.generateContent(finalPrompt);
             const response = await result.response;
             reply = response.candidates[0].content.parts[0].text;
@@ -179,7 +195,14 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             );
         }
 
-        const endpoint = creds.azureEndpoint.replace(/\/$/, '');
+        let endpoint = creds.azureEndpoint.trim().replace(/\/$/, '');
+        // Robust copy-paste handler: extract the base resource URL if they pasted a full deployments URL
+        if (endpoint.includes('/openai/deployments/')) {
+            endpoint = endpoint.split('/openai/deployments/')[0];
+        } else if (endpoint.includes('/openai')) {
+            endpoint = endpoint.split('/openai')[0];
+        }
+
         const cleanModelName = modelName.replace(/^azure\//, '');
         
         // standard deployment extraction or custom endpoint parsing
