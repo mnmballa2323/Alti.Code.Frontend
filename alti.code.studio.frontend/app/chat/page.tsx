@@ -109,13 +109,12 @@ export default function ChatHome() {
             <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
               <div className="flex flex-col items-center text-center z-30 mb-6">
                 <h1
-                  className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+                  className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
                   style={{ fontFamily: "var(--font-secondary)" }}
                 >
-                  Let's Chat
+                  {isResearchMode ? "Deep Research" : "Let's Chat"}
                 </h1>
               </div>
-
               <div className="flex w-full flex-col gap-4 max-w-2xl">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
