@@ -88,6 +88,164 @@ import {
   startNewChat,
   addPendingRoom,
 } from "@/store/messagesSlice";
+import { SAAS_MOCKS } from "@/app/connect-apps/catalog";
+
+type AppIntegration = {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  logo?: string;
+  color: string;
+  status: "connected" | "disconnected" | "connecting";
+  type: "official" | "custom";
+};
+
+const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
+  const [imageError, setImageError] = useState(false);
+  
+  const slug = app.id.replace("app-", "").toLowerCase();
+  const customMappings: Record<string, string> = {
+    googledrive: "google-drive",
+    googlesheets: "google-sheets",
+    gmail: "gmail",
+  };
+  const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
+  const logoUrl = `https://logos.composio.dev/api/${mappedSlug}`;
+
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "from-blue-500 to-indigo-600 text-white",
+      "from-purple-500 to-pink-600 text-white",
+      "from-emerald-500 to-teal-600 text-white",
+      "from-amber-500 to-orange-600 text-white",
+      "from-rose-500 to-red-600 text-white",
+      "from-cyan-500 to-blue-600 text-white",
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  };
+
+  if (!imageError) {
+    return (
+      <img
+        src={logoUrl}
+        alt={`${app.name} logo`}
+        className={cn(className, "object-contain p-0.5 rounded-lg")}
+        onError={() => setImageError(true)}
+      />
+    );
+  }
+
+  const initials = app.name.slice(0, 2).toUpperCase();
+  const gradientClass = getAvatarColor(app.name);
+
+  return (
+    <div className={cn("rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight", gradientClass, className)}>
+      {initials}
+    </div>
+  );
+};
+
+const CORE_APPS: AppIntegration[] = [
+  {
+    id: "github",
+    name: "GitHub",
+    description: "Sync repositories, read PRs, and commit code directly.",
+    icon: "mdi:github",
+    color: "bg-gray-800 dark:bg-white text-white dark:text-gray-900",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "slack",
+    name: "Slack",
+    description: "Read channel messages and send notifications.",
+    icon: "logos:slack-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "jira",
+    name: "Jira",
+    description: "Manage sprints, update tickets, and track velocity.",
+    icon: "logos:jira",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    description: "Search internal docs and update knowledge base.",
+    icon: "logos:notion-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "linear",
+    name: "Linear",
+    description:
+      "Modern issue tracking and project management for software teams.",
+    icon: "logos:linear",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "googledrive",
+    name: "Google Drive",
+    description: "Read and write documents directly to Google Workspace.",
+    icon: "logos:google-drive",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "salesforce",
+    name: "Salesforce",
+    description:
+      "CRM integration to manage leads, contacts, and custom objects.",
+    icon: "logos:salesforce",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "discord",
+    name: "Discord",
+    description:
+      "Interact with community channels, manage roles, and deploy bots.",
+    icon: "logos:discord-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+];
+
+const coreAppIds = new Set(CORE_APPS.map((app) => app.id));
+
+const FALLBACK_APPS: AppIntegration[] = [
+  ...CORE_APPS,
+  ...SAAS_MOCKS.filter((mockApp) => !coreAppIds.has(mockApp.slug)).map(
+    (mockApp) => ({
+      id: `app-${mockApp.slug}`,
+      name: mockApp.name,
+      description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+      icon: mockApp.icon,
+      color: "bg-white border border-gray-200",
+      status: "disconnected" as const,
+      type: "official" as const,
+    }),
+  ),
+].sort((a, b) => a.name.localeCompare(b.name));
+
 import { AppDispatch } from "@/store";
 
 const API_URL =
@@ -430,6 +588,81 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
+
+  // States and dynamic handlers for integrations / connect-apps catalog
+  const [secondarySearch, setSecondarySearch] = useState("");
+  const [apps, setApps] = useState<AppIntegration[]>([]);
+  const [loadingApps, setLoadingApps] = useState(true);
+  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setSecondarySearch("");
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleActiveApp = (e: any) => {
+      setSelectedAppId(e.detail?.id || null);
+    };
+    window.addEventListener("active-connect-app", handleActiveApp);
+    return () => window.removeEventListener("active-connect-app", handleActiveApp);
+  }, []);
+
+  useEffect(() => {
+    if (pathname !== "/connect-apps") return;
+
+    const fetchConnections = async () => {
+      if (!token) {
+        setLoadingApps(false);
+        return;
+      }
+
+      try {
+        const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (res.data && res.data.success && Array.isArray(res.data.data)) {
+          const connectedIds = new Set(
+            res.data.data.map((c: any) =>
+              (c.appId || c.toolkit || c.appName || "").toLowerCase(),
+            ),
+          );
+
+          setApps((prev) => {
+            const initialApps = prev.length > 0 ? prev : FALLBACK_APPS;
+            return initialApps.map((app) => {
+              const slug = app.id.replace("app-", "").toLowerCase();
+
+              if (connectedIds.has(slug)) {
+                return { ...app, status: "connected" };
+              }
+              if (app.status === "connecting") return app;
+
+              return { ...app, status: "disconnected" };
+            });
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch connections in sidebar:", err);
+      } finally {
+        setLoadingApps(false);
+      }
+    };
+
+    // Initialize list
+    setApps(FALLBACK_APPS);
+    fetchConnections();
+
+    // Listen for sync event to re-fetch connection statuses
+    const handleSync = () => {
+      fetchConnections();
+    };
+    window.addEventListener("sync-connect-apps", handleSync);
+
+    return () => {
+      window.removeEventListener("sync-connect-apps", handleSync);
+    };
+  }, [pathname, token]);
 
   const { data: rulesData } = useQuery({
     queryKey: ["codebase-rules", token, selectedRepo],
@@ -1262,6 +1495,12 @@ export default function Sidebar() {
             <input
               className="w-full bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
               placeholder="Search..."
+              value={pathname === "/connect-apps" ? secondarySearch : ""}
+              onChange={(e) => {
+                if (pathname === "/connect-apps") {
+                  setSecondarySearch(e.target.value);
+                }
+              }}
             />
           </div>
           {pathname !== "/instructions" &&
@@ -1330,7 +1569,78 @@ export default function Sidebar() {
           hideScrollBar
           className="flex-1 px-2 mt-1 min-w-[256px] scrollbar-hide"
         >
-          {pathname === "/testing" ? (
+          {pathname === "/connect-apps" ? (
+            <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-default-400 px-3 py-2 select-none">
+                Composio Apps
+              </span>
+
+              {loadingApps ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-3">
+                  <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+                  <span className="text-xs text-default-400">Loading catalog...</span>
+                </div>
+              ) : (() => {
+                const filtered = apps.filter((app) =>
+                  app.name.toLowerCase().includes(secondarySearch.toLowerCase()) ||
+                  app.description.toLowerCase().includes(secondarySearch.toLowerCase())
+                );
+                
+                if (filtered.length === 0) {
+                  return <span className="text-xs text-default-400 text-center py-12">No apps found</span>;
+                }
+
+                return filtered.map((app) => {
+                  const isActive = selectedAppId === app.id;
+                  return (
+                    <button
+                      key={app.id}
+                      onClick={() => {
+                        setSelectedAppId(app.id);
+                        window.dispatchEvent(
+                          new CustomEvent("select-connect-app", { detail: app })
+                        );
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                        isActive
+                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                          : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
+                      )}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        {/* Dynamic Mini App Logo/Icon */}
+                        <div
+                          className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                            isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
+                          )}
+                        >
+                          <AppIcon app={app} className="w-full h-full object-contain" />
+                        </div>
+                        <span className="text-xs text-left truncate pr-2">
+                          {app.name}
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {app.status === "connected" && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                        )}
+                        <Icon
+                          icon="solar:alt-arrow-right-linear"
+                          className={cn(
+                            "text-xs text-default-400 transition-transform",
+                            isActive ? "translate-x-0.5 text-primary" : ""
+                          )}
+                        />
+                      </div>
+                    </button>
+                  );
+                });
+              })()}
+            </div>
+          ) : pathname === "/testing" ? (
             <div className="flex flex-col gap-0.5 px-2 mt-2">
               {testSessions.map((session) => (
                 <button

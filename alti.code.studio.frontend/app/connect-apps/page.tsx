@@ -119,6 +119,56 @@ const FALLBACK_APPS: AppIntegration[] = [
   ),
 ].sort((a, b) => a.name.localeCompare(b.name));
 
+const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
+  const [imageError, setImageError] = useState(false);
+  
+  const slug = app.id.replace("app-", "").toLowerCase();
+  const customMappings: Record<string, string> = {
+    googledrive: "google-drive",
+    googlesheets: "google-sheets",
+    gmail: "gmail",
+  };
+  const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
+  const logoUrl = `https://logos.composio.dev/api/${mappedSlug}`;
+
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "from-blue-500 to-indigo-600 text-white",
+      "from-purple-500 to-pink-600 text-white",
+      "from-emerald-500 to-teal-600 text-white",
+      "from-amber-500 to-orange-600 text-white",
+      "from-rose-500 to-red-600 text-white",
+      "from-cyan-500 to-blue-600 text-white",
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  };
+
+  if (!imageError) {
+    return (
+      <img
+        src={logoUrl}
+        alt={`${app.name} logo`}
+        className={`${className} object-contain p-0.5 rounded-lg`}
+        onError={() => setImageError(true)}
+      />
+    );
+  }
+
+  const initials = app.name.slice(0, 2).toUpperCase();
+  const gradientClass = getAvatarColor(app.name);
+
+  return (
+    <div className={`rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight ${gradientClass} ${className}`}>
+      {initials}
+    </div>
+  );
+};
+
 export default function ConnectAppsPage() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
@@ -137,6 +187,32 @@ export default function ConnectAppsPage() {
   const [appTools, setAppTools] = useState<any[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [modalTab, setModalTab] = useState("tools");
+
+  // Synchronize dynamic active app with the Sidebar column 2
+  useEffect(() => {
+    if (selectedApp) {
+      window.dispatchEvent(
+        new CustomEvent("active-connect-app", { detail: selectedApp })
+      );
+    } else {
+      window.dispatchEvent(
+        new CustomEvent("active-connect-app", { detail: null })
+      );
+    }
+  }, [selectedApp]);
+
+  useEffect(() => {
+    const handleSelectApp = (e: any) => {
+      const app = e.detail;
+      if (app) {
+        openAppDetailsModal(app);
+      } else {
+        setSelectedApp(null);
+      }
+    };
+    window.addEventListener("select-connect-app", handleSelectApp);
+    return () => window.removeEventListener("select-connect-app", handleSelectApp);
+  }, []);
 
   const openAppDetailsModal = async (app: AppIntegration) => {
     setSelectedApp(app);
@@ -191,8 +267,8 @@ export default function ConnectAppsPage() {
             ),
           );
 
-          setApps((prev) =>
-            prev.map((app) => {
+          setApps((prev) => {
+            const nextApps = prev.map((app) => {
               const slug = app.id.replace("app-", "").toLowerCase();
 
               if (connectedIds.has(slug)) {
@@ -201,8 +277,10 @@ export default function ConnectAppsPage() {
               if (app.status === "connecting") return app;
 
               return { ...app, status: "disconnected" };
-            }),
-          );
+            });
+            window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+            return nextApps;
+          });
         }
       } catch (err) {
         console.error("Failed to fetch connections", err);
@@ -225,11 +303,13 @@ export default function ConnectAppsPage() {
   }, [apps.some((a) => a.status === "connecting"), accessToken]);
 
   const handleConnect = async (id: string) => {
-    setApps((prev) =>
-      prev.map((app) =>
+    setApps((prev) => {
+      const next = prev.map((app) =>
         app.id === id ? { ...app, status: "connecting" } : app,
-      ),
-    );
+      );
+      window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+      return next;
+    });
 
     try {
       const slug = id.replace("app-", "");
@@ -249,27 +329,32 @@ export default function ConnectAppsPage() {
         // Open the OAuth URL in a new tab so the user can securely authenticate
         window.open(res.data.data.redirectUrl, "_blank");
         // State remains "connecting", the auto-poll effect will flip it to "connected" automatically!
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
       } else {
         throw new Error("No redirect URL returned from backend");
       }
     } catch (err) {
       console.error("Connection failed:", err);
       // Revert status to disconnected if something failed
-      setApps((prev) =>
-        prev.map((app) =>
+      setApps((prev) => {
+        const next = prev.map((app) =>
           app.id === id ? { ...app, status: "disconnected" } : app,
-        ),
-      );
+        );
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+        return next;
+      });
     }
   };
 
   const handleDisconnect = async (id: string) => {
     // Show spinner while disconnecting
-    setApps((prev) =>
-      prev.map((app) =>
+    setApps((prev) => {
+      const next = prev.map((app) =>
         app.id === id ? { ...app, status: "connecting" } : app,
-      ),
-    );
+      );
+      window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+      return next;
+    });
     try {
       const slug = id.replace("app-", "");
 
@@ -282,19 +367,23 @@ export default function ConnectAppsPage() {
             : {},
         },
       );
-      setApps((prev) =>
-        prev.map((app) =>
+      setApps((prev) => {
+        const next = prev.map((app) =>
           app.id === id ? { ...app, status: "disconnected" } : app,
-        ),
-      );
+        );
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+        return next;
+      });
     } catch (err) {
       console.error("Disconnect failed:", err);
       // Revert back to connected on failure
-      setApps((prev) =>
-        prev.map((app) =>
+      setApps((prev) => {
+        const next = prev.map((app) =>
           app.id === id ? { ...app, status: "connected" } : app,
-        ),
-      );
+        );
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+        return next;
+      });
     }
   };
 
@@ -325,136 +414,6 @@ export default function ConnectAppsPage() {
 
         {/* Master-Detail Split Screen Container */}
         <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
-          {/* Left Column: App Catalog Sidebar */}
-          <div className="w-80 shrink-0 border-r border-default-200 dark:border-default-100/50 bg-[#F9F9FB] dark:bg-[#0E0E10] flex flex-col h-full overflow-hidden select-none">
-            {/* Search Input Box */}
-            <div className="p-4 flex flex-col gap-3 bg-white dark:bg-[#0A0A0A] border-b border-default-200 dark:border-default-100/50">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4 z-10 pointer-events-none" />
-                <input
-                  className="w-full bg-[#f4f4f5] dark:bg-[#27272a] hover:bg-[#e4e4e7] dark:hover:bg-[#3f3f46] border border-transparent rounded-xl h-9 pl-9 pr-8 text-xs font-semibold placeholder:font-normal focus:outline-none focus:border-primary/50 focus:bg-white dark:focus:bg-[#27272a] transition-all duration-200"
-                  placeholder="Search..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-                {search && (
-                  <button
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-default-400 hover:text-default-600 transition-colors"
-                    onClick={() => setSearch("")}
-                  >
-                    <Icon className="text-base" icon="solar:close-circle-bold" />
-                  </button>
-                )}
-              </div>
-
-              {/* 5-Icon Tab Switcher segmented triggers */}
-              <div className="flex bg-[#f4f4f5] dark:bg-[#27272a]/50 p-0.5 rounded-xl justify-between items-center w-full">
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
-                >
-                  <Icon icon="solar:chat-round-line-bold" className="text-base" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
-                >
-                  <Icon icon="solar:folder-bold" className="text-base" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
-                >
-                  <Icon icon="solar:settings-bold" className="text-base" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg bg-white dark:bg-[#27272a] text-primary dark:text-white shadow-sm"
-                >
-                  <Icon icon="solar:widget-bold" className="text-base" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="flex-1 flex items-center justify-center py-1.5 rounded-lg text-default-400 hover:text-default-700 dark:hover:text-default-200 transition-colors"
-                >
-                  <Icon icon="solar:bolt-bold" className="text-base" />
-                </button>
-              </div>
-            </div>
-
-            {/* Catalog List */}
-            <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-1">
-              <span className="text-[9px] font-bold uppercase tracking-wider text-default-400 px-3 py-2 select-none">
-                Composio Apps
-              </span>
-
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-3">
-                  <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
-                  <span className="text-xs text-default-400">Loading catalog...</span>
-                </div>
-              ) : filteredApps.length === 0 ? (
-                <span className="text-xs text-default-400 text-center py-12">No apps found</span>
-              ) : (
-                filteredApps.map((app) => {
-                  const isActive = selectedApp?.id === app.id;
-                  return (
-                    <button
-                      key={app.id}
-                      onClick={() => openAppDetailsModal(app)}
-                      className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200 ${
-                        isActive
-                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                          : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        {/* Dynamic Mini App Logo/Icon */}
-                        <div
-                          className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 ${
-                            isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
-                          }`}
-                        >
-                          <Icon className="text-lg" icon={app.icon || "solar:box-bold"} />
-                        </div>
-                        <span className="text-xs text-left truncate pr-2">
-                          {app.name}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        {app.status === "connected" && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                        )}
-                        <Icon
-                          icon="solar:alt-arrow-right-linear"
-                          className={`text-xs text-default-400 transition-transform ${
-                            isActive ? "translate-x-0.5 text-primary" : ""
-                          }`}
-                        />
-                      </div>
-                    </button>
-                  );
-                })
-              )}
-            </div>
-
-            {/* Stretched My Account Footer Button */}
-            <div className="p-4 border-t border-default-200 dark:border-default-100/50 bg-white dark:bg-[#0E0E10]/30">
-              <button
-                type="button"
-                className="w-full font-bold text-xs h-10 rounded-xl bg-default-100 dark:bg-default-200 hover:bg-default-200 dark:hover:bg-default-300 transition-all text-default-700 dark:text-default-300 border border-transparent dark:border-default-100/30 flex items-center justify-center"
-              >
-                My Account
-              </button>
-            </div>
-          </div>
-
           {/* Right Column: Center Presentation Area */}
           <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
             <AnimatePresence mode="wait">
@@ -522,8 +481,8 @@ export default function ConnectAppsPage() {
                   {/* Connect App Card Wrapper */}
                   <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center text-center gap-6">
                     {/* App logo inside custom box */}
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0">
-                      <Icon className="text-3xl text-default-800 dark:text-white" icon={selectedApp.icon || "solar:box-bold"} />
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
+                      <AppIcon app={selectedApp} className="w-full h-full object-contain" />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
