@@ -15,6 +15,7 @@ import {
   Shield,
   FlaskConical,
   Network,
+  Cpu,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -911,6 +912,46 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>Generate Knowledge Graph</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Cpu
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const archPrompt =
+                            prompt.trim() ||
+                            "System Architecture: Trace the codebase components, map key layers (API, backend, database), analyze system dependencies, and compile the full topography map.";
+                          setPrompt(archPrompt);
+                          if (onSend) {
+                            onSend(
+                              archPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: archPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>System Architecture</p>
                     </TooltipContent>
                   </Tooltip>
 
