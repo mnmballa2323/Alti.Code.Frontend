@@ -5,12 +5,6 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
-## [39.20.0] - 2026-05-26 — Premium Assets Sandbox Split Workspace Overhaul
-### Added
-- **Two-Column Split Workspace Layout**: Transformed the Assets page into a luxury split console (`app/assets/page.tsx`) utilizing a 60/40 design grid.
-- **Classification Category Selectors**: Integrated a premium row of interactive, classification buttons mapping dynamically to `Logo`, `Vector Graphics`, `Figma Layer`, `Color Palette`, and `Typography` categories.
-- **Live Asset Sandbox Preview Panel**: Built a real-time responsive visual preview pane including an adaptive checkers transparency canvas, customized Figma layers telemetry, color swatch rendering, and active synchronization state indicators.
-
 ## [39.19.0] - 2026-05-26 — Assets Page Form Streamlining & Decluttering
 ### Removed
 - **Asset Form Textareas Deletion**: Completely removed the redundant and duplicate `Custom Instructions` and `Safety Guardrails` Textarea fields from the Assets page creation form (`app/assets/page.tsx`).
