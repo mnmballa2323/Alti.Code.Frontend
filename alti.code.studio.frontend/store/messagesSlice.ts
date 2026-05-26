@@ -86,13 +86,13 @@ export const sendMessage = createAsyncThunk<
       const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/gemini/get-response`;
 
       const defaultModel = useSettingsStore.getState().defaultModel;
+      const messagesModel = (getState() as RootState).messages.model;
 
       // 2. Build Payload
       const payload = {
-        // userId: "68e5779e645618133a0dcb18",
         prompt: enrichedPrompt,
         mode: defaultModel || model || "gemini-3.1-pro",
-        domain: domain,
+        domain: messagesModel === "chat" ? "Chat" : domain,
         language: language,
         model: defaultModel || "gemini-3.1-pro",
         ...(sessionId ? { sessionId: sessionId } : {}),

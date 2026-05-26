@@ -108,8 +108,8 @@ const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
 /**
  * In-memory client connection router based on secure Vault key states.
  */
-const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperature = 0.5) => {
-    logger.info(`🔀 [LlmGateway] Triage routing prompt to model: ${modelName}`);
+const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperature = 0.5, domain = 'Full Stack') => {
+    logger.info(`🔀 [LlmGateway] Triage routing prompt to model: ${modelName} | Domain: ${domain}`);
 
     // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
@@ -117,6 +117,16 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
 
     // Load codebase instructions and guardrails dynamically
     let rulesContext = '';
+
+    // Strict isolation boundary for Chat Page: prohibit code generation & modifications
+    if (domain === 'Chat' || modelName === 'chat') {
+        rulesContext += '=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===\n';
+        rulesContext += '1. You are operating in the isolated CHAT workspace.\n';
+        rulesContext += '2. You are allowed to answer codebase architecture queries, search the web, explain concepts, and assist with non-development questions.\n';
+        rulesContext += '3. SECURITY ENFORCEMENT: You are strictly PROHIBITED from writing, generating, or outputting any source code blocks, git commit commands, file creation payloads, or codebase modifications. You CANNOT write code or edit the codebase under any circumstances.\n';
+        rulesContext += '4. If the user requests code generation or codebase edits, you MUST politely guide them to switch to the "Code Workspace" page to perform coding tasks.\n';
+        rulesContext += '==============================================================\n\n';
+    }
     try {
         const rules = await RulesService.parseRules();
         if ((rules.instructions && rules.instructions.length > 0) || (rules.guardrails && rules.guardrails.length > 0)) {

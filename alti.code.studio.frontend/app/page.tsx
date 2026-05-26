@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(startNewChat());
-    dispatch(setChatContext({ sessionId: null, model: "default" }));
+    dispatch(setChatContext({ sessionId: null, model: "code" }));
   }, [dispatch]);
 
   const handleFirstMessageSend = (

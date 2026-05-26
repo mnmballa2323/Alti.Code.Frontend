@@ -34,7 +34,7 @@ export default function ChatHome() {
 
   useEffect(() => {
     dispatch(startNewChat());
-    dispatch(setChatContext({ sessionId: null, model: "default" }));
+    dispatch(setChatContext({ sessionId: null, model: "chat" }));
   }, [dispatch]);
 
   const handleFirstMessageSend = (

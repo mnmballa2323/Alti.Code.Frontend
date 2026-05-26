@@ -13,7 +13,8 @@ const getResponse = catchAsync(async (req, res) => {
         sessionId,
         prompt,
         model,
-        req.body?.temperature
+        req.body?.temperature,
+        req.body?.domain
     );
 
     sendResponse(res, {
