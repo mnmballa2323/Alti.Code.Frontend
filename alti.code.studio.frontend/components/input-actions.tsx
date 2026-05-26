@@ -323,6 +323,11 @@ function PromptInputFullLineComponent({
   const token = session?.user.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
 
+  // Enforce "Select Model" (empty defaultModel) by default on initial component mount
+  useEffect(() => {
+    setDefaultModel("");
+  }, [setDefaultModel]);
+
   // Listen for file drops from the Data / Vault Workspace
   useEffect(() => {
     const handleAddDocument = (e: Event) => {
