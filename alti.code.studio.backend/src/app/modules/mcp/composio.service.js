@@ -1,5 +1,6 @@
 import { Composio } from '@composio/core';
 import { logger } from '../../../shared/logger.js';
+import { mcpClientService } from './mcp.client.js';
 
 class ComposioService {
     constructor() {
@@ -118,53 +119,93 @@ class ComposioService {
     }
     
     /**
-     * Get the JSON Schema representations of all tools for connected apps.
-     * This is mapped perfectly for Gemini / OpenAI function declarations.
+     * Get the JSON Schema representations of all to     * This is mapped perfectly for Gemini / OpenAI function declarations.
      */
     async getConnectedToolsSchema(userId = 'default_user') {
-        if (!this.composio) return [];
+        let allMappedTools = [];
+
+        // 1. Ingest active local stdio MCP tools
         try {
-            const connections = await this.getConnections(userId);
-            if (!connections || !connections.length) return [];
-            
-            // Extract the app slugs from active connections
-            const apps = connections.map(c => (c.appId || c.toolkit || c.appName).toLowerCase());
-            
-            // Get all raw tools for these connected apps
-            const rawTools = await this.composio.tools.getRawComposioTools({ toolkits: apps });
-            
-            // Map to generic AI provider function declarations
-            return rawTools.map(action => {
-                let params = action.inputParameters ? JSON.parse(JSON.stringify(action.inputParameters)) : { type: 'object', properties: {} };
-                
-                // Remove keys that sometimes cause strict LLMs (like Gemini) to throw schema errors
-                if (params.$ref) delete params.$ref;
-                if (params.title) delete params.title;
-                if (params.description) delete params.description;
-                
-                return {
-                    name: action.slug.toLowerCase(),
-                    description: action.description || `Execute ${action.name}`,
-                    parameters: params,
-                    _originalActionName: action.slug
-                };
-            });
+            const localTools = await mcpClientService.getAllTools();
+            if (localTools && localTools.length > 0) {
+                localTools.forEach(tool => {
+                    let params = tool.inputSchema ? JSON.parse(JSON.stringify(tool.inputSchema)) : { type: 'object', properties: {} };
+                    if (params.$ref) delete params.$ref;
+                    if (params.title) delete params.title;
+                    if (params.description) delete params.description;
+
+                    const cleanServer = tool.server.toLowerCase();
+                    const actionName = `${cleanServer}_${tool.name.toLowerCase()}`;
+
+                    allMappedTools.push({
+                        name: actionName,
+                        description: tool.description || `Execute local tool ${tool.name} on server ${tool.server}`,
+                        parameters: params,
+                        _originalActionName: tool.name,
+                        _isMcp: true,
+                        _mcpServer: tool.server
+                    });
+                });
+            }
         } catch (err) {
-            logger.error(`❌ Composio getConnectedToolsSchema failed: ${err.message}`);
-            return [];
+            logger.warn(`⚠️ Composio getConnectedToolsSchema - Failed to ingest local MCP tools: ${err.message}`);
         }
+
+        // 2. Ingest SaaS Oauth tools from Composio catalog
+        if (this.composio) {
+            try {
+                const connections = await this.getConnections(userId);
+                if (connections && connections.length > 0) {
+                    const apps = connections.map(c => (c.appId || c.toolkit || c.appName).toLowerCase());
+                    const rawTools = await this.composio.tools.getRawComposioTools({ toolkits: apps });
+                    
+                    rawTools.forEach(action => {
+                        let params = action.inputParameters ? JSON.parse(JSON.stringify(action.inputParameters)) : { type: 'object', properties: {} };
+                        if (params.$ref) delete params.$ref;
+                        if (params.title) delete params.title;
+                        if (params.description) delete params.description;
+                        
+                        allMappedTools.push({
+                            name: action.slug.toLowerCase(),
+                            description: action.description || `Execute ${action.name}`,
+                            parameters: params,
+                            _originalActionName: action.slug
+                        });
+                    });
+                }
+            } catch (err) {
+                logger.error(`❌ Composio getConnectedToolsSchema failed: ${err.message}`);
+            }
+        }
+
+        return allMappedTools;
     }
     
     /**
      * Execute a specific tool on behalf of the user.
      */
     async executeTool(actionName, args, userId = 'default_user') {
+        try {
+            logger.info(`🤖 Executing Action: ${actionName} for user: ${userId}`);
+
+            const localTools = await mcpClientService.getAllTools();
+            const matchedLocalTool = localTools.find(tool => {
+                const cleanServer = tool.server.toLowerCase();
+                const compositeName = `${cleanServer}_${tool.name.toLowerCase()}`;
+                return compositeName === actionName.toLowerCase() || tool.name.toLowerCase() === actionName.toLowerCase();
+            });
+
+            if (matchedLocalTool) {
+                logger.info(`🤖 Routing execution to local MCP client: ${matchedLocalTool.name} on server ${matchedLocalTool.server}`);
+                const result = await mcpClientService.callTool(matchedLocalTool.server, matchedLocalTool.name, args);
+                return result;
+            }
+        } catch (err) {
+            logger.warn(`⚠️ executeTool - Local MCP detection failed: ${err.message}`);
+        }
+
         if (!this.composio) throw new Error("Composio SDK not initialized");
         try {
-            logger.info(`🤖 Executing Composio Action: ${actionName} for user: ${userId}`);
-            
-            // We use proxyExecute or standard execute depending on the object shape
-            // composio.tools.execute accepts action and params
             const result = await this.composio.tools.execute({
                 action: actionName.toUpperCase(),
                 params: args,

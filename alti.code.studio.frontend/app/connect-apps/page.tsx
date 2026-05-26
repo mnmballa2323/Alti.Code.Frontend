@@ -294,6 +294,14 @@ const FALLBACK_APPS: AppIntegration[] = [
 const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
   const [imageError, setImageError] = useState(false);
   const [urlIndex, setUrlIndex] = useState(0);
+
+  if (app.id === "custom-mcp-launcher") {
+    return (
+      <div className={`w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg ${className}`}>
+        <Icon icon="solar:add-circle-bold" className="text-base" />
+      </div>
+    );
+  }
   
   const slug = app.id.replace("app-", "").toLowerCase();
   let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
@@ -552,6 +560,14 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     );
   }
 
+  if (app.type === "custom") {
+    return (
+      <div className={`rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white ${className}`}>
+        <Icon icon="solar:server-square-bold" className="text-sm" />
+      </div>
+    );
+  }
+
   return (
     <div className={`rounded-xl flex items-center justify-center font-bold text-xs bg-gradient-to-br from-indigo-500 to-purple-600 text-white ${className}`}>
       {app.name.slice(0, 2).toUpperCase()}
@@ -667,8 +683,15 @@ export default function ConnectAppsPage() {
   const [isMcpConnecting, setIsMcpConnecting] = useState(false);
   const [mcpError, setMcpError] = useState<string | null>(null);
 
+  // Custom MCP Form States
+  const [customServersList, setCustomServersList] = useState<any[]>([]);
+  const [mcpTitle, setMcpTitle] = useState("");
+  const [mcpName, setMcpName] = useState("");
+  const [mcpDescription, setMcpDescription] = useState("");
+  const [envInput, setEnvInput] = useState("");
+
   const cleanSlug = selectedApp ? selectedApp.id.replace("app-", "").toLowerCase() : "";
-  const isMcp = cleanSlug.startsWith("mcp_") || cleanSlug.startsWith("mcp_toolbox_");
+  const isMcp = cleanSlug.startsWith("mcp_") || cleanSlug.startsWith("mcp_toolbox_") || selectedApp?.type === "custom";
   const isServerActive = activeTools.some((t) => t.server === cleanSlug);
 
   // Synchronize dynamic active app with the Sidebar column 2
@@ -719,6 +742,35 @@ export default function ConnectAppsPage() {
     setMcpError(null);
 
     const slug = app.id.replace("app-", "");
+
+    if (app.id === "custom-mcp-launcher") {
+      setMcpName("");
+      setMcpTitle("");
+      setMcpDescription("");
+      setCommand("npx");
+      setArgsInput("");
+      setEnvInput("");
+      setLoadingDetails(false);
+      return;
+    }
+
+    if (app.type === "custom") {
+      const customConfig = customServersList.find(s => s.name === slug);
+      if (customConfig) {
+        setMcpName(customConfig.name);
+        setMcpTitle(customConfig.title);
+        setMcpDescription(customConfig.description);
+        setCommand(customConfig.command);
+        setArgsInput(customConfig.args.join(" "));
+        const envStr = Object.entries(customConfig.env || {})
+          .map(([k, v]) => `${k}=${v}`)
+          .join("\n");
+        setEnvInput(envStr);
+      }
+      setLoadingDetails(false);
+      return;
+    }
+
     const isLocalMcp = slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_");
 
     if (isLocalMcp) {
@@ -768,6 +820,20 @@ export default function ConnectAppsPage() {
         // Sync local active tools first
         await fetchActiveTools();
 
+        // Fetch custom registered MCP servers
+        let customServers: any[] = [];
+        try {
+          const customRes = await axios.get(`${API_URL}/mcp/custom`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+          if (customRes.data && customRes.data.success) {
+            customServers = customRes.data.data || [];
+            setCustomServersList(customServers);
+          }
+        } catch (e) {
+          console.error("Failed to fetch custom servers", e);
+        }
+
         const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -779,26 +845,47 @@ export default function ConnectAppsPage() {
             ),
           );
 
-          setApps((prev) => {
-            const nextApps = prev.map((app) => {
-              const slug = app.id.replace("app-", "").toLowerCase();
+          // Virtual Launcher
+          const launcherItem = {
+            id: "custom-mcp-launcher",
+            name: "+ Add Custom MCP Server",
+            description: "Connect and register any local or community Model Context Protocol server dynamically.",
+            icon: "solar:add-circle-bold",
+            color: "bg-primary/10 border-primary/20 text-primary dark:text-primary-400 font-semibold",
+            status: "disconnected" as const,
+            type: "custom" as const
+          };
 
-              // For local/remote MCP Servers, determine status dynamically based on registered tools
-              if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
-                const active = activeTools.some((t) => t.server === slug);
-                return { ...app, status: active ? "connected" : "disconnected" };
-              }
+          // Custom MCP Apps
+          const customAppsMapped = customServers.map((s: any) => ({
+            id: `app-${s.name}`,
+            name: s.title,
+            description: s.description,
+            icon: "solar:server-square-bold",
+            color: "bg-white border border-gray-200",
+            status: activeTools.some((t: any) => t.server === s.name) ? ("connected" as const) : ("disconnected" as const),
+            type: "custom" as const
+          }));
 
-              if (connectedIds.has(slug)) {
-                return { ...app, status: "connected" };
-              }
-              if (app.status === "connecting") return app;
+          // Standard SaaS & Presets
+          const standardAppsMapped = FALLBACK_APPS.map((app) => {
+            const slug = app.id.replace("app-", "").toLowerCase();
 
-              return { ...app, status: "disconnected" };
-            });
-            window.dispatchEvent(new CustomEvent("sync-connect-apps"));
-            return nextApps;
+            if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
+              const active = activeTools.some((t: any) => t.server === slug);
+              return { ...app, status: active ? ("connected" as const) : ("disconnected" as const) };
+            }
+
+            if (connectedIds.has(slug)) {
+              return { ...app, status: "connected" as const };
+            }
+            if (app.status === "connecting") return app;
+
+            return { ...app, status: "disconnected" as const };
           });
+
+          setApps([launcherItem, ...customAppsMapped, ...standardAppsMapped]);
+          window.dispatchEvent(new CustomEvent("sync-connect-apps"));
         }
       } catch (err) {
         console.error("Failed to fetch connections", err);
@@ -861,13 +948,27 @@ export default function ConnectAppsPage() {
     const slug = selectedApp.id.replace("app-", "");
     const parsedArgs = argsInput.trim() ? argsInput.split(/\s+/) : [];
 
+    // Parse KEY=VALUE env input
+    const parsedEnv: Record<string, string> = {};
+    if (envInput.trim()) {
+      envInput.split("\n").forEach(line => {
+        const parts = line.split("=");
+        if (parts.length >= 2) {
+          const key = parts[0].trim();
+          const value = parts.slice(1).join("=").trim();
+          if (key) parsedEnv[key] = value;
+        }
+      });
+    }
+
     try {
       await axios.post(
         `${API_URL}/mcp/connect`,
         {
           name: slug,
           command,
-          args: parsedArgs
+          args: parsedArgs,
+          env: parsedEnv
         },
         {
           headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
@@ -911,6 +1012,93 @@ export default function ConnectAppsPage() {
       window.dispatchEvent(new CustomEvent("sync-connect-apps"));
     } catch (err) {
       console.error("Failed to disconnect server", err);
+    } finally {
+      setIsMcpConnecting(false);
+    }
+  };
+
+  const handleRegisterCustomMcp = async () => {
+    if (!mcpName.trim() || !command.trim()) {
+      setMcpError("Server slug name and launcher command are required.");
+      return;
+    }
+
+    setIsMcpConnecting(true);
+    setMcpError(null);
+
+    const parsedEnv: Record<string, string> = {};
+    if (envInput.trim()) {
+      envInput.split("\n").forEach(line => {
+        const parts = line.split("=");
+        if (parts.length >= 2) {
+          const key = parts[0].trim();
+          const value = parts.slice(1).join("=").trim();
+          if (key) parsedEnv[key] = value;
+        }
+      });
+    }
+
+    const parsedArgs = argsInput.trim() ? argsInput.split(/\s+/) : [];
+    const cleanName = mcpName.trim().replace(/\s+/g, "_").toLowerCase();
+
+    try {
+      const res = await axios.post(
+        `${API_URL}/mcp/custom`,
+        {
+          name: cleanName,
+          title: mcpTitle.trim(),
+          description: mcpDescription.trim(),
+          command,
+          args: parsedArgs,
+          env: parsedEnv
+        },
+        {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        }
+      );
+
+      if (res.data && res.data.success) {
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+        
+        const newAppId = `app-${cleanName}`;
+        const newAppItem = {
+          id: newAppId,
+          name: mcpTitle.trim() || mcpName.trim(),
+          description: mcpDescription.trim() || `Custom Model Context Protocol server running via ${command}`,
+          icon: "solar:server-square-bold",
+          color: "bg-white border border-gray-200",
+          status: "disconnected" as const,
+          type: "custom" as const
+        };
+        
+        setSelectedApp(newAppItem);
+        setMcpName("");
+        setMcpTitle("");
+        setMcpDescription("");
+      }
+    } catch (err: any) {
+      setMcpError(err.response?.data?.message || "Failed to register custom MCP server.");
+    } finally {
+      setIsMcpConnecting(false);
+    }
+  };
+
+  const handleDeleteCustomMcpServer = async () => {
+    if (!selectedApp) return;
+    setIsMcpConnecting(true);
+    const slug = selectedApp.id.replace("app-", "");
+
+    try {
+      await axios.delete(
+        `${API_URL}/mcp/custom/${slug}`,
+        {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        }
+      );
+      setSelectedApp(null);
+      window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+    } catch (err: any) {
+      setMcpError(err.response?.data?.message || "Failed to delete custom server.");
     } finally {
       setIsMcpConnecting(false);
     }
@@ -1156,88 +1344,199 @@ export default function ConnectAppsPage() {
                     </AlertWrapper>
                   )}
 
-                  {/* Connect Server Card Wrapper */}
-                  <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center gap-6">
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
-                      <AppIcon app={selectedApp} className="w-full h-full object-contain" />
-                    </div>
-
-                    <div className="flex flex-col gap-1 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <h2 className="text-xl font-bold text-default-900">
-                          {selectedApp.name}
-                        </h2>
-                        {isServerActive && (
-                          <Chip size="sm" color="success" variant="flat" className="h-5 text-[10px] font-semibold">
-                            Active
-                          </Chip>
-                        )}
+                  {selectedApp.id === "custom-mcp-launcher" ? (
+                    /* 🆕 ADD CUSTOM MCP SERVER FORM */
+                    <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col gap-6">
+                      <div className="flex flex-col items-center gap-4 text-center">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shadow-inner">
+                          <Icon icon="solar:add-circle-bold" className="text-2xl animate-pulse" />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <h2 className="text-xl font-bold text-default-900">Add Custom MCP Server</h2>
+                          <p className="text-xs text-default-500 max-w-sm">
+                            Configure standard input/output transport parameters to launch and dynamically register any local or community MCP server.
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-xs text-default-400 font-mono">
-                        source: {cleanSlug}
-                      </p>
-                      <p className="text-xs text-default-500 leading-relaxed px-2 mt-2">
-                        {selectedApp.description}
-                      </p>
-                    </div>
 
-                    {/* Stdio Transport Parameters input fields */}
-                    <div className="w-full flex flex-col gap-3">
-                      <div className="flex gap-3">
+                      <div className="flex flex-col gap-4">
                         <Input
-                          className="w-1/3"
-                          label="Command"
-                          placeholder="npx"
-                          value={command}
+                          label="Display Title"
+                          placeholder="e.g. Local Database SQLite"
+                          value={mcpTitle}
                           variant="bordered"
-                          onValueChange={setCommand}
+                          onValueChange={setMcpTitle}
+                          isRequired
                         />
+                        
+                        <div className="flex gap-4">
+                          <Input
+                            className="w-1/2"
+                            label="Server Slug ID"
+                            placeholder="e.g. local_sqlite"
+                            value={mcpName}
+                            variant="bordered"
+                            onValueChange={setMcpName}
+                            isRequired
+                          />
+                          <Input
+                            className="w-1/2"
+                            label="Command"
+                            placeholder="npx"
+                            value={command}
+                            variant="bordered"
+                            onValueChange={setCommand}
+                            isRequired
+                          />
+                        </div>
+
                         <Input
-                          className="w-2/3"
+                          label="Description"
+                          placeholder="Brief description of capabilities exposed by this server"
+                          value={mcpDescription}
+                          variant="bordered"
+                          onValueChange={setMcpDescription}
+                        />
+
+                        <Input
                           label="Arguments"
-                          placeholder="-y @modelcontextprotocol/server-sqlite"
+                          placeholder="e.g. -y @modelcontextprotocol/server-sqlite --file db.sqlite"
                           value={argsInput}
                           variant="bordered"
                           onValueChange={setArgsInput}
                         />
+
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-semibold text-default-600 pl-1">Environment Variables (Optional)</label>
+                          <textarea
+                            placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
+                            value={envInput}
+                            onChange={(e) => setEnvInput(e.target.value)}
+                            className="w-full h-24 p-3 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
+                          />
+                        </div>
+
+                        <button
+                          type="button"
+                          disabled={isMcpConnecting}
+                          onClick={handleRegisterCustomMcp}
+                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10 mt-2"
+                        >
+                          {isMcpConnecting ? (
+                            <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
+                          ) : (
+                            <Icon icon="solar:disk-bold" className="text-base" />
+                          )}
+                          Register & Launch Server
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* EXISTING PRESETS OR CUSTOM SERVERS */
+                    <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center gap-6">
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
+                        <AppIcon app={selectedApp} className="w-full h-full object-contain" />
                       </div>
 
-                      {isServerActive ? (
-                        <button
-                          type="button"
-                          disabled={isMcpConnecting}
-                          onClick={handleDisconnectMcpServer}
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20"
-                        >
-                          {isMcpConnecting ? (
-                            <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
-                          ) : (
-                            <Icon icon="solar:stop-circle-bold" className="text-base" />
+                      <div className="flex flex-col gap-1 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <h2 className="text-xl font-bold text-default-900">
+                            {selectedApp.name}
+                          </h2>
+                          {isServerActive && (
+                            <Chip size="sm" color="success" variant="flat" className="h-5 text-[10px] font-semibold">
+                              Active
+                            </Chip>
                           )}
-                          Stop MCP Server
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={isMcpConnecting}
-                          onClick={handleLaunchMcpServer}
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10"
-                        >
-                          {isMcpConnecting ? (
-                            <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
-                          ) : (
-                            <Icon icon="solar:play-circle-bold" className="text-base" />
-                          )}
-                          Launch MCP Server
-                        </button>
-                      )}
-                    </div>
+                        </div>
+                        <p className="text-xs text-default-400 font-mono">
+                          source: {cleanSlug}
+                        </p>
+                        <p className="text-xs text-default-500 leading-relaxed px-2 mt-2">
+                          {selectedApp.description}
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
-                      <Icon icon="solar:server-square-bold" className="text-xs text-primary" />
-                      Ingested seamlessly via secure Stdio pipeline
+                      {/* Stdio Transport Parameters input fields */}
+                      <div className="w-full flex flex-col gap-3">
+                        <div className="flex gap-3">
+                          <Input
+                            className="w-1/3"
+                            label="Command"
+                            placeholder="npx"
+                            value={command}
+                            variant="bordered"
+                            onValueChange={setCommand}
+                          />
+                          <Input
+                            className="w-2/3"
+                            label="Arguments"
+                            placeholder="-y @modelcontextprotocol/server-sqlite"
+                            value={argsInput}
+                            variant="bordered"
+                            onValueChange={setArgsInput}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-1.5 mt-1">
+                          <label className="text-[11px] font-semibold text-default-600 pl-1">Environment Variables (Optional)</label>
+                          <textarea
+                            placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
+                            value={envInput}
+                            onChange={(e) => setEnvInput(e.target.value)}
+                            className="w-full h-20 p-2.5 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
+                          />
+                        </div>
+
+                        {isServerActive ? (
+                          <button
+                            type="button"
+                            disabled={isMcpConnecting}
+                            onClick={handleDisconnectMcpServer}
+                            className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20 mt-2"
+                          >
+                            {isMcpConnecting ? (
+                              <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
+                            ) : (
+                              <Icon icon="solar:stop-circle-bold" className="text-base" />
+                            )}
+                            Stop MCP Server
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={isMcpConnecting}
+                            onClick={handleLaunchMcpServer}
+                            className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10 mt-2"
+                          >
+                            {isMcpConnecting ? (
+                              <Icon icon="line-md:loading-twotone-loop" className="text-base animate-spin" />
+                            ) : (
+                              <Icon icon="solar:play-circle-bold" className="text-base" />
+                            )}
+                            Launch MCP Server
+                          </button>
+                        )}
+
+                        {selectedApp.type === "custom" && (
+                          <button
+                            type="button"
+                            disabled={isMcpConnecting}
+                            onClick={handleDeleteCustomMcpServer}
+                            className="w-full font-bold text-xs h-10 rounded-xl bg-default-100 hover:bg-danger/10 hover:text-danger active:scale-95 transition-all flex items-center justify-center gap-2 border border-transparent hover:border-danger/20 mt-1"
+                          >
+                            <Icon icon="solar:trash-bin-trash-bold" className="text-sm" />
+                            Delete Custom Integration
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
+                        <Icon icon="solar:server-square-bold" className="text-xs text-primary" />
+                        Ingested seamlessly via secure Stdio pipeline
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Ingested Server Tools Tab list */}
                   <div className="w-full flex flex-col gap-4 mt-2">

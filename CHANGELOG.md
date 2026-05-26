@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.35.0] - 2026-05-26 — Dynamic Composio MCP Integration & Custom MCP Launcher
+### Added
+- **Backend: Custom MCP Server Persistence**: Persists user-configured custom stdio MCP servers under `.alti/custom_mcp_servers.json` so they are fully recovered across backend server restarts.
+- **Backend: Custom MCP REST Endpoints**: Deployed `GET`, `POST`, and `DELETE` endpoints under `/mcp/custom` to dynamically read, register, and gracefully disconnect custom stdio MCP servers.
+- **Backend: Composio Unified MCP Execution**: Updated `composioService` to dynamically combine SaaS OAuth tools with active local/stdio MCP tools under `getConnectedToolsSchema()`, routing local tool calls directly inside `executeTool()` via `mcpClientService.callTool()`.
+- **Frontend: Premium "+ Add Custom MCP Server" Action**: Prepended a virtual launcher item to the integrations catalog list, providing immediate quick access to the register control pane.
+- **Frontend: High-Fidelity Custom MCP Form**: Built an interactive, dark mode glassmorphism dual-column form configuring Stdio Title, Slug Name, launcher command presets (`npx`, `uvx`, `docker`, `python`), arguments, and custom key-value multiline environment variables.
+- **Frontend: Custom Server Lifecycle Controls**: Added dynamic connection statuses, active/disconnected indicator badges, stop server triggers, active tool listings, and delete custom integration capability buttons.
+
 ## [39.27.0] - 2026-05-26 — Model Context Protocol (MCP) 97+ Servers & Google MCP Toolbox Integration
 ### Added
 - **MCP Sidebar Menu Navigation integration**: Dynamically lists all 97+ official MCP servers in the sidebar's secondary column when the user is on the Nervous System page (`/mcp`), enabling live catalog search and real-time filtering.

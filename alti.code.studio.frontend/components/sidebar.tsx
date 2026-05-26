@@ -104,6 +104,14 @@ type AppIntegration = {
 const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
   const [imageError, setImageError] = useState(false);
   const [urlIndex, setUrlIndex] = useState(0);
+
+  if (app.id === "custom-mcp-launcher") {
+    return (
+      <div className={cn("w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg", className)}>
+        <Icon icon="solar:add-circle-bold" className="text-base" />
+      </div>
+    );
+  }
   
   const slug = app.id.replace("app-", "").toLowerCase();
   let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
@@ -408,8 +416,17 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     );
   }
 
-  const initials = app.name.slice(0, 2).toUpperCase();
   const gradientClass = getAvatarColor(app.name);
+
+  if (app.type === "custom") {
+    return (
+      <div className={cn("rounded-lg flex items-center justify-center bg-gradient-to-br text-white", gradientClass, className)}>
+        <Icon icon="solar:server-square-bold" className="text-xs" />
+      </div>
+    );
+  }
+
+  const initials = app.name.slice(0, 2).toUpperCase();
 
   return (
     <div className={cn("rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight", gradientClass, className)}>
@@ -897,6 +914,19 @@ export default function Sidebar() {
           console.error("Failed to fetch active tools in sidebar:", e);
         }
 
+        // Fetch custom registered MCP servers
+        let customServers: any[] = [];
+        try {
+          const customRes = await axios.get(`${API_URL}/mcp/custom`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (customRes.data && customRes.data.success) {
+            customServers = customRes.data.data || [];
+          }
+        } catch (e) {
+          console.error("Failed to fetch custom servers in sidebar:", e);
+        }
+
         const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -908,25 +938,46 @@ export default function Sidebar() {
             ),
           );
 
-          setApps((prev) => {
-            const initialApps = prev.length > 0 ? prev : FALLBACK_APPS;
-            return initialApps.map((app) => {
-              const slug = app.id.replace("app-", "").toLowerCase();
+          // Virtual Launcher
+          const launcherItem = {
+            id: "custom-mcp-launcher",
+            name: "+ Add Custom MCP Server",
+            description: "Connect and register any local or community Model Context Protocol server dynamically.",
+            icon: "solar:add-circle-bold",
+            color: "bg-primary/10 border-primary/20 text-primary dark:text-primary-400 font-semibold",
+            status: "disconnected" as const,
+            type: "custom" as const
+          };
 
-              // For local/remote MCP Servers, determine status dynamically based on registered tools
-              if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
-                const active = activeTools.some((t: any) => t.server === slug);
-                return { ...app, status: active ? "connected" : "disconnected" };
-              }
+          // Custom MCP Apps
+          const customAppsMapped = customServers.map((s: any) => ({
+            id: `app-${s.name}`,
+            name: s.title,
+            description: s.description,
+            icon: "solar:server-square-bold",
+            color: "bg-white border border-gray-200",
+            status: activeTools.some((t: any) => t.server === s.name) ? ("connected" as const) : ("disconnected" as const),
+            type: "custom" as const
+          }));
 
-              if (connectedIds.has(slug)) {
-                return { ...app, status: "connected" };
-              }
-              if (app.status === "connecting") return app;
+          // Standard SaaS & Presets
+          const standardAppsMapped = FALLBACK_APPS.map((app) => {
+            const slug = app.id.replace("app-", "").toLowerCase();
 
-              return { ...app, status: "disconnected" };
-            });
+            if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
+              const active = activeTools.some((t: any) => t.server === slug);
+              return { ...app, status: active ? ("connected" as const) : ("disconnected" as const) };
+            }
+
+            if (connectedIds.has(slug)) {
+              return { ...app, status: "connected" as const };
+            }
+            if (app.status === "connecting") return app;
+
+            return { ...app, status: "disconnected" as const };
           });
+
+          setApps([launcherItem, ...customAppsMapped, ...standardAppsMapped]);
         }
       } catch (err) {
         console.error("Failed to fetch connections in sidebar:", err);
@@ -936,7 +987,7 @@ export default function Sidebar() {
     };
 
     // Initialize list
-    setApps(FALLBACK_APPS);
+    setApps([]);
     fetchConnections();
 
     // Listen for sync event to re-fetch connection statuses

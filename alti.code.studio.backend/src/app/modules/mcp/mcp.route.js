@@ -22,4 +22,8 @@ router.post('/connect', requireAuth, McpController.connectServer);
 router.post('/run', requireAuth, McpController.runTool);
 router.post('/execute/local', requireAuth, McpController.runTool);
 
+router.get('/custom', requireAuth, McpController.getCustomMcpServers);
+router.post('/custom', requireAuth, McpController.addCustomMcpServer);
+router.delete('/custom/:name', requireAuth, McpController.deleteCustomMcpServer);
+
 export const mcpRoutes = router;

@@ -48,8 +48,9 @@ class McpClientService {
      * @param {string} serverName - Unique name for the connection
      * @param {string} command    - Command to run the server (e.g. "node")
      * @param {string[]} args     - Arguments for the command
+     * @param {object} env        - Custom environment variables
      */
-    async connect(serverName, command, args = []) {
+    async connect(serverName, command, args = [], env = {}) {
         if (this.clients.has(serverName)) {
             logger.info(`🔌 MCP: Already connected to ${serverName} — skipping.`);
             return this.clients.get(serverName);
@@ -58,7 +59,8 @@ class McpClientService {
         logger.info(`🔌 MCP: Connecting to ${serverName}...`);
 
         try {
-            const transport = new StdioClientTransport({ command, args });
+            const mergedEnv = { ...process.env, ...env };
+            const transport = new StdioClientTransport({ command, args, env: mergedEnv });
 
             const client = new Client(
                 { name: 'AltiClient', version: '1.0.0' },
