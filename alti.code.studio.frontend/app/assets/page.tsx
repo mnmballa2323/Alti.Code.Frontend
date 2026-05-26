@@ -98,22 +98,9 @@ export default function Assets() {
         </div>
 
         {/* Main Content (Centered Form with premium styling, smooth transitions, and rounded elements) */}
-        <div className="flex-1 overflow-y-auto w-full px-6 flex items-center justify-center bg-gray-50/20 dark:bg-black/5 py-12">
-          <div className="w-full max-w-lg bg-white dark:bg-[#121212]/40 border border-default-200 dark:border-default-100/50 rounded-3xl p-8 shadow-sm flex flex-col gap-6 hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            
-            <div className="flex flex-col gap-1">
-              <h2 className="text-base font-bold text-default-900 tracking-tight">
-                {activeAssetId ? "Edit Brand Asset" : "Register Brand Asset"}
-              </h2>
-              <p className="text-xs text-default-400 leading-normal">
-                Register vector graphs, typography guidelines, and Figma anchors to synchronize AI design agents.
-              </p>
-            </div>
-
-            <hr className="border-default-100" />
-
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-1.5">
+        <div className="flex-1 overflow-y-auto w-full px-6 flex items-center justify-center py-12">
+          <div className="w-full max-w-lg flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-default-700">
                   Asset Name
                 </label>
@@ -203,7 +190,6 @@ export default function Assets() {
                   {activeAssetId ? "Save Changes" : "Add Asset"}
                 </Button>
               </div>
-            </div>
           </div>
         </div>
       </div>

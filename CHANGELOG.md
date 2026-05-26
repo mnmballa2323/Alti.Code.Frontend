@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.22.0] - 2026-05-26 — Assets Workspace Card Background & Header Removal
+### Removed
+- **Card Background Box Deletion**: Removed the card background box, shadows, and borders from the centered Assets creation form (`app/assets/page.tsx`), allowing it to blend seamlessly into the transparent workspace.
+- **Form Header Title & Subtitle Deletion**: Purged the redundant `Register Brand Asset` title, subtitle text, and horizontal line separator, letting the form start directly and cleanly with the `Asset Name` input.
+
 ## [39.21.0] - 2026-05-26 — Premium Centered Assets Form & Header Refinement
 ### Changed
 - **Smooth & Centered Card Layout**: Wrapped the streamlined Assets creation form (`app/assets/page.tsx`) in a premium centered card with soft rounded corners (`rounded-3xl`), drop shadows, and comfortable grid gap spacing.
