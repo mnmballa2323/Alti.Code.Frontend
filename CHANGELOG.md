@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.3] - 2026-05-26 — Agentic RAG Routing and Left-Aligned Chat Session Header
+### Added
+- **Backend Agentic Routing**: Integrated dynamic query classification inside `LlmGatewayService.routeCompletion` to analyze user chat inputs. It automatically routes codebase/architecture-related queries to the high-performance Ultimate RAG search pipeline behind the scenes, and routes general queries to standard completions, unifying the chat experience agentically.
+- **Backend Agentic Test Suite**: Added a dedicated integration test case verifying successful dynamic RAG routing, query classification, and early return with mocked database persistence.
+### Changed
+- **Frontend Toggle Removal**: Removed the manual standard/RAG sliding toggle switcher completely from both the home chat page (`app/chat/page.tsx`) and the single active chat session page (`app/chat/[id]/page.tsx`), achieving a clean, focused single-session UI.
+- **Frontend Header Refinements**: Changed the header text title from "New Chat Session" / dynamic titles to "Chat Session" and left-aligned it by removing the centering constraints, satisfying high-fidelity layout guidelines.
+- **Project Version bump**: Incremented root `VERSION` to `39.37.3` and staged all files for Git push.
+
 ## [39.37.2] - 2026-05-26 — Secure RAG Sandbox and Chat-Only Guardrails
 ### Added
 - **Frontend RAG Active Session Binding**: Integrated the codebase RAG search sub-panels into active single-session chat pages (`app/chat/[id]/page.tsx`) with the same premium sliding pill header toggle, unifying RAG codebase search across the entire chat experience.

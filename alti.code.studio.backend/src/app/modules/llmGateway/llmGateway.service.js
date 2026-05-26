@@ -9,6 +9,8 @@ import { logger } from '../../../shared/logger.js';
 import ApiError from '../../../errors/ApiError.js';
 import httpStatus from 'http-status';
 import { RulesService } from '../rules/rules.service.js';
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
@@ -114,6 +116,38 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
     const scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
+
+    // Agentic classification: Should we use codebase RAG search?
+    if (domain === 'Chat' || modelName === 'chat') {
+        try {
+            const classificationPrompt = `You are an agentic router. Given the user query, classify if it requires searching the codebase or requires information about the codebase/repository code/architecture.
+User Query: "${scrubbedPrompt}"
+
+Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a general chat, web search, or non-development question. Do not return any other text.`;
+            
+            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-2.5-flash', 0.1);
+            const decision = classificationResult.content.trim().toUpperCase();
+            
+            if (decision.includes('RAG')) {
+                logger.info(`🤖 [LlmGateway] Agentic Route: Detected codebase query. Redirecting to Ultimate RAG Pipeline.`);
+                const ragResult = await ultimateRagService.synthesize(scrubbedPrompt, modelName, 'Chat', undefined);
+                
+                // Persist chat response to Postgres ChatHistory (JSONB)
+                await saveChatResponse(userId, sessionId, rawPrompt, modelName, ragResult.synthesis);
+                
+                return {
+                    reply: ragResult.synthesis,
+                    sessionId,
+                    model: modelName,
+                    success: true
+                };
+            } else {
+                logger.info(`🤖 [LlmGateway] Agentic Route: General query detected. Proceeding with standard completion.`);
+            }
+        } catch (err) {
+            logger.warn(`[LlmGateway] Agentic routing classification failed (non-blocking): ${err.message}`);
+        }
+    }
 
     // Load codebase instructions and guardrails dynamically
     let rulesContext = '';

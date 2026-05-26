@@ -52,6 +52,20 @@ vi.mock('../../src/app/modules/memory/vector.store.js', () => ({
     }
 }));
 
+vi.mock('../../src/config/prisma.js', () => ({
+    prisma: {
+        user: {
+            findFirst: vi.fn().mockResolvedValue({ id: 'mock-user-id' }),
+            upsert: vi.fn().mockResolvedValue({ id: 'mock-user-id' })
+        },
+        chatHistory: {
+            findFirst: vi.fn().mockResolvedValue(null),
+            create: vi.fn().mockResolvedValue(true),
+            update: vi.fn().mockResolvedValue(true)
+        }
+    }
+}));
+
 describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
     beforeAll(() => {
         // Prevent cache hits
@@ -98,5 +112,35 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
         expect(capturedPrompt).not.toContain('=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===');
         expect(result.synthesis).toContain('Here is the code block');
+    });
+
+    it('LLM Gateway Agentic Routing: should classify codebase queries as RAG and redirect seamlessly', async () => {
+        const { LlmGatewayService } = await import('../../src/app/modules/llmGateway/llmGateway.service.js');
+        
+        let classificationRun = false;
+        GoogleGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+            if (prompt.includes('requires searching the codebase')) {
+                classificationRun = true;
+                return { content: 'RAG' };
+            }
+            if (prompt.includes('GOOGLE RAG CONTEXT')) {
+                return { content: 'This is the RAG answer explaining architecture conceptually.' };
+            }
+            return { content: '["query"]' };
+        });
+
+        // Trigger routeCompletion with domain === 'Chat'
+        const result = await LlmGatewayService.routeCompletion(
+            'system_dev_user',
+            'test-session-agentic',
+            'Explain how Vault service is secure',
+            'gemini-3.1-pro',
+            0.5,
+            'Chat'
+        );
+
+        expect(classificationRun).toBe(true);
+        expect(result.success).toBe(true);
+        expect(result.reply).toBe('This is the RAG answer explaining architecture conceptually.');
     });
 });
