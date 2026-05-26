@@ -146,6 +146,10 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "azure_vm": "azure.svg",
     "azure_blob": "azure.svg",
     
+    // Official Git & Filesystem MCP Integrations
+    "git": "git.svg",
+    "filesystem": "filesystem.svg",
+    
     // A Apps
     "ably": "ably.svg",
     "acculynx": "acculynx.jpeg",
@@ -223,6 +227,10 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "mcp_azure_vm": "https://logo.clearbit.com/microsoft.com",
     "azure_blob": "https://logo.clearbit.com/microsoft.com",
     "mcp_azure_blob": "https://logo.clearbit.com/microsoft.com",
+    "git": "https://logo.clearbit.com/git-scm.com",
+    "mcp_git": "https://logo.clearbit.com/git-scm.com",
+    "filesystem": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
+    "mcp_filesystem": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
     "mcp_chromadb": "https://logo.clearbit.com/trychroma.com",
     "mcp_everything": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
     "accredible_certificates": "https://logo.clearbit.com/accredible.com",

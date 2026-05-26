@@ -5070,6 +5070,16 @@ export const SAAS_MOCKS = [
     icon: "logos:github",
   },
   {
+    name: "Git",
+    slug: "mcp_git",
+    icon: "logos:git",
+  },
+  {
+    name: "Filesystem",
+    slug: "mcp_filesystem",
+    icon: "logos:filesystem",
+  },
+  {
     name: "Cloudflare",
     slug: "mcp_cloudflare",
     icon: "logos:cloudflare",
