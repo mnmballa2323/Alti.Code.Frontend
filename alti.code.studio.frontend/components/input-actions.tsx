@@ -286,7 +286,7 @@ function PromptInputFullLineComponent({
       case "claude-4.7-opus":
         return "Claude 4.7 Opus";
       case "sonnet-5":
-        return "Sonnet 5";
+        return "Claude Sonnet 5";
       case "claude-4.5-haiku":
         return "Claude 4.5 Haiku";
       case "gpt-5.5-pro":
@@ -624,7 +624,7 @@ function PromptInputFullLineComponent({
                     >
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Sonnet 5</span>
+                        <span className="text-xs font-medium text-foreground">Claude Sonnet 5</span>
                         <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
                       </div>
                     </button>
