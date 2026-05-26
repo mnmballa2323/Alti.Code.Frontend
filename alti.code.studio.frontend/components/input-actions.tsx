@@ -527,7 +527,6 @@ function PromptInputFullLineComponent({
                       ? "Claude"
                       : "GPT"}
                   </span>
-                  <ChevronDown className="size-3.5 text-gray-400 group-hover:text-primary shrink-0 transition-colors duration-200" />
                 </button>
               </DropdownTrigger>
               <DropdownMenu
