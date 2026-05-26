@@ -5,6 +5,18 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.13.0] - 2026-05-26 — Complete Deployments Page & Feature Deletion
+### Removed
+- **Total Deployments Feature Deletion**: Completely removed the mock deployments manager page (`app/deployments/page.tsx`), build triggers, rollback scripts integrations, and mock log streaming interfaces.
+- **Sidebar Cleanups**: Removed `/deployments` navigation items, Rocket icon imports, and button click routing actions inside `components/sidebar.tsx` to streamline the user interface.
+- **Unused Lucide-React Cleanups**: Removed both unused `Rocket` and `Globe` imports in `components/sidebar.tsx` to avoid dead code residue.
+
+## [39.12.0] - 2026-05-26 — Complete Custom Domains Page & Infrastructure Feature Removal
+### Removed
+- **Total Custom Domains Feature Deletion**: Completely removed the custom domains manager page (`app/domains/page.tsx`) along with Let's Encrypt SSL automated provisioning UI, DNS custom records editor, and name server verification states.
+- **Sidebar Codebase Cleanups**: Stripped all `/domains` state tracking variables, unused new-item triggers, list rendering sub-views, and commented-out navigation buttons in `components/sidebar.tsx`.
+- **Cloud Panel Reversion**: Restored `app/cloud/page.tsx` to its pure, clean state, removing router-based navigation helpers and the temporary custom domains button to focus entirely on cloud provider integrations.
+
 ## [39.11.4] - 2026-05-26 — Custom Domains Navigation Relocation
 ### Changed
 - **Relocating Custom Domains Entrance**: Commented out the primary sidebar navigation link for `/domains` (Domains) in `components/sidebar.tsx` to simplify the core layout.

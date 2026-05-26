@@ -40,10 +40,8 @@ import {
   Trash2,
   PanelLeftClose,
   PanelLeftOpen,
-  Rocket,
   Terminal,
   Lock,
-  Globe,
   Cloud,
   CheckCircle,
   ShieldAlert,
@@ -381,10 +379,6 @@ export default function Sidebar() {
         return "Canvas";
       case "/architecture":
         return "Architecture";
-      case "/deployments":
-        return "Deployments";
-      case "/domains":
-        return "Domains";
       case "/logs":
         return "Logs";
 
@@ -512,7 +506,6 @@ export default function Sidebar() {
     (state: RootState) => state.system.documents || [],
   );
   const assets = useSelector((state: RootState) => state.system.assets || []);
-  const [domains, setDomains] = useState<{ id: string; name: string }[]>([]);
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -1056,25 +1049,7 @@ export default function Sidebar() {
             </span>
           </button>
 
-          {/* <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/domains"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/domains");
-            }}
-          >
-            <Globe className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Domains
-            </span>
-          </button> */}
+
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
@@ -1228,25 +1203,7 @@ export default function Sidebar() {
               Architecture
             </span>
           </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/deployments"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/deployments");
-            }}
-          >
-            <Rocket className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Deployments
-            </span>
-          </button>
+
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
@@ -1373,8 +1330,6 @@ export default function Sidebar() {
                       setIsNewWorkflowModalOpen(true);
                     } else if (pathname === "/vault") {
                       window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                    } else if (pathname === "/domains") {
-                      window.dispatchEvent(new CustomEvent("open-domain-modal"));
                     } else if (pathname === "/testing") {
                       const newTest = {
                         id: "test-" + Date.now(),
@@ -1981,68 +1936,6 @@ export default function Sidebar() {
                   ))}
                 </div>
               ))}
-            </div>
-          ) : pathname === "/domains" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {domains.map((dom) => (
-                <div
-                  key={dom.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("select-domain", { detail: dom }),
-                    )
-                  }
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <Globe className="text-gray-400 flex-shrink-0" size={14} />
-                    <span className="truncate">{dom.name}</span>
-                  </div>
-                  <div onClick={(e) => e.stopPropagation()}>
-                    <Dropdown
-                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                      placement="bottom-end"
-                    >
-                      <DropdownTrigger>
-                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors p-1">
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Domain options"
-                        className="p-0"
-                        variant="flat"
-                      >
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                          color="danger"
-                          startContent={<Trash2 size={14} />}
-                          onClick={() => {
-                            window.dispatchEvent(
-                              new CustomEvent("delete-domain", {
-                                detail: dom.id,
-                              }),
-                            );
-                            window.dispatchEvent(
-                              new CustomEvent("domain-deleted-cleanup", {
-                                detail: dom.id,
-                              }),
-                            );
-                          }}
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                </div>
-              ))}
-              {domains.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No domains configured yet.
-                </div>
-              )}
             </div>
           ) : pathname?.startsWith("/boardroom") ? (
             <div className="flex flex-col w-full h-full">
