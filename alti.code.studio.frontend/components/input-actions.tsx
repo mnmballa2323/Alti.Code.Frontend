@@ -14,6 +14,7 @@ import {
   MonitorSmartphone,
   Shield,
   FlaskConical,
+  Network,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -870,6 +871,46 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>Autonomous QA Loop</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Network
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const graphPrompt =
+                            prompt.trim() ||
+                            "Generate Knowledge Graph: Analyze the repository structure, parse all files, build dependency relationships, and render the complete visual knowledge graph of the codebase.";
+                          setPrompt(graphPrompt);
+                          if (onSend) {
+                            onSend(
+                              graphPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: graphPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Generate Knowledge Graph</p>
                     </TooltipContent>
                   </Tooltip>
 

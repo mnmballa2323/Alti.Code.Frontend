@@ -1403,25 +1403,6 @@ export default function Sidebar() {
               Canvas
             </span>
           </button> */}
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/graph"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/graph");
-            }}
-          >
-            <Network className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Graph
-            </span>
-          </button>
 
 
 
@@ -1682,7 +1663,6 @@ export default function Sidebar() {
         className={cn(
           "flex h-full flex-col transition-all duration-300 bg-default-50/50 dark:bg-black/20 border-r border-default-200",
           isSecondarySidebarOpen ? "w-64" : "w-10",
-          pathname === "/graph" && "hidden"
         )}
       >
         <div
