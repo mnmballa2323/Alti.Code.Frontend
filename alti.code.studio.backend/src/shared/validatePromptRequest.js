@@ -7,12 +7,12 @@
 
 import { randomUUID } from 'crypto';
 import httpStatus from 'http-status';
-import UserModel from '../app/modules/auth/auth.model.js';
+import { UserRepository } from '../app/modules/auth/prisma.user.repository.js';
 import ApiError from '../errors/ApiError.js';
 
 const validatePromptRequest = async (req, res) => {
   const prompt = req.body?.prompt;
-  const userId = req.user?._id;
+  const userId = req.user?._id || req.user?.id;
   const language = req.body?.language;
   const sessionId = req.body?.sessionId || randomUUID();
   const mode = req.body?.mode || 'Agent';
@@ -35,7 +35,7 @@ const validatePromptRequest = async (req, res) => {
   }
 
   if (activeUserId !== 'system_dev_user') {
-    const user = await UserModel.isUserExist(activeUserId);
+    const user = await UserRepository.findById(activeUserId);
     if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 

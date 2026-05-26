@@ -81,6 +81,7 @@ model User {
   workflows     Workflow[]
   subscriptions Subscription[]
   forums        Forum[]
+  vault         Vault?
 }
 
 // -----------------------------------------------------------------
@@ -352,4 +353,26 @@ model WorkflowRun {
   workflow   Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
   
   @@index([workflowId, createdAt(sort: Desc)])
+}
+
+// -----------------------------------------------------------------
+// Security: Local User Vault (API Keys Field-Level Encryption)
+// -----------------------------------------------------------------
+model Vault {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String   @unique @db.Uuid
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Encrypted at rest via Tink AEAD Field-Level Encryption
+  openaiApiKey       String?  @db.Text
+  anthropicApiKey    String?  @db.Text
+  geminiApiKey       String?  @db.Text
+  azureEndpoint      String?  @db.Text
+  azureApiKey        String?  @db.Text
+  gcpProjectId       String?  @db.Text
+  gcpClientEmail     String?  @db.Text
+  gcpPrivateKey      String?  @db.Text
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

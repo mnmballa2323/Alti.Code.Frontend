@@ -13,10 +13,9 @@ import { BufferMemory } from 'langchain/memory';
 import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { logger } from '../../../shared/logger.js';
-import UserModel from '../auth/auth.model.js';
+import { prisma } from '../../../config/prisma.js';
 import { paymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
-import Llama from './geminiOpenMemo.model.js';
 import { composioService } from '../mcp/composio.service.js';
 
 const client = new GoogleGenerativeAI(config.gemini_secret_key);
@@ -219,19 +218,44 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
       total_time: result?.usage?.total_time || 0,
     };
 
-    let geminiSession = await Llama.findOne({ user: userId, sessionId });
+    let targetUserId = userId;
+    if (userId === 'system_dev_user' || !userId) {
+      const firstUser = await prisma.user.findFirst();
+      if (firstUser) {
+        targetUserId = firstUser.id;
+      } else {
+        const seedUser = await prisma.user.create({
+          data: {
+            email: 'dev@alti.code.studio',
+            role: 'admin',
+          }
+        });
+        targetUserId = seedUser.id;
+      }
+    }
 
-    if (geminiSession) {
-      geminiSession.responses.push(responseData);
-      await geminiSession.save();
-    } else {
-      geminiSession = await Llama.create({
-        user: userId,
-        sessionId,
-        responses: [responseData],
+    const chatHistory = await prisma.chatHistory.findFirst({
+      where: {
+        userId: targetUserId,
+        sessionId: sessionId
+      }
+    });
+
+    if (chatHistory) {
+      const existingResponses = Array.isArray(chatHistory.responses) ? chatHistory.responses : [];
+      existingResponses.push(responseData);
+
+      await prisma.chatHistory.update({
+        where: { id: chatHistory.id },
+        data: { responses: existingResponses }
       });
-      await UserModel.findByIdAndUpdate(userId, {
-        $push: { llamaAiSessions: geminiSession._id },
+    } else {
+      await prisma.chatHistory.create({
+        data: {
+          userId: targetUserId,
+          sessionId: sessionId,
+          responses: [responseData]
+        }
       });
     }
 

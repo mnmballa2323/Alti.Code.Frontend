@@ -10,6 +10,13 @@ interface SettingsState {
   telemetryLevel: "standard" | "verbose";
   openClawEnabled: boolean;
 
+  // New secure Vault database credentials
+  azureEndpoint: string;
+  azureApiKey: string;
+  gcpProjectId: string;
+  gcpClientEmail: string;
+  gcpPrivateKey: string;
+
   // IDE & Editor Preferences
   editorFontSize: number;
   editorWordWrap: boolean;
@@ -27,6 +34,12 @@ interface SettingsState {
   setDefaultModel: (model: string) => void;
   setTelemetryLevel: (level: "standard" | "verbose") => void;
   setOpenClawEnabled: (enabled: boolean) => void;
+
+  setAzureEndpoint: (endpoint: string) => void;
+  setAzureApiKey: (key: string) => void;
+  setGcpProjectId: (projectId: string) => void;
+  setGcpClientEmail: (email: string) => void;
+  setGcpPrivateKey: (key: string) => void;
 
   setEditorFontSize: (size: number) => void;
   setEditorWordWrap: (enabled: boolean) => void;
@@ -46,6 +59,14 @@ export const useSettingsStore = create<SettingsState>()(
       defaultModel: "gemini-3.1-pro",
       telemetryLevel: "standard",
       openClawEnabled: false,
+      
+      // Defaults for Vault credentials
+      azureEndpoint: "",
+      azureApiKey: "",
+      gcpProjectId: "",
+      gcpClientEmail: "",
+      gcpPrivateKey: "",
+
       editorFontSize: 14,
       editorWordWrap: true,
       editorMinimap: true,
@@ -60,6 +81,13 @@ export const useSettingsStore = create<SettingsState>()(
       setDefaultModel: (model) => set({ defaultModel: model }),
       setTelemetryLevel: (level) => set({ telemetryLevel: level }),
       setOpenClawEnabled: (enabled) => set({ openClawEnabled: enabled }),
+
+      setAzureEndpoint: (endpoint) => set({ azureEndpoint: endpoint }),
+      setAzureApiKey: (key) => set({ azureApiKey: key }),
+      setGcpProjectId: (projectId) => set({ gcpProjectId: projectId }),
+      setGcpClientEmail: (email) => set({ gcpClientEmail: email }),
+      setGcpPrivateKey: (key) => set({ gcpPrivateKey: key }),
+
       setEditorFontSize: (size) => set({ editorFontSize: size }),
       setEditorWordWrap: (enabled) => set({ editorWordWrap: enabled }),
       setEditorMinimap: (enabled) => set({ editorMinimap: enabled }),

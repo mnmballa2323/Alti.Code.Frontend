@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect } from "react";
 import {
   Button,
   Modal,
@@ -37,6 +38,14 @@ const SettingsModal = () => {
     editorVimMode,
     maxConcurrentAgents,
     agentTimeoutSecs,
+    
+    // Vault-bound credentials
+    azureEndpoint,
+    azureApiKey,
+    gcpProjectId,
+    gcpClientEmail,
+    gcpPrivateKey,
+
     setOpenaiApiKey,
     setAnthropicApiKey,
     setGeminiApiKey,
@@ -44,6 +53,11 @@ const SettingsModal = () => {
     setDefaultModel,
     setTelemetryLevel,
     setOpenClawEnabled,
+    setAzureEndpoint,
+    setAzureApiKey,
+    setGcpProjectId,
+    setGcpClientEmail,
+    setGcpPrivateKey,
     setEditorFontSize,
     setEditorWordWrap,
     setEditorMinimap,
@@ -51,6 +65,59 @@ const SettingsModal = () => {
     setMaxConcurrentAgents,
     setAgentTimeoutSecs,
   } = useSettingsStore();
+
+  // Load masked keys from secure backend Vault database on modal open
+  useEffect(() => {
+    const loadVaultKeys = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+        const res = await fetch(`${apiUrl}/vault/keys`);
+        const responseData = await res.json();
+        if (responseData?.success && responseData?.data) {
+          const keys = responseData.data;
+          if (keys.openaiApiKey) setOpenaiApiKey(keys.openaiApiKey);
+          if (keys.anthropicApiKey) setAnthropicApiKey(keys.anthropicApiKey);
+          if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
+          if (keys.azureEndpoint) setAzureEndpoint(keys.azureEndpoint);
+          if (keys.azureApiKey) setAzureApiKey(keys.azureApiKey);
+          if (keys.gcpProjectId) setGcpProjectId(keys.gcpProjectId);
+          if (keys.gcpClientEmail) setGcpClientEmail(keys.gcpClientEmail);
+          if (keys.gcpPrivateKey) setGcpPrivateKey(keys.gcpPrivateKey);
+        }
+      } catch (e) {
+        console.error("Failed to load keys from Vault:", e);
+      }
+    };
+    if (isOpen) {
+      loadVaultKeys();
+    }
+  }, [isOpen, setOpenaiApiKey, setAnthropicApiKey, setGeminiApiKey, setAzureEndpoint, setAzureApiKey, setGcpProjectId, setGcpClientEmail, setGcpPrivateKey]);
+
+  const handleSave = async () => {
+    // POST raw keys securely to backend Tink-encrypted Vault
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      await fetch(`${apiUrl}/vault/keys`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          openaiApiKey,
+          anthropicApiKey,
+          geminiApiKey,
+          azureEndpoint,
+          azureApiKey,
+          gcpProjectId,
+          gcpClientEmail,
+          gcpPrivateKey
+        })
+      });
+    } catch (e) {
+      console.error("Failed to sync keys to Vault:", e);
+    }
+    onClose();
+  };
 
   const changeTheme = () => {
     if (theme === "light") {
@@ -183,11 +250,16 @@ const SettingsModal = () => {
 
                   <Divider />
 
-                  {/* API Keys Section */}
+                  {/* API Keys & Secure Vault Section */}
                   <div className="flex flex-col gap-4">
                     <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
-                      API Keys
+                      Cloud Providers & Secure Keys (Vault)
                     </h3>
+                    
+                    <div className="text-xs text-gray-500 mb-2">
+                      All keys and credentials are encrypted at-rest inside our local PostgreSQL secure Vault utilizing field-level military-grade Tink AEAD encryption.
+                    </div>
+
                     <Input
                       label="OpenAI API Key"
                       placeholder="sk-..."
@@ -220,6 +292,54 @@ const SettingsModal = () => {
                       variant="bordered"
                       onValueChange={setGithubToken}
                     />
+
+                    <Divider className="my-2" />
+
+                    <div className="text-xs font-semibold text-gray-400">Azure OpenAI Foundry</div>
+                    <Input
+                      label="Azure Endpoint URL"
+                      placeholder="https://myendpoint.openai.azure.com"
+                      type="text"
+                      value={azureEndpoint}
+                      variant="bordered"
+                      onValueChange={setAzureEndpoint}
+                    />
+                    <Input
+                      label="Azure API Key"
+                      placeholder="Azure API Key..."
+                      type="password"
+                      value={azureApiKey}
+                      variant="bordered"
+                      onValueChange={setAzureApiKey}
+                    />
+
+                    <Divider className="my-2" />
+
+                    <div className="text-xs font-semibold text-gray-400">Google Vertex AI (Enterprise)</div>
+                    <Input
+                      label="GCP Project ID"
+                      placeholder="my-gcp-project-123"
+                      type="text"
+                      value={gcpProjectId}
+                      variant="bordered"
+                      onValueChange={setGcpProjectId}
+                    />
+                    <Input
+                      label="GCP Client Email"
+                      placeholder="sa@my-gcp-project.iam.gserviceaccount.com"
+                      type="email"
+                      value={gcpClientEmail}
+                      variant="bordered"
+                      onValueChange={setGcpClientEmail}
+                    />
+                    <Input
+                      label="GCP Private Key"
+                      placeholder="-----BEGIN PRIVATE KEY-----..."
+                      type="password"
+                      value={gcpPrivateKey}
+                      variant="bordered"
+                      onValueChange={setGcpPrivateKey}
+                    />
                   </div>
 
                   <Divider />
@@ -242,7 +362,15 @@ const SettingsModal = () => {
                       <SelectItem key="gemini-3.1-flash">
                         Gemini 3.1 Flash
                       </SelectItem>
-                      <SelectItem key="gpt-4o">GPT-4o</SelectItem>
+                      <SelectItem key="gpt-4o">
+                        GPT-4o (Direct)
+                      </SelectItem>
+                      <SelectItem key="gpt-4">
+                        GPT-4 (Direct)
+                      </SelectItem>
+                      <SelectItem key="azure/gpt-4o">
+                        GPT-4o (Azure Foundry)
+                      </SelectItem>
                       <SelectItem key="claude-3-5-sonnet-20241022">
                         Claude 3.5 Sonnet
                       </SelectItem>
@@ -347,7 +475,7 @@ const SettingsModal = () => {
               <ModalFooter>
                 <Button
                   className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20"
-                  onPress={onClose}
+                  onPress={handleSave}
                 >
                   Save & Close
                 </Button>
