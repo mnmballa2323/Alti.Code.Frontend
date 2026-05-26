@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.19.0] - 2026-05-26 — Assets Page Form Streamlining & Decluttering
+### Removed
+- **Asset Form Textareas Deletion**: Completely removed the redundant and duplicate `Custom Instructions` and `Safety Guardrails` Textarea fields from the Assets page creation form (`app/assets/page.tsx`).
+- **State & Action Purging**: Stripped related state hooks, clear triggers, Redux update payload mappings, and the unused `Textarea` import.
+
 ## [39.18.0] - 2026-05-26 — Logs Page & Sidebar Menu Simplification
 ### Removed
 - **Static Logs Page Deletion**: Completely deleted the static, hardcoded logs page directory (`app/logs`) to streamline the user interface.

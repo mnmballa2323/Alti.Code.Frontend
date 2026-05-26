@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Input, Textarea } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import {
   Image as ImageIcon,
   Link as LinkIcon,
@@ -25,8 +25,6 @@ export default function Assets() {
   const [newAssetName, setNewAssetName] = useState("");
   const [newAssetUrl, setNewAssetUrl] = useState("");
 
-  const [newAssetInstructions, setNewAssetInstructions] = useState("");
-  const [newAssetGuardrails, setNewAssetGuardrails] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -37,9 +35,6 @@ export default function Assets() {
       setActiveAssetId(null);
       setNewAssetName("");
       setNewAssetUrl("");
-
-      setNewAssetInstructions("");
-      setNewAssetGuardrails("");
     };
 
     const handleEditAsset = (e: any) => {
@@ -48,9 +43,6 @@ export default function Assets() {
       setActiveAssetId(asset.id);
       setNewAssetName(asset.name);
       setNewAssetUrl(asset.url);
-
-      setNewAssetInstructions(asset.customInstructions || "");
-      setNewAssetGuardrails(asset.guardrails || "");
     };
 
     window.addEventListener("open-asset-modal", handleOpenPanel);
@@ -72,8 +64,6 @@ export default function Assets() {
           url: newAssetUrl,
           name: newAssetName,
           assetType: "auto",
-          customInstructions: newAssetInstructions,
-          guardrails: newAssetGuardrails,
           isActive: true,
         }),
       );
@@ -83,8 +73,6 @@ export default function Assets() {
           url: newAssetUrl,
           name: newAssetName,
           assetType: "auto",
-          customInstructions: newAssetInstructions,
-          guardrails: newAssetGuardrails,
           isActive: true,
         }),
       );
@@ -94,9 +82,6 @@ export default function Assets() {
     setActiveAssetId(null);
     setNewAssetName("");
     setNewAssetUrl("");
-
-    setNewAssetInstructions("");
-    setNewAssetGuardrails("");
   };
 
   return (
@@ -194,42 +179,6 @@ export default function Assets() {
                   value={newAssetUrl}
                   variant="flat"
                   onChange={(e) => setNewAssetUrl(e.target.value)}
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-default-700">
-                  Custom Instructions
-                </label>
-                <Textarea
-                  classNames={{
-                    inputWrapper:
-                      "!bg-[#f4f4f5] dark:!bg-[#27272a] hover:!bg-[#e4e4e7] focus-within:!bg-[#f4f4f5]",
-                  }}
-                  minRows={3}
-                  placeholder="E.g. Always use the dark variant of the logo when placing on a light background..."
-                  size="lg"
-                  value={newAssetInstructions}
-                  variant="flat"
-                  onChange={(e) => setNewAssetInstructions(e.target.value)}
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-default-700">
-                  Safety Guardrails
-                </label>
-                <Textarea
-                  classNames={{
-                    inputWrapper:
-                      "!bg-[#f4f4f5] dark:!bg-[#27272a] hover:!bg-[#e4e4e7] focus-within:!bg-[#f4f4f5]",
-                  }}
-                  minRows={3}
-                  placeholder="E.g. Never stretch or distort the brand logo..."
-                  size="lg"
-                  value={newAssetGuardrails}
-                  variant="flat"
-                  onChange={(e) => setNewAssetGuardrails(e.target.value)}
                 />
               </div>
 
