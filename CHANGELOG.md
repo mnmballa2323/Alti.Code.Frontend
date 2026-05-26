@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.23.0] - 2026-05-26 — Live Brand Asset Preview UI
+### Added
+- **Live Brand Asset Preview Integration**: Designed and built a premium, real-time visual `Live Preview` frame mounting below the action button inside the Company Assets form column (`app/assets/page.tsx`).
+- **Dynamic Preview Layout Templates**: Implemented high-fidelity adapters for diverse asset formats:
+  - **Checkerboard Background SVG/Image Template**: Auto-render SVGs, transparent PNGs, and vectors cleanly using an inline light/dark checkered stylesheet grid.
+  - **Figma Design Anchor Card**: Exposes a beautiful simulated design component mockup card with layered element tree, pulse-animation anchor status, and external design node link mapping.
+  - **Document Fallback Tile**: Renders generic files elegantly with file type badges and Lucide page icons.
+- **Memory-Safe URL Handling**: Implemented active garbage collection for local file blob URLs (`URL.revokeObjectURL`) to prevent memory leaks during form saves, edits, and pane updates.
+
 ## [39.22.0] - 2026-05-26 — Assets Workspace Card Background & Header Removal
 ### Removed
 - **Card Background Box Deletion**: Removed the card background box, shadows, and borders from the centered Assets creation form (`app/assets/page.tsx`), allowing it to blend seamlessly into the transparent workspace.
