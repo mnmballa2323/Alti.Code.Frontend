@@ -124,6 +124,69 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   
   const slug = app.id.replace("app-", "").toLowerCase();
   
+  const localLogoMappings: Record<string, string> = {
+    // Core Apps
+    "github": "github.png",
+    "slack": "slack.svg",
+    "jira": "jira.svg",
+    "notion": "notion.svg",
+    "linear": "linear.png",
+    "googledrive": "google-drive.svg",
+    "googlesheets": "google-sheets.svg",
+    "salesforce": "salesforce.svg",
+    "discord": "discord.svg",
+    "gmail": "gmail.svg",
+    
+    // A Apps
+    "ably": "ably.svg",
+    "acculynx": "acculynx.jpeg",
+    "active_campaign": "activecampaign.png",
+    "activecampaign": "activecampaign.png",
+    "affinity": "affinity.jpeg",
+    "agencyzoom": "agencyzoom_logo.jpeg",
+    "ahrefs": "ahrefs.png",
+    "airtable": "airtable.svg",
+    "amcards": "amcards.svg",
+    "amplitude": "amplitude.svg",
+    "apaleo": "apaleo.png",
+    "apollo": "apollo.jpg",
+    "asana": "asana.png",
+    "attio": "attio.webp",
+    
+    // B Apps
+    "baselinker": "baselinker-logo.png",
+    "baserow": "baserow-logo.jpeg",
+    "bitbucket": "bitbucket.svg",
+    "bolna": "bolna-logo.png",
+    "borneo": "borneo.jpeg",
+    "brandfetch": "brandfetch-logo.png",
+    "brex": "brex-staging-logo.png",
+    "browseai": "browseai.svg",
+    
+    // C Apps
+    "cal": "cal-logo.png",
+    "calendarhero": "calendarhero_fixed_20250722.png",
+    "calendly": "calendly.svg",
+    "canva": "canva.jpeg",
+    "canvas": "canvas.jpeg",
+    "capsule_crm": "capsule_crm-logo.png",
+    "clickup": "clickup.png",
+    "coda": "coda.png",
+    
+    // Other standard integrations
+    "docusign": "docusign.svg",
+    "dropbox": "dropbox.svg",
+    "figma": "figma.svg",
+    "hubspot": "hubspot.webp",
+    "linkedin": "linkedin.svg",
+    "shopify": "shopify.svg",
+    "supabase": "supabase.jpeg",
+    "trello": "trello.svg",
+    "twitter": "twitter.png",
+    "youtube": "youtube.svg",
+    "zoom": "zoom.svg",
+  };
+
   const specialLogoUrls: Record<string, string> = {
     "1password": "https://logo.clearbit.com/1password.com",
     "21risk": "https://logo.clearbit.com/21risk.com",
@@ -147,7 +210,13 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     gmail: "gmail",
   };
   
-  const logoUrl = specialLogoUrls[slug] || (() => {
+  const logoUrl = (() => {
+    if (localLogoMappings[slug]) {
+      return `/assets/apps-logos/${localLogoMappings[slug]}`;
+    }
+    if (specialLogoUrls[slug]) {
+      return specialLogoUrls[slug];
+    }
     const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
     return `https://logos.composio.dev/api/${mappedSlug}`;
   })();
