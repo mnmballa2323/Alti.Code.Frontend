@@ -502,32 +502,32 @@ function PromptInputFullLineComponent({
             >
               <DropdownTrigger>
                 <button
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-default-100/50 hover:bg-default-200/60 dark:bg-white/5 dark:hover:bg-white/10 border border-default-200/40 dark:border-white/5 transition-all text-xs font-semibold text-default-700 dark:text-default-300 hover:text-default-900 select-none cursor-pointer shrink-0"
+                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-semibold select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
                   type="button"
                 >
                   <Icon
                     className={cn(
-                      "size-3.5 shrink-0",
-                      (defaultModel || "").includes("gemini") && "text-purple-500 dark:text-purple-400",
-                      (defaultModel || "").includes("claude") && "text-orange-500 dark:text-orange-400",
-                      (defaultModel || "").includes("gpt") && "text-emerald-500 dark:text-emerald-400",
+                      "size-4 shrink-0 transition-colors duration-200",
+                      (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+                      (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
+                      (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
                     )}
                     icon={
                       (defaultModel || "").includes("gemini")
-                        ? "logos:google-gemini-icon"
+                        ? "simple-icons:googlegemini"
                         : (defaultModel || "").includes("claude")
                         ? "simple-icons:anthropic"
                         : "simple-icons:openai"
                     }
                   />
-                  <span>
+                  <span className="transition-colors duration-200">
                     {(defaultModel || "").includes("gemini")
                       ? "Gemini"
                       : (defaultModel || "").includes("claude")
                       ? "Claude"
                       : "GPT"}
                   </span>
-                  <ChevronDown className="size-3 text-default-400 shrink-0" />
+                  <ChevronDown className="size-3.5 text-gray-400 group-hover:text-primary shrink-0 transition-colors duration-200" />
                 </button>
               </DropdownTrigger>
               <DropdownMenu
