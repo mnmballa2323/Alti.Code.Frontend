@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Form, Image, cn, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+import { Badge, Button, Form, Image, cn, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import {
@@ -531,36 +531,137 @@ function PromptInputFullLineComponent({
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Select AI Model"
-                className="p-1"
+                className="p-1 max-h-[380px] overflow-y-auto"
                 onAction={(key) => setDefaultModel(key as string)}
               >
-                <DropdownItem
-                  key="gemini-3.1-pro"
-                  className="rounded-xl px-3 py-2 hover:!bg-purple-500/10"
-                  startContent={
-                    <Icon className="size-4 text-purple-500 dark:text-purple-400" icon="logos:google-gemini-icon" />
-                  }
-                >
-                  <span className="text-xs font-semibold">Gemini</span>
-                </DropdownItem>
-                <DropdownItem
-                  key="claude-3-5-sonnet-20241022"
-                  className="rounded-xl px-3 py-2 hover:!bg-orange-500/10"
-                  startContent={
-                    <Icon className="size-4 text-orange-500 dark:text-orange-400" icon="simple-icons:anthropic" />
-                  }
-                >
-                  <span className="text-xs font-semibold">Claude</span>
-                </DropdownItem>
-                <DropdownItem
-                  key="gpt-4o"
-                  className="rounded-xl px-3 py-2 hover:!bg-emerald-500/10"
-                  startContent={
-                    <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
-                  }
-                >
-                  <span className="text-xs font-semibold">GPT</span>
-                </DropdownItem>
+                <DropdownSection title="Gemini (Vertex AI)" showDivider>
+                  <DropdownItem
+                    key="gemini-3.1-pro"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
+                    startContent={
+                      <Icon className="size-4 text-purple-500 dark:text-purple-400" icon="logos:google-gemini-icon" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Gemini 3.1 Pro</span>
+                      <span className="text-[10px] text-default-400">Flagship code intelligence</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-3.1-flash"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
+                    startContent={
+                      <Icon className="size-4 text-purple-400" icon="logos:google-gemini-icon" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Gemini 3.1 Flash</span>
+                      <span className="text-[10px] text-default-400">Rapid lightweight formatting</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-1.5-pro"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
+                    startContent={
+                      <Icon className="size-4 text-purple-400" icon="logos:google-gemini-icon" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Gemini 1.5 Pro</span>
+                      <span className="text-[10px] text-default-400">Deep 2M token context window</span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection title="Claude (Anthropic)" showDivider>
+                  <DropdownItem
+                    key="claude-3-5-sonnet-20241022"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
+                    startContent={
+                      <Icon className="size-4 text-orange-500 dark:text-orange-400" icon="simple-icons:anthropic" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Claude 3.5 Sonnet</span>
+                      <span className="text-[10px] text-default-400">Gold-standard coding agent</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="claude-3-5-haiku-20241022"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
+                    startContent={
+                      <Icon className="size-4 text-orange-400" icon="simple-icons:anthropic" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Claude 3.5 Haiku</span>
+                      <span className="text-[10px] text-default-400">Lightning-fast script generation</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="claude-3-opus-20240229"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
+                    startContent={
+                      <Icon className="size-4 text-orange-400" icon="simple-icons:anthropic" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">Claude 3 Opus</span>
+                      <span className="text-[10px] text-default-400">Flagship deep reasoning logic</span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection title="GPT (OpenAI & Foundry)">
+                  <DropdownItem
+                    key="gpt-4o"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
+                    startContent={
+                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">GPT-4o (Direct)</span>
+                      <span className="text-[10px] text-default-400">Flagship direct multimodal code</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="o3-mini"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-emerald-500/10"
+                    startContent={
+                      <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">o3-mini (Direct)</span>
+                      <span className="text-[10px] text-default-400">Newest code reasoning agent</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="azure/gpt-4o"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-blue-500/10"
+                    startContent={
+                      <Icon className="size-4 text-blue-500 dark:text-blue-400" icon="simple-icons:openai" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">GPT-4o (Azure Foundry)</span>
+                      <span className="text-[10px] text-default-400">Sovereign enterprise deployment</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="azure/o1-mini"
+                    className="rounded-xl px-3 py-1.5 hover:!bg-blue-500/10"
+                    startContent={
+                      <Icon className="size-4 text-blue-500 dark:text-blue-400" icon="simple-icons:openai" />
+                    }
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium text-foreground">o1-mini (Azure Foundry)</span>
+                      <span className="text-[10px] text-default-400">Fast logical reasoning deployment</span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
               </DropdownMenu>
             </Dropdown>
           )}
