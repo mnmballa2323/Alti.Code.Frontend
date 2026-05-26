@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.15.0] - 2026-05-26 — Prompt Box Security Sweep & Codebase Menu Streamlining
+### Added
+- **Security Audit Toolbar Integration**: Integrated a premium `Shield` icon button into the prompt box bottom actions bar (`components/input-actions.tsx`). Clicking it triggers the background security sweep or auto-submits a sweep request directly into the active chat session.
+### Removed
+- **Security Dashboard Page Removal**: Completely deleted the separate, redundant `/security` page directory (`app/security`) and stripped all related Case statements, button components, lists rendering, and state hooks from `components/sidebar.tsx` to streamline the studio layout.
+- **Unused Lucide Cleanups**: Removed the unused `ShieldAlert` icon import in `components/sidebar.tsx`.
+
 ## [39.14.0] - 2026-05-26 — E2E Zero-Trust Security Scan & Self-Healing Patch Dashboard
 ### Added
 - **Interactive Security Scan Panel**: Built a simple, agentic, fully functional dashboard on `/security` replacing the static placeholder screen.
