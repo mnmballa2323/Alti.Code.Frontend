@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.14.0] - 2026-05-26 — E2E Zero-Trust Security Scan & Self-Healing Patch Dashboard
+### Added
+- **Interactive Security Scan Panel**: Built a simple, agentic, fully functional dashboard on `/security` replacing the static placeholder screen.
+- **Background Swarm Sweeper Integration**: Integrated the frontend scan console directly to the backend `/api/v1/githubDocs/sweeper/run` pipeline, triggering E2E repository package vulnerability scans.
+- **SSE Thought Stream Console**: Implemented a live `EventSource` connection to the `/api/v1/githubDocs/thought-stream` telemetry endpoint, displaying the cognitive thoughts of auditing agents in real-time.
+- **Self-Healing Diff & Remediation Renderer**: Configured dynamic layouts showcasing scan metrics, high-severity CVE threats, remediation plans, and the actual self-healing unified git patch compiled by the backend agent.
+
 ## [39.13.0] - 2026-05-26 — Complete Deployments Page & Feature Deletion
 ### Removed
 - **Total Deployments Feature Deletion**: Completely removed the mock deployments manager page (`app/deployments/page.tsx`), build triggers, rollback scripts integrations, and mock log streaming interfaces.
