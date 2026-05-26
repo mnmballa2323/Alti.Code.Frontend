@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge, Button, Form, Image, cn } from "@heroui/react";
+import { Badge, Button, Form, Image, cn, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import {
@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import AudioRecorder from "./AudioRecorder";
 import PromptInput from "./prompt-input";
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 import { useModalStore } from "@/store/useModalStore";
 import { VideoEyeRecorder } from "@/components/studio/VideoEyeRecorder";
@@ -248,6 +249,7 @@ function PromptInputFullLineComponent({
   placeholder = "Enter your prompt here...",
   customActions,
   rightActions,
+  showModelDropdown = false,
 }: {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
@@ -267,9 +269,11 @@ function PromptInputFullLineComponent({
   placeholder?: string;
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
+  showModelDropdown?: boolean;
 }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
+  const { defaultModel, setDefaultModel } = useSettingsStore();
   const connectedClouds = useSelector(
     (state: RootState) => state.system.connectedClouds,
   );
@@ -490,6 +494,77 @@ function PromptInputFullLineComponent({
               <p>Add context (files, images)</p>
             </TooltipContent>
           </Tooltip>
+
+          {showModelDropdown && (
+            <Dropdown
+              className="bg-white/95 dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-1.5 z-[100] min-w-[130px]"
+              placement="bottom-start"
+            >
+              <DropdownTrigger>
+                <button
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-default-100/50 hover:bg-default-200/60 dark:bg-white/5 dark:hover:bg-white/10 border border-default-200/40 dark:border-white/5 transition-all text-xs font-semibold text-default-700 dark:text-default-300 hover:text-default-900 select-none cursor-pointer shrink-0"
+                  type="button"
+                >
+                  <Icon
+                    className={cn(
+                      "size-3.5 shrink-0",
+                      (defaultModel || "").includes("gemini") && "text-purple-500 dark:text-purple-400",
+                      (defaultModel || "").includes("claude") && "text-orange-500 dark:text-orange-400",
+                      (defaultModel || "").includes("gpt") && "text-emerald-500 dark:text-emerald-400",
+                    )}
+                    icon={
+                      (defaultModel || "").includes("gemini")
+                        ? "logos:google-gemini-icon"
+                        : (defaultModel || "").includes("claude")
+                        ? "simple-icons:anthropic"
+                        : "simple-icons:openai"
+                    }
+                  />
+                  <span>
+                    {(defaultModel || "").includes("gemini")
+                      ? "Gemini"
+                      : (defaultModel || "").includes("claude")
+                      ? "Claude"
+                      : "GPT"}
+                  </span>
+                  <ChevronDown className="size-3 text-default-400 shrink-0" />
+                </button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Select AI Model"
+                className="p-1"
+                onAction={(key) => setDefaultModel(key as string)}
+              >
+                <DropdownItem
+                  key="gemini-3.1-pro"
+                  className="rounded-xl px-3 py-2 hover:!bg-purple-500/10"
+                  startContent={
+                    <Icon className="size-4 text-purple-500 dark:text-purple-400" icon="logos:google-gemini-icon" />
+                  }
+                >
+                  <span className="text-xs font-semibold">Gemini</span>
+                </DropdownItem>
+                <DropdownItem
+                  key="claude-3-5-sonnet-20241022"
+                  className="rounded-xl px-3 py-2 hover:!bg-orange-500/10"
+                  startContent={
+                    <Icon className="size-4 text-orange-500 dark:text-orange-400" icon="simple-icons:anthropic" />
+                  }
+                >
+                  <span className="text-xs font-semibold">Claude</span>
+                </DropdownItem>
+                <DropdownItem
+                  key="gpt-4o"
+                  className="rounded-xl px-3 py-2 hover:!bg-emerald-500/10"
+                  startContent={
+                    <Icon className="size-4 text-emerald-500 dark:text-emerald-400" icon="simple-icons:openai" />
+                  }
+                >
+                  <span className="text-xs font-semibold">GPT</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
 
           {customActions}
 
@@ -757,6 +832,7 @@ export default function PromptInputFullLineWithBottomActions({
   onChange,
   customActions,
   rightActions,
+  showModelDropdown = false,
 }: {
   onSend?: (
     prompt: string,
@@ -776,6 +852,7 @@ export default function PromptInputFullLineWithBottomActions({
   onChange?: (val: string) => void;
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
+  showModelDropdown?: boolean;
 }) {
   const [internalPrompt, setInternalPrompt] = useState("");
   const prompt = value !== undefined ? value : internalPrompt;
@@ -801,6 +878,7 @@ export default function PromptInputFullLineWithBottomActions({
         showFigmaButton={showFigmaButton}
         showResponsiveButton={showResponsiveButton}
         showSandboxButton={showSandboxButton}
+        showModelDropdown={showModelDropdown}
         onSend={onSend}
       />
     </div>
