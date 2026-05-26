@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.24.0] - 2026-05-26 — Assets Live Preview Relocation & Vertical Scaling
+### Changed
+- **Live Preview Relocation**: Repositioned the dynamic `Live Preview` frame to sit elegantly at the very top of the centered Company Assets form column (`app/assets/page.tsx`), right above the `Asset Name` field.
+- **Ultra-Compact Visual Heights**: Reduced vertical height limits on all visual preview modes to ensure 100% fit on standard displays without scrollbars:
+  - **Image Checkerboard Grid**: Scaled container `min-h` from `200px` to `110px` and image `max-h` from `160px` to `85px`.
+  - **Figma Canvas Anchor Card**: Streamlined the layout to render layout node parameters on a single compact line, and reduced `min-h` from `170px` to `105px`.
+  - **Document Fallback**: Scaled fallback tile `min-h` from `80px` to `56px` with compact Lucide icons and paddings.
+- **Vertical Padding Optimization**: Tightened the page content outer wrapper padding from `py-12` to `py-6` to reclaim vertical space.
+
 ## [39.23.0] - 2026-05-26 — Live Brand Asset Preview UI
 ### Added
 - **Live Brand Asset Preview Integration**: Designed and built a premium, real-time visual `Live Preview` frame mounting below the action button inside the Company Assets form column (`app/assets/page.tsx`).
