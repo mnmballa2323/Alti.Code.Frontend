@@ -4989,4 +4989,74 @@ export const SAAS_MOCKS = [
     slug: "_1password",
     icon: "logos:_1password",
   },
+  {
+    name: "MCP Brave Search",
+    slug: "mcp_brave_search",
+    icon: "logos:brave",
+  },
+  {
+    name: "MCP Fetch",
+    slug: "mcp_fetch",
+    icon: "logos:fetch",
+  },
+  {
+    name: "MCP Puppeteer",
+    slug: "mcp_puppeteer",
+    icon: "logos:puppeteer",
+  },
+  {
+    name: "MCP PostgreSQL",
+    slug: "mcp_postgresql",
+    icon: "logos:postgresql",
+  },
+  {
+    name: "MCP SQLite",
+    slug: "mcp_sqlite",
+    icon: "logos:sqlite",
+  },
+  {
+    name: "MCP GitLab",
+    slug: "mcp_gitlab",
+    icon: "logos:gitlab",
+  },
+  {
+    name: "MCP Google Calendar",
+    slug: "mcp_google_calendar",
+    icon: "logos:google-calendar",
+  },
+  {
+    name: "MCP Google Maps",
+    slug: "mcp_google_maps",
+    icon: "logos:google-maps",
+  },
+  {
+    name: "MCP Evernote",
+    slug: "mcp_evernote",
+    icon: "logos:evernote",
+  },
+  {
+    name: "MCP Time",
+    slug: "mcp_time",
+    icon: "logos:time",
+  },
+  {
+    name: "MCP Memory",
+    slug: "mcp_memory",
+    icon: "logos:memory",
+  },
+  {
+    name: "MCP AWS Knowledge Base",
+    slug: "mcp_aws_knowledge_base",
+    icon: "logos:aws",
+  },
+  {
+    name: "MCP ChromaDB",
+    slug: "mcp_chromadb",
+    icon: "logos:chroma",
+  },
+  {
+    name: "MCP Everything",
+    slug: "mcp_everything",
+    icon: "logos:mcp",
+  },
 ];
