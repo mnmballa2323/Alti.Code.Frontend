@@ -896,6 +896,7 @@ export default function Sidebar() {
 
     const fetchConnections = async () => {
       if (!token) {
+        setApps(FALLBACK_APPS);
         setLoadingApps(false);
         return;
       }
@@ -938,17 +939,6 @@ export default function Sidebar() {
             ),
           );
 
-          // Virtual Launcher
-          const launcherItem = {
-            id: "custom-mcp-launcher",
-            name: "+ Add Custom MCP Server",
-            description: "Connect and register any local or community Model Context Protocol server dynamically.",
-            icon: "solar:add-circle-bold",
-            color: "bg-primary/10 border-primary/20 text-primary dark:text-primary-400 font-semibold",
-            status: "disconnected" as const,
-            type: "custom" as const
-          };
-
           // Custom MCP Apps
           const customAppsMapped = customServers.map((s: any) => ({
             id: `app-${s.name}`,
@@ -977,7 +967,12 @@ export default function Sidebar() {
             return { ...app, status: "disconnected" as const };
           });
 
-          setApps([launcherItem, ...customAppsMapped, ...standardAppsMapped]);
+          // Sort all custom + standard apps alphabetically by name
+          const otherAppsSorted = [...customAppsMapped, ...standardAppsMapped].sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
+
+          setApps(otherAppsSorted);
         }
       } catch (err) {
         console.error("Failed to fetch connections in sidebar:", err);
@@ -987,7 +982,7 @@ export default function Sidebar() {
     };
 
     // Initialize list
-    setApps([]);
+    setApps(FALLBACK_APPS);
     fetchConnections();
 
     // Listen for sync event to re-fetch connection statuses
@@ -1842,7 +1837,8 @@ export default function Sidebar() {
           </div>
           {pathname !== "/instructions" &&
             pathname !== "/guardrails" &&
-            pathname !== "/cloud" && (
+            pathname !== "/cloud" &&
+            pathname !== "/connect-apps" && (
               <>
 
                 <Button

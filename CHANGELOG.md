@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.35.1] - 2026-05-26 — Custom MCP Launcher Removal
+### Removed
+- **Frontend: Add Custom MCP Server Deletion**: Completely removed the "+ Add Custom MCP Server" launcher item from the integrations catalog sidebar and details page list to restrict custom stdio MCP creations.
+- **Frontend: Secondary Sidebar New Session Button Excluded**: Excluded the `+` button in the secondary sidebar header when browsing integrations (`/connect-apps`) to prevent adding unauthorized resources.
+
 ## [39.35.0] - 2026-05-26 — Dynamic Composio MCP Integration & Custom MCP Launcher
 ### Added
 - **Backend: Custom MCP Server Persistence**: Persists user-configured custom stdio MCP servers under `.alti/custom_mcp_servers.json` so they are fully recovered across backend server restarts.

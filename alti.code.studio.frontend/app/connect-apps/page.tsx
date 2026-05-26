@@ -812,6 +812,7 @@ export default function ConnectAppsPage() {
 
     const fetchConnections = async () => {
       if (!accessToken) {
+        setApps(FALLBACK_APPS);
         setLoading(false);
         return;
       }
@@ -845,17 +846,6 @@ export default function ConnectAppsPage() {
             ),
           );
 
-          // Virtual Launcher
-          const launcherItem = {
-            id: "custom-mcp-launcher",
-            name: "+ Add Custom MCP Server",
-            description: "Connect and register any local or community Model Context Protocol server dynamically.",
-            icon: "solar:add-circle-bold",
-            color: "bg-primary/10 border-primary/20 text-primary dark:text-primary-400 font-semibold",
-            status: "disconnected" as const,
-            type: "custom" as const
-          };
-
           // Custom MCP Apps
           const customAppsMapped = customServers.map((s: any) => ({
             id: `app-${s.name}`,
@@ -884,7 +874,12 @@ export default function ConnectAppsPage() {
             return { ...app, status: "disconnected" as const };
           });
 
-          setApps([launcherItem, ...customAppsMapped, ...standardAppsMapped]);
+          // Sort all custom + standard apps alphabetically by name
+          const otherAppsSorted = [...customAppsMapped, ...standardAppsMapped].sort((a, b) =>
+            a.name.localeCompare(b.name)
+          );
+
+          setApps(otherAppsSorted);
           window.dispatchEvent(new CustomEvent("sync-connect-apps"));
         }
       } catch (err) {
