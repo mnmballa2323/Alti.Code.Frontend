@@ -1,14 +1,18 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
+import { Search } from "lucide-react";
+import { cn } from "@heroui/react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import MessageContainer from "@/components/message-container";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
-import { setChatContext, setMessages } from "@/store/messagesSlice";
+import { setChatContext, setMessages, sendMessage } from "@/store/messagesSlice";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 import { RootState } from "@/store";
 import useFetchSingleData from "@/hooks/useFetchSingleData";
 import { AppDispatch } from "@/store";
@@ -30,6 +34,14 @@ const SingleChatPage = () => {
   const { sessionId: currentSessionId, model: currentModel } = useSelector(
     (state: RootState) => state.messages,
   );
+
+  const [isResearchMode, setIsResearchMode] = useState(false);
+
+  useEffect(() => {
+    if (chat?.responses?.[0]?.model === "Deep Research") {
+      setIsResearchMode(true);
+    }
+  }, [chat]);
 
   useEffect(() => {
     if (sessionId && chat && chat.responses) {
@@ -69,6 +81,24 @@ const SingleChatPage = () => {
     );
   }
 
+  const handleSend = (
+    prompt: string,
+    mode?: string,
+    domain?: string,
+    language?: string
+  ) => {
+    dispatch(
+      sendMessage({
+        prompt,
+        model: isResearchMode ? "Deep Research" : (mode || "Agent"),
+        domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
+        language,
+        sessionId,
+        token,
+      })
+    );
+  };
+
   const chatTitle = chat?.responses?.[0]?.prompt || "Active Session";
 
   return (
@@ -79,7 +109,7 @@ const SingleChatPage = () => {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
               <h1 className="text-[14px] font-semibold tracking-tight text-default-900 truncate max-w-xl">
-                Chat Session
+                {isResearchMode ? "Deep Research" : "Chat Session"}
               </h1>
             </div>
           </div>
@@ -95,6 +125,26 @@ const SingleChatPage = () => {
               <PromptInputFullLineWithBottomActions
                 hideAgents={true}
                 hideDropdown={true}
+                placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
+                onSend={handleSend}
+                rightActions={
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Search
+                        className={cn(
+                          "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
+                          isResearchMode
+                            ? "bg-primary border-primary shadow-sm shadow-primary/40 scale-105"
+                            : "bg-black border-gray-300 hover:border-primary hover:text-primary",
+                        )}
+                        onClick={() => setIsResearchMode(!isResearchMode)}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                }
               />
             </div>
           </div>

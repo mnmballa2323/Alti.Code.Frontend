@@ -5,6 +5,17 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.4] - 2026-05-26 — Research Merge and Dynamic Deep Research Workspace
+### Added
+- **Circular Right-Action Search Button**: Added a custom circular **Search** icon button in the prompt box's right actions bar (directly next to the send arrow) on both `app/chat/page.tsx` and `app/chat/[id]/page.tsx`, styled exactly like the GitHub and Cloud buttons on the Code workspace.
+- **Dynamic Header Toggling**: Toggling the Research button instantly updates the header title between "Chat Session" and "Deep Research" and updates the prompt placeholder to invite research objectives.
+- **Auto-Activation on Session Load**: In `app/chat/[id]/page.tsx`, automatically defaults `isResearchMode` to true if the loaded session was generated in Deep Research mode.
+- **Backend Interceptor**: Added a Deep Research route interceptor inside `LlmGatewayService.routeCompletion` to intercept queries when `modelName === "Deep Research"` or `domain === "Research"`, call `researchService.executeDeepResearch(scrubbedPrompt, 'deep')`, and persist the report.
+- **Domain Propagation**: Modified `geminiService` in `gemini.service.js` to correctly propagate the `domain` parameter to `routeCompletion`.
+### Removed
+- **Standalone Research Page Deletion**: Completely removed the redundant legacy `/research` route directory (`app/research/page.tsx`).
+- **Sidebar Cleanups**: Stripped all `/research` switches, states, buttons, and session lists from `components/sidebar.tsx`.
+
 ## [39.37.3] - 2026-05-26 — Agentic RAG Routing and Left-Aligned Chat Session Header
 ### Added
 - **Backend Agentic Routing**: Integrated dynamic query classification inside `LlmGatewayService.routeCompletion` to analyze user chat inputs. It automatically routes codebase/architecture-related queries to the high-performance Ultimate RAG search pipeline behind the scenes, and routes general queries to standard completions, unifying the chat experience agentically.

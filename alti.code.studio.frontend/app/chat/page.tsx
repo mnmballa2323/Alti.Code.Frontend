@@ -1,7 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { cn } from "@heroui/react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
@@ -21,6 +25,8 @@ export default function ChatHome() {
   const sessionId = useAppSelector((state) => state.messages.sessionId);
   const isChatting = useAppSelector((state) => state.messages.isChatting);
 
+  const [isResearchMode, setIsResearchMode] = useState(false);
+
   useEffect(() => {
     dispatch(startNewChat());
     dispatch(setChatContext({ sessionId: null, model: "chat" }));
@@ -39,8 +45,8 @@ export default function ChatHome() {
     dispatch(
       sendMessage({
         prompt,
-        model: mode || "Agent",
-        domain: "Chat", // Force 'Chat' domain to enforce Chat Workspace Guardrails
+        model: isResearchMode ? "Deep Research" : (mode || "Agent"),
+        domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
         language,
         sessionId: sessionId,
         ...(sessionId === null ? { onFulfilled: onNavigationFulfilled } : {}),
@@ -57,7 +63,7 @@ export default function ChatHome() {
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
               <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
-                Chat Session
+                {isResearchMode ? "Deep Research" : "Chat Session"}
               </h1>
             </div>
           </div>
@@ -74,7 +80,26 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
+                  placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
                   onSend={handleFirstMessageSend}
+                  rightActions={
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Search
+                          className={cn(
+                            "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
+                            isResearchMode
+                              ? "bg-primary border-primary shadow-sm shadow-primary/40 scale-105"
+                              : "bg-black border-gray-300 hover:border-primary hover:text-primary",
+                          )}
+                          onClick={() => setIsResearchMode(!isResearchMode)}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  }
                 />
               </div>
             </div>
@@ -95,7 +120,26 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
+                  placeholder={isResearchMode ? "Enter research objective (e.g., Perform a zero-trust architecture audit...)" : "Enter your prompt here..."}
                   onSend={handleFirstMessageSend}
+                  rightActions={
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Search
+                          className={cn(
+                            "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
+                            isResearchMode
+                              ? "bg-primary border-primary shadow-sm shadow-primary/40 scale-105"
+                              : "bg-black border-gray-300 hover:border-primary hover:text-primary",
+                          )}
+                          onClick={() => setIsResearchMode(!isResearchMode)}
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  }
                 />
               </div>
             </div>

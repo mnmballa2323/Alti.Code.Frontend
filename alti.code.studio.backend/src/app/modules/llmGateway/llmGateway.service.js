@@ -11,6 +11,8 @@ import httpStatus from 'http-status';
 import { RulesService } from '../rules/rules.service.js';
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
+import { researchService } from '../research/research.service.js';
+
 
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
@@ -116,6 +118,21 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
     const scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
+
+    // Deep Research Interceptor
+    if (modelName === 'Deep Research' || domain === 'Research') {
+        logger.info(`🔬 [LlmGateway] Deep Research Interceptor: Initiating deep crawling pipeline...`);
+        const researchResult = await researchService.executeDeepResearch(scrubbedPrompt, 'deep');
+        const reply = researchResult.content;
+        await saveChatResponse(userId, sessionId, rawPrompt, 'Deep Research', reply);
+        return {
+            reply,
+            sessionId,
+            model: 'Deep Research',
+            success: true
+        };
+    }
+
 
     // Agentic classification: Should we use codebase RAG search?
     if (domain === 'Chat' || modelName === 'chat') {

@@ -6,8 +6,9 @@ import { LlmGatewayService } from '../llmGateway/llmGateway.service.js';
 const geminiService = async (sessionId, prompt, userId, language, mode, domain) => {
     const model = (mode && mode !== 'Agent') ? mode : 'gemini-3.1-pro';
     
-    return LlmGatewayService.routeCompletion(userId, sessionId, prompt, model);
+    return LlmGatewayService.routeCompletion(userId, sessionId, prompt, model, 0.5, domain);
 };
+
 
 export const GeminiAiService = {
     geminiService,

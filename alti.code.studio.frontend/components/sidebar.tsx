@@ -823,8 +823,6 @@ export default function Sidebar() {
         return "Assets";
       case "/cloud":
         return "Cloud";
-      case "/research":
-        return "Research";
 
       default:
         return "Code";
@@ -852,12 +850,6 @@ export default function Sidebar() {
   const [testSessions, setTestSessions] = useState<
     { id: string; name: string }[]
   >([]);
-  const [researchSessions, setResearchSessions] = useState<
-    { id: string; name: string }[]
-  >([
-    { id: "RES-1002", name: "Zero-Trust Architecture Audit" },
-    { id: "RES-1001", name: "AWS to GCP Migration Strategy" },
-  ]);
   const [instructions, setInstructions] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1523,25 +1515,7 @@ export default function Sidebar() {
 
 
 
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/research"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/research");
-            }}
-          >
-            <Search className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Research
-            </span>
-          </button>
+
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
@@ -1823,12 +1797,7 @@ export default function Sidebar() {
                         }),
                       );
 
-                    } else if (pathname === "/research") {
-                      window.dispatchEvent(
-                        new CustomEvent("select-research-session", {
-                          detail: null, // null means "New Mission"
-                        }),
-                      );
+
                     } else if (pathname === "/repositories") {
                       window.dispatchEvent(
                         new CustomEvent("open-repository-modal"),
@@ -1950,28 +1919,7 @@ export default function Sidebar() {
               )}
             </div>
 
-          ) : pathname === "/research" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {researchSessions.map((session) => (
-                <button
-                  key={session.id}
-                  className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
-                  onClick={() => {
-                    window.dispatchEvent(
-                      new CustomEvent("select-research-session", {
-                        detail: session,
-                      }),
-                    );
-                  }}
-                >
-                  <span className="truncate pr-2">{session.name}</span>
-                  <CheckCircle
-                    className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                    size={14}
-                  />
-                </button>
-              ))}
-            </div>
+
           ) : pathname === "/workflows" || pathname === "/workflow-builder" ? (
             <div className="flex flex-col gap-0.5 px-2 mt-2">
               {[
