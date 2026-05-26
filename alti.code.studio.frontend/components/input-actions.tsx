@@ -560,18 +560,6 @@ function PromptInputFullLineComponent({
                     </div>
                   </DropdownItem>
                   <DropdownItem
-                    key="gemini-3.1-pro"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
-                    startContent={
-                      <Icon className="size-4 text-purple-400" icon="logos:google-gemini-icon" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Gemini 3.1 Pro</span>
-                      <span className="text-[10px] text-default-400">Production-proven agent reasoning</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
                     key="gemini-omni-flash"
                     className="rounded-xl px-3 py-1.5 hover:!bg-purple-500/10"
                     startContent={
@@ -608,18 +596,6 @@ function PromptInputFullLineComponent({
                     <div className="flex flex-col">
                       <span className="text-xs font-medium text-foreground">Sonnet 5</span>
                       <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-4.6-sonnet"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-orange-500/10"
-                    startContent={
-                      <Icon className="size-4 text-orange-400" icon="simple-icons:anthropic" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">Claude 4.6 Sonnet</span>
-                      <span className="text-[10px] text-default-400">Balanced professional production model</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -671,18 +647,6 @@ function PromptInputFullLineComponent({
                     <div className="flex flex-col">
                       <span className="text-xs font-medium text-foreground">GPT-5.5 Instant (Direct)</span>
                       <span className="text-[10px] text-default-400">Fast low-latency editing</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="azure/gpt-5.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:!bg-blue-500/10"
-                    startContent={
-                      <Icon className="size-4 text-blue-500 dark:text-blue-400" icon="simple-icons:openai" />
-                    }
-                  >
-                    <div className="flex flex-col">
-                      <span className="text-xs font-medium text-foreground">GPT-5.5 Pro (Azure Foundry)</span>
-                      <span className="text-[10px] text-default-400">High-complexity enterprise deployment</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
