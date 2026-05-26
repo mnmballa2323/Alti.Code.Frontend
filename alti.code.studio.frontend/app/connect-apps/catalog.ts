@@ -5100,6 +5100,11 @@ export const SAAS_MOCKS = [
     icon: "logos:sentry",
   },
   {
+    name: "EverArt",
+    slug: "mcp_everart",
+    icon: "logos:everart",
+  },
+  {
     name: "Redis",
     slug: "mcp_redis",
     icon: "logos:redis",

@@ -97,6 +97,10 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-evernote"]
   },
+  "mcp_everart": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-everart"]
+  },
 
   // Google MCP Toolbox Preset Databases
   "mcp_toolbox_alloydb": {
@@ -399,6 +403,8 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "mcp_google_calendar": "https://logo.clearbit.com/calendar.google.com",
     "mcp_google_maps": "https://logo.clearbit.com/maps.google.com",
     "mcp_evernote": "https://logo.clearbit.com/evernote.com",
+    "everart": "https://logo.clearbit.com/everart.ai",
+    "mcp_everart": "https://logo.clearbit.com/everart.ai",
     "mcp_time": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
     "mcp_memory": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
     "aws_ec2": "https://logo.clearbit.com/amazon.com",
