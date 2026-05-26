@@ -13,6 +13,7 @@ import {
   Codesandbox,
   MonitorSmartphone,
   Shield,
+  FlaskConical,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -829,6 +830,46 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>Security Audit</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <FlaskConical
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const qaPrompt =
+                            prompt.trim() ||
+                            "Autonomous QA Loop: Run all unit tests, detect syntax or hydration failures, look up error stack traces, and autonomously patch the code until the entire test suite passes successfully.";
+                          setPrompt(qaPrompt);
+                          if (onSend) {
+                            onSend(
+                              qaPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: qaPrompt,
+                                model: "default",
+                                domain: "QA",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Autonomous QA Loop</p>
                     </TooltipContent>
                   </Tooltip>
 
