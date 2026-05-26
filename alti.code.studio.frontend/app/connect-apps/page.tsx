@@ -559,6 +559,89 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   );
 };
 
+const MCP_REPOS = [
+  {
+    name: "servers",
+    description: "Official reference implementations for databases, developer tools, and filesystem servers.",
+    license: "Apache 2.0 / MIT",
+    lang: "TypeScript / Python",
+    url: "https://github.com/modelcontextprotocol/servers",
+    install: "git clone https://github.com/modelcontextprotocol/servers.git",
+    icon: "solar:database-bold-duotone",
+    color: "from-amber-500 to-orange-600"
+  },
+  {
+    name: "typescript-sdk",
+    description: "Official TypeScript/JavaScript SDK to build custom Model Context Protocol clients and servers.",
+    license: "MIT",
+    lang: "TypeScript",
+    url: "https://github.com/modelcontextprotocol/typescript-sdk",
+    install: "npm install @modelcontextprotocol/sdk",
+    icon: "logos:typescript-icon",
+    color: "from-blue-500 to-indigo-600"
+  },
+  {
+    name: "python-sdk",
+    description: "Official Python SDK to build custom Model Context Protocol clients and servers.",
+    license: "MIT",
+    lang: "Python",
+    url: "https://github.com/modelcontextprotocol/python-sdk",
+    install: "pip install mcp",
+    icon: "logos:python",
+    color: "from-sky-400 to-blue-600"
+  },
+  {
+    name: "inspector",
+    description: "Official interactive developer tool to inspect, debug, and trace MCP connections.",
+    license: "MIT",
+    lang: "TypeScript",
+    url: "https://github.com/modelcontextprotocol/inspector",
+    install: "npx @modelcontextprotocol/inspector",
+    icon: "solar:tuning-square-bold-duotone",
+    color: "from-purple-500 to-pink-600"
+  },
+  {
+    name: "modelcontextprotocol",
+    description: "Official protocol specifications, schema definitions, and enhancement proposals (SEPs).",
+    license: "MIT",
+    lang: "Markdown / JSON",
+    url: "https://github.com/modelcontextprotocol/modelcontextprotocol",
+    install: "https://modelcontextprotocol.io",
+    icon: "solar:document-bold-duotone",
+    color: "from-teal-400 to-emerald-600"
+  },
+  {
+    name: "go-sdk",
+    description: "Official Go SDK to build custom Model Context Protocol clients and servers.",
+    license: "MIT",
+    lang: "Go",
+    url: "https://github.com/modelcontextprotocol/go-sdk",
+    install: "go get github.com/modelcontextprotocol/go-sdk",
+    icon: "logos:go",
+    color: "from-cyan-400 to-teal-500"
+  },
+  {
+    name: "rust-sdk",
+    description: "Official Rust SDK to build custom Model Context Protocol clients and servers.",
+    license: "MIT",
+    lang: "Rust",
+    url: "https://github.com/modelcontextprotocol/rust-sdk",
+    install: "cargo add mcp-sdk",
+    icon: "logos:rust",
+    color: "from-stone-600 to-neutral-800"
+  },
+  {
+    name: "ext-auth",
+    description: "Official supplementary specification defining authorization mechanisms for MCP connections.",
+    license: "Apache 2.0",
+    lang: "Specification",
+    url: "https://github.com/modelcontextprotocol/ext-auth",
+    install: "Archived Specification",
+    icon: "solar:shield-keyhole-bold-duotone",
+    color: "from-red-500 to-rose-600"
+  }
+];
+
 export default function ConnectAppsPage() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
@@ -574,6 +657,8 @@ export default function ConnectAppsPage() {
   const [appTools, setAppTools] = useState<any[]>([]);
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [modalTab, setModalTab] = useState("tools");
+  const [idleTab, setIdleTab] = useState<"action-hub" | "mcp-explorer">("action-hub");
+  const [copiedText, setCopiedText] = useState<string | null>(null);
 
   // Dynamic Stdio MCP Server Config States
   const [activeTools, setActiveTools] = useState<Tool[]>([]);
@@ -909,48 +994,148 @@ export default function ConnectAppsPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full"
+                  className={`flex-1 flex flex-col items-center justify-start p-8 ${
+                    idleTab === "mcp-explorer" ? "max-w-5xl" : "max-w-2xl"
+                  } mx-auto text-center gap-8 min-h-full py-12 w-full`}
                 >
-                  <div className="flex flex-col items-center gap-4">
-                    {/* Blue Spars Circle Icon */}
-                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
-                      <Icon icon="solar:stars-line-bold" className="text-3xl" />
-                    </div>
-
-                    <h2 className="text-2xl font-bold text-default-900 tracking-tight">
-                      Isolated Action Hub
-                    </h2>
-                    <p className="text-sm text-default-500 max-w-md leading-relaxed">
-                      Connect and prompt individual web applications securely. Select an application in the sidebar to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
-                    </p>
+                  {/* Sliding Tab Pill Selector */}
+                  <div className="flex-none p-1 bg-default-100 dark:bg-default-50/5 rounded-full flex gap-1 items-center relative shadow-inner mb-2 border border-default-200/50">
+                    <button
+                      onClick={() => setIdleTab("action-hub")}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 select-none ${
+                        idleTab === "action-hub"
+                          ? "bg-white dark:bg-default-200 text-default-900 shadow-sm"
+                          : "text-default-500 hover:text-default-800"
+                      }`}
+                    >
+                      <Icon icon="solar:stars-line-bold" />
+                      <span>Isolated Action Hub</span>
+                    </button>
+                    <button
+                      onClick={() => setIdleTab("mcp-explorer")}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 select-none ${
+                        idleTab === "mcp-explorer"
+                          ? "bg-white dark:bg-default-200 text-default-900 shadow-sm"
+                          : "text-default-500 hover:text-default-800"
+                      }`}
+                    >
+                      <Icon icon="mdi:github" />
+                      <span>MCP Repositories Explorer</span>
+                    </button>
                   </div>
 
-                  {/* Dual Bottom Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
-                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
-                      <div className="flex items-center gap-2 text-primary">
-                        <Icon icon="solar:shield-keyhole-bold" className="text-xl" />
-                        <span className="text-xs font-bold uppercase tracking-wider">
-                          100% Isolated Scoping
-                        </span>
-                      </div>
-                      <p className="text-xs text-default-500 leading-normal">
-                        Tools are locked dynamically to ensure strict deterministic execution.
-                      </p>
-                    </div>
+                  {idleTab === "action-hub" ? (
+                    <>
+                      <div className="flex flex-col items-center gap-4">
+                        {/* Blue Spars Circle Icon */}
+                        <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
+                          <Icon icon="solar:stars-line-bold" className="text-3xl" />
+                        </div>
 
-                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
-                      <div className="flex items-center gap-2 text-primary">
-                        <Icon icon="solar:key-bold" className="text-xl" />
-                        <span className="text-xs font-bold uppercase tracking-wider">
-                          Composio MCP Auth
-                        </span>
+                        <h2 className="text-2xl font-bold text-default-900 tracking-tight">
+                          Isolated Action Hub
+                        </h2>
+                        <p className="text-sm text-default-500 max-w-md leading-relaxed">
+                          Connect and prompt individual web applications securely. Select an application in the sidebar to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
+                        </p>
                       </div>
-                      <p className="text-xs text-default-500 leading-normal">
-                        Universal OAuth management handles complex authentications seamlessly.
-                      </p>
+
+                      {/* Dual Bottom Cards */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                        <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
+                          <div className="flex items-center gap-2 text-primary">
+                            <Icon icon="solar:shield-keyhole-bold" className="text-xl" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                              100% Isolated Scoping
+                            </span>
+                          </div>
+                          <p className="text-xs text-default-500 leading-normal">
+                            Tools are locked dynamically to ensure strict deterministic execution.
+                          </p>
+                        </div>
+
+                        <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
+                          <div className="flex items-center gap-2 text-primary">
+                            <Icon icon="solar:key-bold" className="text-xl" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                              Composio MCP Auth
+                            </span>
+                          </div>
+                          <p className="text-xs text-default-500 leading-normal">
+                            Universal OAuth management handles complex authentications seamlessly.
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    /* Deeply Integrated MCP Explorer View */
+                    <div className="w-full flex flex-col gap-6 text-left">
+                      <div className="flex flex-col gap-2">
+                        <h2 className="text-2xl font-bold text-default-900 tracking-tight flex items-center gap-2">
+                          <Icon icon="logos:mcp" className="text-2xl animate-pulse" />
+                          <span>Official MCP Repositories Explorer</span>
+                        </h2>
+                        <p className="text-xs text-default-500 max-w-2xl leading-relaxed">
+                          Browse and integrate official, secure repositories directly from the <a href="https://github.com/modelcontextprotocol" target="_blank" rel="noreferrer" className="text-primary hover:underline font-semibold">modelcontextprotocol</a> organization. All reference packages are fully licensed under Apache-2.0 or MIT for open enterprise deployment.
+                        </p>
+                      </div>
+
+                      {/* Repos Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                        {MCP_REPOS.map((repo) => (
+                          <div
+                            key={repo.name}
+                            className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-3 bg-[#f4f4f5]/30 dark:bg-[#0E0E10]/30 hover:border-default-300 dark:hover:border-default-100 transition-all relative overflow-hidden group"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-2.5">
+                                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${repo.color} flex items-center justify-center text-white text-base shadow-sm`}>
+                                  <Icon icon={repo.icon} />
+                                </div>
+                                <div className="flex flex-col">
+                                  <a
+                                    href={repo.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-sm font-bold text-default-900 hover:text-primary transition-colors flex items-center gap-1"
+                                  >
+                                    <span>{repo.name}</span>
+                                    <Icon icon="solar:arrow-left-up-bold" className="rotate-90 text-[10px]" />
+                                  </a>
+                                  <span className="text-[10px] text-default-400 font-medium">{repo.lang}</span>
+                                </div>
+                              </div>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                repo.license.includes("Apache") 
+                                  ? "bg-blue-500/10 text-blue-500 border border-blue-500/20"
+                                  : "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
+                              }`}>
+                                {repo.license}
+                              </span>
+                            </div>
+
+                            <p className="text-xs text-default-500 leading-normal min-h-[36px]">
+                              {repo.description}
+                            </p>
+
+                            {/* Command Install Block */}
+                            <div className="flex items-center justify-between gap-2 p-2 bg-[#f4f4f5] dark:bg-[#0F0F11] rounded-lg border border-default-200/50 dark:border-default-100/20 select-all font-mono text-[10px] text-default-600 dark:text-default-400">
+                              <span className="truncate">{repo.install}</span>
+                              <button
+                                onClick={() => handleCopy(repo.install)}
+                                className="flex-none p-1 rounded hover:bg-default-200 dark:hover:bg-default-100 text-default-400 hover:text-default-800 transition-all"
+                              >
+                                <Icon
+                                  icon={copiedText === repo.install ? "solar:check-read-bold" : "solar:copy-bold"}
+                                  className={copiedText === repo.install ? "text-emerald-500 animate-bounce" : "text-sm"}
+                                />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </motion.div>
               ) : isMcp ? (
                 /* MCP Server Details Panel (Studio Presets + Stdio Transport Configs) */
