@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.18.0] - 2026-05-26 — Logs Page & Sidebar Menu Simplification
+### Removed
+- **Static Logs Page Deletion**: Completely deleted the static, hardcoded logs page directory (`app/logs`) to streamline the user interface.
+- **Sidebar Cleanups**: Removed all logs-related cases, custom session action menus, terminal icon renderings, and state handlers from `components/sidebar.tsx`.
+- **Lucide Cleanup**: Removed the unused `Terminal` icon import in `components/sidebar.tsx`.
+
 ## [39.17.0] - 2026-05-26 — Prompt Toolbar Layout Refinement
 ### Changed
 - **Security Audit Position Relocation**: Repositioned the newly added "Security Audit" (`Shield`) toolbar action button to render to the left of the "Push to GitHub" (`Github`) button in `components/input-actions.tsx`.

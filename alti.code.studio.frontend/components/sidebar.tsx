@@ -40,7 +40,6 @@ import {
   Trash2,
   PanelLeftClose,
   PanelLeftOpen,
-  Terminal,
   Lock,
   Cloud,
   CheckCircle,
@@ -378,8 +377,6 @@ export default function Sidebar() {
         return "Canvas";
       case "/architecture":
         return "Architecture";
-      case "/logs":
-        return "Logs";
 
       case "/testing":
         return "Test";
@@ -939,26 +936,6 @@ export default function Sidebar() {
             </span>
           </button>
 
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/logs"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/logs");
-            }}
-          >
-            <Terminal className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Logs
-            </span>
-          </button>
-
 
 
           <button
@@ -1417,33 +1394,6 @@ export default function Sidebar() {
                   }
                 >
                   {wf.name}
-                </button>
-              ))}
-            </div>
-          ) : pathname === "/logs" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {[
-                { id: "log-1", name: "System (OS-Bridge)" },
-                { id: "log-2", name: "Background Swarm" },
-                { id: "log-3", name: "Security & DLP" },
-                { id: "log-4", name: "MCP Gateway" },
-              ].map((stream) => (
-                <button
-                  key={stream.id}
-                  className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("select-log-session", {
-                        detail: stream.name,
-                      }),
-                    )
-                  }
-                >
-                  <span>{stream.name}</span>
-                  <Terminal
-                    className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                    size={14}
-                  />
                 </button>
               ))}
             </div>
