@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.10.0] - 2026-05-26 — Agent-Native Swarm Compiler (CLI-Anything) Integration
+### Added
+- **CLI-Anything 7-Phase Compilation Pipeline**: Developed `cliAnything.service.js` to autonomously map, design, and bootstrap target codebases into agent-native applications by generating Click/REPL CLIs, structured JSON schemas, E2E test suites, and discovery documents (`SKILL.md`).
+- **SSE Streaming Gateway**: Implemented `cliAnything.controller.js` and `/api/v1/cli-anything` endpoints on the backend, enabling real-time streaming of compilation phases, logs, and metadata via Server-Sent Events (SSE).
+- **Dynamic Swarm Specialist Agent (`cliAnything`)**: Engineered a new dynamic specialist agent registered dynamically inside the central `agentRegistry` on startup, allowing other agents to delegate CLI compilation and iterative gap-analysis refinement.
+- **Premium Glassmorphic Frontend Dashboard (`/cli-anything`)**: Built `app/cli-anything/page.tsx` using HeroUI and Framer Motion, featuring a vertical pipeline stepper with status indicators, a monospaced dark terminal streaming stdout, a side-by-side tabs browser, and an interactive gap-analysis command refinement chat.
+- **Sidebar Menu Integration**: Patched `components/sidebar.tsx` to add "CLI-Anything" with the `Blocks` icon into the primary sidebar navigation matrix.
+
 ## [39.9.0] - 2026-05-25 — Continuous CI/CD Autonomous Sweeper & Live Streaming Thought Telemetry
 ### Added
 - **Continuous Vulnerability Sweeper Daemon (`executeSecuritySweep`)**: Engineered a background security scanner in `githubSweeper.service.js` that checks dependency matrices, logs CVE security findings, triages vulnerability upgrades to `githubSecurityDependabotAlertsPatcher`, and compiles self-healing patches.

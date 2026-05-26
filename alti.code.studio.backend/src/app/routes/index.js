@@ -75,6 +75,7 @@ try {
               if (file === 'agent.route.js') basePath = '/agents';
               if (file === 'openclaw.config.route.js') basePath = '/openclaw';
               if (file === 'geminiCli.route.js') basePath = '/gemini-cli';
+              if (file === 'cliAnything.route.js') basePath = '/cli-anything';
               if (file === 'geminiExtension.route.js') basePath = '/gemini-extensions';
               if (file === 'geminiOpenMemo.route.js') basePath = '/gemini-open-memory';
               if (file === 'googleGenAi.route.js') basePath = '/google-gen-ai';

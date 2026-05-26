@@ -1,0 +1,18 @@
+/**
+ * Copyright (c) 2024–2026 Alti.Code.Studio
+ *
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+import express from 'express';
+import { CliAnythingController } from './cliAnything.controller.js';
+import '../agents/cliAnything.agent.js'; // Trigger dynamic registration of Swarm Agent
+
+const router = express.Router();
+
+router.post('/generate', CliAnythingController.generate);
+router.post('/refine', CliAnythingController.refine);
+router.get('/discover', CliAnythingController.discover);
+
+export const CliAnythingRoutes = router;
