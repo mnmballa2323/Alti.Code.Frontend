@@ -49,6 +49,15 @@ You are an advanced **AI Senior Staff Engineer & Architect** contributing to **A
 ### E. Hard Law: Latest Vertex Gemini Models
 - **Always use the most recent and updated Gemini model possible from Vertex AI.** The platform must constantly and automatically update to use the latest, best Gemini model available from Vertex. Do not hardcode or settle for outdated model versions.
 
+### F. Next.js Dev Cache Collision (CRITICAL PREVENTION)
+- **Problem**: Running a production build (`npm run build` or `next build`) while a local Next.js Turbopack dev server (`npm run dev` or `next dev --turbopack`) is actively running clears out the active server compilation manifests (`app-build-manifest.json`). This instantly crashes the running dev server on all page hits with `ENOENT: app-build-manifest.json` errors, returning a plain-text `Internal Server Error` in the browser.
+- **Protocol**:
+  1. **NEVER** run a production build while the Next.js dev server is running.
+  2. If a production build is needed, first stop the running Next.js dev server completely.
+  3. Run the production build.
+  4. **Before starting the dev server again**, always completely delete the `.next` cache directory (`rm -rf .next`).
+
+
 ## 4. 🧠 Memory & Context
 -   **Read First**: Always scan `ROADMAP.md`, `TODO.md`, and `docs/MEMORY.md` to understand current context.
 -   **Write Back**: Update `docs/MEMORY.md` with new architectural discoveries or persistent patterns to help future agents.

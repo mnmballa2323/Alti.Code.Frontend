@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.1] - 2026-05-26 — Next.js dev server recovery and cache collision guardrails
+### Fixed
+- **Frontend & Backend Recovery**: Terminated and started clean dev servers for both the frontend (Next.js Turbopack) on port 3000 and the backend (Node.js/Express) on port 5000, recovering the platform successfully.
+- **Frontend Cache Reset**: Purged the corrupted `.next` folder to eliminate the Turbopack build manifest clash, returning a stable `200 OK` rendering of the landing workspace page.
+### Changed
+- **Operational Rules**: Documented the Next.js Dev Cache Collision problem and operational prevention protocol in `docs/LLM_INSTRUCTIONS.md` to prevent any future host agent or developer from triggering this build collision during a running dev server session.
+- **Project Version bump**: Incremented root `VERSION` to `39.37.1` and staged all files for Git push.
+
 ## [39.37.0] - 2026-05-26 — RAG Search & Chat Workspace Integration
 ### Added
 - **Frontend: Dynamic RAG & Chat Triage Switch**: Refactored the core chat route (`app/chat/page.tsx`) to support both standard messaging conversations and codebase RAG search sub-panels using a premium sliding pill toggle in the header.
