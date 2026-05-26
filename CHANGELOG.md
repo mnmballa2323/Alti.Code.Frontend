@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.26.0] - 2026-05-26 — Left Sidebar Clickability & Layout Layering Fix
+### Fixed
+- **Sidebar Clickability Z-Index Stack**: Resolved the unclickable left side navigation menu issue on the Integrations page by elevating the `ChatBotLayout` sidebar wrapper from `z-50` to `z-[100]`.
+- **Page Header Z-Index Normalization**: Lowered the `ConnectAppsPage` header element's z-index from `z-50` to `z-10` to avoid viewport overlap and guarantee 100% stable layer stacking across Next.js static pages.
+
 ## [39.25.0] - 2026-05-26 — Integrations Page Master-Detail Layout Refactor
 ### Changed
 - **Split-Pane Master-Detail Redesign**: Overhauled the Integrations (`/connect-apps`) page from a static grid & popup modal architecture to a premium split-pane master-detail layout matching the high-end dashboard screenshots.
