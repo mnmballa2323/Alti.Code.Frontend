@@ -347,6 +347,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
   const { data: session, status } = useSession();
+  const token = session?.user?.accessToken ?? null;
 
   const getHistoryTitle = () => {
     if (pathname?.startsWith("/boardroom")) return "Board Members";
@@ -626,7 +627,6 @@ export default function Sidebar() {
       window.removeEventListener("open-boardroom-meeting-modal", handleOpenMeetingModal);
     };
   }, []);
-  const token = session?.user?.accessToken ?? null;
 
   const {
     data: aiSessions,

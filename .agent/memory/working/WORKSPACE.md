@@ -1,19 +1,19 @@
 # Workspace (live task state)
 
 ## Current task
-Design, implement, test, and verify the GitHub Developer Documentation Ingestion Engine inside the Alti.Code.Studio backend.
+Design, implement, test, and verify the Workspace Rules (Instructions & Guardrails) System and resolve the Next.js/React 18 SSR hydration mismatch error.
 
 ## Active Checkpoints
-- [x] Researched GitHub LLM-friendly APIs (`llms.txt`, Page List API, and Article Body API).
-- [x] Designed the ingestion flow integrating with local RAG vector store and standalone AgentMemory client.
-- [x] Built the core service `githubDocs.service.js` with batch concurrency and delay throttling.
-- [x] Built the controller `githubDocs.controller.js` to trigger syncs, fetch status, cancel runs, and query similarity searches.
-- [x] Built the routes mapping `githubDocs.route.js` dynamically mounted under `/api/v1/githubDocs`.
-- [x] Modified `server.js` to bootstrap the cron scheduler weekly on server startup.
-- [x] Wrote a complete integration test suite in `tests/integration/githubDocs.test.js` using `vitest` mocks.
-- [x] Ran and verified that all tests passed successfully.
-- [x] Manually executed and tested the status, trigger, and cancellation endpoints against the live local backend server under mock IAP token headers.
-- [x] Followed the LLM instruction bump protocol: updated `VERSION` to `39.1.0` and logged the entry in `CHANGELOG.md`.
+- [x] Researched backend architecture, rules formatting, and dynamic router mounting pipelines.
+- [x] Designed and built `rules.service.js` under `src/app/modules/rules` to read, parse, and write instructions/guardrails to `.altirules` or `.cursorrules`.
+- [x] Built deterministic content-hash IDs (`generateStableId`) to prevent rules rendering key instability across page reloads.
+- [x] Deployed `rules.controller.js` and `rules.route.js` routing express handlers mounted automatically under `/api/v1/rules`.
+- [x] Configured the sovereign `LlmGatewayService.routeCompletion` gateway to dynamically parse codebase rules on each call and auto-prepend them to the completion prompt context.
+- [x] Fixed the React 18 / Next.js server-client icon/rendering hydration mismatch by implementing client-side `mounted` checks and skeletons in `components/sidebar.tsx`.
+- [x] Refactored `components/sidebar.tsx` rule lists to query endpoints using TanStack `useQuery` and autosave modifications via a debounced custom hook.
+- [x] Wrote a complete integration test suite in `tests/integration/rules.test.js` validating rules parsing, writing, stable IDs, and endpoint routing. Verified 100% green test execution.
+- [x] Successfully completed the version bump protocol: updated root `VERSION` to `39.11.0` and appended changes in `CHANGELOG.md`.
+- [x] Staged, committed, and pushed version `39.11.0` successfully to the remote repository.
 
 ## Status
-Completed. The engine is fully operational, verified, tested, and dynamically registered in the system.
+Completed. Workspace Rules are fully persistent, dynamic LLM prompt-ingested, and the Next.js hydration error is completely resolved.
