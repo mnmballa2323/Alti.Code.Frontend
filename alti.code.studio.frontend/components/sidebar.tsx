@@ -105,13 +105,34 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   const [imageError, setImageError] = useState(false);
   
   const slug = app.id.replace("app-", "").toLowerCase();
+  
+  const specialLogoUrls: Record<string, string> = {
+    "1password": "https://logo.clearbit.com/1password.com",
+    "21risk": "https://logo.clearbit.com/21risk.com",
+    "2chat": "https://logo.clearbit.com/2chat.co",
+    "accredible_certificates": "https://logos.composio.dev/api/accredible",
+    "active_campaign": "https://logos.composio.dev/api/activecampaign",
+    "active_trail": "https://logos.composio.dev/api/activetrail",
+    "addepar": "https://logo.clearbit.com/addepar.com",
+    "addressfinder": "https://logo.clearbit.com/addressfinder.com.au",
+    "addresszen": "https://logo.clearbit.com/addresszen.com",
+    "adrapid": "https://logo.clearbit.com/adrapid.com",
+    "adyntel": "https://logo.clearbit.com/adyntel.com",
+    "aeroleads": "https://logo.clearbit.com/aeroleads.com",
+    "affinda": "https://logo.clearbit.com/affinda.com",
+    "affinity": "https://logo.clearbit.com/affinity.co",
+  };
+
   const customMappings: Record<string, string> = {
     googledrive: "google-drive",
     googlesheets: "google-sheets",
     gmail: "gmail",
   };
-  const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
-  const logoUrl = `https://logos.composio.dev/api/${mappedSlug}`;
+  
+  const logoUrl = specialLogoUrls[slug] || (() => {
+    const mappedSlug = customMappings[slug] || slug.replace(/_/g, "-");
+    return `https://logos.composio.dev/api/${mappedSlug}`;
+  })();
 
   const getAvatarColor = (name: string) => {
     const colors = [
