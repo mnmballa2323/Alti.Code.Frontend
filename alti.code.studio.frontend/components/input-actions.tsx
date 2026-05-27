@@ -317,8 +317,6 @@ function PromptInputFullLineComponent({
   const [selectedModel, setSelectedModel] = useState(
     isTestWorkspace ? "Framework" : "Stack",
   );
-  const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
-  const modelDropdownRef = useRef<HTMLDivElement>(null);
   const [selectedProgLang, setSelectedProgLang] = useState("Language");
   const [progLangDropdownOpen, setProgLangDropdownOpen] = useState(false);
   const progLangDropdownRef = useRef<HTMLDivElement>(null);
@@ -358,12 +356,6 @@ function PromptInputFullLineComponent({
         !langDropdownRef.current.contains(e.target as Node)
       ) {
         setLangDropdownOpen(false);
-      }
-      if (
-        modelDropdownRef.current &&
-        !modelDropdownRef.current.contains(e.target as Node)
-      ) {
-        setModelDropdownOpen(false);
       }
       if (
         progLangDropdownRef.current &&
@@ -534,164 +526,196 @@ function PromptInputFullLineComponent({
           </Tooltip>
 
           {showModelDropdown && (
-            <div ref={modelDropdownRef} className="relative inline-block">
-              <button
-                className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
-                type="button"
-                onClick={() => setModelDropdownOpen(!modelDropdownOpen)}
-              >
-                <Icon
-                  className={cn(
-                    "size-4 shrink-0 transition-colors duration-200",
-                    (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
-                    (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
-                    (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
-                  )}
-                  icon={
-                    (defaultModel || "").includes("gemini")
-                      ? "simple-icons:googlegemini"
-                      : (defaultModel || "").includes("claude")
-                      ? "simple-icons:anthropic"
-                      : (defaultModel || "").includes("gpt")
-                      ? "simple-icons:openai"
-                      : "lucide:sparkles"
-                  }
-                />
-                <span className="transition-colors duration-200">
-                  {getModelDisplayName(defaultModel)}
-                </span>
-              </button>
-
-              {modelDropdownOpen && (
-                <div 
-                  className="absolute left-0 bottom-full mb-2 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-2.5 z-[100] min-w-[245px] max-h-[380px] overflow-y-auto flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            <Dropdown
+              placement="top-start"
+              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] max-h-[380px] p-2"
+            >
+              <DropdownTrigger>
+                <button
+                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
+                  type="button"
                 >
-                  {/* Gemini Section */}
-                  <div className="flex flex-col gap-0.5">
-                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
-                      Gemini
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gemini-3.5-flash"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
-                    >
+                  <Icon
+                    className={cn(
+                      "size-4 shrink-0 transition-colors duration-200",
+                      (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+                      (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
+                      (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
+                    )}
+                    icon={
+                      (defaultModel || "").includes("gemini")
+                        ? "simple-icons:googlegemini"
+                        : (defaultModel || "").includes("claude")
+                        ? "simple-icons:anthropic"
+                        : (defaultModel || "").includes("gpt")
+                        ? "simple-icons:openai"
+                        : "lucide:sparkles"
+                    }
+                  />
+                  <span className="transition-colors duration-200">
+                    {getModelDisplayName(defaultModel)}
+                  </span>
+                </button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Model Options"
+                className="p-0 flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                variant="flat"
+              >
+                <DropdownSection
+                  title="GEMINI"
+                  classNames={{
+                    heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5"
+                  }}
+                >
+                  <DropdownItem
+                    key="gemini-3.5-flash"
+                    textValue="Gemini 3.5 Flash"
+                    onPress={() => setDefaultModel("gemini-3.5-flash")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-purple-500 dark:text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Gemini 3.5 Flash</span>
                         <span className="text-[10px] text-default-400">Latest default agent & code model</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gemini-3.5-pro"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-3.5-pro"
+                    textValue="Gemini 3.5 Pro"
+                    onPress={() => setDefaultModel("gemini-3.5-pro")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Gemini 3.5 Pro</span>
                         <span className="text-[10px] text-default-400">Flagship deep reasoning & software logic</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gemini-omni-flash"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-omni-flash"
+                    textValue="Gemini Omni Flash"
+                    onPress={() => setDefaultModel("gemini-omni-flash")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Gemini Omni Flash</span>
                         <span className="text-[10px] text-default-400">Multimodal omni-world coding</span>
                       </div>
-                    </button>
-                  </div>
-
-                  <div className="h-px bg-default-200/50 dark:bg-gray-800" />
-
-                  {/* Claude Section */}
-                  <div className="flex flex-col gap-0.5">
-                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
-                      Claude
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("claude-4.7-opus"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
-                    >
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection
+                  title="CLAUDE"
+                  classNames={{
+                    heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5"
+                  }}
+                >
+                  <DropdownItem
+                    key="claude-4.7-opus"
+                    textValue="Claude 4.7 Opus"
+                    onPress={() => setDefaultModel("claude-4.7-opus")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-orange-500 dark:text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Claude 4.7 Opus</span>
                         <span className="text-[10px] text-default-400">Deep software engineering with 1M context</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("sonnet-5"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="sonnet-5"
+                    textValue="Claude Sonnet 5"
+                    onPress={() => setDefaultModel("sonnet-5")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Claude Sonnet 5</span>
                         <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("claude-4.5-haiku"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="claude-4.5-haiku"
+                    textValue="Claude 4.5 Haiku"
+                    onPress={() => setDefaultModel("claude-4.5-haiku")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">Claude 4.5 Haiku</span>
                         <span className="text-[10px] text-default-400">Fast low-latency agent automation</span>
                       </div>
-                    </button>
-                  </div>
-
-                  <div className="h-px bg-default-200/50 dark:bg-gray-800" />
-
-                  {/* GPT Section */}
-                  <div className="flex flex-col gap-0.5">
-                    <div className="px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider">
-                      GPT
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gpt-5.5-pro"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
-                    >
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection
+                  title="GPT"
+                  classNames={{
+                    heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5"
+                  }}
+                >
+                  <DropdownItem
+                    key="gpt-5.5-pro"
+                    textValue="GPT-5.5 Pro"
+                    onPress={() => setDefaultModel("gpt-5.5-pro")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">GPT-5.5 Pro</span>
                         <span className="text-[10px] text-default-400">Parallel reasoning coding flagship</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gpt-5.5"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gpt-5.5"
+                    textValue="GPT-5.5"
+                    onPress={() => setDefaultModel("gpt-5.5")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">GPT-5.5</span>
                         <span className="text-[10px] text-default-400">Frontier omnimodal developer model</span>
                       </div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setDefaultModel("gpt-5.5-instant"); setModelDropdownOpen(false); }}
-                      className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 text-left transition-colors cursor-pointer"
-                    >
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gpt-5.5-instant"
+                    textValue="GPT-5.5 Instant"
+                    onPress={() => setDefaultModel("gpt-5.5-instant")}
+                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-3">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
                         <span className="text-xs font-medium text-foreground">GPT-5.5 Instant</span>
                         <span className="text-[10px] text-default-400">Fast low-latency editing</span>
                       </div>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
           )}
 
 
