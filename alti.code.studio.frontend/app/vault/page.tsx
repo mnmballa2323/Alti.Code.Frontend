@@ -524,7 +524,7 @@ export default function VaultPage() {
           base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
           header: "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
           body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
-          footer: "p-0 m-0 border-t border-default-200/80 dark:border-default-100/30 flex flex-row w-full divide-x divide-default-200/80 dark:divide-default-100/30 gap-0",
+          footer: "p-0 m-0 flex flex-row w-full gap-0 bg-transparent min-h-0",
         }}
         isOpen={isDeleteModalOpen}
         size="xs"
@@ -535,7 +535,7 @@ export default function VaultPage() {
             <>
               <ModalHeader>
                 <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
-                  Delete Secret?
+                  Delete
                 </h3>
               </ModalHeader>
               <ModalBody>
@@ -543,7 +543,7 @@ export default function VaultPage() {
                   Are you sure you want to delete?
                 </p>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="p-0 m-0 border-t border-default-200/80 dark:border-default-100/30 flex flex-row w-full gap-0 bg-transparent min-h-0">
                 <Button
                   variant="light"
                   className="w-1/2 h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
@@ -551,9 +551,10 @@ export default function VaultPage() {
                 >
                   Cancel
                 </Button>
+                <div className="w-[1px] h-12 bg-default-200/80 dark:bg-default-100/30 shrink-0" />
                 <Button
                   variant="light"
-                  className="w-1/2 h-12 rounded-none border-none text-danger font-semibold hover:bg-default-100/50 text-[15px]"
+                  className="w-1/2 h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
                   onPress={() => {
                     if (secretToDelete) {
                       handleDelete(secretToDelete);

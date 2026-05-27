@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.31] - 2026-05-27 — Apple-Style Delete Alert Dialog Polish
+### Changed
+- **Sleek Title & Action Divider**: Polished the Apple-style Delete Secret confirmation dialog:
+  - Shortened the header title from `"Delete Secret?"` to just `"Delete"`.
+  - Added a solid, high-precision physical vertical dividing border line between the `"Cancel"` and `"Delete"` actions.
+  - Aligned the typography style and font weights of both action buttons to use identical font weights (`font-normal`), achieving perfect visual harmony.
+
 ## [39.37.30] - 2026-05-27 — Apple-Style Vault Delete Secret Alert Dialog
 ### Changed
 - **Apple UI Delete Secret Popup**: Redesigned the delete secret confirmation dialog to perfectly replicate the premium centered Apple macOS/iOS system alert style. Features:
