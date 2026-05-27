@@ -909,6 +909,17 @@ export default function Sidebar() {
     item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase())
   );
 
+  const getPlusTooltipContent = () => {
+    if (pathname === "/" || pathname === "/code") return "New Code";
+    if (pathname.startsWith("/chat")) return "New Chat";
+    if (pathname === "/vault") return "New Vault";
+    if (pathname === "/instructions") return "New Instruction";
+    if (pathname === "/guardrails") return "New Guardrail";
+    if (pathname === "/repositories") return "New Repository";
+    if (pathname === "/documents") return "New Documentation";
+    return "New";
+  };
+
   const [dataFolders, setDataFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1452,31 +1463,41 @@ export default function Sidebar() {
               <Cloud className="size-3.5" />
             </Button>
           </Tooltip>
-          <Button
-            isIconOnly
-            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-            size="sm"
-            title="New"
-            variant="flat"
-            onClick={() => {
-              if (pathname === "/vault") {
-                window.dispatchEvent(new CustomEvent("open-vault-modal"));
-              } else if (pathname === "/repositories") {
-                window.dispatchEvent(
-                  new CustomEvent("open-repository-modal"),
-                );
-              } else if (pathname === "/documents") {
-                window.dispatchEvent(
-                  new CustomEvent("open-document-modal"),
-                );
-              } else {
-                dispatch(startNewChat());
-                router.push("/");
-              }
+          <Tooltip
+            content={getPlusTooltipContent()}
+            placement="top"
+            showArrow
+            delay={0}
+            closeDelay={0}
+            classNames={{
+              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
           >
-            <Plus className="size-3.5" />
-          </Button>
+            <Button
+              isIconOnly
+              className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                if (pathname === "/vault") {
+                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                } else if (pathname === "/repositories") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-repository-modal"),
+                  );
+                } else if (pathname === "/documents") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-document-modal"),
+                  );
+                } else {
+                  dispatch(startNewChat());
+                  router.push("/");
+                }
+              }}
+            >
+              <Plus className="size-3.5" />
+            </Button>
+          </Tooltip>
         </div>
 
         {/* 7 navigation icons toggle container */}
