@@ -85528,6 +85528,52 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'superalignment_sentinel',
+    importPath: './superalignment_sentinel.agent.js',
+    description: 'Futuristic Superalignment Sentinel Agent. Ensures agent swarms align with core human ethics, intentions, and guardrails.',
+    queue: 'superalignment-sentinel-queue',
+    capabilities: ['value-alignment', 'guardrail-verification', 'safety-envelopes'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'quantum_cryptography',
+    importPath: './quantum_cryptography.agent.js',
+    description: 'Post-Quantum Cryptography Auditor. Audits transport layers and secrets storage for Kyber/Dilithium compliance.',
+    queue: 'quantum-cryptography-queue',
+    capabilities: ['lattice-cryptography', 'quantum-resistance', 'post-quantum-audit'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'neuromorphic_silicon',
+    importPath: './neuromorphic_silicon.agent.js',
+    description: 'Neuromorphic Hardware-Software Co-design Specialist. Specializes in spiking neural networks and neuromorphic chip simulators.',
+    queue: 'neuromorphic-silicon-queue',
+    capabilities: ['spiking-neural-networks', 'stdp-compilation', 'neuromorphic-simulators'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'biosynthetic_compiler',
+    importPath: './biosynthetic_compiler.agent.js',
+    description: 'Synthetic Biology DNA Compiler Agent. Translates abstract specifications into CRISPR-Cas9 plasmids and amino acid chains.',
+    queue: 'biosynthetic-compiler-queue',
+    capabilities: ['codon-optimization', 'plasmid-compilation', 'crispr-targeting'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'space_telemetry',
+    importPath: './space_telemetry.agent.js',
+    description: 'L2/Deep-Space Satellite Telemetry Orchestrator. Evaluates spacecraft Doppler drifts, frame alignments, and orbital paths.',
+    queue: 'space-telemetry-queue',
+    capabilities: ['doppler-correction', 'ccsds-frames', 'spacecraft-ephemeris'],
+    version: '1.0.0'
+});
+
+
 
 
 
