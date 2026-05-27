@@ -564,7 +564,7 @@ function PromptInputFullLineComponent({
 
               {modelDropdownOpen && (
                 <div 
-                  className="absolute left-0 bottom-full mb-2 bg-white/95 dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-2.5 z-[100] min-w-[245px] max-h-[380px] overflow-y-auto flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                  className="absolute left-0 bottom-full mb-2 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl p-2.5 z-[100] min-w-[245px] max-h-[380px] overflow-y-auto flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
                   {/* Gemini Section */}
                   <div className="flex flex-col gap-0.5">

@@ -1553,381 +1553,467 @@ export default function Sidebar() {
                 })()}
               </div>
             ) : pathname === "/vault" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {[
-                  { id: "sec-1", name: "Primary Build Agent" },
-                  { id: "sec-2", name: "Synapse Production Analytics" },
-                  { id: "sec-3", name: "Telepathy Inference" },
-                ].filter((stream) =>
-                  stream.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((stream) => (
-                  <button
-                    key={stream.id}
-                    className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
-                    onClick={() =>
-                      window.dispatchEvent(
-                        new CustomEvent("select-secret", { detail: stream.id }),
-                      )
-                    }
-                  >
-                    <span>{stream.name}</span>
-                    <Lock
-                      className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                      size={14}
-                    />
-                  </button>
-                ))}
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const items = [
+                    { id: "sec-1", name: "Primary Build Agent" },
+                    { id: "sec-2", name: "Synapse Production Analytics" },
+                    { id: "sec-3", name: "Telepathy Inference" },
+                  ];
+                  const filtered = items.filter((stream) =>
+                    stream.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:lock-keyhole-minimalistic-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">
+                          {leftSidebarSearch ? "No results found" : "No secrets added yet"}
+                        </span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((stream) => (
+                    <button
+                      key={stream.id}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("select-secret", { detail: stream.id }),
+                        )
+                      }
+                    >
+                      <span>{stream.name}</span>
+                      <Lock
+                        className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                        size={14}
+                      />
+                    </button>
+                  ));
+                })()}
               </div>
             ) : pathname === "/instructions" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {instructions.filter((inst) =>
-                  inst.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((inst) => (
-                  <div
-                    key={inst.id}
-                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                  >
-                    <span className="truncate">{inst.name}</span>
-                    <Dropdown
-                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                      placement="bottom-end"
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = instructions.filter((inst) =>
+                    inst.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (instructions.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:document-text-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No instructions added yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:document-text-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((inst) => (
+                    <div
+                      key={inst.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                     >
-                      <DropdownTrigger>
-                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Instruction options"
-                        className="p-0"
-                        variant="flat"
+                      <span className="truncate">{inst.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
                       >
-                        <DropdownItem
-                          key="edit"
-                          className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                          startContent={
-                            <Edit2 className="text-default-500" size={14} />
-                          }
-                          onClick={() =>
-                            window.dispatchEvent(
-                              new CustomEvent("edit-instruction", {
-                                detail: inst,
-                              }),
-                            )
-                          }
+                        <DropdownTrigger>
+                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="Instruction options"
+                          className="p-0"
+                          variant="flat"
                         >
-                          Edit
-                        </DropdownItem>
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                          color="danger"
-                          startContent={<Trash2 size={14} />}
-                          onClick={() =>
-                            window.dispatchEvent(
-                              new CustomEvent("delete-instruction", {
-                                detail: inst.id,
-                              }),
-                            )
-                          }
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                ))}
-                {instructions.length === 0 && (
-                  <div className="px-3 py-2 text-xs text-gray-400">
-                    No instructions added yet.
-                  </div>
-                )}
+                          <DropdownItem
+                            key="edit"
+                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                            startContent={
+                              <Edit2 className="text-default-500" size={14} />
+                            }
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("edit-instruction", {
+                                  detail: inst,
+                                }),
+                              )
+                            }
+                          >
+                            Edit
+                          </DropdownItem>
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("delete-instruction", {
+                                  detail: inst.id,
+                                }),
+                              )
+                            }
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
               </div>
             ) : pathname === "/guardrails" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {guardrails.filter((gr) =>
-                  gr.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((gr) => (
-                  <div
-                    key={gr.id}
-                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                  >
-                    <span className="truncate">{gr.name}</span>
-                    <Dropdown
-                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                      placement="bottom-end"
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = guardrails.filter((gr) =>
+                    gr.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (guardrails.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:shield-warning-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No guardrails added yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:shield-warning-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((gr) => (
+                    <div
+                      key={gr.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                     >
-                      <DropdownTrigger>
-                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Guardrail options"
-                        className="p-0"
-                        variant="flat"
+                      <span className="truncate">{gr.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
                       >
-                        <DropdownItem
-                          key="edit"
-                          className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                          startContent={
-                            <Edit2 className="text-default-500" size={14} />
-                          }
-                          onClick={() =>
-                            window.dispatchEvent(
-                              new CustomEvent("edit-guardrail", { detail: gr }),
-                            )
-                          }
+                        <DropdownTrigger>
+                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="Guardrail options"
+                          className="p-0"
+                          variant="flat"
                         >
-                          Edit
-                        </DropdownItem>
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                          color="danger"
-                          startContent={<Trash2 size={14} />}
-                          onClick={() =>
-                            window.dispatchEvent(
-                              new CustomEvent("delete-guardrail", {
-                                detail: gr.id,
-                              }),
-                            )
-                          }
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                ))}
-                {guardrails.length === 0 && (
-                  <div className="px-3 py-2 text-xs text-gray-400">
-                    No guardrails added yet.
-                  </div>
-                )}
+                          <DropdownItem
+                            key="edit"
+                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                            startContent={
+                              <Edit2 className="text-default-500" size={14} />
+                            }
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("edit-guardrail", { detail: gr }),
+                              )
+                            }
+                          >
+                            Edit
+                          </DropdownItem>
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("delete-guardrail", {
+                                  detail: gr.id,
+                                }),
+                              )
+                            }
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
               </div>
             ) : pathname === "/repositories" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {repositories.filter((repo) =>
-                  repo.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((repo) => (
-                  <div
-                    key={repo.id}
-                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                    onClick={() =>
-                      window.dispatchEvent(
-                        new CustomEvent("edit-repository", { detail: repo }),
-                      )
-                    }
-                  >
-                    <span className="truncate">{repo.name}</span>
-                    <Dropdown
-                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                      placement="bottom-end"
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = repositories.filter((repo) =>
+                    repo.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (repositories.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:folder-2-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No repositories added yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:folder-2-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((repo) => (
+                    <div
+                      key={repo.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-repository", { detail: repo }),
+                        )
+                      }
                     >
-                      <DropdownTrigger>
-                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Repository options"
-                        className="p-0"
-                        variant="flat"
+                      <span className="truncate">{repo.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
                       >
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                          color="danger"
-                          startContent={<Trash2 size={14} />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            dispatch(removeRepository(repo.id));
-                          }}
+                        <DropdownTrigger>
+                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="Repository options"
+                          className="p-0"
+                          variant="flat"
                         >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                ))}
-                {repositories.length === 0 && (
-                  <div className="px-3 py-2 text-xs text-gray-400">
-                    No repositories added yet.
-                  </div>
-                )}
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dispatch(removeRepository(repo.id));
+                            }}
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
               </div>
             ) : pathname === "/documents" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {documents.filter((doc) =>
-                  doc.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                    onClick={() =>
-                      window.dispatchEvent(
-                        new CustomEvent("edit-document", { detail: doc }),
-                      )
-                    }
-                  >
-                    <span className="truncate">{doc.name}</span>
-                    <Dropdown
-                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                      placement="bottom-end"
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = documents.filter((doc) =>
+                    doc.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (documents.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:book-open-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No documents added yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:book-open-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((doc) => (
+                    <div
+                      key={doc.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-document", { detail: doc }),
+                        )
+                      }
                     >
-                      <DropdownTrigger>
-                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
-                          <MoreHorizontal size={16} />
-                        </button>
-                      </DropdownTrigger>
-                      <DropdownMenu
-                        aria-label="Document options"
-                        className="p-0"
-                        variant="flat"
+                      <span className="truncate">{doc.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
                       >
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                          color="danger"
-                          startContent={<Trash2 size={14} />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            dispatch(removeDocument(doc.id));
-                          }}
+                        <DropdownTrigger>
+                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="Document options"
+                          className="p-0"
+                          variant="flat"
                         >
-                          Delete
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                ))}
-                {documents.length === 0 && (
-                  <div className="px-3 py-2 text-xs text-gray-400">
-                    No documents added yet.
-                  </div>
-                )}
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dispatch(removeDocument(doc.id));
+                            }}
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
               </div>
             ) : pathname === "/cloud" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6">
-                {[
-                  {
-                    category: "Hyperscalers",
-                    providers: [
-                      "Amazon Web Services",
-                      "Google Cloud Platform",
-                      "Microsoft Azure",
-                      "Oracle Cloud",
-                      "IBM Cloud",
-                    ],
-                  },
-                  {
-                    category: "AI & GPU Compute",
-                    providers: [
-                      "CoreWeave",
-                      "Lambda Labs",
-                      "Paperspace",
-                      "RunPod",
-                      "Together AI",
-                    ],
-                  },
-                  {
-                    category: "Developer & PaaS",
-                    providers: [
-                      "DigitalOcean",
-                      "Fly.io",
-                      "Heroku",
-                      "Railway",
-                      "Render",
-                      "Supabase",
-                      "Vercel",
-                      "Kinsta",
-                    ],
-                  },
-                  {
-                    category: "Global & Regional",
-                    providers: [
-                      "Alibaba Cloud",
-                      "Baidu AI Cloud",
-                      "Huawei Cloud",
-                      "OVHcloud",
-                      "Scaleway",
-                      "Tencent Cloud",
-                      "Yandex Cloud",
-                      "Sinopec Cloud",
-                      "Exoscale",
-                    ],
-                  },
-                  {
-                    category: "Bare Metal & Edge",
-                    providers: [
-                      "Cherry Servers",
-                      "Equinix Metal",
-                      "Fastly",
-                      "Lumen",
-                      "MacStadium",
-                      "Maxihost",
-                      "Rackspace",
-                      "Packet",
-                      "Cloudflare",
-                    ],
-                  },
-                  {
-                    category: "VPS Infrastructure",
-                    providers: [
-                      "1&1 IONOS",
-                      "Atlantic.Net",
-                      "Hetzner",
-                      "Kamatera",
-                      "Linode",
-                      "UpCloud",
-                      "Vultr",
-                      "Hostwinds",
-                      "Liquid Web",
-                    ],
-                  },
-                  {
-                    category: "Enterprise Clouds",
-                    providers: [
-                      "Aiven",
-                      "Aruba Cloud",
-                      "ClearDATA",
-                      "Cloudera",
-                      "Databricks",
-                      "Navisite",
-                      "Nutanix",
-                      "Red Hat",
-                      "Salesforce",
-                      "SAP",
-                      "Snowflake",
-                      "VMware",
-                    ],
-                  },
-                  {
-                    category: "Telco & Networking",
-                    providers: [
-                      "Biznet Networks",
-                      "BT Cloud",
-                      "Cato Networks",
-                      "CenturyLink",
-                      "GTS Central Europe",
-                      "Megaport",
-                      "NTT Communications",
-                      "T-Systems",
-                      "Zayo",
-                    ],
-                  },
-                ].map((group) => {
-                  const filteredProviders = group.providers.filter((provider) =>
-                    provider.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                  );
-                  if (filteredProviders.length === 0) return null;
-                  return (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
+                {(() => {
+                  const groups = [
+                    {
+                      category: "Hyperscalers",
+                      providers: [
+                        "Amazon Web Services",
+                        "Google Cloud Platform",
+                        "Microsoft Azure",
+                        "Oracle Cloud",
+                        "IBM Cloud",
+                      ],
+                    },
+                    {
+                      category: "AI & GPU Compute",
+                      providers: [
+                        "CoreWeave",
+                        "Lambda Labs",
+                        "Paperspace",
+                        "RunPod",
+                        "Together AI",
+                      ],
+                    },
+                    {
+                      category: "Developer & PaaS",
+                      providers: [
+                        "DigitalOcean",
+                        "Fly.io",
+                        "Heroku",
+                        "Railway",
+                        "Render",
+                        "Supabase",
+                        "Vercel",
+                        "Kinsta",
+                      ],
+                    },
+                    {
+                      category: "Global & Regional",
+                      providers: [
+                        "Alibaba Cloud",
+                        "Baidu AI Cloud",
+                        "Huawei Cloud",
+                        "OVHcloud",
+                        "Scaleway",
+                        "Tencent Cloud",
+                        "Yandex Cloud",
+                        "Sinopec Cloud",
+                        "Exoscale",
+                      ],
+                    },
+                    {
+                      category: "Bare Metal & Edge",
+                      providers: [
+                        "Cherry Servers",
+                        "Equinix Metal",
+                        "Fastly",
+                        "Lumen",
+                        "MacStadium",
+                        "Maxihost",
+                        "Rackspace",
+                        "Packet",
+                        "Cloudflare",
+                      ],
+                    },
+                    {
+                      category: "VPS Infrastructure",
+                      providers: [
+                        "1&1 IONOS",
+                        "Atlantic.Net",
+                        "Hetzner",
+                        "Kamatera",
+                        "Linode",
+                        "UpCloud",
+                        "Vultr",
+                        "Hostwinds",
+                        "Liquid Web",
+                      ],
+                    },
+                    {
+                      category: "Enterprise Clouds",
+                      providers: [
+                        "Aiven",
+                        "Aruba Cloud",
+                        "ClearDATA",
+                        "Cloudera",
+                        "Databricks",
+                        "Navisite",
+                        "Nutanix",
+                        "Red Hat",
+                        "Salesforce",
+                        "SAP",
+                        "Snowflake",
+                        "VMware",
+                      ],
+                    },
+                    {
+                      category: "Telco & Networking",
+                      providers: [
+                        "Biznet Networks",
+                        "BT Cloud",
+                        "Cato Networks",
+                        "CenturyLink",
+                        "GTS Central Europe",
+                        "Megaport",
+                        "NTT Communications",
+                        "T-Systems",
+                        "Zayo",
+                      ],
+                    },
+                  ];
+
+                  const groupRenderData = groups.map((group) => {
+                    const filteredProviders = group.providers.filter((provider) =>
+                      provider.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    );
+                    return { ...group, providers: filteredProviders };
+                  }).filter(group => group.providers.length > 0);
+
+                  if (groupRenderData.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon icon="solar:cloud-linear" className="text-2xl text-default-400 mb-2" />
+                        <span className="text-xs text-default-400">
+                          {leftSidebarSearch ? "No results found" : "No cloud nodes added yet"}
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return groupRenderData.map((group) => (
                     <div key={group.category} className="mb-4 last:mb-0">
                       <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
                         {group.category}
                       </div>
-                      {filteredProviders.map((provider) => (
+                      {group.providers.map((provider) => (
                         <button
                           key={provider}
                           className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
@@ -1947,8 +2033,8 @@ export default function Sidebar() {
                         </button>
                       ))}
                     </div>
-                  );
-                })}
+                  ));
+                })()}
               </div>
             ) : isLoading ? (
               <div className="space-y-4 px-4 mt-2">
