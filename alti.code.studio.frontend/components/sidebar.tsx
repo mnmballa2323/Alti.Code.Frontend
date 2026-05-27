@@ -1163,7 +1163,7 @@ export default function Sidebar() {
       {/* Primary Column (Left Side Menu) */}
       <div
         className={cn(
-          "flex h-full flex-col transition-all duration-300 border-r border-default-200",
+          "flex h-full flex-col transition-all duration-300 bg-[#F4F4F6] dark:bg-[#161616] border-r border-default-200",
           isSidebarOpen ? "w-64" : "w-10",
         )}
       >

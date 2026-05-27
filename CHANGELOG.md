@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.16] - 2026-05-27 — Left Navigation Sidebar Premium Gray Background Update
+### Changed
+- **AltiHQ Brand Alignment**: Overwrote the primary column left sidebar menu container in `components/sidebar.tsx` to use the premium light gray background color (`bg-[#F4F4F6]`) and dark mode counterpart (`dark:bg-[#161616]`), matching the exact visual brand color aesthetics of the official production `altihq.com` layout.
+
 ## [39.37.15] - 2026-05-27 — Automations and Canvas Builder Purge
 ### Removed
 - **Standalone Automations & Canvas Router Deletion**: Completely removed the legacy mock workflows and workflow-builder routes (`app/workflows` and `app/workflow-builder`) to maintain absolute focus on core agent-native IDE workspaces.
