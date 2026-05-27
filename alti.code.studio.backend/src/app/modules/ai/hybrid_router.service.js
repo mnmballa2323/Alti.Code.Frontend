@@ -1,4 +1,4 @@
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { multiCloudInferenceService } from './multicloud_inference.service.js';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 
@@ -41,14 +41,24 @@ class HybridRouterService {
                 }
             } catch (error) {
                 // Graceful fallback to Cloud if local inference engine is offline
-                logger.warn(`⚠️ [HybridRouter] Local Edge Model unreachable (CodeGemma offline). Bouncing to Google Cloud Gemini-Flash.`);
+                logger.warn(`⚠️ [HybridRouter] Local Edge Model unreachable (CodeGemma offline). Bouncing to Multi-Cloud System.`);
             }
         }
 
-        // Cloud Execution (Heavy Lifting)
-        logger.info(`☁️ [HybridRouter] Task requires heavy intelligence. Routing to Google Cloud Gemini 3.1 Pro...`);
-        const result = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', temperature);
-        return { content: result.content, venue: 'GOOGLE_CLOUD_VERTEX' };
+        // Multi-Cloud Execution (Heavy Lifting & Marketplace Procurement Alignment)
+        let preferredProvider = 'gcp';
+        if (prompt.toLowerCase().includes('bedrock') || prompt.toLowerCase().includes('aws')) {
+            preferredProvider = 'aws';
+        } else if (prompt.toLowerCase().includes('azure') || prompt.toLowerCase().includes('foundry')) {
+            preferredProvider = 'azure';
+        }
+
+        logger.info(`☁️ [HybridRouter] Task requires heavy intelligence. Routing to Multi-Cloud Inference System (Preferred: ${preferredProvider.toUpperCase()})...`);
+        const result = await multiCloudInferenceService.executeMultiCloudInference(prompt, 'jules', { 
+            preferredProvider,
+            modelId: preferredProvider === 'gcp' ? 'gemini-3.1-pro' : (preferredProvider === 'aws' ? 'claude-3-5-sonnet' : 'gpt-4o')
+        });
+        return { content: result.content, venue: result.venue };
     }
 }
 

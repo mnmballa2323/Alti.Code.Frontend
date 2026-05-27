@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.91] - 2026-05-27 — Multi-Cloud Inference & Marketplace Procurement Integration
+### Added
+- **Multi-Cloud Inference Engine**: Implemented `multicloud_inference.service.js` supporting native, robust REST API connectivity to Google Cloud Vertex AI (Core), AWS Bedrock, and Azure AI Studio Foundry. Includes elegant failover routing and load-balancing.
+- **Dynamic Marketplace Billing Tracking**: Logs all inference consumption tokens and pricing in `/logs/marketplace_billing.log`, calculating dollar-amount costs mapped to GCP, AWS, and Azure marketplace contracts.
+- **Aggregated Procurement Metrics**: Exposes `getMarketplaceProcurementStats` to dynamically parse logged billing transactions, providing real-time financial summaries for audits and cloud procurement.
+- **Multi-Cloud Router Integration**: Upgraded `hybrid_router.service.js` to intelligently route heavy model inference to the multi-cloud system, dynamically detecting AWS/Azure provider overrides directly from user prompts.
+- **Multi-Cloud Integration Test Suite**: Deployed `multicloud_inference.test.js` validating primary Vertex executions, AWS/Azure prompt routing overrides, failover states, and real-time marketplace billing logs.
+
 ## [39.37.90] - 2026-05-27 — Dynamic Open-Source Licensing Compliance Audit System
 ### Added
 - **Dynamic Gitmodule Scan Engine**: Upgraded the `LicensingGuardianAgent` in `licensing_guardian.agent.js` from static/hardcoded submodules to a dynamic parser that parses the root `.gitmodules` file in real-time, detecting all active integrations inside the repository dynamically.
