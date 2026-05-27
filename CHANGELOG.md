@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.30] - 2026-05-27 — Apple-Style Vault Delete Secret Alert Dialog
+### Changed
+- **Apple UI Delete Secret Popup**: Redesigned the delete secret confirmation dialog to perfectly replicate the premium centered Apple macOS/iOS system alert style. Features:
+  - Compact rounded-[24px] white/dark-mode panel (`w-[320px]`).
+  - Centered high-contrast header and description labels.
+  - A thin full-width horizontal dividing line separating content from action triggers.
+  - A thin central vertical dividing line separating the `"Cancel"` and `"Delete"` flat, borderless navigation buttons, with a bold red `text-danger` visual highlight on the destructive action.
+
 ## [39.37.29] - 2026-05-27 — Sovereign Vault List Card Navigation Chevron Icon Upgrade
 ### Changed
 - **Manage Text to Chevron Icon**: Replaced the `"Manage"` text action button on the right side of the list cards with a premium, sleek `ChevronRight` icon-only button to align with standard high-fidelity row-details navigation aesthetics.

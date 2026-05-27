@@ -521,37 +521,39 @@ export default function VaultPage() {
         hideCloseButton
         backdrop="blur"
         classNames={{
-          base: "bg-white dark:bg-background rounded-3xl",
-          header: "border-none pt-6 pb-2 flex flex-col gap-1 items-center",
-          body: "py-2 text-center",
-          footer: "border-none pt-4 pb-6 flex justify-center gap-3 w-full",
+          base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
+          header: "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
+          body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
+          footer: "p-0 m-0 border-t border-default-200/80 dark:border-default-100/30 flex flex-row w-full divide-x divide-default-200/80 dark:divide-default-100/30 gap-0",
         }}
         isOpen={isDeleteModalOpen}
-        size="md"
+        size="xs"
         onOpenChange={onDeleteModalChange}
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader>
-                <h2 className="text-xl font-bold text-default-900">
+                <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
                   Delete Secret?
-                </h2>
+                </h3>
               </ModalHeader>
               <ModalBody>
-                <p className="text-default-500 text-base whitespace-nowrap">
+                <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
                   Are you sure you want to delete?
                 </p>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  className="font-medium bg-default-100 px-6 rounded-xl"
+                  variant="light"
+                  className="w-1/2 h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
                   onPress={onClose}
                 >
                   Cancel
                 </Button>
                 <Button
-                  className="bg-red-500 hover:bg-red-600 text-white font-medium shadow-md shadow-red-500/20 px-6 rounded-xl border-none"
+                  variant="light"
+                  className="w-1/2 h-12 rounded-none border-none text-danger font-semibold hover:bg-default-100/50 text-[15px]"
                   onPress={() => {
                     if (secretToDelete) {
                       handleDelete(secretToDelete);
