@@ -233,12 +233,7 @@ export default function VaultPage() {
                 {headerTitle}
               </h1>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 text-xs text-default-500 dark:text-default-400 bg-default-100 dark:bg-default-50/50 px-3 py-1 rounded-full border border-default-200/50 font-medium">
-                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-                Sovereign Vault
-              </span>
-            </div>
+
           </div>
         </div>
         {/* Content Section */}

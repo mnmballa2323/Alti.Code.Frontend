@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.27] - 2026-05-27 — Sovereign Vault Header Status Badge Removal
+### Removed
+- **Sovereign Vault Status Badge**: Completely removed the redundant `"Sovereign Vault"` pulse-status bubble badge from the top-right corner of the vault header layout to simplify the interface navigation.
+
 ## [39.37.26] - 2026-05-27 — Sovereign Vault Premium Gray Section Backgrounds
 ### Changed
 - **High-Contrast Gray Section Backgrounds**: Updated all vault page sections and cards from pure white to a premium light gray background (`bg-[#F4F4F6]`) and its dark mode counterpart (`dark:bg-[#161616]`), matching the premium sidebar layout and perfectly eliminating the white-on-white layout blending.
