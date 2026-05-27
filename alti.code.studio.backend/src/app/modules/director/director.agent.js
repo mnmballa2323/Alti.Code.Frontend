@@ -103,15 +103,42 @@ class DirectorAgent {
             task.startTime = new Date();
 
             try {
-                // Determine the correct service method based on agent name
-                // In a real implementation, this would be dynamic.
-                // For now, we simulate execution or route to specific services if imported.
+                const agentMap = {
+                    'The Architect': 'architect',
+                    'The Composer': 'composer',
+                    'The Critic': 'critic',
+                    'The Scribe': 'documentation',
+                    'The Recruiter': 'onboarding',
+                    'The Broadcaster': 'notification'
+                };
 
-                // MOCK EXECUTION for Stability
-                await new Promise(resolve => setTimeout(resolve, 500));
+                const mappedName = agentMap[task.agent] || task.agent.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const agentDef = agentRegistry.get(mappedName);
 
-                task.status = 'completed';
-                task.result = 'Task executed successfully (Mock)';
+                if (agentDef && agentDef.instance && typeof agentDef.instance.consult === 'function') {
+                    logger.info(`🎬 Director: Activating real specialist ${agentDef.name} for task: "${task.task}"`);
+                    
+                    const contextData = [
+                        { path: 'mission_context.txt', content: `Mission Goal: ${mission.goal}\nTask Assignment: ${task.task}\nPrevious Results: ${JSON.stringify(mission.results)}` }
+                    ];
+
+                    const consultResult = await agentDef.instance.consult(task.task, contextData);
+                    
+                    task.status = 'completed';
+                    task.result = typeof consultResult === 'object' && consultResult.content ? consultResult.content : consultResult;
+                    mission.results[task.agent] = task.result;
+                } else {
+                    logger.warn(`🎬 Director: Specialist agent ${task.agent} (mapped: ${mappedName}) not found or has no active instance. Falling back to high-fidelity AI Gateway emulation...`);
+                    
+                    // Fallback to high-fidelity AI Gateway emulation
+                    const prompt = `You are representing the specialist ${task.agent}.\nMission Goal: ${mission.goal}\nYour specific task: ${task.task}\nPrevious Results: ${JSON.stringify(mission.results)}`;
+                    const response = await aiProvider.reason(prompt);
+                    
+                    task.status = 'completed';
+                    task.result = response;
+                    mission.results[task.agent] = response;
+                }
+
                 task.endTime = new Date();
 
             } catch (error) {

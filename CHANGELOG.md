@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.88] - 2026-05-27 — Executive Swarm Orchestrator Real Specialist Integration
+### Added
+- **Dynamic Executive Specialist Execution**: Wired up the `Director`'s task execution loop in `director.agent.js` to dynamically look up and activate the actual registered specialist class instances (such as the `ArchitectAgent`, `ComposerAgent`, etc.) in the central `agentRegistry`, executing their robust `.consult` method rather than a mock timeout.
+- **High-Fidelity AI Emulation Fallback**: Implemented a fallback pipeline that automatically triggers the AI Provider to emulate execution when a mapped specialist is not yet registered in the registry.
+- **E2E Director Swarm Integration Tests**: Created `director.test.js` validating goal decomposition, dynamic class consultation, and degraded AI emulation fallback.
+
 ## [39.37.87] - 2026-05-27 — Architecture Microservice RAG QA Integration
 ### Added
 - **Production RAG Architecture QA**: Replaced the static placeholder answer in the Architecture service's `askQuestion` endpoint with a high-fidelity integration to the world-class `ultimateRagService`. It now dynamically queries Vertex AI Discovery Engine, Spanner Graph, Gemini CLI, and Gemini File Search in parallel, returning rich semantic context and robust citations.
