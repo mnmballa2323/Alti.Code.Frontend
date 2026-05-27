@@ -44,7 +44,6 @@ import {
   Cloud,
   CheckCircle,
   Github,
-  ImageIcon,
   Users,
   Briefcase,
   Activity,
@@ -814,8 +813,6 @@ export default function Sidebar() {
 
       case "/vault":
         return "Vault";
-      case "/assets":
-        return "Assets";
       case "/cloud":
         return "Cloud";
 
@@ -1040,7 +1037,6 @@ export default function Sidebar() {
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],
   );
-  const assets = useSelector((state: RootState) => state.system.assets || []);
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
@@ -1450,29 +1446,6 @@ export default function Sidebar() {
           <button
             className={cn(
               "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/assets"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/assets");
-            }}
-          >
-            <ImageIcon className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Assets
-            </span>
-          </button>
-
-
-
-
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
               pathname === "/instructions"
                 ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
                 : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
@@ -1725,8 +1698,6 @@ export default function Sidebar() {
                       window.dispatchEvent(
                         new CustomEvent("open-document-modal"),
                       );
-                    } else if (pathname === "/assets") {
-                      window.dispatchEvent(new CustomEvent("open-asset-modal"));
                     } else if (pathname.startsWith("/boardroom")) {
                       setIsBoardroomMeetingModalOpen(true);
                     } else {
@@ -2074,55 +2045,6 @@ export default function Sidebar() {
               {documents.length === 0 && (
                 <div className="px-3 py-2 text-xs text-gray-400">
                   No documents added yet.
-                </div>
-              )}
-            </div>
-          ) : pathname === "/assets" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {assets.map((asset) => (
-                <div
-                  key={asset.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("edit-asset", { detail: asset }),
-                    )
-                  }
-                >
-                  <span className="truncate">{asset.name}</span>
-                  <Dropdown
-                    className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                    placement="bottom-end"
-                  >
-                    <DropdownTrigger>
-                      <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Asset options"
-                      className="p-0"
-                      variant="flat"
-                    >
-                      <DropdownItem
-                        key="delete"
-                        className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                        color="danger"
-                        startContent={<Trash2 size={14} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(removeAsset(asset.id));
-                        }}
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              ))}
-              {assets.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No assets added yet.
                 </div>
               )}
             </div>

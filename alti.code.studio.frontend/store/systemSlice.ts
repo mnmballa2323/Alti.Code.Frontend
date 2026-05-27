@@ -28,15 +28,6 @@ export interface DocumentRule {
   isActive: boolean;
 }
 
-export interface AssetRule {
-  id: string;
-  url: string;
-  name: string;
-  assetType: string;
-  customInstructions: string;
-  guardrails: string;
-  isActive: boolean;
-}
 
 export interface AgentStatus {
   id: string;
@@ -53,7 +44,7 @@ interface SystemState {
   connectedClouds: string[];
   repositories: RepositoryRule[];
   documents: DocumentRule[];
-  assets: AssetRule[];
+
 }
 
 const initialState: SystemState = {
@@ -81,7 +72,7 @@ const initialState: SystemState = {
   connectedClouds: [],
   repositories: [],
   documents: [],
-  assets: [],
+
 };
 
 export const systemSlice = createSlice({
@@ -182,33 +173,7 @@ export const systemSlice = createSlice({
         doc.isActive = !doc.isActive;
       }
     },
-    addAsset: (state, action: PayloadAction<Omit<AssetRule, "id">>) => {
-      state.assets.push({
-        ...action.payload,
-        id:
-          "asset-" +
-          Date.now().toString() +
-          "-" +
-          Math.random().toString(36).substr(2, 9),
-      });
-    },
-    updateAsset: (state, action: PayloadAction<AssetRule>) => {
-      const index = state.assets.findIndex((r) => r.id === action.payload.id);
 
-      if (index !== -1) {
-        state.assets[index] = action.payload;
-      }
-    },
-    removeAsset: (state, action: PayloadAction<string>) => {
-      state.assets = state.assets.filter((r) => r.id !== action.payload);
-    },
-    toggleAsset: (state, action: PayloadAction<string>) => {
-      const asset = state.assets.find((r) => r.id === action.payload);
-
-      if (asset) {
-        asset.isActive = !asset.isActive;
-      }
-    },
   },
 });
 
@@ -226,10 +191,7 @@ export const {
   updateDocument,
   removeDocument,
   toggleDocument,
-  addAsset,
-  updateAsset,
-  removeAsset,
-  toggleAsset,
+
 } = systemSlice.actions;
 export const systemController = systemSlice; // Consistent naming
 export default systemSlice.reducer;

@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.13] - 2026-05-26 — Company Assets Page and Codebase Purge
+### Removed
+- **Standalone Assets Page Deletion**: Completely removed the redundant frontend-only mock `/assets` route page directory (`app/assets/page.tsx`) to purge visual islands and maintain focus on the core agentic IDE workspace.
+- **Sidebar & Layout Cleanups**: Stripped all "Assets" navigation buttons, `ImageIcon` imports, selector variables, open modal custom event handlers, and secondary-column catalog lists from `components/sidebar.tsx`.
+- **Redux State & Actions Cleanup**: Purged the unused `AssetRule` interface, initial states, and related `addAsset`, `updateAsset`, `removeAsset`, and `toggleAsset` reducer actions from the global system store (`store/systemSlice.ts`).
+
 ## [39.37.12] - 2026-05-26 — Code Explanation and Database Design Prompt Deck Actions
 ### Added
 - **Explain Code Toolbar Action**: Integrated the custom **Explain Code** (`HelpCircle`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated execution tracing and conceptual walkthrough prompts.
