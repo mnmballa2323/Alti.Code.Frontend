@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.16] - 2026-05-27 — Left Navigation Sidebar Search and Plus Button Integration
+### Added
+- **Interactive Left Navigation Sidebar Search & Create**: Replicated the visual layout of the center column search bar and `+` (New) button inside the primary left sidebar. Staged the input container directly under the repository workspace dropdown, complete with a clean dividing border line underneath.
+- **Dynamic Sidebar Navigation Filtering**: Bound the new left sidebar search input directly to a case-insensitive filtering mechanism (`filteredNavigationItems`) that dynamically filters the primary navigation menu list (Code, Chat, Vault, Cloud, etc.) in real-time as the user types, including a beautiful fallback "No results found" placeholder state.
+- **Hiding on Sidebar Collapse**: Configured the search input and plus button layout container to hide cleanly (`!isSidebarOpen && "hidden"`) when the left sidebar width collapses, preventing any visual breakage or horizontal scrollbars.
+
 ## [39.37.15] - 2026-05-27 — Automations and Canvas Builder Purge
 ### Removed
 - **Standalone Automations & Canvas Router Deletion**: Completely removed the legacy mock workflows and workflow-builder routes (`app/workflows` and `app/workflow-builder`) to maintain absolute focus on core agent-native IDE workspaces.

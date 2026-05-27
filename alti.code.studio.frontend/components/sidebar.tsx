@@ -819,6 +819,101 @@ export default function Sidebar() {
   const [isSecondarySidebarOpen, setIsSecondarySidebarOpen] = useState(true);
   const toggleSecondarySidebar = () =>
     setIsSecondarySidebarOpen(!isSecondarySidebarOpen);
+  const [leftSidebarSearch, setLeftSidebarSearch] = useState("");
+
+  const navigationItems = [
+    {
+      label: "Code",
+      icon: Code,
+      path: "/",
+      isActive: pathname === "/" || pathname === "/code",
+      onClick: () => {
+        dispatch(startNewChat());
+        router.push("/");
+      },
+    },
+    {
+      label: "Chat",
+      icon: MessageSquare,
+      path: "/chat",
+      isActive: pathname.startsWith("/chat"),
+      onClick: () => {
+        router.push("/chat");
+      },
+    },
+    {
+      label: "Vault",
+      icon: Lock,
+      path: "/vault",
+      isActive: pathname === "/vault",
+      onClick: () => {
+        if (pathname === "/vault") {
+          window.dispatchEvent(
+            new CustomEvent("select-secret", { detail: null }),
+          );
+        }
+        router.push("/vault");
+      },
+    },
+    {
+      label: "Cloud",
+      icon: Cloud,
+      path: "/cloud",
+      isActive: pathname === "/cloud",
+      onClick: () => {
+        router.push("/cloud");
+      },
+    },
+    {
+      label: "Instructions",
+      icon: BookOpen,
+      path: "/instructions",
+      isActive: pathname === "/instructions",
+      onClick: () => {
+        router.push("/instructions");
+      },
+    },
+    {
+      label: "Guardrails",
+      icon: Shield,
+      path: "/guardrails",
+      isActive: pathname === "/guardrails",
+      onClick: () => {
+        router.push("/guardrails");
+      },
+    },
+    {
+      label: "Repositories",
+      icon: Github,
+      path: "/repositories",
+      isActive: pathname === "/repositories",
+      onClick: () => {
+        router.push("/repositories");
+      },
+    },
+    {
+      label: "Documentation",
+      icon: BookOpen,
+      path: "/documents",
+      isActive: pathname === "/documents",
+      onClick: () => {
+        router.push("/documents");
+      },
+    },
+    {
+      label: "Integrations",
+      icon: Blocks,
+      path: "/connect-apps",
+      isActive: pathname === "/connect-apps",
+      onClick: () => {
+        router.push("/connect-apps");
+      },
+    },
+  ];
+
+  const filteredNavigationItems = navigationItems.filter((item) =>
+    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+  );
   const [dataFolders, setDataFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1280,208 +1375,78 @@ export default function Sidebar() {
           </Button>
         </div>
 
-        <div className="pt-2 flex-1 overflow-y-auto overflow-x-hidden">
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/" || pathname === "/code"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              dispatch(startNewChat());
-              router.push("/");
-            }}
-          >
-            <Code className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Code
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname.startsWith("/chat")
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/chat");
-            }}
-          >
-            <MessageSquare className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Chat
-            </span>
-          </button>
-          {/* <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/workflow-builder"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/workflow-builder");
-            }}
-          >
-            <Waypoints className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Canvas
-            </span>
-          </button> */}
-
-
-
-
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/vault"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
+        {/* Search bar and + icon on the same line below the line */}
+        <div
+          className={cn(
+            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
+            !isSidebarOpen && "hidden",
+          )}
+        >
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
+            <input
+              className="w-full bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+              placeholder="Search..."
+              value={leftSidebarSearch}
+              onChange={(e) => setLeftSidebarSearch(e.target.value)}
+            />
+          </div>
+          <Button
+            isIconOnly
+            className="bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+            size="sm"
+            title="New"
+            variant="flat"
             onClick={() => {
               if (pathname === "/vault") {
+                window.dispatchEvent(new CustomEvent("open-vault-modal"));
+              } else if (pathname === "/repositories") {
                 window.dispatchEvent(
-                  new CustomEvent("select-secret", { detail: null }),
+                  new CustomEvent("open-repository-modal"),
                 );
+              } else if (pathname === "/documents") {
+                window.dispatchEvent(
+                  new CustomEvent("open-document-modal"),
+                );
+              } else {
+                dispatch(startNewChat());
+                router.push("/");
               }
-              router.push("/vault");
             }}
           >
-            <Lock className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Vault
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/cloud"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/cloud");
-            }}
-          >
-            <Cloud className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Cloud
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/instructions"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/instructions");
-            }}
-          >
-            <BookOpen className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Instructions
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/guardrails"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/guardrails");
-            }}
-          >
-            <Shield className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Guardrails
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/repositories"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/repositories");
-            }}
-          >
-            <Github className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Repositories
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/documents"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/documents");
-            }}
-          >
-            <BookOpen className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Documentation
-            </span>
-          </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/connect-apps"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/connect-apps");
-            }}
-          >
-            <Blocks className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Integrations
-            </span>
-          </button>
+            <Plus className="size-3.5" />
+          </Button>
+        </div>
 
+        <div className="pt-2 flex-1 overflow-y-auto overflow-x-hidden">
+          {filteredNavigationItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <button
+                key={item.label}
+                className={cn(
+                  "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
+                  item.isActive
+                    ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
+                    : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
+                  !isSidebarOpen && "px-0 justify-center min-w-auto",
+                )}
+                onClick={item.onClick}
+              >
+                <IconComponent className={cn("size-4", isSidebarOpen && "mr-2")} />
+                <span
+                  className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+          {filteredNavigationItems.length === 0 && (
+            <div className="text-center py-8 text-xs text-default-400 italic">
+              No results found
+            </div>
+          )}
         </div>
 
         <div
