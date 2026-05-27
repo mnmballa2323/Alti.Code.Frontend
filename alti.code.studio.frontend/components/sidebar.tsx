@@ -1419,31 +1419,33 @@ export default function Sidebar() {
           >
             <LayoutGrid className="size-3.5" />
           </Button>
-          <Button
-            isIconOnly
-            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-            size="sm"
-            title="New"
-            variant="flat"
-            onClick={() => {
-              if (pathname === "/vault") {
-                window.dispatchEvent(new CustomEvent("open-vault-modal"));
-              } else if (pathname === "/repositories") {
-                window.dispatchEvent(
-                  new CustomEvent("open-repository-modal"),
-                );
-              } else if (pathname === "/documents") {
-                window.dispatchEvent(
-                  new CustomEvent("open-document-modal"),
-                );
-              } else {
-                dispatch(startNewChat());
-                router.push("/");
-              }
-            }}
-          >
-            <Plus className="size-3.5" />
-          </Button>
+          {pathname !== "/connect-apps" && (
+            <Button
+              isIconOnly
+              className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              size="sm"
+              title="New"
+              variant="flat"
+              onClick={() => {
+                if (pathname === "/vault") {
+                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                } else if (pathname === "/repositories") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-repository-modal"),
+                  );
+                } else if (pathname === "/documents") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-document-modal"),
+                  );
+                } else {
+                  dispatch(startNewChat());
+                  router.push("/");
+                }
+              }}
+            >
+              <Plus className="size-3.5" />
+            </Button>
+          )}
         </div>
 
         {/* 8 navigation icons toggle container */}
