@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.23] - 2026-05-27 — AltiHQ High-Fidelity Sliding Navigation Toggler
+### Changed
+- **AltiHQ Slider Alignment**: Redesigned the horizontal single-row navigation row to perfectly replicate the premium `altihq.com` layout interface. Only the active icon is styled inside a solid white square box with a thin border and shadow (`bg-white border-default-200 shadow-sm`), acting as a clean sliding tab background indicator, while inactive buttons are rendered borderless and fully transparent (`bg-transparent text-default-400`).
+- **HeroUI Premium Tooltips**: Migrated navigation hover tooltips to `@heroui/react` robust React components, setting up instant trigger delays (`delay={0}`) and custom class-styled dark box popups (`bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg`) showing standard workspace titles (e.g. `Code`, `Chat`, `Vault`, etc.) upon hover, perfectly matching the design from the `altihq.com` workflows indicator.
+
 ## [39.37.22] - 2026-05-27 — Left Navigation Sidebar Tooltips integration
 ### Added
 - **Premium Hover Tooltips**: Integrated high-fidelity custom `<Tooltip>` components wrapping all 8 horizontal navigation buttons inside `components/sidebar.tsx` to provide crisp, instantaneous textual indicators (`Code`, `Chat`, `Vault`, etc.) upon developer hover.

@@ -21,6 +21,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Tooltip,
 } from "@heroui/react";
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
@@ -70,7 +71,6 @@ import {
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 import {
   removeRepository,
@@ -1428,36 +1428,40 @@ export default function Sidebar() {
         <div
           className={cn(
             isSidebarOpen
-              ? "grid grid-cols-8 gap-1 px-2 py-3 border-b border-default-200"
+              ? "grid grid-cols-8 gap-0.5 px-2 py-2.5 border-b border-default-200"
               : "flex flex-col items-center gap-2 px-1 pt-2"
           )}
         >
           {filteredNavigationItems.map((item) => {
             const IconComponent = item.icon;
             return (
-              <Tooltip key={item.label}>
-                <TooltipTrigger asChild>
-                  <button
-                    className={cn(
-                      "flex items-center justify-center transition-all duration-200 relative group border shadow-sm",
-                      isSidebarOpen ? "h-7 w-full rounded-md" : "h-7 w-7 rounded-md",
-                      item.isActive
-                        ? "bg-primary/10 text-primary dark:text-primary-400 border-primary/30"
-                        : "bg-white dark:bg-default-100 text-default-600 dark:text-default-400 hover:bg-default-50 dark:hover:bg-default-200 border-default-200",
-                    )}
-                    onClick={item.onClick}
-                  >
-                    <IconComponent className="size-3.5" />
-                    <span className="sr-only">{item.label}</span>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side={isSidebarOpen ? "top" : "right"}>
-                  <p className="text-xs">{item.label}</p>
-                </TooltipContent>
+              <Tooltip
+                key={item.label}
+                content={item.label}
+                placement={isSidebarOpen ? "top" : "right"}
+                showArrow
+                delay={0}
+                closeDelay={0}
+                classNames={{
+                  content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                }}
+              >
+                <button
+                  className={cn(
+                    "flex items-center justify-center transition-all duration-200 relative group",
+                    isSidebarOpen ? "h-[30px] w-full rounded-md" : "h-[30px] w-[30px] rounded-md",
+                    item.isActive
+                      ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                      : "bg-transparent border-none text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                  )}
+                  onClick={item.onClick}
+                >
+                  <IconComponent className="size-3.5" />
+                  <span className="sr-only">{item.label}</span>
+                </button>
               </Tooltip>
             );
           })}
-
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
             <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
               No results found
