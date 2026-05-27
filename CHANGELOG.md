@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.93] - 2026-05-27 — Google & GitHub Passport OAuth Strategies & PostgreSQL Integration
+### Added
+- **Passport.js Google & GitHub Strategies**: Deployed `google.strategy.js` and `github.strategy.js` under `src/app/modules/auth/`, configuring secure OAuth2 handlers with `passport-google-oauth20` and `passport-github2` for seamless social sign-ins and sign-ups.
+- **PostgreSQL & Prisma DAL Integration**: Refactored OAuth user lifecycle persistence to use `UserRepository.upsertSocialUser(payload)` from the core PostgreSQL/Prisma DAL, guaranteeing flawless database synchronization and account linking.
+- **Handshake Controllers & Social Redirection Routes**: Added `/github` and `/github/callback` routes in `auth.route.js` and wired up `githubAuthCallback` inside `auth.controller.js` to securely generate JWT tokens, set httpOnly refresh cookies, and redirect users to the client dashboard.
+- **Social OAuth Integration Test Suite**: Developed a comprehensive integration test suite `tests/integration/social_auth.test.js` validating Passport registry presence, sign-up user creation, account linking persistence, and JWT token issuance with 100% test success.
+
 ## [39.37.92] - 2026-05-27 — Cloud Marketplace SaaS Procurement & VPC Deployments
 ### Added
 - **Multi-Cloud SaaS Procurement Service**: Created `cloud_marketplace.service.js` under `src/app/modules/marketplace/` to manage SaaS entitlement resolution, subscription activation, and entitlement validation for **Google Cloud**, **AWS**, and **Azure** Marketplaces. Features simulated sandbox execution to enable automated local dev testing.

@@ -36,6 +36,11 @@ export default {
     searchApiKey: process.env.GOOGLE_SEARCH_API_KEY,
     searchCx: process.env.GOOGLE_SEARCH_CX,
   },
+  github: {
+    clientId: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackUrl: process.env.GITHUB_CALLBACK_URL || 'http://localhost:5000/api/v1/auth/github/callback',
+  },
 
   mailgun: {
     mailgun_domain: process.env.MAILGUN_DOMAIN,

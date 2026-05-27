@@ -61,10 +61,12 @@ dotenv.config();
 
 // import { SentinelService } from './src/app/modules/sentinel/sentinel.service.js';
 import passport from 'passport';
-// import googleStrategy from './src/app/modules/auth/google.strategy.js';
+import googleStrategy from './src/app/modules/auth/google.strategy.js';
+import githubStrategy from './src/app/modules/auth/github.strategy.js';
 
 // Initialize Passport Strategies
-// passport.use(googleStrategy);
+passport.use('google', googleStrategy);
+passport.use('github', githubStrategy);
 
 // Initialize Sentinel
 // SentinelService.startWatch().catch(err => console.error('Failed to start Sentinel:', err));

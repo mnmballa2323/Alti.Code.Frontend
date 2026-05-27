@@ -1,6 +1,6 @@
 {
   "name": "alti.code.studio.backend",
-  "version": "39.37.92",
+  "version": "39.37.93",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -175,6 +175,8 @@
     "opossum": "^5.0.1",
     "otp-generator": "^4.0.1",
     "passport": "^0.7.0",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.18.0",
     "pgvector": "^0.2.1",

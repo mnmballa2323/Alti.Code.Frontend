@@ -449,6 +449,23 @@ const googleAuthCallback = catchAsync(async (req, res) => {
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
+const githubAuthCallback = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { accessToken, refreshToken } = authService.generateUserTokens(user);
+
+  // Set Refresh Token into cookie
+  const cookieOption = {
+    secure: config.env === 'production',
+    httpOnly: true,
+    sameSite: 'strict',
+  };
+  res.cookie('refreshToken', refreshToken, cookieOption);
+
+  // Redirect to frontend
+  const frontendUrl = config.client_url || 'http://localhost:3000';
+  res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
+});
+
 const socialLogin = catchAsync(async (req, res) => {
   const result = await authService.socialLoginService(req.body);
   const { refreshToken, ...others } = result;
@@ -483,5 +500,6 @@ export const authController = {
   changePassword,
   sendMailWithGoogleController,
   googleAuthCallback,
+  githubAuthCallback,
 };
 

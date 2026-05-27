@@ -178,4 +178,15 @@ router.get(
   authController.googleAuthCallback,
 );
 
+router.get(
+  '/github',
+  passport.authenticate('github', { scope: ['user:email'] }),
+);
+
+router.get(
+  '/github/callback',
+  passport.authenticate('github', { session: false }),
+  authController.githubAuthCallback,
+);
+
 export const authRoutes = router;
