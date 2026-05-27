@@ -400,7 +400,7 @@ export default function VaultPage() {
                         <Card
                           key={secret.id}
                           isPressable
-                          className="w-full border border-default-200 bg-[#F4F4F6] dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl"
+                          className="w-full border border-default-200 bg-[#F4F4F6] dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl group"
                           shadow="sm"
                           onPress={() => setSelectedSecretId(secret.id)}
                         >
@@ -426,15 +426,9 @@ export default function VaultPage() {
                               </div>
                             </div>
                              <div className="flex items-center gap-3">
-                               <Button
-                                 isIconOnly
-                                 size="sm"
-                                 variant="light"
-                                 className="text-default-400 hover:text-primary hover:bg-primary/10 rounded-xl min-w-[32px] h-[32px]"
-                                 onClick={() => setSelectedSecretId(secret.id)}
-                               >
+                               <div className="flex items-center justify-center text-default-400 group-hover:text-primary group-hover:bg-primary/10 rounded-xl min-w-[32px] h-[32px] transition-all duration-300">
                                  <ChevronRight size={18} />
-                               </Button>
+                               </div>
                              </div>
                           </CardBody>
                         </Card>

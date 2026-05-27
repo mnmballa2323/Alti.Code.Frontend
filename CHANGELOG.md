@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.34] - 2026-05-27 — Stored Secrets Nested Button Hydration Fix
+### Fixed
+- **Nested Button Hydration Mismatch**: Resolved a React console validation error (`<button> cannot contain a nested <button>`) and browser hydration mismatch by replacing the nested HeroUI `<Button>` inside the pressable `<Card>` element with a standard HTML `div` container.
+- **Group-Hover Micro-Animations**: Added `group` to the Card classes and mapped chevron styling to `group-hover:text-primary group-hover:bg-primary/10`, maintaining gorgeous, identical reactive hover effects across the entire card layout with zero nested button elements.
+
 ## [39.37.33] - 2026-05-27 — Apple-Style Delete Alert Dialog Math Spacing Divider
 ### Fixed
 - **Divider Rendering Overlap**: Resolved a layout rendering issue where the central dividing line was overridden or hidden by the flat buttons container. Adjusted button widths using a precise calc reduction layout (`w-[calc(50%-0.5px)]`) and re-integrated the standalone physical vertical divider `div` with absolute pixel sizing (`w-[1px] bg-[#E5E5EA] dark:bg-[#2C2C2E]`), guaranteeing a perfectly straight, 100% visible vertical dividing line between `"Cancel"` and `"Delete"` actions.
