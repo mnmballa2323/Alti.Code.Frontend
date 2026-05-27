@@ -546,14 +546,15 @@ export default function VaultPage() {
               <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex flex-row w-full gap-0 bg-transparent min-h-0">
                 <Button
                   variant="light"
-                  className="w-1/2 h-12 rounded-none border-none border-r border-[#E5E5EA] dark:border-[#2C2C2E] text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
+                  className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
                   onPress={onClose}
                 >
                   Cancel
                 </Button>
+                <div className="w-[1px] h-12 bg-[#E5E5EA] dark:bg-[#2C2C2E] shrink-0" />
                 <Button
                   variant="light"
-                  className="w-1/2 h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
+                  className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
                   onPress={() => {
                     if (secretToDelete) {
                       handleDelete(secretToDelete);
