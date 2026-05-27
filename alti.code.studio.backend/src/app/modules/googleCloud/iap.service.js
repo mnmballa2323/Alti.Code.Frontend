@@ -46,6 +46,11 @@ class GoogleIAPService {
         const iapJwt = req.headers['x-goog-iap-jwt-assertion'];
 
         if (!iapJwt) {
+            if (config.env === 'development') {
+                logger.warn('⚠️ [IAP] Bypassing missing IAP header for local development.');
+                req.user = { email: 'dev@alti.local', role: 'ADMIN' };
+                return next();
+            }
             logger.warn('⚠️ [IAP] Missing x-goog-iap-jwt-assertion header. Access Denied.');
             return res.status(401).json({ error: 'IAP Token Required for Zero-Trust Access.' });
         }

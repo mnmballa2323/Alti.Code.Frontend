@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.11] - 2026-05-26 — Local Development Zero-Trust Authentication Bypass Fix
+### Fixed
+- **Development 401 Unauthorized Error**: Fixed a critical backend bug where the BeyondCorp Google Identity-Aware Proxy (IAP) auth middleware (`verifyIAPToken`) globally blocked local request completions with 401 Server Errors when the `x-goog-iap-jwt-assertion` header was absent. The middleware now correctly checks `config.env === 'development'` and bypasses missing headers dynamically inside the local environment.
+- **Integration Test Suite Timeout**: Resolved a 5000ms vitest timeout error in `ultimateRag.test.js` by allowing local RAG completions to successfully pass the authentication checks.
+
 ## [39.37.10] - 2026-05-26 — Refactoring and Documentation Prompt Deck Actions
 ### Added
 - **Refactor & Optimize Toolbar Action**: Integrated the custom **Refactor & Optimize** (`Wand2`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated clean code and performance optimization prompts.
