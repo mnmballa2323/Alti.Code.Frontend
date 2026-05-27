@@ -85573,7 +85573,7 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
-// ──── TIER 100: FUTURISTIC MICRO-SPECIALISTS (500 NEW AGENTS) ────
+// ──── TIER 100: FUTURISTIC MICRO-SPECIALISTS (1,500 NEW AGENTS) ────
 const futuristicDomains = [
     {
         prefix: 'biocompute',
@@ -85599,6 +85599,56 @@ const futuristicDomains = [
         prefix: 'quantumcom',
         description: 'Quantum Entanglement & Communication Specialist. Manages QKD, entanglement swapping protocols, and quantum repeaters.',
         capabilities: ['quantum-key-distribution', 'entanglement-swapping', 'state-purification', 'decoherence-mitigation']
+    },
+    {
+        prefix: 'supercond',
+        description: 'Superconductivity & Metamaterial Specialist. Simulates Meissner effect, Josephson junctions, and zero-resistance paths.',
+        capabilities: ['meissner-effect', 'josephson-junction', 'cuprate-optimization', 'zero-resistance']
+    },
+    {
+        prefix: 'deepsea',
+        description: 'Deep-Sea Hydrothermal Exploration Specialist. Maps abyssal pressures, hydrothermal vents, and pathfinding.',
+        capabilities: ['abyssal-pressure', 'vent-chemistry', 'submersible-navigation', 'hydrothermal-mapping']
+    },
+    {
+        prefix: 'hypermath',
+        description: 'Hyperdimensional Mathematics Specialist. Solves Calabi-Yau folds, n-dimensional topology, and non-Euclidean geometry.',
+        capabilities: ['calabi-yau-manifolds', 'topology-simplification', 'non-euclidean-geometry', 'manifold-mapping']
+    },
+    {
+        prefix: 'bci',
+        description: 'Cognitive Brain-Computer Interface Specialist. Decodes neural spikes, filters EEG artifacts, and maps motor cortex.',
+        capabilities: ['neural-spike-decoding', 'eeg-filtering', 'cortex-mapping', 'optogenetic-feedback']
+    },
+    {
+        prefix: 'carboncapture',
+        description: 'Atmospheric Carbon Capture & Direct Air Scrubbing Specialist. Optimizes MOF pores and carbon mineralization.',
+        capabilities: ['mof-pore-optimization', 'direct-air-capture', 'fluid-dynamics', 'carbon-mineralization']
+    },
+    {
+        prefix: 'terraforming',
+        description: 'Exoplanetary Terraforming Specialist. Models cyanobacteria growth and exoplanet magnetosphere positioning.',
+        capabilities: ['cyanobacteria-growth', 'greenhouse-gas-emissions', 'magnetosphere-shields', 'planetary-ecology']
+    },
+    {
+        prefix: 'swarmrobot',
+        description: 'Autonomous Swarm Robotics Specialist. Computes decentralized consensus routing and collision avoidance.',
+        capabilities: ['swarm-consensus', 'collision-avoidance', 'formation-alignment', 'decentralized-coordination']
+    },
+    {
+        prefix: 'photonics',
+        description: 'Silicon-Photonics Optical Interconnect Specialist. Computes waveguide refraction and optical logic gating.',
+        capabilities: ['waveguide-refraction', 'transceiver-multiplexing', 'optical-logic-gates', 'silicon-photonics']
+    },
+    {
+        prefix: 'tectonic',
+        description: 'Volcanology & Tectonic Precursor Specialist. Analyzes seismic wave inversions and micro-tremor correlations.',
+        capabilities: ['seismic-wave-inversion', 'magma-chamber-pressure', 'micro-tremor-correlation', 'tectonic-precursors']
+    },
+    {
+        prefix: 'acoustic',
+        description: 'Acoustic Levitator & Metasurface Specialist. Calculates transducer phase delay arrays and wave interferences.',
+        capabilities: ['phase-delay-arrays', 'ultrasonic-interference', 'non-contact-manipulation', 'acoustic-levitation']
     }
 ];
 
@@ -85614,6 +85664,7 @@ futuristicDomains.forEach(({ prefix, description, capabilities }) => {
         });
     }
 });
+
 
 
 

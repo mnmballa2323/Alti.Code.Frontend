@@ -140,8 +140,8 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('biosynthetic_compiler');
     expect(names).toContain('space_telemetry');
 
-    // Assert scale is over 10,000 active route-able backend agents
-    expect(agentRegistry.count).toBeGreaterThanOrEqual(10000);
+    // Assert scale is over 11,000 active route-able backend agents
+    expect(agentRegistry.count).toBeGreaterThanOrEqual(11000);
     
     // Assert discovery of micro-specialists across domains
     expect(names).toContain('biocompute_0');
@@ -150,4 +150,16 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('astronav_12');
     expect(names).toContain('fusion_88');
     expect(names).toContain('quantumcom_99');
+
+    // Assert discovery of Tier 100 2nd-wave sub-specialists
+    expect(names).toContain('supercond_0');
+    expect(names).toContain('deepsea_99');
+    expect(names).toContain('hypermath_50');
+    expect(names).toContain('bci_12');
+    expect(names).toContain('carboncapture_88');
+    expect(names).toContain('terraforming_99');
+    expect(names).toContain('swarmrobot_25');
+    expect(names).toContain('photonics_75');
+    expect(names).toContain('tectonic_33');
+    expect(names).toContain('acoustic_66');
 });
