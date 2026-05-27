@@ -472,7 +472,7 @@ export default function VaultPage() {
           header: "border-none pt-6 pb-2 px-6",
           body: "py-4 px-6 space-y-6",
           footer: "border-none pt-2 pb-6 px-6 flex justify-end gap-3",
-          closeButton: "top-3 right-5 hover:bg-default-100 dark:hover:bg-[#2C2C2E] active:scale-95 transition-all duration-200",
+          closeButton: "top-3 right-6 hover:bg-default-100 dark:hover:bg-[#2C2C2E] active:scale-95 transition-all duration-200",
         }}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
