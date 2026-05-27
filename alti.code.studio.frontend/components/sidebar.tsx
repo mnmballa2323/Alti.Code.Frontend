@@ -1421,13 +1421,12 @@ export default function Sidebar() {
           >
             <Plus className="size-3.5" />
           </Button>
-        </div>
 
         {/* 8 navigation icons toggle container */}
         <div
           className={cn(
             isSidebarOpen
-              ? "grid grid-cols-4 gap-2 px-3 py-3 border-b border-default-200"
+              ? "grid grid-cols-8 gap-1 px-2 py-3 border-b border-default-200"
               : "flex flex-col items-center gap-2 px-1 pt-2"
           )}
         >
@@ -1439,20 +1438,20 @@ export default function Sidebar() {
                 title={item.label}
                 className={cn(
                   "flex items-center justify-center transition-all duration-200 relative group border shadow-sm",
-                  isSidebarOpen ? "h-10 w-full rounded-lg" : "h-8 w-8 rounded-lg",
+                  isSidebarOpen ? "h-7 w-full rounded-md" : "h-7 w-7 rounded-md",
                   item.isActive
                     ? "bg-primary/10 text-primary dark:text-primary-400 border-primary/30"
                     : "bg-white dark:bg-default-100 text-default-600 dark:text-default-400 hover:bg-default-50 dark:hover:bg-default-200 border-default-200",
                 )}
                 onClick={item.onClick}
               >
-                <IconComponent className="size-4" />
+                <IconComponent className="size-3.5" />
                 <span className="sr-only">{item.label}</span>
               </button>
             );
           })}
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
-            <div className="col-span-4 text-center py-2 text-xs text-default-400 italic">
+            <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
               No results found
             </div>
           )}

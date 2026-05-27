@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.20] - 2026-05-27 — Left Navigation Sidebar Single-Row Toggle Layout
+### Changed
+- **Single-Row Horizontal Navigation**: Refactored the 8 navigation icon buttons (Code, Chat, Vault, Cloud, Instructions, Guardrails, Repositories, Documentation) from a 4x2 grid to a single, beautifully consolidated horizontal row of square white buttons (`grid-cols-8 gap-1 px-2 py-3 border-b border-default-200`) below the search bar container.
+- **Ultra-Compact Button Styling**: Rescaled each square icon box to a compact and crisp dimension (`h-7` / 28px) with slightly rounded corners (`rounded-md`), embedding clean, micro-sized icons (`size-3.5` / 14px) for optimized spacing.
+- **Collapsed Sidebar Consistency**: Synchronized the collapsed state buttons to match the compact `h-7 w-7 rounded-md` square formatting, maintaining clean and consistent geometry in both open and narrow views.
+
 ## [39.37.19] - 2026-05-27 — Left Navigation Sidebar Grid Toggle Redesign
 ### Changed
 - **4x2 Icon Grid Toggle**: Redesigned the primary left navigation sidebar menu by replacing the vertical stacked links with a premium, highly-compact 4x2 grid of 8 square icon buttons (Code, Chat, Vault, Cloud, Instructions, Guardrails, Repositories, Documentation) positioned directly below the search bar container.
