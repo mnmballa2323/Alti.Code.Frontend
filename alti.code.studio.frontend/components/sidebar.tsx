@@ -52,6 +52,7 @@ import {
   Megaphone,
   Server,
   Layout,
+  LayoutGrid,
   Crown,
   Scale,
   Calculator,
@@ -1386,7 +1387,7 @@ export default function Sidebar() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
             <input
-              className="w-full bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+              className="w-full bg-white dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
               placeholder="Search..."
               value={leftSidebarSearch}
               onChange={(e) => setLeftSidebarSearch(e.target.value)}
@@ -1394,7 +1395,19 @@ export default function Sidebar() {
           </div>
           <Button
             isIconOnly
-            className="bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+            size="sm"
+            title="Integrations"
+            variant="flat"
+            onClick={() => {
+              router.push("/connect-apps");
+            }}
+          >
+            <LayoutGrid className="size-3.5" />
+          </Button>
+          <Button
+            isIconOnly
+            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
             size="sm"
             title="New"
             variant="flat"

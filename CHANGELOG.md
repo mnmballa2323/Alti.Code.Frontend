@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.17] - 2026-05-27 — Left Navigation Sidebar Search & App Icon Enhancements
+### Added
+- **White Background Inputs & Buttons**: Updated the search input field and action buttons inside the primary left sidebar to use a solid white background color (`bg-white`) in light mode and dark mode counterpart (`dark:bg-default-100`) to match the high-contrast presentation of `altihq.com` perfectly.
+- **Apps Menu Grid Icon**: Integrated the Lucide `LayoutGrid` icon button directly to the left of the `+` (New) button inside the left sidebar search container. Clicking the apps menu grid button dynamically routes the workspace to the connected integrations page (`/connect-apps`) for rapid tools management.
+
 ## [39.37.16] - 2026-05-27 — Left Navigation Sidebar Premium Gray Background Update
 ### Changed
 - **AltiHQ Brand Alignment**: Overwrote the primary column left sidebar menu container in `components/sidebar.tsx` to use the premium light gray background color (`bg-[#F4F4F6]`) and dark mode counterpart (`dark:bg-[#161616]`), matching the exact visual brand color aesthetics of the official production `altihq.com` layout.
