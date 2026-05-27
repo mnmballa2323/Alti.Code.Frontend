@@ -85955,6 +85955,38 @@ const getProviderSpecOverrides = (key, spec, disp, safePrefix) => {
             database: { name: "Distributed Vector Cache", desc: "Manages Qdrant vector databases, Redis cache pipelines, and hardware bounds.", caps: ["vector-indexing", "redis-caching"] },
             identity: { name: "Kubernetes Secret Vaults", desc: "Secures k8s cluster namespaces, API keys, and injection variables.", caps: ["k8s-namespaces", "secrets-injection"] },
             iac: { name: "Custom Helm & K8s Stacks", desc: "Compiles custom Helm charts, Kubernetes templates, and deploys drift sweeps.", caps: ["helm-compilation", "k8s-manifests"] }
+        },
+        oracle: {
+            compute: { name: "OCI Bare Metal & VMs", desc: "Optimizes AMD/Intel virtual machines, dense bare metal instances, and block volume attachments.", caps: ["oci-compute", "bare-metal", "block-volumes"] },
+            storage: { name: "OCI Object Storage", desc: "Configures high-durability Object Storage buckets, pre-authenticated requests (PAR), and archive storage tiers.", caps: ["oci-buckets", "pre-auth-requests", "archiving-tiers"] },
+            serverless: { name: "OCI Functions & Events", desc: "Manages serverless OCI Functions, Cloud Events triggers, and Oracle API Gateway integrations.", caps: ["oci-functions", "cloud-events", "api-gateway"] },
+            database: { name: "Oracle Autonomous DB", desc: "Tunes Autonomous Data Warehouse (ADW) and Transaction Processing (ATP) database autoscaling and partition indexes.", caps: ["autonomous-db", "atp-tuning", "index-optimization"] },
+            identity: { name: "OCI IAM & Tenancy Security", desc: "Enforces compartment structures, OCI IAM policies, dynamic groups, and vault encryption keys.", caps: ["oci-iam", "compartments", "tenancy-hardening"] },
+            iac: { name: "OCI Resource Manager", desc: "Executes Resource Manager stacks, coordinates Terraform OCI state files, and analyzes configuration drifts.", caps: ["resource-manager", "terraform-oci", "drift-sweeps"] }
+        },
+        "IBM-Cloud": {
+            compute: { name: "IBM Cloud VPC Servers", desc: "Optimizes virtual server instances, bare metal servers, and VPC transit gateways.", caps: ["ibm-vpc-compute", "transit-gateways"] },
+            storage: { name: "IBM Cloud Object Storage", desc: "Manages Cloud Object Storage buckets, SQL query integrations, and immutable data vaults.", caps: ["ibm-cos", "cos-vaults"] },
+            serverless: { name: "IBM Cloud Functions", desc: "Coordinates serverless Apache OpenWhisk actions, event feeds, and triggers.", caps: ["ibm-functions", "openwhisk-actions"] },
+            database: { name: "IBM Cloudant & Db2", desc: "Tunes Cloudant NoSQL schemas, Db2 warehouses, and indexing metrics.", caps: ["cloudant-nosql", "db2-tuning"] },
+            identity: { name: "IBM Cloud IAM Guardian", desc: "Configures IAM access groups, service IDs, API keys, and secret manager vaults.", caps: ["ibm-iam", "service-ids"] },
+            iac: { name: "IBM Cloud Schematics", desc: "Compiles Schematics Terraform workspaces, config plans, and executes deployment runs.", caps: ["ibm-schematics", "terraform-schematics"] }
+        },
+        digitalocean: {
+            compute: { name: "Droplets & App Platform", desc: "Optimizes compute Droplets sizing, custom tags, and App Platform container builds.", caps: ["droplet-sizing", "app-platform"] },
+            storage: { name: "Spaces Object Storage", desc: "Configures Spaces CDN object caching, CORS lists, and volumes attachments.", caps: ["spaces-storage", "spaces-cdn"] },
+            serverless: { name: "DO Functions serverless", desc: "Manages serverless DigitalOcean Functions, API routes, and trigger schedules.", caps: ["do-functions", "api-routing"] },
+            database: { name: "DO Managed Databases", desc: "Coordinates Postgres/Redis/MySQL managed clusters, connection limits, and backup windows.", caps: ["do-databases", "connection-pooling"] },
+            identity: { name: "DO Teams access security", desc: "Enforces DO Team member roles, OAuth logins, and API access tokens.", caps: ["do-teams", "api-tokens"] },
+            iac: { name: "DigitalOcean API & Terraform", desc: "Compiles Terraform DO structures, doctl CLI scripts, and dynamic inventory sync.", caps: ["doctl-scripts", "terraform-do"] }
+        },
+        heroku: {
+            compute: { name: "Heroku Dynos scale", desc: "Balances Heroku Dynos (Web/Worker/one-off), resource sizing, and autoscaling thresholds.", caps: ["dyno-scaling", "worker-dynos"] },
+            storage: { name: "Heroku Slugs & Pipelines", desc: "Manages buildpacks compiling slugs, pipeline releases, and review apps setups.", caps: ["slug-compilation", "heroku-pipelines"] },
+            serverless: { name: "Heroku Edge Addons", desc: "Configures CDN edge extensions, background jobs scheduler tasks, and runtime bindings.", caps: ["edge-addons", "heroku-scheduler"] },
+            database: { name: "Heroku Postgres & Key-Value", desc: "Tunes Heroku Postgres databases, connection pools, and Heroku Redis caches.", caps: ["heroku-postgres", "heroku-redis"] },
+            identity: { name: "Heroku Teams & ConfigVars", desc: "Secures Heroku Config Vars, environment secrets, and Heroku Team access bounds.", caps: ["config-vars", "heroku-teams"] },
+            iac: { name: "Heroku CLI & Terraform", desc: "Synthesizes Heroku Terraform resources, Heroku CLI commands, and release hook loops.", caps: ["heroku-cli", "terraform-heroku"] }
         }
     };
 
