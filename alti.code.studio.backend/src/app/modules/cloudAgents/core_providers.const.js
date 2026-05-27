@@ -1,7 +1,7 @@
 /**
  * 🔒 SOVEREIGN OMNI-CLOUD LOCK
  * 
- * This file cryptographically and immutably locks the 44 Cloud Provider
+ * This file cryptographically and immutably locks the 66 Cloud Provider
  * Open-Source Repositories targets into the architecture. 
  * 
  * UNDER NO CIRCUMSTANCES should any AI Agent or script remove or bypass
@@ -12,16 +12,25 @@
 export const CORE_OMNI_CLOUD_PROVIDERS = Object.freeze([
     // Hyperscalers
     'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
+    
     // AI & GPU Compute
     'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',
+    
     // Developer & PaaS
     'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
+    
     // Global & Regional
-    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'exoscale',
+    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'sinopec-cloud', 'exoscale',
+    
     // Bare Metal & Edge
-    'cherryservers', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cloudflare',
-    // VPS
-    'ionos-cloud', 'hetznercloud', 'linode', 'UpCloudLtd', 'vultr', 'liquidweb',
+    'cherryservers', 'packethost', 'fastly', 'lumen', 'macstadium', 'maxihost', 'rackspace', 'packet', 'cloudflare',
+    
+    // VPS Infrastructure
+    'ionos-cloud', 'atlanticnet', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb',
+    
     // Enterprise Clouds
-    'aiven', 'cloudera', 'databricks', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb'
+    'aiven', 'arubacloud', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware',
+    
+    // Telco & Networking
+    'biznetnetworks', 'btcloud', 'catonetworks', 'centurylink', 'gtscentraleurope', 'megaport', 'nttcommunications', 't-systems', 'zayo'
 ]);

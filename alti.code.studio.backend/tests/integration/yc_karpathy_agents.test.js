@@ -76,7 +76,7 @@ test('LicensingGuardianAgent: Identity and Operational Spec', async () => {
     expect(licensingGuardianAgent.name).toBe('licensing_guardian');
     expect(licensingGuardianAgent.description).toContain('Licensing Compliance Agent');
     const res = await licensingGuardianAgent.consult('Audit react-router package');
-    expect(res.content).toContain('Open-Source Licensing Compliance Report');
+    expect(res.content).toContain('Open-Source Licensing Compliance Audit Report');
 });
 
 test('DbArchitectAgent: Identity and Operational Spec', async () => {
@@ -140,8 +140,8 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('biosynthetic_compiler');
     expect(names).toContain('space_telemetry');
 
-    // Assert scale is over 11,000 active route-able backend agents
-    expect(agentRegistry.count).toBeGreaterThanOrEqual(11000);
+    // Assert scale is over 20,000 active route-able backend agents
+    expect(agentRegistry.count).toBeGreaterThanOrEqual(20000);
     
     // Assert discovery of micro-specialists across domains
     expect(names).toContain('biocompute_0');
@@ -151,15 +151,15 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('fusion_88');
     expect(names).toContain('quantumcom_99');
 
-    // Assert discovery of Tier 100 2nd-wave sub-specialists
+    // Assert discovery of Tier 100 2nd-wave sub-specialists and high-index scaling units
     expect(names).toContain('supercond_0');
-    expect(names).toContain('deepsea_99');
-    expect(names).toContain('hypermath_50');
-    expect(names).toContain('bci_12');
-    expect(names).toContain('carboncapture_88');
-    expect(names).toContain('terraforming_99');
-    expect(names).toContain('swarmrobot_25');
-    expect(names).toContain('photonics_75');
-    expect(names).toContain('tectonic_33');
-    expect(names).toContain('acoustic_66');
+    expect(names).toContain('deepsea_699');
+    expect(names).toContain('hypermath_350');
+    expect(names).toContain('bci_699');
+    expect(names).toContain('carboncapture_588');
+    expect(names).toContain('terraforming_699');
+    expect(names).toContain('swarmrobot_625');
+    expect(names).toContain('photonics_675');
+    expect(names).toContain('tectonic_633');
+    expect(names).toContain('acoustic_699');
 });

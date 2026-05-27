@@ -1,0 +1,18 @@
+[submodule "submodules/claw-code"]
+	path = submodules/claw-code
+	url = https://github.com/ultraworkers/claw-code
+[submodule "submodules/ui-ux-pro-max-skill"]
+	path = submodules/ui-ux-pro-max-skill
+	url = https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+[submodule "submodules/awesome-claude-skills"]
+	path = submodules/awesome-claude-skills
+	url = https://github.com/ComposioHQ/awesome-claude-skills
+[submodule "submodules/CowAgent"]
+	path = submodules/CowAgent
+	url = https://github.com/zhayujie/CowAgent
+[submodule "submodules/antigravity-awesome-skills"]
+	path = submodules/antigravity-awesome-skills
+	url = https://github.com/sickn33/antigravity-awesome-skills
+[submodule "submodules/ruflo"]
+	path = submodules/ruflo
+	url = https://github.com/ruvnet/ruflo

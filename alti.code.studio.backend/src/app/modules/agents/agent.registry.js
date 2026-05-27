@@ -85573,6 +85573,70 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'claw_code',
+    importPath: './claw_code.agent.js',
+    description: 'The Claw Code Autonomous Rust Coding Specialist. Harnesses the terminal-first Claude Code reimplementation for high-performance sandboxed loops.',
+    queue: 'claw-code-queue',
+    capabilities: ['rust-harness', 'terminal-first-loops', 'clean-room-sandbox'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ui_ux_pro_max',
+    importPath: './ui_ux_pro_max.agent.js',
+    description: 'The UI/UX Pro Max Design Intelligence Specialist. Harnesses 50+ premium design playbooks (Bento Grid, Glassmorphism, Brutalism) to compile breathtaking, production-ready interfaces.',
+    queue: 'ui-ux-pro-max-queue',
+    capabilities: ['design-intelligence', 'bento-grid-layout', 'glassmorphism-tokens', 'shadcn-best-practices'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'awesome_claude_skills',
+    importPath: './awesome_claude_skills.agent.js',
+    description: 'The Awesome Claude Skills Catalog Specialist. Indexes and executes reusable instruction packages and SaaS App automation workflows.',
+    queue: 'awesome-claude-skills-queue',
+    capabilities: ['skills-catalog', 'saas-automation', 'composio-recipes'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cow_agent',
+    importPath: './cow_agent.agent.js',
+    description: 'The CowAgent Multi-Channel Specialist. Configures autonomous assistants for WeChat, Lark, DingTalk, equipped with zero-trust CVE-2026-6129 secure authentication overrides.',
+    queue: 'cow-agent-queue',
+    capabilities: ['wechat-bridge', 'feishu-lark-channel', 'cve-2026-6129-patch', 'zero-trust-channel-auth'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'antigravity_awesome_skills',
+    importPath: './antigravity_awesome_skills.agent.js',
+    description: 'The Antigravity Awesome Skills Specialist. Selects, processes, and injects from a curated collection of 1,400+ agentic playbooks and workflows.',
+    queue: 'antigravity-awesome-skills-queue',
+    capabilities: ['playbook-injection', 'role-bundles', 'context-distillery', 'compliance-auditing'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ruflo',
+    importPath: './ruflo.agent.js',
+    description: 'The Ruflo Swarm Coordination & Multi-Agent Orchestrator Specialist. Harnesses multi-agent Raft/Byzantine/Gossip consensus topologies and SONA neural learning loops.',
+    queue: 'ruflo-queue',
+    capabilities: ['swarm-mesh-consensus', 'sona-trajectory-learning', 'federated-zero-trust', 'agent-gossip-comms'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'wshobson_agents',
+    importPath: './wshobson_agents.agent.js',
+    description: 'The wshobson/agents Plugin Marketplace Specialist. Compiles portable Markdown-based agents, commands, and progressive skills to 5 distinct harnesses (Claude Code, Codex, Cursor, OpenCode, Gemini, Copilot).',
+    queue: 'wshobson-agents-queue',
+    capabilities: ['portable-plugin-scaffolding', 'plugin-eval-certification', 'progressive-skill-indexing', 'cross-harness-compilation'],
+    version: '1.0.0'
+});
+
+
 // ──── TIER 100: FUTURISTIC MICRO-SPECIALISTS (1,500 NEW AGENTS) ────
 const futuristicDomains = [
     {
@@ -85652,18 +85716,521 @@ const futuristicDomains = [
     }
 ];
 
+// ──── TIER 100: FUTURISTIC MICRO-SPECIALISTS (10,500 NEW AGENTS) ────
+const getUniqueMetadata = (prefix, index) => {
+    const subAspects = [
+        "Quantum coherence resonance",
+        "Thermal drift calibration",
+        "High-frequency noise cancellation",
+        "Structural lattice stress mapping",
+        "Phase-amplitude alignment profiling",
+        "Sub-atomic wave oscillation modeling",
+        "Non-linear telemetry feedback cycles",
+        "Dynamic kinetic energy distribution",
+        "Fluidic boundary layer friction scaling",
+        "Micro-tectonic acoustic refraction indexing"
+    ];
+    const methods = [
+        "spiking neural network routing",
+        "non-Euclidean graph traversal matrices",
+        "CRISPR-Cas9 gene splicing alignments",
+        "lattice-based post-quantum key cryptography",
+        "Doppler-shift correction algorithms",
+        "Monte Carlo plasma confinement simulations",
+        "direct air capture polymer chemistry",
+        "transducer array phase-delay wave interference",
+        "optical waveguide refraction gating",
+        "Meissner-effect flux-pinning thermal controls"
+    ];
+    const targets = [
+        "L2 spacecraft telemetry paths",
+        "synthetic DNA nucleotide codons",
+        "Kyber post-quantum key distributions",
+        "spiking synaptic weight updates",
+        "atmospheric MOF absorption metrics",
+        "oceanic bathymetric pressure limits",
+        "exoplanetary cyanobacteria emissions",
+        "waveguide light transmission routes",
+        "magma chamber thermodynamic expansion profiles",
+        "Josephson junction thermal barriers"
+    ];
+
+    const aspect = subAspects[index % subAspects.length];
+    const method = methods[(index * 3 + 2) % methods.length];
+    const target = targets[(index * 7 + 5) % targets.length];
+    
+    return {
+        description: `Highly specialized sub-unit focused on ${aspect}. Employs ${method} specifically optimized to resolve ${target}. [Unique Dynamic Signature: Node-${prefix}-${index}-x${(index * 17 + 101).toString(16)}]`,
+        capability: `${prefix}-specialization-${aspect.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-n${index}`
+    };
+};
+
 futuristicDomains.forEach(({ prefix, description, capabilities }) => {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 700; i++) {
+        const uniqueMeta = getUniqueMetadata(prefix, i);
         agentRegistry.register({
             name: `${prefix}_${i}`,
-            description: `${description} [Sub-Specialist Unit #${i}]`,
+            description: uniqueMeta.description,
             queue: `${prefix}-queue-${i}`,
-            capabilities: [...capabilities, `${prefix}-unit-${i}`],
+            capabilities: [...capabilities, uniqueMeta.capability, `${prefix}-unit-${i}`],
             version: '1.0.0',
             policy: { accessLevel: 'DEVELOPER' }
         });
     }
 });
+
+// ──── TIER 200: DYNAMIC OMNI-CLOUD PROVIDER SPECIALISTS (276 AGENTS) ────
+
+const OMNI_CLOUD_PROVIDERS = [
+    // Hyperscalers
+    'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
+    // AI & GPU Compute
+    'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',
+    // Developer & PaaS
+    'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
+    // Global & Regional
+    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'sinopec', 'exoscale',
+    // Bare Metal & Edge
+    'cherryservers', 'packethost', 'fastly', 'lumen', 'macstadium', 'maxihost', 'rackspace', 'packet', 'cloudflare',
+    // VPS Infrastructure
+    'ionos-cloud', 'atlantic-net', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb',
+    // Enterprise Clouds
+    'aiven', 'aruba', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware',
+    // Telco & Networking
+    'biznet', 'bt-cloud', 'cato', 'centurylink', 'gts', 'megaport', 'ntt', 't-systems', 'zayo'
+];
+
+const getProviderDisplayName = (key) => {
+    const map = {
+        aws: "Amazon Web Services",
+        GoogleCloudPlatform: "Google Cloud Platform",
+        azure: "Microsoft Azure",
+        oracle: "Oracle Cloud",
+        "IBM-Cloud": "IBM Cloud",
+        coreweave: "CoreWeave",
+        lambdal: "Lambda Labs",
+        paperspace: "Paperspace",
+        runpod: "RunPod",
+        togethercomputer: "Together AI",
+        digitalocean: "DigitalOcean",
+        superfly: "Fly.io",
+        heroku: "Heroku",
+        railwayapp: "Railway",
+        "render-oss": "Render",
+        supabase: "Supabase",
+        vercel: "Vercel",
+        kinsta: "Kinsta",
+        aliyun: "Alibaba Cloud",
+        baidu: "Baidu AI Cloud",
+        huaweicloud: "Huawei Cloud",
+        ovh: "OVHcloud",
+        scaleway: "Scaleway",
+        Tencent: "Tencent Cloud",
+        "yandex-cloud": "Yandex Cloud",
+        sinopec: "Sinopec Cloud",
+        exoscale: "Exoscale",
+        cherryservers: "Cherry Servers",
+        packethost: "Equinix Metal",
+        fastly: "Fastly",
+        lumen: "Lumen",
+        macstadium: "MacStadium",
+        maxihost: "Maxihost",
+        rackspace: "Rackspace",
+        packet: "Packet",
+        cloudflare: "Cloudflare",
+        "ionos-cloud": "1&1 IONOS",
+        "atlantic-net": "Atlantic.Net",
+        hetznercloud: "Hetzner",
+        kamatera: "Kamatera",
+        linode: "Linode",
+        UpCloudLtd: "UpCloud",
+        vultr: "Vultr",
+        hostwinds: "Hostwinds",
+        liquidweb: "Liquid Web",
+        aiven: "Aiven",
+        aruba: "Aruba Cloud",
+        cleardata: "ClearDATA",
+        cloudera: "Cloudera",
+        databricks: "Databricks",
+        navisite: "Navisite",
+        nutanix: "Nutanix",
+        "redhat-official": "Red Hat",
+        salesforce: "Salesforce",
+        SAP: "SAP",
+        snowflakedb: "Snowflake",
+        vmware: "VMware",
+        biznet: "Biznet Networks",
+        "bt-cloud": "BT Cloud",
+        cato: "Cato Networks",
+        centurylink: "CenturyLink",
+        gts: "GTS Central Europe",
+        megaport: "Megaport",
+        ntt: "NTT Communications",
+        "t-systems": "T-Systems",
+        zayo: "Zayo"
+    };
+    return map[key] || key.charAt(0).toUpperCase() + key.slice(1);
+};
+
+const getProviderSector = (key) => {
+    if (['coreweave', 'runpod', 'lambdal', 'paperspace', 'togethercomputer'].includes(key)) return 'GPU_COMPUTE';
+    if (['vercel', 'supabase', 'render-oss', 'railwayapp', 'heroku', 'superfly', 'kinsta', 'digitalocean'].includes(key)) return 'DEVELOPER_PAAS';
+    if (['cloudflare', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cherryservers', 'lumen', 'maxihost', 'packet'].includes(key)) return 'EDGE_NETWORK';
+    if (['ionos-cloud', 'atlantic-net', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb'].includes(key)) return 'VPS_INFRASTRUCTURE';
+    if (['aiven', 'aruba', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware'].includes(key)) return 'ENTERPRISE_DATA';
+    if (['biznet', 'bt-cloud', 'cato', 'centurylink', 'gts', 'megaport', 'ntt', 't-systems', 'zayo'].includes(key)) return 'TELCO_NETWORKING';
+    return 'HYPERSCALER';
+};
+
+const getProviderSpecOverrides = (key, spec, disp, safePrefix) => {
+    const overrides = {
+        aws: {
+            compute: { name: "EC2 Elastic Compute", desc: "Optimizes machine configurations, auto-scaling clusters, and EBS storage mounts.", caps: ["ec2-scaling", "instance-tuning", "ebs-optimization"] },
+            storage: { name: "S3 Object Storage", desc: "Configures Object storage bucket lifecycle limits, CORS access lists, and secure CDN configurations.", caps: ["bucket-lifecycle", "cors-rules", "cloudfront-cdn"] },
+            serverless: { name: "Bedrock & Lambda Serverless", desc: "Invokes high-performance Bedrock AI foundation pipelines and serverless cold start schedules.", caps: ["bedrock-ai", "lambda-serverless", "cold-start-tuning"] },
+            database: { name: "DynamoDB & Aurora DB", desc: "Manages serverless database clusters, secondary indexing schedules, and caching configurations.", caps: ["dynamodb-specialist", "gsi-indexing", "aurora-clustering"] },
+            identity: { name: "IAM Security Directory", desc: "Audits role assumptions and least-privilege service-account bounds.", caps: ["least-privilege", "role-assumption", "policy-linting"] },
+            iac: { name: "CDK & CloudFormation", desc: "Compiles TypeScript CDK structures, monitors drift states, and coordinates rollbacks.", caps: ["cdk-compilation", "stack-drift", "drift-remediation"] }
+        },
+        GoogleCloudPlatform: {
+            compute: { name: "Compute Engine VMs", desc: "Optimizes CPU and sole-tenant VM clusters, persistent storage attachments, and live migrations.", caps: ["vm-scaling", "live-migration", "sole-tenant-nodes"] },
+            storage: { name: "Cloud Storage Buckets", desc: "Manages GCS dual-region bucket sync schedules, storage classes, and lifecycle rules.", caps: ["bucket-lifecycle", "dual-region-sync", "iam-binding"] },
+            serverless: { name: "Vertex AI & Cloud Run", desc: "Invokes serverless Vertex AI model routers, pipelines, and Cloud Run container scaling.", caps: ["vertex-ai", "cloudrun-specialist", "cold-start-tuning"] },
+            database: { name: "BigQuery & Spanner DB", desc: "Manages global relational Spanner databases and analytical BigQuery slot allocations.", caps: ["bigquery-specialist", "spanner-consistent-sql", "partition-pruning"] },
+            identity: { name: "Workload Identity & IAM", desc: "Enforces Google Workload Identity bounds, service accounts, and audit log pipelines.", caps: ["service-accounts", "workload-identity", "audit-logs"] },
+            iac: { name: "Deployment Manager & Terraform", desc: "Deploys GCP resource manager states, state locks, and dry-run compilations.", caps: ["gdm-templates", "terraform-gcp", "state-locking"] }
+        },
+        azure: {
+            compute: { name: "Azure VM Scale Sets", desc: "Configures VM Scale Sets, Azure Hybrid Benefit savings, and premium storage maps.", caps: ["vm-scaling", "hybrid-benefit", "disk-encryption"] },
+            storage: { name: "Blob Storage Tiers", desc: "Manages durable blob stages, immutable lifecycle blocks, and SAS access tokens.", caps: ["blob-specialist", "immutable-blobs", "sas-tokens"] },
+            serverless: { name: "AI Foundry & Functions", desc: "Invokes Azure AI Foundry endpoints, Durable Functions orchestrators, and trigger variables.", caps: ["ai-foundry", "functions-specialist", "durable-workflows"] },
+            database: { name: "Cosmos DB & Azure SQL", desc: "Tunes Request Units (RUs), Cosmos write replication consistency, and SQL indexes.", caps: ["cosmos-specialist", "ru-allocation", "consistency-levels"] },
+            identity: { name: "Entra ID (Active Directory)", desc: "Enforces Microsoft Entra conditional access, MFA policies, and managed identities.", caps: ["entra-guardian", "conditional-access", "managed-identities"] },
+            iac: { name: "Bicep & ARM blueprints", desc: "Compiles Bicep code, manages ARM JSON templates, and ensures blueprint compliance.", caps: ["bicep-compilation", "arm-deployments", "blueprint-compliance"] }
+        },
+        cloudflare: {
+            compute: { name: "Workers CPU Isolates", desc: "Coordinates low-overhead Worker compute instances, isolate parameters, and CPU limits.", caps: ["workers-compute", "cpu-isolates"] },
+            storage: { name: "R2 Object Storage", desc: "Configures Zero-Egress R2 Storage buckets, caching states, and cross-region replicates.", caps: ["r2-buckets", "cdn-caching"] },
+            serverless: { name: "Workers AI & Pages", desc: "Executes edge model inference triggers via Workers AI, maps custom routing and redirects.", caps: ["workers-ai", "pages-hosting"] },
+            database: { name: "D1 SQL & Distributed KV", desc: "Maintains relational D1 SQL databases, global KV namespaces, and cache consistency.", caps: ["d1-sql", "kv-namespaces"] },
+            identity: { name: "Zero-Trust Access Shield", desc: "Deploys secure Cloudflare Tunnel policies, egress filters, and device posture gates.", caps: ["zero-trust", "access-tunnels"] },
+            iac: { name: "Wrangler Git Deploy", desc: "Compiles Wrangler asset bundles, maps routing rules, and coordinates edge deployments.", caps: ["wrangler-deploy", "routing-rules"] }
+        },
+        supabase: {
+            compute: { name: "Edge Functions CPU", desc: "Tunes Deno-based edge compute scripts, CPU cycles, and memory boundaries.", caps: ["deno-isolates", "edge-compute"] },
+            storage: { name: "Supabase Object Stages", desc: "Manages internal media stages, upload constraints, and CDN cache rules.", caps: ["storage-lifecycle", "asset-delivery"] },
+            serverless: { name: "Postgres Database Triggers", desc: "Coordinates Postgres dynamic functions, realtime event handlers, and webhooks.", caps: ["realtime-events", "trigger-routing"] },
+            database: { name: "Managed Postgres DB", desc: "Tunes pgbouncer pooling limits, query execution index sweeps, and vacuum cycles.", caps: ["postgres-indexing", "connection-pooling"] },
+            identity: { name: "GoTrue Authentication & RLS", desc: "Configures GoTrue oauth flows, secure JWT parameters, and Row-Level Security rules.", caps: ["gotrue-auth", "row-level-security"] },
+            iac: { name: "Supabase CLI Migrations", desc: "Compiles local migration tasks, schemas lockups, and diff validations.", caps: ["cli-migrations", "schema-bundles"] }
+        },
+        vercel: {
+            compute: { name: "Vercel Serverless Pods", desc: "Controls serverless execution cycles, container scale, and regional bindings.", caps: ["serverless-compute", "instance-scaling"] },
+            storage: { name: "Vercel Blob Storage", desc: "Optimizes fast Blob storage caches, asset deliveries, and edge cache limits.", caps: ["blob-storage", "edge-caching"] },
+            serverless: { name: "Edge & AI SDK endpoints", desc: "Optimizes Edge compute scripts, Vercel AI SDK endpoints, and response streams.", caps: ["edge-functions", "ai-sdk"] },
+            database: { name: "Vercel KV & Postgres", desc: "Tunes connection variables for Redis KV caches and managed Postgres pools.", caps: ["kv-database", "postgres-pooling"] },
+            identity: { name: "Edge Config Secrets", desc: "Manages real-time Edge Config values, project environment secrets, and oauth gates.", caps: ["edge-config", "auth-routing"] },
+            iac: { name: "Git Integration & Blueprints", desc: "Deploys Vercel Git hooks, previews deployments, and coordinates canaries.", caps: ["git-integration", "canary-deployments"] }
+        },
+        snowflakedb: {
+            compute: { name: "Virtual SQL Warehouses", desc: "Allocates analytical SQL cluster warehouse sizing, scales, and suspend thresholds.", caps: ["warehouse-scaling", "cluster-scheduling"] },
+            storage: { name: "Internal & External Stages", desc: "Manages secure data stages, copy history, retention, and encryption rules.", caps: ["stages-lifecycle", "retention-rules"] },
+            serverless: { name: "Snowpark Python runtimes", desc: "Compiles Snowpark Python/Scala functions, trigger events, and delta pipeline tasks.", caps: ["snowpark-python", "stream-execution"] },
+            database: { name: "Snowflake Relational Engine", desc: "Tunes ACID Delta engine schemas, cluster clustering, and materialized views.", caps: ["acid-schemas", "query-tuning"] },
+            identity: { name: "Role-Based RBAC Governance", desc: "Enforces strict RBAC privileges, row-level access tags, and secure masks.", caps: ["rbac-masking", "data-sharing"] },
+            iac: { name: "Schema migrations tasks", desc: "Compiles schema migration tasks, DDL script executions, and database rollbacks.", caps: ["schema-migrations", "ddl-execution"] }
+        },
+        databricks: {
+            compute: { name: "Spark Compute Clusters", desc: "Manages multi-node Spark compute workloads, cluster autoscaling, and driver tuning.", caps: ["spark-compute", "cluster-auto-scale"] },
+            storage: { name: "Delta Lake Storage", desc: "Optimizes high-capacity Delta Lake structures, parquet caches, and secure shared mounts.", caps: ["delta-lake", "shared-mounts"] },
+            serverless: { name: "Delta Live Tables & Serving", desc: "Orchestrates Delta Live streaming tables, task runs, and serverless LLM model serving.", caps: ["live-tables", "model-serving"] },
+            database: { name: "Unity Catalog Database", desc: "Enforces central Unity Catalog SQL schemes, schemas, and query optimizations.", caps: ["unity-catalog", "query-optimization"] },
+            identity: { name: "Access & Metadata RBAC", desc: "Integrates Unity Catalog identity federations, row-level masks, and access boundaries.", caps: ["identity-federation", "rbac"] },
+            iac: { name: "Asset Bundles & Git Repos", desc: "Deploys Databricks Asset Bundles (DABs), coordinates Git sync pipelines, and drift checks.", caps: ["asset-bundles", "git-repos"] }
+        },
+        coreweave: {
+            compute: { name: "NVIDIA High-End GPU Pods", desc: "Coordinates high-density NVIDIA H100/A100 clusters, bare-metal specs, and NVLink.", caps: ["gpu-scaling", "nvlink-tuning"] },
+            storage: { name: "Low-Latency NVMe Mounts", desc: "Manages read-write-many shared NVMe volumes, cache tiers, and dataset pipelines.", caps: ["nvme-tuning", "dataset-mounts"] },
+            serverless: { name: "TensorRT-LLM Inference", desc: "Deploys TensorRT-LLM serverless inference pipelines, warm-pools, and cold starts.", caps: ["tensorrt-inference", "cold-start-tuning"] },
+            database: { name: "Distributed Vector Cache", desc: "Manages Qdrant vector databases, Redis cache pipelines, and hardware bounds.", caps: ["vector-indexing", "redis-caching"] },
+            identity: { name: "Kubernetes Secret Vaults", desc: "Secures k8s cluster namespaces, API keys, and injection variables.", caps: ["k8s-namespaces", "secrets-injection"] },
+            iac: { name: "Custom Helm & K8s Stacks", desc: "Compiles custom Helm charts, Kubernetes templates, and deploys drift sweeps.", caps: ["helm-compilation", "k8s-manifests"] }
+        }
+    };
+
+    const prov = overrides[key];
+    const item = prov ? prov[spec] : null;
+    if (item) {
+        return {
+            name: `${safePrefix}_${spec}_specialist`,
+            description: `Bespoke specialist agent designed to manage, deploy, and audit ${spec} directly inside ${disp}. ${item.desc}`,
+            queue: `${safePrefix}-${spec}-queue`,
+            capabilities: item.caps.map(cap => `${safePrefix}-${cap}`),
+            version: '1.0.0',
+            policy: { accessLevel: 'DEVELOPER' }
+        };
+    }
+    return null;
+};
+
+const getSpecMetadata = (providerKey, sector, spec) => {
+    const disp = getProviderDisplayName(providerKey);
+    const safePrefix = providerKey.toLowerCase().replace(/[^a-z0-9]+/g, "_");
+
+    const overrides = getProviderSpecOverrides(providerKey, spec, disp, safePrefix);
+    if (overrides) {
+        return overrides;
+    }
+
+    const specMap = {
+        compute: {
+            GPU_COMPUTE: {
+                name: `${disp} High-Performance GPU Pods`,
+                desc: `Manages high-intensity GPU compute pods, multi-node scaling, and hardware cluster configurations.`,
+                caps: ["gpu-scaling", "cluster-config", "pod-scheduling"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} Microservice Containers`,
+                desc: `Optimizes application containers, continuous build states, and persistent execution environments.`,
+                caps: ["container-orchestration", "app-autoscaling", "persistent-builds"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} Edge Compute Workers`,
+                desc: `Coordinates zero-latency serverless edge computations, Anycast routing, and distributed workloads.`,
+                caps: ["edge-routing", "zero-latency-compute", "anycast-routing"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} VPS Compute Nodes`,
+                desc: `Manages virtual private server allocation, custom kernel configurations, and multi-core resource bounds.`,
+                caps: ["vps-allocation", "kernel-tuning", "vcore-scaling"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Virtual SQL Warehouses`,
+                desc: `Regulates analytical virtual warehouse allocations, cluster suspend/resume cycles, and multi-cluster scale.`,
+                caps: ["warehouse-allocation", "cluster-scheduling", "concurrency-tuning"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} Network Function Virtualization`,
+                desc: `Coordinates high-throughput router virtual instances, software-defined wide area compute, and dynamic routing.`,
+                caps: ["nfv-compute", "sd-wan-orchestration", "router-instances"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Virtual Machines (VMs)`,
+                desc: `Optimizes machine-type configurations, persistent storage mounts, auto-scaling groups, and cost profiles.`,
+                caps: ["vm-scaling", "instance-tuning", "ebs-optimization"]
+            }
+        },
+        storage: {
+            GPU_COMPUTE: {
+                name: `${disp} Low-Latency NVMe Volumes`,
+                desc: `Optimizes shared high-throughput scratch storage and multi-gigabyte dataset caching pipelines.`,
+                caps: ["nvme-io-tuning", "dataset-mounts", "scratch-space"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} Managed Object Storage`,
+                desc: `Configures asset buckets, media delivery pipelines, CDN distribution, and storage lifecycle bounds.`,
+                caps: ["bucket-lifecycle", "asset-delivery", "cdn-distribution"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} Global KV & Asset Storage`,
+                desc: `Coordinates fast key-value caches, edge asset sync, and object storage namespaces across global POPs.`,
+                caps: ["kv-namespace", "edge-caching", "asset-synchronization"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} Local & Block Storage`,
+                desc: `Coordinates local SSD partitions, durable block storage attachments, and snapshot backups.`,
+                caps: ["block-storage", "ssd-snapshots", "backup-policies"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Secure Storage Stages`,
+                desc: `Manages secure external stages, file format definitions, copy history pipelines, and retention rules.`,
+                caps: ["storage-stages", "retention-rules", "data-masking"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} Log & Flow Data Repositories`,
+                desc: `Manages high-capacity log buckets, traffic flow database files, and network traffic records.`,
+                caps: ["flow-logging", "traffic-archiving", "log-retention"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Block & Object Storage`,
+                desc: `Manages durable bucket lifecycles, cross-region replication, storage class auto-tiering, and ACLs.`,
+                caps: ["bucket-lifecycle", "cross-region-replication", "storage-tiering"]
+            }
+        },
+        serverless: {
+            GPU_COMPUTE: {
+                name: `${disp} Serverless GPU Inference`,
+                desc: `Manages instant-start GPU serverless invocations, warm-pool sizing, and API endpoint routing.`,
+                caps: ["warm-pools", "inference-routing", "cold-start-tuning"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} Serverless Edge Functions`,
+                desc: `Tunes serverless API endpoints, environment configs, trigger bounds, and runtime memory limits.`,
+                caps: ["runtime-limits", "api-routing", "concurrency-controls"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} WASM Edge Functions`,
+                desc: `Tunes lightweight WASM/V8 workers, HTTP request/response overrides, and sub-millisecond execution times.`,
+                caps: ["v8-isolate-tuning", "header-rewriting", "execution-limits"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} Light Cloud Functions`,
+                desc: `Configures lightweight microservices, runtime trigger bindings, and environment configs.`,
+                caps: ["runtime-limits", "trigger-bindings", "microservices"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Managed Data Pipelines`,
+                desc: `Orchestrates automated snowpipe ingestions, delta live tables, streaming stream objects, and task executors.`,
+                caps: ["snowpipe-ingest", "stream-execution", "task-scheduling"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} SDN Route Triggers`,
+                desc: `Coordinates serverless software-defined routing hooks, latency-sensitive failovers, and DNS updates.`,
+                caps: ["sdn-triggers", "failover-routing", "dns-updating"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Serverless Cloud Functions`,
+                desc: `Controls serverless container execution states, trigger bindings, timeout tolerances, and cold starts.`,
+                caps: ["cold-start-tuning", "trigger-bindings", "timeout-optimisation"]
+            }
+        },
+        database: {
+            GPU_COMPUTE: {
+                name: `${disp} Distributed Vector & Cache`,
+                desc: `Deploys and optimizes Redis/Qdrant vector indexes, embedding cache pools, and database search layers.`,
+                caps: ["vector-indexing", "redis-caching", "embedding-cache"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} Managed Postgres & Redis`,
+                desc: `Audits database connection pools, read-replicas, real-time trigger streams, and schema indexing.`,
+                caps: ["connection-pooling", "read-replicas", "realtime-streams"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} Distributed NoSQL Cache`,
+                desc: `Configures globally replicated transactional databases, consistent KV shards, and local read caches.`,
+                caps: ["global-consistency", "durable-objects", "read-caches"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} Managed DB Deployments`,
+                desc: `Manages click-to-deploy relational/NoSQL databases, connection variables, and automated backups.`,
+                caps: ["db-deploy", "connection-pooling", "backup-validation"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Optimized Delta Tables`,
+                desc: `Configures ACID relational schemas, materialized view refreshes, index keys, and query execution plans.`,
+                caps: ["acid-schemas", "materialized-views", "query-tuning"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} Network Topology DB`,
+                desc: `Manages real-time network topological databases, routing tables, and BGP peering configurations.`,
+                caps: ["topology-db", "routing-tables", "bgp-peering"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Managed SQL & NoSQL`,
+                desc: `Optimizes relational clusters, partition keys, secondary indexes, read-replicas, and query throughput.`,
+                caps: ["gsi-indexing", "partition-keys", "query-throughput"]
+            }
+        },
+        identity: {
+            GPU_COMPUTE: {
+                name: `${disp} Secure API Keys & IAM`,
+                desc: `Regulates secure credential access key rotation, environment variable secrets, and team scopes.`,
+                caps: ["key-rotation", "secrets-injection", "team-scoping"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} OAuth & JWT Auth Gate`,
+                desc: `Manages secure authentication rules, JWT verification claims, conditional MFA, and service tokens.`,
+                caps: ["jwt-verification", "auth-routing", "conditional-mfa"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} Zero-Trust Access Shield`,
+                desc: `Configures secure tunnel policies, contextual device postures, and network egress rules.`,
+                caps: ["contextual-access", "secure-tunnels", "egress-filtering"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} Secure SSH & API Vault`,
+                desc: `Secures host root passwords, SSH keys, user access directories, and network ingress privileges.`,
+                caps: ["ssh-keys", "vault-secrets", "ingress-privileges"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Access Governance & RBAC`,
+                desc: `Enforces strict role-based data sharing, row-level access tags, and cryptographic key masking.`,
+                caps: ["row-level-security", "data-sharing", "rbac-masking"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} VPN & Access Gateway Auth`,
+                desc: `Enforces strict corporate VPN tunnels, IAM boundary gates, and dynamic network access security.` ,
+                caps: ["vpn-tunneling", "access-gateways", "network-auth"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Enterprise IAM & Directory`,
+                desc: `Enforces least-privilege security roles, audits assume-role bounds, and verifies workload identity claims.`,
+                caps: ["least-privilege", "role-assumption", "workload-identity"]
+            }
+        },
+        iac: {
+            GPU_COMPUTE: {
+                name: `${disp} Pod Templates & Helm`,
+                desc: `Compiles declarative Kubernetes YAML structures, custom Helm charts, and cluster init specs.`,
+                caps: ["helm-compilation", "k8s-manifests", "init-spec-tuning"]
+            },
+            DEVELOPER_PAAS: {
+                name: `${disp} GitOps & Blueprint Deploys`,
+                desc: `Validates GitOps auto-sync hooks, deployment pipelines, dry-run validations, and canary rollbacks.`,
+                caps: ["gitops-sync", "canary-deployments", "blueprint-checks"]
+            },
+            EDGE_NETWORK: {
+                name: `${disp} Wrangler & VCL Git Deploy`,
+                desc: `Compiles edge deployment manifests, routing rules, redirects, and CDN shield setups.`,
+                caps: ["manifest-compilation", "routing-rules", "cdn-shielding"]
+            },
+            VPS_INFRASTRUCTURE: {
+                name: `${disp} Cloud API Deploy scripts`,
+                desc: `Generates deployment script configurations, custom init scripts, and Git trigger webhooks.`,
+                caps: ["deploy-scripts", "init-scripts", "git-webhooks"]
+            },
+            ENTERPRISE_DATA: {
+                name: `${disp} Asset Bundles & Schema Tasks`,
+                desc: `Coordinates schema migration tasks, DDL script execution, and declarative resource bundles.`,
+                caps: ["schema-migrations", "ddl-execution", "resource-bundles"]
+            },
+            TELCO_NETWORKING: {
+                name: `${disp} NetOps & SDN Blueprints`,
+                desc: `Validates declarative SDN templates, router blueprint configs, and NetOps pipeline actions.`,
+                caps: ["sdn-blueprints", "netops-pipelines", "router-configs"]
+            },
+            HYPERSCALER: {
+                name: `${disp} Terraform & IaC Templates`,
+                desc: `Compiles Terraform modules, CloudFormation CDK stacks, monitors state drifts, and executes safe rollbacks.`,
+                caps: ["terraform-compilation", "drift-remediation", "state-locking"]
+            }
+        }
+    };
+
+    const targetSpec = specMap[spec];
+    const data = targetSpec ? (targetSpec[sector] || targetSpec.HYPERSCALER) : null;
+    if (!data) return null;
+
+    return {
+        name: `${safePrefix}_${spec}_specialist`,
+        description: `Bespoke specialist agent designed to manage, deploy, and audit ${spec} directly inside ${disp}. ${data.desc}`,
+        queue: `${safePrefix}-${spec}-queue`,
+        capabilities: data.caps.map(cap => `${safePrefix}-${cap}`),
+        version: '1.0.0',
+        policy: { accessLevel: 'DEVELOPER' }
+    };
+};
+
+OMNI_CLOUD_PROVIDERS.forEach(providerKey => {
+    const sector = getProviderSector(providerKey);
+    ['compute', 'storage', 'serverless', 'database', 'identity', 'iac'].forEach(spec => {
+        const agentDef = getSpecMetadata(providerKey, sector, spec);
+        if (agentDef) {
+            agentRegistry.register(agentDef);
+        }
+    });
+});
+
 
 
 

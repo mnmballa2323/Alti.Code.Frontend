@@ -1,91 +1,170 @@
-# Agent Infrastructure
+# Everything Claude Code (ECC) — Agent Instructions
 
-This folder is the portable brain. Any harness (Claude Code, Cursor, Windsurf,
-OpenCode, OpenClaw, Hermes, standalone Python) can mount it and get the
-same memory, skills, and protocols.
+This is a **production-ready AI coding plugin** providing 61 specialized agents, 246 skills, 76 commands, and automated hook workflows for software development.
 
-## Memory (read in this order)
-- `memory/personal/PREFERENCES.md` — stable user conventions
-- `memory/working/WORKSPACE.md` — current task state
-- `memory/working/REVIEW_QUEUE.md` — pending candidate lessons waiting for you
-- `memory/semantic/DECISIONS.md` — past architectural choices
-- `memory/semantic/LESSONS.md` — distilled patterns (rendered from `lessons.jsonl`)
-- `memory/episodic/AGENT_LEARNINGS.jsonl` — raw experience log (top-k by salience)
+**Version:** 2.0.0-rc.1
 
-## Review Queue (host-agent responsibility)
+## Core Principles
 
-Candidate lessons are clustered + staged automatically by `memory/auto_dream.py`.
-The host agent — you — does the actual review using the CLI tools below.
+1. **Agent-First** — Delegate to specialized agents for domain tasks
+2. **Test-Driven** — Write tests before implementation, 80%+ coverage required
+3. **Security-First** — Never compromise on security; validate all inputs
+4. **Immutability** — Always create new objects, never mutate existing ones
+5. **Plan Before Execute** — Plan complex features before writing code
 
-Check `memory/working/REVIEW_QUEUE.md` at session start. If pending > 10 or
-oldest staged > 7 days, review before substantive work.
+## Available Agents
 
-Workflow:
-1. `python .agent/tools/list_candidates.py` — pending candidates, sorted by priority
-2. For each: decide accept / reject / defer based on claim, evidence_ids,
-   cluster_size, and any contradictions with existing LESSONS.md
-3. `python .agent/tools/graduate.py <id> --rationale "..."` to accept
-4. `python .agent/tools/reject.py <id> --reason "..."` to reject
-5. `python .agent/tools/reopen.py <id>` to requeue a previously-rejected item
-6. Review in a **batch**, not one-by-one — cross-candidate contradictions
-   only surface when you see multiple at once.
+| Agent | Purpose | When to Use |
+|-------|---------|-------------|
+| planner | Implementation planning | Complex features, refactoring |
+| architect | System design and scalability | Architectural decisions |
+| tdd-guide | Test-driven development | New features, bug fixes |
+| code-reviewer | Code quality and maintainability | After writing/modifying code |
+| security-reviewer | Vulnerability detection | Before commits, sensitive code |
+| build-error-resolver | Fix build/type errors | When build fails |
+| e2e-runner | End-to-end Playwright testing | Critical user flows |
+| refactor-cleaner | Dead code cleanup | Code maintenance |
+| doc-updater | Documentation and codemaps | Updating docs |
+| cpp-reviewer | C/C++ code review | C and C++ projects |
+| cpp-build-resolver | C/C++ build errors | C and C++ build failures |
+| fsharp-reviewer | F# functional code review | F# projects |
+| docs-lookup | Documentation lookup via Context7 | API/docs questions |
+| go-reviewer | Go code review | Go projects |
+| go-build-resolver | Go build errors | Go build failures |
+| kotlin-reviewer | Kotlin code review | Kotlin/Android/KMP projects |
+| kotlin-build-resolver | Kotlin/Gradle build errors | Kotlin build failures |
+| database-reviewer | PostgreSQL/Supabase specialist | Schema design, query optimization |
+| python-reviewer | Python code review | Python projects |
+| django-reviewer | Django code review | Django apps, DRF APIs, ORM, migrations |
+| django-build-resolver | Django build, migration, and setup errors | Django startup, dependency, migration, collectstatic failures |
+| java-reviewer | Java and Spring Boot code review | Java/Spring Boot projects |
+| java-build-resolver | Java/Maven/Gradle build errors | Java build failures |
+| loop-operator | Autonomous loop execution | Run loops safely, monitor stalls, intervene |
+| harness-optimizer | Harness config tuning | Reliability, cost, throughput |
+| rust-reviewer | Rust code review | Rust projects |
+| rust-build-resolver | Rust build errors | Rust build failures |
+| pytorch-build-resolver | PyTorch runtime/CUDA/training errors | PyTorch build/training failures |
+| mle-reviewer | Production ML pipeline review | ML pipelines, evals, serving, monitoring, rollback |
+| typescript-reviewer | TypeScript/JavaScript code review | TypeScript/JavaScript projects |
 
-The heuristic prefilter in `memory/validate.py` has already dropped obvious
-junk (too-short claims, exact duplicates). Everything staged needs real
-judgment. Rationale is required for graduation — rubber-stamped promotions
-are the exact failure mode this layer prevents.
+## Agent Orchestration
 
-## Skills
-- `skills/_index.md` — read first for discovery
-- `skills/_manifest.jsonl` — machine-readable skill metadata
-- Load a full `SKILL.md` only when its triggers match the current task
-- Every skill has a self-rewrite hook; invoke it after failures
+Use agents proactively without user prompt:
+- Complex feature requests → **planner**
+- Code just written/modified → **code-reviewer**
+- Bug fix or new feature → **tdd-guide**
+- Architectural decision → **architect**
+- Security-sensitive code → **security-reviewer**
+- Autonomous loops / loop monitoring → **loop-operator**
+- Harness config reliability and cost → **harness-optimizer**
 
-## Design Systems
-- If the project root contains `DESIGN.md`, treat it as the source of truth
-  for visual design decisions and load `skills/design-md/SKILL.md` when a
-  task mentions `DESIGN.md`, Google Stitch, design tokens, design system,
-  or visual design. (The skill's `preconditions` field gates loading on
-  `DESIGN.md` actually existing — keep this rule in lockstep with
-  `skills/_manifest.jsonl` to avoid same-task / different-harness drift.)
-- Prefer exact tokens, component rules, and design rationale from
-  `DESIGN.md` over invented colors, typography, spacing, shadows, or motion.
-- Do not modify `DESIGN.md` unless the user explicitly asks for a design
-  system change; implementation work consumes the contract, it doesn't
-  edit it.
+Use parallel execution for independent operations — launch multiple agents simultaneously.
 
-## Protocols
-- `protocols/permissions.md` — read before any tool call
-- `protocols/tool_schemas/` — typed interfaces for external tools
-- `protocols/delegation.md` — rules for sub-agent handoff
+## Security Guidelines
 
-## Host-agent CLI tools (in `tools/`)
-Daily driver, highest-leverage first:
-- `recall.py "<intent>"` — surface graduated lessons relevant to what
-  you're about to do. **Run before deploy / migration / timestamp / debug /
-  refactor work.** This is how lessons cross harnesses.
-- `learn.py "<rule>" --rationale "<why>"` — teach the agent a new lesson
-  in one shot (stage + graduate + render). For rules you already know.
-- `show.py` — one-screen dashboard of brain state: episodes, candidates,
-  lessons, failing skills, activity graph.
-- `data_layer_export.py` — local cross-harness activity/data-layer export:
-  agent events, cron timelines, tokens/cost estimates, categories,
-  harness mix, `dashboard.html`, and `daily-report.md`.
-- `data_flywheel_export.py` — local export of approved, redacted runs into
-  trace records, context cards, eval cases, training-ready JSONL, and
-  flywheel metrics. It does not train models or call APIs.
-- `list_candidates.py` / `graduate.py` / `reject.py` / `reopen.py` — review
-  protocol for patterns the dream cycle has staged.
-- `memory_reflect.py <skill> <action> <outcome>` — log a significant event.
+**Before ANY commit:**
+- No hardcoded secrets (API keys, passwords, tokens)
+- All user inputs validated
+- SQL injection prevention (parameterized queries)
+- XSS prevention (sanitized HTML)
+- CSRF protection enabled
+- Authentication/authorization verified
+- Rate limiting on all endpoints
+- Error messages don't leak sensitive data
 
-## Rules
-1. Check memory before decisions you have been corrected on before.
-2. If `REVIEW_QUEUE.md` shows backlog past threshold, handle it before the new task.
-3. Log every significant action to `memory/episodic/AGENT_LEARNINGS.jsonl`
-   via `.agent/tools/memory_reflect.py`.
-4. Update `memory/working/WORKSPACE.md` as you work; archive on completion.
-5. Never hand-edit `memory/semantic/LESSONS.md` — it's rendered from
-   `lessons.jsonl`. Use `graduate.py` / `reject.py` instead.
-6. Follow `protocols/permissions.md`. Blocked means blocked.
-7. When a self-rewrite hook fires, propose conservative edits only.
-8. The harness is dumb on purpose. Reasoning lives in skills + the host agent.
+**Secret management:** NEVER hardcode secrets. Use environment variables or a secret manager. Validate required secrets at startup. Rotate any exposed secrets immediately.
+
+**If security issue found:** STOP → use security-reviewer agent → fix CRITICAL issues → rotate exposed secrets → review codebase for similar issues.
+
+## Coding Style
+
+**Immutability (CRITICAL):** Always create new objects, never mutate. Return new copies with changes applied.
+
+**File organization:** Many small files over few large ones. 200-400 lines typical, 800 max. Organize by feature/domain, not by type. High cohesion, low coupling.
+
+**Error handling:** Handle errors at every level. Provide user-friendly messages in UI code. Log detailed context server-side. Never silently swallow errors.
+
+**Input validation:** Validate all user input at system boundaries. Use schema-based validation. Fail fast with clear messages. Never trust external data.
+
+**Code quality checklist:**
+- Functions small (<50 lines), files focused (<800 lines)
+- No deep nesting (>4 levels)
+- Proper error handling, no hardcoded values
+- Readable, well-named identifiers
+
+## Testing Requirements
+
+**Minimum coverage: 80%**
+
+Test types (all required):
+1. **Unit tests** — Individual functions, utilities, components
+2. **Integration tests** — API endpoints, database operations
+3. **E2E tests** — Critical user flows
+
+**TDD workflow (mandatory):**
+1. Write test first (RED) — test should FAIL
+2. Write minimal implementation (GREEN) — test should PASS
+3. Refactor (IMPROVE) — verify coverage 80%+
+
+Troubleshoot failures: check test isolation → verify mocks → fix implementation (not tests, unless tests are wrong).
+
+## Development Workflow
+
+1. **Plan** — Use planner agent, identify dependencies and risks, break into phases
+2. **TDD** — Use tdd-guide agent, write tests first, implement, refactor
+3. **Review** — Use code-reviewer agent immediately, address CRITICAL/HIGH issues
+4. **Capture knowledge in the right place**
+   - Personal debugging notes, preferences, and temporary context → auto memory
+   - Team/project knowledge (architecture decisions, API changes, runbooks) → the project's existing docs structure
+   - If the current task already produces the relevant docs or code comments, do not duplicate the same information elsewhere
+   - If there is no obvious project doc location, ask before creating a new top-level file
+5. **Commit** — Conventional commits format, comprehensive PR summaries
+
+## Workflow Surface Policy
+
+- `skills/` is the canonical workflow surface.
+- New workflow contributions should land in `skills/` first.
+- `commands/` is a legacy slash-entry compatibility surface and should only be added or updated when a shim is still required for migration or cross-harness parity.
+
+## Git Workflow
+
+**Commit format:** `<type>: <description>` — Types: feat, fix, refactor, docs, test, chore, perf, ci
+
+**PR workflow:** Analyze full commit history → draft comprehensive summary → include test plan → push with `-u` flag.
+
+## Architecture Patterns
+
+**API response format:** Consistent envelope with success indicator, data payload, error message, and pagination metadata.
+
+**Repository pattern:** Encapsulate data access behind standard interface (findAll, findById, create, update, delete). Business logic depends on abstract interface, not storage mechanism.
+
+**Skeleton projects:** Search for battle-tested templates, evaluate with parallel agents (security, extensibility, relevance), clone best match, iterate within proven structure.
+
+## Performance
+
+**Context management:** Avoid last 20% of context window for large refactoring and multi-file features. Lower-sensitivity tasks (single edits, docs, simple fixes) tolerate higher utilization.
+
+**Build troubleshooting:** Use build-error-resolver agent → analyze errors → fix incrementally → verify after each fix.
+
+## Project Structure
+
+```
+agents/          — 61 specialized subagents
+skills/          — 243 workflow skills and domain knowledge
+commands/        — 76 slash commands
+hooks/           — Trigger-based automations
+rules/           — Always-follow guidelines (common + per-language)
+scripts/         — Cross-platform Node.js utilities
+mcp-configs/     — 14 MCP server configurations
+tests/           — Test suite
+```
+
+`commands/` remains in the repo for compatibility, but the long-term direction is skills-first.
+
+## Success Metrics
+
+- All tests pass with 80%+ coverage
+- No security vulnerabilities
+- Code is readable and maintainable
+- Performance is acceptable
+- User requirements are met
