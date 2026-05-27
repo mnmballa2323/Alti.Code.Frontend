@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.36] - 2026-05-27 — Sibling HTML Input Labels Overlap Elimination
+### Fixed
+- **Conflicting Inner Box Labels**: Eliminated the overlapping labels inside the edit textboxes by completely removing the internal `label` properties from the HeroUI `<Input>` and `<Select>` elements, rendering them instead as native sibling HTML `<label>` elements with precise vertical spacing (`gap-1.5`). This renders the textbox interiors 100% clean and eliminates the possibility of label-text layout clashes.
+
 ## [39.37.35] - 2026-05-27 — Add/Edit Secret Premium Modal Redesign
 ### Fixed
 - **Label Overlapping Collisions**: Resolved input label overlapping issues on Account Name, Service Provider, and Secret Token fields by integrating HeroUI `labelPlacement="outside"` styling, cleanly positioning interactive labels above input boundaries.

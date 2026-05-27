@@ -471,52 +471,58 @@ export default function VaultPage() {
                 </p>
               </ModalHeader>
               <ModalBody>
-                <Input
-                  label="Account / Reference Name"
-                  labelPlacement="outside"
-                  placeholder="e.g. Production AWS Credentials"
-                  value={newName}
-                  variant="bordered"
-                  onValueChange={setNewName}
-                  classNames={{
-                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
-                    inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                    input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                  }}
-                />
+                <div className="flex flex-col gap-1.5 w-full">
+                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
+                    Account / Reference Name
+                  </label>
+                  <Input
+                    placeholder="e.g. Production AWS Credentials"
+                    value={newName}
+                    variant="bordered"
+                    onValueChange={setNewName}
+                    classNames={{
+                      inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                      input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                    }}
+                  />
+                </div>
 
-                <Select
-                  label="Service Provider"
-                  labelPlacement="outside"
-                  selectedKeys={[newService]}
-                  variant="bordered"
-                  onChange={(e) => setNewService(e.target.value)}
-                  classNames={{
-                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
-                    trigger: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                    value: "text-sm text-default-900 font-medium",
-                  }}
-                >
-                  <SelectItem key="GitHub">GitHub</SelectItem>
-                  <SelectItem key="Azure">Azure</SelectItem>
-                  <SelectItem key="OpenAI">OpenAI / Anthropic</SelectItem>
-                  <SelectItem key="Custom">Custom API</SelectItem>
-                </Select>
+                <div className="flex flex-col gap-1.5 w-full">
+                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
+                    Service Provider
+                  </label>
+                  <Select
+                    selectedKeys={[newService]}
+                    variant="bordered"
+                    onChange={(e) => setNewService(e.target.value)}
+                    classNames={{
+                      trigger: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                      value: "text-sm text-default-900 font-medium",
+                    }}
+                  >
+                    <SelectItem key="GitHub">GitHub</SelectItem>
+                    <SelectItem key="Azure">Azure</SelectItem>
+                    <SelectItem key="OpenAI">OpenAI / Anthropic</SelectItem>
+                    <SelectItem key="Custom">Custom API</SelectItem>
+                  </Select>
+                </div>
 
-                <Input
-                  label="Secret Token / API Key"
-                  labelPlacement="outside"
-                  placeholder="Paste your token here..."
-                  type="password"
-                  value={newKey}
-                  variant="bordered"
-                  onValueChange={setNewKey}
-                  classNames={{
-                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
-                    inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                    input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                  }}
-                />
+                <div className="flex flex-col gap-1.5 w-full">
+                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
+                    Secret Token / API Key
+                  </label>
+                  <Input
+                    placeholder="Paste your token here..."
+                    type="password"
+                    value={newKey}
+                    variant="bordered"
+                    onValueChange={setNewKey}
+                    classNames={{
+                      inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                      input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                    }}
+                  />
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button
