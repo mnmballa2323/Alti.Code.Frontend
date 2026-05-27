@@ -4,6 +4,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@heroui/button";
 import { ScrollShadow } from "@heroui/scroll-shadow";
+import { 
+  Folder, 
+  FolderOpen, 
+  FileCode2, 
+  FileJson, 
+  FileText, 
+  Settings, 
+  File, 
+  ChevronDown, 
+  ChevronRight, 
+  RefreshCw 
+} from "lucide-react";
 
 import { API_URL } from "@/lib/config";
 
@@ -60,16 +72,13 @@ export const FileTree: React.FC<FileTreeProps> = ({
   }, []);
 
   const toggleDir = async (node: FileNode) => {
-    // If already loaded children, just toggle open state locally
-    // But for deep nesting, we might need recursive update logic
-    // For MVP, simplified:
     if (node.type === "file") {
       onSelectFile(node.path);
 
       return;
     }
 
-    const newStructure = [...structure]; // Deep clone needed for deep updates
+    const newStructure = [...structure];
     const updateNode = async (nodes: FileNode[]): Promise<FileNode[]> => {
       return Promise.all(
         nodes.map(async (n): Promise<FileNode> => {
@@ -77,7 +86,6 @@ export const FileTree: React.FC<FileTreeProps> = ({
             if (n.isOpen) {
               return { ...n, isOpen: false };
             } else {
-              // Load children if empty
               const children =
                 n.children && n.children.length > 0
                   ? n.children
@@ -98,27 +106,71 @@ export const FileTree: React.FC<FileTreeProps> = ({
     setStructure(await updateNode(newStructure));
   };
 
+  const getFileIcon = (fileName: string) => {
+    const ext = fileName.split(".").pop()?.toLowerCase();
+    switch (ext) {
+      case "tsx":
+      case "ts":
+      case "jsx":
+      case "js":
+        return <FileCode2 className="size-4 text-sky-400 shrink-0" />;
+      case "json":
+      case "lock":
+        return <FileJson className="size-4 text-amber-400 shrink-0" />;
+      case "py":
+        return <FileCode2 className="size-4 text-emerald-400 shrink-0" />;
+      case "md":
+        return <FileText className="size-4 text-indigo-400 shrink-0" />;
+      case "env":
+      case "gitignore":
+        return <Settings className="size-4 text-rose-400 shrink-0" />;
+      default:
+        return <File className="size-4 text-gray-400 shrink-0" />;
+    }
+  };
+
+  const getFolderIcon = (isOpen: boolean) => {
+    return isOpen ? (
+      <FolderOpen className="size-4 text-yellow-500 dark:text-yellow-400 shrink-0" />
+    ) : (
+      <Folder className="size-4 text-yellow-500 dark:text-yellow-400 shrink-0" />
+    );
+  };
+
   const renderTree = (nodes: FileNode[], depth = 0) => {
     return nodes.map((node) => (
       <div key={node.path} style={{ paddingLeft: `${depth * 12}px` }}>
         <div
           className={`
-                        flex items-center gap-2 py-1 px-2 cursor-pointer text-sm
-                        hover:bg-gray-800 rounded-md transition-colors
-                        ${currentFile === node.path ? "bg-blue-900/50 text-blue-300" : "text-gray-400"}
-                    `}
+            flex items-center gap-2 py-1.5 px-2.5 cursor-pointer text-sm rounded-lg transition-all select-none mb-0.5
+            ${currentFile === node.path 
+              ? "bg-primary/10 text-primary-400 font-medium" 
+              : "text-gray-400 hover:bg-default-100 hover:text-foreground"
+            }
+          `}
           onClick={(e) => {
             e.stopPropagation();
             toggleDir(node);
           }}
         >
-          <span className="opacity-70">
-            {node.type === "directory" ? (node.isOpen ? "📂" : "📁") : "📄"}
-          </span>
+          {node.type === "directory" ? (
+            <span className="flex items-center gap-1.5 shrink-0">
+              {node.isOpen ? (
+                <ChevronDown className="size-3.5 text-default-400" />
+              ) : (
+                <ChevronRight className="size-3.5 text-default-400" />
+              )}
+              {getFolderIcon(!!node.isOpen)}
+            </span>
+          ) : (
+            <span className="pl-5 shrink-0">
+              {getFileIcon(node.name)}
+            </span>
+          )}
           <span className="truncate">{node.name}</span>
         </div>
         {node.isOpen && node.children && (
-          <div className="border-l border-gray-800 ml-2">
+          <div className="border-l border-default-200/50 dark:border-gray-800/80 ml-4 pl-1">
             {renderTree(node.children, depth + 1)}
           </div>
         )}
@@ -128,12 +180,18 @@ export const FileTree: React.FC<FileTreeProps> = ({
 
   return (
     <div className="h-full flex flex-col bg-[#0d1117] border-r border-gray-800">
-      <div className="p-3 border-b border-gray-800 flex justify-between items-center bg-[#161b22]">
+      <div className="p-3 border-b border-gray-800 flex justify-between items-center bg-[#161b22] h-10 select-none">
         <h3 className="font-semibold text-xs text-gray-400 uppercase tracking-wider">
           Explorer
         </h3>
-        <Button isIconOnly size="sm" variant="light" onClick={loadRoot}>
-          🔄
+        <Button 
+          isIconOnly 
+          size="sm" 
+          variant="light" 
+          onClick={loadRoot}
+          className="hover:bg-default-100 text-default-400 hover:text-foreground rounded-lg"
+        >
+          <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
         </Button>
       </div>
       <ScrollShadow className="flex-1 p-2">
