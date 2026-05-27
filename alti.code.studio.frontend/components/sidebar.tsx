@@ -1398,67 +1398,85 @@ export default function Sidebar() {
               onChange={(e) => setLeftSidebarSearch(e.target.value)}
             />
           </div>
-          <Button
-            isIconOnly
-            className={cn(
-              "border rounded-lg flex-shrink-0",
-              pathname === "/connect-apps"
-                ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
-            )}
-            size="sm"
-            title="Integrations"
-            variant="flat"
-            onClick={() => {
-              router.push("/connect-apps");
+          <Tooltip
+            content="App Connections"
+            placement="top"
+            showArrow
+            delay={0}
+            closeDelay={0}
+            classNames={{
+              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
           >
-            <LayoutGrid className="size-3.5" />
-          </Button>
-          <Button
-            isIconOnly
-            className={cn(
-              "border rounded-lg flex-shrink-0",
-              pathname === "/cloud"
-                ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
-            )}
-            size="sm"
-            title="Cloud Connections"
-            variant="flat"
-            onClick={() => {
-              router.push("/cloud");
-            }}
-          >
-            <Cloud className="size-3.5" />
-          </Button>
-          {pathname !== "/connect-apps" && (
             <Button
               isIconOnly
-              className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              className={cn(
+                "border rounded-lg flex-shrink-0",
+                pathname === "/connect-apps"
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+              )}
               size="sm"
-              title="New"
               variant="flat"
               onClick={() => {
-                if (pathname === "/vault") {
-                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/repositories") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-repository-modal"),
-                  );
-                } else if (pathname === "/documents") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-document-modal"),
-                  );
-                } else {
-                  dispatch(startNewChat());
-                  router.push("/");
-                }
+                router.push("/connect-apps");
               }}
             >
-              <Plus className="size-3.5" />
+              <LayoutGrid className="size-3.5" />
             </Button>
-          )}
+          </Tooltip>
+          <Tooltip
+            content="Cloud Connections"
+            placement="top"
+            showArrow
+            delay={0}
+            closeDelay={0}
+            classNames={{
+              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+          >
+            <Button
+              isIconOnly
+              className={cn(
+                "border rounded-lg flex-shrink-0",
+                pathname === "/cloud"
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+              )}
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                router.push("/cloud");
+              }}
+            >
+              <Cloud className="size-3.5" />
+            </Button>
+          </Tooltip>
+          <Button
+            isIconOnly
+            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+            size="sm"
+            title="New"
+            variant="flat"
+            onClick={() => {
+              if (pathname === "/vault") {
+                window.dispatchEvent(new CustomEvent("open-vault-modal"));
+              } else if (pathname === "/repositories") {
+                window.dispatchEvent(
+                  new CustomEvent("open-repository-modal"),
+                );
+              } else if (pathname === "/documents") {
+                window.dispatchEvent(
+                  new CustomEvent("open-document-modal"),
+                );
+              } else {
+                dispatch(startNewChat());
+                router.push("/");
+              }
+            }}
+          >
+            <Plus className="size-3.5" />
+          </Button>
         </div>
 
         {/* 7 navigation icons toggle container */}
