@@ -786,6 +786,19 @@ export default function Sidebar() {
   const [repoSearch, setRepoSearch] = useState("");
   const [selectedRepo, setSelectedRepo] = useState("alti.code.studio");
 
+  // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/chat");
+    router.prefetch("/vault");
+    router.prefetch("/cloud");
+    router.prefetch("/instructions");
+    router.prefetch("/guardrails");
+    router.prefetch("/repositories");
+    router.prefetch("/documents");
+    router.prefetch("/connect-apps");
+  }, [router]);
+
   const getHistoryTitle = () => {
     if (pathname?.startsWith("/chat/")) return "Chat";
 
