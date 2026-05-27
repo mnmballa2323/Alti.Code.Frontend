@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.38] - 2026-05-27 — Modal Close Button Repositioning
+### Fixed
+- **Inward Modal Close Button**: Adjusted the absolute position coordinates of the modal's close button (X) from the default edge boundaries to `top-6 right-6`, shifting it beautifully inward to align perfectly with the modal's secure lock header paddings.
+
 ## [39.37.37] - 2026-05-27 — Service Provider Dropdown Elimination & Auto-Detection
 ### Removed
 - **Service Provider Select Input**: Completely deleted the manual "Service Provider" dropdown selection from the modal body to simplify the form and achieve a highly minimal, clutter-free user interface.
