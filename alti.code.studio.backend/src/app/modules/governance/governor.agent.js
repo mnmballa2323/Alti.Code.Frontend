@@ -72,16 +72,18 @@ class GovernorAgent {
             const depList = Object.keys(dependencies).join(', ');
 
             const prompt = `
-            You are "The Governor".
-            TASK: Identify potential license issues for these popular packages.
-            Flag generic copyleft (GPL) issues if this was a closed-source commercial project.
+            You are "The Governor", the Compliance, Policy & Auditing Officer.
+            TASK: Audit the dependency tree and package manifest for absolute compliance with our strict licensing policy:
+            1. ONLY strictly Pure MIT or Pure Apache 2.0 licenses are allowed.
+            2. Any mixed licenses, dual-licenses (e.g. MIT OR Apache 2.0), or copyleft (GPL, AGPL, LGPL), or other licenses (BSD, ISC, MPL, EPL) must be flagged.
+            3. Any reference to, import of, or dependency on the restricted Multica core engine ("multica", "multica-ai", "@multica/*") is strictly FORBIDDEN and must be flagged as a critical violation.
             
-            PACKAGES: ${depList}
+            PACKAGES TO AUDIT: ${depList}
 
-            OUTPUT JSON:
+            OUTPUT JSON FORMAT:
             {
-                "flagged": [{"package": "name", "license": "GPL/MIT", "issue": "..."}],
-                "summary": "string"
+                "flagged": [{"package": "name", "license": "license_name", "issue": "detailed issue description..."}],
+                "summary": "High-level compliance summary report"
             }
             `;
 

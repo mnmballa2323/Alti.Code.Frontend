@@ -69,21 +69,40 @@ OPERATIONAL PARAMETERS:
         }
 
         let report = `🛡️ **Open-Source Licensing Compliance Audit Report:**\n`;
-        report += `Active Policy: Strictly Permissive (MIT & Apache-2.0 ONLY). All other licenses (GPL, BSD, ISC, etc.) are strictly REJECTED.\n\n`;
+        report += `Active Policy: Strictly Pure MIT & Pure Apache-2.0 ONLY. All other licenses (GPL, BSD, ISC, etc.) or mixtures are strictly REJECTED.\n\n`;
         
         let compliantCount = 0;
         let violationCount = 0;
         const details = [];
 
+        // Check for restricted Multica core code references
+        let foundMultica = false;
+        try {
+            const gitmodulesContent = await fs.readFile(gitmodulesPath, 'utf8');
+            if (gitmodulesContent.includes('multica-ai/multica') || gitmodulesContent.includes('@multica/')) {
+                foundMultica = true;
+            }
+        } catch (e) {}
+
         for (const sub of submodules) {
             const isCompliant = sub.license === 'MIT' || sub.license === 'Apache-2.0';
-            if (isCompliant) {
+            const isMulticaCore = sub.path.toLowerCase().includes('multica-ai/multica') || sub.name.toLowerCase() === 'multica';
+            
+            if (isMulticaCore) {
+                violationCount++;
+                details.push(`❌ **${sub.name}** (${sub.path}): CRITICAL VIOLATION - Restricted Multica core engine submodule detected!`);
+            } else if (isCompliant) {
                 compliantCount++;
                 details.push(`✅ **${sub.name}** (${sub.path}): Verified compliance as pure **${sub.license}**`);
             } else {
                 violationCount++;
-                details.push(`❌ **${sub.name}** (${sub.path}): VIOLATION detected! Restricted license found: **${sub.license}**`);
+                details.push(`❌ **${sub.name}** (${sub.path}): VIOLATION detected! Non-permissive or mixed license found: **${sub.license}**`);
             }
+        }
+
+        if (foundMultica) {
+            violationCount++;
+            details.push(`❌ **Gitmodules Configuration**: CRITICAL VIOLATION - Reference to blocked Multica core repository detected!`);
         }
 
         report += details.join('\n') + `\n\n`;
@@ -93,9 +112,9 @@ OPERATIONAL PARAMETERS:
         report += `- Violations: ${violationCount}\n\n`;
 
         if (violationCount > 0) {
-            report += `⚠️ **Verdict: REJECTED** (Systems contain non-permissive or restricted licensing models)`;
+            report += `⚠️ **Verdict: REJECTED** (Codebase contains restricted licensing models or blocked Multica core artifacts)`;
         } else {
-            report += `🎉 **Verdict: 100% PASSED** (All assessed submodules strictly adhere to pure MIT and Apache-2.0 guidelines!)`;
+            report += `🎉 **Verdict: 100% PASSED** (All assessed submodules strictly adhere to Pure MIT and Pure Apache-2.0 guidelines!)`;
         }
 
         return report;
@@ -123,21 +142,21 @@ OPERATIONAL PARAMETERS:
                 const fullPath = path.resolve(dirPath, file);
                 const content = await fs.readFile(fullPath, 'utf8');
                 
-                if (content.includes('MIT License') || content.includes('mit-license.org')) {
-                    return 'MIT';
-                }
-                if (content.includes('Apache License') && content.includes('Version 2.0')) {
-                    return 'Apache-2.0';
-                }
-                if (content.includes('GNU General Public License') || content.includes('GPL')) {
-                    if (content.includes('Affero') || content.includes('AGPL')) {
-                        return 'AGPL';
-                    }
+                const hasMIT = content.includes('MIT License') || content.includes('mit-license.org') || content.includes('Permission is hereby granted, free of charge');
+                const hasApache = content.includes('Apache License') && content.includes('Version 2.0');
+                const hasGPL = content.includes('GNU General Public License') || content.includes('GPL') || content.includes('Affero') || content.includes('AGPL');
+                const hasBSD = content.includes('BSD 2-Clause') || content.includes('BSD 3-Clause') || content.includes('BSD-style') || content.includes('BSD License');
+                const hasISC = content.includes('ISC License') || content.includes('Internet Systems Consortium');
+
+                if (hasGPL) {
+                    if (content.includes('Affero') || content.includes('AGPL')) return 'AGPL';
                     return 'GPL';
                 }
-                if (content.includes('BSD 2-Clause') || content.includes('BSD 3-Clause')) {
-                    return 'BSD';
-                }
+                if (hasBSD) return 'BSD';
+                if (hasISC) return 'ISC';
+                if (hasMIT && hasApache) return 'MIXED (MIT and Apache-2.0)';
+                if (hasMIT) return 'MIT';
+                if (hasApache) return 'Apache-2.0';
             } catch (e) {
                 // File does not exist, check next
             }
