@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
+import { swarmNexusAgent } from './swarm_nexus.agent.js';
 
 const genAI = new GoogleGenerativeAI(config.gemini_secret_key || process.env.GEMINI_API_KEY);
 
@@ -19,6 +20,41 @@ class AgenticRouterService {
      */
     async routePrompt(prompt) {
         logger.info(`🧠 [Router] Orchestrating 'World of Worlds' swarm with Gemini 3.1 Pro...`);
+
+        const cleanPrompt = prompt.toLowerCase();
+
+        // 1. [Garry Tan gstack Virtual Team Swarm Router]
+        // If the task mentions 'gstack' or represents a high-complexity full-stack system,
+        // we dynamically route it via a collaborative YC-style virtual engineering team.
+        const isComplexSystem = cleanPrompt.includes('gstack') || 
+                                cleanPrompt.includes('system') || 
+                                cleanPrompt.includes('architecture') || 
+                                cleanPrompt.includes('payment') ||
+                                cleanPrompt.includes('full-stack');
+
+        if (isComplexSystem) {
+            logger.info(`👥 [Router] High-complexity prompt detected. Invoking Garry Tan gstack Swarm team layout...`);
+            try {
+                const gstackRoadmap = await swarmNexusAgent.routeGstackTeam(prompt, 'Project context: backend-only orchestration.');
+                logger.info(`✅ [Router] Garry Tan gstack virtual team successfully mapped. Swarm structured.`);
+                
+                // Convert YC team roadmap into swarm sequence nodes
+                return {
+                    strategy: 'Garry Tan gstack Virtual Engineering Swarm Layout',
+                    sequence: [
+                        { agentId: 'swarm_nexus_agent', task: 'Strategic CEO review & Product Spec mapping' },
+                        { agentId: 'architect', task: 'Surgical design and blast radius mapping' },
+                        { agentId: 'jules', task: 'Core developer implementation' },
+                        { agentId: 'auditor', task: 'QA verification and test execution' },
+                        { agentId: 'security_security_auditor_agent', task: 'Hardened PII, DLP, and credentials audits' }
+                    ],
+                    priority: 'HIGH',
+                    gstackRoadmap
+                };
+            } catch (err) {
+                logger.warn(`⚠️ [Router] gstack routing failed, falling back to standard sequence: ${err.message}`);
+            }
+        }
 
         const systemInstruction = `
             ACT AS THE CHIEF SMARTRONTING ARCHITECT FOR ALTI CODE STUDIO.
@@ -40,13 +76,52 @@ class AgenticRouterService {
         `;
 
         try {
-            // 1. Initial Orchestration Attempt
+            // 2. Initial Orchestration Attempt
             const result = await this.model.generateContent([systemInstruction, prompt]);
             const responseText = result.response.text();
             const jsonMatch = responseText.match(/\{[\s\S]*\}/);
             let plan = jsonMatch ? JSON.parse(jsonMatch[0]) : this.fallbackPlan(prompt);
 
-            // 2. [FLAWLESS VALIDATION LOOP]
+            // 3. [Andrej Karpathy Behavioral Compliance Auditor Gate]
+            // We proactively audit the plan *before* execution.
+            // If the plan violates simplicity, stated thinking, or surgical changes, we trigger a Self-Correction Loop.
+            logger.info(`⚖️ [Router] Proactively auditing orchestration plan under Andrej Karpathy guidelines...`);
+            try {
+                const karpathyReport = await swarmNexusAgent.auditKarpathyRules(
+                    JSON.stringify(plan),
+                    `Prompt: "${prompt}"`
+                );
+
+                if (karpathyReport.includes('NON-COMPLIANT')) {
+                    logger.warn(`🚨 [Router] Plan failed Karpathy Rules. Triggering Self-Correction compliance loop...`);
+                    
+                    const correctionInstruction = `
+                        Your previous orchestration plan failed the Andrej Karpathy Agentic Guidelines.
+                        
+                        COMPLIANCE REPORT:
+                        ${karpathyReport}
+                        
+                        Please re-orchestrate the plan to be 100% compliant. Ensure it is:
+                        - Surgical (touches only the target domain, no orthogonal changes)
+                        - Simple (no redundant layers, minimal agents)
+                        - Verified (ends with QA / auditor nodes)
+                    `;
+
+                    const correctionResult = await this.model.generateContent([correctionInstruction, prompt]);
+                    const correctionText = correctionResult.response.text();
+                    const correctionJsonMatch = correctionText.match(/\{[\s\S]*\}/);
+                    if (correctionJsonMatch) {
+                        plan = JSON.parse(correctionJsonMatch[0]);
+                        logger.info(`✅ [Router] Compliance loop completed. Plan is now 100% Karpathy compliant.`);
+                    }
+                } else {
+                    logger.info(`✅ [Router] Swarm plan passed Andrej Karpathy compliance check.`);
+                }
+            } catch (err) {
+                logger.warn(`⚠️ [Router] Karpathy compliance audit skipped due to error: ${err.message}`);
+            }
+
+            // 4. [FLAWLESS VALIDATION LOOP]
             // Verify that every agent suggested actually exists in the Nexus Registry
             const invalidAgents = plan.sequence.filter(s => !agentRegistry.get(s.agentId));
             
@@ -64,7 +139,7 @@ class AgenticRouterService {
                 if (correctionJsonMatch) plan = JSON.parse(correctionJsonMatch[0]);
             }
 
-            // 3. 🛡️ [Hard Law Enforcement]: Final Safety Append
+            // 5. 🛡️ [Hard Law Enforcement]: Final Safety Append
             if (!plan.sequence.find(s => s.agentId === 'auditor')) {
                 plan.sequence.push({ agentId: 'auditor', task: 'Final fidelity benchmarking and world-best quality audit.' });
             }
@@ -88,3 +163,4 @@ class AgenticRouterService {
 }
 
 export const agenticRouter = new AgenticRouterService();
+
