@@ -5,6 +5,14 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.19] - 2026-05-27 — Left Navigation Sidebar Grid Toggle Redesign
+### Changed
+- **4x2 Icon Grid Toggle**: Redesigned the primary left navigation sidebar menu by replacing the vertical stacked links with a premium, highly-compact 4x2 grid of 8 square icon buttons (Code, Chat, Vault, Cloud, Instructions, Guardrails, Repositories, Documentation) positioned directly below the search bar container.
+- **Hyperscaler Consistent Styling**: Styled each navigation icon button in a premium high-contrast square box using solid white background (`bg-white`) in light mode and dark mode counterpart (`dark:bg-default-100`) with matching borders (`border-default-200`) and shadow.
+- **Active Navigation Highlights**: Bound active states to a sleek light primary theme highlight (`bg-primary/10 text-primary dark:text-primary-400 border-primary/30`) indicating the current workspace immediately.
+- **Sovereign Solid Dividing Line**: Inserted a solid horizontal dividing line (`border-b border-default-200`) immediately below the grid toggle container to match the top search bar boundary and keep the workspace cleanly segregated.
+- **Agile Collapsed Vertical Stack**: Configured the toggle container to automatically transition into a tight vertical column of square icon buttons when the sidebar is collapsed, preserving 100% utility in compact views.
+
 ## [39.37.18] - 2026-05-27 — Left Navigation Sidebar Menu Consolidation
 ### Removed
 - **Redundant Integrations Button Deletion**: Cleanly stripped the redundant "Integrations" (`Blocks`) vertical menu item button from the `navigationItems` array inside `components/sidebar.tsx`. Since the new premium white Apps Grid Icon at the top of the sidebar dynamically opens the `/connect-apps` page with a single click, the separate text-based menu link has been completely consolidated to simplify and declutter the developer navigation stack.

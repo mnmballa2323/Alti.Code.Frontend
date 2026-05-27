@@ -1423,36 +1423,42 @@ export default function Sidebar() {
           </Button>
         </div>
 
-        <div className="pt-2 flex-1 overflow-y-auto overflow-x-hidden">
+        {/* 8 navigation icons toggle container */}
+        <div
+          className={cn(
+            isSidebarOpen
+              ? "grid grid-cols-4 gap-2 px-3 py-3 border-b border-default-200"
+              : "flex flex-col items-center gap-2 px-1 pt-2"
+          )}
+        >
           {filteredNavigationItems.map((item) => {
             const IconComponent = item.icon;
             return (
               <button
                 key={item.label}
+                title={item.label}
                 className={cn(
-                  "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
+                  "flex items-center justify-center transition-all duration-200 relative group border shadow-sm",
+                  isSidebarOpen ? "h-10 w-full rounded-lg" : "h-8 w-8 rounded-lg",
                   item.isActive
-                    ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                    : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-                  !isSidebarOpen && "px-0 justify-center min-w-auto",
+                    ? "bg-primary/10 text-primary dark:text-primary-400 border-primary/30"
+                    : "bg-white dark:bg-default-100 text-default-600 dark:text-default-400 hover:bg-default-50 dark:hover:bg-default-200 border-default-200",
                 )}
                 onClick={item.onClick}
               >
-                <IconComponent className={cn("size-4", isSidebarOpen && "mr-2")} />
-                <span
-                  className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-                >
-                  {item.label}
-                </span>
+                <IconComponent className="size-4" />
+                <span className="sr-only">{item.label}</span>
               </button>
             );
           })}
-          {filteredNavigationItems.length === 0 && (
-            <div className="text-center py-8 text-xs text-default-400 italic">
+          {isSidebarOpen && filteredNavigationItems.length === 0 && (
+            <div className="col-span-4 text-center py-2 text-xs text-default-400 italic">
               No results found
             </div>
           )}
         </div>
+
+        <div className="flex-1" />
 
         <div
           className={cn(
