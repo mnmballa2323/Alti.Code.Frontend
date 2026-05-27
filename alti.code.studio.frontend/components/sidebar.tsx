@@ -1421,6 +1421,7 @@ export default function Sidebar() {
           >
             <Plus className="size-3.5" />
           </Button>
+        </div>
 
         {/* 8 navigation icons toggle container */}
         <div

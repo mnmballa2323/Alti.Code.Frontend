@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.21] - 2026-05-27 — Left Navigation Sidebar Syntax Fix
+### Fixed
+- **Missing Tag Restoration**: Resolved a Turbopack build failure by restoring the missing closing `</div>` tag for the search container inside `components/sidebar.tsx` and verifying compilation completeness.
+
 ## [39.37.20] - 2026-05-27 — Left Navigation Sidebar Single-Row Toggle Layout
 ### Changed
 - **Single-Row Horizontal Navigation**: Refactored the 8 navigation icon buttons (Code, Chat, Vault, Cloud, Instructions, Guardrails, Repositories, Documentation) from a 4x2 grid to a single, beautifully consolidated horizontal row of square white buttons (`grid-cols-8 gap-1 px-2 py-3 border-b border-default-200`) below the search bar container.
