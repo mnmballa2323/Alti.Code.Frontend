@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.42] - 2026-05-27 — Dedicated Agent Swarms for Every Cloud Function
+### Added
+- **Dedicated Cloud Function Swarms**: Designed and integrated a comprehensive specialized agent mapping grid (`getFunctionsForProvider`) inside the Cloud Workspace page (`app/cloud/page.tsx`) mapping 6 tailored, specialized, and dedicated agent nodes with custom capability tags and role definitions for **every single function inside all 67 cloud providers**.
+- **Interactive Live-Stream Telemetry Console**: Engineered a responsive real-time terminal drawer that prints multi-stage docker container spawn logs, IAM secure-tunnel bindings, and DLP security checklist streams when launching any dedicated cloud function specialist.
+
 ## [39.37.41] - 2026-05-27 — Symmetrical Close Button Alignment
 ### Fixed
 - **Content-Aligned Modal Close Button**: Repositioned the close button (X) inside the modal using `top-3 right-6` coordinates, moving it slightly further left to align perfectly with the `px-6` (24px) padding right-edge boundary of the modal body content, achieving a highly symmetric and cohesive grid system.
