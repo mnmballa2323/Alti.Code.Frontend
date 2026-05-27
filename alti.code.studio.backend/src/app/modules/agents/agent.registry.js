@@ -85492,6 +85492,43 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'yc_growth',
+    importPath: './yc_growth.agent.js',
+    description: 'The Garry Tan YC Growth & Analytics Agent. Specializes in instrumentation, activation funnels, and retention optimization.',
+    queue: 'yc-growth-queue',
+    capabilities: ['telemetry-instrumentation', 'activation-loops', 'conversion-funnels'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'karpathy_opt',
+    importPath: './karpathy_opt.agent.js',
+    description: 'The Andrej Karpathy Performance & LLM Optimization Agent. Specializes in token efficiency, caching, and latency minimization.',
+    queue: 'karpathy-opt-queue',
+    capabilities: ['token-pruning', 'llm-caching', 'latency-minimization'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'licensing_guardian',
+    importPath: './licensing_guardian.agent.js',
+    description: 'The Open-Source Licensing Compliance Agent. Proactively audits dependency trees for GPL/AGPL compliance to prevent license contamination.',
+    queue: 'licensing-guardian-queue',
+    capabilities: ['licensing-audit', 'dependency-manifest-checks', 'copyleft-protection'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'db_architect',
+    importPath: './db_architect.agent.js',
+    description: 'The Database & Schema Migration Specialist. Specializes in relational schemas, indexing, migrations safety, and SQL performance.',
+    queue: 'db-architect-queue',
+    capabilities: ['schema-migrations', 'database-indexing', 'sql-query-optimization'],
+    version: '1.0.0'
+});
+
+
 
 
 

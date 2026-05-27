@@ -5,6 +5,10 @@ import { ycSecurityAgent } from '../../src/app/modules/agents/yc_security.agent.
 import { karpathySentinelAgent } from '../../src/app/modules/agents/karpathy_sentinel.agent.js';
 import { ycCeoAgent } from '../../src/app/modules/agents/yc_ceo.agent.js';
 import { karpathyRefactorAgent } from '../../src/app/modules/agents/karpathy_refactor.agent.js';
+import { ycGrowthAgent } from '../../src/app/modules/agents/yc_growth.agent.js';
+import { karpathyOptAgent } from '../../src/app/modules/agents/karpathy_opt.agent.js';
+import { licensingGuardianAgent } from '../../src/app/modules/agents/licensing_guardian.agent.js';
+import { dbArchitectAgent } from '../../src/app/modules/agents/db_architect.agent.js';
 import { agentRegistry } from '../../src/app/modules/agents/agent.registry.js';
 
 test('YcPmAgent: Identity and Operational Spec', async () => {
@@ -49,6 +53,34 @@ test('KarpathyRefactorAgent: Identity and Operational Spec', async () => {
     expect(res.content).toContain('Andrej Karpathy Surgical Refactoring Report');
 });
 
+test('YcGrowthAgent: Identity and Operational Spec', async () => {
+    expect(ycGrowthAgent.name).toBe('yc_growth');
+    expect(ycGrowthAgent.description).toContain('Growth & Analytics Agent');
+    const res = await ycGrowthAgent.consult('Instrument telemetry click event');
+    expect(res.content).toContain('Garry Tan YC Growth & Telemetry Report');
+});
+
+test('KarpathyOptAgent: Identity and Operational Spec', async () => {
+    expect(karpathyOptAgent.name).toBe('karpathy_opt');
+    expect(karpathyOptAgent.description).toContain('LLM Optimization Agent');
+    const res = await karpathyOptAgent.consult('Prune system preambles');
+    expect(res.content).toContain('Andrej Karpathy Performance & Inference Optimization Report');
+});
+
+test('LicensingGuardianAgent: Identity and Operational Spec', async () => {
+    expect(licensingGuardianAgent.name).toBe('licensing_guardian');
+    expect(licensingGuardianAgent.description).toContain('Licensing Compliance Agent');
+    const res = await licensingGuardianAgent.consult('Audit react-router package');
+    expect(res.content).toContain('Open-Source Licensing Compliance Report');
+});
+
+test('DbArchitectAgent: Identity and Operational Spec', async () => {
+    expect(dbArchitectAgent.name).toBe('db_architect');
+    expect(dbArchitectAgent.description).toContain('Database & Schema Migration Specialist');
+    const res = await dbArchitectAgent.consult('Normalize schema indices');
+    expect(res.content).toContain('Database & Schema Migration Specialist Report');
+});
+
 test('Nexus Registry: Discoverability of new agents', () => {
     const list = agentRegistry.listAgents();
     const names = list.map(a => a.name);
@@ -58,4 +90,8 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('karpathy_sentinel');
     expect(names).toContain('yc_ceo');
     expect(names).toContain('karpathy_refactor');
+    expect(names).toContain('yc_growth');
+    expect(names).toContain('karpathy_opt');
+    expect(names).toContain('licensing_guardian');
+    expect(names).toContain('db_architect');
 });
