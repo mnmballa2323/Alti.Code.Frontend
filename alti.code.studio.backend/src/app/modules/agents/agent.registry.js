@@ -85474,5 +85474,24 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'yc_ceo',
+    importPath: './yc_ceo.agent.js',
+    description: 'The Garry Tan YC CEO Agent. Sets the north star, validates strategic alignment, and enforces Launch Early & Iterate.',
+    queue: 'yc-ceo-queue',
+    capabilities: ['north-star-alignment', 'launch-strategy', 'strategic-review'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'karpathy_refactor',
+    importPath: './karpathy_refactor.agent.js',
+    description: 'The Andrej Karpathy Surgical Refactoring Agent. Specializes in simplification and minimal surgical code modifications.',
+    queue: 'karpathy-refactor-queue',
+    capabilities: ['surgical-refactoring', 'diff-minimization', 'code-simplification'],
+    version: '1.0.0'
+});
+
+
 
 

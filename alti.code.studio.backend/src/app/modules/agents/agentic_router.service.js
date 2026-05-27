@@ -46,7 +46,8 @@ class AgenticRouterService {
                         { agentId: 'karpathy_sentinel', task: 'Proactive simplicity and surgical scope compliance validation' },
                         { agentId: 'jules', task: 'Core developer implementation' },
                         { agentId: 'yc_qa', task: 'Automated Vitest/Playwright test suites generation and QA check' },
-                        { agentId: 'yc_security', task: 'Zero-trust DLP checks, credentials scans, and input hardening audits' }
+                        { agentId: 'yc_security', task: 'Zero-trust DLP checks, credentials scans, and input hardening audits' },
+                        { agentId: 'yc_ceo', task: 'Strategic YC CEO alignment validation and MVP release authorization' }
                     ],
                     priority: 'HIGH',
                     gstackRoadmap
@@ -112,6 +113,12 @@ class AgenticRouterService {
                     const correctionJsonMatch = correctionText.match(/\{[\s\S]*\}/);
                     if (correctionJsonMatch) {
                         plan = JSON.parse(correctionJsonMatch[0]);
+                        
+                        // Inject the Karpathy refactoring agent to execute surgical simplification
+                        if (!plan.sequence.find(s => s.agentId === 'karpathy_refactor')) {
+                            plan.sequence.unshift({ agentId: 'karpathy_refactor', task: 'Surgical code simplification and diff size minimization mapping' });
+                        }
+                        
                         logger.info(`✅ [Router] Compliance loop completed. Plan is now 100% Karpathy compliant.`);
                     }
                 } else {

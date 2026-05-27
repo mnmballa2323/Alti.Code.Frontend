@@ -59,6 +59,7 @@ test('AgenticRouter: Garry Tan gstack Swarm team routing', async () => {
     expect(sequenceIds).toContain('jules');
     expect(sequenceIds).toContain('yc_qa');
     expect(sequenceIds).toContain('yc_security');
+    expect(sequenceIds).toContain('yc_ceo');
     expect(plan.gstackRoadmap).toBe('Simulated YC Team Spec');
 });
 
@@ -93,8 +94,10 @@ test('AgenticRouter: Proactive Andrej Karpathy compliance self-correction loop',
     const plan = await agenticRouter.routePrompt("Refactor billing controller");
 
     // The router should invoke the compliance gate, detect non-compliance, trigger a correction loop,
-    // and successfully return the compliant plan.
+    // and successfully return the compliant plan with karpathy_refactor prepended.
     expect(plan.strategy).toBe('Surgical simple strategy');
+    const sequenceIds = plan.sequence.map(s => s.agentId);
+    expect(sequenceIds).toContain('karpathy_refactor');
     expect(generateSpy).toHaveBeenCalledTimes(2);
 });
 
