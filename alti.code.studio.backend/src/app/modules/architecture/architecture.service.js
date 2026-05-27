@@ -1,5 +1,6 @@
 import { architectureQueue } from './architecture.worker.js';
 import { ArchitectureNode, ArchitectureEdge } from './architecture.model.js';
+import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import path from 'path';
 
 // This service acts as the core orchestrator for the architecture microservice pipeline.
@@ -124,9 +125,31 @@ export const getClusterDetails = async (layer) => {
 };
 
 export const askQuestion = async (query, repoId) => {
-  // TODO: Convert query to embedding, perform RAG against the Graph/Vector DB, and call LLM
+  // Leverage the world-class Ultimate Google Cloud RAG Engine
+  const result = await ultimateRagService.synthesize(query, 'Architect', 'Architecture', null);
+  
+  // Format references from the parsed citations
+  const references = [];
+  if (result.pipeline && result.pipeline.sources) {
+    const vertexSource = result.pipeline.sources.find(s => s.id === 'vertex');
+    if (vertexSource && vertexSource.result) {
+      vertexSource.result.slice(0, 5).forEach(res => {
+        const fileSource = res.document?.id || res.document?.name;
+        if (fileSource && !references.includes(fileSource)) {
+          references.push(fileSource);
+        }
+      });
+    }
+  }
+
   return {
-    answer: `Based on the architecture, the part handling ${query.includes('auth') ? 'authentication is the AuthService.' : 'this request is found in the core services.'}`,
-    references: [],
+    answer: result.synthesis,
+    references: references,
+    telemetry: {
+      retrievalMs: result.pipeline?.retrievalMs,
+      synthesisMs: result.pipeline?.synthesisMs,
+      totalMs: result.pipeline?.totalMs,
+      activeSources: result.pipeline?.activeSources,
+    }
   };
 };

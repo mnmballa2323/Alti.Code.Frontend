@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.87] - 2026-05-27 — Architecture Microservice RAG QA Integration
+### Added
+- **Production RAG Architecture QA**: Replaced the static placeholder answer in the Architecture service's `askQuestion` endpoint with a high-fidelity integration to the world-class `ultimateRagService`. It now dynamically queries Vertex AI Discovery Engine, Spanner Graph, Gemini CLI, and Gemini File Search in parallel, returning rich semantic context and robust citations.
+- **E2E Architecture QA Integration Tests**: Created `architecture.test.js` validating graph retrieval operations, node and cluster detail queries, and real-time RAG-grounded answering.
+
 ## [39.37.86] - 2026-05-27 — 66-Provider Cloud Agent Specialization & Unification
 ### Added
 - **Dynamic 66-Provider Agent Specialization**: Automatically registers **396 tailored cloud specialist agents** representing 6 essential cloud verticals (`compute`, `storage`, `serverless`, `database`, `identity`, `iac`) across all **66 cloud providers** dynamically inside the central `agentRegistry`.
