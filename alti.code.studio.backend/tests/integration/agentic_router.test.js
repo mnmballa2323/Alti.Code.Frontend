@@ -54,11 +54,11 @@ test('AgenticRouter: Garry Tan gstack Swarm team routing', async () => {
 
     expect(plan.strategy).toBe('Garry Tan gstack Virtual Engineering Swarm Layout');
     const sequenceIds = plan.sequence.map(s => s.agentId);
-    expect(sequenceIds).toContain('swarm_nexus_agent');
-    expect(sequenceIds).toContain('architect');
+    expect(sequenceIds).toContain('yc_pm');
+    expect(sequenceIds).toContain('karpathy_sentinel');
     expect(sequenceIds).toContain('jules');
-    expect(sequenceIds).toContain('auditor');
-    expect(sequenceIds).toContain('security_security_auditor_agent');
+    expect(sequenceIds).toContain('yc_qa');
+    expect(sequenceIds).toContain('yc_security');
     expect(plan.gstackRoadmap).toBe('Simulated YC Team Spec');
 });
 

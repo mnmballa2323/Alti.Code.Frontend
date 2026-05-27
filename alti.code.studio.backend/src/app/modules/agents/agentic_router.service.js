@@ -42,11 +42,11 @@ class AgenticRouterService {
                 return {
                     strategy: 'Garry Tan gstack Virtual Engineering Swarm Layout',
                     sequence: [
-                        { agentId: 'swarm_nexus_agent', task: 'Strategic CEO review & Product Spec mapping' },
-                        { agentId: 'architect', task: 'Surgical design and blast radius mapping' },
+                        { agentId: 'yc_pm', task: 'Strategic CEO spec mapping and problem hypothesis validation' },
+                        { agentId: 'karpathy_sentinel', task: 'Proactive simplicity and surgical scope compliance validation' },
                         { agentId: 'jules', task: 'Core developer implementation' },
-                        { agentId: 'auditor', task: 'QA verification and test execution' },
-                        { agentId: 'security_security_auditor_agent', task: 'Hardened PII, DLP, and credentials audits' }
+                        { agentId: 'yc_qa', task: 'Automated Vitest/Playwright test suites generation and QA check' },
+                        { agentId: 'yc_security', task: 'Zero-trust DLP checks, credentials scans, and input hardening audits' }
                     ],
                     priority: 'HIGH',
                     gstackRoadmap

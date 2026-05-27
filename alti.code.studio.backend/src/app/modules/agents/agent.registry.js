@@ -85438,4 +85438,41 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'yc_pm',
+    importPath: './yc_pm.agent.js',
+    description: 'The Garry Tan YC Product Manager Agent. Specializes in problem-first, hypothesis-driven specs and lean PRD validation.',
+    queue: 'yc-pm-queue',
+    capabilities: ['spec-grounding', 'lean-prd', 'product-strategy'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'yc_qa',
+    importPath: './yc_qa.agent.js',
+    description: 'The Garry Tan YC QA Engineer Agent. Specializes in automated Vitest and Playwright test generation and continuous verification.',
+    queue: 'yc-qa-queue',
+    capabilities: ['vitest-testing', 'playwright-qa', 'verification-loops'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'yc_security',
+    importPath: './yc_security.agent.js',
+    description: 'The Garry Tan YC Security Officer Agent. Specializes in credentials scans, inputs validation, and zero-trust DLP hardening.',
+    queue: 'yc-security-queue',
+    capabilities: ['credentials-scanning', 'dlp-hardening', 'inputs-sanitization'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'karpathy_sentinel',
+    importPath: './karpathy_sentinel.agent.js',
+    description: 'The Andrej Karpathy Behavioral Sentinel Agent. Proactively enforces Think Before Coding, Simplicity, and Surgical targets.',
+    queue: 'karpathy-sentinel-queue',
+    capabilities: ['surgical-validation', 'abstraction-auditing', 'behavioral-alignment'],
+    version: '1.0.0'
+});
+
+
 
