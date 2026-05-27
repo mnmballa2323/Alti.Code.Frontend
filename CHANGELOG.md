@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.37] - 2026-05-27 — Service Provider Dropdown Elimination & Auto-Detection
+### Removed
+- **Service Provider Select Input**: Completely deleted the manual "Service Provider" dropdown selection from the modal body to simplify the form and achieve a highly minimal, clutter-free user interface.
+
+### Changed
+- **Dynamic Service Detection**: Integrated an intelligent pattern matching helper `detectService` that automatically deduces the service provider (GitHub, Azure, OpenAI, or Custom) by examining key patterns (e.g. `ghp_`, `sk-`, `az_`) or keywords inside the secret name during saving/editing.
+
 ## [39.37.36] - 2026-05-27 — Sibling HTML Input Labels Overlap Elimination
 ### Fixed
 - **Conflicting Inner Box Labels**: Eliminated the overlapping labels inside the edit textboxes by completely removing the internal `label` properties from the HeroUI `<Input>` and `<Select>` elements, rendering them instead as native sibling HTML `<label>` elements with precise vertical spacing (`gap-1.5`). This renders the textbox interiors 100% clean and eliminates the possibility of label-text layout clashes.

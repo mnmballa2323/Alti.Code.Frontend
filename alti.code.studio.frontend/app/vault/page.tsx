@@ -86,6 +86,26 @@ const serviceConfig: Record<string, { icon: any; color: string }> = {
   Default: { icon: KeyRound, color: "text-default-500 bg-default-100" },
 };
 
+const detectService = (name: string, key: string, currentService?: string): string => {
+  if (currentService && currentService !== "Custom" && currentService !== "GitHub" && currentService !== "Default") {
+    return currentService;
+  }
+  const lowerName = name.toLowerCase();
+  const lowerKey = key.toLowerCase();
+  
+  if (lowerKey.startsWith("ghp_") || lowerName.includes("github")) {
+    return "GitHub";
+  }
+  if (lowerKey.startsWith("sk-") || lowerName.includes("openai") || lowerName.includes("gpt") || lowerName.includes("anthropic") || lowerName.includes("claude")) {
+    return "OpenAI";
+  }
+  if (lowerKey.startsWith("az_") || lowerName.includes("azure") || lowerName.includes("microsoft")) {
+    return "Azure";
+  }
+  
+  return "Custom";
+};
+
 export default function VaultPage() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
@@ -166,6 +186,8 @@ export default function VaultPage() {
       .replace(/[^a-z0-9-]/g, "-")
       .replace(/-+/g, "-");
 
+    const detected = detectService(newName, newKey, editingSecretId ? secrets.find(s => s.id === editingSecretId)?.service : undefined);
+
     try {
       await axios.post(
         `${API_URL}/secret-manager/update`,
@@ -181,7 +203,7 @@ export default function VaultPage() {
         setSecrets(
           secrets.map((s) =>
             s.id === editingSecretId
-              ? { ...s, name: newName, service: newService, key: newKey }
+              ? { ...s, name: newName, service: detected, key: newKey }
               : s,
           ),
         );
@@ -191,7 +213,7 @@ export default function VaultPage() {
           {
             id: normalizedSecretId,
             name: newName,
-            service: newService,
+            service: detected,
             key: newKey,
             lastUsed: "Never",
           },
@@ -487,25 +509,6 @@ export default function VaultPage() {
                   />
                 </div>
 
-                <div className="flex flex-col gap-1.5 w-full">
-                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
-                    Service Provider
-                  </label>
-                  <Select
-                    selectedKeys={[newService]}
-                    variant="bordered"
-                    onChange={(e) => setNewService(e.target.value)}
-                    classNames={{
-                      trigger: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                      value: "text-sm text-default-900 font-medium",
-                    }}
-                  >
-                    <SelectItem key="GitHub">GitHub</SelectItem>
-                    <SelectItem key="Azure">Azure</SelectItem>
-                    <SelectItem key="OpenAI">OpenAI / Anthropic</SelectItem>
-                    <SelectItem key="Custom">Custom API</SelectItem>
-                  </Select>
-                </div>
 
                 <div className="flex flex-col gap-1.5 w-full">
                   <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
