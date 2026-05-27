@@ -16,6 +16,8 @@ import {
   FlaskConical,
   Network,
   Cpu,
+  Wand2,
+  BookOpen,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -952,6 +954,86 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>System Architecture</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Wand2
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const refactorPrompt =
+                            prompt.trim() ||
+                            "Refactor & Optimize: Analyze the active files, apply DRY and clean code principles, refactor complex methods, optimize performance, and inject JSDoc/TypeScript types.";
+                          setPrompt(refactorPrompt);
+                          if (onSend) {
+                            onSend(
+                              refactorPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: refactorPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Refactor & Optimize</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <BookOpen
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const docsPrompt =
+                            prompt.trim() ||
+                            "Write Documentation: Scan the codebase components, analyze implementation details, and generate comprehensive markdown API documentation, architectural summaries, or README guides.";
+                          setPrompt(docsPrompt);
+                          if (onSend) {
+                            onSend(
+                              docsPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: docsPrompt,
+                                model: "default",
+                                domain: "Documentation",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Write Documentation</p>
                     </TooltipContent>
                   </Tooltip>
 

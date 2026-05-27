@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.10] - 2026-05-26 — Refactoring and Documentation Prompt Deck Actions
+### Added
+- **Refactor & Optimize Toolbar Action**: Integrated the custom **Refactor & Optimize** (`Wand2`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated clean code and performance optimization prompts.
+- **Write Documentation Toolbar Action**: Integrated the custom **Write Documentation** (`BookOpen`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated API documentation and README generation prompts.
+
 ## [39.37.9] - 2026-05-26 — System Architecture Workspace Consolidation
 ### Added
 - **System Architecture Toolbar Action**: Integrated the custom **System Architecture** (`Cpu`) action button inside the Code Workspace input toolbar (`components/input-actions.tsx`), mapping to automated codebase topography and service mapping prompts.
