@@ -5,6 +5,17 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.92] - 2026-05-27 — Cloud Marketplace SaaS Procurement & VPC Deployments
+### Added
+- **Multi-Cloud SaaS Procurement Service**: Created `cloud_marketplace.service.js` under `src/app/modules/marketplace/` to manage SaaS entitlement resolution, subscription activation, and entitlement validation for **Google Cloud**, **AWS**, and **Azure** Marketplaces. Features simulated sandbox execution to enable automated local dev testing.
+- **Marketplace Webhook Controllers & Routes**: Deployed `cloud_marketplace.controller.js` and `cloud_marketplace.route.js` handling registration redirections, JWT/auth tokens validation, and cron-scheduled metered billing batch dispatches. Custom-mounted under `/marketplace/cloud` inside the main router (`index.js`).
+- **Product Metadata Schemas & Manifests**: Published standard marketplace schema configurations:
+  - **GCP Marketplace**: `gcp_marketplace_config.json` detailing Partner Procurement settings and HSL token billing dimensions.
+  - **AWS Marketplace**: `aws_marketplace_manifest.json` outlining subscription contracts and SQS/SNS event topics.
+  - **Azure Marketplace**: `azure_marketplace_manifest.json` mapping pay-as-you-go billing plans and Event Grid webhooks.
+- **Enterprise VPC Helm & Kubernetes Templates**: Published deployment charts under `deployment/helm/` and `deployment/kubernetes/` configuring secure ingress TLS, Workload Identity / IAM service roles, resource bounds (limits/requests), and liveness/readiness probes for private VPC customer deployments.
+- **Marketplace E2E Test Suite**: Created `tests/integration/cloud_marketplace.test.js` validating GCP, AWS, and Azure token resolutions, active entitlement checks, and hourly metered billing logs aggregation with 100% test isolation.
+
 ## [39.37.91] - 2026-05-27 — Multi-Cloud Inference & Marketplace Procurement Integration
 ### Added
 - **Multi-Cloud Inference Engine**: Implemented `multicloud_inference.service.js` supporting native, robust REST API connectivity to Google Cloud Vertex AI (Core), AWS Bedrock, and Azure AI Studio Foundry. Includes elegant failover routing and load-balancing.

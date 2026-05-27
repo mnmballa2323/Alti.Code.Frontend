@@ -1,0 +1,50 @@
+{
+  "offerType": "SaaS",
+  "publisherId": "alticode-studios",
+  "offerId": "alti-code-studio-saas",
+  "azureMarketplaceSaaSVersion": "2018-08-31",
+  "landingPageUrl": "https://alticode.studio/marketplace/azure/resolve",
+  "connectionString": {
+    "authEndpoint": "https://login.microsoftonline.com",
+    "resource": "https://marketplaceapi.microsoft.com"
+  },
+  "plans": [
+    {
+      "planId": "alti-enterprise-payg",
+      "name": "Alti Developer Swarm PAYG Plan",
+      "description": "Pay-As-You-Go pay-per-token pricing billed securely through your Azure active subscription.",
+      "marketplaces": [
+        "Public",
+        "Private"
+      ],
+      "billingPeriod": "MONTHLY",
+      "basePriceUsd": 0.00,
+      "dimensions": [
+        {
+          "id": "AgentTokens",
+          "name": "Azure Swarm Agent Tokens",
+          "unit": "1k Tokens",
+          "pricePerUnitUsd": 0.0025
+        },
+        {
+          "id": "CustomSubagents",
+          "name": "Azure Active Subagent Subscriptions",
+          "unit": "Agent Instance",
+          "pricePerUnitUsd": 1.50
+        }
+      ]
+    },
+    {
+      "planId": "alti-enterprise-flat-annual",
+      "name": "Alti Developer Swarm Enterprise Annual Plan",
+      "description": "Flat annual membership including standard subagent bundles.",
+      "billingPeriod": "YEARLY",
+      "basePriceUsd": 25000.00,
+      "dimensions": []
+    }
+  ],
+  "webhooks": {
+    "azureEventGridTopic": "arn:aws:eventgrid:us-east-1:123456789012:action/azure-commercial-marketplace-webhooks",
+    "connectionEndpoint": "https://alticode.studio/api/v1/marketplace/azure/webhook"
+  }
+}

@@ -61,6 +61,7 @@ try {
               let basePath = `/${moduleDir}`;
               
               // Custom path overrides matching frontend configurations
+              if (file === 'cloud_marketplace.route.js') basePath = '/marketplace/cloud';
               if (file === 'gitAgent.route.js') basePath = '/git-agent';
               if (file === 'dyad.route.js') basePath = '/dyad/claude';
               if (file === 'gemini.route.js') basePath = '/gemini';

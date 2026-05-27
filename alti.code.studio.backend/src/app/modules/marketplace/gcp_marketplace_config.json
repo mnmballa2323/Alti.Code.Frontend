@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-integration/master/saas-schema.json",
+  "productName": "Alti.Code.Studio Enterprise Swarm",
+  "productId": "alti-code-studio-swarm-saas",
+  "partnerId": "alticode-partner-dev",
+  "integrationVersion": "v1.0",
+  "saasUrl": "https://alticode.studio/marketplace/gcp/resolve",
+  "procurementConfig": {
+    "procurementApiVersion": "v1",
+    "serviceName": "alticode-swarm-prod.consumerprocurement.googleapis.com",
+    "entitlementCheckingEnabled": true,
+    "automaticApproval": false
+  },
+  "billingDimensions": [
+    {
+      "id": "alti-swarm-agent-token",
+      "name": "Alti.Code.Studio Agent Token Consumption",
+      "description": "Enterprise Swarm LLM prompt/completion tokens mapped via dynamic multi-cloud routing.",
+      "unit": "1000 Tokens",
+      "pricing": {
+        "tier1": {
+          "minQty": 0,
+          "pricePerUnitUsd": 0.0015
+        }
+      }
+    },
+    {
+      "id": "alti-swarm-agent-loop",
+      "name": "Alti.Code.Studio Autonomous Task Loop Executions",
+      "description": "Per active task loop run by autonomous agentic modules.",
+      "unit": "Loop Execution",
+      "pricing": {
+        "tier1": {
+          "minQty": 0,
+          "pricePerUnitUsd": 0.05
+        }
+      }
+    }
+  ],
+  "plans": [
+    {
+      "planId": "alti-enterprise-annual",
+      "name": "Alti Enterprise Swarm (Annual Contract)",
+      "description": "Full access to collaborative agent orchestration, private cleanroom runtime, and unlimited local IDE workspace subagents.",
+      "billingPeriod": "YEARLY",
+      "basePriceUsd": 25000.00,
+      "meteredBillingOverride": false
+    },
+    {
+      "planId": "alti-enterprise-payg",
+      "name": "Alti Enterprise Pay-As-You-Go",
+      "description": "Flexible token-based consumption billing mapped directly to GCP Marketplace contracts.",
+      "billingPeriod": "MONTHLY",
+      "basePriceUsd": 0.00,
+      "meteredBillingOverride": true
+    }
+  ],
+  "features": [
+    "Unlimited Developer Workspace Connections",
+    "Google Vertex AI Native Endpoint Routing",
+    "Private Cleanroom Sandbox Runtime Support",
+    "Enterprise RBAC and Single Sign-On (SSO)"
+  ]
+}
