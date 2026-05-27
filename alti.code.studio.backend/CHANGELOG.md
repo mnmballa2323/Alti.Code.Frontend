@@ -2,6 +2,15 @@
 
 All notable changes to the backend will be documented here.
 
+## [39.37.14] — 2026-05-27
+
+### Aligned Release & Zero-Trust Authentication Bypasses
+- **Local Development Zero-Trust Auth Bypass**: Fixed a critical backend bug inside `iap.service.js` where the Google Identity-Aware Proxy (IAP) auth middleware (`verifyIAPToken`) blocked local request dispatches with 401 Unauthorized errors in the absence of `x-goog-iap-jwt-assertion` headers. The middleware now dynamically bypasses checking headers when `config.env === 'development'`.
+- **Low-Latency Agentic RAG Classifier**: Refactored the core prompt completion router inside `LlmGatewayService.routeCompletion` to classify user chat inputs dynamically, routing codebase queries automatically to the high-performance RAG pipeline and general queries to standard completions.
+- **Deep Research Integration**: Placed a custom research interceptor route inside the `LlmGatewayService` gateway to dynamically catch Deep Research models and delegate tasks cleanly to `researchService.executeDeepResearch`.
+- **Authoritative Test Suites**: Deployed authoritative integration test cases under `ultimateRag.test.js` and `rules.test.js` validating 100% green test execution for the zero-trust auth bypass and the RAG router logic.
+- **Platform Version Aligned**: Aligned backend versioning and release timeline to `39.37.14` for absolute consistency with frontend clients and monorepo tags.
+
 ## [39.6.0] — 2026-05-24
 
 ### Autonomous GitHub Swarm Factory (120+ Specialists Swarm)

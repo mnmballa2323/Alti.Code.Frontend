@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.15] - 2026-05-27 — Automations and Canvas Builder Purge
+### Removed
+- **Standalone Automations & Canvas Router Deletion**: Completely removed the legacy mock workflows and workflow-builder routes (`app/workflows` and `app/workflow-builder`) to maintain absolute focus on core agent-native IDE workspaces.
+- **Sidebar & Modal Layout Cleanups**: Stripped all "Automations" and "Canvas" case titles, navbar buttons, new-workflow modal states (`isNewWorkflowModalOpen`, `newWorkflowName`, `isCreatingWorkflow`), dialog overlays, and secondary-column workflow map lists from `components/sidebar.tsx`.
+- **Lucide Icon Import Cleanups**: Removed unused `Workflow` and related asset imports from the client components to avoid dead code residue.
+
 ## [39.37.14] - 2026-05-27 — Boardroom Meetings and Roundtable Purge
 ### Removed
 - **Standalone Boardroom Page & Nested Routes Deletion**: Completely removed the redundant mock boardroom meeting directories and pages (`app/boardroom`) to streamline the agentic IDE workspace and eliminate non-development feature bloat.

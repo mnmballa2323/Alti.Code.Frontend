@@ -27,7 +27,6 @@ import {
   Search,
   ChevronDown,
   Blocks,
-  Workflow,
   Waypoints,
   Network,
   BookOpen,
@@ -804,10 +803,6 @@ export default function Sidebar() {
       case "/connect-apps":
       case "/integrations":
         return "Integrations";
-      case "/workflows":
-        return "Automations";
-      case "/workflow-builder":
-        return "Canvas";
 
       case "/vault":
         return "Vault";
@@ -824,9 +819,6 @@ export default function Sidebar() {
   const [isSecondarySidebarOpen, setIsSecondarySidebarOpen] = useState(true);
   const toggleSecondarySidebar = () =>
     setIsSecondarySidebarOpen(!isSecondarySidebarOpen);
-  const [isNewWorkflowModalOpen, setIsNewWorkflowModalOpen] = useState(false);
-  const [newWorkflowName, setNewWorkflowName] = useState("");
-  const [isCreatingWorkflow, setIsCreatingWorkflow] = useState(false);
   const [dataFolders, setDataFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1052,43 +1044,6 @@ export default function Sidebar() {
     }
     closeDeleteModal();
     setItemToDelete(null);
-  };
-
-  const handleCreateWorkflow = async () => {
-    if (!newWorkflowName.trim()) return;
-    setIsCreatingWorkflow(true);
-
-    try {
-      const res = await axios.post(
-        `${API_URL}/workflows`,
-        { name: newWorkflowName },
-        {
-          headers: {
-            Authorization: `Bearer ${session?.user?.accessToken || ""}`,
-          },
-        },
-      );
-
-      setIsNewWorkflowModalOpen(false);
-      window.dispatchEvent(
-        new CustomEvent("init-new-workflow", {
-          detail: res.data?.data?.name || newWorkflowName,
-        }),
-      );
-      router.push("/workflow-builder");
-      setNewWorkflowName("");
-    } catch (err) {
-      console.error("Failed to create workflow via API:", err);
-      // Fallback
-      setIsNewWorkflowModalOpen(false);
-      window.dispatchEvent(
-        new CustomEvent("init-new-workflow", { detail: newWorkflowName }),
-      );
-      router.push("/workflow-builder");
-      setNewWorkflowName("");
-    } finally {
-      setIsCreatingWorkflow(false);
-    }
   };
 
   useEffect(() => {
@@ -1526,25 +1481,7 @@ export default function Sidebar() {
               Integrations
             </span>
           </button>
-          <button
-            className={cn(
-              "flex h-11 w-full items-center justify-start text-sm rounded-xl px-4 transition-colors",
-              pathname === "/workflows"
-                ? "bg-black/5 dark:bg-white/5 text-black dark:text-white font-medium"
-                : "bg-transparent text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5",
-              !isSidebarOpen && "px-0 justify-center min-w-auto",
-            )}
-            onClick={() => {
-              router.push("/workflows");
-            }}
-          >
-            <Workflow className={cn("size-4", isSidebarOpen && "mr-2")} />
-            <span
-              className={cn("text-sm font-normal", !isSidebarOpen && "hidden")}
-            >
-              Automations
-            </span>
-          </button>
+
         </div>
 
         <div
@@ -1651,12 +1588,7 @@ export default function Sidebar() {
                   title="New"
                   variant="flat"
                   onClick={() => {
-                    if (
-                      pathname === "/workflows" ||
-                      pathname === "/workflow-builder"
-                    ) {
-                      setIsNewWorkflowModalOpen(true);
-                    } else if (pathname === "/vault") {
+                    if (pathname === "/vault") {
                       window.dispatchEvent(new CustomEvent("open-vault-modal"));
                     } else if (pathname === "/repositories") {
                       window.dispatchEvent(
@@ -1748,25 +1680,6 @@ export default function Sidebar() {
                   );
                 });
               })()}
-            </div>
-          ) : pathname === "/workflows" || pathname === "/workflow-builder" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {[
-                { id: "wf-1", name: "Daily Standup Summary" },
-                { id: "wf-2", name: "GitHub PR Auto-Reviewer" },
-              ].map((wf) => (
-                <button
-                  key={wf.id}
-                  className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("select-workflow", { detail: wf.id }),
-                    )
-                  }
-                >
-                  {wf.name}
-                </button>
-              ))}
             </div>
           ) : pathname === "/vault" ? (
             <div className="flex flex-col gap-0.5 px-2 mt-2">
@@ -2219,53 +2132,7 @@ export default function Sidebar() {
         </ModalContent>
       </Modal>
 
-      <Modal
-        backdrop="opaque"
-        classNames={{ backdrop: "bg-black/20 backdrop-blur-sm" }}
-        isOpen={isNewWorkflowModalOpen}
-        size="sm"
-        onClose={() => setIsNewWorkflowModalOpen(false)}
-      >
-        <ModalContent className="bg-white dark:bg-default-50 border border-default-200 shadow-2xl rounded-2xl p-2">
-          <ModalHeader className="flex flex-col gap-1 text-black dark:text-white">
-            New Workflow
-          </ModalHeader>
-          <ModalBody>
-            <label className="block text-sm font-semibold mb-1 text-gray-800 dark:text-gray-200">
-              Workflow Name
-            </label>
-            <input
-              autoFocus
-              className="w-full px-3 py-2 border border-default-200 rounded-xl text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-white dark:bg-black"
-              placeholder="e.g. User Onboarding"
-              type="text"
-              value={newWorkflowName}
-              onChange={(e) => setNewWorkflowName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && newWorkflowName.trim()) {
-                  handleCreateWorkflow();
-                }
-              }}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-xl transition-colors"
-              onPress={() => setIsNewWorkflowModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="px-4 py-2 bg-black hover:bg-gray-900 text-white text-sm font-medium rounded-xl transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
-              isDisabled={!newWorkflowName.trim() || isCreatingWorkflow}
-              isLoading={isCreatingWorkflow}
-              onPress={handleCreateWorkflow}
-            >
-              Create
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
 
     </div>
   );
