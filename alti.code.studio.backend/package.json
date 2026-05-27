@@ -35,7 +35,6 @@
     }
   },
   "dependencies": {
-    "@agentmemory/agentmemory": "^0.9.5",
     "@anthropic-ai/sdk": "^0.74.0",
     "@babel/parser": "^7.29.0",
     "@babel/traverse": "^7.29.0",
@@ -97,7 +96,6 @@
     "@googlemaps/google-maps-services-js": "^3.4.2",
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
-    "@huggingface/transformers": "^3.8.1",
     "@langchain/community": "^1.1.17",
     "@langchain/core": "^1.1.27",
     "@langchain/langgraph": "^1.1.4",
