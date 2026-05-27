@@ -18,6 +18,8 @@ import {
   Cpu,
   Wand2,
   BookOpen,
+  HelpCircle,
+  Database,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -1034,6 +1036,86 @@ function PromptInputFullLineComponent({
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       <p>Write Documentation</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const explainPrompt =
+                            prompt.trim() ||
+                            "Explain Code: Trace the execution flow of the active files, provide a line-by-line conceptual walkthrough, explain technical trade-offs, and detail how the components interact.";
+                          setPrompt(explainPrompt);
+                          if (onSend) {
+                            onSend(
+                              explainPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: explainPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Explain Code</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Database
+                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                        onClick={() => {
+                          const dbPrompt =
+                            prompt.trim() ||
+                            "Database Designer: Architect the relational database schema, design Prisma or Mongoose models, write SQL migration scripts, optimize indexes, and map out entity relationships.";
+                          setPrompt(dbPrompt);
+                          if (onSend) {
+                            onSend(
+                              dbPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: dbPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Database Designer</p>
                     </TooltipContent>
                   </Tooltip>
 
