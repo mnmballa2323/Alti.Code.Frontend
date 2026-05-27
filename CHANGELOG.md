@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.14] - 2026-05-27 — Boardroom Meetings and Roundtable Purge
+### Removed
+- **Standalone Boardroom Page & Nested Routes Deletion**: Completely removed the redundant mock boardroom meeting directories and pages (`app/boardroom`) to streamline the agentic IDE workspace and eliminate non-development feature bloat.
+- **Sidebar & Roundtable Layout Cleanups**: Stripped the "Boardroom" navigation triggers, `addPendingRoom` imports, boardroom tab-state mappings, roundtable modal render code, and secondary sidebar room-listing containers from `components/sidebar.tsx`.
+- **Redux Messages State & Reducer Cleanups**: Purged the unused `pendingRooms` initial states, `addPendingRoom` action exports, and corresponding reducer cases from `store/messagesSlice.ts`.
+
 ## [39.37.13] - 2026-05-26 — Company Assets Page and Codebase Purge
 ### Removed
 - **Standalone Assets Page Deletion**: Completely removed the redundant frontend-only mock `/assets` route page directory (`app/assets/page.tsx`) to purge visual islands and maintain focus on the core agentic IDE workspace.

@@ -22,7 +22,7 @@ interface MessagesState {
   loading: boolean;
   error: string | null;
   model: string;
-  pendingRooms: any[];
+
 }
 
 const initialState: MessagesState = {
@@ -31,7 +31,7 @@ const initialState: MessagesState = {
   loading: false,
   error: null,
   model: "default",
-  pendingRooms: [],
+
 };
 
 interface SendMessagePayload {
@@ -168,9 +168,7 @@ const messagesSlice = createSlice({
     addMessage(state, action: PayloadAction<MessageType>) {
       state.messages.push(action.payload);
     },
-    addPendingRoom(state, action: PayloadAction<any>) {
-      state.pendingRooms.push(action.payload);
-    },
+
   },
   extraReducers: (builder) => {
     builder
@@ -218,7 +216,7 @@ const messagesSlice = createSlice({
   },
 });
 
-export const { setMessages, setChatContext, startNewChat, addMessage, addPendingRoom } =
+export const { setMessages, setChatContext, startNewChat, addMessage } =
   messagesSlice.actions;
 
 export default messagesSlice.reducer;
