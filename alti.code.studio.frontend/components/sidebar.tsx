@@ -901,15 +901,6 @@ export default function Sidebar() {
         router.push("/documents");
       },
     },
-    {
-      label: "Integrations",
-      icon: Blocks,
-      path: "/connect-apps",
-      isActive: pathname === "/connect-apps",
-      onClick: () => {
-        router.push("/connect-apps");
-      },
-    },
   ];
 
   const filteredNavigationItems = navigationItems.filter((item) =>

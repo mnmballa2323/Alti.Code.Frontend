@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.18] - 2026-05-27 — Left Navigation Sidebar Menu Consolidation
+### Removed
+- **Redundant Integrations Button Deletion**: Cleanly stripped the redundant "Integrations" (`Blocks`) vertical menu item button from the `navigationItems` array inside `components/sidebar.tsx`. Since the new premium white Apps Grid Icon at the top of the sidebar dynamically opens the `/connect-apps` page with a single click, the separate text-based menu link has been completely consolidated to simplify and declutter the developer navigation stack.
+
 ## [39.37.17] - 2026-05-27 — Left Navigation Sidebar Search & App Icon Enhancements
 ### Added
 - **White Background Inputs & Buttons**: Updated the search input field and action buttons inside the primary left sidebar to use a solid white background color (`bg-white`) in light mode and dark mode counterpart (`dark:bg-default-100`) to match the high-contrast presentation of `altihq.com` perfectly.
