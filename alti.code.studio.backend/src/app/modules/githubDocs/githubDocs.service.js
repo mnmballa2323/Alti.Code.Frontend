@@ -204,7 +204,7 @@ class GithubDocsService {
 
             // 1. Dynamic precision capability and keyword mapping over all registered specialist plugins
             for (const agent of allAgents) {
-                if (agent.isPlugin && agent.name.toLowerCase().startsWith('github')) {
+                if (agent.isPlugin) {
                     let score = 0;
                     
                     // Match by granular capabilities (e.g. github-create-repository)

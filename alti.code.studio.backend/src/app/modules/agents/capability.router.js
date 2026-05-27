@@ -20,6 +20,10 @@ class CapabilityRouter {
         this.isIndexed = false;
     }
 
+    get table() {
+        return CAPABILITY_TABLE;
+    }
+
     /**
      * Initializes the Agentic RAG system by generating embeddings for all 10,000+ agents
      * and storing them in the vector database if they aren't already there.
@@ -325,4 +329,19 @@ class CapabilityRouter {
 }
 
 export const capabilityRouter = new CapabilityRouter();
-export const CAPABILITY_TABLE = [];
+export const CAPABILITY_TABLE = new Proxy([], {
+    get(target, prop) {
+        const list = agentRegistry.list().map(a => ({
+            agent: a.instance || a,
+            keywords: a.capabilities || [],
+            id: a.name
+        }));
+        if (prop === 'length') {
+            return list.length;
+        }
+        if (typeof list[prop] === 'function') {
+            return list[prop].bind(list);
+        }
+        return list[prop];
+    }
+});

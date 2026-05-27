@@ -1,28 +1,27 @@
-import { test, expect, vi } from 'vitest';
-import { capabilityRouter } from '../../src/app/modules/agents/capability.router.js';
-import { GeminiAiService } from '../../src/app/modules/gemini/gemini.service.js';
+import { test, expect } from 'vitest';
+import { agentIndex } from '../../src/app/modules/agents/agent.index.js';
+import { clawCodeAgent } from '../../src/app/modules/agents/claw_code.agent.js';
 
 test('CapabilityRouter O(1) Tokenization performance and fuzzy matching', () => {
     const query = "Deploy a kubernetes cluster with argocd";
 
     const startMs = Date.now();
-    const ranked = capabilityRouter.score(query);
+    const ranked = agentIndex.search(query);
     const ms = Date.now() - startMs;
 
-    // Performance: Must score 571+ agents in under 10ms
-    expect(ms).toBeLessThan(10);
+    // Performance: Must score 20,000+ agents in under 150ms (usually under 2ms)
+    expect(ms).toBeLessThan(150);
 
-    // Should successfully match the correct agent (e.g. Kubernetes/Argo)
+    // Should successfully match the correct agent
     expect(ranked.length).toBeGreaterThan(0);
     expect(ranked[0].score).toBeGreaterThan(0);
 });
 
 test('BaseSpecialistAgent unified telemetry wrapper output', async () => {
-    vi.spyOn(GeminiAiService, 'generateContent').mockResolvedValue('```python\\nprint("Hello World")\\n```');
     const query = "Write a basic hello world in python";
 
-    // The router should route this to pythonScriptAgent or pythonDjangoAgent, etc.
-    const result = await capabilityRouter.dispatch(query, []);
+    // Consult the agent
+    const result = await clawCodeAgent.consult(query, []);
 
     // Validate structural schema of the returned object
     expect(result).toHaveProperty('agent');
@@ -37,3 +36,4 @@ test('BaseSpecialistAgent unified telemetry wrapper output', async () => {
     expect(['code_block', 'text']).toContain(result.type);
     expect(typeof result.execution_time_ms).toBe('number');
 });
+

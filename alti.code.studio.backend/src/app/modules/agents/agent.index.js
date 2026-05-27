@@ -33,12 +33,46 @@ class AgentCapabilityIndex {
      */
     search(query) {
         const q = query.toLowerCase();
+        const terms = q.split(/\s+/).filter(t => t.length > 2);
         return this.entries
             .map(e => {
-                const score =
-                    e.keywords.filter(kw => kw.includes(q)).length +
-                    (e.name.toLowerCase().includes(q) ? 2 : 0) +
-                    (e.description.toLowerCase().includes(q) ? 1 : 0);
+                let score = 0;
+                
+                // Keyword matches
+                for (const kw of e.keywords) {
+                    const kwLower = kw.toLowerCase();
+                    if (q.includes(kwLower)) {
+                        score += 3;
+                    }
+                    for (const term of terms) {
+                        if (kwLower.includes(term)) {
+                            score += 1;
+                        }
+                    }
+                }
+                
+                // Name matches
+                const nameLower = e.name.toLowerCase();
+                if (q.includes(nameLower)) {
+                    score += 5;
+                }
+                for (const term of terms) {
+                    if (nameLower.includes(term)) {
+                        score += 2;
+                    }
+                }
+                
+                // Description matches
+                const descLower = e.description.toLowerCase();
+                if (q.includes(descLower)) {
+                    score += 2;
+                }
+                for (const term of terms) {
+                    if (descLower.includes(term)) {
+                        score += 1;
+                    }
+                }
+                
                 return { ...e, score };
             })
             .filter(e => e.score > 0)

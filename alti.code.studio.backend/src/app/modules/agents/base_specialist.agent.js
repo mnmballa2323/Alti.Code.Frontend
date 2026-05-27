@@ -55,6 +55,10 @@ function withTimeout(promise, ms, label) {
 
 // ── Base Class ────────────────────────────────────────────────────────────────
 export class BaseSpecialistAgent {
+    get id() {
+        return this.name;
+    }
+
     constructor() {
         if (new.target === BaseSpecialistAgent) {
             throw new TypeError('Cannot construct BaseSpecialistAgent directly — use a subclass.');

@@ -788,9 +788,10 @@ export default function Sidebar() {
 
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
-    router.prefetch("/");
-    router.prefetch("/chat");
-    router.prefetch("/vault");
+     router.prefetch("/");
+     router.prefetch("/chat");
+     router.prefetch("/agents-showcase");
+     router.prefetch("/vault");
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
@@ -807,6 +808,8 @@ export default function Sidebar() {
         return "Code";
       case "/chat":
         return "Chat";
+      case "/agents-showcase":
+        return "Agent Arcade";
       case "/documents":
         return "Documentation";
       case "/instructions":
@@ -851,6 +854,15 @@ export default function Sidebar() {
       isActive: pathname.startsWith("/chat"),
       onClick: () => {
         router.push("/chat");
+      },
+    },
+    {
+      label: "Agent Arcade",
+      icon: Bot,
+      path: "/agents-showcase",
+      isActive: pathname === "/agents-showcase",
+      onClick: () => {
+        router.push("/agents-showcase");
       },
     },
     {
@@ -942,6 +954,7 @@ export default function Sidebar() {
   useEffect(() => {
     router.prefetch("/");
     router.prefetch("/chat");
+    router.prefetch("/agents-showcase");
     router.prefetch("/vault");
     router.prefetch("/cloud");
     router.prefetch("/instructions");

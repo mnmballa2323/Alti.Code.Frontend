@@ -74,6 +74,7 @@ try {
               if (file === 'observability.route.js') basePath = '/observability';
               if (file === 'metrics.route.js') basePath = '/metrics';
               if (file === 'agent.route.js') basePath = '/agents';
+              if (file === 'omni_polyglot.route.js') basePath = '/agents/polyglot';
               if (file === 'openclaw.config.route.js') basePath = '/openclaw';
               if (file === 'geminiCli.route.js') basePath = '/gemini-cli';
               if (file === 'cliAnything.route.js') basePath = '/cli-anything';
