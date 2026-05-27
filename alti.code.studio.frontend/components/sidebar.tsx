@@ -818,9 +818,6 @@ export default function Sidebar() {
   // const dispatch = useDispatch();
   const [currentMode, setCurrentMode] = useState<"chat" | "code">("chat");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isSecondarySidebarOpen, setIsSecondarySidebarOpen] = useState(true);
-  const toggleSecondarySidebar = () =>
-    setIsSecondarySidebarOpen(!isSecondarySidebarOpen);
   const [leftSidebarSearch, setLeftSidebarSearch] = useState("");
 
   const navigationItems = [
@@ -922,7 +919,6 @@ export default function Sidebar() {
   );
 
   // States and dynamic handlers for integrations / connect-apps catalog
-  const [secondarySearch, setSecondarySearch] = useState("");
   const [apps, setApps] = useState<AppIntegration[]>([]);
   const [loadingApps, setLoadingApps] = useState(true);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
@@ -941,7 +937,7 @@ export default function Sidebar() {
   }, [router]);
 
   useEffect(() => {
-    setSecondarySearch("");
+    setLeftSidebarSearch("");
   }, [pathname]);
 
   useEffect(() => {
@@ -1482,7 +1478,504 @@ export default function Sidebar() {
           )}
         </div>
 
-        <div className="flex-1" />
+        {!isSidebarOpen && <div className="flex-1" />}
+
+        {isSidebarOpen && (
+          <ScrollShadow
+            hideScrollBar
+            className="flex-1 px-2 mt-1 min-h-0 w-full scrollbar-hide overflow-y-auto"
+          >
+            {pathname === "/connect-apps" ? (
+              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                {loadingApps ? (
+                  <div className="flex flex-col items-center justify-center py-20 gap-3">
+                    <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+                    <span className="text-xs text-default-400">Loading catalog...</span>
+                  </div>
+                ) : (() => {
+                  const filtered = apps.filter((app) =>
+                    app.name.toLowerCase().includes(leftSidebarSearch.toLowerCase()) ||
+                    app.description.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  
+                  if (filtered.length === 0) {
+                    return <span className="text-xs text-default-400 text-center py-12">No apps found</span>;
+                  }
+
+                  return filtered.map((app) => {
+                    const isActive = selectedAppId === app.id;
+                    return (
+                      <button
+                        key={app.id}
+                        onClick={() => {
+                          setSelectedAppId(app.id);
+                          window.dispatchEvent(
+                            new CustomEvent("select-connect-app", { detail: app })
+                          );
+                        }}
+                        className={cn(
+                          "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                          isActive
+                            ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                            : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
+                        )}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          {/* Dynamic Mini App Logo/Icon */}
+                          <div
+                            className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                              isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
+                            )}
+                          >
+                            <AppIcon app={app} className="w-full h-full object-contain" />
+                          </div>
+                          <span className="text-xs text-left truncate pr-2">
+                            {app.name}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {app.status === "connected" && (
+                            <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                          )}
+                          <Icon
+                            icon="solar:alt-arrow-right-linear"
+                            className={cn(
+                              "text-xs text-default-400 transition-transform",
+                              isActive ? "translate-x-0.5 text-primary" : ""
+                            )}
+                          />
+                        </div>
+                      </button>
+                    );
+                  });
+                })()}
+              </div>
+            ) : pathname === "/vault" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {[
+                  { id: "sec-1", name: "Primary Build Agent" },
+                  { id: "sec-2", name: "Synapse Production Analytics" },
+                  { id: "sec-3", name: "Telepathy Inference" },
+                ].filter((stream) =>
+                  stream.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((stream) => (
+                  <button
+                    key={stream.id}
+                    className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
+                    onClick={() =>
+                      window.dispatchEvent(
+                        new CustomEvent("select-secret", { detail: stream.id }),
+                      )
+                    }
+                  >
+                    <span>{stream.name}</span>
+                    <Lock
+                      className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                      size={14}
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : pathname === "/instructions" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {instructions.filter((inst) =>
+                  inst.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((inst) => (
+                  <div
+                    key={inst.id}
+                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                  >
+                    <span className="truncate">{inst.name}</span>
+                    <Dropdown
+                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                      placement="bottom-end"
+                    >
+                      <DropdownTrigger>
+                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                          <MoreHorizontal size={16} />
+                        </button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Instruction options"
+                        className="p-0"
+                        variant="flat"
+                      >
+                        <DropdownItem
+                          key="edit"
+                          className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                          startContent={
+                            <Edit2 className="text-default-500" size={14} />
+                          }
+                          onClick={() =>
+                            window.dispatchEvent(
+                              new CustomEvent("edit-instruction", {
+                                detail: inst,
+                              }),
+                            )
+                          }
+                        >
+                          Edit
+                        </DropdownItem>
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                          color="danger"
+                          startContent={<Trash2 size={14} />}
+                          onClick={() =>
+                            window.dispatchEvent(
+                              new CustomEvent("delete-instruction", {
+                                detail: inst.id,
+                              }),
+                            )
+                          }
+                        >
+                          Delete
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                ))}
+                {instructions.length === 0 && (
+                  <div className="px-3 py-2 text-xs text-gray-400">
+                    No instructions added yet.
+                  </div>
+                )}
+              </div>
+            ) : pathname === "/guardrails" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {guardrails.filter((gr) =>
+                  gr.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((gr) => (
+                  <div
+                    key={gr.id}
+                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                  >
+                    <span className="truncate">{gr.name}</span>
+                    <Dropdown
+                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                      placement="bottom-end"
+                    >
+                      <DropdownTrigger>
+                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                          <MoreHorizontal size={16} />
+                        </button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Guardrail options"
+                        className="p-0"
+                        variant="flat"
+                      >
+                        <DropdownItem
+                          key="edit"
+                          className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                          startContent={
+                            <Edit2 className="text-default-500" size={14} />
+                          }
+                          onClick={() =>
+                            window.dispatchEvent(
+                              new CustomEvent("edit-guardrail", { detail: gr }),
+                            )
+                          }
+                        >
+                          Edit
+                        </DropdownItem>
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                          color="danger"
+                          startContent={<Trash2 size={14} />}
+                          onClick={() =>
+                            window.dispatchEvent(
+                              new CustomEvent("delete-guardrail", {
+                                detail: gr.id,
+                              }),
+                            )
+                          }
+                        >
+                          Delete
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                ))}
+                {guardrails.length === 0 && (
+                  <div className="px-3 py-2 text-xs text-gray-400">
+                    No guardrails added yet.
+                  </div>
+                )}
+              </div>
+            ) : pathname === "/repositories" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {repositories.filter((repo) =>
+                  repo.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((repo) => (
+                  <div
+                    key={repo.id}
+                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    onClick={() =>
+                      window.dispatchEvent(
+                        new CustomEvent("edit-repository", { detail: repo }),
+                      )
+                    }
+                  >
+                    <span className="truncate">{repo.name}</span>
+                    <Dropdown
+                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                      placement="bottom-end"
+                    >
+                      <DropdownTrigger>
+                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                          <MoreHorizontal size={16} />
+                        </button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Repository options"
+                        className="p-0"
+                        variant="flat"
+                      >
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                          color="danger"
+                          startContent={<Trash2 size={14} />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(removeRepository(repo.id));
+                          }}
+                        >
+                          Delete
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                ))}
+                {repositories.length === 0 && (
+                  <div className="px-3 py-2 text-xs text-gray-400">
+                    No repositories added yet.
+                  </div>
+                )}
+              </div>
+            ) : pathname === "/documents" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {documents.filter((doc) =>
+                  doc.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((doc) => (
+                  <div
+                    key={doc.id}
+                    className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    onClick={() =>
+                      window.dispatchEvent(
+                        new CustomEvent("edit-document", { detail: doc }),
+                      )
+                    }
+                  >
+                    <span className="truncate">{doc.name}</span>
+                    <Dropdown
+                      className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                      placement="bottom-end"
+                    >
+                      <DropdownTrigger>
+                        <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                          <MoreHorizontal size={16} />
+                        </button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Document options"
+                        className="p-0"
+                        variant="flat"
+                      >
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                          color="danger"
+                          startContent={<Trash2 size={14} />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(removeDocument(doc.id));
+                          }}
+                        >
+                          Delete
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                ))}
+                {documents.length === 0 && (
+                  <div className="px-3 py-2 text-xs text-gray-400">
+                    No documents added yet.
+                  </div>
+                )}
+              </div>
+            ) : pathname === "/cloud" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6">
+                {[
+                  {
+                    category: "Hyperscalers",
+                    providers: [
+                      "Amazon Web Services",
+                      "Google Cloud Platform",
+                      "Microsoft Azure",
+                      "Oracle Cloud",
+                      "IBM Cloud",
+                    ],
+                  },
+                  {
+                    category: "AI & GPU Compute",
+                    providers: [
+                      "CoreWeave",
+                      "Lambda Labs",
+                      "Paperspace",
+                      "RunPod",
+                      "Together AI",
+                    ],
+                  },
+                  {
+                    category: "Developer & PaaS",
+                    providers: [
+                      "DigitalOcean",
+                      "Fly.io",
+                      "Heroku",
+                      "Railway",
+                      "Render",
+                      "Supabase",
+                      "Vercel",
+                      "Kinsta",
+                    ],
+                  },
+                  {
+                    category: "Global & Regional",
+                    providers: [
+                      "Alibaba Cloud",
+                      "Baidu AI Cloud",
+                      "Huawei Cloud",
+                      "OVHcloud",
+                      "Scaleway",
+                      "Tencent Cloud",
+                      "Yandex Cloud",
+                      "Sinopec Cloud",
+                      "Exoscale",
+                    ],
+                  },
+                  {
+                    category: "Bare Metal & Edge",
+                    providers: [
+                      "Cherry Servers",
+                      "Equinix Metal",
+                      "Fastly",
+                      "Lumen",
+                      "MacStadium",
+                      "Maxihost",
+                      "Rackspace",
+                      "Packet",
+                      "Cloudflare",
+                    ],
+                  },
+                  {
+                    category: "VPS Infrastructure",
+                    providers: [
+                      "1&1 IONOS",
+                      "Atlantic.Net",
+                      "Hetzner",
+                      "Kamatera",
+                      "Linode",
+                      "UpCloud",
+                      "Vultr",
+                      "Hostwinds",
+                      "Liquid Web",
+                    ],
+                  },
+                  {
+                    category: "Enterprise Clouds",
+                    providers: [
+                      "Aiven",
+                      "Aruba Cloud",
+                      "ClearDATA",
+                      "Cloudera",
+                      "Databricks",
+                      "Navisite",
+                      "Nutanix",
+                      "Red Hat",
+                      "Salesforce",
+                      "SAP",
+                      "Snowflake",
+                      "VMware",
+                    ],
+                  },
+                  {
+                    category: "Telco & Networking",
+                    providers: [
+                      "Biznet Networks",
+                      "BT Cloud",
+                      "Cato Networks",
+                      "CenturyLink",
+                      "GTS Central Europe",
+                      "Megaport",
+                      "NTT Communications",
+                      "T-Systems",
+                      "Zayo",
+                    ],
+                  },
+                ].map((group) => {
+                  const filteredProviders = group.providers.filter((provider) =>
+                    provider.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (filteredProviders.length === 0) return null;
+                  return (
+                    <div key={group.category} className="mb-4 last:mb-0">
+                      <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                        {group.category}
+                      </div>
+                      {filteredProviders.map((provider) => (
+                        <button
+                          key={provider}
+                          className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
+                          onClick={() =>
+                            window.dispatchEvent(
+                              new CustomEvent("select-cloud-provider", {
+                                detail: provider,
+                              }),
+                            )
+                          }
+                        >
+                          <Cloud
+                            className="text-gray-400 flex-shrink-0"
+                            size={14}
+                          />
+                          <span className="truncate">{provider}</span>
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : isLoading ? (
+              <div className="space-y-4 px-4 mt-2">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div
+                    key={i}
+                    className="h-4 w-full bg-default-100 animate-pulse rounded"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-0.5 px-2 mt-2">
+                {sortedChats.filter((item) =>
+                  (item?.responses[0]?.prompt || "Untitled Chat").toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                ).map((item) => (
+                  <button
+                    key={item?._id}
+                    className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
+                    onClick={() => item?.sessionId && submitForm(item?.sessionId)}
+                  >
+                    {item?.responses[0]?.prompt || "Untitled Chat"}
+                  </button>
+                ))}
+              </div>
+            )}
+          </ScrollShadow>
+        )}
 
         <div
           className={cn(
@@ -1511,581 +2004,6 @@ export default function Sidebar() {
             </div>
           )}
         </div>
-      </div>
-
-      {/* Secondary Column (Right Side Menu for History) */}
-      <div
-        className={cn(
-          "flex h-full flex-col transition-all duration-300 bg-default-50/50 dark:bg-black/20 border-r border-default-200",
-          isSecondarySidebarOpen ? "w-64" : "w-10",
-        )}
-      >
-        <div
-          className={cn(
-            "h-[56px] flex items-center border-b border-default-200",
-            isSecondarySidebarOpen
-              ? "px-4 justify-between min-w-[256px]"
-              : "px-0 justify-center",
-          )}
-        >
-          <span
-            className={cn(
-              "text-[14px] font-semibold tracking-tight text-default-900 truncate",
-              !isSecondarySidebarOpen && "hidden",
-            )}
-          >
-            {getHistoryTitle()}
-          </span>
-          <Button
-            isIconOnly
-            className={cn(
-              isSecondarySidebarOpen
-                ? "-mr-2 text-default-400 hover:text-default-600"
-                : "",
-            )}
-            size="sm"
-            variant="light"
-            onClick={toggleSecondarySidebar}
-          >
-            {isSecondarySidebarOpen ? (
-              <PanelLeftClose className="size-4" />
-            ) : (
-              <PanelLeftOpen className="size-4" />
-            )}
-          </Button>
-        </div>
-
-        {/* Search bar and + icon on the same line below the line */}
-        <div
-          className={cn(
-            "px-3 py-3 flex items-center gap-2 border-b border-default-200 min-w-[256px]",
-            !isSecondarySidebarOpen && "hidden",
-          )}
-        >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-            <input
-              className="w-full bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-              placeholder="Search..."
-              value={pathname === "/connect-apps" ? secondarySearch : ""}
-              onChange={(e) => {
-                if (pathname === "/connect-apps") {
-                  setSecondarySearch(e.target.value);
-                }
-              }}
-            />
-          </div>
-          {pathname !== "/instructions" &&
-            pathname !== "/guardrails" &&
-            pathname !== "/cloud" &&
-            pathname !== "/connect-apps" && (
-              <>
-
-                <Button
-                  isIconOnly
-                  className="bg-default-50 dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-                  size="sm"
-                  title="New"
-                  variant="flat"
-                  onClick={() => {
-                    if (pathname === "/vault") {
-                      window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                    } else if (pathname === "/repositories") {
-                      window.dispatchEvent(
-                        new CustomEvent("open-repository-modal"),
-                      );
-                    } else if (pathname === "/documents") {
-                      window.dispatchEvent(
-                        new CustomEvent("open-document-modal"),
-                      );
-                    } else {
-                      dispatch(startNewChat());
-                      router.push("/");
-                    }
-                  }}
-                >
-                  <Plus className="size-3.5" />
-                </Button>
-              </>
-            )}
-        </div>
-
-        <ScrollShadow
-          hideScrollBar
-          className="flex-1 px-2 mt-1 min-w-[256px] scrollbar-hide"
-        >
-          {pathname === "/connect-apps" ? (
-            <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
-              {loadingApps ? (
-                <div className="flex flex-col items-center justify-center py-20 gap-3">
-                  <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
-                  <span className="text-xs text-default-400">Loading catalog...</span>
-                </div>
-              ) : (() => {
-                const filtered = apps.filter((app) =>
-                  app.name.toLowerCase().includes(secondarySearch.toLowerCase()) ||
-                  app.description.toLowerCase().includes(secondarySearch.toLowerCase())
-                );
-                
-                if (filtered.length === 0) {
-                  return <span className="text-xs text-default-400 text-center py-12">No apps found</span>;
-                }
-
-                return filtered.map((app) => {
-                  const isActive = selectedAppId === app.id;
-                  return (
-                    <button
-                      key={app.id}
-                      onClick={() => {
-                        setSelectedAppId(app.id);
-                        window.dispatchEvent(
-                          new CustomEvent("select-connect-app", { detail: app })
-                        );
-                      }}
-                      className={cn(
-                        "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
-                        isActive
-                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                          : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
-                      )}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        {/* Dynamic Mini App Logo/Icon */}
-                        <div
-                          className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
-                            isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
-                          )}
-                        >
-                          <AppIcon app={app} className="w-full h-full object-contain" />
-                        </div>
-                        <span className="text-xs text-left truncate pr-2">
-                          {app.name}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        {app.status === "connected" && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                        )}
-                        <Icon
-                          icon="solar:alt-arrow-right-linear"
-                          className={cn(
-                            "text-xs text-default-400 transition-transform",
-                            isActive ? "translate-x-0.5 text-primary" : ""
-                          )}
-                        />
-                      </div>
-                    </button>
-                  );
-                });
-              })()}
-            </div>
-          ) : pathname === "/vault" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {[
-                { id: "sec-1", name: "Primary Build Agent" },
-                { id: "sec-2", name: "Synapse Production Analytics" },
-                { id: "sec-3", name: "Telepathy Inference" },
-              ].map((stream) => (
-                <button
-                  key={stream.id}
-                  className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("select-secret", { detail: stream.id }),
-                    )
-                  }
-                >
-                  <span>{stream.name}</span>
-                  <Lock
-                    className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                    size={14}
-                  />
-                </button>
-              ))}
-            </div>
-          ) : pathname === "/instructions" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {instructions.map((inst) => (
-                <div
-                  key={inst.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                >
-                  <span className="truncate">{inst.name}</span>
-                  <Dropdown
-                    className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                    placement="bottom-end"
-                  >
-                    <DropdownTrigger>
-                      <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Instruction options"
-                      className="p-0"
-                      variant="flat"
-                    >
-                      <DropdownItem
-                        key="edit"
-                        className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                        startContent={
-                          <Edit2 className="text-default-500" size={14} />
-                        }
-                        onClick={() =>
-                          window.dispatchEvent(
-                            new CustomEvent("edit-instruction", {
-                              detail: inst,
-                            }),
-                          )
-                        }
-                      >
-                        Edit
-                      </DropdownItem>
-                      <DropdownItem
-                        key="delete"
-                        className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                        color="danger"
-                        startContent={<Trash2 size={14} />}
-                        onClick={() =>
-                          window.dispatchEvent(
-                            new CustomEvent("delete-instruction", {
-                              detail: inst.id,
-                            }),
-                          )
-                        }
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              ))}
-              {instructions.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No instructions added yet.
-                </div>
-              )}
-            </div>
-          ) : pathname === "/guardrails" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {guardrails.map((gr) => (
-                <div
-                  key={gr.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                >
-                  <span className="truncate">{gr.name}</span>
-                  <Dropdown
-                    className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                    placement="bottom-end"
-                  >
-                    <DropdownTrigger>
-                      <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Guardrail options"
-                      className="p-0"
-                      variant="flat"
-                    >
-                      <DropdownItem
-                        key="edit"
-                        className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                        startContent={
-                          <Edit2 className="text-default-500" size={14} />
-                        }
-                        onClick={() =>
-                          window.dispatchEvent(
-                            new CustomEvent("edit-guardrail", { detail: gr }),
-                          )
-                        }
-                      >
-                        Edit
-                      </DropdownItem>
-                      <DropdownItem
-                        key="delete"
-                        className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                        color="danger"
-                        startContent={<Trash2 size={14} />}
-                        onClick={() =>
-                          window.dispatchEvent(
-                            new CustomEvent("delete-guardrail", {
-                              detail: gr.id,
-                            }),
-                          )
-                        }
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              ))}
-              {guardrails.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No guardrails added yet.
-                </div>
-              )}
-            </div>
-          ) : pathname === "/repositories" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {repositories.map((repo) => (
-                <div
-                  key={repo.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("edit-repository", { detail: repo }),
-                    )
-                  }
-                >
-                  <span className="truncate">{repo.name}</span>
-                  <Dropdown
-                    className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                    placement="bottom-end"
-                  >
-                    <DropdownTrigger>
-                      <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Repository options"
-                      className="p-0"
-                      variant="flat"
-                    >
-                      <DropdownItem
-                        key="delete"
-                        className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                        color="danger"
-                        startContent={<Trash2 size={14} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(removeRepository(repo.id));
-                        }}
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              ))}
-              {repositories.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No repositories added yet.
-                </div>
-              )}
-            </div>
-          ) : pathname === "/documents" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {documents.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                  onClick={() =>
-                    window.dispatchEvent(
-                      new CustomEvent("edit-document", { detail: doc }),
-                    )
-                  }
-                >
-                  <span className="truncate">{doc.name}</span>
-                  <Dropdown
-                    className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                    placement="bottom-end"
-                  >
-                    <DropdownTrigger>
-                      <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Document options"
-                      className="p-0"
-                      variant="flat"
-                    >
-                      <DropdownItem
-                        key="delete"
-                        className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                        color="danger"
-                        startContent={<Trash2 size={14} />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(removeDocument(doc.id));
-                        }}
-                      >
-                        Delete
-                      </DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-              ))}
-              {documents.length === 0 && (
-                <div className="px-3 py-2 text-xs text-gray-400">
-                  No documents added yet.
-                </div>
-              )}
-            </div>
-          ) : pathname === "/cloud" ? (
-            <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6">
-              {[
-                {
-                  category: "Hyperscalers",
-                  providers: [
-                    "Amazon Web Services",
-                    "Google Cloud Platform",
-                    "Microsoft Azure",
-                    "Oracle Cloud",
-                    "IBM Cloud",
-                  ],
-                },
-                {
-                  category: "AI & GPU Compute",
-                  providers: [
-                    "CoreWeave",
-                    "Lambda Labs",
-                    "Paperspace",
-                    "RunPod",
-                    "Together AI",
-                  ],
-                },
-                {
-                  category: "Developer & PaaS",
-                  providers: [
-                    "DigitalOcean",
-                    "Fly.io",
-                    "Heroku",
-                    "Railway",
-                    "Render",
-                    "Supabase",
-                    "Vercel",
-                    "Kinsta",
-                  ],
-                },
-                {
-                  category: "Global & Regional",
-                  providers: [
-                    "Alibaba Cloud",
-                    "Baidu AI Cloud",
-                    "Huawei Cloud",
-                    "OVHcloud",
-                    "Scaleway",
-                    "Tencent Cloud",
-                    "Yandex Cloud",
-                    "Sinopec Cloud",
-                    "Exoscale",
-                  ],
-                },
-                {
-                  category: "Bare Metal & Edge",
-                  providers: [
-                    "Cherry Servers",
-                    "Equinix Metal",
-                    "Fastly",
-                    "Lumen",
-                    "MacStadium",
-                    "Maxihost",
-                    "Rackspace",
-                    "Packet",
-                    "Cloudflare",
-                  ],
-                },
-                {
-                  category: "VPS Infrastructure",
-                  providers: [
-                    "1&1 IONOS",
-                    "Atlantic.Net",
-                    "Hetzner",
-                    "Kamatera",
-                    "Linode",
-                    "UpCloud",
-                    "Vultr",
-                    "Hostwinds",
-                    "Liquid Web",
-                  ],
-                },
-                {
-                  category: "Enterprise Clouds",
-                  providers: [
-                    "Aiven",
-                    "Aruba Cloud",
-                    "ClearDATA",
-                    "Cloudera",
-                    "Databricks",
-                    "Navisite",
-                    "Nutanix",
-                    "Red Hat",
-                    "Salesforce",
-                    "SAP",
-                    "Snowflake",
-                    "VMware",
-                  ],
-                },
-                {
-                  category: "Telco & Networking",
-                  providers: [
-                    "Biznet Networks",
-                    "BT Cloud",
-                    "Cato Networks",
-                    "CenturyLink",
-                    "GTS Central Europe",
-                    "Megaport",
-                    "NTT Communications",
-                    "T-Systems",
-                    "Zayo",
-                  ],
-                },
-              ].map((group) => (
-                <div key={group.category} className="mb-4 last:mb-0">
-                  <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                    {group.category}
-                  </div>
-                  {group.providers.map((provider) => (
-                    <button
-                      key={provider}
-                      className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("select-cloud-provider", {
-                            detail: provider,
-                          }),
-                        )
-                      }
-                    >
-                      <Cloud
-                        className="text-gray-400 flex-shrink-0"
-                        size={14}
-                      />
-                      <span className="truncate">{provider}</span>
-                    </button>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ) : isLoading ? (
-            <div className="space-y-4 px-4 mt-2">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div
-                  key={i}
-                  className="h-4 w-full bg-default-100 animate-pulse rounded"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col gap-0.5 px-2 mt-2">
-              {sortedChats.map((item) => (
-                <button
-                  key={item?._id}
-                  className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
-                  onClick={() => item?.sessionId && submitForm(item?.sessionId)}
-                >
-                  {item?.responses[0]?.prompt || "Untitled Chat"}
-                </button>
-              ))}
-            </div>
-          )}
-        </ScrollShadow>
       </div>
     </div>
   );
