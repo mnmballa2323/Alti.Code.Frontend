@@ -1084,6 +1084,7 @@ export default function Sidebar() {
       return data.success ? data.data : { instructions: [], guardrails: [] };
     },
     enabled: !!token,
+    staleTime: 1000 * 60 * 5, // Cache rules for 5 minutes to prevent blocking fetches on page transition
   });
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -1429,6 +1430,9 @@ export default function Sidebar() {
               )}
               size="sm"
               variant="flat"
+              onMouseEnter={() => {
+                router.prefetch("/connect-apps");
+              }}
               onClick={() => {
                 router.push("/connect-apps");
               }}
@@ -1456,6 +1460,9 @@ export default function Sidebar() {
               )}
               size="sm"
               variant="flat"
+              onMouseEnter={() => {
+                router.prefetch("/cloud");
+              }}
               onClick={() => {
                 router.push("/cloud");
               }}
@@ -1478,6 +1485,17 @@ export default function Sidebar() {
               className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
               size="sm"
               variant="flat"
+              onMouseEnter={() => {
+                if (pathname === "/vault") {
+                  router.prefetch("/vault");
+                } else if (pathname === "/repositories") {
+                  router.prefetch("/repositories");
+                } else if (pathname === "/documents") {
+                  router.prefetch("/documents");
+                } else {
+                  router.prefetch("/");
+                }
+              }}
               onClick={() => {
                 if (pathname === "/vault") {
                   window.dispatchEvent(new CustomEvent("open-vault-modal"));
@@ -1530,6 +1548,9 @@ export default function Sidebar() {
                       ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
                       : "bg-transparent border-none text-default-400 hover:text-default-700 dark:hover:text-default-200",
                   )}
+                  onMouseEnter={() => {
+                    router.prefetch(item.path);
+                  }}
                   onClick={item.onClick}
                 >
                   <IconComponent className="size-3.5" />
