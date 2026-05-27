@@ -442,13 +442,14 @@ export default function VaultPage() {
         </ScrollShadow>
       </div>
 
-      {/* Add Secret Modal */}
+      {/* Add/Edit Secret Modal */}
       <Modal
         backdrop="blur"
         classNames={{
-          base: "bg-white dark:bg-background border border-default-200",
-          header: "border-b border-default-200",
-          footer: "border-t border-default-200",
+          base: "bg-white dark:bg-[#161616] border border-default-200/50 rounded-[32px] shadow-2xl overflow-hidden max-w-[440px] w-full mx-4",
+          header: "border-none pt-6 pb-2 px-6",
+          body: "py-4 px-6 space-y-6",
+          footer: "border-none pt-2 pb-6 px-6 flex justify-end gap-3",
         }}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -456,29 +457,45 @@ export default function VaultPage() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold">
-                  {editingSecretId ? "Edit Secret" : "Store New Secret"}
-                </h2>
-                <p className="text-xs font-normal text-default-500">
-                  Data is immediately encrypted locally via AES-256 before
-                  persistence.
+              <ModalHeader className="flex flex-col gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
+                    <Lock size={16} />
+                  </div>
+                  <h2 className="text-xl font-bold tracking-tight text-default-900">
+                    {editingSecretId ? "Edit Secret" : "Store New Secret"}
+                  </h2>
+                </div>
+                <p className="text-xs font-normal text-default-400 leading-normal">
+                  Data is immediately encrypted locally via AES-256 before persistence.
                 </p>
               </ModalHeader>
-              <ModalBody className="py-6 space-y-4">
+              <ModalBody>
                 <Input
                   label="Account / Reference Name"
+                  labelPlacement="outside"
                   placeholder="e.g. Production AWS Credentials"
                   value={newName}
                   variant="bordered"
                   onValueChange={setNewName}
+                  classNames={{
+                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
+                    inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                    input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                  }}
                 />
 
                 <Select
                   label="Service Provider"
+                  labelPlacement="outside"
                   selectedKeys={[newService]}
                   variant="bordered"
                   onChange={(e) => setNewService(e.target.value)}
+                  classNames={{
+                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
+                    trigger: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                    value: "text-sm text-default-900 font-medium",
+                  }}
                 >
                   <SelectItem key="GitHub">GitHub</SelectItem>
                   <SelectItem key="Azure">Azure</SelectItem>
@@ -488,19 +505,29 @@ export default function VaultPage() {
 
                 <Input
                   label="Secret Token / API Key"
+                  labelPlacement="outside"
                   placeholder="Paste your token here..."
                   type="password"
                   value={newKey}
                   variant="bordered"
                   onValueChange={setNewKey}
+                  classNames={{
+                    label: "text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide",
+                    inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
+                    input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                  }}
                 />
               </ModalBody>
               <ModalFooter>
-                <Button variant="flat" onPress={onClose}>
+                <Button
+                  variant="light"
+                  className="bg-default-100 hover:bg-default-200 dark:bg-[#2C2C2E] dark:hover:bg-[#3A3A3C] text-default-800 dark:text-default-200 font-semibold rounded-2xl h-11 px-5 transition-all duration-200"
+                  onPress={onClose}
+                >
                   Cancel
                 </Button>
                 <Button
-                  className="bg-black dark:bg-white text-white dark:text-black font-medium"
+                  className="bg-primary hover:bg-primary-600 text-white font-semibold rounded-2xl h-11 px-6 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border-none"
                   onPress={() => handleSave(onClose)}
                 >
                   {editingSecretId ? "Update Secret" : "Encrypt & Save"}

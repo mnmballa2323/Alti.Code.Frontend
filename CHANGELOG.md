@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.35] - 2026-05-27 — Add/Edit Secret Premium Modal Redesign
+### Fixed
+- **Label Overlapping Collisions**: Resolved input label overlapping issues on Account Name, Service Provider, and Secret Token fields by integrating HeroUI `labelPlacement="outside"` styling, cleanly positioning interactive labels above input boundaries.
+
+### Changed
+- **Premium Apple Alert UI**: Redesigned the Add/Edit Secret modal layout with high-end minimal aesthetics: integrated a lock-protected secure header banner, configured glassmorphic border inputs, styled custom triggers with subtle transition hover effects, and built a brand-aligned reactive primary action button.
+
 ## [39.37.34] - 2026-05-27 — Stored Secrets Nested Button Hydration Fix
 ### Fixed
 - **Nested Button Hydration Mismatch**: Resolved a React console validation error (`<button> cannot contain a nested <button>`) and browser hydration mismatch by replacing the nested HeroUI `<Button>` inside the pressable `<Card>` element with a standard HTML `div` container.
