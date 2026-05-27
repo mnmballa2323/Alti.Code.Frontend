@@ -5,6 +5,16 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.26] - 2026-05-27 — Sovereign Vault Premium Gray Section Backgrounds
+### Changed
+- **High-Contrast Gray Section Backgrounds**: Updated all vault page sections and cards from pure white to a premium light gray background (`bg-[#F4F4F6]`) and its dark mode counterpart (`dark:bg-[#161616]`), matching the premium sidebar layout and perfectly eliminating the white-on-white layout blending.
+
+## [39.37.25] - 2026-05-27 — Sovereign Vault Welcome Banner Removal & Syntax Fix
+### Removed
+- **Sovereign Cryptographic Vault Banner**: Completely removed the large welcome posture banner `"Sovereign Cryptographic Vault"` from the top of the stored secrets list to achieve an extremely clean, minimal, and hyper-focused interface.
+### Fixed
+- **Next.js Dev Compile Syntax Error**: Resolved a TSX/JSX compilation error by correctly nesting the comment expression inside the rendering element boundary.
+
 ## [39.37.24] - 2026-05-27 — Left Navigation Sidebar Background Prefetch Optimization
 ### Optimized
 - **Instant Route Prefetching**: Engineered a background route preload system inside `components/sidebar.tsx` executing Next.js client-side prefetching (`router.prefetch`) on mount across all 9 primary and utility workspace targets. This downloads client bundles in advance and cuts click-to-transition latencies down to exactly 0ms.

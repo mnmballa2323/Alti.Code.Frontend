@@ -260,7 +260,7 @@ export default function VaultPage() {
                     >
                       {/* Secret Value Section */}
                       <div>
-                        <div className="bg-white dark:bg-content1 border border-default-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
+                        <div className="bg-[#F4F4F6] dark:bg-[#161616] border border-default-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-default-100 dark:border-default-50/50 pb-5 mb-6">
                             <div className="flex items-center gap-3">
                               <div
@@ -340,7 +340,7 @@ export default function VaultPage() {
                       </div>
 
                       {/* Security Status Info Card */}
-                      <div className="bg-white dark:bg-content1 border border-default-200 rounded-3xl p-6 shadow-sm relative overflow-hidden flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
+                      <div className="bg-[#F4F4F6] dark:bg-[#161616] border border-default-200 rounded-3xl p-6 shadow-sm relative overflow-hidden flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
                         <div className="p-3 rounded-2xl bg-success-500/10 text-success border border-success-500/20 shadow-sm shrink-0">
                           <Lock size={20} />
                         </div>
@@ -354,7 +354,7 @@ export default function VaultPage() {
 
                       {/* Danger Zone */}
                       <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                        <div className="flex items-center justify-between bg-white dark:bg-content1 border border-danger-200 dark:border-danger-900/40 shadow-sm rounded-3xl p-6 relative overflow-hidden">
+                        <div className="flex items-center justify-between bg-[#F4F4F6] dark:bg-[#161616] border border-danger-200 dark:border-danger-900/40 shadow-sm rounded-3xl p-6 relative overflow-hidden">
                           <div className="absolute top-0 left-0 w-1 h-full bg-danger-500" />
                           <div>
                             <h3 className="text-base font-bold text-danger-600 dark:text-danger-500">
@@ -381,7 +381,7 @@ export default function VaultPage() {
             ) : (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
                 {secrets.length === 0 ? (
-                  <div className="text-center py-20 border border-dashed border-default-200/80 rounded-3xl bg-white dark:bg-background shadow-sm">
+                  <div className="text-center py-20 border border-dashed border-default-200/80 rounded-3xl bg-[#F4F4F6] dark:bg-[#161616] shadow-sm">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
                       <Lock className="size-6" />
                     </div>
@@ -393,85 +393,59 @@ export default function VaultPage() {
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-6">
-                    {/* Security Posture Header Banner */}
-                    <div className="bg-gradient-to-r from-primary-500/10 via-indigo-500/5 to-transparent border border-default-200/60 bg-white dark:bg-content1 rounded-3xl p-6 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
-                      <div className="space-y-1.5">
-                        <h2 className="text-lg font-bold text-default-900 tracking-tight flex items-center gap-2">
-                          <Lock className="text-primary size-5" /> Sovereign Cryptographic Vault
-                        </h2>
-                        <p className="text-xs text-default-500 max-w-xl leading-relaxed">
-                          API credentials and access keys are encrypted locally using military-grade **AES-256** standards before synchronization with secure Google Cloud Secret Manager endpoints.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex flex-col items-center bg-white dark:bg-default-50/50 px-4 py-2.5 rounded-2xl border border-default-200 shadow-sm min-w-[110px] text-center">
-                          <span className="text-[10px] text-default-400 font-bold uppercase tracking-wider">Posture</span>
-                          <span className="text-xs font-bold text-success flex items-center gap-1 mt-1">
-                            <span className="w-1.5 h-1.5 rounded-full bg-success" /> Encrypted
-                          </span>
-                        </div>
-                        <div className="flex flex-col items-center bg-white dark:bg-default-50/50 px-4 py-2.5 rounded-2xl border border-default-200 shadow-sm min-w-[110px] text-center">
-                          <span className="text-[10px] text-default-400 font-bold uppercase tracking-wider">Rotation</span>
-                          <span className="text-xs font-bold text-primary mt-1">Automatic</span>
-                        </div>
-                      </div>
-                    </div>
-
+                  <div className="space-y-4">
                     {/* Secrets Cards Grid (Full-Width Rows) */}
-                    <div className="space-y-4">
-                      {secrets.map((secret) => {
-                        const conf =
-                          serviceConfig[secret.service] || serviceConfig.Default;
-                        const ServiceIcon = conf.icon;
+                    {secrets.map((secret) => {
+                      const conf =
+                        serviceConfig[secret.service] || serviceConfig.Default;
+                      const ServiceIcon = conf.icon;
 
-                        return (
-                          <Card
-                            key={secret.id}
-                            isPressable
-                            className="w-full border border-default-200 bg-white dark:bg-background hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl"
-                            shadow="sm"
-                            onPress={() => setSelectedSecretId(secret.id)}
-                          >
-                            <CardBody className="p-6 flex flex-row items-center justify-between gap-6">
-                              <div className="flex items-center gap-4 text-left">
-                                <div
-                                  className={cn(
-                                    "p-3.5 rounded-2xl flex-shrink-0 border border-default-100/50 shadow-sm",
-                                    conf.color,
-                                  )}
-                                >
-                                  <ServiceIcon size={22} />
-                                </div>
-                                <div>
-                                  <h3 className="text-base font-bold text-default-900 tracking-tight">
-                                    {secret.name}
-                                  </h3>
-                                  <p className="text-xs text-default-400 mt-1 flex items-center gap-1.5 font-medium">
-                                    <span>{secret.service}</span>
-                                    <span className="w-1 h-1 rounded-full bg-default-300" />
-                                    <span>Last used {secret.lastUsed}</span>
-                                  </p>
-                                </div>
+                      return (
+                        <Card
+                          key={secret.id}
+                          isPressable
+                          className="w-full border border-default-200 bg-[#F4F4F6] dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl"
+                          shadow="sm"
+                          onPress={() => setSelectedSecretId(secret.id)}
+                        >
+                          <CardBody className="p-6 flex flex-row items-center justify-between gap-6">
+                            <div className="flex items-center gap-4 text-left">
+                              <div
+                                className={cn(
+                                  "p-3.5 rounded-2xl flex-shrink-0 border border-default-100/50 shadow-sm",
+                                  conf.color,
+                                )}
+                              >
+                                <ServiceIcon size={22} />
                               </div>
-                              <div className="flex items-center gap-3">
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-default-400 bg-default-100 dark:bg-default-50/50 px-3 py-1.5 rounded-2xl border border-default-200/50">
-                                  {secret.service}
-                                </span>
-                                <Button
-                                  size="sm"
-                                  variant="light"
-                                  className="text-primary hover:bg-primary/10 rounded-xl font-bold"
-                                  onClick={() => setSelectedSecretId(secret.id)}
-                                >
-                                  Manage
-                                </Button>
+                              <div>
+                                <h3 className="text-base font-bold text-default-900 tracking-tight">
+                                  {secret.name}
+                                </h3>
+                                <p className="text-xs text-default-400 mt-1 flex items-center gap-1.5 font-medium">
+                                  <span>{secret.service}</span>
+                                  <span className="w-1 h-1 rounded-full bg-default-300" />
+                                  <span>Last used {secret.lastUsed}</span>
+                                </p>
                               </div>
-                            </CardBody>
-                          </Card>
-                        );
-                      })}
-                    </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-[10px] uppercase font-bold tracking-widest text-default-400 bg-default-100 dark:bg-default-50/50 px-3 py-1.5 rounded-2xl border border-default-200/50">
+                                {secret.service}
+                              </span>
+                              <Button
+                                size="sm"
+                                variant="light"
+                                className="text-primary hover:bg-primary/10 rounded-xl font-bold"
+                                onClick={() => setSelectedSecretId(secret.id)}
+                              >
+                                Manage
+                              </Button>
+                            </div>
+                          </CardBody>
+                        </Card>
+                      );
+                    })}
                   </div>
                 )}
               </div>
