@@ -543,15 +543,14 @@ export default function VaultPage() {
                   Are you sure you want to delete?
                 </p>
               </ModalBody>
-              <ModalFooter className="p-0 m-0 border-t border-default-200/80 dark:border-default-100/30 flex flex-row w-full gap-0 bg-transparent min-h-0">
+              <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex flex-row w-full gap-0 bg-transparent min-h-0">
                 <Button
                   variant="light"
-                  className="w-1/2 h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
+                  className="w-1/2 h-12 rounded-none border-none border-r border-[#E5E5EA] dark:border-[#2C2C2E] text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
                   onPress={onClose}
                 >
                   Cancel
                 </Button>
-                <div className="w-[1px] h-12 bg-default-200/80 dark:bg-default-100/30 shrink-0" />
                 <Button
                   variant="light"
                   className="w-1/2 h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"

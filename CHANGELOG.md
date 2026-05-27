@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.32] - 2026-05-27 — Apple-Style Delete Alert Dialog Divider Alignment
+### Changed
+- **High-Precision Button Divider**: Fixed the vertical dividing line between the `"Cancel"` and `"Delete"` action buttons inside the Delete confirmation modal by rendering a native, perfectly straight Apple gray vertical border line (`border-r border-[#E5E5EA] dark:border-[#2C2C2E]`) directly on the Cancel button wrapper, ensuring 100% stable rendering across all resolutions.
+
 ## [39.37.31] - 2026-05-27 — Apple-Style Delete Alert Dialog Polish
 ### Changed
 - **Sleek Title & Action Divider**: Polished the Apple-style Delete Secret confirmation dialog:
