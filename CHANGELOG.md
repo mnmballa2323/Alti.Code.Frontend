@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.90] - 2026-05-27 — Dynamic Open-Source Licensing Compliance Audit System
+### Added
+- **Dynamic Gitmodule Scan Engine**: Upgraded the `LicensingGuardianAgent` in `licensing_guardian.agent.js` from static/hardcoded submodules to a dynamic parser that parses the root `.gitmodules` file in real-time, detecting all active integrations inside the repository dynamically.
+- **Filesystem License Detection & Signature Audit**: Implemented filesystem auditing of submodules, scanning directories for standard license files (`LICENSE`, `LICENSE.md`, `COPYING`, etc.) and `package.json` package manifests, extracting licensing metadata, and matching standard permissive (MIT/Apache 2.0) and copyleft (GPL/AGPL) license structures dynamically.
+- **E2E Licensing Compliance Integration Tests**: Created `licensing_guardian.test.js` validating `.gitmodules` parsing, filesystem permissive/copyleft signature matching, and standardized telemetry wrapper output.
+
 ## [39.37.89] - 2026-05-27 — Overseer Agent Self-Healing ESM & Robustness Upgrade
 ### Added
 - **ESM-Compliant Command Execution**: Fixed a severe ESM crash inside `overseer.agent.js` by removing legacy CommonJS `require('child_process')` calls and migrating the `_runShellCommand` runner to use an ES module top-level import of `{ exec }`.

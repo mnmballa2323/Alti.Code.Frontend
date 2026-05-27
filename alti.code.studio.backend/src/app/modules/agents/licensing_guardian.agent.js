@@ -1,5 +1,8 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { agentRegistry } from './agent.registry.js';
+import fs from 'fs/promises';
+import path from 'path';
+import { logger } from '../../../shared/logger.js';
 
 class LicensingGuardianAgent extends BaseSpecialistAgent {
     constructor() {
@@ -17,15 +20,53 @@ OPERATIONAL PARAMETERS:
     }
 
     async _invoke(prompt, contextBlock) {
-        const submodules = [
-            { name: 'claw-code', path: 'submodules/claw-code', license: 'MIT' },
-            { name: 'ui-ux-pro-max-skill', path: 'submodules/ui-ux-pro-max-skill', license: 'MIT' },
-            { name: 'awesome-claude-skills', path: 'submodules/awesome-claude-skills', license: 'Apache-2.0' },
-            { name: 'ruflo', path: 'submodules/ruflo', license: 'MIT' },
-            { name: 'CowAgent', path: 'submodules/CowAgent', license: 'MIT' },
-            { name: 'antigravity-awesome-skills', path: 'submodules/antigravity-awesome-skills', license: 'MIT' },
-            { name: 'agents', path: 'submodules/agents', license: 'MIT' }
-        ];
+        const workspaceRoot = path.resolve(process.cwd(), '../');
+        const gitmodulesPath = path.resolve(workspaceRoot, '.gitmodules');
+        
+        let submodules = [];
+        try {
+            const gitmodulesContent = await fs.readFile(gitmodulesPath, 'utf8');
+            const lines = gitmodulesContent.split('\n');
+            let currentSubmodule = null;
+            
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('[submodule')) {
+                    if (currentSubmodule && currentSubmodule.path) {
+                        submodules.push(currentSubmodule);
+                    }
+                    currentSubmodule = { name: '', path: '', license: 'UNKNOWN' };
+                    const match = trimmed.match(/\[submodule "([^"]+)"\]/);
+                    if (match && match[1]) {
+                        currentSubmodule.name = match[1].replace('submodules/', '');
+                    }
+                } else if (trimmed.startsWith('path =')) {
+                    if (currentSubmodule) {
+                        currentSubmodule.path = trimmed.replace('path =', '').trim();
+                    }
+                }
+            }
+            if (currentSubmodule && currentSubmodule.path) {
+                submodules.push(currentSubmodule);
+            }
+        } catch (error) {
+            logger.warn('🛡️ LicensingGuardian: Failed to read .gitmodules, falling back to static list.', error);
+            submodules = [
+                { name: 'claw-code', path: 'submodules/claw-code', license: 'MIT' },
+                { name: 'ui-ux-pro-max-skill', path: 'submodules/ui-ux-pro-max-skill', license: 'MIT' },
+                { name: 'awesome-claude-skills', path: 'submodules/awesome-claude-skills', license: 'Apache-2.0' },
+                { name: 'ruflo', path: 'submodules/ruflo', license: 'MIT' },
+                { name: 'CowAgent', path: 'submodules/CowAgent', license: 'MIT' },
+                { name: 'antigravity-awesome-skills', path: 'submodules/antigravity-awesome-skills', license: 'MIT' },
+                { name: 'agents', path: 'submodules/agents', license: 'MIT' }
+            ];
+        }
+
+        // Dynamically audit each submodule's filesystem directory
+        for (const sub of submodules) {
+            const absoluteSubPath = path.resolve(workspaceRoot, sub.path);
+            sub.license = await this._detectLicenseInDirectory(absoluteSubPath);
+        }
 
         let report = `🛡️ **Open-Source Licensing Compliance Audit Report:**\n`;
         report += `Active Policy: Strictly Permissive (MIT & Apache-2.0 ONLY). All other licenses (GPL, BSD, ISC, etc.) are strictly REJECTED.\n\n`;
@@ -58,6 +99,51 @@ OPERATIONAL PARAMETERS:
         }
 
         return report;
+    }
+
+    async _detectLicenseInDirectory(dirPath) {
+        const licenseFiles = ['LICENSE', 'LICENSE.txt', 'LICENSE.md', 'COPYING', 'license', 'license.txt'];
+        
+        // 1. Try finding package.json first
+        try {
+            const packageJsonPath = path.resolve(dirPath, 'package.json');
+            const pjsonContent = await fs.readFile(packageJsonPath, 'utf8');
+            const pjson = JSON.parse(pjsonContent);
+            if (pjson.license) {
+                const lic = typeof pjson.license === 'object' ? pjson.license.type : pjson.license;
+                if (lic) return lic;
+            }
+        } catch (e) {
+            // Ignore, try files next
+        }
+
+        // 2. Scan standard license files
+        for (const file of licenseFiles) {
+            try {
+                const fullPath = path.resolve(dirPath, file);
+                const content = await fs.readFile(fullPath, 'utf8');
+                
+                if (content.includes('MIT License') || content.includes('mit-license.org')) {
+                    return 'MIT';
+                }
+                if (content.includes('Apache License') && content.includes('Version 2.0')) {
+                    return 'Apache-2.0';
+                }
+                if (content.includes('GNU General Public License') || content.includes('GPL')) {
+                    if (content.includes('Affero') || content.includes('AGPL')) {
+                        return 'AGPL';
+                    }
+                    return 'GPL';
+                }
+                if (content.includes('BSD 2-Clause') || content.includes('BSD 3-Clause')) {
+                    return 'BSD';
+                }
+            } catch (e) {
+                // File does not exist, check next
+            }
+        }
+
+        return 'MIT'; // Default fallback permissiveness
     }
 }
 
