@@ -528,7 +528,7 @@ function PromptInputFullLineComponent({
           {showModelDropdown && (
             <Dropdown
               placement="top-start"
-              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] max-h-[380px] p-2"
+              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2"
             >
               <DropdownTrigger>
                 <button
@@ -559,11 +559,12 @@ function PromptInputFullLineComponent({
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Model Options"
-                className="p-0 flex flex-col gap-3.5 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                className="p-0 max-h-[350px] overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 variant="flat"
               >
                 <DropdownSection
                   title="GEMINI"
+                  className="mb-3.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -573,13 +574,13 @@ function PromptInputFullLineComponent({
                     key="gemini-3.5-flash"
                     textValue="Gemini 3.5 Flash"
                     onPress={() => setDefaultModel("gemini-3.5-flash")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-500 dark:text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Gemini 3.5 Flash</span>
-                        <span className="text-[10px] text-default-400">Latest default agent & code model</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Flash</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Latest default agent & code model</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -587,13 +588,13 @@ function PromptInputFullLineComponent({
                     key="gemini-3.5-pro"
                     textValue="Gemini 3.5 Pro"
                     onPress={() => setDefaultModel("gemini-3.5-pro")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Gemini 3.5 Pro</span>
-                        <span className="text-[10px] text-default-400">Flagship deep reasoning & software logic</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Pro</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Flagship deep reasoning & software logic</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -601,13 +602,13 @@ function PromptInputFullLineComponent({
                     key="gemini-omni-flash"
                     textValue="Gemini Omni Flash"
                     onPress={() => setDefaultModel("gemini-omni-flash")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Gemini Omni Flash</span>
-                        <span className="text-[10px] text-default-400">Multimodal omni-world coding</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini Omni Flash</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Multimodal omni-world coding</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -615,6 +616,7 @@ function PromptInputFullLineComponent({
 
                 <DropdownSection
                   title="CLAUDE"
+                  className="mb-3.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -624,13 +626,13 @@ function PromptInputFullLineComponent({
                     key="claude-4.7-opus"
                     textValue="Claude 4.7 Opus"
                     onPress={() => setDefaultModel("claude-4.7-opus")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-500 dark:text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Claude 4.7 Opus</span>
-                        <span className="text-[10px] text-default-400">Deep software engineering with 1M context</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.7 Opus</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Deep software engineering with 1M context</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -638,13 +640,13 @@ function PromptInputFullLineComponent({
                     key="sonnet-5"
                     textValue="Claude Sonnet 5"
                     onPress={() => setDefaultModel("sonnet-5")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Claude Sonnet 5</span>
-                        <span className="text-[10px] text-default-400">High-end architecture & refactoring</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Claude Sonnet 5</span>
+                        <span className="text-[10px] text-default-400 leading-normal">High-end architecture & refactoring</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -652,13 +654,13 @@ function PromptInputFullLineComponent({
                     key="claude-4.5-haiku"
                     textValue="Claude 4.5 Haiku"
                     onPress={() => setDefaultModel("claude-4.5-haiku")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">Claude 4.5 Haiku</span>
-                        <span className="text-[10px] text-default-400">Fast low-latency agent automation</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.5 Haiku</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Fast low-latency agent automation</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -666,6 +668,7 @@ function PromptInputFullLineComponent({
 
                 <DropdownSection
                   title="GPT"
+                  className="mb-3.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -675,13 +678,13 @@ function PromptInputFullLineComponent({
                     key="gpt-5.5-pro"
                     textValue="GPT-5.5 Pro"
                     onPress={() => setDefaultModel("gpt-5.5-pro")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">GPT-5.5 Pro</span>
-                        <span className="text-[10px] text-default-400">Parallel reasoning coding flagship</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Pro</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Parallel reasoning coding flagship</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -689,13 +692,13 @@ function PromptInputFullLineComponent({
                     key="gpt-5.5"
                     textValue="GPT-5.5"
                     onPress={() => setDefaultModel("gpt-5.5")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">GPT-5.5</span>
-                        <span className="text-[10px] text-default-400">Frontier omnimodal developer model</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Frontier omnimodal developer model</span>
                       </div>
                     </div>
                   </DropdownItem>
@@ -703,13 +706,13 @@ function PromptInputFullLineComponent({
                     key="gpt-5.5-instant"
                     textValue="GPT-5.5 Instant"
                     onPress={() => setDefaultModel("gpt-5.5-instant")}
-                    className="w-full flex items-center gap-3 rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 text-left transition-colors cursor-pointer"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground">GPT-5.5 Instant</span>
-                        <span className="text-[10px] text-default-400">Fast low-latency editing</span>
+                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Instant</span>
+                        <span className="text-[10px] text-default-400 leading-normal">Fast low-latency editing</span>
                       </div>
                     </div>
                   </DropdownItem>
