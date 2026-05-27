@@ -1,3 +1,39 @@
 [submodule "submodules/hermes-agent"]
 	path = submodules/hermes-agent
 	url = https://github.com/nousresearch/hermes-agent
+[submodule "submodules/ECC"]
+	path = submodules/ECC
+	url = https://github.com/affaan-m/ECC
+[submodule "submodules/andrej-karpathy-skills"]
+	path = submodules/andrej-karpathy-skills
+	url = https://github.com/multica-ai/andrej-karpathy-skills
+[submodule "submodules/gstack"]
+	path = submodules/gstack
+	url = https://github.com/garrytan/gstack
+[submodule "submodules/claude-mem"]
+	path = submodules/claude-mem
+	url = https://github.com/thedotmack/claude-mem
+[submodule "submodules/ruflo"]
+	path = submodules/ruflo
+	url = https://github.com/ruvnet/ruflo
+[submodule "submodules/agents"]
+	path = submodules/agents
+	url = https://github.com/wshobson/agents
+[submodule "submodules/codegraph"]
+	path = submodules/codegraph
+	url = https://github.com/colbymchenry/codegraph
+[submodule "submodules/AionUi"]
+	path = submodules/AionUi
+	url = https://github.com/iOfficeAI/AionUi
+[submodule "submodules/serena"]
+	path = submodules/serena
+	url = https://github.com/oraios/serena
+[submodule "submodules/Archon"]
+	path = submodules/Archon
+	url = https://github.com/coleam00/Archon
+[submodule "submodules/kilocode"]
+	path = submodules/kilocode
+	url = https://github.com/Kilo-Org/kilocode
+[submodule "submodules/agentmemory"]
+	path = submodules/agentmemory
+	url = https://github.com/rohitg00/agentmemory

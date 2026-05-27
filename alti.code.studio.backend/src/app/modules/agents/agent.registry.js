@@ -65,6 +65,16 @@ class AgentRegistry {
         return Array.from(this.agents.values());
     }
 
+    /** Alias for backward compatibility / multi-agent routing queries */
+    listAgents() {
+        return this.list();
+    }
+
+    /** Alias for backward compatibility / multi-agent routing queries */
+    getAllAgents() {
+        return this.list();
+    }
+
     /** Find agents by capability */
     findByCapability(capability) {
         return this.list().filter(a => a.capabilities?.includes(capability));
@@ -85400,3 +85410,32 @@ agentRegistry.register({
     capabilities: ['spec-driven-development', 'compliance-architecture', 'gdpr', 'hipaa'],
     version: '1.0.0'
 });
+
+agentRegistry.register({
+    name: 'openclaw_agent',
+    importPath: './openclaw.agent.js',
+    description: 'The Local Automator — Specialist Swarm Agent dedicated natively to delegating complex local host tasks directly to the user\'s embedded OpenClaw instance via the Proxy Tunnel.',
+    queue: 'openclaw-queue',
+    capabilities: ['openclaw', 'moltbot', 'composio', 'local-automation', 'browser-automation', 'os-automation'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'hermes_agent',
+    importPath: './hermes.agent.js',
+    description: 'The Hermes Vanguard CLI python executor bridge. Executes the autonomous self-improving Hermes Agent locally.',
+    queue: 'hermes-queue',
+    capabilities: ['hermes', 'cli-python', 'self-improving', 'nous-research', 'local-execution'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'swarm_nexus_agent',
+    importPath: './swarm_nexus.agent.js',
+    description: 'The ultimate swarm coordinator and compliance auditor, unifying ECC, Garry Tan\'s gstack, Andrej Karpathy\'s agent rules, and persistent vector memory.',
+    queue: 'swarm-nexus-queue',
+    capabilities: ['swarm-coordination', 'behavioral-auditing', 'virtual-team-routing', 'semantic-memory-retrieval'],
+    version: '1.0.0'
+});
+
+

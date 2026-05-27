@@ -12,7 +12,7 @@ import { logger } from '../../../shared/logger.js';
 class LicenseService {
     constructor() {
         this.whitelistedLicenses = [
-            'MIT', 'ISC', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'CC0-1.0', 'Unlicense', 'WTFPL', '0BSD'
+            'MIT', 'Apache-2.0'
         ];
         this.restrictedLicenses = [
             'GPL-2.0-only', 'GPL-3.0-only', 'AGPL-3.0-only', 'LGPL-2.1-only', 'LGPL-3.0-only'
@@ -58,9 +58,13 @@ class LicenseService {
     }
 
     isRestricted(licenseType) {
-        if (!licenseType) return false; // Unknown licenses warn but don't strictly block in this lax mode
-        // Check if strictly restricted
-        return this.restrictedLicenses.some(l => licenseType.includes(l) || licenseType.includes('GPL'));
+        if (!licenseType) return true; // Under strict mode, unknown licenses are rejected
+        // Normalize license type
+        const normalized = licenseType.toUpperCase().replace(/\s+/g, '');
+        const isMIT = normalized.includes('MIT');
+        const isApache = normalized.includes('APACHE-2.0') || normalized.includes('APACHE2.0');
+        
+        return !(isMIT || isApache);
     }
 
     async getLicense(packageName) {

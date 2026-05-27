@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024–2026 Alti.Code.Studio
  *
  * "The Local Automator" — Tier 12 Micro-Specialist
  * A Swarm Agent dedicated natively to delegating complex local host tasks
@@ -14,28 +14,39 @@ import { logger } from '../../../shared/logger.js';
 
 class OpenClawAgent extends BaseSpecialistAgent {
     constructor() {
-        super('OpenClawAgent', 'The Local Automator', 'Tier 12');
+        super();
         this.name = 'OpenClawAgent';
+        this.description = 'The Local Automator — Specialist Swarm Agent dedicated natively to delegating complex local host tasks directly to the user\'s embedded OpenClaw instance via the Proxy Tunnel.';
     }
 
-    async _invoke(context) {
-        logger.info(`🤖 Local Automator: Planning delegation to physical host for context: "${context.goal}"`);
+    /**
+     * Standard Swarm Brain entry point.
+     * @param {string|object} prompt - The goal prompt or a legacy context object.
+     * @param {string} contextBlock  - Sanitized context text block.
+     * @returns {Promise<string>}
+     */
+    async _invoke(prompt, contextBlock) {
+        // Support both string input and context object to handle legacy/future invocations gracefully
+        const goal = typeof prompt === 'string' ? prompt : (prompt.goal || '');
+        const files = typeof prompt === 'object' ? (prompt.files || {}) : {};
+
+        logger.info(`🤖 Local Automator: Planning delegation to physical host for goal: "${goal}"`);
 
         // 1. Synthesize the OpenClaw Intent
-        const prompt = `You are the Local Automator Swarm Agent.
+        const llmPrompt = `You are the Local Automator Swarm Agent.
 Your job is to translate the current Cloud Sprint Goal into a specific automation intent for "Moltbot" (OpenClaw + Composio), an autonomous agent running physically on the user's local machine.
 
 Moltbot has full system access, shell access, browser access, AND is natively authenticated across 800+ SaaS apps via the built-in Composio Plugin (Jira, GitHub, Slack, Notion, Salesforce, etc.).
 
-Cloud Sprint Goal: "${context.goal}"
-Current Code Context: ${JSON.stringify(context.files || {})}
+Cloud Sprint Goal: "${goal}"
+Current Code Context: ${contextBlock || JSON.stringify(files)}
 
 Generate a precise natural language command for the local Moltbot Surrogate. 
 If the goal involves SaaS platforms, explicitly instruct it to use its Composio capabilities (e.g. "Use your Composio integration to fetch Jira ticket PROJ-123 and test it against the local repository").
 Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.alticodestudio.com...".
 Return ONLY the raw intent string, no markdown.`;
 
-        const openClawIntent = await GeminiAiService.generateContent(prompt);
+        const openClawIntent = await GeminiAiService.generateContent(llmPrompt);
         const cleanIntent = openClawIntent.replace(/^["'\`]+|["'\`]+$/g, '').trim();
 
         logger.info(`🤖 Local Automator: Translated goal into Host Intent: "${cleanIntent}"`);

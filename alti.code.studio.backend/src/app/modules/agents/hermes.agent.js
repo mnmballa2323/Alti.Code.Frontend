@@ -1,12 +1,35 @@
+/**
+ * Copyright (c) 2024–2026 Alti.Code.Studio
+ *
+ * "The Hermes Vanguard"
+ * A Specialist Agent wrapper mapping standard swarm brain pipelines to the
+ * autonomous NousResearch Hermes CLI execution bridge.
+ */
+
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { spawn } from 'child_process';
 import path from 'path';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
-class HermesAgentBridge {
+class HermesAgent extends BaseSpecialistAgent {
     constructor() {
+        super();
+        this.name = 'HermesAgent';
+        this.description = 'The Hermes Vanguard CLI python executor bridge. Executes the autonomous self-improving Hermes Agent locally.';
         this.hermesPath = path.resolve(process.cwd(), 'submodules/hermes-agent/cli.py');
         this.pythonPath = path.resolve(process.cwd(), 'submodules/hermes-agent/.venv/bin/python');
+    }
+
+    /**
+     * Standard Swarm Brain entry point.
+     * @param {string} prompt       - The instruction prompt.
+     * @param {string} contextBlock - Sanitized context text block.
+     * @returns {Promise<string>}
+     */
+    async _invoke(prompt, contextBlock) {
+        const fullPrompt = contextBlock ? `${contextBlock}\n\nTask: ${prompt}` : prompt;
+        return this.executeTask(fullPrompt);
     }
 
     /**
@@ -61,4 +84,5 @@ class HermesAgentBridge {
     }
 }
 
-export const hermesAgentBridge = new HermesAgentBridge();
+export const hermesAgent = new HermesAgent();
+export const hermesAgentBridge = hermesAgent;
