@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.40] - 2026-05-27 — Fine-Tuning Close Button Placement
+### Fixed
+- **Pixel-Perfect Close Button Corner**: Fine-tuned the close button (X) positioning inside the modal using `top-3 right-5` coordinate styles, shifting it slightly higher and further left to establish absolute visual balance relative to the card border and title text.
+
 ## [39.37.39] - 2026-05-27 — Close Button Corner Placement
 ### Fixed
 - **Standard Close Button Coordinates**: Adjusted the absolute position coordinate class names of the modal close button to `top-4 right-4`, placing it perfectly in the top-right corner with flawless visual alignment and generous margins.
