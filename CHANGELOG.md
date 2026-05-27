@@ -5,6 +5,11 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.22] - 2026-05-27 — Left Navigation Sidebar Tooltips integration
+### Added
+- **Premium Hover Tooltips**: Integrated high-fidelity custom `<Tooltip>` components wrapping all 8 horizontal navigation buttons inside `components/sidebar.tsx` to provide crisp, instantaneous textual indicators (`Code`, `Chat`, `Vault`, etc.) upon developer hover.
+- **Dynamic Orientation Spacing**: Configured tooltips to hover dynamically over the top (`side="top"`) of buttons when the sidebar is expanded, and hover to the right side (`side="right"`) when the sidebar is collapsed, maximizing interface clarity.
+
 ## [39.37.21] - 2026-05-27 — Left Navigation Sidebar Syntax Fix
 ### Fixed
 - **Missing Tag Restoration**: Resolved a Turbopack build failure by restoring the missing closing `</div>` tag for the search container inside `components/sidebar.tsx` and verifying compilation completeness.

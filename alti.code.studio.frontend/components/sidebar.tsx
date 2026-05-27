@@ -70,6 +70,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 import {
   removeRepository,
@@ -1434,23 +1435,29 @@ export default function Sidebar() {
           {filteredNavigationItems.map((item) => {
             const IconComponent = item.icon;
             return (
-              <button
-                key={item.label}
-                title={item.label}
-                className={cn(
-                  "flex items-center justify-center transition-all duration-200 relative group border shadow-sm",
-                  isSidebarOpen ? "h-7 w-full rounded-md" : "h-7 w-7 rounded-md",
-                  item.isActive
-                    ? "bg-primary/10 text-primary dark:text-primary-400 border-primary/30"
-                    : "bg-white dark:bg-default-100 text-default-600 dark:text-default-400 hover:bg-default-50 dark:hover:bg-default-200 border-default-200",
-                )}
-                onClick={item.onClick}
-              >
-                <IconComponent className="size-3.5" />
-                <span className="sr-only">{item.label}</span>
-              </button>
+              <Tooltip key={item.label}>
+                <TooltipTrigger asChild>
+                  <button
+                    className={cn(
+                      "flex items-center justify-center transition-all duration-200 relative group border shadow-sm",
+                      isSidebarOpen ? "h-7 w-full rounded-md" : "h-7 w-7 rounded-md",
+                      item.isActive
+                        ? "bg-primary/10 text-primary dark:text-primary-400 border-primary/30"
+                        : "bg-white dark:bg-default-100 text-default-600 dark:text-default-400 hover:bg-default-50 dark:hover:bg-default-200 border-default-200",
+                    )}
+                    onClick={item.onClick}
+                  >
+                    <IconComponent className="size-3.5" />
+                    <span className="sr-only">{item.label}</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side={isSidebarOpen ? "top" : "right"}>
+                  <p className="text-xs">{item.label}</p>
+                </TooltipContent>
+              </Tooltip>
             );
           })}
+
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
             <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
               No results found
