@@ -418,8 +418,8 @@ export default function VaultPage() {
                       </div>
                     </div>
 
-                    {/* Secrets Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {/* Secrets Cards Grid (Full-Width Rows) */}
+                    <div className="space-y-4">
                       {secrets.map((secret) => {
                         const conf =
                           serviceConfig[secret.service] || serviceConfig.Default;
@@ -429,32 +429,43 @@ export default function VaultPage() {
                           <Card
                             key={secret.id}
                             isPressable
-                            className="border border-default-200 bg-white dark:bg-background hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl"
+                            className="w-full border border-default-200 bg-white dark:bg-background hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl"
                             shadow="sm"
                             onPress={() => setSelectedSecretId(secret.id)}
                           >
-                            <CardBody className="p-6 flex flex-col items-start gap-4">
-                              <div className="flex items-center justify-between w-full">
+                            <CardBody className="p-6 flex flex-row items-center justify-between gap-6">
+                              <div className="flex items-center gap-4 text-left">
                                 <div
                                   className={cn(
-                                    "p-3 rounded-2xl flex-shrink-0 border border-default-100/50 shadow-sm",
+                                    "p-3.5 rounded-2xl flex-shrink-0 border border-default-100/50 shadow-sm",
                                     conf.color,
                                   )}
                                 >
-                                  <ServiceIcon size={20} />
+                                  <ServiceIcon size={22} />
                                 </div>
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-default-400">
+                                <div>
+                                  <h3 className="text-base font-bold text-default-900 tracking-tight">
+                                    {secret.name}
+                                  </h3>
+                                  <p className="text-xs text-default-400 mt-1 flex items-center gap-1.5 font-medium">
+                                    <span>{secret.service}</span>
+                                    <span className="w-1 h-1 rounded-full bg-default-300" />
+                                    <span>Last used {secret.lastUsed}</span>
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <span className="text-[10px] uppercase font-bold tracking-widest text-default-400 bg-default-100 dark:bg-default-50/50 px-3 py-1.5 rounded-2xl border border-default-200/50">
                                   {secret.service}
                                 </span>
-                              </div>
-                              <div className="text-left mt-2">
-                                <h3 className="text-base font-bold text-default-900 tracking-tight line-clamp-1">
-                                  {secret.name}
-                                </h3>
-                                <p className="text-xs text-default-400 mt-1 flex items-center gap-1">
-                                  <span className="w-1 h-1 rounded-full bg-default-400" />
-                                  Last used {secret.lastUsed}
-                                </p>
+                                <Button
+                                  size="sm"
+                                  variant="light"
+                                  className="text-primary hover:bg-primary/10 rounded-xl font-bold"
+                                  onClick={() => setSelectedSecretId(secret.id)}
+                                >
+                                  Manage
+                                </Button>
                               </div>
                             </CardBody>
                           </Card>
