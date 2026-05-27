@@ -425,9 +425,6 @@ export default function VaultPage() {
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
-                              <span className="text-[10px] uppercase font-bold tracking-widest text-default-400 bg-default-100 dark:bg-default-50/50 px-3 py-1.5 rounded-2xl border border-default-200/50">
-                                {secret.service}
-                              </span>
                               <Button
                                 size="sm"
                                 variant="light"
