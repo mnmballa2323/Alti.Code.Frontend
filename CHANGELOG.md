@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.39] - 2026-05-27 — Close Button Corner Placement
+### Fixed
+- **Standard Close Button Coordinates**: Adjusted the absolute position coordinate class names of the modal close button to `top-4 right-4`, placing it perfectly in the top-right corner with flawless visual alignment and generous margins.
+
 ## [39.37.38] - 2026-05-27 — Modal Close Button Repositioning
 ### Fixed
 - **Inward Modal Close Button**: Adjusted the absolute position coordinates of the modal's close button (X) from the default edge boundaries to `top-6 right-6`, shifting it beautifully inward to align perfectly with the modal's secure lock header paddings.
