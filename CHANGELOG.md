@@ -5,6 +5,10 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.29] - 2026-05-27 — Sovereign Vault List Card Navigation Chevron Icon Upgrade
+### Changed
+- **Manage Text to Chevron Icon**: Replaced the `"Manage"` text action button on the right side of the list cards with a premium, sleek `ChevronRight` icon-only button to align with standard high-fidelity row-details navigation aesthetics.
+
 ## [39.37.28] - 2026-05-27 — Sovereign Vault List Card Actions Simplification
 ### Removed
 - **Uppercase Service Badges**: Completely removed the redundant uppercase service provider badges (`GITHUB`, `AZURE`, `OPENAI`) on the right side of the list cards, leaving only the `"Manage"` text actions to achieve an extremely clean, minimal presentation.

@@ -28,6 +28,7 @@ import {
   Server,
   Edit2,
   ArrowLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -424,16 +425,17 @@ export default function VaultPage() {
                                 </p>
                               </div>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <Button
-                                size="sm"
-                                variant="light"
-                                className="text-primary hover:bg-primary/10 rounded-xl font-bold"
-                                onClick={() => setSelectedSecretId(secret.id)}
-                              >
-                                Manage
-                              </Button>
-                            </div>
+                             <div className="flex items-center gap-3">
+                               <Button
+                                 isIconOnly
+                                 size="sm"
+                                 variant="light"
+                                 className="text-default-400 hover:text-primary hover:bg-primary/10 rounded-xl min-w-[32px] h-[32px]"
+                                 onClick={() => setSelectedSecretId(secret.id)}
+                               >
+                                 <ChevronRight size={18} />
+                               </Button>
+                             </div>
                           </CardBody>
                         </Card>
                       );
