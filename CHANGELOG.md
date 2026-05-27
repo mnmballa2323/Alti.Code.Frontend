@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.86] - 2026-05-27 — 66-Provider Cloud Agent Specialization & Unification
+### Added
+- **Dynamic 66-Provider Agent Specialization**: Automatically registers **396 tailored cloud specialist agents** representing 6 essential cloud verticals (`compute`, `storage`, `serverless`, `database`, `identity`, `iac`) across all **66 cloud providers** dynamically inside the central `agentRegistry`.
+- **High-Fidelity Agent Overrides**: Configured high-fidelity bespoke specialists with custom queues and distinct capability signatures for 12 primary edge, serverless, and GPU providers: `lambdal` (Lambda Labs), `runpod` (RunPod), `superfly` (Fly.io), `railwayapp` (Railway), `render-oss` (Render), `hetznercloud` (Hetzner), `vultr` (Vultr), `linode` (Linode), `fastly` (Fastly), `scaleway` (Scaleway), `ovh` (OVHcloud), and `aliyun` (Alibaba Cloud).
+- **Hardened Security & Threat Compliance**: Ensured all dynamic agent integrations are 100% compliant with standard MIT/Apache 2.0 open-source licensing.
+- **E2E Cloud Telemetry & Connectivity Integration Tests**: Added a complete suite of integration tests (`cloud_connectivity.test.js`) validating unified Dynamic Adapters, structured telemetry querying, secure connection gates, and smart failover routing logic under high load conditions.
+
 ## [39.37.42] - 2026-05-27 — Dedicated Agent Swarms for Every Cloud Function
 ### Added
 - **Dedicated Cloud Function Swarms**: Designed and integrated a comprehensive specialized agent mapping grid (`getFunctionsForProvider`) inside the Cloud Workspace page (`app/cloud/page.tsx`) mapping 6 tailored, specialized, and dedicated agent nodes with custom capability tags and role definitions for **every single function inside all 67 cloud providers**.

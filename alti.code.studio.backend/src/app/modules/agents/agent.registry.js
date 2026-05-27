@@ -85779,7 +85779,7 @@ futuristicDomains.forEach(({ prefix, description, capabilities }) => {
     }
 });
 
-// ──── TIER 200: DYNAMIC OMNI-CLOUD PROVIDER SPECIALISTS (276 AGENTS) ────
+// ──── TIER 200: DYNAMIC OMNI-CLOUD PROVIDER SPECIALISTS (396 AGENTS) ────
 
 const OMNI_CLOUD_PROVIDERS = [
     // Hyperscalers
@@ -85789,15 +85789,15 @@ const OMNI_CLOUD_PROVIDERS = [
     // Developer & PaaS
     'digitalocean', 'superfly', 'heroku', 'railwayapp', 'render-oss', 'supabase', 'vercel', 'kinsta',
     // Global & Regional
-    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'sinopec', 'exoscale',
+    'aliyun', 'baidu', 'huaweicloud', 'ovh', 'scaleway', 'Tencent', 'yandex-cloud', 'sinopec-cloud', 'exoscale',
     // Bare Metal & Edge
     'cherryservers', 'packethost', 'fastly', 'lumen', 'macstadium', 'maxihost', 'rackspace', 'packet', 'cloudflare',
     // VPS Infrastructure
-    'ionos-cloud', 'atlantic-net', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb',
+    'ionos-cloud', 'atlanticnet', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb',
     // Enterprise Clouds
-    'aiven', 'aruba', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware',
+    'aiven', 'arubacloud', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware',
     // Telco & Networking
-    'biznet', 'bt-cloud', 'cato', 'centurylink', 'gts', 'megaport', 'ntt', 't-systems', 'zayo'
+    'biznetnetworks', 'btcloud', 'catonetworks', 'centurylink', 'gtscentraleurope', 'megaport', 'nttcommunications', 't-systems', 'zayo'
 ];
 
 const getProviderDisplayName = (key) => {
@@ -85827,7 +85827,7 @@ const getProviderDisplayName = (key) => {
         scaleway: "Scaleway",
         Tencent: "Tencent Cloud",
         "yandex-cloud": "Yandex Cloud",
-        sinopec: "Sinopec Cloud",
+        "sinopec-cloud": "Sinopec Cloud",
         exoscale: "Exoscale",
         cherryservers: "Cherry Servers",
         packethost: "Equinix Metal",
@@ -85839,7 +85839,7 @@ const getProviderDisplayName = (key) => {
         packet: "Packet",
         cloudflare: "Cloudflare",
         "ionos-cloud": "1&1 IONOS",
-        "atlantic-net": "Atlantic.Net",
+        atlanticnet: "Atlantic.Net",
         hetznercloud: "Hetzner",
         kamatera: "Kamatera",
         linode: "Linode",
@@ -85848,7 +85848,7 @@ const getProviderDisplayName = (key) => {
         hostwinds: "Hostwinds",
         liquidweb: "Liquid Web",
         aiven: "Aiven",
-        aruba: "Aruba Cloud",
+        arubacloud: "Aruba Cloud",
         cleardata: "ClearDATA",
         cloudera: "Cloudera",
         databricks: "Databricks",
@@ -85859,13 +85859,13 @@ const getProviderDisplayName = (key) => {
         SAP: "SAP",
         snowflakedb: "Snowflake",
         vmware: "VMware",
-        biznet: "Biznet Networks",
-        "bt-cloud": "BT Cloud",
-        cato: "Cato Networks",
+        biznetnetworks: "Biznet Networks",
+        btcloud: "BT Cloud",
+        catonetworks: "Cato Networks",
         centurylink: "CenturyLink",
-        gts: "GTS Central Europe",
+        gtscentraleurope: "GTS Central Europe",
         megaport: "Megaport",
-        ntt: "NTT Communications",
+        nttcommunications: "NTT Communications",
         "t-systems": "T-Systems",
         zayo: "Zayo"
     };
@@ -85876,9 +85876,9 @@ const getProviderSector = (key) => {
     if (['coreweave', 'runpod', 'lambdal', 'paperspace', 'togethercomputer'].includes(key)) return 'GPU_COMPUTE';
     if (['vercel', 'supabase', 'render-oss', 'railwayapp', 'heroku', 'superfly', 'kinsta', 'digitalocean'].includes(key)) return 'DEVELOPER_PAAS';
     if (['cloudflare', 'fastly', 'macstadium', 'rackspace', 'packethost', 'cherryservers', 'lumen', 'maxihost', 'packet'].includes(key)) return 'EDGE_NETWORK';
-    if (['ionos-cloud', 'atlantic-net', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb'].includes(key)) return 'VPS_INFRASTRUCTURE';
-    if (['aiven', 'aruba', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware'].includes(key)) return 'ENTERPRISE_DATA';
-    if (['biznet', 'bt-cloud', 'cato', 'centurylink', 'gts', 'megaport', 'ntt', 't-systems', 'zayo'].includes(key)) return 'TELCO_NETWORKING';
+    if (['ionos-cloud', 'atlanticnet', 'hetznercloud', 'kamatera', 'linode', 'UpCloudLtd', 'vultr', 'hostwinds', 'liquidweb'].includes(key)) return 'VPS_INFRASTRUCTURE';
+    if (['aiven', 'arubacloud', 'cleardata', 'cloudera', 'databricks', 'navisite', 'nutanix', 'redhat-official', 'salesforce', 'SAP', 'snowflakedb', 'vmware'].includes(key)) return 'ENTERPRISE_DATA';
+    if (['biznetnetworks', 'btcloud', 'catonetworks', 'centurylink', 'gtscentraleurope', 'megaport', 'nttcommunications', 't-systems', 'zayo'].includes(key)) return 'TELCO_NETWORKING';
     return 'HYPERSCALER';
 };
 
@@ -85987,6 +85987,102 @@ const getProviderSpecOverrides = (key, spec, disp, safePrefix) => {
             database: { name: "Heroku Postgres & Key-Value", desc: "Tunes Heroku Postgres databases, connection pools, and Heroku Redis caches.", caps: ["heroku-postgres", "heroku-redis"] },
             identity: { name: "Heroku Teams & ConfigVars", desc: "Secures Heroku Config Vars, environment secrets, and Heroku Team access bounds.", caps: ["config-vars", "heroku-teams"] },
             iac: { name: "Heroku CLI & Terraform", desc: "Synthesizes Heroku Terraform resources, Heroku CLI commands, and release hook loops.", caps: ["heroku-cli", "terraform-heroku"] }
+        },
+        lambdal: {
+            compute: { name: "Lambda Hyper-GPU VMs", desc: "Coordinates custom deep learning VM clusters, high-intensity H100 hardware nodes, and PCIe node interlinks.", caps: ["lambda-gpu-vms", "h100-nodes", "pcie-links"] },
+            storage: { name: "Lambda Shared Filesystems", desc: "Manages persistent, high-throughput network file storage, dataset staging zones, and mount volumes.", caps: ["lambda-fs", "dataset-staging", "mount-volumes"] },
+            serverless: { name: "Lambda On-Demand API", desc: "Invokes specialized machine learning container runners, dynamic scaling hooks, and execution triggers.", caps: ["lambda-on-demand", "container-runners", "ml-execution"] },
+            database: { name: "Lambda Distributed Vector DB", desc: "Coordinates low-latency Qdrant/Milvus embedding storage, indices caching, and GPU memory partitioning.", caps: ["lambda-vector-db", "embedding-storage", "gpu-memory-partition"] },
+            identity: { name: "Lambda SSH Key Vault", desc: "Secures developer authentication credentials, IAM access roles, and API secret keys.", caps: ["lambda-ssh-keys", "iam-access", "secret-keys"] },
+            iac: { name: "Lambda CLI & Launch Scripts", desc: "Generates launch configurations, deploy automation, resource parameters, and custom shell scripts.", caps: ["lambda-cli", "launch-configurations", "deploy-automation"] }
+        },
+        runpod: {
+            compute: { name: "RunPod GPU & CPU Pods", desc: "Allocates safe, isolated GPU/CPU container pods, secure network proxies, and real-time GPU hardware monitors.", caps: ["runpod-pods", "isolated-containers", "gpu-monitoring"] },
+            storage: { name: "RunPod Network Volumes", desc: "Configures hot-swappable network volumes, persistent directory mounts, and high-performance NVMe stages.", caps: ["runpod-volumes", "network-mounts", "nvme-stages"] },
+            serverless: { name: "RunPod Serverless Endpoints", desc: "Deploys autoscaling worker triggers, custom Docker runtimes, and fast cold-start wakeups.", caps: ["runpod-serverless", "autoscaling-workers", "cold-starts"] },
+            database: { name: "RunPod Redis Cache & Vector", desc: "Manages distributed cache caches, memory pool databases, and secondary search indices.", caps: ["runpod-cache", "memory-pools", "vector-indices"] },
+            identity: { name: "RunPod Secure Env & API Keys", desc: "Secures container environment parameters, API gateway keys, and strict namespace access rules.", caps: ["runpod-env-secrets", "api-gateway-keys", "namespace-security"] },
+            iac: { name: "RunPod CLI & Pod Templates", desc: "Compiles pod YAML configurations, runpodctl command automations, and custom template scripts.", caps: ["runpodctl-cli", "pod-yaml", "template-automation"] }
+        },
+        superfly: {
+            compute: { name: "Fly.io Firecracker MicroVMs", desc: "Launches globally distributed Firecracker micro-VM containers, anycast IP targets, and auto-start schedules.", caps: ["fly-microvms", "anycast-ips", "autostart-scaling"] },
+            storage: { name: "Fly Volumes SSD Storage", desc: "Manages fast local NVMe volumes, block backups, and global data replications.", caps: ["fly-volumes", "nvme-storage", "volume-replication"] },
+            serverless: { name: "Fly Machine Serverless Events", desc: "Coordinates serverless machine scale-to-zero routines, HTTP triggers, and event loops.", caps: ["fly-machines", "scale-to-zero", "http-trigger-routes"] },
+            database: { name: "Fly LiteFS & Managed Postgres", desc: "Tunes LiteFS SQLite replication schemas, managed Postgres instances, and cluster setups.", caps: ["litefs-replication", "fly-postgres", "cluster-pooling"] },
+            identity: { name: "Fly Secret Vault & Access tokens", desc: "Encrypts deployment variables, active API key scopes, and wireguard security tunnels.", caps: ["fly-secrets", "wireguard-tunnels", "token-scopes"] },
+            iac: { name: "Flyctl CLI & fly.toml synthesis", desc: "Synthesizes fly.toml specifications, coordinates fly deploy sequences, and manages multi-region releases.", caps: ["flyctl-cli", "toml-synthesis", "multi-region-deploy"] }
+        },
+        railwayapp: {
+            compute: { name: "Railway Compute Services", desc: "Optimizes container execution, dynamic vertical auto-scaling, and background daemon lifecycles.", caps: ["railway-containers", "vertical-scaling", "daemon-management"] },
+            storage: { name: "Railway persistent storage", desc: "Manages durable disk attachments, mount limits, and secure volume structures.", caps: ["railway-disks", "disk-mounting"] },
+            serverless: { name: "Railway Triggered Webhooks", desc: "Executes cron-triggered tasks, release webhooks, and event callback pipelines.", caps: ["railway-cron", "release-webhooks", "event-pipelines"] },
+            database: { name: "Railway Multi-instance SQL/NoSQL", desc: "Deploys click-to-run database instances, connection limits, and backup protocols.", caps: ["railway-dbs", "connection-management"] },
+            identity: { name: "Railway Shared Variables Encrypter", desc: "Enforces environment variable encryption, team role scopes, and project API keys.", caps: ["railway-env-vault", "variable-encryption", "team-role-scopes"] },
+            iac: { name: "Railway CLI & dynamic templates", desc: "Compiles Railway blueprint parameters, railway command scripts, and config sweeps.", caps: ["railway-cli", "blueprint-compilation", "config-sweeps"] }
+        },
+        "render-oss": {
+            compute: { name: "Render Web Services & Cron", desc: "Optimizes Web Service containers, background workers, and automated cron runtimes.", caps: ["render-web-services", "background-workers", "cron-runtimes"] },
+            storage: { name: "Render Persistent Disks", desc: "Configures SSD disk attachments, cache paths, and data recovery systems.", caps: ["render-disks", "cache-paths", "data-recovery"] },
+            serverless: { name: "Render Background Worker Jobs", desc: "Balances intensive asynchronous task queues, CPU scale thresholds, and memory boundaries.", caps: ["render-async-jobs", "cpu-scaling", "memory-boundaries"] },
+            database: { name: "Render Managed Postgres & Redis", desc: "Tunes connection pools, managed Postgres databases, and fast Redis cache instances.", caps: ["render-postgres", "render-redis", "pool-tuning"] },
+            identity: { name: "Render Env Groups Secrets", desc: "Secures Environment Groups variables, custom SSH key access, and team boundaries.", caps: ["render-env-groups", "ssh-key-vault", "team-boundaries"] },
+            iac: { name: "Render Blueprint Infrastructure YAML", desc: "Generates render.yaml blueprints, Git commit-to-deploy hooks, and blueprint validation sweeps.", caps: ["render-blueprints", "git-deploys", "blueprint-validation"] }
+        },
+        hetznercloud: {
+            compute: { name: "Hetzner Dedicated & Cloud VMs", desc: "Optimizes CX/CP virtual CPU servers, dedicated physical hosts, and memory ratios.", caps: ["hcloud-servers", "dedicated-hosts", "cpu-optimisation"] },
+            storage: { name: "Hetzner block volumes & CEPH", desc: "Coordinates high-availability SSD block volumes, CEPH cluster mounts, and backup policies.", caps: ["hcloud-volumes", "ceph-mounts", "backup-policies"] },
+            serverless: { name: "Hetzner microservice executors", desc: "Coordinates ephemeral tasks, API routes triggers, and lightweight shell runners.", caps: ["hcloud-executors", "ephemeral-tasks", "api-triggers"] },
+            database: { name: "Hetzner cluster master setups", desc: "Coordinates postgres replication, master-replica setups, and connection limits.", caps: ["hcloud-postgres-cluster", "replication-sync", "connection-limits"] },
+            identity: { name: "Hetzner SSH keys & API tokens", desc: "Hardens console SSH key constraints, hcloud API tokens, and firewall security blocks.", caps: ["hcloud-ssh-security", "hcloud-tokens", "firewall-rules"] },
+            iac: { name: "Hetzner CLI hcloud & Terraform", desc: "Synthesizes Terraform hcloud modules, hcloud CLI automation scripts, and cluster rollouts.", caps: ["hcloud-cli", "terraform-hcloud", "cluster-rollouts"] }
+        },
+        vultr: {
+            compute: { name: "Vultr bare-metal & cloud VMs", desc: "Allocates high-performance bare-metal clusters, AMD EPYC virtual servers, and instance groups.", caps: ["vultr-bare-metal", "epyc-instances", "instance-groups"] },
+            storage: { name: "Vultr block storage maps", desc: "Configures NVMe block storage mounts, cluster snapshot backups, and object storage buckets.", caps: ["vultr-block-nvme", "snapshots", "object-storage"] },
+            serverless: { name: "Vultr Kubernetes engine pods", desc: "Coordinates serverless VKE Kubernetes setups, microservice pods, and autoscalers.", caps: ["vke-kubernetes", "microservice-pods", "autoscaling-vke"] },
+            database: { name: "Vultr managed DB pools", desc: "Tunes managed MySQL/Postgres pooling bounds, query speed indexes, and backup windows.", caps: ["vultr-managed-dbs", "pool-tuning", "index-optimization"] },
+            identity: { name: "Vultr IAM & secure firewalls", desc: "Configures project collaborator access, Vultr firewall rules, and API token ranges.", caps: ["vultr-iam", "firewall-rules", "api-tokens"] },
+            iac: { name: "Vultr API CLI & Terraform", desc: "Compiles Terraform Vultr scripts, Vultr CLI actions, and dynamic resource builds.", caps: ["vultr-cli", "terraform-vultr", "resource-builds"] }
+        },
+        linode: {
+            compute: { name: "Linode high-memory VMs", desc: "Optimizes CPU-dedicated instances, massive high-memory servers, and load balancers configurations.", caps: ["linode-dedicated-cpu", "high-memory-nodes", "nodebalancers"] },
+            storage: { name: "Linode block storage volumes", desc: "Manages block storage mounts, Linode Object Storage buckets, and backup rotations.", caps: ["linode-block-storage", "linode-object-storage", "backup-rotations"] },
+            serverless: { name: "Linode LKE Kubernetes pods", desc: "Coordinates LKE Kubernetes deployments, node pools scaling, and dynamic service routes.", caps: ["lke-kubernetes", "node-pools-scaling", "service-routing"] },
+            database: { name: "Linode managed clusters", desc: "Coordinates cluster database replicas, pg_dump automated backups, and cache indices.", caps: ["linode-databases", "replica-sync", "index-optimization"] },
+            identity: { name: "Linode cloud manager security", desc: "Enforces API Personal Access Tokens security, IAM policies, and VPC private gates.", caps: ["linode-pat", "linode-iam", "vpc-isolation"] },
+            iac: { name: "Linode CLI linode-cli & Terraform", desc: "Deploys Terraform Linode templates, linode-cli script executions, and stack automation.", caps: ["linode-cli", "terraform-linode", "stack-automation"] }
+        },
+        fastly: {
+            compute: { name: "Fastly Compute@Edge V8 isolates", desc: "Compiles Rust/JavaScript Fastly Compute@Edge V8 isolates and HTTP lifecycle actions.", caps: ["fastly-compute-edge", "v8-isolates", "http-lifecycle"] },
+            storage: { name: "Fastly Edge KV & Config stores", desc: "Configures sub-millisecond Edge KV stores, Config Stores variables, and local caching lists.", caps: ["fastly-edge-kv", "config-stores", "edge-caching"] },
+            serverless: { name: "Fastly Edge serverless actions", desc: "Coordinates instant serverless edge functions, custom redirects, and dynamic content rewrites.", caps: ["fastly-serverless", "edge-redirects", "content-rewrites"] },
+            database: { name: "Fastly Edge Dictionary variables", desc: "Manages fast Edge Dictionary maps, real-time key-value configs, and lookup speeds.", caps: ["edge-dictionaries", "realtime-lookups", "config-mapping"] },
+            identity: { name: "Fastly Edge rate limiter security", desc: "Deploys WAF security rules, rate limiters, and secure origin shielding.", caps: ["fastly-waf", "rate-limiting", "origin-shielding"] },
+            iac: { name: "Fastly CLI fastly & VCL scripts", desc: "Compiles Fastly VCL configurations, fastly-cli deploy sequences, and live service rollouts.", caps: ["fastly-vcl", "fastly-cli", "service-rollouts"] }
+        },
+        scaleway: {
+            compute: { name: "Scaleway instance computing", desc: "Coordinates GP1 compute instances, bare-metal servers, and dynamic serverless scale.", caps: ["scaleway-instances", "bare-metal", "serverless-scale"] },
+            storage: { name: "Scaleway object & block storage", desc: "Configures Object storage buckets, multi-region replicates, and high-performance block volumes.", caps: ["scaleway-buckets", "multi-region-replication", "block-volumes"] },
+            serverless: { name: "Scaleway serverless functions", desc: "Deploys Python/Node serverless functions, events gateways, and triggers integrations.", caps: ["scaleway-functions", "event-gateways", "triggers-integration"] },
+            database: { name: "Scaleway database instances", desc: "Tunes managed SQL/NoSQL databases, replica synchronizations, and backup lifecycle grids.", caps: ["scaleway-dbs", "database-replicas", "backup-lifecycle"] },
+            identity: { name: "Scaleway IAM access controls", desc: "Enforces least-privilege IAM policies, API credentials, and private VPC routes.", caps: ["scaleway-iam", "api-credentials", "private-vpc"] },
+            iac: { name: "Scaleway CLI scw & Terraform", desc: "Synthesizes Terraform Scaleway architectures, scw CLI automation, and infrastructure sweeps.", caps: ["scaleway-cli", "terraform-scaleway", "infrastructure-sweeps"] }
+        },
+        ovh: {
+            compute: { name: "OVHcloud Hosted Private Cloud", desc: "Configures VMware hosted clouds, bare metal physical hosts, and VM scaling clusters.", caps: ["ovh-private-cloud", "ovh-bare-metal", "vm-scaling"] },
+            storage: { name: "OVHcloud Block & Object Storage", desc: "Coordinates high-durability CEPH block storage, Swift Object buckets, and backup runs.", caps: ["ovh-ceph-storage", "ovh-object-storage", "backup-runs"] },
+            serverless: { name: "OVHcloud Serverless Functions", desc: "Manages ephemeral task actions, background triggers, and API Gateway bindings.", caps: ["ovh-functions", "background-triggers", "api-gateway"] },
+            database: { name: "OVHcloud Managed DBs", desc: "Coordinates Postgres/MySQL clusters, read-replica synchronization, and connection pooling.", caps: ["ovh-databases", "replica-sync", "connection-pooling"] },
+            identity: { name: "OVHcloud IAM & API Secrets", desc: "Enforces project access controls, OpenStack token creations, and secure firewalls.", caps: ["ovh-iam", "openstack-tokens", "firewall-rules"] },
+            iac: { name: "OVHcloud CLI & Terraform", desc: "Deploys Terraform OVH modules, OpenStack CLI integrations, and infrastructure sweeps.", caps: ["ovh-cli", "terraform-ovh", "openstack-cli"] }
+        },
+        aliyun: {
+            compute: { name: "Alibaba Cloud Elastic Compute (ECS)", desc: "Optimizes ECS VM scaling, GPU/CPU machine types, and auto-scaling groups.", caps: ["ecs-scaling", "gpu-instances", "autoscaling-groups"] },
+            storage: { name: "Alibaba Object Storage Service (OSS)", desc: "Configures high-durability OSS buckets, lifecycle tiering, and CDN edge accelerations.", caps: ["oss-buckets", "oss-lifecycle", "cdn-acceleration"] },
+            serverless: { name: "Alibaba Function Compute (FC)", desc: "Manages serverless Function Compute execution, events triggers, and cold-start mitigations.", caps: ["function-compute", "event-triggers", "cold-start-tuning"] },
+            database: { name: "Alibaba ApsaraDB & PolarDB", desc: "Tunes PolarDB database autoscaling, read-replicas connection limits, and backup rotations.", caps: ["apsaradb-polar", "read-replicas", "backup-rotations"] },
+            identity: { name: "Alibaba RAM Security (IAM)", desc: "Enforces Resource Access Management (RAM) least-privilege roles and API key vaults.", caps: ["ram-iam", "least-privilege", "key-vaults"] },
+            iac: { name: "Alibaba ROS & Terraform", desc: "Deploys ROS stacks, compiles Terraform alicloud modules, and coordinates infra sweeps.", caps: ["ros-stacks", "terraform-alicloud", "infrastructure-sweeps"] }
         }
     };
 
