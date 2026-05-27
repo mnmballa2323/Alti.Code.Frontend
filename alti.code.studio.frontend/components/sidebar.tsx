@@ -868,15 +868,6 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Cloud",
-      icon: Cloud,
-      path: "/cloud",
-      isActive: pathname === "/cloud",
-      onClick: () => {
-        router.push("/cloud");
-      },
-    },
-    {
       label: "Instructions",
       icon: BookOpen,
       path: "/instructions",
@@ -1409,7 +1400,12 @@ export default function Sidebar() {
           </div>
           <Button
             isIconOnly
-            className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+            className={cn(
+              "border rounded-lg flex-shrink-0",
+              pathname === "/connect-apps"
+                ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+            )}
             size="sm"
             title="Integrations"
             variant="flat"
@@ -1418,6 +1414,23 @@ export default function Sidebar() {
             }}
           >
             <LayoutGrid className="size-3.5" />
+          </Button>
+          <Button
+            isIconOnly
+            className={cn(
+              "border rounded-lg flex-shrink-0",
+              pathname === "/cloud"
+                ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+            )}
+            size="sm"
+            title="Cloud Connections"
+            variant="flat"
+            onClick={() => {
+              router.push("/cloud");
+            }}
+          >
+            <Cloud className="size-3.5" />
           </Button>
           {pathname !== "/connect-apps" && (
             <Button
@@ -1448,11 +1461,11 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* 8 navigation icons toggle container */}
+        {/* 7 navigation icons toggle container */}
         <div
           className={cn(
             isSidebarOpen
-              ? "grid grid-cols-8 gap-0.5 px-2 py-2.5 border-b border-default-200"
+              ? "grid grid-cols-7 gap-0.5 px-2 py-2.5 border-b border-default-200"
               : "flex flex-col items-center gap-2 px-1 pt-2"
           )}
         >
@@ -1487,7 +1500,7 @@ export default function Sidebar() {
             );
           })}
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
-            <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
+            <div className="col-span-7 text-center py-2 text-xs text-default-400 italic">
               No results found
             </div>
           )}
