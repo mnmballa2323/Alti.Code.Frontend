@@ -1960,18 +1960,46 @@ export default function Sidebar() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col gap-0.5 px-2 mt-2">
-                {sortedChats.filter((item) =>
-                  (item?.responses[0]?.prompt || "Untitled Chat").toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                ).map((item) => (
-                  <button
-                    key={item?._id}
-                    className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
-                    onClick={() => item?.sessionId && submitForm(item?.sessionId)}
-                  >
-                    {item?.responses[0]?.prompt || "Untitled Chat"}
-                  </button>
-                ))}
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = sortedChats.filter((item) =>
+                    (item?.responses[0]?.prompt || "Untitled Chat").toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+
+                  if (sortedChats.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          icon={pathname === "/" || pathname === "/code" ? "solar:code-square-linear" : "solar:chat-square-linear"}
+                          className="text-2xl text-default-400 mb-2"
+                        />
+                        <span className="text-xs text-default-400">
+                          {pathname === "/" || pathname === "/code"
+                            ? "No code history yet"
+                            : "No chat history yet"}
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="px-3 py-8 text-center text-xs text-default-400">
+                        No results found
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((item) => (
+                    <button
+                      key={item?._id}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
+                      onClick={() => item?.sessionId && submitForm(item?.sessionId)}
+                    >
+                      {item?.responses[0]?.prompt || "Untitled Chat"}
+                    </button>
+                  ));
+                })()}
               </div>
             )}
           </ScrollShadow>
