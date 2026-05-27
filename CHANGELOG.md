@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.89] - 2026-05-27 — Overseer Agent Self-Healing ESM & Robustness Upgrade
+### Added
+- **ESM-Compliant Command Execution**: Fixed a severe ESM crash inside `overseer.agent.js` by removing legacy CommonJS `require('child_process')` calls and migrating the `_runShellCommand` runner to use an ES module top-level import of `{ exec }`.
+- **Robust Verified Path Scanner**: Refactored the `_extractFilePathFromLog` file trace scanner. It now robustly matches Unix stack traces, Windows absolute paths, linter reports, and Vitest test runner outputs, and verifies using `fs.stat` that the target file *actually exists* before proposing any self-healing patches, ensuring zero-trust isolation.
+- **E2E Overseer Self-Healing Tests**: Created `overseer.test.js` validating verified path extraction, ESM command runs, and failing sandbox auto-healing cycles.
+
 ## [39.37.88] - 2026-05-27 — Executive Swarm Orchestrator Real Specialist Integration
 ### Added
 - **Dynamic Executive Specialist Execution**: Wired up the `Director`'s task execution loop in `director.agent.js` to dynamically look up and activate the actual registered specialist class instances (such as the `ArchitectAgent`, `ComposerAgent`, etc.) in the central `agentRegistry`, executing their robust `.consult` method rather than a mock timeout.

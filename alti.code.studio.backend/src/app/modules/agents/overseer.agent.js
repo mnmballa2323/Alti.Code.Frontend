@@ -11,6 +11,7 @@ import { RefactorAgentService } from '../refactorAgent/refactorAgent.service.js'
 import { sandboxService } from '../shadowWorkspace/sandbox.service.js';
 import path from 'path';
 import fs from 'fs/promises';
+import { exec } from 'child_process';
 
 export class OverseerAgent {
     constructor() {
@@ -90,9 +91,8 @@ export class OverseerAgent {
 
                 logger.info(`👁️ Overseer: DebugAgent suggested a patch for Severity: ${debugResult.bugSeverity}`);
 
-                // TODO: For complete implementation, we need the exact file path.
-                // We'll extract the first file path found in the error log.
-                const impactedFile = this._extractFilePathFromLog(errorLog, workingDir);
+                // Extracted file path must be verified for presence in filesystem
+                const impactedFile = await this._extractFilePathFromLog(errorLog, workingDir);
 
                 if (impactedFile) {
                     logger.info(`👁️ Overseer: Applying patch to ${impactedFile}`);
@@ -146,22 +146,48 @@ export class OverseerAgent {
         }
     }
 
-    _extractFilePathFromLog(log, baseDir) {
-        // Very basic regex to find a local file path in the stack trace
-        const match = log.match(/(?:at |in )([a-zA-Z0-9_/\\.-]+\.jsx?)/);
-        if (match && match[1]) {
-            return path.resolve(baseDir, match[1]);
+    async _extractFilePathFromLog(log, baseDir) {
+        if (!log || typeof log !== 'string') return null;
+
+        // Robust matching patterns for stack traces, linter outputs, compiler errors, and test runner outputs
+        const regexes = [
+            /(?:at\s+|❯\s+)?([a-zA-Z0-9_/\\.-]+\.(?:jsx?|tsx?|json|py|rs|css|html))(?::\d+:\d+|:\d+|\(\d+,\d+\))?/g,
+            /([a-zA-Z]:[\\/][a-zA-Z0-9_/\\.-]+\.(?:jsx?|tsx?|json|py|rs|css|html))/g, // Windows absolute
+            /(\/[a-zA-Z0-9_/\\.-]+\.(?:jsx?|tsx?|json|py|rs|css|html))/g // Unix absolute
+        ];
+
+        for (const regex of regexes) {
+            let match;
+            regex.lastIndex = 0;
+            
+            while ((match = regex.exec(log)) !== null) {
+                const rawPath = match[1];
+                if (!rawPath) continue;
+
+                // Resolve path relative to baseDir if not already absolute
+                const resolvedPath = path.isAbsolute(rawPath) ? rawPath : path.resolve(baseDir, rawPath);
+
+                try {
+                    const stats = await fs.stat(resolvedPath);
+                    if (stats.isFile()) {
+                        logger.info(`👁️ Overseer: Robustly matched existing target file: ${resolvedPath}`);
+                        return resolvedPath;
+                    }
+                } catch (e) {
+                    // File does not exist, continue scanning next matches
+                }
+            }
         }
+
         return null;
     }
 
-    // Wrap child_process execution
+    // ESM-compliant child_process execution using imported exec
     _runShellCommand(command, cwd) {
         return new Promise((resolve, reject) => {
-            const { exec } = require('child_process');
             exec(command, { cwd }, (error, stdout, stderr) => {
                 if (error) {
-                    reject(stdout + '\\n' + stderr);
+                    reject(stdout + '\n' + stderr);
                 } else {
                     resolve(stdout);
                 }
