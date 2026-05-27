@@ -4,6 +4,8 @@ import { logger } from '../../../shared/logger.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import config from '../../../../config/index.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
+import { agentMemoryService } from '../memory/agentmemory.service.js';
+import { knowledgeGraphService } from '../memory/knowledge_graph.service.js';
 
 // Secure Environment Validation: Enforce presence of safe key config
 const apiKey = config.gemini_secret_key || process.env.GEMINI_API_KEY;
@@ -130,9 +132,23 @@ Return a structured roadmap detailing the task assignment for each role to compl
     }
 
     async querySemanticMemory(prompt, contextBlock) {
-        // Simulates SQLite + Vector hybrid memory resolution
+        // Query the actual agentmemory persistent vector index if available
+        if (agentMemoryService.isReady) {
+            try {
+                logger.info(`🧠 [SwarmNexus] Querying live vector agentmemory for: "${prompt.slice(0, 40)}..."`);
+                const mems = await agentMemoryService.smartSearch({ query: prompt, limit: 5 });
+                if (mems && mems.results && mems.results.length > 0) {
+                    return `🔍 **agentmemory live vector persistent cache hit:**\n` + 
+                        mems.results.map(m => `- ${m.content}`).join('\n');
+                }
+            } catch (err) {
+                logger.warn(`⚠️ [SwarmNexus] agentmemory smartSearch failed: ${err.message}. Degrading gracefully...`);
+            }
+        }
+
+        // Degrading gracefully: simulated SQLite + Vector hybrid memory resolution
         const simulatedMemoryResult = `
-🔍 **claude-mem & agentmemory persistent vector index hit:**
+🔍 **claude-mem & agentmemory persistent vector index hit (Simulated Fallback):**
 - [Memory Node 1] (timestamp: 2026-05-27T19:25:29Z): Unified registry dynamic loading successfully integrated.
 - [Memory Node 2] (timestamp: 2026-05-27T19:25:30Z): Strictly whitelisted pure MIT & Apache 2.0 licenses in LicenseService.
 - [Verification]: All backend vitest integration tests are passing perfectly.
@@ -141,10 +157,24 @@ Return a structured roadmap detailing the task assignment for each role to compl
     }
 
     async traverseCodeGraph(prompt, contextBlock) {
-        // Path Traversal and SQL Injection Hardening Guard
         const cleanSymbol = prompt.replace(/[^a-zA-Z0-9_\.]/g, '');
+        
+        // Traverse the actual SQLite/ChromaDB AST knowledge graph if online
+        if (knowledgeGraphService.collection) {
+            try {
+                logger.info(`📐 [SwarmNexus] Querying live ChromaDB knowledgeGraph for symbol: "${cleanSymbol}"`);
+                const historicalPatch = await knowledgeGraphService.recallSimilarFix(cleanSymbol);
+                if (historicalPatch) {
+                    return `📐 **CodeGraph Semantic Symbol Index Traverse Complete (Live ChromaDB Match):**\n${historicalPatch}`;
+                }
+            } catch (err) {
+                logger.warn(`⚠️ [SwarmNexus] knowledgeGraph recall failed: ${err.message}. Degrading gracefully...`);
+            }
+        }
+
+        // Degrading gracefully: simulated CodeGraph Tree-sitter queryable symbol search
         return `
-📐 **CodeGraph Semantic Symbol Index Traverse Complete:**
+📐 **CodeGraph Semantic Symbol Index Traverse Complete (Simulated Fallback):**
 - Target Symbol: \`${cleanSymbol || 'LicenseService'}\`
 - Declared in: \`src/app/modules/governance/license.service.js\`
 - Callers: \`LicenseController\`, \`agenticRouter.routePrompt\`
@@ -174,4 +204,5 @@ agentRegistry.register({
     version: '1.0.0',
     instance: swarmNexusAgent
 });
+
 
