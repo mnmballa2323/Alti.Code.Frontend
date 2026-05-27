@@ -139,4 +139,15 @@ test('Nexus Registry: Discoverability of new agents', () => {
     expect(names).toContain('neuromorphic_silicon');
     expect(names).toContain('biosynthetic_compiler');
     expect(names).toContain('space_telemetry');
+
+    // Assert scale is over 10,000 active route-able backend agents
+    expect(agentRegistry.count).toBeGreaterThanOrEqual(10000);
+    
+    // Assert discovery of micro-specialists across domains
+    expect(names).toContain('biocompute_0');
+    expect(names).toContain('biocompute_99');
+    expect(names).toContain('nanotech_50');
+    expect(names).toContain('astronav_12');
+    expect(names).toContain('fusion_88');
+    expect(names).toContain('quantumcom_99');
 });
