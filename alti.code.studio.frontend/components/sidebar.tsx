@@ -927,6 +927,19 @@ export default function Sidebar() {
   const [loadingApps, setLoadingApps] = useState(true);
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
 
+  // Prefetch all navigation routes on mount to ensure instant, zero-latency page transitions
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/chat");
+    router.prefetch("/vault");
+    router.prefetch("/cloud");
+    router.prefetch("/instructions");
+    router.prefetch("/guardrails");
+    router.prefetch("/repositories");
+    router.prefetch("/documents");
+    router.prefetch("/connect-apps");
+  }, [router]);
+
   useEffect(() => {
     setSecondarySearch("");
   }, [pathname]);
