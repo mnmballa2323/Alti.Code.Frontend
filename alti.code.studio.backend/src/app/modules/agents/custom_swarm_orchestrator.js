@@ -114,8 +114,49 @@ export class SwarmEngine {
                 if (result && result.isHandoff) {
                     // Dynamic Handoff Mapping: Resolve target agent instance by name dynamically
                     const swarmModule = await import('./software_engineering_swarm.js');
-                    const targetAgent = swarmModule[result.handoffAgentName + 'Agent'] || swarmModule[result.handoffAgentName];
+                    let targetAgent = swarmModule[result.handoffAgentName + 'Agent'] || swarmModule[result.handoffAgentName];
                     
+                    if (!targetAgent) {
+                        // Resolve dynamically from the AgentRegistry / shards
+                        try {
+                            const { agentRegistry } = await import('./agent.registry.js');
+                            const agentDef = agentRegistry.get(result.handoffAgentName);
+                            if (agentDef && agentDef.importPath) {
+                                // Dynamically load the sharded agent instance
+                                const shardModule = await import(agentDef.importPath);
+                                const specialistInstance = Object.values(shardModule).find(val => val && val.consult);
+                                
+                                if (specialistInstance) {
+                                    // Wrap the specialistInstance in a SwarmAgent dynamically
+                                    targetAgent = new SwarmAgent({
+                                        name: specialistInstance.name,
+                                        instructions: specialistInstance.preamble,
+                                        functions: [
+                                            {
+                                                name: `consult_${specialistInstance.name.toLowerCase()}`,
+                                                description: `Consult the ${specialistInstance.name} specialist with your prompt to run its domain logic.`,
+                                                parameters: {
+                                                    type: 'OBJECT',
+                                                    properties: {
+                                                        prompt: { type: 'STRING', description: 'The domain prompt to audit or generate code' }
+                                                    },
+                                                    required: ['prompt']
+                                                },
+                                                execute: async (args, context) => {
+                                                    const contextBlock = context.generatedCode || context.architectureDesign || '';
+                                                    const consultResult = await specialistInstance.consult(args.prompt, [{ content: typeof contextBlock === 'string' ? contextBlock : JSON.stringify(contextBlock) }]);
+                                                    return consultResult.content || consultResult;
+                                                }
+                                            }
+                                        ]
+                                    });
+                                }
+                            }
+                        } catch (e) {
+                            logger.error(`Swarm Engine: Failed to dynamically load agent shard for [${result.handoffAgentName}]: ${e.message}`);
+                        }
+                    }
+
                     if (targetAgent) {
                         logger.info(`🔄 Swarm Handoff: [${currentAgent.name}] -> Delegated to [${targetAgent.name}]`);
                         handoffAgent = targetAgent;

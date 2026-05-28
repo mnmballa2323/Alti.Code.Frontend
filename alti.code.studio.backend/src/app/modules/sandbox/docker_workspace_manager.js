@@ -13,6 +13,7 @@
 import { exec } from 'child_process';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
+import vm from 'vm';
 
 export class DockerWorkspaceManager {
     /**
@@ -243,22 +244,21 @@ export class DockerWorkspaceManager {
             const mockErrors = [];
             let mockSuccess = true;
             try {
-                // Safe standard sandbox IIFE simulation
-                const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-                const runner = new AsyncFunction('console', `
-                    try {
-                        ${code}
-                    } catch (e) {
-                        throw e;
-                    }
-                `);
-                
                 const customConsole = {
                     log: (...args) => mockLogs.push(args.join(' ')),
                     error: (...args) => mockErrors.push(args.join(' '))
                 };
-
-                await runner(customConsole);
+                const sandbox = {
+                    console: customConsole,
+                    setTimeout,
+                    setInterval,
+                    clearTimeout,
+                    clearInterval,
+                    Buffer,
+                    process: { env: {} }
+                };
+                const timeoutMs = options.timeoutMs || options.timeout || 5000;
+                vm.runInNewContext(code, sandbox, { timeout: timeoutMs });
             } catch (e) {
                 mockSuccess = false;
                 mockErrors.push(e.message);
@@ -401,21 +401,21 @@ export class DockerWorkspaceManager {
             const mockErrors = [];
             let mockSuccess = true;
             try {
-                const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-                const runner = new AsyncFunction('console', `
-                    try {
-                        ${code}
-                    } catch (e) {
-                        throw e;
-                    }
-                `);
-                
                 const customConsole = {
                     log: (...args) => mockLogs.push(args.join(' ')),
                     error: (...args) => mockErrors.push(args.join(' '))
                 };
-
-                await runner(customConsole);
+                const sandbox = {
+                    console: customConsole,
+                    setTimeout,
+                    setInterval,
+                    clearTimeout,
+                    clearInterval,
+                    Buffer,
+                    process: { env: {} }
+                };
+                const timeoutMs = options.timeoutMs || options.timeout || 5000;
+                vm.runInNewContext(code, sandbox, { timeout: timeoutMs });
             } catch (e) {
                 mockSuccess = false;
                 mockErrors.push(e.message);
