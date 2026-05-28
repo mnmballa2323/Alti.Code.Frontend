@@ -86455,6 +86455,24 @@ OMNI_CLOUD_PROVIDERS.forEach(providerKey => {
     });
 });
 
+agentRegistry.register({
+    name: 'tdd_coverage_enforcer_agent',
+    importPath: './shards/t/tdd_coverage_enforcer.agent.js',
+    description: 'TDD Coverage Enforcer & Edge-Case Generator Specialist. Analyzes code coverage gaps and generates robust unit tests to push coverage beyond the 80% threshold.',
+    queue: 'tdd-coverage-enforcer-queue',
+    capabilities: ['test-coverage', 'edge-case-generation', 'tdd', 'vitest', 'error-boundaries'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'rag_context_optimizer_agent',
+    importPath: './shards/r/rag_context_optimizer.agent.js',
+    description: 'RAG Context & Token Optimizer Specialist. Analyzes token bloat and prunes redundant document context to keep AI reasoning cheap, fast, and highly focused.',
+    queue: 'rag-context-optimizer-queue',
+    capabilities: ['rag-optimization', 'token-pruning', 'context-summarization', 'vector-search-tuning'],
+    version: '1.0.0'
+});
+
 
 
 
