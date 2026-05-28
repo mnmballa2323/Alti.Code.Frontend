@@ -105,11 +105,27 @@ export class DockerWorkspaceManager {
         // 2. Clean up dead container if it exists
         await this._execCmd(`docker rm -f ${containerName}`);
 
-        // 3. Launch isolated resource-limited Docker container
-        // Memory limit: 256MB, CPU limit: 0.5 CPU, volume mapped to /workspace
+        // Ensure host workspace directory is accessible by the unprivileged Node user (UID 1000) inside the container
+        await this._execCmd(`chmod -R 777 "${hostPath}"`);
+
+        // 3. Launch isolated resource-limited and heavily hardened Docker container:
+        // - Strict Air-Gapped Network Isolation: --network none
+        // - Root filesystem read-only: --read-only
+        // - Drop all default Linux capabilities: --cap-drop=ALL
+        // - Prevent privilege escalation: --security-opt=no-new-privileges:true
+        // - Run as default unprivileged Node user: --user 1000:1000
+        // - Memory-bound non-executable tmp filesystem for system writes: --tmpfs /tmp:rw,noexec,nosuid,size=65536k
+        // - Scoped host workspace directory mount: -v hostPath:/workspace
+        // - Constraints: --memory=256m --cpus=0.5
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostPath}":/workspace ` +
+            `--network none ` +
+            `--read-only ` +
+            `--security-opt=no-new-privileges:true ` +
+            `--cap-drop=ALL ` +
+            `--user 1000:1000 ` +
+            `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
             `--memory="256m" ` +
             `--cpus="0.5" ` +
             `--workdir /workspace ` +
@@ -119,7 +135,7 @@ export class DockerWorkspaceManager {
 
         if (!runResult.success) {
             // Graceful fallback to Mock mode if container creation fails due to daemon constraints
-            console.log(`⚠️ Docker container creation failed. Cascading [${containerName}] to Mock Sandbox.`);
+            console.log(`⚠️ Docker container creation failed: ${runResult.error}. Cascading [${containerName}] to Mock Sandbox.`);
             this.activeContainers.add(containerName);
             return {
                 containerName,
