@@ -21,7 +21,8 @@ const TEST_SUITES = [
     { name: 'Cognitive Task Planner', path: './scripts/test_cognitive.js' },
     { name: 'Agentic Skills Loader', path: './scripts/test_skills.js' },
     { name: 'Workspace Sandbox Isolator', path: './scripts/test_workspace_isolator.js' },
-    { name: 'AST Query Evaluator Engine', path: './scripts/test_ast_query_evaluator.js' }
+    { name: 'AST Query Evaluator Engine', path: './scripts/test_ast_query_evaluator.js' },
+    { name: 'Agent Quality Evaluator Engine', path: './scripts/test_agent_evaluator.js' }
 ];
 
 async function executeSuite(suite) {
