@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Search } from "lucide-react";
+import { Search, Plus, Server } from "lucide-react";
 import { Input, Button, Chip, cn } from "@heroui/react";
 
 import { SAAS_MOCKS } from "./catalog";
@@ -308,8 +308,8 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   if (app.id === "custom-mcp-launcher") {
     return (
-      <div className={cn("w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg", className)}>
-        <Icon icon="solar:add-circle-bold" className="text-base" />
+      <div className={cn("w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-xl", className)}>
+        <Plus className="size-4 shrink-0" />
       </div>
     );
   }
@@ -345,6 +345,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   const simpleIconsMapping: Record<string, string> = {
     aws_dynamodb: "amazondynamodb",
+    aws_ec2: "amazonec2",
+    aws_lambda: "awslambda",
+    aws_s3: "amazons3",
+    aws_ecs: "amazonecs",
+    aws_cdk: "amazonwebservices",
+    aws_kb_retrieval: "amazonwebservices",
     apollo_graphql: "apollographql",
     google_drive: "googledrive",
     google_sheets: "googlesheets",
@@ -432,25 +438,16 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     );
   }
 
-  // Fallback 1: Curated Iconify vector icon (if we are online and it loads)
-  if (app.icon && app.icon.includes(":")) {
-    return (
-      <div className={cn("rounded-xl flex items-center justify-center p-0.5 bg-transparent shrink-0", className)}>
-        <Icon icon={app.icon} className="w-full h-full object-contain" />
-      </div>
-    );
-  }
-
-  // Fallback 2: System custom server icon
+  // Fallback 1: System custom server icon
   if (app.type === "custom") {
     return (
       <div className={cn("rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white shrink-0", className)}>
-        <Icon icon="solar:server-square-bold" className="text-sm" />
+        <Server className="size-4 text-white shrink-0" />
       </div>
     );
   }
 
-  // Fallback 3: Ultimate bulletproof initials box
+  // Fallback 2: Ultimate bulletproof initials box (strictly bypasses broken Iconify components to ensure no blank circles!)
   const initials = app.name.slice(0, 2).toUpperCase();
   const gradientClass = getAvatarColor(app.name);
 
