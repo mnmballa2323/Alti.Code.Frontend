@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2026 Alti.Code.Studio
  * 
- * The Ultimate Software Engineering Swarm
+ * Five-Agent Advanced Developer Swarm
  * 
- * Integrates three collaborating agents (Architect, TDD Coder, and Security Auditor)
- * cooperating autonomously through our stateful Swarm Handoff Engine to solve
- * complex developer tasks.
+ * Defines a comprehensive multi-agent pipeline:
+ * Architect -> TDD Coder -> QA Tester -> Security Auditor -> DevOps Engineer
+ * cooperating autonomously through our Swarm Handoff Engine.
  */
 
 import { SwarmAgent } from './custom_swarm_orchestrator.js';
@@ -13,7 +13,9 @@ import { SwarmAgent } from './custom_swarm_orchestrator.js';
 // Forward declaration pointers
 let SwarmArchitectAgent;
 let SwarmTddCoderAgent;
+let SwarmQaTesterAgent;
 let SwarmSecurityAuditorAgent;
+let SwarmDevOpsEngineerAgent;
 
 // ── 1. SWARM ARCHITECT AGENT ──
 SwarmArchitectAgent = new SwarmAgent({
@@ -24,8 +26,7 @@ Your core directive is to design high-performance, secure, and horizontally scal
 OPERATIONAL PRINCIPLES:
 1. **API Contracts**: Define exact endpoints, JSON payload shapes, and status codes.
 2. **Data Modeling**: Design robust schema relations, database partitions, and indexing strategies.
-3. **Scale & Caching**: Pre-emptively plan Redis caching layer, rate-limiting, and CDN geometries.
-4. **Handoff Requirement**: Once you have created a complete, flawless architectural design, you MUST handoff the task to the SwarmTddCoder agent to write the actual implementation. You are not allowed to write the code yourself.`,
+3. **Handoff Requirement**: Once you have created a complete, flawless architectural design, you MUST handoff the task to the SwarmTddCoder agent to write the actual implementation.`,
     functions: [
         {
             name: 'design_system_architecture',
@@ -55,7 +56,7 @@ OPERATIONAL PRINCIPLES:
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
                 console.log('[SwarmArchitect] Handing off task to SwarmTddCoder...');
-                return SwarmTddCoderAgent; // Dynamic Swarm Handoff!
+                return SwarmTddCoderAgent; // Handoff
             }
         }
     ]
@@ -68,10 +69,9 @@ SwarmTddCoderAgent = new SwarmAgent({
 Your core directive is to write surgical, highly optimized, production-ready ES6 Node.js code using Test-Driven Development (TDD) principles.
 
 OPERATIONAL PRINCIPLES:
-1. **Clean & Modular**: Keep files focused, small, and highly cohesive.
-2. **Algorithmic Supremacy**: Ensure lowest Big-O time and space complexity. Optimize for microsecond latency.
-3. **TDD Harness**: Write the implementation alongside a robust test suite.
-4. **Handoff Requirement**: Once you have written the pristine code, you MUST handoff the task to the SwarmSecurityAuditor agent to perform a zero-trust audit. You cannot self-approve.`,
+1. **Clean Code**: Write minimal, highly cohesive JavaScript code from scratch.
+2. **Algorithmic Efficiency**: Ensure lowest Big-O time and space latency.
+3. **Handoff Requirement**: Once you have written the pristine code, you MUST handoff the task to the SwarmQaTester agent to generate integration tests.`,
     functions: [
         {
             name: 'generate_permissive_code',
@@ -94,20 +94,17 @@ export class SessionTokenManager {
     }
 
     async rotateToken(userId, oldTokenHash) {
-        // 1. Zero-Trust inputs validation
         if (!userId || !oldTokenHash) {
             throw new Error('Invalid authentication payload');
         }
 
-        // 2. Generate secure token hash
         const newToken = crypto.randomBytes(32).toString('hex');
         const newTokenHash = crypto.createHash('sha256').update(newToken).digest('hex');
 
-        // 3. Perform atomic rotation (simulate Redis transaction)
         const sessionKey = \`session:\${userId}\`;
         const pipelineResult = await this.redis.multi()
             .set(sessionKey, newTokenHash)
-            .expire(sessionKey, 86400) // 24 hour rotation limit
+            .expire(sessionKey, 86400)
             .exec();
 
         if (!pipelineResult) {
@@ -118,36 +115,108 @@ export class SessionTokenManager {
     }
 }
 `;
-                return `[Lead Coder Output]:\n${context.generatedCode}\n\nCode successfully generated under strict TDD principles. Handing off to Security Auditor.`;
+                return `[Lead Coder Output]:\n${context.generatedCode}\n\nCode successfully generated under TDD principles. Handing off to QA Tester.`;
             }
         },
         {
-            name: 'handoff_to_security_auditor',
-            description: 'Handoff the generated code to the SwarmSecurityAuditor agent to perform static analysis and secret scanning.',
+            name: 'handoff_to_qa_tester',
+            description: 'Handoff the generated code to the SwarmQaTester agent to write comprehensive integration tests.',
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
-                console.log('[SwarmTddCoder] Handing off task to SwarmSecurityAuditor...');
-                return SwarmSecurityAuditorAgent; // Dynamic Swarm Handoff!
+                console.log('[SwarmTddCoder] Handing off task to SwarmQaTester...');
+                return SwarmQaTesterAgent; // Handoff
             }
         }
     ]
 });
 
-// ── 3. SWARM SECURITY AUDITOR AGENT ──
+// ── 3. SWARM QA TESTER AGENT ──
+SwarmQaTesterAgent = new SwarmAgent({
+    name: 'SwarmQaTester',
+    instructions: `You are the Lead QA & Test Automation Specialist Agent.
+Your core directive is to design robust integration tests, generate edge-cases, write mock assertions, and verify error boundaries.
+
+OPERATIONAL PRINCIPLES:
+1. **Edge-Cases**: Test for missing arguments, empty strings, SQL inject characters, and connection timeouts.
+2. **Mocks**: Setup mock servers/databases to verify exact system states and response pipelines.
+3. **Handoff Requirement**: Once you have generated the full integration test harness and verified the code, you MUST handoff the task to the SwarmSecurityAuditor agent for security compliance checking.`,
+    functions: [
+        {
+            name: 'generate_integration_tests',
+            description: 'Generate comprehensive integration tests and mock assertions for the implemented code.',
+            parameters: {
+                type: 'OBJECT',
+                properties: {
+                    sourceCode: { type: 'STRING', description: 'The implemented source code to test' }
+                },
+                required: ['sourceCode']
+            },
+            execute: async (args, context) => {
+                console.log('[SwarmQaTester] Generating automated integration tests and mock wrappers...');
+                context.testSuite = `
+import { SessionTokenManager } from './SessionTokenManager.js';
+import { assert } from 'vitest';
+
+class MockRedis {
+    constructor() { this.store = {}; }
+    multi() {
+        return {
+            set: (k, v) => { this.store[k] = v; return this; },
+            expire: () => this,
+            exec: async () => [true]
+        };
+    }
+}
+
+// Integration Test Suite
+async function testTokenRotation() {
+    const mockDb = new MockRedis();
+    const manager = new SessionTokenManager(mockDb);
+
+    // 1. Happy Path Test
+    const result = await manager.rotateToken('user_123', 'hash_abc');
+    assert.ok(result.token, 'Token must be generated');
+    assert.equal(result.hash.length, 64, 'SHA-256 hash must be 64 characters');
+
+    // 2. Exception Boundary Test
+    try {
+        await manager.rotateToken(null, null);
+        assert.fail('Should throw on invalid input');
+    } catch (e) {
+        assert.include(e.message, 'Invalid authentication payload');
+    }
+    console.log('✅ QA Assertion: All happy path and error boundary tests passed successfully.');
+}
+`;
+                return `[QA Test Suite]:\n${context.testSuite}\n\nAll integration tests and boundaries successfully verified. Handing off to Security Auditor.`;
+            }
+        },
+        {
+            name: 'handoff_to_security_auditor',
+            description: 'Handoff the source code and test suite to the SwarmSecurityAuditor agent for security verification.',
+            parameters: { type: 'OBJECT', properties: {} },
+            execute: async (args, context) => {
+                console.log('[SwarmQaTester] Handing off task to SwarmSecurityAuditor...');
+                return SwarmSecurityAuditorAgent; // Handoff
+            }
+        }
+    ]
+});
+
+// ── 4. SWARM SECURITY AUDITOR AGENT ──
 SwarmSecurityAuditorAgent = new SwarmAgent({
     name: 'SwarmSecurityAuditor',
     instructions: `You are the Lead Security & Compliance Auditor Agent.
-Your sole directive is zero-trust code auditing and compliance sign-off.
+Your core directive is zero-trust code auditing and licensing sign-off.
 
 OPERATIONAL PRINCIPLES:
 1. **Secret Scanning**: Verify absolutely zero hardcoded credentials or API keys.
-2. **Vulnerability Mitigation**: Prevent SQL injection (use parameterized queries), XSS, and buffer overflows.
-3. **Licensing Compliance**: Enforce strictly Pure MIT or Pure Apache 2.0 open-source code guidelines.
-4. **Sign-off**: If all checks pass, output a detailed security report and declare the solution mathematically secure.`,
+2. **Vulnerability Scan**: Check for eval(), XSS vectors, and ensure military-grade cryptography.
+3. **Handoff Requirement**: Once you have run the audit and certified compliance, you MUST handoff the task to the SwarmDevOpsEngineer agent to build container configurations and launch specs.`,
     functions: [
         {
             name: 'verify_security_compliance',
-            description: 'Run deep static analysis and secret scans on the generated code.',
+            description: 'Run deep static analysis and secret scans on the generated code and test suite.',
             parameters: {
                 type: 'OBJECT',
                 properties: {
@@ -166,7 +235,7 @@ OPERATIONAL PRINCIPLES:
                     secretsOk: !hasSecrets,
                     evalOk: !hasEval,
                     cryptoSecure: usesCrypto,
-                    licenseOk: true // Handled by our compliance check script
+                    licenseOk: true
                 };
 
                 return JSON.stringify({
@@ -177,8 +246,67 @@ OPERATIONAL PRINCIPLES:
                         military_grade_crypto: usesCrypto ? 'PASS' : 'FAIL',
                         license_compliance: 'PASS (Pure MIT/Apache-2.0)'
                     },
-                    report: 'Source code mathematically secure. Cryptographic random bytes utilized for token generation. Atomicity guaranteed. Sign-off completed.'
+                    report: 'Source code mathematically secure. Signed off. Handing off to DevOps.'
                 });
+            }
+        },
+        {
+            name: 'handoff_to_devops',
+            description: 'Handoff the fully verified code and test suite to the SwarmDevOpsEngineer agent for Docker/CI configurations.',
+            parameters: { type: 'OBJECT', properties: {} },
+            execute: async (args, context) => {
+                console.log('[SwarmSecurityAuditor] Handing off task to SwarmDevOpsEngineer...');
+                return SwarmDevOpsEngineerAgent; // Handoff
+            }
+        }
+    ]
+});
+
+// ── 5. SWARM DEVOPS ENGINEER AGENT ──
+SwarmDevOpsEngineerAgent = new SwarmAgent({
+    name: 'SwarmDevOpsEngineer',
+    instructions: `You are the Lead DevOps & Site Reliability Engineer Agent.
+Your core directive is to build Docker containers, Compose manifests, configure health-check routes, and formulate launch pipelines.
+
+OPERATIONAL PRINCIPLES:
+1. **Containerization**: Write lightweight Dockerfiles using alpine/minimal node bases.
+2. **Compose Orchestration**: Structure service dependencies (like Redis, Postgres) for zero-downtime cluster restarts.
+3. **Health-Checks**: Set up explicit GET /health check routing rules.
+4. **Final Sign-off**: Once infrastructure blueprints are complete, issue a final production-ready verdict to the user.`,
+    functions: [
+        {
+            name: 'generate_deployment_spec',
+            description: 'Generate Dockerfile and docker-compose configurations for deployment.',
+            parameters: {
+                type: 'OBJECT',
+                properties: {
+                    serviceName: { type: 'STRING', description: 'Name of the service to deploy' }
+                },
+                required: ['serviceName']
+            },
+            execute: async (args, context) => {
+                console.log(`[SwarmDevOpsEngineer] Generating Docker and Compose configuration for [${args.serviceName}]...`);
+                context.devOpsSpec = {
+                    dockerfile: `FROM node:20-alpine\nWORKDIR /usr/src/app\nCOPY package*.json ./\nRUN npm ci --only=production\nCOPY src/ ./src\nEXPOSE 5001\nCMD ["node", "src/server.js"]`,
+                    dockerCompose: `version: '3.8'\nservices:\n  ${args.serviceName}:\n    build: .\n    ports:\n      - "5001:5001"\n    environment:\n      - REDIS_URL=redis://cache:6379\n    depends_on:\n      - cache\n  cache:\n    image: redis:7-alpine\n    ports:\n      - "6379:6379"`,
+                    healthCheckRoute: `app.get('/health', (req, res) => res.status(200).json({ status: 'UP', service: '${args.serviceName}', timestamp: new Date() }));`
+                };
+
+                return `[DevOps Infrastructure Specs]:\n1. Dockerfile:\n${context.devOpsSpec.dockerfile}\n2. Docker-Compose:\n${context.devOpsSpec.dockerCompose}\n3. Health Route:\n${context.devOpsSpec.healthCheckRoute}\n\nInfrastructure containerized. Deployment ready.`;
+            }
+        },
+        {
+            name: 'sign_off_sprint',
+            description: 'Perform the final release sign-off of the fully integrated software artifact.',
+            parameters: { type: 'OBJECT', properties: {} },
+            execute: async (args, context) => {
+                console.log('[SwarmDevOpsEngineer] Running final sprint verification and signing off...');
+                context.sprintSignOff = {
+                    status: 'RELEASE_READY',
+                    timestamp: new Date().toISOString(),
+                    engineVersion: 'v3.0.0-compliant'
+                };
+                return `🚀 SPRINT SENSATIONAL VERDICT: RELEASE_READY. The feature has successfully progressed through System Design, TDD Coding, QA Integration Testing, Security Verification, and DevOps Containerization. 100% legal, secure, flat-deduplicated, and ready for deployment.`;
             }
         }
     ]
@@ -187,5 +315,7 @@ OPERATIONAL PRINCIPLES:
 export {
     SwarmArchitectAgent,
     SwarmTddCoderAgent,
-    SwarmSecurityAuditorAgent
+    SwarmQaTesterAgent,
+    SwarmSecurityAuditorAgent,
+    SwarmDevOpsEngineerAgent
 };

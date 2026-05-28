@@ -75,7 +75,6 @@ import MyAccountDropdown from "./MyAccountDropdown";
 import {
   removeRepository,
   removeDocument,
-  removeAsset,
 } from "@/store/systemSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
@@ -1553,9 +1552,10 @@ export default function Sidebar() {
                   content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
                 }}
               >
-                <button
+                <Button
+                  isIconOnly
                   className={cn(
-                    "flex items-center justify-center transition-all duration-200 relative group",
+                    "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
                     isSidebarOpen ? "h-[30px] w-full rounded-md" : "h-[30px] w-[30px] rounded-md",
                     item.isActive
                       ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
@@ -1568,7 +1568,7 @@ export default function Sidebar() {
                 >
                   <IconComponent className="size-3.5" />
                   <span className="sr-only">{item.label}</span>
-                </button>
+                </Button>
               </Tooltip>
             );
           })}

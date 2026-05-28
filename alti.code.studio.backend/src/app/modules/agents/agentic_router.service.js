@@ -3,6 +3,7 @@ import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
 import { swarmNexusAgent } from './swarm_nexus.agent.js';
+import { vectorStoreService } from '../memory/vector.store.js';
 
 const genAI = new GoogleGenerativeAI(config.gemini_secret_key || process.env.GEMINI_API_KEY);
 
@@ -57,9 +58,51 @@ class AgenticRouterService {
             }
         }
 
+        // RAG-based dynamic candidate pre-selection loop to solve token bloat
+        let candidateAgents = [];
+        try {
+            const searchResults = await vectorStoreService.search(prompt, 12);
+            if (searchResults && searchResults.documents && searchResults.documents[0] && searchResults.documents[0].length > 0) {
+                const matchedAgentIds = searchResults.metadatas[0].map(m => m.agentId);
+                candidateAgents = matchedAgentIds
+                    .map(id => agentRegistry.get(id))
+                    .filter(Boolean);
+            }
+        } catch (err) {
+            logger.warn(`⚠️ [Router] Vector store candidate retrieval failed: ${err.message}`);
+        }
+
+        // Fallback array of 15 agents if vector search yields empty or fails
+        if (candidateAgents.length === 0) {
+            logger.info(`ℹ️ [Router] Vector store search empty. Falling back to core and sample specialist list.`);
+            candidateAgents = agentRegistry.list().slice(0, 15);
+        }
+
+        // Ensure critical core workflow agents are always present in the candidates list
+        const coreAgentIds = [
+            'yc_pm', 'karpathy_sentinel', 'jules', 'yc_qa', 'yc_security', 'yc_ceo',
+            'auditor', 'licenseGuardian', 'agent_forge_generator', 'karpathy_refactor'
+        ];
+        
+        for (const id of coreAgentIds) {
+            if (!candidateAgents.some(a => a.name === id)) {
+                const coreAgent = agentRegistry.get(id);
+                if (coreAgent) {
+                    candidateAgents.push(coreAgent);
+                }
+            }
+        }
+
+        // Map to ultra token-lean clean profiles
+        const leanCandidatesList = candidateAgents.map(a => ({
+            name: a.name,
+            description: a.description,
+            capabilities: a.capabilities
+        }));
+
         const systemInstruction = `
             ACT AS THE CHIEF SMARTRONTING ARCHITECT FOR ALTI CODE STUDIO.
-            Available Specialists: ${JSON.stringify(agentRegistry.list())}
+            Available Specialists: ${JSON.stringify(leanCandidatesList)}
             
             UNIVERSE-BEST ROUTING RULES:
             1. **Holistic Intelligence**: If the user asks for code, you MUST include 'Architect' for strategy, 'jules' for execution, and 'auditor' for fidelity review.
@@ -68,6 +111,7 @@ class AgenticRouterService {
             4. **Parallel Execution**: Suggest parallel agent activations if the tasks are independent.
             5. **Final Synthesis**: Ensure the chain ends with a quality gate.
             6. **Zero-Limit Routing (The Forge)**: If the user requests a capability, domain, or industry that is NOT covered by any of the available specialists, you MUST route the task to 'agent_forge_generator'. Instruct the Forge to dynamically write, register, and deploy a new hyper-specialized agent capable of fulfilling the request.
+            7. **Dynamic Load Balancing**: You MUST explicitly balance execution workloads by assigning the appropriate 'workerConfig'. Assign 'GKE_BURST' for highly compute-heavy tasks (like comprehensive test runs, heavy security audits, full compilation, or extensive refactoring cycles) and 'STANDARD' for lightweight reasoning steps (initial planning, docstring generations, peer reviews). This ensures that standard node pools do not experience bottleneck starvation under heavy load.
             
             Return a JSON object: { 
                 strategy: string, 

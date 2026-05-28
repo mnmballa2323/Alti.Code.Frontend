@@ -33,6 +33,21 @@ class AgentRegistry {
             policy: definition.policy || { accessLevel: 'DEVELOPER' } // Default to low-privilege
         });
         logger.info(`🤖 AgentRegistry: Registered [${definition.name}] — Policy: ${definition.policy?.accessLevel || 'DEVELOPER'}`);
+
+        // Dynamic Agentic RAG Auto-Indexing:
+        // Asynchronously add the newly registered agent's profile document to the vector store index.
+        // This ensures that dynamically forged or hot-loaded agents are instantly available for routing!
+        const agentDocument = `Agent Name: ${definition.name}\nDescription: ${definition.description}\nCapabilities: ${definition.capabilities?.join(', ')}`;
+        import('../memory/vector.store.js').then(({ vectorStoreService }) => {
+            vectorStoreService.add(agentDocument, { 
+                type: 'agent_profile', 
+                agentId: definition.name 
+            }).then(() => {
+                logger.info(`🗺️ [Nexus-RAG] Dynamically indexed newly registered [${definition.name}] in pgvector store.`);
+            }).catch(e => {
+                logger.debug(`[Nexus-RAG] Dynamic indexing skipped or failed for [${definition.name}]: ${e.message}`);
+            });
+        }).catch(() => {});
     }
 
     /**
@@ -32055,6 +32070,87 @@ agentRegistry.register({
     description: 'Infrastructure DataWarehouse Auditor. Bleeding-edge software development and Infrastructure DataWarehouse.',
     queue: 'infrastructure-datawarehouse-auditor-queue',
     capabilities: ['infrastructure', 'datawarehouse', 'auditor', 'software-engineering', '10k-vanguard'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'submodule_sentinel_agent',
+    importPath: './shards/s/submodule_sentinel.agent.js',
+    description: 'Submodule Sentinel and Cross-Repository Consistency Specialist. Audits submodules, git state, head-SHA pins, licensing compliance, and suggestion logic.',
+    queue: 'submodule-sentinel-queue',
+    capabilities: ['submodule', 'git-submodule', 'cross-repo-consistency', 'submodule-sync', 'dependency-audit', 'licensing-compliance'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ntegrals_10x_expert_agent',
+    importPath: './shards/n/ntegrals_10x_expert.agent.js',
+    description: 'Ntegrals 10x Expert Agent. Bleeding-edge software development, multi-step AI coding powers, smart routing, and self-hosted TS developers.',
+    queue: 'ntegrals-10x-expert-queue',
+    capabilities: ['ntegrals', '10x', 'ai-coding', 'smart-routing', 'self-hosted', 'typescript-codegen'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'mnfst_manifest_expert_agent',
+    importPath: './shards/m/mnfst_manifest_expert.agent.js',
+    description: 'Mnfst Manifest Expert Agent. Definition-first backend generation, PostgreSQL declarative schemas, and dynamic React admin panels.',
+    queue: 'mnfst-manifest-expert-queue',
+    capabilities: ['mnfst', 'manifest', 'definition-first', 'admin-panel', 'postgres-sync', 'dynamic-endpoints'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'katanemo_plano_expert_agent',
+    importPath: './shards/k/katanemo_plano_expert.agent.js',
+    description: 'Katanemo Plano Expert Agent. AI-native sidecar proxy, low-latency agent-to-agent (A2A) routing, observability, and safety guardrails.',
+    queue: 'katanemo-plano-expert-queue',
+    capabilities: ['katanemo', 'plano', 'ai-sidecar', 'a2a-routing', 'opentelemetry-tracing', 'safety-guardrails'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'blockrunai_clawrouter_expert_agent',
+    importPath: './shards/b/blockrunai_clawrouter_expert.agent.js',
+    description: 'BlockRunAI ClawRouter Expert Agent. Agent-native LLM proxy, pay-per-request USDC micropayments (x402 protocol) on Base and Solana, and local routing (<1ms).',
+    queue: 'blockrunai-clawrouter-expert-queue',
+    capabilities: ['blockrunai', 'clawrouter', 'llm-proxy', 'micropayments', 'x402-protocol', 'local-routing'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'performance_auditor_agent',
+    importPath: './shards/p/performance_auditor.agent.js',
+    description: 'Performance Bottleneck Auditor & Log Profiler Specialist. Audits code time/space complexity (Big-O), V8 heaps, database queries, and event-loop blocks.',
+    queue: 'performance-auditor-queue',
+    capabilities: ['performance', 'optimization', 'log-profiling', 'memory-audit', 'database-indexing', 'algorithmic-efficiency'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'dlp_secrets_scanner_agent',
+    importPath: './shards/d/dlp_secrets_scanner.agent.js',
+    description: 'DLP & Hardened Secrets Scanner Specialist. Scans files, commit diffs, memory streams, and configs for passwords, API keys, certificates, private keys, and raw PII.',
+    queue: 'dlp-secrets-scanner-queue',
+    capabilities: ['secrets-scanning', 'dlp', 'sast', 'credentials-audit', 'security-hardening'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'db_migration_optimizer_agent',
+    importPath: './shards/d/db_migration_optimizer.agent.js',
+    description: 'Database Migration & Schema Optimizer Specialist. Reviews SQL schema DDL, indexing efficiencies, sequential scans, and locks hazards to ensure zero-downtime rollouts.',
+    queue: 'db-migration-optimizer-queue',
+    capabilities: ['database-migrations', 'schema-optimization', 'index-planning', 'query-profiling', 'sql-security'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'api_contract_agent',
+    importPath: './shards/a/api_contract.agent.js',
+    description: 'API Contract & Integration SDK Specialist. Audits routing controllers, maps response envelopes, prevents types drift, and generates client-side integration SDKs.',
+    queue: 'api-contract-queue',
+    capabilities: ['api-contracts', 'openapi-specs', 'sdk-generation', 'payload-validation', 'contract-compliance'],
     version: '1.0.0'
 });
 
