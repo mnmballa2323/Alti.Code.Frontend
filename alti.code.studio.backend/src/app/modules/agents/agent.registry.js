@@ -86491,6 +86491,24 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'zod_validator_compiler_agent',
+    importPath: './shards/z/zod_validator_compiler.agent.js',
+    description: 'Zero-Trust Input Validator & Zod Schema Compiler Specialist. Analyzes payload shapes and automatically generates strict Zod schemas and Express validation middleware to harden API endpoints.',
+    queue: 'zod-validator-compiler-queue',
+    capabilities: ['zod-schemas', 'input-validation', 'request-sanitization', 'express-middleware', 'zero-trust-boundaries'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'openapi_mock_generator_agent',
+    importPath: './shards/o/openapi_mock_generator.agent.js',
+    description: 'OpenAPI Schema Generator & Endpoint Mocking Specialist. Analyzes Express controllers and routes to generate complete OpenAPI 3.0 specs and high-fidelity mock server endpoint mappings.',
+    queue: 'openapi-mock-generator-queue',
+    capabilities: ['openapi-specs', 'swagger-generation', 'endpoint-mocking', 'api-mock-servers', 'route-analysis'],
+    version: '1.0.0'
+});
+
 
 
 
