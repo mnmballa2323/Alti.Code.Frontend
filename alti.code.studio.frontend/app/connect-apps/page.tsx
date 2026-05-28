@@ -101,6 +101,26 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-everart"]
   },
+  "mcp_slack": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-slack"]
+  },
+  "mcp_sentry": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-sentry"]
+  },
+  "mcp_redis": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-redis"]
+  },
+  "mcp_google_drive": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-gdrive"]
+  },
+  "mcp_aws_kb_retrieval": {
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-aws-kb-retrieval"]
+  },
 
   // Google MCP Toolbox Preset Databases
   "mcp_toolbox_alloydb": {

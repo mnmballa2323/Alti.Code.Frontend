@@ -290,4 +290,39 @@ export const SAAS_MOCKS = [
     slug: "mcp_memory",
     icon: "solar:cpu-bold-duotone",
   },
+  {
+    name: "AWS Knowledge Base Retrieval",
+    slug: "mcp_aws_kb_retrieval",
+    icon: "logos:aws",
+  },
+  {
+    name: "Google Drive (Official MCP)",
+    slug: "mcp_google_drive",
+    icon: "logos:google-drive",
+  },
+  {
+    name: "Redis (Official MCP)",
+    slug: "mcp_redis",
+    icon: "logos:redis",
+  },
+  {
+    name: "Sentry (Official MCP)",
+    slug: "mcp_sentry",
+    icon: "logos:sentry-icon",
+  },
+  {
+    name: "Slack (Official MCP)",
+    slug: "mcp_slack",
+    icon: "logos:slack-icon",
+  },
+  {
+    name: "GitHub (Official MCP)",
+    slug: "mcp_github",
+    icon: "mdi:github",
+  },
+  {
+    name: "GitLab (Official MCP)",
+    slug: "mcp_gitlab",
+    icon: "logos:gitlab",
+  },
 ];
