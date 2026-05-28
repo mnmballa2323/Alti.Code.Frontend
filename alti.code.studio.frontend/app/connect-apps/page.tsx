@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Search } from "lucide-react";
-import { Input, Button, Chip } from "@heroui/react";
+import { Input, Button, Chip, cn } from "@heroui/react";
 
 import { SAAS_MOCKS } from "./catalog";
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -308,12 +308,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   if (app.id === "custom-mcp-launcher") {
     return (
-      <div className={`w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg ${className}`}>
+      <div className={cn("w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg", className)}>
         <Icon icon="solar:add-circle-bold" className="text-base" />
       </div>
     );
   }
-  
+
   const slug = app.id.replace("app-", "").toLowerCase();
   let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
   if (cleanSlug.startsWith("mcp_toolbox_")) {
@@ -321,270 +321,44 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   } else if (cleanSlug.startsWith("mcp_")) {
     cleanSlug = cleanSlug.slice(4);
   }
-  
+
   const localLogoMappings: Record<string, string> = {
-    // Core Apps
-    "github": "github.png",
-    "slack": "slack.svg",
-    "jira": "jira.svg",
-    "notion": "notion.svg",
-    "linear": "linear.png",
-    "googledrive": "google-drive.svg",
-    "googlesheets": "google-sheets.svg",
-    "discord": "discord.svg",
-    "gmail": "gmail.svg",
-    
-    // Google MCP Toolbox & Database Integrations
-    "alloydb": "google-cloud.svg",
-    "spanner": "google-cloud.svg",
-    "bigquery": "googl-bigquery.svg",
-    "bigtable": "google-cloud.svg",
-    "cloudsql": "google-cloud.svg",
-    "dataproc": "google-cloud.svg",
-    "monitoring": "google-cloud.svg",
-    "logging": "google-cloud.svg",
-    "healthcare": "google-cloud.svg",
-    "knowledge_catalog": "google-cloud.svg",
-    
-    // AWS & Azure Integrations
-    "aws_ec2": "aws.svg",
-    "aws_knowledge_base": "aws.svg",
-    "aws_lambda": "aws.svg",
-    "aws_s3": "aws.svg",
-    "azure_vm": "azure.svg",
-    "azure_blob": "azure.svg",
-    
-    // Official Git & Filesystem MCP Integrations
-    "git": "git.svg",
-    "filesystem": "filesystem.svg",
-    
-    // A Apps
-    "ably": "ably.svg",
-    "acculynx": "acculynx.jpeg",
-    "active_campaign": "activecampaign.png",
-    "activecampaign": "activecampaign.png",
-    "affinity": "affinity.jpeg",
-    "agencyzoom": "agencyzoom_logo.jpeg",
-    "ahrefs": "ahrefs.png",
-    "airtable": "airtable.svg",
-    "amcards": "amcards.svg",
-    "amplitude": "amplitude.svg",
-    "apaleo": "apaleo.png",
-    "apollo": "apollo.jpg",
-    "asana": "asana.png",
-    "attio": "attio.webp",
-    
-    // B Apps
-    "baselinker": "baselinker-logo.png",
-    "baserow": "baserow-logo.jpeg",
-    "bitbucket": "bitbucket.svg",
-    "bolna": "bolna-logo.png",
-    "borneo": "borneo.jpeg",
-    "brandfetch": "brandfetch-logo.png",
-    "brex": "brex-staging-logo.png",
-    "browseai": "browseai.svg",
-    
-    // C Apps
-    "cal": "cal-logo.png",
-    "calendarhero": "calendarhero_fixed_20250722.png",
-    "calendly": "calendly.svg",
-    "canva": "canva.jpeg",
-    "canvas": "canvas.jpeg",
-    "capsule_crm": "capsule_crm-logo.png",
-    "clickup": "clickup.png",
-    "coda": "coda.png",
-    
-    // Other standard integrations
-    "docusign": "docusign.svg",
-    "dropbox": "dropbox.svg",
-    "figma": "figma.svg",
-    "hubspot": "hubspot.webp",
-    "linkedin": "linkedin.svg",
-    "shopify": "shopify.svg",
-    "supabase": "supabase.jpeg",
-    "trello": "trello.svg",
-    "twitter": "twitter.png",
-    "youtube": "youtube.svg",
-    "zoom": "zoom.svg",
+    github: "github.png",
+    slack: "slack.svg",
+    jira: "jira.svg",
+    notion: "notion.svg",
+    linear: "linear.png",
+    googledrive: "google-drive.svg",
+    googlesheets: "google-sheets.svg",
+    discord: "discord.svg",
+    gmail: "gmail.svg",
+    git: "git.svg",
+    filesystem: "filesystem.svg",
+    supabase: "supabase.jpeg",
+    posthog: "posthog.svg",
+    sentry: "sentry.svg",
+    docker: "docker-icon.png",
+    kubernetes: "kubernetes.png",
+    aws: "aws.svg",
+    azure: "azure.svg",
   };
 
-  const specialLogoUrls: Record<string, string> = {
-    "1password": "https://logo.clearbit.com/1password.com",
-    "21risk": "https://github.com/21RISK.png",
-    "2chat": "https://github.com/2ChatCo.png",
-    "mcp_brave_search": "https://logo.clearbit.com/brave.com",
-    "mcp_fetch": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "mcp_puppeteer": "https://logo.clearbit.com/puppeteer.io",
-    "mcp_postgresql": "https://logo.clearbit.com/postgresql.org",
-    "mcp_sqlite": "https://logo.clearbit.com/sqlite.org",
-    "mcp_gitlab": "https://logo.clearbit.com/gitlab.com",
-    "mcp_google_calendar": "https://logo.clearbit.com/calendar.google.com",
-    "mcp_google_maps": "https://logo.clearbit.com/maps.google.com",
-    "mcp_evernote": "https://logo.clearbit.com/evernote.com",
-    "everart": "https://logo.clearbit.com/everart.ai",
-    "mcp_everart": "https://logo.clearbit.com/everart.ai",
-    "mcp_time": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "mcp_memory": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "aws_ec2": "https://logo.clearbit.com/amazon.com",
-    "mcp_aws_ec2": "https://logo.clearbit.com/amazon.com",
-    "aws_knowledge_base": "https://logo.clearbit.com/amazon.com",
-    "mcp_aws_knowledge_base": "https://logo.clearbit.com/amazon.com",
-    "aws_lambda": "https://logo.clearbit.com/amazon.com",
-    "mcp_aws_lambda": "https://logo.clearbit.com/amazon.com",
-    "aws_s3": "https://logo.clearbit.com/amazon.com",
-    "mcp_aws_s3": "https://logo.clearbit.com/amazon.com",
-    "azure_vm": "https://logo.clearbit.com/microsoft.com",
-    "mcp_azure_vm": "https://logo.clearbit.com/microsoft.com",
-    "azure_blob": "https://logo.clearbit.com/microsoft.com",
-    "mcp_azure_blob": "https://logo.clearbit.com/microsoft.com",
-    "git": "https://logo.clearbit.com/git-scm.com",
-    "mcp_git": "https://logo.clearbit.com/git-scm.com",
-    "filesystem": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "mcp_filesystem": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "mcp_chromadb": "https://logo.clearbit.com/trychroma.com",
-    "mcp_everything": "https://avatars.githubusercontent.com/u/150796347?s=200&v=4",
-    "accredible_certificates": "https://logo.clearbit.com/accredible.com",
-    "active_campaign": "https://logo.clearbit.com/activecampaign.com",
-    "activecampaign": "https://logo.clearbit.com/activecampaign.com",
-    "active_trail": "https://logo.clearbit.com/activetrail.com",
-    "activetrail": "https://logo.clearbit.com/activetrail.com",
-    "addepar": "https://logo.clearbit.com/addepar.com",
-    "addressfinder": "https://logo.clearbit.com/addressfinder.com.au",
-    "addresszen": "https://logo.clearbit.com/addresszen.com",
-    "adrapid": "https://logo.clearbit.com/adrapid.com",
-    "adyntel": "https://logo.clearbit.com/adyntel.com",
-    "aeroleads": "https://logo.clearbit.com/aeroleads.com",
-    "affinda": "https://logo.clearbit.com/affinda.com",
-    "affinity": "https://logo.clearbit.com/affinity.co",
-    "alloydb": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_alloydb": "https://logo.clearbit.com/google.com",
-    "spanner": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_spanner": "https://logo.clearbit.com/google.com",
-    "bigquery": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_bigquery": "https://logo.clearbit.com/google.com",
-    "bigtable": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_bigtable": "https://logo.clearbit.com/google.com",
-    "cloudsql": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_cloudsql": "https://logo.clearbit.com/google.com",
-    "looker": "https://logo.clearbit.com/looker.com",
-    "mcp_toolbox_looker": "https://logo.clearbit.com/looker.com",
-    "dataproc": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_dataproc": "https://logo.clearbit.com/google.com",
-    "monitoring": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_monitoring": "https://logo.clearbit.com/google.com",
-    "logging": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_logging": "https://logo.clearbit.com/google.com",
-    "healthcare": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_healthcare": "https://logo.clearbit.com/google.com",
-    "knowledge_catalog": "https://logo.clearbit.com/google.com",
-    "mcp_toolbox_knowledge_catalog": "https://logo.clearbit.com/google.com",
-    "oceanbase": "https://logo.clearbit.com/oceanbase.com",
-    "mcp_toolbox_oceanbase": "https://logo.clearbit.com/oceanbase.com",
-    "mssql": "https://logo.clearbit.com/microsoft.com",
-    "mcp_toolbox_mssql": "https://logo.clearbit.com/microsoft.com",
-    "cockroachdb": "https://logo.clearbit.com/cockroachlabs.com",
-    "mcp_toolbox_cockroachdb": "https://logo.clearbit.com/cockroachlabs.com",
-    "yugabytedb": "https://logo.clearbit.com/yugabyte.com",
-    "mcp_toolbox_yugabytedb": "https://logo.clearbit.com/yugabyte.com",
-    "clickhouse": "https://logo.clearbit.com/clickhouse.com",
-    "mcp_toolbox_clickhouse": "https://logo.clearbit.com/clickhouse.com",
-    "tidb": "https://logo.clearbit.com/pingcap.com",
-    "mcp_toolbox_tidb": "https://logo.clearbit.com/pingcap.com",
-    "firebird": "https://logo.clearbit.com/firebirdsql.org",
-    "mcp_toolbox_firebird": "https://logo.clearbit.com/firebirdsql.org",
-    "singlestore": "https://logo.clearbit.com/singlestore.com",
-    "mcp_toolbox_singlestore": "https://logo.clearbit.com/singlestore.com",
-    "mariadb": "https://logo.clearbit.com/mariadb.org",
-    "mcp_toolbox_mariadb": "https://logo.clearbit.com/mariadb.org",
-    "couchbase": "https://logo.clearbit.com/couchbase.com",
-    "mcp_toolbox_couchbase": "https://logo.clearbit.com/couchbase.com",
-    "cassandra": "https://logo.clearbit.com/cassandra.apache.org",
-    "mcp_toolbox_cassandra": "https://logo.clearbit.com/cassandra.apache.org",
-    "dgraph": "https://logo.clearbit.com/dgraph.io",
-    "mcp_toolbox_dgraph": "https://logo.clearbit.com/dgraph.io",
-    "blockrunai": "https://logo.clearbit.com/blockrun.ai",
-    "mcp_blockrunai": "https://logo.clearbit.com/blockrun.ai",
-    "katanemo": "https://logo.clearbit.com/katanemo.com",
-    "katanemo_plano": "https://logo.clearbit.com/katanemo.com",
-    "mcp_katanemo_plano": "https://logo.clearbit.com/katanemo.com",
-    "manifest": "https://logo.clearbit.com/manifest.build",
-    "mnfst_manifest": "https://logo.clearbit.com/manifest.build",
-    "mcp_mnfst_manifest": "https://logo.clearbit.com/manifest.build",
-    "ntegrals": "https://logo.clearbit.com/ntegrals.com",
-    "ntegrals_10x": "https://logo.clearbit.com/ntegrals.com",
-    "mcp_ntegrals_10x": "https://logo.clearbit.com/ntegrals.com",
-    "neon_branching": "https://logo.clearbit.com/neon.tech",
-    "mcp_neon_branching": "https://logo.clearbit.com/neon.tech",
-    "snyk_scanner": "https://logo.clearbit.com/snyk.io",
-    "mcp_snyk_scanner": "https://logo.clearbit.com/snyk.io",
-    "sonarqube_audits": "https://logo.clearbit.com/sonarqube.org",
-    "mcp_sonarqube_audits": "https://logo.clearbit.com/sonarqube.org",
-    "cypress_dashboard": "https://logo.clearbit.com/cypress.io",
-    "mcp_cypress_dashboard": "https://logo.clearbit.com/cypress.io",
-    "playwright_recorder": "https://logo.clearbit.com/playwright.dev",
-    "mcp_playwright_recorder": "https://logo.clearbit.com/playwright.dev",
-    "launchdarkly": "https://logo.clearbit.com/launchdarkly.com",
-    "mcp_launchdarkly": "https://logo.clearbit.com/launchdarkly.com",
-    "flagsmith": "https://logo.clearbit.com/flagsmith.com",
-    "mcp_flagsmith": "https://logo.clearbit.com/flagsmith.com",
-    "posthog": "https://logo.clearbit.com/posthog.com",
-    "mcp_posthog": "https://logo.clearbit.com/posthog.com",
-    "firebase_auth": "https://logo.clearbit.com/firebase.com",
-    "mcp_firebase_auth": "https://logo.clearbit.com/firebase.com",
-    "firebase_firestore": "https://logo.clearbit.com/firebase.com",
-    "mcp_firebase_firestore": "https://logo.clearbit.com/firebase.com",
-    "firebase_hosting": "https://logo.clearbit.com/firebase.com",
-    "mcp_firebase_hosting": "https://logo.clearbit.com/firebase.com",
-    "ollama": "https://logo.clearbit.com/ollama.com",
-    "mcp_ollama": "https://logo.clearbit.com/ollama.com",
-    "huggingface": "https://logo.clearbit.com/huggingface.co",
-    "mcp_huggingface": "https://logo.clearbit.com/huggingface.co",
-    "replicate_runner": "https://logo.clearbit.com/replicate.com",
-    "mcp_replicate_runner": "https://logo.clearbit.com/replicate.com",
-    "openrouter": "https://logo.clearbit.com/openrouter.ai",
-    "mcp_openrouter": "https://logo.clearbit.com/openrouter.ai",
-    "groq_llama": "https://logo.clearbit.com/groq.com",
-    "mcp_groq_llama": "https://logo.clearbit.com/groq.com",
-    "together_ai": "https://logo.clearbit.com/together.ai",
-    "mcp_together_ai": "https://logo.clearbit.com/together.ai",
-    "lm_studio": "https://logo.clearbit.com/lmstudio.ai",
-    "mcp_lm_studio": "https://logo.clearbit.com/lmstudio.ai",
-    "fastapi": "https://logo.clearbit.com/fastapi.tiangolo.com",
-    "mcp_fastapi": "https://logo.clearbit.com/fastapi.tiangolo.com",
-    "django": "https://logo.clearbit.com/djangoproject.com",
-    "mcp_django": "https://logo.clearbit.com/djangoproject.com",
-    "springboot": "https://logo.clearbit.com/spring.io",
-    "mcp_springboot": "https://logo.clearbit.com/spring.io",
-    "nextjs": "https://logo.clearbit.com/nextjs.org",
-    "mcp_nextjs": "https://logo.clearbit.com/nextjs.org",
-    "bun_runtime": "https://logo.clearbit.com/bun.sh",
-    "mcp_bun_runtime": "https://logo.clearbit.com/bun.sh",
-    "deno_runtime": "https://logo.clearbit.com/deno.com",
-    "mcp_deno_runtime": "https://logo.clearbit.com/deno.com",
-    "prisma_orm": "https://logo.clearbit.com/prisma.io",
-    "mcp_prisma_orm": "https://logo.clearbit.com/prisma.io",
-    "apollo_graphql": "https://logo.clearbit.com/apollographql.com",
-    "mcp_apollo_graphql": "https://logo.clearbit.com/apollographql.com",
-    "hasura_graphql": "https://logo.clearbit.com/hasura.io",
-    "mcp_hasura_graphql": "https://logo.clearbit.com/hasura.io",
-    "jupyter": "https://logo.clearbit.com/jupyter.org",
-    "mcp_jupyter": "https://logo.clearbit.com/jupyter.org",
-    "python_poetry": "https://logo.clearbit.com/python-poetry.org",
-    "mcp_python_poetry": "https://logo.clearbit.com/python-poetry.org",
-    "bitwarden": "https://logo.clearbit.com/bitwarden.com",
-    "mcp_bitwarden": "https://logo.clearbit.com/bitwarden.com",
-    "ngrok": "https://logo.clearbit.com/ngrok.com",
-    "mcp_ngrok": "https://logo.clearbit.com/ngrok.com",
-    "minio": "https://logo.clearbit.com/min.io",
-    "mcp_minio": "https://logo.clearbit.com/min.io",
-    "localstack": "https://logo.clearbit.com/localstack.cloud",
-    "mcp_localstack": "https://logo.clearbit.com/localstack.cloud",
-    "gitea": "https://logo.clearbit.com/gitea.com",
-    "mcp_gitea": "https://logo.clearbit.com/gitea.com",
-    "sourcegraph": "https://logo.clearbit.com/sourcegraph.com",
-    "mcp_sourcegraph": "https://logo.clearbit.com/sourcegraph.com",
-    "duckdb": "https://logo.clearbit.com/duckdb.org",
-    "mcp_duckdb": "https://logo.clearbit.com/duckdb.org",
+  const simpleIconsMapping: Record<string, string> = {
+    aws_dynamodb: "amazondynamodb",
+    apollo_graphql: "apollographql",
+    google_drive: "googledrive",
+    google_sheets: "googlesheets",
+    google_calendar: "googlecalendar",
+    google_maps: "googlemaps",
+    bun_runtime: "bun",
+    deno_runtime: "deno",
+    prisma_orm: "prisma",
+    hasura_graphql: "hasura",
+    stripe_dev: "stripe",
+    teams: "microsoftteams",
+    nextjs: "nextdotjs",
+    springboot: "springboot",
+    brave_search: "brave",
   };
 
   const getUrlsToTry = () => {
@@ -593,40 +367,27 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
       if (url && !urls.includes(url)) urls.push(url);
     };
 
+    // 1. Try explicit app.logo if provided
+    if (app.logo) {
+      addUrl(app.logo);
+    }
+
+    // 2. Try local mapped asset (offline-first!)
     const localFile = localLogoMappings[cleanSlug] || localLogoMappings[slug];
-    if (localFile) addUrl(`/assets/apps-logos/${localFile}`);
+    if (localFile) {
+      addUrl(`/assets/apps-logos/${localFile}`);
+    }
 
-    const specialUrl = specialLogoUrls[cleanSlug] || specialLogoUrls[slug];
-    if (specialUrl) addUrl(specialUrl);
+    // 3. Try official Simple Icons SVG CDN (extremely fast and serves the exact brand SVG natively)
+    const simpleIconBrand = simpleIconsMapping[cleanSlug] || cleanSlug.replace(/_/g, "");
+    addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
 
+    // 4. Try Composio official logo API
     addUrl(`https://logos.composio.dev/api/${cleanSlug.replace(/_/g, "-")}`);
     addUrl(`https://logos.composio.dev/api/${cleanSlug}`);
 
-    const suffixToStrip = ["_search", "_database", "_integration", "_server", "_toolbox"];
-    let brand = cleanSlug;
-    for (const suffix of suffixToStrip) {
-      if (brand.endsWith(suffix)) {
-        brand = brand.slice(0, -suffix.length);
-        break;
-      }
-    }
-
-    const cleanName = app.name.toLowerCase().trim().replace(/[^a-z0-9\s-_]/g, "");
-    const firstWord = cleanName.split(/\s+/)[0];
-
-    const candidateDomains = [
-      `${brand}.com`,
-      `${firstWord}.com`,
-      `${brand}.io`,
-      `${brand}.org`,
-      `${firstWord}.io`,
-    ];
-
-    for (const dom of candidateDomains) {
-      addUrl(`https://logo.clearbit.com/${dom}`);
-    }
-
-    addUrl("https://avatars.githubusercontent.com/u/150796347?s=200&v=4");
+    // 5. Try Clearbit Logo API
+    addUrl(`https://logo.clearbit.com/${simpleIconBrand}.com`);
 
     return urls;
   };
@@ -642,28 +403,60 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     }
   };
 
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "from-blue-500 to-indigo-600 text-white",
+      "from-purple-500 to-pink-600 text-white",
+      "from-emerald-500 to-teal-600 text-white",
+      "from-amber-500 to-orange-600 text-white",
+      "from-rose-500 to-red-600 text-white",
+      "from-cyan-500 to-blue-600 text-white",
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  };
+
+  // Render the image if we haven't exhausted our fallback options
   if (!imageError && currentLogoUrl) {
     return (
       <img
         src={currentLogoUrl}
         alt={`${app.name} logo`}
-        className={`${className} object-contain p-0.5`}
+        className={cn(className, "object-contain p-0.5 rounded-xl shrink-0")}
         onError={handleImageError}
       />
     );
   }
 
+  // Fallback 1: Curated Iconify vector icon (if we are online and it loads)
+  if (app.icon && app.icon.includes(":")) {
+    return (
+      <div className={cn("rounded-xl flex items-center justify-center p-0.5 bg-transparent shrink-0", className)}>
+        <Icon icon={app.icon} className="w-full h-full object-contain" />
+      </div>
+    );
+  }
+
+  // Fallback 2: System custom server icon
   if (app.type === "custom") {
     return (
-      <div className={`rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white ${className}`}>
+      <div className={cn("rounded-xl flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white shrink-0", className)}>
         <Icon icon="solar:server-square-bold" className="text-sm" />
       </div>
     );
   }
 
+  // Fallback 3: Ultimate bulletproof initials box
+  const initials = app.name.slice(0, 2).toUpperCase();
+  const gradientClass = getAvatarColor(app.name);
+
   return (
-    <div className={`rounded-xl flex items-center justify-center font-bold text-xs bg-gradient-to-br from-indigo-500 to-purple-600 text-white ${className}`}>
-      {app.name.slice(0, 2).toUpperCase()}
+    <div className={cn("rounded-xl flex items-center justify-center font-bold text-xs bg-gradient-to-br tracking-tight shrink-0", gradientClass, className)}>
+      {initials}
     </div>
   );
 };
@@ -786,6 +579,12 @@ export default function ConnectAppsPage() {
   const cleanSlug = selectedApp ? selectedApp.id.replace("app-", "").toLowerCase() : "";
   const isMcp = cleanSlug.startsWith("mcp_") || cleanSlug.startsWith("mcp_toolbox_") || selectedApp?.type === "custom";
   const isServerActive = activeTools.some((t) => t.server === cleanSlug);
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(text);
+    setTimeout(() => setCopiedText(null), 2000);
+  };
 
   // Synchronize dynamic active app with the Sidebar column 2
   useEffect(() => {
@@ -995,7 +794,7 @@ export default function ConnectAppsPage() {
   const handleConnect = async (id: string) => {
     setApps((prev) => {
       const next = prev.map((app) =>
-        app.id === id ? { ...app, status: "connecting" } : app,
+        app.id === id ? { ...app, status: "connecting" as const } : app,
       );
       window.dispatchEvent(new CustomEvent("sync-connect-apps"));
       return next;
@@ -1021,7 +820,7 @@ export default function ConnectAppsPage() {
       console.error("Connection failed:", err);
       setApps((prev) => {
         const next = prev.map((app) =>
-          app.id === id ? { ...app, status: "disconnected" } : app,
+          app.id === id ? { ...app, status: "disconnected" as const } : app,
         );
         window.dispatchEvent(new CustomEvent("sync-connect-apps"));
         return next;
@@ -1066,7 +865,7 @@ export default function ConnectAppsPage() {
       // Sync local status mapping
       setApps((prev) =>
         prev.map((app) =>
-          app.id === selectedApp.id ? { ...app, status: "connected" } : app
+          app.id === selectedApp.id ? { ...app, status: "connected" as const } : app
         )
       );
       window.dispatchEvent(new CustomEvent("sync-connect-apps"));
@@ -1094,7 +893,7 @@ export default function ConnectAppsPage() {
       await fetchActiveTools();
       setApps((prev) =>
         prev.map((app) =>
-          app.id === selectedApp.id ? { ...app, status: "disconnected" } : app
+          app.id === selectedApp.id ? { ...app, status: "disconnected" as const } : app
         )
       );
       window.dispatchEvent(new CustomEvent("sync-connect-apps"));
@@ -1195,7 +994,7 @@ export default function ConnectAppsPage() {
   const handleDisconnect = async (id: string) => {
     setApps((prev) => {
       const next = prev.map((app) =>
-        app.id === id ? { ...app, status: "connecting" } : app,
+        app.id === id ? { ...app, status: "connecting" as const } : app,
       );
       window.dispatchEvent(new CustomEvent("sync-connect-apps"));
       return next;
@@ -1212,7 +1011,7 @@ export default function ConnectAppsPage() {
       );
       setApps((prev) => {
         const next = prev.map((app) =>
-          app.id === id ? { ...app, status: "disconnected" } : app,
+          app.id === id ? { ...app, status: "disconnected" as const } : app,
         );
         window.dispatchEvent(new CustomEvent("sync-connect-apps"));
         return next;
@@ -1221,7 +1020,7 @@ export default function ConnectAppsPage() {
       console.error("Disconnect failed:", err);
       setApps((prev) => {
         const next = prev.map((app) =>
-          app.id === id ? { ...app, status: "connected" } : app,
+          app.id === id ? { ...app, status: "connected" as const } : app,
         );
         window.dispatchEvent(new CustomEvent("sync-connect-apps"));
         return next;
