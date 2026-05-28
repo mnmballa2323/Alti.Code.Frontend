@@ -125,7 +125,7 @@ export class DockerWorkspaceManager {
         // - Run as default unprivileged Node user: --user 1000:1000
         // - Memory-bound non-executable tmp filesystem for system writes: --tmpfs /tmp:rw,noexec,nosuid,size=65536k
         // - Scoped host workspace directory mount: -v hostPath:/workspace
-        // - Resource constraints and fork bomb / log flooding protections
+        // - Resource constraints, fork bomb / log flooding protections, and swap / ulimit / namespace constraints
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostPath}":/workspace ` +
@@ -139,6 +139,10 @@ export class DockerWorkspaceManager {
             `--log-opt max-size=10m ` +
             `--log-opt max-file=3 ` +
             `--memory="${memory}" ` +
+            `--memory-swap="${memory}" ` +
+            `--ulimit fsize=52428800 ` +
+            `-e NODE_ENV=production ` +
+            `-e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin ` +
             `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
             `${this.baseImage} tail -f /dev/null`;
@@ -338,6 +342,10 @@ export class DockerWorkspaceManager {
             `--log-opt max-size=10m ` +
             `--log-opt max-file=3 ` +
             `--memory="${memory}" ` +
+            `--memory-swap="${memory}" ` +
+            `--ulimit fsize=52428800 ` +
+            `-e NODE_ENV=production ` +
+            `-e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin ` +
             `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
             `${this.baseImage} tail -f /dev/null`;
