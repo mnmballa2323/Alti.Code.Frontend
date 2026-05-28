@@ -724,20 +724,6 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Vault",
-      icon: Lock,
-      path: "/vault",
-      isActive: pathname === "/vault",
-      onClick: () => {
-        if (pathname === "/vault") {
-          window.dispatchEvent(
-            new CustomEvent("select-secret", { detail: null }),
-          );
-        }
-        router.push("/vault");
-      },
-    },
-    {
       label: "Instructions",
       icon: BookOpen,
       path: "/instructions",
@@ -771,6 +757,20 @@ export default function Sidebar() {
       isActive: pathname === "/documents",
       onClick: () => {
         router.push("/documents");
+      },
+    },
+    {
+      label: "Vault",
+      icon: Lock,
+      path: "/vault",
+      isActive: pathname === "/vault",
+      onClick: () => {
+        if (pathname === "/vault") {
+          window.dispatchEvent(
+            new CustomEvent("select-secret", { detail: null }),
+          );
+        }
+        router.push("/vault");
       },
     },
   ];
