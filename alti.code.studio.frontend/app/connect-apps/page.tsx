@@ -253,15 +253,6 @@ const CORE_APPS: AppIntegration[] = [
     type: "official",
   },
   {
-    id: "salesforce",
-    name: "Salesforce",
-    description: "CRM integration to manage leads, contacts, opportunities, and accounts.",
-    icon: "logos:salesforce",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
     id: "discord",
     name: "Discord",
     description: "Interact with community channels, manage roles, and deploy bots.",
@@ -320,7 +311,6 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     "linear": "linear.png",
     "googledrive": "google-drive.svg",
     "googlesheets": "google-sheets.svg",
-    "salesforce": "salesforce.svg",
     "discord": "discord.svg",
     "gmail": "gmail.svg",
     
