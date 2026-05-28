@@ -86590,6 +86590,33 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'agentshield_security_agent',
+    importPath: './shards/a/agentshield_security.agent.js',
+    description: 'Zero-Trust IAM, Container, & Cloud Security Auditor Specialist. Dynamic reviews of Dockerfiles, Kubernetes manifests, IAM configurations, and cloud policies to block privilege escalations, unsafe mounts, and leaks.',
+    queue: 'agentshield-security-queue',
+    capabilities: ['container-security', 'iam-audits', 'zero-trust', 'manifest-validation', 'vulnerability-scanning'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'playwright_e2e_agent',
+    importPath: './shards/p/playwright_e2e.agent.js',
+    description: 'End-to-End Test Automation & Browser Automation Specialist. Autonomously crawls frontend routes, reviews selectors, validates visual contrast and keyboard accessibility, and writes/auto-heals resilient E2E scripts.',
+    queue: 'playwright-e2e-queue',
+    capabilities: ['e2e-testing', 'playwright-scripts', 'browser-automation', 'assertion-generation', 'ui-accessibility'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ci_pipeline_optimizer_agent',
+    importPath: './shards/c/ci_pipeline_optimizer.agent.js',
+    description: 'CI/CD Workflow & Build Pipeline Optimizer Specialist. Reviews GitHub Actions YAMLs, Drone configurations, Dockerfile caching structures, and dependency package caches (npm/pnpm/yarn) to trim build times, optimize parallel tasks, and auto-heal compilation errors.',
+    queue: 'ci-pipeline-optimizer-queue',
+    capabilities: ['cicd-optimization', 'docker-caching', 'pipeline-profiling', 'build-healer', 'dependency-caching'],
+    version: '1.0.0'
+});
+
 
 
 
