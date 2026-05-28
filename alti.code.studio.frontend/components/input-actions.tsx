@@ -1157,7 +1157,33 @@ function PromptInputFullLineComponent({
                         )}
                         onClick={() => {
                           setGithubSelected(!githubSelected);
-                          if (!githubSelected) console.log("Pushing to GitHub...");
+                          const pushPrompt =
+                            prompt.trim() ||
+                            "Push to GitHub: Stage all refined codebase modifications, perform licensing and security compliance checks, compile a precise conventional commit message, and push the verified changes to the remote branch.";
+                          setPrompt(pushPrompt);
+                          if (onSend) {
+                            onSend(
+                              pushPrompt,
+                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            );
+                          } else {
+                            dispatch(
+                              sendMessage({
+                                prompt: pushPrompt,
+                                model: "default",
+                                domain: "Code",
+                                language:
+                                  selectedProgLang === "Language"
+                                    ? undefined
+                                    : selectedProgLang,
+                                sessionId,
+                                token,
+                              }),
+                            );
+                          }
+                          setPrompt("");
                         }}
                       />
                     </TooltipTrigger>
