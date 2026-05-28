@@ -44,7 +44,9 @@ export class DockerWorkspaceManager {
                     success: !error,
                     stdout: stdout.trim(),
                     stderr: stderr.trim(),
-                    error: error ? error.message : null
+                    error: error ? error.message : null,
+                    exitCode: error ? (error.code || 1) : 0,
+                    killed: error ? !!error.killed : false
                 });
             });
         });
@@ -425,6 +427,7 @@ export class DockerWorkspaceManager {
 
             return {
                 success: mockSuccess,
+                exitCode: mockSuccess ? 0 : 1,
                 logs: mockLogs,
                 errors: mockErrors,
                 durationMs: Date.now() - startTime,
@@ -442,10 +445,16 @@ export class DockerWorkspaceManager {
 
         const durationMs = Date.now() - startTime;
 
+        const errors = execResult.stderr ? execResult.stderr.split('\n') : [];
+        if (execResult.exitCode === 137 || execResult.killed) {
+            errors.push('Error: Execution timeout exceeded. The sandbox process was forcefully terminated.');
+        }
+
         return {
             success: execResult.success,
+            exitCode: execResult.exitCode,
             logs: execResult.stdout ? execResult.stdout.split('\n') : [],
-            errors: execResult.stderr ? execResult.stderr.split('\n') : [],
+            errors,
             durationMs,
             isMock: false
         };

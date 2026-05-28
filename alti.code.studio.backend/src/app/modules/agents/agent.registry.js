@@ -86509,6 +86509,88 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'api_contract_agent',
+    importPath: './shards/a/api_contract.agent.js',
+    description: 'API Contract & Integration SDK Specialist. Autonomous OpenAPI specs validation, contract compliance checking, and TypeScript integration SDK generation.',
+    queue: 'api-contract-queue',
+    capabilities: ['api-contracts', 'openapi-specs', 'sdk-generation', 'payload-validation', 'contract-compliance'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'blockrunai_clawrouter_expert',
+    importPath: './shards/b/blockrunai_clawrouter_expert.agent.js',
+    description: 'Elite expert on BlockRunAI/ClawRouter, the agent-native cost-optimizing LLM proxy featuring instant 1ms routing and x402 USDC micropayments.',
+    queue: 'blockrunai-clawrouter-queue',
+    capabilities: ['clawrouter', 'micropayments', 'model-routing', 'x402', 'sovereign-billing'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'db_migration_optimizer_agent',
+    importPath: './shards/d/db_migration_optimizer.agent.js',
+    description: 'Database Migration & Schema Optimizer Specialist. Autonomous SQL schema review, zero-downtime database migrations engineering, index planning, and queries efficiency analysis.',
+    queue: 'db-migration-optimizer-queue',
+    capabilities: ['database-migrations', 'schema-optimization', 'index-planning', 'query-profiling', 'sql-security'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'dlp_secrets_scanner_agent',
+    importPath: './shards/d/dlp_secrets_scanner.agent.js',
+    description: 'DLP & Hardened Secrets Scanner Specialist. Autonomous credentials discovery, data leak prevention (DLP), and PII protection.',
+    queue: 'dlp-secrets-scanner-queue',
+    capabilities: ['secrets-scanning', 'dlp', 'sast', 'credentials-audit', 'security-hardening'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'katanemo_plano_expert',
+    importPath: './shards/k/katanemo_plano_expert.agent.js',
+    description: 'Elite expert on katanemo/plano, the AI-native data plane and sidecar proxy for agentic workflows, low-latency routing, tracing, and secure guardrails.',
+    queue: 'katanemo-plano-queue',
+    capabilities: ['plano', 'sidecar-proxy', 'A2A-routing', 'agentic-tracing', 'security-guardrails'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'mnfst_manifest_expert',
+    importPath: './shards/m/mnfst_manifest_expert.agent.js',
+    description: 'Elite expert on mnfst/manifest, the definition-first TypeScript framework for building admin panels and full-stack backends dynamically from YAML and Postgres.',
+    queue: 'mnfst-manifest-queue',
+    capabilities: ['manifest', 'admin-panels', 'schema-syncing', 'REST-API', 'GraphQL'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ntegrals_10x_expert',
+    importPath: './shards/n/ntegrals_10x_expert.agent.js',
+    description: 'Elite expert on the ntegrals/10x multi-step AI coding powers, smart model routing, and self-hosted TypeScript developer agent.',
+    queue: 'ntegrals-10x-queue',
+    capabilities: ['10x', 'multi-step-powers', 'smart-routing', 'self-hosted', 'code-engines'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'performance_auditor_agent',
+    importPath: './shards/p/performance_auditor.agent.js',
+    description: 'Autonomous Performance Bottleneck Auditor & Log Profiler Specialist. Analyzes time/space complexity (Big-O), audits heap allocations, memory leaks, and hotpath bottlenecks.',
+    queue: 'performance-auditor-queue',
+    capabilities: ['profiling', 'optimization', 'caching', 'memory-analysis', 'performance-audit'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'submodule_sentinel_agent',
+    importPath: './shards/s/submodule_sentinel.agent.js',
+    description: 'Autonomous Submodule Sentinel and Cross-Repository Consistency Specialist. Audits submodules, git state, head-SHA pins, licensing compliance, and suggestion logic.',
+    queue: 'submodule-sentinel-queue',
+    capabilities: ['submodules', 'git-state', 'version-consistency', 'licensing-audits', 'dependency-versioning'],
+    version: '1.0.0'
+});
+
+
 
 
 
