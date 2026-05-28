@@ -86473,6 +86473,24 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'refactor_debt_scrubber_agent',
+    importPath: './shards/r/refactor_debt_scrubber.agent.js',
+    description: 'Refactor & Technical Debt Scrubber Specialist. Analyzes code components to eliminate spaghetti structures, excessive nesting, and duplicated logic, optimizing code maintainability.',
+    queue: 'refactor-debt-scrubber-queue',
+    capabilities: ['code-refactoring', 'tech-debt-elimination', 'complexity-reduction', 'modular-design', 'dry-principles'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'build_compilation_debugger_agent',
+    importPath: './shards/b/build_compilation_debugger.agent.js',
+    description: 'CI/CD Build & Compilation Debugger Specialist. Analyzes webpack, turbopack, typescript, or ESLint build logs to pinpoint and automatically repair compiler and syntax crashes.',
+    queue: 'build-compilation-debugger-queue',
+    capabilities: ['build-repair', 'compiler-debugging', 'typescript-errors', 'lint-resolution', 'ci-cd-coherence'],
+    version: '1.0.0'
+});
+
 
 
 
