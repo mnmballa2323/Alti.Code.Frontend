@@ -76,7 +76,10 @@ async function runTest() {
             const fs = await import('fs');
             const spec = fs.readFileSync('/workspace/spec.txt', 'utf8');
             fs.writeFileSync('/workspace/code.js', `// Compiled from: ${spec}\nconsole.log("JWT Service Launched!");`, 'utf8');
-            return "Code compiled successfully!";
+            return {
+                message: "Code compiled successfully!",
+                uid: process.getuid ? process.getuid() : 1000
+            };
         },
         sessionWs.path
     );
@@ -85,6 +88,14 @@ async function runTest() {
     const codePath = join(sessionWs.path, 'code.js');
     assert.ok(existsSync(codePath));
     assert.ok(readFileSync(codePath, 'utf8').includes('Architect Specifications for JWT Rotate'));
+
+    // Assert Dynamic UID/GID synchronization
+    const expectedHostUid = (process.getuid && process.getuid() !== 0) ? process.getuid() : 1000;
+    if (!coderResult.isMock) {
+        assert.equal(coderExec.uid, expectedHostUid, `Container execution UID must dynamically align with host executing UID ${expectedHostUid}`);
+        console.log(`✅ Dynamic UID/GID sync verified successfully (UID matches host UID ${expectedHostUid}).`);
+    }
+
     console.log('✅ Coder container successfully read Architect spec and implemented code.');
 
     // 3. Open-Source Code Submodule Isolation Test

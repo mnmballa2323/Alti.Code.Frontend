@@ -30,6 +30,9 @@ export class AgentContainerOrchestrator {
         try {
             mkdirSync(this.baseSandboxDir, { recursive: true });
         } catch (e) {}
+
+        // Launch self-healing orphaned agent container pruning asynchronously on startup
+        this.pruneOrphanedContainers().catch(() => {});
     }
 
     /**
@@ -106,12 +109,16 @@ export class AgentContainerOrchestrator {
         const cpus = options.cpus || '0.5';
         const pidsLimit = options.pidsLimit || 100;
 
+        // Dynamically map execution user UID/GID to executing host credentials (avoiding root UID 0)
+        const hostUid = (process.getuid && process.getuid() !== 0) ? process.getuid() : 1000;
+        const hostGid = (process.getgid && process.getgid() !== 0) ? process.getgid() : 1000;
+
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
         // - Strict Air-Gapped Network Isolation: --network none
         // - Root filesystem read-only: --read-only
         // - Drop all default Linux capabilities: --cap-drop=ALL
         // - Prevent privilege escalation: --security-opt=no-new-privileges:true
-        // - Run as default unprivileged Node user: --user 1000:1000
+        // - Run mapped to host UID/GID dynamically: --user ${hostUid}:${hostGid}
         // - Memory-bound non-executable tmp filesystem for system writes: --tmpfs /tmp:rw,noexec,nosuid,size=65536k
         // - Scoped host workspace directory mount: -v hostWorkspacePath:/workspace
         // - Resource constraints, fork bomb / log flooding protections, and swap / ulimit / namespace constraints
@@ -122,7 +129,7 @@ export class AgentContainerOrchestrator {
             `--read-only ` +
             `--security-opt=no-new-privileges:true ` +
             `--cap-drop=ALL ` +
-            `--user 1000:1000 ` +
+            `--user ${hostUid}:${hostGid} ` +
             `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
             `--pids-limit=${pidsLimit} ` +
             `--log-opt max-size=10m ` +
@@ -322,5 +329,25 @@ export class AgentContainerOrchestrator {
         }
 
         return executionReport.result;
+    }
+
+    /**
+     * Scans and automatically stops/prunes any orphaned agent containers left behind from past failed sessions.
+     */
+    async pruneOrphanedContainers() {
+        const hasDocker = await this.checkDockerAvailability();
+        if (!hasDocker) return;
+
+        // Query active agent containers
+        const listCmd = `docker ps -a --filter "name=agent_container_" --format "{{.Names}}"`;
+        const listResult = await this._execCmd(listCmd);
+        if (listResult.success && listResult.stdout) {
+            const names = listResult.stdout.split('\n').filter(Boolean);
+            for (const name of names) {
+                console.log(`🧹 Self-Healing: Pruning orphaned agent container detected: [${name}]`);
+                await this._execCmd(`docker stop ${name}`);
+                await this._execCmd(`docker rm -f ${name}`);
+            }
+        }
     }
 }
