@@ -584,4 +584,144 @@ export const SAAS_MOCKS = [
     slug: "mcp_aws_kb_retrieval",
     icon: "logos:aws",
   },
+  {
+    name: "GitHub PR Reviewer",
+    slug: "mcp_github_pr_reviewer",
+    icon: "mdi:github",
+  },
+  {
+    name: "GitLab Runners",
+    slug: "mcp_gitlab_runners",
+    icon: "logos:gitlab",
+  },
+  {
+    name: "AWS ECS / Fargate",
+    slug: "mcp_aws_ecs",
+    icon: "logos:aws-ecs",
+  },
+  {
+    name: "AWS CloudFormation / CDK",
+    slug: "mcp_aws_cdk",
+    icon: "logos:aws",
+  },
+  {
+    name: "Google Kubernetes Engine (GKE)",
+    slug: "mcp_gcp_gke",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Azure Kubernetes Service (AKS)",
+    slug: "mcp_azure_aks",
+    icon: "logos:azure-icon",
+  },
+  {
+    name: "Jupyter Notebook Core",
+    slug: "mcp_jupyter",
+    icon: "logos:jupyter",
+  },
+  {
+    name: "Neon Branching",
+    slug: "mcp_neon_branching",
+    icon: "logos:neon-icon",
+  },
+  {
+    name: "SonarQube Code Auditing",
+    slug: "mcp_sonarqube_audits",
+    icon: "logos:sonarqube",
+  },
+  {
+    name: "Snyk Vulnerability Scanner",
+    slug: "mcp_snyk_scanner",
+    icon: "logos:snyk",
+  },
+  {
+    name: "Sentry Releases & Source Maps",
+    slug: "mcp_sentry_releases",
+    icon: "logos:sentry-icon",
+  },
+  {
+    name: "Playwright Visual Recorder",
+    slug: "mcp_playwright_recorder",
+    icon: "logos:playwright",
+  },
+  {
+    name: "Cypress Headless Dashboard",
+    slug: "mcp_cypress_dashboard",
+    icon: "logos:cypress-icon",
+  },
+  {
+    name: "Excalidraw Software Architecture Diagrammer",
+    slug: "mcp_excalidraw",
+    icon: "solar:widget-bold-duotone",
+  },
+  {
+    name: "Mermaid.js UML/Sequence Visualizer",
+    slug: "mcp_mermaid",
+    icon: "solar:graph-bold-duotone",
+  },
+  {
+    name: "Postman Collections Runner",
+    slug: "mcp_postman_runner",
+    icon: "logos:postman-icon",
+  },
+  {
+    name: "LaunchDarkly Feature Flags",
+    slug: "mcp_launchdarkly",
+    icon: "logos:launchdarkly-icon",
+  },
+  {
+    name: "Flagsmith Remote Config Management",
+    slug: "mcp_flagsmith",
+    icon: "logos:flagsmith",
+  },
+  {
+    name: "PostHog Developer Analytics",
+    slug: "mcp_posthog",
+    icon: "logos:posthog-icon",
+  },
+  {
+    name: "Expanse Security / Asset Audits",
+    slug: "mcp_expanse",
+    icon: "solar:shield-warning-bold-duotone",
+  },
+  {
+    name: "Firebase Authentication",
+    slug: "mcp_firebase_auth",
+    icon: "logos:firebase",
+  },
+  {
+    name: "Firebase Firestore Database",
+    slug: "mcp_firebase_firestore",
+    icon: "logos:firebase",
+  },
+  {
+    name: "Firebase App Hosting",
+    slug: "mcp_firebase_hosting",
+    icon: "logos:firebase",
+  },
+  {
+    name: "Excellence LLM Gateway Proxy",
+    slug: "mcp_excellence_router",
+    icon: "solar:routing-bold-duotone",
+  },
+  {
+    name: "BlockRunAI Micropayments API",
+    slug: "mcp_blockrunai",
+    icon: "solar:dollar-minimalistic-bold-duotone",
+  },
+  {
+    name: "Katanemo Plano Networking Mesh",
+    slug: "mcp_katanemo_plano",
+    icon: "solar:link-bold-duotone",
+  },
+  {
+    name: "Mnfst Manifest Admin Panel",
+    slug: "mcp_mnfst_manifest",
+    icon: "solar:window-frame-bold-duotone",
+  },
+  {
+    name: "Ntegrals 10x Smart Agent Router",
+    slug: "mcp_ntegrals_10x",
+    icon: "solar:tuning-bold-duotone",
+  },
 ];
