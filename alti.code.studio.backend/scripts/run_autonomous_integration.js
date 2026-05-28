@@ -19,7 +19,8 @@ const TEST_SUITES = [
     { name: 'Sandboxed Code Executor', path: './scripts/test_sandbox.js' },
     { name: 'Agent Telemetry Observability', path: './scripts/test_telemetry.js' },
     { name: 'Cognitive Task Planner', path: './scripts/test_cognitive.js' },
-    { name: 'Agentic Skills Loader', path: './scripts/test_skills.js' }
+    { name: 'Agentic Skills Loader', path: './scripts/test_skills.js' },
+    { name: 'Workspace Sandbox Isolator', path: './scripts/test_workspace_isolator.js' }
 ];
 
 async function executeSuite(suite) {
