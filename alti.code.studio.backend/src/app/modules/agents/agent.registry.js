@@ -37,17 +37,19 @@ class AgentRegistry {
         // Dynamic Agentic RAG Auto-Indexing:
         // Asynchronously add the newly registered agent's profile document to the vector store index.
         // This ensures that dynamically forged or hot-loaded agents are instantly available for routing!
-        const agentDocument = `Agent Name: ${definition.name}\nDescription: ${definition.description}\nCapabilities: ${definition.capabilities?.join(', ')}`;
-        import('../memory/vector.store.js').then(({ vectorStoreService }) => {
-            vectorStoreService.add(agentDocument, { 
-                type: 'agent_profile', 
-                agentId: definition.name 
-            }).then(() => {
-                logger.info(`🗺️ [Nexus-RAG] Dynamically indexed newly registered [${definition.name}] in pgvector store.`);
-            }).catch(e => {
-                logger.debug(`[Nexus-RAG] Dynamic indexing skipped or failed for [${definition.name}]: ${e.message}`);
-            });
-        }).catch(() => {});
+        if (this.bootstrapped) {
+            const agentDocument = `Agent Name: ${definition.name}\nDescription: ${definition.description}\nCapabilities: ${definition.capabilities?.join(', ')}`;
+            import('../memory/vector.store.js').then(({ vectorStoreService }) => {
+                vectorStoreService.add(agentDocument, { 
+                    type: 'agent_profile', 
+                    agentId: definition.name 
+                }).then(() => {
+                    logger.info(`🗺️ [Nexus-RAG] Dynamically indexed newly registered [${definition.name}] in pgvector store.`);
+                }).catch(e => {
+                    logger.debug(`[Nexus-RAG] Dynamic indexing skipped or failed for [${definition.name}]: ${e.message}`);
+                });
+            }).catch(() => {});
+        }
     }
 
     /**
@@ -86616,6 +86618,8 @@ agentRegistry.register({
     capabilities: ['cicd-optimization', 'docker-caching', 'pipeline-profiling', 'build-healer', 'dependency-caching'],
     version: '1.0.0'
 });
+
+agentRegistry.bootstrapped = true;
 
 
 

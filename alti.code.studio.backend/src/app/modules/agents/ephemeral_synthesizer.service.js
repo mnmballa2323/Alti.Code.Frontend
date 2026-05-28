@@ -82,11 +82,23 @@ CRITICAL INSTRUCTIONS:
 `;
 
         // 4. Instantiate Transient Agent
-        const syntheticAgent = new BaseSpecialistAgent({
-            name: agentName,
-            preamble: dynamicPreamble,
-            temperature: 0.1 // Highly deterministic for pure code synthesis
-        });
+        const agentClass = class extends BaseSpecialistAgent {
+            constructor() {
+                super();
+                this.name = agentName;
+                this.displayName = `Synthetic Agent ${hash}`;
+                this.description = `Ephemeral synthetic agent generated dynamically for active file: ${activeFilePath}`;
+                this.preamble = dynamicPreamble;
+                this.temperature = 0.1; // Highly deterministic for pure code synthesis
+            }
+
+            async _invoke(prompt, contextBlock) {
+                const { GeminiAiService } = await import('../gemini/gemini.service.js');
+                return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
+            }
+        };
+
+        const syntheticAgent = new agentClass();
 
         // 5. Mount to Hot-Memory
         this.activeSynthetics.set(agentName, {

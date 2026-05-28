@@ -326,6 +326,26 @@ class CapabilityRouter {
             orchestrationMode: 'LOCAL_SEMAPHORE'
         };
     }
+
+    /**
+     * Dynamically registers a specialist agent in the central registry.
+     * Keeps backwards compatibility with Phase 10 dynamic synthetics.
+     * 
+     * @param {BaseSpecialistAgent} agent The specialist agent instance.
+     * @param {string[]} keywords Query keywords for semantic routing.
+     */
+    registerAgent(agent, keywords = []) {
+        logger.info(`🗺️ [CapabilityRouter] Dynamically registering agent [${agent.name}] with ${keywords.length} keywords.`);
+        agentRegistry.register({
+            name: agent.name,
+            displayName: agent.displayName || agent.name,
+            description: agent.description || `Dynamic Specialist Agent: ${agent.name}`,
+            preamble: agent.preamble,
+            capabilities: keywords,
+            instance: agent,
+            version: '1.0.0'
+        });
+    }
 }
 
 export const capabilityRouter = new CapabilityRouter();

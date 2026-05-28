@@ -5,6 +5,22 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.96] - 2026-05-28 — Advanced Performance & Security Declarative YAML Agents
+### Added
+- **Performance & Latency Optimizer Specialist**: Created `performance.optimizer.agent.yaml` to identify Big-O runtime complexities, N+1 query bottlenecks, event listener memory leaks, and L1/L2 caching architectures.
+- **Security & OWASP Hardening Sentinel Specialist**: Created `security.sentinel.agent.yaml` to audit against OWASP Top 10 vulnerabilities, parameterize SQL queries, sanitize inputs, enforce high-grade cryptography, and verify JWT/auth scopes.
+
+## [39.37.95] - 2026-05-28 — Swarm Agent Self-Expansion & Dynamic YAML DSL Loader Integration
+### Added
+- **Activated Declarative YAML Agent Loader**: Integrated `yaml_agent_loader.js` directly into the `SwarmBrain` constructor to boot and register initial custom `.agent.yaml` profiles on startup.
+- **Proxy Hot-Reload Bridge**: Integrated a reactive `Proxy`-based hot-reload bridge using `watchDefinitions` so that modifying or adding custom `*.agent.yaml` files inside `definitions/` dynamically re-registers active agent instances in `capabilityRouter` without server restarts.
+- **Complete Self-Expanding Swarm Service**: Completed the implementation of `SelfExpandingSwarmService` by adding the unified `swarmBus` Event Bus (EventEmitter), progress telemetry streams (`synthesisReports`), logging, companion JSON config generation, dynamic ESM `import()` resolution, and live capability router registration triggers.
+
+## [39.37.94] - 2026-05-28 — Secure Vault User ID Validation & Dynamic Swarm Integration
+### Fixed
+- **Prisma Vault UUID Query Crash**: Implemented a robust `resolveUserId` helper and UUID validation regex inside `VaultService` (`vault.service.js`) to sanitize user IDs before querying the database. This guarantees that non-UUID developer fallback identifiers (like `'system_dev_user'`) are safely mapped to a valid database user ID or standard development zero-UUID fallback, preventing PostgreSQL/Prisma casting crashes completely.
+- **LLM Gateway & Test Suite Agility**: Fully verified the Vault Service UUID safety layer with all integration tests passing flawlessly.
+
 ## [39.37.93] - 2026-05-27 — Google & GitHub Passport OAuth Strategies & PostgreSQL Integration
 ### Added
 - **Passport.js Google & GitHub Strategies**: Deployed `google.strategy.js` and `github.strategy.js` under `src/app/modules/auth/`, configuring secure OAuth2 handlers with `passport-google-oauth20` and `passport-github2` for seamless social sign-ins and sign-ups.

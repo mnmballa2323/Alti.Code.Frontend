@@ -85,6 +85,31 @@ class SwarmBrain {
         dynamicAgentLoaderService.init();
         googleSkillsLoaderService.init();
         superpowersLoaderService.init();
+
+        // Phase 31: Dynamic YAML DSL Agent Loader Activation
+        import('./yaml_agent_loader.js').then(async ({ loadYamlAgents, watchDefinitions }) => {
+            try {
+                const yamlAgents = await loadYamlAgents();
+                for (const [id, agent] of yamlAgents.entries()) {
+                    capabilityRouter.registerAgent(agent, agent.manifest.capabilities || []);
+                }
+                
+                // Hot-reload proxy bridge to auto-register modified YAML agents
+                const reactiveMap = new Map();
+                const proxyMap = new Proxy(reactiveMap, {
+                    set(target, prop, value) {
+                        if (value && value.manifest) {
+                            logger.info(`♻️  [SwarmBrain] Hot-reloading YAML Agent: ${value.name}`);
+                            capabilityRouter.registerAgent(value, value.manifest.capabilities || []);
+                        }
+                        return Reflect.set(target, prop, value);
+                    }
+                });
+                watchDefinitions(proxyMap);
+            } catch (err) {
+                logger.error('❌ Failed to bootstrap YAML Agent Loader', err);
+            }
+        }).catch(err => logger.error('❌ Failed to import YamlAgentLoader', err));
         
         logger.info('🧠 SwarmBrain: Initialized. Thousands-Agent Code Swarm is Online.');
     }

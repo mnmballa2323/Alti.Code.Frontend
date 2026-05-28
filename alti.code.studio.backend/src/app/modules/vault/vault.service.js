@@ -32,12 +32,31 @@ const decryptField = async (encryptedValue) => {
     }
 };
 
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Robust helper to ensure the user ID is a valid UUID format before database queries.
+ * Falls back to first available user, or zero-uuid string.
+ */
+const resolveUserId = async (userId) => {
+    if (userId && uuidRegex.test(userId)) {
+        return userId;
+    }
+    try {
+        const defaultUser = await prisma.user.findFirst();
+        return defaultUser?.id || '00000000-0000-0000-0000-000000000000';
+    } catch (e) {
+        return '00000000-0000-0000-0000-000000000000';
+    }
+};
+
 /**
  * Get decrypted credentials securely in-memory.
  */
 const getRawCredentials = async (userId) => {
+    const targetUserId = await resolveUserId(userId);
     let vault = await prisma.vault.findUnique({
-        where: { userId }
+        where: { userId: targetUserId }
     });
 
     if (!vault) return {};
@@ -58,7 +77,8 @@ const getRawCredentials = async (userId) => {
  * Get masked credentials safely for frontend UI.
  */
 const getMaskedCredentials = async (userId) => {
-    const raw = await getRawCredentials(userId);
+    const targetUserId = await resolveUserId(userId);
+    const raw = await getRawCredentials(targetUserId);
     return {
         openaiApiKey: maskKey(raw.openaiApiKey),
         anthropicApiKey: maskKey(raw.anthropicApiKey),
@@ -75,10 +95,11 @@ const getMaskedCredentials = async (userId) => {
  * Upsert encrypted credentials.
  */
 const updateCredentials = async (userId, keys) => {
-    logger.info(`🔐 [VaultService] Updating credentials for user ${userId}...`);
+    const targetUserId = await resolveUserId(userId);
+    logger.info(`🔐 [VaultService] Updating credentials for user ${targetUserId}...`);
 
     // Fetch existing vault to avoid overwriting unchanged (masked) keys
-    const existing = await prisma.vault.findUnique({ where: { userId } });
+    const existing = await prisma.vault.findUnique({ where: { userId: targetUserId } });
 
     const updateData = {};
 
@@ -106,15 +127,15 @@ const updateCredentials = async (userId, keys) => {
     await processField('gcpPrivateKey', keys.gcpPrivateKey);
 
     const vault = await prisma.vault.upsert({
-        where: { userId },
+        where: { userId: targetUserId },
         update: updateData,
         create: {
-            userId,
+            userId: targetUserId,
             ...updateData
         }
     });
 
-    return getMaskedCredentials(userId);
+    return getMaskedCredentials(targetUserId);
 };
 
 export const VaultService = {

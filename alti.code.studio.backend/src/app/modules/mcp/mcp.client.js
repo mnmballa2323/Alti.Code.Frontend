@@ -10,7 +10,7 @@ import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import { logger } from '../../../shared/logger.js';
 
 /** Preset MCP server configurations loaded from env or defaults. */
-const PRESETS = [
+export const PRESETS = [
     {
         name: 'filesystem',
         command: 'npx',
@@ -34,6 +34,24 @@ const PRESETS = [
         command: 'npx',
         args: ['-y', '@modelcontextprotocol/server-github'],
         envKey: 'MCP_ENABLE_GITHUB',
+    },
+    {
+        name: 'sentry',
+        command: 'npx',
+        args: ['-y', '@modelcontextprotocol/server-sentry'],
+        envKey: 'MCP_ENABLE_SENTRY',
+    },
+    {
+        name: 'postgres',
+        command: 'npx',
+        args: ['-y', '@modelcontextprotocol/server-postgres'],
+        envKey: 'MCP_ENABLE_POSTGRES',
+    },
+    {
+        name: 'puppeteer',
+        command: 'npx',
+        args: ['-y', '@modelcontextprotocol/server-puppeteer'],
+        envKey: 'MCP_ENABLE_PUPPETEER',
     },
 ];
 
@@ -105,6 +123,11 @@ class McpClientService {
     async listTools(serverName) {
         const client = this._getClient(serverName);
         return await client.listTools();
+    }
+
+    async listResources(serverName) {
+        const client = this._getClient(serverName);
+        return await client.listResources().catch(() => ({ resources: [] }));
     }
 
     async callTool(serverName, toolName, args) {

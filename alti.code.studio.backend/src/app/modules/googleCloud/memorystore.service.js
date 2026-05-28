@@ -7,6 +7,7 @@ class GoogleCloudMemorystoreService {
         this.publisher = null;
         this.subscriber = null;
         this.isInitialized = false;
+        this.fallbackCache = new Map();
         this.messageCallbacks = new Map();
         this.init();
     }
@@ -31,16 +32,26 @@ class GoogleCloudMemorystoreService {
                 host: redisHost,
                 port: redisPort,
                 password: redisPassword,
+                // Limit connection retries to prevent infinite spamming in local/test environments
                 retryStrategy: (times) => {
-                    return Math.min(times * 50, 2000);
+                    if (times > 3) {
+                        logger.warn(`⚠️ Memorystore Redis connection failed after ${times - 1} retries. Falling back to local in-memory store.`);
+                        this.isInitialized = false;
+                        return null; // Stop retrying
+                    }
+                    return Math.min(times * 100, 1000);
                 }
             };
 
             this.publisher = new Redis(redisOptions);
             this.subscriber = new Redis(redisOptions);
 
-            this.publisher.on('error', (err) => logger.error(`❌ Memorystore Publisher Error: ${err.message}`));
-            this.subscriber.on('error', (err) => logger.error(`❌ Memorystore Subscriber Error: ${err.message}`));
+            this.publisher.on('error', (err) => {
+                logger.error(`❌ Memorystore Publisher Error: ${err.message}`);
+            });
+            this.subscriber.on('error', (err) => {
+                logger.error(`❌ Memorystore Subscriber Error: ${err.message}`);
+            });
 
             this.subscriber.on('message', (channel, message) => {
                 const callbacks = this.messageCallbacks.get(channel);
@@ -54,6 +65,7 @@ class GoogleCloudMemorystoreService {
             logger.info(`🔴 Google Cloud Memorystore (Redis) Pub/Sub initialized at ${redisHost}:${redisPort}`);
         } catch (error) {
             logger.error(`❌ Failed to initialize Cloud Memorystore: ${error.message}`);
+            this.isInitialized = false;
         }
     }
 
@@ -63,8 +75,14 @@ class GoogleCloudMemorystoreService {
      * @param {string} base64Update - The base64 encoded Yjs update
      */
     async publishCrdtUpdate(docName, base64Update) {
-        if (!this.isInitialized) return;
         const channel = `crdt:${docName}`;
+        // Fallback: trigger local callbacks immediately for single-process memory routing
+        const localCallbacks = this.messageCallbacks.get(channel);
+        if (localCallbacks) {
+            localCallbacks.forEach(cb => cb(base64Update));
+        }
+
+        if (!this.isInitialized) return;
         try {
             await this.publisher.publish(channel, base64Update);
         } catch (error) {
@@ -78,16 +96,17 @@ class GoogleCloudMemorystoreService {
      * @param {Function} callback - Function to handle the base64 encoded incoming update
      */
     async subscribeToCrdt(docName, callback) {
-        if (!this.isInitialized) return;
         const channel = `crdt:${docName}`;
         
         if (!this.messageCallbacks.has(channel)) {
             this.messageCallbacks.set(channel, new Set());
-            try {
-                await this.subscriber.subscribe(channel);
-                logger.info(`📡 Subscribed to Cloud Memorystore channel: ${channel}`);
-            } catch (error) {
-                logger.error(`❌ Memorystore Subscribe Error on ${channel}: ${error.message}`);
+            if (this.isInitialized) {
+                try {
+                    await this.subscriber.subscribe(channel);
+                    logger.info(`📡 Subscribed to Cloud Memorystore channel: ${channel}`);
+                } catch (error) {
+                    logger.error(`❌ Memorystore Subscribe Error on ${channel}: ${error.message}`);
+                }
             }
         }
         
@@ -101,6 +120,12 @@ class GoogleCloudMemorystoreService {
      * @param {number} ttlSeconds - Time to live in seconds (default 3600 = 1 hour)
      */
     async setCache(key, value, ttlSeconds = 3600) {
+        // Always populate the local in-memory fallback cache
+        this.fallbackCache.set(key, {
+            value,
+            expiry: Date.now() + (ttlSeconds * 1000)
+        });
+
         if (!this.isInitialized) return;
         try {
             await this.publisher.set(key, value, 'EX', ttlSeconds);
@@ -115,11 +140,30 @@ class GoogleCloudMemorystoreService {
      * @returns {string|null} The cached value, or null if not found
      */
     async getCache(key) {
-        if (!this.isInitialized) return null;
+        // Retrieve from in-memory fallback cache first if Redis is offline
+        if (!this.isInitialized) {
+            const entry = this.fallbackCache.get(key);
+            if (entry) {
+                if (entry.expiry > Date.now()) {
+                    return entry.value;
+                }
+                this.fallbackCache.delete(key);
+            }
+            return null;
+        }
+
         try {
             return await this.publisher.get(key);
         } catch (error) {
             logger.error(`❌ Memorystore getCache Error [${key}]: ${error.message}`);
+            // Failover to local in-memory fallback cache
+            const entry = this.fallbackCache.get(key);
+            if (entry) {
+                if (entry.expiry > Date.now()) {
+                    return entry.value;
+                }
+                this.fallbackCache.delete(key);
+            }
             return null;
         }
     }
