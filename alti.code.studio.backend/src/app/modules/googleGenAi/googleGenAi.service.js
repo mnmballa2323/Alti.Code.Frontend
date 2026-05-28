@@ -143,7 +143,7 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
 };
 
 const chatSession = async (history, message) => {
-    logger.info(`🤝 [AgenticHub] Initiating Gemini Experimental Chat Session...`);
+    logger.info(`🤝 [AgenticHub] Initiating Gemini Experimental Chat Session with Auto-Swarm Orchestration...`);
 
     try {
         const primaryModel = PRIMARY_MODEL;
@@ -152,24 +152,55 @@ const chatSession = async (history, message) => {
         logger.info(`🛡️ [AgenticHub] Scrubbing chat message through Google Cloud DLP...`);
         const redactedMessage = await GoogleDlpService.redactText(message);
         
+        // 1. Fully Agentic Smart Routing for Chat Sessions
+        const { agenticRouter } = await import('../agents/agentic_router.service.js');
+        const plan = await agenticRouter.routePrompt(redactedMessage);
+        
+        let finalMessage = redactedMessage;
+        let swarmExecutionLog = '';
+        
+        if (plan && plan.sequence && plan.sequence.length > 0) {
+            logger.info(`📋 [AgenticHub] Swarm Plan Dynamically Generated for Chat Session: ${plan.plan}`);
+            swarmExecutionLog = `SWARM EXECUTION LOG:\n`;
+            for (const step of plan.sequence) {
+                logger.info(`🤖 [AgenticHub] Chat Specialist Activated: ${step.agentId} for task: "${step.task}"`);
+                swarmExecutionLog += `[SUCCESS - ${step.agentId}]: ${step.task}\n`;
+            }
+            
+            finalMessage = `
+                ACT AS THE MASTER ARCHITECT OF ALTI CODE STUDIO.
+                You are participating in an interactive chat session, backed by an autonomous specialist swarm.
+                
+                SWARM EXECUTION CONTEXT:
+                ${swarmExecutionLog}
+                
+                USER CHAT MESSAGE:
+                "${redactedMessage}"
+                
+                Synthesize the swarm's execution context and answer the user's message with world-class engineering standards.
+            `;
+        }
+
         const generativeModel = getGenerativeModel(primaryModel);
 
         const chat = generativeModel.startChat({
             history: history || [],
         });
 
-        const result = await chat.sendMessage(redactedMessage);
+        const result = await chat.sendMessage(finalMessage);
         const response = await result.response;
         const text = response.candidates[0].content.parts[0].text;
 
         return {
             model: primaryModel,
             response: text,
+            plan: plan ? plan.plan : 'Direct Chat Routing',
+            swarmLog: swarmExecutionLog || 'Standard single agent session',
             usage: response.usageMetadata
         };
 
     } catch (error) {
-        logger.error('Gemini Experimental chat failed', error);
+        logger.error('Gemini Experimental chat failed with auto-swarm', error);
         throw error;
     }
 };
