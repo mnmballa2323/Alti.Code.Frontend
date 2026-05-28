@@ -160,6 +160,9 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
     nextjs: "nextdotjs",
     springboot: "springboot",
     brave_search: "brave",
+    argocd: "argo",
+    ansible: "ansible",
+    anthropic: "anthropic",
   };
 
   const getUrlsToTry = () => {
@@ -179,8 +182,10 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
       addUrl(`/assets/apps-logos/${localFile}`);
     }
 
-    // 3. Try official Simple Icons SVG CDN (extremely fast and serves the exact brand SVG natively)
+    // 3. Try official jsDelivr/unpkg Simple Icons npm CDN (highly CSP-compliant and fast)
     const simpleIconBrand = simpleIconsMapping[cleanSlug] || cleanSlug.replace(/_/g, "");
+    addUrl(`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${simpleIconBrand}.svg`);
+    addUrl(`https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`);
     addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
 
     // 4. Try Composio official logo API
