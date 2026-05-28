@@ -24,7 +24,8 @@ const TEST_SUITES = [
     { name: 'AST Query Evaluator Engine', path: './scripts/test_ast_query_evaluator.js' },
     { name: 'Agent Quality Evaluator Engine', path: './scripts/test_agent_evaluator.js' },
     { name: 'Page Browser Automation Engine', path: './scripts/test_browser.js' },
-    { name: 'User-Isolated Docker Workspace', path: './scripts/test_docker_workspace.js' }
+    { name: 'User-Isolated Docker Workspace', path: './scripts/test_docker_workspace.js' },
+    { name: 'Per-Agent & Per-OSS Docker Containerization', path: './scripts/test_agent_containers.js' }
 ];
 
 async function executeSuite(suite) {

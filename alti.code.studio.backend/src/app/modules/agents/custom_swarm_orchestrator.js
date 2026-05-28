@@ -88,15 +88,40 @@ export class SwarmEngine {
 
                 logger.info(`🐝 Executing tool [${name}] with args: ${JSON.stringify(args)}`);
                 
-                // Execute the function
-                const result = await targetFn.execute(args, contextVariables);
+                // Get or provision the shared session workspace directory
+                if (!contextVariables.sessionWorkspacePath) {
+                    const { WorkspaceIsolator } = await import('../sandbox/workspace_isolator.js');
+                    const isolator = new WorkspaceIsolator();
+                    const ws = isolator.provision();
+                    contextVariables.sessionWorkspacePath = ws.path;
+                    contextVariables.provisionedSessionWorkspaceId = ws.id; // Track for cleanups
+                }
+
+                // Execute the agent tool function containerized!
+                const { AgentContainerOrchestrator } = await import('../sandbox/agent_container_orchestrator.js');
+                const orchestrator = new AgentContainerOrchestrator();
                 
-                // Check if the tool returned a SwarmAgent (Autonomous Handoff!)
-                if (result instanceof SwarmAgent) {
-                    logger.info(`🔄 Swarm Handoff: [${currentAgent.name}] -> Delegated to [${result.name}]`);
-                    handoffAgent = result;
-                    executedToolsLog.push({ tool: name, handoff: result.name });
-                    return `Handoff successful. You have delegated this task to the specialized [${result.name}]. Please let them take over and complete the request under their custom instructions.`;
+                const result = await orchestrator.executeAgentTool(
+                    currentAgent.name,
+                    name,
+                    args,
+                    contextVariables,
+                    targetFn.execute,
+                    contextVariables.sessionWorkspacePath
+                );
+                
+                // Check if the tool returned an Autonomous Handoff!
+                if (result && result.isHandoff) {
+                    // Dynamic Handoff Mapping: Resolve target agent instance by name dynamically
+                    const swarmModule = await import('./software_engineering_swarm.js');
+                    const targetAgent = swarmModule[result.handoffAgentName + 'Agent'] || swarmModule[result.handoffAgentName];
+                    
+                    if (targetAgent) {
+                        logger.info(`🔄 Swarm Handoff: [${currentAgent.name}] -> Delegated to [${targetAgent.name}]`);
+                        handoffAgent = targetAgent;
+                        executedToolsLog.push({ tool: name, handoff: targetAgent.name });
+                        return `Handoff successful. You have delegated this task to the specialized [${targetAgent.name}]. Please let them take over and complete the request under their custom instructions.`;
+                    }
                 }
 
                 // Standard function return
@@ -147,6 +172,30 @@ export class SwarmEngine {
             // No handoff occurred, loop terminates successfully (task finished by active agent)
             logger.info(`🐝 SwarmEngine: Execution completed successfully in ${turn} turns.`);
             break;
+        }
+
+        // Clean up spawned agent containers and session workspaces dynamically
+        if (contextVariables.provisionedSessionWorkspaceId) {
+            try {
+                const { AgentContainerOrchestrator } = await import('../sandbox/agent_container_orchestrator.js');
+                const orchestrator = new AgentContainerOrchestrator();
+                
+                // Dynamically stop all launched agent containers
+                if (contextVariables.activeAgentContainers) {
+                    for (const agentName of contextVariables.activeAgentContainers) {
+                        await orchestrator.stopAgentContainer(agentName);
+                    }
+                }
+
+                const { WorkspaceIsolator } = await import('../sandbox/workspace_isolator.js');
+                const isolator = new WorkspaceIsolator();
+                isolator.destroy({
+                    id: contextVariables.provisionedSessionWorkspaceId,
+                    path: contextVariables.sessionWorkspacePath
+                });
+            } catch (e) {
+                // Ignore cleanup warnings
+            }
         }
 
         if (turn >= maxTurns) {

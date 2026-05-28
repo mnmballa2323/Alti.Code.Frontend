@@ -272,4 +272,139 @@ export class DockerWorkspaceManager {
             isMock: false
         };
     }
+
+    /**
+     * Spawns a dedicated, unprivileged, heavily hardened container for an open-source module.
+     * @param {string} moduleName - Name of the open-source module
+     * @param {string} hostPath - Folder path of the open-source code on the host
+     */
+    async startOssContainer(moduleName, hostPath) {
+        const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
+        const containerName = `oss_container_${cleanModuleName}`;
+        const targetHostPath = resolve(hostPath);
+
+        const hasDocker = await this.checkDockerAvailability();
+
+        if (!hasDocker) {
+            this.activeContainers.add(containerName);
+            return { containerName, hostPath: targetHostPath, isMock: true };
+        }
+
+        // Check if already running
+        const inspect = await this._execCmd(`docker inspect -f '{{.State.Running}}' ${containerName}`);
+        if (inspect.success && inspect.stdout === 'true') {
+            this.activeContainers.add(containerName);
+            return { containerName, hostPath: targetHostPath, isMock: false };
+        }
+
+        // Clean dead container
+        await this._execCmd(`docker rm -f ${containerName}`);
+
+        // Give unprivileged user permissions
+        await this._execCmd(`chmod -R 777 "${targetHostPath}"`);
+
+        // Launch isolated OSS container
+        const dockerRunCmd = `docker run -d ` +
+            `--name ${containerName} ` +
+            `-v "${targetHostPath}":/workspace ` +
+            `--network none ` +
+            `--read-only ` +
+            `--security-opt=no-new-privileges:true ` +
+            `--cap-drop=ALL ` +
+            `--user 1000:1000 ` +
+            `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
+            `--memory="256m" ` +
+            `--cpus="0.5" ` +
+            `--workdir /workspace ` +
+            `${this.baseImage} tail -f /dev/null`;
+
+        const runResult = await this._execCmd(dockerRunCmd);
+
+        if (!runResult.success) {
+            console.log(`⚠️ Docker OSS container launch failed: ${runResult.error}. Cascading to Mock Sandbox.`);
+            this.activeContainers.add(containerName);
+            return { containerName, hostPath: targetHostPath, isMock: true };
+        }
+
+        console.log(`🚀 Provisioned isolated OSS Container: [${containerName}] -> Mounted: ${targetHostPath}`);
+        this.activeContainers.add(containerName);
+        return { containerName, hostPath: targetHostPath, isMock: false };
+    }
+
+    /**
+     * Executes open-source code inside its dedicated container sandbox.
+     */
+    async executeOssCode(moduleName, code, hostPath) {
+        const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
+        const containerName = `oss_container_${cleanModuleName}`;
+        const targetHostPath = resolve(hostPath);
+
+        const startTime = Date.now();
+
+        // Write code snippet to host volume
+        const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.js`;
+        const tempHostPath = join(targetHostPath, tempFileName);
+        
+        mkdirSync(targetHostPath, { recursive: true });
+        writeFileSync(tempHostPath, code, 'utf8');
+
+        const containerResult = await this.startOssContainer(moduleName, targetHostPath);
+
+        if (containerResult.isMock) {
+            // Mock sandbox fallback simulation
+            const mockLogs = [];
+            const mockErrors = [];
+            let mockSuccess = true;
+            try {
+                const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+                const runner = new AsyncFunction('console', `
+                    try {
+                        ${code}
+                    } catch (e) {
+                        throw e;
+                    }
+                `);
+                
+                const customConsole = {
+                    log: (...args) => mockLogs.push(args.join(' ')),
+                    error: (...args) => mockErrors.push(args.join(' '))
+                };
+
+                await runner(customConsole);
+            } catch (e) {
+                mockSuccess = false;
+                mockErrors.push(e.message);
+            }
+
+            try {
+                rmSync(tempHostPath, { force: true });
+            } catch (e) {}
+
+            return {
+                success: mockSuccess,
+                logs: mockLogs,
+                errors: mockErrors,
+                durationMs: Date.now() - startTime,
+                isMock: true
+            };
+        }
+
+        // Docker exec execution
+        const execCmd = `docker exec ${containerName} node /workspace/${tempFileName}`;
+        const execResult = await this._execCmd(execCmd);
+
+        try {
+            rmSync(tempHostPath, { force: true });
+        } catch (e) {}
+
+        const durationMs = Date.now() - startTime;
+
+        return {
+            success: execResult.success,
+            logs: execResult.stdout ? execResult.stdout.split('\n') : [],
+            errors: execResult.stderr ? execResult.stderr.split('\n') : [],
+            durationMs,
+            isMock: false
+        };
+    }
 }
