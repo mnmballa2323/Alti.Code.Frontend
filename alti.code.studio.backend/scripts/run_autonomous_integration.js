@@ -23,7 +23,8 @@ const TEST_SUITES = [
     { name: 'Workspace Sandbox Isolator', path: './scripts/test_workspace_isolator.js' },
     { name: 'AST Query Evaluator Engine', path: './scripts/test_ast_query_evaluator.js' },
     { name: 'Agent Quality Evaluator Engine', path: './scripts/test_agent_evaluator.js' },
-    { name: 'Page Browser Automation Engine', path: './scripts/test_browser.js' }
+    { name: 'Page Browser Automation Engine', path: './scripts/test_browser.js' },
+    { name: 'User-Isolated Docker Workspace', path: './scripts/test_docker_workspace.js' }
 ];
 
 async function executeSuite(suite) {

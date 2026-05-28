@@ -82,4 +82,37 @@ export class WorkspaceIsolator {
         }
         return readdirSync(this.baseSandboxDir);
     }
+
+    /**
+     * EXTENSION: Provision and start a dedicated user-level Docker container and workspace environment.
+     * @param {string} userId - Unique user account identifier
+     * @returns {Promise<object>} Launched container status details
+     */
+    async provisionDockerWorkspace(userId) {
+        const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
+        const manager = new DockerWorkspaceManager(this.baseSandboxDir);
+        return await manager.startUserContainer(userId);
+    }
+
+    /**
+     * EXTENSION: Execute a script in a user's dedicated, isolated Docker container environment.
+     * @param {string} userId - Unique user account identifier
+     * @param {string} code - The Javascript code block to execute
+     * @returns {Promise<object>} Container execution results
+     */
+    async executeInDockerWorkspace(userId, code) {
+        const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
+        const manager = new DockerWorkspaceManager(this.baseSandboxDir);
+        return await manager.executeCode(userId, code);
+    }
+
+    /**
+     * EXTENSION: Destroy and prune a user's isolated Docker container environment.
+     * @param {string} userId - Unique user account identifier
+     */
+    async destroyDockerWorkspace(userId) {
+        const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
+        const manager = new DockerWorkspaceManager(this.baseSandboxDir);
+        return await manager.stopUserContainer(userId);
+    }
 }
