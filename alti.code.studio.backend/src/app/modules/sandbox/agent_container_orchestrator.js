@@ -64,9 +64,13 @@ export class AgentContainerOrchestrator {
      * Dynamically launches an unprivileged, heavily-hardened container for a specific agent class.
      * @param {string} agentName - Name of the agent class (e.g., SwarmArchitect)
      * @param {string} sessionWorkspacePath - Host-level shared workspace directory path
+     * @param {object} [options] - Configurable resource constraints
+     * @param {string} [options.memory] - Custom memory limit (default: 256m)
+     * @param {string} [options.cpus] - Custom CPU limit (default: 0.5)
+     * @param {number} [options.pidsLimit] - Custom PID limit to prevent fork bombs (default: 100)
      * @returns {Promise<object>} Container details
      */
-    async startAgentContainer(agentName, sessionWorkspacePath) {
+    async startAgentContainer(agentName, sessionWorkspacePath, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
         const hostWorkspacePath = resolve(sessionWorkspacePath);
@@ -97,6 +101,11 @@ export class AgentContainerOrchestrator {
         // Ensure host workspace directory is accessible by the unprivileged Node user (UID 1000) inside the container
         await this._execCmd(`chmod -R 777 "${hostWorkspacePath}"`);
 
+        // Resolve options with robust, hardened defaults
+        const memory = options.memory || '256m';
+        const cpus = options.cpus || '0.5';
+        const pidsLimit = options.pidsLimit || 100;
+
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
         // - Strict Air-Gapped Network Isolation: --network none
         // - Root filesystem read-only: --read-only
@@ -105,7 +114,7 @@ export class AgentContainerOrchestrator {
         // - Run as default unprivileged Node user: --user 1000:1000
         // - Memory-bound non-executable tmp filesystem for system writes: --tmpfs /tmp:rw,noexec,nosuid,size=65536k
         // - Scoped host workspace directory mount: -v hostWorkspacePath:/workspace
-        // - Constraints: --memory=256m --cpus=0.5
+        // - Resource constraints and fork bomb / log flooding protections
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostWorkspacePath}":/workspace ` +
@@ -115,8 +124,11 @@ export class AgentContainerOrchestrator {
             `--cap-drop=ALL ` +
             `--user 1000:1000 ` +
             `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
-            `--memory="256m" ` +
-            `--cpus="0.5" ` +
+            `--pids-limit=${pidsLimit} ` +
+            `--log-opt max-size=10m ` +
+            `--log-opt max-file=3 ` +
+            `--memory="${memory}" ` +
+            `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
             `${this.baseImage} tail -f /dev/null`;
 
@@ -165,9 +177,10 @@ export class AgentContainerOrchestrator {
      * @param {object} context - Stateful shared session context variables
      * @param {Function} toolExecuteFn - The raw execution function
      * @param {string} sessionWorkspacePath - Host-level shared workspace directory path
+     * @param {object} [options] - Configurable resource constraints
      * @returns {Promise<any>} The returned result of the tool execution (mapping back handoffs)
      */
-    async executeAgentTool(agentName, toolName, args, context, toolExecuteFn, sessionWorkspacePath) {
+    async executeAgentTool(agentName, toolName, args, context, toolExecuteFn, sessionWorkspacePath, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
         const hostWorkspacePath = resolve(sessionWorkspacePath);
@@ -175,7 +188,7 @@ export class AgentContainerOrchestrator {
         const startTime = Date.now();
 
         // 1. Start the agent's container (if not already running)
-        const containerResult = await this.startAgentContainer(agentName, hostWorkspacePath);
+        const containerResult = await this.startAgentContainer(agentName, hostWorkspacePath, options);
 
         // 2. Serialize tool execution function, arguments, and context into a temporary JS file inside the shared workspace
         const tempFileName = `temp_tool_${cleanAgentName}_${Math.random().toString(36).substring(2, 9)}.js`;

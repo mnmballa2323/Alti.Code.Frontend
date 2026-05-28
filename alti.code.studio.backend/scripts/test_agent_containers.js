@@ -111,9 +111,35 @@ async function runTest() {
     assert.ok(sandboxResult.logs.some(log => log.includes('Sandbox Execution successfully')));
     console.log('✅ General sandbox execution containerized successfully.');
 
-    // 5. Clean Teardown of All Agent and OSS Containers
+    // 5. Custom Resource Scaling and PID Limits Verification
+    console.log('\n🏃 Test 5.5: Executing tool inside SwarmArchitect container with custom scaling and PID constraints...');
+    const archCustomExec = await orchestrator.executeAgentTool(
+        'SwarmArchitectCustom',
+        'custom_design_system',
+        {},
+        {},
+        async () => {
+            const fs = await import('fs');
+            fs.writeFileSync('/workspace/custom_spec.txt', 'Scaled Spec with PID constraints', 'utf8');
+            return "Custom resource scaling validated successfully!";
+        },
+        sessionWs.path,
+        {
+            memory: '512m',
+            cpus: '1.0',
+            pidsLimit: 120
+        }
+    );
+    console.log('Architect Custom Resource Scaling Tool Output:', JSON.stringify(archCustomExec, null, 2));
+    const customSpecPath = join(sessionWs.path, 'custom_spec.txt');
+    assert.ok(existsSync(customSpecPath));
+    assert.equal(readFileSync(customSpecPath, 'utf8'), 'Scaled Spec with PID constraints');
+    console.log('✅ Custom scaling and PID limits successfully applied and verified.');
+
+    // 6. Clean Teardown of All Agent and OSS Containers
     console.log('\n🏃 Test 6: Stopping and tearing down all multi-agent containers...');
     await orchestrator.stopAgentContainer('SwarmArchitect');
+    await orchestrator.stopAgentContainer('SwarmArchitectCustom');
     await orchestrator.stopAgentContainer('SwarmTddCoder');
     await manager.stopUserContainer('andrej_karpathy_skills');
     await manager.stopUserContainer('generic'); // Cleanup generic sandbox container

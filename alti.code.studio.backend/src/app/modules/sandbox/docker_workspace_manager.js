@@ -74,9 +74,13 @@ export class DockerWorkspaceManager {
     /**
      * Dynamically launches a secure, resource-constrained container for the user.
      * @param {string} userId - Target user identifier
+     * @param {object} [options] - Configurable resource constraints
+     * @param {string} [options.memory] - Custom memory limit (default: 256m)
+     * @param {string} [options.cpus] - Custom CPU limit (default: 0.5)
+     * @param {number} [options.pidsLimit] - Custom PID limit to prevent fork bombs (default: 50)
      * @returns {Promise<object>} Container details (containerName, hostPath, isMock)
      */
-    async startUserContainer(userId) {
+    async startUserContainer(userId, options = {}) {
         const cleanUserId = userId.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `user_sandbox_${cleanUserId}`;
         const hostPath = this.provisionUserWorkspace(userId);
@@ -108,6 +112,11 @@ export class DockerWorkspaceManager {
         // Ensure host workspace directory is accessible by the unprivileged Node user (UID 1000) inside the container
         await this._execCmd(`chmod -R 777 "${hostPath}"`);
 
+        // Resolve options with robust, hardened defaults
+        const memory = options.memory || '256m';
+        const cpus = options.cpus || '0.5';
+        const pidsLimit = options.pidsLimit || 50;
+
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
         // - Strict Air-Gapped Network Isolation: --network none
         // - Root filesystem read-only: --read-only
@@ -116,7 +125,7 @@ export class DockerWorkspaceManager {
         // - Run as default unprivileged Node user: --user 1000:1000
         // - Memory-bound non-executable tmp filesystem for system writes: --tmpfs /tmp:rw,noexec,nosuid,size=65536k
         // - Scoped host workspace directory mount: -v hostPath:/workspace
-        // - Constraints: --memory=256m --cpus=0.5
+        // - Resource constraints and fork bomb / log flooding protections
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostPath}":/workspace ` +
@@ -126,8 +135,11 @@ export class DockerWorkspaceManager {
             `--cap-drop=ALL ` +
             `--user 1000:1000 ` +
             `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
-            `--memory="256m" ` +
-            `--cpus="0.5" ` +
+            `--pids-limit=${pidsLimit} ` +
+            `--log-opt max-size=10m ` +
+            `--log-opt max-file=3 ` +
+            `--memory="${memory}" ` +
+            `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
             `${this.baseImage} tail -f /dev/null`;
 
@@ -199,7 +211,7 @@ export class DockerWorkspaceManager {
     /**
      * Securely executes JavaScript or shell code inside the user's dedicated environment.
      */
-    async executeCode(userId, code) {
+    async executeCode(userId, code, options = {}) {
         const cleanUserId = userId.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `user_sandbox_${cleanUserId}`;
         const hostPath = this.provisionUserWorkspace(userId);
@@ -210,7 +222,7 @@ export class DockerWorkspaceManager {
         const tempFileName = `temp_exec_${Math.random().toString(36).substring(2, 9)}.js`;
         this.safeWriteFile(userId, tempFileName, code);
 
-        const containerResult = await this.startUserContainer(userId);
+        const containerResult = await this.startUserContainer(userId, options);
 
         if (containerResult.isMock) {
             // High-fidelity Mock execution simulation using sandboxed evaluation
@@ -277,8 +289,12 @@ export class DockerWorkspaceManager {
      * Spawns a dedicated, unprivileged, heavily hardened container for an open-source module.
      * @param {string} moduleName - Name of the open-source module
      * @param {string} hostPath - Folder path of the open-source code on the host
+     * @param {object} [options] - Configurable resource constraints
+     * @param {string} [options.memory] - Custom memory limit (default: 256m)
+     * @param {string} [options.cpus] - Custom CPU limit (default: 0.5)
+     * @param {number} [options.pidsLimit] - Custom PID limit (default: 50)
      */
-    async startOssContainer(moduleName, hostPath) {
+    async startOssContainer(moduleName, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `oss_container_${cleanModuleName}`;
         const targetHostPath = resolve(hostPath);
@@ -303,6 +319,11 @@ export class DockerWorkspaceManager {
         // Give unprivileged user permissions
         await this._execCmd(`chmod -R 777 "${targetHostPath}"`);
 
+        // Resolve options with robust, hardened defaults
+        const memory = options.memory || '256m';
+        const cpus = options.cpus || '0.5';
+        const pidsLimit = options.pidsLimit || 50;
+
         // Launch isolated OSS container
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
@@ -313,8 +334,11 @@ export class DockerWorkspaceManager {
             `--cap-drop=ALL ` +
             `--user 1000:1000 ` +
             `--tmpfs /tmp:rw,noexec,nosuid,size=65536k ` +
-            `--memory="256m" ` +
-            `--cpus="0.5" ` +
+            `--pids-limit=${pidsLimit} ` +
+            `--log-opt max-size=10m ` +
+            `--log-opt max-file=3 ` +
+            `--memory="${memory}" ` +
+            `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
             `${this.baseImage} tail -f /dev/null`;
 
@@ -334,7 +358,7 @@ export class DockerWorkspaceManager {
     /**
      * Executes open-source code inside its dedicated container sandbox.
      */
-    async executeOssCode(moduleName, code, hostPath) {
+    async executeOssCode(moduleName, code, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `oss_container_${cleanModuleName}`;
         const targetHostPath = resolve(hostPath);
@@ -348,7 +372,7 @@ export class DockerWorkspaceManager {
         mkdirSync(targetHostPath, { recursive: true });
         writeFileSync(tempHostPath, code, 'utf8');
 
-        const containerResult = await this.startOssContainer(moduleName, targetHostPath);
+        const containerResult = await this.startOssContainer(moduleName, targetHostPath, options);
 
         if (containerResult.isMock) {
             // Mock sandbox fallback simulation
