@@ -724,4 +724,254 @@ export const SAAS_MOCKS = [
     slug: "mcp_ntegrals_10x",
     icon: "solar:tuning-bold-duotone",
   },
+  {
+    name: "GitHub CLI Tools",
+    slug: "mcp_gh_cli",
+    icon: "mdi:github",
+  },
+  {
+    name: "Claude Engineer Suite",
+    slug: "mcp_claude_engineer",
+    icon: "solar:cpu-bold-duotone",
+  },
+  {
+    name: "Cursor Editor Controller",
+    slug: "mcp_cursor_editor",
+    icon: "solar:code-square-bold-duotone",
+  },
+  {
+    name: "Zed Editor Workspaces",
+    slug: "mcp_zed_workspaces",
+    icon: "solar:window-frame-bold-duotone",
+  },
+  {
+    name: "VS Code Extensions Hub",
+    slug: "mcp_vscode_hub",
+    icon: "logos:visual-studio-code",
+  },
+  {
+    name: "NeoVim LSP Integration",
+    slug: "mcp_neovim_lsp",
+    icon: "logos:neovim",
+  },
+  {
+    name: "JupyterLite Local Sandbox",
+    slug: "mcp_jupyterlite",
+    icon: "logos:jupyter",
+  },
+  {
+    name: "Python Poetry Manager",
+    slug: "mcp_python_poetry",
+    icon: "logos:poetry",
+  },
+  {
+    name: "Rust Cargo Package Tool",
+    slug: "mcp_rust_cargo",
+    icon: "logos:rust",
+  },
+  {
+    name: "Go Compiler & Toolchain",
+    slug: "mcp_go_toolchain",
+    icon: "logos:go",
+  },
+  {
+    name: "Bun High-Speed Runtime",
+    slug: "mcp_bun_runtime",
+    icon: "logos:bun",
+  },
+  {
+    name: "Deno Secure Runtime",
+    slug: "mcp_deno_runtime",
+    icon: "logos:deno",
+  },
+  {
+    name: "Localhost Port Forwarder",
+    slug: "mcp_port_forwarding",
+    icon: "solar:routing-bold-duotone",
+  },
+  {
+    name: "Ngrok Secure Tunneling",
+    slug: "mcp_ngrok",
+    icon: "logos:ngrok",
+  },
+  {
+    name: "LocalStack AWS Emulator",
+    slug: "mcp_localstack",
+    icon: "logos:localstack",
+  },
+  {
+    name: "MinIO S3 Compatible Object Store",
+    slug: "mcp_minio",
+    icon: "logos:minio",
+  },
+  {
+    name: "Supabase Local CLI",
+    slug: "mcp_supabase_cli",
+    icon: "logos:supabase-icon",
+  },
+  {
+    name: "Prisma ORM Client",
+    slug: "mcp_prisma_orm",
+    icon: "logos:prisma",
+  },
+  {
+    name: "Drizzle ORM Auditor",
+    slug: "mcp_drizzle_orm",
+    icon: "solar:database-bold-duotone",
+  },
+  {
+    name: "Hasura GraphQL Engine",
+    slug: "mcp_hasura_graphql",
+    icon: "logos:hasura",
+  },
+  {
+    name: "Apollo GraphQL Server",
+    slug: "mcp_apollo_graphql",
+    icon: "logos:apollostack",
+  },
+  {
+    name: "TailwindCSS Compiler JIT",
+    slug: "mcp_tailwindcss",
+    icon: "logos:tailwindcss-icon",
+  },
+  {
+    name: "Storybook Components Auditor",
+    slug: "mcp_storybook",
+    icon: "logos:storybook-icon",
+  },
+  {
+    name: "ESLint Quality Linter",
+    slug: "mcp_eslint",
+    icon: "logos:eslint",
+  },
+  {
+    name: "Prettier Code Formatter",
+    slug: "mcp_prettier",
+    icon: "logos:prettier",
+  },
+  {
+    name: "Playwright Trace Viewer",
+    slug: "mcp_playwright_trace",
+    icon: "logos:playwright",
+  },
+  {
+    name: "Axe Core Accessibility Auditor",
+    slug: "mcp_axe_accessibility",
+    icon: "solar:star-ring-bold-duotone",
+  },
+  {
+    name: "Lighthouse Performance Auditor",
+    slug: "mcp_lighthouse",
+    icon: "logos:lighthouse",
+  },
+  {
+    name: "Google PageSpeed Insights",
+    slug: "mcp_pagespeed_insights",
+    icon: "logos:google",
+  },
+  {
+    name: "Semgrep Static Code Analyzer",
+    slug: "mcp_semgrep",
+    icon: "solar:shield-bold-duotone",
+  },
+  {
+    name: "Trivy Container Scanner",
+    slug: "mcp_trivy",
+    icon: "solar:shield-up-bold-duotone",
+  },
+  {
+    name: "OWASP ZAP Pen-Tester",
+    slug: "mcp_owasp_zap",
+    icon: "solar:shield-cross-bold-duotone",
+  },
+  {
+    name: "OpenID Connect (OIDC) Identity",
+    slug: "mcp_oidc",
+    icon: "logos:openid-icon",
+  },
+  {
+    name: "Stripe Developer Sandbox",
+    slug: "mcp_stripe_dev",
+    icon: "logos:stripe",
+  },
+  {
+    name: "Resend Transactional Email",
+    slug: "mcp_resend",
+    icon: "solar:letter-opened-bold-duotone",
+  },
+  {
+    name: "Twilio Voice & SMS Developer API",
+    slug: "mcp_twilio",
+    icon: "logos:twilio",
+  },
+  {
+    name: "Algolia Search Engine Indexer",
+    slug: "mcp_algolia",
+    icon: "logos:algolia",
+  },
+  {
+    name: "Typesense Instant Search",
+    slug: "mcp_typesense",
+    icon: "solar:magnifer-zoom-in-bold-duotone",
+  },
+  {
+    name: "Meilisearch Developer Engine",
+    slug: "mcp_meilisearch",
+    icon: "solar:magnifer-zoom-out-bold-duotone",
+  },
+  {
+    name: "Hugging Face Inference API",
+    slug: "mcp_huggingface_inference",
+    icon: "logos:huggingface",
+  },
+  {
+    name: "Replicate Model Runner Engine",
+    slug: "mcp_replicate_runner",
+    icon: "solar:play-bold-duotone",
+  },
+  {
+    name: "Groq High-Speed Llama Engine",
+    slug: "mcp_groq_llama",
+    icon: "solar:bolt-bold-duotone",
+  },
+  {
+    name: "Together AI Serverless Runner",
+    slug: "mcp_together_ai",
+    icon: "solar:cloud-bold-duotone",
+  },
+  {
+    name: "OpenRouter LLM Gateway",
+    slug: "mcp_openrouter",
+    icon: "solar:share-circle-bold-duotone",
+  },
+  {
+    name: "LM Studio Local LLM",
+    slug: "mcp_lm_studio",
+    icon: "solar:cpu-bold-duotone",
+  },
+  {
+    name: "Local Llama.cpp Endpoint",
+    slug: "mcp_llama_cpp",
+    icon: "solar:server-bold-duotone",
+  },
+  {
+    name: "FastAPI Route Builder",
+    slug: "mcp_fastapi",
+    icon: "logos:fastapi-icon",
+  },
+  {
+    name: "Django Admin Panel Builder",
+    slug: "mcp_django",
+    icon: "logos:django-icon",
+  },
+  {
+    name: "Spring Boot Controller",
+    slug: "mcp_springboot",
+    icon: "logos:spring-icon",
+  },
+  {
+    name: "Next.js Router Optimizer",
+    slug: "mcp_nextjs",
+    icon: "logos:nextjs-icon",
+  },
 ];
