@@ -1,22 +1,22 @@
 export const SAAS_MOCKS = [
-  // 1. Developer Platforms & Git
+  // 1. Developer Platforms & Version Control
   {
     name: "GitHub",
-    slug: "github",
+    slug: "mcp_github",
     icon: "mdi:github",
   },
   {
     name: "GitLab",
-    slug: "gitlab",
+    slug: "mcp_gitlab",
     icon: "logos:gitlab",
   },
   {
     name: "Bitbucket",
-    slug: "bitbucket",
+    slug: "mcp_bitbucket",
     icon: "logos:bitbucket-icon",
   },
   {
-    name: "Git",
+    name: "Git reference",
     slug: "mcp_git",
     icon: "logos:git-icon",
   },
@@ -25,85 +25,33 @@ export const SAAS_MOCKS = [
     slug: "mcp_filesystem",
     icon: "solar:folder-2-linear",
   },
-
-  // 2. Cloud & Infrastructure Providers
   {
-    name: "AWS EC2",
-    slug: "mcp_aws_ec2",
-    icon: "logos:aws",
+    name: "Gitea",
+    slug: "mcp_gitea",
+    icon: "logos:gitea",
   },
   {
-    name: "AWS Lambda",
-    slug: "mcp_aws_lambda",
-    icon: "logos:aws-lambda",
+    name: "Sourcegraph",
+    slug: "mcp_sourcegraph",
+    icon: "logos:sourcegraph",
   },
   {
-    name: "AWS S3",
-    slug: "mcp_aws_s3",
-    icon: "logos:aws-s3",
+    name: "Phabricator",
+    slug: "mcp_phabricator",
+    icon: "solar:code-square-bold-duotone",
   },
   {
-    name: "Azure Virtual Machines",
-    slug: "mcp_azure_vm",
-    icon: "logos:azure",
+    name: "Gerrit",
+    slug: "mcp_gerrit",
+    icon: "logos:gerrit",
   },
   {
-    name: "Azure Blob Storage",
-    slug: "mcp_azure_blob",
-    icon: "logos:azure-icon",
-  },
-  {
-    name: "Google Cloud Spanner",
-    slug: "mcp_toolbox_spanner",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud AlloyDB",
-    slug: "mcp_toolbox_alloydb",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud SQL",
-    slug: "mcp_toolbox_cloudsql",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud Dataproc",
-    slug: "mcp_toolbox_dataproc",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google BigQuery",
-    slug: "mcp_toolbox_bigquery",
-    icon: "logos:google-bigquery",
-  },
-  {
-    name: "Vercel",
-    slug: "vercel",
-    icon: "logos:vercel-icon",
-  },
-  {
-    name: "Netlify",
-    slug: "netlify",
-    icon: "logos:netlify-icon",
-  },
-  {
-    name: "Heroku",
-    slug: "heroku",
-    icon: "logos:heroku-icon",
-  },
-  {
-    name: "Docker",
-    slug: "docker",
-    icon: "logos:docker-icon",
-  },
-  {
-    name: "Kubernetes",
-    slug: "kubernetes",
-    icon: "logos:kubernetes",
+    name: "Subversion SVN",
+    slug: "mcp_svn",
+    icon: "logos:subversion",
   },
 
-  // 3. Databases & Data Platforms
+  // 2. Databases, Cache & Storage
   {
     name: "PostgreSQL",
     slug: "mcp_postgresql",
@@ -120,19 +68,29 @@ export const SAAS_MOCKS = [
     icon: "logos:sqlite",
   },
   {
-    name: "Supabase",
-    slug: "supabase",
-    icon: "logos:supabase-icon",
+    name: "Redis",
+    slug: "mcp_redis",
+    icon: "logos:redis",
   },
   {
     name: "MongoDB",
-    slug: "mongodb",
+    slug: "mcp_mongodb",
     icon: "logos:mongodb-icon",
   },
   {
-    name: "Redis",
-    slug: "redis",
-    icon: "logos:redis",
+    name: "Supabase",
+    slug: "mcp_supabase",
+    icon: "logos:supabase-icon",
+  },
+  {
+    name: "Neon DB",
+    slug: "mcp_neon",
+    icon: "logos:neon-icon",
+  },
+  {
+    name: "DuckDB",
+    slug: "mcp_duckdb",
+    icon: "logos:duckdb",
   },
   {
     name: "CockroachDB",
@@ -159,27 +117,226 @@ export const SAAS_MOCKS = [
     slug: "mcp_toolbox_dgraph",
     icon: "logos:dgraph",
   },
+  {
+    name: "Google Cloud Spanner",
+    slug: "mcp_toolbox_spanner",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Google Cloud AlloyDB",
+    slug: "mcp_toolbox_alloydb",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Google BigQuery",
+    slug: "mcp_toolbox_bigquery",
+    icon: "logos:google-bigquery",
+  },
+  {
+    name: "Google Bigtable",
+    slug: "mcp_toolbox_bigtable",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Amazon DynamoDB",
+    slug: "mcp_aws_dynamodb",
+    icon: "logos:aws-dynamodb",
+  },
+  {
+    name: "CouchDB",
+    slug: "mcp_couchdb",
+    icon: "logos:couchdb-icon",
+  },
+  {
+    name: "MariaDB",
+    slug: "mcp_toolbox_mariadb",
+    icon: "logos:mariadb-icon",
+  },
 
-  // 4. Monitoring, Logs & Security
+  // 3. Cloud & Hosting Providers
+  {
+    name: "AWS EC2",
+    slug: "mcp_aws_ec2",
+    icon: "logos:aws",
+  },
+  {
+    name: "AWS Lambda",
+    slug: "mcp_aws_lambda",
+    icon: "logos:aws-lambda",
+  },
+  {
+    name: "AWS S3",
+    slug: "mcp_aws_s3",
+    icon: "logos:aws-s3",
+  },
+  {
+    name: "Azure Virtual Machines",
+    slug: "mcp_azure_vm",
+    icon: "logos:azure",
+  },
+  {
+    name: "Azure Blob Storage",
+    slug: "mcp_azure_blob",
+    icon: "logos:azure-icon",
+  },
+  {
+    name: "Google Cloud SQL",
+    slug: "mcp_toolbox_cloudsql",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Google Cloud Dataproc",
+    slug: "mcp_toolbox_dataproc",
+    icon: "logos:google-cloud",
+  },
+  {
+    name: "Vercel",
+    slug: "mcp_vercel",
+    icon: "logos:vercel-icon",
+  },
+  {
+    name: "Netlify",
+    slug: "mcp_netlify",
+    icon: "logos:netlify-icon",
+  },
+  {
+    name: "Heroku",
+    slug: "mcp_heroku",
+    icon: "logos:heroku-icon",
+  },
+  {
+    name: "Render",
+    slug: "mcp_render",
+    icon: "solar:server-path-bold-duotone",
+  },
+  {
+    name: "DigitalOcean",
+    slug: "mcp_digitalocean",
+    icon: "logos:digitalocean-icon",
+  },
+  {
+    name: "Cloudflare",
+    slug: "mcp_cloudflare",
+    icon: "logos:cloudflare",
+  },
+  {
+    name: "Linode",
+    slug: "mcp_linode",
+    icon: "logos:linode",
+  },
+  {
+    name: "Fly.io",
+    slug: "mcp_flyio",
+    icon: "logos:fly",
+  },
+
+  // 4. DevOps, CI/CD & Infrastructure
+  {
+    name: "Docker",
+    slug: "mcp_docker",
+    icon: "logos:docker-icon",
+  },
+  {
+    name: "Kubernetes",
+    slug: "mcp_kubernetes",
+    icon: "logos:kubernetes",
+  },
+  {
+    name: "Jenkins",
+    slug: "mcp_jenkins",
+    icon: "logos:jenkins",
+  },
+  {
+    name: "CircleCI",
+    slug: "mcp_circleci",
+    icon: "logos:circleci",
+  },
+  {
+    name: "TravisCI",
+    slug: "mcp_travisci",
+    icon: "logos:travis-ci",
+  },
+  {
+    name: "GitHub Actions",
+    slug: "mcp_github_actions",
+    icon: "logos:github-actions",
+  },
+  {
+    name: "GitLab CI/CD",
+    slug: "mcp_gitlab_ci",
+    icon: "logos:gitlab",
+  },
+  {
+    name: "ArgoCD",
+    slug: "mcp_argocd",
+    icon: "logos:argo",
+  },
+  {
+    name: "Terraform",
+    slug: "mcp_terraform",
+    icon: "logos:terraform-icon",
+  },
+  {
+    name: "Ansible",
+    slug: "mcp_ansible",
+    icon: "logos:ansible",
+  },
+  {
+    name: "Nomad HashiCorp",
+    slug: "mcp_nomad",
+    icon: "logos:nomad",
+  },
+  {
+    name: "Prometheus",
+    slug: "mcp_prometheus",
+    icon: "logos:prometheus",
+  },
+
+  // 5. Monitoring, APM & Observability
   {
     name: "Sentry",
-    slug: "sentry",
+    slug: "mcp_sentry",
     icon: "logos:sentry-icon",
   },
   {
     name: "Datadog",
-    slug: "datadog",
+    slug: "mcp_datadog",
     icon: "logos:datadog",
   },
   {
     name: "Grafana",
-    slug: "grafana",
+    slug: "mcp_grafana",
     icon: "logos:grafana",
   },
   {
-    name: "Prometheus",
-    slug: "prometheus",
-    icon: "logos:prometheus",
+    name: "New Relic",
+    slug: "mcp_newrelic",
+    icon: "logos:newrelic",
+  },
+  {
+    name: "Splunk",
+    slug: "mcp_splunk",
+    icon: "logos:splunk",
+  },
+  {
+    name: "Dynatrace",
+    slug: "mcp_dynatrace",
+    icon: "logos:dynatrace",
+  },
+  {
+    name: "ElasticSearch",
+    slug: "mcp_elasticsearch",
+    icon: "logos:elasticsearch",
+  },
+  {
+    name: "Logstash",
+    slug: "mcp_logstash",
+    icon: "logos:logstash",
+  },
+  {
+    name: "Kibana",
+    slug: "mcp_kibana",
+    icon: "logos:kibana",
   },
   {
     name: "Google Cloud Logging",
@@ -192,77 +349,134 @@ export const SAAS_MOCKS = [
     icon: "logos:google-cloud",
   },
   {
+    name: "OpenTelemetry",
+    slug: "mcp_opentelemetry",
+    icon: "logos:opentelemetry-icon",
+  },
+
+  // 6. AI Infrastructure & Vector Databases
+  {
+    name: "Pinecone",
+    slug: "mcp_pinecone",
+    icon: "logos:pinecone",
+  },
+  {
+    name: "Weaviate",
+    slug: "mcp_weaviate",
+    icon: "logos:weaviate",
+  },
+  {
+    name: "Qdrant",
+    slug: "mcp_qdrant",
+    icon: "logos:qdrant",
+  },
+  {
+    name: "Milvus",
+    slug: "mcp_milvus",
+    icon: "logos:milvus",
+  },
+  {
+    name: "ChromaDB",
+    slug: "mcp_chromadb",
+    icon: "solar:database-bold-duotone",
+  },
+  {
+    name: "Hugging Face",
+    slug: "mcp_huggingface",
+    icon: "logos:huggingface",
+  },
+  {
+    name: "Ollama Local AI",
+    slug: "mcp_ollama",
+    icon: "solar:cpu-bold-duotone",
+  },
+  {
+    name: "OpenAI Developer API",
+    slug: "mcp_openai",
+    icon: "logos:openai",
+  },
+  {
+    name: "Anthropic API",
+    slug: "mcp_anthropic",
+    icon: "logos:anthropic",
+  },
+  {
+    name: "LangChain",
+    slug: "mcp_langchain",
+    icon: "logos:langchain-icon",
+  },
+  {
+    name: "LlamaIndex",
+    slug: "mcp_llamaindex",
+    icon: "solar:document-bold-duotone",
+  },
+  {
+    name: "Gemini Developer API",
+    slug: "mcp_gemini",
+    icon: "logos:google-gemini",
+  },
+  {
+    name: "Vertex AI",
+    slug: "mcp_vertexai",
+    icon: "logos:google-cloud",
+  },
+
+  // 7. Security, Compliance & Identity
+  {
     name: "AbuseIPDB",
-    slug: "abuseipdb",
+    slug: "mcp_abuseipdb",
     icon: "logos:abuseipdb-icon",
   },
   {
     name: "Bitwarden",
-    slug: "bitwarden",
+    slug: "mcp_bitwarden",
     icon: "logos:bitwarden-icon",
   },
   {
     name: "1Password",
-    slug: "1password",
+    slug: "mcp_1password",
     icon: "logos:1password",
   },
-
-  // 5. Collaboration, Team & Communication
   {
-    name: "Slack",
-    slug: "slack",
-    icon: "logos:slack-icon",
+    name: "Snyk Security",
+    slug: "mcp_snyk",
+    icon: "logos:snyk",
   },
   {
-    name: "Discord",
-    slug: "discord",
-    icon: "logos:discord-icon",
+    name: "SonarQube Core",
+    slug: "mcp_sonarqube",
+    icon: "logos:sonarqube",
   },
   {
-    name: "Notion",
-    slug: "notion",
-    icon: "logos:notion-icon",
+    name: "Auth0 Security",
+    slug: "mcp_auth0",
+    icon: "logos:auth0-icon",
   },
   {
-    name: "Jira",
-    slug: "jira",
-    icon: "logos:jira",
+    name: "Keycloak IAM",
+    slug: "mcp_keycloak",
+    icon: "logos:keycloak",
   },
   {
-    name: "Linear",
-    slug: "linear",
-    icon: "logos:linear",
-  },
-  {
-    name: "Trello",
-    slug: "trello",
-    icon: "logos:trello",
-  },
-  {
-    name: "Zoom",
-    slug: "zoom",
-    icon: "logos:zoom-icon",
-  },
-  {
-    name: "Google Drive",
-    slug: "googledrive",
-    icon: "logos:google-drive",
-  },
-  {
-    name: "Google Sheets",
-    slug: "googlesheets",
-    icon: "logos:google-sheets",
+    name: "Okta Identity",
+    slug: "mcp_okta",
+    icon: "logos:okta-icon",
   },
 
-  // 6. Developer APIs & Testing Utilities
+  // 8. Developer Utilities, Testing & Collab
   {
-    name: "Puppeteer",
+    name: "Puppeteer Browser",
     slug: "mcp_puppeteer",
     icon: "logos:puppeteer",
   },
   {
-    name: "Postman",
-    slug: "postman",
+    name: "Playwright Browser",
+    slug: "mcp_playwright",
+    icon: "logos:playwright",
+  },
+  {
+    name: "Postman Client",
+    slug: "mcp_postman",
     icon: "logos:postman-icon",
   },
   {
@@ -281,48 +495,93 @@ export const SAAS_MOCKS = [
     icon: "solar:clock-circle-bold-duotone",
   },
   {
-    name: "Sequential Thinking",
-    slug: "mcp_sequential_thinking",
-    icon: "solar:ranking-bold-duotone",
-  },
-  {
     name: "Memory Server",
     slug: "mcp_memory",
     icon: "solar:cpu-bold-duotone",
   },
   {
-    name: "AWS Knowledge Base Retrieval",
-    slug: "mcp_aws_kb_retrieval",
-    icon: "logos:aws",
+    name: "Sequential Thinking",
+    slug: "mcp_sequential_thinking",
+    icon: "solar:ranking-bold-duotone",
   },
   {
-    name: "Google Drive (Official MCP)",
-    slug: "mcp_google_drive",
-    icon: "logos:google-drive",
+    name: "Cypress E2E Testing",
+    slug: "mcp_cypress",
+    icon: "logos:cypress-icon",
   },
   {
-    name: "Redis (Official MCP)",
-    slug: "mcp_redis",
-    icon: "logos:redis",
+    name: "Firecrawl Scraper",
+    slug: "mcp_firecrawl",
+    icon: "solar:fire-bold-duotone",
   },
   {
-    name: "Sentry (Official MCP)",
-    slug: "mcp_sentry",
-    icon: "logos:sentry-icon",
-  },
-  {
-    name: "Slack (Official MCP)",
+    name: "Slack Collaboration",
     slug: "mcp_slack",
     icon: "logos:slack-icon",
   },
   {
-    name: "GitHub (Official MCP)",
-    slug: "mcp_github",
-    icon: "mdi:github",
+    name: "Discord Bot Hub",
+    slug: "mcp_discord",
+    icon: "logos:discord-icon",
   },
   {
-    name: "GitLab (Official MCP)",
-    slug: "mcp_gitlab",
-    icon: "logos:gitlab",
+    name: "Zoom Meeting API",
+    slug: "mcp_zoom",
+    icon: "logos:zoom-icon",
+  },
+  {
+    name: "Microsoft Teams Collab",
+    slug: "mcp_teams",
+    icon: "logos:microsoft-teams",
+  },
+  {
+    name: "Notion Wiki",
+    slug: "mcp_notion",
+    icon: "logos:notion-icon",
+  },
+  {
+    name: "Jira Tasker",
+    slug: "mcp_jira",
+    icon: "logos:jira",
+  },
+  {
+    name: "Linear PM Tracker",
+    slug: "mcp_linear",
+    icon: "logos:linear",
+  },
+  {
+    name: "Trello Board Builder",
+    slug: "mcp_trello",
+    icon: "logos:trello",
+  },
+  {
+    name: "Google Drive Folder",
+    slug: "mcp_google_drive",
+    icon: "logos:google-drive",
+  },
+  {
+    name: "Google Sheets Data",
+    slug: "mcp_google_sheets",
+    icon: "logos:google-sheets",
+  },
+  {
+    name: "Google Calendar Sync",
+    slug: "mcp_google_calendar",
+    icon: "logos:google-calendar",
+  },
+  {
+    name: "Google Maps Nav",
+    slug: "mcp_google_maps",
+    icon: "logos:google-maps",
+  },
+  {
+    name: "Gmail Reporting",
+    slug: "mcp_gmail",
+    icon: "logos:gmail",
+  },
+  {
+    name: "AWS KB Retrieval",
+    slug: "mcp_aws_kb_retrieval",
+    icon: "logos:aws",
   },
 ];
