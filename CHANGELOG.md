@@ -4,6 +4,25 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [39.37.127] - 2026-05-29 — Advanced Operating Systems, Kernels & Compilers Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Operating Systems, Kernels & Compilers Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/sys/`:
+    - **Linux Kernel & Device Driver Engineer**: Linux Kernel & Device Driver Engineer (`sys.kernel`) auditing kernel module sysfs parameters and configuring device driver tasklets/workqueues.
+    - **Compiler Optimization & LLVM Specialist**: Compiler Optimization & LLVM Specialist (`sys.compiler`) optimizing intermediate representation (LLVM IR) passes, compiler dead code elimination, and loop vectorizations.
+    - **Linker, Loader & Static Binary Analyzer**: Linker, Loader & Static Binary Analyzer (`sys.linker`) reviewing ELF/Mach-O binary headers, dynamic/static linker symbol resolutions, and memory offsets.
+    - **Garbage Collection & Memory Runtime Specialist**: Garbage Collection & Memory Runtime Specialist (`sys.garbage_collection`) optimizing generational mark-sweep algorithms, V8/JVM heap compaction limits, and memory arenas.
+    - **Assembler, Disassembler & Reverse Engineering Expert**: Assembler, Disassembler & Reverse Engineering Expert (`sys.assembler`) decoding x86-64/ARM assembly structures, Ghidra/IDA Pro disassemblers outputs, and register traces.
+    - **Virtualization Hypervisor & Xen/KVM Architect**: Virtualization Hypervisor & Xen/KVM Architect (`sys.hypervisor`) optimizing Xen/KVM kernel settings, hardware-assisted virtualization bounds, and PCI passthroughs.
+    - **POSIX System Programming & C Library Specialist**: POSIX System Programming & C Library Specialist (`sys.posix`) focusing on glibc/musl C library mappings, signal handling isolation, and POSIX threads/syscalls.
+    - **Debugger Engine & GDB/LLDB Interop Specialist**: Debugger Engine & GDB/LLDB Interop Specialist (`sys.debugger`) coordinating ptrace process attachments, software/hardware breakpoint injections, and DWARF/PDB parsing.
+    - **Binary Compactor & Packer Specialist**: Binary Compactor & Packer Specialist (`sys.packer`) optimizing runtime UPX executable compacting, code obfuscations, and decompression stubs.
+    - **Microkernel & Operating Systems Architect**: Microkernel & Operating Systems Architect (`sys.microkernel`) coordinating capability-based seL4 security, microkernel IPC channels, and page table mappings.
+- **Swarm Router Downstream Systems Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 150 to 159) mapping low-level systems programming, compiler, and OS kernel keywords to their respective specialists.
+- **Modular Systems Programming Test Suite & Verification**:
+  - Developed a dedicated integration test suite `system_programming.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 12 declarative integration test suites sweeps with zero regressions (240/240 tests passed cleanly).
 
 ## [39.37.126] - 2026-05-29 — Advanced Mobile, Edge Computing & Native Systems Swarm Deployment
 ### Added

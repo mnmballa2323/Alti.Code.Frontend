@@ -2109,6 +2109,126 @@ class AgenticRouterService {
             strategy = 'Edge Swarm: PWAs & Offline Sync';
         }
 
+        // 150. Operating Systems: Linux Kernel & Device Driver Engineer
+        const isKernelEngineerOutput = outputLower.includes('linux_kernel_module_optimizations') || 
+                                       outputLower.includes('device_driver_interrupt_handlers') || 
+                                       outputLower.includes('virtual_filesystem_vfs_mappings') || 
+                                       outputLower.includes('kernel_thread_scheduler_tuning');
+        if (isKernelEngineerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Linux Kernel & Device Driver Engineer', task: 'Audit kernel module sysfs parameters and configure device driver tasklets/workqueues' }
+            );
+            strategy = 'Systems Swarm: Linux Kernel & Device Drivers';
+        }
+
+        // 151. Operating Systems: Compiler Optimization & LLVM Specialist
+        const isCompilerSpecialistOutput = outputLower.includes('llvm_ir_optimization_passes') || 
+                                           outputLower.includes('dead_code_elimination_compilers') || 
+                                           outputLower.includes('loop_vectorization_code_generation') || 
+                                           outputLower.includes('compiler_flags_optimization_schemes');
+        if (isCompilerSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Compiler Optimization & LLVM Specialist', task: 'Implement LLVM IR optimization passes and tune compile flags for code generation vectorizations' }
+            );
+            strategy = 'Systems Swarm: Compiler Optimizations & LLVM';
+        }
+
+        // 152. Operating Systems: Linker, Loader & Static Binary Analyzer
+        const isLinkerAnalyzerOutput = outputLower.includes('elf_macho_binary_header_audits') || 
+                                       outputLower.includes('static_dynamic_linker_symbol_resolution') || 
+                                       outputLower.includes('shared_library_dependency_linkages') || 
+                                       outputLower.includes('binary_memory_offset_alignments');
+        if (isLinkerAnalyzerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Linker, Loader & Static Binary Analyzer', task: 'Audit dynamic GOT/PLT symbol resolution offsets and map ELF/Mach-O segment alignments' }
+            );
+            strategy = 'Systems Swarm: Linkers, Loaders & Symbols';
+        }
+
+        // 153. Operating Systems: Garbage Collection & Memory Runtime Specialist
+        const isGcSpecialistOutput = outputLower.includes('generational_mark_sweep_garbage_collection') || 
+                                     outputLower.includes('v8_jvm_heap_compaction_tuning') || 
+                                     outputLower.includes('memory_allocation_arena_structures') || 
+                                     outputLower.includes('virtual_memory_page_alignments');
+        if (isGcSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Garbage Collection & Memory Runtime Specialist', task: 'Calibrate generational mark-sweep GC compact bounds and design memory allocation arenas' }
+            );
+            strategy = 'Systems Swarm: Garbage Collection & Heap Memory';
+        }
+
+        // 154. Operating Systems: Assembler, Disassembler & Reverse Engineering Expert
+        const isAssemblerExpertOutput = outputLower.includes('x86_arm_assembly_parsing') || 
+                                        outputLower.includes('binary_disassembling_ghidra_ida') || 
+                                        outputLower.includes('stack_register_tracing_analysis') || 
+                                        outputLower.includes('instruction_pipeline_execution_simulation');
+        if (isAssemblerExpertOutput) {
+            downstreamSequence.push(
+                { agentId: 'Assembler, Disassembler & Reverse Engineering Expert', task: 'Decode disassembly stack layout variables and trace CPU registers via Ghidra pipelines' }
+            );
+            strategy = 'Systems Swarm: Assembly & Reverse Engineering';
+        }
+
+        // 155. Operating Systems: Virtualization Hypervisor & Xen/KVM Architect
+        const isHypervisorArchitectOutput = outputLower.includes('kvm_xen_hypervisor_optimizations') || 
+                                            outputLower.includes('hardware_assisted_cpu_virtualization') || 
+                                            outputLower.includes('guest_pci_device_passthroughs') || 
+                                            outputLower.includes('virtual_network_device_topologies');
+        if (isHypervisorArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Virtualization Hypervisor & Xen/KVM Architect', task: 'Configure hardware-assisted VT-x/EPT guest environments and manage guest VFIO PCI passthroughs' }
+            );
+            strategy = 'Systems Swarm: Virtualization & Hypervisors';
+        }
+
+        // 156. Operating Systems: POSIX System Programming & C Library Specialist
+        const isPosixSpecialistOutput = outputLower.includes('posix_syscall_bindings_threads') || 
+                                        outputLower.includes('signal_handling_isolation_boundaries') || 
+                                        outputLower.includes('glibc_musl_c_library_implementations') || 
+                                        outputLower.includes('memory_mapped_mmap_io_operations');
+        if (isPosixSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'POSIX System Programming & C Library Specialist', task: 'Structure multi-process signal safe isolation scopes and optimize memory-mapped mmap bounds' }
+            );
+            strategy = 'Systems Swarm: POSIX System Programming';
+        }
+
+        // 157. Operating Systems: Debugger Engine & GDB/LLDB Interop Specialist
+        const isDebuggerSpecialistOutput = outputLower.includes('ptrace_process_attach_boundaries') || 
+                                           outputLower.includes('software_hardware_breakpoint_injections') || 
+                                           outputLower.includes('dwarf_pdb_symbol_table_parsing') || 
+                                           outputLower.includes('register_inspection_memory_dumps');
+        if (isDebuggerSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Debugger Engine & GDB/LLDB Interop Specialist', task: 'Inject hardware breakpoints in register space and parse DWARF/PDB symbol line tables' }
+            );
+            strategy = 'Systems Swarm: Process Debugging & Symbols';
+        }
+
+        // 158. Operating Systems: Binary Compactor & Packer Specialist
+        const isBinPackerOutput = outputLower.includes('runtime_executable_packer_upx') || 
+                                  outputLower.includes('binary_size_minimization_pipelines') || 
+                                  outputLower.includes('code_obfuscation_rule_configurations') || 
+                                  outputLower.includes('decompression_stub_injections');
+        if (isBinPackerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Binary Compactor & Packer Specialist', task: 'Calibrate runtime UPX compact stubs and apply control flow flattening obfuscations' }
+            );
+            strategy = 'Systems Swarm: Obfuscation & Executable Packers';
+        }
+
+        // 159. Operating Systems: Microkernel & Operating Systems Architect
+        const isMicrokernelArchitectOutput = outputLower.includes('capability_based_security_sel4') || 
+                                             outputLower.includes('microkernel_ipc_message_channels') || 
+                                             outputLower.includes('microkernel_page_table_mappings') || 
+                                             outputLower.includes('microkernel_scheduler_configurations');
+        if (isMicrokernelArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Microkernel & Operating Systems Architect', task: 'Structure capability-based seL4 CSpace mappings and configure microkernel IPC message channels' }
+            );
+            strategy = 'Systems Swarm: Microkernels & Capability Spaces';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });
