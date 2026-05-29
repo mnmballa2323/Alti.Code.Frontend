@@ -1749,6 +1749,126 @@ class AgenticRouterService {
             strategy = 'Cybersecurity Swarm: SIEM & Immutable Audit Logs';
         }
 
+        // 120. Platform Engineering: Terraform State & IaC Optimizer
+        const isTerraformOptimizerOutput = outputLower.includes('terraform_state_lock_auditing') || 
+                                           outputLower.includes('module_dependency_graphing') || 
+                                           outputLower.includes('dynamic_block_optimization') || 
+                                           outputLower.includes('hcl_syntax_linting');
+        if (isTerraformOptimizerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Terraform State & IaC Optimizer', task: 'Audit state lock files and validate HCL module dependencies' }
+            );
+            strategy = 'Platform Engineering Swarm: Terraform & IaC';
+        }
+
+        // 121. Platform Engineering: Ansible Configuration & Playbook Specialist
+        const isAnsibleSpecialistOutput = outputLower.includes('play_execution_concurrency') || 
+                                          outputLower.includes('dynamic_inventory_mapping') || 
+                                          outputLower.includes('task_idempotent_validations') || 
+                                          outputLower.includes('custom_modules_python_mapping');
+        if (isAnsibleSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Ansible Configuration & Playbook Specialist', task: 'Optimize Ansible task execution concurrency and dynamic inventory groups' }
+            );
+            strategy = 'Platform Engineering Swarm: Ansible Configurations';
+        }
+
+        // 122. Platform Engineering: Helm Chart & Package Manager Architect
+        const isHelmArchitectOutput = outputLower.includes('values_overlays_structure') || 
+                                      outputLower.includes('dynamic_template_dependencies') || 
+                                      outputLower.includes('lifecycle_hook_boundaries') || 
+                                      outputLower.includes('chart_repo_packaging');
+        if (isHelmArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Helm Chart & Package Manager Architect', task: 'Evaluate Helm values schema overlays and dynamic template dependency trees' }
+            );
+            strategy = 'Platform Engineering Swarm: Helm & K8s Packaging';
+        }
+
+        // 123. Platform Engineering: Docker Engine & Host Virtualization Specialist
+        const isDockerSpecialistOutput = outputLower.includes('docker_socket_security_access') || 
+                                         outputLower.includes('multi_architecture_builder_setups') || 
+                                         outputLower.includes('host_storage_volume_isolations') || 
+                                         outputLower.includes('docker_daemon_configurations');
+        if (isDockerSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Docker Engine & Host Virtualization Specialist', task: 'Enforce container multi-architecture builds and Docker socket host security policies' }
+            );
+            strategy = 'Platform Engineering Swarm: Docker & Virtualization';
+        }
+
+        // 124. Platform Engineering: Consul Service Discovery & Key-Value Specialist
+        const isConsulSpecialistOutput = outputLower.includes('catalog_synchronization_periods') || 
+                                         outputLower.includes('dynamic_service_registries_health_tests') || 
+                                         outputLower.includes('raft_consensus_cluster_configs') || 
+                                         outputLower.includes('acl_security_token_systems');
+        if (isConsulSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Consul Service Discovery & Key-Value Specialist', task: 'Tune Consul service discovery synchronization periods and Raft consensus configuration states' }
+            );
+            strategy = 'Platform Engineering Swarm: Consul Discovery & KV';
+        }
+
+        // 125. Platform Engineering: Prometheus Telemetry & Alerting Specialist
+        const isPrometheusSpecialistOutput = outputLower.includes('metrics_scraping_intervals') || 
+                                             outputLower.includes('recording_rule_evaluations') || 
+                                             outputLower.includes('tsdb_storage_block_compactions') || 
+                                             outputLower.includes('alertmanager_configurations');
+        if (isPrometheusSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Prometheus Telemetry & Alerting Specialist', task: 'Calibrate metrics scraping timeouts and TSDB storage block compaction parameters' }
+            );
+            strategy = 'Platform Engineering Swarm: Prometheus Telemetry';
+        }
+
+        // 126. Platform Engineering: NGINX Reverse Proxy & HTTP Engine Specialist
+        const isNginxSpecialistOutput = outputLower.includes('server_proxy_blocks_configurations') || 
+                                        outputLower.includes('http_keepalive_buffers_tuning') || 
+                                        outputLower.includes('upstream_load_balancing_limits') || 
+                                        outputLower.includes('ssl_session_caching');
+        if (isNginxSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'NGINX Reverse Proxy & HTTP Engine Specialist', task: 'Tune HTTP keepalive session buffers and optimize reverse proxy upstream load balancing limits' }
+            );
+            strategy = 'Platform Engineering Swarm: NGINX Proxy & Reverse Web';
+        }
+
+        // 127. Platform Engineering: ArgoCD GitOps Git Sync Specialist
+        const isArgoCdSpecialistOutput = outputLower.includes('application_synchronization_queues') || 
+                                         outputLower.includes('directories_generation_trees') || 
+                                         outputLower.includes('target_synchronization_window_constraints') || 
+                                         outputLower.includes('applicationset_matrix_generators');
+        if (isArgoCdSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'ArgoCD GitOps Git Sync Specialist', task: 'Monitor ArgoCD dynamic target sync windows and map matrix applicationset definitions' }
+            );
+            strategy = 'Platform Engineering Swarm: ArgoCD GitOps';
+        }
+
+        // 128. Platform Engineering: Envoy Proxy & Service Mesh Specialist
+        const isEnvoySpecialistOutput = outputLower.includes('dynamic_cluster_discovery_xds') || 
+                                        outputLower.includes('circuit_breaking_filters') || 
+                                        outputLower.includes('trace_context_propagation') || 
+                                        outputLower.includes('custom_filters_wasm_injection');
+        if (isEnvoySpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Envoy Proxy & Service Mesh Specialist', task: 'Integrate dynamic cluster discovery EDS metrics and monitor Envoy circuit breaker filter status' }
+            );
+            strategy = 'Platform Engineering Swarm: Envoy Mesh & Sidecars';
+        }
+
+        // 129. Platform Engineering: Packer Machine Image & Template Specialist
+        const isPackerSpecialistOutput = outputLower.includes('vm_golden_image_builds') || 
+                                         outputLower.includes('shell_provisioning_sequences') || 
+                                         outputLower.includes('post_processor_pipelines') || 
+                                         outputLower.includes('parallel_build_optimizations');
+        if (isPackerSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Packer Machine Image & Template Specialist', task: 'Calibrate golden machine VM provisioning flows and orchestrate image compression post-processors' }
+            );
+            strategy = 'Platform Engineering Swarm: Packer Machine Images';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

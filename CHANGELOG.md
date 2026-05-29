@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.124] - 2026-05-29 — Advanced Infrastructure-as-Code & Platform Engineering Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Infrastructure-as-Code & Platform Engineering Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/platform/`:
+    - **Terraform State & IaC Optimizer**: Terraform State & IaC Optimizer (`platform.terraform`) optimizing state lock troubleshooting, HCL modules, and variable schemas.
+    - **Ansible Playbook Specialist**: Ansible Configuration & Playbook Specialist (`platform.ansible`) coordinating dynamic inventories, idempotent play validations, and task speed optimizations.
+    - **Helm Chart Package Architect**: Helm Chart & Package Manager Architect (`platform.helm`) designing Values.yaml overlays, hook dependencies, and release packaging rules.
+    - **Docker Engine Specialist**: Docker Engine & Host Virtualization Specialist (`platform.docker`) hardening Docker socket daemon access and multi-architecture builder Buildx cache mounts.
+    - **Consul Discovery Specialist**: Consul Service Discovery & Key-Value Specialist (`platform.consul`) mapping DNS service catalogs and Raft consensus replication limits.
+    - **Prometheus Telemetry Specialist**: Prometheus Telemetry & Alerting Specialist (`platform.prometheus`) calibrating metrics scrapers, PromQL alerts, and TSDB compact settings.
+    - **NGINX Reverse Proxy Specialist**: NGINX Reverse Proxy & HTTP Engine Specialist (`platform.nginx`) tuning HTTP keepalives, upstream balancer load weights, and SSL session caching.
+    - **ArgoCD GitOps Git Sync Specialist**: ArgoCD GitOps Git Sync Specialist (`platform.argocd`) managing reconciliation sync queues and ApplicationSet path matrices.
+    - **Envoy Mesh Sidecar Specialist**: Envoy Proxy & Service Mesh Specialist (`platform.envoy`) configuring dynamic cluster discovery (xDS) and trace propagation filters.
+    - **Packer Golden Image Specialist**: Packer Machine Image & Template Specialist (`platform.packer`) calibrating VM HCL2 template builds and cloud registry post-processors.
+- **Swarm Router Downstream Platform Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 120 to 129) mapping Platform/IaC GICS/domain keywords to their respective specialists.
+- **Modular Platform Test Suite & Verification**:
+  - Developed a dedicated integration test suite `platform.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 9 declarative integration test suites sweeps with zero regressions (180/180 tests passed cleanly).
+
 ## [39.37.123] - 2026-05-29 — Advanced Cybersecurity, DevSecOps & Defensive Auditing Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Cybersecurity, DevSecOps & Defensive Auditing Agents**:
