@@ -1509,6 +1509,126 @@ class AgenticRouterService {
             strategy = 'Advanced AI Swarm: Synthetic Data & Augmentation';
         }
 
+        // 100. Data Engineering: Apache Kafka & Event Stream Tuning Specialist
+        const isKafkaTunerOutput = outputLower.includes('kafka_partition_calibration') || 
+                                   outputLower.includes('consumer_lag_mitigation') || 
+                                   outputLower.includes('producer_idempotency_tuning') || 
+                                   outputLower.includes('schema_registry_evolution');
+        if (isKafkaTunerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Kafka & Event Stream Tuning Specialist', task: 'Troubleshoot consumer offset lag patterns and calibrate idempotent producers' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Kafka Streaming';
+        }
+
+        // 101. Data Engineering: Apache Spark & Large-Scale Batch Tuning Specialist
+        const isSparkOptimizerOutput = outputLower.includes('spark_shuffle_partition_optimization') || 
+                                       outputLower.includes('spark_memory_management_bounds') || 
+                                       outputLower.includes('disk_spill_mitigation') || 
+                                       outputLower.includes('dynamic_resource_allocation');
+        if (isSparkOptimizerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Spark & Large-Scale Batch Tuning Specialist', task: 'Tune AQE shuffle partition limits and optimize executor heap storage allocations' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Spark Optimization';
+        }
+
+        // 102. Data Engineering: Apache Flink & Real-Time Stream Processor
+        const isFlinkStreamOutput = outputLower.includes('stateful_stream_computations') || 
+                                    outputLower.includes('event_time_windowing') || 
+                                    outputLower.includes('watermarking_strategies') || 
+                                    outputLower.includes('exactly_once_checkpointing');
+        if (isFlinkStreamOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Flink & Real-Time Stream Processor', task: 'Configure RocksDB state backends and define watermarks for out-of-order streams' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Flink Streaming';
+        }
+
+        // 103. Data Engineering: Snowflake & Enterprise Data Warehouse Architect
+        const isSnowflakeDwhOutput = outputLower.includes('micro_partitioning_alignment') || 
+                                     outputLower.includes('dynamic_clustering_keys') || 
+                                     outputLower.includes('search_optimization_services') || 
+                                     outputLower.includes('zero_copy_cloning_layouts');
+        if (isSnowflakeDwhOutput) {
+            downstreamSequence.push(
+                { agentId: 'Snowflake & Enterprise Data Warehouse Architect', task: 'Design micro-partition pruning strategies and define auto-suspending warehouses' }
+            );
+            strategy = 'Data Engineering Swarm: Snowflake Data Warehousing';
+        }
+
+        // 104. Data Engineering: dbt (Data Build Tool) Analytics Engineer
+        const isDbtModelerOutput = outputLower.includes('incremental_materialization_strategies') || 
+                                   outputLower.includes('sql_cte_factoring') || 
+                                   outputLower.includes('jinja_macro_customizations') || 
+                                   outputLower.includes('source_freshness_validations');
+        if (isDbtModelerOutput) {
+            downstreamSequence.push(
+                { agentId: 'dbt (Data Build Tool) Analytics Engineer', task: 'Formulate incremental ref models unique keys and write data validation tests' }
+            );
+            strategy = 'Data Engineering Swarm: dbt Analytics Engineering';
+        }
+
+        // 105. Data Engineering: Apache Airflow & Workflow Conductor
+        const isAirflowGovernorOutput = outputLower.includes('dynamic_dag_generation') || 
+                                       outputLower.includes('taskflow_api_mappings') || 
+                                       outputLower.includes('external_task_sensors') || 
+                                       outputLower.includes('custom_sla_callbacks');
+        if (isAirflowGovernorOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Airflow & Workflow Conductor', task: 'Generate dynamic DAG structures and coordinate TaskFlow SLA callback triggers' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Airflow Orchestration';
+        }
+
+        // 106. Data Engineering: ClickHouse & Columnar OLAP Specialist
+        const isClickhouseOlapOutput = outputLower.includes('mergetree_engine_tuning') || 
+                                       outputLower.includes('skips_index_configurations') || 
+                                       outputLower.includes('materialized_views_opt') || 
+                                       outputLower.includes('distributed_olap_scaling');
+        if (isClickhouseOlapOutput) {
+            downstreamSequence.push(
+                { agentId: 'ClickHouse & Columnar OLAP Specialist', task: 'Configure CollapsingMergeTree indices and structure analytical materialized views' }
+            );
+            strategy = 'Data Engineering Swarm: ClickHouse Columnar OLAP';
+        }
+
+        // 107. Data Engineering: Apache Iceberg & Open Table Format Specialist
+        const isIcebergLakeOutput = outputLower.includes('acid_transactions_lakehouse') || 
+                                    outputLower.includes('hidden_partitioning_evolution') || 
+                                    outputLower.includes('time_travel_snapshot_limits') || 
+                                    outputLower.includes('metadata_file_compaction');
+        if (isIcebergLakeOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Iceberg & Open Table Format Specialist', task: 'Structure schema evolution maps and design dynamic compaction routines' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Iceberg Lakehouse';
+        }
+
+        // 108. Data Engineering: Data Lineage & Governance Officer
+        const isDataLineageOutput = outputLower.includes('metadata_scanning_maps') || 
+                                    outputLower.includes('column_level_lineage_tracking') || 
+                                    outputLower.includes('gdpr_ccpa_classifications') || 
+                                    outputLower.includes('openlineage_compliance');
+        if (isDataLineageOutput) {
+            downstreamSequence.push(
+                { agentId: 'Data Lineage & Governance Officer', task: 'Integrate OpenLineage collection hooks and detect sensitive PII fields' }
+            );
+            strategy = 'Data Engineering Swarm: Governance & Lineage';
+        }
+
+        // 109. Data Engineering: Apache Pulsar & Multi-Tenant Messaging Specialist
+        const isPulsarBrokerOutput = outputLower.includes('pulsar_multi_tenancy_namespaces') || 
+                                     outputLower.includes('pulsar_geo_replication') || 
+                                     outputLower.includes('tiered_storage_migration') || 
+                                     outputLower.includes('bookkeeper_ledger_tuning');
+        if (isPulsarBrokerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Pulsar & Multi-Tenant Messaging Specialist', task: 'Configure multi-cluster active-active geo-replication namespaces' }
+            );
+            strategy = 'Data Engineering Swarm: Apache Pulsar Messaging';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

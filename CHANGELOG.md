@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.122] - 2026-05-29 — Advanced Data Engineering & Stream Processing Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Data Engineering & Stream Processing Agents**:
+  - Structured and deployed 10 premium declarative agent definitions under the new directory `definitions/data/`:
+    - **Apache Kafka Specialist**: Apache Kafka & Event Stream Tuning Specialist (`data.kafka_tuner`) troubleshooting consumer offsets lag and calibrating idempotent producers.
+    - **Apache Spark Specialist**: Apache Spark & Large-Scale Batch Tuning Specialist (`data.spark_optimizer`) calibrating AQE shuffle partition limits and executor heap memory management.
+    - **Apache Flink Specialist**: Apache Flink & Real-Time Stream Processor (`data.flink_stream`) configuring RocksDB state backends and out-of-order stream watermarking.
+    - **Snowflake Architect**: Snowflake & Enterprise Data Warehouse Architect (`data.snowflake_dwh`) designing micro-partition pruning strategies and multi-cluster warehouse scaling.
+    - **dbt Analytics Engineer**: dbt (Data Build Tool) Analytics Engineer (`data.dbt_modeler`) configuring incremental models, CTE patterns, and source freshness test suites.
+    - **Apache Airflow Conductor**: Apache Airflow & Workflow Conductor (`data.airflow_governor`) generating dynamic Python DAGs and TaskFlow SLA callback triggers.
+    - **ClickHouse OLAP Specialist**: ClickHouse & Columnar OLAP Specialist (`data.clickhouse_olap`) tuning MergeTree parameter configurations and real-time materialized views.
+    - **Apache Iceberg Specialist**: Apache Iceberg & Open Table Format Specialist (`data.iceberg_lake`) structuring ACID transactional data lakehouses and metadata file compactions.
+    - **Data Lineage Officer**: Data Lineage & Governance Officer (`data.data_lineage`) scanning column-level OpenLineage metadata and classifying GDPR PII data.
+    - **Apache Pulsar Specialist**: Apache Pulsar & Multi-Tenant Messaging Specialist (`data.pulsar_broker`) configuring multi-tenant namespace scopes and geo-replication topologies.
+- **Swarm Router Downstream Data Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 100 to 109) mapping data-specific GICS/domain keywords to their respective specialists.
+- **Modular Data Engineering Test Suite & Verification**:
+  - Developed a dedicated integration test suite `data.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 7 declarative integration test suites sweeps with zero regressions (140/140 tests passed cleanly).
+
 ## [39.37.121] - 2026-05-29 — Advanced AI Engineering & LLMOps Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative AI Engineering & LLMOps Agents**:
