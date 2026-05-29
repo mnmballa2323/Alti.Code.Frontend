@@ -4,6 +4,27 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+## [39.37.128] - 2026-05-29 — Advanced Graphics, 3D Rendering & Game Engine Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Graphics, 3D Rendering & Game Engine Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/graphics/`:
+    - **WebGPU & WebGL Rendering Pipeline Engineer**: WebGPU & WebGL Rendering Pipeline Engineer (`graphics.webgpu`) optimizing GPU render passes, WGSL/GLSL shader compile, bind groups, and compute pipelines.
+    - **Ray Tracing & Global Illumination Specialist**: Ray Tracing & Global Illumination Specialist (`graphics.raytracing`) focusing on bounding volume hierarchies (BVH), ray-box intersections, and path tracing.
+    - **Creative Shader & Visual Effects Artist**: Creative Shader & Visual Effects Artist (`graphics.shader`) optimizing fragment/vertex shaders, noise functions, screenspace filters, and Raymarching.
+    - **Game Physics Engine & Rigid Body Dynamics Specialist**: Game Physics Engine & Rigid Body Dynamics Specialist (`graphics.physics`) focusing on collision detection (AABB/GJK), rigid body solvers, and Verlet integration.
+    - **Scene Graph & Entity Component System (ECS) Architect**: Scene Graph & Entity Component System (ECS) Architect (`graphics.scene_graph`) coordinating quadtree/octree spatial partitioning, transform matrices, and dynamic ECS layouts.
+    - **Video & Image Compression Codec Specialist**: Video & Image Compression Codec Specialist (`graphics.video_codec`) focusing on H.264/HEVC/AV1 quantization matrices, motion vector estimation, and entropy coding.
+    - **Spatial Audio & Interactive Acoustics Engineer**: Spatial Audio & Interactive Acoustics Engineer (`graphics.spatial_audio`) optimizing Web Audio API nodes, HRTF spatial panning, reverb convolutions, and Doppler effects.
+    - **AR/VR XR Runtime & Spatial Computing Specialist**: AR/VR XR Runtime & Spatial Computing Specialist (`graphics.ar_vr`) coordinating WebXR device APIs, pose estimation matrices, and lens distortion warp.
+    - **CAD Engine & Vector Graphics Specialist**: CAD Engine & Vector Graphics Specialist (`graphics.cad_vector`) focusing on Bezier/B-Spline curve subdivisions, SVG paths optimizations, and boolean clipping operations.
+    - **Texture Mapping & Materials Shader Specialist**: Texture Mapping & Materials Shader Specialist (`graphics.texture`) focusing on PBR (Physically Based Rendering) materials, normal/displacement maps, and texture compaction compression.
+- **Swarm Router Downstream Graphics Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 160 to 169) mapping Graphics, 3D rendering, spatial acoustics, physics, and game engine keywords to their respective specialists.
+- **Modular Graphics Programming Test Suite & Verification**:
+  - Developed a dedicated integration test suite `graphics_rendering.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 13 declarative integration test suites sweeps with zero regressions (260/260 tests passed cleanly).
+
 ## [39.37.127] - 2026-05-29 — Advanced Operating Systems, Kernels & Compilers Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Operating Systems, Kernels & Compilers Agents**:

@@ -2229,6 +2229,126 @@ class AgenticRouterService {
             strategy = 'Systems Swarm: Microkernels & Capability Spaces';
         }
 
+        // 160. Graphics: WebGPU & WebGL Rendering Pipeline Engineer
+        const isWebGpuPipelineOutput = outputLower.includes('webgpu_gpu_render_passes') || 
+                                       outputLower.includes('wgsl_glsl_shader_compile') || 
+                                       outputLower.includes('bind_groups_vertex_buffers') || 
+                                       outputLower.includes('gpu_compute_pipelines');
+        if (isWebGpuPipelineOutput) {
+            downstreamSequence.push(
+                { agentId: 'WebGPU & WebGL Rendering Pipeline Engineer', task: 'Compile WGSL rendering and compute pipelines and optimize bind group layouts' }
+            );
+            strategy = 'Graphics Swarm: WebGPU & GPU Pipelines';
+        }
+
+        // 161. Graphics: Ray Tracing & Global Illumination Specialist
+        const isRayTracingOutput = outputLower.includes('bounding_volume_hierarchies_bvh') || 
+                                   outputLower.includes('ray_box_intersection_algorithms') || 
+                                   outputLower.includes('path_tracing_global_illumination') || 
+                                   outputLower.includes('denoising_irradiance_caching');
+        if (isRayTracingOutput) {
+            downstreamSequence.push(
+                { agentId: 'Ray Tracing & Global Illumination Specialist', task: 'Traverse bounding volume hierarchies and optimize path tracing BRDF integrations' }
+            );
+            strategy = 'Graphics Swarm: Ray Tracing & Global Illumination';
+        }
+
+        // 162. Graphics: Creative Shader & Visual Effects Artist
+        const isShaderArtistOutput = outputLower.includes('fragment_vertex_shader_effects') || 
+                                     outputLower.includes('simplex_perlin_noise_functions') || 
+                                     outputLower.includes('post_processing_effects_filters') || 
+                                     outputLower.includes('raymarching_signed_distance_fields');
+        if (isShaderArtistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Creative Shader & Visual Effects Artist', task: 'Design screenspace post-processing filters and render screenspace SDF raymarching bounds' }
+            );
+            strategy = 'Graphics Swarm: Shaders & Visual Effects';
+        }
+
+        // 163. Graphics: Game Physics Engine & Rigid Body Dynamics Specialist
+        const isPhysicsEngineOutput = outputLower.includes('collision_detection_gjk_aabb') || 
+                                      outputLower.includes('rigid_body_impulse_solvers') || 
+                                      outputLower.includes('soft_body_cloth_simulations') || 
+                                      outputLower.includes('verlet_integration_dynamics');
+        if (isPhysicsEngineOutput) {
+            downstreamSequence.push(
+                { agentId: 'Game Physics Engine & Rigid Body Dynamics Specialist', task: 'Solve GJK collision impulses and calibrate mass-spring soft body structures' }
+            );
+            strategy = 'Graphics Swarm: Game Physics & Dynamics';
+        }
+
+        // 164. Graphics: Scene Graph & Entity Component System (ECS) Architect
+        const isSceneGraphOutput = outputLower.includes('quadtree_octree_spatial_partitioning') || 
+                                   outputLower.includes('scene_graph_frustum_culling') || 
+                                   outputLower.includes('entity_component_system_ecs_layouts') || 
+                                   outputLower.includes('transform_matrix_multiplications');
+        if (isSceneGraphOutput) {
+            downstreamSequence.push(
+                { agentId: 'Scene Graph & Entity Component System (ECS) Architect', task: 'Update ECS contiguous storage blocks and propagate local-to-world transform hierarchies' }
+            );
+            strategy = 'Graphics Swarm: ECS & Scene Graph Architecture';
+        }
+
+        // 165. Graphics: Video & Image Compression Codec Specialist
+        const isVideoCodecOutput = outputLower.includes('h264_hevc_av1_quantization') || 
+                                   outputLower.includes('motion_vector_estimation_encoding') || 
+                                   outputLower.includes('jpeg_png_decoder_optimizations') || 
+                                   outputLower.includes('macroblock_entropy_coding');
+        if (isVideoCodecOutput) {
+            downstreamSequence.push(
+                { agentId: 'Video & Image Compression Codec Specialist', task: 'Calibrate CABAC entropy bounds and optimize motion vector search matrices' }
+            );
+            strategy = 'Graphics Swarm: Codecs & Image Compression';
+        }
+
+        // 166. Graphics: Spatial Audio & Interactive Acoustics Engineer
+        const isSpatialAudioOutput = outputLower.includes('web_audio_api_node_connections') || 
+                                     outputLower.includes('hrtf_spatial_panning_filters') || 
+                                     outputLower.includes('acoustic_room_impulse_responses') || 
+                                     outputLower.includes('doppler_effect_pitch_shifting');
+        if (isSpatialAudioOutput) {
+            downstreamSequence.push(
+                { agentId: 'Spatial Audio & Interactive Acoustics Engineer', task: 'Structure AudioWorklet processor kernels and pan binaural listener vectors' }
+            );
+            strategy = 'Graphics Swarm: Spatial Audio & Acoustics';
+        }
+
+        // 167. Graphics: AR/VR XR Runtime & Spatial Computing Specialist
+        const isArVrSpecialistOutput = outputLower.includes('webxr_device_pose_estimation') || 
+                                       outputLower.includes('foveated_rendering_eye_tracking') || 
+                                       outputLower.includes('lens_distortion_warp_compensation') || 
+                                       outputLower.includes('spatial_controller_tracking_offsets');
+        if (isArVrSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'AR/VR XR Runtime & Spatial Computing Specialist', task: 'Map projection poses in immersive loops and compensate lens distortion warp offsets' }
+            );
+            strategy = 'Graphics Swarm: AR/VR & XR Runtimes';
+        }
+
+        // 168. Graphics: CAD Engine & Vector Graphics Specialist
+        const isCadVectorOutput = outputLower.includes('bezier_bspline_subdivision_curves') || 
+                                  outputLower.includes('svg_path_rendering_pipelines') || 
+                                  outputLower.includes('boolean_polygon_clipping_operations') || 
+                                  outputLower.includes('delaunay_ear_clipping_triangulation');
+        if (isCadVectorOutput) {
+            downstreamSequence.push(
+                { agentId: 'CAD Engine & Vector Graphics Specialist', task: 'Perform boolean clipping polygon splits and triangulate Delaunay mesh control splines' }
+            );
+            strategy = 'Graphics Swarm: CAD Engines & Vector Graphics';
+        }
+
+        // 169. Graphics: Texture Mapping & Materials Shader Specialist
+        const isTextureMaterialOutput = outputLower.includes('pbr_material_reflectance_rendering') || 
+                                        outputLower.includes('displacement_normal_bump_mapping') || 
+                                        outputLower.includes('mipmap_filtering_anisotropic_levels') || 
+                                        outputLower.includes('astc_etc2_texture_compaction');
+        if (isTextureMaterialOutput) {
+            downstreamSequence.push(
+                { agentId: 'Texture Mapping & Materials Shader Specialist', task: 'Construct PBR reflectance BRDF stages and allocate mipmap anisotropic filtering buffers' }
+            );
+            strategy = 'Graphics Swarm: Textures & Materials Shading';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });
