@@ -5,6 +5,24 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.114] - 2026-05-29 — Complete Suite of Twenty-Nine GCP Specialized Backend Agents & Swarm Router Integration
+### Added
+- **Ten More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Cloud Run Jobs & Scheduled Tasks Specialist** (`agent.gcp.run.jobs`): Specializes in job specifications, cron scheduling, retry policies, and cost-efficiency optimization.
+  - **GCP Cloud DNSSEC & Global Failover Specialist** (`agent.gcp.dns.failover`): Hardens zone security, manages keys (KSK/ZSK), and designs weighted/geolocation active-active failover routing.
+  - **AlloyDB Columnar Engine & Cache Specialist** (`agent.alloydb.columnar.tuner`): Tunes columnar memory sizes, HTAP analytical processing scales, and ultra-fast cache engines.
+  - **GCP Cloud Spanner Graph & Property Database Specialist** (`agent.gcp.spanner.graph`): Engineers property graph schemas (`CREATE PROPERTY GRAPH`) and optimizes GQL query execution paths.
+  - **GCP Vertex AI Vector Search & Matching Engine Specialist** (`agent.gcp.vertex.vector`): Configures HNSW index metadata and scaling parameters for high-dimensional vector search endpoints.
+  - **GCP BigQuery Omni & Multi-Cloud Query Coordinator** (`agent.gcp.bigquery.omni`): Coordinates OIDC-secured external connections and federated queries across AWS S3 and Azure Blob Storage.
+  - **GCP Cloud Bigtable & NoSQL Scalability Specialist** (`agent.gcp.bigtable.specialist`): Designs non-hotspotting row-keys, column family garbage collection, and active-active multi-cluster routing.
+  - **GCP Cloud Memorystore Redis & Caching Tuning Specialist** (`agent.gcp.memorystore.tuner`): Calibrates Redis eviction policies, failover lag, and RESP protocol transaction boundaries.
+  - **GCP Cloud NAT & Secure Egress Network Specialist** (`agent.gcp.nat.network`): Deploys secure NAT gateways, egress routing paths, subnets private ranges, and dynamic port configurations.
+  - **GCP Cloud Asset Inventory & IAM Compliance Auditor** (`agent.gcp.asset.auditor`): Deploys compliance monitors, real-time asset change feeds, IAM posture scans, and organization policy enforcements.
+- **Hierarchical Swarm Router & Keyword Matching Alignment**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 29 GCP specialized agents.
+  - Refined trigger keyword boundaries to prevent strategy overrides and false positive overlaps during downstream sub-swarm evaluation.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.113] - 2026-05-29 — Complete Suite of Nineteen GCP Specialized Backend Agents & Swarm Router Integration
 ### Added
 - **Four More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:

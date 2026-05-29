@@ -539,6 +539,136 @@ class AgenticRouterService {
             strategy = 'Hierarchical Vertex Feature Store & Model Swarm';
         }
 
+        // 20. Analyze Cloud Run Jobs and scheduler cron tasks
+        const isRunJobsOutput = outputLower.includes('cloudrun_job') || 
+                                outputLower.includes('cloud_run_job') || 
+                                outputLower.includes('run-job') || 
+                                outputLower.includes('scheduler_cron') || 
+                                outputLower.includes('cron-trigger');
+        if (isRunJobsOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Run Jobs & Scheduled Tasks Specialist', task: 'Orchestrate batch job executions, scheduled crons, and container retry policies' }
+            );
+            strategy = 'Hierarchical Cloud Run Jobs & Batch Tasks Swarm';
+        }
+
+        // 21. Analyze Cloud DNSSEC & global failover routing
+        const isDnsFailoverOutput = outputLower.includes('dnssec') || 
+                                    outputLower.includes('geolocation_routing') || 
+                                    outputLower.includes('dns_failover') || 
+                                    outputLower.includes('active-active') || 
+                                    outputLower.includes('dns-challenge');
+        if (isDnsFailoverOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud DNSSEC & Global Failover Specialist', task: 'Configure secure global DNSSEC policies and geolocation failovers' }
+            );
+            strategy = 'Hierarchical Global DNSSEC & Failover Swarm';
+        }
+
+        // 22. Analyze AlloyDB Columnar Engine and Cache configurations
+        const isAlloydbColumnarOutput = outputLower.includes('columnar_engine') || 
+                                        outputLower.includes('columnar_store') || 
+                                        outputLower.includes('columnar_size') || 
+                                        outputLower.includes('auto_recommend') || 
+                                        outputLower.includes('htap');
+        if (isAlloydbColumnarOutput) {
+            downstreamSequence.push(
+                { agentId: 'AlloyDB Columnar Engine & Cache Specialist', task: 'Optimize AlloyDB columnar memory sizing, htaps queries, and cache buffers' }
+            );
+            strategy = 'Hierarchical AlloyDB Columnar Store Swarm';
+        }
+
+        // 23. Analyze Spanner Graph property databases
+        const isSpannerGraphOutput = outputLower.includes('spanner_graph') || 
+                                     outputLower.includes('property_graph') || 
+                                     outputLower.includes('gql') || 
+                                     outputLower.includes('match_pattern') || 
+                                     outputLower.includes('graph_schema');
+        if (isSpannerGraphOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Spanner Graph & Property Database Specialist', task: 'Design Spanner property graph structures and optimize GQL queries' }
+            );
+            strategy = 'Hierarchical Spanner Property Graph Swarm';
+        }
+
+        // 24. Analyze Vertex AI Vector Search & Matching Engine
+        const isVertexVectorOutput = outputLower.includes('matching_engine') || 
+                                     outputLower.includes('vector_search_endpoint') || 
+                                     outputLower.includes('ann_index') || 
+                                     outputLower.includes('hnsw_index') || 
+                                     outputLower.includes('index_metadata');
+        if (isVertexVectorOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Vertex AI Vector Search & Matching Engine Specialist', task: 'Configure high-dimensional Vector Search index parameters and endpoints' }
+            );
+            strategy = 'Hierarchical Vertex Vector Search Swarm';
+        }
+
+        // 25. Analyze BigQuery Omni & Multi-Cloud Query setups
+        const isBigQueryOmniOutput = outputLower.includes('bigquery_omni') || 
+                                     outputLower.includes('cross_cloud') || 
+                                     outputLower.includes('external_connection') || 
+                                     outputLower.includes('federated_query') || 
+                                     outputLower.includes('s3_external');
+        if (isBigQueryOmniOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP BigQuery Omni & Multi-Cloud Query Coordinator', task: 'Orchestrate federated multi-cloud external connections and queries' }
+            );
+            strategy = 'Hierarchical BigQuery Omni Multi-Cloud Swarm';
+        }
+
+        // 26. Analyze Cloud Bigtable NoSQL scalability
+        const isBigtableSpecialistOutput = outputLower.includes('bigtable_schema') || 
+                                           outputLower.includes('row_key') || 
+                                           outputLower.includes('gc_policy') || 
+                                           outputLower.includes('column_family') || 
+                                           outputLower.includes('nosql_hotspot');
+        if (isBigtableSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Bigtable & NoSQL Scalability Specialist', task: 'Optimize Bigtable NoSQL row-key design, replication, and garbage collection policies' }
+            );
+            strategy = 'Hierarchical Cloud Bigtable NoSQL Swarm';
+        }
+
+        // 27. Analyze Cloud Memorystore Redis caching tuning
+        const isMemorystoreTunerOutput = outputLower.includes('memorystore_redis') || 
+                                         outputLower.includes('redis_eviction') || 
+                                         outputLower.includes('redis_failover') || 
+                                         outputLower.includes('cache_aside') || 
+                                         outputLower.includes('resp_protocol');
+        if (isMemorystoreTunerOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Memorystore Redis & Caching Tuning Specialist', task: 'Tune Memorystore Redis memory limits, evictions, and connection routing' }
+            );
+            strategy = 'Hierarchical Memorystore Redis Caching Swarm';
+        }
+
+        // 28. Analyze Cloud NAT & Secure Egress VPC configurations
+        const isNatNetworkOutput = outputLower.includes('cloud_nat') || 
+                                   outputLower.includes('secure_egress') || 
+                                   outputLower.includes('port_allocation') || 
+                                   outputLower.includes('nat_logging') || 
+                                   outputLower.includes('private_subnet');
+        if (isNatNetworkOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud NAT & Secure Egress Network Specialist', task: 'Configure secure NAT egress routing policies and subnet port allocations' }
+            );
+            strategy = 'Hierarchical Cloud NAT Secure Egress Swarm';
+        }
+
+        // 29. Analyze Cloud Asset Inventory IAM compliance
+        const isAssetAuditorOutput = outputLower.includes('asset_inventory') || 
+                                     outputLower.includes('iam_compliance') || 
+                                     outputLower.includes('asset_feed') || 
+                                     outputLower.includes('org_policy') || 
+                                     outputLower.includes('gcloud_asset');
+        if (isAssetAuditorOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Asset Inventory & IAM Compliance Auditor', task: 'Audit resource compliance posture and Organization Policy enforcements' }
+            );
+            strategy = 'Hierarchical Asset Compliance & IAM Posture Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the nineteen highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the twenty-nine highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -489,6 +489,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const edgePath = path.join(DEFINITIONS_DIR, 'gcp.edge.network.agent.yaml');
             const dlpPath = path.join(DEFINITIONS_DIR, 'gcp.dlp.governance.agent.yaml');
             const featurePath = path.join(DEFINITIONS_DIR, 'gcp.feature.store.agent.yaml');
+            
+            // 10 new agents
+            const runJobsPath = path.join(DEFINITIONS_DIR, 'gcp.run.jobs.agent.yaml');
+            const dnsFailoverPath = path.join(DEFINITIONS_DIR, 'gcp.dns.failover.agent.yaml');
+            const alloydbColumnarPath = path.join(DEFINITIONS_DIR, 'alloydb.columnar.tuner.agent.yaml');
+            const spannerGraphPath = path.join(DEFINITIONS_DIR, 'gcp.spanner.graph.agent.yaml');
+            const vertexVectorPath = path.join(DEFINITIONS_DIR, 'gcp.vertex.vector.agent.yaml');
+            const bigqueryOmniPath = path.join(DEFINITIONS_DIR, 'gcp.bigquery.omni.agent.yaml');
+            const bigtablePath = path.join(DEFINITIONS_DIR, 'gcp.bigtable.specialist.agent.yaml');
+            const memorystorePath = path.join(DEFINITIONS_DIR, 'gcp.memorystore.tuner.agent.yaml');
+            const natPath = path.join(DEFINITIONS_DIR, 'gcp.nat.network.agent.yaml');
+            const assetAuditorPath = path.join(DEFINITIONS_DIR, 'gcp.asset.auditor.agent.yaml');
 
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
@@ -509,6 +521,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const edgeDef = parseYaml(await fs.readFile(edgePath, 'utf8'));
             const dlpDef = parseYaml(await fs.readFile(dlpPath, 'utf8'));
             const featureDef = parseYaml(await fs.readFile(featurePath, 'utf8'));
+
+            // 10 new agents parsing
+            const runJobsDef = parseYaml(await fs.readFile(runJobsPath, 'utf8'));
+            const dnsFailoverDef = parseYaml(await fs.readFile(dnsFailoverPath, 'utf8'));
+            const alloydbColumnarDef = parseYaml(await fs.readFile(alloydbColumnarPath, 'utf8'));
+            const spannerGraphDef = parseYaml(await fs.readFile(spannerGraphPath, 'utf8'));
+            const vertexVectorDef = parseYaml(await fs.readFile(vertexVectorPath, 'utf8'));
+            const bigqueryOmniDef = parseYaml(await fs.readFile(bigqueryOmniPath, 'utf8'));
+            const bigtableDef = parseYaml(await fs.readFile(bigtablePath, 'utf8'));
+            const memorystoreDef = parseYaml(await fs.readFile(memorystorePath, 'utf8'));
+            const natDef = parseYaml(await fs.readFile(natPath, 'utf8'));
+            const assetAuditorDef = parseYaml(await fs.readFile(assetAuditorPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -566,6 +590,37 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(featureDef.id).toBe('agent.gcp.feature.store');
             expect(featureDef.name).toBe('GCP Vertex AI Feature Store & Model Registry Specialist');
+
+            // Assertions for 10 new agents
+            expect(runJobsDef.id).toBe('agent.gcp.run.jobs');
+            expect(runJobsDef.name).toBe('GCP Cloud Run Jobs & Scheduled Tasks Specialist');
+
+            expect(dnsFailoverDef.id).toBe('agent.gcp.dns.failover');
+            expect(dnsFailoverDef.name).toBe('GCP Cloud DNSSEC & Global Failover Specialist');
+
+            expect(alloydbColumnarDef.id).toBe('agent.alloydb.columnar.tuner');
+            expect(alloydbColumnarDef.name).toBe('AlloyDB Columnar Engine & Cache Specialist');
+
+            expect(spannerGraphDef.id).toBe('agent.gcp.spanner.graph');
+            expect(spannerGraphDef.name).toBe('GCP Cloud Spanner Graph & Property Database Specialist');
+
+            expect(vertexVectorDef.id).toBe('agent.gcp.vertex.vector');
+            expect(vertexVectorDef.name).toBe('GCP Vertex AI Vector Search & Matching Engine Specialist');
+
+            expect(bigqueryOmniDef.id).toBe('agent.gcp.bigquery.omni');
+            expect(bigqueryOmniDef.name).toBe('GCP BigQuery Omni & Multi-Cloud Query Coordinator');
+
+            expect(bigtableDef.id).toBe('agent.gcp.bigtable.specialist');
+            expect(bigtableDef.name).toBe('GCP Cloud Bigtable & NoSQL Scalability Specialist');
+
+            expect(memorystoreDef.id).toBe('agent.gcp.memorystore.tuner');
+            expect(memorystoreDef.name).toBe('GCP Cloud Memorystore Redis & Caching Tuning Specialist');
+
+            expect(natDef.id).toBe('agent.gcp.nat.network');
+            expect(natDef.name).toBe('GCP Cloud NAT & Secure Egress Network Specialist');
+
+            expect(assetAuditorDef.id).toBe('agent.gcp.asset.auditor');
+            expect(assetAuditorDef.name).toBe('GCP Cloud Asset Inventory & IAM Compliance Auditor');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -698,6 +753,66 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             expect(featureSwarm.strategy).toBe('Hierarchical Vertex Feature Store & Model Swarm');
             expect(featureSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Feature Store & Model Registry Specialist');
             expect(featureSwarm.sequence.map(s => s.agentId)).toContain('Vertex AI & Gemini Pipeline Optimization Specialist');
+
+            // 20. Evaluate Cloud Run Jobs & Scheduled Tasks
+            const runJobsOutput = 'cloudrun_job cloud_run_job run-job scheduler_cron cron-trigger';
+            const runJobsSwarm = await agenticRouter.routeDownstreamSwarm(runJobsOutput);
+            expect(runJobsSwarm.strategy).toBe('Hierarchical Cloud Run Jobs & Batch Tasks Swarm');
+            expect(runJobsSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Run Jobs & Scheduled Tasks Specialist');
+
+            // 21. Evaluate Cloud DNSSEC & global failover
+            const dnsFailoverOutput = 'dnssec geolocation_routing dns_failover active-active dns-challenge';
+            const dnsFailoverSwarm = await agenticRouter.routeDownstreamSwarm(dnsFailoverOutput);
+            expect(dnsFailoverSwarm.strategy).toBe('Hierarchical Global DNSSEC & Failover Swarm');
+            expect(dnsFailoverSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud DNSSEC & Global Failover Specialist');
+
+            // 22. Evaluate AlloyDB Columnar Engine & Cache
+            const alloydbColumnarOutput = 'columnar_engine columnar_store columnar_size auto_recommend htap';
+            const alloydbColumnarSwarm = await agenticRouter.routeDownstreamSwarm(alloydbColumnarOutput);
+            expect(alloydbColumnarSwarm.strategy).toBe('Hierarchical AlloyDB Columnar Store Swarm');
+            expect(alloydbColumnarSwarm.sequence.map(s => s.agentId)).toContain('AlloyDB Columnar Engine & Cache Specialist');
+
+            // 23. Evaluate Spanner Graph
+            const spannerGraphOutput = 'spanner_graph property_graph gql match_pattern graph_schema';
+            const spannerGraphSwarm = await agenticRouter.routeDownstreamSwarm(spannerGraphOutput);
+            expect(spannerGraphSwarm.strategy).toBe('Hierarchical Spanner Property Graph Swarm');
+            expect(spannerGraphSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Spanner Graph & Property Database Specialist');
+
+            // 24. Evaluate Vertex AI Vector Search
+            const vertexVectorOutput = 'matching_engine vector_search_endpoint ann_index hnsw_index index_metadata';
+            const vertexVectorSwarm = await agenticRouter.routeDownstreamSwarm(vertexVectorOutput);
+            expect(vertexVectorSwarm.strategy).toBe('Hierarchical Vertex Vector Search Swarm');
+            expect(vertexVectorSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Vector Search & Matching Engine Specialist');
+
+            // 25. Evaluate BigQuery Omni
+            const bigqueryOmniOutput = 'bigquery_omni cross_cloud external_connection federated_query s3_external';
+            const bigqueryOmniSwarm = await agenticRouter.routeDownstreamSwarm(bigqueryOmniOutput);
+            expect(bigqueryOmniSwarm.strategy).toBe('Hierarchical BigQuery Omni Multi-Cloud Swarm');
+            expect(bigqueryOmniSwarm.sequence.map(s => s.agentId)).toContain('GCP BigQuery Omni & Multi-Cloud Query Coordinator');
+
+            // 26. Evaluate Cloud Bigtable NoSQL
+            const bigtableOutput = 'bigtable_schema row_key gc_policy column_family nosql_hotspot';
+            const bigtableSwarm = await agenticRouter.routeDownstreamSwarm(bigtableOutput);
+            expect(bigtableSwarm.strategy).toBe('Hierarchical Cloud Bigtable NoSQL Swarm');
+            expect(bigtableSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Bigtable & NoSQL Scalability Specialist');
+
+            // 27. Evaluate Cloud Memorystore Redis caching
+            const memorystoreOutput = 'memorystore_redis redis_eviction redis_failover cache_aside resp_protocol';
+            const memorystoreSwarm = await agenticRouter.routeDownstreamSwarm(memorystoreOutput);
+            expect(memorystoreSwarm.strategy).toBe('Hierarchical Memorystore Redis Caching Swarm');
+            expect(memorystoreSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Memorystore Redis & Caching Tuning Specialist');
+
+            // 28. Evaluate Cloud NAT & Secure Egress
+            const natOutput = 'cloud_nat secure_egress port_allocation nat_logging private_subnet';
+            const natSwarm = await agenticRouter.routeDownstreamSwarm(natOutput);
+            expect(natSwarm.strategy).toBe('Hierarchical Cloud NAT Secure Egress Swarm');
+            expect(natSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud NAT & Secure Egress Network Specialist');
+
+            // 29. Evaluate Cloud Asset Inventory IAM compliance
+            const assetAuditorOutput = 'asset_inventory iam_compliance asset_feed org_policy gcloud_asset';
+            const assetAuditorSwarm = await agenticRouter.routeDownstreamSwarm(assetAuditorOutput);
+            expect(assetAuditorSwarm.strategy).toBe('Hierarchical Asset Compliance & IAM Posture Swarm');
+            expect(assetAuditorSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Asset Inventory & IAM Compliance Auditor');
         });
     });
 });
