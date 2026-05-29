@@ -5,6 +5,24 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.115] - 2026-05-29 — Complete Suite of Thirty-Nine GCP Specialized Backend Agents & Swarm Router Integration
+### Added
+- **Ten More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Cloud Composer & Apache Airflow Orchestrator** (`agent.gcp.composer.orchestrator`): Specializes in managed Cloud Composer environments, Apache Airflow DAG generation, dependency scheduling, dynamic task execution, and resource pooling.
+  - **GCP Cloud Dataflow & Apache Beam Specialist** (`agent.gcp.dataflow.beam`): Specializes in Cloud Dataflow streaming and batch pipelines, Apache Beam pipeline definitions, windowing, and autoscaling.
+  - **GCP Vertex AI Feature Store Feast Specialist** (`agent.gcp.vertex.feast`): Specializes in Feast feature registries, feature view definitions, high-throughput online serving, and offline store alignment.
+  - **GCP Cloud Filestore & Distributed NFS Storage Specialist** (`agent.gcp.filestore.specialist`): Specializes in NFS file systems, high-capacity filestore tiers, mount points, and private network mappings.
+  - **GCP Web Security Scanner & Vulnerability Auditor** (`agent.gcp.security.scanner`): Specializes in web security scanning, OWASP vulnerability patching, crawler infrastructures, and target scanning perimeters.
+  - **GCP Eventarc & CloudEvents Mesh Specialist** (`agent.gcp.eventarc.conductor`): Specializes in Eventarc event meshes, CloudEvents payload structures, routing filters, and trigger targets.
+  - **GCP Cloud SQL Auth Proxy & IAM Database Specialist** (`agent.gcp.sql.proxy`): Specializes in Cloud SQL Auth Proxy configurations, secure database IAM connections, and proxy ports.
+  - **GCP Binary Authorization & Software Supply Chain Specialist** (`agent.gcp.binauth.guardian`): Specializes in Kubernetes Binary Authorization policies, Kritis signer systems, attestation authorities, and build provenance.
+  - **GCP Cloud Interconnect & Secure VPN Specialist** (`agent.gcp.interconnect.vpn`): Specializes in dedicated/partner interconnects, Cloud VPN IPSec tunnels, BGP dynamic routing sessions, and peering connections.
+  - **GCP Workload Identity Federation & OIDC Specialist** (`agent.gcp.workload.federation`): Specializes in multi-cloud federations, OIDC provider registrations (AWS/GitHub Actions), and keyless service account access.
+- **Hierarchical Swarm Router & Keyword Matching Alignment**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 39 GCP specialized agents.
+  - Refined trigger keyword boundaries for Composer, Dataflow, Vertex Feast, Filestore, Security Scanner, Eventarc, SQL Proxy, Binary Authorization, Interconnect, and Workload Identity Federation.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.114] - 2026-05-29 — Complete Suite of Twenty-Nine GCP Specialized Backend Agents & Swarm Router Integration
 ### Added
 - **Ten More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:

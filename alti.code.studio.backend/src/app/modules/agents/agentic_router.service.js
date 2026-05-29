@@ -669,6 +669,146 @@ class AgenticRouterService {
             strategy = 'Hierarchical Asset Compliance & IAM Posture Swarm';
         }
 
+        // 30. Analyze Cloud Composer & Airflow orchestration
+        const isComposerOutput = outputLower.includes('composer_env') || 
+                                 outputLower.includes('apache_airflow') || 
+                                 outputLower.includes('dag_generation') || 
+                                 outputLower.includes('airflow_task') || 
+                                 outputLower.includes('composer_autoscaling');
+        if (isComposerOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Composer & Apache Airflow Orchestrator', task: 'Design Apache Airflow DAG structures, task dependencies, and provision Cloud Composer environments' },
+                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Audit and coordinate cross-environment task workflows' }
+            );
+            strategy = 'Hierarchical Cloud Composer & Airflow Orchestration Swarm';
+        }
+
+        // 31. Analyze Cloud Dataflow & Beam pipelines
+        const isDataflowOutput = outputLower.includes('cloud_dataflow') || 
+                                 outputLower.includes('apache_beam') || 
+                                 outputLower.includes('ptransform') || 
+                                 outputLower.includes('side_input') || 
+                                 outputLower.includes('flexrs');
+        if (isDataflowOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Dataflow & Apache Beam Specialist', task: 'Design real-time Apache Beam pipelines and optimize Cloud Dataflow execution' },
+                { agentId: 'Google Cloud BigQuery & Dataflow Analytics Specialist', task: 'Optimize big data analytical downstream query structures' }
+            );
+            strategy = 'Hierarchical Cloud Dataflow & Beam Pipeline Swarm';
+        }
+
+        // 32. Analyze Vertex AI Feature Store Feast
+        const isVertexFeastOutput = outputLower.includes('vertex_feast') || 
+                                    outputLower.includes('feature_view') || 
+                                    outputLower.includes('feature_registry') || 
+                                    outputLower.includes('offline_store') || 
+                                    outputLower.includes('feast_sdk');
+        if (isVertexFeastOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Vertex AI Feature Store Feast Specialist', task: 'Configure Feast feature store registries and high-throughput online lookup views' },
+                { agentId: 'GCP Vertex AI Feature Store & Model Registry Specialist', task: 'Align features definitions with model endpoints registry policies' }
+            );
+            strategy = 'Hierarchical Vertex AI Feast Feature Store Swarm';
+        }
+
+        // 33. Analyze Cloud Filestore & Distributed NFS storage
+        const isFilestoreOutput = outputLower.includes('cloud_filestore') || 
+                                  outputLower.includes('distributed_nfs') || 
+                                  outputLower.includes('nfs_mount') || 
+                                  outputLower.includes('filestore_tier') || 
+                                  outputLower.includes('shared_file_share');
+        if (isFilestoreOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Filestore & Distributed NFS Storage Specialist', task: 'Configure enterprise NFS file systems and Cloud Filestore capacity tiers' },
+                { agentId: 'GCP Cloud Storage & Data Lifecycle Governor Specialist', task: 'Integrate shared file shares with object storage boundaries' }
+            );
+            strategy = 'Hierarchical Cloud Filestore & NFS Storage Swarm';
+        }
+
+        // 34. Analyze Web Security Scanner & vulnerability auditing
+        const isSecurityScannerOutput = outputLower.includes('web_security_scanner') || 
+                                        outputLower.includes('vulnerability_audit') || 
+                                        outputLower.includes('owasp_patrol') || 
+                                        outputLower.includes('crawling_infra') || 
+                                        outputLower.includes('scan_target');
+        if (isSecurityScannerOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Web Security Scanner & Vulnerability Auditor', task: 'Formulate dynamic security scans, target crawl configurations, and vulnerability assessments' },
+                { agentId: 'Security & OWASP Hardening Sentinel', task: 'Remediate identified application vulnerabilities and secure boundaries' }
+            );
+            strategy = 'Hierarchical Web Security Scanner Swarm';
+        }
+
+        // 35. Analyze Eventarc & CloudEvents Mesh
+        const isEventarcOutput = outputLower.includes('eventarc_mesh') || 
+                                 outputLower.includes('cloudevents') || 
+                                 outputLower.includes('event_filter') || 
+                                 outputLower.includes('eventarc_trigger') || 
+                                 outputLower.includes('channel_connection');
+        if (isEventarcOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Eventarc & CloudEvents Mesh Specialist', task: 'Design Eventarc trigger meshes and coordinate CloudEvents payload mappings' },
+                { agentId: 'GCP Pub/Sub Event-Driven Mesh Conductor Specialist', task: 'Integrate Eventarc triggers with high-throughput Pub/Sub message topics' }
+            );
+            strategy = 'Hierarchical Eventarc & CloudEvents Mesh Swarm';
+        }
+
+        // 36. Analyze Cloud SQL Auth Proxy & IAM database setup
+        const isSqlProxyOutput = outputLower.includes('sql_auth_proxy') || 
+                                 outputLower.includes('iam_database') || 
+                                 outputLower.includes('proxy_port') || 
+                                 outputLower.includes('cloud_sql_connector') || 
+                                 outputLower.includes('db_token');
+        if (isSqlProxyOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud SQL Auth Proxy & IAM Database Specialist', task: 'Set up secure database IAM passwordless logins and Cloud SQL Auth Proxies' },
+                { agentId: 'GCP Relational Database & AlloyDB Architect', task: 'Audit relational connection pools and high-availability replications' }
+            );
+            strategy = 'Hierarchical Cloud SQL Proxy & IAM DB Swarm';
+        }
+
+        // 37. Analyze Binary Authorization & software supply chain
+        const isBinauthOutput = outputLower.includes('binauth_guardian') || 
+                                outputLower.includes('binary_authorization_policy') || 
+                                outputLower.includes('kritis_signer') || 
+                                outputLower.includes('attestation_authority') || 
+                                outputLower.includes('supply_chain_security');
+        if (isBinauthOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Binary Authorization & Software Supply Chain Specialist', task: 'Formulate Kubernetes binary authorization policies and attestation authorities' },
+                { agentId: 'GCP Cloud Build & Artifact Registry CI/CD Specialist', task: 'Audit build container provenance and secure software supply chains' }
+            );
+            strategy = 'Hierarchical Binary Authorization & Supply Chain Swarm';
+        }
+
+        // 38. Analyze Cloud Interconnect & Secure VPN connections
+        const isInterconnectOutput = outputLower.includes('cloud_interconnect') || 
+                                     outputLower.includes('secure_vpn') || 
+                                     outputLower.includes('bgp_session') || 
+                                     outputLower.includes('direct_peering') || 
+                                     outputLower.includes('ipsec_tunnel');
+        if (isInterconnectOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Interconnect & Secure VPN Specialist', task: 'Configure Anycast private connections, BGP dynamic routing, and IPSec VPN tunnels' },
+                { agentId: 'GCP Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Integrate private network interconnects with edge DNS routing policies' }
+            );
+            strategy = 'Hierarchical Cloud Interconnect & Secure VPN Swarm';
+        }
+
+        // 39. Analyze Workload Identity Federation & OIDC Specialist
+        const isWorkloadFederationOutput = outputLower.includes('workload_identity_federation') || 
+                                           outputLower.includes('oidc_provider') || 
+                                           outputLower.includes('aws_identity_pool') || 
+                                           outputLower.includes('github_actions_oidc') || 
+                                           outputLower.includes('federated_credential');
+        if (isWorkloadFederationOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Workload Identity Federation & OIDC Specialist', task: 'Build keyless multi-cloud OIDC provider integrations and Workload Identity pools' },
+                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Enforce Zero-Trust external clearance boundaries and IAM trust policies' }
+            );
+            strategy = 'Hierarchical Workload Identity Federation & OIDC Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the twenty-nine highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the thirty-nine highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -502,6 +502,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const natPath = path.join(DEFINITIONS_DIR, 'gcp.nat.network.agent.yaml');
             const assetAuditorPath = path.join(DEFINITIONS_DIR, 'gcp.asset.auditor.agent.yaml');
 
+            // 10 newest agents
+            const composerPath = path.join(DEFINITIONS_DIR, 'gcp.composer.orchestrator.agent.yaml');
+            const dataflowPath = path.join(DEFINITIONS_DIR, 'gcp.dataflow.beam.agent.yaml');
+            const vertexFeastPath = path.join(DEFINITIONS_DIR, 'gcp.vertex.feast.agent.yaml');
+            const filestorePath = path.join(DEFINITIONS_DIR, 'gcp.filestore.specialist.agent.yaml');
+            const securityScannerPath = path.join(DEFINITIONS_DIR, 'gcp.security.scanner.agent.yaml');
+            const eventarcPath = path.join(DEFINITIONS_DIR, 'gcp.eventarc.conductor.agent.yaml');
+            const sqlProxyPath = path.join(DEFINITIONS_DIR, 'gcp.sql.proxy.agent.yaml');
+            const binauthPath = path.join(DEFINITIONS_DIR, 'gcp.binauth.guardian.agent.yaml');
+            const interconnectPath = path.join(DEFINITIONS_DIR, 'gcp.interconnect.vpn.agent.yaml');
+            const workloadFederationPath = path.join(DEFINITIONS_DIR, 'gcp.workload.federation.agent.yaml');
+
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
             const alloydbDef = parseYaml(await fs.readFile(alloydbPath, 'utf8'));
@@ -533,6 +545,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const memorystoreDef = parseYaml(await fs.readFile(memorystorePath, 'utf8'));
             const natDef = parseYaml(await fs.readFile(natPath, 'utf8'));
             const assetAuditorDef = parseYaml(await fs.readFile(assetAuditorPath, 'utf8'));
+
+            // 10 newest agents parsing
+            const composerDef = parseYaml(await fs.readFile(composerPath, 'utf8'));
+            const dataflowDef = parseYaml(await fs.readFile(dataflowPath, 'utf8'));
+            const vertexFeastDef = parseYaml(await fs.readFile(vertexFeastPath, 'utf8'));
+            const filestoreDef = parseYaml(await fs.readFile(filestorePath, 'utf8'));
+            const securityScannerDef = parseYaml(await fs.readFile(securityScannerPath, 'utf8'));
+            const eventarcDef = parseYaml(await fs.readFile(eventarcPath, 'utf8'));
+            const sqlProxyDef = parseYaml(await fs.readFile(sqlProxyPath, 'utf8'));
+            const binauthDef = parseYaml(await fs.readFile(binauthPath, 'utf8'));
+            const interconnectDef = parseYaml(await fs.readFile(interconnectPath, 'utf8'));
+            const workloadFederationDef = parseYaml(await fs.readFile(workloadFederationPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -621,6 +645,37 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(assetAuditorDef.id).toBe('agent.gcp.asset.auditor');
             expect(assetAuditorDef.name).toBe('GCP Cloud Asset Inventory & IAM Compliance Auditor');
+
+            // Assertions for 10 newest agents
+            expect(composerDef.id).toBe('agent.gcp.composer.orchestrator');
+            expect(composerDef.name).toBe('GCP Cloud Composer & Apache Airflow Orchestrator');
+
+            expect(dataflowDef.id).toBe('agent.gcp.dataflow.beam');
+            expect(dataflowDef.name).toBe('GCP Cloud Dataflow & Apache Beam Specialist');
+
+            expect(vertexFeastDef.id).toBe('agent.gcp.vertex.feast');
+            expect(vertexFeastDef.name).toBe('GCP Vertex AI Feature Store Feast Specialist');
+
+            expect(filestoreDef.id).toBe('agent.gcp.filestore.specialist');
+            expect(filestoreDef.name).toBe('GCP Cloud Filestore & Distributed NFS Storage Specialist');
+
+            expect(securityScannerDef.id).toBe('agent.gcp.security.scanner');
+            expect(securityScannerDef.name).toBe('GCP Web Security Scanner & Vulnerability Auditor');
+
+            expect(eventarcDef.id).toBe('agent.gcp.eventarc.conductor');
+            expect(eventarcDef.name).toBe('GCP Eventarc & CloudEvents Mesh Specialist');
+
+            expect(sqlProxyDef.id).toBe('agent.gcp.sql.proxy');
+            expect(sqlProxyDef.name).toBe('GCP Cloud SQL Auth Proxy & IAM Database Specialist');
+
+            expect(binauthDef.id).toBe('agent.gcp.binauth.guardian');
+            expect(binauthDef.name).toBe('GCP Binary Authorization & Software Supply Chain Specialist');
+
+            expect(interconnectDef.id).toBe('agent.gcp.interconnect.vpn');
+            expect(interconnectDef.name).toBe('GCP Cloud Interconnect & Secure VPN Specialist');
+
+            expect(workloadFederationDef.id).toBe('agent.gcp.workload.federation');
+            expect(workloadFederationDef.name).toBe('GCP Workload Identity Federation & OIDC Specialist');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -813,6 +868,66 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const assetAuditorSwarm = await agenticRouter.routeDownstreamSwarm(assetAuditorOutput);
             expect(assetAuditorSwarm.strategy).toBe('Hierarchical Asset Compliance & IAM Posture Swarm');
             expect(assetAuditorSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Asset Inventory & IAM Compliance Auditor');
+
+            // 30. Evaluate Cloud Composer & Airflow orchestration
+            const composerOutput = 'composer_env apache_airflow dag_generation airflow_task composer_autoscaling';
+            const composerSwarm = await agenticRouter.routeDownstreamSwarm(composerOutput);
+            expect(composerSwarm.strategy).toBe('Hierarchical Cloud Composer & Airflow Orchestration Swarm');
+            expect(composerSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Composer & Apache Airflow Orchestrator');
+
+            // 31. Evaluate Cloud Dataflow & Beam pipelines
+            const dataflowOutput = 'cloud_dataflow apache_beam ptransform side_input flexrs';
+            const dataflowSwarm = await agenticRouter.routeDownstreamSwarm(dataflowOutput);
+            expect(dataflowSwarm.strategy).toBe('Hierarchical Cloud Dataflow & Beam Pipeline Swarm');
+            expect(dataflowSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Dataflow & Apache Beam Specialist');
+
+            // 32. Evaluate Vertex AI Feature Store Feast
+            const vertexFeastOutput = 'vertex_feast feature_view feature_registry offline_store feast_sdk';
+            const vertexFeastSwarm = await agenticRouter.routeDownstreamSwarm(vertexFeastOutput);
+            expect(vertexFeastSwarm.strategy).toBe('Hierarchical Vertex AI Feast Feature Store Swarm');
+            expect(vertexFeastSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Feature Store Feast Specialist');
+
+            // 33. Evaluate Cloud Filestore & Distributed NFS storage
+            const filestoreOutput = 'cloud_filestore distributed_nfs nfs_mount filestore_tier shared_file_share';
+            const filestoreSwarm = await agenticRouter.routeDownstreamSwarm(filestoreOutput);
+            expect(filestoreSwarm.strategy).toBe('Hierarchical Cloud Filestore & NFS Storage Swarm');
+            expect(filestoreSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Filestore & Distributed NFS Storage Specialist');
+
+            // 34. Evaluate Web Security Scanner & vulnerability auditing
+            const securityScannerOutput = 'web_security_scanner vulnerability_audit owasp_patrol crawling_infra scan_target';
+            const securityScannerSwarm = await agenticRouter.routeDownstreamSwarm(securityScannerOutput);
+            expect(securityScannerSwarm.strategy).toBe('Hierarchical Web Security Scanner Swarm');
+            expect(securityScannerSwarm.sequence.map(s => s.agentId)).toContain('GCP Web Security Scanner & Vulnerability Auditor');
+
+            // 35. Evaluate Eventarc & CloudEvents Mesh
+            const eventarcOutput = 'eventarc_mesh cloudevents event_filter eventarc_trigger channel_connection';
+            const eventarcSwarm = await agenticRouter.routeDownstreamSwarm(eventarcOutput);
+            expect(eventarcSwarm.strategy).toBe('Hierarchical Eventarc & CloudEvents Mesh Swarm');
+            expect(eventarcSwarm.sequence.map(s => s.agentId)).toContain('GCP Eventarc & CloudEvents Mesh Specialist');
+
+            // 36. Evaluate Cloud SQL Auth Proxy & IAM database setup
+            const sqlProxyOutput = 'sql_auth_proxy iam_database proxy_port cloud_sql_connector db_token';
+            const sqlProxySwarm = await agenticRouter.routeDownstreamSwarm(sqlProxyOutput);
+            expect(sqlProxySwarm.strategy).toBe('Hierarchical Cloud SQL Proxy & IAM DB Swarm');
+            expect(sqlProxySwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud SQL Auth Proxy & IAM Database Specialist');
+
+            // 37. Evaluate Binary Authorization & software supply chain
+            const binauthOutput = 'binauth_guardian binary_authorization_policy kritis_signer attestation_authority supply_chain_security';
+            const binauthSwarm = await agenticRouter.routeDownstreamSwarm(binauthOutput);
+            expect(binauthSwarm.strategy).toBe('Hierarchical Binary Authorization & Supply Chain Swarm');
+            expect(binauthSwarm.sequence.map(s => s.agentId)).toContain('GCP Binary Authorization & Software Supply Chain Specialist');
+
+            // 38. Evaluate Cloud Interconnect & Secure VPN connections
+            const interconnectOutput = 'cloud_interconnect secure_vpn bgp_session direct_peering ipsec_tunnel';
+            const interconnectSwarm = await agenticRouter.routeDownstreamSwarm(interconnectOutput);
+            expect(interconnectSwarm.strategy).toBe('Hierarchical Cloud Interconnect & Secure VPN Swarm');
+            expect(interconnectSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Interconnect & Secure VPN Specialist');
+
+            // 39. Evaluate Workload Identity Federation & OIDC Specialist
+            const workloadFederationOutput = 'workload_identity_federation oidc_provider aws_identity_pool github_actions_oidc federated_credential';
+            const workloadFederationSwarm = await agenticRouter.routeDownstreamSwarm(workloadFederationOutput);
+            expect(workloadFederationSwarm.strategy).toBe('Hierarchical Workload Identity Federation & OIDC Swarm');
+            expect(workloadFederationSwarm.sequence.map(s => s.agentId)).toContain('GCP Workload Identity Federation & OIDC Specialist');
         });
     });
 });
