@@ -142,34 +142,46 @@ function createAgentFromDefinition(def) {
     return new YamlAgent();
 }
 
+async function scanDir(dir) {
+    const results = [];
+    const list = await fs.readdir(dir, { withFileTypes: true });
+    for (const file of list) {
+        const fullPath = path.join(dir, file.name);
+        if (file.isDirectory()) {
+            results.push(...(await scanDir(fullPath)));
+        } else if (file.isFile() && file.name.endsWith('.agent.yaml')) {
+            results.push(fullPath);
+        }
+    }
+    return results;
+}
+
 /**
- * Loads all *.agent.yaml files from the definitions/ directory.
+ * Loads all *.agent.yaml files from the definitions/ directory recursively.
  *
  * @returns {Promise<Map<string, BaseSpecialistAgent>>} Map of agentId → agent instance
  */
 async function loadYamlAgents() {
     const agents = new Map();
 
-    let files = [];
+    let yamlFiles = [];
     try {
-        files = await fs.readdir(DEFINITIONS_DIR);
+        yamlFiles = await scanDir(DEFINITIONS_DIR);
     } catch {
         logger.warn(`⚠️  YAML Agent Loader: definitions/ directory not found — creating it.`);
         await fs.mkdir(DEFINITIONS_DIR, { recursive: true });
         return agents;
     }
 
-    const yamlFiles = files.filter((f) => f.endsWith('.agent.yaml'));
-
-    for (const file of yamlFiles) {
+    for (const filePath of yamlFiles) {
         try {
-            const raw = await fs.readFile(path.join(DEFINITIONS_DIR, file), 'utf8');
+            const raw = await fs.readFile(filePath, 'utf8');
             const def = parseYaml(raw);
             const agent = createAgentFromDefinition(def);
             agents.set(def.id, agent);
             logger.info(`✅ YAML Agent Loaded: ${def.name} (${def.id}) v${def.version || '1.0.0'}`);
         } catch (e) {
-            logger.error(`❌ YAML Agent Loader: Failed to load ${file} — ${e.message}`);
+            logger.error(`❌ YAML Agent Loader: Failed to load ${filePath} — ${e.message}`);
         }
     }
 
@@ -177,14 +189,14 @@ async function loadYamlAgents() {
 }
 
 /**
- * Starts a file watcher on the definitions/ directory.
+ * Starts a file watcher on the definitions/ directory recursively.
  * On any change (.agent.yaml created/modified), re-loads that specific agent.
  *
  * @param {Map<string, BaseSpecialistAgent>} agentMap — live registry to update
  */
 function watchDefinitions(agentMap) {
     try {
-        watch(DEFINITIONS_DIR, { persistent: false }, async (eventType, filename) => {
+        watch(DEFINITIONS_DIR, { persistent: false, recursive: true }, async (eventType, filename) => {
             if (!filename || !filename.endsWith('.agent.yaml')) return;
             const filePath = path.join(DEFINITIONS_DIR, filename);
             logger.info(`🔄 YAML hot-reload triggered for: ${filename}`);
@@ -198,7 +210,7 @@ function watchDefinitions(agentMap) {
                 logger.error(`❌ YAML hot-reload failed for ${filename}: ${e.message}`);
             }
         });
-        logger.info(`👁️  YAML Agent Loader: watching ${DEFINITIONS_DIR} for changes`);
+        logger.info(`👁️  YAML Agent Loader: watching ${DEFINITIONS_DIR} for changes (recursive)`);
     } catch (e) {
         logger.warn(`⚠️  YAML Agent Loader: Could not start watcher — ${e.message}`);
     }

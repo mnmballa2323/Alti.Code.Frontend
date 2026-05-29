@@ -5,6 +5,29 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.117] - 2026-05-29 — Economic Sectors Swarm Deployment & Recursive YAML Loading Ingestion
+### Added
+- **Recursive DSL Agent Ingestion & Hot-Reloading**:
+  - Refactored `loadYamlAgents` in `yaml_agent_loader.js` to recursively scan all subdirectories of `definitions/` for declarative `*.agent.yaml` files.
+  - Enabled recursive file watching in `watchDefinitions()` to support dynamic hot-reloading for nested subfolders.
+- **Twenty Highly Detailed Declarative Economic Sector Agents**:
+  - Organized and deployed 20 specialized declarative agent definitions under the new structured directory `definitions/sectors/` grouped by GICS-aligned economic sectors:
+    - **Financial Services**: Commercial Banking Swarm Specialist (`fin.banking`), Actuarial Underwriting & Risk Modeler (`fin.insurance`).
+    - **Healthcare & Life Sciences**: Clinical Diagnostics & Imaging Coordinator (`hc.diagnostics`), Bioinformatics & Biopharma Specialist (`hc.pharma`).
+    - **Energy & Utilities**: Renewable Grid Optimization Load Balancing Auditor (`energy.grid`), SCADA Safety & Nuclear Reactor Inspector (`energy.nuclear`).
+    - **Manufacturing & Industrial**: Assembly Line Robotics PLC Coordinator (`ind.robotics`), MES & Supply Chain Planner (`ind.mes`).
+    - **Retail & E-commerce**: Omnichannel Dynamic Pricing & Elasticity Specialist (`ret.pricing`), Personalized CRM & Retention Conductor (`ret.crm`).
+    - **Transportation & Logistics**: Intermodal Freight & Maritime Routing Conductor (`trans.freight`), Autonomous Drone & Delivery Fleet Coordinator (`trans.fleet`).
+    - **Agriculture & AgTech**: Precision Soil Agronomy & Variable Rate Irrigation Specialist (`ag.agronomy`), Macro Crop Yield Forecasting Specialist (`ag.market`).
+    - **Technology & Media**: Next-Gen 5G/6G Network Slice & Edge Architect (`tech.slice`), Spatial Computing & Metaverse Specialist (`tech.metaverse`).
+    - **Education & EdTech**: Adaptive Learning Graph & Curriculum Architect (`edu.curriculum`), Proctoring & Academic Integrity Security Guard (`edu.proctor`).
+    - **Government & Public Sector**: Smart Urban Municipal Traffic Engineer (`gov.urban`), Disaster Preparedness & FEMA Emergency Relief Specialist (`gov.disaster`).
+- **Swarm Router Downstream Economic Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers routing prompts with economic GICS keywords to their sector specialists.
+- **Modular Test Suite & Verification**:
+  - Established a dedicated, modular test suite `sectors.integration.test.js` validating the recursive parsing, loading, and routing of all 20 economic agents.
+  - All 20 modular tests and the full definitions suite pass with 100% success.
+
 ## [39.37.116] - 2026-05-29 — Complete Suite of Forty-Nine GCP Specialized Backend Agents & Swarm Router Integration
 ### Added
 - **Ten Additional Premium GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:

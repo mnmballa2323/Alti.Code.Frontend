@@ -929,6 +929,126 @@ class AgenticRouterService {
             strategy = 'Hierarchical TPU & High-Performance Compute Swarm';
         }
 
+        // 50. Analyze Economic Sector: Financial Services
+        const isSectorFinanceOutput = outputLower.includes('sector_finance') || 
+                                     outputLower.includes('iso_20022') || 
+                                     outputLower.includes('actuarial_model');
+        if (isSectorFinanceOutput) {
+            downstreamSequence.push(
+                { agentId: 'Global Investment & Commercial Banking Swarm Specialist', task: 'Review Basel compliance ratios, syndicated loans, and ISO 20022 messaging structures' },
+                { agentId: 'Premium Actuarial Underwriting & Insurance Risk Modeler', task: 'Formulate actuarial reserves estimations and catastrophe PML calculations' }
+            );
+            strategy = 'Economic Sector Swarm: Financial Services';
+        }
+
+        // 51. Analyze Economic Sector: Healthcare & Life Sciences
+        const isSectorHealthcareOutput = outputLower.includes('sector_healthcare') || 
+                                        outputLower.includes('clinical_diagnostics') || 
+                                        outputLower.includes('bioinformatics_pharma');
+        if (isSectorHealthcareOutput) {
+            downstreamSequence.push(
+                { agentId: 'Clinical Diagnostics & Medical Imaging AI Coordinator', task: 'Formulate DICOM annotations PACS storage guidelines and HL7/FHIR mappings' },
+                { agentId: 'Bioinformatics Genomic Assembly & Biopharma Specialist', task: 'Analyze next-gen genomic sequencing pipelines and molecular binding affinities' }
+            );
+            strategy = 'Economic Sector Swarm: Healthcare & Life Sciences';
+        }
+
+        // 52. Analyze Economic Sector: Energy & Utilities
+        const isSectorEnergyOutput = outputLower.includes('sector_energy') || 
+                                    outputLower.includes('microgrid_powerflow') || 
+                                    outputLower.includes('thermal_hydraulics');
+        if (isSectorEnergyOutput) {
+            downstreamSequence.push(
+                { agentId: 'Smart Renewable Grid Optimization & Load Balancing Auditor', task: 'Optimize microgrid powerflows and solar battery state-of-charge degradation metrics' },
+                { agentId: 'Nuclear Reactor Instrumentation & SCADA Safety Inspector', task: 'Monitor pressurized thermal hydraulics safety loops and encrypt SCADA Modbus networks' }
+            );
+            strategy = 'Economic Sector Swarm: Energy & Utilities';
+        }
+
+        // 53. Analyze Economic Sector: Manufacturing & Industrial
+        const isSectorIndustrialOutput = outputLower.includes('sector_industrial') || 
+                                        outputLower.includes('robotic_kinematics') || 
+                                        outputLower.includes('shop_floor_mes');
+        if (isSectorIndustrialOutput) {
+            downstreamSequence.push(
+                { agentId: 'Automotive Assembly Line Robotics & PLC Coordinator', task: 'Formulate 6-DOF robotic kinematics trajectories and program PLC ladder logic feedback loops' },
+                { agentId: 'Manufacturing Execution System (MES) & Supply Chain Planner', task: 'Map WIP floor scheduling bottlenecks and audit supplier lead time buffers' }
+            );
+            strategy = 'Economic Sector Swarm: Manufacturing & Industrial';
+        }
+
+        // 54. Analyze Economic Sector: Retail & E-commerce
+        const isSectorRetailOutput = outputLower.includes('sector_retail') || 
+                                     outputLower.includes('price_elasticity') || 
+                                     outputLower.includes('customer_clv_score');
+        if (isSectorRetailOutput) {
+            downstreamSequence.push(
+                { agentId: 'Omnichannel Dynamic Pricing & Elasticity Arbitrage Specialist', task: 'Formulate logarithmic demand regressions and optimize margin defense triggers' },
+                { agentId: 'Hyper-Personalized Retail CRM & Retention Conductor', task: 'Score customer lifetime values and model churn-risk loyalty cohorts' }
+            );
+            strategy = 'Economic Sector Swarm: Retail & E-commerce';
+        }
+
+        // 55. Analyze Economic Sector: Transportation & Logistics
+        const isSectorTransportOutput = outputLower.includes('sector_transport') || 
+                                        outputLower.includes('ocean_freight_routing') || 
+                                        outputLower.includes('vrptw_fleet_opt');
+        if (isSectorTransportOutput) {
+            downstreamSequence.push(
+                { agentId: 'Intermodal Global Freight & Maritime Routing Conductor', task: 'Optimize container ocean vessel routes and minimize port demurrage delays' },
+                { agentId: 'Autonomous Drone & Delivery Fleet Coordinator', task: 'Direct low-altitude flight paths airspace NFZ perimeters and solve dynamic VRPTW tasks' }
+            );
+            strategy = 'Economic Sector Swarm: Transportation & Logistics';
+        }
+
+        // 56. Analyze Economic Sector: Agriculture & AgTech
+        const isSectorAgricultureOutput = outputLower.includes('sector_agriculture') || 
+                                           outputLower.includes('ndvi_satellite_imaging') || 
+                                           outputLower.includes('crop_yield_prediction');
+        if (isSectorAgricultureOutput) {
+            downstreamSequence.push(
+                { agentId: 'Precision Soil Agronomy & Variable Rate Irrigation Specialist', task: 'Evaluate NDVI satellite vegetation health and calculate Penman-Monteith smart waterings' },
+                { agentId: 'Macro Crop Yield Forecasting & Market Hedging Specialist', task: 'Predict meteorological soybean yield vectors and formulate CBOT grain future hedges' }
+            );
+            strategy = 'Economic Sector Swarm: Agriculture & AgTech';
+        }
+
+        // 57. Analyze Economic Sector: Technology & Media
+        const isSectorTechMediaOutput = outputLower.includes('sector_tech_media') || 
+                                        outputLower.includes('5g_6g_network_slicing') || 
+                                        outputLower.includes('webgl_threejs_rendering');
+        if (isSectorTechMediaOutput) {
+            downstreamSequence.push(
+                { agentId: 'Next-Gen 5G/6G Network Slice & Edge Compute Architect', task: 'Design software-defined SDN slicings and map low-latency NFV topologies' },
+                { agentId: 'Spatial Computing & High-Fidelity Metaverse Specialist', task: 'Optimize WebGL glTF vertex shaders and synchronize avatar collision parameters' }
+            );
+            strategy = 'Economic Sector Swarm: Technology & Media';
+        }
+
+        // 58. Analyze Economic Sector: Education & EdTech
+        const isSectorEducationOutput = outputLower.includes('sector_education') || 
+                                        outputLower.includes('adaptive_learning_graph') || 
+                                        outputLower.includes('gaze_anomaly_detection');
+        if (isSectorEducationOutput) {
+            downstreamSequence.push(
+                { agentId: 'Adaptive Curriculum Pathing & EdTech Analytics Architect', task: 'Establish personalized learning graphs and spacing repetitions matrices' },
+                { agentId: 'Remote Proctoring & Academic Integrity Security Guard', task: 'Monitor remote exam gaze-detection logs and browser lockdown API violations' }
+            );
+            strategy = 'Economic Sector Swarm: Education & EdTech';
+        }
+
+        // 59. Analyze Economic Sector: Government & Public Sector
+        const isSectorGovernmentOutput = outputLower.includes('sector_government') || 
+                                         outputLower.includes('traffic_signal_opt') || 
+                                         outputLower.includes('disaster_hazard_map');
+        if (isSectorGovernmentOutput) {
+            downstreamSequence.push(
+                { agentId: 'Smart Urban Municipal Infrastructure & Traffic Engineer', task: 'Optimize municipal signal phases public transit routes and urban lighting rules' },
+                { agentId: 'Disaster Preparedness & FEMA Emergency Relief Specialist', task: 'Audit wildfire GIS hazard maps coordinate emergency food logistics and track recovery grants' }
+            );
+            strategy = 'Economic Sector Swarm: Government & Public Sector';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });
