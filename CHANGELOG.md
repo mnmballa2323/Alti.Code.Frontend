@@ -5,6 +5,19 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.110] - 2026-05-29 — Full Suite of Seven GCP Backend Agents & Swarm Router Refinement
+### Added
+- **Four New Highly Specialized GCP Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Workflows Conductor & Orchestration Specialist** (`agent.gcp.workflows.conductor`): Directs distributed Cloud Workflows states, error-handling callbacks, and Cloud Tasks queues.
+  - **Vertex AI & Gemini Pipeline Optimization Specialist** (`agent.gcp.vertexai.optimizer`): Fine-tunes Gemini prompt caching parameters and Kubeflow Vertex Pipelines.
+  - **Google Cloud BigQuery & Dataflow Analytics Specialist** (`agent.gcp.bigquery.analytics`): Manages analytical datasets, streaming analytics via Dataflow (Apache Beam), and BigQuery vector search indexes.
+  - **Google Cloud Spanner Scalability Specialist** (`agent.gcp.spanner.architect`): Designs globally distributed relational architectures, child-table interleaving schemas, and zero-downtime DDL scaling.
+- **Enhanced Swarm Router & Keyword Matching**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to support all seven GCP backend agents.
+  - Refined downstream security keyword scanning to ignore `'foreign key'` and `'primary key'` patterns, eliminating false positive zero-trust routing triggers during database scaling audits.
+  - Updated Spanner SQL keyword scanner to seamlessly match `'interleave'` patterns.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.109] - 2026-05-29 — Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents
 ### Added
 - **Dynamic Hierarchical Swarm Orchestrator**: Extended `AgenticRouterService` (`agentic_router.service.js`) with `routeDownstreamSwarm(primaryOutput)` to dynamically audit generated backend outputs and spawn downstream specialized sub-swarms in parallel.

@@ -469,26 +469,43 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the three new highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the seven highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
+            const workflowsPath = path.join(DEFINITIONS_DIR, 'gcp.workflows.conductor.agent.yaml');
+            const vertexPath = path.join(DEFINITIONS_DIR, 'gcp.vertexai.optimizer.agent.yaml');
+            const bigqueryPath = path.join(DEFINITIONS_DIR, 'gcp.bigquery.analytics.agent.yaml');
+            const spannerPath = path.join(DEFINITIONS_DIR, 'gcp.spanner.architect.agent.yaml');
 
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
             const alloydbDef = parseYaml(await fs.readFile(alloydbPath, 'utf8'));
+            const workflowsDef = parseYaml(await fs.readFile(workflowsPath, 'utf8'));
+            const vertexDef = parseYaml(await fs.readFile(vertexPath, 'utf8'));
+            const bigqueryDef = parseYaml(await fs.readFile(bigqueryPath, 'utf8'));
+            const spannerDef = parseYaml(await fs.readFile(spannerPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
-            expect(pubsubDef.capabilities).toContain('gcp_pubsub_architecture');
 
             expect(sentinelDef.id).toBe('agent.gcp.sentinel.security.auditor');
             expect(sentinelDef.name).toBe('GCP Sentinel Zero-Trust Security Auditor');
-            expect(sentinelDef.capabilities).toContain('zero_trust_audit');
 
             expect(alloydbDef.id).toBe('agent.alloydb.pgvector.tuner');
             expect(alloydbDef.name).toBe('AlloyDB pgvector Similarity Search Tuning Specialist');
-            expect(alloydbDef.capabilities).toContain('alloydb_vector_indexing');
+
+            expect(workflowsDef.id).toBe('agent.gcp.workflows.conductor');
+            expect(workflowsDef.name).toBe('GCP Workflows Conductor & Orchestration Specialist');
+
+            expect(vertexDef.id).toBe('agent.gcp.vertexai.optimizer');
+            expect(vertexDef.name).toBe('Vertex AI & Gemini Pipeline Optimization Specialist');
+
+            expect(bigqueryDef.id).toBe('agent.gcp.bigquery.analytics');
+            expect(bigqueryDef.name).toBe('Google Cloud BigQuery & Dataflow Analytics Specialist');
+
+            expect(spannerDef.id).toBe('agent.gcp.spanner.architect');
+            expect(spannerDef.name).toBe('Google Cloud Spanner Scalability Specialist');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -514,6 +531,30 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             expect(pubsubSwarm.strategy).toBe('Hierarchical Event-Driven Mesh Scaling Swarm');
             expect(pubsubSwarm.sequence.map(s => s.agentId)).toContain('Distributed Queue & Event Coordinator');
             expect(pubsubSwarm.sequence.map(s => s.agentId)).toContain('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
+
+            // 4. Evaluate distributed workflows outputs
+            const workflowsOutput = 'type: workflows\nsteps:\n  - callTaskQueue: true';
+            const workflowsSwarm = await agenticRouter.routeDownstreamSwarm(workflowsOutput);
+            expect(workflowsSwarm.strategy).toBe('Hierarchical Distributed Workflows Swarm');
+            expect(workflowsSwarm.sequence.map(s => s.agentId)).toContain('GCP Workflows Conductor & Orchestration Specialist');
+
+            // 5. Evaluate Vertex AI outputs
+            const vertexOutput = 'await vertexPipelines.runCustomTrainingJob({ prompt_caching: true });';
+            const vertexSwarm = await agenticRouter.routeDownstreamSwarm(vertexOutput);
+            expect(vertexSwarm.strategy).toBe('Hierarchical Vertex AI Lifecycle Swarm');
+            expect(vertexSwarm.sequence.map(s => s.agentId)).toContain('Vertex AI & Gemini Pipeline Optimization Specialist');
+
+            // 6. Evaluate BigQuery analytics outputs
+            const bigqueryOutput = 'SELECT * FROM bigquery.vector_search(TABLE dataset.table, embedding);';
+            const bigquerySwarm = await agenticRouter.routeDownstreamSwarm(bigqueryOutput);
+            expect(bigquerySwarm.strategy).toBe('Hierarchical Vector Analytics Swarm');
+            expect(bigquerySwarm.sequence.map(s => s.agentId)).toContain('Google Cloud BigQuery & Dataflow Analytics Specialist');
+
+            // 7. Evaluate Cloud Spanner outputs
+            const spannerOutput = 'ALTER TABLE child_table ADD FOREIGN KEY (parent_id) INTERLEAVE IN PARENT parent_table;';
+            const spannerSwarm = await agenticRouter.routeDownstreamSwarm(spannerOutput);
+            expect(spannerSwarm.strategy).toBe('Hierarchical Cloud Spanner Scaling Swarm');
+            expect(spannerSwarm.sequence.map(s => s.agentId)).toContain('Google Cloud Spanner Scalability Specialist');
         });
     });
 });

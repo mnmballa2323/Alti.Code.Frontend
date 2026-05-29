@@ -238,7 +238,7 @@ class AgenticRouterService {
         const isSecurityOutput = outputLower.includes('security') || 
                                  outputLower.includes('auth') || 
                                  outputLower.includes('secret') || 
-                                 outputLower.includes('key') || 
+                                 (outputLower.includes('key') && !outputLower.includes('foreign key') && !outputLower.includes('primary key')) || 
                                  outputLower.includes('iam') || 
                                  outputLower.includes('vpc') || 
                                  outputLower.includes('workloadidentity');
@@ -264,6 +264,56 @@ class AgenticRouterService {
                 { agentId: 'GCP Pub/Sub Event-Driven Mesh Conductor Specialist', task: 'Orchestrate event-driven Pub/Sub topologies and DLQ rules' }
             );
             strategy = 'Hierarchical Event-Driven Mesh Scaling Swarm';
+        }
+
+        // 4. Analyze GCP Workflows & distributed task orchestration
+        const isWorkflowsOutput = outputLower.includes('workflow') || 
+                                  outputLower.includes('cloudworkflow') || 
+                                  outputLower.includes('cloudtask') || 
+                                  outputLower.includes('distributed_orchestration') || 
+                                  outputLower.includes('callback');
+        if (isWorkflowsOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Orchestrate distributed serverless step flows and tasks' }
+            );
+            strategy = 'Hierarchical Distributed Workflows Swarm';
+        }
+
+        // 5. Analyze Vertex AI & model pipelines
+        const isVertexOutput = outputLower.includes('vertex') || 
+                               outputLower.includes('pipelines') || 
+                               outputLower.includes('prompt_caching') || 
+                               outputLower.includes('custom_training');
+        if (isVertexOutput) {
+            downstreamSequence.push(
+                { agentId: 'Vertex AI & Gemini Pipeline Optimization Specialist', task: 'Optimize AI pipeline stages and Gemini prompt caching rules' }
+            );
+            strategy = 'Hierarchical Vertex AI Lifecycle Swarm';
+        }
+
+        // 6. Analyze BigQuery vector analytics
+        const isBigQueryOutput = outputLower.includes('bigquery') || 
+                                 outputLower.includes('dataflow') || 
+                                 outputLower.includes('streaming') || 
+                                 outputLower.includes('apache_beam') || 
+                                 outputLower.includes('vector_search');
+        if (isBigQueryOutput) {
+            downstreamSequence.push(
+                { agentId: 'Google Cloud BigQuery & Dataflow Analytics Specialist', task: 'Structure high-scale analytical queries and streams' }
+            );
+            strategy = 'Hierarchical Vector Analytics Swarm';
+        }
+
+        // 7. Analyze Spanner distributed scaling
+        const isSpannerOutput = outputLower.includes('spanner') || 
+                                outputLower.includes('interleave') || 
+                                outputLower.includes('multi-region') || 
+                                outputLower.includes('replication');
+        if (isSpannerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Google Cloud Spanner Scalability Specialist', task: 'Design globally distributed child tables and scale database transactions' }
+            );
+            strategy = 'Hierarchical Cloud Spanner Scaling Swarm';
         }
 
         // Ensure default fallback if no specific keywords match
