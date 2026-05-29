@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,6 +10,9 @@ import { dynamicSessionsService } from '../googleCloud/dynamic_sessions.service.
 import { gcsService } from '../googleCloud/storage.service.js';
 import { pubsubService } from '../googleCloud/pubsub.service.js';
 import { evolutionService } from '../../../shared/evolution.service.js';
+import { orchestrator } from './orchestrator.js';
+import { triadDebateChamberService } from './triad_debate_chamber.service.js';
+import { aiProvider } from '../ai/ai.provider.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFINITIONS_DIR = path.join(__dirname, 'definitions');
@@ -237,6 +240,73 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             // Cleanup test directory
             await fs.rm(testWorkspaceDir, { recursive: true, force: true });
+        });
+    });
+
+    describe('Swarm Conductor Meta-Cognitive Self-Healing & Refinement Gate', () => {
+        it('should intercept step failures, convene Triad Debate, and successfully heal the execution on retry', async () => {
+            const step = {
+                agent: 'agent.regex.optimizer',
+                description: 'Compile high performance safe regex',
+                data: { pattern: '(a+)+' }
+            };
+            const context = { planId: 'test_heal_plan' };
+
+            // 1. Mock _dispatchStep to fail on first attempt, and succeed on second attempt
+            let callCount = 0;
+            const originalDispatch = orchestrator._dispatchStep;
+            orchestrator._dispatchStep = vi.fn().mockImplementation(async (s, ctx) => {
+                callCount++;
+                if (callCount === 1) {
+                    return { agent: s.agent, error: 'Database Queue Timeout Error' };
+                }
+                return { agent: s.agent, jobId: 'mock_job_99', status: 'dispatched' };
+            });
+
+            // 2. Mock Triad Debate Chamber to avoid real Vertex/Gemini API calls
+            const originalInitiateDebate = triadDebateChamberService.initiateDebate;
+            triadDebateChamberService.initiateDebate = vi.fn().mockResolvedValue(
+                'HEALED: Inject standard limits and eliminate nested quantifiers.'
+            );
+
+            // 3. Execute healed step
+            const result = await orchestrator._healAndExecuteStep(step, context);
+
+            // 4. Verification Assertions
+            expect(callCount).toBe(2); // Retried once
+            expect(result.jobId).toBe('mock_job_99');
+            expect(step.description).toContain('Healed on attempt 2');
+            expect(step.data.healedInstructions).toBe('HEALED: Inject standard limits and eliminate nested quantifiers.');
+            expect(triadDebateChamberService.initiateDebate).toHaveBeenCalled();
+
+            // Restore original methods
+            orchestrator._dispatchStep = originalDispatch;
+            triadDebateChamberService.initiateDebate = originalInitiateDebate;
+        });
+
+        it('should reject syntactically invalid code and autonomously run auto-refinement loop to convergence', async () => {
+            const planId = 'test_refine_plan';
+            const context = {
+                generatedCode: 'function brokenSyntax( {' // Throwing parser syntax error
+            };
+
+            // 1. Mock AI Provider reason to return clean, syntactically correct code
+            const originalReason = aiProvider.reason;
+            aiProvider.reason = vi.fn().mockResolvedValue(
+                'function brokenSyntax() { return "healed and syntax valid"; }'
+            );
+
+            // 2. Execute verification and refinement
+            const evalResult = await orchestrator._evaluateAndRefine(planId, [], context);
+
+            // 3. Verification Assertions
+            expect(evalResult.success).toBe(true);
+            expect(evalResult.complexity).toBeDefined();
+            expect(context.generatedCode).toContain('healed and syntax valid');
+            expect(aiProvider.reason).toHaveBeenCalled();
+
+            // Restore original method
+            aiProvider.reason = originalReason;
         });
     });
 });

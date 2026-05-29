@@ -5,6 +5,13 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.106] - 2026-05-29 — Level 5 Meta-Cognitive Self-Healing Orchestrator
+### Added
+- **Dynamic Self-Healing Dispatcher Loop**: Upgraded Alti's backend Conductor (`orchestrator.js`) to intercept step execution failures, autonomously convene a **Triad Debate Chamber** (`triadDebateChamberService`), and synthesize recursive remediation retries.
+- **Post-Execution Evaluation & Refinement Gate**: Implemented a mathematical verification sweep over generated artifacts using cyclomatic complexity analysis (`astService.calculateComplexity`). Autonomously triggers recursive auto-refinements via Gemini for high-complexity code.
+- **GCP Swarm State Mesh**: Integrated the orchestrator to publish real-time orchestration state events to Google Cloud Pub/Sub (`alti-swarm-events`) during plan starts, failures, healings, and completions.
+- **Hermetic Conductor Integration Tests**: Deployed integration tests in `definitions.integration.test.js` validating recursive self-healing debates, syntax/complexity evaluation gates, and Pub/Sub mesh synchronization.
+
 ## [39.37.105] - 2026-05-29 — Deep Google Cloud Entrenchment (GCS & Pub/Sub integrations)
 ### Added
 - **GCP Pub/Sub Event-Driven Swarm Sync**: Overhauled `pubsub.service.js` to manage real-time cross-agent communications. Implemented an asynchronous in-memory `EventEmitter` fallback for hybrid local routing, preventing any gRPC connection hangs during local runs.

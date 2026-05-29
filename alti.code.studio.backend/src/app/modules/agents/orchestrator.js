@@ -17,6 +17,10 @@ import { queueService } from '../queue/queue.service.js';
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
+import { pubsubService } from '../googleCloud/pubsub.service.js';
+import { triadDebateChamberService } from './triad_debate_chamber.service.js';
+import { astService } from '../../../shared/ast.service.js';
+import { existsSync } from 'fs';
 
 /** Agents that require human approval in HYBRID mode */
 const CRITICAL_AGENTS = new Set([
@@ -269,33 +273,62 @@ No explanation. JSON only.
         const results = [];
         const parallel = plan.filter(s => s.parallel);
         const sequential = plan.filter(s => !s.parallel);
+        const sharedContext = { ...context, planId };
+
+        // Publish orchestration execution started to the GCP Swarm Event Mesh
+        await pubsubService.publishEvent('alti-swarm-events', {
+            event: 'ORCHESTRATION_EXECUTION_STARTED',
+            planId,
+            agentCount: plan.length,
+            timestamp: new Date().toISOString()
+        }).catch(() => {});
 
         // Run parallel agents simultaneously
         if (parallel.length > 0) {
             const parallelResults = await Promise.all(parallel.map(step =>
-                this._dispatchStep(step, context)
+                this._healAndExecuteStep(step, sharedContext)
             ));
             results.push(...parallelResults);
         }
 
         // Run sequential agents in order
         for (const step of sequential) {
-            results.push(await this._dispatchStep(step, context));
+            results.push(await this._healAndExecuteStep(step, sharedContext));
         }
 
-        this._auditUpdate(planId, 'executed', { results });
-        return { planId, status: 'executed', mode: this.mode, results };
+        // Execute post-execution mathematical verification and auto-refinement gate
+        const evaluationResult = await this._evaluateAndRefine(planId, results, sharedContext);
+
+        this._auditUpdate(planId, 'executed', { results, evaluation: evaluationResult });
+
+        // Publish orchestration completed event to the GCP Swarm Event Mesh
+        await pubsubService.publishEvent('alti-swarm-events', {
+            event: 'ORCHESTRATION_EXECUTION_COMPLETED',
+            planId,
+            status: evaluationResult.success ? 'SUCCESS' : 'WARNING',
+            timestamp: new Date().toISOString()
+        }).catch(() => {});
+
+        return { 
+            planId, 
+            status: 'executed', 
+            mode: this.mode, 
+            results,
+            evaluation: evaluationResult,
+            refinedCode: sharedContext.generatedCode || null
+        };
     }
 
     async _executeHybrid(planId, plan, context) {
         const results = [];
         const needsApproval = [];
+        const sharedContext = { ...context, planId };
 
         for (const step of plan) {
             if (CRITICAL_AGENTS.has(step.agent)) {
                 needsApproval.push(step);
             } else {
-                results.push(await this._dispatchStep(step, context));
+                results.push(await this._healAndExecuteStep(step, sharedContext));
             }
         }
 
@@ -312,6 +345,170 @@ No explanation. JSON only.
             pendingApproval: needsApproval.map(s => ({ agent: s.agent, description: s.description })),
             approvalPlanId: needsApproval.length > 0 ? `${planId}_critical` : null
         };
+    }
+
+    /**
+     * Recursive meta-cognitive self-healing step execution block.
+     * Intercepts step failures, convenes a Triad Debate, synthesizes correction, and retries.
+     */
+    async _healAndExecuteStep(step, context, attempt = 1, maxRetries = 3) {
+        try {
+            const result = await this._dispatchStep(step, context);
+            if (result.error) {
+                throw new Error(result.error);
+            }
+            return result;
+        } catch (err) {
+            logger.warn(`⚠️ [Conductor Self-Healing] Step [${step.agent}] failed on attempt ${attempt}/${maxRetries}: ${err.message}`);
+
+            if (attempt >= maxRetries) {
+                logger.error(`❌ [Conductor Self-Healing] Step [${step.agent}] exhausted all ${maxRetries} healing retries. Escalating.`);
+                return { agent: step.agent, error: err.message, failed: true };
+            }
+
+            // Publish step failed state to the GCP Swarm Event Mesh
+            await pubsubService.publishEvent('alti-swarm-events', {
+                event: 'ORCHESTRATION_STEP_FAILED',
+                planId: context.planId || 'unknown-plan',
+                agent: step.agent,
+                attempt,
+                error: err.message,
+                timestamp: new Date().toISOString()
+            }).catch(() => {});
+
+            // Convene the Triad Debate Chamber to autonomously formulate a healed solution
+            logger.info(`🏛️ [Conductor Self-Healing] Convening Triad Debate Chamber to resolve failure: "${err.message}"...`);
+            try {
+                const debateObjective = `
+                We are executing an automated multi-agent workflow step.
+                Agent: "${step.agent}"
+                Action Description: "${step.description || 'orchestrated step'}"
+                Target Input Payload: ${JSON.stringify(step.data || {})}
+                
+                The execution failed with the following error:
+                "${err.message}"
+                
+                Analyze this failure and synthesize a healed, optimal instruction set or input payload for the retry.
+                `;
+                const healedConsensus = await triadDebateChamberService.initiateDebate(debateObjective);
+                logger.info(`✅ [Conductor Self-Healing] Triad debate consensus synthesized successfully. Appending healing instructions.`);
+
+                // Inject the healed consensus into the step parameters
+                step.data = {
+                    ...step.data,
+                    healedInstructions: healedConsensus,
+                    remediedAt: new Date().toISOString(),
+                    attempt: attempt + 1
+                };
+                step.description = `${step.description || 'orchestrated step'} (Healed on attempt ${attempt + 1}: ${healedConsensus.substring(0, 100)}...)`;
+
+                // Publish healed event to the GCP Swarm Event Mesh
+                await pubsubService.publishEvent('alti-swarm-events', {
+                    event: 'ORCHESTRATION_PLAN_HEALED',
+                    planId: context.planId || 'unknown-plan',
+                    agent: step.agent,
+                    remediation: healedConsensus.substring(0, 200),
+                    timestamp: new Date().toISOString()
+                }).catch(() => {});
+
+                // Recursively retry
+                return await this._healAndExecuteStep(step, context, attempt + 1, maxRetries);
+            } catch (debateErr) {
+                logger.error(`❌ [Conductor Self-Healing] Triad Debate Chamber collapsed: ${debateErr.message}. Falling back to default retry.`);
+                // Fallback to basic retry if debate engine fails
+                return await this._healAndExecuteStep(step, context, attempt + 1, maxRetries);
+            }
+        }
+    }
+
+    /**
+     * Post-Execution mathematical verification and recursive auto-refinement gate.
+     * Evaluates JavaScript drafts using AST complexity analysis and fixes sub-optimal designs.
+     */
+    async _evaluateAndRefine(planId, results, context, attempt = 1, maxRefinements = 3) {
+        logger.info(`🔬 [Conductor Evaluation] Scanning artifacts for structural and complexity anomalies...`);
+
+        const draftCode = context.generatedCode || "";
+        if (!draftCode) {
+            logger.info(`🔬 [Conductor Evaluation] No generated code provided for direct AST sweep. Skipping post-execution gate.`);
+            return { success: true };
+        }
+
+        let complexity = 1;
+        let syntaxValid = true;
+        let syntaxError = null;
+
+        try {
+            complexity = astService.calculateComplexity(draftCode) || 1;
+        } catch (err) {
+            syntaxValid = false;
+            syntaxError = err.message;
+        }
+
+        const isAnomalous = !syntaxValid || complexity > 15;
+
+        if (isAnomalous) {
+            const anomalyType = !syntaxValid ? `Syntax Error: ${syntaxError}` : `High Cyclomatic Complexity: ${complexity}`;
+            logger.warn(`⚠️ [Conductor Evaluation] Anomaly detected: ${anomalyType}. Triggering auto-refinement loop.`);
+
+            if (attempt >= maxRefinements) {
+                logger.error(`❌ [Conductor Evaluation] Exhausted all ${maxRefinements} refinement retries. Proceeding with warnings.`);
+                return { success: false, reason: `Exhausted refinements for: ${anomalyType}` };
+            }
+
+            // Publish evaluation failed event to the GCP Swarm Event Mesh
+            await pubsubService.publishEvent('alti-swarm-events', {
+                event: 'ORCHESTRATION_EVALUATION_FAILED',
+                planId,
+                anomalyType,
+                attempt,
+                timestamp: new Date().toISOString()
+            }).catch(() => {});
+
+            // Call Gemini to refine the sub-optimal code draft
+            try {
+                const refinePrompt = `
+                You are a Senior Staff Compiler Engineer.
+                The following code draft failed our post-execution verification gate.
+                
+                CRITICAL ERROR/ANOMALY: ${anomalyType}
+                
+                CODE DRAFT:
+                ====
+                ${draftCode}
+                ====
+                
+                Please rewrite this code to:
+                1. Resolve any syntax errors and ensure it is raw, executable JavaScript.
+                2. Reduce cyclomatic complexity below 10 by decomposing nested loops, using early returns, and using map/filter/reduce cleanly.
+                
+                Return ONLY the clean, raw refined JavaScript code. Do NOT wrap in markdown \`\`\`.
+                `;
+                
+                const refinedCode = await aiProvider.reason(refinePrompt);
+                const cleanRefinedCode = refinedCode.replace(/^```[a-z]*\n/i, '').replace(/\n```$/i, '').trim();
+
+                // Update context with refined code
+                context.generatedCode = cleanRefinedCode;
+
+                // Publish refined convergence event to the GCP Swarm Event Mesh
+                await pubsubService.publishEvent('alti-swarm-events', {
+                    event: 'ORCHESTRATION_CONVERGED',
+                    planId,
+                    refinedComplexity: astService.calculateComplexity(cleanRefinedCode) || 1,
+                    timestamp: new Date().toISOString()
+                }).catch(() => {});
+
+                // Recursively re-evaluate
+                return await this._evaluateAndRefine(planId, results, context, attempt + 1, maxRefinements);
+            } catch (refineErr) {
+                logger.error(`❌ [Conductor Evaluation] Refinement engine failed: ${refineErr.message}`);
+                return { success: false, error: refineErr.message };
+            }
+        }
+
+        logger.info(`✅ [Conductor Evaluation] All verification checks passed perfectly (Complexity: ${complexity}, Syntax: Valid).`);
+        return { success: true, complexity };
     }
 
     async _dispatchStep(step, context) {
