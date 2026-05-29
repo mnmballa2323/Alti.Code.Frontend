@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.121] - 2026-05-29 — Advanced AI Engineering & LLMOps Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative AI Engineering & LLMOps Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new structured directory `definitions/ai/`:
+    - **Prompt Engineer**: LLM Prompt Optimization & Few-Shot Specialist (`ai.prompt_engineer`) designing high-performance prompt envelopes and structured schemas.
+    - **RAG Optimizer**: Retrieval-Augmented Generation (RAG) & Chunking Specialist (`ai.rag_optimizer`) designing semantic sliding window chunking and hybrid dense+sparse retrieval.
+    - **Vector DB Tuner**: Vector Database & Indexing Specialist (`ai.vector_tuner`) tuning high-dimensional HNSW vector index parameter profiles and metadata filter caches.
+    - **Fine-Tuning**: LLM Fine-Tuning & PEFT Specialist (`ai.fine_tuning`) configuring LoRA ranks, instruction dataset JSONL formatting, and DPO alignment.
+    - **Agent Orchestrator**: Multi-Agent Frameworks & Orchestrator Specialist (`ai.agent_orchestrator`) formulating multi-agent crewAI graphs, task delegation, and loop monitors state updates.
+    - **AI Safety / Guardrails**: AI Safety & Guardrails Officer (`ai.guardrails`) enforcing moderation APIs, jailbreak detection gates, and hallucination prevention shields.
+    - **LLM Evaluator**: LLM Evaluation & Benchmarking Auditor (`ai.llm_evaluator`) designing custom evaluation matrices, automated synthetic test datasets generation, and RAGAS metric alignments.
+    - **Model Serving**: Model Inference Serving & Quantization Optimizer (`ai.model_serving`) optimizing vLLM/TGI serving, dynamic request batching, and FP8/INT4 quantization layers.
+    - **Semantic Cache**: Semantic Prompt Caching Specialist (`ai.semantic_cache`) tuning similarity cache stores, cosine similarity cutoffs, and latency bypass schemes.
+    - **Synthetic Data**: Synthetic Dataset Generator & Data Augmenter (`ai.synthetic_data`) orchestrating high-diversity structured synthetic data pipelines and outlier filtering.
+- **Swarm Router Downstream AI Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision trigger blocks (triggers 90 to 99) mapping AI and LLMOps keywords to their respective specialists.
+- **Modular AI Engineering Test Suite & Verification**:
+  - Developed a dedicated integration test suite `ai.integration.test.js` verifying recursive parsing, loading, and downstream routing triggers for all 10 AI engineering agents.
+  - Successfully cleared all core backend test suites sweeps, confirming 100% green verification passes on the new AI, architectures, algorithms, runtimes, economic sectors, and main definitions integration tests (120/120 tests passed).
+
 ## [39.37.120] - 2026-05-29 — Advanced Software Architectures & Distributed Systems Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Software Architecture & Distributed Systems Agents**:

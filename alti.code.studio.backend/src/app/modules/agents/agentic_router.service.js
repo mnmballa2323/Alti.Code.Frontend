@@ -1389,6 +1389,126 @@ class AgenticRouterService {
             strategy = 'Advanced Architecture Swarm: Real-Time WebSockets & CRDT';
         }
 
+        // 90. AI Engineering: LLM Prompt Optimization & Few-Shot Specialist
+        const isPromptEngineerOutput = outputLower.includes('prompt_template_design') || 
+                                       outputLower.includes('chain_of_thought_cot') || 
+                                       outputLower.includes('prompt_injection_shielding') || 
+                                       outputLower.includes('structured_output_validation');
+        if (isPromptEngineerOutput) {
+            downstreamSequence.push(
+                { agentId: 'LLM Prompt Optimization & Few-Shot Specialist', task: 'Optimize dynamic LLM prompt envelopes and system prompt shielding boundaries' }
+            );
+            strategy = 'Advanced AI Swarm: Prompt Optimization & Few-Shot';
+        }
+
+        // 91. AI Engineering: Retrieval-Augmented Generation (RAG) & Chunking Specialist
+        const isRagOptimizerOutput = outputLower.includes('semantic_chunking_strategies') || 
+                                     outputLower.includes('hybrid_vector_lexical_search') || 
+                                     outputLower.includes('cross_encoder_rerank_opt') || 
+                                     outputLower.includes('context_window_packing');
+        if (isRagOptimizerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Retrieval-Augmented Generation (RAG) & Chunking Specialist', task: 'Design recursive sliding window chunking maps and hybrid vector search retrievals' }
+            );
+            strategy = 'Advanced AI Swarm: RAG & Chunking Optimization';
+        }
+
+        // 92. AI Engineering: Vector Database & Indexing Specialist
+        const isVectorTunerOutput = outputLower.includes('hnsw_index_tuning') || 
+                                    outputLower.includes('product_quantization_compress') || 
+                                    outputLower.includes('metadata_filtering_opt') || 
+                                    outputLower.includes('vector_db_sizing');
+        if (isVectorTunerOutput) {
+            downstreamSequence.push(
+                { agentId: 'Vector Database & Indexing Specialist', task: 'Tune high-dimensional HNSW index parameter profiles and metadata filter caches' }
+            );
+            strategy = 'Advanced AI Swarm: Vector Database & Indexing';
+        }
+
+        // 93. AI Engineering: LLM Fine-Tuning & PEFT Specialist
+        const isFineTuningOutput = outputLower.includes('lora_peft_tuning') || 
+                                   outputLower.includes('instruction_dataset_curation') || 
+                                   outputLower.includes('dpo_rlhf_alignment') || 
+                                   outputLower.includes('adapter_merge_specs');
+        if (isFineTuningOutput) {
+            downstreamSequence.push(
+                { agentId: 'LLM Fine-Tuning & PEFT Specialist', task: 'Configure LoRA rank adapters, Instruction JSONL formatting pipelines, and DPO alignments' }
+            );
+            strategy = 'Advanced AI Swarm: LLM Fine-Tuning & PEFT';
+        }
+
+        // 94. AI Engineering: Multi-Agent Frameworks & Orchestrator Specialist
+        const isAgentOrchestratorOutput = outputLower.includes('multi_agent_graphs') || 
+                                          outputLower.includes('loop_state_monitoring') || 
+                                          outputLower.includes('task_delegation_supervisor') || 
+                                          outputLower.includes('context_sharing_handoffs');
+        if (isAgentOrchestratorOutput) {
+            downstreamSequence.push(
+                { agentId: 'Multi-Agent Frameworks & Orchestrator Specialist', task: 'Formulate crewAI multi-agent supervisors patterns and loop monitors state updates' }
+            );
+            strategy = 'Advanced AI Swarm: Multi-Agent Frameworks';
+        }
+
+        // 95. AI Engineering: AI Safety & Guardrails Officer
+        const isGuardrailsOutput = outputLower.includes('jailbreak_detection_gates') || 
+                                   outputLower.includes('hallucination_prevention_shields') || 
+                                   outputLower.includes('toxicity_moderation_rules') || 
+                                   outputLower.includes('pii_anonymization_filters');
+        if (isGuardrailsOutput) {
+            downstreamSequence.push(
+                { agentId: 'AI Safety & Guardrails Officer', task: 'Enforce LlamaGuard toxicity moderators and hallucination mitigation filters' }
+            );
+            strategy = 'Advanced AI Swarm: Safety & Guardrails';
+        }
+
+        // 96. AI Engineering: LLM Evaluation & Benchmarking Auditor
+        const isLlmEvaluatorOutput = outputLower.includes('automated_benchmarking_harness') || 
+                                     outputLower.includes('ragas_metric_alignment') || 
+                                     outputLower.includes('factual_faithfulness_scores') || 
+                                     outputLower.includes('llm_judge_templates');
+        if (isLlmEvaluatorOutput) {
+            downstreamSequence.push(
+                { agentId: 'LLM Evaluation & Benchmarking Auditor', task: 'Generate synthetic evaluation datasets and evaluate faithfulness scoring metrics' }
+            );
+            strategy = 'Advanced AI Swarm: Evaluation & Benchmarking';
+        }
+
+        // 97. AI Engineering: Model Inference Serving & Quantization Optimizer
+        const isModelServingOutput = outputLower.includes('inference_engine_tuning') || 
+                                     outputLower.includes('model_quantization_formats') || 
+                                     outputLower.includes('parallel_gpu_inference') || 
+                                     outputLower.includes('latency_throughput_profile');
+        if (isModelServingOutput) {
+            downstreamSequence.push(
+                { agentId: 'Model Inference Serving & Quantization Optimizer', task: 'Calibrate vLLM serving parameters and INT4/FP8 quantization configurations' }
+            );
+            strategy = 'Advanced AI Swarm: Serving & Quantization';
+        }
+
+        // 98. AI Engineering: Semantic Prompt Caching Specialist
+        const isSemanticCacheOutput = outputLower.includes('semantic_caching_thresholds') || 
+                                      outputLower.includes('similarity_cutoff_rules') || 
+                                      outputLower.includes('cache_invalidation_logic') || 
+                                      outputLower.includes('latency_bypass_telemetry');
+        if (isSemanticCacheOutput) {
+            downstreamSequence.push(
+                { agentId: 'Semantic Prompt Caching Specialist', task: 'Tune semantic cosine similarity thresholds and cache invalidation policies' }
+            );
+            strategy = 'Advanced AI Swarm: Semantic Prompt Caching';
+        }
+
+        // 99. AI Engineering: Synthetic Dataset Generator & Data Augmenter
+        const isSyntheticDataOutput = outputLower.includes('synthetic_data_pipelines') || 
+                                      outputLower.includes('data_diversity_scoring') || 
+                                      outputLower.includes('context_aware_augmentation') || 
+                                      outputLower.includes('outlier_filtering_opt');
+        if (isSyntheticDataOutput) {
+            downstreamSequence.push(
+                { agentId: 'Synthetic Dataset Generator & Data Augmenter', task: 'Orchestrate high-diversity synthetic questions data pipelines and outlier checks' }
+            );
+            strategy = 'Advanced AI Swarm: Synthetic Data & Augmentation';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });
