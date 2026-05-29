@@ -5,6 +5,24 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.116] - 2026-05-29 — Complete Suite of Forty-Nine GCP Specialized Backend Agents & Swarm Router Integration
+### Added
+- **Ten Additional Premium GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP GKE Enterprise Multi-Cluster Fleet Manager** (`agent.gcp.gke.fleet`): Specializes in GKE Enterprise fleets, multi-cluster ingress routing, Config Sync configuration, and multi-cluster meshes.
+  - **GCP Vertex AI Model Monitoring & Drift Auditor** (`agent.gcp.vertex.monitoring`): Specializes in Vertex model monitoring, prediction logging, and feature attribution skew alerts.
+  - **GCP Cloud Healthcare API & HL7/FHIR Specialist** (`agent.gcp.healthcare.fhir`): Specializes in Healthcare datasets, FHIR R4 stores, and HIPAA de-identification pipelines.
+  - **GCP Apigee Enterprise API Management Specialist** (`agent.gcp.apigee.enterprise`): Specializes in Apigee X proxy patterns, traffic spike arrest policies, OAuth2, and developer portals.
+  - **GCP Dataplex Data Mesh Governance Specialist** (`agent.gcp.dataplex.mesh`): Specializes in Dataplex data zones, data quality checks, and data lineage tracking.
+  - **GCP Dataproc Serverless & Apache Spark Specialist** (`agent.gcp.dataproc.spark`): Specializes in Dataproc serverless PySpark batch runs, Spark performance tuning, and shared Hive metastores.
+  - **GCP Vertex AI Search & Conversation Agentic Specialist** (`agent.gcp.vertex.search`): Specializes in Vertex AI Agent Builder, semantic search index data stores, Dialogflow CX, and secure grounding.
+  - **GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist** (`agent.gcp.secure.proxy`): Specializes in Cloud Secure Web Proxy configurations, TLS egress decryption scopes, and domain routing rules.
+  - **GCP Cloud Run Multicontainer & Sidecar Orchestration Specialist** (`agent.gcp.cloudrun.multicontainer`): Specializes in Cloud Run multicontainer architectures, database sidecar proxies, shared local scratch volumes, and Nginx egress routes.
+  - **GCP Cloud TPU & High-Performance Compute Cluster Specialist** (`agent.gcp.tpu.hpc`): Specializes in Cloud TPU v4/v5 pod slices, Slurm HPC cluster schedulers, GCSFuse caching, and Model Parallel/JAX scaling configurations.
+- **Hierarchical Swarm Router & Keyword Matching Alignment**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 49 GCP specialized agents.
+  - Aligned high-precision triggers for GKE fleets, model monitoring, FHIR, Apigee, Dataplex data mesh, serverless Dataproc Spark, search/Agent Builder, SWP egress, Cloud Run multicontainers, and HPC TPU scaling.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.115] - 2026-05-29 — Complete Suite of Thirty-Nine GCP Specialized Backend Agents & Swarm Router Integration
 ### Added
 - **Ten More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:

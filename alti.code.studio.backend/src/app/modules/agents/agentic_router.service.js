@@ -809,6 +809,126 @@ class AgenticRouterService {
             strategy = 'Hierarchical Workload Identity Federation & OIDC Swarm';
         }
 
+        // 40. Analyze GKE Enterprise multi-cluster fleet management
+        const isGkeFleetOutput = outputLower.includes('gke_fleet') || 
+                                 outputLower.includes('multi_cluster_ingress') || 
+                                 outputLower.includes('config_sync') || 
+                                 outputLower.includes('fleet_membership');
+        if (isGkeFleetOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP GKE Enterprise Multi-Cluster Fleet Manager', task: 'Enforce Config Sync fleet policies and coordinate multi-cluster ingress routing' }
+            );
+            strategy = 'Hierarchical GKE Enterprise Fleet Swarm';
+        }
+
+        // 41. Analyze Vertex AI model monitoring & prediction drift
+        const isVertexMonitoringOutput = outputLower.includes('vertex_model_monitoring') || 
+                                         outputLower.includes('drift_detection') || 
+                                         outputLower.includes('model_skew') || 
+                                         outputLower.includes('prediction_telemetry');
+        if (isVertexMonitoringOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Vertex AI Model Monitoring & Drift Auditor', task: 'Formulate model continuous evaluation baseline schemas and statistical drift alerts' }
+            );
+            strategy = 'Hierarchical Vertex AI Model Monitoring Swarm';
+        }
+
+        // 42. Analyze Healthcare API & FHIR protocol data
+        const isHealthcareFhirOutput = outputLower.includes('healthcare_api') || 
+                                       outputLower.includes('fhir_store') || 
+                                       outputLower.includes('hl7_v2') || 
+                                       outputLower.includes('dicom_deid');
+        if (isHealthcareFhirOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Healthcare API & HL7/FHIR Specialist', task: 'Design secure FHIR data store integrations and HIPAA de-identification pipelines' }
+            );
+            strategy = 'Hierarchical Healthcare & FHIR Data Swarm';
+        }
+
+        // 43. Analyze Apigee Enterprise API management
+        const isApigeeEnterpriseOutput = outputLower.includes('apigee_proxy') || 
+                                         outputLower.includes('spike_arrest') || 
+                                         outputLower.includes('apigee_quota') || 
+                                         outputLower.includes('api_developer_portal');
+        if (isApigeeEnterpriseOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Apigee Enterprise API Management Specialist', task: 'Configure Apigee proxy routing configurations and traffic rate-limiting policies' }
+            );
+            strategy = 'Hierarchical Apigee Enterprise Swarm';
+        }
+
+        // 44. Analyze Dataplex data mesh governance
+        const isDataplexMeshOutput = outputLower.includes('dataplex_lake') || 
+                                     outputLower.includes('data_mesh_governance') || 
+                                     outputLower.includes('data_quality_rule') || 
+                                     outputLower.includes('metadata_lineage');
+        if (isDataplexMeshOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Dataplex Data Mesh Governance Specialist', task: 'Audit Dataplex data quality rule configurations and metadata catalog lineage' }
+            );
+            strategy = 'Hierarchical Dataplex Data Mesh Swarm';
+        }
+
+        // 45. Analyze Dataproc serverless Spark computing
+        const isDataprocSparkOutput = outputLower.includes('dataproc_serverless') || 
+                                      outputLower.includes('pyspark_batch') || 
+                                      outputLower.includes('spark_sql_tuning') || 
+                                      outputLower.includes('ephemeral_hive');
+        if (isDataprocSparkOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Dataproc Serverless & Apache Spark Specialist', task: 'Design serverless Spark batches and tune distributed memory executor settings' }
+            );
+            strategy = 'Hierarchical Dataproc Serverless Spark Swarm';
+        }
+
+        // 46. Analyze Vertex AI Search & Conversation Builder
+        const isVertexSearchOutput = outputLower.includes('vertex_search_engine') || 
+                                     outputLower.includes('agent_builder') || 
+                                     outputLower.includes('data_store_index') || 
+                                     outputLower.includes('dialogflow_cx');
+        if (isVertexSearchOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Vertex AI Search & Conversation Agentic Specialist', task: 'Configure RAG data store search indexes and conversational Dialogflow CX intents' }
+            );
+            strategy = 'Hierarchical Vertex AI Agent Builder Swarm';
+        }
+
+        // 47. Analyze Secure Web Proxy & egress decryption gateway
+        const isSecureProxyOutput = outputLower.includes('secure_web_proxy') || 
+                                    outputLower.includes('egress_decryption') || 
+                                    outputLower.includes('url_routing_rule') || 
+                                    outputLower.includes('tls_inspection');
+        if (isSecureProxyOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist', task: 'Deploy secure SWP gateways, TLS decryption boundaries, and egress routing filters' }
+            );
+            strategy = 'Hierarchical Secure Web Proxy Egress Swarm';
+        }
+
+        // 48. Analyze Cloud Run Multicontainer sidecar proxying
+        const isRunMulticontainerOutput = outputLower.includes('run_multicontainer') || 
+                                          outputLower.includes('sidecar_proxy') || 
+                                          outputLower.includes('run_nginx_egress') || 
+                                          outputLower.includes('run_shared_volume');
+        if (isRunMulticontainerOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Run Multicontainer & Sidecar Orchestration Specialist', task: 'Design Cloud Run sidecar services and memory-backed shared scratch volumes' }
+            );
+            strategy = 'Hierarchical Cloud Run Multicontainer Swarm';
+        }
+
+        // 49. Analyze Cloud TPU & HPC cluster scheduling
+        const isTpuHpcOutput = outputLower.includes('cloud_tpu_v5') || 
+                               outputLower.includes('tpu_pod_slice') || 
+                               outputLower.includes('hpc_scheduler') || 
+                               outputLower.includes('slurm_cluster');
+        if (isTpuHpcOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud TPU & High-Performance Compute Cluster Specialist', task: 'Configure Slurm cluster batch schedulers and JAX TPU VM pod configurations' }
+            );
+            strategy = 'Hierarchical TPU & High-Performance Compute Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the thirty-nine highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the forty-nine highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -514,6 +514,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const interconnectPath = path.join(DEFINITIONS_DIR, 'gcp.interconnect.vpn.agent.yaml');
             const workloadFederationPath = path.join(DEFINITIONS_DIR, 'gcp.workload.federation.agent.yaml');
 
+            // 10 newest agents (Total 49)
+            const gkeFleetPath = path.join(DEFINITIONS_DIR, 'gcp.gke.fleet.agent.yaml');
+            const vertexMonitoringPath = path.join(DEFINITIONS_DIR, 'gcp.vertex.monitoring.agent.yaml');
+            const healthcareFhirPath = path.join(DEFINITIONS_DIR, 'gcp.healthcare.fhir.agent.yaml');
+            const apigeeEnterprisePath = path.join(DEFINITIONS_DIR, 'gcp.apigee.enterprise.agent.yaml');
+            const dataplexMeshPath = path.join(DEFINITIONS_DIR, 'gcp.dataplex.mesh.agent.yaml');
+            const dataprocSparkPath = path.join(DEFINITIONS_DIR, 'gcp.dataproc.spark.agent.yaml');
+            const vertexSearchPath = path.join(DEFINITIONS_DIR, 'gcp.vertex.search.agent.yaml');
+            const secureProxyPath = path.join(DEFINITIONS_DIR, 'gcp.secure.proxy.agent.yaml');
+            const runMulticontainerPath = path.join(DEFINITIONS_DIR, 'gcp.cloudrun.multicontainer.agent.yaml');
+            const tpuHpcPath = path.join(DEFINITIONS_DIR, 'gcp.tpu.hpc.agent.yaml');
+
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
             const alloydbDef = parseYaml(await fs.readFile(alloydbPath, 'utf8'));
@@ -557,6 +569,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const binauthDef = parseYaml(await fs.readFile(binauthPath, 'utf8'));
             const interconnectDef = parseYaml(await fs.readFile(interconnectPath, 'utf8'));
             const workloadFederationDef = parseYaml(await fs.readFile(workloadFederationPath, 'utf8'));
+
+            // 10 newest agents parsing (Total 49)
+            const gkeFleetDef = parseYaml(await fs.readFile(gkeFleetPath, 'utf8'));
+            const vertexMonitoringDef = parseYaml(await fs.readFile(vertexMonitoringPath, 'utf8'));
+            const healthcareFhirDef = parseYaml(await fs.readFile(healthcareFhirPath, 'utf8'));
+            const apigeeEnterpriseDef = parseYaml(await fs.readFile(apigeeEnterprisePath, 'utf8'));
+            const dataplexMeshDef = parseYaml(await fs.readFile(dataplexMeshPath, 'utf8'));
+            const dataprocSparkDef = parseYaml(await fs.readFile(dataprocSparkPath, 'utf8'));
+            const vertexSearchDef = parseYaml(await fs.readFile(vertexSearchPath, 'utf8'));
+            const secureProxyDef = parseYaml(await fs.readFile(secureProxyPath, 'utf8'));
+            const runMulticontainerDef = parseYaml(await fs.readFile(runMulticontainerPath, 'utf8'));
+            const tpuHpcDef = parseYaml(await fs.readFile(tpuHpcPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -676,6 +700,37 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(workloadFederationDef.id).toBe('agent.gcp.workload.federation');
             expect(workloadFederationDef.name).toBe('GCP Workload Identity Federation & OIDC Specialist');
+
+            // Assertions for 10 newest agents (Total 49)
+            expect(gkeFleetDef.id).toBe('agent.gcp.gke.fleet');
+            expect(gkeFleetDef.name).toBe('GCP GKE Enterprise Multi-Cluster Fleet Manager');
+
+            expect(vertexMonitoringDef.id).toBe('agent.gcp.vertex.monitoring');
+            expect(vertexMonitoringDef.name).toBe('GCP Vertex AI Model Monitoring & Drift Auditor');
+
+            expect(healthcareFhirDef.id).toBe('agent.gcp.healthcare.fhir');
+            expect(healthcareFhirDef.name).toBe('GCP Cloud Healthcare API & HL7/FHIR Specialist');
+
+            expect(apigeeEnterpriseDef.id).toBe('agent.gcp.apigee.enterprise');
+            expect(apigeeEnterpriseDef.name).toBe('GCP Apigee Enterprise API Management Specialist');
+
+            expect(dataplexMeshDef.id).toBe('agent.gcp.dataplex.mesh');
+            expect(dataplexMeshDef.name).toBe('GCP Dataplex Data Mesh Governance Specialist');
+
+            expect(dataprocSparkDef.id).toBe('agent.gcp.dataproc.spark');
+            expect(dataprocSparkDef.name).toBe('GCP Dataproc Serverless & Apache Spark Specialist');
+
+            expect(vertexSearchDef.id).toBe('agent.gcp.vertex.search');
+            expect(vertexSearchDef.name).toBe('GCP Vertex AI Search & Conversation Agentic Specialist');
+
+            expect(secureProxyDef.id).toBe('agent.gcp.secure.proxy');
+            expect(secureProxyDef.name).toBe('GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist');
+
+            expect(runMulticontainerDef.id).toBe('agent.gcp.cloudrun.multicontainer');
+            expect(runMulticontainerDef.name).toBe('GCP Cloud Run Multicontainer & Sidecar Orchestration Specialist');
+
+            expect(tpuHpcDef.id).toBe('agent.gcp.tpu.hpc');
+            expect(tpuHpcDef.name).toBe('GCP Cloud TPU & High-Performance Compute Cluster Specialist');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -928,6 +983,66 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const workloadFederationSwarm = await agenticRouter.routeDownstreamSwarm(workloadFederationOutput);
             expect(workloadFederationSwarm.strategy).toBe('Hierarchical Workload Identity Federation & OIDC Swarm');
             expect(workloadFederationSwarm.sequence.map(s => s.agentId)).toContain('GCP Workload Identity Federation & OIDC Specialist');
+
+            // 40. Evaluate GKE Enterprise multi-cluster fleet management
+            const gkeFleetOutput = 'gke_fleet multi_cluster_ingress config_sync fleet_membership';
+            const gkeFleetSwarm = await agenticRouter.routeDownstreamSwarm(gkeFleetOutput);
+            expect(gkeFleetSwarm.strategy).toBe('Hierarchical GKE Enterprise Fleet Swarm');
+            expect(gkeFleetSwarm.sequence.map(s => s.agentId)).toContain('GCP GKE Enterprise Multi-Cluster Fleet Manager');
+
+            // 41. Evaluate Vertex AI model monitoring & prediction drift
+            const vertexMonitoringOutput = 'vertex_model_monitoring drift_detection model_skew prediction_telemetry';
+            const vertexMonitoringSwarm = await agenticRouter.routeDownstreamSwarm(vertexMonitoringOutput);
+            expect(vertexMonitoringSwarm.strategy).toBe('Hierarchical Vertex AI Model Monitoring Swarm');
+            expect(vertexMonitoringSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Model Monitoring & Drift Auditor');
+
+            // 42. Evaluate Healthcare API & FHIR protocol data
+            const healthcareFhirOutput = 'healthcare_api fhir_store hl7_v2 dicom_deid';
+            const healthcareFhirSwarm = await agenticRouter.routeDownstreamSwarm(healthcareFhirOutput);
+            expect(healthcareFhirSwarm.strategy).toBe('Hierarchical Healthcare & FHIR Data Swarm');
+            expect(healthcareFhirSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Healthcare API & HL7/FHIR Specialist');
+
+            // 43. Evaluate Apigee Enterprise API management
+            const apigeeEnterpriseOutput = 'apigee_proxy spike_arrest apigee_quota api_developer_portal';
+            const apigeeEnterpriseSwarm = await agenticRouter.routeDownstreamSwarm(apigeeEnterpriseOutput);
+            expect(apigeeEnterpriseSwarm.strategy).toBe('Hierarchical Apigee Enterprise Swarm');
+            expect(apigeeEnterpriseSwarm.sequence.map(s => s.agentId)).toContain('GCP Apigee Enterprise API Management Specialist');
+
+            // 44. Evaluate Dataplex data mesh governance
+            const dataplexMeshOutput = 'dataplex_lake data_mesh_governance data_quality_rule metadata_lineage';
+            const dataplexMeshSwarm = await agenticRouter.routeDownstreamSwarm(dataplexMeshOutput);
+            expect(dataplexMeshSwarm.strategy).toBe('Hierarchical Dataplex Data Mesh Swarm');
+            expect(dataplexMeshSwarm.sequence.map(s => s.agentId)).toContain('GCP Dataplex Data Mesh Governance Specialist');
+
+            // 45. Evaluate Dataproc serverless Spark computing
+            const dataprocSparkOutput = 'dataproc_serverless pyspark_batch spark_sql_tuning ephemeral_hive';
+            const dataprocSparkSwarm = await agenticRouter.routeDownstreamSwarm(dataprocSparkOutput);
+            expect(dataprocSparkSwarm.strategy).toBe('Hierarchical Dataproc Serverless Spark Swarm');
+            expect(dataprocSparkSwarm.sequence.map(s => s.agentId)).toContain('GCP Dataproc Serverless & Apache Spark Specialist');
+
+            // 46. Evaluate Vertex AI Search & Conversation Builder
+            const vertexSearchOutput = 'vertex_search_engine agent_builder data_store_index dialogflow_cx';
+            const vertexSearchSwarm = await agenticRouter.routeDownstreamSwarm(vertexSearchOutput);
+            expect(vertexSearchSwarm.strategy).toBe('Hierarchical Vertex AI Agent Builder Swarm');
+            expect(vertexSearchSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Search & Conversation Agentic Specialist');
+
+            // 47. Evaluate Secure Web Proxy & egress decryption gateway
+            const secureProxyOutput = 'secure_web_proxy egress_decryption url_routing_rule tls_inspection';
+            const secureProxySwarm = await agenticRouter.routeDownstreamSwarm(secureProxyOutput);
+            expect(secureProxySwarm.strategy).toBe('Hierarchical Secure Web Proxy Egress Swarm');
+            expect(secureProxySwarm.sequence.map(s => s.agentId)).toContain('GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist');
+
+            // 48. Evaluate Cloud Run Multicontainer sidecar proxying
+            const runMulticontainerOutput = 'run_multicontainer sidecar_proxy run_nginx_egress run_shared_volume';
+            const runMulticontainerSwarm = await agenticRouter.routeDownstreamSwarm(runMulticontainerOutput);
+            expect(runMulticontainerSwarm.strategy).toBe('Hierarchical Cloud Run Multicontainer Swarm');
+            expect(runMulticontainerSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Run Multicontainer & Sidecar Orchestration Specialist');
+
+            // 49. Evaluate Cloud TPU & HPC cluster scheduling
+            const tpuHpcOutput = 'cloud_tpu_v5 tpu_pod_slice hpc_scheduler slurm_cluster';
+            const tpuHpcSwarm = await agenticRouter.routeDownstreamSwarm(tpuHpcOutput);
+            expect(tpuHpcSwarm.strategy).toBe('Hierarchical TPU & High-Performance Compute Swarm');
+            expect(tpuHpcSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud TPU & High-Performance Compute Cluster Specialist');
         });
     });
 });
