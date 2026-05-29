@@ -388,6 +388,79 @@ class AgenticRouterService {
             strategy = 'Hierarchical API Gateway & Cloud Armor WAF Swarm';
         }
 
+        // 12. Analyze Relational DB / Cloud SQL
+        const isRelationalDbOutput = outputLower.includes('cloudsql') || 
+                                     outputLower.includes('connection_pool') || 
+                                     outputLower.includes('pgbouncer') || 
+                                     outputLower.includes('replica') || 
+                                     outputLower.includes('read_replica') || 
+                                     outputLower.includes('high_availability') || 
+                                     outputLower.includes('ha') || 
+                                     outputLower.includes('alloydb_instance') || 
+                                     outputLower.includes('query_cache');
+        if (isRelationalDbOutput) {
+            downstreamSequence.push(
+                { agentId: 'Database Performance & SQL Optimization Tuning Specialist', task: 'Audit queries and indexing strategies' },
+                { agentId: 'GCP Relational Database & AlloyDB Architect', task: 'Design highly available database replications and Cloud SQL connection pools' }
+            );
+            strategy = 'Hierarchical Relational DB & AlloyDB Tuning Swarm';
+        }
+
+        // 13. Analyze Identity & Federated login
+        const isIdentityOutput = outputLower.includes('firebase_auth') || 
+                                 outputLower.includes('identity_platform') || 
+                                 outputLower.includes('mfa') || 
+                                 outputLower.includes('oauth2') || 
+                                 outputLower.includes('oidc') || 
+                                 outputLower.includes('saml') || 
+                                 outputLower.includes('federated') || 
+                                 outputLower.includes('jwt') || 
+                                 outputLower.includes('custom_claims');
+        if (isIdentityOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Identity Platform & Firebase Auth Specialist', task: 'Configure enterprise identity federations and custom JWT tokens' },
+                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Audit user access controls and authentication boundaries' }
+            );
+            strategy = 'Hierarchical IAM & Federated Identity Swarm';
+        }
+
+        // 14. Analyze Eventarc and serverless functions triggers
+        const isFunctionsMeshOutput = outputLower.includes('cloudfunction') || 
+                                      outputLower.includes('cloudfunctions') || 
+                                      outputLower.includes('eventarc') || 
+                                      outputLower.includes('trigger') || 
+                                      outputLower.includes('oncreate') || 
+                                      outputLower.includes('onupdate') || 
+                                      outputLower.includes('ondelete') || 
+                                      outputLower.includes('firestore.document') || 
+                                      outputLower.includes('event_routing') || 
+                                      outputLower.includes('firestore_trigger') || 
+                                      outputLower.includes('pubsub_trigger') || 
+                                      outputLower.includes('serverless_function');
+        if (isFunctionsMeshOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Functions & Eventarc Micro-Mesh Specialist', task: 'Configure 2nd gen serverless handlers and Eventarc trigger meshes' },
+                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Orchestrate step workflow callbacks and cloud task runs' }
+            );
+            strategy = 'Hierarchical Eventarc & Serverless Micro-Mesh Swarm';
+        }
+
+        // 15. Analyze Secret Manager & KMS encryption keys
+        const isKmsOfficerOutput = outputLower.includes('secretmanager') || 
+                                   outputLower.includes('kms') || 
+                                   outputLower.includes('encryption_key') || 
+                                   outputLower.includes('cmek') || 
+                                   outputLower.includes('envelope_encryption') || 
+                                   outputLower.includes('secret_rotation') || 
+                                   outputLower.includes('cryptographic');
+        if (isKmsOfficerOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Secret Manager & KMS Cryptographic Officer', task: 'Secure secret manager rotation schemes and KMS key envelopes' },
+                { agentId: 'Security & OWASP Hardening Sentinel', task: 'Scan configurations for encryption and secrets leaks compliance' }
+            );
+            strategy = 'Hierarchical Cryptographic & KMS Officer Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

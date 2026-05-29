@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the eleven highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the fifteen highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -481,6 +481,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const storagePath = path.join(DEFINITIONS_DIR, 'gcp.storage.governor.agent.yaml');
             const monitoringPath = path.join(DEFINITIONS_DIR, 'gcp.operations.monitoring.agent.yaml');
             const armorPath = path.join(DEFINITIONS_DIR, 'gcp.armor.gateway.agent.yaml');
+            const relationalPath = path.join(DEFINITIONS_DIR, 'gcp.relational.architect.agent.yaml');
+            const identityPath = path.join(DEFINITIONS_DIR, 'gcp.identity.specialist.agent.yaml');
+            const functionsPath = path.join(DEFINITIONS_DIR, 'gcp.functions.mesh.agent.yaml');
+            const kmsPath = path.join(DEFINITIONS_DIR, 'gcp.kms.officer.agent.yaml');
 
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
@@ -493,6 +497,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const storageDef = parseYaml(await fs.readFile(storagePath, 'utf8'));
             const monitoringDef = parseYaml(await fs.readFile(monitoringPath, 'utf8'));
             const armorDef = parseYaml(await fs.readFile(armorPath, 'utf8'));
+            const relationalDef = parseYaml(await fs.readFile(relationalPath, 'utf8'));
+            const identityDef = parseYaml(await fs.readFile(identityPath, 'utf8'));
+            const functionsDef = parseYaml(await fs.readFile(functionsPath, 'utf8'));
+            const kmsDef = parseYaml(await fs.readFile(kmsPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -526,6 +534,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(armorDef.id).toBe('agent.gcp.armor.gateway');
             expect(armorDef.name).toBe('GCP Cloud Armor & API Gateway WAF Specialist');
+
+            expect(relationalDef.id).toBe('agent.gcp.relational.architect');
+            expect(relationalDef.name).toBe('GCP Relational Database & AlloyDB Architect');
+
+            expect(identityDef.id).toBe('agent.gcp.identity.specialist');
+            expect(identityDef.name).toBe('GCP Identity Platform & Firebase Auth Specialist');
+
+            expect(functionsDef.id).toBe('agent.gcp.functions.mesh');
+            expect(functionsDef.name).toBe('GCP Cloud Functions & Eventarc Micro-Mesh Specialist');
+
+            expect(kmsDef.id).toBe('agent.gcp.kms.officer');
+            expect(kmsDef.name).toBe('GCP Secret Manager & KMS Cryptographic Officer');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -602,6 +622,34 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             expect(gatewaySwarm.strategy).toBe('Hierarchical API Gateway & Cloud Armor WAF Swarm');
             expect(gatewaySwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Armor & API Gateway WAF Specialist');
             expect(gatewaySwarm.sequence.map(s => s.agentId)).toContain('Security & OWASP Hardening Sentinel');
+
+            // 12. Evaluate Relational DB / Cloud SQL outputs
+            const relationalOutput = 'const connection = await cloudSql.connect({ pgbouncer: true });';
+            const relationalSwarm = await agenticRouter.routeDownstreamSwarm(relationalOutput);
+            expect(relationalSwarm.strategy).toBe('Hierarchical Relational DB & AlloyDB Tuning Swarm');
+            expect(relationalSwarm.sequence.map(s => s.agentId)).toContain('Database Performance & SQL Optimization Tuning Specialist');
+            expect(relationalSwarm.sequence.map(s => s.agentId)).toContain('GCP Relational Database & AlloyDB Architect');
+
+            // 13. Evaluate Identity & Firebase Auth outputs
+            const identityOutput = 'firebaseAdmin.auth().createCustomToken(uid, { mfaEnrolled: true });';
+            const identitySwarm = await agenticRouter.routeDownstreamSwarm(identityOutput);
+            expect(identitySwarm.strategy).toBe('Hierarchical IAM & Federated Identity Swarm');
+            expect(identitySwarm.sequence.map(s => s.agentId)).toContain('GCP Identity Platform & Firebase Auth Specialist');
+            expect(identitySwarm.sequence.map(s => s.agentId)).toContain('GCP Sentinel Zero-Trust Security Auditor');
+
+            // 14. Evaluate Cloud Functions & Eventarc outputs
+            const functionsOutput = 'exports.onDocumentCreated = firestore.document("users/{uid}").onCreate((snap, ctx) => {});';
+            const functionsSwarm = await agenticRouter.routeDownstreamSwarm(functionsOutput);
+            expect(functionsSwarm.strategy).toBe('Hierarchical Eventarc & Serverless Micro-Mesh Swarm');
+            expect(functionsSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Functions & Eventarc Micro-Mesh Specialist');
+            expect(functionsSwarm.sequence.map(s => s.agentId)).toContain('GCP Workflows Conductor & Orchestration Specialist');
+
+            // 15. Evaluate Secret Manager & KMS outputs
+            const kmsOutput = 'await kmsClient.envelopeEncrypt({ key: "secretmanager-cmek-key" });';
+            const kmsSwarm = await agenticRouter.routeDownstreamSwarm(kmsOutput);
+            expect(kmsSwarm.strategy).toBe('Hierarchical Cryptographic & KMS Officer Swarm');
+            expect(kmsSwarm.sequence.map(s => s.agentId)).toContain('GCP Secret Manager & KMS Cryptographic Officer');
+            expect(kmsSwarm.sequence.map(s => s.agentId)).toContain('Security & OWASP Hardening Sentinel');
         });
     });
 });

@@ -5,6 +5,18 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.112] - 2026-05-29 — Complete Suite of Fifteen GCP Specialized Backend Agents & Swarm Router Convergence
+### Added
+- **Four Additional Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Relational Database & AlloyDB Architect** (`agent.gcp.relational.architect`): Specializes in regional Cloud SQL HA failover configurations, connection pool optimizations (pgBouncer/Cloud SQL Proxy), and Database Migration Services (DMS).
+  - **GCP Identity Platform & Firebase Auth Specialist** (`agent.gcp.identity.specialist`): Handles OIDC/SAML federated identity handshakes, multi-tenant structures, custom JWT tokens, and step-up MFA enrollment.
+  - **GCP Cloud Functions & Eventarc Micro-Mesh Specialist** (`agent.gcp.functions.mesh`): Orchestrates 2nd gen micro-services, Eventarc routing topologies, Firestore document trigger streams, and serverless concurrency constraints.
+  - **GCP Secret Manager & KMS Cryptographic Officer** (`agent.gcp.kms.officer`): Designs envelope encryption schemas, Customer-Managed Encryption Keys (CMEK) configurations, automated Secret Manager key rotation curves, and Cloud KMS audit logging.
+- **Hierarchical Swarm Router & Keyword Matching Alignment**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 15 GCP specialized agents.
+  - Upgraded Eventarc/Cloud Functions trigger keyword matching to support JS/TS native trigger events like `'oncreate'`, `'onupdate'`, `'ondelete'`, and `'firestore.document'` seamlessly.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.111] - 2026-05-29 — Level 5 Full Swarm Expansion & 11 GCP Specialists Deployed
 ### Added
 - **Four More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
