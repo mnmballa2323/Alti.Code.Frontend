@@ -13,6 +13,9 @@ import { evolutionService } from '../../../shared/evolution.service.js';
 import { orchestrator } from './orchestrator.js';
 import { triadDebateChamberService } from './triad_debate_chamber.service.js';
 import { aiProvider } from '../ai/ai.provider.js';
+import { autonomousRepairDaemon } from './autonomous_repair_daemon.js';
+import { gcpSentinel } from '../googleCloud/gcpSentinel.service.js';
+import { swarmBrain } from './swarm_brain.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFINITIONS_DIR = path.join(__dirname, 'definitions');
@@ -307,6 +310,69 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             // Restore original method
             aiProvider.reason = originalReason;
+        });
+    });
+
+    describe('Autonomous DevSecOps SRE Swarm & GCP Sentinel Security Gates', () => {
+        it('should successfully patrol simulated logs, remediate crashes, verify safety, and archive post-mortems', async () => {
+            // 1. Setup simulated error log file
+            const simulatedLogFile = path.resolve('./logs/production_simulated_errors.log');
+            await fs.mkdir(path.dirname(simulatedLogFile), { recursive: true });
+            await fs.writeFile(simulatedLogFile, 'Error: UnhandledPromiseRejection: Database connection lost at pool.js:12\n', 'utf8');
+
+            // 2. Mock swarmBrain.executeTask to return clean patch
+            const originalExecuteTask = swarmBrain.executeTask;
+            swarmBrain.executeTask = vi.fn().mockResolvedValue(
+                '// Remediated code patch\nfunction connectDb() { return "healed patch data"; }'
+            );
+
+            // 3. Mock GCS and Pub/Sub mesh to capture events without network calls
+            const originalGcsUpload = gcsService.uploadContent;
+            let capturedGcsPath = null;
+            let capturedGcsReport = null;
+            gcsService.uploadContent = vi.fn().mockImplementation(async (bucket, filename, content) => {
+                capturedGcsPath = `gs://${bucket}/${filename}`;
+                capturedGcsReport = JSON.parse(content);
+                return true;
+            });
+
+            const originalPubSubPublish = pubsubService.publishEvent;
+            let capturedPubSubEvent = null;
+            pubsubService.publishEvent = vi.fn().mockImplementation(async (topic, payload) => {
+                capturedPubSubEvent = payload;
+                return 'mock-remediation-msg-id';
+            });
+
+            // 4. Trigger simulated log scan
+            await autonomousRepairDaemon.scanLocalLogs();
+
+            // 5. Verification Assertions
+            expect(swarmBrain.executeTask).toHaveBeenCalled();
+            expect(capturedGcsPath).toContain('gs://alti-incident-vault/incidents/inc_');
+            expect(capturedGcsReport.status).toBe('RESOLVED');
+            expect(capturedGcsReport.remediationPatch).toContain('healed patch data');
+            expect(capturedPubSubEvent.event).toBe('INCIDENT_REMEDIATED');
+
+            // Cleanup local log
+            await fs.rm(simulatedLogFile, { force: true });
+
+            // Restore mocks
+            swarmBrain.executeTask = originalExecuteTask;
+            gcsService.uploadContent = originalGcsUpload;
+            pubsubService.publishEvent = originalPubSubPublish;
+        });
+
+        it('should trigger pre-flight Sentinel audits and aggressively abort deployments containing hardcoded secrets', async () => {
+            const insecurePatch = `
+            // Insecure patch containing plain-text keys
+            const GCP_API_KEY = "AIzaSyD-mockKey-1234567890abcdefghijklm";
+            function initialize() { console.log(GCP_API_KEY); }
+            `;
+
+            // Enforce audit and expect to reject plain-text keys
+            await expect(gcpSentinel.auditDeployment(insecurePatch)).rejects.toThrow(
+                'CRITICAL: Plain-text secrets detected in deployment payload. Mission aborted.'
+            );
         });
     });
 });
