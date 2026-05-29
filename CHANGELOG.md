@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.125] - 2026-05-29 — Advanced API Protocols, Gateway Architectures & Communication Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative API Protocols, Gateway Architectures & Communication Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/api/`:
+    - **GraphQL Federation Architect**: GraphQL Federation & Supergraph Architect (`api.graphql`) optimizing Apollo Router traffic, composition rules, and query cost limits.
+    - **gRPC Interface Optimizer**: gRPC & ProtoBuf Interface Optimizer (`api.grpc`) calibrating HTTP/2 flow controls, name resolutions, and ProtoBuf contracts compatibility.
+    - **WebSockets Real-Time Sync Coordinator**: WebSockets & Real-Time Sync Coordinator (`api.websocket`) scaling socket connections and subscription distributions with Redis.
+    - **OpenAPI Contract Schema Enforcer**: OpenAPI Contract & Schema Enforcer (`api.openapi`) validating strict JSON schemas and mock integration test expectations.
+    - **Apache Kafka Event-Driven Architect**: Apache Kafka Event-Driven Architect (`api.kafka`) optimizing stream partition distribution keys and log compactions.
+    - **RabbitMQ AMQP Broker Specialist**: RabbitMQ AMQP Broker Specialist (`api.rabbitmq`) designing DLX dead-letter queues and consumer prefetch QoS policies.
+    - **APIs Gateway Policy Controller**: APIs Gateway Policy Controller (`api.gateway`) securing header rewrites, OAuth2 boundaries, and gateway Lua filters.
+    - **RPC Protocol Specialist**: JSON-RPC & XML-RPC Protocol Specialist (`api.rpc`) calibrating batch requests, custom dispatch schemas, and response encoders.
+    - **tRPC Type-Safe Contract Coordinator**: tRPC Type-Safe Contract Coordinator (`api.trpc`) verifying client-server generic types propagation and procedurals middleware.
+    - **WebRTC Peer-to-Peer Engine Specialist**: WebRTC Peer-to-Peer & SFU Engine Specialist (`api.webrtc`) coordinating low-latency connection signaling and media selective layers.
+- **Swarm Router Downstream API Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 130 to 139) mapping API/gateway GICS/domain keywords to their respective specialists.
+- **Modular API Protocols Test Suite & Verification**:
+  - Developed a dedicated integration test suite `api_protocols.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 10 declarative integration test suites sweeps with zero regressions (200/200 tests passed cleanly).
+
 ## [39.37.124] - 2026-05-29 — Advanced Infrastructure-as-Code & Platform Engineering Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Infrastructure-as-Code & Platform Engineering Agents**:

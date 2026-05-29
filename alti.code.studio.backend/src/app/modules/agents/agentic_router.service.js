@@ -1869,6 +1869,126 @@ class AgenticRouterService {
             strategy = 'Platform Engineering Swarm: Packer Machine Images';
         }
 
+        // 130. API Systems: GraphQL Federation & Supergraph Architect
+        const isGraphQlFederationOutput = outputLower.includes('graphql_federation_supergraph_routing') || 
+                                          outputLower.includes('subgraph_schema_entity_resolution') || 
+                                          outputLower.includes('query_planner_graph_optimization') || 
+                                          outputLower.includes('apollo_router_traffic_shaping');
+        if (isGraphQlFederationOutput) {
+            downstreamSequence.push(
+                { agentId: 'GraphQL Federation & Supergraph Architect', task: 'Design federated supergraph schemas and analyze subgraphs entity resolution query costs' }
+            );
+            strategy = 'API Swarm: GraphQL Federation';
+        }
+
+        // 131. API Systems: gRPC & ProtoBuf Interface Optimizer
+        const isGrpcOptimizerOutput = outputLower.includes('grpc_protobuf_binary_serialization') || 
+                                      outputLower.includes('http2_multiplexed_stream_tuning') || 
+                                      outputLower.includes('grpc_client_channel_load_balancing') || 
+                                      outputLower.includes('proto_contract_backwards_compatibility');
+        if (isGrpcOptimizerOutput) {
+            downstreamSequence.push(
+                { agentId: 'gRPC & ProtoBuf Interface Optimizer', task: 'Optimize ProtoBuf message structures and evaluate HTTP/2 flow control multiplexed streams' }
+            );
+            strategy = 'API Swarm: gRPC & ProtoBuf';
+        }
+
+        // 132. API Systems: WebSockets & Real-Time Sync Coordinator
+        const isWebSocketSyncOutput = outputLower.includes('websocket_connection_heartbeat_tuning') || 
+                                      outputLower.includes('pubsub_channel_state_distribution') || 
+                                      outputLower.includes('connection_backpressure_buffer_management') || 
+                                      outputLower.includes('socketio_horizontal_scaling_redis');
+        if (isWebSocketSyncOutput) {
+            downstreamSequence.push(
+                { agentId: 'WebSockets & Real-Time Sync Coordinator', task: 'Manage websocket reconnect limits and scale state distributions using Redis socket adapters' }
+            );
+            strategy = 'API Swarm: Real-Time WebSockets';
+        }
+
+        // 133. API Systems: OpenAPI Contract & Schema Enforcer
+        const isOpenApiEnforcerOutput = outputLower.includes('openapi_contract_validation_assertions') || 
+                                        outputLower.includes('json_schema_structural_matching') || 
+                                        outputLower.includes('api_mock_integration_testing') || 
+                                        outputLower.includes('swagger_spec_linting_standards');
+        if (isOpenApiEnforcerOutput) {
+            downstreamSequence.push(
+                { agentId: 'OpenAPI Contract & Schema Enforcer', task: 'Enforce OpenAPI schema structures and evaluate Mock integration test assertion rules' }
+            );
+            strategy = 'API Swarm: OpenAPI Specs & Contract Tests';
+        }
+
+        // 134. API Systems: Apache Kafka Event-Driven Architect
+        const isKafkaEventArchitectOutput = outputLower.includes('kafka_partition_key_rebalancing') || 
+                                            outputLower.includes('consumer_group_state_rebalances') || 
+                                            outputLower.includes('tombstone_record_log_compaction') || 
+                                            outputLower.includes('exactly_once_transactional_streams');
+        if (isKafkaEventArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Apache Kafka Event-Driven Architect', task: 'Audit Kafka partition key distribution schemas and configure exactly-once event transactional flows' }
+            );
+            strategy = 'API Swarm: Kafka Event Streaming';
+        }
+
+        // 135. API Systems: RabbitMQ AMQP Broker Specialist
+        const isRabbitMqBrokerOutput = outputLower.includes('amqp_exchange_routing_bindings') || 
+                                       outputLower.includes('queue_dead_letter_routing') || 
+                                       outputLower.includes('publisher_confirmations_safeguards') || 
+                                       outputLower.includes('consumer_prefetch_limit_tuning');
+        if (isRabbitMqBrokerOutput) {
+            downstreamSequence.push(
+                { agentId: 'RabbitMQ AMQP Broker Specialist', task: 'Map RabbitMQ dead-letter exchange bindings and balance consumer prefetch limits' }
+            );
+            strategy = 'API Swarm: RabbitMQ Messaging';
+        }
+
+        // 136. API Systems: APIs Gateway Policy Controller
+        const isApiGatewayControllerOutput = outputLower.includes('api_gateway_request_transformations') || 
+                                             outputLower.includes('plugin_boundary_rate_limiting') || 
+                                             outputLower.includes('jwt_oauth2_verification_policies') || 
+                                             outputLower.includes('custom_gateway_lua_plugins');
+        if (isApiGatewayControllerOutput) {
+            downstreamSequence.push(
+                { agentId: 'APIs Gateway Policy Controller', task: 'Configure gateway request header rewrites and monitor OAuth2/JWT verification boundaries' }
+            );
+            strategy = 'API Swarm: APIs Gateways & Policies';
+        }
+
+        // 137. API Systems: JSON-RPC & XML-RPC Protocol Specialist
+        const isRpcProtocolSpecialistOutput = outputLower.includes('rpc_request_batching_payloads') || 
+                                              outputLower.includes('method_dispatcher_schema_validations') || 
+                                              outputLower.includes('payload_compression_rules_encoding') || 
+                                              outputLower.includes('jsonrpc_error_code_standards');
+        if (isRpcProtocolSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'JSON-RPC & XML-RPC Protocol Specialist', task: 'Audit JSON-RPC batching payloads and standard error code dispatch structures' }
+            );
+            strategy = 'API Swarm: JSON-RPC & XML-RPC Protocols';
+        }
+
+        // 138. API Systems: tRPC Type-Safe Contract Coordinator
+        const isTrpcContractOutput = outputLower.includes('trpc_client_server_type_propagation') || 
+                                     outputLower.includes('procedural_query_mutation_handlers') || 
+                                     outputLower.includes('batching_middleware_query_optimizations') || 
+                                     outputLower.includes('trpc_context_router_mappings');
+        if (isTrpcContractOutput) {
+            downstreamSequence.push(
+                { agentId: 'tRPC Type-Safe Contract Coordinator', task: 'Validate tRPC procedural type exports and scale middleware query batching limits' }
+            );
+            strategy = 'API Swarm: tRPC Type-Safe Contracts';
+        }
+
+        // 139. API Systems: WebRTC Peer-to-Peer & SFU Engine Specialist
+        const isWebRtcSpecialistOutput = outputLower.includes('webrtc_signaling_ice_negotiations') || 
+                                         outputLower.includes('stun_turn_server_allocations') || 
+                                         outputLower.includes('media_channel_bandwidth_constraints') || 
+                                         outputLower.includes('sfu_selective_routing_topologies');
+        if (isWebRtcSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'WebRTC Peer-to-Peer & SFU Engine Specialist', task: 'Optimize WebRTC ICE negotiation handshakes and manage SFU media layer allocations' }
+            );
+            strategy = 'API Swarm: WebRTC Peer-to-Peer & SFU Channels';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });
