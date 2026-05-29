@@ -30,9 +30,6 @@ export class DockerWorkspaceManager {
         try {
             mkdirSync(this.baseSandboxDir, { recursive: true });
         } catch (e) {}
-
-        // Launch self-healing orphaned container pruning asynchronously on startup
-        this.pruneOrphanedContainers().catch(() => {});
     }
 
     /**

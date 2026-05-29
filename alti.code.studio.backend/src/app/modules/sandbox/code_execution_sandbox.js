@@ -24,9 +24,14 @@ export class CodeExecutionSandbox {
      */
     static async execute(code, options = {}) {
         const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
-        const manager = new DockerWorkspaceManager('./logs/workspaces/oss_generic');
         
-        // Execute inside a dedicated 'generic' open-source container
-        return await manager.executeOssCode('generic', code, './logs/workspaces/oss_generic');
+        const agentId = options.agentId || 'generic';
+        const cleanAgentId = agentId.replace(/[^a-zA-Z0-9_]/g, '_');
+        const workspacePath = `./logs/workspaces/agent_${cleanAgentId}`;
+        
+        const manager = new DockerWorkspaceManager(workspacePath);
+        
+        // Execute inside a dedicated agent container
+        return await manager.executeOssCode(`agent_${cleanAgentId}`, code, workspacePath, options);
     }
 }

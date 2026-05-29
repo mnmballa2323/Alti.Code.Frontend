@@ -14,9 +14,10 @@ class GoogleDynamicSessionsService {
      * Executes arbitrary code in a Google Cloud Run Dynamic Session (gVisor sandbox)
      * @param {string} code - The source code to execute
      * @param {string} language - The language environment ('python', 'nodejs')
+     * @param {object} [options] - Configurations (agentId)
      * @returns {Promise<object>} The execution result containing stdout, stderr, and status
      */
-    async executeCode(code, language = 'python') {
+    async executeCode(code, language = 'python', options = {}) {
         try {
             logger.info(`⚡ Executing ${language} code in Google Cloud Run Dynamic Session sandbox...`);
             
@@ -46,7 +47,7 @@ class GoogleDynamicSessionsService {
                 const errorText = await response.text();
                 logger.error(`❌ Dynamic Session execution failed: ${response.status} - ${errorText}`);
                 logger.warn(`⚠️ Google Cloud Run Dynamic Session was unavailable (HTTP ${response.status}). Activating Local/Docker Sandbox Fallback...`);
-                return await this._executeCodeLocal(code, language);
+                return await this._executeCodeLocal(code, language, options);
             }
 
             const result = await response.json();
@@ -63,7 +64,7 @@ class GoogleDynamicSessionsService {
         } catch (error) {
             logger.error(`❌ Error invoking Cloud Run Dynamic Sessions: ${error.message}`);
             logger.warn(`⚠️ Google Cloud Run Dynamic Session was unauthenticated or offline. Activating Local/Docker Sandbox Fallback...`);
-            return await this._executeCodeLocal(code, language);
+            return await this._executeCodeLocal(code, language, options);
         }
     }
 
@@ -73,15 +74,16 @@ class GoogleDynamicSessionsService {
      * Gracefully cascades to high-fidelity Mock Sandbox if Docker daemon is not running.
      * @param {string} code - The source code to execute
      * @param {string} language - The execution environment language ('python', 'javascript', 'nodejs')
+     * @param {object} [options] - Configuration parameters (agentId)
      * @returns {Promise<object>} The execution result in the same envelope format
      */
-    async _executeCodeLocal(code, language = 'python') {
+    async _executeCodeLocal(code, language = 'python', options = {}) {
         logger.info(`🔄 Running fallback execution locally for language: ${language}...`);
         
         try {
             if (language === 'nodejs' || language === 'javascript') {
                 const { CodeExecutionSandbox } = await import('../sandbox/code_execution_sandbox.js');
-                const result = await CodeExecutionSandbox.execute(code);
+                const result = await CodeExecutionSandbox.execute(code, options);
                 return {
                     success: result.success,
                     stdout: result.logs ? result.logs.join('\n') : '',
@@ -90,13 +92,17 @@ class GoogleDynamicSessionsService {
                 };
             } else if (language === 'python') {
                 const { DockerWorkspaceManager } = await import('../sandbox/docker_workspace_manager.js');
-                const manager = new DockerWorkspaceManager('./logs/workspaces/oss_generic');
+                
+                const agentId = options.agentId || 'generic';
+                const cleanAgentId = agentId.replace(/[^a-zA-Z0-9_]/g, '_');
+                const workspacePath = `./logs/workspaces/agent_${cleanAgentId}`;
+                const manager = new DockerWorkspaceManager(workspacePath);
                 
                 const hasDocker = await manager.checkDockerAvailability();
                 const startTime = Date.now();
                 
                 if (hasDocker) {
-                    const result = await manager.executeOssCode('python_generic', code, './logs/workspaces/oss_generic', {
+                    const result = await manager.executeOssCode(`agent_${cleanAgentId}`, code, workspacePath, {
                         language: 'python',
                         timeoutMs: 5000
                     });
