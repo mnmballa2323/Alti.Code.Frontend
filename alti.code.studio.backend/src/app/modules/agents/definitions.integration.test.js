@@ -375,4 +375,96 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             );
         });
     });
+
+    describe('Local AST Dependency Graph Crawler & Architectural Patrol', () => {
+        it('should parse mock dependency files, construct directed edges, and calculate accurate in-degree coupling centrality', async () => {
+            const tempDir = path.resolve('./logs/ast_test_temp');
+            await fs.mkdir(tempDir, { recursive: true });
+
+            // File C: The ultimate god object (imported by A and B)
+            await fs.writeFile(path.join(tempDir, 'fileC.js'), 'console.log("no imports");', 'utf8');
+
+            // File B: Imported by A, imports C
+            await fs.writeFile(path.join(tempDir, 'fileB.js'), 'import "./fileC.js";', 'utf8');
+
+            // File A: Imports B and C
+            await fs.writeFile(path.join(tempDir, 'fileA.js'), 'import "./fileB.js";\nimport "./fileC.js";', 'utf8');
+
+            const centralities = await autonomousRepairDaemon.calculateLocalDependencyCentrality(tempDir);
+
+            // Cleanup temp files
+            await fs.rm(tempDir, { recursive: true, force: true });
+
+            // Assert C is the most highly coupled
+            const nodeC = centralities.find(n => n.name === 'fileC.js');
+            const nodeB = centralities.find(n => n.name === 'fileB.js');
+            const nodeA = centralities.find(n => n.name === 'fileA.js');
+
+            expect(nodeC).toBeDefined();
+            expect(nodeC.score).toBe(2); // Imported by B and A
+
+            expect(nodeB).toBeDefined();
+            expect(nodeB.score).toBe(1); // Imported by A
+
+            expect(nodeA).toBeDefined();
+            expect(nodeA.score).toBe(0); // Not imported
+        });
+
+        it('should successfully fallback to local AST crawler on Neo4j GDS error, convene Triad debate, and trigger Strangler Fig refactoring', async () => {
+            // 1. Mock calculateLocalDependencyCentrality to return a mock God Object above threshold
+            const originalLocalCrawl = autonomousRepairDaemon.calculateLocalDependencyCentrality;
+            autonomousRepairDaemon.calculateLocalDependencyCentrality = vi.fn().mockResolvedValue([
+                { name: 'god_block_component.js', filePath: '/src/god_block_component.js', score: 5 }
+            ]);
+
+            // 2. Mock debate chamber consensus
+            const originalInitiateDebate = triadDebateChamberService.initiateDebate;
+            triadDebateChamberService.initiateDebate = vi.fn().mockResolvedValue(
+                'CONSTRUCT STRANGLER FIG: Decouple God Block into modular controllers.'
+            );
+
+            // 3. Mock SwarmBrain task executor
+            const originalExecuteTask = swarmBrain.executeTask;
+            swarmBrain.executeTask = vi.fn().mockResolvedValue(
+                '// Autonomously generated Refactoring Plan\nexport function subtaskA() {}'
+            );
+
+            // 4. Mock GCS and Pub/Sub uploads to verify output archiving
+            const originalGcsUpload = gcsService.uploadContent;
+            let capturedGcsPath = null;
+            let capturedGcsReport = null;
+            gcsService.uploadContent = vi.fn().mockImplementation(async (bucket, filename, content) => {
+                capturedGcsPath = `gs://${bucket}/${filename}`;
+                capturedGcsReport = JSON.parse(content);
+                return true;
+            });
+
+            const originalPubSubPublish = pubsubService.publishEvent;
+            let capturedPubSubEvent = null;
+            pubsubService.publishEvent = vi.fn().mockImplementation(async (topic, payload) => {
+                capturedPubSubEvent = payload;
+                return 'mock-strangler-msg-id';
+            });
+
+            // 5. Trigger scanForArchitecturalDecay (will trigger GDS error automatically since Neo4j GDS import or service will throw in test mode)
+            await autonomousRepairDaemon.scanForArchitecturalDecay();
+
+            // 6. Verify assertions
+            expect(triadDebateChamberService.initiateDebate).toHaveBeenCalled();
+            expect(swarmBrain.executeTask).toHaveBeenCalled();
+            expect(capturedGcsPath).toBe('gs://alti-incident-vault/blueprints/strangler-god_block_component.js.json');
+            expect(capturedGcsReport.status).toBe('Blueprinted');
+            expect(capturedGcsReport.decouplingConsensus).toContain('CONSTRUCT STRANGLER FIG');
+            expect(capturedGcsReport.refactoringPlan).toContain('export function subtaskA()');
+            expect(capturedPubSubEvent.event).toBe('STRANGLER_FIG_BLUEPRINTED');
+            expect(capturedPubSubEvent.godObjectName).toBe('god_block_component.js');
+
+            // Restore original methods
+            autonomousRepairDaemon.calculateLocalDependencyCentrality = originalLocalCrawl;
+            triadDebateChamberService.initiateDebate = originalInitiateDebate;
+            swarmBrain.executeTask = originalExecuteTask;
+            gcsService.uploadContent = originalGcsUpload;
+            pubsubService.publishEvent = originalPubSubPublish;
+        });
+    });
 });

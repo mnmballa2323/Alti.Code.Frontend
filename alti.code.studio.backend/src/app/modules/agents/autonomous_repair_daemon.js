@@ -21,6 +21,7 @@ import path from 'path';
 import { gcsService } from '../googleCloud/storage.service.js';
 import { pubsubService } from '../googleCloud/pubsub.service.js';
 import { gcpSentinel } from '../googleCloud/gcpSentinel.service.js';
+import { triadDebateChamberService } from './triad_debate_chamber.service.js';
 
 class AutonomousRepairDaemon {
     constructor() {
@@ -70,11 +71,9 @@ class AutonomousRepairDaemon {
         
         if (this.isGcpConnected) {
             logger.info('🛡️ [Auto-Repair] Autonomous Repair Daemon is now patrolling Google Cloud Logging for production crashes.');
-            // Poll every 30 seconds for critical exceptions
             setInterval(() => this.scanForAnomalies(), 30000);
         } else {
             logger.info(`🛡️ [Auto-Repair] Autonomous Repair Daemon is now patrolling local error logs at: ${this.localSimulatedErrorLog}`);
-            // Poll local logs faster for dev/test responsiveness
             setInterval(() => this.scanLocalLogs(), 5000);
         }
     }
@@ -84,7 +83,6 @@ class AutonomousRepairDaemon {
      */
     async scanForAnomalies() {
         try {
-            // Advanced GCP Log filtering: look for Node.js or Python unhandled exceptions in the last 10 minutes
             const filter = `severity >= ERROR AND timestamp >= "${new Date(Date.now() - 10 * 60000).toISOString()}"`;
             
             const [entries] = await this.logging.getEntries({
@@ -100,7 +98,6 @@ class AutonomousRepairDaemon {
 
                 const payload = entry.data && entry.data.message ? entry.data.message : JSON.stringify(entry.data);
                 
-                // If it looks like a stack trace, trigger the Swarm
                 if (payload.includes('Error:') || payload.includes('Exception:') || payload.includes('Traceback')) {
                     logger.warn(`🚨 [Auto-Repair] Production Crash Intercepted! Triggering Autonomous Swarm Remediation...`);
                     await this.remediateCrash(payload, entry.metadata);
@@ -156,15 +153,12 @@ ${stackTrace}
 
 Identify the root cause, locate the file, and write the exact code patch required to prevent this exception.`;
             
-            // Execute the Swarm Pipeline
             const swarmFix = await swarmBrain.executeTask(prompt, []);
 
-            // ── DevSecOps: Pre-Flight Sentinel Security Audit ──
             logger.info(`🛡️ [Auto-Repair] Initiating pre-flight security clearance check for incident ${incidentId}...`);
             const auditResult = await gcpSentinel.auditDeployment(swarmFix);
             logger.info(`🛡️ [Auto-Repair] Pre-flight security clearance APPROVED. Audit ID: ${auditResult.auditId}`);
 
-            // ── GCS Archival: Incident Post-Mortem Archival ──
             const postMortemReport = {
                 incidentId,
                 timestamp: new Date().toISOString(),
@@ -180,7 +174,6 @@ Identify the root cause, locate the file, and write the exact code patch require
             await gcsService.uploadContent(bucketName, destFileName, JSON.stringify(postMortemReport, null, 2));
             logger.info(`☁️ [Auto-Repair] Incident post-mortem successfully archived to GCS: gs://${bucketName}/${destFileName}`);
 
-            // ── Pub/Sub: Incident Emitter Sync ──
             await pubsubService.publishEvent('alti-swarm-events', {
                 event: 'INCIDENT_REMEDIATED',
                 incidentId,
@@ -189,7 +182,6 @@ Identify the root cause, locate the file, and write the exact code patch require
                 timestamp: new Date().toISOString()
             }).catch(() => {});
             
-            // Notify the Engineering Manager via Google Workspace Email
             const emailBody = `
                 <h2>🚨 Autonomous Production Repair Successful</h2>
                 <p>The Sentinel Daemon intercepted a production crash at ${new Date(metadata.timestamp).toUTCString()}.</p>
@@ -204,7 +196,6 @@ Identify the root cause, locate the file, and write the exact code patch require
             
             await workspaceService.emailAdministrator(`[RESOLVED] Production Crash: ${metadata.logName}`, emailBody).catch(() => {});
             
-            // PagerDuty / Slack Webhook Integration
             try {
                 const { default: axios } = await import('axios');
                 const webhookUrl = process.env.SLACK_WEBHOOK_URL || process.env.PAGERDUTY_ROUTING_KEY;
@@ -221,7 +212,6 @@ Identify the root cause, locate the file, and write the exact code patch require
         } catch (error) {
             logger.error(`❌ [Auto-Repair] Swarm failed to remediate the crash: ${error.message}`);
             
-            // Publish escalation state to Pub/Sub
             await pubsubService.publishEvent('alti-swarm-events', {
                 event: 'INCIDENT_ESCALATED',
                 incidentId,
@@ -234,6 +224,106 @@ Identify the root cause, locate the file, and write the exact code patch require
     }
 
     /**
+     * Crawls local directory, parses JS/TS files via AST, and builds a dependency coupling map.
+     * @param {string} targetDir - Root directory to scan
+     * @returns {Promise<Array<{name: string, filePath: string, score: number}>>} Coupled nodes sorted by in-degree centrality
+     */
+    async calculateLocalDependencyCentrality(targetDir) {
+        logger.info(`🌳 [Auto-Repair] Local AST Patrol: Crawling dependencies under ${targetDir}...`);
+        
+        const filesMap = new Map();
+        const inDegreeMap = new Map();
+
+        const parseFileImports = async (filePath) => {
+            try {
+                const code = await fs.readFile(filePath, 'utf8');
+                const { parse } = await import('@babel/parser');
+                const traverseModule = await import('@babel/traverse');
+                const traverse = traverseModule.default || traverseModule;
+                
+                const ast = parse(code, {
+                    sourceType: 'module',
+                    plugins: ['jsx', 'typescript', 'classProperties', 'decorators-legacy']
+                });
+
+                const imports = new Set();
+                traverse(ast, {
+                    ImportDeclaration(pathNode) {
+                        const source = pathNode.node.source.value;
+                        if (source.startsWith('.')) {
+                            const resolvedPath = path.resolve(path.dirname(filePath), source);
+                            imports.add(resolvedPath);
+                        }
+                    },
+                    CallExpression(pathNode) {
+                        if (pathNode.node.callee.type === 'Import') {
+                            const arg = pathNode.node.arguments[0];
+                            if (arg && arg.type === 'StringLiteral' && arg.value.startsWith('.')) {
+                                const resolvedPath = path.resolve(path.dirname(filePath), arg.value);
+                                imports.add(resolvedPath);
+                            }
+                        }
+                    }
+                });
+
+                filesMap.set(filePath, imports);
+                
+                if (!inDegreeMap.has(filePath)) {
+                    inDegreeMap.set(filePath, 0);
+                }
+
+                for (const imported of imports) {
+                    // Try exact file resolution first, fall back to .js/index.js if needed
+                    let resolvedFile = imported;
+                    if (!existsSync(resolvedFile) && existsSync(resolvedFile + '.js')) {
+                        resolvedFile = resolvedFile + '.js';
+                    } else if (!existsSync(resolvedFile) && existsSync(resolvedFile + '/index.js')) {
+                        resolvedFile = resolvedFile + '/index.js';
+                    }
+
+                    const currentCount = inDegreeMap.get(resolvedFile) || 0;
+                    inDegreeMap.set(resolvedFile, currentCount + 1);
+                }
+            } catch (err) {
+                logger.debug(`[Auto-Repair] Skipping AST parse for ${filePath}: ${err.message}`);
+            }
+        };
+
+        const scanDirectory = async (dir) => {
+            const children = await fs.readdir(dir, { withFileTypes: true });
+            for (const child of children) {
+                const fullPath = path.resolve(dir, child.name);
+                if (child.isDirectory()) {
+                    if (child.name !== 'node_modules' && child.name !== '.git' && child.name !== 'logs' && child.name !== 'dist') {
+                        await scanDirectory(fullPath);
+                    }
+                } else if (child.isFile() && (child.name.endsWith('.js') || child.name.endsWith('.ts') || child.name.endsWith('.jsx'))) {
+                    await parseFileImports(fullPath);
+                }
+            }
+        };
+
+        try {
+            if (existsSync(targetDir)) {
+                await scanDirectory(targetDir);
+            }
+        } catch (err) {
+            logger.error(`❌ [Auto-Repair] Local AST dependency crawl failed: ${err.message}`);
+        }
+
+        const results = Array.from(inDegreeMap.entries()).map(([filePath, count]) => {
+            const baseName = path.relative(targetDir, filePath);
+            return {
+                name: baseName,
+                filePath,
+                score: count
+            };
+        });
+
+        return results.sort((a, b) => b.score - a.score);
+    }
+
+    /**
      * Proactive Level 5 Autonomy: The Architectural Sentinel.
      * Continuously runs PageRank on the Cognitive Graph to detect "God Objects" 
      * and autonomously initiates architectural refactoring before bugs even happen.
@@ -243,31 +333,86 @@ Identify the root cause, locate the file, and write the exact code patch require
         this.isArchitecturalPatrolling = true;
         logger.info('🛡️ [Auto-Repair] Sentinel is now patrolling the codebase for architectural decay (God Objects).');
         
-        // Run architectural patrol every 1 hour (simulated as 1 minute for local dev)
         setInterval(() => this.scanForArchitecturalDecay(), 60000);
     }
 
     async scanForArchitecturalDecay() {
         try {
-            logger.info('🔷 [Auto-Repair] Sentinel initiating autonomous Neo4j GDS PageRank analysis...');
-            const { neo4jGdsService } = await import('../../services/neo4j_gds.service.js');
-            const topNodes = await neo4jGdsService.calculatePageRank();
-            
-            if (topNodes && topNodes.length > 0) {
-                const worstNode = topNodes[0];
-                if (worstNode.score > 15.0) {
-                    logger.warn(`⚠️ [Auto-Repair] Sentinel detected a severe "God Object": ${worstNode.name}. Triggering Swarm Refactor...`);
+            let worstNode = null;
+            let worstNodeName = null;
+            let worstNodeScore = 0;
+            let isLocalCrawl = false;
+
+            try {
+                logger.info('🔷 [Auto-Repair] Sentinel initiating autonomous Neo4j GDS PageRank analysis...');
+                const { neo4jGdsService } = await import('../../services/neo4j_gds.service.js');
+                const topNodes = await neo4jGdsService.calculatePageRank();
+                if (topNodes && topNodes.length > 0) {
+                    worstNode = topNodes[0];
+                    worstNodeName = worstNode.name;
+                    worstNodeScore = worstNode.score;
+                }
+            } catch (neo4jErr) {
+                logger.warn(`⚠️ [Auto-Repair] Neo4j GDS analysis unavailable: ${neo4jErr.message}. Cascading to local Babel AST dependency crawler.`);
+                
+                // Fallback to pure local AST dependency crawler
+                const localRoot = path.resolve('./src');
+                const topCentralities = await this.calculateLocalDependencyCentrality(localRoot);
+                
+                if (topCentralities && topCentralities.length > 0) {
+                    worstNode = topCentralities[0];
+                    worstNodeName = worstNode.name;
+                    worstNodeScore = worstNode.score;
+                    isLocalCrawl = true;
+                    logger.info(`🌳 [Auto-Repair] Local AST crawling completed. Most highly coupled object: "${worstNodeName}" (In-Degree score: ${worstNodeScore})`);
+                }
+            }
+
+            if (worstNodeName) {
+                const threshold = isLocalCrawl ? 3 : 15.0;
+                
+                if (worstNodeScore >= threshold) {
+                    logger.warn(`⚠️ [Auto-Repair] Sentinel detected a severe "God Object" undergoing decay: ${worstNodeName}. Triggering Strangler Fig refactor...`);
                     
-                    const prompt = `
-                    Act as a Fortune 100 Principal Architect.
-                    Our autonomous Neo4j Graph Data Science patrol just identified the file ${worstNode.name} as a "God Object" with a PageRank centrality score of ${worstNode.score}.
-                    This file is dangerously highly coupled. 
-                    Please formulate a detailed architectural teardown and propose a Strangler Fig pattern to decouple it into 3 separate micro-modules.
-                    `;
-                    
-                    const refactorPlan = await swarmBrain.executeTask(prompt, []);
-                    logger.info(`✅ [Auto-Repair] Sentinel generated Strangler Fig decoupling plan for ${worstNode.name}.`);
+                    const prompt = `Act as a Senior Principal Software Architect.
+Our autonomous dependency crawler just identified the file "${worstNodeName}" as a "God Object" with a centrality score of ${worstNodeScore}.
+This file is dangerously highly coupled. 
+Please formulate a detailed Strangler Fig decoupling proposal to partition this coupled code block into 3 separate, clean modular functions.`;
+
+                    logger.info(`🏛️ [Auto-Repair] Convening Triad Debate Chamber to formulate Strangler Fig decoupling consensus...`);
+                    const debateConsensus = await triadDebateChamberService.initiateDebate(
+                        `How should we struturize a Strangler Fig decoupling plan to split the God Object "${worstNodeName}"?`
+                    );
+                    logger.info(`✅ [Auto-Repair] Triad debate consensus synthesized successfully.`);
+
+                    const refactorPlan = await swarmBrain.executeTask(`${prompt}\nTriad Consensus:\n${debateConsensus}`, []);
+                    logger.info(`✅ [Auto-Repair] Sentinel successfully generated Strangler Fig decoupling plan for ${worstNodeName}.`);
+
+                    const refactorBlueprint = {
+                        blueprintId: `strangler_${Date.now()}`,
+                        timestamp: new Date().toISOString(),
+                        godObjectName: worstNodeName,
+                        centralityScore: worstNodeScore,
+                        decouplingConsensus: debateConsensus,
+                        refactoringPlan: refactorPlan,
+                        status: 'Blueprinted'
+                    };
+
+                    const bucketName = 'alti-incident-vault';
+                    const destFileName = `blueprints/strangler-${worstNodeName.replace(/\//g, '_')}.json`;
+                    await gcsService.uploadContent(bucketName, destFileName, JSON.stringify(refactorBlueprint, null, 2));
+                    logger.info(`☁️ [Auto-Repair] Strangler Fig blueprint successfully archived to GCS: gs://${bucketName}/${destFileName}`);
+
+                    await pubsubService.publishEvent('alti-swarm-events', {
+                        event: 'STRANGLER_FIG_BLUEPRINTED',
+                        godObjectName: worstNodeName,
+                        centralityScore: worstNodeScore,
+                        timestamp: new Date().toISOString()
+                    }).catch(() => {});
+
                     logger.info(`[SENTINEL REPORT]: \n${refactorPlan.substring(0, 500)}...`);
+                } else {
+                    logger.info(`✅ [Auto-Repair] Codebase coupling scores are within safe thresholds (Worst: "${worstNodeName}" score: ${worstNodeScore}/${threshold}).`);
                 }
             }
         } catch (error) {

@@ -5,6 +5,12 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.108] - 2026-05-29 — Local AST Dependency Graph Crawler & Proactive Refactoring Patrol
+### Added
+- **Local Babel AST Dependency crawler**: Implemented a complete, pure JavaScript dependency graph crawler (`calculateLocalDependencyCentrality`) parsing imports and dynamic `import()` AST expressions under `./src` completely offline when Neo4j is unavailable.
+- **Proactive Architectural Patrol**: Integrated the offline AST crawler into the Sentinel's `scanForArchitecturalDecay` loop, detecting severe "God Objects" based on coupling centrality thresholds, convening the Triad debate consensus, generating Strangler Fig modularization proposals, and archiving reports to GCS incident vault.
+- **Architectural Patrol Integration Tests**: Added comprehensive integration test suites in `definitions.integration.test.js` validating the AST coupling centrality scoring accuracy and the offline Strangler Fig GCS/Pub/Sub refactoring path with 100% success.
+
 ## [39.37.107] - 2026-05-29 — Level 5 Autonomous DevSecOps SRE Swarm & GCP Sentinel Security Gates
 ### Added
 - **Dynamic Log Patrol Fallback**: Upgraded the `AutonomousRepairDaemon` (`autonomous_repair_daemon.js`) to support local error log patrolling (`./logs/production_simulated_errors.log`), allowing developers to simulate production crashes locally.
