@@ -1989,6 +1989,126 @@ class AgenticRouterService {
             strategy = 'API Swarm: WebRTC Peer-to-Peer & SFU Channels';
         }
 
+        // 140. Edge Systems: iOS Swift & CocoaTouch Specialist
+        const isIosSpecialistOutput = outputLower.includes('swift_concurrency_structured_async') || 
+                                      outputLower.includes('arc_memory_graph_leak_detection') || 
+                                      outputLower.includes('swiftui_layout_rendering_performance') || 
+                                      outputLower.includes('coredata_persistent_store_migration');
+        if (isIosSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'iOS Swift & CocoaTouch Specialist', task: 'Audit structured async Swift tasks and profile weak references inside reference graphs' }
+            );
+            strategy = 'Edge Swarm: iOS Development';
+        }
+
+        // 141. Edge Systems: Android Kotlin & Jetpack Compose Architect
+        const isAndroidArchitectOutput = outputLower.includes('kotlin_coroutine_flow_orchestration') || 
+                                         outputLower.includes('jetpack_compose_recomposition_tuning') || 
+                                         outputLower.includes('android_background_service_workers') || 
+                                         outputLower.includes('room_sqlite_schema_relationships');
+        if (isAndroidArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Android Kotlin & Jetpack Compose Architect', task: 'Tune Jetpack Compose state hoisting recomposition scopes and audit Room database transactions' }
+            );
+            strategy = 'Edge Swarm: Android Development';
+        }
+
+        // 142. Edge Systems: Kotlin Multiplatform (KMP) Shared Core Specialist
+        const isKmpSpecialistOutput = outputLower.includes('kmp_expect_actual_platform_mappings') || 
+                                     outputLower.includes('shared_business_logic_monorepo') || 
+                                     outputLower.includes('kotlin_native_memory_concurrency_models') || 
+                                     outputLower.includes('multiplatform_http_client_ktor');
+        if (isKmpSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Kotlin Multiplatform (KMP) Shared Core Specialist', task: 'Orchestrate KMP shared common modules and configure cross-platform Ktor engines' }
+            );
+            strategy = 'Edge Swarm: Kotlin Multiplatform';
+        }
+
+        // 143. Edge Systems: React Native Bridge & Native Modules Specialist
+        const isReactNativeSpecialistOutput = outputLower.includes('jsi_native_bridge_communication') || 
+                                              outputLower.includes('custom_native_modules_objectivec_java') || 
+                                              outputLower.includes('javascript_thread_bottleneck_tuning') || 
+                                              outputLower.includes('fabric_renderer_ui_components');
+        if (isReactNativeSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'React Native Bridge & Native Modules Specialist', task: 'Bridge native Fabric components and debug JavaScript thread event loops' }
+            );
+            strategy = 'Edge Swarm: React Native Bridges';
+        }
+
+        // 144. Edge Systems: Electron Desktop & Native Interop Architect
+        const isElectronArchitectOutput = outputLower.includes('electron_ipc_renderer_security_sandbox') || 
+                                           outputLower.includes('native_desktop_bindings_node_gyp') || 
+                                           outputLower.includes('auto_updater_release_channel_signing') || 
+                                           outputLower.includes('multi_window_renderer_state_sync');
+        if (isElectronArchitectOutput) {
+            downstreamSequence.push(
+                { agentId: 'Electron Desktop & Native Interop Architect', task: 'Enforce preload contextBridge security perimeters and compile node-gyp bindings' }
+            );
+            strategy = 'Edge Swarm: Electron Desktop';
+        }
+
+        // 145. Edge Systems: WebAssembly WebAPI & WASI Compiler Specialist
+        const isWasmSpecialistOutput = outputLower.includes('wasi_filesystem_abstraction_layers') || 
+                                       outputLower.includes('shared_memory_wasm_buffer_views') || 
+                                       outputLower.includes('emscripten_javascript_glue_bindings') || 
+                                       outputLower.includes('rust_cpp_wasm_pack_compilation');
+        if (isWasmSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'WebAssembly WebAPI & WASI Compiler Specialist', task: 'Compile high-fidelity C++/Rust modules and configure WASI filesystem abstractions' }
+            );
+            strategy = 'Edge Swarm: WebAssembly Systems';
+        }
+
+        // 146. Edge Systems: Embedded RTOS & Microcontroller Systems Specialist
+        const isEmbeddedSpecialistOutput = outputLower.includes('rtos_kernel_scheduler_boundaries') || 
+                                           outputLower.includes('hardware_peripheral_register_drivers') || 
+                                           outputLower.includes('low_power_microcontroller_telemetry') || 
+                                           outputLower.includes('embedded_memory_heap_leak_mitigation');
+        if (isEmbeddedSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Embedded RTOS & Microcontroller Systems Specialist', task: 'Audit FreeRTOS kernel mutex locks and debug peripheral microcontroller registers' }
+            );
+            strategy = 'Edge Swarm: Embedded RTOS Hardware';
+        }
+
+        // 147. Edge Systems: WebUSB & WebBluetooth System Interop Specialist
+        const isWebUsbSpecialistOutput = outputLower.includes('webusb_endpoint_packet_transfers') || 
+                                         outputLower.includes('webbluetooth_gatt_service_discovery') || 
+                                         outputLower.includes('binary_stream_transform_adapters') || 
+                                         outputLower.includes('hardware_device_permission_profiles');
+        if (isWebUsbSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'WebUSB & WebBluetooth System Interop Specialist', task: 'Parse hardware vendor buffers and manage GATT service characteristic callbacks' }
+            );
+            strategy = 'Edge Swarm: WebUSB & WebBluetooth';
+        }
+
+        // 148. Edge Systems: Edge Compute Serverless & CDN Architect
+        const isEdgeServerlessOutput = outputLower.includes('cloudflare_workers_v8_isolates_compute') || 
+                                       outputLower.includes('edge_cache_invalidation_routing') || 
+                                       outputLower.includes('wasm_edge_serverless_executions') || 
+                                       outputLower.includes('globally_distributed_keyvalue_maps');
+        if (isEdgeServerlessOutput) {
+            downstreamSequence.push(
+                { agentId: 'Edge Compute Serverless & CDN Architect', task: 'Map distributed V8 serverless worker isolates and optimize edge invalidation cache tags' }
+            );
+            strategy = 'Edge Swarm: Edge Serverless & CDN';
+        }
+
+        // 149. Edge Systems: Progressive Web Application (PWA) Offline Sync Specialist
+        const isPwaSpecialistOutput = outputLower.includes('service_worker_lifecycle_caching') || 
+                                      outputLower.includes('cachestorage_policy_cache_first') || 
+                                      outputLower.includes('offline_sync_background_queue_management') || 
+                                      outputLower.includes('push_notification_payload_encryption');
+        if (isPwaSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Progressive Web Application (PWA) Offline Sync Specialist', task: 'Calibrate Workbox background sync queues and structure payload push notification keys' }
+            );
+            strategy = 'Edge Swarm: PWAs & Offline Sync';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

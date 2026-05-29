@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.126] - 2026-05-29 — Advanced Mobile, Edge Computing & Native Systems Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Mobile, Edge Computing & Native Systems Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/edge/`:
+    - **iOS Swift & CocoaTouch Specialist**: iOS Swift & CocoaTouch Specialist (`edge.ios`) auditing structured Swift async routines and strong/weak reference graph memory cycles.
+    - **Android Kotlin & Jetpack Compose Architect**: Android Kotlin & Jetpack Compose Architect (`edge.android`) tuning recomposition performance, Room SQLite databases, and worker processes.
+    - **Kotlin Multiplatform Shared Core Specialist**: Kotlin Multiplatform (KMP) Shared Core Specialist (`edge.kmp`) coordinating common expects/actuals declarations and shared Ktor networking models.
+    - **React Native Bridge & Native Modules Specialist**: React Native Bridge & Native Modules Specialist (`edge.reactnative`) balancing JSI Native host objects, custom plugins, and native Fabric threads.
+    - **Electron Desktop & Native Interop Architect**: Electron Desktop & Native Interop Architect (`edge.electron`) securing contextBridge main/renderer IPC buffers and node-gyp bindings compilation.
+    - **WebAssembly & WASI Compiler Specialist**: WebAssembly WebAPI & WASI Compiler Specialist (`edge.wasm`) compiling low-level Rust/C++ modules with WASI fs capabilities and shared memory views.
+    - **Embedded RTOS Systems Specialist**: Embedded RTOS & Microcontroller Systems Specialist (`edge.embedded`) managing FreeRTOS kernel mutexes, low-power sleep registers, and stack heap overflows.
+    - **WebUSB WebBluetooth System Interop Specialist**: WebUSB & WebBluetooth System Interop Specialist (`edge.webusb`) orchestrating raw browser bulk transfers and GATT peripheral service callbacks.
+    - **Edge Compute Serverless & CDN Architect**: Edge Compute Serverless & CDN Architect (`edge.serverless`) tuning wrangler CDN routes, V8 serverless worker isolates, and global Key-Value mappings.
+    - **PWA Offline Sync Specialist**: Progressive Web Application (PWA) Offline Sync Specialist (`edge.pwa`) designing Workbox background queues and encrypted payload push notifications.
+- **Swarm Router Downstream Edge Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 140 to 149) mapping Mobile/Edge native runtime keywords to their respective specialists.
+- **Modular Edge Systems Test Suite & Verification**:
+  - Developed a dedicated integration test suite `edge_systems.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 11 declarative integration test suites sweeps with zero regressions (220/220 tests passed cleanly).
+
 ## [39.37.125] - 2026-05-29 — Advanced API Protocols, Gateway Architectures & Communication Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative API Protocols, Gateway Architectures & Communication Agents**:
