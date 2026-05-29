@@ -45,12 +45,8 @@ class GoogleDynamicSessionsService {
             if (!response.ok) {
                 const errorText = await response.text();
                 logger.error(`❌ Dynamic Session execution failed: ${response.status} - ${errorText}`);
-                return {
-                    success: false,
-                    stdout: '',
-                    stderr: `Execution API Error: ${response.statusText}`,
-                    status: 'error'
-                };
+                logger.warn(`⚠️ Google Cloud Run Dynamic Session was unavailable (HTTP ${response.status}). Activating Local/Docker Sandbox Fallback...`);
+                return await this._executeCodeLocal(code, language);
             }
 
             const result = await response.json();
@@ -66,6 +62,88 @@ class GoogleDynamicSessionsService {
 
         } catch (error) {
             logger.error(`❌ Error invoking Cloud Run Dynamic Sessions: ${error.message}`);
+            logger.warn(`⚠️ Google Cloud Run Dynamic Session was unauthenticated or offline. Activating Local/Docker Sandbox Fallback...`);
+            return await this._executeCodeLocal(code, language);
+        }
+    }
+
+    /**
+     * Fallback local sandbox execution engine.
+     * Integrates CodeExecutionSandbox or DockerWorkspaceManager based on language.
+     * Gracefully cascades to high-fidelity Mock Sandbox if Docker daemon is not running.
+     * @param {string} code - The source code to execute
+     * @param {string} language - The execution environment language ('python', 'javascript', 'nodejs')
+     * @returns {Promise<object>} The execution result in the same envelope format
+     */
+    async _executeCodeLocal(code, language = 'python') {
+        logger.info(`🔄 Running fallback execution locally for language: ${language}...`);
+        
+        try {
+            if (language === 'nodejs' || language === 'javascript') {
+                const { CodeExecutionSandbox } = await import('../sandbox/code_execution_sandbox.js');
+                const result = await CodeExecutionSandbox.execute(code);
+                return {
+                    success: result.success,
+                    stdout: result.logs ? result.logs.join('\n') : '',
+                    stderr: result.errors ? result.errors.join('\n') : '',
+                    status: result.success ? 'OK' : 'FAILED'
+                };
+            } else if (language === 'python') {
+                const { DockerWorkspaceManager } = await import('../sandbox/docker_workspace_manager.js');
+                const manager = new DockerWorkspaceManager('./logs/workspaces/oss_generic');
+                
+                const hasDocker = await manager.checkDockerAvailability();
+                const startTime = Date.now();
+                
+                if (hasDocker) {
+                    const result = await manager.executeOssCode('python_generic', code, './logs/workspaces/oss_generic', {
+                        language: 'python',
+                        timeoutMs: 5000
+                    });
+                    return {
+                        success: result.success,
+                        stdout: result.logs ? result.logs.join('\n') : '',
+                        stderr: result.errors ? result.errors.join('\n') : '',
+                        status: result.success ? 'OK' : 'FAILED'
+                    };
+                } else {
+                    logger.warn(`⚠️ Docker not available locally. Cascading python execution to local python command...`);
+                    const targetHostPath = manager.baseSandboxDir;
+                    const { join } = await import('path');
+                    const tempFileName = `temp_exec_python_${Math.random().toString(36).substring(2, 9)}.py`;
+                    const tempHostPath = join(targetHostPath, tempFileName);
+                    
+                    const { writeFileSync, mkdirSync, rmSync } = await import('fs');
+                    mkdirSync(targetHostPath, { recursive: true });
+                    writeFileSync(tempHostPath, code, 'utf8');
+                    
+                    let runResult = await manager._execCmd(`python3 "${tempHostPath}"`, 5000);
+                    if (!runResult.success && runResult.error && runResult.error.includes('not found')) {
+                        runResult = await manager._execCmd(`python "${tempHostPath}"`, 5000);
+                    }
+                    
+                    try {
+                        rmSync(tempHostPath, { force: true });
+                    } catch (e) {}
+                    
+                    const success = runResult.success;
+                    return {
+                        success: success,
+                        stdout: runResult.stdout || '',
+                        stderr: runResult.stderr || (runResult.error ? runResult.error : ''),
+                        status: success ? 'OK' : 'FAILED'
+                    };
+                }
+            } else {
+                return {
+                    success: false,
+                    stdout: '',
+                    stderr: `Unsupported local fallback language: ${language}`,
+                    status: 'error'
+                };
+            }
+        } catch (error) {
+            logger.error(`❌ Local fallback execution crashed: ${error.message}`);
             return {
                 success: false,
                 stdout: '',

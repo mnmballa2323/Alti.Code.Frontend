@@ -51,20 +51,85 @@ Return ONLY the raw intent string, no markdown.`;
 
         logger.info(`🤖 Local Automator: Translated goal into Host Intent: "${cleanIntent}"`);
 
-        // 2. Delegate through the Cloud Proxy Tunnel
-        try {
-            const surrogateOutput = await openclawProxyService.delegateToLocalHost(
-                cleanIntent,
-                "Return the exact stdout, test execution results, or a summary of visual confirmation."
-            );
+        // 2. Delegate through the Cloud Proxy Tunnel with Socratic Self-Healing
+        let attempt = 1;
+        const maxAttempts = 3;
+        let currentIntent = cleanIntent;
 
-            // BaseSpecialistAgent requires a string return which it then wraps.
-            return `[OPENCLAW SURROGATE LOCAL EXECUTION]\nIntent: ${cleanIntent}\nStatus: SUCCESS\nOutput:\n${surrogateOutput}`;
+        while (attempt <= maxAttempts) {
+            try {
+                logger.info(`🤖 Local Automator: Routing Intent (Attempt ${attempt}/${maxAttempts}): "${currentIntent}"`);
+                const surrogateOutput = await openclawProxyService.delegateToLocalHost(
+                    currentIntent,
+                    "Return the exact stdout, test execution results, or a summary of visual confirmation."
+                );
 
-        } catch (error) {
-            logger.error(`❌ Local Automator: Moltbot execution failed on physical host: ${error.message}`);
-            // Let the BaseSpecialistAgent circuit breaker catch and retry this if transient
-            throw error;
+                // Check if stdout indicates a crash/error despite network SUCCESS
+                if (surrogateOutput.toLowerCase().includes('critical failure') || 
+                    surrogateOutput.toLowerCase().includes('error:') || 
+                    surrogateOutput.toLowerCase().includes('command not found')) {
+                    throw new Error(`Execution error captured in stdout: ${surrogateOutput.substring(0, 300)}`);
+                }
+
+                // Reinforce successful healed trajectory in persistent DB successes experience bank
+                if (attempt > 1) {
+                    try {
+                        import('../skillopt/skillopt.service.js').then(({ SkillOptService }) => {
+                            SkillOptService.registerSuccess(this.name, goal, currentIntent).catch(() => {});
+                        }).catch(() => {});
+                    } catch (err) {}
+                }
+
+                return `[OPENCLAW SURROGATE LOCAL EXECUTION]\nIntent: ${currentIntent}\nStatus: SUCCESS\nOutput:\n${surrogateOutput}`;
+
+            } catch (error) {
+                logger.warn(`⚠️ Local Automator: Attempt ${attempt} failed: ${error.message}`);
+                if (attempt === maxAttempts) {
+                    logger.error(`❌ Local Automator: Moltbot execution permanently failed on physical host.`);
+                    throw error;
+                }
+
+                // Socratic Debate & Self-Healing synthesis via Neuromorphic Hermes
+                logger.info(`🧠 [Self-Healing] Triggering Neuromorphic Hermes Socratic Debate to analyze failed execution trajectory...`);
+                let socraticFeedback = '';
+                try {
+                    const { neuromorphicHermesAgent } = await import('./neuromorphic_hermes.agent.js');
+                    const debatePrompt = `The local automator agent failed to execute the intent.
+Goal: "${goal}"
+Failed Intent Context: "${currentIntent}"
+Execution Error Trace:
+${error.message}`;
+
+                    socraticFeedback = await neuromorphicHermesAgent._invoke(
+                        debatePrompt,
+                        `Analyze why the intent failed and generate a counter-proposal resolution to correct the Composio/browser path.`
+                    );
+                    logger.info(`🧠 [Self-Healing] Socratic Debate Verdict: ${socraticFeedback.substring(0, 300)}...`);
+                } catch (debateErr) {
+                    logger.warn(`Socratic debate failed: ${debateErr.message}. Falling back to standard healing prompt.`);
+                }
+
+                const healingPrompt = `You are the Local Automator Self-Healing Coordinator.
+The previous local automation intent failed.
+
+Cloud Sprint Goal: "${goal}"
+Previous Failed Intent: "${currentIntent}"
+Error/Trace: "${error.message}"
+${socraticFeedback ? `Socratic Debate Recommendation:\n${socraticFeedback}\n` : ''}
+Your task is to generate a revised, corrected intent string to resolve the failed attempt.
+Return ONLY the revised raw intent string, no markdown or explanation.`;
+
+                try {
+                    const healedIntent = await GeminiAiService.generateContent(healingPrompt);
+                    currentIntent = healedIntent.replace(/^["'\`]+|["'\`]+$/g, '').trim();
+                    logger.info(`🧠 [Self-Healing] Evolved corrected intent: "${currentIntent}"`);
+                } catch (healErr) {
+                    logger.warn(`Failed to synthesize healed intent: ${healErr.message}`);
+                    // fallback to retrying original
+                }
+
+                attempt++;
+            }
         }
     }
 }

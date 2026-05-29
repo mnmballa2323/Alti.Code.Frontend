@@ -309,7 +309,8 @@ export class DockerWorkspaceManager {
      */
     async startOssContainer(moduleName, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `oss_container_${cleanModuleName}`;
+        const isPython = options.language === 'python';
+        const containerName = `oss_container_${cleanModuleName}${isPython ? '_python' : ''}`;
         const targetHostPath = resolve(hostPath);
 
         const hasDocker = await this.checkDockerAvailability();
@@ -361,7 +362,7 @@ export class DockerWorkspaceManager {
             `-e PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin ` +
             `--cpus="${cpus}" ` +
             `--workdir /workspace ` +
-            `${this.baseImage} tail -f /dev/null`;
+            `${isPython ? 'python:3.11-alpine' : this.baseImage} tail -f /dev/null`;
 
         const runResult = await this._execCmd(dockerRunCmd);
 
@@ -381,13 +382,15 @@ export class DockerWorkspaceManager {
      */
     async executeOssCode(moduleName, code, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `oss_container_${cleanModuleName}`;
+        const isPython = options.language === 'python';
+        const containerName = `oss_container_${cleanModuleName}${isPython ? '_python' : ''}`;
         const targetHostPath = resolve(hostPath);
 
         const startTime = Date.now();
 
         // Write code snippet to host volume
-        const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.js`;
+        const tempExt = isPython ? 'py' : 'js';
+        const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.${tempExt}`;
         const tempHostPath = join(targetHostPath, tempFileName);
         
         mkdirSync(targetHostPath, { recursive: true });
@@ -436,7 +439,8 @@ export class DockerWorkspaceManager {
         }
 
         // Docker exec execution
-        const execCmd = `docker exec ${containerName} node /workspace/${tempFileName}`;
+        const runtimeCmd = isPython ? 'python' : 'node';
+        const execCmd = `docker exec ${containerName} ${runtimeCmd} /workspace/${tempFileName}`;
         const execResult = await this._execCmd(execCmd);
 
         try {

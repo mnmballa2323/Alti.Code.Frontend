@@ -75,6 +75,22 @@ export class EvolutionService {
 
         await fs.writeFile(weightsPath, JSON.stringify(currentConfig, null, 2), 'utf8');
         logger.info(`🧬 EvolutionService: Implicitly learned ${newRulesArray.length} new stylistic preferences. Injected into ${this.weightsFileName}.`);
+
+        // Synchronize and persist style preferences globally inside the database Skill catalog
+        try {
+            import('../app/modules/skillopt/skillopt.service.js').then(({ SkillOptService }) => {
+                newRulesArray.forEach(rule => {
+                    SkillOptService.registerSuccess(
+                        'global_style_enforcer',
+                        'Maintain human preferred syntax style and rules across all generated code.',
+                        `STYLE RULE: ${rule}`
+                    ).catch(() => {});
+                });
+                logger.info(`🧬 EvolutionService: Synchronized ${newRulesArray.length} style preferences to the Mongoose Skill catalog successes bank.`);
+            }).catch(() => {});
+        } catch (err) {
+            logger.debug(`[EvolutionService] Database synchronization unavailable: ${err.message}`);
+        }
     }
 
     /**

@@ -127,6 +127,17 @@ class CodeBrowserService {
         await fs.writeFile(abs, newContent);
         logger.info(`✏️ CodeBrowser: Patch written → ${abs}`);
 
+        // 🧠 Reinforcement Style Evolution Trigger
+        if (originalContent && originalContent.trim() !== newContent.trim()) {
+            try {
+                const { evolutionService } = await import('../../../shared/evolution.service.js');
+                evolutionService.processEvolutionaryDelta(originalContent, newContent, CWD)
+                    .catch(err => logger.warn(`[EvolutionService] Failed to process stylistic preference: ${err.message}`));
+            } catch (err) {
+                logger.debug(`[EvolutionService] Service unavailable: ${err.message}`);
+            }
+        }
+
         // 4. Autonomic AST sweep (complexity check, no rewrite threshold lower in patch context)
         await autonomicService.commenceProactiveSweep([abs]).catch(e =>
             logger.warn(`CodeBrowser: AST sweep warn — ${e.message}`)

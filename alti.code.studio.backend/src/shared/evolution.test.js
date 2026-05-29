@@ -1,19 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { evolutionService } from './evolution.service.js';
 import { GeminiAiService } from '../app/modules/gemini/gemini.service.js';
+import { SkillOptService } from '../app/modules/skillopt/skillopt.service.js';
 import fs from 'fs/promises';
 import path from 'path';
 
 vi.mock('../app/modules/gemini/gemini.service.js');
 vi.mock('fs/promises');
 
-describe('Evolutionary Reinforcement Learning (Phase 23 - The Adaptor)', () => {
+vi.mock('../app/modules/skillopt/skillopt.service.js', () => {
+    return {
+        SkillOptService: {
+            registerSuccess: vi.fn().mockResolvedValue(true)
+        }
+    };
+});
+
+describe('Evolutionary Reinforcement Learning (Phase 23 - The Adaptor) with DB Sync', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
-    it('should structurally analyze a code delta and learn the human preference for async/await', async () => {
+    it('should structurally analyze a code delta, learn human preference, and synchronize to Skill DB', async () => {
 
         const aiLegacyCode = `
 function fetchData(url) {
@@ -60,6 +69,24 @@ const fetchData = async (url) => {
             expectedWeightsPath,
             expect.stringContaining('async/await'),
             'utf8'
+        );
+
+        // Wait brief tick for async DB save
+        await new Promise(resolve => setTimeout(resolve, 10));
+
+        // 4. Check the style rules were synchronized to the Mongoose Skill database
+        expect(SkillOptService.registerSuccess).toHaveBeenCalledTimes(2);
+        expect(SkillOptService.registerSuccess).toHaveBeenNthCalledWith(
+            1,
+            'global_style_enforcer',
+            expect.any(String),
+            'STYLE RULE: Use modern const and arrow functions instead of function declarations.'
+        );
+        expect(SkillOptService.registerSuccess).toHaveBeenNthCalledWith(
+            2,
+            'global_style_enforcer',
+            expect.any(String),
+            'STYLE RULE: Strictly prefer async/await over Promise.then chaining.'
         );
     });
 

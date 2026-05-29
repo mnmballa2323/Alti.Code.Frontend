@@ -95,6 +95,14 @@ async function main() {
       }
     }
 
+    // Seed initial agent skills for SkillOpt catalog
+    try {
+      const { seedInitialSkills } = await import('./src/app/modules/skillopt/skillopt.seeder.js');
+      await seedInitialSkills();
+    } catch (seedErr) {
+      logger.error('❌ Failed to seed SkillOpt initial skills', seedErr);
+    }
+
     // Load Dynamic Marketplace Plugins Before Background Workers
     try {
       await agentRegistry.loadPlugins();

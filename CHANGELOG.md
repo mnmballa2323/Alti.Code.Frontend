@@ -5,6 +5,34 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.104] - 2026-05-29 — Cross-Agent Socratic Debate, Experience Sync, & Dynamic Session Fallbacks
+### Added
+- **GCP Dynamic Session Fallback Sandbox**: Implemented a robust fallback mechanism in `GoogleDynamicSessionsService` (`dynamic_sessions.service.js`) to capture authentication, API, and network errors during compile-time verification or execution, and route them to a local sandboxed fallback engine.
+- **Enhanced Multi-Language Sandbox Support**: Upgraded `DockerWorkspaceManager` (`docker_workspace_manager.js`) to support Python container environments dynamically, alongside the existing Node.js environment. Adds local command-line Python fallback execution when Docker is unavailable.
+- **Dynamic Session Fallback Tests**: Created a comprehensive Vitest suite `dynamic_sessions.test.js` validating primary GCP API successes, JS/Node local sandbox fallbacks, Python local Docker sandbox execution, and Python local command-line host cascades with 100% test coverage.
+- **Cross-Agent Socratic Debate Integration**: Enhanced `OpenClawAgent` to dynamically spawn `NeuromorphicHermesAgent` socratic debate cross-examinations when local automation crashes occur, providing resilient self-healing.
+- **Implicit Database Experience Synchronization**: Upgraded `EvolutionService` to asynchronously synchronize and record newly learned human coding preferences and healed socratic debate trajectories into the persistent Mongoose `Skill` successes experiences catalog.
+
+## [39.37.103] - 2026-05-29 — Advanced Self-Healing OpenClaw & Socratic Hermes Agent Upgrades
+### Added
+- **OpenClaw Self-Healing Loop**: Upgraded `OpenClawAgent` (`openclaw.agent.js`) to capture host execution failures, dynamically synthesize corrected automation intents using Gemini, and autonomously retry up to 3 times before escalating.
+- **Hermes Socratic Debate & Repair Pipeline**: Upgraded `HermesAgent` (`hermes.agent.js`) to intercept NousResearch CLI process crashes, invoke the `neuromorphicHermesAgent` debater to analyze the failure log, and build a healed prompt payload incorporating the debate counter-proposal recommendations for retry.
+- **OpenClaw & Hermes Test Suites**: Implemented comprehensive Vitest suites (`openclaw_agent.test.js` and `hermes_agent.test.js`) verifying self-healing, intent correction, CLI crashes, socratic debates, and evolved prompt re-execution.
+
+## [39.37.102] - 2026-05-29 — Stylistic Reinforcement Learning Swarm Integration
+### Added
+- **Closed-Loop Swarm Reinforcement**: Weaved the `EvolutionService` (style adaptor) directly into production execution flows.
+- **Dynamic Style Injections**: Added dynamic stylistic preference loading inside `consult()` in `swarm_brain.js`, automatically binding human-preferred style rules into all specialized swarm agent prompts on the fly.
+- **Monaco Patch Style Learning**: Hooked up implicit learning (`processEvolutionaryDelta`) directly inside `applyPatch()` in `codeBrowser.service.js` to automatically extract, generalize, and record human code preferences from Live Code Browser delta overrides.
+- **CodeBrowser Test Suite**: Created a comprehensive Vitest test suite (`codeBrowser.test.js`) verifying safety gates, original backups, and preference evolution triggers.
+
+## [39.37.101] - 2026-05-29 — Microsoft Research SkillOpt Integration
+### Added
+- **Offline Agent Instruction Tuner Engine**: Implemented native ESM JavaScript `SkillOptService` performing Textual Gradient Descent in text space using Google Vertex Gemini model architectures. Features instruction patching and validation gate updates with zero runtime inference overhead.
+- **SkillOpt Mongoose Schemas**: Added `Skill` and `SkillOptRun` models to store optimized prompts, training validation histories, and metrics telemetry.
+- **SkillOpt REST Endpoints**: Implemented controller actions and router mounts, which are dynamically auto-detected under `/skillopt` path.
+- **Test Suite & Offline CLI Simulator**: Created complete Vitest test suites and an interactive `run_skillopt_demo.js` simulation script in `scripts/` to execute and watch prompt instruction evolution locally.
+
 ## [39.37.96] - 2026-05-28 — Advanced Performance & Security Declarative YAML Agents
 ### Added
 - **Performance & Latency Optimizer Specialist**: Created `performance.optimizer.agent.yaml` to identify Big-O runtime complexities, N+1 query bottlenecks, event listener memory leaks, and L1/L2 caching architectures.

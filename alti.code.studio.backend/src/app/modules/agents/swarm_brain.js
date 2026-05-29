@@ -189,8 +189,41 @@ class SwarmBrain {
                  temperature: node.temperature !== undefined ? node.temperature : 0.5,
                  iamRole: node.iamRole || 'roles/editor',
                  consult: async (p, ctx) => {
-                     const systemPrompt = `You are ${agentDefinition.name}. ${agentDefinition.description}
-Capabilities: ${agentDefinition.capabilities?.join(', ')}
+                     let promptInstructions = agentDefinition.description;
+                     let experienceFewShot = '';
+                     let stylisticPreferences = '';
+                     try {
+                         const { Skill } = await import('../skillopt/skillopt.model.js');
+                         const customSkill = await Skill.findOne({ name: agentDefinition.name });
+                         if (customSkill) {
+                             if (customSkill.systemInstruction) {
+                                 promptInstructions = customSkill.systemInstruction;
+                                 logger.info(`🔌 [SkillOpt] Dynamic Prompt Binding: Loaded evolved optimized instructions for [${agentDefinition.name}]`);
+                             }
+                             if (customSkill.successes && customSkill.successes.length > 0) {
+                                 experienceFewShot = '\n\n=== REINFORCED LEARNING: SUCCESSFUL FEW-SHOT EXAMPLES ===\n';
+                                 customSkill.successes.forEach((s, idx) => {
+                                     experienceFewShot += `\n[EXAMPLE ${idx + 1}]\nTASK INPUT:\n${s.input.substring(0, 500)}\n\nCORRECT COMPLIANT AGENT OUTPUT:\n${s.output.substring(0, 1000)}\n-----------------------------------------\n`;
+                                 });
+                                 logger.info(`🔌 [SkillOpt] Reinforced Learning: Loaded ${customSkill.successes.length} success cases as in-context demonstrations for [${agentDefinition.name}]`);
+                             }
+                         }
+                     } catch (err) {
+                         logger.debug(`[SkillOpt] Failed to fetch custom skill override: ${err.message}`);
+                     }
+
+                     try {
+                         const { evolutionService } = await import('../../../shared/evolution.service.js');
+                         stylisticPreferences = await evolutionService.getStylisticParameters(process.cwd());
+                         if (stylisticPreferences) {
+                             logger.info(`🔌 [EvolutionService] Style Integration: Loaded stylistic constraints for [${agentDefinition.name}]`);
+                         }
+                     } catch (err) {
+                         logger.debug(`[EvolutionService] Failed to fetch stylistic preferences: ${err.message}`);
+                     }
+
+                     const systemPrompt = `You are ${agentDefinition.name}. ${promptInstructions}
+Capabilities: ${agentDefinition.capabilities?.join(', ')}${experienceFewShot}${stylisticPreferences}
 
 ${agentDefinition.preamble ? `=== PROTOCOL DIRECTIVE ===\n${agentDefinition.preamble}\n==========================\n` : ''}
 Previous Agent Context Pipeline:
@@ -687,6 +720,21 @@ If you require assistance from another specialized agent to complete your task, 
                  logger.error(`❌ SwarmBrain: Node [${nodeId}] exhausted all auto-remediation attempts. Triggering Agent-to-Human (A2H) Escalation Protocol...`);
                  socketService.broadcast('swarm', 'node_status', { nodeId, agentName: agent.name, status: 'failed' });
                  
+                 // 🧠 SkillOpt Autonomous Self-Healing Calibration Trigger
+                 try {
+                     const { SkillOptService } = await import('../skillopt/skillopt.service.js');
+                     const compiledFeedback = `Failed Gates: EvalApproved=${evalScore.isApproved}, PeerApproved=${peerReviewPassed}, SecOpsApproved=${secOpsPassed}, CompilerApproved=${compilerPassed}, AguiApproved=${aguiPassed}. Details: ${evalScore.reasoning || peerReviewFeedback || compilerFeedback || aguiFeedback || 'SAST validation violation'}`;
+                     SkillOptService.registerFailure(
+                         agent.name,
+                         injectedPrompt,
+                         null,
+                         'Did the output successfully bypass the SAST, compiler, visual, and peer review quality gates?',
+                         compiledFeedback
+                     ).catch(err => logger.warn(`[SkillOpt] Failed to record failure: ${err.message}`));
+                 } catch (err) {
+                     logger.debug(`[SkillOpt] Service unavailable: ${err.message}`);
+                 }
+                 
                  // Agent-to-Human (A2H) Escalation (Mocking Google Workspace Chat Webhook)
                  const a2hPayload = {
                      alert: `CRITICAL SWARM BLOCK: Node [${nodeId}] has exhausted 3 remediation attempts.`,
@@ -700,6 +748,15 @@ If you require assistance from another specialized agent to complete your task, 
                  logger.info(`✅ SwarmBrain: Node [${nodeId}] passed all AGI Quality Gates (Attempt ${attempt}).`);
                  if (onProgress) onProgress({ status: 'node_completed', nodeId, agentName: agent.name });
                  socketService.broadcast('swarm', 'node_status', { nodeId, agentName: agent.name, status: 'completed' });
+                 
+                 // 🧠 SkillOpt Autonomous Experience-Based Reinforcement Trigger
+                 if (!result.includes('[SYSTEM_DISPATCH]')) {
+                     try {
+                         import('../skillopt/skillopt.service.js').then(({ SkillOptService }) => {
+                             SkillOptService.registerSuccess(agent.name, injectedPrompt, result).catch(() => {});
+                         }).catch(() => {});
+                     } catch (err) {}
+                 }
                  
                  // 5. Continuous Cognitive Fine-Tuning (MLOps)
                  // If it took multiple attempts, log it as a fine-tuning example for Vertex AI

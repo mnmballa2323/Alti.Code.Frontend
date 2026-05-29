@@ -284,6 +284,9 @@ function PromptInputFullLineComponent({
 
   const getModelDisplayName = (modelKey: string): string => {
     switch (modelKey) {
+      case "":
+      case "auto":
+        return "Smart Routing";
       case "gemini-3.5-flash":
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
@@ -303,7 +306,7 @@ function PromptInputFullLineComponent({
       case "gpt-5.5-instant":
         return "GPT-5.5 Instant";
       default:
-        return "Select Model";
+        return "Smart Routing";
     }
   };
 
@@ -328,7 +331,7 @@ function PromptInputFullLineComponent({
   const token = session?.user.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
 
-  // Enforce "Select Model" (empty defaultModel) by default on initial component mount
+  // Enforce "Smart Routing" (empty defaultModel) by default on initial component mount
   useEffect(() => {
     setDefaultModel("");
   }, [setDefaultModel]);
@@ -530,7 +533,7 @@ function PromptInputFullLineComponent({
               placement="top-start"
               className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2"
             >
-              <DropdownTrigger>
+            <DropdownTrigger>
                 <button
                   className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
                   type="button"
@@ -555,16 +558,38 @@ function PromptInputFullLineComponent({
                   <span className="transition-colors duration-200">
                     {getModelDisplayName(defaultModel)}
                   </span>
+                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
                 </button>
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Model Options"
-                className="p-0 max-h-[350px] overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                className="p-0 overflow-hidden"
                 variant="flat"
               >
                 <DropdownSection
+                  title="AUTONOMOUS"
+                  className="mb-1.5 last:mb-0"
+                  classNames={{
+                    heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5"
+                  }}
+                >
+                  <DropdownItem
+                    key="auto"
+                    textValue="Smart Routing"
+                    onPress={() => setDefaultModel("")}
+                    className="rounded-xl px-3 py-1.5 hover:bg-primary/10 data-[hover=true]:bg-primary/10 transition-colors"
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon className="size-4 text-primary shrink-0" icon="lucide:sparkles" />
+                      <span className="text-xs font-semibold text-primary text-[12px]">Smart Routing (Auto)</span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection
                   title="GEMINI"
-                  className="mb-3.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -578,10 +603,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-500 dark:text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Flash</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Latest default agent & code model</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Flash</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -592,10 +614,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Pro</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Flagship deep reasoning & software logic</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Gemini 3.5 Pro</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -606,17 +625,14 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Gemini Omni Flash</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Multimodal omni-world coding</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Gemini Omni Flash</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
                   title="CLAUDE"
-                  className="mb-3.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -630,10 +646,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-500 dark:text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.7 Opus</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Deep software engineering with 1M context</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.7 Opus</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -644,10 +657,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Claude Sonnet 5</span>
-                        <span className="text-[10px] text-default-400 leading-normal">High-end architecture & refactoring</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Claude Sonnet 5</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -658,17 +668,14 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.5 Haiku</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Fast low-latency agent automation</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">Claude 4.5 Haiku</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
                   title="GPT"
-                  className="mb-3.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
                     heading: "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
                     group: "flex flex-col gap-0.5"
@@ -682,10 +689,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Pro</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Parallel reasoning coding flagship</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Pro</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -696,10 +700,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Frontier omnimodal developer model</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5</span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
@@ -710,10 +711,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Instant</span>
-                        <span className="text-[10px] text-default-400 leading-normal">Fast low-latency editing</span>
-                      </div>
+                      <span className="text-xs font-medium text-foreground text-[12px]">GPT-5.5 Instant</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
