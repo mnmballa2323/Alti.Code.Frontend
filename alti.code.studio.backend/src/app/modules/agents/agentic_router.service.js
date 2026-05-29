@@ -1269,6 +1269,126 @@ class AgenticRouterService {
             strategy = 'Advanced Algorithmic Swarm: LSM-Tree & B-Tree Storage';
         }
 
+        // 80. Software Architecture: CQRS & Event Sourcing Architect
+        const isCqrsOutput = outputLower.includes('cqrs_read_write_segregation') || 
+                             outputLower.includes('event_sourcing_schema') || 
+                             outputLower.includes('event_store_replay') || 
+                             outputLower.includes('materialized_projection_sync');
+        if (isCqrsOutput) {
+            downstreamSequence.push(
+                { agentId: 'CQRS & Event Sourcing Architect', task: 'Design segregated read/write paths and transaction-safe event replay projections' }
+            );
+            strategy = 'Advanced Architecture Swarm: CQRS & Event Sourcing';
+        }
+
+        // 81. Software Architecture: Choreographed & Orchestrated Microservices Coordinator
+        const isMicroservicesOutput = outputLower.includes('saga_transaction_coordination') || 
+                                      outputLower.includes('transactional_outbox_publisher') || 
+                                      outputLower.includes('api_gateway_mesh_routing') || 
+                                      outputLower.includes('distributed_service_orchestration');
+        if (isMicroservicesOutput) {
+            downstreamSequence.push(
+                { agentId: 'Choreographed & Orchestrated Microservices Coordinator', task: 'Orchestrate Saga transactions, outbox publication pipelines, and API Gateway mesh routes' }
+            );
+            strategy = 'Advanced Architecture Swarm: Microservices Coordination';
+        }
+
+        // 82. Software Architecture: Event-Driven Architecture & Message Broker Specialist
+        const isEventDrivenOutput = outputLower.includes('message_broker_topology') || 
+                                    outputLower.includes('dlq_retry_backoff_opt') || 
+                                    outputLower.includes('exactly_once_semantics') || 
+                                    outputLower.includes('backpressure_consumer_tuning');
+        if (isEventDrivenOutput) {
+            downstreamSequence.push(
+                { agentId: 'Event-Driven Architecture & Message Broker Specialist', task: 'Structure message broker queue topologies and optimize DLQ retry-backoff paths' }
+            );
+            strategy = 'Advanced Architecture Swarm: Event-Driven Broker Mesh';
+        }
+
+        // 83. Software Architecture: Serverless Micro-Mesh & Cloud Workflows Architect
+        const isServerlessOutput = outputLower.includes('faas_concurrency_sizing') || 
+                                   outputLower.includes('cold_start_mitigation') || 
+                                   outputLower.includes('stateful_workflow_dsl') || 
+                                   outputLower.includes('serverless_callback_sync');
+        if (isServerlessOutput) {
+            downstreamSequence.push(
+                { agentId: 'Serverless Micro-Mesh & Cloud Workflows Architect', task: 'Configure FaaS memory profiles, cold start mitigations, and serverless workflow steps' }
+            );
+            strategy = 'Advanced Architecture Swarm: Serverless Workflows';
+        }
+
+        // 84. Software Architecture: Multi-Tier Distributed Caching Architect
+        const isCachingOutput = outputLower.includes('cache_access_topologies') || 
+                                 outputLower.includes('redis_cluster_scaling') || 
+                                 outputLower.includes('stampede_avalanche_mitigation') || 
+                                 outputLower.includes('cache_invalidation_sync');
+        if (isCachingOutput) {
+            downstreamSequence.push(
+                { agentId: 'Multi-Tier Distributed Caching Architect', task: 'Formulate cache access structures and Redis Cluster connection optimizations' }
+            );
+            strategy = 'Advanced Architecture Swarm: Distributed Caching';
+        }
+
+        // 85. Software Architecture: Distributed Database Sharding & Replication Specialist
+        const isDatabasesOutput = outputLower.includes('database_sharding_keys') || 
+                                  outputLower.includes('replication_lag_mitigation') || 
+                                  outputLower.includes('automated_db_failover') || 
+                                  outputLower.includes('two_phase_commit_opt');
+        if (isDatabasesOutput) {
+            downstreamSequence.push(
+                { agentId: 'Distributed Database Sharding & Replication Specialist', task: 'Optimize database horizontal sharding maps and failover replication steps' }
+            );
+            strategy = 'Advanced Architecture Swarm: Database Sharding & Replication';
+        }
+
+        // 86. Software Architecture: Hybrid & Multi-Cloud Infrastructure Architect
+        const isHybridCloudOutput = outputLower.includes('hybrid_interconnect_vpn') || 
+                                     outputLower.includes('federated_vpc_networks') || 
+                                     outputLower.includes('multi_provider_iam_federation') || 
+                                     outputLower.includes('cross_cloud_failover');
+        if (isHybridCloudOutput) {
+            downstreamSequence.push(
+                { agentId: 'Hybrid & Multi-Cloud Infrastructure Architect', task: 'Design secure multi-cloud federations, VPC transit routes, and Workload Identity pools' }
+            );
+            strategy = 'Advanced Architecture Swarm: Hybrid & Multi-Cloud';
+        }
+
+        // 87. Software Architecture: Site Reliability & High-Availability Chaos Engineer
+        const isResilienceOutput = outputLower.includes('circuit_breaker_states') || 
+                                   outputLower.includes('bulkhead_isolation_sizing') || 
+                                   outputLower.includes('retry_backoff_jitter') || 
+                                   outputLower.includes('chaos_injection_trials');
+        if (isResilienceOutput) {
+            downstreamSequence.push(
+                { agentId: 'Site Reliability & High-Availability Chaos Engineer', task: 'Enforce circuit breaker limits, bulkhead isolation pool sizing, and retry backoffs' }
+            );
+            strategy = 'Advanced Architecture Swarm: SRE Resilience & Chaos';
+        }
+
+        // 88. Software Architecture: Observability & OpenTelemetry APM Architect
+        const isObservabilityOutput = outputLower.includes('telemetry_tracing_propagation') || 
+                                      outputLower.includes('metrics_aggregation_query') || 
+                                      outputLower.includes('continuous_runtime_profiling') || 
+                                      outputLower.includes('alert_threshold_design');
+        if (isObservabilityOutput) {
+            downstreamSequence.push(
+                { agentId: 'Observability & OpenTelemetry APM Architect', task: 'Examine trace context headers propagation and continuous V8 cpu profiling metrics' }
+            );
+            strategy = 'Advanced Architecture Swarm: Observability & OTel APM';
+        }
+
+        // 89. Software Architecture: Real-Time WebSockets & CRDT Collaboration Specialist
+        const isRealtimeOutput = outputLower.includes('websocket_sfu_connections') || 
+                                 outputLower.includes('crdt_state_sync') || 
+                                 outputLower.includes('operational_transformation') || 
+                                 outputLower.includes('realtime_sync_loops');
+        if (isRealtimeOutput) {
+            downstreamSequence.push(
+                { agentId: 'Real-Time WebSockets & CRDT Collaboration Specialist', task: 'Structure low-latency WebSockets collaborative server synchronization loops' }
+            );
+            strategy = 'Advanced Architecture Swarm: Real-Time WebSockets & CRDT';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

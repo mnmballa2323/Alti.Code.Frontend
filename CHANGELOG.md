@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.120] - 2026-05-29 — Advanced Software Architectures & Distributed Systems Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Software Architecture & Distributed Systems Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new structured directory `definitions/architectures/`:
+    - **CQRS & Event Sourcing**: CQRS & Event Sourcing Architect (`arch.cqrs`) segregating read/write paths and replay projections.
+    - **Microservices Coordinator**: Choreographed & Orchestrated Microservices Coordinator (`arch.microservices`) orchestrating Sagas and Outbox patterns.
+    - **Event-Driven Broker**: Event-Driven Architecture & Message Broker Specialist (`arch.event_driven`) structuring queue partitions and DLQ retries.
+    - **Serverless Workflows**: Serverless Micro-Mesh & Cloud Workflows Architect (`arch.serverless`) managing cold starts and state step-functions.
+    - **Distributed Caching**: Multi-Tier Distributed Caching Architect (`arch.caching`) mitigating cache stampedes and scaling clusters.
+    - **Databases Specialist**: Distributed Database Sharding & Replication Specialist (`arch.databases`) scaling shard keys and 2PC commits.
+    - **Hybrid Cloud**: Hybrid & Multi-Cloud Infrastructure Architect (`arch.hybrid_cloud`) federating VPC networks and workload OIDC agreements.
+    - **SRE Chaos Engineer**: Site Reliability & High-Availability Chaos Engineer (`arch.resilience`) enforcing circuit breakers and jitter-exponential retries.
+    - **Observability APM**: Observability & OpenTelemetry APM Architect (`arch.observability`) instrumenting traces context and continuous V8 memory profiling.
+    - **Real-Time Collaboration**: Real-Time WebSockets & CRDT Collaboration Specialist (`arch.realtime`) syncing CRDT delta states and socket SFU connections.
+- **Swarm Router Downstream Architectural Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 high-precision trigger blocks (triggers 80 to 89) mapping architecture GICS keywords to their respective specialists.
+- **Modular Architectures Test Suite & Verification**:
+  - Developed a dedicated integration test suite `architectures.integration.test.js` verifying recursive parsing, loading, and downstream routing triggers for all 10 architectural agents.
+  - Successfully cleared all backend test suites sweeps, confirming 100% green verification passes on the new architectures, algorithms, runtimes, economic sectors, and main definitions integration tests.
+
 ## [39.37.119] - 2026-05-29 — Advanced Algorithmic Design & Mathematics Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Algorithmic & Mathematics Agents**:
