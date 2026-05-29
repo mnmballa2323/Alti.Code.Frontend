@@ -1629,6 +1629,126 @@ class AgenticRouterService {
             strategy = 'Data Engineering Swarm: Apache Pulsar Messaging';
         }
 
+        // 110. Security Engineering: Static Analysis & CVE Auditing Specialist
+        const isCveAuditorOutput = outputLower.includes('dependency_vulnerability_scanning') || 
+                                   outputLower.includes('sast_dast_scanner_calibration') || 
+                                   outputLower.includes('lockfile_security_audit') || 
+                                   outputLower.includes('cve_remediation_patching');
+        if (isCveAuditorOutput) {
+            downstreamSequence.push(
+                { agentId: 'Static Analysis & CVE Auditing Specialist', task: 'Scan dependency trees for out-of-date locks and calibrate SAST Semgrep rules' }
+            );
+            strategy = 'Cybersecurity Swarm: CVE & Static Code Analysis';
+        }
+
+        // 111. Security Engineering: Automated Penetration Tester & Red Teamer
+        const isPenetrationOutput = outputLower.includes('sql_injection_penetration') || 
+                                    outputLower.includes('xss_csrf_bypass_testing') || 
+                                    outputLower.includes('cors_session_hijacking_audit') || 
+                                    outputLower.includes('auth_rate_limiting_hardening');
+        if (isPenetrationOutput) {
+            downstreamSequence.push(
+                { agentId: 'Automated Penetration Tester & Red Teamer', task: 'Simulate SQL injection vectors and input bypass payloads to verify filters robustness' }
+            );
+            strategy = 'Cybersecurity Swarm: Penetration & Red Teaming';
+        }
+
+        // 112. Security Engineering: Cryptographic Key & Secret Manager Sentinel
+        const isKmsSentinelOutput = outputLower.includes('kms_cryptographic_key_rotation') || 
+                                    outputLower.includes('envelope_encryption_wrapping') || 
+                                    outputLower.includes('dynamic_secrets_rotation') || 
+                                    outputLower.includes('api_token_leak_scanning');
+        if (isKmsSentinelOutput) {
+            downstreamSequence.push(
+                { agentId: 'Cryptographic Key & Secret Manager Sentinel', task: 'Enforce AES-GCM envelope encryption configurations and audit token scanning alerts' }
+            );
+            strategy = 'Cybersecurity Swarm: Cryptographic Keys & Secrets';
+        }
+
+        // 113. Security Engineering: Zero-Trust Network Perimeter Auditor
+        const isZeroTrustOutput = outputLower.includes('vpc_service_connect_perimeters') || 
+                                  outputLower.includes('mutual_tls_mtls_enforcement') || 
+                                  outputLower.includes('service_mesh_authorization_policies') || 
+                                  outputLower.includes('egress_firewall_group_hardening');
+        if (isZeroTrustOutput) {
+            downstreamSequence.push(
+                { agentId: 'Zero-Trust Network Perimeter Auditor', task: 'Audit VPC service perimeters boundaries and mutual TLS Istio access mesh policies' }
+            );
+            strategy = 'Cybersecurity Swarm: Zero-Trust Network Mesh';
+        }
+
+        // 114. Security Engineering: IAM & Identity Privilege Sentinel
+        const isIamGovernorOutput = outputLower.includes('cross_account_role_assumption') || 
+                                    outputLower.includes('identity_federation_oidc_mapping') || 
+                                    outputLower.includes('privilege_escalation_auditing') || 
+                                    outputLower.includes('least_privilege_iam_alignment');
+        if (isIamGovernorOutput) {
+            downstreamSequence.push(
+                { agentId: 'IAM & Identity Privilege Sentinel', task: 'Trim unused permissions policies and map federated OIDC identity pool boundaries' }
+            );
+            strategy = 'Cybersecurity Swarm: IAM & Identity Privileges';
+        }
+
+        // 115. Security Engineering: Threat Modeling & Attack Graph Specialist
+        const isThreatModelingOutput = outputLower.includes('stride_threat_model_classification') || 
+                                       outputLower.includes('dataflow_trust_boundary_mapping') || 
+                                       outputLower.includes('attack_graph_path_generation') || 
+                                       outputLower.includes('cvss_vulnerability_metric_scoring');
+        if (isThreatModelingOutput) {
+            downstreamSequence.push(
+                { agentId: 'Threat Modeling & Attack Graph Specialist', task: 'Map trust boundaries architecture diagrams and score vulnerabilities exploitability levels' }
+            );
+            strategy = 'Cybersecurity Swarm: Threat Modeling & Attack Graphs';
+        }
+
+        // 116. Security Engineering: SOC2, PCI-DSS & HIPAA Compliance Auditor
+        const isComplianceOutput = outputLower.includes('soc2_trust_services_audit') || 
+                                   outputLower.includes('pci_dss_cde_encryption_scope') || 
+                                   outputLower.includes('hipaa_phi_data_preservation') || 
+                                   outputLower.includes('compliance_as_code_rego_rules');
+        if (isComplianceOutput) {
+            downstreamSequence.push(
+                { agentId: 'SOC2, PCI-DSS & HIPAA Compliance Auditor', task: 'Run compliance-as-code Open Policy Agent assertions against cloud configurations' }
+            );
+            strategy = 'Cybersecurity Swarm: Compliance & Auditing';
+        }
+
+        // 117. Security Engineering: WAF & DDoS Mitigation Coordinator
+        const isWafSentinelOutput = outputLower.includes('waf_custom_rule_exclusions') || 
+                                    outputLower.includes('dynamic_rate_limiting_thresholds') || 
+                                    outputLower.includes('layer7_ddos_mitigation_rules') || 
+                                    outputLower.includes('ssl_tls_cipher_enforcement');
+        if (isWafSentinelOutput) {
+            downstreamSequence.push(
+                { agentId: 'WAF & DDoS Mitigation Coordinator', task: 'Examine rate limiting profiles and SSL/TLS cipher suite security enforcement limits' }
+            );
+            strategy = 'Cybersecurity Swarm: WAF & DDoS Protection';
+        }
+
+        // 118. Security Engineering: Binary Authorization & Supply Chain Guardian
+        const isBinaryAuthOutput = outputLower.includes('container_cryptographic_signing') || 
+                                   outputLower.includes('slsa_provenance_verification') || 
+                                   outputLower.includes('binary_authorization_gateways') || 
+                                   outputLower.includes('sbom_generation_vulnerability_correlation');
+        if (isBinaryAuthOutput) {
+            downstreamSequence.push(
+                { agentId: 'Binary Authorization & Supply Chain Guardian', task: 'Enforce container SLSA provenance verifications and check SBOM vulnerability alerts' }
+            );
+            strategy = 'Cybersecurity Swarm: Software Supply Chain Trust';
+        }
+
+        // 119. Security Engineering: SIEM & Secure Audit Trail Specialist
+        const isAuditLoggerOutput = outputLower.includes('immutable_log_sinks') || 
+                                    outputLower.includes('secure_audit_trail_schemas') || 
+                                    outputLower.includes('siem_chronicle_ingestion') || 
+                                    outputLower.includes('threat_detection_alerting');
+        if (isAuditLoggerOutput) {
+            downstreamSequence.push(
+                { agentId: 'SIEM & Secure Audit Trail Specialist', task: 'Structure secure write-once-read-many log sinks and SIEM Chronicle parser maps' }
+            );
+            strategy = 'Cybersecurity Swarm: SIEM & Immutable Audit Logs';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.123] - 2026-05-29 — Advanced Cybersecurity, DevSecOps & Defensive Auditing Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Cybersecurity, DevSecOps & Defensive Auditing Agents**:
+  - Organized and deployed 10 premium declarative agent definitions under the new directory `definitions/security/`:
+    - **Static Analysis & CVE Auditor**: Static Analysis & CVE Auditing Specialist (`security.cve_auditor`) scanning dependency trees and lockfiles for vulnerabilities and SAST/DAST integrations.
+    - **Automated Penetration Tester**: Automated Penetration Tester & Red Teamer (`security.penetration`) simulating SQL injections, XSS/CSRF exploits, and auth rate limiting tests.
+    - **Cryptographic KMS Officer**: Cryptographic Key & Secret Manager Sentinel (`security.kms_officer`) wrap envelope encryptions, rotate KMS keys, and scan API leaks.
+    - **Zero-Trust Network Auditor**: Zero-Trust Network Perimeter Auditor (`security.zero_trust`) managing VPC service connect boundaries and Istio mTLS policies.
+    - **IAM Privilege Sentinel**: IAM & Identity Privilege Sentinel (`security.iam_governor`) auditing least-privilege IAM policies, wildcards, and OIDC federation identity pools.
+    - **Threat Modeling specialist**: Threat Modeling & Attack Graph Specialist (`security.threat_modeling`) mapping architectural STRIDE threats, trust boundaries, and attack paths.
+    - **Compliance Auditor**: SOC2, PCI-DSS & HIPAA Compliance Auditor (`security.compliance`) running compliance-as-code Open Policy Agent Rego drift checks.
+    - **WAF DDoS Coordinator**: WAF & DDoS Mitigation Coordinator (`security.waf_sentinel`) configuring custom rule exclusions, rate-limits, and SSL/TLS profile parameters.
+    - **Binary Auth Guardian**: Binary Authorization & Supply Chain Guardian (`security.binary_auth`) verifying signed containers, SBOM vulnerabilities, and SLSA provenance.
+    - **SIEM Audit Specialist**: SIEM & Secure Audit Trail Specialist (`security.audit_logger`) structuring immutable log sinks and Chronicle threat detections.
+- **Swarm Router Downstream Security Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers (triggers 110 to 119) mapping security-specific GICS/domain keywords to their respective specialists.
+- **Modular Cybersecurity Test Suite & Verification**:
+  - Developed a dedicated integration test suite `security.integration.test.js` verifying recursive parsing, loading, and routing behaviors for all 10 new agents.
+  - Successfully cleared all 8 declarative integration test suites sweeps with zero regressions (160/160 tests passed cleanly).
+
 ## [39.37.122] - 2026-05-29 — Advanced Data Engineering & Stream Processing Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Data Engineering & Stream Processing Agents**:
