@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the seven highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the eleven highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -477,6 +477,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const vertexPath = path.join(DEFINITIONS_DIR, 'gcp.vertexai.optimizer.agent.yaml');
             const bigqueryPath = path.join(DEFINITIONS_DIR, 'gcp.bigquery.analytics.agent.yaml');
             const spannerPath = path.join(DEFINITIONS_DIR, 'gcp.spanner.architect.agent.yaml');
+            const cloudrunPath = path.join(DEFINITIONS_DIR, 'gcp.cloudrun.provisioner.agent.yaml');
+            const storagePath = path.join(DEFINITIONS_DIR, 'gcp.storage.governor.agent.yaml');
+            const monitoringPath = path.join(DEFINITIONS_DIR, 'gcp.operations.monitoring.agent.yaml');
+            const armorPath = path.join(DEFINITIONS_DIR, 'gcp.armor.gateway.agent.yaml');
 
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
@@ -485,6 +489,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const vertexDef = parseYaml(await fs.readFile(vertexPath, 'utf8'));
             const bigqueryDef = parseYaml(await fs.readFile(bigqueryPath, 'utf8'));
             const spannerDef = parseYaml(await fs.readFile(spannerPath, 'utf8'));
+            const cloudrunDef = parseYaml(await fs.readFile(cloudrunPath, 'utf8'));
+            const storageDef = parseYaml(await fs.readFile(storagePath, 'utf8'));
+            const monitoringDef = parseYaml(await fs.readFile(monitoringPath, 'utf8'));
+            const armorDef = parseYaml(await fs.readFile(armorPath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -506,6 +514,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(spannerDef.id).toBe('agent.gcp.spanner.architect');
             expect(spannerDef.name).toBe('Google Cloud Spanner Scalability Specialist');
+
+            expect(cloudrunDef.id).toBe('agent.gcp.cloudrun.provisioner');
+            expect(cloudrunDef.name).toBe('GCP Cloud Run & GKE Autopilot Provisioning Specialist');
+
+            expect(storageDef.id).toBe('agent.gcp.storage.governor');
+            expect(storageDef.name).toBe('GCP Cloud Storage & Data Lifecycle Governor Specialist');
+
+            expect(monitoringDef.id).toBe('agent.gcp.operations.monitoring');
+            expect(monitoringDef.name).toBe('GCP Operations & Monitoring Specialist');
+
+            expect(armorDef.id).toBe('agent.gcp.armor.gateway');
+            expect(armorDef.name).toBe('GCP Cloud Armor & API Gateway WAF Specialist');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -555,6 +575,33 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const spannerSwarm = await agenticRouter.routeDownstreamSwarm(spannerOutput);
             expect(spannerSwarm.strategy).toBe('Hierarchical Cloud Spanner Scaling Swarm');
             expect(spannerSwarm.sequence.map(s => s.agentId)).toContain('Google Cloud Spanner Scalability Specialist');
+
+            // 8. Evaluate Cloud Run & GKE Autopilot provisioning outputs
+            const cloudrunOutput = 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: alti-cloudrun-deploy';
+            const cloudrunSwarm = await agenticRouter.routeDownstreamSwarm(cloudrunOutput);
+            expect(cloudrunSwarm.strategy).toBe('Hierarchical Serverless & Container Provisioning Swarm');
+            expect(cloudrunSwarm.sequence.map(s => s.agentId)).toContain('Kubernetes Manifest & Helm Compiler Agent');
+            expect(cloudrunSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Run & GKE Autopilot Provisioning Specialist');
+
+            // 9. Evaluate GCS storage lifecycle outputs
+            const storageOutput = 'gsutil lifecycle set policy.json gs://alti-data-vault';
+            const storageSwarm = await agenticRouter.routeDownstreamSwarm(storageOutput);
+            expect(storageSwarm.strategy).toBe('Hierarchical GCS Storage & Lifecycle Swarm');
+            expect(storageSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Storage & Data Lifecycle Governor Specialist');
+
+            // 10. Evaluate operations alert and monitoring outputs
+            const monitoringOutput = 'monitoring.v3.AlertPolicy\ncombiner: OR\nconditions:';
+            const monitoringSwarm = await agenticRouter.routeDownstreamSwarm(monitoringOutput);
+            expect(monitoringSwarm.strategy).toBe('Hierarchical Operations & Monitoring Swarm');
+            expect(monitoringSwarm.sequence.map(s => s.agentId)).toContain('Distributed Tracing & APM Instrumentation Architect');
+            expect(monitoringSwarm.sequence.map(s => s.agentId)).toContain('GCP Operations & Monitoring Specialist');
+
+            // 11. Evaluate API Gateway & Cloud Armor WAF outputs
+            const gatewayOutput = 'swagger: "2.0"\nx-google-backend:\n  address: https://alti-api.gateway';
+            const gatewaySwarm = await agenticRouter.routeDownstreamSwarm(gatewayOutput);
+            expect(gatewaySwarm.strategy).toBe('Hierarchical API Gateway & Cloud Armor WAF Swarm');
+            expect(gatewaySwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Armor & API Gateway WAF Specialist');
+            expect(gatewaySwarm.sequence.map(s => s.agentId)).toContain('Security & OWASP Hardening Sentinel');
         });
     });
 });

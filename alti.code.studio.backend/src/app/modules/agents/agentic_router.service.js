@@ -316,6 +316,78 @@ class AgenticRouterService {
             strategy = 'Hierarchical Cloud Spanner Scaling Swarm';
         }
 
+        // 8. Analyze Cloud Run & GKE Autopilot provisioning
+        const isCloudRunOutput = outputLower.includes('cloudrun') || 
+                                 outputLower.includes('gke') || 
+                                 outputLower.includes('kubernetes') || 
+                                 outputLower.includes('k8s') || 
+                                 outputLower.includes('autopilot') || 
+                                 outputLower.includes('pod') || 
+                                 outputLower.includes('ingress') || 
+                                 outputLower.includes('knative') || 
+                                 outputLower.includes('container_port');
+        if (isCloudRunOutput) {
+            downstreamSequence.push(
+                { agentId: 'Kubernetes Manifest & Helm Compiler Agent', task: 'Scan and validate Kubernetes manifest templates' },
+                { agentId: 'GCP Cloud Run & GKE Autopilot Provisioning Specialist', task: 'Deploy containerized serverless resources and scale GKE Autopilot pods' }
+            );
+            strategy = 'Hierarchical Serverless & Container Provisioning Swarm';
+        }
+
+        // 9. Analyze GCS storage lifecycle policies
+        const isGcsOutput = outputLower.includes('gcs') || 
+                            outputLower.includes('bucket') || 
+                            outputLower.includes('storage') || 
+                            outputLower.includes('lifecycle') || 
+                            outputLower.includes('signedurl') || 
+                            outputLower.includes('coldline') || 
+                            outputLower.includes('archive') || 
+                            outputLower.includes('cors') || 
+                            outputLower.includes('transfer');
+        if (isGcsOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Storage & Data Lifecycle Governor Specialist', task: 'Structure lifecycle storage rules and signed URL security policies' }
+            );
+            strategy = 'Hierarchical GCS Storage & Lifecycle Swarm';
+        }
+
+        // 10. Analyze operations alerts and monitoring SLIs/SLOs
+        const isMonitoringOutput = outputLower.includes('monitoring') || 
+                                   outputLower.includes('alert') || 
+                                   outputLower.includes('slo') || 
+                                   outputLower.includes('sli') || 
+                                   outputLower.includes('metric') || 
+                                   outputLower.includes('profiler') || 
+                                   outputLower.includes('trace') || 
+                                   outputLower.includes('logging') || 
+                                   outputLower.includes('cloudlogger');
+        if (isMonitoringOutput) {
+            downstreamSequence.push(
+                { agentId: 'Distributed Tracing & APM Instrumentation Architect', task: 'Correlate trace logs and OTel APM endpoints' },
+                { agentId: 'GCP Operations & Monitoring Specialist', task: 'Configure Cloud Operations sinks, continuous profiler, and SLI/SLO dashboards' }
+            );
+            strategy = 'Hierarchical Operations & Monitoring Swarm';
+        }
+
+        // 11. Analyze Cloud Armor WAF & API Gateway routing
+        const isArmorGatewayOutput = outputLower.includes('apigateway') || 
+                                     outputLower.includes('api.gateway') || 
+                                     outputLower.includes('api-gateway') || 
+                                     outputLower.includes('gateway') || 
+                                     outputLower.includes('cloudarmor') || 
+                                     outputLower.includes('waf') || 
+                                     outputLower.includes('rate_limiting') || 
+                                     outputLower.includes('ddos') || 
+                                     outputLower.includes('firewall') || 
+                                     outputLower.includes('ssl');
+        if (isArmorGatewayOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Armor & API Gateway WAF Specialist', task: 'Formulate OpenAPI Gateway routing and Cloud Armor WAF security profiles' },
+                { agentId: 'Security & OWASP Hardening Sentinel', task: 'Audit WAF rate limiting and API edge protection rules' }
+            );
+            strategy = 'Hierarchical API Gateway & Cloud Armor WAF Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

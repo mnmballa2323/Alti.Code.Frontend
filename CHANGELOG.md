@@ -5,6 +5,18 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.111] - 2026-05-29 — Level 5 Full Swarm Expansion & 11 GCP Specialists Deployed
+### Added
+- **Four More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Cloud Run & GKE Autopilot Provisioning Specialist** (`agent.gcp.cloudrun.provisioner`): Configures Knative serverless parameters, scaling limitations, and GKE Autopilot requests/limits ratios.
+  - **GCP Cloud Storage & Data Lifecycle Governor Specialist** (`agent.gcp.storage.governor`): Defines object storage classes, lifecycle transition boundaries, secure Signed URLs, and CORS headers.
+  - **GCP Operations & Monitoring Specialist** (`agent.gcp.operations.monitoring`): Governs Cloud Logging sinks, Log Analytics SQL, continuous profiling, and alert metric queries (SLIs/SLOs).
+  - **GCP Cloud Armor & API Gateway WAF Specialist** (`agent.gcp.armor.gateway`): Engineers edge OpenAPI Gateways, rate-limiting profiles, and WAF rulesets for OWASP protection.
+- **Hierarchical Swarm Router Extensions**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 11 GCP specialized agents.
+  - Refined API Gateway and WAF keyword scanning to support `'gateway'`, `'api.gateway'`, and `'api-gateway'` patterns seamlessly.
+- **Full Swarm Verification tests**: Validated all 20 integration tests passing successfully with 100% green sweeps.
+
 ## [39.37.110] - 2026-05-29 — Full Suite of Seven GCP Backend Agents & Swarm Router Refinement
 ### Added
 - **Four New Highly Specialized GCP Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
