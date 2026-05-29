@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.109] - 2026-05-29 — Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents
+### Added
+- **Dynamic Hierarchical Swarm Orchestrator**: Extended `AgenticRouterService` (`agentic_router.service.js`) with `routeDownstreamSwarm(primaryOutput)` to dynamically audit generated backend outputs and spawn downstream specialized sub-swarms in parallel.
+- **Three Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Pub/Sub Event-Driven Mesh Conductor** (`agent.gcp.pubsub.mesh.conductor`): Specializes in orchestrating high-throughput messaging topologies, exponential backoffs, and dead-letter queues (DLQ).
+  - **GCP Sentinel Zero-Trust Security Auditor** (`agent.gcp.sentinel.security.auditor`): Proactively scans deployments and VPC Service Control perimeters for maximum least-privilege compliance.
+  - **AlloyDB pgvector Tuning Specialist** (`agent.alloydb.pgvector.tuner`): Optimizes vector schemas, HNSW similarity parameters, and RAG embeddings acceleration rules.
+- **Hierarchical Swarm Integration Tests**: Added integration tests in `definitions.integration.test.js` asserting schema loading validation and targeted downstream sub-swarm routing with a 100% success rate.
+
 ## [39.37.108] - 2026-05-29 — Local AST Dependency Graph Crawler & Proactive Refactoring Patrol
 ### Added
 - **Local Babel AST Dependency crawler**: Implemented a complete, pure JavaScript dependency graph crawler (`calculateLocalDependencyCentrality`) parsing imports and dynamic `import()` AST expressions under `./src` completely offline when Neo4j is unavailable.

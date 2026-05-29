@@ -467,4 +467,53 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             pubsubService.publishEvent = originalPubSubPublish;
         });
     });
+
+    describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
+        it('should successfully parse and load the three new highly specialized GCP agent definitions', async () => {
+            const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
+            const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
+            const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
+
+            const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
+            const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
+            const alloydbDef = parseYaml(await fs.readFile(alloydbPath, 'utf8'));
+
+            expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
+            expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
+            expect(pubsubDef.capabilities).toContain('gcp_pubsub_architecture');
+
+            expect(sentinelDef.id).toBe('agent.gcp.sentinel.security.auditor');
+            expect(sentinelDef.name).toBe('GCP Sentinel Zero-Trust Security Auditor');
+            expect(sentinelDef.capabilities).toContain('zero_trust_audit');
+
+            expect(alloydbDef.id).toBe('agent.alloydb.pgvector.tuner');
+            expect(alloydbDef.name).toBe('AlloyDB pgvector Similarity Search Tuning Specialist');
+            expect(alloydbDef.capabilities).toContain('alloydb_vector_indexing');
+        });
+
+        it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
+            const { agenticRouter } = await import('./agentic_router.service.js');
+
+            // 1. Evaluate database vector outputs
+            const dbOutput = 'CREATE INDEX idx_vector ON items USING hnsw (embedding vector_cosine_ops);';
+            const dbSwarm = await agenticRouter.routeDownstreamSwarm(dbOutput);
+            expect(dbSwarm.strategy).toBe('Hierarchical Vector DB Optimization Swarm');
+            expect(dbSwarm.sequence.map(s => s.agentId)).toContain('Database Performance & SQL Optimization Tuning Specialist');
+            expect(dbSwarm.sequence.map(s => s.agentId)).toContain('AlloyDB pgvector Similarity Search Tuning Specialist');
+
+            // 2. Evaluate security clearances outputs
+            const securityOutput = 'const secretToken = process.env.IAM_WORKLOAD_IDENTITY_KEY;';
+            const securitySwarm = await agenticRouter.routeDownstreamSwarm(securityOutput);
+            expect(securitySwarm.strategy).toBe('Hierarchical Zero-Trust Security Clearance Swarm');
+            expect(securitySwarm.sequence.map(s => s.agentId)).toContain('Security & OWASP Hardening Sentinel');
+            expect(securitySwarm.sequence.map(s => s.agentId)).toContain('GCP Sentinel Zero-Trust Security Auditor');
+
+            // 3. Evaluate event message mesh outputs
+            const pubsubOutput = 'await pubsubService.publishEvent("alti-swarm-events", { event: "REMEDIATED" });';
+            const pubsubSwarm = await agenticRouter.routeDownstreamSwarm(pubsubOutput);
+            expect(pubsubSwarm.strategy).toBe('Hierarchical Event-Driven Mesh Scaling Swarm');
+            expect(pubsubSwarm.sequence.map(s => s.agentId)).toContain('Distributed Queue & Event Coordinator');
+            expect(pubsubSwarm.sequence.map(s => s.agentId)).toContain('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
+        });
+    });
 });
