@@ -461,6 +461,84 @@ class AgenticRouterService {
             strategy = 'Hierarchical Cryptographic & KMS Officer Swarm';
         }
 
+        // 16. Analyze Cloud Build & Artifact Registry CI/CD
+        const isBuildCicdOutput = outputLower.includes('cloudbuild') || 
+                                  outputLower.includes('artifact_registry') || 
+                                  outputLower.includes('gcr.io') || 
+                                  outputLower.includes('pkg.dev') || 
+                                  outputLower.includes('cloud-builders') || 
+                                  outputLower.includes('dockerfile') || 
+                                  outputLower.includes('docker') || 
+                                  outputLower.includes('binary_authorization') || 
+                                  outputLower.includes('vulnerability_scan') || 
+                                  outputLower.includes('ci_cd') || 
+                                  outputLower.includes('pipeline_trigger');
+        if (isBuildCicdOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Cloud Build & Artifact Registry CI/CD Specialist', task: 'Design secure Cloud Build pipelines and Artifact Registry repos' },
+                { agentId: 'Kubernetes Manifest & Helm Compiler Agent', task: 'Audit pipeline deployment manifests' }
+            );
+            strategy = 'Hierarchical CI/CD & Artifact Registry Swarm';
+        }
+
+        // 17. Analyze Edge DNS, CDN & load balancers
+        const isEdgeNetworkOutput = outputLower.includes('cloudcdn') || 
+                                    outputLower.includes('clouddns') || 
+                                    outputLower.includes('cdn') || 
+                                    outputLower.includes('dns') || 
+                                    outputLower.includes('cdn-cache') || 
+                                    outputLower.includes('backend-services') || 
+                                    outputLower.includes('anycast') || 
+                                    outputLower.includes('load_balancer') || 
+                                    outputLower.includes('loadbalancer') || 
+                                    outputLower.includes('load-balancer') || 
+                                    outputLower.includes('cdn_cache') || 
+                                    outputLower.includes('dns_routing') || 
+                                    outputLower.includes('signed_cookies');
+        if (isEdgeNetworkOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Configure Anycast routing, Cloud DNS zones, and Cloud CDN caches' },
+                { agentId: 'GCP Cloud Armor & API Gateway WAF Specialist', task: 'Enforce edge load balancer WAF configurations' }
+            );
+            strategy = 'Hierarchical Edge Network & CDN Swarm';
+        }
+
+        // 18. Analyze Data Catalog & DLP privacy templates
+        const isDlpGovernanceOutput = outputLower.includes('data_catalog') || 
+                                      outputLower.includes('dlp') || 
+                                      outputLower.includes('pii_scan') || 
+                                      outputLower.includes('de_identification') || 
+                                      outputLower.includes('catalog_tagging') || 
+                                      outputLower.includes('privacy_compliance') || 
+                                      outputLower.includes('data_governance');
+        if (isDlpGovernanceOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Data Catalog & Cloud DLP Compliance Officer', task: 'Build DLP inspection templates and Data Catalog taxologies' },
+                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Verify data privacy access perimeters' }
+            );
+            strategy = 'Hierarchical Data Governance & DLP Swarm';
+        }
+
+        // 19. Analyze Vertex AI Feature Store & ML serving
+        const isFeatureStoreOutput = outputLower.includes('feature_store') || 
+                                     outputLower.includes('feature-store') || 
+                                     outputLower.includes('model_registry') || 
+                                     outputLower.includes('model-registry') || 
+                                     outputLower.includes('deploymodel') || 
+                                     outputLower.includes('deploy_model') || 
+                                     outputLower.includes('endpoint') || 
+                                     outputLower.includes('vertex_endpoint') || 
+                                     outputLower.includes('model_serving') || 
+                                     outputLower.includes('online_serving') || 
+                                     outputLower.includes('feature_engineering');
+        if (isFeatureStoreOutput) {
+            downstreamSequence.push(
+                { agentId: 'GCP Vertex AI Feature Store & Model Registry Specialist', task: 'Optimize online Feature Store view lookups and Vertex endpoints' },
+                { agentId: 'Vertex AI & Gemini Pipeline Optimization Specialist', task: 'Deploy and version models in Vertex Registry' }
+            );
+            strategy = 'Hierarchical Vertex Feature Store & Model Swarm';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

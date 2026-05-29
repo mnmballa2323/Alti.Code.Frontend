@@ -5,6 +5,19 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.113] - 2026-05-29 — Complete Suite of Nineteen GCP Specialized Backend Agents & Swarm Router Integration
+### Added
+- **Four More Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:
+  - **GCP Cloud Build & Artifact Registry CI/CD Specialist** (`agent.gcp.build.cicd`): Specializes in `cloudbuild.yaml` pipelines, Artifact Registry setups, Binary Authorization gates, and vulnerability scans.
+  - **GCP Edge Network, Cloud CDN & Cloud DNS Specialist** (`agent.gcp.edge.network`): Formulates caching policies, geolocation routing rules, Anycast Load Balancers, and secure Signed Cookies/URLs.
+  - **GCP Data Catalog & Cloud DLP Compliance Officer** (`agent.gcp.dlp.governance`): Oversees Data Loss Prevention inspection/de-identification templates, PII scanning, and Data Catalog metadata tagging.
+  - **GCP Vertex AI Feature Store & Model Registry Specialist** (`agent.gcp.feature.store`): Configures feature store entity views, model registering, online/offline serving parameters, and Vertex Endpoints.
+- **Hierarchical Swarm Router & Keyword Matching Alignment**:
+  - Expanded `routeDownstreamSwarm` in `agentic_router.service.js` to route downstream to all 19 GCP specialized agents.
+  - Upgraded Cloud Build/CI-CD trigger keyword matching to support JS/TS native trigger events like `'cloud-builders'`, `'gcr.io'`, `'pkg.dev'`, and `'docker'` seamlessly.
+  - Upgraded Vertex Feature Store trigger keyword matching to support `'deploymodel'`, `'deploy_model'`, and `'endpoint'` patterns seamlessly.
+- **Full Swarm Verification tests**: All 20 integration tests passing with 100% success inside the hermetic Vitest environment.
+
 ## [39.37.112] - 2026-05-29 — Complete Suite of Fifteen GCP Specialized Backend Agents & Swarm Router Convergence
 ### Added
 - **Four Additional Highly Specialized GCP Backend Agents**: Added declarative YAML registries in `src/app/modules/agents/definitions/` for:

@@ -469,7 +469,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
     });
 
     describe('Dynamic Hierarchical Swarm Router & Specialized GCP Backend Agents', () => {
-        it('should successfully parse and load the fifteen highly specialized GCP agent definitions', async () => {
+        it('should successfully parse and load the nineteen highly specialized GCP agent definitions', async () => {
             const pubsubPath = path.join(DEFINITIONS_DIR, 'gcp.pubsub.mesh.conductor.agent.yaml');
             const sentinelPath = path.join(DEFINITIONS_DIR, 'gcp.sentinel.security.auditor.agent.yaml');
             const alloydbPath = path.join(DEFINITIONS_DIR, 'alloydb.pgvector.tuner.agent.yaml');
@@ -485,6 +485,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const identityPath = path.join(DEFINITIONS_DIR, 'gcp.identity.specialist.agent.yaml');
             const functionsPath = path.join(DEFINITIONS_DIR, 'gcp.functions.mesh.agent.yaml');
             const kmsPath = path.join(DEFINITIONS_DIR, 'gcp.kms.officer.agent.yaml');
+            const buildPath = path.join(DEFINITIONS_DIR, 'gcp.build.cicd.agent.yaml');
+            const edgePath = path.join(DEFINITIONS_DIR, 'gcp.edge.network.agent.yaml');
+            const dlpPath = path.join(DEFINITIONS_DIR, 'gcp.dlp.governance.agent.yaml');
+            const featurePath = path.join(DEFINITIONS_DIR, 'gcp.feature.store.agent.yaml');
 
             const pubsubDef = parseYaml(await fs.readFile(pubsubPath, 'utf8'));
             const sentinelDef = parseYaml(await fs.readFile(sentinelPath, 'utf8'));
@@ -501,6 +505,10 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             const identityDef = parseYaml(await fs.readFile(identityPath, 'utf8'));
             const functionsDef = parseYaml(await fs.readFile(functionsPath, 'utf8'));
             const kmsDef = parseYaml(await fs.readFile(kmsPath, 'utf8'));
+            const buildDef = parseYaml(await fs.readFile(buildPath, 'utf8'));
+            const edgeDef = parseYaml(await fs.readFile(edgePath, 'utf8'));
+            const dlpDef = parseYaml(await fs.readFile(dlpPath, 'utf8'));
+            const featureDef = parseYaml(await fs.readFile(featurePath, 'utf8'));
 
             expect(pubsubDef.id).toBe('agent.gcp.pubsub.mesh.conductor');
             expect(pubsubDef.name).toBe('GCP Pub/Sub Event-Driven Mesh Conductor Specialist');
@@ -546,6 +554,18 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
 
             expect(kmsDef.id).toBe('agent.gcp.kms.officer');
             expect(kmsDef.name).toBe('GCP Secret Manager & KMS Cryptographic Officer');
+
+            expect(buildDef.id).toBe('agent.gcp.build.cicd');
+            expect(buildDef.name).toBe('GCP Cloud Build & Artifact Registry CI/CD Specialist');
+
+            expect(edgeDef.id).toBe('agent.gcp.edge.network');
+            expect(edgeDef.name).toBe('GCP Edge Network, Cloud CDN & Cloud DNS Specialist');
+
+            expect(dlpDef.id).toBe('agent.gcp.dlp.governance');
+            expect(dlpDef.name).toBe('GCP Data Catalog & Cloud DLP Compliance Officer');
+
+            expect(featureDef.id).toBe('agent.gcp.feature.store');
+            expect(featureDef.name).toBe('GCP Vertex AI Feature Store & Model Registry Specialist');
         });
 
         it('should dynamically evaluate primary outputs and recursively route targeted downstream sub-swarms', async () => {
@@ -650,6 +670,34 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
             expect(kmsSwarm.strategy).toBe('Hierarchical Cryptographic & KMS Officer Swarm');
             expect(kmsSwarm.sequence.map(s => s.agentId)).toContain('GCP Secret Manager & KMS Cryptographic Officer');
             expect(kmsSwarm.sequence.map(s => s.agentId)).toContain('Security & OWASP Hardening Sentinel');
+
+            // 16. Evaluate Cloud Build & Artifact Registry outputs
+            const buildOutput = 'steps:\n- name: gcr.io/cloud-builders/docker\n  args: ["build", "-t", "us-central1-docker.pkg.dev/proj/repo/img", "."]';
+            const buildSwarm = await agenticRouter.routeDownstreamSwarm(buildOutput);
+            expect(buildSwarm.strategy).toBe('Hierarchical CI/CD & Artifact Registry Swarm');
+            expect(buildSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Build & Artifact Registry CI/CD Specialist');
+            expect(buildSwarm.sequence.map(s => s.agentId)).toContain('Kubernetes Manifest & Helm Compiler Agent');
+
+            // 17. Evaluate Edge Network, Cloud CDN & Cloud DNS outputs
+            const edgeOutput = 'gcloud compute backend-services update backend-svc --enable-cdn --cdn-cache-mode=CACHE_ALL_STATIC';
+            const edgeSwarm = await agenticRouter.routeDownstreamSwarm(edgeOutput);
+            expect(edgeSwarm.strategy).toBe('Hierarchical Edge Network & CDN Swarm');
+            expect(edgeSwarm.sequence.map(s => s.agentId)).toContain('GCP Edge Network, Cloud CDN & Cloud DNS Specialist');
+            expect(edgeSwarm.sequence.map(s => s.agentId)).toContain('GCP Cloud Armor & API Gateway WAF Specialist');
+
+            // 18. Evaluate Data Catalog & Cloud DLP outputs
+            const dlpOutput = 'await dlpClient.createInspectTemplate({ inspectConfig: { infoTypes: [{ name: "EMAIL_ADDRESS" }] } });';
+            const dlpSwarm = await agenticRouter.routeDownstreamSwarm(dlpOutput);
+            expect(dlpSwarm.strategy).toBe('Hierarchical Data Governance & DLP Swarm');
+            expect(dlpSwarm.sequence.map(s => s.agentId)).toContain('GCP Data Catalog & Cloud DLP Compliance Officer');
+            expect(dlpSwarm.sequence.map(s => s.agentId)).toContain('GCP Sentinel Zero-Trust Security Auditor');
+
+            // 19. Evaluate Vertex AI Feature Store & Model Registry outputs
+            const featureOutput = 'const [operation] = await endpointServiceClient.deployModel({ endpoint, deployedModel: { model: "projects/p/locations/l/models/m" } });';
+            const featureSwarm = await agenticRouter.routeDownstreamSwarm(featureOutput);
+            expect(featureSwarm.strategy).toBe('Hierarchical Vertex Feature Store & Model Swarm');
+            expect(featureSwarm.sequence.map(s => s.agentId)).toContain('GCP Vertex AI Feature Store & Model Registry Specialist');
+            expect(featureSwarm.sequence.map(s => s.agentId)).toContain('Vertex AI & Gemini Pipeline Optimization Specialist');
         });
     });
 });
