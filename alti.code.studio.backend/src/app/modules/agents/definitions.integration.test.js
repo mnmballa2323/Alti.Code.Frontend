@@ -7,6 +7,9 @@ import { capabilityRouter } from './capability.router.js';
 import { agentRegistry } from './agent.registry.js';
 import { CodeExecutionSandbox } from '../sandbox/code_execution_sandbox.js';
 import { dynamicSessionsService } from '../googleCloud/dynamic_sessions.service.js';
+import { gcsService } from '../googleCloud/storage.service.js';
+import { pubsubService } from '../googleCloud/pubsub.service.js';
+import { evolutionService } from '../../../shared/evolution.service.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFINITIONS_DIR = path.join(__dirname, 'definitions');
@@ -151,4 +154,89 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
         const dirStats = await fs.stat(expectedWorkspaceDir);
         expect(dirStats.isDirectory()).toBe(true);
     }, 30000);
+
+    describe('Google Cloud Platform native Infrastructure (Storage & Pub/Sub)', () => {
+        it('should successfully upload and download content using GoogleCloudStorageService sandbox fallback', async () => {
+            const bucketName = 'test-bucket';
+            const fileName = 'trajectories/test-trajectory.json';
+            const testPayload = JSON.stringify({ key: 'test-value', timestamp: Date.now() });
+
+            // 1. Upload content
+            const uploadSuccess = await gcsService.uploadContent(bucketName, fileName, testPayload);
+            expect(uploadSuccess).toBe(true);
+
+            // 2. Download content and verify consistency
+            const downloadedContent = await gcsService.downloadContent(bucketName, fileName);
+            expect(downloadedContent).toBe(testPayload);
+
+            // 3. Verify that it was correctly archived under the local fallback directory
+            const expectedLocalPath = path.resolve(`./logs/gcs_mock/${bucketName}/${fileName}`);
+            const stats = await fs.stat(expectedLocalPath);
+            expect(stats.isFile()).toBe(true);
+        });
+
+        it('should publish events and route them to subscribers using GooglePubSubService fallback', async () => {
+            const topicName = 'test-topic';
+            const subName = 'test-topic-sub';
+            const testPayload = { message: 'Hello from GCP Pub/Sub Integration Test', test: true };
+
+            let receivedPayload = null;
+            const messagePromise = new Promise((resolve) => {
+                pubsubService.subscribe(subName, topicName, (payload) => {
+                    receivedPayload = payload;
+                    resolve();
+                });
+            });
+
+            // Publish message
+            const messageId = await pubsubService.publishEvent(topicName, testPayload);
+            expect(messageId).toBeDefined();
+            expect(typeof messageId).toBe('string');
+
+            // Wait for event handler routing
+            await messagePromise;
+            expect(receivedPayload).toEqual(testPayload);
+        });
+
+        it('should archive style weights to GCS and broadcast evolution event via Pub/Sub when evolutionService updates style weights', async () => {
+            const testWorkspaceDir = path.resolve('./logs/workspaces/test_evolution_workspace');
+            await fs.mkdir(testWorkspaceDir, { recursive: true });
+
+            const newRules = ['Ensure all functions use standard arrow syntax style', 'Bypass local loops in DB query'];
+            
+            // Set up Pub/Sub subscription to watch for the broadcast event
+            let evolutionEventReceived = null;
+            const evolutionPromise = new Promise((resolve) => {
+                pubsubService.subscribe('alti-swarm-events-sub', 'alti-swarm-events', (payload) => {
+                    if (payload.event === 'STYLE_WEIGHTS_EVOLVED') {
+                        evolutionEventReceived = payload;
+                        resolve();
+                    }
+                });
+            });
+
+            // Trigger the internal weights update
+            await evolutionService._updateStyleWeights(testWorkspaceDir, newRules);
+
+            // 1. Verify local weights file was generated
+            const weightsPath = path.join(testWorkspaceDir, '.alti-style-weights.json');
+            const fileContent = await fs.readFile(weightsPath, 'utf8');
+            const parsedWeights = JSON.parse(fileContent);
+            expect(parsedWeights.enforced_human_styles).toContain(newRules[0]);
+
+            // 2. Verify that weights were archived to GCS sandbox mock
+            const expectedGcsMockPath = path.resolve('./logs/gcs_mock/alti-style-registry/weights/global-style-weights.json');
+            const gcsMockStats = await fs.stat(expectedGcsMockPath);
+            expect(gcsMockStats.isFile()).toBe(true);
+
+            // 3. Verify that Pub/Sub evolution event was successfully published and routed
+            await evolutionPromise;
+            expect(evolutionEventReceived).toBeDefined();
+            expect(evolutionEventReceived.event).toBe('STYLE_WEIGHTS_EVOLVED');
+            expect(evolutionEventReceived.newRules).toEqual(newRules);
+
+            // Cleanup test directory
+            await fs.rm(testWorkspaceDir, { recursive: true, force: true });
+        });
+    });
 });

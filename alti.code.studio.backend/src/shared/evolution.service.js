@@ -9,6 +9,8 @@ import { logger } from './logger.js';
 import { GeminiAiService } from '../app/modules/gemini/gemini.service.js';
 import fs from 'fs/promises';
 import path from 'path';
+import { gcsService } from '../app/modules/googleCloud/storage.service.js';
+import { pubsubService } from '../app/modules/googleCloud/pubsub.service.js';
 
 export class EvolutionService {
     constructor() {
@@ -75,6 +77,32 @@ export class EvolutionService {
 
         await fs.writeFile(weightsPath, JSON.stringify(currentConfig, null, 2), 'utf8');
         logger.info(`🧬 EvolutionService: Implicitly learned ${newRulesArray.length} new stylistic preferences. Injected into ${this.weightsFileName}.`);
+
+        // Archive style weight updates in GCS
+        try {
+            const bucketName = 'alti-style-registry';
+            const destFileName = 'weights/global-style-weights.json';
+            const content = JSON.stringify(currentConfig, null, 2);
+            await gcsService.uploadContent(bucketName, destFileName, content);
+            logger.info(`🧬 [EvolutionService] Successfully archived style weights to GCS: gs://${bucketName}/${destFileName}`);
+        } catch (gcsErr) {
+            logger.warn(`⚠️ [EvolutionService] Failed to archive weights to GCS: ${gcsErr.message}`);
+        }
+
+        // Publish stylistic evolution events to Pub/Sub
+        try {
+            const topicName = 'alti-swarm-events';
+            const payload = {
+                event: 'STYLE_WEIGHTS_EVOLVED',
+                timestamp: new Date().toISOString(),
+                newRules: newRulesArray,
+                totalRulesCount: currentConfig.enforced_human_styles.length
+            };
+            await pubsubService.publishEvent(topicName, payload);
+            logger.info(`🧬 [EvolutionService] Successfully published evolution event to topic ${topicName}`);
+        } catch (pubSubErr) {
+            logger.warn(`⚠️ [EvolutionService] Failed to publish style evolution event: ${pubSubErr.message}`);
+        }
 
         // Synchronize and persist style preferences globally inside the database Skill catalog
         try {

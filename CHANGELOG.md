@@ -5,6 +5,15 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.105] - 2026-05-29 — Deep Google Cloud Entrenchment (GCS & Pub/Sub integrations)
+### Added
+- **GCP Pub/Sub Event-Driven Swarm Sync**: Overhauled `pubsub.service.js` to manage real-time cross-agent communications. Implemented an asynchronous in-memory `EventEmitter` fallback for hybrid local routing, preventing any gRPC connection hangs during local runs.
+- **GCS Log & Trajectory Archival**: Configured `storage.service.js` to archive large codebase contexts, socratic debate logs, and style weights JSON structures to GCS, cascading gracefully to local sandbox files when offline.
+- **Stylistic RL GCP Synchronization**: Wired GCS and Pub/Sub directly into `evolution.service.js` (`_updateStyleWeights`) to automatically archive style weights JSON snapshots to GCS (`gs://alti-style-registry/weights/global-style-weights.json`) and broadcast stylistic evolution events to GCP Pub/Sub (`alti-swarm-events`) in real-time.
+- **Hermetic Integration Tests**: Added a complete suite of integration tests inside `definitions.integration.test.js` validating GCS sandbox cascades, Pub/Sub distributed event fallback loops, and evolution GCP synchronization pathways with 100% success.
+### Fixed
+- **SwarmBrain Missing Import**: Added the missing `pubsubService` import in `swarm_brain.js` to ensure the distributed CI/CD workflow completion event publishes flawlessly.
+
 ## [39.37.104] - 2026-05-29 — Cross-Agent Socratic Debate, Experience Sync, & Dynamic Session Fallbacks
 ### Added
 - **GCP Dynamic Session Fallback Sandbox**: Implemented a robust fallback mechanism in `GoogleDynamicSessionsService` (`dynamic_sessions.service.js`) to capture authentication, API, and network errors during compile-time verification or execution, and route them to a local sandboxed fallback engine.

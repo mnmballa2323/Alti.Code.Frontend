@@ -48,6 +48,7 @@ import { SecretManagerService } from '../googleCloud/secretManager.service.js';
 import { tpuOrchestratorService } from '../googleCloud/tpu_orchestrator.service.js';
 import { videoEyeService } from '../googleCloud/video_eye.service.js';
 import { workspaceService } from '../googleCloud/workspace.service.js';
+import { pubsubService } from '../googleCloud/pubsub.service.js';
 
 class SwarmBrain {
     constructor() {
