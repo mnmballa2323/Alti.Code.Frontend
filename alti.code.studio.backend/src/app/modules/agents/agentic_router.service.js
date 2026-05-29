@@ -1049,6 +1049,106 @@ class AgenticRouterService {
             strategy = 'Economic Sector Swarm: Government & Public Sector';
         }
 
+        // 60. Analyze Runtime/Compiler: Rust Borrow Checker & Lifetime Sanitizer
+        const isRustSafetyOutput = outputLower.includes('rust_unsafe_audit') || 
+                                   outputLower.includes('lifetime_sanitization');
+        if (isRustSafetyOutput) {
+            downstreamSequence.push(
+                { agentId: 'Rust Borrow Checker & Lifetime Sanitizer Specialist', task: 'Audit raw pointers, lifetime variables, and unsafe code boundaries' }
+            );
+            strategy = 'Advanced Compiler Swarm: Rust Borrow Checker & Safety';
+        }
+
+        // 61. Analyze Runtime/Compiler: Go Goroutine Concurrency & Race Detector
+        const isGoConcurrencyOutput = outputLower.includes('goroutine_leak_audit') || 
+                                       outputLower.includes('go_race_detector');
+        if (isGoConcurrencyOutput) {
+            downstreamSequence.push(
+                { agentId: 'Go Goroutine Concurrency & Race Detector Specialist', task: 'Audit channels select locks deadlocks and evaluate go race outputs' }
+            );
+            strategy = 'Advanced Compiler Swarm: Go Concurrency & Race Detection';
+        }
+
+        // 62. Analyze Runtime/Compiler: Wasm Linear Memory Sandbox
+        const isWasmSandboxOutput = outputLower.includes('wasm_linear_memory') || 
+                                     outputLower.includes('wasi_capability_access');
+        if (isWasmSandboxOutput) {
+            downstreamSequence.push(
+                { agentId: 'Wasm WebAssembly Linear Memory Sandbox Auditor', task: 'Enforce Wasm linear memory bounds and map WASI secure file capabilities' }
+            );
+            strategy = 'Advanced Compiler Swarm: Wasm Sandbox Isolation';
+        }
+
+        // 63. Analyze Runtime/Compiler: JVM GC & Memory leak tuning
+        const isJvmMemoryOutput = outputLower.includes('jvm_gc_tuning') || 
+                                   outputLower.includes('oom_leak_diagnosis');
+        if (isJvmMemoryOutput) {
+            downstreamSequence.push(
+                { agentId: 'JVM Garbage Collection & Memory Management Tuner', task: 'Calibrate JVM garbage collector generational spaces and diagnose OOM heap traces' }
+            );
+            strategy = 'Advanced Compiler Swarm: JVM GC & Memory Optimization';
+        }
+
+        // 64. Analyze Runtime/Compiler: C/C++ Pointer Safety & Valgrind
+        const isCppValgrindOutput = outputLower.includes('cpp_pointer_safety') || 
+                                     outputLower.includes('valgrind_log_parse');
+        if (isCppValgrindOutput) {
+            downstreamSequence.push(
+                { agentId: 'C/C++ Pointer Safety & Valgrind Diagnostic Auditor', task: 'Scan pointer allocations buffer overflows and parse Valgrind leak logs' }
+            );
+            strategy = 'Advanced Compiler Swarm: C/C++ Pointer Safety & Valgrind';
+        }
+
+        // 65. Analyze Runtime/Compiler: Python CPython GIL & AsyncIO
+        const isPythonInterpreterOutput = outputLower.includes('gil_thread_contention') || 
+                                          outputLower.includes('asyncio_eventloop');
+        if (isPythonInterpreterOutput) {
+            downstreamSequence.push(
+                { agentId: 'Python CPython GIL & AsyncIO Performance Optimizer', task: 'Analyze GIL lock contention metrics and tune AsyncIO socket select loops' }
+            );
+            strategy = 'Advanced Compiler Swarm: Python Interpreter & GIL';
+        }
+
+        // 66. Analyze Runtime/Compiler: PostgreSQL AST & Query Plan
+        const isPostgresQueryplanOutput = outputLower.includes('explain_plan_parsing') || 
+                                          outputLower.includes('ast_query_rewriting');
+        if (isPostgresQueryplanOutput) {
+            downstreamSequence.push(
+                { agentId: 'PostgreSQL AST Query Execution Plan Optimizer', task: 'Parse EXPLAIN output graphs and rewrite SQL query AST structures' }
+            );
+            strategy = 'Advanced Compiler Swarm: PostgreSQL AST Query Planner';
+        }
+
+        // 67. Analyze Runtime/Compiler: TS strictMode compiler
+        const isTypescriptCompilerOutput = outputLower.includes('strict_type_checks') || 
+                                           outputLower.includes('tsc_compiler_diagnostics');
+        if (isTypescriptCompilerOutput) {
+            downstreamSequence.push(
+                { agentId: 'TypeScript strictNullChecks & Compiler Error Resolver', task: 'Audit strict tsc settings and compile TS generic types declarations' }
+            );
+            strategy = 'Advanced Compiler Swarm: TypeScript Strict Compiler';
+        }
+
+        // 68. Analyze Runtime/Compiler: Docker Multi-Stage layer optimizer
+        const isDockerLayersOutput = outputLower.includes('docker_multistage_build') || 
+                                     outputLower.includes('layer_cache_opt');
+        if (isDockerLayersOutput) {
+            downstreamSequence.push(
+                { agentId: 'Docker Container Multi-Stage Layer Minimization Specialist', task: 'Audit Dockerfile build layer caches and reduce minimal base footprints' }
+            );
+            strategy = 'Advanced Compiler Swarm: Docker Layer Minimization';
+        }
+
+        // 69. Analyze Runtime/Compiler: Kubernetes Policy & OPA Gatekeeper
+        const isK8sPolicyOutput = outputLower.includes('opa_rego_policy') || 
+                                  outputLower.includes('kustomize_overlays');
+        if (isK8sPolicyOutput) {
+            downstreamSequence.push(
+                { agentId: 'Kubernetes Kustomize & OPA Gatekeeper Policy Auditor', task: 'Audit Kubernetes Kustomize resource policies and enforce OPA rego rules' }
+            );
+            strategy = 'Advanced Compiler Swarm: Kubernetes Policy & OPA';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.118] - 2026-05-29 — Advanced Compiler & Language Runtimes Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Compiler & Runtime Agents**:
+  - Organized and deployed 10 specialized declarative agent definitions under the structured directory `definitions/runtimes/` representing:
+    - **Rust safety**: Rust Borrow Checker & Lifetime Sanitizer Specialist (`rust.safety`) auditing unsafe boundaries and lifetimes.
+    - **Go concurrency**: Go Goroutine Concurrency & Race Detector Specialist (`go.concurrency`) auditing leaks and deadlocks.
+    - **Wasm Sandbox**: Wasm WebAssembly Linear Memory Sandbox Auditor (`wasm.sandbox`) enforcing linear memory guest-host isolation.
+    - **JVM Memory**: JVM Garbage Collection & Memory Management Tuner (`jvm.memory`) calibrating G1GC/ZGC spaces.
+    - **C/C++ Pointer Safety**: C/C++ Pointer Safety & Valgrind Diagnostic Auditor (`cpp.valgrind`) checking overflows and Valgrind trace logs.
+    - **Python Interpreter**: Python CPython GIL & AsyncIO Performance Optimizer (`python.interpreter`) tuning locks and AsyncIO socket loops.
+    - **PostgreSQL AST query plan**: PostgreSQL AST Query Execution Plan Optimizer (`postgres.queryplan`) rewriting AST and parsing explain graphs.
+    - **TS strict mode**: TypeScript strictNullChecks & Compiler Error Resolver (`typescript.compiler`) auditing generic inferences and strict type checks.
+    - **Docker Layer Minimizer**: Docker Container Multi-Stage Layer Minimization Specialist (`docker.layers`) optimizing layer caches and reducing image size.
+    - **Kubernetes OPA Policy**: Kubernetes Kustomize & OPA Gatekeeper Policy Auditor (`k8s.policy`) auditing OPA rego rules and overlay structures.
+- **Swarm Router Downstream Compiler & Runtime Routing**:
+  - Extended `routeDownstreamSwarm` in `agentic_router.service.js` with 10 precision triggers routing prompts with runtime GICS keywords to their respective compiler specialists.
+- **Modular Test Suite & Verification**:
+  - Established a dedicated, modular test suite `runtimes.integration.test.js` validating the recursive parsing, loading, and routing of all 10 compiler agents.
+  - All 20 modular tests, the economic sectors test suite, and the full definitions suite pass with 100% success.
+
 ## [39.37.117] - 2026-05-29 — Economic Sectors Swarm Deployment & Recursive YAML Loading Ingestion
 ### Added
 - **Recursive DSL Agent Ingestion & Hot-Reloading**:
