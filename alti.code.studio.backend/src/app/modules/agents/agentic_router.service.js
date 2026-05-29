@@ -1149,6 +1149,126 @@ class AgenticRouterService {
             strategy = 'Advanced Compiler Swarm: Kubernetes Policy & OPA';
         }
 
+        // 70. Algorithmic Design: Distributed Consensus & Raft/Paxos Protocol Specialist
+        const isConsensusOutput = outputLower.includes('consensus_raft_paxos') || 
+                                  outputLower.includes('raft_consensus') || 
+                                  outputLower.includes('paxos_protocol') || 
+                                  outputLower.includes('replicated_state_machine');
+        if (isConsensusOutput) {
+            downstreamSequence.push(
+                { agentId: 'Distributed Consensus & Raft/Paxos Protocol Specialist', task: 'Design fault-tolerant replicated state machines and consensus protocols' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Distributed Consensus';
+        }
+
+        // 71. Algorithmic Design: Graph Theory & Directed Acyclic Graph (DAG) Specialist
+        const isGraphOutput = outputLower.includes('graph_theory') || 
+                              outputLower.includes('directed_acyclic') || 
+                              outputLower.includes('topological_sort') || 
+                              outputLower.includes('cyclic_dependency');
+        if (isGraphOutput) {
+            downstreamSequence.push(
+                { agentId: 'Graph Theory & Directed Acyclic Graph (DAG) Specialist', task: 'Optimize directed acyclic graph structures and cycle detection routines' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Graph Theory & DAG';
+        }
+
+        // 72. Algorithmic Design: Huffman & LZW Lossless Data Compression Specialist
+        const isCompressionOutput = outputLower.includes('lossless_compression') || 
+                                    outputLower.includes('huffman_encoding') || 
+                                    outputLower.includes('lzw_compression') || 
+                                    outputLower.includes('run_length_encoding');
+        if (isCompressionOutput) {
+            downstreamSequence.push(
+                { agentId: 'Huffman & LZW Lossless Data Compression Specialist', task: 'Design optimized lossless compression and dictionary encoding pipelines' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Lossless Data Compression';
+        }
+
+        // 73. Algorithmic Design: Abstract Syntax Tree (AST) & Lexer/Parser Specialist
+        const isAstParserOutput = outputLower.includes('abstract_syntax_tree') || 
+                                  outputLower.includes('ast_parsing_lexer') || 
+                                  outputLower.includes('lexer_tokenizer') || 
+                                  outputLower.includes('context_free_grammar');
+        if (isAstParserOutput) {
+            downstreamSequence.push(
+                { agentId: 'Abstract Syntax Tree (AST) & Lexer/Parser Specialist', task: 'Build custom parsing lexers, tokenizers, and AST validation structures' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: AST & Lexer Parser';
+        }
+
+        // 74. Algorithmic Design: Zero-Knowledge Proof & Cryptographic Protocol Specialist
+        const isCryptographyOutput = outputLower.includes('zero_knowledge_proof') || 
+                                     outputLower.includes('zkp_protocol') || 
+                                     outputLower.includes('cryptographic_protocol') || 
+                                     outputLower.includes('homomorphic_encryption');
+        if (isCryptographyOutput) {
+            downstreamSequence.push(
+                { agentId: 'Zero-Knowledge Proof & Cryptographic Protocol Specialist', task: 'Formulate mathematical zero-knowledge proof protocols and secure cryptography parameters' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Zero-Knowledge Proof';
+        }
+
+        // 75. Algorithmic Design: NP-Hard & Integer Linear Programming (ILP) Specialist
+        const isOptimizationOutput = outputLower.includes('np_hard_optimization') || 
+                                     outputLower.includes('integer_linear_programming') || 
+                                     outputLower.includes('ilp_solver_simplex') || 
+                                     outputLower.includes('knapsack_optimization');
+        if (isOptimizationOutput) {
+            downstreamSequence.push(
+                { agentId: 'NP-Hard & Integer Linear Programming (ILP) Specialist', task: 'Design linear programming solvers and heuristic optimizations for NP-hard problems' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: NP-Hard & Heuristics';
+        }
+
+        // 76. Algorithmic Design: Vector Index HNSW & High-Dimensional Geometry Specialist
+        const isGeometryOutput = outputLower.includes('hnsw_indexing') || 
+                                 outputLower.includes('high_dimensional_geometry') || 
+                                 outputLower.includes('vector_similarity_search') || 
+                                 outputLower.includes('spatial_partitioning');
+        if (isGeometryOutput) {
+            downstreamSequence.push(
+                { agentId: 'Vector Index HNSW & High-Dimensional Geometry Specialist', task: 'Optimize high-dimensional geometric partitioning and vector search indices' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Vector Index & Geometry';
+        }
+
+        // 77. Algorithmic Design: Consistent Hashing & DHT Distributed Cache Specialist
+        const isHashingOutput = outputLower.includes('consistent_hashing') || 
+                                outputLower.includes('dht_protocol') || 
+                                outputLower.includes('cache_eviction_opt') || 
+                                outputLower.includes('distributed_cache_ring');
+        if (isHashingOutput) {
+            downstreamSequence.push(
+                { agentId: 'Consistent Hashing & DHT Distributed Cache Specialist', task: 'Design virtual nodes and consistent hashing distribution cache models' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Consistent Hashing & DHT';
+        }
+
+        // 78. Algorithmic Design: Time-Series Forecasting & Kalman Filter Specialist
+        const isTimeseriesOutput = outputLower.includes('kalman_filtering') || 
+                                   outputLower.includes('timeseries_forecasting') || 
+                                   outputLower.includes('sensor_fusion_model') || 
+                                   outputLower.includes('digital_signal_processing');
+        if (isTimeseriesOutput) {
+            downstreamSequence.push(
+                { agentId: 'Time-Series Forecasting & Kalman Filter Specialist', task: 'Implement recursive Kalman filtering and signal processing models' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: Time-Series & Kalman Filter';
+        }
+
+        // 79. Algorithmic Design: B-Tree & LSM-Tree Storage Engine Specialist
+        const isStorageEngineOutput = outputLower.includes('lsm_tree_storage') || 
+                                      outputLower.includes('btree_indexing') || 
+                                      outputLower.includes('write_ahead_logging') || 
+                                      outputLower.includes('db_crash_recovery');
+        if (isStorageEngineOutput) {
+            downstreamSequence.push(
+                { agentId: 'B-Tree & LSM-Tree Storage Engine Specialist', task: 'Architect high-throughput LSM-Tree storage compaction and crash recovery systems' }
+            );
+            strategy = 'Advanced Algorithmic Swarm: LSM-Tree & B-Tree Storage';
+        }
+
         // Ensure default fallback if no specific keywords match
         if (downstreamSequence.length === 0) {
             downstreamSequence.push({ agentId: 'auditor', task: 'Fidelity quality gate audit on backend output' });

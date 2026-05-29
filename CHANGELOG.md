@@ -5,6 +5,26 @@ All notable changes to **Alti.Code.Studio** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.119] - 2026-05-29 — Advanced Algorithmic Design & Mathematics Swarm Deployment
+### Added
+- **Ten Highly Specialized Declarative Algorithmic & Mathematics Agents**:
+  - Structured and deployed 10 premium declarative agent definitions under `definitions/algorithms/`:
+    - **Distributed Consensus**: Distributed Consensus & Raft/Paxos Protocol Specialist (`alg.consensus`).
+    - **Graph Theory**: Graph Theory & Directed Acyclic Graph (DAG) Specialist (`alg.graph`).
+    - **Lossless Data Compression**: Huffman & LZW Lossless Data Compression Specialist (`alg.compression`).
+    - **AST Parser**: Abstract Syntax Tree (AST) & Lexer/Parser Specialist (`alg.ast_parser`).
+    - **Zero-Knowledge Cryptography**: Zero-Knowledge Proof & Cryptographic Protocol Specialist (`alg.cryptography`).
+    - **NP-Hard Optimization**: NP-Hard & Integer Linear Programming (ILP) Specialist (`alg.optimization`).
+    - **HNSW Geometry**: Vector Index HNSW & High-Dimensional Geometry Specialist (`alg.geometry`).
+    - **Consistent Hashing & DHT**: Consistent Hashing & DHT Distributed Cache Specialist (`alg.hashing`).
+    - **Time-Series Kalman Filter**: Time-Series Forecasting & Kalman Filter Specialist (`alg.timeseries`).
+    - **Storage Engine**: B-Tree & LSM-Tree Storage Engine Specialist (`alg.storage_engine`).
+- **Swarm Router Downstream Algorithmic & Mathematics Routing**:
+  - Integrated 10 precision downstream triggers in `agentic_router.service.js` under `routeDownstreamSwarm` mapping GICS-aligned math and algorithm keywords to their respective specialists.
+- **Modular Algorithmic Test Suite & Verification**:
+  - Created a modular integration test suite `algorithms.integration.test.js` validating recursive ingestion and downstream routing triggers for all 10 math agents.
+  - Achieved a 100% green sweep across the new algorithms test suite, runtimes test suite, sectors test suite, and the main definitions integration test suite.
+
 ## [39.37.118] - 2026-05-29 — Advanced Compiler & Language Runtimes Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Compiler & Runtime Agents**:
