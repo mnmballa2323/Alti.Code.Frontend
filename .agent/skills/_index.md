@@ -166,3 +166,53 @@ Triggers: "kafka", "flink", "stream processing", "event sourcing", "cqrs", "spar
 ## search-engine-relevance-expert
 Specializes in text search indexes, Elasticsearch configurations, Lucene query parses, BM25 metrics, vector search embeddings, and query rerankers.
 Triggers: "elasticsearch", "lucene", "search relevance", "bm25", "vector search", "reranking", "search index"
+
+
+## telemetry-observability-engineer
+Specializes in OpenTelemetry instrumentation, distributed tracing architectures, Prometheus metrics, Jaeger dashboards, and log parsing.
+Triggers: "opentelemetry", "observability", "distributed tracing", "prometheus", "jaeger", "metrics", "log parsing"
+
+
+## network-stack-engineer
+Specializes in TCP congestion algorithms, BGP configuration, SDN controller design, packet analysis (Wireshark), and QUIC/HTTP3 pipelines.
+Triggers: "tcp", "bgp", "sdn", "wireshark", "packet analysis", "quic", "http3", "network stack"
+
+
+## storage-filesystem-architect
+Specializes in Ceph storage layers, NVMe-oF pipelines, Page Cache tuning, RAID array designs, copy-on-write systems, and ZFS structures.
+Triggers: "ceph", "nvme-of", "zfs", "page cache", "raid", "copy-on-write", "filesystem", "block storage"
+
+
+## mainframe-modernization-specialist
+Specializes in legacy mainframe migrations, COBOL decompilation, JCL routing, DB2 translations, and microservice refactoring integrations.
+Triggers: "mainframe", "cobol", "jcl", "db2", "mainframe migration", "legacy migration", "refactoring"
+
+
+## mobile-app-performance-engineer
+Specializes in app startup time optimization, memory leak tracking, battery profiling, off-line synchronization, and rendering rate tuning.
+Triggers: "mobile performance", "app startup", "memory profile", "battery profiling", "offline sync", "fps", "android", "ios"
+
+
+## ui-ux-animation-specialist
+Specializes in modern CSS layouts, Glassmorphism design system rules, custom WebGL/Canvas pipelines, and smooth micro-interactions.
+Triggers: "glassmorphism", "animation", "css custom properties", "webgl", "canvas", "micro-interactions", "ui ux"
+
+
+## compliance-gdpr-hipaa-auditor
+Specializes in SOC2 security verification, HIPAA/GDPR data compliance, audit logs structure, and advanced cryptographic masking strategies.
+Triggers: "gdpr", "hipaa", "soc2", "audit logs", "data masking", "compliance", "encryption at rest"
+
+
+## robotics-kinematics-engineer
+Specializes in ROS2 development, SLAM navigation pipelines, LiDAR data processing, pathfinding (A*, Dijkstra), and motion planning models.
+Triggers: "robotics", "ros2", "slam", "lidar", "pathfinding", "kinematics", "motion planning"
+
+
+## fpga-hardware-description-expert
+Specializes in Verilog/VHDL configurations, RTL design synthesis, timing constraints, clock domains synchronization, and DSP block setups.
+Triggers: "fpga", "verilog", "vhdl", "rtl synthesis", "timing closure", "clock domain crossing", "dsp block"
+
+
+## ebpf-kernel-observability-analyst
+Specializes in eBPF program design, XDP networking, kernel probe setups, performance analysis, and tracing flame graphs.
+Triggers: "ebpf", "xdp", "kprobe", "perf analysis", "flame graph", "kernel tuning"
