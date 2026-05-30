@@ -216,3 +216,53 @@ Triggers: "fpga", "verilog", "vhdl", "rtl synthesis", "timing closure", "clock d
 ## ebpf-kernel-observability-analyst
 Specializes in eBPF program design, XDP networking, kernel probe setups, performance analysis, and tracing flame graphs.
 Triggers: "ebpf", "xdp", "kprobe", "perf analysis", "flame graph", "kernel tuning"
+
+
+## reverse-engineering-binary-analyst
+Specializes in Ghidra decompilation, malware deobfuscation, static/dynamic binaries, assembly debugging, and unpacking code.
+Triggers: "ghidra", "deobfuscation", "binary analysis", "reverse engineering", "malware", "unpacking", "assembly"
+
+
+## load-stress-testing-engineer
+Specializes in load testing using k6, high throughput test simulations, performance bottlenecks detection, and queueing theory models.
+Triggers: "k6", "load testing", "stress testing", "throughput", "bottlenecks", "queueing theory"
+
+
+## identity-access-management-expert
+Specializes in OpenID Connect (OIDC), OAuth2 authorization flows, SSO structures, Keycloak integrations, and Zero Trust models.
+Triggers: "oidc", "oauth2", "sso", "keycloak", "identity access", "zero trust", "jwt verification"
+
+
+## nlp-model-fine-tuner
+Specializes in LLM parameter-efficient fine-tuning (LoRA, QLoRA), tokenization strategies, RLHF pipelines, and bias evaluation.
+Triggers: "lora", "qlora", "fine tuning", "nlp", "tokenization", "rlhf", "model evaluation"
+
+
+## computer-vision-pipeline-builder
+Specializes in OpenCV architectures, YOLO object detection models, image semantic segmentation, and real-time camera calibrations.
+Triggers: "opencv", "yolo", "computer vision", "segmentation", "object detection", "image processing"
+
+
+## geospatial-postgis-specialist
+Specializes in H3 hexagonal index layers, GeoJSON files, complex PostGIS geometry lookups, and coordinate projection formulas.
+Triggers: "postgis", "geospatial", "h3 index", "geojson", "geometry lookup", "spatial database"
+
+
+## finops-cloud-cost-analyst
+Specializes in Kubernetes node autoscaling, spot instance orchestration, AWS/GCP cost allocation, and eliminating cloud resource waste.
+Triggers: "finops", "cloud cost", "spot instance", "autoscaling", "cost allocation", "cloud savings"
+
+
+## event-driven-messaging-specialist
+Specializes in AMQP protocols, RabbitMQ server clustering, dead-letter exchange (DLX) routing, and idempotent messaging.
+Triggers: "rabbitmq", "amqp", "message queue", "dead letter", "message broker", "clustering"
+
+
+## ci-cd-security-pipeline-integrator
+Specializes in integrating static/dynamic vulnerability scans, secure container signing, and secret scanning into CI/CD pipelines.
+Triggers: "ci cd security", "sast", "dast", "secret scanning", "container signing", "cosign", "github actions security"
+
+
+## test-automation-coverage-analyst
+Specializes in Playwright automation scripts, mock API systems, mutation testing metrics, and automated unit test integrations.
+Triggers: "playwright", "coverage", "mutation testing", "mocks", "test automation", "vitest"
