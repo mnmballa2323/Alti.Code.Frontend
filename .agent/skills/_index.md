@@ -266,3 +266,53 @@ Triggers: "ci cd security", "sast", "dast", "secret scanning", "container signin
 ## test-automation-coverage-analyst
 Specializes in Playwright automation scripts, mock API systems, mutation testing metrics, and automated unit test integrations.
 Triggers: "playwright", "coverage", "mutation testing", "mocks", "test automation", "vitest"
+
+
+## configuration-management-orchestrator
+Specializes in Ansible playbook tuning, Terraform state configurations, Infrastructure as Code workflows, and cluster provisioning.
+Triggers: "terraform", "ansible", "infrastructure as code", "playbook", "iac", "state management"
+
+
+## web3-dapp-developer
+Specializes in web3 integration, Ethers.js library configurations, wallet handshake logic, RPC provider optimizations, and IPFS storage.
+Triggers: "web3", "dapp", "ethers", "wallet connection", "rpc provider", "ipfs", "metamask"
+
+
+## spatial-computing-webrtc-architect
+Specializes in WebXR standard layout, WebSockets server synchronization, low-latency audio pipelines, and WebRTC peer channels.
+Triggers: "webrtc", "webxr", "spatial computing", "websockets", "low latency", "media streaming"
+
+
+## harness-performance-optimizer
+Specializes in parallel test orchestration, build caching systems, multi-model execution, and optimizing local Claude-Code throughput.
+Triggers: "harness config", "parallel build", "build caching", "claude code optimization", "multi model"
+
+
+## hardware-reliability-engineer
+Specializes in MTTF calculation, system thermal diagnostics, hardware failing prediction, and component stress profiling.
+Triggers: "hardware reliability", "mttf", "thermal diagnostics", "stress profiling", "system failure"
+
+
+## documentation-information-architect
+Specializes in Doxygen configurations, Sphinx reference designs, technical document modeling, and API documentation generators.
+Triggers: "documentation", "sphinx", "doxygen", "technical writing", "api docs", "info architecture"
+
+
+## big-data-warehouse-architect
+Specializes in column store configurations, Snowflake partitioning, BigQuery optimizers, ETL data lake layouts, and partition filters.
+Triggers: "snowflake", "bigquery", "data warehouse", "column store", "etl", "data lake", "clustering keys"
+
+
+## firmware-security-auditor
+Specializes in secure boot structures, TPM security logic, cryptographic hardware key management, and JTAG debugging shields.
+Triggers: "firmware security", "secure boot", "tpm", "jtag", "hardware keys", "hsm", "side-channel"
+
+
+## container-runtime-specialist
+Specializes in runc system calls, containerd namespaces, Linux cgroup controllers, and namespace isolation configurations.
+Triggers: "container runtime", "runc", "containerd", "cgroups", "namespaces", "isolation"
+
+
+## ai-safety-alignment-reviewer
+Specializes in prompt injection shielding, LLM output toxicity scanners, algorithmic bias auditing, and safety guardrail setups.
+Triggers: "ai safety", "prompt injection", "toxicity scan", "bias audit", "guardrails", "moderation api"
