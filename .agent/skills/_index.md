@@ -866,3 +866,53 @@ Triggers: "ultra-fast", "container-sandbox", "scrubber", "performance", "systems
 ## real-time-stream-hypervisor-builder
 Highly specialized Real-Time-Stream Hypervisor Builder responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
 Triggers: "real-time-stream", "hypervisor", "builder", "performance", "systems"
+
+
+## zero-trust-query-execution-evaluator
+Highly specialized Zero-Trust Query-Execution Evaluator responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "zero-trust", "query-execution", "evaluator", "performance", "systems"
+
+
+## zero-trust-hypervisor-validator
+Highly specialized Zero-Trust Hypervisor Validator responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "zero-trust", "hypervisor", "validator", "performance", "systems"
+
+
+## autonomous-distributed-tracing-architect
+Highly specialized Autonomous Distributed-Tracing Architect responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "autonomous", "distributed-tracing", "architect", "performance", "systems"
+
+
+## real-time-stream-secure-boot-adviser
+Highly specialized Real-Time-Stream Secure-Boot Adviser responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "real-time-stream", "secure-boot", "adviser", "performance", "systems"
+
+
+## self-healing-symmetric-crypto-builder
+Highly specialized Self-Healing Symmetric-Crypto Builder responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "self-healing", "symmetric-crypto", "builder", "performance", "systems"
+
+
+## defense-in-depth-container-sandbox-scrubber
+Highly specialized Defense-in-Depth Container-Sandbox Scrubber responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "defense-in-depth", "container-sandbox", "scrubber", "performance", "systems"
+
+
+## zero-trust-container-sandbox-guardian
+Highly specialized Zero-Trust Container-Sandbox Guardian responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "zero-trust", "container-sandbox", "guardian", "performance", "systems"
+
+
+## defense-in-depth-concurrency-guardian
+Highly specialized Defense-in-Depth Concurrency Guardian responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "defense-in-depth", "concurrency", "guardian", "performance", "systems"
+
+
+## real-time-stream-secure-boot-evaluator
+Highly specialized Real-Time-Stream Secure-Boot Evaluator responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "real-time-stream", "secure-boot", "evaluator", "performance", "systems"
+
+
+## elastic-microservices-architect
+Highly specialized Elastic Microservices Architect responsible for designing, optimizing, and securing enterprise systems in cloud-native platforms.
+Triggers: "elastic", "microservices", "architect", "performance", "systems"
