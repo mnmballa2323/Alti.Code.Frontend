@@ -79,13 +79,53 @@ const ROLES_DATABASE = [
 ];
 
 // Offline combinations matrix to generate infinite unique agent sub-specialties
-const OFFLINE_PREFIXES = ["High-Performance", "Scalable", "Reliable", "Real-Time", "Decentralized", "Secure", "Fault-Tolerant", "Predictive", "Low-Latency", "Serverless"];
-const OFFLINE_CORES = ["Distributed", "Kernel", "Database", "Container", "Cryptographic", "Network", "Machine-Learning", "CI-CD", "Telemetry", "API-Federation"];
-const OFFLINE_ROLES = ["Optimizer", "Architect", "Auditor", "Engineer", "Sentinel", "Developer", "Specialist", "Analyst", "Strategist", "Operator"];
+const OFFLINE_PREFIXES = ["Ultra-Fast", "Elastic", "Resilient", "Real-Time-Stream", "Zero-Trust", "Defense-in-Depth", "Self-Healing", "Autonomous", "Edge-Optimized", "Distributed-Consensus"];
+const OFFLINE_CORES = ["Concurrency", "Virtualization", "Query-Execution", "Hypervisor", "Secure-Boot", "Symmetric-Crypto", "Neural-Network", "Container-Sandbox", "Distributed-Tracing", "Microservices"];
+const OFFLINE_ROLES = ["Tuner", "Architect", "Validator", "Consultant", "Guardian", "Builder", "Adviser", "Scrubber", "Evaluator", "Controller"];
+
+// Deep scanning utility to gather all existing agent names/IDs across all subfolders recursively
+function deepScanExistingAgents(dir, existingSet = new Set()) {
+  if (!fs.existsSync(dir)) return existingSet;
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    
+    // Skip node_modules, .git, and common system folders to avoid infinite loops and irrelevant files
+    if (entry.isDirectory()) {
+      if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.borg' || entry.name === '.shadow' || entry.name === 'uploads') {
+        continue;
+      }
+      deepScanExistingAgents(fullPath, existingSet);
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      // 1. Add by filename without extension
+      const basename = entry.name.slice(0, -3).toLowerCase();
+      existingSet.add(basename);
+
+      // 2. Scan frontmatter 'name:' for explicit agent name identifiers
+      try {
+        const content = fs.readFileSync(fullPath, 'utf8');
+        const frontmatterMatch = content.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+        if (frontmatterMatch) {
+          const lines = frontmatterMatch[1].split('\n');
+          for (const line of lines) {
+            const parts = line.split(':');
+            if (parts[0].trim() === 'name' && parts[1]) {
+              existingSet.add(parts[1].trim().toLowerCase());
+            }
+          }
+        }
+      } catch (err) {
+        // Silently continue if a file is unreadable
+      }
+    }
+  }
+  return existingSet;
+}
 
 function generateOfflineSpecialty(existingIds) {
   let attempts = 0;
-  while (attempts < 200) {
+  while (attempts < 500) {
     const pref = OFFLINE_PREFIXES[Math.floor(Math.random() * OFFLINE_PREFIXES.length)];
     const core = OFFLINE_CORES[Math.floor(Math.random() * OFFLINE_CORES.length)];
     const role = OFFLINE_ROLES[Math.floor(Math.random() * OFFLINE_ROLES.length)];
@@ -116,10 +156,10 @@ function generateOfflineSpecialty(existingIds) {
     attempts++;
   }
   // Ultimate fallback
-  const randNum = Math.floor(Math.random() * 100000);
+  const randNum = Math.floor(Math.random() * 1000000);
   return {
-    id: `custom-cs-agent-${randNum}`,
-    title: `Custom CS Agent ${randNum}`,
+    id: `custom-gcp-cs-agent-${randNum}`,
+    title: `Custom GCP CS Agent ${randNum}`,
     description: `Specialized Computer Science and Systems Design AI Agent built on Google Cloud Platform.`,
     triggers: ["custom", "google cloud", "systems design"],
     category: "engineering",
@@ -314,13 +354,13 @@ async function run() {
       if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     });
 
-    // Discover existing IDs across both dirs
-    const files = fs.readdirSync(rootSkillsDir);
-    const existingIds = files
-      .filter(f => f.endsWith('.md') && !f.startsWith('_'))
-      .map(f => f.slice(0, -3));
+    // 1. Deep scan entire workspace recursively to discover existing agent IDs (over 20,000+ files)
+    console.log("Starting deep scan of all agent skill files recursively...");
+    const masterSet = new Set();
+    deepScanExistingAgents(workspaceRoot, masterSet);
 
-    console.log(`Found ${existingIds.length} existing specialized agents.`);
+    const existingIds = Array.from(masterSet);
+    console.log(`Deep scan complete. Discovered ${existingIds.length} existing specialized agent IDs.`);
 
     // Choose 10 new agents
     const nextRoles = [];
@@ -336,7 +376,7 @@ async function run() {
     const dbRoles = ROLES_DATABASE.filter(r => !existingIds.includes(r.id)).slice(0, 10);
     nextRoles.push(...dbRoles);
 
-    // Dynamic generation loop for the remainder of the 10-batch
+    // Dynamic generation loop for the remainder of the 10-batch, strictly avoiding duplicates
     const activeExistingIds = [...existingIds, ...nextRoles.map(r => r.id)];
     while (nextRoles.length < 10) {
       let role;
