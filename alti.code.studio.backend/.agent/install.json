@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "agentic_stack_version": "0.13.0",
+  "abs_target": "/Users/michaelmeram/workspace/alti.code.studio",
+  "installed_at": "2026-05-03T01:01:38Z",
+  "adapters": {
+    "antigravity": {
+      "installed_at": "2026-05-03T01:01:38Z",
+      "files_written": [
+        "ANTIGRAVITY.md"
+      ],
+      "files_overwritten": [],
+      "files_alerted": [],
+      "file_results": [
+        {
+          "dst": "ANTIGRAVITY.md",
+          "result": "written_new"
+        }
+      ],
+      "post_install_results": []
+    }
+  }
+}
