@@ -6,7 +6,6 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { workerService } from './worker.service.js';
 
 // Mocks
 vi.mock('../../../shared/logger.js', () => ({
@@ -44,10 +43,12 @@ vi.mock('../audit/audit.worker.js', () => ({ auditWorkerProcessor: vi.fn() }));
 describe('Universal Swarm (7 Agents)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.resetModules();
         global.mockWorkers = {};
     });
 
     it('should initialize the full IMMORTAL SWARM', async () => {
+        const { workerService } = await import('./worker.service.js');
         await workerService.init();
 
         const expectedQueues = [

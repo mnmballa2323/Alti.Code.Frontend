@@ -38,6 +38,12 @@ vi.mock('../../services/socket.service.js', () => ({
     socketService: { broadcast: vi.fn() }
 }));
 
+vi.mock('../googleCloud/pubsub.service.js', () => ({
+    pubsubService: {
+        publishEvent: vi.fn().mockResolvedValue({ success: true }),
+    }
+}));
+
 vi.mock('../../../shared/logger.js', () => ({
     logger: { info: vi.fn(), error: vi.fn(), warn: vi.fn(), debug: vi.fn() }
 }));
