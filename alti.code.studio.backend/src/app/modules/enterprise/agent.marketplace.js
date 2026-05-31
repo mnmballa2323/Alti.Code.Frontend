@@ -61,6 +61,7 @@ class AgentMarketplace {
             capabilities = [],
             dependencies = [],
             metadata = {},
+            silent = false,
         } = options;
 
         if (!name) throw new Error('Agent name is required');
@@ -90,7 +91,10 @@ class AgentMarketplace {
 
         this.listings.set(listingId, listing);
         this.stats.totalListings++;
-        logger.info(`🏪 Agent published: ${name} v${version} [${listingId}]`);
+        
+        if (!silent) {
+            logger.info(`🏪 Agent published: ${name} v${version} [${listingId}]`);
+        }
 
         return { listingId, name, version, category };
     }

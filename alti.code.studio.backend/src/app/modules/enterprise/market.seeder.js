@@ -44,7 +44,8 @@ class MarketSeeder {
                     metadata: {
                         isNative: true,
                         tier: entry.tier || 1
-                    }
+                    },
+                    silent: true
                 });
 
                 seeded++;
