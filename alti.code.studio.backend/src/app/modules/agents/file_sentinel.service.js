@@ -1,5 +1,6 @@
 import chokidar from 'chokidar';
 import path from 'path';
+import fs from 'fs';
 import { logger } from '../../../shared/logger.js';
 import { swarmBrain } from './swarm_brain.js';
 
@@ -23,7 +24,22 @@ class FileSentinelService {
         if (this.isWatching) return;
         
         const targetPath = workspaceRoot || path.resolve(process.cwd(), '../');
-        logger.info(`👁️ [Sentinel] Initiating active filesystem patrol on: ${targetPath}`);
+        
+        // Define targeted source subdirectories to prevent recursing heavy system folders
+        const targetSubdirs = [
+            'alti.code.studio.backend/src',
+            'alti.code.studio.frontend/app',
+            'alti.code.studio.frontend/components',
+            'alti.code.studio.frontend/lib',
+            'alti.code.studio.desktop/src'
+        ];
+
+        const pathsToWatch = targetSubdirs
+            .map(sub => path.join(targetPath, sub))
+            .filter(p => fs.existsSync(p));
+
+        const watchTargets = pathsToWatch.length > 0 ? pathsToWatch : [targetPath];
+        logger.info(`👁️ [Sentinel] Initiating active filesystem patrol on targets: ${watchTargets.join(', ')}`);
 
         const ignoredPaths = [
             'node_modules',
@@ -32,10 +48,12 @@ class FileSentinelService {
             '.git',
             '.agent',
             '.codegraph',
-            '.skills'
+            '.skills',
+            '.shadow',
+            'logs'
         ];
 
-        this.watcher = chokidar.watch(targetPath, {
+        this.watcher = chokidar.watch(watchTargets, {
             ignored: (filePath) => {
                 const basename = path.basename(filePath);
                 if (basename.startsWith('.') && basename !== '.' && basename !== '..') {
