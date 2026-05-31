@@ -32,7 +32,9 @@ class AgentRegistry {
             registeredAt: new Date().toISOString(),
             policy: definition.policy || { accessLevel: 'DEVELOPER' } // Default to low-privilege
         });
-        logger.info(`🤖 AgentRegistry: Registered [${definition.name}] — Policy: ${definition.policy?.accessLevel || 'DEVELOPER'}`);
+        if (!definition.silent) {
+            logger.info(`🤖 AgentRegistry: Registered [${definition.name}] — Policy: ${definition.policy?.accessLevel || 'DEVELOPER'}`);
+        }
 
         // Dynamic Agentic RAG Auto-Indexing:
         // Asynchronously add the newly registered agent's profile document to the vector store index.
@@ -1410,7 +1412,7 @@ const require = createRequire(import.meta.url);
 try {
     const dynamicAgents = require('./polyglots_registry.json');
     for (const agent of dynamicAgents) {
-        agentRegistry.register(agent);
+        agentRegistry.register({ ...agent, silent: true });
     }
     logger.info(`⚡ Swarm Registry: Dynamically loaded ${dynamicAgents.length} auto-generated specialists from polyglots_registry.json.`);
 } catch (err) {

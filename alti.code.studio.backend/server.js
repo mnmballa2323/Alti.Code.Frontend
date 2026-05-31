@@ -56,6 +56,15 @@ mongoose.set('bufferCommands', false);
 
 async function main() {
   try {
+    // 0. Load Google Cloud Secret Manager enterprise secrets
+    try {
+      const { loadEnterpriseSecrets } = await import('./config/index.js');
+      await loadEnterpriseSecrets();
+      logger.info('🔑 [GCP] Google Cloud Secret Manager enterprise secrets synchronized.');
+    } catch (secretErr) {
+      logger.warn(`⚠️ Google Secret Manager auto-inject bypassed: ${secretErr.message}`);
+    }
+
     // 1. Initialize PostgreSQL (Prisma)
     await connectPrisma();
 
