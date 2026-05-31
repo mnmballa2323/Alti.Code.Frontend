@@ -23,7 +23,11 @@ class FileSentinelService {
     startWatching(workspaceRoot) {
         if (this.isWatching) return;
         
-        const targetPath = workspaceRoot || path.resolve(process.cwd(), '../');
+        let targetPath = workspaceRoot || path.resolve(process.cwd(), '../');
+        // If targetPath points to the subproject directly, go up to the workspace root
+        if (targetPath.endsWith('alti.code.studio.backend') || targetPath.endsWith('alti.code.studio.backend/')) {
+            targetPath = path.resolve(targetPath, '../');
+        }
         
         // Define targeted source subdirectories to prevent recursing heavy system folders
         const targetSubdirs = [
