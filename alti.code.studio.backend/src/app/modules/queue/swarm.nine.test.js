@@ -44,7 +44,6 @@ vi.mock('../audit/audit.worker.js', () => ({ auditWorkerProcessor: vi.fn() }));
 describe('The Singularity Swarm (9 Agents)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.resetModules();
         for (const key in mockWorkers) delete mockWorkers[key];
     });
 

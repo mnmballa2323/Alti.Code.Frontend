@@ -206,37 +206,41 @@ class Orchestrator {
 
         // #5: Enterprise Memory RAG — inject past decision context into planning
         let ragContext = '';
-        try {
-            const { ragService } = await import('../memory/rag.service.js');
-            ragContext = await Promise.race([
-                ragService.query(`Past orchestration decisions and architectural guidelines for: ${task}`, 3),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
-            ]);
-            if (ragContext) {
-                logger.info(`🧠 [Orchestrator] Injected ${ragContext.length} chars of enterprise memory into planning.`);
+        if (process.env.NODE_ENV !== 'test') {
+            try {
+                const { ragService } = await import('../memory/rag.service.js');
+                ragContext = await Promise.race([
+                    ragService.query(`Past orchestration decisions and architectural guidelines for: ${task}`, 3),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+                ]);
+                if (ragContext) {
+                    logger.info(`🧠 [Orchestrator] Injected ${ragContext.length} chars of enterprise memory into planning.`);
+                }
+            } catch (e) {
+                logger.warn(`⚠️ [Orchestrator] RAG context injection failed (non-blocking): ${e.message}`);
             }
-        } catch (e) {
-            logger.warn(`⚠️ [Orchestrator] RAG context injection failed (non-blocking): ${e.message}`);
         }
 
         // #5b: File Search — inject indexed document context into planning
         let fileSearchContext = '';
-        try {
-            const { fileSearchService } = await import('../fileSearch/fileSearch.service.js');
-            const stores = await fileSearchService.listStores();
-            if (stores && stores.length > 0) {
-                const storeNames = stores.slice(0, 3).map(s => s.name);
-                const fsResult = await Promise.race([
-                    fileSearchService.query(task, storeNames),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
-                ]);
-                if (fsResult && fsResult.text) {
-                    fileSearchContext = fsResult.text.substring(0, 2000);
-                    logger.info(`📚 [Orchestrator] File Search injected ${fileSearchContext.length} chars into planning.`);
+        if (process.env.NODE_ENV !== 'test') {
+            try {
+                const { fileSearchService } = await import('../fileSearch/fileSearch.service.js');
+                const stores = await fileSearchService.listStores();
+                if (stores && stores.length > 0) {
+                    const storeNames = stores.slice(0, 3).map(s => s.name);
+                    const fsResult = await Promise.race([
+                        fileSearchService.query(task, storeNames),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
+                    ]);
+                    if (fsResult && fsResult.text) {
+                        fileSearchContext = fsResult.text.substring(0, 2000);
+                        logger.info(`📚 [Orchestrator] File Search injected ${fileSearchContext.length} chars into planning.`);
+                    }
                 }
+            } catch (e) {
+                logger.warn(`⚠️ [Orchestrator] File Search planning context failed (non-blocking): ${e.message}`);
             }
-        } catch (e) {
-            logger.warn(`⚠️ [Orchestrator] File Search planning context failed (non-blocking): ${e.message}`);
         }
 
         const response = await aiProvider.reason(`

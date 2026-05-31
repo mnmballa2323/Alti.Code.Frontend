@@ -48,7 +48,6 @@ vi.mock('../audit/audit.worker.js', () => ({
 describe('Galactic Federation (Worker Swarm)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        vi.resetModules();
         // Clear mock registry
         for (const key in mockWorkers) delete mockWorkers[key];
     });

@@ -71,7 +71,10 @@ vi.mock('../queue/queue.service.js', () => ({
 
 // Mock config
 vi.mock('../../../../config/index.js', () => ({
-    default: { redis: { host: 'localhost', port: 6379 } }
+    default: { 
+        redis: { host: 'localhost', port: 6379 },
+        gcp: { project_id: 'alti-code-studio', location: 'us-central1' }
+    }
 }));
 
 vi.mock('../ai/ai.provider.js', () => ({
