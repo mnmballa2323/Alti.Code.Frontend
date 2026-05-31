@@ -25,9 +25,25 @@ class FileSentinelService {
         const targetPath = workspaceRoot || path.resolve(process.cwd(), '../');
         logger.info(`👁️ [Sentinel] Initiating active filesystem patrol on: ${targetPath}`);
 
-        // Ignore node_modules, .git, and hidden files to save CPU
+        const ignoredPaths = [
+            'node_modules',
+            'dist',
+            '.next',
+            '.git',
+            '.agent',
+            '.codegraph',
+            '.skills'
+        ];
+
         this.watcher = chokidar.watch(targetPath, {
-            ignored: /(^|[\/\\])\..|node_modules|dist|\.next/, 
+            ignored: (filePath) => {
+                const basename = path.basename(filePath);
+                if (basename.startsWith('.') && basename !== '.' && basename !== '..') {
+                    return true;
+                }
+                const parts = filePath.split(path.sep);
+                return parts.some(part => ignoredPaths.includes(part));
+            },
             persistent: true,
             ignoreInitial: true,
             awaitWriteFinish: {
