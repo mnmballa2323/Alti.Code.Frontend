@@ -101,8 +101,16 @@ const languages = [
     { id: 'dockerfile', name: 'Dockerfile', desc: 'Container image build specifications.' }
 ];
 
+const jsonRegistryFile = path.join(agentsDir, 'polyglots_registry.json');
+
 async function generateAgents() {
-    let registryAppend = '\n// ── Swarm Intelligence Expansion (Wave 22: The Polyglot Meta-Wave: Part 2) ──\n\n';
+    let dynamicAgents = [];
+    try {
+        const jsonContent = await fs.readFile(jsonRegistryFile, 'utf8');
+        dynamicAgents = JSON.parse(jsonContent);
+    } catch (err) {
+        console.log('No existing polyglots_registry.json found. Creating a new one...');
+    }
 
     for (const lang of languages) {
         const className = lang.name.replace(/[^a-zA-Z0-9]/g, '') + 'SpecialistAgent';
@@ -145,17 +153,24 @@ export const ${className}Instance = new ${className}();
 
         await fs.writeFile(filePath, code);
 
-        registryAppend += `agentRegistry.register({
-    name: '${lang.id}_specialist',
-    description: '${lang.name} Specialist. ${lang.desc}',
-    queue: '${lang.id}-queue',
-    capabilities: ['${lang.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}', 'programming-language', 'polyglot'],
-    version: '1.0.0'
-});\n\n`;
+        const newAgentDef = {
+            name: `${lang.id}_specialist`,
+            description: `${lang.name} Specialist. ${lang.desc}`,
+            queue: `${lang.id}-queue`,
+            capabilities: [lang.name.toLowerCase().replace(/[^a-z0-9]/g, '-'), 'programming-language', 'polyglot'],
+            version: '1.0.0'
+        };
+
+        const existingIndex = dynamicAgents.findIndex(a => a.name === newAgentDef.name);
+        if (existingIndex !== -1) {
+            dynamicAgents[existingIndex] = newAgentDef;
+        } else {
+            dynamicAgents.push(newAgentDef);
+        }
     }
 
-    await fs.appendFile(registryFile, registryAppend);
-    console.log(`Successfully generated ${languages.length} polyglot agents and updated registry.`);
+    await fs.writeFile(jsonRegistryFile, JSON.stringify(dynamicAgents, null, 2), 'utf8');
+    console.log(`Successfully generated ${languages.length} polyglot agents and updated polyglots_registry.json.`);
 }
 
 generateAgents().catch(console.error);

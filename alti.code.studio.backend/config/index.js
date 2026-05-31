@@ -3,7 +3,7 @@ import path from 'path';
 
 config({ path: path.join(process.cwd(), '.env') });
 
-export default {
+const configObject = {
   env: process.env.NODE_ENV,
   database_local: process.env.DATABASE_LOCAL,
   port: process.env.PORT,
@@ -71,4 +71,42 @@ export default {
   },
   social_login_secret: process.env.SOCIAL_LOGIN_SECRET,
 };
+
+export const loadEnterpriseSecrets = async () => {
+  if (process.env.NODE_ENV === 'test') {
+    return; // Prevent network dependencies during unit tests
+  }
+  try {
+    const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
+    const client = new SecretManagerServiceClient();
+    const project = configObject.gcp.project_id;
+
+    const secretsMap = {
+      'DATABASE_LOCAL': (val) => { configObject.database_local = val; },
+      'REDIS_URL': (val) => { configObject.redis.url = val; },
+      'JWT_ACCESS_TOKEN': (val) => { configObject.jwt.access_token = val; },
+      'GOOGLE_CLIENT_SECRET': (val) => { configObject.google.clientSecret = val; },
+      'GITHUB_CLIENT_SECRET': (val) => { configObject.github.clientSecret = val; },
+      'GEMINI_API_KEY': (val) => { configObject.gemini_secret_key = val; }
+    };
+
+    for (const [secretName, updater] of Object.entries(secretsMap)) {
+      try {
+        const name = `projects/${project}/secrets/${secretName}/versions/latest`;
+        const [version] = await client.accessSecretVersion({ name });
+        const payload = version.payload.data.toString().trim();
+        if (payload) {
+          updater(payload);
+          process.env[secretName] = payload;
+        }
+      } catch (err) {
+        // Fallback: silently ignore and keep the local environment value
+      }
+    }
+  } catch (err) {
+    // Secret Manager Client could not be created or credentials absent - bypass and use env fallback
+  }
+};
+
+export default configObject;
 
