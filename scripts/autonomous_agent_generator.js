@@ -444,6 +444,27 @@ async function run() {
     });
 
     console.log(`Synced manifests and indexes in root and backend workspace.`);
+
+    // --- Enterprise pre-push Quality Gate ---
+    console.log("🛡️ Enforcing Enterprise Pre-Push Quality Gate...");
+    const { validateAgentFile } = require('./pre_push_quality_gate');
+    for (const role of nextRoles) {
+      const rootFilePath = path.join(rootSkillsDir, `${role.id}.md`);
+      const check = validateAgentFile(rootFilePath);
+      if (!check.valid) {
+        throw new Error(`Quality Gate failed for generated agent ${role.id}: ${check.reason}`);
+      }
+    }
+    console.log("✅ Quality Gate passed! All 10 generated agents meet premium standards.");
+
+    // --- Submodule Dashboard Auto-Update ---
+    try {
+      console.log("📊 Regenerating Submodule Dashboard...");
+      execSync("node scripts/generate_dashboard.js", { cwd: workspaceRoot, stdio: 'inherit' });
+    } catch (e) {
+      console.warn("⚠️ Failed to update submodule dashboard:", e.message);
+    }
+
     generatedCount += nextRoles.length;
 
     // Run Git commits and pushes to respective repositories
