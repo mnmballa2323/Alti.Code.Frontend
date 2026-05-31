@@ -6,14 +6,14 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { workerService } from './worker.service.js';
 
 // Mocks
 vi.mock('../../../shared/logger.js', () => ({
     logger: {
-        info: vi.fn(),
-        error: vi.fn(),
-        warn: vi.fn(),
+        info: vi.fn(console.log),
+        error: vi.fn(console.error),
+        warn: vi.fn(console.warn),
+        debug: vi.fn(console.debug),
     }
 }));
 
@@ -44,25 +44,27 @@ vi.mock('../audit/audit.worker.js', () => ({ auditWorkerProcessor: vi.fn() }));
 describe('The Singularity Swarm (9 Agents)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.resetModules();
         global.mockWorkers = {};
     });
 
     it('should initialize the full GOD MODE SWARM', async () => {
+        const { workerService } = await import('./worker.service.js');
         await workerService.init();
 
-        const expectedQueues = [
-            'audit-queue',
-            'refactor-queue',
-            'security-queue',
-            'devops-queue',
-            'qa-queue',
-            'monitoring-queue',
-            'iac-queue',
-            'cicd-queue'
+        const expectedAgents = [
+            'audit',
+            'refactor',
+            'security',
+            'devops',
+            'qa',
+            'monitoring',
+            'iac',
+            'cicd'
         ];
 
-        expectedQueues.forEach(q => {
-            expect(global.mockWorkers[q]).toBeDefined();
+        expectedAgents.forEach(agent => {
+            expect(workerService.workers[agent]).toBeDefined();
         });
     });
 });

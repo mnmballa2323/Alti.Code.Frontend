@@ -44,24 +44,23 @@ describe('Universal Swarm (7 Agents)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         vi.resetModules();
-        global.mockWorkers = {};
     });
 
     it('should initialize the full IMMORTAL SWARM', async () => {
         const { workerService } = await import('./worker.service.js');
         await workerService.init();
 
-        const expectedQueues = [
-            'audit-queue',
-            'refactor-queue',
-            'security-queue',
-            'devops-queue',
-            'qa-queue',
-            'monitoring-queue'
+        const expectedAgents = [
+            'audit',
+            'refactor',
+            'security',
+            'devops',
+            'qa',
+            'monitoring'
         ];
 
-        expectedQueues.forEach(q => {
-            expect(global.mockWorkers[q]).toBeDefined();
+        expectedAgents.forEach(agent => {
+            expect(workerService.workers[agent]).toBeDefined();
         });
     });
 });
