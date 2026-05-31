@@ -58,16 +58,7 @@ export default function ChatHome() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans w-full">
-        {/* Standardized Header - Left-Aligned Chat Session */}
-        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
-              <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
-                {isResearchMode ? "Deep Research" : "Chat Session"}
-              </h1>
-            </div>
-          </div>
-        </div>
+
 
         {/* Dynamic Content */}
         {isChatting ? (

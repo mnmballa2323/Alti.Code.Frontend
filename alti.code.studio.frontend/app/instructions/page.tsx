@@ -57,16 +57,7 @@ export default function Instructions() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
-        {/* Standardized Header */}
-        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
-          <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
-            <div className="flex items-center gap-3">
-              <h1 className="text-[14px] font-semibold tracking-tight text-default-900">
-                System Instructions
-              </h1>
-            </div>
-          </div>
-        </div>
+
 
         <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-10 pointer-events-none blur-sm mix-blend-screen">

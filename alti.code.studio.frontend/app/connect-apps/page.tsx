@@ -1088,16 +1088,7 @@ export default function ConnectAppsPage() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
-        {/* Standardized Header */}
-        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-10 relative w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
-              <h1 className="text-[14px] font-semibold tracking-tight text-default-900 flex items-center gap-2">
-                Integrations
-              </h1>
-            </div>
-          </div>
-        </div>
+
 
         {/* Master-Detail Split Screen Container */}
         <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">

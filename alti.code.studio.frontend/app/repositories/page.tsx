@@ -102,16 +102,7 @@ export default function Repositories() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-white dark:bg-[#0A0A0A] flex flex-col h-full font-sans w-full items-center">
-        {/* Standardized Header */}
-        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center z-50 relative w-full">
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-3">
-              <h1 className="text-[14px] font-semibold tracking-tight text-default-900 flex items-center gap-2">
-                <Github size={16} /> Open Source Repositories
-              </h1>
-            </div>
-          </div>
-        </div>
+
 
         {/* Main Content (Centered Form) */}
         <div className="flex-1 overflow-y-auto w-full pt-6 pb-12 px-6 flex justify-center">
