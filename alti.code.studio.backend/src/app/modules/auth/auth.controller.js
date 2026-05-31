@@ -445,7 +445,7 @@ const googleAuthCallback = catchAsync(async (req, res) => {
   res.cookie('refreshToken', refreshToken, cookieOption);
 
   // Redirect to frontend
-  const frontendUrl = config.client_url || 'http://localhost:3000';
+  const frontendUrl = config.client_url || 'http://localhost:3001';
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
@@ -462,7 +462,7 @@ const githubAuthCallback = catchAsync(async (req, res) => {
   res.cookie('refreshToken', refreshToken, cookieOption);
 
   // Redirect to frontend
-  const frontendUrl = config.client_url || 'http://localhost:3000';
+  const frontendUrl = config.client_url || 'http://localhost:3001';
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
