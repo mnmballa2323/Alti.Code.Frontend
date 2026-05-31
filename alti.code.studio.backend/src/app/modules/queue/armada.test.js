@@ -49,6 +49,20 @@ vi.mock('../audit/audit.model.js', () => ({
     }
 }));
 
+// Mock QueueService
+let jobCounter = 0;
+vi.mock('../queue/queue.service.js', () => ({
+    queueService: {
+        isInitialized: true,
+        queues: {},
+        init: vi.fn(),
+        addJob: vi.fn().mockImplementation(async (queueName, data) => {
+            jobCounter++;
+            return { id: `stress-job-${jobCounter}`, name: queueName, data };
+        })
+    }
+}));
+
 vi.mock('../ai/ai.provider.js', () => ({
     aiProvider: {
         reason: vi.fn().mockResolvedValue('[]'),

@@ -18,12 +18,12 @@ vi.mock('../../../shared/logger.js', () => ({
 }));
 
 // Mock BullMQ Workers
-const mockWorkers = {};
 vi.mock('bullmq', () => {
     return {
         Worker: class {
             constructor(queueName, processor) {
-                mockWorkers[queueName] = processor;
+                global.mockWorkers = global.mockWorkers || {};
+                global.mockWorkers[queueName] = processor;
                 this.on = vi.fn();
             }
         },
@@ -48,17 +48,16 @@ vi.mock('../audit/audit.worker.js', () => ({
 describe('Galactic Federation (Worker Swarm)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        // Clear mock registry
-        for (const key in mockWorkers) delete mockWorkers[key];
+        global.mockWorkers = {};
     });
 
     it('should register all specialized agents upon initialization', async () => {
         await workerService.init();
 
         // Check if all queues have assigned processors
-        expect(mockWorkers['audit-queue']).toBeDefined();
-        expect(mockWorkers['refactor-queue']).toBeDefined();
-        expect(mockWorkers['security-queue']).toBeDefined();
-        expect(mockWorkers['devops-queue']).toBeDefined();
+        expect(global.mockWorkers['audit-queue']).toBeDefined();
+        expect(global.mockWorkers['refactor-queue']).toBeDefined();
+        expect(global.mockWorkers['security-queue']).toBeDefined();
+        expect(global.mockWorkers['devops-queue']).toBeDefined();
     });
 });

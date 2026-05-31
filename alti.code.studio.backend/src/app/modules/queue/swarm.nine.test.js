@@ -18,12 +18,12 @@ vi.mock('../../../shared/logger.js', () => ({
 }));
 
 // Mock BullMQ Workers
-const mockWorkers = {};
 vi.mock('bullmq', () => {
     return {
         Worker: class {
             constructor(queueName, processor) {
-                mockWorkers[queueName] = processor;
+                global.mockWorkers = global.mockWorkers || {};
+                global.mockWorkers[queueName] = processor;
                 this.on = vi.fn();
             }
         },
@@ -44,7 +44,7 @@ vi.mock('../audit/audit.worker.js', () => ({ auditWorkerProcessor: vi.fn() }));
 describe('The Singularity Swarm (9 Agents)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
-        for (const key in mockWorkers) delete mockWorkers[key];
+        global.mockWorkers = {};
     });
 
     it('should initialize the full GOD MODE SWARM', async () => {
@@ -62,7 +62,7 @@ describe('The Singularity Swarm (9 Agents)', () => {
         ];
 
         expectedQueues.forEach(q => {
-            expect(mockWorkers[q]).toBeDefined();
+            expect(global.mockWorkers[q]).toBeDefined();
         });
     });
 });
