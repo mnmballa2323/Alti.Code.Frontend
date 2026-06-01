@@ -1371,11 +1371,11 @@ export default function Sidebar() {
           </Tooltip>
         </div>
 
-        {/* 7 navigation icons toggle container */}
+        {/* 5 navigation icons toggle container */}
         <div
           className={cn(
             isSidebarOpen
-              ? "grid grid-cols-7 gap-0.5 px-2 py-2.5 border-b border-default-200"
+              ? "grid grid-cols-5 gap-0.5 px-2 py-2.5 border-b border-default-200"
               : "flex flex-col items-center gap-2 px-1 pt-2"
           )}
         >
@@ -1414,7 +1414,7 @@ export default function Sidebar() {
             );
           })}
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
-            <div className="col-span-7 text-center py-2 text-xs text-default-400 italic">
+            <div className="col-span-5 text-center py-2 text-xs text-default-400 italic">
               No results found
             </div>
           )}
