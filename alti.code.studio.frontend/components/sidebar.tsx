@@ -742,24 +742,6 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Repositories",
-      icon: Github,
-      path: "/repositories",
-      isActive: pathname === "/repositories",
-      onClick: () => {
-        router.push("/repositories");
-      },
-    },
-    {
-      label: "Documentation",
-      icon: BookOpen,
-      path: "/documents",
-      isActive: pathname === "/documents",
-      onClick: () => {
-        router.push("/documents");
-      },
-    },
-    {
       label: "Vault",
       icon: Lock,
       path: "/vault",
