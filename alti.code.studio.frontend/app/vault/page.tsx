@@ -398,66 +398,43 @@ export default function VaultPage() {
                 })
             ) : (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
-                {secrets.length === 0 ? (
-                  <div className="text-center py-20 border border-dashed border-default-200/80 rounded-3xl bg-white dark:bg-[#161616] shadow-sm">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
-                      <Lock className="size-6" />
-                    </div>
-                    <h3 className="text-lg font-bold text-default-900 tracking-tight">
-                      Sovereign Vault is Empty
-                    </h3>
-                    <p className="text-sm text-default-500 max-w-sm mx-auto mt-2 leading-relaxed">
-                      Store your API keys or integration credentials securely. Click the Plus (**+**) icon in the sidebar search bar to get started.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {/* Secrets Cards Grid (Full-Width Rows) */}
-                    {secrets.map((secret) => {
-                      const conf =
-                        serviceConfig[secret.service] || serviceConfig.Default;
-                      const ServiceIcon = conf.icon;
+                <div className="max-w-3xl mx-auto mt-12 p-8 flex flex-col items-center justify-center min-h-[40vh]">
+                  <div className="space-y-8 w-full flex flex-col items-center">
+                    <Input
+                      placeholder="Enter name here..."
+                      value={newName}
+                      variant="bordered"
+                      onValueChange={setNewName}
+                      classNames={{
+                        base: "max-w-2xl",
+                        inputWrapper: "bg-white dark:bg-[#27272a] border border-default-200 hover:border-default-300 focus-within:!border-default-400 rounded-2xl h-14 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]",
+                        input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                      }}
+                    />
 
-                      return (
-                        <Card
-                          key={secret.id}
-                          isPressable
-                          className="w-full border border-default-200 bg-white dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl group"
-                          shadow="sm"
-                          onPress={() => setSelectedSecretId(secret.id)}
-                        >
-                          <CardBody className="p-6 flex flex-row items-center justify-between gap-6">
-                            <div className="flex items-center gap-4 text-left">
-                              <div
-                                className={cn(
-                                  "p-3.5 rounded-2xl flex-shrink-0 border border-default-100/50 shadow-sm",
-                                  conf.color,
-                                )}
-                              >
-                                <ServiceIcon size={22} />
-                              </div>
-                              <div>
-                                <h3 className="text-base font-bold text-default-900 tracking-tight">
-                                  {secret.name}
-                                </h3>
-                                <p className="text-xs text-default-400 mt-1 flex items-center gap-1.5 font-medium">
-                                  <span>{secret.service}</span>
-                                  <span className="w-1 h-1 rounded-full bg-default-300" />
-                                  <span>Last used {secret.lastUsed}</span>
-                                </p>
-                              </div>
-                            </div>
-                             <div className="flex items-center gap-3">
-                               <div className="flex items-center justify-center text-default-400 group-hover:text-primary group-hover:bg-primary/10 rounded-xl min-w-[32px] h-[32px] transition-all duration-300">
-                                 <ChevronRight size={18} />
-                               </div>
-                             </div>
-                          </CardBody>
-                        </Card>
-                      );
-                    })}
+                    <Input
+                      placeholder="Enter secret here..."
+                      type="password"
+                      value={newKey}
+                      variant="bordered"
+                      onValueChange={setNewKey}
+                      classNames={{
+                        base: "max-w-2xl",
+                        inputWrapper: "bg-white dark:bg-[#27272a] border border-default-200 hover:border-default-300 focus-within:!border-default-400 rounded-2xl h-14 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]",
+                        input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
+                      }}
+                    />
+
+                    <div className="pt-2 w-full flex justify-center">
+                      <Button
+                        className="bg-white dark:bg-[#27272a] border border-default-200 text-default-800 dark:text-default-200 hover:bg-default-50 active:scale-[0.99] transition-all duration-200 font-medium shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-2xl h-14 w-full max-w-2xl text-sm"
+                        onPress={() => handleSave(() => {})}
+                      >
+                        Encrypt & Save
+                      </Button>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             )}
           </div>

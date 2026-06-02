@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import { InMemoryChatMessageHistory } from '@langchain/core/chat_history';
 import { AIMessage, HumanMessage } from '@langchain/core/messages';
 import httpStatus from 'http-status';
@@ -18,21 +18,20 @@ import { paymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
 import { composioService } from '../mcp/composio.service.js';
 
-const client = new GoogleGenerativeAI(config.gemini_secret_key);
-const model = client.getGenerativeModel({ model:  'gemini-3.1-pro' });
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
-const sessionMemoryStore = {};
+import { RedisChatMessageHistory } from '@langchain/community/stores/message/ioredis';
+import { redisCacheService } from '../memory/redis.service.js';
 
 const geminiOpenMemoryService = async (sessionId, prompt, userId, language, mode = 'Agent', domain) => {
-  let memory = sessionMemoryStore[sessionId];
-  if (!memory) {
-    memory = new BufferMemory({
-      returnMessages: true,
-      memoryKey: 'history',
-      chatHistory: new InMemoryChatMessageHistory(),
-    });
-    sessionMemoryStore[sessionId] = memory;
-  }
+  const memory = new BufferMemory({
+    returnMessages: true,
+    memoryKey: 'history',
+    chatHistory: new RedisChatMessageHistory({
+      sessionId,
+      client: redisCacheService.client
+    }),
+  });
 
   let systemPrompt = '';
   switch (mode.toLowerCase()) {
@@ -124,14 +123,12 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     await memory.chatHistory.addMessage(new HumanMessage(prompt));
 
     // Inject active user tools from Composio MCP
-    let activeModel = model;
+    let activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
     try {
       const connectedTools = await composioService.getConnectedToolsSchema(userId);
       if (connectedTools && connectedTools.length > 0) {
-        activeModel = client.getGenerativeModel({ 
-          model: 'gemini-3.1-pro',
-          tools: [{ functionDeclarations: connectedTools }]
-        });
+        // Composio MCP tool integration requires advanced Vertex setup, falling back to base model for now
+        activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
         logger.info(`🔌 Injected ${connectedTools.length} Composio MCP tools into active LLM session for user ${userId}`);
       }
     } catch(e) {

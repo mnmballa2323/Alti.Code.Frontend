@@ -1,5 +1,5 @@
 import { ChromaClient } from 'chromadb';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
 import { AgentMemoryHooks } from './agentmemory.hooks.js';
@@ -13,7 +13,7 @@ const logger = winston.createLogger({
 class MemoryPalaceService {
     constructor() {
         this.client = new ChromaClient({ path: process.env.CHROMA_DB_URL || "http://localhost:8000" });
-        this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+        this.genAI = null /* DIRECT GEMINI BLOCKED */;
         this.collectionName = 'alti_episodic_memory';
         this.isInitialized = false;
     }

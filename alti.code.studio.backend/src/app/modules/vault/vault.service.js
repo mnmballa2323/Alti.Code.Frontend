@@ -70,6 +70,9 @@ const getRawCredentials = async (userId) => {
         gcpProjectId: await decryptField(vault.gcpProjectId),
         gcpClientEmail: await decryptField(vault.gcpClientEmail),
         gcpPrivateKey: await decryptField(vault.gcpPrivateKey),
+        awsAccessKeyId: await decryptField(vault.awsAccessKeyId),
+        awsSecretAccessKey: await decryptField(vault.awsSecretAccessKey),
+        awsRegion: await decryptField(vault.awsRegion),
     };
 };
 
@@ -88,6 +91,9 @@ const getMaskedCredentials = async (userId) => {
         gcpProjectId: raw.gcpProjectId || '',
         gcpClientEmail: raw.gcpClientEmail || '',
         gcpPrivateKey: maskKey(raw.gcpPrivateKey),
+        awsAccessKeyId: maskKey(raw.awsAccessKeyId),
+        awsSecretAccessKey: maskKey(raw.awsSecretAccessKey),
+        awsRegion: raw.awsRegion || '',
     };
 };
 
@@ -125,6 +131,9 @@ const updateCredentials = async (userId, keys) => {
     await processField('gcpProjectId', keys.gcpProjectId);
     await processField('gcpClientEmail', keys.gcpClientEmail);
     await processField('gcpPrivateKey', keys.gcpPrivateKey);
+    await processField('awsAccessKeyId', keys.awsAccessKeyId);
+    await processField('awsSecretAccessKey', keys.awsSecretAccessKey);
+    await processField('awsRegion', keys.awsRegion);
 
     const vault = await prisma.vault.upsert({
         where: { userId: targetUserId },

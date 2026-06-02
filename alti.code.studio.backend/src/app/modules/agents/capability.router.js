@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
@@ -12,12 +12,19 @@ import { workflowService } from '../googleCloud/workflow.service.js';
 import crypto from 'crypto';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 
-const genAI = new GoogleGenerativeAI(config.gemini_secret_key || process.env.GEMINI_API_KEY);
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
 class CapabilityRouter {
     constructor() {
-        this.model = genAI.getGenerativeModel({ model: config.gcp.model_name || 'gemini-3.1-pro' });
+        this.modelName = config.gcp.model_name || 'gemini-3.1-pro';
         this.isIndexed = false;
+    }
+
+    get model() {
+        if (!this._model) {
+            this._model = GoogleGenAiService.getGenerativeModel(this.modelName);
+        }
+        return this._model;
     }
 
     get table() {

@@ -1318,12 +1318,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     githubUrl: "https://github.com/jduncan-rva/gemini-history-learning",
     category: "Dev Tools",
   },
-  {
-    name: "nanobanana",
-    description: "Image generation with Nano Banana via OpenRouter.",
-    githubUrl: "https://github.com/Aeven-AI/mcp-nanobanana",
-    category: "Media",
-  },
+
   {
     name: "gemini-deep-research",
     description: "Deep research extension for Gemini CLI.",

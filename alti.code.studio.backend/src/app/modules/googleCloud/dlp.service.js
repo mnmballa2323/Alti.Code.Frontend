@@ -75,8 +75,17 @@ const redactText = async (text) => {
                 infoTypes: [
                     { name: 'EMAIL_ADDRESS' },
                     { name: 'PERSON_NAME' },
-                    { name: 'AUTH_TOKEN' },
+                    { name: 'PHONE_NUMBER' },
+                    { name: 'US_SOCIAL_SECURITY_NUMBER' },
                     { name: 'CREDIT_CARD_NUMBER' },
+                    { name: 'AUTH_TOKEN' },
+                    { name: 'AWS_CREDENTIALS' },
+                    { name: 'AZURE_AUTH_TOKEN' },
+                    { name: 'BASIC_AUTH_HEADER' },
+                    { name: 'ENCRYPTION_KEY' },
+                    { name: 'GCP_API_KEY' },
+                    { name: 'GCP_CREDENTIALS' },
+                    { name: 'JSON_WEB_TOKEN' },
                 ],
             },
         };

@@ -70,7 +70,7 @@ export default function Guardrails() {
                 className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
-                Guardrails
+                New Guardrail
               </h1>
             </div>
 

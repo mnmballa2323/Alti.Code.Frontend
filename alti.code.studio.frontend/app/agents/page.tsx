@@ -1,19 +1,53 @@
 "use client";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import React from "react";
-import { Button } from "@heroui/button";
 import ChatBotLayout from "@/components/ChatbotLayout";
+import PromptInputFullLineWithBottomActions from "@/components/input-actions";
+import { AppDispatch, RootState } from "@/store";
+import { setChatContext, startNewChat } from "@/store/messagesSlice";
 
 export default function AgentArcadePage() {
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSend = (prompt: string) => {
+    window.dispatchEvent(
+      new CustomEvent("open-agent-modal", { detail: prompt })
+    );
+    setInputValue("");
+  };
+
   return (
     <ChatBotLayout>
-      <div className="container mx-auto p-6 max-w-7xl h-[calc(100vh-80px)] flex flex-col items-center justify-center">
-        <Button
-          className="bg-white dark:bg-[#27272a] border border-default-200 text-default-800 dark:text-default-200 hover:bg-default-50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 font-medium shadow-[0_2px_10px_rgba(0,0,0,0.04)] rounded-full px-8 py-6 text-sm"
-          onPress={() => window.dispatchEvent(new CustomEvent("open-agent-modal"))}
-        >
-          Create New Agent
-        </Button>
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
+        <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
+          <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
+            <div className="flex flex-col items-center text-center z-30 mb-6">
+              <h1
+                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+                style={{ fontFamily: "var(--font-secondary)" }}
+              >
+                New Agent
+              </h1>
+            </div>
+
+            <div className="flex w-full flex-col gap-4 max-w-2xl">
+              <PromptInputFullLineWithBottomActions
+                hideAgents={true}
+                hideDropdown={true}
+                placeholder="Describe your new agent..."
+                value={inputValue}
+                onChange={setInputValue}
+                onSend={handleSend}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </ChatBotLayout>
   );

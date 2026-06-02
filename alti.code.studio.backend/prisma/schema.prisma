@@ -372,6 +372,9 @@ model Vault {
   gcpProjectId       String?  @db.Text
   gcpClientEmail     String?  @db.Text
   gcpPrivateKey      String?  @db.Text
+  awsAccessKeyId     String?  @db.Text
+  awsSecretAccessKey String?  @db.Text
+  awsRegion          String?  @db.Text
   
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

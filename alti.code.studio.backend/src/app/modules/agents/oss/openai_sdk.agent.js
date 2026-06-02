@@ -15,7 +15,7 @@ class OpenaiSdkOssAgent extends BaseSpecialistAgent {
 SETUP:
 npm install openai
 import OpenAI from 'openai'
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+const openai = null /* DIRECT OPENAI BLOCKED - USE GATEWAY (AZURE FOUNDRY) */
 
 # Python:
 pip install openai
@@ -153,7 +153,7 @@ const messages = await openai.beta.threads.messages.list(thread.id)
 
 RATE LIMITS & RETRIES:
 // SDK auto-retries with exponential backoff by default (maxRetries=2):
-const openai = new OpenAI({ maxRetries: 3, timeout: 30 * 1000 })
+const openai = null /* DIRECT OPENAI BLOCKED - USE GATEWAY (AZURE FOUNDRY) */
 // Per-request: await openai.chat.completions.create({...}, { maxRetries: 5 })`;
     }
 

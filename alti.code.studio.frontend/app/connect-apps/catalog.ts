@@ -939,11 +939,7 @@ export const SAAS_MOCKS = [
     slug: "mcp_together_ai",
     icon: "solar:cloud-bold-duotone",
   },
-  {
-    name: "OpenRouter LLM Gateway",
-    slug: "mcp_openrouter",
-    icon: "solar:share-circle-bold-duotone",
-  },
+
   {
     name: "LM Studio Local LLM",
     slug: "mcp_lm_studio",

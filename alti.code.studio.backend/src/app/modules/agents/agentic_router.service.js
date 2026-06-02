@@ -1,11 +1,11 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
 import { swarmNexusAgent } from './swarm_nexus.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
-const genAI = new GoogleGenerativeAI(config.gemini_secret_key || process.env.GEMINI_API_KEY);
+const genAI = null /* DIRECT GEMINI BLOCKED */;
 
 /**
  * The 'Brain' of the Swarm.

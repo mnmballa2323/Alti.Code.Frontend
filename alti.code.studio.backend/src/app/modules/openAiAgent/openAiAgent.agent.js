@@ -9,12 +9,7 @@
 // Focus: BEST coding output, any programming language
 // Architecture: MVC (Agent as Service layer)
 
-import OpenAI from 'openai';
-import config from '../../../../config/index.js'; // Ensure we have config for API key
-
-const openai = new OpenAI({
-  apiKey: config.openai_api_key || process.env.OPENAI_API_KEY || 'sk-dummy-key-for-boot',
-});
+import { LlmGatewayService } from '../llmGateway/llmGateway.service.js';
 
 const systemPrompt = `
 You are a Staff-level software engineer.
@@ -42,15 +37,20 @@ class Agent {
   }
 
   async run(prompt) {
-    const response = await openai.chat.completions.create({
-      model: this.model,
-      messages: [
-        { role: 'system', content: this.instructions },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.2,
-    });
-    return response.choices[0].message.content;
+    const finalPrompt = `${this.instructions}\n\nUser Prompt:\n${prompt}`;
+    // Using default zero-UUID for system-level backend agents
+    const defaultUserId = '00000000-0000-0000-0000-000000000000';
+    
+    // Routes through Gateway -> Enforces Tri-Cloud Architecture
+    const result = await LlmGatewayService.routeCompletion(
+        defaultUserId,
+        null,
+        finalPrompt,
+        this.model,
+        'Code',
+        0.2
+    );
+    return result.reply;
   }
 }
 

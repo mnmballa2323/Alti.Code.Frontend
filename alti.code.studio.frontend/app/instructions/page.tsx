@@ -70,7 +70,7 @@ export default function Instructions() {
                 className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
-                Instructions
+                New Instruction
               </h1>
             </div>
 

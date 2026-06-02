@@ -1,7 +1,7 @@
 import { BaseSpecialistAgent, AgentError } from './base_specialist.agent.js';
 import { agentRegistry } from './agent.registry.js';
 import { logger } from '../../../shared/logger.js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import config from '../../../../config/index.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { agentMemoryService } from '../memory/agentmemory.service.js';
@@ -13,7 +13,7 @@ if (!apiKey) {
     logger.error('🚨 [SwarmNexus] CRITICAL SECURITY WARNING: GEMINI_API_KEY environment variable is missing.');
 }
 
-const genAI = new GoogleGenerativeAI(apiKey || 'dummy_api_key_fallback');
+const genAI = null /* DIRECT GEMINI BLOCKED */;
 
 export class SwarmNexusAgent extends BaseSpecialistAgent {
     constructor() {

@@ -6,7 +6,7 @@
  */
 
 import { VertexAI } from '@google-cloud/vertexai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
@@ -14,7 +14,7 @@ import { semanticCacheService } from '../memory/semantic_cache.service.js';
 
 // Initialize Vertex AI or Fallback client
 let vertex_ai = null;
-const fallback_ai = new GoogleGenerativeAI(config.gemini_secret_key || process.env.GEMINI_API_KEY);
+const fallback_ai = null /* DIRECT GEMINI BLOCKED */;
 
 if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     try {
@@ -53,12 +53,7 @@ const getGenerativeModel = (modelName, temperature = 0.5) => {
             generationConfig: { temperature }
         });
     } else {
-        return fallback_ai.getGenerativeModel({ 
-            model: modelName,
-            systemInstruction: systemInstruction,
-            tools: [dynamicGroundingTool],
-            generationConfig: { temperature }
-        });
+        throw new Error('Google Cloud Vertex AI is not initialized. Direct Gemini SDK is disabled for security reasons.');
     }
 };
 

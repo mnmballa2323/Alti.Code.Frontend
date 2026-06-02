@@ -1,7 +1,7 @@
 import { VertexAI } from '@google-cloud/vertexai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
+
+import { AzureOpenAI } from 'openai';
+import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
 import { prisma } from '../../../config/prisma.js';
 import { VaultService } from '../vault/vault.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
@@ -241,18 +241,10 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
                 const result = await callWithRetry(() => model.generateContent(finalPrompt));
                 const response = await result.response;
                 reply = response.candidates[0].content.parts[0].text;
-            } else if (geminiApiKey) {
-                // Standard API Key fallback
-                logger.info('🧠 [LlmGateway] Using Google Generative AI with fallback API Key...');
-                const ai = new GoogleGenerativeAI(geminiApiKey);
-                const model = ai.getGenerativeModel({ model: cleanModelName });
-                const result = await callWithRetry(() => model.generateContent(finalPrompt));
-                const response = await result.response;
-                reply = response.candidates[0].content.parts[0].text;
             } else {
                 throw new ApiError(
                     httpStatus.BAD_REQUEST,
-                    'Google Vertex / Gemini credentials are missing in the secure Vault.'
+                    'Google Vertex AI credentials (GCP Project ID and Private Key/Email) are missing in the secure Vault. Direct Gemini API Key connection is disabled.'
                 );
             }
         } catch (err) {
@@ -263,27 +255,37 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             );
         }
     }
-    // 2. Anthropic Claude Direct Connection
+    // 2. AWS Bedrock Connection for Anthropic
     else if (modelName.startsWith('claude-') || modelName.startsWith('sonnet-')) {
-        logger.info('🧠 [LlmGateway] Calling Anthropic direct endpoint...');
-        const anthropicApiKey = creds.anthropicApiKey || process.env.ANTHROPIC_API_KEY;
+        logger.info('🧠 [LlmGateway] Calling AWS Bedrock Anthropic endpoint...');
+        const awsAccessKeyId = creds.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
+        const awsSecretAccessKey = creds.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
+        const awsRegion = creds.awsRegion || process.env.AWS_REGION || 'us-east-1';
 
-        if (!anthropicApiKey) {
+        if (!awsAccessKeyId || !awsSecretAccessKey) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'Anthropic API Key is missing in the secure Vault.'
+                'AWS Bedrock credentials (Access Key ID and Secret Access Key) are missing in the secure Vault.'
             );
         }
 
         try {
-            const anthropic = new Anthropic({
-                apiKey: anthropicApiKey,
+            const anthropic = new AnthropicBedrock({
+                awsAccessKey: awsAccessKeyId,
+                awsSecretKey: awsSecretAccessKey,
+                awsRegion: awsRegion,
                 timeout: 20 * 1000 // 20s secure timeout
             });
 
+            // Fallback mapper for model names if they don't have the anthropic prefix
+            let bedrockModelId = modelName;
+            if (bedrockModelId === 'claude-3-5-sonnet-20240620') bedrockModelId = 'anthropic.claude-3-5-sonnet-20240620-v1:0';
+            else if (bedrockModelId === 'claude-3-5-sonnet-20241022' || bedrockModelId === 'claude-3-5-sonnet-latest') bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+            else if (!bedrockModelId.startsWith('anthropic.') && bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+
             const response = await callWithRetry(() =>
                 anthropic.messages.create({
-                    model: modelName,
+                    model: bedrockModelId,
                     max_tokens: 4096,
                     messages: [{ role: 'user', content: finalPrompt }],
                     temperature: temperature
@@ -291,21 +293,22 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             );
 
             reply = response.content[0].text;
+            usedModelName = bedrockModelId;
         } catch (err) {
-            logger.error(`❌ [LlmGateway] Anthropic execution failed: ${sanitizeErrorMessage(err.message)}`);
+            logger.error(`❌ [LlmGateway] AWS Bedrock Anthropic execution failed: ${sanitizeErrorMessage(err.message)}`);
             throw new ApiError(
                 err.status || httpStatus.INTERNAL_SERVER_ERROR,
                 sanitizeErrorMessage(err.message)
             );
         }
     }
-    // 3. Azure OpenAI Foundry Proxy Connection
-    else if (modelName.startsWith('azure/') || creds.azureEndpoint) {
+    // 3. Azure OpenAI Foundry Proxy Connection (Enforced for all other models like GPT-4o, o1-pro)
+    else {
         logger.info('🧠 [LlmGateway] Calling Azure OpenAI Foundry direct endpoint...');
         if (!creds.azureApiKey || !creds.azureEndpoint) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
-                'Azure OpenAI Foundry endpoint or API Key is missing in the secure Vault.'
+                'Azure OpenAI Foundry endpoint or API Key is missing in the secure Vault. Direct OpenAI connection is disabled.'
             );
         }
 
@@ -320,17 +323,16 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         const cleanModelName = modelName.replace(/^azure\//, '');
         
         try {
-            // standard deployment extraction or custom endpoint parsing
-            const openai = new OpenAI({
+            const azureClient = new AzureOpenAI({
                 apiKey: creds.azureApiKey,
-                baseURL: `${endpoint}/openai/deployments/${cleanModelName}`,
-                defaultHeaders: { 'api-key': creds.azureApiKey },
-                defaultQuery: { 'api-version': '2024-02-15-preview' },
+                endpoint: endpoint,
+                apiVersion: '2024-02-15-preview',
+                deployment: cleanModelName,
                 timeout: 20 * 1000 // 20s secure timeout
             });
 
             const response = await callWithRetry(() =>
-                openai.chat.completions.create({
+                azureClient.chat.completions.create({
                     model: cleanModelName,
                     messages: [{ role: 'user', content: finalPrompt }],
                     temperature: temperature
@@ -341,41 +343,6 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             usedModelName = `azure/${cleanModelName}`;
         } catch (err) {
             logger.error(`❌ [LlmGateway] Azure OpenAI Foundry execution failed: ${sanitizeErrorMessage(err.message)}`);
-            throw new ApiError(
-                err.status || httpStatus.INTERNAL_SERVER_ERROR,
-                sanitizeErrorMessage(err.message)
-            );
-        }
-    }
-    // 3. OpenAI Direct Client Connection (GPT-4o, GPT-4, o1-pro)
-    else {
-        logger.info('🧠 [LlmGateway] Calling OpenAI direct endpoint...');
-        const openaiApiKey = creds.openaiApiKey || process.env.OPENAI_API_KEY;
-
-        if (!openaiApiKey) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'OpenAI API Key is missing in the secure Vault.'
-            );
-        }
-
-        try {
-            const openai = new OpenAI({
-                apiKey: openaiApiKey,
-                timeout: 20 * 1000 // 20s secure timeout
-            });
-
-            const response = await callWithRetry(() =>
-                openai.chat.completions.create({
-                    model: modelName || 'gpt-4o',
-                    messages: [{ role: 'user', content: finalPrompt }],
-                    temperature: temperature
-                })
-            );
-
-            reply = response.choices[0].message.content;
-        } catch (err) {
-            logger.error(`❌ [LlmGateway] OpenAI direct execution failed: ${sanitizeErrorMessage(err.message)}`);
             throw new ApiError(
                 err.status || httpStatus.INTERNAL_SERVER_ERROR,
                 sanitizeErrorMessage(err.message)
