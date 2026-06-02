@@ -3,6 +3,7 @@
 import type { ComponentProps } from "react";
 
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import axios from "axios";
@@ -1165,15 +1166,40 @@ export default function Sidebar() {
           isSidebarOpen ? "w-64" : "w-10",
         )}
       >
+        {/* Top Section - Brand & Toggle */}
         <div
           className={cn(
             "h-[56px] flex items-center justify-between border-b border-default-200",
-            isSidebarOpen ? "pr-4" : "px-0 justify-center",
+            isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
           )}
         >
           <div
-            className={cn("flex-1 min-w-0 mr-1", !isSidebarOpen && "hidden")}
+            className={cn("flex-1 min-w-0 flex items-center justify-start", !isSidebarOpen && "hidden")}
           >
+            <Image src="/android-chrome-512x512.png" alt="Alti Logo" width={22} height={22} className="dark:invert" />
+          </div>
+          <Button
+            isIconOnly
+            className="-mr-2 text-default-400 hover:text-default-600"
+            size="sm"
+            variant="light"
+            onClick={toggleLeftSidebar}
+          >
+            {isSidebarOpen ? (
+              <PanelLeftClose className="size-4" />
+            ) : (
+              <PanelLeftOpen className="size-4" />
+            )}
+          </Button>
+        </div>
+
+        {/* Repository Dropdown Section */}
+        <div
+          className={cn(
+            "border-b border-default-200 px-3 py-2",
+            !isSidebarOpen && "hidden"
+          )}
+        >
             <Dropdown
               className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
               placement="bottom-start"
@@ -1262,20 +1288,6 @@ export default function Sidebar() {
                 )}
               </DropdownMenu>
             </Dropdown>
-          </div>
-          <Button
-            isIconOnly
-            className="-mr-2 text-default-400 hover:text-default-600"
-            size="sm"
-            variant="light"
-            onClick={toggleLeftSidebar}
-          >
-            {isSidebarOpen ? (
-              <PanelLeftClose className="size-4" />
-            ) : (
-              <PanelLeftOpen className="size-4" />
-            )}
-          </Button>
         </div>
 
         {/* Search bar and + icon on the same line below the line */}
