@@ -74,7 +74,7 @@ function bootOpenWork() {
 }
 
 const createWindow = () => {
-    const iconPath = path.join(__dirname, '../public/app-icon-final.png');
+    const iconPath = path.join(__dirname, '../public/app-icon.png');
     
     // Set dock icon for macOS
     if (process.platform === 'darwin' && app.dock) {
@@ -315,7 +315,7 @@ const createWindow = () => {
             win.loadURL('app://./index.html');
         });
     } else {
-        win.loadURL('http://localhost:3000');
+        win.loadURL('http://localhost:3002');
         // Open DevTools in development
         // win.webContents.openDevTools();
     }
