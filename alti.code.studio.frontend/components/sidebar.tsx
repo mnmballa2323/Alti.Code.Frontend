@@ -77,6 +77,7 @@ import MyAccountDropdown from "./MyAccountDropdown";
 import {
   removeRepository,
   removeDocument,
+  setActiveWorkspace,
 } from "@/store/systemSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
@@ -653,7 +654,7 @@ export default function Sidebar() {
   const { data: session, status } = useSession();
   const token = session?.user?.accessToken ?? null;
   const [repoSearch, setRepoSearch] = useState("");
-  const [selectedRepo, setSelectedRepo] = useState("alti.code.studio");
+  const selectedRepo = useSelector((state: RootState) => state.system.activeWorkspace) || "alti.code.studio";
 
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
@@ -725,6 +726,15 @@ export default function Sidebar() {
       isActive: pathname.startsWith("/chat"),
       onClick: () => {
         router.push("/chat");
+      },
+    },
+    {
+      label: "Agents",
+      icon: Bot,
+      path: "/agents",
+      isActive: pathname === "/agents" || pathname.startsWith("/agents/"),
+      onClick: () => {
+        router.push("/agents");
       },
     },
     {
@@ -1269,7 +1279,7 @@ export default function Sidebar() {
                         />
                       </div>
                     }
-                    onClick={() => setSelectedRepo(repo.name)}
+                    onClick={() => dispatch(setActiveWorkspace(repo.name))}
                   >
                     <span className="text-xs font-medium text-default-700">
                       {repo.name}
@@ -1424,7 +1434,7 @@ export default function Sidebar() {
             className={cn(
               "bg-[#FAFAFA] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
-                ? "grid grid-cols-6 gap-0.5"
+                ? "grid grid-cols-7 gap-0.5"
                 : "flex flex-col items-center gap-2"
             )}
           >

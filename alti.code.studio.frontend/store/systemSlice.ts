@@ -44,7 +44,7 @@ interface SystemState {
   connectedClouds: string[];
   repositories: RepositoryRule[];
   documents: DocumentRule[];
-
+  activeWorkspace: string | null;
 }
 
 const initialState: SystemState = {
@@ -72,7 +72,7 @@ const initialState: SystemState = {
   connectedClouds: [],
   repositories: [],
   documents: [],
-
+  activeWorkspace: "alti.code.studio",
 };
 
 export const systemSlice = createSlice({
@@ -173,7 +173,9 @@ export const systemSlice = createSlice({
         doc.isActive = !doc.isActive;
       }
     },
-
+    setActiveWorkspace: (state, action: PayloadAction<string>) => {
+      state.activeWorkspace = action.payload;
+    },
   },
 });
 
@@ -191,7 +193,7 @@ export const {
   updateDocument,
   removeDocument,
   toggleDocument,
-
+  setActiveWorkspace,
 } = systemSlice.actions;
 export const systemController = systemSlice; // Consistent naming
 export default systemSlice.reducer;

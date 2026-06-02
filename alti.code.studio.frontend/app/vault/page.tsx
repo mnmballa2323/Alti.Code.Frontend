@@ -278,7 +278,7 @@ export default function VaultPage() {
                     >
                       {/* Secret Value Section */}
                       <div>
-                        <div className="bg-[#F4F4F6] dark:bg-[#161616] border border-default-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
+                        <div className="bg-white dark:bg-[#161616] border border-default-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-default-100 dark:border-default-50/50 pb-5 mb-6">
                             <div className="flex items-center gap-3">
                               <div
@@ -358,7 +358,7 @@ export default function VaultPage() {
                       </div>
 
                       {/* Security Status Info Card */}
-                      <div className="bg-[#F4F4F6] dark:bg-[#161616] border border-default-200 rounded-3xl p-6 shadow-sm relative overflow-hidden flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
+                      <div className="bg-white dark:bg-[#161616] border border-default-200 rounded-3xl p-6 shadow-sm relative overflow-hidden flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
                         <div className="p-3 rounded-2xl bg-success-500/10 text-success border border-success-500/20 shadow-sm shrink-0">
                           <Lock size={20} />
                         </div>
@@ -372,7 +372,7 @@ export default function VaultPage() {
 
                       {/* Danger Zone */}
                       <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                        <div className="flex items-center justify-between bg-[#F4F4F6] dark:bg-[#161616] border border-danger-200 dark:border-danger-900/40 shadow-sm rounded-3xl p-6 relative overflow-hidden">
+                        <div className="flex items-center justify-between bg-white dark:bg-[#161616] border border-danger-200 dark:border-danger-900/40 shadow-sm rounded-3xl p-6 relative overflow-hidden">
                           <div className="absolute top-0 left-0 w-1 h-full bg-danger-500" />
                           <div>
                             <h3 className="text-base font-bold text-danger-600 dark:text-danger-500">
@@ -399,7 +399,7 @@ export default function VaultPage() {
             ) : (
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
                 {secrets.length === 0 ? (
-                  <div className="text-center py-20 border border-dashed border-default-200/80 rounded-3xl bg-[#F4F4F6] dark:bg-[#161616] shadow-sm">
+                  <div className="text-center py-20 border border-dashed border-default-200/80 rounded-3xl bg-white dark:bg-[#161616] shadow-sm">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4 border border-primary/20">
                       <Lock className="size-6" />
                     </div>
@@ -422,7 +422,7 @@ export default function VaultPage() {
                         <Card
                           key={secret.id}
                           isPressable
-                          className="w-full border border-default-200 bg-[#F4F4F6] dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl group"
+                          className="w-full border border-default-200 bg-white dark:bg-[#161616] hover:border-primary hover:shadow-md hover:shadow-primary/5 transition-all duration-300 rounded-3xl group"
                           shadow="sm"
                           onPress={() => setSelectedSecretId(secret.id)}
                         >
