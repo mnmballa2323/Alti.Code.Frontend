@@ -22,6 +22,7 @@ import {
   ModalBody,
   ModalFooter,
   Tooltip,
+  Input,
 } from "@heroui/react";
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
@@ -683,6 +684,8 @@ export default function Sidebar() {
         return "Instructions";
       case "/guardrails":
         return "Guardrails";
+      case "/knowledge":
+        return "Knowledge";
       case "/repositories":
         return "Repositories";
       case "/connect-apps":
@@ -742,6 +745,15 @@ export default function Sidebar() {
       },
     },
     {
+      label: "Knowledge",
+      icon: Database,
+      path: "/knowledge",
+      isActive: pathname === "/knowledge",
+      onClick: () => {
+        router.push("/knowledge");
+      },
+    },
+    {
       label: "Vault",
       icon: Lock,
       path: "/vault",
@@ -767,6 +779,7 @@ export default function Sidebar() {
     if (pathname === "/vault") return "New Vault";
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
+    if (pathname === "/knowledge") return "New Knowledge";
     if (pathname === "/repositories") return "New Repository";
     if (pathname === "/documents") return "New Documentation";
     return "New";
@@ -784,6 +797,9 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const [knowledgeFolders, setKnowledgeFolders] = useState<{ id: string; name: string }[]>(
+    [],
+  );
 
   // States and dynamic handlers for integrations / connect-apps catalog
   const [apps, setApps] = useState<AppIntegration[]>([]);
@@ -799,6 +815,7 @@ export default function Sidebar() {
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
+    router.prefetch("/knowledge");
     router.prefetch("/repositories");
     router.prefetch("/documents");
     router.prefetch("/connect-apps");
@@ -1002,6 +1019,13 @@ export default function Sidebar() {
     type: "instruction" | "guardrail";
   } | null>(null);
 
+  const {
+    isOpen: isKnowledgeModalOpen,
+    onOpen: openKnowledgeModal,
+    onClose: closeKnowledgeModal,
+  } = useDisclosure();
+  const [knowledgeFolderName, setKnowledgeFolderName] = useState("");
+
   const confirmDelete = () => {
     if (!itemToDelete) return;
     if (itemToDelete.type === "instruction") {
@@ -1046,12 +1070,18 @@ export default function Sidebar() {
       openDeleteModal();
     };
 
+    const handleOpenKnowledgeModal = () => {
+      setKnowledgeFolderName("");
+      openKnowledgeModal();
+    };
+
     window.addEventListener("add-instruction", handleAddInstruction);
     window.addEventListener("update-instruction", handleUpdateInstruction);
     window.addEventListener("delete-instruction", handleDeleteInstruction);
     window.addEventListener("add-guardrail", handleAddGuardrail);
     window.addEventListener("update-guardrail", handleUpdateGuardrail);
     window.addEventListener("delete-guardrail", handleDeleteGuardrail);
+    window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
 
 
     return () => {
@@ -1061,6 +1091,7 @@ export default function Sidebar() {
       window.removeEventListener("add-guardrail", handleAddGuardrail);
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
+      window.removeEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
     };
   }, []);
 
@@ -1360,6 +1391,10 @@ export default function Sidebar() {
                   window.dispatchEvent(
                     new CustomEvent("open-document-modal"),
                   );
+                } else if (pathname === "/knowledge") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-knowledge-modal"),
+                  );
                 } else {
                   dispatch(startNewChat());
                   router.push("/");
@@ -1371,11 +1406,11 @@ export default function Sidebar() {
           </Tooltip>
         </div>
 
-        {/* 5 navigation icons toggle container */}
+        {/* 6 navigation icons toggle container */}
         <div
           className={cn(
             isSidebarOpen
-              ? "grid grid-cols-5 gap-0.5 px-2 py-2.5 border-b border-default-200"
+              ? "grid grid-cols-6 gap-0.5 px-2 py-2.5 border-b border-default-200"
               : "flex flex-col items-center gap-2 px-1 pt-2"
           )}
         >
@@ -1686,6 +1721,36 @@ export default function Sidebar() {
                           </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
+                    </div>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/knowledge" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = knowledgeFolders.filter((kf) =>
+                    kf.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (knowledgeFolders.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                        <span className="text-xs text-default-500 font-medium">No knowledge folders yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                        <span className="text-xs text-default-500 font-medium">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((kf) => (
+                    <div
+                      key={kf.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    >
+                      <span className="truncate">{kf.name}</span>
                     </div>
                   ));
                 })()}
@@ -2106,7 +2171,68 @@ export default function Sidebar() {
         </ModalContent>
       </Modal>
 
-
+      <Modal
+        backdrop="opaque"
+        classNames={{ 
+          backdrop: "bg-black/20 backdrop-blur-sm",
+          base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[420px] p-0"
+        }}
+        hideCloseButton
+        isOpen={isKnowledgeModalOpen}
+        placement="center"
+        onClose={closeKnowledgeModal}
+      >
+        <ModalContent>
+          <div className="flex flex-col items-center pt-8 pb-6 px-6 gap-2">
+            <h2 className="text-lg font-bold text-black dark:text-white">
+              Create Knowledge Folder
+            </h2>
+            <div className="w-full mt-4">
+              <Input
+                autoFocus
+                classNames={{
+                  inputWrapper:
+                    "!bg-[#f4f4f5] dark:!bg-[#27272a] hover:!bg-[#e4e4e7] focus-within:!bg-[#f4f4f5] shadow-none",
+                }}
+                placeholder="Enter Folder Name"
+                size="md"
+                value={knowledgeFolderName}
+                variant="flat"
+                onChange={(e) => setKnowledgeFolderName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && knowledgeFolderName) {
+                    e.preventDefault();
+                    setKnowledgeFolders(prev => [...prev, { id: "kf-" + Date.now(), name: knowledgeFolderName }]);
+                    closeKnowledgeModal();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          
+          <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
+            <Button
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              disableRipple
+              onPress={closeKnowledgeModal}
+            >
+              Cancel
+            </Button>
+            <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
+            <Button
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              disableRipple
+              isDisabled={!knowledgeFolderName}
+              onPress={() => {
+                setKnowledgeFolders(prev => [...prev, { id: "kf-" + Date.now(), name: knowledgeFolderName }]);
+                closeKnowledgeModal();
+              }}
+            >
+              Create
+            </Button>
+          </div>
+        </ModalContent>
+      </Modal>
 
     </div>
   );
