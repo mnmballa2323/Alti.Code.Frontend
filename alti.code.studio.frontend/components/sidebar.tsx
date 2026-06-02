@@ -1161,7 +1161,7 @@ export default function Sidebar() {
       {/* Primary Column (Left Side Menu) */}
       <div
         className={cn(
-          "flex h-full flex-col transition-all duration-300 bg-[#F4F4F6] dark:bg-[#161616] border-r border-default-200",
+          "flex h-full flex-col transition-all duration-300 bg-white dark:bg-black border-r border-default-200",
           isSidebarOpen ? "w-64" : "w-10",
         )}
       >
@@ -1288,7 +1288,7 @@ export default function Sidebar() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
             <input
-              className="w-full bg-white dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+              className="w-full bg-[#FAFAFA] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
               placeholder="Search..."
               value={leftSidebarSearch}
               onChange={(e) => setLeftSidebarSearch(e.target.value)}
@@ -1310,7 +1310,7 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/connect-apps"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#FAFAFA] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
               )}
               size="sm"
               variant="flat"
@@ -1340,7 +1340,7 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/cloud"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-white dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#FAFAFA] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
               )}
               size="sm"
               variant="flat"
@@ -1366,7 +1366,7 @@ export default function Sidebar() {
           >
             <Button
               isIconOnly
-              className="bg-white dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              className="bg-[#FAFAFA] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
               size="sm"
               variant="flat"
               onMouseEnter={() => {
@@ -1407,13 +1407,15 @@ export default function Sidebar() {
         </div>
 
         {/* 6 navigation icons toggle container */}
-        <div
-          className={cn(
-            isSidebarOpen
-              ? "grid grid-cols-6 gap-0.5 px-2 py-2.5 border-b border-default-200"
-              : "flex flex-col items-center gap-2 px-1 pt-2"
-          )}
-        >
+        <div className={cn("border-b border-default-200", isSidebarOpen ? "px-3 py-2" : "py-2 px-1")}>
+          <div
+            className={cn(
+              "bg-[#FAFAFA] dark:bg-default-50 rounded-xl p-1",
+              isSidebarOpen
+                ? "grid grid-cols-6 gap-0.5"
+                : "flex flex-col items-center gap-2"
+            )}
+          >
           {filteredNavigationItems.map((item) => {
             const IconComponent = item.icon;
             return (
@@ -1435,7 +1437,7 @@ export default function Sidebar() {
                     isSidebarOpen ? "h-[30px] w-full rounded-md" : "h-[30px] w-[30px] rounded-md",
                     item.isActive
                       ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                      : "bg-transparent border-none text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                      : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
                   )}
                   onMouseEnter={() => {
                     router.prefetch(item.path);
@@ -1449,10 +1451,11 @@ export default function Sidebar() {
             );
           })}
           {isSidebarOpen && filteredNavigationItems.length === 0 && (
-            <div className="col-span-5 text-center py-2 text-xs text-default-400 italic">
+            <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
               No results found
             </div>
           )}
+          </div>
         </div>
 
         {!isSidebarOpen && <div className="flex-1" />}
