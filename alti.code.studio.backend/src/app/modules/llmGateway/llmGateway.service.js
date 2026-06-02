@@ -12,6 +12,7 @@ import { RulesService } from '../rules/rules.service.js';
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import { researchService } from '../research/research.service.js';
+import { triBrainService } from '../agents/tri_brain.service.js';
 
 
 /**
@@ -131,6 +132,27 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
             model: 'Deep Research',
             success: true
         };
+    }
+
+    // Tri-Brain Autonomous Consensus Interceptor (Smart Routing)
+    if (!modelName || modelName === '' || modelName === 'auto' || modelName === 'default') {
+        logger.info(`🧠 [LlmGateway] Smart Routing selected. Triggering Tri-Brain Autonomous Consensus...`);
+        try {
+            const consensus = await triBrainService.executeConsensusLoop(scrubbedPrompt);
+            const reply = `### 🧠 Tri-Cloud Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (AWS Bedrock)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (GCP Vertex)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure Foundry)**:\n${consensus.auditLog}`;
+            
+            await saveChatResponse(userId, sessionId, rawPrompt, 'Tri-Brain Swarm', reply);
+            
+            return {
+                reply,
+                sessionId,
+                model: 'Tri-Brain Swarm',
+                success: true
+            };
+        } catch (err) {
+            logger.error(`❌ [LlmGateway] Tri-Brain consensus failed: ${err.message}`);
+            // Fall back to standard routing below if consensus loop completely crashes
+        }
     }
 
 
@@ -279,9 +301,12 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
 
             // Fallback mapper for model names if they don't have the anthropic prefix
             let bedrockModelId = modelName;
-            if (bedrockModelId === 'claude-5-sonnet-20240620') bedrockModelId = 'anthropic.claude-5-sonnet-20240620-v1:0';
-            else if (bedrockModelId === 'claude-5-sonnet-20241022' || bedrockModelId === 'claude-5-sonnet-latest') bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
-            else if (!bedrockModelId.startsWith('anthropic.') && bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
+            if (!bedrockModelId.startsWith('anthropic.')) {
+                if (bedrockModelId.includes('haiku')) bedrockModelId = 'anthropic.claude-5-haiku-20241022-v1:0';
+                else if (bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
+                else if (bedrockModelId.includes('opus')) bedrockModelId = 'anthropic.claude-5-opus-20240229-v1:0';
+                else bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0'; // default fallback
+            }
 
             const response = await callWithRetry(() =>
                 anthropic.messages.create({
