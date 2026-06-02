@@ -1216,11 +1216,7 @@ export default function Sidebar() {
             >
               <DropdownTrigger>
                 <div className="relative">
-                  <div className="flex w-full items-center gap-2 pl-4 pr-3 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
-                    <Icon
-                      className="size-4 text-default-500 shrink-0"
-                      icon="solar:folder-2-linear"
-                    />
+                  <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
                     <div className="flex flex-col items-start min-w-0 flex-1">
                       <div className="flex items-center w-full">
                         <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
@@ -1310,7 +1306,7 @@ export default function Sidebar() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
             <input
-              className="w-full bg-[#FAFAFA] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
               placeholder="Search..."
               value={leftSidebarSearch}
               onChange={(e) => setLeftSidebarSearch(e.target.value)}
@@ -1332,7 +1328,7 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/connect-apps"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#FAFAFA] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
               )}
               size="sm"
               variant="flat"
@@ -1362,7 +1358,7 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/cloud"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#FAFAFA] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
               )}
               size="sm"
               variant="flat"
@@ -1388,7 +1384,7 @@ export default function Sidebar() {
           >
             <Button
               isIconOnly
-              className="bg-[#FAFAFA] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
               size="sm"
               variant="flat"
               onMouseEnter={() => {
@@ -1432,7 +1428,7 @@ export default function Sidebar() {
         <div className={cn("border-b border-default-200", isSidebarOpen ? "px-3 py-2" : "py-2 px-1")}>
           <div
             className={cn(
-              "bg-[#FAFAFA] dark:bg-default-50 rounded-xl p-1",
+              "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
                 ? "grid grid-cols-7 gap-0.5"
                 : "flex flex-col items-center gap-2"
