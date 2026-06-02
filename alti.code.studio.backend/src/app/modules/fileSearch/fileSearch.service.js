@@ -28,7 +28,7 @@ import config from '../../../../config/index.js';
 const DEFAULT_EMBEDDING_MODEL = 'models/gemini-embedding-2';
 
 /** Default generation model for File Search queries */
-const DEFAULT_GENERATION_MODEL = 'gemini-2.5-flash';
+const DEFAULT_GENERATION_MODEL = 'gemini-3.1-pro';
 
 /** Polling configuration for async operations */
 const POLL_CONFIG = Object.freeze({

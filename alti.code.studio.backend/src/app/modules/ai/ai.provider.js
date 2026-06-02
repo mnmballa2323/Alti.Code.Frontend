@@ -27,7 +27,7 @@ const PROVIDERS = {
         },
         reason: async (client, prompt, options = {}) => {
             const modelOptions = { 
-                model: options.model || 'gemini-3.1-flash',
+                model: options.model || 'gemini-3.1-pro',
                 systemInstruction: BASE_SYSTEM_PROMPT
             };
             if (options.tools && options.tools.length > 0) {
@@ -117,7 +117,7 @@ const PROVIDERS = {
         },
         reason: async (client, prompt, options = {}) => {
             const model = client.preview.getGenerativeModel({
-                model: options.model || 'gemini-3.1-flash',
+                model: options.model || 'gemini-3.1-pro',
                 systemInstruction: { parts: [{ text: BASE_SYSTEM_PROMPT }] }
             });
             const result = await model.generateContent({ contents: [{ role: 'user', parts: [{ text: prompt }] }] });

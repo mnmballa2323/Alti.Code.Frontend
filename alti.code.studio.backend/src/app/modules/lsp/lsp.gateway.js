@@ -105,8 +105,8 @@ class LspGateway {
                         logger.info(`🧠 LSP Telepathy: Triggering Vertex AI Gemini Flash prediction for ${uri}...`);
                         const prompt = `You are a sub-100ms latency autocomplete engine. Provide only the exact next lines of code to complete this buffer. Do not use markdown. Do not repeat the prompt. BUFFER:\n${newText}\n\nCOMPLETE HERE:\n`;
                         
-                        // Use gemini-3.1-flash for extreme speed
-                        const completion = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-flash', 0.2);
+                        // Use gemini-3.1-pro for extreme speed
+                        const completion = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
                         
                         if (completion && completion.content) {
                             this.pushSuggestion(uri, {

@@ -63,7 +63,7 @@ Rules:
 
 Example: ["original query", "specific technical term query", "architectural pattern query"]`;
 
-            const raw = await GoogleGenAiService.generateContent(prompt, 'gemini-2.5-flash', 0.3);
+            const raw = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.3);
             const cleaned = raw.content.replace(/^```json?\n?/m, '').replace(/\n?```$/m, '').trim();
             const expanded = JSON.parse(cleaned);
 

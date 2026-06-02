@@ -56,7 +56,7 @@ class Agent {
 
 const ProgrammerAgentModel = new Agent({
   name: 'Universal Programmer Agent',
-  model: 'gpt-4o',
+  model: 'gpt-5.5',
   instructions: systemPrompt,
 });
 

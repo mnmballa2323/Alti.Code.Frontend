@@ -56,7 +56,7 @@ class HybridRouterService {
         logger.info(`☁️ [HybridRouter] Task requires heavy intelligence. Routing to Multi-Cloud Inference System (Preferred: ${preferredProvider.toUpperCase()})...`);
         const result = await multiCloudInferenceService.executeMultiCloudInference(prompt, 'jules', { 
             preferredProvider,
-            modelId: preferredProvider === 'gcp' ? 'gemini-3.1-pro' : (preferredProvider === 'aws' ? 'claude-3-5-sonnet' : 'gpt-4o')
+            modelId: preferredProvider === 'gcp' ? 'gemini-3.1-pro' : (preferredProvider === 'aws' ? 'claude-5-sonnet' : 'gpt-5.5')
         });
         return { content: result.content, venue: result.venue };
     }

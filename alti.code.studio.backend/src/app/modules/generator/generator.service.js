@@ -63,7 +63,7 @@ const generateApp = async (prompt) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5.5',
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: prompt }
@@ -283,7 +283,7 @@ const refineProject = async (targetDir, prompt) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-5.5',
       messages: [{ role: 'system', content: systemPrompt }],
       response_format: { type: 'json_object' },
       temperature: 0.1,

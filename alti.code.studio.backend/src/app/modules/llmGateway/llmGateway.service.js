@@ -142,7 +142,7 @@ User Query: "${scrubbedPrompt}"
 
 Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a general chat, web search, or non-development question. Do not return any other text.`;
             
-            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-2.5-flash', 0.1);
+            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-3.1-pro', 0.1);
             const decision = classificationResult.content.trim().toUpperCase();
             
             if (decision.includes('RAG')) {
@@ -279,9 +279,9 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
 
             // Fallback mapper for model names if they don't have the anthropic prefix
             let bedrockModelId = modelName;
-            if (bedrockModelId === 'claude-3-5-sonnet-20240620') bedrockModelId = 'anthropic.claude-3-5-sonnet-20240620-v1:0';
-            else if (bedrockModelId === 'claude-3-5-sonnet-20241022' || bedrockModelId === 'claude-3-5-sonnet-latest') bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
-            else if (!bedrockModelId.startsWith('anthropic.') && bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+            if (bedrockModelId === 'claude-5-sonnet-20240620') bedrockModelId = 'anthropic.claude-5-sonnet-20240620-v1:0';
+            else if (bedrockModelId === 'claude-5-sonnet-20241022' || bedrockModelId === 'claude-5-sonnet-latest') bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
+            else if (!bedrockModelId.startsWith('anthropic.') && bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
 
             const response = await callWithRetry(() =>
                 anthropic.messages.create({

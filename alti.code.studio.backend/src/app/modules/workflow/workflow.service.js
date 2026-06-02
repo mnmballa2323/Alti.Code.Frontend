@@ -32,7 +32,7 @@ class WorkflowService {
 
         let compiledSteps = [];
         try {
-            const result = await GoogleGenAiService.generateContent(compilerPrompt, 'gemini-2.5-flash', 0.1);
+            const result = await GoogleGenAiService.generateContent(compilerPrompt, 'gemini-3.1-pro', 0.1);
             const cleaned = result.content.replace(/^```json?\n?/m, '').replace(/\n?```$/m, '').trim();
             compiledSteps = JSON.parse(cleaned);
         } catch (e) {
