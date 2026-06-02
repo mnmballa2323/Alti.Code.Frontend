@@ -60,7 +60,7 @@ export default function Home() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans">
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
 
 
         {/* Dynamic Content */}

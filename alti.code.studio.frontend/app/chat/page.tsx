@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Microscope } from "lucide-react";
 import { cn } from "@heroui/react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -57,7 +57,7 @@ export default function ChatHome() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans w-full">
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
 
 
         {/* Dynamic Content */}
@@ -115,7 +115,7 @@ export default function ChatHome() {
                   rightActions={
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Search
+                        <Microscope
                           className={cn(
                             "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-all active:scale-95",
                             isResearchMode
