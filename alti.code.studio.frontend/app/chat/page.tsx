@@ -97,8 +97,8 @@ export default function ChatHome() {
             </div>
           </div>
         ) : (
-          <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
-            <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
+            <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
               <div className="flex flex-col items-center text-center z-30 mb-6">
                 <h1
                   className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
