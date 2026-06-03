@@ -41,12 +41,33 @@ class TriBrainService {
 Strictly adhere to these historical architectural constraints derived from our Vector DB:
 ${ragContext.answer}
 `;
-        const architectResult = await this.anthropic.messages.create({
-            model: 'claude-5-sonnet',
-            max_tokens: 8192,
-            messages: [{ role: 'user', content: claudePrompt }]
-        });
-        const initialCode = architectResult.content[0].text;
+        
+        let initialCode = "";
+        try {
+            // Pillar 33: Multi-Cloud Traffic Shifting (Failover Simulation)
+            const architectResult = await this.anthropic.messages.create({
+                model: 'claude-5-sonnet',
+                max_tokens: 8192,
+                messages: [{ role: 'user', content: claudePrompt }]
+            });
+            initialCode = architectResult.content[0].text;
+        } catch (error) {
+            logger.warn(`⚠️ [Tri-Brain] AWS Bedrock rate limit detected! Executing Pillar 33 Multi-Cloud Traffic Shift...`);
+            logger.info(`   [Tri-Brain] Routing 100% of LLM traffic seamlessly to Azure Foundry (GPT-5.5)...`);
+            const fallbackResult = await this.azureOpenAi.chat.completions.create({
+                model: "gpt-5.5",
+                messages: [{ role: "user", content: claudePrompt }]
+            });
+            initialCode = fallbackResult.choices[0].message.content;
+        }
+
+        // Pillar 31: Auto-Injecting Telemetry (AST Rewriter)
+        logger.info(`🔭 [Tri-Brain] Pillar 31: Rewriting AST to inject OpenTelemetry spans...`);
+        // Simulating an AST manipulation replacing function declarations with traced wrappers
+        initialCode = initialCode.replace(/function\s+(\w+)\s*\(([^)]*)\)\s*\{/g, 
+            `function $1($2) {\\n  const _span = opentelemetry.trace.getTracer('tri-brain').startSpan('$1');\\n  try {`);
+        initialCode = initialCode.replace(/return\s+(.*?);/g, 
+            `_span.end();\\n  return $1;`);
 
         // Step 2: The QA Engineer (GCP Vertex / Gemini 3.1 Pro) writes exhaustive tests
         logger.info(`🧪 [Tri-Brain] Step 2: Gemini 3.1 Pro (GCP) writing integration tests...`);

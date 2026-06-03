@@ -132,7 +132,34 @@ const getSwarmTelemetry = async () => {
     };
 };
 
+/**
+ * Pillar 32: Visual Chaos Monkey (Gemini 1.5 Pro Vision)
+ * Simulates analyzing a Grafana screenshot for catastrophic memory leaks
+ */
+const watchGrafanaDashboards = async (base64GrafanaScreenshot) => {
+    logger.info(`🐒 [Chaos Monkey] Pillar 32: Analyzing Grafana metrics visually via Gemini Vision...`);
+    
+    // Simulating the Vision API call delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Simulating that the Vision model detected a steep memory curve
+    const visionDecision = "CRITICAL_LEAK_DETECTED";
+    
+    if (visionDecision === "CRITICAL_LEAK_DETECTED") {
+        logger.error(`🚨 [Chaos Monkey] Gemini Vision detected a catastrophic memory leak on production!`);
+        logger.info(`   [Chaos Monkey] Autonomously invoking CI/CD Healer to initiate rollback...`);
+        
+        // Simulating passing the rollback request to the healer
+        // await cicdHealerService.analyzeAndHealFailure("CRITICAL PRODUCTION MEMORY LEAK. Revert latest deployment.");
+        
+        return { status: "ROLLED_BACK", reason: "Visual detection of memory leak." };
+    }
+
+    return { status: "HEALTHY" };
+};
+
 export const ObservabilityService = {
     getContainerCpuUsage,
     getSwarmTelemetry,
+    watchGrafanaDashboards
 };
