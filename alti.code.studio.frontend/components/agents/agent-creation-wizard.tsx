@@ -21,12 +21,6 @@ import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 const STEPS = [
   { id: "name", label: "NAME", icon: User, title: "Enter Project Name" },
   {
-    id: "description",
-    label: "DESCRIPTION",
-    icon: AlignLeft,
-    title: "Enter Description",
-  },
-  {
     id: "instructions",
     label: "INSTRUCTIONS",
     icon: FileText,
@@ -52,7 +46,6 @@ export default function AgentCreationWizard({
 
   // Form State
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState<
     { id: string; text: string; date: string }[]
   >([]);
@@ -68,7 +61,7 @@ export default function AgentCreationWizard({
     if (currentStep < STEPS.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
-      onComplete({ name, description, instructions, guardrails });
+      onComplete({ name, description: "", instructions, guardrails });
     }
   };
 
@@ -111,7 +104,7 @@ export default function AgentCreationWizard({
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto h-full px-6 relative">
       {/* Stepper Header (Absolute positioned at the top) */}
-      {currentStep < 5 && (
+      {currentStep < 4 && (
         <div className="absolute top-0 left-0 right-0 w-full pt-16 px-2 z-40">
           <div className="relative flex items-start justify-between w-full max-w-4xl mx-auto">
             {/* Dynamic Background Line */}
@@ -209,43 +202,8 @@ export default function AgentCreationWizard({
               </div>
             )}
 
-            {/* Step 2: DESCRIPTION */}
+            {/* Step 2: INSTRUCTIONS */}
             {currentStep === 1 && (
-              <div className="relative w-full flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow focus-within:shadow-[0_2px_15px_rgba(0,0,0,0.05)] focus-within:border-gray-300">
-                <button
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 bg-black text-white hover:bg-gray-800 ml-1 shadow-sm"
-                  onClick={handleBack}
-                >
-                  <ChevronLeft size={16} strokeWidth={2.5} />
-                </button>
-                <input
-                  autoFocus
-                  className="flex-1 bg-transparent border-none outline-none px-4 py-2 text-[15px] text-gray-900 placeholder:text-gray-400"
-                  placeholder="Enter description..."
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  onKeyDown={(e) =>
-                    e.key === "Enter" && description.trim() && handleNext()
-                  }
-                />
-                <button
-                  className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 disabled:opacity-50",
-                    description.trim()
-                      ? "bg-black text-white hover:bg-gray-800"
-                      : "bg-gray-100 text-gray-400",
-                  )}
-                  disabled={!description.trim()}
-                  onClick={handleNext}
-                >
-                  <ArrowUp size={16} strokeWidth={3} />
-                </button>
-              </div>
-            )}
-
-            {/* Step 3: INSTRUCTIONS */}
-            {currentStep === 2 && (
               <div className="flex flex-col gap-4">
                 {/* Input Form */}
                 <div className="relative w-full flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow focus-within:shadow-[0_2px_15px_rgba(0,0,0,0.05)] focus-within:border-gray-300">
@@ -312,8 +270,8 @@ export default function AgentCreationWizard({
               </div>
             )}
 
-            {/* Step 4: GUARDRAILS */}
-            {currentStep === 3 && (
+            {/* Step 3: GUARDRAILS */}
+            {currentStep === 2 && (
               <div className="flex flex-col gap-4">
                 {/* Input Form */}
                 <div className="relative w-full flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow focus-within:shadow-[0_2px_15px_rgba(0,0,0,0.05)] focus-within:border-gray-300">
@@ -379,8 +337,8 @@ export default function AgentCreationWizard({
               </div>
             )}
 
-            {/* Step 5: DATA */}
-            {currentStep === 4 && (
+            {/* Step 4: DATA */}
+            {currentStep === 3 && (
               <div className="flex flex-col gap-4">
                 {/* File Upload Form */}
                 <div
@@ -458,14 +416,14 @@ export default function AgentCreationWizard({
               </div>
             )}
 
-            {/* Step 6: PUBLISH */}
-            {currentStep === 5 && (
+            {/* Step 5: PUBLISH */}
+            {currentStep === 4 && (
               <div 
                 className="relative w-full flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-[0_2px_15px_rgba(0,0,0,0.05)] hover:border-gray-300 animate-in fade-in slide-in-from-bottom-4 duration-500 cursor-pointer group"
                 onClick={() => {
                   onComplete({
                     name,
-                    description,
+                    description: "",
                     instructions,
                     guardrails,
                     files,
@@ -495,7 +453,7 @@ export default function AgentCreationWizard({
                     e.stopPropagation();
                     onComplete({
                       name,
-                      description,
+                      description: "",
                       instructions,
                       guardrails,
                       files,
@@ -508,8 +466,8 @@ export default function AgentCreationWizard({
               </div>
             )}
 
-            {/* Next Button (Only for steps >= 2 and < 5) */}
-            {currentStep >= 2 && currentStep < 5 && (
+            {/* Next Button (Only for steps >= 1 and < 4) */}
+            {currentStep >= 1 && currentStep < 4 && (
               <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-[#f4f4f6] via-[#f4f4f6] to-transparent pt-8 pb-4 flex justify-center z-50 pointer-events-none px-6">
                 <div className="w-full max-w-2xl flex justify-end">
                   <button
