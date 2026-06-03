@@ -377,7 +377,7 @@ export default function VaultPage() {
 
                   {/* Thin Button */}
                   <button
-                    className="w-full bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-gray-900 dark:hover:bg-gray-100 transition-all font-medium text-sm text-white dark:text-black"
+                    className="w-full mt-2 bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-gray-900 dark:hover:bg-gray-100 transition-all font-medium text-sm text-white dark:text-black"
                     onClick={() => handleSave(() => {})}
                   >
                     {editingSecretId ? "Update Secret" : "Save Secret"}
