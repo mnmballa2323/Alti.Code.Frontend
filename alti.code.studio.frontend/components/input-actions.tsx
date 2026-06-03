@@ -287,24 +287,12 @@ function PromptInputFullLineComponent({
       case "":
       case "auto":
         return "Smart Routing";
-      case "gemini-3.1-flash":
-        return "Gemini 3.1 Flash";
-      case "gemini-3.1-pro":
-        return "Gemini 3.1 Pro";
-      case "gemini-omni":
-        return "Gemini Omni";
-      case "claude-5-haiku":
-        return "Claude 5 Haiku";
-      case "claude-5-sonnet":
-        return "Claude 5 Sonnet";
-      case "claude-5-opus":
-        return "Claude 5 Opus";
-      case "gpt-5.5-instant":
-        return "GPT-5.5 Instant";
-      case "gpt-5.5":
-        return "GPT-5.5";
-      case "gpt-5.5-pro":
-        return "GPT-5.5 Pro";
+      case "gcp-gemini-1.5-pro":
+        return "Gemini 1.5 Pro (GCP)";
+      case "aws-claude-3.5-sonnet":
+        return "Claude 3.5 Sonnet (AWS)";
+      case "azure-gpt-4o":
+        return "GPT-4o (Azure)";
       default:
         return "Smart Routing";
     }
@@ -588,7 +576,7 @@ function PromptInputFullLineComponent({
                 </DropdownSection>
 
                 <DropdownSection
-                  title="GEMINI"
+                  title="GCP VERTEX AI"
                   className="mb-0.5 last:mb-0"
                   classNames={{
                     heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
@@ -596,42 +584,20 @@ function PromptInputFullLineComponent({
                   }}
                 >
                   <DropdownItem
-                    key="gemini-3.1-flash"
-                    textValue="Gemini 3.1 Flash"
-                    onPress={() => setDefaultModel("gemini-3.1-flash")}
+                    key="gcp-gemini-1.5-pro"
+                    textValue="Gemini 1.5 Pro"
+                    onPress={() => setDefaultModel("gcp-gemini-1.5-pro")}
                     className="rounded-lg px-2 py-1 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
                   >
                     <div className="flex items-center gap-2 text-left">
                       <Icon className="size-3.5 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <span className="text-[11px] font-medium text-foreground">Gemini 3.1 Flash</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gemini-3.1-pro"
-                    textValue="Gemini 3.1 Pro"
-                    onPress={() => setDefaultModel("gemini-3.1-pro")}
-                    className="rounded-lg px-2 py-1 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <span className="text-[11px] font-medium text-foreground">Gemini 3.1 Pro</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gemini-omni"
-                    textValue="Gemini Omni"
-                    onPress={() => setDefaultModel("gemini-omni")}
-                    className="rounded-lg px-2 py-1 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <span className="text-[11px] font-medium text-foreground">Gemini Omni</span>
+                      <span className="text-[11px] font-medium text-foreground">Gemini 1.5 Pro</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
-                  title="CLAUDE"
+                  title="AWS BEDROCK"
                   className="mb-0.5 last:mb-0"
                   classNames={{
                     heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
@@ -639,42 +605,20 @@ function PromptInputFullLineComponent({
                   }}
                 >
                   <DropdownItem
-                    key="claude-5-haiku"
-                    textValue="Claude 5 Haiku"
-                    onPress={() => setDefaultModel("claude-5-haiku")}
+                    key="aws-claude-3.5-sonnet"
+                    textValue="Claude 3.5 Sonnet"
+                    onPress={() => setDefaultModel("aws-claude-3.5-sonnet")}
                     className="rounded-lg px-2 py-1 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
                   >
                     <div className="flex items-center gap-2 text-left">
                       <Icon className="size-3.5 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <span className="text-[11px] font-medium text-foreground">Claude 5 Haiku</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-5-sonnet"
-                    textValue="Claude 5 Sonnet"
-                    onPress={() => setDefaultModel("claude-5-sonnet")}
-                    className="rounded-lg px-2 py-1 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <span className="text-[11px] font-medium text-foreground">Claude 5 Sonnet</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-5-opus"
-                    textValue="Claude 5 Opus"
-                    onPress={() => setDefaultModel("claude-5-opus")}
-                    className="rounded-lg px-2 py-1 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <span className="text-[11px] font-medium text-foreground">Claude 5 Opus</span>
+                      <span className="text-[11px] font-medium text-foreground">Claude 3.5 Sonnet</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
-                  title="GPT"
+                  title="AZURE OPENAI FOUNDRY"
                   className="mb-0 last:mb-0"
                   classNames={{
                     heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
@@ -682,36 +626,14 @@ function PromptInputFullLineComponent({
                   }}
                 >
                   <DropdownItem
-                    key="gpt-5.5-instant"
-                    textValue="GPT-5.5 Instant"
-                    onPress={() => setDefaultModel("gpt-5.5-instant")}
+                    key="azure-gpt-4o"
+                    textValue="GPT-4o"
+                    onPress={() => setDefaultModel("azure-gpt-4o")}
                     className="rounded-lg px-2 py-1 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
                   >
                     <div className="flex items-center gap-2 text-left">
                       <Icon className="size-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <span className="text-[11px] font-medium text-foreground">GPT-5.5 Instant</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.5"
-                    textValue="GPT-5.5"
-                    onPress={() => setDefaultModel("gpt-5.5")}
-                    className="rounded-lg px-2 py-1 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <span className="text-[11px] font-medium text-foreground">GPT-5.5</span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.5-pro"
-                    textValue="GPT-5.5 Pro"
-                    onPress={() => setDefaultModel("gpt-5.5-pro")}
-                    className="rounded-lg px-2 py-1 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <span className="text-[11px] font-medium text-foreground">GPT-5.5 Pro</span>
+                      <span className="text-[11px] font-medium text-foreground">GPT-4o</span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>

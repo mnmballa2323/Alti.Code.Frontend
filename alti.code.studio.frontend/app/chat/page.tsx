@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Search, Microscope } from "lucide-react";
 import { cn } from "@heroui/react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
@@ -23,6 +23,7 @@ export default function ChatHome() {
   const { data: session } = useSession();
   const token = session?.user?.accessToken ?? null;
   const sessionId = useAppSelector((state) => state.messages.sessionId);
+  const { defaultModel } = useSettingsStore();
   const isChatting = useAppSelector((state) => state.messages.isChatting);
 
   const [isResearchMode, setIsResearchMode] = useState(false);
@@ -45,7 +46,7 @@ export default function ChatHome() {
     dispatch(
       sendMessage({
         prompt,
-        model: isResearchMode ? "Deep Research" : (mode || "Agent"),
+        model: isResearchMode ? "Deep Research" : (defaultModel || mode || "Smart Routing"),
         domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
         language,
         sessionId: sessionId,
@@ -110,6 +111,7 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
+                  showModelDropdown={true}
                   placeholder="Enter prompt here..."
                   onSend={handleFirstMessageSend}
                   rightActions={

@@ -49,22 +49,22 @@ const initialSecrets: SecretEntry[] = [
   {
     id: "sec-1",
     name: "Primary Build Agent",
-    service: "GitHub",
-    key: "ghp_xYz123AlphaOmegaSecretKey",
+    service: "AWS Bedrock",
+    key: "AKIAIOSFODNN7EXAMPLE",
     lastUsed: "2 mins ago",
   },
   {
     id: "sec-2",
     name: "Synapse Production Analytics",
-    service: "Azure",
+    service: "Azure OpenAI Foundry",
     key: "az_prod_eu_west_98127398123",
     lastUsed: "1 hour ago",
   },
   {
     id: "sec-3",
     name: "Telepathy Inference",
-    service: "OpenAI",
-    key: "sk-proj-781263871263871263",
+    service: "GCP Vertex AI",
+    key: "gcp_vtx_781263871263871263",
     lastUsed: "Just now",
   },
 ];
@@ -75,13 +75,17 @@ const serviceConfig: Record<string, { icon: any; color: string }> = {
     color:
       "text-default-700 dark:text-default-300 bg-default-100 dark:bg-default-800",
   },
-  Azure: {
+  "AWS Bedrock": {
     icon: Cloud,
-    color: "text-primary-600 bg-primary-100 dark:bg-primary-900/30",
+    color: "text-warning-600 bg-warning-100 dark:bg-warning-900/30",
   },
-  OpenAI: {
+  "GCP Vertex AI": {
     icon: Server,
     color: "text-success-600 bg-success-100 dark:bg-success-900/30",
+  },
+  "Azure OpenAI Foundry": {
+    icon: Cloud,
+    color: "text-primary-600 bg-primary-100 dark:bg-primary-900/30",
   },
   Default: { icon: KeyRound, color: "text-default-500 bg-default-100" },
 };
@@ -96,11 +100,14 @@ const detectService = (name: string, key: string, currentService?: string): stri
   if (lowerKey.startsWith("ghp_") || lowerName.includes("github")) {
     return "GitHub";
   }
-  if (lowerKey.startsWith("sk-") || lowerName.includes("openai") || lowerName.includes("gpt") || lowerName.includes("anthropic") || lowerName.includes("claude")) {
-    return "OpenAI";
+  if (lowerKey.startsWith("akia") || lowerName.includes("aws") || lowerName.includes("bedrock") || lowerName.includes("claude")) {
+    return "AWS Bedrock";
   }
-  if (lowerKey.startsWith("az_") || lowerName.includes("azure") || lowerName.includes("microsoft")) {
-    return "Azure";
+  if (lowerKey.startsWith("az_") || lowerName.includes("azure") || lowerName.includes("microsoft") || lowerName.includes("gpt")) {
+    return "Azure OpenAI Foundry";
+  }
+  if (lowerKey.startsWith("gcp_") || lowerName.includes("gcp") || lowerName.includes("google") || lowerName.includes("vertex") || lowerName.includes("gemini")) {
+    return "GCP Vertex AI";
   }
   
   return "Custom";

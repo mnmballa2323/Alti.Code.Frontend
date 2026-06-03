@@ -657,9 +657,9 @@ export default function Sidebar() {
   const selectedRepo = useSelector((state: RootState) => state.system.activeWorkspace) || "alti.code.studio";
 
   const [vaultSecrets, setVaultSecrets] = useState([
-    { id: "sec-1", name: "Primary Build Agent" },
-    { id: "sec-2", name: "Synapse Production Analytics" },
-    { id: "sec-3", name: "Telepathy Inference" },
+    { id: "sec-1", name: "Primary Build Agent", service: "AWS Bedrock" },
+    { id: "sec-2", name: "Synapse Production Analytics", service: "Azure OpenAI Foundry" },
+    { id: "sec-3", name: "Telepathy Inference", service: "GCP Vertex AI" },
   ]);
 
   useEffect(() => {

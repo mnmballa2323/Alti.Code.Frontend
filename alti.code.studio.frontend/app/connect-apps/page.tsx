@@ -1150,7 +1150,7 @@ export default function ConnectAppsPage() {
                       </div>
 
                       {/* Dual Bottom Cards */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full text-left">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-left">
                         <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
                           <div className="flex items-center gap-2 text-primary">
                             <Icon icon="solar:shield-keyhole-bold" className="text-xl" />
@@ -1172,6 +1172,18 @@ export default function ConnectAppsPage() {
                           </div>
                           <p className="text-xs text-default-500 leading-normal">
                             Universal OAuth management handles complex authentications seamlessly.
+                          </p>
+                        </div>
+
+                        <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
+                          <div className="flex items-center gap-2 text-success">
+                            <Icon icon="solar:verified-check-bold" className="text-xl" />
+                            <span className="text-xs font-bold uppercase tracking-wider">
+                              Data Privacy Guarantee
+                            </span>
+                          </div>
+                          <p className="text-xs text-default-500 leading-normal">
+                            SOC2/HIPAA compliant architecture. Zero data retention and strict no-training policies enforced.
                           </p>
                         </div>
                       </div>

@@ -341,68 +341,76 @@ export default function CloudPage() {
         const data = await telemetryRes.json();
         setTelemetry(data);
       } else {
+        let workloads = [];
+        if (selectedProvider?.includes("Amazon") || selectedProvider?.includes("AWS")) {
+          workloads = [
+            { id: `i-${Math.floor(Math.random() * 10000000)}`, name: "EC2 Inference Fleet", status: "Running", region: "us-east-1", cpu: "65%" },
+            { id: `bedrock-${Math.floor(Math.random() * 1000)}`, name: "Bedrock Claude 3.5 Sonnet", status: "Running", region: "us-west-2", cpu: "82%" },
+            { id: `ddb-${Math.floor(Math.random() * 1000)}`, name: "DynamoDB Global Table", status: "Running", region: "eu-central-1", cpu: "20%" },
+          ];
+        } else if (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP")) {
+          workloads = [
+            { id: `gk-${Math.floor(Math.random() * 100000)}`, name: "GKE AI Cluster", status: "Running", region: "us-central1", cpu: "45%" },
+            { id: `vertex-${Math.floor(Math.random() * 1000)}`, name: "Vertex AI Gemini 1.5 Pro", status: "Running", region: "europe-west1", cpu: "78%" },
+            { id: `bq-${Math.floor(Math.random() * 1000)}`, name: "BigQuery Data Lake", status: "Running", region: "asia-northeast1", cpu: "12%" },
+          ];
+        } else if (selectedProvider?.includes("Azure")) {
+          workloads = [
+            { id: `vmss-${Math.floor(Math.random() * 10000)}`, name: "AKS Workload Nodes", status: "Running", region: "eastus", cpu: "55%" },
+            { id: `openai-${Math.floor(Math.random() * 1000)}`, name: "Azure OpenAI GPT-4o Foundry", status: "Running", region: "westeurope", cpu: "88%" },
+            { id: `cosmos-${Math.floor(Math.random() * 1000)}`, name: "CosmosDB Multi-Write", status: "Running", region: "japaneast", cpu: "18%" },
+          ];
+        } else {
+          workloads = [
+            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Production Database Cluster", status: "Running", region: "us-east-1", cpu: "45%" },
+            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "AI Inference Gateway", status: "Running", region: "eu-west-3", cpu: "82%" },
+            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Edge Caching Nodes", status: "Running", region: "ap-northeast-1", cpu: "12%" },
+          ];
+        }
         setTelemetry({
           nodes: Math.floor(Math.random() * 50) + 1,
           storage: (Math.random() * 5).toFixed(1) + " TB",
           egress: Math.floor(Math.random() * 1000) + " GB/mo",
           status: "HEALTHY",
-          workloads: [
-            {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "Production Database Cluster",
-              status: "Running",
-              region: "us-east-1",
-              cpu: "45%",
-            },
-            {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "AI Inference Gateway",
-              status: "Running",
-              region: "eu-west-3",
-              cpu: "82%",
-            },
-            {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "Edge Caching Nodes",
-              status: "Running",
-              region: "ap-northeast-1",
-              cpu: "12%",
-            },
-          ],
+          workloads: workloads,
         });
       }
     } catch (error) {
       console.error(error);
       setIsModalOpen(false);
       setIsAuthenticated(true);
+      let workloads = [];
+      if (selectedProvider?.includes("Amazon") || selectedProvider?.includes("AWS")) {
+        workloads = [
+          { id: `i-${Math.floor(Math.random() * 10000000)}`, name: "EC2 Inference Fleet", status: "Running", region: "us-east-1", cpu: "65%" },
+          { id: `bedrock-${Math.floor(Math.random() * 1000)}`, name: "Bedrock Claude 3.5 Sonnet", status: "Running", region: "us-west-2", cpu: "82%" },
+          { id: `ddb-${Math.floor(Math.random() * 1000)}`, name: "DynamoDB Global Table", status: "Running", region: "eu-central-1", cpu: "20%" },
+        ];
+      } else if (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP")) {
+        workloads = [
+          { id: `gk-${Math.floor(Math.random() * 100000)}`, name: "GKE AI Cluster", status: "Running", region: "us-central1", cpu: "45%" },
+          { id: `vertex-${Math.floor(Math.random() * 1000)}`, name: "Vertex AI Gemini 1.5 Pro", status: "Running", region: "europe-west1", cpu: "78%" },
+          { id: `bq-${Math.floor(Math.random() * 1000)}`, name: "BigQuery Data Lake", status: "Running", region: "asia-northeast1", cpu: "12%" },
+        ];
+      } else if (selectedProvider?.includes("Azure")) {
+        workloads = [
+          { id: `vmss-${Math.floor(Math.random() * 10000)}`, name: "AKS Workload Nodes", status: "Running", region: "eastus", cpu: "55%" },
+          { id: `openai-${Math.floor(Math.random() * 1000)}`, name: "Azure OpenAI GPT-4o Foundry", status: "Running", region: "westeurope", cpu: "88%" },
+          { id: `cosmos-${Math.floor(Math.random() * 1000)}`, name: "CosmosDB Multi-Write", status: "Running", region: "japaneast", cpu: "18%" },
+        ];
+      } else {
+        workloads = [
+          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Production Database Cluster", status: "Running", region: "us-east-1", cpu: "45%" },
+          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "AI Inference Gateway", status: "Running", region: "eu-west-3", cpu: "82%" },
+          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Edge Caching Nodes", status: "Running", region: "ap-northeast-1", cpu: "12%" },
+        ];
+      }
       setTelemetry({
         nodes: Math.floor(Math.random() * 50) + 1,
         storage: (Math.random() * 5).toFixed(1) + " TB",
         egress: Math.floor(Math.random() * 1000) + " GB/mo",
         status: "HEALTHY",
-        workloads: [
-          {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "Production Database Cluster",
-            status: "Running",
-            region: "us-east-1",
-            cpu: "45%",
-          },
-          {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "AI Inference Gateway",
-            status: "Running",
-            region: "eu-west-3",
-            cpu: "82%",
-          },
-          {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "Edge Caching Nodes",
-            status: "Running",
-            region: "ap-northeast-1",
-            cpu: "12%",
-          },
-        ],
+        workloads: workloads,
       });
     } finally {
       setIsAuthenticating(false);

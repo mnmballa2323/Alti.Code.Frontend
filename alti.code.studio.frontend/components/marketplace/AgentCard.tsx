@@ -123,12 +123,28 @@ export function AgentCard({
             {agent.description}
           </p>
 
-          <div className="mt-4 flex items-center gap-2 text-xs text-default-500">
+          <div className="mt-4 flex items-center gap-2 text-xs text-default-500 flex-wrap">
             <Icon
               className="text-primary/70"
               icon="solar:download-minimalistic-bold"
             />
             <span>{agent.downloads.toLocaleString()} installs</span>
+            
+            {(() => {
+              const hash = agent.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              const providers = [
+                { name: "AWS Bedrock", color: "text-warning-500 bg-warning-500/10 border-warning-500/20" },
+                { name: "GCP Vertex AI", color: "text-success-500 bg-success-500/10 border-success-500/20" },
+                { name: "Azure Foundry", color: "text-primary-500 bg-primary-500/10 border-primary-500/20" }
+              ];
+              const cloud = providers[hash % providers.length];
+              return (
+                <Chip size="sm" variant="flat" className={`text-[9px] border ${cloud.color}`}>
+                  Powered by {cloud.name}
+                </Chip>
+              );
+            })()}
+
             <span className="ml-auto">
               <Chip
                 className="bg-white/5 text-[10px] text-default-400"
