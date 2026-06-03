@@ -345,7 +345,7 @@ export default function VaultPage() {
                     );
                   })
               ) : (
-                <div className="flex w-full flex-col gap-4 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+                <div className="flex w-full flex-col gap-4 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both mb-[-88px]">
                   {/* Thin Name Input */}
                   <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
                     <input
