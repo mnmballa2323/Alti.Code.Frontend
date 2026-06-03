@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { Button } from "@heroui/button";
 import ChatBotLayout from "@/components/ChatbotLayout";
-import { UploadCloud, Paperclip, Search, FileText, Trash2, Shield } from "lucide-react";
+import { UploadCloud, Paperclip, Search, FileText, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 function KnowledgePageContent() {
@@ -58,18 +58,6 @@ function KnowledgePageContent() {
         ) : (
           <div className="flex flex-col items-center justify-start pt-20 h-full animate-in fade-in zoom-in duration-300 w-full">
             <div className="flex w-full flex-col gap-4 max-w-3xl">
-              
-              <div className="bg-danger-50/50 dark:bg-danger-500/10 border-l-4 border-danger p-4 rounded-r-xl w-full">
-                <div className="flex items-center gap-2 mb-1">
-                  <Shield className="text-danger w-4 h-4" />
-                  <h3 className="text-danger font-bold text-sm tracking-wide uppercase">
-                    [!WARNING] HARD LAW
-                  </h3>
-                </div>
-                <p className="text-danger-800 dark:text-danger-200 text-xs font-medium">
-                  The entire system MUST strictly adhere to the Tri-Cloud Inference Strategy. There are absolutely NO EXCEPTIONS. Direct SDK connections to foundational models are blocked and forbidden for security reasons. All Vector ingestion goes through Tri-Cloud.
-                </p>
-              </div>
               
               {/* Thin Upload Box */}
               <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all border border-gray-100 dark:border-gray-800">

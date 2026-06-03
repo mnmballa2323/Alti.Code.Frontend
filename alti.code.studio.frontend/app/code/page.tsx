@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
-import { Shield } from "lucide-react";
 
 import { API_URL } from "@/lib/config";
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -156,26 +155,14 @@ export default function CodeStudioPage() {
               />
             ) : (
               <div className="flex bg-[#0d1117] flex-col items-center justify-start h-full text-gray-500 overflow-y-auto w-full p-8">
-                <div className="text-center mb-8 mt-4 flex flex-col items-center">
+                <div className="text-center mb-8 mt-4">
                   <h3 className="text-2xl font-semibold text-gray-200">
                     Alti.Code.Studio Epic
                   </h3>
-                  <p className="text-sm mt-2 max-w-lg mx-auto mb-6">
+                  <p className="text-sm mt-2 max-w-lg mx-auto">
                     Select a file from the explorer to edit, or deploy an
                     autonomous enterprise integration specialist below.
                   </p>
-
-                  <div className="bg-red-500/10 border-l-4 border-red-500 p-4 rounded-r-xl w-full max-w-lg text-left">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Shield className="text-red-500 w-4 h-4" />
-                      <h3 className="text-red-500 font-bold text-xs tracking-wide uppercase">
-                        [!WARNING] HARD LAW
-                      </h3>
-                    </div>
-                    <p className="text-red-200 text-xs font-medium">
-                      All autonomous specialists deployed here MUST route through the Tri-Cloud Inference Strategy (AWS Bedrock, GCP Vertex AI, Azure OpenAI Foundry). Direct SDKs are forbidden.
-                    </p>
-                  </div>
                 </div>
                 <div className="w-full max-w-6xl">
                   <EnterpriseConnectors

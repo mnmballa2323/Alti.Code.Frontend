@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, Input, Textarea } from "@heroui/react";
-import { BookOpen, Globe, Eye, EyeOff, Shield } from "lucide-react";
+import { BookOpen, Globe, Eye, EyeOff } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
@@ -104,18 +104,6 @@ export default function Documents() {
         {/* Main Content (Centered Form) */}
         <div className="flex-1 overflow-y-auto w-full pt-6 pb-12 px-6 flex justify-center">
           <div className="w-full max-w-2xl flex flex-col gap-8">
-            <div className="bg-danger-50/50 dark:bg-danger-500/10 border-l-4 border-danger p-4 rounded-r-xl">
-              <div className="flex items-center gap-2 mb-1">
-                <Shield className="text-danger w-4 h-4" />
-                <h3 className="text-danger font-bold text-sm tracking-wide uppercase">
-                  [!WARNING] HARD LAW
-                </h3>
-              </div>
-              <p className="text-danger-800 dark:text-danger-200 text-xs font-medium">
-                The entire system MUST strictly adhere to the Tri-Cloud Inference Strategy. There are absolutely NO EXCEPTIONS. Direct SDK connections to foundational models are blocked and forbidden for security reasons. All Document custom instructions and guardrails must enforce this.
-              </p>
-            </div>
-            
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium text-default-700">
