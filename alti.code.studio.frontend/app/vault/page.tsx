@@ -257,8 +257,8 @@ export default function VaultPage() {
   return (
     <ChatBotLayout isRightSidebarOpenByDefault={false}>
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
-        <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
-          <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
+        <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
+          <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
             <div className="flex flex-col items-center text-center z-30 mb-6">
               <h1
                 className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
@@ -345,7 +345,7 @@ export default function VaultPage() {
                     );
                   })
               ) : (
-                <div className="flex w-full flex-col gap-4 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both mb-[-88px]">
+                <div className="flex w-full flex-col gap-4 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
                   {/* Thin Name Input */}
                   <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
                     <input

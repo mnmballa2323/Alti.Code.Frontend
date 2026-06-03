@@ -60,12 +60,12 @@ export default function Instructions() {
       <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
 
 
-        <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
+        <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-10 pointer-events-none blur-sm mix-blend-screen">
             <AgentCommandCenter />
           </div>
 
-          <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
+          <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
             <div className="flex flex-col items-center text-center z-30 mb-6">
               <h1
                 className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
