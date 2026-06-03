@@ -81,9 +81,9 @@ const vertexVectorSearchClient = new IndexEndpointServiceClient({
     }
 
     /**
-     * Phase 5 & 6: EXTREME RAG + God-Tier Caching & Routing
+     * Phase 5, 6, 8: EXTREME RAG + God-Tier Caching, Routing, RBAC, and Streaming
      */
-    async queryKnowledgeBase(userPrompt) {
+    async queryKnowledgeBase(userPrompt, userContext = { role: 'engineer', id: 'usr_123' }, onTokenStream = null) {
         logger.info(`⚡ [Tri-Cloud RAG] Pillar 15: Checking GCP Memorystore (Redis) for Semantic Cache hits...`);
         const cacheHit = await this._checkSemanticCache(userPrompt);
         if (cacheHit) {
@@ -121,7 +121,8 @@ const vertexVectorSearchClient = new IndexEndpointServiceClient({
             }));
             const queryVector = JSON.parse(new TextDecoder().decode(queryEmbeddingResponse.body)).embedding;
 
-            const retrievedChunks = await this._queryVertexHybridSearch(queryVector, searchQueries[0], 25);
+            // Pillar 21: Vector-Level RBAC injected here
+            const retrievedChunks = await this._queryVertexHybridSearch(queryVector, searchQueries[0], 25, userContext);
             accumulatedContext.push(...retrievedChunks);
 
             const needsMoreInfo = currentHop < maxHops;
@@ -148,16 +149,26 @@ ${accumulatedContext.map((c, i) => `[Chunk ${i+1}]: ${c}`).join('\\n\\n')}
 Provide your synthesized answer below:
 `;
 
-        const initialCompletion = await azureOpenAi.chat.completions.create({
+        // Pillar 20: Real-Time Stream Tokenization
+        logger.info(`🌊 [Tri-Cloud RAG] Pillar 20: Streaming Azure GPT-5.5 tokens to client in real-time...`);
+        const stream = await azureOpenAi.chat.completions.create({
             model: "gpt-5.5-pro",
             messages: [{ role: "user", content: synthesisPrompt }],
             temperature: 0.1, 
+            stream: true // Enabled Streaming
         });
 
-        const initialAnswer = initialCompletion.choices[0].message.content;
+        let fullAnswer = "";
+        for await (const chunk of stream) {
+            const token = chunk.choices[0]?.delta?.content || "";
+            fullAnswer += token;
+            if (onTokenStream) {
+                onTokenStream(token); // Fire callback for SSE integration
+            }
+        }
 
         logger.info(`🛡️ [Tri-Cloud RAG] Pillar 13: Hallucination Auditor & Confidence Scoring (Azure)...`);
-        const auditResult = await this._auditAndScoreHallucinations(userPrompt, initialAnswer, accumulatedContext);
+        const auditResult = await this._auditAndScoreHallucinations(userPrompt, fullAnswer, accumulatedContext);
         
         logger.info(`✅ [Tri-Cloud RAG] Extreme RAG complete. Confidence: ${auditResult.confidenceScore}%`);
         
