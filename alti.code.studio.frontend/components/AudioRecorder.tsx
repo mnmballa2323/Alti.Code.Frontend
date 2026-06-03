@@ -11,8 +11,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function AudioRecorder({
   setMessage,
+  className,
 }: {
   setMessage: (message: any) => void;
+  className?: string;
 }) {
   const { data } = useSession();
   const [recording, setRecording] = useState(false);
@@ -154,12 +156,12 @@ export default function AudioRecorder({
         </div>
       )}
       {loadingText && !recording ? (
-        <LoaderCircle className="size-6 flex-none animate-spin cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white" />
+        <LoaderCircle className={className || "size-6 flex-none animate-spin cursor-pointer rounded-xl border-2 border-gray-300 bg-black p-0.5 text-white"} />
       ) : !recording && !loadingText ? (
         <Tooltip>
           <TooltipTrigger asChild>
             <Mic
-              className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+              className={className || "size-6 flex-none cursor-pointer rounded-xl border-2 border-gray-300 bg-black p-0.5 text-white"}
               onClick={startRecording}
             />
           </TooltipTrigger>
@@ -174,7 +176,7 @@ export default function AudioRecorder({
             onClick={handleCancelRecording}
           />
           <ArrowUp
-            className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white"
+            className={className || "size-6 flex-none cursor-pointer rounded-xl border-2 border-gray-300 bg-black p-0.5 text-white"}
             onClick={stopRecording}
           />
         </div>

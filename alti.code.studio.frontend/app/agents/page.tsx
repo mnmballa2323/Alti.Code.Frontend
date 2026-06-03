@@ -2,11 +2,13 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { useDispatch } from "react-redux";
-import { Bot, Sparkles, Send, CheckCircle2 } from "lucide-react";
+import { Bot, Sparkles, Send, CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import AgentCreationWizard from "@/components/agents/agent-creation-wizard";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
+import AgentRightSidebar from "@/components/agent-right-sidebar";
+import AudioRecorder from "@/components/AudioRecorder";
 import { AppDispatch } from "@/store";
 
 // Mock Action Block component for UI demonstration
@@ -148,41 +150,42 @@ function AgentPageContent() {
               }}
             />
           </div>
-        ) : mockMessages.length === 0 ? (
-          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden animate-in fade-in duration-300">
-            <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
-              <div className="flex flex-col items-center text-center z-30 mb-6">
-                <h1
-                  className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
-                  style={{ fontFamily: "var(--font-secondary)" }}
-                >
-                  {agentName}
-                </h1>
-              </div>
-
-              <div className="flex w-full flex-col gap-4 max-w-2xl">
-                <PromptInputFullLineWithBottomActions
-                  hideAgents={true}
-                  hideDropdown={true}
-                  placeholder={`Message ${agentName}...`}
-                  prompt={inputValue}
-                  setPrompt={setInputValue}
-                  onSend={(prompt) => {
-                    handleChatSend(undefined, prompt);
-                  }}
-                />
-              </div>
-            </div>
-
-            <p className="absolute bottom-8 text-xs font-medium text-default-400 opacity-60 z-20">
-              Agent execution is transparent. Watch action blocks for background tasks.
-            </p>
-          </div>
         ) : (
-          // Agent Chat Mode
-          <div className="flex flex-col h-full w-full max-w-4xl mx-auto animate-in fade-in duration-300">
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+          <div className="flex h-full w-full relative">
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
+              {mockMessages.length === 0 ? (
+                <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden animate-in fade-in duration-300">
+                  <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
+                    <div className="flex flex-col items-center text-center z-30 mb-6">
+                      <h1
+                        className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+                        style={{ fontFamily: "var(--font-secondary)" }}
+                      >
+                        {agentName}
+                      </h1>
+                    </div>
+
+                    <div className="flex w-full flex-col gap-4 max-w-2xl">
+                      <PromptInputFullLineWithBottomActions
+                        hideAgents={true}
+                        hideDropdown={true}
+                        placeholder={`Message ${agentName}...`}
+                        prompt={inputValue}
+                        setPrompt={setInputValue}
+                        onSend={(prompt) => {
+                          handleChatSend(undefined, prompt);
+                        }}
+                      />
+                    </div>
+                  </div>
+
+
+                </div>
+              ) : (
+                // Agent Chat Mode
+                <div className="flex flex-col h-full w-full max-w-4xl mx-auto animate-in fade-in duration-300">
+                  {/* Messages Area */}
+                  <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
               {mockMessages.map((msg, i) => (
                 <div
                   key={i}
@@ -201,7 +204,7 @@ function AgentPageContent() {
                         />
                       )}
                       {msg.content && (
-                        <div className="bg-gray-100 dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 px-5 py-3.5 rounded-2xl text-[15px] shadow-sm whitespace-pre-wrap">
+                        <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 px-5 py-3.5 rounded-2xl text-[15px] shadow-sm whitespace-pre-wrap">
                           {msg.content}
                         </div>
                       )}
@@ -215,30 +218,36 @@ function AgentPageContent() {
             <div className="p-6 bg-transparent">
               <form className="relative group" onSubmit={handleChatSend}>
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-                <div className="relative flex items-center bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all p-2">
+                <div className="relative flex items-center bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all p-2 gap-1">
+                  <button type="button" className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0">
+                    <Paperclip size={20} />
+                  </button>
                   <input
-                    className="flex-1 bg-transparent border-none outline-none px-4 py-3 text-[15px] text-gray-900 dark:text-white placeholder:text-gray-400"
+                    className="flex-1 bg-transparent border-none outline-none px-2 py-3 text-[15px] text-gray-900 dark:text-white placeholder:text-gray-400"
                     placeholder="Message your agent..."
                     type="text"
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
                   />
-                  <button
-                    className="w-10 h-10 rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-                    disabled={!chatMessage.trim()}
-                    type="submit"
-                  >
-                    <Send className="ml-1" size={18} />
-                  </button>
+                  {chatMessage ? (
+                    <ArrowUp
+                      className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:opacity-80 transition-opacity shrink-0"
+                      onClick={(e: any) => handleChatSend(e)}
+                    />
+                  ) : (
+                    <AudioRecorder 
+                      className="w-10 h-10 p-2.5 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex-none shrink-0 hover:opacity-80 transition-opacity"
+                      setMessage={setChatMessage} 
+                    />
+                  )}
                 </div>
               </form>
-              <div className="text-center mt-3">
-                <span className="text-[11px] text-gray-400 dark:text-gray-500">
-                  Agent execution is transparent. Watch action blocks for
-                  background tasks.
-                </span>
-              </div>
+
             </div>
+          </div>
+              )}
+            </div>
+            <AgentRightSidebar />
           </div>
         )}
       </div>
