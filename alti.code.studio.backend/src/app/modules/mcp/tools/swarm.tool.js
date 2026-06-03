@@ -21,26 +21,28 @@ export const swarmTool = {
         required: ["goal"]
     },
     handler: async (args) => {
-        const { goal, userId } = args; // Assuming userId is now part of args
-        const result = await Orchestrator.execute(goal, userId);
+        const { goal, userId, sessionId } = args;
+        
+        try {
+            // Use the new GPT-5.5 Tri-Cloud Hive Orchestrator
+            const { HiveOrchestratorService } = await import('../../swarm/hiveOrchestrator.service.js');
+            const result = await HiveOrchestratorService.executeSwarm(userId || 'system', sessionId || 'mcp-tool', goal);
 
-        if (result.status === 'success') {
-            const stepsLog = result.completed_steps.map(s => `✅ Step ${s.id}: Success`).join('\n');
             return {
                 content: [
                     {
                         type: "text",
-                        text: `🐝 Swarm Mission Complete!\n\n${stepsLog}`
+                        text: `🐝 Alti Hive Swarm Mission Complete!\n\n${result}`
                     }
                 ]
             };
-        } else {
+        } catch (error) {
             return {
                 isError: true,
                 content: [
                     {
                         type: "text",
-                        text: `❌ Swarm Mission Failed at Step ${result.completed_steps.length + 1}.\n\nError: ${result.error}`
+                        text: `❌ Alti Hive Swarm Mission Failed.\n\nError: ${error.message}`
                     }
                 ]
             };

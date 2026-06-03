@@ -90,16 +90,19 @@ export default function AudioRecorder({
 
     recognition.onerror = (event: any) => {
       console.warn("GCP Speech Recognition warning:", event.error);
-      
+
       let friendlyMessage = `Microphone error: ${event.error}`;
+
       if (event.error === "not-allowed") {
-        friendlyMessage = "Microphone access is blocked. Please click the mic icon in your browser URL bar to grant permission.";
+        friendlyMessage =
+          "Microphone access is blocked. Please click the mic icon in your browser URL bar to grant permission.";
       } else if (event.error === "no-speech") {
         friendlyMessage = "No speech was detected. Please try speaking again.";
       } else if (event.error === "network") {
-        friendlyMessage = "A network error occurred. Please check your internet connection.";
+        friendlyMessage =
+          "A network error occurred. Please check your internet connection.";
       }
-      
+
       toast.error(friendlyMessage);
       setRecording(false);
       setLoadingText(false);

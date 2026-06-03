@@ -129,17 +129,36 @@ export function AgentCard({
               icon="solar:download-minimalistic-bold"
             />
             <span>{agent.downloads.toLocaleString()} installs</span>
-            
+
             {(() => {
-              const hash = agent.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+              const hash = agent.id
+                .split("")
+                .reduce((acc, char) => acc + char.charCodeAt(0), 0);
               const providers = [
-                { name: "AWS Bedrock", color: "text-warning-500 bg-warning-500/10 border-warning-500/20" },
-                { name: "GCP Vertex AI", color: "text-success-500 bg-success-500/10 border-success-500/20" },
-                { name: "Azure Foundry", color: "text-primary-500 bg-primary-500/10 border-primary-500/20" }
+                {
+                  name: "AWS Bedrock",
+                  color:
+                    "text-warning-500 bg-warning-500/10 border-warning-500/20",
+                },
+                {
+                  name: "GCP Vertex AI",
+                  color:
+                    "text-success-500 bg-success-500/10 border-success-500/20",
+                },
+                {
+                  name: "Azure Foundry",
+                  color:
+                    "text-primary-500 bg-primary-500/10 border-primary-500/20",
+                },
               ];
               const cloud = providers[hash % providers.length];
+
               return (
-                <Chip size="sm" variant="flat" className={`text-[9px] border ${cloud.color}`}>
+                <Chip
+                  className={`text-[9px] border ${cloud.color}`}
+                  size="sm"
+                  variant="flat"
+                >
                   Powered by {cloud.name}
                 </Chip>
               );

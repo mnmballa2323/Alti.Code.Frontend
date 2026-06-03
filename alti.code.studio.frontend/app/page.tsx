@@ -61,8 +61,6 @@ export default function Home() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
-
-
         {/* Dynamic Content */}
         {isChatting ? (
           <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">

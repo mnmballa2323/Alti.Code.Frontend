@@ -4,15 +4,22 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
-import { Search, Microscope } from "lucide-react";
+import { Microscope } from "lucide-react";
 import { cn } from "@heroui/react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import MessageContainer from "@/components/message-container";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
-import { setChatContext, setMessages, sendMessage } from "@/store/messagesSlice";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-
+import {
+  setChatContext,
+  setMessages,
+  sendMessage,
+} from "@/store/messagesSlice";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { RootState } from "@/store";
 import useFetchSingleData from "@/hooks/useFetchSingleData";
 import { AppDispatch } from "@/store";
@@ -85,17 +92,17 @@ const SingleChatPage = () => {
     prompt: string,
     mode?: string,
     domain?: string,
-    language?: string
+    language?: string,
   ) => {
     dispatch(
       sendMessage({
         prompt,
-        model: isResearchMode ? "Deep Research" : (mode || "Agent"),
+        model: isResearchMode ? "Deep Research" : mode || "Agent",
         domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
         language,
         sessionId,
         token,
-      })
+      }),
     );
   };
 
@@ -104,8 +111,6 @@ const SingleChatPage = () => {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
-
-
         {/* Dynamic Content */}
         <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
           <div className="flex flex-col w-full h-full max-w-3xl">
@@ -117,7 +122,6 @@ const SingleChatPage = () => {
                 hideAgents={true}
                 hideDropdown={true}
                 placeholder="Enter prompt here..."
-                onSend={handleSend}
                 rightActions={
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -132,10 +136,15 @@ const SingleChatPage = () => {
                       />
                     </TooltipTrigger>
                     <TooltipContent side="top">
-                      <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                      <p>
+                        {isResearchMode
+                          ? "Disable Deep Research"
+                          : "Deep Research"}
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 }
+                onSend={handleSend}
               />
             </div>
           </div>

@@ -4,17 +4,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@heroui/button";
 import { ScrollShadow } from "@heroui/scroll-shadow";
-import { 
-  Folder, 
-  FolderOpen, 
-  FileCode2, 
-  FileJson, 
-  FileText, 
-  Settings, 
-  File, 
-  ChevronDown, 
-  ChevronRight, 
-  RefreshCw 
+import {
+  Folder,
+  FolderOpen,
+  FileCode2,
+  FileJson,
+  FileText,
+  Settings,
+  File,
+  ChevronDown,
+  ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 
 import { API_URL } from "@/lib/config";
@@ -108,6 +108,7 @@ export const FileTree: React.FC<FileTreeProps> = ({
 
   const getFileIcon = (fileName: string) => {
     const ext = fileName.split(".").pop()?.toLowerCase();
+
     switch (ext) {
       case "tsx":
       case "ts":
@@ -143,9 +144,10 @@ export const FileTree: React.FC<FileTreeProps> = ({
         <div
           className={`
             flex items-center gap-2 py-1.5 px-2.5 cursor-pointer text-sm rounded-lg transition-all select-none mb-0.5
-            ${currentFile === node.path 
-              ? "bg-primary/10 text-primary-400 font-medium" 
-              : "text-gray-400 hover:bg-default-100 hover:text-foreground"
+            ${
+              currentFile === node.path
+                ? "bg-primary/10 text-primary-400 font-medium"
+                : "text-gray-400 hover:bg-default-100 hover:text-foreground"
             }
           `}
           onClick={(e) => {
@@ -163,9 +165,7 @@ export const FileTree: React.FC<FileTreeProps> = ({
               {getFolderIcon(!!node.isOpen)}
             </span>
           ) : (
-            <span className="pl-5 shrink-0">
-              {getFileIcon(node.name)}
-            </span>
+            <span className="pl-5 shrink-0">{getFileIcon(node.name)}</span>
           )}
           <span className="truncate">{node.name}</span>
         </div>
@@ -184,12 +184,12 @@ export const FileTree: React.FC<FileTreeProps> = ({
         <h3 className="font-semibold text-xs text-gray-400 uppercase tracking-wider">
           Explorer
         </h3>
-        <Button 
-          isIconOnly 
-          size="sm" 
-          variant="light" 
-          onClick={loadRoot}
+        <Button
+          isIconOnly
           className="hover:bg-default-100 text-default-400 hover:text-foreground rounded-lg"
+          size="sm"
+          variant="light"
+          onClick={loadRoot}
         >
           <RefreshCw className={`size-3.5 ${loading ? "animate-spin" : ""}`} />
         </Button>

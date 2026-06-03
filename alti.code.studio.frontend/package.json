@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
+    "start": "node .next/standalone/server.js || next start",
     "lint": "eslint --fix",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
     "electron:build": "npm run build && electron-builder"

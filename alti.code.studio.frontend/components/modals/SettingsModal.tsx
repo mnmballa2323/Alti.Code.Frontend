@@ -38,7 +38,7 @@ const SettingsModal = () => {
     editorVimMode,
     maxConcurrentAgents,
     agentTimeoutSecs,
-    
+
     // Vault-bound credentials
     azureEndpoint,
     azureApiKey,
@@ -70,11 +70,14 @@ const SettingsModal = () => {
   useEffect(() => {
     const loadVaultKeys = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
         const res = await fetch(`${apiUrl}/vault/keys`);
         const responseData = await res.json();
+
         if (responseData?.success && responseData?.data) {
           const keys = responseData.data;
+
           if (keys.openaiApiKey) setOpenaiApiKey(keys.openaiApiKey);
           if (keys.anthropicApiKey) setAnthropicApiKey(keys.anthropicApiKey);
           if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
@@ -88,19 +91,32 @@ const SettingsModal = () => {
         console.error("Failed to load keys from Vault:", e);
       }
     };
+
     if (isOpen) {
       loadVaultKeys();
     }
-  }, [isOpen, setOpenaiApiKey, setAnthropicApiKey, setGeminiApiKey, setAzureEndpoint, setAzureApiKey, setGcpProjectId, setGcpClientEmail, setGcpPrivateKey]);
+  }, [
+    isOpen,
+    setOpenaiApiKey,
+    setAnthropicApiKey,
+    setGeminiApiKey,
+    setAzureEndpoint,
+    setAzureApiKey,
+    setGcpProjectId,
+    setGcpClientEmail,
+    setGcpPrivateKey,
+  ]);
 
   const handleSave = async () => {
     // POST raw keys securely to backend Tink-encrypted Vault
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
       await fetch(`${apiUrl}/vault/keys`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           openaiApiKey,
@@ -110,8 +126,8 @@ const SettingsModal = () => {
           azureApiKey,
           gcpProjectId,
           gcpClientEmail,
-          gcpPrivateKey
-        })
+          gcpPrivateKey,
+        }),
       });
     } catch (e) {
       console.error("Failed to sync keys to Vault:", e);
@@ -255,9 +271,11 @@ const SettingsModal = () => {
                     <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
                       Cloud Providers & Secure Keys (Vault)
                     </h3>
-                    
+
                     <div className="text-xs text-gray-500 mb-2">
-                      All keys and credentials are encrypted at-rest inside our local PostgreSQL secure Vault utilizing field-level military-grade Tink AEAD encryption.
+                      All keys and credentials are encrypted at-rest inside our
+                      local PostgreSQL secure Vault utilizing field-level
+                      military-grade Tink AEAD encryption.
                     </div>
 
                     <Input
@@ -295,7 +313,9 @@ const SettingsModal = () => {
 
                     <Divider className="my-2" />
 
-                    <div className="text-xs font-semibold text-gray-400">Azure OpenAI Foundry</div>
+                    <div className="text-xs font-semibold text-gray-400">
+                      Azure OpenAI Foundry
+                    </div>
                     <Input
                       label="Azure Endpoint URL"
                       placeholder="https://myendpoint.openai.azure.com"
@@ -315,7 +335,9 @@ const SettingsModal = () => {
 
                     <Divider className="my-2" />
 
-                    <div className="text-xs font-semibold text-gray-400">Google Vertex AI (Enterprise)</div>
+                    <div className="text-xs font-semibold text-gray-400">
+                      Google Vertex AI (Enterprise)
+                    </div>
                     <Input
                       label="GCP Project ID"
                       placeholder="my-gcp-project-123"
@@ -362,12 +384,8 @@ const SettingsModal = () => {
                       <SelectItem key="gemini-3.1-flash">
                         Gemini 3.1 Flash
                       </SelectItem>
-                      <SelectItem key="gpt-4o">
-                        GPT-4o (Direct)
-                      </SelectItem>
-                      <SelectItem key="gpt-4">
-                        GPT-4 (Direct)
-                      </SelectItem>
+                      <SelectItem key="gpt-4o">GPT-4o (Direct)</SelectItem>
+                      <SelectItem key="gpt-4">GPT-4 (Direct)</SelectItem>
                       <SelectItem key="azure/gpt-4o">
                         GPT-4o (Azure Foundry)
                       </SelectItem>

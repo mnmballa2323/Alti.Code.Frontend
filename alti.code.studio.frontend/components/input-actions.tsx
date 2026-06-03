@@ -1,6 +1,17 @@
 "use client";
 
-import { Badge, Button, Form, Image, cn, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, DropdownSection } from "@heroui/react";
+import {
+  Badge,
+  Button,
+  Form,
+  Image,
+  cn,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  DropdownSection,
+} from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import {
@@ -29,8 +40,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import AudioRecorder from "./AudioRecorder";
 import PromptInput from "./prompt-input";
-import { useSettingsStore } from "@/store/useSettingsStore";
 
+import { useSettingsStore } from "@/store/useSettingsStore";
 import { useModalStore } from "@/store/useModalStore";
 import { VideoEyeRecorder } from "@/components/studio/VideoEyeRecorder";
 import { LogCaptureAgent } from "@/components/studio/LogCaptureAgent";
@@ -287,12 +298,24 @@ function PromptInputFullLineComponent({
       case "":
       case "auto":
         return "Smart Routing";
-      case "gcp-gemini-1.5-pro":
-        return "Gemini 1.5 Pro (GCP)";
-      case "aws-claude-3.5-sonnet":
-        return "Claude 3.5 Sonnet (AWS)";
-      case "azure-gpt-4o":
-        return "GPT-4o (Azure)";
+      case "gemini-3.5-flash":
+        return "Gemini 3.5 Flash";
+      case "gemini-3.5-pro":
+        return "Gemini 3.5 Pro";
+      case "gemini-omni-flash":
+        return "Gemini Omni Flash";
+      case "claude-4.7-opus":
+        return "Claude 4.7 Opus";
+      case "sonnet-5":
+        return "Claude Sonnet 5";
+      case "claude-4.5-haiku":
+        return "Claude 4.5 Haiku";
+      case "gpt-5.5-pro":
+        return "GPT-5.5 Pro";
+      case "gpt-5.5":
+        return "GPT-5.5";
+      case "gpt-5.5-instant":
+        return "GPT-5.5 Instant";
       default:
         return "Smart Routing";
     }
@@ -383,14 +406,7 @@ function PromptInputFullLineComponent({
     }
     setPrompt("");
     inputRef.current?.focus();
-  }, [
-    prompt,
-    setPrompt,
-    dispatch,
-    sessionId,
-    token,
-    onSend,
-  ]);
+  }, [prompt, setPrompt, dispatch, sessionId, token, onSend]);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -518,10 +534,10 @@ function PromptInputFullLineComponent({
 
           {showModelDropdown && (
             <Dropdown
-              placement="top-start"
               className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2"
+              placement="top-start"
             >
-            <DropdownTrigger>
+              <DropdownTrigger>
                 <button
                   className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
                   type="button"
@@ -529,18 +545,21 @@ function PromptInputFullLineComponent({
                   <Icon
                     className={cn(
                       "size-4 shrink-0 transition-colors duration-200",
-                      (defaultModel || "").includes("gemini") && "group-hover:text-purple-500 dark:group-hover:text-purple-400",
-                      (defaultModel || "").includes("claude") && "group-hover:text-orange-500 dark:group-hover:text-orange-400",
-                      (defaultModel || "").includes("gpt") && "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
+                      (defaultModel || "").includes("gemini") &&
+                        "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+                      (defaultModel || "").includes("claude") &&
+                        "group-hover:text-orange-500 dark:group-hover:text-orange-400",
+                      (defaultModel || "").includes("gpt") &&
+                        "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
                     )}
                     icon={
                       (defaultModel || "").includes("gemini")
                         ? "simple-icons:googlegemini"
                         : (defaultModel || "").includes("claude")
-                        ? "simple-icons:anthropic"
-                        : (defaultModel || "").includes("gpt")
-                        ? "simple-icons:openai"
-                        : "lucide:sparkles"
+                          ? "simple-icons:anthropic"
+                          : (defaultModel || "").includes("gpt")
+                            ? "simple-icons:openai"
+                            : "lucide:sparkles"
                     }
                   />
                   <span className="transition-colors duration-200">
@@ -555,85 +574,205 @@ function PromptInputFullLineComponent({
                 variant="flat"
               >
                 <DropdownSection
-                  title="AUTONOMOUS"
-                  className="mb-0.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
-                    heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
-                    group: "flex flex-col gap-0"
+                    heading:
+                      "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5",
                   }}
+                  title="AUTONOMOUS"
                 >
                   <DropdownItem
                     key="auto"
+                    className="rounded-xl px-3 py-1.5 hover:bg-primary/10 data-[hover=true]:bg-primary/10 transition-colors"
                     textValue="Smart Routing"
                     onPress={() => setDefaultModel("")}
-                    className="rounded-lg px-2 py-1 hover:bg-primary/10 data-[hover=true]:bg-primary/10 transition-colors"
                   >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-primary shrink-0" icon="lucide:sparkles" />
-                      <span className="text-[11px] font-semibold text-primary">Smart Routing</span>
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-primary shrink-0"
+                        icon="lucide:sparkles"
+                      />
+                      <span className="text-xs font-semibold text-primary text-[12px]">
+                        Smart Routing (Auto)
+                      </span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
-                  title="GCP VERTEX AI"
-                  className="mb-0.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
-                    heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
-                    group: "flex flex-col gap-0"
+                    heading:
+                      "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5",
                   }}
+                  title="GEMINI"
                 >
                   <DropdownItem
-                    key="gcp-gemini-1.5-pro"
-                    textValue="Gemini 1.5 Pro"
-                    onPress={() => setDefaultModel("gcp-gemini-1.5-pro")}
-                    className="rounded-lg px-2 py-1 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    key="gemini-3.5-flash"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    textValue="Gemini 3.5 Flash"
+                    onPress={() => setDefaultModel("gemini-3.5-flash")}
                   >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-purple-400 shrink-0" icon="logos:google-gemini-icon" />
-                      <span className="text-[11px] font-medium text-foreground">Gemini 1.5 Pro</span>
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-purple-500 dark:text-purple-400 shrink-0"
+                        icon="logos:google-gemini-icon"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini 3.5 Flash
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-3.5-pro"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    textValue="Gemini 3.5 Pro"
+                    onPress={() => setDefaultModel("gemini-3.5-pro")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-purple-400 shrink-0"
+                        icon="logos:google-gemini-icon"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini 3.5 Pro
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-omni-flash"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    textValue="Gemini Omni Flash"
+                    onPress={() => setDefaultModel("gemini-omni-flash")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-purple-400 shrink-0"
+                        icon="logos:google-gemini-icon"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini Omni Flash
+                      </span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
-                  title="AWS BEDROCK"
-                  className="mb-0.5 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
-                    heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
-                    group: "flex flex-col gap-0"
+                    heading:
+                      "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5",
                   }}
+                  title="CLAUDE"
                 >
                   <DropdownItem
-                    key="aws-claude-3.5-sonnet"
-                    textValue="Claude 3.5 Sonnet"
-                    onPress={() => setDefaultModel("aws-claude-3.5-sonnet")}
-                    className="rounded-lg px-2 py-1 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    key="claude-4.7-opus"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    textValue="Claude 4.7 Opus"
+                    onPress={() => setDefaultModel("claude-4.7-opus")}
                   >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-orange-400 shrink-0" icon="simple-icons:anthropic" />
-                      <span className="text-[11px] font-medium text-foreground">Claude 3.5 Sonnet</span>
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-orange-500 dark:text-orange-400 shrink-0"
+                        icon="simple-icons:anthropic"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude 4.7 Opus
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="sonnet-5"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    textValue="Claude Sonnet 5"
+                    onPress={() => setDefaultModel("sonnet-5")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-orange-400 shrink-0"
+                        icon="simple-icons:anthropic"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude Sonnet 5
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="claude-4.5-haiku"
+                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    textValue="Claude 4.5 Haiku"
+                    onPress={() => setDefaultModel("claude-4.5-haiku")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-orange-400 shrink-0"
+                        icon="simple-icons:anthropic"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude 4.5 Haiku
+                      </span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
-                  title="AZURE OPENAI FOUNDRY"
-                  className="mb-0 last:mb-0"
+                  className="mb-1.5 last:mb-0"
                   classNames={{
-                    heading: "px-2 py-0.5 text-[10px] font-semibold text-gray-400 select-none uppercase tracking-wider",
-                    group: "flex flex-col gap-0"
+                    heading:
+                      "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
+                    group: "flex flex-col gap-0.5",
                   }}
+                  title="GPT"
                 >
                   <DropdownItem
-                    key="azure-gpt-4o"
-                    textValue="GPT-4o"
-                    onPress={() => setDefaultModel("azure-gpt-4o")}
-                    className="rounded-lg px-2 py-1 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    key="gpt-5.5-pro"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    textValue="GPT-5.5 Pro"
+                    onPress={() => setDefaultModel("gpt-5.5-pro")}
                   >
-                    <div className="flex items-center gap-2 text-left">
-                      <Icon className="size-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" icon="simple-icons:openai" />
-                      <span className="text-[11px] font-medium text-foreground">GPT-4o</span>
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
+                        icon="simple-icons:openai"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        GPT-5.5 Pro
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gpt-5.5"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    textValue="GPT-5.5"
+                    onPress={() => setDefaultModel("gpt-5.5")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
+                        icon="simple-icons:openai"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        GPT-5.5
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gpt-5.5-instant"
+                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    textValue="GPT-5.5 Instant"
+                    onPress={() => setDefaultModel("gpt-5.5-instant")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
+                        icon="simple-icons:openai"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        GPT-5.5 Instant
+                      </span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
@@ -641,10 +780,7 @@ function PromptInputFullLineComponent({
             </Dropdown>
           )}
 
-
           {customActions}
-
-
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
@@ -660,8 +796,6 @@ function PromptInputFullLineComponent({
           )}
           {!hideAgents && (
             <>
-
-
               {showFigmaButton && (
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -676,9 +810,15 @@ function PromptInputFullLineComponent({
                         if (onSend) {
                           onSend(
                             figmaPrompt,
-                            selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            selectedLanguage === "Mode"
+                              ? "default"
+                              : selectedLanguage.toLowerCase(),
+                            selectedModel === "Stack"
+                              ? "fullstack"
+                              : selectedModel.toLowerCase(),
+                            selectedProgLang === "Language"
+                              ? "typescript"
+                              : selectedProgLang.toLowerCase(),
                           );
                         }
                       }}
@@ -699,13 +839,20 @@ function PromptInputFullLineComponent({
                         const sandboxPrompt =
                           prompt.trim() ||
                           "Export to CodeSandbox: Create a live interactive preview of this design.";
+
                         setPrompt(sandboxPrompt);
                         if (onSend) {
                           onSend(
                             sandboxPrompt,
-                            selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            selectedLanguage === "Mode"
+                              ? "default"
+                              : selectedLanguage.toLowerCase(),
+                            selectedModel === "Stack"
+                              ? "fullstack"
+                              : selectedModel.toLowerCase(),
+                            selectedProgLang === "Language"
+                              ? "typescript"
+                              : selectedProgLang.toLowerCase(),
                           );
                         }
                       }}
@@ -726,13 +873,20 @@ function PromptInputFullLineComponent({
                         const responsivePrompt =
                           prompt.trim() ||
                           "Make Responsive: Ensure this design is fully responsive and looks perfect on mobile, tablet, and desktop screens using Tailwind breakpoints.";
+
                         setPrompt(responsivePrompt);
                         if (onSend) {
                           onSend(
                             responsivePrompt,
-                            selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                            selectedLanguage === "Mode"
+                              ? "default"
+                              : selectedLanguage.toLowerCase(),
+                            selectedModel === "Stack"
+                              ? "fullstack"
+                              : selectedModel.toLowerCase(),
+                            selectedProgLang === "Language"
+                              ? "typescript"
+                              : selectedProgLang.toLowerCase(),
                           );
                         }
                       }}
@@ -754,13 +908,20 @@ function PromptInputFullLineComponent({
                           const sweepPrompt =
                             prompt.trim() ||
                             "Security Sweep: Audit my repository coordinates for dependency vulnerabilities, CVE threat coordinates, and compile secure self-healing patches.";
+
                           setPrompt(sweepPrompt);
                           if (onSend) {
                             onSend(
                               sweepPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -794,13 +955,20 @@ function PromptInputFullLineComponent({
                           const qaPrompt =
                             prompt.trim() ||
                             "Autonomous QA Loop: Run all unit tests, detect syntax or hydration failures, look up error stack traces, and autonomously patch the code until the entire test suite passes successfully.";
+
                           setPrompt(qaPrompt);
                           if (onSend) {
                             onSend(
                               qaPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -834,13 +1002,20 @@ function PromptInputFullLineComponent({
                           const graphPrompt =
                             prompt.trim() ||
                             "Generate Knowledge Graph: Analyze the repository structure, parse all files, build dependency relationships, and render the complete visual knowledge graph of the codebase.";
+
                           setPrompt(graphPrompt);
                           if (onSend) {
                             onSend(
                               graphPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -874,13 +1049,20 @@ function PromptInputFullLineComponent({
                           const archPrompt =
                             prompt.trim() ||
                             "System Architecture: Trace the codebase components, map key layers (API, backend, database), analyze system dependencies, and compile the full topography map.";
+
                           setPrompt(archPrompt);
                           if (onSend) {
                             onSend(
                               archPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -914,13 +1096,20 @@ function PromptInputFullLineComponent({
                           const refactorPrompt =
                             prompt.trim() ||
                             "Refactor & Optimize: Analyze the active files, apply DRY and clean code principles, refactor complex methods, optimize performance, and inject JSDoc/TypeScript types.";
+
                           setPrompt(refactorPrompt);
                           if (onSend) {
                             onSend(
                               refactorPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -954,13 +1143,20 @@ function PromptInputFullLineComponent({
                           const docsPrompt =
                             prompt.trim() ||
                             "Write Documentation: Scan the codebase components, analyze implementation details, and generate comprehensive markdown API documentation, architectural summaries, or README guides.";
+
                           setPrompt(docsPrompt);
                           if (onSend) {
                             onSend(
                               docsPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -994,13 +1190,20 @@ function PromptInputFullLineComponent({
                           const explainPrompt =
                             prompt.trim() ||
                             "Explain Code: Trace the execution flow of the active files, provide a line-by-line conceptual walkthrough, explain technical trade-offs, and detail how the components interact.";
+
                           setPrompt(explainPrompt);
                           if (onSend) {
                             onSend(
                               explainPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -1034,13 +1237,20 @@ function PromptInputFullLineComponent({
                           const dbPrompt =
                             prompt.trim() ||
                             "Database Designer: Architect the relational database schema, design Prisma or Mongoose models, write SQL migration scripts, optimize indexes, and map out entity relationships.";
+
                           setPrompt(dbPrompt);
                           if (onSend) {
                             onSend(
                               dbPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -1080,13 +1290,20 @@ function PromptInputFullLineComponent({
                           const pushPrompt =
                             prompt.trim() ||
                             "Push to GitHub: Stage all refined codebase modifications, perform licensing and security compliance checks, compile a precise conventional commit message, and push the verified changes to the remote branch.";
+
                           setPrompt(pushPrompt);
                           if (onSend) {
                             onSend(
                               pushPrompt,
-                              selectedLanguage === "Mode" ? "default" : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack" ? "fullstack" : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language" ? "typescript" : selectedProgLang.toLowerCase()
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
                             );
                           } else {
                             dispatch(
@@ -1235,13 +1452,13 @@ export default function PromptInputFullLineWithBottomActions({
     <div className="flex w-full flex-col gap-4 mb-6 !z-50">
       <PromptInputFullLineComponent
         customActions={customActions}
-        rightActions={rightActions}
         hideAgents={hideAgents}
         hideDropdown={hideDropdown}
         hideRunLocally={hideRunLocally}
         isTestWorkspace={isTestWorkspace}
         placeholder={placeholder}
         prompt={prompt}
+        rightActions={rightActions}
         setPrompt={(val) => {
           const newVal = typeof val === "function" ? val(prompt) : val;
 
@@ -1249,9 +1466,9 @@ export default function PromptInputFullLineWithBottomActions({
           else setInternalPrompt(newVal);
         }}
         showFigmaButton={showFigmaButton}
+        showModelDropdown={showModelDropdown}
         showResponsiveButton={showResponsiveButton}
         showSandboxButton={showSandboxButton}
-        showModelDropdown={showModelDropdown}
         onSend={onSend}
       />
     </div>

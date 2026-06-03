@@ -28,7 +28,6 @@ export interface DocumentRule {
   isActive: boolean;
 }
 
-
 export interface AgentStatus {
   id: string;
   name: string;

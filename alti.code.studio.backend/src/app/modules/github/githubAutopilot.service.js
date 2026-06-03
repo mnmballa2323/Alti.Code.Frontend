@@ -1,11 +1,11 @@
 import { Octokit } from 'octokit';
 import { VectorSearchService } from '../googleCloud/vectorSearch.service.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { LlmGatewayService } from '../llmGateway/llmGateway.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 const octokit = new Octokit({
-    auth: config.github_token || process.env.GITHUB_TOKEN
+    auth: config.github_token || process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN
 });
 
 /**
@@ -39,9 +39,12 @@ const ingestRepository = async (owner, repo, branch = 'main') => {
                 const rawContent = Buffer.from(content.content, 'base64').toString();
 
                 // 3. Summarize and Embedding
-                // We use Gemini 3.1 Pro to extract technical 'knowledge' before embedding
-                const summary = await GoogleGenAiService.generateContent(
-                    `Analyze this file and extract key architectural patterns, APIs, and business logic for indexing in a vector store: \n\n ${rawContent.substring(0, 4000)}`
+                // We use LlmGatewayService to extract technical 'knowledge' before embedding, enforcing Tri-Cloud DLP scanning
+                const summary = await LlmGatewayService.routeCompletion(
+                    'system',
+                    'github-ingestion',
+                    `Analyze this file and extract key architectural patterns, APIs, and business logic for indexing in a vector store: \n\n ${rawContent.substring(0, 4000)}`,
+                    'Architect'
                 );
 
                 // 4. Store in Vertex AI Vector Search (Placeholder call as indices require deployment)

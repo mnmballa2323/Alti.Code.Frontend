@@ -3,22 +3,14 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Card,
-  CardBody,
-  Input,
-  Select,
-  SelectItem,
   Modal,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalFooter,
   useDisclosure,
-  ScrollShadow,
-  cn,
 } from "@heroui/react";
 import {
-  Lock,
   KeyRound,
   Eye,
   EyeOff,
@@ -27,8 +19,6 @@ import {
   Github,
   Server,
   Edit2,
-  ArrowLeft,
-  ChevronRight,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -90,26 +80,51 @@ const serviceConfig: Record<string, { icon: any; color: string }> = {
   Default: { icon: KeyRound, color: "text-default-500 bg-default-100" },
 };
 
-const detectService = (name: string, key: string, currentService?: string): string => {
-  if (currentService && currentService !== "Custom" && currentService !== "GitHub" && currentService !== "Default") {
+const detectService = (
+  name: string,
+  key: string,
+  currentService?: string,
+): string => {
+  if (
+    currentService &&
+    currentService !== "Custom" &&
+    currentService !== "GitHub" &&
+    currentService !== "Default"
+  ) {
     return currentService;
   }
   const lowerName = name.toLowerCase();
   const lowerKey = key.toLowerCase();
-  
+
   if (lowerKey.startsWith("ghp_") || lowerName.includes("github")) {
     return "GitHub";
   }
-  if (lowerKey.startsWith("akia") || lowerName.includes("aws") || lowerName.includes("bedrock") || lowerName.includes("claude")) {
+  if (
+    lowerKey.startsWith("akia") ||
+    lowerName.includes("aws") ||
+    lowerName.includes("bedrock") ||
+    lowerName.includes("claude")
+  ) {
     return "AWS Bedrock";
   }
-  if (lowerKey.startsWith("az_") || lowerName.includes("azure") || lowerName.includes("microsoft") || lowerName.includes("gpt")) {
+  if (
+    lowerKey.startsWith("az_") ||
+    lowerName.includes("azure") ||
+    lowerName.includes("microsoft") ||
+    lowerName.includes("gpt")
+  ) {
     return "Azure OpenAI Foundry";
   }
-  if (lowerKey.startsWith("gcp_") || lowerName.includes("gcp") || lowerName.includes("google") || lowerName.includes("vertex") || lowerName.includes("gemini")) {
+  if (
+    lowerKey.startsWith("gcp_") ||
+    lowerName.includes("gcp") ||
+    lowerName.includes("google") ||
+    lowerName.includes("vertex") ||
+    lowerName.includes("gemini")
+  ) {
     return "GCP Vertex AI";
   }
-  
+
   return "Custom";
 };
 
@@ -177,7 +192,9 @@ export default function VaultPage() {
     if (selectedSecretId === id) {
       setSelectedSecretId(null);
     }
-    window.dispatchEvent(new CustomEvent("delete-vault-secret", { detail: id }));
+    window.dispatchEvent(
+      new CustomEvent("delete-vault-secret", { detail: id }),
+    );
   };
 
   const handleEditClick = (secret: SecretEntry) => {
@@ -198,7 +215,13 @@ export default function VaultPage() {
       .replace(/[^a-z0-9-]/g, "-")
       .replace(/-+/g, "-");
 
-    const detected = detectService(newName, newKey, editingSecretId ? secrets.find(s => s.id === editingSecretId)?.service : undefined);
+    const detected = detectService(
+      newName,
+      newKey,
+      editingSecretId
+        ? secrets.find((s) => s.id === editingSecretId)?.service
+        : undefined,
+    );
 
     try {
       try {
@@ -212,19 +235,28 @@ export default function VaultPage() {
           },
         );
       } catch (apiError) {
-        console.warn("Backend API not available. Updating local state.", apiError);
+        console.warn(
+          "Backend API not available. Updating local state.",
+          apiError,
+        );
       }
 
       if (editingSecretId) {
-        const updatedEntry = { id: editingSecretId, name: newName, service: detected, key: newKey };
+        const updatedEntry = {
+          id: editingSecretId,
+          name: newName,
+          service: detected,
+          key: newKey,
+        };
+
         setSecrets(
           secrets.map((s) =>
-            s.id === editingSecretId
-              ? { ...s, ...updatedEntry }
-              : s,
+            s.id === editingSecretId ? { ...s, ...updatedEntry } : s,
           ),
         );
-        window.dispatchEvent(new CustomEvent("update-vault-secret", { detail: updatedEntry }));
+        window.dispatchEvent(
+          new CustomEvent("update-vault-secret", { detail: updatedEntry }),
+        );
         setSuccessMessage("Secret successfully updated!");
         setIsSuccessModalOpen(true);
       } else {
@@ -235,8 +267,11 @@ export default function VaultPage() {
           key: newKey,
           lastUsed: "Never",
         };
+
         setSecrets([newEntry, ...secrets]);
-        window.dispatchEvent(new CustomEvent("update-vault-secret", { detail: newEntry }));
+        window.dispatchEvent(
+          new CustomEvent("update-vault-secret", { detail: newEntry }),
+        );
         setSuccessMessage("Your new secret is now saved!");
         setIsSuccessModalOpen(true);
       }
@@ -252,16 +287,20 @@ export default function VaultPage() {
   };
 
   const activeSecret = secrets.find((s) => s.id === selectedSecretId);
-  const headerTitle = activeSecret ? activeSecret.name : (editingSecretId ? "Edit Secret" : "New Secret");
+  const headerTitle = activeSecret
+    ? activeSecret.name
+    : editingSecretId
+      ? "Edit Secret"
+      : "New Secret";
 
   return (
     <ChatBotLayout isRightSidebarOpenByDefault={false}>
-      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
         <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
           <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
             <div className="flex flex-col items-center text-center z-30 mb-6">
               <h1
-                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
+                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
                 {headerTitle}
@@ -286,14 +325,14 @@ export default function VaultPage() {
                         {/* Name Row */}
                         <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
                           <div className="flex items-center gap-3">
-                            <ServiceIcon size={18} className={conf.color} />
+                            <ServiceIcon className={conf.color} size={18} />
                             <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {secret.name}
                             </span>
                           </div>
                           <button
-                            onClick={() => handleEditClick(secret)}
                             className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                            onClick={() => handleEditClick(secret)}
                           >
                             <Edit2 size={12} /> Edit
                           </button>
@@ -302,21 +341,23 @@ export default function VaultPage() {
                         {/* Secret Row */}
                         <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
                           <span className="text-sm font-mono text-gray-900 dark:text-gray-100 truncate flex-1">
-                            {isRevealed ? secret.key : "••••••••••••••••••••••••"}
+                            {isRevealed
+                              ? secret.key
+                              : "••••••••••••••••••••••••"}
                           </span>
                           <div className="flex gap-4 items-center shrink-0">
                             <button
+                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
                               onClick={() => {
                                 handleCopy(secret.key);
                                 toast.success("Token copied to clipboard!");
                               }}
-                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
                             >
                               <Copy size={12} /> Copy
                             </button>
                             <button
-                              onClick={() => toggleReveal(secret.id)}
                               className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                              onClick={() => toggleReveal(secret.id)}
                             >
                               {isRevealed ? (
                                 <>
@@ -349,9 +390,9 @@ export default function VaultPage() {
                   {/* Thin Name Input */}
                   <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
                     <input
-                      type="text"
-                      placeholder="Enter name here..."
                       className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                      placeholder="Enter name here..."
+                      type="text"
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
                     />
@@ -360,24 +401,30 @@ export default function VaultPage() {
                   {/* Thin Secret Input */}
                   <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
                     <input
-                      type={isFormSecretRevealed ? "text" : "password"}
-                      placeholder="Enter secret here..."
                       className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                      placeholder="Enter secret here..."
+                      type={isFormSecretRevealed ? "text" : "password"}
                       value={newKey}
                       onChange={(e) => setNewKey(e.target.value)}
                     />
                     <button
-                      onClick={() => setIsFormSecretRevealed(!isFormSecretRevealed)}
                       className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0 focus:outline-none"
                       type="button"
+                      onClick={() =>
+                        setIsFormSecretRevealed(!isFormSecretRevealed)
+                      }
                     >
-                      {isFormSecretRevealed ? <EyeOff size={16} /> : <Eye size={16} />}
+                      {isFormSecretRevealed ? (
+                        <EyeOff size={16} />
+                      ) : (
+                        <Eye size={16} />
+                      )}
                     </button>
                   </div>
 
                   {/* Thin Button */}
                   <button
-                    className="w-full mt-2 bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-gray-900 dark:hover:bg-gray-100 transition-all font-medium text-sm text-white dark:text-black"
+                    className="w-full bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-gray-900 dark:hover:bg-gray-100 transition-all font-medium text-sm text-white dark:text-black"
                     onClick={() => handleSave(() => {})}
                   >
                     {editingSecretId ? "Update Secret" : "Save Secret"}
@@ -388,7 +435,6 @@ export default function VaultPage() {
           </div>
         </div>
       </div>
-
 
       {/* Delete Confirmation Modal */}
       <Modal
@@ -419,16 +465,16 @@ export default function VaultPage() {
               </ModalBody>
               <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex flex-row w-full gap-0 bg-transparent min-h-0">
                 <Button
-                  variant="light"
                   className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
+                  variant="light"
                   onPress={onClose}
                 >
                   Cancel
                 </Button>
                 <div className="w-[1px] h-12 bg-[#E5E5EA] dark:bg-[#2C2C2E] shrink-0" />
                 <Button
-                  variant="light"
                   className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
+                  variant="light"
                   onPress={() => {
                     if (secretToDelete) {
                       handleDelete(secretToDelete);
@@ -473,8 +519,8 @@ export default function VaultPage() {
               </ModalBody>
               <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex w-full bg-transparent min-h-0">
                 <Button
-                  variant="light"
                   className="w-full h-12 rounded-none border-none text-primary font-normal hover:bg-default-100/50 text-[15px]"
+                  variant="light"
                   onPress={onClose}
                 >
                   Close

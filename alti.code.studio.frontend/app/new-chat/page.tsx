@@ -69,12 +69,18 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="transition-all duration-300 flex h-full w-full items-center justify-center">
-          <div className="flex w-full max-w-4xl flex-col items-center gap-8 z-20">
-            <h1 className="text-3xl font-semibold leading-9 text-default-foreground">
-              How can I help you today?
-            </h1>
-            <div className="flex w-full flex-col gap-4 px-4 hide-scrollbar">
+        <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
+          <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
+            <div className="flex flex-col items-center text-center z-30 mb-6">
+              <h1
+                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+                style={{ fontFamily: "var(--font-secondary)" }}
+              >
+                How can I help you today?
+              </h1>
+            </div>
+
+            <div className="flex w-full flex-col gap-4 max-w-2xl">
               <PromptInputFullLineWithBottomActions
                 onSend={handleFirstMessageSend}
               />

@@ -1,7 +1,7 @@
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { logger } from '../../../shared/logger.js';
-import Anthropic from '@anthropic-ai/sdk'; // Bedrock Wrapper
+import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk'; // Bedrock Wrapper
 import { AzureOpenAI } from 'openai'; // Azure Foundry Wrapper
 
 /**
@@ -13,8 +13,12 @@ import { AzureOpenAI } from 'openai'; // Azure Foundry Wrapper
  */
 class TriBrainService {
     constructor() {
-        this.anthropic = new Anthropic(); // Assumes AWS Auth configured via Env
-        this.azureOpenAi = new AzureOpenAI({ apiVersion: "2024-02-15-preview" });
+        this.anthropic = new AnthropicBedrock(); // Assumes AWS Auth configured via Env
+        this.azureOpenAi = new AzureOpenAI({ 
+            apiVersion: "2024-02-15-preview",
+            apiKey: process.env.AZURE_OPENAI_API_KEY || "dummy-key-for-sandbox-execution",
+            baseURL: process.env.AZURE_OPENAI_ENDPOINT || "https://dummy-endpoint.openai.azure.com/"
+        });
     }
 
     /**

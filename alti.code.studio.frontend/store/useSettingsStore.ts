@@ -59,7 +59,7 @@ export const useSettingsStore = create<SettingsState>()(
       defaultModel: "",
       telemetryLevel: "standard",
       openClawEnabled: false,
-      
+
       // Defaults for Vault credentials
       azureEndpoint: "",
       azureApiKey: "",

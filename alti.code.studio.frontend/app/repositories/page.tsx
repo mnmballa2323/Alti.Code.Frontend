@@ -102,8 +102,6 @@ export default function Repositories() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-white dark:bg-[#0A0A0A] flex flex-col h-full font-sans w-full items-center">
-
-
         {/* Main Content (Centered Form) */}
         <div className="flex-1 overflow-y-auto w-full pt-6 pb-12 px-6 flex justify-center">
           <div className="w-full max-w-2xl flex flex-col gap-8">

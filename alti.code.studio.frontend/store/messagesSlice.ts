@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { RootState } from "./index";
+
 import { useSettingsStore } from "@/store/useSettingsStore";
 
 export interface ToolExecution {
@@ -22,7 +23,6 @@ interface MessagesState {
   loading: boolean;
   error: string | null;
   model: string;
-
 }
 
 const initialState: MessagesState = {
@@ -31,7 +31,6 @@ const initialState: MessagesState = {
   loading: false,
   error: null,
   model: "default",
-
 };
 
 interface SendMessagePayload {
@@ -168,7 +167,6 @@ const messagesSlice = createSlice({
     addMessage(state, action: PayloadAction<MessageType>) {
       state.messages.push(action.payload);
     },
-
   },
   extraReducers: (builder) => {
     builder

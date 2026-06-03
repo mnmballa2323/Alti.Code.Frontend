@@ -12,7 +12,6 @@ import {
   Globe2,
   Key,
   UploadCloud,
-  ChevronRight,
   Zap,
   Check,
   Play,
@@ -62,8 +61,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "aws_ec2_specialist",
         status: "ACTIVE",
         capabilities: ["ec2-scaling", "instance-tuning", "ebs-optimization"],
-        description: "Optimizes instance sizing, cost efficiency, and automated auto-scaling groups.",
-        icon: "Server"
+        description:
+          "Optimizes instance sizing, cost efficiency, and automated auto-scaling groups.",
+        icon: "Server",
       },
       {
         name: "S3 Object Storage",
@@ -72,8 +72,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "aws_s3_specialist",
         status: "ACTIVE",
         capabilities: ["bucket-lifecycle", "cors-rules", "cloudfront-cdn"],
-        description: "Manages object storage lifecycle rules, access controls, and low-latency CloudFront caching.",
-        icon: "Database"
+        description:
+          "Manages object storage lifecycle rules, access controls, and low-latency CloudFront caching.",
+        icon: "Database",
       },
       {
         name: "Lambda Serverless",
@@ -81,9 +82,14 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentName: "AWS Lambda Specialist (Tier 14)",
         agentId: "aws_lambda_specialist",
         status: "OPTIMIZING",
-        capabilities: ["cold-start-tuning", "concurrency-limits", "event-routing"],
-        description: "Regulates cold-start latency, concurrency controls, and API Gateway bindings.",
-        icon: "Cpu"
+        capabilities: [
+          "cold-start-tuning",
+          "concurrency-limits",
+          "event-routing",
+        ],
+        description:
+          "Regulates cold-start latency, concurrency controls, and API Gateway bindings.",
+        icon: "Cpu",
       },
       {
         name: "DynamoDB NoSQL",
@@ -92,8 +98,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "aws_dynamodb_specialist",
         status: "ACTIVE",
         capabilities: ["gsi-indexing", "partition-keys", "daas-caching"],
-        description: "Configures secondary indexes, query throughput tuning, and hot-partition balancing.",
-        icon: "Database"
+        description:
+          "Configures secondary indexes, query throughput tuning, and hot-partition balancing.",
+        icon: "Database",
       },
       {
         name: "IAM Identity & Access",
@@ -102,8 +109,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "aws_iam_guardian",
         status: "SWARMING",
         capabilities: ["least-privilege", "role-assumption", "policy-linting"],
-        description: "Enforces least-privilege policies, audits assume-role bounds, and filters credentials.",
-        icon: "Lock"
+        description:
+          "Enforces least-privilege policies, audits assume-role bounds, and filters credentials.",
+        icon: "Lock",
       },
       {
         name: "CloudFormation & CDK",
@@ -112,9 +120,10 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "aws_iac_specialist",
         status: "IDLE",
         capabilities: ["cdk-compilation", "stack-drift", "drift-remediation"],
-        description: "Compiles TypeScript CDK structures, monitors drift compliance, and executes safe rollbacks.",
-        icon: "Activity"
-      }
+        description:
+          "Compiles TypeScript CDK structures, monitors drift compliance, and executes safe rollbacks.",
+        icon: "Activity",
+      },
     ];
   }
 
@@ -128,8 +137,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_compute_specialist",
         status: "ACTIVE",
         capabilities: ["vm-scaling", "live-migration", "sole-tenant-nodes"],
-        description: "Optimizes machine-type configurations, persistent disk allocation, and live migrations.",
-        icon: "Server"
+        description:
+          "Optimizes machine-type configurations, persistent disk allocation, and live migrations.",
+        icon: "Server",
       },
       {
         name: "Cloud Storage",
@@ -138,8 +148,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_storage_specialist",
         status: "ACTIVE",
         capabilities: ["bucket-lifecycle", "dual-region-sync", "iam-binding"],
-        description: "Controls dual-region replication, storage class auto-tiering, and access tokens.",
-        icon: "Database"
+        description:
+          "Controls dual-region replication, storage class auto-tiering, and access tokens.",
+        icon: "Database",
       },
       {
         name: "Cloud Run Serverless",
@@ -148,8 +159,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_cloudrun_specialist",
         status: "OPTIMIZING",
         capabilities: ["min-instances", "cpu-allocation", "traffic-splitting"],
-        description: "Manages container scaling, zero-to-one latency optimization, and green-blue canary deploys.",
-        icon: "Cpu"
+        description:
+          "Manages container scaling, zero-to-one latency optimization, and green-blue canary deploys.",
+        icon: "Cpu",
       },
       {
         name: "BigQuery Analytics",
@@ -158,8 +170,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_bigquery_specialist",
         status: "ACTIVE",
         capabilities: ["partition-pruning", "slot-allocation", "clustering"],
-        description: "Coordinates query slot scheduling, partition optimization, and materialized view caching.",
-        icon: "Database"
+        description:
+          "Coordinates query slot scheduling, partition optimization, and materialized view caching.",
+        icon: "Database",
       },
       {
         name: "GCP IAM & Sovereignty",
@@ -168,8 +181,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_iam_guardian",
         status: "SWARMING",
         capabilities: ["service-accounts", "workload-identity", "audit-logs"],
-        description: "Secures Google Workload Identity federations, audits service accounts, and isolates project structures.",
-        icon: "Lock"
+        description:
+          "Secures Google Workload Identity federations, audits service accounts, and isolates project structures.",
+        icon: "Lock",
       },
       {
         name: "Google Deployment Manager",
@@ -178,9 +192,10 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "gcp_iac_specialist",
         status: "IDLE",
         capabilities: ["gdm-templates", "terraform-gcp", "state-locking"],
-        description: "Synthesizes Terraform GCP structures, maps state locking, and executes deployment dry-runs.",
-        icon: "Activity"
-      }
+        description:
+          "Synthesizes Terraform GCP structures, maps state locking, and executes deployment dry-runs.",
+        icon: "Activity",
+      },
     ];
   }
 
@@ -194,8 +209,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "azure_vm_specialist",
         status: "ACTIVE",
         capabilities: ["vm-scaling", "hybrid-benefit", "disk-encryption"],
-        description: "Optimizes Azure Hybrid Benefit licenses, VM scale sets, and premium disk configurations.",
-        icon: "Server"
+        description:
+          "Optimizes Azure Hybrid Benefit licenses, VM scale sets, and premium disk configurations.",
+        icon: "Server",
       },
       {
         name: "Blob Storage",
@@ -204,8 +220,9 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentId: "azure_blob_specialist",
         status: "ACTIVE",
         capabilities: ["lifecycle-management", "immutable-blobs", "sas-tokens"],
-        description: "Configures Shared Access Signatures, access tiers (Hot/Cool/Archive), and blob triggers.",
-        icon: "Database"
+        description:
+          "Configures Shared Access Signatures, access tiers (Hot/Cool/Archive), and blob triggers.",
+        icon: "Database",
       },
       {
         name: "Azure Functions",
@@ -213,9 +230,14 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentName: "Azure Functions Specialist (Tier 14)",
         agentId: "azure_functions_specialist",
         status: "OPTIMIZING",
-        capabilities: ["premium-plan-scaling", "trigger-bindings", "durable-workflows"],
-        description: "Tunes Durable Functions orchestration, serverless bindings, and startup execution times.",
-        icon: "Cpu"
+        capabilities: [
+          "premium-plan-scaling",
+          "trigger-bindings",
+          "durable-workflows",
+        ],
+        description:
+          "Tunes Durable Functions orchestration, serverless bindings, and startup execution times.",
+        icon: "Cpu",
       },
       {
         name: "Cosmos DB",
@@ -223,9 +245,14 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentName: "Azure Cosmos Specialist (Tier 14)",
         agentId: "azure_cosmos_specialist",
         status: "ACTIVE",
-        capabilities: ["multi-region-writes", "ru-allocation", "consistency-levels"],
-        description: "Tunes Request Units (RUs), consistency parameters, and multi-region read/write replication.",
-        icon: "Database"
+        capabilities: [
+          "multi-region-writes",
+          "ru-allocation",
+          "consistency-levels",
+        ],
+        description:
+          "Tunes Request Units (RUs), consistency parameters, and multi-region read/write replication.",
+        icon: "Database",
       },
       {
         name: "Entra ID (Active Directory)",
@@ -233,9 +260,14 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentName: "Azure Entra Guardian (Tier 14)",
         agentId: "azure_entra_guardian",
         status: "SWARMING",
-        capabilities: ["conditional-access", "managed-identities", "app-registrations"],
-        description: "Audits conditional access policies, configures system-assigned managed identities, and registers APIs.",
-        icon: "Lock"
+        capabilities: [
+          "conditional-access",
+          "managed-identities",
+          "app-registrations",
+        ],
+        description:
+          "Audits conditional access policies, configures system-assigned managed identities, and registers APIs.",
+        icon: "Lock",
       },
       {
         name: "ARM Templates & Bicep",
@@ -243,21 +275,56 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
         agentName: "Azure IaC Specialist (Tier 14)",
         agentId: "azure_iac_specialist",
         status: "IDLE",
-        capabilities: ["bicep-compilation", "arm-deployments", "blueprint-compliance"],
-        description: "Compiles declarative Bicep files, manages Azure Blueprints compliance, and runs validation gates.",
-        icon: "Activity"
-      }
+        capabilities: [
+          "bicep-compilation",
+          "arm-deployments",
+          "blueprint-compliance",
+        ],
+        description:
+          "Compiles declarative Bicep files, manages Azure Blueprints compliance, and runs validation gates.",
+        icon: "Activity",
+      },
     ];
   }
 
   // Fallback programmatic generator for all other 64 cloud providers!
   const categories = [
-    { suffix: "Compute Specialist (Tier 12)", type: "Compute & Microservices", icon: "Server" as const, caps: ["workload-isolation", "node-auto-scale", "virtualization"] },
-    { suffix: "Storage Specialist (Tier 12)", type: "Persistent Data & Backups", icon: "Database" as const, caps: ["replication", "retention-policies", "data-scrubbing"] },
-    { suffix: "Network Router (Tier 12)", type: "Edge & Delivery Networks", icon: "Network" as const, caps: ["anycast-routing", "dns-failover", "ingress-filters"] },
-    { suffix: "Security Shield (Tier 12)", type: "Zero-Trust & Vaults", icon: "Lock" as const, caps: ["token-rotation", "firewall-rules", "key-custody"] },
-    { suffix: "Telemetry Pulse (Tier 12)", type: "Observability & Latency", icon: "Activity" as const, caps: ["log-streams", "latency-metrics", "alert-triggers"] },
-    { suffix: "Orchestrator Node (Tier 12)", type: "Automated Deployments", icon: "Cpu" as const, caps: ["gitops-sync", "dry-run-compiles", "auto-rollback"] }
+    {
+      suffix: "Compute Specialist (Tier 12)",
+      type: "Compute & Microservices",
+      icon: "Server" as const,
+      caps: ["workload-isolation", "node-auto-scale", "virtualization"],
+    },
+    {
+      suffix: "Storage Specialist (Tier 12)",
+      type: "Persistent Data & Backups",
+      icon: "Database" as const,
+      caps: ["replication", "retention-policies", "data-scrubbing"],
+    },
+    {
+      suffix: "Network Router (Tier 12)",
+      type: "Edge & Delivery Networks",
+      icon: "Network" as const,
+      caps: ["anycast-routing", "dns-failover", "ingress-filters"],
+    },
+    {
+      suffix: "Security Shield (Tier 12)",
+      type: "Zero-Trust & Vaults",
+      icon: "Lock" as const,
+      caps: ["token-rotation", "firewall-rules", "key-custody"],
+    },
+    {
+      suffix: "Telemetry Pulse (Tier 12)",
+      type: "Observability & Latency",
+      icon: "Activity" as const,
+      caps: ["log-streams", "latency-metrics", "alert-triggers"],
+    },
+    {
+      suffix: "Orchestrator Node (Tier 12)",
+      type: "Automated Deployments",
+      icon: "Cpu" as const,
+      caps: ["gitops-sync", "dry-run-compiles", "auto-rollback"],
+    },
   ];
 
   return categories.map((cat, i) => {
@@ -266,10 +333,17 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
       functionName: cat.type,
       agentName: `${name} ${cat.suffix}`,
       agentId: `${safePrefix}_${cat.suffix.split(" ")[0].toLowerCase()}_specialist`,
-      status: i === 4 ? "OPTIMIZING" : i === 3 ? "SWARMING" : i === 5 ? "IDLE" : "ACTIVE",
-      capabilities: cat.caps.map(cap => `${safePrefix}-${cap}`),
+      status:
+        i === 4
+          ? "OPTIMIZING"
+          : i === 3
+            ? "SWARMING"
+            : i === 5
+              ? "IDLE"
+              : "ACTIVE",
+      capabilities: cat.caps.map((cap) => `${safePrefix}-${cap}`),
       description: `Bespoke dynamic specialist agent designed to manage, deploy, and audit ${cat.type.toLowerCase()} directly inside ${name}.`,
-      icon: cat.icon
+      icon: cat.icon,
     };
   });
 };
@@ -339,32 +413,112 @@ export default function CloudPage() {
 
       if (telemetryRes.ok) {
         const data = await telemetryRes.json();
+
         setTelemetry(data);
       } else {
         let workloads = [];
-        if (selectedProvider?.includes("Amazon") || selectedProvider?.includes("AWS")) {
+
+        if (
+          selectedProvider?.includes("Amazon") ||
+          selectedProvider?.includes("AWS")
+        ) {
           workloads = [
-            { id: `i-${Math.floor(Math.random() * 10000000)}`, name: "EC2 Inference Fleet", status: "Running", region: "us-east-1", cpu: "65%" },
-            { id: `bedrock-${Math.floor(Math.random() * 1000)}`, name: "Bedrock Claude 3.5 Sonnet", status: "Running", region: "us-west-2", cpu: "82%" },
-            { id: `ddb-${Math.floor(Math.random() * 1000)}`, name: "DynamoDB Global Table", status: "Running", region: "eu-central-1", cpu: "20%" },
+            {
+              id: `i-${Math.floor(Math.random() * 10000000)}`,
+              name: "EC2 Inference Fleet",
+              status: "Running",
+              region: "us-east-1",
+              cpu: "65%",
+            },
+            {
+              id: `bedrock-${Math.floor(Math.random() * 1000)}`,
+              name: "Bedrock Claude 3.5 Sonnet",
+              status: "Running",
+              region: "us-west-2",
+              cpu: "82%",
+            },
+            {
+              id: `ddb-${Math.floor(Math.random() * 1000)}`,
+              name: "DynamoDB Global Table",
+              status: "Running",
+              region: "eu-central-1",
+              cpu: "20%",
+            },
           ];
-        } else if (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP")) {
+        } else if (
+          selectedProvider?.includes("Google") ||
+          selectedProvider?.includes("GCP")
+        ) {
           workloads = [
-            { id: `gk-${Math.floor(Math.random() * 100000)}`, name: "GKE AI Cluster", status: "Running", region: "us-central1", cpu: "45%" },
-            { id: `vertex-${Math.floor(Math.random() * 1000)}`, name: "Vertex AI Gemini 1.5 Pro", status: "Running", region: "europe-west1", cpu: "78%" },
-            { id: `bq-${Math.floor(Math.random() * 1000)}`, name: "BigQuery Data Lake", status: "Running", region: "asia-northeast1", cpu: "12%" },
+            {
+              id: `gk-${Math.floor(Math.random() * 100000)}`,
+              name: "GKE AI Cluster",
+              status: "Running",
+              region: "us-central1",
+              cpu: "45%",
+            },
+            {
+              id: `vertex-${Math.floor(Math.random() * 1000)}`,
+              name: "Vertex AI Gemini 1.5 Pro",
+              status: "Running",
+              region: "europe-west1",
+              cpu: "78%",
+            },
+            {
+              id: `bq-${Math.floor(Math.random() * 1000)}`,
+              name: "BigQuery Data Lake",
+              status: "Running",
+              region: "asia-northeast1",
+              cpu: "12%",
+            },
           ];
         } else if (selectedProvider?.includes("Azure")) {
           workloads = [
-            { id: `vmss-${Math.floor(Math.random() * 10000)}`, name: "AKS Workload Nodes", status: "Running", region: "eastus", cpu: "55%" },
-            { id: `openai-${Math.floor(Math.random() * 1000)}`, name: "Azure OpenAI GPT-4o Foundry", status: "Running", region: "westeurope", cpu: "88%" },
-            { id: `cosmos-${Math.floor(Math.random() * 1000)}`, name: "CosmosDB Multi-Write", status: "Running", region: "japaneast", cpu: "18%" },
+            {
+              id: `vmss-${Math.floor(Math.random() * 10000)}`,
+              name: "AKS Workload Nodes",
+              status: "Running",
+              region: "eastus",
+              cpu: "55%",
+            },
+            {
+              id: `openai-${Math.floor(Math.random() * 1000)}`,
+              name: "Azure OpenAI GPT-4o Foundry",
+              status: "Running",
+              region: "westeurope",
+              cpu: "88%",
+            },
+            {
+              id: `cosmos-${Math.floor(Math.random() * 1000)}`,
+              name: "CosmosDB Multi-Write",
+              status: "Running",
+              region: "japaneast",
+              cpu: "18%",
+            },
           ];
         } else {
           workloads = [
-            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Production Database Cluster", status: "Running", region: "us-east-1", cpu: "45%" },
-            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "AI Inference Gateway", status: "Running", region: "eu-west-3", cpu: "82%" },
-            { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Edge Caching Nodes", status: "Running", region: "ap-northeast-1", cpu: "12%" },
+            {
+              id: `wk-${Math.floor(Math.random() * 1000)}`,
+              name: "Production Database Cluster",
+              status: "Running",
+              region: "us-east-1",
+              cpu: "45%",
+            },
+            {
+              id: `wk-${Math.floor(Math.random() * 1000)}`,
+              name: "AI Inference Gateway",
+              status: "Running",
+              region: "eu-west-3",
+              cpu: "82%",
+            },
+            {
+              id: `wk-${Math.floor(Math.random() * 1000)}`,
+              name: "Edge Caching Nodes",
+              status: "Running",
+              region: "ap-northeast-1",
+              cpu: "12%",
+            },
           ];
         }
         setTelemetry({
@@ -380,29 +534,108 @@ export default function CloudPage() {
       setIsModalOpen(false);
       setIsAuthenticated(true);
       let workloads = [];
-      if (selectedProvider?.includes("Amazon") || selectedProvider?.includes("AWS")) {
+
+      if (
+        selectedProvider?.includes("Amazon") ||
+        selectedProvider?.includes("AWS")
+      ) {
         workloads = [
-          { id: `i-${Math.floor(Math.random() * 10000000)}`, name: "EC2 Inference Fleet", status: "Running", region: "us-east-1", cpu: "65%" },
-          { id: `bedrock-${Math.floor(Math.random() * 1000)}`, name: "Bedrock Claude 3.5 Sonnet", status: "Running", region: "us-west-2", cpu: "82%" },
-          { id: `ddb-${Math.floor(Math.random() * 1000)}`, name: "DynamoDB Global Table", status: "Running", region: "eu-central-1", cpu: "20%" },
+          {
+            id: `i-${Math.floor(Math.random() * 10000000)}`,
+            name: "EC2 Inference Fleet",
+            status: "Running",
+            region: "us-east-1",
+            cpu: "65%",
+          },
+          {
+            id: `bedrock-${Math.floor(Math.random() * 1000)}`,
+            name: "Bedrock Claude 3.5 Sonnet",
+            status: "Running",
+            region: "us-west-2",
+            cpu: "82%",
+          },
+          {
+            id: `ddb-${Math.floor(Math.random() * 1000)}`,
+            name: "DynamoDB Global Table",
+            status: "Running",
+            region: "eu-central-1",
+            cpu: "20%",
+          },
         ];
-      } else if (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP")) {
+      } else if (
+        selectedProvider?.includes("Google") ||
+        selectedProvider?.includes("GCP")
+      ) {
         workloads = [
-          { id: `gk-${Math.floor(Math.random() * 100000)}`, name: "GKE AI Cluster", status: "Running", region: "us-central1", cpu: "45%" },
-          { id: `vertex-${Math.floor(Math.random() * 1000)}`, name: "Vertex AI Gemini 1.5 Pro", status: "Running", region: "europe-west1", cpu: "78%" },
-          { id: `bq-${Math.floor(Math.random() * 1000)}`, name: "BigQuery Data Lake", status: "Running", region: "asia-northeast1", cpu: "12%" },
+          {
+            id: `gk-${Math.floor(Math.random() * 100000)}`,
+            name: "GKE AI Cluster",
+            status: "Running",
+            region: "us-central1",
+            cpu: "45%",
+          },
+          {
+            id: `vertex-${Math.floor(Math.random() * 1000)}`,
+            name: "Vertex AI Gemini 1.5 Pro",
+            status: "Running",
+            region: "europe-west1",
+            cpu: "78%",
+          },
+          {
+            id: `bq-${Math.floor(Math.random() * 1000)}`,
+            name: "BigQuery Data Lake",
+            status: "Running",
+            region: "asia-northeast1",
+            cpu: "12%",
+          },
         ];
       } else if (selectedProvider?.includes("Azure")) {
         workloads = [
-          { id: `vmss-${Math.floor(Math.random() * 10000)}`, name: "AKS Workload Nodes", status: "Running", region: "eastus", cpu: "55%" },
-          { id: `openai-${Math.floor(Math.random() * 1000)}`, name: "Azure OpenAI GPT-4o Foundry", status: "Running", region: "westeurope", cpu: "88%" },
-          { id: `cosmos-${Math.floor(Math.random() * 1000)}`, name: "CosmosDB Multi-Write", status: "Running", region: "japaneast", cpu: "18%" },
+          {
+            id: `vmss-${Math.floor(Math.random() * 10000)}`,
+            name: "AKS Workload Nodes",
+            status: "Running",
+            region: "eastus",
+            cpu: "55%",
+          },
+          {
+            id: `openai-${Math.floor(Math.random() * 1000)}`,
+            name: "Azure OpenAI GPT-4o Foundry",
+            status: "Running",
+            region: "westeurope",
+            cpu: "88%",
+          },
+          {
+            id: `cosmos-${Math.floor(Math.random() * 1000)}`,
+            name: "CosmosDB Multi-Write",
+            status: "Running",
+            region: "japaneast",
+            cpu: "18%",
+          },
         ];
       } else {
         workloads = [
-          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Production Database Cluster", status: "Running", region: "us-east-1", cpu: "45%" },
-          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "AI Inference Gateway", status: "Running", region: "eu-west-3", cpu: "82%" },
-          { id: `wk-${Math.floor(Math.random() * 1000)}`, name: "Edge Caching Nodes", status: "Running", region: "ap-northeast-1", cpu: "12%" },
+          {
+            id: `wk-${Math.floor(Math.random() * 1000)}`,
+            name: "Production Database Cluster",
+            status: "Running",
+            region: "us-east-1",
+            cpu: "45%",
+          },
+          {
+            id: `wk-${Math.floor(Math.random() * 1000)}`,
+            name: "AI Inference Gateway",
+            status: "Running",
+            region: "eu-west-3",
+            cpu: "82%",
+          },
+          {
+            id: `wk-${Math.floor(Math.random() * 1000)}`,
+            name: "Edge Caching Nodes",
+            status: "Running",
+            region: "ap-northeast-1",
+            cpu: "12%",
+          },
         ];
       }
       setTelemetry({
@@ -430,7 +663,7 @@ export default function CloudPage() {
       `[${timestamp()}] 🔐 Establishing secure tunnel using GCP Workload Identity / IAM bindings...`,
       `[${timestamp()}] 🔍 Injecting Dynamic DLP Scrubber & regex validation filters...`,
       `[${timestamp()}] 🩺 Conducting sandbox telemetry checklist & pre-flight compile diagnostics...`,
-      `[${timestamp()}] 🎯 Dedicated specialist bound! Status promoted to ACTIVE & SWARMING.`
+      `[${timestamp()}] 🎯 Dedicated specialist bound! Status promoted to ACTIVE & SWARMING.`,
     ];
 
     for (let i = 0; i < stages.length; i++) {
@@ -443,7 +676,9 @@ export default function CloudPage() {
     setDeployingAgentId(null);
   };
 
-  const currentAgents = selectedProvider ? getFunctionsForProvider(selectedProvider) : [];
+  const currentAgents = selectedProvider
+    ? getFunctionsForProvider(selectedProvider)
+    : [];
 
   const getAgentIcon = (type: string) => {
     switch (type) {
@@ -638,13 +873,21 @@ export default function CloudPage() {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-primary" /> Dedicated Specialist Agent Swarm
+                        <Zap className="w-5 h-5 text-primary" /> Dedicated
+                        Specialist Agent Swarm
                       </h3>
                       <p className="text-xs text-gray-500 mt-1">
-                        Fully specialized autonomous agent nodes running dedicated telemetry microservices for every core function of {selectedProvider}.
+                        Fully specialized autonomous agent nodes running
+                        dedicated telemetry microservices for every core
+                        function of {selectedProvider}.
                       </p>
                     </div>
-                    <Chip size="sm" variant="flat" color="primary" className="font-semibold uppercase tracking-wider">
+                    <Chip
+                      className="font-semibold uppercase tracking-wider"
+                      color="primary"
+                      size="sm"
+                      variant="flat"
+                    >
                       6 Specializations Active
                     </Chip>
                   </div>
@@ -658,7 +901,10 @@ export default function CloudPage() {
                       </div>
                       <div className="space-y-1 select-none">
                         {agentLogs.map((log, i) => (
-                          <div key={i} className="animate-in slide-in-from-left duration-300">
+                          <div
+                            key={i}
+                            className="animate-in slide-in-from-left duration-300"
+                          >
                             {log}
                           </div>
                         ))}
@@ -694,27 +940,27 @@ export default function CloudPage() {
                               </div>
 
                               <Chip
-                                size="sm"
                                 className="text-[10px] font-bold border-none"
                                 color={
                                   activeStatus === "ACTIVE"
                                     ? "success"
                                     : activeStatus === "SWARMING"
-                                    ? "secondary"
-                                    : activeStatus === "OPTIMIZING"
-                                    ? "warning"
-                                    : "default"
+                                      ? "secondary"
+                                      : activeStatus === "OPTIMIZING"
+                                        ? "warning"
+                                        : "default"
                                 }
+                                size="sm"
                                 startContent={
                                   <div
                                     className={`w-1 h-1 rounded-full ${
                                       activeStatus === "ACTIVE"
                                         ? "bg-success"
                                         : activeStatus === "SWARMING"
-                                        ? "bg-secondary"
-                                        : activeStatus === "OPTIMIZING"
-                                        ? "bg-warning"
-                                        : "bg-gray-400"
+                                          ? "bg-secondary"
+                                          : activeStatus === "OPTIMIZING"
+                                            ? "bg-warning"
+                                            : "bg-gray-400"
                                     } mr-1`}
                                   />
                                 }
@@ -732,9 +978,9 @@ export default function CloudPage() {
                               {agent.capabilities.map((cap) => (
                                 <Chip
                                   key={cap}
+                                  className="text-[9px] font-mono border-default-200 px-1 hover:bg-default-100 transition-colors"
                                   size="sm"
                                   variant="bordered"
-                                  className="text-[9px] font-mono border-default-200 px-1 hover:bg-default-100 transition-colors"
                                 >
                                   {cap}
                                 </Chip>
@@ -752,14 +998,14 @@ export default function CloudPage() {
                                   ? "bg-success/10 text-success border border-success/20 hover:bg-success/20"
                                   : "bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
                               }`}
-                              size="sm"
                               isDisabled={isDeploying || isDeployed}
                               isLoading={isDeploying}
+                              size="sm"
                               startContent={
                                 isDeployed ? (
                                   <Check size={12} />
                                 ) : (
-                                  <Play size={12} fill="currentColor" />
+                                  <Play fill="currentColor" size={12} />
                                 )
                               }
                               onClick={() => deploySpecialistAgent(agent)}
@@ -772,7 +1018,6 @@ export default function CloudPage() {
                     })}
                   </div>
                 </div>
-
               </div>
             </div>
           ) : (
@@ -887,4 +1132,3 @@ export default function CloudPage() {
     </ChatBotLayout>
   );
 }
-

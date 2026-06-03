@@ -3,7 +3,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "@iconify/react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
@@ -57,9 +56,7 @@ export default function Instructions() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
-
-
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
         <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-10 pointer-events-none blur-sm mix-blend-screen">
             <AgentCommandCenter />

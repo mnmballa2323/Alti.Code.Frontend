@@ -13,6 +13,8 @@ const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
+process.stdout.on("error", (err) => { if (err.code === "EPIPE") return; throw err; });
+process.on("uncaughtException", (err) => { if (err.code === "EPIPE") return; console.error("Uncaught Exception:", err); process.exit(1); });
 const safeLog = (...args) => { try { console.log(...args); } catch(e) { if(e.code !== 'EPIPE') throw e; } };
 const safeWarn = (...args) => { try { console.warn(...args); } catch(e) { if(e.code !== 'EPIPE') throw e; } };
 const safeError = (...args) => { try { console.error(...args); } catch(e) { if(e.code !== 'EPIPE') throw e; } };

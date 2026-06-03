@@ -4,9 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Search, Microscope } from "lucide-react";
 import { cn } from "@heroui/react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useSettingsStore } from "@/store/useSettingsStore";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useSettingsStore } from "@/store/useSettingsStore";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import MessageContainer from "@/components/message-container";
@@ -37,7 +41,7 @@ export default function ChatHome() {
     prompt: string,
     mode?: string,
     domain?: string,
-    language?: string
+    language?: string,
   ) => {
     const onNavigationFulfilled = (newSessionId: string) => {
       router.push(`/chat/${newSessionId}`);
@@ -46,21 +50,21 @@ export default function ChatHome() {
     dispatch(
       sendMessage({
         prompt,
-        model: isResearchMode ? "Deep Research" : (defaultModel || mode || "Smart Routing"),
+        model: isResearchMode
+          ? "Deep Research"
+          : defaultModel || mode || "Smart Routing",
         domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
         language,
         sessionId: sessionId,
         ...(sessionId === null ? { onFulfilled: onNavigationFulfilled } : {}),
         token,
-      })
+      }),
     );
   };
 
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
-
-
         {/* Dynamic Content */}
         {isChatting ? (
           <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
@@ -73,7 +77,6 @@ export default function ChatHome() {
                   hideAgents={true}
                   hideDropdown={true}
                   placeholder="Enter prompt here..."
-                  onSend={handleFirstMessageSend}
                   rightActions={
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -88,10 +91,15 @@ export default function ChatHome() {
                         />
                       </TooltipTrigger>
                       <TooltipContent side="top">
-                        <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                        <p>
+                          {isResearchMode
+                            ? "Disable Deep Research"
+                            : "Deep Research"}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   }
+                  onSend={handleFirstMessageSend}
                 />
               </div>
             </div>
@@ -111,9 +119,7 @@ export default function ChatHome() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
-                  showModelDropdown={true}
                   placeholder="Enter prompt here..."
-                  onSend={handleFirstMessageSend}
                   rightActions={
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -128,10 +134,16 @@ export default function ChatHome() {
                         />
                       </TooltipTrigger>
                       <TooltipContent side="top">
-                        <p>{isResearchMode ? "Disable Deep Research" : "Deep Research"}</p>
+                        <p>
+                          {isResearchMode
+                            ? "Disable Deep Research"
+                            : "Deep Research"}
+                        </p>
                       </TooltipContent>
                     </Tooltip>
                   }
+                  showModelDropdown={true}
+                  onSend={handleFirstMessageSend}
                 />
               </div>
             </div>

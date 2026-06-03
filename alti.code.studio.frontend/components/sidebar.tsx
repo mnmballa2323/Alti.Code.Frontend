@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
@@ -29,9 +29,6 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Search,
   ChevronDown,
-  Blocks,
-  Waypoints,
-  Network,
   BookOpen,
   Shield,
   Plus,
@@ -44,31 +41,10 @@ import {
   PanelLeftOpen,
   Lock,
   Cloud,
-  CheckCircle,
-  Github,
-  Users,
-  Briefcase,
-  Activity,
-  Cpu,
-  ShieldCheck,
-  Landmark,
-  Megaphone,
   Server,
-  Layout,
   LayoutGrid,
-  Crown,
-  Scale,
-  Calculator,
-  Target,
-  Palette,
-  Settings2,
-  Bug,
-  TrendingUp,
   Bot,
   Database,
-  FileText,
-  ListTodo,
-  LifeBuoy,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -82,11 +58,7 @@ import {
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
-import {
-  sendMessage,
-  setChatContext,
-  startNewChat,
-} from "@/store/messagesSlice";
+import { startNewChat } from "@/store/messagesSlice";
 import { SAAS_MOCKS } from "@/app/connect-apps/catalog";
 
 type AppIntegration = {
@@ -100,13 +72,24 @@ type AppIntegration = {
   type: "official" | "custom";
 };
 
-const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; className?: string }) => {
+const AppIcon = ({
+  app,
+  className = "w-8 h-8",
+}: {
+  app: AppIntegration;
+  className?: string;
+}) => {
   const [imageError, setImageError] = useState(false);
   const [urlIndex, setUrlIndex] = useState(0);
 
   if (app.id === "custom-mcp-launcher") {
     return (
-      <div className={cn("w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg", className)}>
+      <div
+        className={cn(
+          "w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg",
+          className,
+        )}
+      >
         <Plus className="size-4 shrink-0" />
       </div>
     );
@@ -114,6 +97,7 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   const slug = app.id.replace("app-", "").toLowerCase();
   let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+
   if (cleanSlug.startsWith("mcp_toolbox_")) {
     cleanSlug = cleanSlug.slice(12);
   } else if (cleanSlug.startsWith("mcp_")) {
@@ -122,40 +106,85 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
   const localSVGRegistry: Record<string, React.ReactNode> = {
     aws_dynamodb: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-0.5 object-contain">
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>Amazon DynamoDB</title>
-        <path fill="#4053D6" d="M16.606 20.705v-2.371c-1.263 1.082-3.884 1.795-7.066 1.795-3.184 0-5.805-.714-7.068-1.797v2.369c0 1.168 2.903 2.47 7.068 2.47 4.16 0 7.06-1.3 7.066-2.466zm.001-6.765l.817-.005v.005c0 .517-.258.998-.75 1.441.601.54.75 1.071.75 1.449a1661.7 1661.7 0 0 0 0 3.87c0 1.881-3.389 3.3-7.884 3.3-4.471 0-7.846-1.404-7.88-3.27a583.119 583.119 0 0 1-.003-3.909c.001-.375.15-.9.745-1.437-.592-.538-.743-1.062-.746-1.435v-3.892c.002-.377.153-.903.747-1.438-.593-.54-.744-1.062-.747-1.435 0-1.357-.002-2.735.002-3.897C1.674 1.412 5.056 0 9.54 0c2.159 0 4.233.356 5.689.974l-.315.766c-1.36-.58-3.319-.91-5.374-.91-4.165 0-7.067 1.3-7.067 2.47 0 1.168 2.902 2.47 7.067 2.47.115 0 .222 0 .334-.005l.033.828c-.122.006-.245.006-.367.006-3.184 0-5.805-.714-7.068-1.798v2.38c.005.45.45.843.821 1.093 1.116.736 3.114 1.239 5.34 1.342l-.037.829c-2.254-.105-4.23-.59-5.5-1.332-.318.245-.623.573-.623.952 0 1.168 2.902 2.47 7.067 2.47.411 0 .812-.014 1.203-.042l.06.826c-.41.03-.833.045-1.263.045-3.184 0-5.805-.713-7.068-1.797v2.368c.005.462.449.855.821 1.104 1.275.842 3.67 1.366 6.247 1.366h.182v.83H9.54c-2.62 0-4.99-.507-6.444-1.359-.317.245-.623.574-.623.954 0 1.168 2.902 2.47 7.067 2.47 4.159 0 7.058-1.298 7.066-2.465v-.007c0-.377-.303-.705-.62-.948a5.732 5.732 0 0 1-.662.336l-.316-.764c.3-.128.56-.266.776-.412.376-.254.823-.651.823-1.1zm4.377-6.915h-2.717a.406.406 0 0 1-.332-.173.42.42 0 0 1-.055-.375l1.204-3.597h-5.403l-2.583 4.974h2.623c.128 0 .248.06.325.164a.418.418 0 0 1 .069.36l-2.249 8.365zm1.249-.128l-10.89 11.608a.408.408 0 0 1-.498.075.418.418 0 0 1-.192-.471l2.534-9.426h-2.766a.407.407 0 0 1-.349-.2.418.418 0 0 1-.012-.407l3.014-5.804a.408.408 0 0 1 .36-.222h6.22c.132 0 .256.065.332.174a.422.422 0 0 1 .055.374l-1.204 3.598h3.1c.164 0 .31.099.375.251a.422.422 0 0 1-.08.45zM3.085 20.723a8.107 8.107 0 0 0 1.72.72l.233-.794a7.32 7.32 0 0 1-1.546-.645zm1.72-5.984l.233-.795a7.262 7.262 0 0 1-1.546-.646l-.407.72a8.051 8.051 0 0 0 1.72.72zm-1.72-7.427l.407-.719c.418.244.939.462 1.546.646l-.232.794a8.046 8.046 0 0 1-1.72-.72Z" />
+        <path
+          d="M16.606 20.705v-2.371c-1.263 1.082-3.884 1.795-7.066 1.795-3.184 0-5.805-.714-7.068-1.797v2.369c0 1.168 2.903 2.47 7.068 2.47 4.16 0 7.06-1.3 7.066-2.466zm.001-6.765l.817-.005v.005c0 .517-.258.998-.75 1.441.601.54.75 1.071.75 1.449a1661.7 1661.7 0 0 0 0 3.87c0 1.881-3.389 3.3-7.884 3.3-4.471 0-7.846-1.404-7.88-3.27a583.119 583.119 0 0 1-.003-3.909c.001-.375.15-.9.745-1.437-.592-.538-.743-1.062-.746-1.435v-3.892c.002-.377.153-.903.747-1.438-.593-.54-.744-1.062-.747-1.435 0-1.357-.002-2.735.002-3.897C1.674 1.412 5.056 0 9.54 0c2.159 0 4.233.356 5.689.974l-.315.766c-1.36-.58-3.319-.91-5.374-.91-4.165 0-7.067 1.3-7.067 2.47 0 1.168 2.902 2.47 7.067 2.47.115 0 .222 0 .334-.005l.033.828c-.122.006-.245.006-.367.006-3.184 0-5.805-.714-7.068-1.798v2.38c.005.45.45.843.821 1.093 1.116.736 3.114 1.239 5.34 1.342l-.037.829c-2.254-.105-4.23-.59-5.5-1.332-.318.245-.623.573-.623.952 0 1.168 2.902 2.47 7.067 2.47.411 0 .812-.014 1.203-.042l.06.826c-.41.03-.833.045-1.263.045-3.184 0-5.805-.713-7.068-1.797v2.368c.005.462.449.855.821 1.104 1.275.842 3.67 1.366 6.247 1.366h.182v.83H9.54c-2.62 0-4.99-.507-6.444-1.359-.317.245-.623.574-.623.954 0 1.168 2.902 2.47 7.067 2.47 4.159 0 7.058-1.298 7.066-2.465v-.007c0-.377-.303-.705-.62-.948a5.732 5.732 0 0 1-.662.336l-.316-.764c.3-.128.56-.266.776-.412.376-.254.823-.651.823-1.1zm4.377-6.915h-2.717a.406.406 0 0 1-.332-.173.42.42 0 0 1-.055-.375l1.204-3.597h-5.403l-2.583 4.974h2.623c.128 0 .248.06.325.164a.418.418 0 0 1 .069.36l-2.249 8.365zm1.249-.128l-10.89 11.608a.408.408 0 0 1-.498.075.418.418 0 0 1-.192-.471l2.534-9.426h-2.766a.407.407 0 0 1-.349-.2.418.418 0 0 1-.012-.407l3.014-5.804a.408.408 0 0 1 .36-.222h6.22c.132 0 .256.065.332.174a.422.422 0 0 1 .055.374l-1.204 3.598h3.1c.164 0 .31.099.375.251a.422.422 0 0 1-.08.45zM3.085 20.723a8.107 8.107 0 0 0 1.72.72l.233-.794a7.32 7.32 0 0 1-1.546-.645zm1.72-5.984l.233-.795a7.262 7.262 0 0 1-1.546-.646l-.407.72a8.051 8.051 0 0 0 1.72.72zm-1.72-7.427l.407-.719c.418.244.939.462 1.546.646l-.232.794a8.046 8.046 0 0 1-1.72-.72Z"
+          fill="#4053D6"
+        />
       </svg>
     ),
     ansible: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-0.5 object-contain">
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>Ansible</title>
-        <path fill="#EE0000" d="M10.617 11.473l4.686 3.695-3.102-7.662zM12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm5.797 17.305c-.011.471-.403.842-.875.83-.236 0-.416-.09-.664-.293l-6.19-5-2.079 5.203H6.191L11.438 5.44c.124-.314.427-.52.764-.506.326-.014.63.189.742.506l4.774 11.494c.045.111.08.234.08.348-.001.009-.001.009-.001.023z" />
+        <path
+          d="M10.617 11.473l4.686 3.695-3.102-7.662zM12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm5.797 17.305c-.011.471-.403.842-.875.83-.236 0-.416-.09-.664-.293l-6.19-5-2.079 5.203H6.191L11.438 5.44c.124-.314.427-.52.764-.506.326-.014.63.189.742.506l4.774 11.494c.045.111.08.234.08.348-.001.009-.001.009-.001.023z"
+          fill="#EE0000"
+        />
       </svg>
     ),
     anthropic: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-0.5 object-contain">
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>Anthropic</title>
-        <path fill="#191919" d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" />
+        <path
+          d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"
+          fill="#191919"
+        />
       </svg>
     ),
     apollo_graphql: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-0.5 object-contain">
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>Apollo GraphQL</title>
-        <path fill="#311C87" d="M12,0C5.372,0 0,5.373 0,12 0,18.628 5.372,24 12,24 18.627,24 24,18.628 24,12A12.014,12.014 0 0 0 23.527,8.657 0.6,0.6 0 0 0 22.4,9.066H22.398C22.663,10.009 22.8,10.994 22.8,12A10.73,10.73 0 0 1 19.637,19.637 10.729,10.729 0 0 1 12,22.8 10.73,10.73 0 0 1 4.363,19.637 10.728,10.728 0 0 1 1.2,12 10.73,10.73 0 0 1 4.363,4.363 10.728,10.728 0 0 1 12,1.2C14.576,1.2 17.013,2.096 18.958,3.74A1.466,1.466 0 1 0 19.82,2.9 11.953,11.953 0 0 0 12,0ZM10.56,5.88 6.36,16.782H8.99L9.677,14.934H13.646L12.927,12.892H10.314L12.014,8.201 15.038,16.781H17.669L13.47,5.88Z" />
+        <path
+          d="M12,0C5.372,0 0,5.373 0,12 0,18.628 5.372,24 12,24 18.627,24 24,18.628 24,12A12.014,12.014 0 0 0 23.527,8.657 0.6,0.6 0 0 0 22.4,9.066H22.398C22.663,10.009 22.8,10.994 22.8,12A10.73,10.73 0 0 1 19.637,19.637 10.729,10.729 0 0 1 12,22.8 10.73,10.73 0 0 1 4.363,19.637 10.728,10.728 0 0 1 1.2,12 10.73,10.73 0 0 1 4.363,4.363 10.728,10.728 0 0 1 12,1.2C14.576,1.2 17.013,2.096 18.958,3.74A1.466,1.466 0 1 0 19.82,2.9 11.953,11.953 0 0 0 12,0ZM10.56,5.88 6.36,16.782H8.99L9.677,14.934H13.646L12.927,12.892H10.314L12.014,8.201 15.038,16.781H17.669L13.47,5.88Z"
+          fill="#311C87"
+        />
       </svg>
     ),
     argocd: (
-      <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-full h-full p-0.5 object-contain">
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <title>ArgoCD</title>
-        <path fill="#EF6A39" d="M12.581 0c.436.037.871.1 1.299.186 1.679.383 3.121 1.213 4.382 2.365 1.161 1.06 1.917 2.372 2.335 3.881.089.321.216.56.586.624.205.035.238.245.239.43.003.646.002 1.294.002 1.94l-.002 1.21c-.001.356-.116.479-.466.474-.211-.003-.293.119-.344.291-.146.489-.33.966-.552 1.426-.818 1.682-2.084 2.938-3.688 3.87-.077.045-.155.088-.233.131-.252.137-.258.146-.155.415.114.299.358.529.664.625.269.096.553.134.827.21a.672.672 0 0 1 .236.094c-.066.082-.156.067-.231.082-.36.073-.713.184-1.086.17a1.275 1.275 0 0 1-.438-.064c-.114-.045-.152-.006-.176.109a5.354 5.354 0 0 0-.084.92c-.015.617-.071 1.23-.112 1.844-.042.598-.018.651.558.842.281.094.563.187.842.286.069.024.15.038.192.117-.04.057-.098.035-.146.035-.493.003-.985.005-1.478.001-.524-.005-.806-.282-.845-.803-.055-.762-.12-1.524-.182-2.286a.947.947 0 0 0-.026-.12c-.079.455-.065.879-.084 1.298-.023.528-.008 1.057-.007 1.584 0 .27.086.388.335.483.359.135.711.295 1.114.262.141-.012.276.062.402.129.032.017.073.033.069.073-.004.043-.049.047-.084.045-.657-.019-1.317.065-1.972-.028-.323-.046-.533-.236-.631-.552-.094-.303-.114-.617-.137-.93-.046-.626-.078-1.253-.116-1.88a.222.222 0 0 0-.061-.171.282.282 0 0 0-.031.193c-.002.956-.002 1.911-.001 2.866 0 .388.123.575.494.708.481.172.976.298 1.47.423.11.028.225.047.242.192h-1.852c-.051-.01-.103-.022-.155-.03-.701-.1-1.001-.372-1.143-1.042l-.067-.331-.226-1.103c-.069.12-.118.25-.144.386-.083.399-.151.802-.243 1.2-.113.493-.444.763-.932.857l-.33.063H8.558c.057-.171.216-.185.355-.221.476-.127.96-.223 1.417-.409a.603.603 0 0 0 .397-.521c.058-.435.002-.865-.013-1.296a1.528 1.528 0 0 0-.078-.315.405.405 0 0 0-.071.207c-.026.296-.049.591-.075.886-.038.432-.273.716-.679.81a1.702 1.702 0 0 1-.37.045c-.557.003-1.115-.001-1.673-.005-.048 0-.109.019-.148-.065.178-.103.377-.168.582-.187a5.67 5.67 0 0 0 .939-.193c.42-.114.522-.249.512-.687-.023-.931-.091-1.86-.069-2.791.004-.184.001-.368.001-.551a2.387 2.387 0 0 0-.05.385 40.299 40.299 0 0 1-.186 2.623c-.052.513-.296.748-.804.805-.446.051-.889.002-1.332-.02-.108-.006-.234.012-.339-.064.043-.066.106-.07.16-.087.362-.115.725-.224 1.086-.344.246-.081.35-.235.355-.492a2.241 2.241 0 0 0-.003-.232 45.315 45.315 0 0 1-.105-2.149 5.487 5.487 0 0 0-.035-.478c-.024-.188-.131-.287-.295-.258-.505.092-.99-.006-1.473-.139-.059-.016-.134-.007-.178-.088a.986.986 0 0 1 .285-.09c.255-.052.507-.121.753-.208.312-.112.564-.347.695-.651.089-.203.056-.317-.112-.398-1.418-.683-2.512-1.73-3.391-3.017a8.152 8.152 0 0 1-1.123-2.447c-.067-.246-.156-.3-.383-.26-.306.053-.401.006-.535-.273v-3.49c.144-.303.205-.341.534-.329.235.01.247-.004.309-.242.396-1.508 1.082-2.861 2.171-3.988C6.9 1.42 8.523.631 10.34.203c.456-.108.922-.15 1.387-.203h.854Zm7.974 8.948a7.34 7.34 0 0 0-.048-.938 8.353 8.353 0 0 0-.099-.65c-.598-2.964-2.344-5.02-5.051-6.268-1.553-.715-3.21-.835-4.878-.511-3.248.633-5.396 2.583-6.539 5.652-.436 1.173-.495 2.406-.37 3.65.087.935.339 1.846.745 2.694.585 1.213 1.444 2.207 2.477 3.058.343.286.719.528 1.121.719.235.111.247.105.245-.146.006-.16.003-.32-.009-.48-.125-1.02-.142-2.045-.169-3.069a.392.392 0 0 0-.184-.353c-.385-.268-.713-.592-.921-1.019-.474-.97-.372-2.361.813-3.215.136-.097.217-.19.198-.373a1.724 1.724 0 0 1 .031-.442c.177-1.187.748-2.138 1.722-2.84.68-.492 1.442-.772 2.286-.782.483-.007.953.11 1.414.244 1.609.467 2.846 2.07 2.845 3.697a.64.64 0 0 0 .268.565c.463.371.821.83.943 1.426.22 1.077-.083 1.982-.979 2.634-.266.194-.347.406-.333.698.002.047 0 .095-.002.142l-.062 1.439c-.025.586-.138 1.165-.117 1.754.008.223.006.226.201.128a7.46 7.46 0 0 0 2.393-1.903c1.32-1.577 2.074-3.372 2.059-5.511ZM9.117 12.102c1.489.021 2.443-1.578 1.716-2.879a1.937 1.937 0 0 0-1.699-.991c-1.094-.004-1.954.822-1.958 1.881-.005 1.148.813 1.985 1.941 1.989Zm5.794 0c1.101.002 1.935-.823 1.935-1.917 0-1.091-.846-1.949-1.92-1.947-1.064.003-1.94.866-1.943 1.915-.003 1.105.831 1.948 1.928 1.949Zm-1.472 1.937c-.208.128-.407.277-.63.384-.536.257-1.063.257-1.579-.048-.158-.094-.308-.201-.464-.298-.047-.028-.092-.103-.15-.062-.044.03-.01.1-.001.151.037.179.064.362.082.544.027.565.293.992.742 1.31a.984.984 0 0 0 .791.186c.565-.119 1.025-.614 1.124-1.218.043-.266.005-.544.109-.803a.133.133 0 0 0-.024-.146Zm-8.78-4.92c-.012-1.102.143-2.055.54-2.961.633-1.443 1.642-2.553 2.98-3.374a.378.378 0 0 1 .459.067c.06.06.036.118.01.178a1.09 1.09 0 0 1-.48.51c-1.079.639-1.829 1.571-2.357 2.688a6.325 6.325 0 0 0-.618 2.986c.055 1.309.439 2.516 1.213 3.588.088.104.148.23.173.365.01.08.059.168-.031.228a.312.312 0 0 1-.288.041.502.502 0 0 1-.234-.185c-.72-.979-1.193-2.056-1.331-3.273-.036-.326-.004-.653-.036-.858ZM8.94 2.34a.373.373 0 0 1 .378-.382c.211.001.409.226.416.473.004.138-.309.39-.476.386-.189-.005-.318-.2-.318-.477Zm-.465 7.48a.609.609 0 0 1 .586-.631c.38-.003.671.271.675.633.004.356-.27.622-.639.621-.38-.002-.621-.241-.622-.623Zm6.496.623c-.381-.002-.625-.255-.621-.646a.635.635 0 0 1 .596-.613.656.656 0 0 1 .669.643c.001.354-.275.618-.644.616Z" />
+        <path
+          d="M12.581 0c.436.037.871.1 1.299.186 1.679.383 3.121 1.213 4.382 2.365 1.161 1.06 1.917 2.372 2.335 3.881.089.321.216.56.586.624.205.035.238.245.239.43.003.646.002 1.294.002 1.94l-.002 1.21c-.001.356-.116.479-.466.474-.211-.003-.293.119-.344.291-.146.489-.33.966-.552 1.426-.818 1.682-2.084 2.938-3.688 3.87-.077.045-.155.088-.233.131-.252.137-.258.146-.155.415.114.299.358.529.664.625.269.096.553.134.827.21a.672.672 0 0 1 .236.094c-.066.082-.156.067-.231.082-.36.073-.713.184-1.086.17a1.275 1.275 0 0 1-.438-.064c-.114-.045-.152-.006-.176.109a5.354 5.354 0 0 0-.084.92c-.015.617-.071 1.23-.112 1.844-.042.598-.018.651.558.842.281.094.563.187.842.286.069.024.15.038.192.117-.04.057-.098.035-.146.035-.493.003-.985.005-1.478.001-.524-.005-.806-.282-.845-.803-.055-.762-.12-1.524-.182-2.286a.947.947 0 0 0-.026-.12c-.079.455-.065.879-.084 1.298-.023.528-.008 1.057-.007 1.584 0 .27.086.388.335.483.359.135.711.295 1.114.262.141-.012.276.062.402.129.032.017.073.033.069.073-.004.043-.049.047-.084.045-.657-.019-1.317.065-1.972-.028-.323-.046-.533-.236-.631-.552-.094-.303-.114-.617-.137-.93-.046-.626-.078-1.253-.116-1.88a.222.222 0 0 0-.061-.171.282.282 0 0 0-.031.193c-.002.956-.002 1.911-.001 2.866 0 .388.123.575.494.708.481.172.976.298 1.47.423.11.028.225.047.242.192h-1.852c-.051-.01-.103-.022-.155-.03-.701-.1-1.001-.372-1.143-1.042l-.067-.331-.226-1.103c-.069.12-.118.25-.144.386-.083.399-.151.802-.243 1.2-.113.493-.444.763-.932.857l-.33.063H8.558c.057-.171.216-.185.355-.221.476-.127.96-.223 1.417-.409a.603.603 0 0 0 .397-.521c.058-.435.002-.865-.013-1.296a1.528 1.528 0 0 0-.078-.315.405.405 0 0 0-.071.207c-.026.296-.049.591-.075.886-.038.432-.273.716-.679.81a1.702 1.702 0 0 1-.37.045c-.557.003-1.115-.001-1.673-.005-.048 0-.109.019-.148-.065.178-.103.377-.168.582-.187a5.67 5.67 0 0 0 .939-.193c.42-.114.522-.249.512-.687-.023-.931-.091-1.86-.069-2.791.004-.184.001-.368.001-.551a2.387 2.387 0 0 0-.05.385 40.299 40.299 0 0 1-.186 2.623c-.052.513-.296.748-.804.805-.446.051-.889.002-1.332-.02-.108-.006-.234.012-.339-.064.043-.066.106-.07.16-.087.362-.115.725-.224 1.086-.344.246-.081.35-.235.355-.492a2.241 2.241 0 0 0-.003-.232 45.315 45.315 0 0 1-.105-2.149 5.487 5.487 0 0 0-.035-.478c-.024-.188-.131-.287-.295-.258-.505.092-.99-.006-1.473-.139-.059-.016-.134-.007-.178-.088a.986.986 0 0 1 .285-.09c.255-.052.507-.121.753-.208.312-.112.564-.347.695-.651.089-.203.056-.317-.112-.398-1.418-.683-2.512-1.73-3.391-3.017a8.152 8.152 0 0 1-1.123-2.447c-.067-.246-.156-.3-.383-.26-.306.053-.401.006-.535-.273v-3.49c.144-.303.205-.341.534-.329.235.01.247-.004.309-.242.396-1.508 1.082-2.861 2.171-3.988C6.9 1.42 8.523.631 10.34.203c.456-.108.922-.15 1.387-.203h.854Zm7.974 8.948a7.34 7.34 0 0 0-.048-.938 8.353 8.353 0 0 0-.099-.65c-.598-2.964-2.344-5.02-5.051-6.268-1.553-.715-3.21-.835-4.878-.511-3.248.633-5.396 2.583-6.539 5.652-.436 1.173-.495 2.406-.37 3.65.087.935.339 1.846.745 2.694.585 1.213 1.444 2.207 2.477 3.058.343.286.719.528 1.121.719.235.111.247.105.245-.146.006-.16.003-.32-.009-.48-.125-1.02-.142-2.045-.169-3.069a.392.392 0 0 0-.184-.353c-.385-.268-.713-.592-.921-1.019-.474-.97-.372-2.361.813-3.215.136-.097.217-.19.198-.373a1.724 1.724 0 0 1 .031-.442c.177-1.187.748-2.138 1.722-2.84.68-.492 1.442-.772 2.286-.782.483-.007.953.11 1.414.244 1.609.467 2.846 2.07 2.845 3.697a.64.64 0 0 0 .268.565c.463.371.821.83.943 1.426.22 1.077-.083 1.982-.979 2.634-.266.194-.347.406-.333.698.002.047 0 .095-.002.142l-.062 1.439c-.025.586-.138 1.165-.117 1.754.008.223.006.226.201.128a7.46 7.46 0 0 0 2.393-1.903c1.32-1.577 2.074-3.372 2.059-5.511ZM9.117 12.102c1.489.021 2.443-1.578 1.716-2.879a1.937 1.937 0 0 0-1.699-.991c-1.094-.004-1.954.822-1.958 1.881-.005 1.148.813 1.985 1.941 1.989Zm5.794 0c1.101.002 1.935-.823 1.935-1.917 0-1.091-.846-1.949-1.92-1.947-1.064.003-1.94.866-1.943 1.915-.003 1.105.831 1.948 1.928 1.949Zm-1.472 1.937c-.208.128-.407.277-.63.384-.536.257-1.063.257-1.579-.048-.158-.094-.308-.201-.464-.298-.047-.028-.092-.103-.15-.062-.044.03-.01.1-.001.151.037.179.064.362.082.544.027.565.293.992.742 1.31a.984.984 0 0 0 .791.186c.565-.119 1.025-.614 1.124-1.218.043-.266.005-.544.109-.803a.133.133 0 0 0-.024-.146Zm-8.78-4.92c-.012-1.102.143-2.055.54-2.961.633-1.443 1.642-2.553 2.98-3.374a.378.378 0 0 1 .459.067c.06.06.036.118.01.178a1.09 1.09 0 0 1-.48.51c-1.079.639-1.829 1.571-2.357 2.688a6.325 6.325 0 0 0-.618 2.986c.055 1.309.439 2.516 1.213 3.588.088.104.148.23.173.365.01.08.059.168-.031.228a.312.312 0 0 1-.288.041.502.502 0 0 1-.234-.185c-.72-.979-1.193-2.056-1.331-3.273-.036-.326-.004-.653-.036-.858ZM8.94 2.34a.373.373 0 0 1 .378-.382c.211.001.409.226.416.473.004.138-.309.39-.476.386-.189-.005-.318-.2-.318-.477Zm-.465 7.48a.609.609 0 0 1 .586-.631c.38-.003.671.271.675.633.004.356-.27.622-.639.621-.38-.002-.621-.241-.622-.623Zm6.496.623c-.381-.002-.625-.255-.621-.646a.635.635 0 0 1 .596-.613.656.656 0 0 1 .669.643c.001.354-.275.618-.644.616Z"
+          fill="#EF6A39"
+        />
       </svg>
     ),
   };
 
   if (localSVGRegistry[cleanSlug]) {
     return (
-      <div className={cn("rounded-lg flex items-center justify-center bg-transparent shrink-0", className)}>
+      <div
+        className={cn(
+          "rounded-lg flex items-center justify-center bg-transparent shrink-0",
+          className,
+        )}
+      >
         {localSVGRegistry[cleanSlug]}
       </div>
     );
@@ -222,14 +251,21 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
 
     // 2. Try local mapped asset (offline-first!)
     const localFile = localLogoMappings[cleanSlug] || localLogoMappings[slug];
+
     if (localFile) {
       addUrl(`/assets/apps-logos/${localFile}`);
     }
 
     // 3. Try official jsDelivr/unpkg Simple Icons npm CDN (highly CSP-compliant and fast)
-    const simpleIconBrand = simpleIconsMapping[cleanSlug] || cleanSlug.replace(/_/g, "");
-    addUrl(`https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${simpleIconBrand}.svg`);
-    addUrl(`https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`);
+    const simpleIconBrand =
+      simpleIconsMapping[cleanSlug] || cleanSlug.replace(/_/g, "");
+
+    addUrl(
+      `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${simpleIconBrand}.svg`,
+    );
+    addUrl(
+      `https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`,
+    );
     addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
 
     // 4. Try Composio official logo API
@@ -263,10 +299,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
       "from-cyan-500 to-blue-600 text-white",
     ];
     let hash = 0;
+
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash);
     }
     const index = Math.abs(hash) % colors.length;
+
     return colors[index];
   };
 
@@ -274,9 +312,9 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   if (!imageError && currentLogoUrl) {
     return (
       <img
-        src={currentLogoUrl}
         alt={`${app.name} logo`}
         className={cn(className, "object-contain p-0.5 rounded-lg shrink-0")}
+        src={currentLogoUrl}
         onError={handleImageError}
       />
     );
@@ -285,7 +323,12 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   // Fallback 1: System custom server icon
   if (app.type === "custom") {
     return (
-      <div className={cn("rounded-lg flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white shrink-0", className)}>
+      <div
+        className={cn(
+          "rounded-lg flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white shrink-0",
+          className,
+        )}
+      >
         <Server className="size-4 text-white shrink-0" />
       </div>
     );
@@ -296,7 +339,13 @@ const AppIcon = ({ app, className = "w-8 h-8" }: { app: AppIntegration; classNam
   const gradientClass = getAvatarColor(app.name);
 
   return (
-    <div className={cn("rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight shrink-0", gradientClass, className)}>
+    <div
+      className={cn(
+        "rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight shrink-0",
+        gradientClass,
+        className,
+      )}
+    >
       {initials}
     </div>
   );
@@ -654,31 +703,41 @@ export default function Sidebar() {
   const { data: session, status } = useSession();
   const token = session?.user?.accessToken ?? null;
   const [repoSearch, setRepoSearch] = useState("");
-  const selectedRepo = useSelector((state: RootState) => state.system.activeWorkspace) || "alti.code.studio";
+  const selectedRepo =
+    useSelector((state: RootState) => state.system.activeWorkspace) ||
+    "alti.code.studio";
 
   const [vaultSecrets, setVaultSecrets] = useState([
     { id: "sec-1", name: "Primary Build Agent", service: "AWS Bedrock" },
-    { id: "sec-2", name: "Synapse Production Analytics", service: "Azure OpenAI Foundry" },
+    {
+      id: "sec-2",
+      name: "Synapse Production Analytics",
+      service: "Azure OpenAI Foundry",
+    },
     { id: "sec-3", name: "Telepathy Inference", service: "GCP Vertex AI" },
   ]);
 
   useEffect(() => {
     const handleNewSecret = (e: any) => {
       const newSecret = e.detail;
-      setVaultSecrets(prev => {
-        const exists = prev.find(s => s.id === newSecret.id);
+
+      setVaultSecrets((prev) => {
+        const exists = prev.find((s) => s.id === newSecret.id);
+
         if (exists) {
-          return prev.map(s => s.id === newSecret.id ? newSecret : s);
+          return prev.map((s) => (s.id === newSecret.id ? newSecret : s));
         }
+
         return [newSecret, ...prev];
       });
     };
     const handleDeleteSecret = (e: any) => {
-      setVaultSecrets(prev => prev.filter(s => s.id !== e.detail));
+      setVaultSecrets((prev) => prev.filter((s) => s.id !== e.detail));
     };
 
     window.addEventListener("update-vault-secret", handleNewSecret);
     window.addEventListener("delete-vault-secret", handleDeleteSecret);
+
     return () => {
       window.removeEventListener("update-vault-secret", handleNewSecret);
       window.removeEventListener("delete-vault-secret", handleDeleteSecret);
@@ -687,10 +746,10 @@ export default function Sidebar() {
 
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
-     router.prefetch("/");
-     router.prefetch("/chat");
-     router.prefetch("/agents-showcase");
-     router.prefetch("/vault");
+    router.prefetch("/");
+    router.prefetch("/chat");
+    router.prefetch("/agents-showcase");
+    router.prefetch("/vault");
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
@@ -810,7 +869,7 @@ export default function Sidebar() {
   ];
 
   const filteredNavigationItems = navigationItems.filter((item) =>
-    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
   );
 
   const getPlusTooltipContent = () => {
@@ -822,6 +881,7 @@ export default function Sidebar() {
     if (pathname === "/knowledge") return "New Knowledge";
     if (pathname === "/repositories") return "New Repository";
     if (pathname === "/documents") return "New Documentation";
+
     return "New";
   };
 
@@ -837,15 +897,36 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
-  const [knowledgeFolders, setKnowledgeFolders] = useState<{ id: string; name: string }[]>(
-    [],
-  );
-  const [selectedKnowledgeFolderId, setSelectedKnowledgeFolderId] = useState<string | null>(null);
-  
-  const [customAgents, setCustomAgents] = useState<{ id: string; name: string; prompt: string }[]>(
-    [],
-  );
+  const [knowledgeFolders, setKnowledgeFolders] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [selectedKnowledgeFolderId, setSelectedKnowledgeFolderId] = useState<
+    string | null
+  >(null);
+
+  const [customAgents, setCustomAgents] = useState<
+    { id: string; name: string; prompt: string }[]
+  >([]);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const agentIdParam = searchParams?.get("agentId");
+  const agentNameParam = searchParams?.get("name");
+
+  useEffect(() => {
+    if (agentIdParam && agentNameParam) {
+      setCustomAgents((prev) => {
+        if (!prev.find((a) => a.id === agentIdParam)) {
+          return [
+            ...prev,
+            { id: agentIdParam, name: agentNameParam, prompt: "" },
+          ];
+        }
+        return prev;
+      });
+      setSelectedAgentId(agentIdParam);
+    }
+  }, [agentIdParam, agentNameParam]);
 
   // States and dynamic handlers for integrations / connect-apps catalog
   const [apps, setApps] = useState<AppIntegration[]>([]);
@@ -875,8 +956,11 @@ export default function Sidebar() {
     const handleActiveApp = (e: any) => {
       setSelectedAppId(e.detail?.id || null);
     };
+
     window.addEventListener("active-connect-app", handleActiveApp);
-    return () => window.removeEventListener("active-connect-app", handleActiveApp);
+
+    return () =>
+      window.removeEventListener("active-connect-app", handleActiveApp);
   }, []);
 
   useEffect(() => {
@@ -886,16 +970,19 @@ export default function Sidebar() {
       if (!token) {
         setApps(FALLBACK_APPS);
         setLoadingApps(false);
+
         return;
       }
 
       try {
         // Fetch local active tools first
         let activeTools: any[] = [];
+
         try {
           const toolsRes = await axios.get(`${API_URL}/mcp/tools/local`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+
           if (toolsRes.data && toolsRes.data.success) {
             activeTools = toolsRes.data.data || [];
           }
@@ -905,10 +992,12 @@ export default function Sidebar() {
 
         // Fetch custom registered MCP servers
         let customServers: any[] = [];
+
         try {
           const customRes = await axios.get(`${API_URL}/mcp/custom`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+
           if (customRes.data && customRes.data.success) {
             customServers = customRes.data.data || [];
           }
@@ -934,8 +1023,10 @@ export default function Sidebar() {
             description: s.description,
             icon: "solar:server-square-bold",
             color: "bg-white border border-gray-200",
-            status: activeTools.some((t: any) => t.server === s.name) ? ("connected" as const) : ("disconnected" as const),
-            type: "custom" as const
+            status: activeTools.some((t: any) => t.server === s.name)
+              ? ("connected" as const)
+              : ("disconnected" as const),
+            type: "custom" as const,
           }));
 
           // Standard SaaS & Presets
@@ -944,7 +1035,13 @@ export default function Sidebar() {
 
             if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
               const active = activeTools.some((t: any) => t.server === slug);
-              return { ...app, status: active ? ("connected" as const) : ("disconnected" as const) };
+
+              return {
+                ...app,
+                status: active
+                  ? ("connected" as const)
+                  : ("disconnected" as const),
+              };
             }
 
             if (connectedIds.has(slug)) {
@@ -956,9 +1053,10 @@ export default function Sidebar() {
           });
 
           // Sort all custom + standard apps alphabetically by name
-          const otherAppsSorted = [...customAppsMapped, ...standardAppsMapped].sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
+          const otherAppsSorted = [
+            ...customAppsMapped,
+            ...standardAppsMapped,
+          ].sort((a, b) => a.name.localeCompare(b.name));
 
           setApps(otherAppsSorted);
         }
@@ -977,6 +1075,7 @@ export default function Sidebar() {
     const handleSync = () => {
       fetchConnections();
     };
+
     window.addEventListener("sync-connect-apps", handleSync);
 
     return () => {
@@ -988,15 +1087,13 @@ export default function Sidebar() {
     queryKey: ["codebase-rules", token, selectedRepo],
     queryFn: async () => {
       if (!token) return { instructions: [], guardrails: [] };
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/rules`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rules`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       const data = await res.json();
+
       return data.success ? data.data : { instructions: [], guardrails: [] };
     },
     enabled: !!token,
@@ -1027,13 +1124,13 @@ export default function Sidebar() {
           `${API_URL}/rules`,
           {
             instructions,
-            guardrails
+            guardrails,
           },
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
       } catch (err) {
         console.error("Failed to save codebase rules:", err);
@@ -1051,6 +1148,7 @@ export default function Sidebar() {
     (state: RootState) => state.system.documents || [],
   );
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -1122,17 +1220,30 @@ export default function Sidebar() {
     };
 
     const handleCreateAgent = (e: any) => {
-      const prompt = e.detail;
       const newAgentId = "agent-" + Date.now();
-      // Extract a simple name from the prompt or use a default
-      const nameMatch = prompt.split(" ").slice(0, 3).join(" ") + "...";
-      
-      const newAgent = { id: newAgentId, name: nameMatch, prompt: prompt };
-      setCustomAgents(prev => [...prev, newAgent]);
+      let newAgent;
+
+      if (typeof e.detail === "string") {
+        const prompt = e.detail;
+        const nameMatch = prompt.split(" ").slice(0, 3).join(" ") + "...";
+
+        newAgent = { id: newAgentId, name: nameMatch, prompt: prompt };
+      } else {
+        newAgent = {
+          id: newAgentId,
+          name: e.detail.name || "Untitled Agent",
+          prompt: e.detail.instructions || "",
+          ...e.detail,
+        };
+      }
+
+      setCustomAgents((prev) => [...prev, newAgent]);
       setSelectedAgentId(newAgentId);
-      
+
       // Navigate to the newly created agent
-      router.push(`/agents?agentId=${newAgentId}&name=${encodeURIComponent(newAgent.name)}`);
+      router.push(
+        `/agents?agentId=${newAgentId}&name=${encodeURIComponent(newAgent.name)}`,
+      );
     };
 
     window.addEventListener("add-instruction", handleAddInstruction);
@@ -1144,7 +1255,6 @@ export default function Sidebar() {
     window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
     window.addEventListener("create-agent", handleCreateAgent);
 
-
     return () => {
       window.removeEventListener("add-instruction", handleAddInstruction);
       window.removeEventListener("update-instruction", handleUpdateInstruction);
@@ -1152,7 +1262,10 @@ export default function Sidebar() {
       window.removeEventListener("add-guardrail", handleAddGuardrail);
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
-      window.removeEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
+      window.removeEventListener(
+        "open-knowledge-modal",
+        handleOpenKnowledgeModal,
+      );
       window.removeEventListener("create-agent", handleCreateAgent);
     };
   }, []);
@@ -1235,9 +1348,18 @@ export default function Sidebar() {
           )}
         >
           <div
-            className={cn("flex-1 min-w-0 flex items-center justify-start", !isSidebarOpen && "hidden")}
+            className={cn(
+              "flex-1 min-w-0 flex items-center justify-start",
+              !isSidebarOpen && "hidden",
+            )}
           >
-            <Image src="/android-chrome-512x512.png" alt="Alti Logo" width={22} height={22} className="dark:invert" />
+            <Image
+              alt="Alti Logo"
+              className="dark:invert"
+              height={22}
+              src="/android-chrome-512x512.png"
+              width={22}
+            />
           </div>
           <Button
             isIconOnly
@@ -1258,93 +1380,90 @@ export default function Sidebar() {
         <div
           className={cn(
             "border-b border-default-200 px-3 py-2",
-            !isSidebarOpen && "hidden"
+            !isSidebarOpen && "hidden",
           )}
         >
-            <Dropdown
-              className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
-              placement="bottom-start"
-            >
-              <DropdownTrigger>
-                <div className="relative">
-                  <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <div className="flex items-center w-full">
-                        <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
-                          {selectedRepo}
-                        </span>
-                        <ChevronDown className="size-3 text-default-400 ml-auto shrink-0" />
-                      </div>
+          <Dropdown
+            className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
+            placement="bottom-start"
+          >
+            <DropdownTrigger>
+              <div className="relative">
+                <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
+                  <div className="flex flex-col items-start min-w-0 flex-1">
+                    <div className="flex items-center w-full">
+                      <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
+                        {selectedRepo}
+                      </span>
+                      <ChevronDown className="size-3 text-default-400 ml-auto shrink-0" />
                     </div>
                   </div>
                 </div>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Select Workspace"
-                className="p-2"
-                disabledKeys={isRepoLoading ? ["searching"] : []}
+              </div>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Select Workspace"
+              className="p-2"
+              disabledKeys={isRepoLoading ? ["searching"] : []}
+            >
+              <DropdownItem
+                key="search-section"
+                isReadOnly
+                className="cursor-default hover:bg-transparent p-0 mb-2"
               >
+                <div className="px-2 py-1 relative">
+                  <input
+                    autoFocus
+                    className="w-full bg-default-100 border border-default-200 rounded-lg px-8 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                    placeholder="Search repositories..."
+                    value={repoSearch}
+                    onChange={(e) => handleRepoSearch(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
+                  {isRepoLoading && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 size-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  )}
+                </div>
+              </DropdownItem>
+
+              <DropdownItem
+                key="current-header"
+                isReadOnly
+                className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-2 mb-1"
+              >
+                Available Repositories
+              </DropdownItem>
+
+              {repos.map((repo: any) => (
                 <DropdownItem
-                  key="search-section"
-                  isReadOnly
-                  className="cursor-default hover:bg-transparent p-0 mb-2"
+                  key={repo.fullName}
+                  className="rounded-lg h-10 px-2 hover:bg-primary/5 transition-colors"
+                  description={repo.private ? "Private" : "Public"}
+                  startContent={
+                    <div className="p-1.5 rounded-md bg-default-100 text-default-500">
+                      <Icon className="size-3.5" icon="solar:folder-2-linear" />
+                    </div>
+                  }
+                  onClick={() => dispatch(setActiveWorkspace(repo.name))}
                 >
-                  <div className="px-2 py-1 relative">
-                    <input
-                      autoFocus
-                      className="w-full bg-default-100 border border-default-200 rounded-lg px-8 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                      placeholder="Search repositories..."
-                      value={repoSearch}
-                      onChange={(e) => handleRepoSearch(e.target.value)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-                    {isRepoLoading && (
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 size-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                    )}
-                  </div>
+                  <span className="text-xs font-medium text-default-700">
+                    {repo.name}
+                  </span>
                 </DropdownItem>
+              ))}
 
+              {repos.length === 0 && !isRepoLoading && (
                 <DropdownItem
-                  key="current-header"
+                  key="no-repos"
                   isReadOnly
-                  className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-2 mb-1"
+                  className="text-center py-4 text-xs text-default-400 italic"
                 >
-                  Available Repositories
+                  No repositories found
                 </DropdownItem>
-
-                {repos.map((repo: any) => (
-                  <DropdownItem
-                    key={repo.fullName}
-                    className="rounded-lg h-10 px-2 hover:bg-primary/5 transition-colors"
-                    description={repo.private ? "Private" : "Public"}
-                    startContent={
-                      <div className="p-1.5 rounded-md bg-default-100 text-default-500">
-                        <Icon
-                          className="size-3.5"
-                          icon="solar:folder-2-linear"
-                        />
-                      </div>
-                    }
-                    onClick={() => dispatch(setActiveWorkspace(repo.name))}
-                  >
-                    <span className="text-xs font-medium text-default-700">
-                      {repo.name}
-                    </span>
-                  </DropdownItem>
-                ))}
-
-                {repos.length === 0 && !isRepoLoading && (
-                  <DropdownItem
-                    key="no-repos"
-                    isReadOnly
-                    className="text-center py-4 text-xs text-default-400 italic"
-                  >
-                    No repositories found
-                  </DropdownItem>
-                )}
-              </DropdownMenu>
-            </Dropdown>
+              )}
+            </DropdownMenu>
+          </Dropdown>
         </div>
 
         {/* Search bar and + icon on the same line below the line */}
@@ -1364,14 +1483,15 @@ export default function Sidebar() {
             />
           </div>
           <Tooltip
-            content="App Connections"
-            placement="top"
             showArrow
-            delay={0}
-            closeDelay={0}
             classNames={{
-              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
+            closeDelay={0}
+            content="App Connections"
+            delay={0}
+            placement="top"
           >
             <Button
               isIconOnly
@@ -1379,29 +1499,30 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/connect-apps"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
               )}
               size="sm"
               variant="flat"
-              onMouseEnter={() => {
-                router.prefetch("/connect-apps");
-              }}
               onClick={() => {
                 router.push("/connect-apps");
+              }}
+              onMouseEnter={() => {
+                router.prefetch("/connect-apps");
               }}
             >
               <LayoutGrid className="size-3.5" />
             </Button>
           </Tooltip>
           <Tooltip
-            content="Cloud Connections"
-            placement="top"
             showArrow
-            delay={0}
-            closeDelay={0}
             classNames={{
-              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
+            closeDelay={0}
+            content="Cloud Connections"
+            delay={0}
+            placement="top"
           >
             <Button
               isIconOnly
@@ -1409,35 +1530,52 @@ export default function Sidebar() {
                 "border rounded-lg flex-shrink-0",
                 pathname === "/cloud"
                   ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
               )}
               size="sm"
               variant="flat"
-              onMouseEnter={() => {
-                router.prefetch("/cloud");
-              }}
               onClick={() => {
                 router.push("/cloud");
+              }}
+              onMouseEnter={() => {
+                router.prefetch("/cloud");
               }}
             >
               <Cloud className="size-3.5" />
             </Button>
           </Tooltip>
           <Tooltip
-            content={getPlusTooltipContent()}
-            placement="top"
             showArrow
-            delay={0}
-            closeDelay={0}
             classNames={{
-              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
+            closeDelay={0}
+            content={getPlusTooltipContent()}
+            delay={0}
+            placement="top"
           >
             <Button
               isIconOnly
               className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
               size="sm"
               variant="flat"
+              onClick={() => {
+                if (pathname === "/vault") {
+                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                } else if (pathname === "/repositories") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-repository-modal"),
+                  );
+                } else if (pathname === "/documents") {
+                  window.dispatchEvent(new CustomEvent("open-document-modal"));
+                } else if (pathname === "/knowledge") {
+                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
+                } else {
+                  dispatch(startNewChat());
+                  router.push("/");
+                }
+              }}
               onMouseEnter={() => {
                 if (pathname === "/vault") {
                   router.prefetch("/vault");
@@ -1449,26 +1587,6 @@ export default function Sidebar() {
                   router.prefetch("/");
                 }
               }}
-              onClick={() => {
-                if (pathname === "/vault") {
-                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/repositories") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-repository-modal"),
-                  );
-                } else if (pathname === "/documents") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-document-modal"),
-                  );
-                } else if (pathname === "/knowledge") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-knowledge-modal"),
-                  );
-                } else {
-                  dispatch(startNewChat());
-                  router.push("/");
-                }
-              }}
             >
               <Plus className="size-3.5" />
             </Button>
@@ -1476,54 +1594,63 @@ export default function Sidebar() {
         </div>
 
         {/* 6 navigation icons toggle container */}
-        <div className={cn("border-b border-default-200", isSidebarOpen ? "px-3 py-2" : "py-2 px-1")}>
+        <div
+          className={cn(
+            "border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+          )}
+        >
           <div
             className={cn(
               "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
                 ? "grid grid-cols-7 gap-0.5"
-                : "flex flex-col items-center gap-2"
+                : "flex flex-col items-center gap-2",
             )}
           >
-          {filteredNavigationItems.map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <Tooltip
-                key={item.label}
-                content={item.label}
-                placement={isSidebarOpen ? "top" : "right"}
-                showArrow
-                delay={0}
-                closeDelay={0}
-                classNames={{
-                  content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                }}
-              >
-                <Button
-                  isIconOnly
-                  className={cn(
-                    "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                    isSidebarOpen ? "h-[30px] w-full rounded-md" : "h-[30px] w-[30px] rounded-md",
-                    item.isActive
-                      ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                      : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
-                  )}
-                  onMouseEnter={() => {
-                    router.prefetch(item.path);
+            {filteredNavigationItems.map((item) => {
+              const IconComponent = item.icon;
+
+              return (
+                <Tooltip
+                  key={item.label}
+                  showArrow
+                  classNames={{
+                    content:
+                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
                   }}
-                  onClick={item.onClick}
+                  closeDelay={0}
+                  content={item.label}
+                  delay={0}
+                  placement={isSidebarOpen ? "top" : "right"}
                 >
-                  <IconComponent className="size-3.5" />
-                  <span className="sr-only">{item.label}</span>
-                </Button>
-              </Tooltip>
-            );
-          })}
-          {isSidebarOpen && filteredNavigationItems.length === 0 && (
-            <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
-              No results found
-            </div>
-          )}
+                  <Button
+                    isIconOnly
+                    className={cn(
+                      "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                      isSidebarOpen
+                        ? "h-[30px] w-full rounded-md"
+                        : "h-[30px] w-[30px] rounded-md",
+                      item.isActive
+                        ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                        : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                    )}
+                    onClick={item.onClick}
+                    onMouseEnter={() => {
+                      router.prefetch(item.path);
+                    }}
+                  >
+                    <IconComponent className="size-3.5" />
+                    <span className="sr-only">{item.label}</span>
+                  </Button>
+                </Tooltip>
+              );
+            })}
+            {isSidebarOpen && filteredNavigationItems.length === 0 && (
+              <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
+                No results found
+              </div>
+            )}
           </div>
         </div>
 
@@ -1538,92 +1665,127 @@ export default function Sidebar() {
               <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
                 {loadingApps ? (
                   <div className="flex flex-col items-center justify-center py-20 gap-3">
-                    <Icon className="text-2xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
-                    <span className="text-xs text-default-400">Loading catalog...</span>
+                    <Icon
+                      className="text-2xl text-primary animate-spin"
+                      icon="line-md:loading-twotone-loop"
+                    />
+                    <span className="text-xs text-default-400">
+                      Loading catalog...
+                    </span>
                   </div>
-                ) : (() => {
-                  const filtered = apps.filter((app) =>
-                    app.name.toLowerCase().includes(leftSidebarSearch.toLowerCase()) ||
-                    app.description.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                  );
-                  
-                  if (filtered.length === 0) {
-                    return <span className="text-xs text-default-400 text-center py-12">No apps found</span>;
-                  }
-
-                  return filtered.map((app) => {
-                    const isActive = selectedAppId === app.id;
-                    return (
-                      <button
-                        key={app.id}
-                        onClick={() => {
-                          setSelectedAppId(app.id);
-                          window.dispatchEvent(
-                            new CustomEvent("select-connect-app", { detail: app })
-                          );
-                        }}
-                        className={cn(
-                          "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
-                          isActive
-                            ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                            : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300"
-                        )}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          {/* Dynamic Mini App Logo/Icon */}
-                          <div
-                            className={cn(
-                              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
-                              isActive ? "bg-white dark:bg-black" : "bg-[#f4f4f5] dark:bg-[#27272a]"
-                            )}
-                          >
-                            <AppIcon app={app} className="w-full h-full object-contain" />
-                          </div>
-                          <span className="text-xs text-left truncate pr-2">
-                            {app.name}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {app.status === "connected" && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                          )}
-                          <Icon
-                            icon="solar:alt-arrow-right-linear"
-                            className={cn(
-                              "text-xs text-default-400 transition-transform",
-                              isActive ? "translate-x-0.5 text-primary" : ""
-                            )}
-                          />
-                        </div>
-                      </button>
+                ) : (
+                  (() => {
+                    const filtered = apps.filter(
+                      (app) =>
+                        app.name
+                          .toLowerCase()
+                          .includes(leftSidebarSearch.toLowerCase()) ||
+                        app.description
+                          .toLowerCase()
+                          .includes(leftSidebarSearch.toLowerCase()),
                     );
-                  });
-                })()}
+
+                    if (filtered.length === 0) {
+                      return (
+                        <span className="text-xs text-default-400 text-center py-12">
+                          No apps found
+                        </span>
+                      );
+                    }
+
+                    return filtered.map((app) => {
+                      const isActive = selectedAppId === app.id;
+
+                      return (
+                        <button
+                          key={app.id}
+                          className={cn(
+                            "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                            isActive
+                              ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                              : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                          )}
+                          onClick={() => {
+                            setSelectedAppId(app.id);
+                            window.dispatchEvent(
+                              new CustomEvent("select-connect-app", {
+                                detail: app,
+                              }),
+                            );
+                          }}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            {/* Dynamic Mini App Logo/Icon */}
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                                isActive
+                                  ? "bg-white dark:bg-black"
+                                  : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                              )}
+                            >
+                              <AppIcon
+                                app={app}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <span className="text-xs text-left truncate pr-2">
+                              {app.name}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {app.status === "connected" && (
+                              <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                            )}
+                            <Icon
+                              className={cn(
+                                "text-xs text-default-400 transition-transform",
+                                isActive ? "translate-x-0.5 text-primary" : "",
+                              )}
+                              icon="solar:alt-arrow-right-linear"
+                            />
+                          </div>
+                        </button>
+                      );
+                    });
+                  })()
+                )}
               </div>
             ) : pathname === "/vault" ? (
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = vaultSecrets.filter((stream) =>
-                    stream.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    stream.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:lock-keyhole-minimalistic-linear" className="text-2xl text-default-400 mb-2" />
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:lock-keyhole-minimalistic-linear"
+                        />
                         <span className="text-xs text-default-400">
-                          {leftSidebarSearch ? "No results found" : "No secrets added yet"}
+                          {leftSidebarSearch
+                            ? "No results found"
+                            : "No secrets added yet"}
                         </span>
                       </div>
                     );
                   }
+
                   return filtered.map((stream) => (
                     <button
                       key={stream.id}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
                       onClick={() =>
                         window.dispatchEvent(
-                          new CustomEvent("select-secret", { detail: stream.id }),
+                          new CustomEvent("select-secret", {
+                            detail: stream.id,
+                          }),
                         )
                       }
                     >
@@ -1640,24 +1802,38 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = instructions.filter((inst) =>
-                    inst.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    inst.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (instructions.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:document-text-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No instructions added yet</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:document-text-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No instructions added yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:document-text-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No results found</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:document-text-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((inst) => (
                     <div
                       key={inst.id}
@@ -1719,24 +1895,38 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = guardrails.filter((gr) =>
-                    gr.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    gr.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (guardrails.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:shield-warning-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No guardrails added yet</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:shield-warning-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No guardrails added yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:shield-warning-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No results found</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:shield-warning-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((gr) => (
                     <div
                       key={gr.id}
@@ -1765,7 +1955,9 @@ export default function Sidebar() {
                             }
                             onClick={() =>
                               window.dispatchEvent(
-                                new CustomEvent("edit-guardrail", { detail: gr }),
+                                new CustomEvent("edit-guardrail", {
+                                  detail: gr,
+                                }),
                               )
                             }
                           >
@@ -1796,34 +1988,50 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = knowledgeFolders.filter((kf) =>
-                    kf.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    kf.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (knowledgeFolders.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
-                        <span className="text-xs text-default-500 font-medium">No knowledge folders yet</span>
+                        <span className="text-xs text-default-500 font-medium">
+                          No knowledge folders yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
-                        <span className="text-xs text-default-500 font-medium">No results found</span>
+                        <span className="text-xs text-default-500 font-medium">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((kf) => (
                     <button
                       key={kf.id}
+                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                        kf.id === selectedKnowledgeFolderId
+                          ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
+                          : ""
+                      }`}
                       type="button"
                       onClick={() => {
                         setSelectedKnowledgeFolderId(kf.id);
-                        router.push(`/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`);
-                        window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: kf }));
+                        router.push(
+                          `/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`,
+                        );
+                        window.dispatchEvent(
+                          new CustomEvent("select-knowledge-folder", {
+                            detail: kf,
+                          }),
+                        );
                       }}
-                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                        kf.id === selectedKnowledgeFolderId ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white" : ""
-                      }`}
                     >
                       <span className="truncate">{kf.name}</span>
                     </button>
@@ -1834,33 +2042,45 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = customAgents.filter((agent) =>
-                    agent.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    agent.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (customAgents.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <span className="text-xs text-default-400">No agents created yet</span>
+                        <span className="text-xs text-default-400">
+                          No agents created yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <span className="text-xs text-default-400">No results found</span>
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((agent) => (
                     <button
                       key={agent.id}
+                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                        agent.id === selectedAgentId
+                          ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
+                          : ""
+                      }`}
                       type="button"
                       onClick={() => {
                         setSelectedAgentId(agent.id);
-                        router.push(`/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`);
+                        router.push(
+                          `/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`,
+                        );
                       }}
-                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                        agent.id === selectedAgentId ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white" : ""
-                      }`}
                     >
                       <span className="truncate">{agent.name}</span>
                     </button>
@@ -1871,24 +2091,38 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = repositories.filter((repo) =>
-                    repo.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    repo.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (repositories.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:folder-2-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No repositories added yet</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:folder-2-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No repositories added yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:folder-2-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No results found</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:folder-2-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((repo) => (
                     <div
                       key={repo.id}
@@ -1905,7 +2139,10 @@ export default function Sidebar() {
                         placement="bottom-end"
                       >
                         <DropdownTrigger>
-                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreHorizontal size={16} />
                           </button>
                         </DropdownTrigger>
@@ -1936,24 +2173,38 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = documents.filter((doc) =>
-                    doc.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    doc.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
+
                   if (documents.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:book-open-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No documents added yet</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:book-open-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No documents added yet
+                        </span>
                       </div>
                     );
                   }
                   if (filtered.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:book-open-linear" className="text-2xl text-default-400 mb-2" />
-                        <span className="text-xs text-default-400">No results found</span>
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:book-open-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
                       </div>
                     );
                   }
+
                   return filtered.map((doc) => (
                     <div
                       key={doc.id}
@@ -1970,7 +2221,10 @@ export default function Sidebar() {
                         placement="bottom-end"
                       >
                         <DropdownTrigger>
-                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreHorizontal size={16} />
                           </button>
                         </DropdownTrigger>
@@ -2109,19 +2363,30 @@ export default function Sidebar() {
                     },
                   ];
 
-                  const groupRenderData = groups.map((group) => {
-                    const filteredProviders = group.providers.filter((provider) =>
-                      provider.toLowerCase().includes(leftSidebarSearch.toLowerCase())
-                    );
-                    return { ...group, providers: filteredProviders };
-                  }).filter(group => group.providers.length > 0);
+                  const groupRenderData = groups
+                    .map((group) => {
+                      const filteredProviders = group.providers.filter(
+                        (provider) =>
+                          provider
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()),
+                      );
+
+                      return { ...group, providers: filteredProviders };
+                    })
+                    .filter((group) => group.providers.length > 0);
 
                   if (groupRenderData.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon icon="solar:cloud-linear" className="text-2xl text-default-400 mb-2" />
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:cloud-linear"
+                        />
                         <span className="text-xs text-default-400">
-                          {leftSidebarSearch ? "No results found" : "No cloud nodes added yet"}
+                          {leftSidebarSearch
+                            ? "No results found"
+                            : "No cloud nodes added yet"}
                         </span>
                       </div>
                     );
@@ -2168,15 +2433,21 @@ export default function Sidebar() {
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = sortedChats.filter((item) =>
-                    (item?.responses[0]?.prompt || "Untitled Chat").toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    (item?.responses[0]?.prompt || "Untitled Chat")
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
 
                   if (sortedChats.length === 0) {
                     return (
                       <div className="flex flex-col items-center justify-center py-12 text-center w-full">
                         <Icon
-                          icon={pathname === "/" || pathname === "/code" ? "solar:code-square-linear" : "solar:chat-square-linear"}
                           className="text-2xl text-default-400 mb-2"
+                          icon={
+                            pathname === "/" || pathname === "/code"
+                              ? "solar:code-square-linear"
+                              : "solar:chat-square-linear"
+                          }
                         />
                         <span className="text-xs text-default-400">
                           {pathname === "/" || pathname === "/code"
@@ -2199,7 +2470,9 @@ export default function Sidebar() {
                     <button
                       key={item?._id}
                       className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
-                      onClick={() => item?.sessionId && submitForm(item?.sessionId)}
+                      onClick={() =>
+                        item?.sessionId && submitForm(item?.sessionId)
+                      }
                     >
                       {item?.responses[0]?.prompt || "Untitled Chat"}
                     </button>
@@ -2284,12 +2557,12 @@ export default function Sidebar() {
       </Modal>
 
       <Modal
-        backdrop="opaque"
-        classNames={{ 
-          backdrop: "bg-black/20 backdrop-blur-sm",
-          base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[420px] p-0"
-        }}
         hideCloseButton
+        backdrop="opaque"
+        classNames={{
+          backdrop: "bg-black/20 backdrop-blur-sm",
+          base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[420px] p-0",
+        }}
         isOpen={isKnowledgeModalOpen}
         placement="center"
         onClose={closeKnowledgeModal}
@@ -2314,35 +2587,51 @@ export default function Sidebar() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && knowledgeFolderName) {
                     e.preventDefault();
-                    const newFolder = { id: "kf-" + Date.now(), name: knowledgeFolderName };
-                    setKnowledgeFolders(prev => [...prev, newFolder]);
+                    const newFolder = {
+                      id: "kf-" + Date.now(),
+                      name: knowledgeFolderName,
+                    };
+
+                    setKnowledgeFolders((prev) => [...prev, newFolder]);
                     setSelectedKnowledgeFolderId(newFolder.id);
-                    window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: newFolder }));
+                    window.dispatchEvent(
+                      new CustomEvent("select-knowledge-folder", {
+                        detail: newFolder,
+                      }),
+                    );
                     closeKnowledgeModal();
                   }
                 }}
               />
             </div>
           </div>
-          
+
           <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
             <Button
-              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
               disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
               onPress={closeKnowledgeModal}
             >
               Cancel
             </Button>
             <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
             <Button
-              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
               disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
               isDisabled={!knowledgeFolderName}
               onPress={() => {
-                const newFolder = { id: "kf-" + Date.now(), name: knowledgeFolderName };
-                setKnowledgeFolders(prev => [...prev, newFolder]);
+                const newFolder = {
+                  id: "kf-" + Date.now(),
+                  name: knowledgeFolderName,
+                };
+
+                setKnowledgeFolders((prev) => [...prev, newFolder]);
                 setSelectedKnowledgeFolderId(newFolder.id);
-                window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: newFolder }));
+                window.dispatchEvent(
+                  new CustomEvent("select-knowledge-folder", {
+                    detail: newFolder,
+                  }),
+                );
                 closeKnowledgeModal();
               }}
             >
@@ -2351,7 +2640,6 @@ export default function Sidebar() {
           </div>
         </ModalContent>
       </Modal>
-
     </div>
   );
 }

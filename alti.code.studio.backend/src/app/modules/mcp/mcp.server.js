@@ -34,6 +34,7 @@ import { authTools } from './tools/auth.tool.js';
 import { iacTool } from './tools/iac.tool.js';
 import { devopsTool } from './tools/devops.tool.js';
 import { geminiCliTool } from './tools/geminiCli.tool.js';
+import { githubSearchTool } from './tools/githubSearch.tool.js';
 import { auditService } from '../audit/audit.service.js';
 import { promisify } from 'util';
 import { execFile } from 'child_process';
@@ -233,6 +234,11 @@ class AltiMCPServer {
                     }
                 }
             },
+            {
+                name: githubSearchTool.name,
+                description: githubSearchTool.description,
+                inputSchema: githubSearchTool.inputSchema
+            },
             ...authTools
         ];
 
@@ -380,6 +386,8 @@ class AltiMCPServer {
                         ]
                     };
                 }
+                case "search_open_source":
+                    return await githubSearchTool.handler(args);
                 default:
                     throw new Error(`Unknown tool: ${name}`);
             }
