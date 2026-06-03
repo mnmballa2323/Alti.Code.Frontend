@@ -7,13 +7,13 @@ import ChatBotLayout from "@/components/ChatbotLayout";
 
 export default function KnowledgePage() {
   const [query, setQuery] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleQuery = async () => {
     if (!query) return;
     setLoading(true);
-    setAnswer("");
+    setResult(null);
     
     try {
       // Calls the Tri-Cloud RAG Orchestrator (Bedrock -> Vertex -> Azure)
@@ -24,12 +24,13 @@ export default function KnowledgePage() {
       });
       const data = await res.json();
       if (data.success) {
-        setAnswer(data.answer);
+        // data.answer is now an object containing { answer, confidenceScore, citations }
+        setResult(data.answer);
       } else {
-        setAnswer("Error: " + data.error);
+        setResult({ answer: "Error: " + data.error });
       }
     } catch (err) {
-      setAnswer("Failed to connect to Tri-Cloud RAG Gateway.");
+      setResult({ answer: "Failed to connect to Tri-Cloud RAG Gateway." });
     } finally {
       setLoading(false);
     }
@@ -66,12 +67,37 @@ export default function KnowledgePage() {
           </Button>
         </div>
 
-        {answer && (
+        {result && (
           <div className="w-full bg-white dark:bg-[#161b22] border border-default-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-sm font-semibold text-primary mb-4 uppercase tracking-wide">Synthesized Answer (GPT-5.5 Pro)</h3>
-            <div className="text-default-800 dark:text-default-200 leading-relaxed whitespace-pre-wrap">
-              {answer}
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-semibold text-primary uppercase tracking-wide">Synthesized Answer (GPT-5.5 Pro)</h3>
+              {result.confidenceScore && (
+                <span className="text-xs font-bold px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
+                  {result.confidenceScore}% Confidence
+                </span>
+              )}
             </div>
+            
+            <div className="text-default-800 dark:text-default-200 leading-relaxed whitespace-pre-wrap mb-6">
+              {result.answer}
+            </div>
+
+            {result.citations && result.citations.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-default-200 dark:border-gray-800">
+                <h4 className="text-xs font-semibold text-default-500 uppercase mb-3">Sources & Citations</h4>
+                <div className="flex flex-col gap-2">
+                  {result.citations.map((cite: any, idx: number) => (
+                    <div key={idx} className="bg-default-50 dark:bg-black/20 p-3 rounded-lg border border-default-100 dark:border-gray-800/50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-primary font-medium text-xs">[{cite.text}]</span>
+                        <span className="text-default-400 text-[10px]">Chunk {cite.chunk}</span>
+                      </div>
+                      <p className="text-xs text-default-500 font-mono">"{cite.extract}"</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

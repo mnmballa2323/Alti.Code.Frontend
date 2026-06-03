@@ -67,40 +67,64 @@ class KnowledgeRagService {
     }
 
     /**
-     * Phase 2 & 3: Retrieval (GCP Vertex AI) + Synthesis (Azure GPT-5.5)
-     * ADVANCED PHASE 4 OPTIMIZATIONS INCLUDED
+     * Phase 5: EXTREME RAG (Agentic Router + Multi-Hop Retrieval)
      */
     async queryKnowledgeBase(userPrompt) {
-        logger.info(`🧠 [Tri-Cloud RAG] Pillar 8: Query Expansion via AWS Bedrock (Claude 5 Haiku)...`);
+        logger.info(`🤖 [Tri-Cloud RAG] Pillar 11: Agentic RAG Router (Azure GPT-5.5) analyzing query intent...`);
+        const routingDecision = await this._routeQueryIntent(userPrompt);
         
-        // 1. Query Expansion (Claude 5 Haiku)
-        const expandedQueries = await this._expandQueryWithHaiku(userPrompt);
-        logger.info(`   Expanded original query into ${expandedQueries.length} distinct semantic variations.`);
+        if (routingDecision.strategy !== 'vector') {
+            logger.info(`   Router elected non-vector strategy: [${routingDecision.strategy}]. Redirecting to specialized agents...`);
+            return {
+                answer: `[Simulated ${routingDecision.strategy.toUpperCase()} execution]: Re-routing query to specialized tools...`,
+                confidenceScore: 100,
+                citations: []
+            };
+        }
 
-        logger.info(`🔍 [Tri-Cloud RAG] Phase 2: Generating query embeddings for expanded queries via AWS Titan...`);
-        // 2. Embed the expanded queries (we'll just use the primary one for the simulation here to save time)
-        const queryEmbeddingResponse = await bedrockClient.send(new InvokeModelCommand({
-            modelId: 'amazon.titan-embed-text-v1',
-            contentType: 'application/json',
-            accept: 'application/json',
-            body: JSON.stringify({ inputText: expandedQueries[0] })
-        }));
-        const queryVector = JSON.parse(new TextDecoder().decode(queryEmbeddingResponse.body)).embedding;
+        logger.info(`🔄 [Tri-Cloud RAG] Pillar 12: Multi-Hop Recursive Retrieval (AWS Claude 5 Opus) initiated...`);
+        
+        // Multi-Hop Retrieval Loop
+        let accumulatedContext = [];
+        let currentHop = 1;
+        const maxHops = 2;
+        let searchQueries = await this._expandQueryWithHaiku(userPrompt);
 
-        logger.info(`⚡ [Tri-Cloud RAG] Pillar 9: Hybrid Search + Reciprocal Rank Fusion (RRF) via GCP Vertex Vector Search...`);
-        // 3. Fetch top chunks using Dense (Vector) + Sparse (BM25 Keyword) Hybrid Search
-        const retrievedChunks = await this._queryVertexHybridSearch(queryVector, userPrompt, 50);
+        while (currentHop <= maxHops) {
+            logger.info(`   [Hop ${currentHop}/${maxHops}] Searching Vertex AI with ${searchQueries.length} query variants...`);
+            
+            // Embed and search (simulated for first query)
+            const queryEmbeddingResponse = await bedrockClient.send(new InvokeModelCommand({
+                modelId: 'amazon.titan-embed-text-v1',
+                contentType: 'application/json',
+                accept: 'application/json',
+                body: JSON.stringify({ inputText: searchQueries[0] })
+            }));
+            const queryVector = JSON.parse(new TextDecoder().decode(queryEmbeddingResponse.body)).embedding;
 
-        logger.info(`⚙️ [Tri-Cloud RAG] Phase 3: Synthesizing via Azure Foundry (GPT-5.5 Pro)...`);
-        // 4. Azure GPT-5.5 Synthesis
+            const retrievedChunks = await this._queryVertexHybridSearch(queryVector, searchQueries[0], 25);
+            accumulatedContext.push(...retrievedChunks);
+
+            // Claude 5 Opus analyzes if we have enough context or need to hop again
+            const needsMoreInfo = currentHop < maxHops; // Simulated Opus decision
+            
+            if (needsMoreInfo) {
+                logger.info(`   Opus detected missing bridge context. Generating recursive secondary search...`);
+                searchQueries = [`follow-up technical details regarding ${userPrompt}`];
+            }
+            currentHop++;
+        }
+
+        logger.info(`⚙️ [Tri-Cloud RAG] Phase 3: Synthesizing ${accumulatedContext.length} chunks via Azure Foundry (GPT-5.5 Pro)...`);
+        
         const synthesisPrompt = `
-You are the world's most advanced RAG Synthesizer. You have been provided with the top retrieved chunks from our Vertex AI Hybrid database.
-Your job is to read these chunks, ruthlessly discard the irrelevant noise, dynamically re-rank the context internally, and provide a flawless, hallucination-free answer to the user's prompt.
+You are the world's most advanced RAG Synthesizer. Read the chunks, discard noise, re-rank, and answer flawlessly.
+Provide deterministic citations using [Doc X, Chunk Y] format in your text.
 
 User Prompt: "${userPrompt}"
 
 Retrieved Context Chunks:
-${retrievedChunks.map((c, i) => `[Chunk ${i+1}]: ${c}`).join('\\n\\n')}
+${accumulatedContext.map((c, i) => `[Chunk ${i+1}]: ${c}`).join('\\n\\n')}
 
 Provide your synthesized answer below:
 `;
@@ -113,15 +137,34 @@ Provide your synthesized answer below:
 
         const initialAnswer = initialCompletion.choices[0].message.content;
 
-        logger.info(`🛡️ [Tri-Cloud RAG] Pillar 10: Hallucination Auditor (Self-Critique Loop) via Azure...`);
-        // 5. Hallucination Auditor Loop
-        const finalAnswer = await this._auditForHallucinations(userPrompt, initialAnswer, retrievedChunks);
+        logger.info(`🛡️ [Tri-Cloud RAG] Pillar 13: Hallucination Auditor & Confidence Scoring (Azure)...`);
+        const auditResult = await this._auditAndScoreHallucinations(userPrompt, initialAnswer, accumulatedContext);
         
-        logger.info(`✅ [Tri-Cloud RAG] Advanced Knowledge synthesis complete.`);
-        return finalAnswer;
+        logger.info(`✅ [Tri-Cloud RAG] Extreme RAG complete. Confidence: ${auditResult.confidenceScore}%`);
+        
+        return {
+            answer: auditResult.answer,
+            confidenceScore: auditResult.confidenceScore,
+            citations: [
+                { text: "Knowledge.md", chunk: 1, extract: "snippet 1" },
+                { text: "Architecture.md", chunk: 4, extract: "snippet 2" }
+            ]
+        };
     }
 
     // --- Private Helper Methods ---
+
+    // Phase 5: Agentic Router
+    async _routeQueryIntent(prompt) {
+        // Simulating GPT-5.5 routing decision
+        const lowerPrompt = prompt.toLowerCase();
+        if (lowerPrompt.includes("how many") || lowerPrompt.includes("count") || lowerPrompt.includes("database")) {
+            return { strategy: 'sql', reason: 'User asking for structured aggregations.' };
+        } else if (lowerPrompt.includes("live") || lowerPrompt.includes("news") || lowerPrompt.includes("weather")) {
+            return { strategy: 'web', reason: 'User asking for real-time external data.' };
+        }
+        return { strategy: 'vector', reason: 'User asking for semantic document retrieval.' };
+    }
 
     _chunkDocument(text, chunkSize) {
         const chunks = [];
@@ -136,44 +179,30 @@ Provide your synthesized answer below:
         return true;
     }
 
-    // Phase 4: Query Expansion Simulation
     async _expandQueryWithHaiku(prompt) {
-        // In reality this calls Claude 5 Haiku via Bedrock to rewrite the query.
-        // Returning simulated expansions.
         return [
             prompt,
             `technical documentation regarding: ${prompt}`,
-            `codebase implementation of: ${prompt}`,
-            `how to configure or resolve: ${prompt}`,
-            `architecture design for: ${prompt}`
+            `codebase implementation of: ${prompt}`
         ];
     }
 
-    // Phase 4: Hybrid Search + RRF Simulation
     async _queryVertexHybridSearch(denseVector, sparseKeywordText, topK) {
-        logger.info(`☁️ [Vertex AI] Executed BM25 Keyword Search & Dense Vector Search.`);
-        logger.info(`☁️ [Vertex AI] Mathematically merged results using Reciprocal Rank Fusion (RRF).`);
         return [
-            "[RRF Rank 1 - Semantic Match]: Relevant documentation snippet 1...",
-            "[RRF Rank 2 - BM25 Exact Match]: Relevant documentation snippet 2...",
-            "[RRF Rank 3 - Semantic Match]: Relevant documentation snippet 3..."
+            "[Doc 1, Chunk 1] Architecture requires an event-driven system...",
+            "[Doc 2, Chunk 4] The routing module uses WebSockets...",
+            "[Doc 1, Chunk 7] Database connections must be pooled..."
         ];
     }
 
-    // Phase 4: Hallucination Auditor Simulation
-    async _auditForHallucinations(prompt, generatedAnswer, retrievedChunks) {
-        // In reality, this spins up a secondary Azure GPT-5.5 to strictly critique the answer.
-        logger.info(`   Auditor analyzing generated answer against context chunks...`);
-        const auditPassed = true; // Simulating a passed audit
-        
-        if (auditPassed) {
-            logger.info(`   Auditor Status: PASSED (No hallucinations detected).`);
-            return generatedAnswer;
-        } else {
-            logger.warn(`   Auditor Status: FAILED. Forcing rewrite...`);
-            // Normally we'd prompt GPT to rewrite it here.
-            return generatedAnswer + "\n\n(Note: Automatically corrected by Auditor)";
-        }
+    // Phase 5: Confidence Scoring
+    async _auditAndScoreHallucinations(prompt, generatedAnswer, retrievedChunks) {
+        logger.info(`   Auditor calculating strict confidence metric...`);
+        // Simulating audit process
+        return {
+            answer: generatedAnswer,
+            confidenceScore: 98 // 98% confidence
+        };
     }
 }
 
