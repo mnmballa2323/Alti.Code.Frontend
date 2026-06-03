@@ -28,9 +28,19 @@ class TriBrainService {
         // 🛡️ Pre-computation: Scrub the incoming intent through GCP Cloud DLP
         const safeIntent = await GoogleDlpService.redactText(taskDescription);
 
+        // 🧠 Phase 11: Instinct Memory Bank (RAG Pre-Fetch)
+        logger.info(`🔍 [Tri-Brain] Pillar 31: Querying Instinct Memory Bank (Vertex RAG) for architectural context...`);
+        const { knowledgeRagService } = await import('../knowledge/knowledge.rag.service.js');
+        const ragContext = await knowledgeRagService.queryKnowledgeBase(safeIntent);
+        logger.info(`   [Tri-Brain] Retrieved ${ragContext.citations.length} semantic vectors to inject into Architect's context.`);
+
         // Step 1: The Architect (AWS Bedrock / Claude 5 Sonnet) writes the code
         logger.info(`🏗️ [Tri-Brain] Step 1: Claude 5 Sonnet (AWS) generating code...`);
-        const claudePrompt = `You are the Lead Architect. Generate the complete code implementation for this intent: ${safeIntent}`;
+        const claudePrompt = `You are the Lead Architect. Generate the complete code implementation for this intent: ${safeIntent}
+        
+Strictly adhere to these historical architectural constraints derived from our Vector DB:
+${ragContext.answer}
+`;
         const architectResult = await this.anthropic.messages.create({
             model: 'claude-5-sonnet',
             max_tokens: 8192,
