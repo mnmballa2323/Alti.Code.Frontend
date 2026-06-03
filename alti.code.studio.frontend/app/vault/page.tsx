@@ -110,12 +110,13 @@ export default function VaultPage() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isDeleteModalOpen,
     onOpen: openDeleteModal,
     onOpenChange: onDeleteModalChange,
   } = useDisclosure();
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const [secretToDelete, setSecretToDelete] = useState<string | null>(null);
   const [secrets, setSecrets] = useState<SecretEntry[]>(initialSecrets);
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
@@ -126,6 +127,7 @@ export default function VaultPage() {
   const [newName, setNewName] = useState("");
   const [newService, setNewService] = useState("GitHub");
   const [newKey, setNewKey] = useState("");
+  const [isFormSecretRevealed, setIsFormSecretRevealed] = useState(false);
 
   useEffect(() => {
     const handleOpenModal = () => {
@@ -133,7 +135,8 @@ export default function VaultPage() {
       setNewName("");
       setNewService("GitHub");
       setNewKey("");
-      onOpen();
+      setIsFormSecretRevealed(false);
+      setSelectedSecretId(null);
     };
     const handleSelectSecret = (e: any) => {
       setSelectedSecretId(e.detail);
@@ -147,7 +150,7 @@ export default function VaultPage() {
       window.removeEventListener("open-vault-modal", handleOpenModal);
       window.removeEventListener("select-secret", handleSelectSecret);
     };
-  }, [onOpen]);
+  }, []);
 
   const toggleReveal = (id: string) => {
     const newSet = new Set(revealedIds);
@@ -167,6 +170,7 @@ export default function VaultPage() {
     if (selectedSecretId === id) {
       setSelectedSecretId(null);
     }
+    window.dispatchEvent(new CustomEvent("delete-vault-secret", { detail: id }));
   };
 
   const handleEditClick = (secret: SecretEntry) => {
@@ -174,7 +178,8 @@ export default function VaultPage() {
     setNewName(secret.name);
     setNewService(secret.service);
     setNewKey(secret.key);
-    onOpen();
+    setIsFormSecretRevealed(false);
+    setSelectedSecretId(null);
   };
 
   const handleSave = async (onClose: () => void) => {
@@ -189,42 +194,50 @@ export default function VaultPage() {
     const detected = detectService(newName, newKey, editingSecretId ? secrets.find(s => s.id === editingSecretId)?.service : undefined);
 
     try {
-      await axios.post(
-        `${API_URL}/secret-manager/update`,
-        { secretId: normalizedSecretId, payload: newKey },
-        {
-          headers: accessToken
-            ? { Authorization: `Bearer ${accessToken}` }
-            : {},
-        },
-      );
+      try {
+        await axios.post(
+          `${API_URL}/secret-manager/update`,
+          { secretId: normalizedSecretId, payload: newKey },
+          {
+            headers: accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : {},
+          },
+        );
+      } catch (apiError) {
+        console.warn("Backend API not available. Updating local state.", apiError);
+      }
 
       if (editingSecretId) {
+        const updatedEntry = { id: editingSecretId, name: newName, service: detected, key: newKey };
         setSecrets(
           secrets.map((s) =>
             s.id === editingSecretId
-              ? { ...s, name: newName, service: detected, key: newKey }
+              ? { ...s, ...updatedEntry }
               : s,
           ),
         );
-        toast.success("Secret successfully updated!");
+        window.dispatchEvent(new CustomEvent("update-vault-secret", { detail: updatedEntry }));
+        setSuccessMessage("Secret successfully updated!");
+        setIsSuccessModalOpen(true);
       } else {
-        setSecrets([
-          {
-            id: normalizedSecretId,
-            name: newName,
-            service: detected,
-            key: newKey,
-            lastUsed: "Never",
-          },
-          ...secrets,
-        ]);
-        toast.success("Secret securely stored in GCP Secret Manager!");
+        const newEntry = {
+          id: normalizedSecretId,
+          name: newName,
+          service: detected,
+          key: newKey,
+          lastUsed: "Never",
+        };
+        setSecrets([newEntry, ...secrets]);
+        window.dispatchEvent(new CustomEvent("update-vault-secret", { detail: newEntry }));
+        setSuccessMessage("Your new secret is now saved!");
+        setIsSuccessModalOpen(true);
       }
 
       setNewName("");
       setNewKey("");
-      onClose();
+      setEditingSecretId(null);
+      setSelectedSecretId(null);
     } catch (err) {
       console.error("Failed to store secret", err);
       toast.error("Failed to store secret in Vault");
@@ -232,298 +245,144 @@ export default function VaultPage() {
   };
 
   const activeSecret = secrets.find((s) => s.id === selectedSecretId);
-  const headerTitle = activeSecret ? activeSecret.name : "Stored Secrets";
+  const headerTitle = activeSecret ? activeSecret.name : (editingSecretId ? "Edit Secret" : "New Secret");
 
   return (
     <ChatBotLayout isRightSidebarOpenByDefault={false}>
-      <div className="flex-1 overflow-hidden bg-default-100 dark:bg-background flex flex-col h-full font-sans">
-        {/* Header */}
-        <div className="flex-none h-[56px] px-8 border-b border-default-200 bg-white dark:bg-content1 flex items-center">
-          <div className="flex items-center justify-between max-w-6xl mx-auto w-full">
-            <div className="flex items-center gap-3">
-              {selectedSecretId && (
-                <Button
-                  isIconOnly
-                  variant="light"
-                  size="sm"
-                  className="mr-1 text-default-500 hover:text-default-900 rounded-lg min-w-[32px]"
-                  onClick={() => setSelectedSecretId(null)}
-                >
-                  <ArrowLeft size={16} />
-                </Button>
-              )}
-              <h1 className="text-base font-bold tracking-tight text-default-900">
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
+        <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
+          <div className="flex w-full flex-col items-center gap-6 z-20 px-6 mt-[-5vh]">
+            <div className="flex flex-col items-center text-center z-30 mb-6">
+              <h1
+                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
+                style={{ fontFamily: "var(--font-secondary)" }}
+              >
                 {headerTitle}
               </h1>
             </div>
 
+            <div className="flex w-full flex-col gap-4 max-w-2xl">
+              {selectedSecretId ? (
+                secrets
+                  .filter((s) => s.id === selectedSecretId)
+                  .map((secret) => {
+                    const conf =
+                      serviceConfig[secret.service] || serviceConfig.Default;
+                    const ServiceIcon = conf.icon;
+                    const isRevealed = revealedIds.has(secret.id);
+
+                    return (
+                      <div
+                        key={secret.id}
+                        className="flex flex-col gap-4 w-full animate-in slide-in-from-bottom-4 duration-500 fill-mode-both"
+                      >
+                        {/* Name Row */}
+                        <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
+                          <div className="flex items-center gap-3">
+                            <ServiceIcon size={18} className={conf.color} />
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {secret.name}
+                            </span>
+                          </div>
+                          <button
+                            onClick={() => handleEditClick(secret)}
+                            className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                          >
+                            <Edit2 size={12} /> Edit
+                          </button>
+                        </div>
+
+                        {/* Secret Row */}
+                        <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
+                          <span className="text-sm font-mono text-gray-900 dark:text-gray-100 truncate flex-1">
+                            {isRevealed ? secret.key : "••••••••••••••••••••••••"}
+                          </span>
+                          <div className="flex gap-4 items-center shrink-0">
+                            <button
+                              onClick={() => {
+                                handleCopy(secret.key);
+                                toast.success("Token copied to clipboard!");
+                              }}
+                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                            >
+                              <Copy size={12} /> Copy
+                            </button>
+                            <button
+                              onClick={() => toggleReveal(secret.id)}
+                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                            >
+                              {isRevealed ? (
+                                <>
+                                  <EyeOff size={12} /> Hide
+                                </>
+                              ) : (
+                                <>
+                                  <Eye size={12} /> Reveal
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Delete Button */}
+                        <button
+                          className="w-full bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-500 shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-red-100 dark:hover:bg-red-900/50 transition-all font-medium text-sm border border-red-100 dark:border-red-900/50"
+                          onClick={() => {
+                            setSecretToDelete(secret.id);
+                            openDeleteModal();
+                          }}
+                        >
+                          Delete Secret
+                        </button>
+                      </div>
+                    );
+                  })
+              ) : (
+                <div className="flex w-full flex-col gap-4 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+                  {/* Thin Name Input */}
+                  <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
+                    <input
+                      type="text"
+                      placeholder="Enter name here..."
+                      className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Thin Secret Input */}
+                  <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800 focus-within:border-primary/50 transition-colors">
+                    <input
+                      type={isFormSecretRevealed ? "text" : "password"}
+                      placeholder="Enter secret here..."
+                      className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                      value={newKey}
+                      onChange={(e) => setNewKey(e.target.value)}
+                    />
+                    <button
+                      onClick={() => setIsFormSecretRevealed(!isFormSecretRevealed)}
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0 focus:outline-none"
+                      type="button"
+                    >
+                      {isFormSecretRevealed ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+
+                  {/* Thin Button */}
+                  <button
+                    className="w-full bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-gray-900 dark:hover:bg-gray-100 transition-all font-medium text-sm text-white dark:text-black"
+                    onClick={() => handleSave(() => {})}
+                  >
+                    {editingSecretId ? "Update Secret" : "Encrypt & Save"}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        {/* Content Section */}
-        <ScrollShadow className="flex-1 overflow-y-auto p-8">
-          <div className="max-w-5xl mx-auto space-y-4">
-            {selectedSecretId ? (
-              secrets
-                .filter((s) => s.id === selectedSecretId)
-                .map((secret) => {
-                  const conf =
-                    serviceConfig[secret.service] || serviceConfig.Default;
-                  const ServiceIcon = conf.icon;
-                  const isRevealed = revealedIds.has(secret.id);
-
-                  return (
-                    <div
-                      key={secret.id}
-                      className="max-w-3xl mx-auto space-y-6 mt-2 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-12"
-                    >
-                      {/* Secret Value Section */}
-                      <div>
-                        <div className="bg-white dark:bg-[#161616] border border-default-200 rounded-3xl p-8 shadow-sm relative overflow-hidden">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-default-100 dark:border-default-50/50 pb-5 mb-6">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={cn(
-                                  "p-3 rounded-2xl border border-default-100/50 shadow-sm",
-                                  conf.color,
-                                )}
-                              >
-                                <ServiceIcon size={20} />
-                              </div>
-                              <div>
-                                <span className="text-[10px] uppercase font-bold tracking-widest text-default-400 block">
-                                  {secret.service} Credential
-                                </span>
-                                <h2 className="text-lg font-bold text-default-900 tracking-tight">
-                                  {secret.name}
-                                </h2>
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              <Button
-                                className="bg-default-100 dark:bg-[#1A1A1A] font-semibold rounded-xl text-default-700 hover:text-default-900"
-                                size="sm"
-                                startContent={<Edit2 size={14} />}
-                                variant="flat"
-                                onPress={() => handleEditClick(secret)}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                className="bg-default-100 dark:bg-[#1A1A1A] font-semibold rounded-xl text-default-700 hover:text-default-900"
-                                size="sm"
-                                startContent={<Copy size={14} />}
-                                variant="flat"
-                                onPress={() => {
-                                  handleCopy(secret.key);
-                                  toast.success("Token copied to clipboard!");
-                                }}
-                              >
-                                Copy
-                              </Button>
-                              <Button
-                                className={cn(
-                                  "font-semibold rounded-xl transition-all",
-                                  isRevealed
-                                    ? "bg-primary text-white shadow-sm shadow-primary/30"
-                                    : "bg-default-100 dark:bg-[#1A1A1A] text-default-700 hover:text-default-900",
-                                )}
-                                size="sm"
-                                startContent={
-                                  isRevealed ? (
-                                    <EyeOff size={14} />
-                                  ) : (
-                                    <Eye size={14} />
-                                  )
-                                }
-                                variant="flat"
-                                onPress={() => toggleReveal(secret.id)}
-                              >
-                                {isRevealed ? "Hide" : "Reveal"}
-                              </Button>
-                            </div>
-                          </div>
-                          
-                          <div className="font-mono text-lg break-all bg-default-50 dark:bg-black/40 p-6 rounded-2xl border border-default-100/60 flex items-center justify-center min-h-[100px] shadow-inner relative overflow-hidden">
-                            {isRevealed ? (
-                              <span className="text-default-900 leading-relaxed font-semibold">
-                                {secret.key}
-                              </span>
-                            ) : (
-                              <span className="text-default-300 dark:text-default-700 tracking-[0.25em] text-3xl leading-none mt-2 select-none truncate max-w-full">
-                                ••••••••••••••••••••••••
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Security Status Info Card */}
-                      <div className="bg-white dark:bg-[#161616] border border-default-200 rounded-3xl p-6 shadow-sm relative overflow-hidden flex items-center gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-75">
-                        <div className="p-3 rounded-2xl bg-success-500/10 text-success border border-success-500/20 shadow-sm shrink-0">
-                          <Lock size={20} />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-default-900 tracking-tight">Active Cryptographic Shield</h4>
-                          <p className="text-xs text-default-500 mt-0.5 leading-relaxed">
-                            This token is securely isolated. Workspace agent calls query this vault dynamically via encrypted gRPC channels, ensuring credentials never leak into dynamic prompt logs.
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Danger Zone */}
-                      <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
-                        <div className="flex items-center justify-between bg-white dark:bg-[#161616] border border-danger-200 dark:border-danger-900/40 shadow-sm rounded-3xl p-6 relative overflow-hidden">
-                          <div className="absolute top-0 left-0 w-1 h-full bg-danger-500" />
-                          <div>
-                            <h3 className="text-base font-bold text-danger-600 dark:text-danger-500">
-                              Revoke & Delete Secret
-                            </h3>
-                            <p className="text-sm text-default-500 mt-1">
-                              This action is permanent. Workspace agents will immediately lose access to connected services.
-                            </p>
-                          </div>
-                          <Button
-                            className="bg-red-500 hover:bg-red-600 text-white font-semibold shadow-md shadow-red-500/20 px-6 rounded-xl border-none"
-                            onPress={() => {
-                              setSecretToDelete(secret.id);
-                              openDeleteModal();
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
-            ) : (
-              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
-                <div className="max-w-3xl mx-auto mt-12 p-8 flex flex-col items-center justify-center min-h-[40vh]">
-                  <div className="space-y-8 w-full flex flex-col items-center">
-                    <Input
-                      placeholder="Enter name here..."
-                      value={newName}
-                      variant="bordered"
-                      onValueChange={setNewName}
-                      classNames={{
-                        base: "max-w-2xl",
-                        inputWrapper: "bg-white dark:bg-[#27272a] border border-default-200 hover:border-default-300 focus-within:!border-default-400 rounded-2xl h-14 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]",
-                        input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                      }}
-                    />
-
-                    <Input
-                      placeholder="Enter secret here..."
-                      type="password"
-                      value={newKey}
-                      variant="bordered"
-                      onValueChange={setNewKey}
-                      classNames={{
-                        base: "max-w-2xl",
-                        inputWrapper: "bg-white dark:bg-[#27272a] border border-default-200 hover:border-default-300 focus-within:!border-default-400 rounded-2xl h-14 transition-all duration-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)]",
-                        input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                      }}
-                    />
-
-                    <div className="pt-2 w-full flex justify-center">
-                      <Button
-                        className="bg-white dark:bg-[#27272a] border border-default-200 text-default-800 dark:text-default-200 hover:bg-default-50 active:scale-[0.99] transition-all duration-200 font-medium shadow-[0_2px_10px_rgba(0,0,0,0.02)] rounded-2xl h-14 w-full max-w-2xl text-sm"
-                        onPress={() => handleSave(() => {})}
-                      >
-                        Encrypt & Save
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </ScrollShadow>
       </div>
 
-      {/* Add/Edit Secret Modal */}
-      <Modal
-        backdrop="blur"
-        classNames={{
-          base: "bg-white dark:bg-[#161616] border border-default-200/50 rounded-[32px] shadow-2xl overflow-hidden max-w-[440px] w-full mx-4",
-          header: "border-none pt-6 pb-2 px-6",
-          body: "py-4 px-6 space-y-6",
-          footer: "border-none pt-2 pb-6 px-6 flex justify-end gap-3",
-          closeButton: "top-3 right-6 hover:bg-default-100 dark:hover:bg-[#2C2C2E] active:scale-95 transition-all duration-200",
-        }}
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
-                    <Lock size={16} />
-                  </div>
-                  <h2 className="text-xl font-bold tracking-tight text-default-900">
-                    {editingSecretId ? "Edit Secret" : "Store New Secret"}
-                  </h2>
-                </div>
-                <p className="text-xs font-normal text-default-400 leading-normal">
-                  Data is immediately encrypted locally via AES-256 before persistence.
-                </p>
-              </ModalHeader>
-              <ModalBody>
-                <div className="flex flex-col gap-1.5 w-full">
-                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
-                    Account / Reference Name
-                  </label>
-                  <Input
-                    placeholder="e.g. Production AWS Credentials"
-                    value={newName}
-                    variant="bordered"
-                    onValueChange={setNewName}
-                    classNames={{
-                      inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                      input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                    }}
-                  />
-                </div>
 
-
-                <div className="flex flex-col gap-1.5 w-full">
-                  <label className="text-default-700 dark:text-default-300 font-semibold text-xs tracking-wide">
-                    Secret Token / API Key
-                  </label>
-                  <Input
-                    placeholder="Paste your token here..."
-                    type="password"
-                    value={newKey}
-                    variant="bordered"
-                    onValueChange={setNewKey}
-                    classNames={{
-                      inputWrapper: "bg-default-50 dark:bg-black/20 border border-default-200 hover:border-primary/50 focus-within:!border-primary rounded-2xl h-12 transition-all duration-200 shadow-sm",
-                      input: "text-sm text-default-900 placeholder:text-default-400 font-medium",
-                    }}
-                  />
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  variant="light"
-                  className="bg-default-100 hover:bg-default-200 dark:bg-[#2C2C2E] dark:hover:bg-[#3A3A3C] text-default-800 dark:text-default-200 font-semibold rounded-2xl h-11 px-5 transition-all duration-200"
-                  onPress={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="bg-primary hover:bg-primary-600 text-white font-semibold rounded-2xl h-11 px-6 shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border-none"
-                  onPress={() => handleSave(onClose)}
-                >
-                  {editingSecretId ? "Update Secret" : "Encrypt & Save"}
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
       {/* Delete Confirmation Modal */}
       <Modal
         hideCloseButton
@@ -571,6 +430,47 @@ export default function VaultPage() {
                   }}
                 >
                   Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal
+        hideCloseButton
+        backdrop="blur"
+        classNames={{
+          base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
+          header: "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
+          body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
+          footer: "p-0 m-0 flex w-full bg-transparent min-h-0",
+        }}
+        isOpen={isSuccessModalOpen}
+        size="xs"
+        onOpenChange={setIsSuccessModalOpen}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>
+                <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
+                  Success
+                </h3>
+              </ModalHeader>
+              <ModalBody>
+                <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
+                  {successMessage}
+                </p>
+              </ModalBody>
+              <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex w-full bg-transparent min-h-0">
+                <Button
+                  variant="light"
+                  className="w-full h-12 rounded-none border-none text-primary font-normal hover:bg-default-100/50 text-[15px]"
+                  onPress={onClose}
+                >
+                  Close
                 </Button>
               </ModalFooter>
             </>

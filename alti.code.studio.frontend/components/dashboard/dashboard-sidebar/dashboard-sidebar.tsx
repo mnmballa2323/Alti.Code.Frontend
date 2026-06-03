@@ -96,6 +96,11 @@ const sidebarItems: SidebarItem[] = [
     title: "Documents",
   },
   {
+    key: "data",
+    href: "/dashboard/data",
+    title: "Data Hub",
+  },
+  {
     key: "marketplace",
     href: "/dashboard/marketplace",
     title: "Marketplace",

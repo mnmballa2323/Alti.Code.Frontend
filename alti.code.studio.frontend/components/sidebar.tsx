@@ -656,6 +656,35 @@ export default function Sidebar() {
   const [repoSearch, setRepoSearch] = useState("");
   const selectedRepo = useSelector((state: RootState) => state.system.activeWorkspace) || "alti.code.studio";
 
+  const [vaultSecrets, setVaultSecrets] = useState([
+    { id: "sec-1", name: "Primary Build Agent" },
+    { id: "sec-2", name: "Synapse Production Analytics" },
+    { id: "sec-3", name: "Telepathy Inference" },
+  ]);
+
+  useEffect(() => {
+    const handleNewSecret = (e: any) => {
+      const newSecret = e.detail;
+      setVaultSecrets(prev => {
+        const exists = prev.find(s => s.id === newSecret.id);
+        if (exists) {
+          return prev.map(s => s.id === newSecret.id ? newSecret : s);
+        }
+        return [newSecret, ...prev];
+      });
+    };
+    const handleDeleteSecret = (e: any) => {
+      setVaultSecrets(prev => prev.filter(s => s.id !== e.detail));
+    };
+
+    window.addEventListener("update-vault-secret", handleNewSecret);
+    window.addEventListener("delete-vault-secret", handleDeleteSecret);
+    return () => {
+      window.removeEventListener("update-vault-secret", handleNewSecret);
+      window.removeEventListener("delete-vault-secret", handleDeleteSecret);
+    };
+  }, []);
+
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
      router.prefetch("/");
@@ -811,6 +840,12 @@ export default function Sidebar() {
   const [knowledgeFolders, setKnowledgeFolders] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const [selectedKnowledgeFolderId, setSelectedKnowledgeFolderId] = useState<string | null>(null);
+  
+  const [customAgents, setCustomAgents] = useState<{ id: string; name: string; prompt: string }[]>(
+    [],
+  );
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
 
   // States and dynamic handlers for integrations / connect-apps catalog
   const [apps, setApps] = useState<AppIntegration[]>([]);
@@ -1086,6 +1121,20 @@ export default function Sidebar() {
       openKnowledgeModal();
     };
 
+    const handleCreateAgent = (e: any) => {
+      const prompt = e.detail;
+      const newAgentId = "agent-" + Date.now();
+      // Extract a simple name from the prompt or use a default
+      const nameMatch = prompt.split(" ").slice(0, 3).join(" ") + "...";
+      
+      const newAgent = { id: newAgentId, name: nameMatch, prompt: prompt };
+      setCustomAgents(prev => [...prev, newAgent]);
+      setSelectedAgentId(newAgentId);
+      
+      // Navigate to the newly created agent
+      router.push(`/agents?agentId=${newAgentId}&name=${encodeURIComponent(newAgent.name)}`);
+    };
+
     window.addEventListener("add-instruction", handleAddInstruction);
     window.addEventListener("update-instruction", handleUpdateInstruction);
     window.addEventListener("delete-instruction", handleDeleteInstruction);
@@ -1093,6 +1142,7 @@ export default function Sidebar() {
     window.addEventListener("update-guardrail", handleUpdateGuardrail);
     window.addEventListener("delete-guardrail", handleDeleteGuardrail);
     window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
+    window.addEventListener("create-agent", handleCreateAgent);
 
 
     return () => {
@@ -1103,6 +1153,7 @@ export default function Sidebar() {
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
       window.removeEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
+      window.removeEventListener("create-agent", handleCreateAgent);
     };
   }, []);
 
@@ -1553,12 +1604,7 @@ export default function Sidebar() {
             ) : pathname === "/vault" ? (
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
-                  const items = [
-                    { id: "sec-1", name: "Primary Build Agent" },
-                    { id: "sec-2", name: "Synapse Production Analytics" },
-                    { id: "sec-3", name: "Telepathy Inference" },
-                  ];
-                  const filtered = items.filter((stream) =>
+                  const filtered = vaultSecrets.filter((stream) =>
                     stream.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
                   );
                   if (filtered.length === 0) {
@@ -1767,12 +1813,57 @@ export default function Sidebar() {
                     );
                   }
                   return filtered.map((kf) => (
-                    <div
+                    <button
                       key={kf.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      type="button"
+                      onClick={() => {
+                        setSelectedKnowledgeFolderId(kf.id);
+                        router.push(`/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`);
+                        window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: kf }));
+                      }}
+                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                        kf.id === selectedKnowledgeFolderId ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white" : ""
+                      }`}
                     >
                       <span className="truncate">{kf.name}</span>
-                    </div>
+                    </button>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/agents" || pathname.startsWith("/agents/") ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = customAgents.filter((agent) =>
+                    agent.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+                  if (customAgents.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <span className="text-xs text-default-400">No agents created yet</span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <span className="text-xs text-default-400">No results found</span>
+                      </div>
+                    );
+                  }
+                  return filtered.map((agent) => (
+                    <button
+                      key={agent.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedAgentId(agent.id);
+                        router.push(`/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`);
+                      }}
+                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                        agent.id === selectedAgentId ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white" : ""
+                      }`}
+                    >
+                      <span className="truncate">{agent.name}</span>
+                    </button>
                   ));
                 })()}
               </div>
@@ -2223,7 +2314,10 @@ export default function Sidebar() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && knowledgeFolderName) {
                     e.preventDefault();
-                    setKnowledgeFolders(prev => [...prev, { id: "kf-" + Date.now(), name: knowledgeFolderName }]);
+                    const newFolder = { id: "kf-" + Date.now(), name: knowledgeFolderName };
+                    setKnowledgeFolders(prev => [...prev, newFolder]);
+                    setSelectedKnowledgeFolderId(newFolder.id);
+                    window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: newFolder }));
                     closeKnowledgeModal();
                   }
                 }}
@@ -2245,7 +2339,10 @@ export default function Sidebar() {
               disableRipple
               isDisabled={!knowledgeFolderName}
               onPress={() => {
-                setKnowledgeFolders(prev => [...prev, { id: "kf-" + Date.now(), name: knowledgeFolderName }]);
+                const newFolder = { id: "kf-" + Date.now(), name: knowledgeFolderName };
+                setKnowledgeFolders(prev => [...prev, newFolder]);
+                setSelectedKnowledgeFolderId(newFolder.id);
+                window.dispatchEvent(new CustomEvent("select-knowledge-folder", { detail: newFolder }));
                 closeKnowledgeModal();
               }}
             >

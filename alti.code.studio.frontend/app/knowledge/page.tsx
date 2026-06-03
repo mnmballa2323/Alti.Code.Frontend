@@ -1,117 +1,148 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
 import ChatBotLayout from "@/components/ChatbotLayout";
+import { UploadCloud, Paperclip, Search, FileText, Trash2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-export default function KnowledgePage() {
-  const [query, setQuery] = useState("");
-  const [result, setResult] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
+function KnowledgePageContent() {
+  const searchParams = useSearchParams();
+  const urlFolderId = searchParams.get("folderId");
+  const urlFolderName = searchParams.get("folderName");
 
-  const handleQuery = async () => {
-    if (!query) return;
-    setLoading(true);
-    setResult(null);
-    
-    try {
-      // Calls the Tri-Cloud RAG Orchestrator (Bedrock -> Vertex -> Azure)
-      const res = await fetch("http://localhost:3001/api/v1/knowledge/query", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: query }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        // data.answer is now an object containing { answer, confidenceScore, citations }
-        setResult(data.answer);
-      } else {
-        setResult({ answer: "Error: " + data.error });
-      }
-    } catch (err) {
-      setResult({ answer: "Failed to connect to Tri-Cloud RAG Gateway." });
-    } finally {
-      setLoading(false);
+  const [selectedFolder, setSelectedFolder] = useState<{ id: string; name: string } | null>(null);
+  const [files, setFiles] = useState<{name: string, size: number, type: string}[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [fileToDelete, setFileToDelete] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (urlFolderId && urlFolderName) {
+      setSelectedFolder({ id: urlFolderId, name: urlFolderName });
+    }
+  }, [urlFolderId, urlFolderName]);
+
+  useEffect(() => {
+    const handleSelectFolder = (e: any) => {
+      setSelectedFolder(e.detail);
+    };
+    window.addEventListener("select-knowledge-folder", handleSelectFolder);
+    return () => window.removeEventListener("select-knowledge-folder", handleSelectFolder);
+  }, []);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files).map(f => ({ name: f.name, size: f.size, type: f.type }));
+      setFiles(prev => [...prev, ...newFiles]);
     }
   };
 
+  const removeFile = (indexToRemove: number) => {
+    setFiles(files.filter((_, index) => index !== indexToRemove));
+  };
+
+  const filteredFiles = files.filter(f => f.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return (
     <ChatBotLayout>
-      <div className="container mx-auto p-6 max-w-4xl h-[calc(100vh-80px)] flex flex-col items-center pt-24">
-        
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">Tri-Cloud Knowledge Base</h1>
-          <p className="text-default-500 text-lg">
-            Powered by AWS Bedrock (Ingestion), GCP Vertex AI (Retrieval), and Azure GPT-5.5 (Synthesis).
-          </p>
-        </div>
+      <div className="container mx-auto p-6 h-[calc(100vh-80px)] w-full">
+        {!selectedFolder ? (
+          <div className="flex flex-col items-center justify-center h-full w-full">
+            <Button
+              className="bg-white text-black font-medium rounded-xl shadow-sm hover:bg-gray-100 px-8 py-6 h-auto text-sm"
+              onPress={() => window.dispatchEvent(new CustomEvent("open-knowledge-modal"))}
+            >
+              Create Knowledge Folder
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-start pt-20 h-full animate-in fade-in zoom-in duration-300 w-full">
+            <div className="flex w-full flex-col gap-4 max-w-3xl">
+              
+              {/* Thin Upload Box */}
+              <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all border border-gray-100 dark:border-gray-800">
+                <div className="p-1.5 bg-gray-900 dark:bg-gray-100 rounded-lg">
+                  <Paperclip className="w-3.5 h-3.5 text-white dark:text-gray-900" />
+                </div>
+                <span className="text-sm text-gray-400">Click or drag & drop files here...</span>
+                <input type="file" className="hidden" multiple onChange={handleFileUpload} />
+              </label>
 
-        <div className="w-full flex gap-2 mb-8">
-          <Input 
-            size="lg"
-            placeholder="Ask a question about your uploaded documents..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleQuery()}
-            className="flex-1"
-          />
-          <Button 
-            size="lg"
-            color="primary"
-            isLoading={loading}
-            onPress={handleQuery}
-            className="font-semibold"
-          >
-            Synthesize
-          </Button>
-        </div>
+              {/* Thin Search Bar */}
+              <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800">
+                <Search className="w-4 h-4 text-gray-400" />
+                <input 
+                  type="text"
+                  placeholder="Search files..."
+                  className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
 
-        {result && (
-          <div className="w-full bg-white dark:bg-[#161b22] border border-default-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-semibold text-primary uppercase tracking-wide">Synthesized Answer (GPT-5.5 Pro)</h3>
-              {result.confidenceScore && (
-                <span className="text-xs font-bold px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">
-                  {result.confidenceScore}% Confidence
-                </span>
-              )}
-            </div>
-            
-            <div className="text-default-800 dark:text-default-200 leading-relaxed whitespace-pre-wrap mb-6">
-              {result.answer}
-            </div>
-
-            {result.citations && result.citations.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-default-200 dark:border-gray-800">
-                <h4 className="text-xs font-semibold text-default-500 uppercase mb-3">Sources & Citations</h4>
-                <div className="flex flex-col gap-2">
-                  {result.citations.map((cite: any, idx: number) => (
-                    <div key={idx} className="bg-default-50 dark:bg-black/20 p-3 rounded-lg border border-default-100 dark:border-gray-800/50">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-primary font-medium text-xs">[{cite.text}]</span>
-                        <span className="text-default-400 text-[10px]">Chunk {cite.chunk}</span>
+              {/* File List */}
+              {filteredFiles.length > 0 && (
+                <div className="w-full flex flex-col gap-2 mt-4">
+                  {filteredFiles.map((file, i) => (
+                    <div key={i} className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center justify-between border border-gray-100 dark:border-gray-800 animate-in fade-in slide-in-from-bottom-2">
+                      <div className="flex items-center gap-3 overflow-hidden">
+                        <FileText className="w-4 h-4 text-gray-500 shrink-0" />
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{file.name}</span>
                       </div>
-                      <p className="text-xs text-default-500 font-mono">"{cite.extract}"</p>
+                      <div className="flex items-center gap-3 shrink-0 ml-4">
+                        <span className="text-xs text-gray-400">{(file.size / 1024).toFixed(1)} KB</span>
+                        <button onClick={() => setFileToDelete(i)} className="text-gray-400 hover:text-red-500 transition-colors">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+
+            </div>
           </div>
         )}
-
-        <div className="mt-auto pb-12">
-          <Button
-            variant="flat"
-            className="text-xs font-medium rounded-full"
-            onPress={() => window.dispatchEvent(new CustomEvent("open-knowledge-modal"))}
-          >
-            + Upload New Documents to Vector Search
-          </Button>
-        </div>
-
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {fileToDelete !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 dark:bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#161b22] rounded-3xl shadow-xl w-full max-w-sm animate-in zoom-in-95 duration-200 overflow-hidden flex flex-col">
+            <div className="p-6 pt-8 pb-6 flex flex-col items-center">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Delete</h3>
+              <p className="text-sm text-center text-gray-500 dark:text-gray-400">
+                Are you sure you want to remove this file?
+              </p>
+            </div>
+            <div className="flex border-t border-gray-100 dark:border-gray-800 w-full">
+              <button 
+                onClick={() => setFileToDelete(null)}
+                className="flex-1 py-3.5 text-sm font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-r border-gray-100 dark:border-gray-800"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => { 
+                  removeFile(fileToDelete); 
+                  setFileToDelete(null); 
+                }}
+                className="flex-1 py-3.5 text-sm font-medium text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </ChatBotLayout>
+  );
+}
+
+export default function KnowledgePage() {
+  return (
+    <Suspense fallback={<div className="h-full w-full bg-default-50 dark:bg-background" />}>
+      <KnowledgePageContent />
+    </Suspense>
   );
 }
