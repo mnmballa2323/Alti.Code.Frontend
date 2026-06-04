@@ -1348,6 +1348,246 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+agentRegistry.register({
+    name: 'render',
+    description: 'PaaS specialist for Render web services, background workers, and PostgreSQL.',
+    queue: 'render-queue',
+    capabilities: ['render', 'paas', 'blue-green'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'linode',
+    description: 'Cloud computing specialist for Linode instances, NodeBalancers, and LKE.',
+    queue: 'linode-queue',
+    capabilities: ['linode', 'lke', 'nodebalancers'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'vultr',
+    description: 'Cloud specialist for Vultr VPS, bare metal, and VKE.',
+    queue: 'vultr-queue',
+    capabilities: ['vultr', 'vps', 'vke'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'scaleway',
+    description: 'European cloud specialist for Scaleway Elements, Kapsule, and Serverless.',
+    queue: 'scaleway-queue',
+    capabilities: ['scaleway', 'kapsule', 'serverless'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'ovhcloud',
+    description: 'Cloud hosting specialist for OVHcloud Public Cloud, dedicated servers, and VRack.',
+    queue: 'ovhcloud-queue',
+    capabilities: ['ovhcloud', 'dedicated-servers', 'vrack'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'neon',
+    description: 'Serverless Postgres specialist for Neon DB branching, autoscaling, and bottomless storage.',
+    queue: 'neon-queue',
+    capabilities: ['neon', 'serverless-postgres', 'database-branching'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'fastly',
+    description: 'Edge cloud platform specialist for Fastly Compute@Edge, VCL, and CDN orchestration.',
+    queue: 'fastly-queue',
+    capabilities: ['fastly', 'compute-at-edge', 'vcl', 'cdn'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'backblaze',
+    description: 'Cloud storage specialist for Backblaze B2, S3-compatible APIs, and cloud backup.',
+    queue: 'backblaze-queue',
+    capabilities: ['backblaze-b2', 'cloud-storage', 's3-compatible'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'heroku',
+    description: 'PaaS specialist for Heroku Dynos, buildpacks, and Heroku Postgres.',
+    queue: 'heroku-queue',
+    capabilities: ['heroku', 'buildpacks', 'dynos'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'planetscale',
+    description: 'Serverless MySQL specialist for PlanetScale Vitess clusters, branching, and migrations.',
+    queue: 'planetscale-queue',
+    capabilities: ['planetscale', 'vitess', 'serverless-mysql'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'upcloud',
+    description: 'European cloud hosting specialist for UpCloud MaxIOPS servers and managed databases.',
+    queue: 'upcloud-queue',
+    capabilities: ['upcloud', 'maxiops', 'vps'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'exoscale',
+    description: 'Swiss cloud specialist for Exoscale instances, SKS, and secure cloud storage.',
+    queue: 'exoscale-queue',
+    capabilities: ['exoscale', 'sks', 'swiss-cloud'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'civo',
+    description: 'Cloud native service provider focusing on lightning-fast K3s Kubernetes.',
+    queue: 'civo-queue',
+    capabilities: ['civo', 'k3s', 'cloud-native'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'coreweave',
+    description: 'Specialized cloud for GPU-accelerated workloads, machine learning, and VFX rendering.',
+    queue: 'coreweave-queue',
+    capabilities: ['coreweave', 'gpu-cloud', 'machine-learning'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'lambdalabs',
+    description: 'GPU cloud specialist for Lambda Labs AI/ML compute infrastructure.',
+    queue: 'lambdalabs-queue',
+    capabilities: ['lambdalabs', 'gpu-compute', 'ai-infrastructure'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'runpod',
+    description: 'Serverless GPU cloud specialist for RunPod pods and AI endpoints.',
+    queue: 'runpod-queue',
+    capabilities: ['runpod', 'serverless-gpu', 'ai-endpoints'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'paperspace',
+    description: 'Cloud computing specialist for Paperspace Core and Gradient ML workflows.',
+    queue: 'paperspace-queue',
+    capabilities: ['paperspace', 'gradient', 'gpu-vms'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'tencent',
+    description: 'Asian cloud provider specialist for Tencent Cloud CVM, TKE, and CDN.',
+    queue: 'tencent-queue',
+    capabilities: ['tencent-cloud', 'cvm', 'tke'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'huawei',
+    description: 'Global cloud specialist for Huawei Cloud ECS, CCE, and GaussDB.',
+    queue: 'huawei-queue',
+    capabilities: ['huawei-cloud', 'ecs', 'cce'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'baidu',
+    description: 'Cloud specialist for Baidu AI Cloud BCC and smart edge computing.',
+    queue: 'baidu-queue',
+    capabilities: ['baidu-cloud', 'bcc', 'ai-cloud'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'yandex',
+    description: 'Russian cloud platform specialist for Yandex Cloud compute and Managed ClickHouse.',
+    queue: 'yandex-queue',
+    capabilities: ['yandex-cloud', 'managed-clickhouse', 'vms'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'equinix',
+    description: 'Bare metal cloud specialist for Equinix Metal provisioning and interconnections.',
+    queue: 'equinix-queue',
+    capabilities: ['equinix-metal', 'bare-metal', 'edge-compute'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'cloudinary',
+    description: 'Cloud media specialist for Cloudinary image and video transformations and CDN.',
+    queue: 'cloudinary-queue',
+    capabilities: ['cloudinary', 'media-management', 'cdn'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'snowflake',
+    description: 'Data cloud specialist for Snowflake warehouses, Snowpipe, and secure data sharing.',
+    queue: 'snowflake-queue',
+    capabilities: ['snowflake', 'data-cloud', 'snowpipe'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'databricks',
+    description: 'Lakehouse specialist for Databricks Apache Spark, Delta Lake, and MLflow.',
+    queue: 'databricks-queue',
+    capabilities: ['databricks', 'delta-lake', 'spark'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'denodeploy',
+    description: 'Serverless V8 isolate cloud specialist for Deno Deploy and edge functions.',
+    queue: 'denodeploy-queue',
+    capabilities: ['deno-deploy', 'edge-functions', 'v8-isolates'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'turso',
+    description: 'Edge database specialist for Turso (libSQL) distributed SQLite.',
+    queue: 'turso-queue',
+    capabilities: ['turso', 'libsql', 'edge-sqlite'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'akamai',
+    description: 'Edge cloud and CDN specialist for Akamai EdgeWorkers and security.',
+    queue: 'akamai-queue',
+    capabilities: ['akamai', 'edgeworkers', 'cdn'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'supabasecloud',
+    description: 'BaaS cloud specialist for Supabase hosted instances, Edge Functions, and Realtime.',
+    queue: 'supabasecloud-queue',
+    capabilities: ['supabase', 'baas', 'edge-functions'],
+    version: '1.0.0'
+});
+
+agentRegistry.register({
+    name: 'apprunner',
+    description: 'Managed container application service specialist for AWS App Runner.',
+    queue: 'apprunner-queue',
+    capabilities: ['app-runner', 'managed-containers', 'aws'],
+    version: '1.0.0'
+});
+
 // ──── DEEP INTEGRATION: Context Engineering, Deep Research, Vectorless RAG, Nano Agent ────
 agentRegistry.register({
     name: 'contextEngineering',
