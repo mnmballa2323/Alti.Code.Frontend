@@ -5,15 +5,20 @@ import { agentRegistry } from './agent.registry.js';
 import { swarmNexusAgent } from './swarm_nexus.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
-const genAI = null /* DIRECT GEMINI BLOCKED */;
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
+// DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 /**
  * The 'Brain' of the Swarm.
  * Autonomously routes any prompt to the correct agentic workflow.
  */
 class AgenticRouterService {
     constructor() {
-        this.model = genAI.getGenerativeModel({ model: 'gemini-3.1-pro' });
+        // model generation is lazy or uses the valid Vertex AI gateway
+    }
+
+    get _model() {
+        return GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL || 'gemini-3.1-pro');
     }
 
     /**
@@ -122,7 +127,7 @@ class AgenticRouterService {
 
         try {
             // 2. Initial Orchestration Attempt
-            const result = await this.model.generateContent([systemInstruction, prompt]);
+            const result = await this._model.generateContent([systemInstruction, prompt]);
             const responseText = result.response.text();
             const jsonMatch = responseText.match(/\{[\s\S]*\}/);
             let plan = jsonMatch ? JSON.parse(jsonMatch[0]) : this.fallbackPlan(prompt);
@@ -152,7 +157,7 @@ class AgenticRouterService {
                         - Verified (ends with QA / auditor nodes)
                     `;
 
-                    const correctionResult = await this.model.generateContent([correctionInstruction, prompt]);
+                    const correctionResult = await this._model.generateContent([correctionInstruction, prompt]);
                     const correctionText = correctionResult.response.text();
                     const correctionJsonMatch = correctionText.match(/\{[\s\S]*\}/);
                     if (correctionJsonMatch) {
@@ -184,7 +189,7 @@ class AgenticRouterService {
                     Please RE-ORCHESTRATE the plan using ONLY these available agents: ${JSON.stringify(agentRegistry.listAgents())}
                 `;
                 
-                const correctionResult = await this.model.generateContent([correctionInstruction, prompt]);
+                const correctionResult = await this._model.generateContent([correctionInstruction, prompt]);
                 const correctionText = correctionResult.response.text();
                 const correctionJsonMatch = correctionText.match(/\{[\s\S]*\}/);
                 if (correctionJsonMatch) plan = JSON.parse(correctionJsonMatch[0]);

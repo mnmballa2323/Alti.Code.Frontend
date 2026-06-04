@@ -655,8 +655,7 @@ If you require assistance from another specialized agent to complete your task, 
                      const aguiPrompt = `You are the best software designer in the world, who was trained by the most famous software designers in history, and you have the ability to design software on any device, in any style, according to the user requirements. You are acting as a strict Frontend UX/UI QA Engineer. Analyze this rendered screenshot of the generated code. Does it look aesthetically pleasing, properly aligned, and functional? If it is mathematically perfect, respond with exactly "APPROVED". Otherwise, explain the visual defects in detail.`;
                      
                      try {
-                         const genAIInstance = null /* DIRECT GEMINI BLOCKED */;
-                         const generativeModel = genAIInstance.getGenerativeModel({ model: 'gemini-3.1-pro' });
+                         const generativeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
                          const visionResult = await generativeModel.generateContent([
                               { text: aguiPrompt },
                               { inlineData: { data: renderResult.screenshot, mimeType: 'image/png' } }

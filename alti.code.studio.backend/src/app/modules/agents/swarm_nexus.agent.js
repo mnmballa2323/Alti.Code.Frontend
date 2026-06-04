@@ -13,8 +13,9 @@ if (!apiKey) {
     logger.error('🚨 [SwarmNexus] CRITICAL SECURITY WARNING: GEMINI_API_KEY environment variable is missing.');
 }
 
-const genAI = null /* DIRECT GEMINI BLOCKED */;
+import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
+// DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 export class SwarmNexusAgent extends BaseSpecialistAgent {
     constructor() {
         super();
@@ -31,7 +32,11 @@ You integrate:
 6. **Archon Deterministic Workflow Engine**: Build YAML DAG workflows in isolated git worktrees.
 7. **AgentMemory Session Replay Hooks**: Perform vector-backed memory scans and hooks.
 `;
-        this.model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+        // model initialized lazy
+    }
+
+    get _model() {
+        return GoogleGenAiService.getGenerativeModel('gemini-2.5-flash');
     }
 
     async _invoke(prompt, contextBlock, opts = {}) {
@@ -107,7 +112,7 @@ Code Context: ${contextBlock}
 
 Provide a compliance scorecard (COMPLIANT / NON-COMPLIANT) for each rule with actionable remediation instructions.
 `;
-        const res = await this.model.generateContent([instruction]);
+        const res = await this._model.generateContent([instruction]);
         return res.response.text();
     }
 
@@ -127,7 +132,7 @@ Code Context: ${contextBlock}
 
 Return a structured roadmap detailing the task assignment for each role to complete the goal.
 `;
-        const res = await this.model.generateContent([instruction]);
+        const res = await this._model.generateContent([instruction]);
         return res.response.text();
     }
 
@@ -189,7 +194,7 @@ Orchestrate a parallel swarming plan using these registered specialists: ${JSON.
 to fulfill the target prompt: "${prompt}".
 Segment the prompt into modular subtasks, assign each to a specific specialist agent, and define the final quality synthesis gate.
 `;
-        const res = await this.model.generateContent([instruction]);
+        const res = await this._model.generateContent([instruction]);
         return res.response.text();
     }
 }

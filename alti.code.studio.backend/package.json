@@ -16,7 +16,8 @@
     "license-check": "node ../scripts/license_compliance_check.js",
     "pretest": "npm run license-check",
     "test": "wireit",
-    "lint": "wireit"
+    "lint": "wireit",
+    "agent-factory": "node scripts/autonomous_agent_factory.js"
   },
   "wireit": {
     "test": {

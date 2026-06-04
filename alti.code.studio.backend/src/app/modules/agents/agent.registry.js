@@ -11,6 +11,25 @@ import { logger } from '../../../shared/logger.js';
 import fs from 'fs/promises';
 import path from 'path';
 
+// Advanced I/O Agent Imports
+import { videoGenerationAgent } from './video_generation.agent.js';
+import { spatial3DNerfAgent } from './spatial_3d_nerf.agent.js';
+import { neuralBciParserAgent } from './neural_bci_parser.agent.js';
+import { hapticKinematicsAgent } from './haptic_kinematics.agent.js';
+import { omniAudioSynthesisAgent } from './omni_audio_synthesis.agent.js';
+
+// High-Value Enterprise B2B Agent Imports
+import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
+import { servicenowItsmAgent } from './servicenow_itsm.agent.js';
+import { soxItgcComplianceAgent } from './sox_itgc_compliance.agent.js';
+import { as400RpgleModernizerAgent } from './as400_rpgle_modernizer.agent.js';
+import { paloAltoPanosAgent } from './palo_alto_panos.agent.js';
+import { dynamics365ErpAgent } from './dynamics_365_erp.agent.js';
+import { databricksSparkAgent } from './databricks_spark.agent.js';
+import { uipathRpaBotAgent } from './uipath_rpa_bot.agent.js';
+import { intuneMdmPolicyAgent } from './intune_mdm_policy.agent.js';
+import { peoplesoftHcmBridgeAgent } from './peoplesoft_hcm_bridge.agent.js';
+
 class AgentRegistry {
 
     constructor() {
@@ -1403,6 +1422,143 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
+
+// ──── TIER 13: ADVANCED I/O MODALITIES ────
+agentRegistry.register({
+    name: videoGenerationAgent.name,
+    description: videoGenerationAgent.description,
+    queue: 'video-generation-queue',
+    capabilities: ['video-synthesis', 'runway', 'sora', 'text-to-video'],
+    version: '1.0.0',
+    instance: videoGenerationAgent
+});
+
+agentRegistry.register({
+    name: spatial3DNerfAgent.name,
+    description: spatial3DNerfAgent.description,
+    queue: 'spatial-3d-queue',
+    capabilities: ['nerf', 'gaussian-splatting', 'threejs', '3d-generation'],
+    version: '1.0.0',
+    instance: spatial3DNerfAgent
+});
+
+agentRegistry.register({
+    name: neuralBciParserAgent.name,
+    description: neuralBciParserAgent.description,
+    queue: 'neural-bci-queue',
+    capabilities: ['bci', 'eeg', 'signal-processing', 'neural-intent'],
+    version: '1.0.0',
+    instance: neuralBciParserAgent
+});
+
+agentRegistry.register({
+    name: hapticKinematicsAgent.name,
+    description: hapticKinematicsAgent.description,
+    queue: 'haptic-kinematics-queue',
+    capabilities: ['haptics', 'force-feedback', 'vr-kinematics', 'robotics'],
+    version: '1.0.0',
+    instance: hapticKinematicsAgent
+});
+
+agentRegistry.register({
+    name: omniAudioSynthesisAgent.name,
+    description: omniAudioSynthesisAgent.description,
+    queue: 'audio-synthesis-queue',
+    capabilities: ['tts', 'voice-cloning', 'spatial-audio', 'real-time-dubbing'],
+    version: '1.0.0',
+    instance: omniAudioSynthesisAgent
+});
+
+// ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────
+agentRegistry.register({
+    name: mulesoftAnypointAgent.name,
+    description: mulesoftAnypointAgent.description,
+    queue: 'mulesoft-anypoint-queue',
+    capabilities: mulesoftAnypointAgent.capabilities || ['mulesoft'],
+    version: '1.0.0',
+    instance: mulesoftAnypointAgent
+});
+
+agentRegistry.register({
+    name: servicenowItsmAgent.name,
+    description: servicenowItsmAgent.description,
+    queue: 'servicenow-itsm-queue',
+    capabilities: servicenowItsmAgent.capabilities || ['servicenow'],
+    version: '1.0.0',
+    instance: servicenowItsmAgent
+});
+
+agentRegistry.register({
+    name: soxItgcComplianceAgent.name,
+    description: soxItgcComplianceAgent.description,
+    queue: 'sox-itgc-queue',
+    capabilities: soxItgcComplianceAgent.capabilities || ['sox'],
+    version: '1.0.0',
+    instance: soxItgcComplianceAgent
+});
+
+agentRegistry.register({
+    name: as400RpgleModernizerAgent.name,
+    description: as400RpgleModernizerAgent.description,
+    queue: 'as400-modernizer-queue',
+    capabilities: as400RpgleModernizerAgent.capabilities || ['as400'],
+    version: '1.0.0',
+    instance: as400RpgleModernizerAgent
+});
+
+agentRegistry.register({
+    name: paloAltoPanosAgent.name,
+    description: paloAltoPanosAgent.description,
+    queue: 'palo-alto-queue',
+    capabilities: paloAltoPanosAgent.capabilities || ['palo_alto'],
+    version: '1.0.0',
+    instance: paloAltoPanosAgent
+});
+
+agentRegistry.register({
+    name: dynamics365ErpAgent.name,
+    description: dynamics365ErpAgent.description,
+    queue: 'dynamics-365-queue',
+    capabilities: dynamics365ErpAgent.capabilities || ['dynamics_365'],
+    version: '1.0.0',
+    instance: dynamics365ErpAgent
+});
+
+agentRegistry.register({
+    name: databricksSparkAgent.name,
+    description: databricksSparkAgent.description,
+    queue: 'databricks-spark-queue',
+    capabilities: databricksSparkAgent.capabilities || ['databricks'],
+    version: '1.0.0',
+    instance: databricksSparkAgent
+});
+
+agentRegistry.register({
+    name: uipathRpaBotAgent.name,
+    description: uipathRpaBotAgent.description,
+    queue: 'uipath-rpa-queue',
+    capabilities: uipathRpaBotAgent.capabilities || ['uipath'],
+    version: '1.0.0',
+    instance: uipathRpaBotAgent
+});
+
+agentRegistry.register({
+    name: intuneMdmPolicyAgent.name,
+    description: intuneMdmPolicyAgent.description,
+    queue: 'intune-mdm-queue',
+    capabilities: intuneMdmPolicyAgent.capabilities || ['intune'],
+    version: '1.0.0',
+    instance: intuneMdmPolicyAgent
+});
+
+agentRegistry.register({
+    name: peoplesoftHcmBridgeAgent.name,
+    description: peoplesoftHcmBridgeAgent.description,
+    queue: 'peoplesoft-hcm-queue',
+    capabilities: peoplesoftHcmBridgeAgent.capabilities || ['peoplesoft'],
+    version: '1.0.0',
+    instance: peoplesoftHcmBridgeAgent
+});
 
 // ── Dynamic JSON-based Swarm Registry Loader ──
 // Dynamically load polyglots and auto-generated agents from JSON database on start.

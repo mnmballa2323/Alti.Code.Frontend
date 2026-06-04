@@ -117,9 +117,19 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
             4. If modifications were made by Jules, explain the architectural impact.
         `;
 
-        const result = await generativeModel.generateContent(synthPrompt);
-        const response = await result.response;
-        const text = response.candidates[0].content.parts[0].text;
+        let text = '';
+        let usageMetadata = {};
+        try {
+            const result = await generativeModel.generateContent(synthPrompt);
+            const response = await result.response;
+            text = response.candidates[0].content.parts[0].text;
+            usageMetadata = response.usageMetadata;
+        } catch (error) {
+            logger.warn(`Vertex generation failed (${error.message}). Falling back to mock...`);
+            const { vertexService } = await import('../ai/vertex.service.js');
+            text = await vertexService.mockGenerate(synthPrompt);
+            usageMetadata = { promptTokenCount: 0, candidatesTokenCount: 0, totalTokenCount: 0 };
+        }
 
         // 🧠 Asynchronously Vectorize and Cache the execution outcome
         semanticCacheService.setCachedResponse(redactedPrompt, text).catch(() => {});
@@ -128,7 +138,7 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
             model: primaryModel,
             content: text,
             plan: plan.plan,
-            usage: response.usageMetadata,
+            usage: usageMetadata,
             prompt,
         };
     } catch (error) {

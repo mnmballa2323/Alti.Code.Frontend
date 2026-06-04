@@ -156,6 +156,40 @@ function recursiveFunction(n) {
             }
         }
 
+        if (prompt.includes('You are the Swarm Intelligence Overseer')) {
+            const prefixes = ["Mainframe", "AS400", "Cobol", "SAP", "OracleERP", "MuleSoft", "SOX", "PCI_DSS", "HIPAA", "ZeroTrust", "Kafka", "Salesforce", "ServiceNow", "Workday", "Peoplesoft", "ActiveDirectory"];
+            const roles = ["MigrationSpecialist", "ComplianceAuditor", "IntegrationEngineer", "SecuritySentinel", "DataArchitect", "PerformanceOptimizer", "DevSecOpsLead", "LegacyRefactorer"];
+            const generated = [];
+            for (let i = 0; i < 10; i++) {
+                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                const role = roles[Math.floor(Math.random() * roles.length)];
+                const suffix = Math.floor(Math.random() * 1000);
+                generated.push(`${prefix}_${role}_${suffix}`);
+            }
+            return JSON.stringify(generated);
+        }
+
+        if (prompt.includes('Write the complete Node.js source code for a new agent class extending')) {
+            const domainMatch = prompt.match(/Requirement: (.*)/);
+            const domain = domainMatch ? domainMatch[1].trim() : 'DynamicSpecialist';
+            const cleanDomain = domain.replace(/[^a-zA-Z0-9]/g, '');
+            return `
+import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
+
+class ${cleanDomain}Agent extends GeminiCliBaseAgent {
+    constructor() {
+        super(
+            '${cleanDomain.toLowerCase()}_agent',
+            '${cleanDomain} Specialist Agent',
+            'You are the expert specialist for ${cleanDomain}.'
+        );
+    }
+}
+
+export const ${cleanDomain.toLowerCase()}Agent = Object.freeze(new ${cleanDomain}Agent());
+`;
+        }
+
         return `[MOCK GEMINI RESPONSE]
 I received your prompt: "${prompt.substring(0, 50)}..."
 This is a simulated response because Vertex AI is not configured or reachable.
