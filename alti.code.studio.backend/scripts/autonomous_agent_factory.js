@@ -17,16 +17,21 @@ async function bootstrap() {
 
     async function getNewDomainsBatch() {
         const historyArray = Array.from(history).slice(-100);
+        const cloudProviders = ['AWS', 'GCP', 'Azure', 'Cloudflare', 'Vercel', 'Netlify', 'DigitalOcean', 'Oracle Cloud', 'IBM Cloud', 'Alibaba', 'Hetzner', 'Fly.io', 'Railway', 'Render', 'Linode', 'Vultr', 'Scaleway', 'OVHcloud', 'Neon', 'Fastly', 'Backblaze B2', 'Databricks', 'Snowflake', 'CoreWeave', 'PlanetScale', 'Heroku', 'UpCloud', 'Exoscale', 'Civo', 'Lambda Labs', 'RunPod', 'Paperspace', 'Tencent Cloud', 'Huawei Cloud', 'Baidu Cloud', 'Yandex Cloud', 'Equinix Metal', 'Cloudinary', 'Deno Deploy', 'Turso', 'Akamai', 'Supabase', 'App Runner', 'Firebase'];
+
         const prompt = `
         You are the Swarm Intelligence Overseer.
-        Your objective is to generate exactly ${BATCH_SIZE} highly specific, highly unsexy, extremely realistic, massive-value Enterprise B2B software engineering domains/agents that are needed in our backend.
-        Focus on legacy migration, compliance, DevSecOps, EAI (Enterprise Application Integration), ERP customization, mainframes, ITGC, or network security.
+        Your objective is to generate exactly ${BATCH_SIZE} highly specific, deep-expertise specialist agents for the following 44 Cloud Providers:
+        ${cloudProviders.join(', ')}
+        
+        Each agent must focus on a hyper-niche capability within one of these specific cloud providers.
+        For example, instead of a general AWS agent, generate an "AWS Lambda Concurrency Expert", "GCP BigQuery Cost Optimizer", "Vercel Edge Function Strategist", "Cloudflare Workers WASM Specialist", or "Neon Serverless Postgres Sharding Master".
         
         DO NOT GENERATE ANY OF THE FOLLOWING:
         ${historyArray.length > 0 ? historyArray.join(", ") : "None yet."}
         
         Return the output STRICTLY as a valid JSON array of strings, with no markdown code blocks and no surrounding text.
-        Example: ["Mainframe DB2 Migration Specialist", "Cisco ACI Network Orchestrator", "SAP BAPI Customization Expert"]
+        Example: ["AWS DynamoDB Single-Table Design Specialist", "Vultr Bare Metal Provisioning Guru", "Databricks Delta Lake Architect"]
         `;
 
         try {
