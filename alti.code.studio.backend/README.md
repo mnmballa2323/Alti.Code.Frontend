@@ -1,6 +1,6 @@
 # 🤖 Alti.Code.Studio — Backend
 
-> The AI Agent Swarm Engine · 435+ Specialists · Multimodal GUI Automation · 19 OpenClaw Bots · 21 Cloud Providers · 46 Programming Languages · Gemini CLI Hub
+> The AI Agent Swarm Engine · 435+ Specialists · Multimodal GUI Automation · 19 OpenClaw Bots · 44 Cloud Providers · 46 Programming Languages · Gemini CLI Hub
 
 [![Node](https://img.shields.io/badge/node-v20%2B-green)](https://nodejs.org)
 [![Express](https://img.shields.io/badge/express-5.x-lightgrey)](https://expressjs.com)
@@ -92,7 +92,7 @@ Every agent inherits `BaseSpecialistAgent` which provides:
 - ✅ **Typed `AgentError`** with `.code` + `.retryable`
 - ✅ **Per-agent metrics** via `.getMetrics()`
 
-### Cloud Agents (21 Providers)
+### Cloud Agents (44 Providers)
 
 | Provider | Agent File |
 |----------|-----------|
@@ -117,6 +117,7 @@ Every agent inherits `BaseSpecialistAgent` which provides:
 | Neon | `neon.agent.js` |
 | Fastly | `fastly.agent.js` |
 | Backblaze B2 | `backblaze.agent.js` |
+| ... | *+ 23 more Cloud Providers* |
 
 ### Language Agents (46 Languages)
 
