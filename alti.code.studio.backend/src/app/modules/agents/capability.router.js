@@ -38,25 +38,31 @@ class CapabilityRouter {
     async indexAgents() {
         if (this.isIndexed) return;
         
-        logger.info(`🗺️ [CapabilityRouter] Bootstrapping Agentic RAG Vector Index...`);
+        logger.info(`🗺️ [CapabilityRouter] Bootstrapping Agentic RAG Vector Index for massive scale...`);
         const availableAgents = agentRegistry.list();
         
-        // In a real production scenario, we'd check if the index is populated,
-        // but for safety we will wipe and re-index the agent profiles
         try {
             let count = 0;
-            // Note: In an actual 10k deployment, this would be batched and queued
-            for (const agent of availableAgents) {
-                const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
-                
-                await vectorStoreService.add(agentDocument, { 
-                    type: 'agent_profile', 
-                    agentId: agent.name 
+            const BATCH_SIZE = 50;
+            
+            for (let i = 0; i < availableAgents.length; i += BATCH_SIZE) {
+                const batch = availableAgents.slice(i, i + BATCH_SIZE);
+                const batchPromises = batch.map(agent => {
+                    const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
+                    return vectorStoreService.add(agentDocument, { 
+                        type: 'agent_profile', 
+                        agentId: agent.name 
+                    }).then(() => { count++; }).catch(e => {
+                        logger.warn(`⚠️ Failed to index agent ${agent.name}: ${e.message}`);
+                    });
                 });
-                count++;
+                
+                await Promise.all(batchPromises);
+                logger.info(`🚀 [CapabilityRouter] Indexed batch ${i / BATCH_SIZE + 1} (${count}/${availableAgents.length} agents indexed)`);
             }
+            
             this.isIndexed = true;
-            logger.info(`✅ [CapabilityRouter] Successfully indexed ${count} agent profiles into Vector Store.`);
+            logger.info(`✅ [CapabilityRouter] Successfully bulk-indexed ${count} agent profiles into Vector Store.`);
         } catch (error) {
             logger.error(`❌ [CapabilityRouter] Failed to index agent profiles: ${error.message}`);
         }

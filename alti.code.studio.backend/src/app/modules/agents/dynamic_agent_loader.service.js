@@ -42,11 +42,23 @@ class DynamicAgentLoaderService {
     async loadAll() {
         try {
             const files = fs.readdirSync(this.customDir);
-            for (const file of files) {
-                if (file.endsWith('.json')) {
-                    await this.loadCustomAgent(file);
+            const jsonFiles = files.filter(file => file.endsWith('.json'));
+            
+            logger.info(`[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Beginning bulk hydration...`);
+            
+            const BATCH_SIZE = 50;
+            for (let i = 0; i < jsonFiles.length; i += BATCH_SIZE) {
+                const batch = jsonFiles.slice(i, i + BATCH_SIZE);
+                const promises = batch.map(file => this.loadCustomAgent(file).catch(e => {
+                    logger.warn(`Failed to hydrate ${file}: ${e.message}`);
+                }));
+                
+                await Promise.all(promises);
+                if (i % 500 === 0 && i > 0) {
+                    logger.info(`🚀 [Dynamic Loader] Hydrated ${i} out of ${jsonFiles.length} agents...`);
                 }
             }
+            logger.info(`✅ [Dynamic Loader] Massive Hydration Complete: Successfully mounted ${this.loadedAgents.size} agents.`);
         } catch (e) {
             logger.warn(`Failed to read custom agents directory: ${e.message}`);
         }
