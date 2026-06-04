@@ -20,7 +20,7 @@ Data Sample: ${JSON.stringify(trainingDataSample).substring(0, 5000)}
 Return ONLY the raw Python script.`;
 
         const result = await LlmGatewayService.routeCompletion(
-            userId, sessionId, mlPrompt, 'gemini-1.5-pro-002', 'ML-Engineer'
+            userId, sessionId, mlPrompt, 'gemini-3.1-pro-002', 'ML-Engineer'
         );
 
         const pythonScript = result.reply.replace(/```python/g, '').replace(/```/g, '');

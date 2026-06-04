@@ -57,7 +57,7 @@ const runTddLoop = async (userId, sessionId, featurePrompt, maxIterations = 5) =
     const testResult = await LlmGatewayService.routeCompletion(
         userId, sessionId,
         `Write comprehensive Jest unit tests for this feature. Return ONLY raw javascript code, no markdown.\nFeature: ${featurePrompt}\nCode:\n${currentCode}`,
-        'gemini-1.5-pro-002', 'TDD-Test'
+        'gemini-3.1-pro-002', 'TDD-Test'
     );
     let currentTest = testResult.reply.replace(/```javascript/g, '').replace(/```/g, '');
 

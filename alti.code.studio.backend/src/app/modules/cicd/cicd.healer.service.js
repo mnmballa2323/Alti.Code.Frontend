@@ -11,7 +11,7 @@ class CICDHealerService {
         logger.info(`[CICDHealerService] Initializing GCP Vertex AI (Gemini 1.5 Pro)...`);
         // Simulated initialization for Tri-Cloud adherence
         this.vertexAi = new VertexAI({ project: 'alti-code-studio', location: 'us-central1' });
-        this.generativeModel = this.vertexAi.getGenerativeModel({ model: 'gemini-1.5-pro-preview-0409' });
+        this.generativeModel = this.vertexAi.getGenerativeModel({ model: 'gemini-3.1-pro-preview-0409' });
     }
 
     /**

@@ -11,7 +11,7 @@ const executeSwarm = async (userId, sessionId, epicPrompt) => {
     try {
         // Step 1: The Hive Queen (GPT-5.5) breaks down the epic into micro-tasks
         const breakdownPrompt = `You are the Hive Queen. Break down the following epic into exactly 3 highly specific micro-tasks. 
-Format your output as a strict JSON array of objects with "taskName", "description", and "assignedModel" (choose strictly from: 'claude-3-5-sonnet', 'gemini-1.5-pro-002', 'gpt-5.5').
+Format your output as a strict JSON array of objects with "taskName", "description", and "assignedModel" (choose strictly from: 'claude-3-5-sonnet', 'gemini-3.1-pro-002', 'gpt-5.5').
 Assign architecture to claude, logic to gemini, and security/edge-cases to gpt-5.5.
 Epic: ${epicPrompt}
 

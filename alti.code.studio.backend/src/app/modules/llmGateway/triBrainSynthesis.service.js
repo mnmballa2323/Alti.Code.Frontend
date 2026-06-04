@@ -23,7 +23,7 @@ const synthesize = async (userId, sessionId, contextPrompt, taskPrompt) => {
                 userId, 
                 sessionId, 
                 `${contextPrompt}\n\nTask: ${taskPrompt}\n\nFocus strictly on PERFORMANCE and CODE QUALITY.`, 
-                'gemini-1.5-pro-002', 
+                'gemini-3.1-pro-002', 
                 'Synthesis'
             ),
             LlmGatewayService.routeCompletion(

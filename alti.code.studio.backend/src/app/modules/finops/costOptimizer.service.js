@@ -24,7 +24,7 @@ Task: Refactor the code to achieve optimal Big O time and space complexity. Use 
 Return ONLY the raw optimized javascript code, no markdown or explanations.`;
 
         const result = await LlmGatewayService.routeCompletion(
-            userId, sessionId, refactorPrompt, 'gemini-1.5-pro-002', 'FinOps-Optimizer'
+            userId, sessionId, refactorPrompt, 'gemini-3.1-pro-002', 'FinOps-Optimizer'
         );
 
         const optimizedCode = result.reply.replace(/```javascript/g, '').replace(/```/g, '');
