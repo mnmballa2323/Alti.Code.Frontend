@@ -39,12 +39,12 @@ class DynamicAgentLoaderService {
         });
     }
 
-    loadAll() {
+    async loadAll() {
         try {
             const files = fs.readdirSync(this.customDir);
             for (const file of files) {
                 if (file.endsWith('.json')) {
-                    this.loadCustomAgent(file);
+                    await this.loadCustomAgent(file);
                 }
             }
         } catch (e) {
@@ -52,27 +52,50 @@ class DynamicAgentLoaderService {
         }
     }
 
-    loadCustomAgent(filename) {
+    async loadCustomAgent(filename) {
         try {
             const filePath = path.join(this.customDir, filename);
             if (!fs.existsSync(filePath)) return;
 
             const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+            const agentName = config.name;
 
             // Avoid duplicate registration if just modified slightly
-            if (this.loadedAgents.has(config.name)) {
-                logger.info(`[Dynamic Loader] Updating logic for existing agent: ${config.name}`);
+            if (this.loadedAgents.has(agentName)) {
+                logger.info(`[Dynamic Loader] Updating logic for existing agent: ${agentName}`);
                 // In a perfect system, we'd update the router. For now we just let capabilityRouter re-register 
                 // and prioritize the new instance scoring.
             }
 
-            const customAgentInstance = new DynamicAgent(config);
+            let customAgentInstance = null;
+            const jsFilePath = filePath.replace('.json', '.agent.js');
+            
+            if (fs.existsSync(jsFilePath)) {
+                try {
+                    const moduleUrl = `file://${jsFilePath}`;
+                    const module = await import(moduleUrl);
+                    
+                    // Retrieve the exported class instance
+                    const exportedKey = Object.keys(module).find(k => module[k] && typeof module[k] === 'object');
+                    if (exportedKey) {
+                        customAgentInstance = module[exportedKey];
+                        logger.info(`✅ Successfully loaded native logic for [${agentName}]`);
+                    }
+                } catch (importErr) {
+                    logger.warn(`Failed to load native JS for [${agentName}], falling back to JSON stub. Error: ${importErr.message}`);
+                }
+            }
+
+            // Fallback to JSON stub if JS loading failed or file doesn't exist
+            if (!customAgentInstance) {
+                customAgentInstance = new DynamicAgent(config);
+            }
 
             // Phase 45: Dynamically inject into capability router
             capabilityRouter.registerAgent(customAgentInstance, config.keywords || []);
 
-            this.loadedAgents.add(config.name);
-            logger.info(`✨ Genesis Protocol: Dynamically ingested [${config.name}] into Swarm Capability Router.`);
+            this.loadedAgents.add(agentName);
+            logger.info(`✨ Genesis Protocol: Dynamically ingested [${agentName}] into Swarm Capability Router.`);
 
         } catch (e) {
             logger.error(`[Dynamic Loader] Failed to parse custom agent ${filename}: ${e.message}`);
