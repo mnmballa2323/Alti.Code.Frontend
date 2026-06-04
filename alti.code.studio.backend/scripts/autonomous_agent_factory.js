@@ -24,7 +24,8 @@ async function bootstrap() {
         Your objective is to generate exactly ${BATCH_SIZE} highly specific, deep-expertise specialist agents for the following 44 Cloud Providers:
         ${cloudProviders.join(', ')}
         
-        CRITICAL: While you must cover all 44 providers perfectly, place a MAJOR and DISPROPORTIONATE focus on the hyperscale giants: AWS, Microsoft Azure, and Google Cloud (GCP). The armies for these top 3 providers should be the largest and most deeply specialized.
+        CRITICAL: The core of this platform is our HARD LAW "Tri-Cloud Inference Strategy" spanning AWS (Bedrock), Google Cloud (Vertex AI), and Microsoft Azure (OpenAI Foundry). 
+        While you must cover all 44 providers perfectly, you must place a MAJOR and DISPROPORTIONATE focus on these three Tri-Cloud hyperscale giants. The armies for AWS, GCP, and Azure must explicitly support and execute this sovereign, cross-cloud AGI execution strategy.
         
         Each agent must focus on a hyper-niche capability within one of these specific cloud providers.
         For example, instead of a general AWS agent, generate an "AWS Lambda Concurrency Expert", "GCP BigQuery Cost Optimizer", "Vercel Edge Function Strategist", "Cloudflare Workers WASM Specialist", or "Neon Serverless Postgres Sharding Master".
