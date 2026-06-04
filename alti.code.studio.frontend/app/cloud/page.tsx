@@ -459,7 +459,7 @@ export default function CloudPage() {
             },
             {
               id: `vertex-${Math.floor(Math.random() * 1000)}`,
-              name: "Vertex AI Gemini 1.5 Pro",
+              name: "Vertex AI Gemini 3.1 Pro",
               status: "Running",
               region: "europe-west1",
               cpu: "78%",
@@ -576,7 +576,7 @@ export default function CloudPage() {
           },
           {
             id: `vertex-${Math.floor(Math.random() * 1000)}`,
-            name: "Vertex AI Gemini 1.5 Pro",
+            name: "Vertex AI Gemini 3.1 Pro",
             status: "Running",
             region: "europe-west1",
             cpu: "78%",

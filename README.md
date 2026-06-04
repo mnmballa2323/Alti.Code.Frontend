@@ -28,7 +28,7 @@ Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-
 ### The AGI Genesis (Tri-Cloud Architecture)
 The platform operates on a completely sovereign, self-healing Tri-Cloud architecture:
 1. **The Architect (AWS Bedrock / Claude 5 Sonnet):** Writes God-Tier algorithmic code with mathematically proven structures.
-2. **The QA Engineer (GCP Vertex AI / Gemini 1.5 Pro):** Ingests code, visual Grafana dashboards, and raw CI/CD crash logs to autonomously heal PRs.
+2. **The QA Engineer (GCP Vertex AI / Gemini 3.1 Pro):** Ingests code, visual Grafana dashboards, and raw CI/CD crash logs to autonomously heal PRs.
 3. **The DevSecOps CISO (Azure Foundry / GPT-5.5):** Audits code cryptographically and streams real-time RBAC tokens.
 
 This Triple-Threat consensus loop runs autonomously via the **Sovereign Agent**, which writes its own Jira tickets, hot-reloads its own V8 bytecode (Metamorphic Self-Compilation), and queues its knowledge vectors for a 14-minute Interplanetary Sync to Mars.
@@ -38,7 +38,7 @@ This Triple-Threat consensus loop runs autonomously via the **Sovereign Agent**,
 |-----------|------|
 | `tri_brain.service.js` | Sovereign AGI Convergence Loop across AWS, GCP, and Azure |
 | `sovereign.agent.js` | Detaches from human prompts, scrapes web trends, generates own Jira tickets |
-| `cicd.healer.service.js` | Gemini 1.5 Pro pipeline to parse massive raw build logs and push autonomous Git fixes |
+| `cicd.healer.service.js` | Gemini 3.1 Pro pipeline to parse massive raw build logs and push autonomous Git fixes |
 | `db.swarm.service.js` | Instantly spins up isolated ephemeral PostgreSQL Docker containers per test run |
 | `observability.service.js`| Chaos Monkeys using Gemini Vision to read Grafana dashboards and auto-rollback |
 | `graph.orchestrator.js` | LangGraph-powered multi-agent orchestrator with plan → guard → execute → review pipeline |

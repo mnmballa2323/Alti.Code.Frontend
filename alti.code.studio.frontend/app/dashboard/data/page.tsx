@@ -24,7 +24,7 @@ export default function DataPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       const simulatedLogs = [
-        "[Gemini 1.5 Pro] Autonomously chunking 450 pages of API docs...",
+        "[Gemini 3.1 Pro] Autonomously chunking 450 pages of API docs...",
         "[Tri-Brain] Embedding AST syntax trees...",
         "[VectorDB] Pruning stale vectors from branch 'feature/auth'...",
         "[Sovereign] Scraping GitHub trending repos for insights...",
