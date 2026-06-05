@@ -14,6 +14,7 @@
 import { exec } from 'child_process';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
+import { TenantContainerOrchestrator } from './tenant_container_orchestrator.js';
 
 export class AgentContainerOrchestrator {
     /**
@@ -26,6 +27,7 @@ export class AgentContainerOrchestrator {
         this.baseImage = baseImage;
         this.activeContainers = new Set();
         this.isDockerAvailable = null;
+        this.tenantOrchestrator = new TenantContainerOrchestrator();
 
         try {
             mkdirSync(this.baseSandboxDir, { recursive: true });
@@ -67,13 +69,14 @@ export class AgentContainerOrchestrator {
      * Dynamically launches an unprivileged, heavily-hardened container for a specific agent class.
      * @param {string} agentName - Name of the agent class (e.g., SwarmArchitect)
      * @param {string} sessionWorkspacePath - Host-level shared workspace directory path
+     * @param {string} [tenantId] - The Enterprise Tenant UUID to bind network execution to
      * @param {object} [options] - Configurable resource constraints
      * @param {string} [options.memory] - Custom memory limit (default: 256m)
      * @param {string} [options.cpus] - Custom CPU limit (default: 0.5)
      * @param {number} [options.pidsLimit] - Custom PID limit to prevent fork bombs (default: 100)
      * @returns {Promise<object>} Container details
      */
-    async startAgentContainer(agentName, sessionWorkspacePath, options = {}) {
+    async startAgentContainer(agentName, sessionWorkspacePath, tenantId = null, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
         const hostWorkspacePath = resolve(sessionWorkspacePath);
@@ -113,8 +116,12 @@ export class AgentContainerOrchestrator {
         const hostUid = (process.getuid && process.getuid() !== 0) ? process.getuid() : 1000;
         const hostGid = (process.getgid && process.getgid() !== 0) ? process.getgid() : 1000;
 
+        // Determine network isolation: 
+        // If tenantId exists, bind to tenant's air-gapped bridge network. Else, use 'none'.
+        const networkFlag = tenantId ? `--network ${this.tenantOrchestrator.getTenantNetwork(tenantId)}` : `--network none`;
+
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
-        // - Strict Air-Gapped Network Isolation: --network none
+        // - Strict Network Isolation: networkFlag
         // - Root filesystem read-only: --read-only
         // - Drop all default Linux capabilities: --cap-drop=ALL
         // - Prevent privilege escalation: --security-opt=no-new-privileges:true
@@ -125,7 +132,7 @@ export class AgentContainerOrchestrator {
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostWorkspacePath}":/workspace ` +
-            `--network none ` +
+            `${networkFlag} ` +
             `--read-only ` +
             `--security-opt=no-new-privileges:true ` +
             `--cap-drop=ALL ` +
@@ -188,18 +195,19 @@ export class AgentContainerOrchestrator {
      * @param {object} context - Stateful shared session context variables
      * @param {Function} toolExecuteFn - The raw execution function
      * @param {string} sessionWorkspacePath - Host-level shared workspace directory path
+     * @param {string} [tenantId] - The enterprise Tenant UUID for execution isolation
      * @param {object} [options] - Configurable resource constraints
      * @returns {Promise<any>} The returned result of the tool execution (mapping back handoffs)
      */
-    async executeAgentTool(agentName, toolName, args, context, toolExecuteFn, sessionWorkspacePath, options = {}) {
+    async executeAgentTool(agentName, toolName, args, context, toolExecuteFn, sessionWorkspacePath, tenantId = null, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
         const hostWorkspacePath = resolve(sessionWorkspacePath);
 
         const startTime = Date.now();
 
-        // 1. Start the agent's container (if not already running)
-        const containerResult = await this.startAgentContainer(agentName, hostWorkspacePath, options);
+        // 1. Start the agent's container (if not already running) scoped to the tenant's network
+        const containerResult = await this.startAgentContainer(agentName, hostWorkspacePath, tenantId, options);
 
         // 2. Serialize tool execution function, arguments, and context into a temporary JS file inside the shared workspace
         const tempFileName = `temp_tool_${cleanAgentName}_${Math.random().toString(36).substring(2, 9)}.js`;
