@@ -67,42 +67,10 @@ async function main() {
 
     // 1. Initialize PostgreSQL (Prisma)
     await connectPrisma();
-
-    // 2. Initialize Legacy MongoDB (Mongoose) - Phased Deprecation
-    try {
-      console.log('--- Attempting Legacy MongoDB Connection ---');
-      await mongoose.connect(config.database_local, { serverSelectionTimeoutMS: 2000 });
-      logger.info('✅ MongoDB connected successfully');
-      logger.info("Test log entry from INSOCODE");
-    } catch (dbError) {
-      console.log('--- Real MongoDB Failed. ---');
-      logger.warn(`⚠️ Local MongoDB connection failed: ${dbError.message}`);
-      
-      if (process.env.NODE_ENV === 'production') {
-        logger.error('❌ FATAL: Database connection failed in production. Proceeding with zero-db fallback is forbidden to prevent data loss.', dbError);
-        process.exit(1);
-      }
-
-      logger.warn('⚠️ Switching to In-Memory MongoDB (Mock Mode)...');
-      try {
-        console.log('--- Importing MongoMemoryServer ---');
-        // Dynamic import to avoid production dependency issues/size
-        const { MongoMemoryServer } = await import('mongodb-memory-server');
-        console.log('--- Creating MongoMemoryServer Instance ---');
-        const mongoServer = await MongoMemoryServer.create();
-        console.log('--- Getting URI ---');
-        const uri = mongoServer.getUri();
-        console.log(`--- Connecting Mongoose to ${uri} ---`);
-        await mongoose.connect(uri);
-        logger.info(`✅ Connected to In-Memory MongoDB at ${uri}`);
-        // Set a global flag if needed for other services?
-        global.MOCK_DB_MODE = true;
-      } catch (memError) {
-        console.error('--- In-Memory Setup Failed ---', memError);
-        logger.error('❌ Failed to start In-Memory Mongo. Continuing without Database...', memError);
-        // throw memError; // SWALLOWED to allow server start
-      }
-    }
+    
+    // 2. Disable Legacy MongoDB & Mock Mode
+    logger.info('✅ Strict Database Policy Enforced: Legacy MongoDB and MongoMemoryServer disabled.');
+    logger.info('   All systems now exclusively utilize the robust PostgreSQL (Prisma) data store.');
 
     // Seed initial agent skills for SkillOpt catalog
     try {

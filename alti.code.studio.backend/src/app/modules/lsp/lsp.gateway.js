@@ -10,6 +10,8 @@ import { logger } from '../../../shared/logger.js';
 import { swarmBrain } from '../agents/swarm_brain.js';
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { dlpService } from '../googleCloud/dlp.service.js';
+import { triBrainService } from '../agents/tri_brain.service.js';
+import { TenantContainerOrchestrator } from '../sandbox/tenant_container_orchestrator.js';
 
 class LspGateway {
     constructor() {
@@ -22,6 +24,8 @@ class LspGateway {
         
         // Debounce timers for predictive autocomplete to avoid hammering Vertex AI on every keystroke
         this.typingDebouncers = new Map();
+        
+        this.tenantOrchestrator = new TenantContainerOrchestrator();
     }
 
     /**
@@ -38,8 +42,16 @@ class LspGateway {
 
         this.wss.on('connection', (ws, req) => {
             const sessionId = req.headers['sec-websocket-key'];
-            logger.info(`🔮 LSP Telepathy: IDE Session Connected [${sessionId}]`);
+            const tenantId = req.headers['x-tenant-id'] || 'default-tenant';
+            logger.info(`🔮 LSP Telepathy: IDE Session Connected [${sessionId}] for Tenant [${tenantId}]`);
             this.activeSessions.set(sessionId, ws);
+            
+            // Asynchronously provision the secure Docker workspace for this session
+            this.tenantOrchestrator.provisionWorkspace(tenantId).then(() => {
+                logger.info(`✅ [LSP Gateway] Docker workspace provisioned for Tenant [${tenantId}]`);
+            }).catch(err => {
+                logger.error(`❌ [LSP Gateway] Failed to provision Docker workspace: ${err.message}`);
+            });
 
             ws.on('message', async (message) => {
                 await this.handleLspMessage(sessionId, message.toString());
@@ -102,16 +114,16 @@ class LspGateway {
                 
                 this.typingDebouncers.set(uri, setTimeout(async () => {
                     try {
-                        logger.info(`🧠 LSP Telepathy: Triggering Vertex AI Gemini Flash prediction for ${uri}...`);
+                        logger.info(`🧠 LSP Telepathy: Triggering Tri-Cloud fast inference prediction for ${uri}...`);
                         const prompt = `You are a sub-100ms latency autocomplete engine. Provide only the exact next lines of code to complete this buffer. Do not use markdown. Do not repeat the prompt. BUFFER:\n${newText}\n\nCOMPLETE HERE:\n`;
                         
-                        // Use gemini-3.1-pro for extreme speed
-                        const completion = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
+                        // Use Tri-Brain Fast Inference (AWS Bedrock -> Azure -> GCP Vertex)
+                        const completionText = await triBrainService.fastInference(prompt);
                         
-                        if (completion && completion.content) {
+                        if (completionText) {
                             this.pushSuggestion(uri, {
                                 type: 'ghost_text',
-                                text: completion.content.trim()
+                                text: completionText.trim()
                             });
                         }
                     } catch(e) {

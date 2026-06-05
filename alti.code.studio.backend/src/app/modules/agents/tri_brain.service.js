@@ -117,6 +117,7 @@ ${ragContext.answer}
             // Recursive self-healing loop: feed vulnerabilities back to Claude
             const healingIntent = `${safeIntent}\n\nThe DevSecOps auditor rejected the previous attempt with these reasons:\n${cisoDecision}\n\nPlease rewrite the code to fix these issues.`;
             return this.executeConsensusLoop(healingIntent); // Recurse until flawless
+        }
     }
 
     /**
