@@ -15,6 +15,7 @@ import { playwrightCompilerService } from '../qa/playwright_compiler.service.js'
 import { vectorStoreService } from '../memory/vector.store.js';
 import { swarmMeshNetworkService } from './swarm_mesh_network.service.js';
 import { chaosImmuneSystemService } from './chaos_immune_system.service.js';
+import { elasticTerraformService } from '../infrastructure/elastic_terraform.service.js';
 
 class GodModeOrchestrator {
     constructor() {
@@ -64,8 +65,14 @@ class GodModeOrchestrator {
     async executeGodModeTask(prompt, contextPayload) {
         if (!this.isReady) throw new Error("God Mode Orchestrator is offline.");
 
-        logger.info(`⚡ [GOD MODE] Task Received: "${prompt.substring(0, 50)}..."`);
+        logger.info(`⚡ [GOD MODE] Intercepted Master Command: "${prompt.substring(0, 50)}..."`);
         
+        // Project Aether: Elastic Infrastructure Trigger
+        if (prompt.toLowerCase().includes('compile') || prompt.toLowerCase().includes('train') || prompt.toLowerCase().includes('massive')) {
+            logger.warn(`🌩️ [GOD MODE] Massive computational load detected. Triggering Elastic Infrastructure Synthesis...`);
+            await elasticTerraformService.provisionComputeCluster({ provider: 'aws', vcpu: 128, ramGB: 512 });
+        }
+
         const result = {
             memoryRecalled: false,
             testsPassed: false,
