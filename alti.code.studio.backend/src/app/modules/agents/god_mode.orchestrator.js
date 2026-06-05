@@ -14,6 +14,7 @@ import { desktopIpcService } from './desktop_ipc.service.js';
 import { playwrightCompilerService } from '../qa/playwright_compiler.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 import { swarmMeshNetworkService } from './swarm_mesh_network.service.js';
+import { chaosImmuneSystemService } from './chaos_immune_system.service.js';
 
 class GodModeOrchestrator {
     constructor() {
@@ -44,6 +45,9 @@ class GodModeOrchestrator {
             // Epic 5: Boot Decentralized P2P Gossip Mesh
             logger.info('🕸️ [GOD MODE] Booting Project Nova LibP2P Swarm Mesh...');
             await swarmMeshNetworkService.start();
+
+            // Epic 6: Engage Adversarial Chaos Engine (Project Aether)
+            chaosImmuneSystemService.start();
 
             this.isReady = true;
             logger.info('🌌 [GOD MODE] The Alti Swarm is fully autonomous and online.');

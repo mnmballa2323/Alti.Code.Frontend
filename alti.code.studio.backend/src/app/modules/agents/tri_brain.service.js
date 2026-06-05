@@ -46,12 +46,20 @@ class TriBrainService {
         const ragContext = await knowledgeRagService.queryKnowledgeBase(safeIntent);
         logger.info(`   [Tri-Brain] Retrieved ${ragContext.citations.length} semantic vectors to inject into Architect's context.`);
 
+        // 🕸️ Phase 12: Omniscient Graph Memory (Project Aether)
+        const { graphMemoryService } = await import('../memory/graph.memory.service.js');
+        const graphContext = await graphMemoryService.queryIntentGraph(safeIntent);
+        logger.info(`   [Tri-Brain] Retrieved relational graph dependencies for historical lineage.`);
+
         // Step 1: The Architect (AWS Bedrock / Claude 5 Sonnet) writes the code
         logger.info(`🏗️ [Tri-Brain] Step 1: Claude 5 Sonnet (AWS) generating code...`);
         const claudePrompt = `You are the Lead Architect. Generate the complete code implementation for this intent: ${safeIntent}
         
 Strictly adhere to these historical architectural constraints derived from our Vector DB:
 ${ragContext.answer}
+
+And respect the following relational lineage from the Omniscient Graph:
+${graphContext}
 `;
         
         let initialCode = "";
