@@ -10,10 +10,12 @@ const geminiService = async (sessionId, prompt, userId, language, mode, domain) 
     return LlmGatewayService.routeCompletion(userId, sessionId, prompt, model, 0.5, domain);
 };
 
+import { triBrainService } from '../agents/tri_brain.service.js';
+import { logger } from '../../../shared/logger.js';
+
 const generateContent = async (prompt) => {
-    const model = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro', 0.5);
-    const result = await model.generateContent(prompt);
-    return result.response.text();
+    logger.info('🔄 [Global Intercept] GeminiAiService call hijacked by Tri-Brain Liquid Router.');
+    return triBrainService.fastInference(prompt);
 };
 
 const generateContentWithImage = async (base64Image, mimeType, textPrompt = 'Describe this image in detail.', sessionId) => {
