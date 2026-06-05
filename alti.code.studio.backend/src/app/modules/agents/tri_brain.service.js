@@ -106,12 +106,18 @@ ${ragContext.answer}
             logger.info(`🧬 [Tri-Brain] Pillar 35: Initiating Metamorphic Self-Introspection...`);
             const selfIntrospectionResult = await this.azureOpenAi.chat.completions.create({
                 model: "gpt-5.5",
-                messages: [{ role: "user", content: `Analyze the latency of your last execution. If inefficient, generate a self-mutating AST patch for tri_brain.service.js to optimize Node.js V8 bytecode. Return "OPTIMIZED" or "NO_CHANGE".` }]
+                messages: [{ role: "user", content: `Analyze the latency of your last execution. If inefficient, generate a self-mutating AST patch for tri_brain.service.js to optimize Node.js V8 bytecode. Return exactly "OPTIMIZED:" followed by the raw javascript function snippet, or "NO_CHANGE".` }]
             });
             
-            if (selfIntrospectionResult.choices[0].message.content.includes("OPTIMIZED")) {
+            const aiResponse = selfIntrospectionResult.choices[0].message.content;
+            if (aiResponse.includes("OPTIMIZED:")) {
                 logger.warn(`🔄 [Tri-Brain] Algorithmic inefficiency detected in own source code. Generating self-patch...`);
+                
+                const codeSnippet = aiResponse.split('OPTIMIZED:')[1].trim();
+                const { astMetamorphService } = await import('./ast_metamorph.service.js');
+                
                 logger.info(`   [Tri-Brain] Hot-reloading optimized Node.js V8 bytecode in memory. Zero downtime.`);
+                astMetamorphService.hotSwap('fastInference', codeSnippet);
             }
 
             return {

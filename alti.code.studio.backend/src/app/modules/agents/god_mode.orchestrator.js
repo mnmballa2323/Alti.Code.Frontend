@@ -41,6 +41,10 @@ class GodModeOrchestrator {
             logger.info('🧪 [GOD MODE] Warming up Auto-Test CI/CD Playwright Engine...');
             // await playwrightCompilerService.warmup();
 
+            // Epic 5: Boot Decentralized P2P Gossip Mesh
+            logger.info('🕸️ [GOD MODE] Booting Project Nova LibP2P Swarm Mesh...');
+            await swarmMeshNetworkService.start();
+
             this.isReady = true;
             logger.info('🌌 [GOD MODE] The Alti Swarm is fully autonomous and online.');
         } catch (error) {
@@ -62,10 +66,15 @@ class GodModeOrchestrator {
             memoryRecalled: false,
             testsPassed: false,
             filesWritten: false,
+            meshBroadcasted: false,
             fix: null
         };
 
         try {
+            // Step 0: Broadcast the task into the Project Nova decentralized LibP2P Mesh
+            logger.info('🕸️ [GOD MODE] Broadcasting Task Intent to decentralized P2P Gossip Mesh...');
+            swarmMeshNetworkService.broadcast('TASK_DISCOVERY', { prompt, contextPayload, orchestrator: 'GOD_MODE' });
+            result.meshBroadcasted = true;
             // Step 1: Recall from Vector Memory
             logger.info('🔍 [GOD MODE] Querying Sovereign Vector Memory for previous solutions...');
             const priorKnowledge = await vectorStoreService.search(prompt, 1);
