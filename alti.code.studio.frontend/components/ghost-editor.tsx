@@ -16,13 +16,13 @@ if (typeof window !== "undefined") {
   (window as any).MonacoEnvironment = {
     getWorker: () => undefined,
   };
-}
 
-loader.config({
-  paths: {
-    vs: "https://unpkg.com/monaco-editor@0.53.0/min/vs",
-  },
-});
+  loader.config({
+    paths: {
+      vs: "https://unpkg.com/monaco-editor@0.53.0/min/vs",
+    },
+  });
+}
 
 /**
  * Sovereign Monaco Controller.
