@@ -61,11 +61,19 @@ export const logger = winston.createLogger({
   transports: transports,
 });
 
+logger.on('error', (err) => {
+  console.error('Winston Logger Error:', err.message);
+});
+
 // Error logger
 export const errorlogger = winston.createLogger({
   level: 'error',
   format: baseFormat,
   transports: errorTransports,
+});
+
+errorlogger.on('error', (err) => {
+  console.error('Winston ErrorLogger Error:', err.message);
 });
 
 // 🚨 Override errorlogger to stream natively to GCP Error Reporting

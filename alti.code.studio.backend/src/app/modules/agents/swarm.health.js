@@ -32,11 +32,11 @@ class SwarmHealthMonitor {
         const start = Date.now();
 
         // Structural validation — no LLM call needed
+        const isStaticDefinition = typeof agent.consult !== 'function' && !agent.preamble;
         const hasRequiredFields = (
             typeof agent.name === 'string' &&
             typeof agent.description === 'string' &&
-            typeof agent.preamble === 'string' &&
-            typeof agent.consult === 'function'
+            (isStaticDefinition || (typeof agent.preamble === 'string' && typeof agent.consult === 'function'))
         );
 
         const latencyMs = Date.now() - start;
