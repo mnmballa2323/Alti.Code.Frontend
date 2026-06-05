@@ -114,9 +114,11 @@ async function main() {
 
     // Load Dynamic Marketplace Plugins Before Background Workers
     try {
-      await agentRegistry.loadPlugins();
+      agentRegistry.loadPlugins().catch(e => {
+        logger.error('❌ Failed to load dynamic marketplace plugins asynchronously', e);
+      });
     } catch (e) {
-      logger.error('❌ Failed to load dynamic marketplace plugins', e);
+      logger.error('❌ Failed to initiate dynamic marketplace plugins', e);
     }
 
     // Initialize Background Workers (BullMQ Async Agents)
