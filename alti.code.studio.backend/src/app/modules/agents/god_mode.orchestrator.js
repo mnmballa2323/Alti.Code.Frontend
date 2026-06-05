@@ -13,6 +13,7 @@ import { logger } from '../../../shared/logger.js';
 import { desktopIpcService } from './desktop_ipc.service.js';
 import { playwrightCompilerService } from '../qa/playwright_compiler.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
+import { swarmMeshNetworkService } from './swarm_mesh_network.service.js';
 
 class GodModeOrchestrator {
     constructor() {

@@ -19,6 +19,14 @@ class TriBrainService {
             apiKey: process.env.AZURE_OPENAI_API_KEY || "dummy-key-for-sandbox-execution",
             baseURL: process.env.AZURE_OPENAI_ENDPOINT || "https://dummy-endpoint.openai.azure.com/"
         });
+
+        // LIQUID ROUTING METRICS: Epsilon-Greedy Latency Matrix
+        this.latencyMatrix = {
+            'aws': { totalTime: 0, count: 0, avg: 50 }, // assume optimistic 50ms start
+            'azure': { totalTime: 0, count: 0, avg: 60 },
+            'gcp': { totalTime: 0, count: 0, avg: 55 }
+        };
+        this.epsilon = 0.15; // 15% of the time, explore a random cloud to discover new latency dips
     }
 
     /**
@@ -121,33 +129,68 @@ ${ragContext.answer}
     }
 
     /**
-     * Rapid inference router for low-latency tasks (like LSP Autocomplete).
-     * Attempts AWS Bedrock first, fails over to Azure Foundry, then GCP Vertex.
+     * Liquid Tri-Cloud Router (Multi-Armed Bandit)
+     * Dynamically benchmarks and routes traffic to the fastest/cheapest provider in real-time.
      * @param {string} prompt 
      */
     async fastInference(prompt) {
+        // Step 1: Epsilon-Greedy Selection
+        const clouds = ['aws', 'azure', 'gcp'];
+        let selectedCloud = 'aws';
+        
+        if (Math.random() < this.epsilon) {
+            // Explore: Pick a random cloud to update latency metrics
+            selectedCloud = clouds[Math.floor(Math.random() * clouds.length)];
+            logger.info(`🌊 [Liquid Router] EXPLORE mode triggered. Randomly selected ${selectedCloud.toUpperCase()}`);
+        } else {
+            // Exploit: Pick the cloud with the absolute lowest average latency
+            selectedCloud = clouds.reduce((a, b) => this.latencyMatrix[a].avg < this.latencyMatrix[b].avg ? a : b);
+            logger.info(`⚡ [Liquid Router] EXPLOIT mode. Selecting fastest cloud: ${selectedCloud.toUpperCase()} (${this.latencyMatrix[selectedCloud].avg.toFixed(2)}ms avg)`);
+        }
+
+        const startTime = Date.now();
+        let resultText = "";
+
         try {
-            // Primary: AWS Bedrock (Claude 3 Haiku for speed, simulated here via 5 Sonnet)
-            const result = await this.anthropic.messages.create({
-                model: 'claude-5-sonnet',
-                max_tokens: 256,
-                messages: [{ role: 'user', content: prompt }]
-            });
-            return result.content[0].text;
-        } catch (e1) {
-            try {
-                // Failover 1: Azure Foundry
+            if (selectedCloud === 'aws') {
+                const result = await this.anthropic.messages.create({
+                    model: 'claude-5-sonnet',
+                    max_tokens: 256,
+                    messages: [{ role: 'user', content: prompt }]
+                });
+                resultText = result.content[0].text;
+            } else if (selectedCloud === 'azure') {
                 const result = await this.azureOpenAi.chat.completions.create({
                     model: "gpt-5.5",
                     messages: [{ role: "user", content: prompt }],
                     max_tokens: 256
                 });
-                return result.choices[0].message.content;
-            } catch (e2) {
-                // Failover 2: GCP Vertex AI
+                resultText = result.choices[0].message.content;
+            } else {
                 const result = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
-                return result.content;
+                resultText = result.content;
             }
+            
+            // Update Latency Matrix
+            const latency = Date.now() - startTime;
+            const metrics = this.latencyMatrix[selectedCloud];
+            metrics.count++;
+            metrics.totalTime += latency;
+            metrics.avg = metrics.totalTime / metrics.count;
+            
+            logger.info(`✅ [Liquid Router] ${selectedCloud.toUpperCase()} responded in ${latency}ms.`);
+            return resultText;
+
+        } catch (error) {
+            // On failure, penalize the cloud heavily (simulate 5000ms latency) and fallback
+            logger.warn(`⚠️ [Liquid Router] ${selectedCloud.toUpperCase()} FAILED. Heavily penalizing its latency score.`);
+            const metrics = this.latencyMatrix[selectedCloud];
+            metrics.count++;
+            metrics.totalTime += 5000;
+            metrics.avg = metrics.totalTime / metrics.count;
+
+            // Simple recursive fallback for safety
+            return this.fastInference(prompt);
         }
     }
 }
