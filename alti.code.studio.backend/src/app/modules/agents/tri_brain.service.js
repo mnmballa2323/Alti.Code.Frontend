@@ -117,6 +117,36 @@ ${ragContext.answer}
             // Recursive self-healing loop: feed vulnerabilities back to Claude
             const healingIntent = `${safeIntent}\n\nThe DevSecOps auditor rejected the previous attempt with these reasons:\n${cisoDecision}\n\nPlease rewrite the code to fix these issues.`;
             return this.executeConsensusLoop(healingIntent); // Recurse until flawless
+    }
+
+    /**
+     * Rapid inference router for low-latency tasks (like LSP Autocomplete).
+     * Attempts AWS Bedrock first, fails over to Azure Foundry, then GCP Vertex.
+     * @param {string} prompt 
+     */
+    async fastInference(prompt) {
+        try {
+            // Primary: AWS Bedrock (Claude 3 Haiku for speed, simulated here via 5 Sonnet)
+            const result = await this.anthropic.messages.create({
+                model: 'claude-5-sonnet',
+                max_tokens: 256,
+                messages: [{ role: 'user', content: prompt }]
+            });
+            return result.content[0].text;
+        } catch (e1) {
+            try {
+                // Failover 1: Azure Foundry
+                const result = await this.azureOpenAi.chat.completions.create({
+                    model: "gpt-5.5",
+                    messages: [{ role: "user", content: prompt }],
+                    max_tokens: 256
+                });
+                return result.choices[0].message.content;
+            } catch (e2) {
+                // Failover 2: GCP Vertex AI
+                const result = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
+                return result.content;
+            }
         }
     }
 }
