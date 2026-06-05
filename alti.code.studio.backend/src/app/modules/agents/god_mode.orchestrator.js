@@ -16,6 +16,7 @@ import { vectorStoreService } from '../memory/vector.store.js';
 import { swarmMeshNetworkService } from './swarm_mesh_network.service.js';
 import { chaosImmuneSystemService } from './chaos_immune_system.service.js';
 import { elasticTerraformService } from '../infrastructure/elastic_terraform.service.js';
+import { openSourceIngestionService } from './open_source_ingestion.service.js';
 
 class GodModeOrchestrator {
     constructor() {
@@ -49,6 +50,9 @@ class GodModeOrchestrator {
 
             // Epic 6: Engage Adversarial Chaos Engine (Project Aether)
             chaosImmuneSystemService.start();
+
+            // Epic 7: Project Singularity (Global MIT Open-Source Ingestion)
+            openSourceIngestionService.start();
 
             this.isReady = true;
             logger.info('🌌 [GOD MODE] The Alti Swarm is fully autonomous and online.');
