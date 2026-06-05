@@ -25,6 +25,13 @@ enum Role {
   unauthorized
 }
 
+enum TenantRole {
+  owner
+  admin
+  developer
+  viewer
+}
+
 enum SubscriptionStatus {
   paid
   expired
@@ -36,10 +43,41 @@ enum SubscriptionDuration {
 }
 
 // -----------------------------------------------------------------
-// Foundation: Identity & Access Management
+// Foundation: Identity & Access Management (Enterprise)
 // -----------------------------------------------------------------
+model Tenant {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String   @unique
+  domain               String?  @unique
+  
+  // Enterprise SSO
+  ssoEnabled           Boolean  @default(false)
+  samlIdpUrl           String?
+  samlCert             String?  @db.Text
+  oidcIssuer           String?
+  oidcClientId         String?
+  
+  // Isolated Database Connection (Dynamic Provisioning)
+  dedicatedDatabaseUrl String?  @db.Text
+  
+  // Billing
+  billing              TenantBilling?
+  
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  users                User[]
+  llmMetrics           LLMMetrics[]
+}
+
 model User {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  // Tenancy
+  tenantId  String?  @db.Uuid
+  tenantRole TenantRole @default(viewer)
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+
   provider  String   @default("local")
   googleId  String?
   githubId  String?
@@ -154,12 +192,13 @@ model MarketplacePlugin {
 // -----------------------------------------------------------------
 model AuditLog {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId      String?  @db.Uuid
   timestamp     DateTime @default(now())
   actor         String   @db.VarChar(255)
   action        String   @db.VarChar(255)
   metadata      Json     @default("{}")
   status        String   @default("SUCCESS") // SUCCESS, FAILURE, DENIED, WARNING
-  environment   String   @default("development")
+  environment   String   @default("production")
   ipAddress     String?
   userAgent     String?
   
@@ -244,9 +283,23 @@ model BacklogItem {
 // -----------------------------------------------------------------
 // Enterprise FinOps: LLM Cost & Telemetry
 // -----------------------------------------------------------------
+model TenantBilling {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId         String   @unique @db.Uuid
+  tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  
+  monthlyBudgetUsd Float    @default(100.0)
+  currentSpendUsd  Float    @default(0.0)
+  hardLimitAction  String   @default("pause") // pause, warn
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
 model LLMMetrics {
   id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId         String   @default("default_enterprise_tenant")
+  tenantId         String   @db.Uuid
+  tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   agentName        String
   model            String   @default("gemini-3.1-pro")
   promptTokens     Int      @default(0)
