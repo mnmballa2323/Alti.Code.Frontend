@@ -1631,7 +1631,6 @@ export default function Sidebar() {
                 <Cloud className="size-3.5" />
               </Button>
             </Tooltip>
-          </div>
         </div>
 
         {/* 6 navigation icons toggle container */}
