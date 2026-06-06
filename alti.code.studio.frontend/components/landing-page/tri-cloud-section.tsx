@@ -26,7 +26,7 @@ const providers = [
 
 export default function TriCloudSection() {
   return (
-    <section id="architecture" className="w-full py-32 bg-[#F5F5F7] text-black px-4 sm:px-6 lg:px-8">
+    <section id="architecture" className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-20">
         
         {/* Header */}
