@@ -1853,7 +1853,7 @@ export default function Sidebar() {
                                 : "bg-[#f4f4f5] dark:bg-[#27272a]",
                             )}
                           >
-                            <img src={`/database-logos/${db.id}.svg`} alt={db.name} className="w-5 h-5 object-contain" />
+                            <img src={`/database-logos/${db.id}.${db.id === 'alloydb' ? 'png' : 'svg'}`} alt={db.name} className="w-5 h-5 object-contain" />
                           </div>
                           <span className="text-xs text-left truncate pr-2">
                             {db.name}

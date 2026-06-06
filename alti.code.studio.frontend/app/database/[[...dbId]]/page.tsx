@@ -40,7 +40,7 @@ export default function DatabasePage({ params }: { params: Promise<{ dbId?: stri
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
                   {selectedDb ? (
-                    <img src={`/database-logos/${selectedDb.id}.svg`} alt={selectedDb.name} className="w-6 h-6 object-contain" />
+                    <img src={`/database-logos/${selectedDb.id}.${selectedDb.id === 'alloydb' ? 'png' : 'svg'}`} alt={selectedDb.name} className="w-6 h-6 object-contain" />
                   ) : (
                     <Database className="w-6 h-6 text-primary" />
                   )}
@@ -58,7 +58,7 @@ export default function DatabasePage({ params }: { params: Promise<{ dbId?: stri
             
             <div className="text-center py-12 text-default-500">
               {selectedDb ? (
-                <img src={`/database-logos/${selectedDb.id}.svg`} alt={selectedDb.name} className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <img src={`/database-logos/${selectedDb.id}.${selectedDb.id === 'alloydb' ? 'png' : 'svg'}`} alt={selectedDb.name} className="w-12 h-12 mx-auto mb-4 opacity-30" />
               ) : (
                 <Database className="w-12 h-12 mx-auto mb-4 opacity-20" />
               )}
