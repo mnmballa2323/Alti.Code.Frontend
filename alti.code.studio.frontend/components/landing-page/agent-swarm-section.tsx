@@ -29,14 +29,14 @@ export default function AgentSwarmSection() {
             
             {/* Outer Orbit */}
             <div className="absolute inset-8 rounded-full border border-gray-200" style={{ animation: 'spin 30s linear infinite' }}>
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-black rounded-full shadow-sm" />
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-400 rounded-full shadow-sm" />
+              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full shadow-sm" />
+              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-purple-500 rounded-full shadow-sm" />
             </div>
 
             {/* Inner Orbit */}
             <div className="absolute inset-[25%] rounded-full border border-gray-200" style={{ animation: 'spin 20s linear infinite reverse' }}>
-              <div className="absolute top-1/2 -left-2.5 -translate-y-1/2 w-5 h-5 bg-gray-800 rounded-full shadow-sm" />
-              <div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-gray-300 rounded-full shadow-sm" />
+              <div className="absolute top-1/2 -left-2.5 -translate-y-1/2 w-5 h-5 bg-emerald-500 rounded-full shadow-sm" />
+              <div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-rose-500 rounded-full shadow-sm" />
             </div>
 
             {/* Center Core */}
