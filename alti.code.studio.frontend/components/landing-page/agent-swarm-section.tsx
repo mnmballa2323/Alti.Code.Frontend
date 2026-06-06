@@ -1,6 +1,6 @@
 "use client";
 
-import { Network } from "lucide-react";
+import Image from "next/image";
 
 export default function AgentSwarmSection() {
   return (
@@ -40,8 +40,8 @@ export default function AgentSwarmSection() {
             </div>
 
             {/* Center Core */}
-            <div className="absolute inset-[40%] rounded-full bg-white shadow-sm flex items-center justify-center border border-gray-200 z-10">
-              <Network className="w-12 h-12 text-black" />
+            <div className="absolute inset-[40%] rounded-full bg-white shadow-sm flex items-center justify-center border border-gray-200 z-10 overflow-hidden p-2">
+              <Image src="/alti-logo.png" alt="Alti Logo" width={48} height={48} className="w-full h-full object-contain" />
             </div>
             
           </div>
