@@ -243,7 +243,7 @@ export default function RegisterPage() {
               <p className="text-center text-[11px] text-gray-400 mt-2">
                 By creating an account, you agree to our{" "}
                 <Link href="/terms" className="font-semibold text-black hover:underline">
-                  Terms
+                  Terms of Use
                 </Link>
                 {" "}&{" "}
                 <Link href="/privacy-policy" className="font-semibold text-black hover:underline">
