@@ -30,7 +30,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
              Build the future.
            </h2>
            <p className="text-gray-300 text-lg xl:text-xl font-medium">
-             Join the Alti Code Studio platform and accelerate your engineering team with autonomous AI agents.
+             Join the alti code studio platform and accelerate your engineering team with autonomous AI agents.
            </p>
          </div>
       </div>

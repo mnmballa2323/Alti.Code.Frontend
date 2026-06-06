@@ -86,7 +86,7 @@ export default function RegisterPage() {
           Create an account
         </h1>
         <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Join the Alti Code Studio platform.
+          Join the alti code studio platform.
         </p>
       </div>
 
