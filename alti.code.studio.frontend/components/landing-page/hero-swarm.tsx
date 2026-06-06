@@ -7,10 +7,10 @@ import MagicCodeBackground from "./magic-code-background";
 
 export default function HeroSwarm() {
   return (
-    <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
+    <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
       {/* Magical animated network background */}
       <MagicCodeBackground />
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-10">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-20">
         
         {/* Apple-style Headline */}
         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-black leading-[1.05]">
