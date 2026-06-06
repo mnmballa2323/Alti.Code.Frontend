@@ -1608,7 +1608,7 @@ export default function Sidebar() {
                 isIconOnly
                 className={cn(
                   "border rounded-lg flex-shrink-0 flex-1",
-                  pathname === "/database"
+                  pathname.startsWith("/database")
                     ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
                     : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
                 )}
