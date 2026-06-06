@@ -100,12 +100,12 @@ export default function EnterpriseConnectorsSection() {
             duration={40} 
             reverse
             items={[
-              <SiSupabase key="supabase" className="w-6 h-6 text-[#3ECF8E]" />,
-              <SiMongodb key="mongodb" className="w-6 h-6 text-[#47A248]" />,
-              <SiPlanetscale key="planetscale" className="w-6 h-6 text-black" />,
-              <SiRedis key="redis" className="w-6 h-6 text-[#DC382D]" />,
-              <SiVercel key="vercel" className="w-6 h-6 text-black" />,
-              <SiCloudflare key="cloudflare" className="w-6 h-6 text-[#F38020]" />
+              <SiKubernetes key="kubernetes" className="w-6 h-6 text-[#326CE5]" />,
+              <SiDigitalocean key="digitalocean" className="w-6 h-6 text-[#0080FF]" />,
+              <SiHeroku key="heroku" className="w-6 h-6 text-[#430098]" />,
+              <SiNetlify key="netlify" className="w-6 h-6 text-[#00C7B7]" />,
+              <SiFirebase key="firebase" className="w-6 h-6 text-[#FFCA28]" />,
+              <SiSnowflake key="snowflake" className="w-6 h-6 text-[#29B5E8]" />
             ]} 
           />
 
