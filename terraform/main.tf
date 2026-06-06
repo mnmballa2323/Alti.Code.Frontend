@@ -84,31 +84,55 @@ provider "helm" {
 }
 
 # -------------------------------------------------------------
+# God-Tier Sovereign Multi-Tenant Identity & Configuration
+# -------------------------------------------------------------
+locals {
+  customers = {
+    "stark_industries" = { cidr = "10.10.0.0/16", bgp_rt = "64512:101" }
+    "wayne_ent"        = { cidr = "10.20.0.0/16", bgp_rt = "64512:102" }
+    "acme_corp"        = { cidr = "10.30.0.0/16", bgp_rt = "64512:103" }
+  }
+}
+
+resource "openstack_identity_project_v3" "tenant_projects" {
+  for_each    = local.customers
+  name        = "alti-tenant-${each.key}-${var.environment}"
+  description = "Isolated Airgapped Sovereign Environment for ${each.key}"
+}
+
+# -------------------------------------------------------------
 # Core Infrastructure (OpenStack Private Cloud)
 # -------------------------------------------------------------
 
-# Network
+# Sovereign Networking (VRF / Tenant Isolation)
 resource "openstack_networking_network_v2" "alti_network" {
-  name           = "alti-network-${var.environment}"
+  for_each       = local.customers
+  name           = "alti-network-${each.key}-${var.environment}"
   admin_state_up = true
+  tenant_id      = openstack_identity_project_v3.tenant_projects[each.key].id
 }
 
 resource "openstack_networking_subnet_v2" "alti_subnet" {
-  name       = "alti-subnet-${var.environment}"
-  network_id = openstack_networking_network_v2.alti_network.id
-  cidr       = "10.0.0.0/16"
+  for_each   = local.customers
+  name       = "alti-subnet-${each.key}-${var.environment}"
+  network_id = openstack_networking_network_v2.alti_network[each.key].id
+  cidr       = each.value.cidr
   ip_version = 4
+  tenant_id  = openstack_identity_project_v3.tenant_projects[each.key].id
 }
 
 resource "openstack_networking_router_v2" "alti_router" {
-  name                = "alti-router-${var.environment}"
+  for_each            = local.customers
+  name                = "alti-router-${each.key}-${var.environment}"
   admin_state_up      = true
   external_network_id = data.openstack_networking_network_v2.ext_net.id
+  tenant_id           = openstack_identity_project_v3.tenant_projects[each.key].id
 }
 
 resource "openstack_networking_router_interface_v2" "alti_router_interface" {
-  router_id = openstack_networking_router_v2.alti_router.id
-  subnet_id = openstack_networking_subnet_v2.alti_subnet.id
+  for_each  = local.customers
+  router_id = openstack_networking_router_v2.alti_router[each.key].id
+  subnet_id = openstack_networking_subnet_v2.alti_subnet[each.key].id
 }
 
 data "openstack_networking_network_v2" "ext_net" {
@@ -187,7 +211,8 @@ resource "openstack_networking_secgroup_rule_v2" "allow_internal_egress" {
 
 # Magnum Kubernetes Cluster
 resource "openstack_containerinfra_cluster_v1" "k8s_cluster" {
-  name                = "alti-k8s-${var.environment}"
+  for_each            = local.customers
+  name                = "alti-k8s-${each.key}-${var.environment}"
   cluster_template_id = openstack_containerinfra_clustertemplate_v1.k8s_template.id
   master_count        = 3
   node_count          = 5
@@ -221,6 +246,9 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
     
     # Apex-Tier: TPM Attested Hardware Secure Boot
     secure_boot                    = "true"
+    
+    # God-Tier: Kata Containers (Hardware-Isolated Micro-VMs for Docker)
+    container_runtime              = "kata"
   }
 }
 
@@ -272,16 +300,19 @@ resource "openstack_vpnaas_siteconnection_v2" "office_connection" {
 
 # BGP VPN (Direct Fiber Cross-Connects to Hyperscalers)
 resource "openstack_networking_bgpvpn_v2" "hyperscaler_bgp" {
-  name           = "alti-hyperscaler-bgp-${var.environment}"
+  for_each       = local.customers
+  name           = "alti-hyperscaler-bgp-${each.key}-${var.environment}"
   type           = "l3"
-  route_targets  = ["64512:100"] # Example ASN/RT for Equinix/AWS Direct Connect
-  import_targets = ["64512:100"]
-  export_targets = ["64512:100"]
+  route_targets  = [each.value.bgp_rt] # Sovereign BGP Route Targets per customer
+  import_targets = [each.value.bgp_rt]
+  export_targets = [each.value.bgp_rt]
+  tenant_id      = openstack_identity_project_v3.tenant_projects[each.key].id
 }
 
 resource "openstack_networking_bgpvpn_router_associate_v2" "bgp_router_assoc" {
-  bgpvpn_id = openstack_networking_bgpvpn_v2.hyperscaler_bgp.id
-  router_id = openstack_networking_router_v2.alti_router.id
+  for_each  = local.customers
+  bgpvpn_id = openstack_networking_bgpvpn_v2.hyperscaler_bgp[each.key].id
+  router_id = openstack_networking_router_v2.alti_router[each.key].id
 }
 
 # Barbican (Hardware Security Module / Key Manager)
