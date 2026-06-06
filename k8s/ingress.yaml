@@ -54,6 +54,27 @@ spec:
   - host: api.alti.code.studio
     http:
       paths:
+      - path: /api/v1/aws
+        pathType: Prefix
+        backend:
+          service:
+            name: alti-backend-aws
+            port:
+              number: 80
+      - path: /api/v1/azure
+        pathType: Prefix
+        backend:
+          service:
+            name: alti-backend-azure
+            port:
+              number: 80
+      - path: /api/v1/gcp
+        pathType: Prefix
+        backend:
+          service:
+            name: alti-backend-gcp
+            port:
+              number: 80
       - path: /
         pathType: Prefix
         backend:
@@ -61,7 +82,7 @@ spec:
             name: alti-backend
             port:
               number: 80
-  
+
   - host: fossflow.alti.code.studio
     http:
       paths:
