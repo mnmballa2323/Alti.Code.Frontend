@@ -1,10 +1,7 @@
 import type { ButtonProps } from "@heroui/react";
 
 export enum TiersEnum {
-  Launch = "launch",
-  Build = "build",
-  Scale = "scale",
-  Command = "command",
+  Professional = "professional",
 }
 
 export type Tier = {

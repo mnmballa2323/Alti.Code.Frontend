@@ -78,7 +78,7 @@ export default function Pricing() {
         </h2>
       </div>
       <Spacer y={12} />
-      <div className="grid grid-cols-1 w-full gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="flex justify-center w-full max-w-sm mx-auto">
         {tiers.map((tier) => (
           <Card key={tier.key} className="p-3 w-full h-full" shadow="md">
             <CardHeader className="flex flex-col items-start gap-2 pb-6">
