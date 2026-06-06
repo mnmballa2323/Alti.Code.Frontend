@@ -7,6 +7,7 @@ import HeroSwarm from "@/components/landing-page/hero-swarm";
 import TriCloudSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
+import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -33,6 +34,7 @@ export default function LandingPage() {
         <TriCloudSection />
         <AgentSwarmSection />
         <EnterpriseConnectorsSection />
+        <AppConnectorsSection />
         <DeterministicControlSection />
       </main>
 
