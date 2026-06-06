@@ -1,4 +1,3 @@
-import MagicCodeBackground from "@/components/landing-page/magic-code-background";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 
@@ -21,13 +20,10 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Right Background Panel */}
-      <div className="hidden lg:flex w-1/2 bg-white relative overflow-hidden flex-col justify-end">
-         <div className="absolute inset-0 z-0">
-           <MagicCodeBackground />
-         </div>
+      <div className="hidden lg:flex w-1/2 bg-[#F9FAFB] relative overflow-hidden flex-col justify-end border-l border-gray-100">
          
-         {/* Gradient Overlay to make text readable */}
-         <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/20 to-transparent pointer-events-none z-10" />
+         {/* Subtle static dot pattern */}
+         <div className="absolute inset-0 z-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50" />
          
          <div className="relative z-20 p-16 w-full max-w-2xl">
            <h2 className="text-4xl xl:text-5xl font-bold text-black tracking-tight mb-4 leading-tight">
