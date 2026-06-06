@@ -2485,14 +2485,14 @@ export default function Sidebar() {
 
         <div
           className={cn(
-            "mt-auto",
+            "mt-auto border-t border-default-200",
             isSidebarOpen ? "px-5 pb-5 pt-4" : "px-1 pb-4 pt-4",
           )}
         >
           {status === "unauthenticated" ? (
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
-                className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-xl"
+                className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-md"
                 onClick={() => window.location.href = "/login"}
               >
                 Login
