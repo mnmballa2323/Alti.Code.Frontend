@@ -73,7 +73,7 @@ export default function TriCloudSection() {
               
               <div className="w-full h-px bg-gray-100" />
               
-              <CardBody className="p-10">
+              <CardBody className="p-10 bg-black">
                 <div className="flex items-center justify-between mb-5">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Supported Models</p>
                   <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -85,12 +85,12 @@ export default function TriCloudSection() {
                   {provider.models.map((model, mIdx) => (
                     <li key={mIdx} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                        <span className="text-gray-900 font-medium whitespace-nowrap">{model.name}</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+                        <span className="text-white font-medium whitespace-nowrap">{model.name}</span>
                       </div>
                       <div className="flex gap-4">
-                        <span className="text-sm text-gray-500 font-medium w-16 text-left">{model.inputPrice}</span>
-                        <span className="text-sm text-gray-500 font-medium w-16 text-left pl-1">{model.outputPrice}</span>
+                        <span className="text-sm text-gray-300 font-medium w-16 text-left">{model.inputPrice}</span>
+                        <span className="text-sm text-gray-300 font-medium w-16 text-left pl-1">{model.outputPrice}</span>
                       </div>
                     </li>
                   ))}
