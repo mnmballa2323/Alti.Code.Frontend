@@ -45,22 +45,19 @@ resource "google_kms_crypto_key" "gke_key" {
 resource "google_compute_security_policy" "cloud_armor" {
   name        = "alti-edge-security-policy"
   description = "Cloud Armor WAF for Alti Code Studio API"
-
   rule {
     action   = "allow"
     priority = "2147483647"
     match {
       versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["*"]
-      }
+      config { src_ip_ranges = ["*"] }
     }
     description = "default rule"
   }
 }
 
 # ==========================================
-# VPC & Subnets (Zero-Trust)
+# VPC & Subnets (Zero-Trust + Cloud NAT + Cloud IDS)
 # ==========================================
 resource "google_compute_network" "vpc_network" {
   name                    = "alti-vpc-${var.customer_name}"
@@ -72,8 +69,28 @@ resource "google_compute_subnetwork" "subnet" {
   ip_cidr_range = "10.0.0.0/16"
   region        = var.gcp_region
   network       = google_compute_network.vpc_network.id
-  
   private_ip_google_access = true
+}
+
+resource "google_compute_router" "router" {
+  name    = "alti-router"
+  region  = var.gcp_region
+  network = google_compute_network.vpc_network.id
+}
+
+resource "google_compute_router_nat" "nat" {
+  name                               = "alti-cloud-nat"
+  router                             = google_compute_router.router.name
+  region                             = var.gcp_region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+}
+
+resource "google_cloud_ids_endpoint" "ids_endpoint" {
+  name     = "alti-cloud-ids"
+  location = "${var.gcp_region}-a"
+  network  = google_compute_network.vpc_network.id
+  severity = "INFORMATIONAL"
 }
 
 # ==========================================
@@ -91,9 +108,7 @@ resource "google_access_context_manager_service_perimeter" "secure_perimeter" {
   
   status {
     restricted_services = ["aiplatform.googleapis.com", "container.googleapis.com"]
-    
-    resources = ["projects/${var.gcp_project_number}"]
-    
+    resources           = ["projects/${var.gcp_project_number}"]
     vpc_accessible_services {
       enable_restriction = true
       allowed_services   = ["RESTRICTED-SERVICES"]
@@ -101,11 +116,36 @@ resource "google_access_context_manager_service_perimeter" "secure_perimeter" {
   }
 }
 
-variable "gcp_org_id" {
-  type = string
+variable "gcp_org_id" { type = string }
+variable "gcp_project_number" { type = string }
+
+# ==========================================
+# Binary Authorization (Cryptographic Enforcement)
+# ==========================================
+resource "google_binary_authorization_policy" "policy" {
+  global_policy_evaluation_mode = "ENABLE"
+  default_admission_rule {
+    evaluation_mode  = "REQUIRE_ATTESTATION"
+    enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"
+    require_attestations_by = [
+      google_binary_authorization_attestor.alti_attestor.name
+    ]
+  }
 }
-variable "gcp_project_number" {
-  type = string
+
+resource "google_binary_authorization_attestor" "alti_attestor" {
+  name = "alti-control-plane-attestor"
+  attestation_authority_note {
+    note_reference = "projects/${var.gcp_project_id}/notes/alti-attestor-note"
+    public_keys {
+      ascii_armored_pgp_public_key = var.alti_pgp_public_key
+    }
+  }
+}
+
+variable "alti_pgp_public_key" {
+  description = "The PGP public key from the Liberty Center One Control Plane used to sign verified containers."
+  type        = string
 }
 
 # ==========================================
@@ -122,6 +162,10 @@ resource "google_container_cluster" "gke" {
   database_encryption {
     state    = "ENCRYPTED"
     key_name = google_kms_crypto_key.gke_key.id
+  }
+
+  binary_authorization {
+    evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
   }
 
   workload_identity_config {

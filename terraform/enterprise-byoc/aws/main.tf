@@ -50,7 +50,35 @@ resource "aws_s3_bucket" "audit_bucket" {
 }
 
 # ==========================================
-# VPC & Networking (Zero-Trust)
+# Hyper-Advanced Security (Macie, Security Hub, Config)
+# ==========================================
+resource "aws_macie2_account" "macie" {
+  status = "ENABLED"
+}
+
+resource "aws_macie2_classification_job" "scan_audit_bucket" {
+  name        = "alti-code-leakage-scan"
+  job_type    = "SCHEDULED"
+  s3_job_definition {
+    bucket_definitions {
+      account_id = data.aws_caller_identity.current.account_id
+      buckets    = [aws_s3_bucket.audit_bucket.bucket]
+    }
+  }
+  schedule_frequency {
+    daily_schedule = true
+  }
+}
+
+resource "aws_securityhub_account" "hub" {}
+
+resource "aws_config_configuration_recorder" "config" {
+  name     = "alti-config-recorder"
+  role_arn = aws_iam_role.config_role.arn
+}
+
+# ==========================================
+# VPC & Networking (Zero-Trust + Flow Logs)
 # ==========================================
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -68,17 +96,22 @@ module "vpc" {
   enable_vpn_gateway = false
 }
 
+resource "aws_flow_log" "vpc_flow_log" {
+  log_destination      = aws_s3_bucket.audit_bucket.arn
+  log_destination_type = "s3"
+  traffic_type         = "ALL"
+  vpc_id               = module.vpc.vpc_id
+}
+
 # ==========================================
-# Edge Protection (WAF & Shield Advanced)
+# Edge & Deep Packet Inspection (WAF, Shield, Network Firewall)
 # ==========================================
 resource "aws_wafv2_web_acl" "edge_waf" {
   name        = "alti-enterprise-waf"
   description = "WAF for Alti Code Studio API Gateway"
   scope       = "REGIONAL"
 
-  default_action {
-    allow {}
-  }
+  default_action { allow {} }
 
   visibility_config {
     cloudwatch_metrics_enabled = true
@@ -90,6 +123,24 @@ resource "aws_wafv2_web_acl" "edge_waf" {
 resource "aws_shield_protection" "api_shield" {
   name         = "alti-api-shield-advanced"
   resource_arn = aws_wafv2_web_acl.edge_waf.arn
+}
+
+resource "aws_networkfirewall_firewall" "deep_packet_inspection" {
+  name                = "alti-network-firewall"
+  firewall_policy_arn = aws_networkfirewall_firewall_policy.strict_policy.arn
+  vpc_id              = module.vpc.vpc_id
+  
+  subnet_mapping {
+    subnet_id = module.vpc.public_subnets[0]
+  }
+}
+
+resource "aws_networkfirewall_firewall_policy" "strict_policy" {
+  name = "alti-strict-dpi-policy"
+  firewall_policy {
+    stateless_default_actions          = ["aws:forward_to_sfe"]
+    stateless_fragment_default_actions = ["aws:forward_to_sfe"]
+  }
 }
 
 # ==========================================
@@ -114,17 +165,17 @@ module "eks" {
 
   eks_managed_node_groups = {
     alti_inference_nodes = {
-      min_size     = 3
-      max_size     = 10
-      desired_size = 3
-      instance_types = ["g5.xlarge"] # GPU enabled for edge inference
+      min_size       = 3
+      max_size       = 10
+      desired_size   = 3
+      instance_types = ["g5.xlarge"]
       capacity_type  = "ON_DEMAND"
     }
   }
 }
 
 # ==========================================
-# IAM Roles for Service Accounts (IRSA) for Bedrock
+# IAM Roles for Service Accounts (IRSA)
 # ==========================================
 module "iam_eks_role" {
   source    = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -139,4 +190,18 @@ module "iam_eks_role" {
       namespace_service_accounts = ["default:alti-backend-aws"]
     }
   }
+}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_role" "config_role" {
+  name = "alti-aws-config-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Action = "sts:AssumeRole"
+      Effect = "Allow"
+      Principal = { Service = "config.amazonaws.com" }
+    }]
+  })
 }
