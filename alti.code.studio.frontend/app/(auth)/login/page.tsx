@@ -78,7 +78,7 @@ export default function LoginPage() {
       <div className="flex flex-col gap-5 mt-2">
         <div className="flex flex-col gap-3">
           <div
-            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all cursor-pointer shadow-sm"
+            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-[#F5F5F7] hover:bg-[#EBEBEF] transition-all cursor-pointer"
             onClick={() => handleOAuthLogin("github")}
           >
             <div className="flex gap-3 items-center text-black">
