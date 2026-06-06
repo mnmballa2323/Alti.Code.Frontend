@@ -32,10 +32,7 @@ export default function DeterministicControlSection() {
         
         {/* Left Side: Copy */}
         <div className="flex flex-col gap-8">
-          <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
-            Chaos vs. Control
-          </h2>
-          <h3 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
+          <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]">
             Deterministic Output. <br />
             Absolute Security.
           </h3>
