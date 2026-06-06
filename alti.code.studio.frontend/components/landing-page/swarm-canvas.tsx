@@ -86,13 +86,23 @@ class Particle {
     this.x += this.vx;
     this.y += this.vy;
 
-    // Soft bounds (turn around smoothly at edges)
-    const margin = 30;
-    const turnFactor = 0.05;
-    if (this.x < margin) this.vx += turnFactor;
-    if (this.x > width - margin) this.vx -= turnFactor;
-    if (this.y < margin) this.vy += turnFactor;
-    if (this.y > height - margin) this.vy -= turnFactor;
+    // Hard bounce at edges so they never go off-screen
+    const radius = this.size;
+    if (this.x - radius <= 0) {
+      this.x = radius;
+      this.vx *= -1;
+    } else if (this.x + radius >= width) {
+      this.x = width - radius;
+      this.vx *= -1;
+    }
+
+    if (this.y - radius <= 0) {
+      this.y = radius;
+      this.vy *= -1;
+    } else if (this.y + radius >= height) {
+      this.y = height - radius;
+      this.vy *= -1;
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
