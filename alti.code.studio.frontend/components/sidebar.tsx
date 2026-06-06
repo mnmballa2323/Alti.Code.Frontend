@@ -800,11 +800,11 @@ export default function Sidebar() {
     {
       label: "Code",
       icon: Code,
-      path: "/",
-      isActive: pathname === "/" || pathname === "/code",
+      path: "/new-chat",
+      isActive: pathname === "/new-chat" || pathname === "/code",
       onClick: () => {
         dispatch(startNewChat());
-        router.push("/");
+        router.push("/new-chat");
       },
     },
     {
@@ -1573,7 +1573,7 @@ export default function Sidebar() {
                   window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
                 } else {
                   dispatch(startNewChat());
-                  router.push("/");
+                  router.push("/new-chat");
                 }
               }}
               onMouseEnter={() => {
@@ -1584,7 +1584,7 @@ export default function Sidebar() {
                 } else if (pathname === "/documents") {
                   router.prefetch("/documents");
                 } else {
-                  router.prefetch("/");
+                  router.prefetch("/new-chat");
                 }
               }}
             >
