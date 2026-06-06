@@ -2497,12 +2497,6 @@ export default function Sidebar() {
               >
                 Login
               </Button>
-              <Button
-                className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-xl"
-                onClick={() => window.location.href = "/register"}
-              >
-                Register
-              </Button>
             </div>
           ) : (
             <div className={cn("flex w-full", !isSidebarOpen && "hidden")}>
