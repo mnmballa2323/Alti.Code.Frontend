@@ -151,7 +151,8 @@ function Navbar() {
 
   return (
     <>
-      <div className="glass flex items-center justify-between h-[80px] z-50 sticky top-0 transition-all duration-300">
+      <div className="h-[80px] w-full">
+        <div className="glass flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
         <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
           {/* Logo */}
           {mounted ? (
@@ -269,6 +270,7 @@ function Navbar() {
             </motion.button>
           </div> */}
         </div>
+      </div>
       </div>
 
       {/* Mobile Drawer */}
