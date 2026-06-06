@@ -8,9 +8,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
     models: [
-      { name: "GPT-5.5 Instant", price: "$1.50 In / $4.50 Out" },
-      { name: "GPT-5.5", price: "$5.00 In / $30.00 Out" },
-      { name: "GPT-5.5 Pro", price: "$15.00 In / $75.00 Out" }
+      { name: "GPT-5.5 Instant", inputPrice: "$1.50", outputPrice: "$4.50" },
+      { name: "GPT-5.5", inputPrice: "$5.00", outputPrice: "$30.00" },
+      { name: "GPT-5.5 Pro", inputPrice: "$15.00", outputPrice: "$75.00" }
     ],
   },
   {
@@ -18,9 +18,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family of models.",
     models: [
-      { name: "Claude 4.5 Haiku", price: "$0.25 In / $1.25 Out" },
-      { name: "Claude Sonnet 5", price: "$3.00 In / $15.00 Out" },
-      { name: "Claude 4.7 Opus", price: "$15.00 In / $75.00 Out" }
+      { name: "Claude 4.5 Haiku", inputPrice: "$0.25", outputPrice: "$1.25" },
+      { name: "Claude Sonnet 5", inputPrice: "$3.00", outputPrice: "$15.00" },
+      { name: "Claude 4.7 Opus", inputPrice: "$15.00", outputPrice: "$75.00" }
     ],
   },
   {
@@ -28,9 +28,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: [
-      { name: "Gemini Omni Flash", price: "$0.75 In / $4.50 Out" },
-      { name: "Gemini 3.5 Flash", price: "$1.50 In / $9.00 Out" },
-      { name: "Gemini 3.5 Pro", price: "$7.00 In / $21.00 Out" }
+      { name: "Gemini Omni Flash", inputPrice: "$0.75", outputPrice: "$4.50" },
+      { name: "Gemini 3.5 Flash", inputPrice: "$1.50", outputPrice: "$9.00" },
+      { name: "Gemini 3.5 Pro", inputPrice: "$7.00", outputPrice: "$21.00" }
     ],
   }
 ];
@@ -77,15 +77,24 @@ export default function TriCloudSection() {
               <div className="w-full h-px bg-gray-100" />
               
               <CardBody className="p-10">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5">Supported Models</p>
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Supported Models</p>
+                  <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <span className="w-12 text-right">Input</span>
+                    <span className="w-12 text-right">Output</span>
+                  </div>
+                </div>
                 <ul className="flex flex-col gap-4">
                   {provider.models.map((model, mIdx) => (
                     <li key={mIdx} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-black" />
-                        <span className="text-gray-900 font-medium">{model.name}</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
+                        <span className="text-gray-900 font-medium whitespace-nowrap">{model.name}</span>
                       </div>
-                      <span className="text-sm text-gray-500 font-medium">{model.price}</span>
+                      <div className="flex gap-4">
+                        <span className="text-sm text-gray-500 font-medium w-12 text-right">{model.inputPrice}</span>
+                        <span className="text-sm text-gray-500 font-medium w-12 text-right">{model.outputPrice}</span>
+                      </div>
                     </li>
                   ))}
                 </ul>
