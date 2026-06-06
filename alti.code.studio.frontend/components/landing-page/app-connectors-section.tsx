@@ -1,28 +1,23 @@
 "use client";
 
 import React from "react";
-import { 
-  SiSlack, SiJira, SiGithub, SiLinear, SiNotion, 
-  SiStripe, SiZendesk, SiDiscord, SiFigma, 
-  SiSalesforce, SiTwilio, SiSendgrid, SiDatadog, SiAsana
-} from "react-icons/si";
 
 export default function AppConnectorsSection() {
   const apps = [
-    { name: "Slack", icon: <SiSlack className="w-8 h-8 text-[#4A154B]" /> },
-    { name: "Jira", icon: <SiJira className="w-8 h-8 text-[#0052CC]" /> },
-    { name: "GitHub", icon: <SiGithub className="w-8 h-8 text-[#181717]" /> },
-    { name: "Linear", icon: <SiLinear className="w-8 h-8 text-[#5E6AD2]" /> },
-    { name: "Notion", icon: <SiNotion className="w-8 h-8 text-[#000000]" /> },
-    { name: "Stripe", icon: <SiStripe className="w-8 h-8 text-[#008CDD]" /> },
-    { name: "Zendesk", icon: <SiZendesk className="w-8 h-8 text-[#03363D]" /> },
-    { name: "Discord", icon: <SiDiscord className="w-8 h-8 text-[#5865F2]" /> },
-    { name: "Figma", icon: <SiFigma className="w-8 h-8 text-[#F24E1E]" /> },
-    { name: "Salesforce", icon: <SiSalesforce className="w-8 h-8 text-[#00A1E0]" /> },
-    { name: "Twilio", icon: <SiTwilio className="w-8 h-8 text-[#F22F46]" /> },
-    { name: "SendGrid", icon: <SiSendgrid className="w-8 h-8 text-[#1A82E2]" /> },
-    { name: "Datadog", icon: <SiDatadog className="w-8 h-8 text-[#632CA6]" /> },
-    { name: "Asana", icon: <SiAsana className="w-8 h-8 text-[#F06A6A]" /> }
+    { name: "Slack", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/slack-icon.svg" alt="Slack" className="w-8 h-8 object-contain" /> },
+    { name: "Jira", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/jira.svg" alt="Jira" className="w-8 h-8 object-contain" /> },
+    { name: "GitHub", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/github-icon.svg" alt="GitHub" className="w-8 h-8 object-contain" /> },
+    { name: "Linear", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/linear-icon.svg" alt="Linear" className="w-8 h-8 object-contain" /> },
+    { name: "Notion", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/notion-icon.svg" alt="Notion" className="w-8 h-8 object-contain" /> },
+    { name: "Stripe", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/stripe.svg" alt="Stripe" className="w-8 h-8 object-contain" /> },
+    { name: "Zendesk", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/zendesk-icon.svg" alt="Zendesk" className="w-8 h-8 object-contain" /> },
+    { name: "Discord", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/discord-icon.svg" alt="Discord" className="w-8 h-8 object-contain" /> },
+    { name: "Figma", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/figma.svg" alt="Figma" className="w-8 h-8 object-contain" /> },
+    { name: "Salesforce", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/salesforce.svg" alt="Salesforce" className="w-8 h-8 object-contain" /> },
+    { name: "Twilio", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/twilio-icon.svg" alt="Twilio" className="w-8 h-8 object-contain" /> },
+    { name: "SendGrid", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/sendgrid-icon.svg" alt="SendGrid" className="w-8 h-8 object-contain" /> },
+    { name: "Datadog", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/datadog-icon.svg" alt="Datadog" className="w-8 h-8 object-contain" /> },
+    { name: "Asana", icon: <img src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/asana-icon.svg" alt="Asana" className="w-8 h-8 object-contain" /> }
   ];
 
   // Duplicate the array to create a seamless infinite scrolling effect
