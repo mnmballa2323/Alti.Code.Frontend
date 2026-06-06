@@ -1,0 +1,51 @@
+# Default values for alti-enterprise-byoc
+
+global:
+  environment: "production"
+  # Target cloud provider: aws, azure, or gcp
+  cloudProvider: "aws"
+  
+  # Connection tether back to Liberty Center One Control Plane
+  controlPlane:
+    url: "https://controlplane.alti.code.studio.internal"
+    mTLSCert: ""
+    mTLSKey: ""
+
+microservices:
+  awsBedrock:
+    enabled: true
+    replicaCount: 3
+    image:
+      repository: registry.alti.code.studio/alti-backend-aws
+      tag: "latest"
+    resources:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+    nodeSelector:
+      # If deploying on AWS EKS, use standard AWS labels instead of bare-metal cage labels
+      "karpenter.sh/capacity-type": "on-demand"
+
+  azureFoundry:
+    enabled: false
+    replicaCount: 3
+    image:
+      repository: registry.alti.code.studio/alti-backend-azure
+      tag: "latest"
+    nodeSelector:
+      "agentpool": "default"
+
+  gcpVertex:
+    enabled: false
+    replicaCount: 3
+    image:
+      repository: registry.alti.code.studio/alti-backend-gcp
+      tag: "latest"
+    nodeSelector:
+      "cloud.google.com/gke-nodepool": "default-pool"
+
+telemetry:
+  openTelemetry:
+    enabled: true
+    # Force usage metrics back to Liberty Center One for billing
+    endpoint: "https://otel.alti.code.studio.internal:4317"
