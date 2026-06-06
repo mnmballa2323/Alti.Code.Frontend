@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gcr.io/PROJECT_ID/alti-frontend:latest
+        image: registry.internal.libertycenterone.com/alti-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -49,8 +49,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alti-frontend
-  annotations:
-    cloud.google.com/neg: '{"ingress": true}'
 spec:
   type: ClusterIP
   selector:

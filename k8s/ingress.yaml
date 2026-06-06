@@ -1,37 +1,50 @@
 # -------------------------------------------------------------
-# Managed SSL Certificate for Google Cloud
+# TLS Certificate via cert-manager (Let's Encrypt)
 # -------------------------------------------------------------
-apiVersion: networking.gke.io/v1
-kind: ManagedCertificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
 metadata:
   name: alti-code-studio-cert
+  namespace: default
 spec:
-  domains:
+  secretName: alti-tls-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
     - alti.code.studio
     - api.alti.code.studio
     - fossflow.alti.code.studio
 
 ---
 # -------------------------------------------------------------
-# Google Cloud Load Balancer (GCLB) Ingress
+# NGINX Ingress (Octavia Load Balancer backend)
 # -------------------------------------------------------------
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: alti-ingress
+  namespace: default
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: "alti-production-ip"
-    networking.gke.io/managed-certificates: "alti-code-studio-cert"
-    kubernetes.io/ingress.class: "gce"
-    # Enable Cloud Armor for DDoS protection and WAF
-    networking.gke.io/v1beta1.FrontendConfig: "alti-frontend-config"
+    kubernetes.io/ingress.class: "nginx"
+    # Cert-manager will automatically provision the secret referenced in TLS
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # SSL Redirect
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
+  tls:
+    - hosts:
+        - alti.code.studio
+        - api.alti.code.studio
+        - fossflow.alti.code.studio
+      secretName: alti-tls-secret
   rules:
-  - host: albi.code.studio
+  - host: alti.code.studio
     http:
       paths:
-      - path: /*
-        pathType: ImplementationSpecific
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: alti-frontend
@@ -41,8 +54,8 @@ spec:
   - host: api.alti.code.studio
     http:
       paths:
-      - path: /*
-        pathType: ImplementationSpecific
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: alti-backend
@@ -52,23 +65,10 @@ spec:
   - host: fossflow.alti.code.studio
     http:
       paths:
-      - path: /*
-        pathType: ImplementationSpecific
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: fossflow
             port:
               number: 80
-
----
-# -------------------------------------------------------------
-# FrontendConfig (Google Cloud Armor / HTTPS redirection)
-# -------------------------------------------------------------
-apiVersion: networking.gke.io/v1beta1
-kind: FrontendConfig
-metadata:
-  name: alti-frontend-config
-spec:
-  redirectToHttps:
-    enabled: true
-    responseCodeName: MOVED_PERMANENTLY_DEFAULT
