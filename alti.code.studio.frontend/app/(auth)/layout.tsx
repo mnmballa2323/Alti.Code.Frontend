@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import AuthCarousel from "@/components/landing-page/AuthCarousel";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +8,11 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Left Panel: Background Images */}
       <div className="hidden lg:flex w-1/2 bg-black relative overflow-hidden flex-col justify-end border-r border-gray-900">
          <div className="absolute inset-0 z-0">
-           <AuthCarousel />
+           <img 
+             src="/auth_bg_3.png" 
+             alt="Alti Code Studio" 
+             className="absolute inset-0 w-full h-full object-cover" 
+           />
          </div>
          
          {/* Gradient Overlay to make text readable */}
