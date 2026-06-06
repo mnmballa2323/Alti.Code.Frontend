@@ -81,7 +81,7 @@ export default function TriCloudSection() {
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Supported Models</p>
                   <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     <span className="w-16 text-left">Input</span>
-                    <span className="w-16 text-left">Output</span>
+                    <span className="w-16 text-left pl-1">Output</span>
                   </div>
                 </div>
                 <ul className="flex flex-col gap-4">
