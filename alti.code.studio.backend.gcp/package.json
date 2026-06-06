@@ -1,0 +1,13 @@
+{
+  "name": "alti.code.studio.backend.gcp",
+  "version": "1.0.0",
+  "description": "Isolated GCP Vertex Microservice for Alti Code Studio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "@google/genai": "^0.1.2"
+  }
+}
