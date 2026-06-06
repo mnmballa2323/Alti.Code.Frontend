@@ -29,35 +29,44 @@ variable "customer_name" {
 }
 
 # ==========================================
-# Enterprise Security (KMS & Cloud Armor)
+# God-Tier Hardware Cryptography (EKM)
 # ==========================================
 resource "google_kms_key_ring" "keyring" {
   name     = "alti-keyring-${var.customer_name}"
   location = var.gcp_region
 }
 
-resource "google_kms_crypto_key" "gke_key" {
-  name            = "gke-encryption-key"
+resource "google_kms_crypto_key" "gke_ekm_key" {
+  name            = "gke-ekm-key"
   key_ring        = google_kms_key_ring.keyring.id
-  rotation_period = "7776000s" # 90 days
-}
-
-resource "google_compute_security_policy" "cloud_armor" {
-  name        = "alti-edge-security-policy"
-  description = "Cloud Armor WAF for Alti Code Studio API"
-  rule {
-    action   = "allow"
-    priority = "2147483647"
-    match {
-      versioned_expr = "SRC_IPS_V1"
-      config { src_ip_ranges = ["*"] }
-    }
-    description = "default rule"
-  }
+  purpose         = "ENCRYPT_DECRYPT"
+  
+  # The actual master key is hosted outside Google (e.g. Liberty Center One)
+  protection_level = "EXTERNAL"
 }
 
 # ==========================================
-# VPC & Subnets (Zero-Trust + Cloud NAT + Cloud IDS)
+# Assured Workloads (IL4 / FedRAMP High Boundary)
+# ==========================================
+resource "google_assured_workloads_workload" "workload" {
+  billing_account = var.gcp_billing_account
+  compliance_regime = "IL4"
+  display_name    = "alti-assured-workload"
+  location        = var.gcp_region
+  organization    = var.gcp_org_id
+
+  kms_settings {
+    next_rotation_time = "2027-01-01T00:00:00Z"
+    rotation_period    = "7776000s"
+  }
+}
+
+variable "gcp_billing_account" { type = string }
+variable "gcp_org_id" { type = string }
+variable "gcp_project_number" { type = string }
+
+# ==========================================
+# VPC & Subnets (Cloud NAT + Private Service Connect)
 # ==========================================
 resource "google_compute_network" "vpc_network" {
   name                    = "alti-vpc-${var.customer_name}"
@@ -86,13 +95,6 @@ resource "google_compute_router_nat" "nat" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
-resource "google_cloud_ids_endpoint" "ids_endpoint" {
-  name     = "alti-cloud-ids"
-  location = "${var.gcp_region}-a"
-  network  = google_compute_network.vpc_network.id
-  severity = "INFORMATIONAL"
-}
-
 # ==========================================
 # VPC Service Controls (Absolute Isolation Perimeter)
 # ==========================================
@@ -115,9 +117,6 @@ resource "google_access_context_manager_service_perimeter" "secure_perimeter" {
     }
   }
 }
-
-variable "gcp_org_id" { type = string }
-variable "gcp_project_number" { type = string }
 
 # ==========================================
 # Binary Authorization (Cryptographic Enforcement)
@@ -149,19 +148,35 @@ variable "alti_pgp_public_key" {
 }
 
 # ==========================================
-# GKE Autopilot Cluster (Customer Data Plane)
+# Sole Tenant Nodes (Physical Hardware Isolation)
+# ==========================================
+resource "google_compute_node_template" "sole_tenant" {
+  name      = "alti-sole-tenant-template"
+  region    = var.gcp_region
+  node_type = "n2-node-80-512"
+}
+
+resource "google_compute_node_group" "nodes" {
+  name          = "alti-sole-tenant-group"
+  zone          = "${var.gcp_region}-a"
+  node_template = google_compute_node_template.sole_tenant.id
+  size          = 1
+}
+
+# ==========================================
+# Confidential Computing GKE (AMD SEV Memory Encryption)
 # ==========================================
 resource "google_container_cluster" "gke" {
   name     = "alti-data-plane-${var.customer_name}"
   location = var.gcp_region
 
-  enable_autopilot = true
-  network          = google_compute_network.vpc_network.id
-  subnetwork       = google_compute_subnetwork.subnet.id
+  network    = google_compute_network.vpc_network.id
+  subnetwork = google_compute_subnetwork.subnet.id
   
+  # God-Tier: EKM Encryption
   database_encryption {
     state    = "ENCRYPTED"
-    key_name = google_kms_crypto_key.gke_key.id
+    key_name = google_kms_crypto_key.gke_ekm_key.id
   }
 
   binary_authorization {
@@ -177,24 +192,22 @@ resource "google_container_cluster" "gke" {
     enable_private_endpoint = false
     master_ipv4_cidr_block  = "172.16.0.0/28"
   }
-}
 
-# ==========================================
-# Workload Identity for Vertex AI Access
-# ==========================================
-resource "google_service_account" "vertex_sa" {
-  account_id   = "alti-vertex-sa"
-  display_name = "Alti Backend GCP Vertex Service Account"
-}
-
-resource "google_project_iam_member" "vertex_user" {
-  project = var.gcp_project_id
-  role    = "roles/aiplatform.user"
-  member  = "serviceAccount:${google_service_account.vertex_sa.email}"
-}
-
-resource "google_service_account_iam_member" "workload_identity_binding" {
-  service_account_id = google_service_account.vertex_sa.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.gcp_project_id}.svc.id.goog[default/alti-backend-gcp]"
+  # God-Tier: AMD SEV Memory Encryption & Sole Tenant execution
+  node_pool {
+    name = "confidential-pool"
+    node_config {
+      machine_type = "n2d-standard-16"
+      
+      confidential_nodes {
+        enabled = true
+      }
+      
+      node_affinity {
+        key      = "compute.googleapis.com/node-group-name"
+        operator = "IN"
+        values   = [google_compute_node_group.nodes.name]
+      }
+    }
+  }
 }

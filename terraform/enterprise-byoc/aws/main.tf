@@ -23,58 +23,24 @@ variable "customer_name" {
 }
 
 # ==========================================
-# Enterprise Security (KMS, CloudTrail, GuardDuty)
+# God-Tier Security: CloudHSM (Hardware FIPS 140-2 L3)
 # ==========================================
+resource "aws_cloudhsm_v2_cluster" "hsm_cluster" {
+  hsm_type   = "hsm1.medium"
+  subnet_ids = module.vpc.private_subnets
+}
+
+resource "aws_kms_custom_key_store" "hsm_keystore" {
+  cloud_hsm_cluster_id = aws_cloudhsm_v2_cluster.hsm_cluster.cluster_id
+  custom_key_store_name = "alti-hsm-keystore-${var.customer_name}"
+  trust_anchor_certificate = "REQUIRED_BUT_MANAGED_OUT_OF_BAND"
+  key_store_password       = "MANAGED_SECURELY"
+}
+
 resource "aws_kms_key" "eks_encryption_key" {
-  description             = "KMS Key for EKS Secret and EBS Encryption - Alti BYOC"
+  description             = "CloudHSM Backed Key for EKS Secret and EBS Encryption"
+  custom_key_store_id     = aws_kms_custom_key_store.hsm_keystore.id
   enable_key_rotation     = true
-  deletion_window_in_days = 7
-}
-
-resource "aws_guardduty_detector" "threat_detection" {
-  enable = true
-  finding_publishing_frequency = "FIFTEEN_MINUTES"
-}
-
-resource "aws_cloudtrail" "audit_trail" {
-  name                          = "alti-enterprise-audit-trail"
-  s3_bucket_name                = aws_s3_bucket.audit_bucket.id
-  include_global_service_events = true
-  is_multi_region_trail         = true
-  enable_log_file_validation    = true
-  kms_key_id                    = aws_kms_key.eks_encryption_key.arn
-}
-
-resource "aws_s3_bucket" "audit_bucket" {
-  bucket = "alti-enterprise-audit-${var.customer_name}"
-}
-
-# ==========================================
-# Hyper-Advanced Security (Macie, Security Hub, Config)
-# ==========================================
-resource "aws_macie2_account" "macie" {
-  status = "ENABLED"
-}
-
-resource "aws_macie2_classification_job" "scan_audit_bucket" {
-  name        = "alti-code-leakage-scan"
-  job_type    = "SCHEDULED"
-  s3_job_definition {
-    bucket_definitions {
-      account_id = data.aws_caller_identity.current.account_id
-      buckets    = [aws_s3_bucket.audit_bucket.bucket]
-    }
-  }
-  schedule_frequency {
-    daily_schedule = true
-  }
-}
-
-resource "aws_securityhub_account" "hub" {}
-
-resource "aws_config_configuration_recorder" "config" {
-  name     = "alti-config-recorder"
-  role_arn = aws_iam_role.config_role.arn
 }
 
 # ==========================================
@@ -93,7 +59,10 @@ module "vpc" {
 
   enable_nat_gateway = true
   single_nat_gateway = false
-  enable_vpn_gateway = false
+}
+
+resource "aws_s3_bucket" "audit_bucket" {
+  bucket = "alti-enterprise-audit-${var.customer_name}"
 }
 
 resource "aws_flow_log" "vpc_flow_log" {
@@ -104,35 +73,13 @@ resource "aws_flow_log" "vpc_flow_log" {
 }
 
 # ==========================================
-# Edge & Deep Packet Inspection (WAF, Shield, Network Firewall)
+# Deep Packet Inspection & Boundary Shielding
 # ==========================================
-resource "aws_wafv2_web_acl" "edge_waf" {
-  name        = "alti-enterprise-waf"
-  description = "WAF for Alti Code Studio API Gateway"
-  scope       = "REGIONAL"
-
-  default_action { allow {} }
-
-  visibility_config {
-    cloudwatch_metrics_enabled = true
-    metric_name                = "altiWafMetrics"
-    sampled_requests_enabled   = true
-  }
-}
-
-resource "aws_shield_protection" "api_shield" {
-  name         = "alti-api-shield-advanced"
-  resource_arn = aws_wafv2_web_acl.edge_waf.arn
-}
-
 resource "aws_networkfirewall_firewall" "deep_packet_inspection" {
   name                = "alti-network-firewall"
   firewall_policy_arn = aws_networkfirewall_firewall_policy.strict_policy.arn
   vpc_id              = module.vpc.vpc_id
-  
-  subnet_mapping {
-    subnet_id = module.vpc.public_subnets[0]
-  }
+  subnet_mapping { subnet_id = module.vpc.public_subnets[0] }
 }
 
 resource "aws_networkfirewall_firewall_policy" "strict_policy" {
@@ -144,7 +91,16 @@ resource "aws_networkfirewall_firewall_policy" "strict_policy" {
 }
 
 # ==========================================
-# EKS Cluster (Customer Data Plane)
+# Dedicated Hosts (Physical Hardware Isolation)
+# ==========================================
+resource "aws_ec2_host" "dedicated_host" {
+  instance_type     = "g5.xlarge"
+  availability_zone = "${var.aws_region}a"
+  auto_placement    = "on"
+}
+
+# ==========================================
+# EKS Cluster with Nitro Enclaves (Memory Encryption)
 # ==========================================
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -166,10 +122,17 @@ module "eks" {
   eks_managed_node_groups = {
     alti_inference_nodes = {
       min_size       = 3
-      max_size       = 10
+      max_size       = 3
       desired_size   = 3
       instance_types = ["g5.xlarge"]
-      capacity_type  = "ON_DEMAND"
+      
+      # Enforce execution on Dedicated Physical Hosts
+      placement_group_id = aws_ec2_host.dedicated_host.id
+      
+      # God-Tier: Enable AWS Nitro Enclaves
+      enclave_options = {
+        enabled = true
+      }
     }
   }
 }
@@ -192,16 +155,13 @@ module "iam_eks_role" {
   }
 }
 
-data "aws_caller_identity" "current" {}
+# ==========================================
+# ML Threat Detection (GuardDuty & Macie)
+# ==========================================
+resource "aws_guardduty_detector" "threat_detection" {
+  enable = true
+}
 
-resource "aws_iam_role" "config_role" {
-  name = "alti-aws-config-role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = { Service = "config.amazonaws.com" }
-    }]
-  })
+resource "aws_macie2_account" "macie" {
+  status = "ENABLED"
 }

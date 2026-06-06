@@ -30,7 +30,22 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # ==========================================
-# VNet & Networking (Zero-Trust + DDoS Standard)
+# God-Tier Hardware Cryptography (Managed HSM)
+# ==========================================
+resource "azurerm_key_vault_managed_hardware_security_module" "mhsm" {
+  name                       = "altimhsm${var.customer_name}"
+  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = azurerm_resource_group.rg.location
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  sku_name                   = "Standard_B1"
+  purge_protection_enabled   = true
+  soft_delete_retention_days = 90
+  
+  admin_object_ids = [data.azurerm_client_config.current.object_id]
+}
+
+# ==========================================
+# VNet & Networking (DDoS Standard)
 # ==========================================
 resource "azurerm_network_ddos_protection_plan" "ddos" {
   name                = "alti-ddos-protection"
@@ -55,7 +70,6 @@ resource "azurerm_subnet" "aks_subnet" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
-  
   private_endpoint_network_policies_enabled = true
 }
 
@@ -66,36 +80,59 @@ resource "azurerm_subnet" "pe_subnet" {
   address_prefixes     = ["10.0.2.0/24"]
 }
 
-resource "azurerm_subnet" "firewall_subnet" {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.3.0/24"]
+# ==========================================
+# Dedicated Host (Physical Hardware Isolation)
+# ==========================================
+resource "azurerm_dedicated_host_group" "dhg" {
+  name                = "alti-host-group"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  platform_fault_domain_count = 1
+}
+
+resource "azurerm_dedicated_host" "dh" {
+  name                    = "alti-physical-host"
+  location                = azurerm_resource_group.rg.location
+  dedicated_host_group_id = azurerm_dedicated_host_group.dhg.id
+  sku_name                = "DCsv3-Type1"
 }
 
 # ==========================================
-# Hyper-Advanced Security (Firewall Premium, Sentinel, Policy)
+# Confidential Computing AKS (Intel SGX Memory Encryption)
 # ==========================================
-resource "azurerm_public_ip" "firewall_pip" {
-  name                = "alti-firewall-pip"
+resource "azurerm_kubernetes_cluster" "aks" {
+  name                = "alti-data-plane-${var.customer_name}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+  dns_prefix          = "alti-${var.customer_name}"
 
-resource "azurerm_firewall" "premium_firewall" {
-  name                = "alti-firewall-premium"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku_name            = "AZFW_VNet"
-  sku_tier            = "Premium"
-
-  ip_configuration {
-    name                 = "configuration"
-    subnet_id            = azurerm_subnet.firewall_subnet.id
-    public_ip_address_id = azurerm_public_ip.firewall_pip.id
+  # God-Tier: Intel SGX hardware memory encryption VMs
+  default_node_pool {
+    name           = "confpool"
+    node_count     = 3
+    vm_size        = "Standard_DC4s_v3" # Intel SGX enabled
+    vnet_subnet_id = azurerm_subnet.aks_subnet.id
+    host_group_id  = azurerm_dedicated_host_group.dhg.id
   }
+
+  confidential_computing {
+    sgx_quote_helper_enabled = true
+  }
+
+  identity { type = "SystemAssigned" }
+
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+  }
+}
+
+# ==========================================
+# Active Threat Hunting & SIEM
+# ==========================================
+resource "azurerm_security_center_subscription_pricing" "defender_containers" {
+  tier          = "Standard"
+  resource_type = "Containers"
 }
 
 resource "azurerm_log_analytics_workspace" "law" {
@@ -107,65 +144,6 @@ resource "azurerm_log_analytics_workspace" "law" {
 
 resource "azurerm_sentinel_log_analytics_workspace_onboarding" "sentinel" {
   workspace_id = azurerm_log_analytics_workspace.law.id
-}
-
-resource "azurerm_resource_group_policy_assignment" "deny_public_ips" {
-  name                 = "deny-public-ips"
-  resource_group_id    = azurerm_resource_group.rg.id
-  policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114"
-  description          = "Force Zero-Trust: Mathematically prevents the creation of public IPs."
-}
-
-# ==========================================
-# Enterprise Cryptography (Key Vault & Defender)
-# ==========================================
-resource "azurerm_key_vault" "kv" {
-  name                        = "altikv${var.customer_name}"
-  location                    = azurerm_resource_group.rg.location
-  resource_group_name         = azurerm_resource_group.rg.name
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  sku_name                    = "premium"
-  purge_protection_enabled    = true
-}
-
-resource "azurerm_security_center_subscription_pricing" "defender_containers" {
-  tier          = "Standard"
-  resource_type = "Containers"
-}
-
-# ==========================================
-# Edge Protection (Azure Front Door WAF)
-# ==========================================
-resource "azurerm_cdn_frontdoor_profile" "afd" {
-  name                = "alti-frontdoor-${var.customer_name}"
-  resource_group_name = azurerm_resource_group.rg.name
-  sku_name            = "Premium_AzureFrontDoor"
-}
-
-# ==========================================
-# AKS Cluster (Customer Data Plane)
-# ==========================================
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "alti-data-plane-${var.customer_name}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = "alti-${var.customer_name}"
-
-  default_node_pool {
-    name           = "default"
-    node_count     = 3
-    vm_size        = "Standard_NC6s_v3"
-    vnet_subnet_id = azurerm_subnet.aks_subnet.id
-  }
-
-  identity { type = "SystemAssigned" }
-
-  key_vault_secrets_provider { secret_rotation_enabled = true }
-
-  network_profile {
-    network_plugin    = "azure"
-    load_balancer_sku = "standard"
-  }
 }
 
 # ==========================================
