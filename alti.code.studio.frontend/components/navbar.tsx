@@ -152,7 +152,7 @@ function Navbar() {
   return (
     <>
       <div className="glass flex items-center justify-between h-[80px] z-50 sticky top-0 transition-all duration-300">
-        <div className="wrapper flex items-center justify-between px-4 md:px-6 lg:px-8">
+        <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
           {/* Logo */}
           {mounted ? (
             <Link className="flex-shrink-0" href="/">
@@ -172,8 +172,8 @@ function Navbar() {
             />
           )}
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-12">
+          {/* Desktop Navigation Links (Centered) */}
+          <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <ul className="flex items-center gap-8 xl:gap-12">
               {links.map((item, index) => (
                 <li key={index}>
@@ -201,16 +201,10 @@ function Navbar() {
                 </li>
               ))}
             </ul>
-            {/* <button
-              onClick={() => router.push("/code")}
-              className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group cursor-pointer"
-            >
-              Code Editor
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full"></span>
-            </button> */}
+          </div>
 
-            {/* ✅ Auth Section Added */}
-            <div className="flex gap-4 xl:gap-6 justify-center items-center">
+          {/* ✅ Auth Section Added */}
+          <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
               {session?.user && status === "authenticated" ? (
                 <>
                   <Button
@@ -249,7 +243,6 @@ function Navbar() {
                 </>
               )}
             </div>
-          </div>
 
           <div className="lg:hidden">
             <MobileNavSheet />
