@@ -32,13 +32,13 @@ export default function AppConnectorsSection() {
     <section className="w-full py-32 bg-gray-50 text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col gap-16 items-center text-center">
         
-        <div className="flex flex-col gap-6 max-w-3xl">
+        <div className="flex flex-col gap-6 max-w-5xl w-full px-4">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
             165 App Connectors. <br />
             <span className="text-gray-400">Plug into everything.</span>
           </h3>
-          <p className="text-xl text-gray-500 leading-relaxed font-medium max-w-3xl mx-auto text-balance">
-            Your agents seamlessly integrate with the tools your team already relies on. 
+          <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto">
+            Your agents seamlessly integrate with the tools your team already relies on. <br className="hidden md:block" />
             Read tickets, write documentation, and automate workflows across your stack.
           </p>
         </div>
