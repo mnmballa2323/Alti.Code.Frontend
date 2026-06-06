@@ -72,6 +72,30 @@ type AppIntegration = {
   type: "official" | "custom";
 };
 
+const SUPPORTED_DATABASES = [
+  { id: "postgresql", name: "PostgreSQL", icon: "logos:postgresql" },
+  { id: "mysql", name: "MySQL", icon: "logos:mysql" },
+  { id: "sqlserver", name: "SQL Server", icon: "carbon:sql" },
+  { id: "oracle", name: "Oracle", icon: "logos:oracle" },
+  { id: "mongodb", name: "MongoDB", icon: "logos:mongodb-icon" },
+  { id: "redis", name: "Redis", icon: "logos:redis" },
+  { id: "elasticsearch", name: "Elasticsearch", icon: "logos:elasticsearch" },
+  { id: "cockroachdb", name: "CockroachDB", icon: "logos:cockroachlabs" },
+  { id: "clickhouse", name: "ClickHouse", icon: "logos:clickhouse" },
+  { id: "couchbase", name: "Couchbase", icon: "logos:couchbase" },
+  { id: "neo4j", name: "Neo4j", icon: "logos:neo4j" },
+  { id: "snowflake", name: "Snowflake", icon: "logos:snowflake-icon" },
+  { id: "trino", name: "Trino", icon: "logos:trino" },
+  { id: "alloydb", name: "AlloyDB", icon: "logos:google-cloud" },
+  { id: "bigquery", name: "BigQuery", icon: "logos:google-cloud" },
+  { id: "cloudsql-postgres", name: "Cloud SQL (PostgreSQL)", icon: "logos:google-cloud" },
+  { id: "cloudsql-mysql", name: "Cloud SQL (MySQL)", icon: "logos:google-cloud" },
+  { id: "cloudsql-sqlserver", name: "Cloud SQL (SQL Server)", icon: "logos:google-cloud" },
+  { id: "spanner", name: "Spanner", icon: "logos:google-cloud" },
+  { id: "firestore", name: "Firestore", icon: "logos:firebase" },
+  { id: "knowledge-catalog", name: "Knowledge Catalog", icon: "logos:google-cloud" },
+];
+
 const AppIcon = ({
   app,
   className = "w-8 h-8",
@@ -1791,6 +1815,67 @@ export default function Sidebar() {
                     });
                   })()
                 )}
+              </div>
+            ) : pathname.startsWith("/database") ? (
+              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                {(() => {
+                  const filtered = SUPPORTED_DATABASES.filter((db) =>
+                    db.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                  );
+
+                  if (filtered.length === 0) {
+                    return (
+                      <span className="text-xs text-default-400 text-center py-12">
+                        No databases found
+                      </span>
+                    );
+                  }
+
+                  return filtered.map((db) => {
+                    const isActive = pathname === `/database/${db.id}`;
+
+                    return (
+                      <button
+                        key={db.id}
+                        className={cn(
+                          "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                          isActive
+                            ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                            : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                        )}
+                        onClick={() => {
+                          router.push(`/database/${db.id}`);
+                        }}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                              isActive
+                                ? "bg-white dark:bg-black"
+                                : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                            )}
+                          >
+                            <Icon icon={db.icon} className="w-5 h-5 object-contain" />
+                          </div>
+                          <span className="text-xs text-left truncate pr-2">
+                            {db.name}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <Icon
+                            className={cn(
+                              "text-xs text-default-400 transition-transform",
+                              isActive ? "translate-x-0.5 text-primary" : "",
+                            )}
+                            icon="solar:alt-arrow-right-linear"
+                          />
+                        </div>
+                      </button>
+                    );
+                  });
+                })()}
               </div>
             ) : pathname === "/vault" ? (
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
