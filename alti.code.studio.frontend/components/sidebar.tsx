@@ -1873,7 +1873,7 @@ export default function Sidebar() {
                             : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
                         )}
                         onClick={() => {
-                          router.push(`/database/${db.id}`);
+                          router.push(`/database/${db.id}`, { scroll: false });
                         }}
                       >
                         <div className="flex items-center gap-3 min-w-0">
