@@ -8,7 +8,6 @@ const providers = [
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
     models: [
-      { name: "GPT-5.5 Instant", inputPrice: "$1.50", outputPrice: "$4.50" },
       { name: "GPT-5.5", inputPrice: "$5.00", outputPrice: "$30.00" },
       { name: "GPT-5.5 Pro", inputPrice: "$15.00", outputPrice: "$75.00" }
     ],
@@ -18,7 +17,6 @@ const providers = [
     logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family of models.",
     models: [
-      { name: "Claude 4.5 Haiku", inputPrice: "$0.25", outputPrice: "$1.25" },
       { name: "Claude Sonnet 5", inputPrice: "$3.00", outputPrice: "$15.00" },
       { name: "Claude 4.7 Opus", inputPrice: "$15.00", outputPrice: "$75.00" }
     ],
@@ -28,7 +26,6 @@ const providers = [
     logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: [
-      { name: "Gemini Omni Flash", inputPrice: "$0.75", outputPrice: "$4.50" },
       { name: "Gemini 3.5 Flash", inputPrice: "$1.50", outputPrice: "$9.00" },
       { name: "Gemini 3.5 Pro", inputPrice: "$7.00", outputPrice: "$21.00" }
     ],
