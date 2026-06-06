@@ -3,14 +3,13 @@
 import { Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
+import MagicCodeBackground from "./magic-code-background";
 
 export default function HeroSwarm() {
   return (
     <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
-      
-      {/* Super subtle radial gradient for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-white to-white pointer-events-none z-0" />
-      
+      {/* Magical animated network background */}
+      <MagicCodeBackground />
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-10">
         
         {/* Apple-style Headline */}
