@@ -2,10 +2,11 @@
 
 import { 
   SiGooglecloud, SiVercel, SiSupabase, SiMongodb, 
-  SiPostgresql, SiRedis, SiCloudflare, SiKubernetes 
+  SiPostgresql, SiRedis, SiCloudflare, SiKubernetes,
+  SiDigitalocean, SiHeroku, SiNetlify, SiFirebase, SiSnowflake
 } from "react-icons/si";
 import { 
-  FaAws, FaDocker, FaGithub, FaReact, FaNodeJs, FaFigma, FaDiscord 
+  FaAws, FaDocker
 } from "react-icons/fa";
 import { VscAzure } from "react-icons/vsc";
 import React from "react";
@@ -56,7 +57,7 @@ export default function EnterpriseConnectorsSection() {
         {/* Left Side: Text */}
         <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-black leading-tight">
-            66 Cloud Connections. Zero Friction.
+            66 Cloud Connections. Zero Friction. All Power.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Alti Code Studio isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
@@ -109,17 +110,17 @@ export default function EnterpriseConnectorsSection() {
             ]} 
           />
 
-          {/* Outer Orbit: Frameworks & Tools */}
+          {/* Outer Orbit: Cloud Providers & Infra */}
           <OrbitRing 
             size={580} 
             duration={55} 
             items={[
-              <FaGithub key="github" className="w-6 h-6 text-black" />,
-              <FaReact key="react" className="w-6 h-6 text-[#61DAFB]" />,
-              <FaNodeJs key="node" className="w-6 h-6 text-[#339933]" />,
+              <SiDigitalocean key="digitalocean" className="w-6 h-6 text-[#0080FF]" />,
+              <SiHeroku key="heroku" className="w-6 h-6 text-[#430098]" />,
+              <SiNetlify key="netlify" className="w-6 h-6 text-[#00C7B7]" />,
               <SiKubernetes key="k8s" className="w-6 h-6 text-[#326CE5]" />,
-              <FaFigma key="figma" className="w-6 h-6 text-[#F24E1E]" />,
-              <FaDiscord key="discord" className="w-6 h-6 text-[#5865F2]" />
+              <SiFirebase key="firebase" className="w-6 h-6 text-[#FFCA28]" />,
+              <SiSnowflake key="snowflake" className="w-6 h-6 text-[#29B5E8]" />
             ]} 
           />
 
