@@ -152,7 +152,7 @@ function Navbar() {
   return (
     <>
       <div className="h-[80px] w-full">
-        <div className="glass flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
+        <div className="bg-white dark:bg-black flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
         <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
           {/* Logo */}
           {mounted ? (
