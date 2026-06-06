@@ -1,26 +1,26 @@
 "use client";
 
 import { Card, CardHeader, CardBody } from "@heroui/react";
-import { Server, Database, Cloud } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 const providers = [
   {
     name: "Azure Foundry",
-    logo: <Server className="w-6 h-6 text-black" />,
+    logo: <Icon icon="logos:microsoft-azure" className="w-8 h-8" />,
     description: "Enterprise-grade deployment of OpenAI's most advanced reasoning engines.",
-    models: ["GPT-4o", "o1-Preview", "GPT-4 Turbo"],
+    models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
   },
   {
     name: "AWS Bedrock",
-    logo: <Database className="w-6 h-6 text-black" />,
-    description: "Highly secure, deeply integrated access to Anthropic's Claude 3 family.",
-    models: ["Claude 3.5 Sonnet", "Claude 3 Opus", "Claude 3 Haiku"],
+    logo: <Icon icon="logos:aws" className="w-8 h-8" />,
+    description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family.",
+    models: ["Claude 4.7 Opus", "Claude Sonnet 5", "Claude 4.5 Haiku"],
   },
   {
     name: "GCP Vertex AI",
-    logo: <Cloud className="w-6 h-6 text-black" />,
+    logo: <Icon icon="logos:google-cloud" className="w-8 h-8" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
-    models: ["Gemini 1.5 Pro", "Gemini 1.5 Flash", "Gemini Ultra"],
+    models: ["Gemini 3.5 Pro", "Gemini 3.5 Flash", "Gemini Omni Flash"],
   }
 ];
 
