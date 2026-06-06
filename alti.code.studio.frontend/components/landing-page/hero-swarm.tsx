@@ -33,10 +33,10 @@ export default function HeroSwarm() {
             className="w-full sm:w-auto bg-white border border-gray-200 text-black font-semibold rounded-full px-10 py-7 text-lg hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center gap-3"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
-              <path fill="#0078D4" d="M0,0 H47 V47 H0 Z" />
-              <path fill="#0078D4" d="M53,0 H100 V47 H53 Z" />
-              <path fill="#0078D4" d="M0,53 H47 V100 H0 Z" />
-              <path fill="#0078D4" d="M53,53 H100 V100 H53 Z" />
+              <path fill="#F25022" d="M0,0 H47 V47 H0 Z" />
+              <path fill="#7FBA00" d="M53,0 H100 V47 H53 Z" />
+              <path fill="#00A4EF" d="M0,53 H47 V100 H0 Z" />
+              <path fill="#FFB900" d="M53,53 H100 V100 H53 Z" />
             </svg>
             Download for Windows
           </Button>
