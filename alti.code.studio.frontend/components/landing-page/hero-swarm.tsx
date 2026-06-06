@@ -30,7 +30,7 @@ export default function HeroSwarm() {
             as={Link} 
             href="/download/windows" 
             size="lg" 
-            className="w-full sm:w-auto bg-white border border-gray-200 text-black font-semibold rounded-full px-10 py-7 text-lg hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center gap-3"
+            className="w-full sm:w-auto bg-black text-white font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="w-5 h-5">
               <path fill="#F25022" d="M0,0 H47 V47 H0 Z" />
@@ -44,7 +44,7 @@ export default function HeroSwarm() {
             as={Link} 
             href="/download/mac" 
             size="lg" 
-            className="w-full sm:w-auto bg-white border border-gray-200 text-black font-semibold rounded-full px-10 py-7 text-lg hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm flex items-center gap-3"
+            className="w-full sm:w-auto bg-black text-white font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" className="w-5 h-5" fill="currentColor">
               <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 24 184.8 8 273.5q-9 59.4 20 114.1c18.9 31.5 45.3 68.1 81.4 66.9 31-1.2 44.5-19.7 82.2-19.7 37.6 0 49.3 19 82.2 19 36.2-.6 58-31 75.9-61.9 22.8-38.3 32-77.8 33-80.4-5.3-2.6-63.6-25-64-82.8zM263.6 84.6c16.6-21.3 27.6-50 24.5-79.6-25.3 1.5-56.1 18.5-73.8 39.5-14.7 17.5-27 46.5-23.2 75.2 28.5 2.5 56.4-15.6 72.5-35.1z"/>
