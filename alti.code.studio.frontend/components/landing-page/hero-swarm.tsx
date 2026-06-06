@@ -57,7 +57,7 @@ export default function HeroSwarm() {
             <span className="text-gray-500 font-bold mt-2 text-xs md:text-sm uppercase tracking-widest text-center">Cloud Connections</span>
           </div>
           <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">250</span>
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">164</span>
             <span className="text-gray-500 font-bold mt-2 text-xs md:text-sm uppercase tracking-widest text-center">App Connectors</span>
           </div>
           <div className="flex flex-col items-center justify-center py-6 px-4 group">

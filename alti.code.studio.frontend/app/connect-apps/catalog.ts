@@ -51,108 +51,6 @@ export const SAAS_MOCKS = [
     icon: "logos:subversion",
   },
 
-  // 2. Databases, Cache & Storage
-  {
-    name: "PostgreSQL",
-    slug: "mcp_postgresql",
-    icon: "logos:postgresql",
-  },
-  {
-    name: "MySQL",
-    slug: "mcp_mysql",
-    icon: "logos:mysql-icon",
-  },
-  {
-    name: "SQLite",
-    slug: "mcp_sqlite",
-    icon: "logos:sqlite",
-  },
-  {
-    name: "Redis",
-    slug: "mcp_redis",
-    icon: "logos:redis",
-  },
-  {
-    name: "MongoDB",
-    slug: "mcp_mongodb",
-    icon: "logos:mongodb-icon",
-  },
-  {
-    name: "Supabase",
-    slug: "mcp_supabase",
-    icon: "logos:supabase-icon",
-  },
-  {
-    name: "Neon DB",
-    slug: "mcp_neon",
-    icon: "logos:neon-icon",
-  },
-  {
-    name: "DuckDB",
-    slug: "mcp_duckdb",
-    icon: "logos:duckdb",
-  },
-  {
-    name: "CockroachDB",
-    slug: "mcp_toolbox_cockroachdb",
-    icon: "logos:cockroachdb-icon",
-  },
-  {
-    name: "ClickHouse",
-    slug: "mcp_toolbox_clickhouse",
-    icon: "logos:clickhouse-icon",
-  },
-  {
-    name: "TiDB",
-    slug: "mcp_toolbox_tidb",
-    icon: "logos:pingcap-icon",
-  },
-  {
-    name: "Cassandra",
-    slug: "mcp_toolbox_cassandra",
-    icon: "logos:cassandra",
-  },
-  {
-    name: "Dgraph",
-    slug: "mcp_toolbox_dgraph",
-    icon: "logos:dgraph",
-  },
-  {
-    name: "Google Cloud Spanner",
-    slug: "mcp_toolbox_spanner",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud AlloyDB",
-    slug: "mcp_toolbox_alloydb",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google BigQuery",
-    slug: "mcp_toolbox_bigquery",
-    icon: "logos:google-bigquery",
-  },
-  {
-    name: "Google Bigtable",
-    slug: "mcp_toolbox_bigtable",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Amazon DynamoDB",
-    slug: "mcp_aws_dynamodb",
-    icon: "logos:aws-dynamodb",
-  },
-  {
-    name: "CouchDB",
-    slug: "mcp_couchdb",
-    icon: "logos:couchdb-icon",
-  },
-  {
-    name: "MariaDB",
-    slug: "mcp_toolbox_mariadb",
-    icon: "logos:mariadb-icon",
-  },
-
   // 3. Cloud & Hosting Providers
   {
     name: "AWS EC2",
@@ -525,16 +423,6 @@ export const SAAS_MOCKS = [
     icon: "logos:discord-icon",
   },
   {
-    name: "Zoom Meeting API",
-    slug: "mcp_zoom",
-    icon: "logos:zoom-icon",
-  },
-  {
-    name: "Microsoft Teams Collab",
-    slug: "mcp_teams",
-    icon: "logos:microsoft-teams",
-  },
-  {
     name: "Notion Wiki",
     slug: "mcp_notion",
     icon: "logos:notion-icon",
@@ -553,31 +441,6 @@ export const SAAS_MOCKS = [
     name: "Trello Board Builder",
     slug: "mcp_trello",
     icon: "logos:trello",
-  },
-  {
-    name: "Google Drive Folder",
-    slug: "mcp_google_drive",
-    icon: "logos:google-drive",
-  },
-  {
-    name: "Google Sheets Data",
-    slug: "mcp_google_sheets",
-    icon: "logos:google-sheets",
-  },
-  {
-    name: "Google Calendar Sync",
-    slug: "mcp_google_calendar",
-    icon: "logos:google-calendar",
-  },
-  {
-    name: "Google Maps Nav",
-    slug: "mcp_google_maps",
-    icon: "logos:google-maps",
-  },
-  {
-    name: "Gmail Reporting",
-    slug: "mcp_gmail",
-    icon: "logos:gmail",
   },
   {
     name: "AWS KB Retrieval",
