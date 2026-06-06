@@ -18,12 +18,6 @@ export default function HeroSwarm() {
           Autonomous engineering.
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-xl md:text-3xl text-gray-500 max-w-3xl font-medium leading-snug tracking-tight">
-          Unleash a network of 50,000+ specialized engineering agents powered by 
-          the ultimate Tri-Cloud intelligence engine.
-        </p>
-
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 w-full sm:w-auto">
           <Button 
@@ -51,26 +45,6 @@ export default function HeroSwarm() {
             </svg>
             Download for Mac
           </Button>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 mt-24 text-left w-full max-w-4xl">
-          <div className="flex flex-col gap-1">
-            <span className="text-5xl font-semibold tracking-tighter text-black">46k+</span>
-            <span className="text-sm text-gray-500 font-medium">Dynamic Agents</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-5xl font-semibold tracking-tighter text-black">44</span>
-            <span className="text-sm text-gray-500 font-medium">Cloud Connectors</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-5xl font-semibold tracking-tighter text-black">3</span>
-            <span className="text-sm text-gray-500 font-medium">Foundation Models</span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-5xl font-semibold tracking-tighter text-black">Zero</span>
-            <span className="text-sm text-gray-500 font-medium">API Markup</span>
-          </div>
         </div>
       </div>
     </section>
