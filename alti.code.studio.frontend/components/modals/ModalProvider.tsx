@@ -1,8 +1,6 @@
 "use client";
 import { ForgotPasswordDialog } from "./ForgotPasswordDialog";
-import { Login } from "./login";
 import { Logout } from "./logout";
-import { Register } from "./register";
 import RenameChat from "./RenameChat";
 import SearchChats from "./SearchChats";
 import SearchWorkflows from "./SearchWorkflows";
@@ -18,9 +16,7 @@ export const ModalProvider = () => {
 
   return (
     <>
-      {type === "login" && <Login />}
       {type === "logout" && <Logout />}
-      {type === "register" && <Register />}
       {type === "search-chats" && <SearchChats />}
       {type === "rename-chat" && <RenameChat />}
       {type === "forgot-password" && <ForgotPasswordDialog />}

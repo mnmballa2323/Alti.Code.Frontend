@@ -2493,13 +2493,13 @@ export default function Sidebar() {
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
                 className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-xl"
-                onClick={() => onOpen({ type: "login" })}
+                onClick={() => window.location.href = "/login"}
               >
                 Login
               </Button>
               <Button
                 className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-xl"
-                onClick={() => onOpen({ type: "register" })}
+                onClick={() => window.location.href = "/register"}
               >
                 Register
               </Button>
