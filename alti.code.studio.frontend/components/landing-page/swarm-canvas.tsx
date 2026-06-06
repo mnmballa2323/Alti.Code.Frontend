@@ -14,8 +14,8 @@ class Particle {
   constructor(width: number, height: number) {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 1.5;
-    this.vy = (Math.random() - 0.5) * 1.5;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
     this.size = Math.random() * 2 + 1;
     const colors = ["#4285F4", "#34A853", "#FBBC05", "#EA4335", "#000000", "#666666"];
     this.color = colors[Math.floor(Math.random() * colors.length)];
