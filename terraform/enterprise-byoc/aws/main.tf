@@ -23,6 +23,33 @@ variable "customer_name" {
 }
 
 # ==========================================
+# Enterprise Security (KMS, CloudTrail, GuardDuty)
+# ==========================================
+resource "aws_kms_key" "eks_encryption_key" {
+  description             = "KMS Key for EKS Secret and EBS Encryption - Alti BYOC"
+  enable_key_rotation     = true
+  deletion_window_in_days = 7
+}
+
+resource "aws_guardduty_detector" "threat_detection" {
+  enable = true
+  finding_publishing_frequency = "FIFTEEN_MINUTES"
+}
+
+resource "aws_cloudtrail" "audit_trail" {
+  name                          = "alti-enterprise-audit-trail"
+  s3_bucket_name                = aws_s3_bucket.audit_bucket.id
+  include_global_service_events = true
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
+  kms_key_id                    = aws_kms_key.eks_encryption_key.arn
+}
+
+resource "aws_s3_bucket" "audit_bucket" {
+  bucket = "alti-enterprise-audit-${var.customer_name}"
+}
+
+# ==========================================
 # VPC & Networking (Zero-Trust)
 # ==========================================
 module "vpc" {
@@ -42,6 +69,30 @@ module "vpc" {
 }
 
 # ==========================================
+# Edge Protection (WAF & Shield Advanced)
+# ==========================================
+resource "aws_wafv2_web_acl" "edge_waf" {
+  name        = "alti-enterprise-waf"
+  description = "WAF for Alti Code Studio API Gateway"
+  scope       = "REGIONAL"
+
+  default_action {
+    allow {}
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "altiWafMetrics"
+    sampled_requests_enabled   = true
+  }
+}
+
+resource "aws_shield_protection" "api_shield" {
+  name         = "alti-api-shield-advanced"
+  resource_arn = aws_wafv2_web_acl.edge_waf.arn
+}
+
+# ==========================================
 # EKS Cluster (Customer Data Plane)
 # ==========================================
 module "eks" {
@@ -54,6 +105,12 @@ module "eks" {
   vpc_id                   = module.vpc.vpc_id
   subnet_ids               = module.vpc.private_subnets
   control_plane_subnet_ids = module.vpc.public_subnets
+
+  create_kms_key = false
+  cluster_encryption_config = {
+    provider_key_arn = aws_kms_key.eks_encryption_key.arn
+    resources        = ["secrets"]
+  }
 
   eks_managed_node_groups = {
     alti_inference_nodes = {

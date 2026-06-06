@@ -29,6 +29,37 @@ variable "customer_name" {
 }
 
 # ==========================================
+# Enterprise Security (KMS & Cloud Armor)
+# ==========================================
+resource "google_kms_key_ring" "keyring" {
+  name     = "alti-keyring-${var.customer_name}"
+  location = var.gcp_region
+}
+
+resource "google_kms_crypto_key" "gke_key" {
+  name            = "gke-encryption-key"
+  key_ring        = google_kms_key_ring.keyring.id
+  rotation_period = "7776000s" # 90 days
+}
+
+resource "google_compute_security_policy" "cloud_armor" {
+  name        = "alti-edge-security-policy"
+  description = "Cloud Armor WAF for Alti Code Studio API"
+
+  rule {
+    action   = "allow"
+    priority = "2147483647"
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config {
+        src_ip_ranges = ["*"]
+      }
+    }
+    description = "default rule"
+  }
+}
+
+# ==========================================
 # VPC & Subnets (Zero-Trust)
 # ==========================================
 resource "google_compute_network" "vpc_network" {
@@ -41,6 +72,40 @@ resource "google_compute_subnetwork" "subnet" {
   ip_cidr_range = "10.0.0.0/16"
   region        = var.gcp_region
   network       = google_compute_network.vpc_network.id
+  
+  private_ip_google_access = true
+}
+
+# ==========================================
+# VPC Service Controls (Absolute Isolation Perimeter)
+# ==========================================
+resource "google_access_context_manager_access_policy" "policy" {
+  parent = "organizations/${var.gcp_org_id}"
+  title  = "Alti Code Studio Perimeter Policy"
+}
+
+resource "google_access_context_manager_service_perimeter" "secure_perimeter" {
+  parent = "accessPolicies/${google_access_context_manager_access_policy.policy.name}"
+  name   = "accessPolicies/${google_access_context_manager_access_policy.policy.name}/servicePerimeters/alti_perimeter"
+  title  = "Alti Data Plane Perimeter"
+  
+  status {
+    restricted_services = ["aiplatform.googleapis.com", "container.googleapis.com"]
+    
+    resources = ["projects/${var.gcp_project_number}"]
+    
+    vpc_accessible_services {
+      enable_restriction = true
+      allowed_services   = ["RESTRICTED-SERVICES"]
+    }
+  }
+}
+
+variable "gcp_org_id" {
+  type = string
+}
+variable "gcp_project_number" {
+  type = string
 }
 
 # ==========================================
@@ -53,9 +118,20 @@ resource "google_container_cluster" "gke" {
   enable_autopilot = true
   network          = google_compute_network.vpc_network.id
   subnetwork       = google_compute_subnetwork.subnet.id
+  
+  database_encryption {
+    state    = "ENCRYPTED"
+    key_name = google_kms_crypto_key.gke_key.id
+  }
 
   workload_identity_config {
     workload_pool = "${var.gcp_project_id}.svc.id.goog"
+  }
+  
+  private_cluster_config {
+    enable_private_nodes    = true
+    enable_private_endpoint = false
+    master_ipv4_cidr_block  = "172.16.0.0/28"
   }
 }
 
