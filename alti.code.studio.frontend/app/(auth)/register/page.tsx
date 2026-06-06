@@ -86,7 +86,7 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-black">
           Create an account
         </h1>
-        <p className="text-gray-500 text-sm mt-3">
+        <p className="text-center text-gray-500 text-sm mt-2 font-medium">
           Join the alti code studio platform
         </p>
       </div>
