@@ -1,108 +1,50 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 
 class Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
+  angle: number;
+  distance: number;
+  speed: number;
+  inwardSpeed: number;
   size: number;
   color: string;
+  x: number = 0;
+  y: number = 0;
 
-  constructor(width: number, height: number) {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 0.5 + 0.5;
-    this.vx = Math.cos(angle) * speed;
-    this.vy = Math.sin(angle) * speed;
-    this.size = Math.random() * 2 + 1.5; // Slightly larger for better visibility
+  constructor(width: number, height: number, initial: boolean = true) {
+    this.angle = Math.random() * Math.PI * 2;
+    // Max distance is slightly larger than the container to spawn outside
+    const maxDist = Math.max(width, height) / 1.2;
+    this.distance = initial ? Math.random() * maxDist : maxDist;
+    
+    // Orbital speed and inward suction speed
+    this.speed = Math.random() * 0.01 + 0.002;
+    this.inwardSpeed = Math.random() * 0.4 + 0.1;
+    
+    this.size = Math.random() * 2 + 1;
     const colors = ["#4285F4", "#34A853", "#FBBC05", "#EA4335", "#111111", "#444444"];
     this.color = colors[Math.floor(Math.random() * colors.length)];
   }
 
-  update(particles: Particle[], width: number, height: number) {
-    // Boids physics: separation, alignment, cohesion
-    let sepX = 0, sepY = 0;
-    let aliX = 0, aliY = 0;
-    let cohX = 0, cohY = 0;
-    let total = 0;
+  update(width: number, height: number) {
+    // Spin faster as they approach the center (simulating gravity well / black hole)
+    const angularVelocity = this.speed * (150 / Math.max(30, this.distance));
+    this.angle += angularVelocity;
     
-    for (const other of particles) {
-      if (other === this) continue;
-      const dx = this.x - other.x;
-      const dy = this.y - other.y;
-      const distSq = dx * dx + dy * dy;
-      
-      if (distSq < 4000) { // Vision radius ~63px
-        total++;
-        // Separation (repulsion if too close)
-        if (distSq < 800) { 
-          sepX += dx / distSq;
-          sepY += dy / distSq;
-        }
-        // Alignment
-        aliX += other.vx;
-        aliY += other.vy;
-        // Cohesion
-        cohX += other.x;
-        cohY += other.y;
-      }
-    }
-    
-    if (total > 0) {
-      aliX /= total; aliY /= total;
-      cohX = (cohX / total) - this.x;
-      cohY = (cohY / total) - this.y;
-      
-      // Apply Boid forces
-      this.vx += (aliX * 0.05) + (cohX * 0.002) + (sepX * 2);
-      this.vy += (aliY * 0.05) + (cohY * 0.002) + (sepY * 2);
-    }
-    
-    // Center pull
-    const centerX = width / 2;
-    const centerY = height / 2;
-    this.vx += (centerX - this.x) * 0.0001;
-    this.vy += (centerY - this.y) * 0.0001;
-    
-    // Enforce max speed limit
-    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-    const maxSpeed = 1.2; // Boids look better slightly faster
-    if (speed > maxSpeed) {
-      this.vx = (this.vx / speed) * maxSpeed;
-      this.vy = (this.vy / speed) * maxSpeed;
-    }
-    
-    // Enforce min speed to prevent stopping
-    const minSpeed = 0.4;
-    if (speed < minSpeed && speed > 0) {
-      this.vx = (this.vx / speed) * minSpeed;
-      this.vy = (this.vy / speed) * minSpeed;
+    // Move inward
+    this.distance -= this.inwardSpeed;
+
+    // If swallowed by the center, respawn at the edge
+    if (this.distance < 5) {
+      const maxDist = Math.max(width, height) / 1.2;
+      this.distance = maxDist;
+      this.angle = Math.random() * Math.PI * 2;
     }
 
-    this.x += this.vx;
-    this.y += this.vy;
-
-    // Hard bounce at edges so they never go off-screen
-    const radius = this.size;
-    if (this.x - radius <= 0) {
-      this.x = radius;
-      this.vx *= -1;
-    } else if (this.x + radius >= width) {
-      this.x = width - radius;
-      this.vx *= -1;
-    }
-
-    if (this.y - radius <= 0) {
-      this.y = radius;
-      this.vy *= -1;
-    } else if (this.y + radius >= height) {
-      this.y = height - radius;
-      this.vy *= -1;
-    }
+    // Calculate absolute X and Y for rendering
+    this.x = width / 2 + Math.cos(this.angle) * this.distance;
+    this.y = height / 2 + Math.sin(this.angle) * this.distance;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -136,21 +78,21 @@ export default function SwarmCanvas() {
 
     // Initialize Particles
     const particles: Particle[] = [];
-    const particleCount = 120; // Flocking needs slightly fewer to prevent total chaos
+    const particleCount = 200; // Vortex looks great with higher density
     for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle(canvas.width, canvas.height));
+      particles.push(new Particle(canvas.width, canvas.height, true));
     }
 
     let animationFrameId: number;
 
     const render = () => {
-      // Clear canvas with a slight trail effect
-      ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+      // Clear canvas with a slight trail effect to create motion blur
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
-        particles[i].update(particles, canvas.width, canvas.height);
+        particles[i].update(canvas.width, canvas.height);
         particles[i].draw(ctx);
 
         // Draw connecting lines for nearby particles
@@ -159,12 +101,13 @@ export default function SwarmCanvas() {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 50) {
+          // Connecting lines emphasize the swirling vortex arms
+          if (distance < 45) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            const opacity = 1 - distance / 50;
-            ctx.strokeStyle = `rgba(100, 100, 100, ${opacity * 0.4})`;
+            const opacity = 1 - distance / 45;
+            ctx.strokeStyle = `rgba(80, 80, 80, ${opacity * 0.3})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
