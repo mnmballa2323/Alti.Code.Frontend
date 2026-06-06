@@ -29,15 +29,7 @@ const MyAccountDropdown = () => {
 
         <DropdownMenuContent align="start" className="w-64">
           <DropdownMenuGroup>
-            <DropdownMenuItem className="relative">
-              <span className="flex items-center space-x-2">
-                <Table2 className="size-4.5" />
-                <Link href="/pricing">
-                  <span className="absolute inset-0" />
-                  Plans
-                </Link>
-              </span>
-            </DropdownMenuItem>
+
             <DropdownMenuItem className="relative">
               <span className="flex items-center space-x-2">
                 <CreditCard className="size-5" />

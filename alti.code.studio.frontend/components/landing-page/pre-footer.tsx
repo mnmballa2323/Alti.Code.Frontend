@@ -67,14 +67,7 @@ function PreFooter() {
                       Features
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="#pricing"
-                    >
-                      Pricing
-                    </Link>
-                  </li>
+
                   <li>
                     <Link
                       className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors cursor-pointer"
@@ -177,12 +170,7 @@ function PreFooter() {
                   >
                     Security
                   </Link>
-                  <Link
-                    className="text-white font-secondary font-normal text-sm"
-                    href="#pricing"
-                  >
-                    Pricing
-                  </Link>
+
                   <Link
                     className="text-white font-secondary font-normal text-sm cursor-pointer"
                     href="#"

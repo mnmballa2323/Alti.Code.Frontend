@@ -33,7 +33,6 @@ function Navbar() {
     { href: "/", label: "Home", type: "route" },
     { href: "#howItsWork", label: "Product", type: "anchor" },
     { href: "#security", label: "Features", type: "anchor" },
-    { href: "#pricing", label: "Pricing", type: "anchor" },
     { href: "/mission-control", label: "Mission Control", type: "route" },
     { href: "#", label: "Contact", type: "action" },
   ];

@@ -64,11 +64,7 @@ const faqs = [
     content:
       "All vault deployments include comprehensive support via phone, email, and secure chat. On-premise installations include ongoing maintenance, security updates, and technical assistance from our dedicated support team.",
   },
-  {
-    title: "How does pricing work for large organizations?",
-    content:
-      "Our base pricing is $250 per user per month with a 10 user minimum. For deployments over 100 users, we offer enterprise packages with additional features like dedicated support and custom software license agreements.",
-  },
+
   {
     title: "Is vault compliant with industry regulations?",
     content:
