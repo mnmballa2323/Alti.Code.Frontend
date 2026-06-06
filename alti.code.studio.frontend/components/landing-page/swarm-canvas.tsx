@@ -126,7 +126,7 @@ export default function SwarmCanvas() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[500px] aspect-square rounded-[2rem] bg-white border border-gray-200 overflow-hidden shadow-2xl flex items-center justify-center">
+    <div className="relative w-full max-w-[400px] aspect-square rounded-[2rem] bg-white border border-gray-200 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.08)] flex items-center justify-center">
       <canvas 
         ref={canvasRef} 
         className="absolute inset-0 w-full h-full pointer-events-none"
