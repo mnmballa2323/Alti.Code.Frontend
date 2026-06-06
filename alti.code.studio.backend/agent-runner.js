@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 const agentId = process.env.AGENT_ID;
 const task = process.env.TASK;

@@ -1,6 +1,10 @@
-const { execSync, spawn } = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import { execSync, spawn } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 class AgentOrchestrator {
   constructor() {
@@ -58,7 +62,9 @@ class AgentOrchestrator {
   }
 }
 
-if (require.main === module) {
+// Emulate require.main === module for ESM
+import { resolve } from 'path';
+if (process.argv[1] === resolve(__filename)) {
   const orchestrator = new AgentOrchestrator();
   try {
     orchestrator.buildAgentImage();
