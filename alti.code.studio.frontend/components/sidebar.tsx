@@ -83,6 +83,7 @@ const SUPPORTED_DATABASES = [
   { id: "cosmosdb", name: "Cosmos DB", icon: "logos:cosmos" },
   { id: "couchbase", name: "Couchbase", icon: "logos:couchbase" },
   { id: "couchdb", name: "CouchDB", icon: "logos:couchdb" },
+  { id: "databricks", name: "Databricks", icon: "simple-icons:databricks" },
   { id: "dgraph", name: "Dgraph", icon: "simple-icons:dgraph" },
   { id: "dynamodb", name: "DynamoDB", icon: "logos:aws-dynamodb" },
   { id: "elasticsearch", name: "Elasticsearch", icon: "logos:elasticsearch" },
