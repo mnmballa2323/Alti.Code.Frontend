@@ -176,11 +176,12 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
   volume_driver         = "cinder"
   master_flavor         = "m1.medium"
   flavor                = "m1.large"
-  image                 = "fedora-coreos-latest"
+  image                 = openstack_images_image_v2.fedora_coreos.name
   external_network_id   = data.openstack_networking_network_v2.ext_net.id
   
   # Highly Secure: Master nodes are private, no floating IPs exposed
   floating_ip_enabled   = false
+  auto_healing_enabled  = true
 
   labels = {
     kube_tag                       = "v1.28.0"
@@ -202,6 +203,41 @@ resource "openstack_objectstorage_container_v1" "gemini_context" {
 # -------------------------------------------------------------
 # Deep OpenStack Integrations: Barbican, Manila, Designate
 # -------------------------------------------------------------
+
+# Glance (Image Service)
+resource "openstack_images_image_v2" "fedora_coreos" {
+  name             = "fedora-coreos-38-${var.environment}"
+  image_source_url = "https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/38.20230819.3.0/x86_64/fedora-coreos-38.20230819.3.0-openstack.x86_64.qcow2.xz"
+  container_format = "bare"
+  disk_format      = "qcow2"
+  visibility       = "private"
+}
+
+# VPNaaS (IPsec VPN Tunnel)
+resource "openstack_vpnaas_service_v2" "alti_vpn" {
+  name           = "alti-vpn-service-${var.environment}"
+  router_id      = openstack_networking_router_v2.alti_router.id
+  admin_state_up = true
+}
+
+resource "openstack_vpnaas_ipsecpolicy_v2" "alti_ipsec_policy" {
+  name = "alti-ipsec-policy-${var.environment}"
+}
+
+resource "openstack_vpnaas_ikepolicy_v2" "alti_ike_policy" {
+  name = "alti-ike-policy-${var.environment}"
+}
+
+resource "openstack_vpnaas_siteconnection_v2" "office_connection" {
+  name              = "alti-office-vpn-${var.environment}"
+  vpnservice_id     = openstack_vpnaas_service_v2.alti_vpn.id
+  ikepolicy_id      = openstack_vpnaas_ikepolicy_v2.alti_ike_policy.id
+  ipsecpolicy_id    = openstack_vpnaas_ipsecpolicy_v2.alti_ipsec_policy.id
+  peer_address      = "198.51.100.12" # Placeholder for Office IP
+  peer_id           = "198.51.100.12"
+  psk               = openstack_keymanager_secret_v1.global_db_secret.payload
+  local_ep_group_id = "" # Handled by defaults in older providers
+}
 
 # Barbican (Hardware Security Module / Key Manager)
 resource "random_password" "db_password" {
@@ -257,55 +293,53 @@ resource "openstack_dns_recordset_v2" "wildcard_a_record" {
 }
 
 # -------------------------------------------------------------
-# App Deployment (Stateful Backing Services via Helm)
+# App Deployment (Stateful Backing Services via Trove & Helm)
 # -------------------------------------------------------------
 
-resource "helm_release" "postgresql" {
-  name       = "alti-postgres"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "postgresql"
-  version    = "12.12.10"
-  namespace  = "default"
+# Trove (Database as a Service) - PostgreSQL
+resource "openstack_db_instance_v1" "postgresql" {
+  name      = "alti-postgres-${var.environment}"
+  region    = var.openstack_region
+  size      = 50
+  flavor_id = "db.m1.large" # Example Trove Flavor
 
-  set {
-    name  = "global.postgresql.auth.postgresPassword"
-    value = openstack_keymanager_secret_v1.global_db_secret.payload
+  datastore {
+    type    = "postgresql"
+    version = "12"
   }
-  set {
-    name  = "primary.persistence.enabled"
-    value = "true"
+
+  network {
+    uuid = openstack_networking_network_v2.alti_network.id
   }
-  set {
-    name  = "primary.persistence.size"
-    value = "50Gi"
+
+  users {
+    name     = "alti_admin"
+    password = openstack_keymanager_secret_v1.global_db_secret.payload
+  }
+
+  databases {
+    name = "pentagi_prod"
   }
 }
 
-resource "helm_release" "redis" {
-  name       = "alti-redis"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "redis"
-  version    = "18.1.5"
-  namespace  = "default"
+# Trove (Database as a Service) - Redis
+resource "openstack_db_instance_v1" "redis" {
+  name      = "alti-redis-${var.environment}"
+  region    = var.openstack_region
+  size      = 10
+  flavor_id = "db.m1.medium"
 
-  set {
-    name  = "auth.password"
-    value = openstack_keymanager_secret_v1.global_db_secret.payload
+  datastore {
+    type    = "redis"
+    version = "6.0" # Example Trove Version
   }
-  set {
-    name  = "architecture"
-    value = "standalone"
-  }
-  set {
-    name  = "master.persistence.enabled"
-    value = "true"
-  }
-  set {
-    name  = "master.persistence.size"
-    value = "10Gi"
+
+  network {
+    uuid = openstack_networking_network_v2.alti_network.id
   }
 }
 
+# RabbitMQ (Helm Deployment)
 resource "helm_release" "rabbitmq" {
   name       = "alti-rabbitmq"
   repository = "https://charts.bitnami.com/bitnami"
