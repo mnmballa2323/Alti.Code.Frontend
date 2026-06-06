@@ -90,9 +90,7 @@ export default function EnterpriseConnectorsSection() {
             items={[
               <FaAws key="aws" className="w-6 h-6 text-[#232F3E]" />,
               <SiGooglecloud key="gcp" className="w-6 h-6 text-[#4285F4]" />,
-              <VscAzure key="azure" className="w-6 h-6 text-[#0078D4]" />,
-              <img key="ibm" src="/assets/cloud-logos/ibm.svg" alt="IBM Cloud" className="w-6 h-6 object-contain" />,
-              <img key="oracle" src="/assets/cloud-logos/oracle.svg" alt="Oracle Cloud" className="w-6 h-6 object-contain" />
+              <VscAzure key="azure" className="w-6 h-6 text-[#0078D4]" />
             ]} 
           />
 
