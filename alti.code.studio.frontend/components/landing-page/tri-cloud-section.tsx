@@ -8,9 +8,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
     models: [
-      { name: "GPT-5.5 Instant", price: "$0.15/M" },
-      { name: "GPT-5.5", price: "$2.50/M" },
-      { name: "GPT-5.5 Pro", price: "$15.00/M" }
+      { name: "GPT-5.5 Instant", price: "$1.50 In / $4.50 Out" },
+      { name: "GPT-5.5", price: "$5.00 In / $30.00 Out" },
+      { name: "GPT-5.5 Pro", price: "$15.00 In / $75.00 Out" }
     ],
   },
   {
@@ -18,9 +18,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family of models.",
     models: [
-      { name: "Claude 4.5 Haiku", price: "$0.25/M" },
-      { name: "Claude Sonnet 5", price: "$3.00/M" },
-      { name: "Claude 4.7 Opus", price: "$15.00/M" }
+      { name: "Claude 4.5 Haiku", price: "$0.25 In / $1.25 Out" },
+      { name: "Claude Sonnet 5", price: "$3.00 In / $15.00 Out" },
+      { name: "Claude 4.7 Opus", price: "$15.00 In / $75.00 Out" }
     ],
   },
   {
@@ -28,9 +28,9 @@ const providers = [
     logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: [
-      { name: "Gemini Omni Flash", price: "$0.10/M" },
-      { name: "Gemini 3.5 Flash", price: "$0.35/M" },
-      { name: "Gemini 3.5 Pro", price: "$7.00/M" }
+      { name: "Gemini Omni Flash", price: "$0.75 In / $4.50 Out" },
+      { name: "Gemini 3.5 Flash", price: "$1.50 In / $9.00 Out" },
+      { name: "Gemini 3.5 Pro", price: "$7.00 In / $21.00 Out" }
     ],
   }
 ];
