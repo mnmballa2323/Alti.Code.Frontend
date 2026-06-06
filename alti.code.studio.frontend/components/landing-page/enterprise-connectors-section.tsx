@@ -8,9 +8,7 @@ export default function EnterpriseConnectorsSection() {
       <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-16">
         
         <div className="flex flex-col gap-6 max-w-3xl">
-          <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
-            Universal Ecosystem
-          </h2>
+
           <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
             66 Cloud Connections. <br />Zero Friction.
           </h3>
