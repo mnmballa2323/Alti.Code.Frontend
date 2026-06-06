@@ -52,7 +52,7 @@ const OrbitRing = ({ size, duration, reverse, items }: { size: number, duration:
 export default function EnterpriseConnectorsSection() {
   return (
     <section className="w-full py-32 bg-[#F5F5F7] text-black px-4 sm:px-6 lg:px-8 border-t border-gray-200 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-8 lg:justify-between">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-8 lg:justify-between">
         
         {/* Left Side: Text */}
         <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">
@@ -65,8 +65,8 @@ export default function EnterpriseConnectorsSection() {
           </p>
         </div>
 
-        {/* Right Side: Orbital Ecosystem */}
-        <div className="relative w-full lg:w-[50%] h-[600px] flex items-center justify-center lg:justify-end scale-[0.65] sm:scale-75 md:scale-90 lg:scale-100">
+        {/* Right Side: Orbital Ecosystem (Now visually on Left) */}
+        <div className="relative w-full lg:w-[50%] h-[600px] flex items-center justify-center lg:justify-start scale-[0.65] sm:scale-75 md:scale-90 lg:scale-100">
           
           <style dangerouslySetInnerHTML={{__html: `
             @keyframes spin-reverse {
