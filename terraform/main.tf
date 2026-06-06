@@ -53,8 +53,9 @@ resource "openstack_containerinfra_nodegroup_v1" "aws_baremetal_nodes" {
   node_count = 5
   flavor_id  = "baremetal.cyborg.h100" # Physical GPU nodes
   labels = {
-    "sovereign.cloud/environment" = "aws"
-    "sovereign.cloud/vrf"         = "aws-direct-connect"
+    "sovereign.cloud/environment"  = "aws"
+    "sovereign.cloud/vrf"          = "aws-direct-connect"
+    "topology.kubernetes.io/zone"  = "aws-cage"
   }
 }
 
@@ -65,8 +66,9 @@ resource "openstack_containerinfra_nodegroup_v1" "azure_baremetal_nodes" {
   node_count = 5
   flavor_id  = "baremetal.cyborg.h100"
   labels = {
-    "sovereign.cloud/environment" = "azure"
-    "sovereign.cloud/vrf"         = "azure-expressroute"
+    "sovereign.cloud/environment"  = "azure"
+    "sovereign.cloud/vrf"          = "azure-expressroute"
+    "topology.kubernetes.io/zone"  = "azure-cage"
   }
 }
 
@@ -77,8 +79,9 @@ resource "openstack_containerinfra_nodegroup_v1" "gcp_baremetal_nodes" {
   node_count = 5
   flavor_id  = "baremetal.cyborg.h100"
   labels = {
-    "sovereign.cloud/environment" = "gcp"
-    "sovereign.cloud/vrf"         = "gcp-interconnect"
+    "sovereign.cloud/environment"  = "gcp"
+    "sovereign.cloud/vrf"          = "gcp-interconnect"
+    "topology.kubernetes.io/zone"  = "gcp-cage"
   }
 }
 

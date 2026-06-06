@@ -26,6 +26,10 @@ spec:
                 operator: In
                 values:
                 - gcp
+              - key: topology.kubernetes.io/zone
+                operator: In
+                values:
+                - gcp-cage
       tolerations:
       - key: "sovereign.cloud/environment"
         operator: "Equal"
