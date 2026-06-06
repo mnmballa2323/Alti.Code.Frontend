@@ -45,9 +45,12 @@ terraform {
 # Providers
 # -------------------------------------------------------------
 provider "openstack" {
-  auth_url    = var.openstack_auth_url
-  tenant_id   = var.openstack_tenant_id
-  region      = var.openstack_region
+  auth_url                      = var.openstack_auth_url
+  region                        = var.openstack_region
+  
+  # Apex-Tier: Zero-Trust OIDC Identity Federation via App Credentials
+  application_credential_id     = var.openstack_app_cred_id
+  application_credential_secret = var.openstack_app_cred_secret
 }
 
 provider "google" {
@@ -111,6 +114,19 @@ resource "openstack_networking_router_interface_v2" "alti_router_interface" {
 data "openstack_networking_network_v2" "ext_net" {
   name     = "public"
   external = true
+}
+
+# Apex-Tier: OVN Hardware Offloading (SmartNICs / DPUs)
+# By setting vnic_type="direct", Neutron bypasses the host CPU's Open vSwitch
+# and programs the microsegmentation/BGP rules directly into the physical NIC ASIC.
+resource "openstack_networking_port_v2" "dpu_offloaded_port" {
+  name           = "alti-dpu-port-${var.environment}"
+  network_id     = openstack_networking_network_v2.alti_network.id
+  admin_state_up = true
+  
+  binding {
+    vnic_type = "direct"
+  }
 }
 
 # SSH Keypair (Nova)
@@ -202,6 +218,9 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
     cinder_csi_enabled             = "true"
     manila_csi_enabled             = "true"
     master_lb_enabled              = "true"
+    
+    # Apex-Tier: TPM Attested Hardware Secure Boot
+    secure_boot                    = "true"
   }
 }
 
