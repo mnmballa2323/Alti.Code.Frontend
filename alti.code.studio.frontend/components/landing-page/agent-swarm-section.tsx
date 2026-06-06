@@ -5,7 +5,7 @@ import SwarmCanvas from "./swarm-canvas";
 
 export default function AgentSwarmSection() {
   return (
-    <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
+    <section className="w-full py-32 bg-gray-50 text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-24">
         
         {/* Left Side: Text & Context */}
