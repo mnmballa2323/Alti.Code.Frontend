@@ -225,9 +225,9 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
   network_driver        = "calico"
   volume_driver         = "cinder"
   
-  # Omega-Tier: Deploy directly onto raw physical servers via OpenStack Ironic
-  master_flavor         = "baremetal.compute"
-  flavor                = "baremetal.compute"
+  # Transcendent-Tier: Deploy directly onto raw physical servers with NVIDIA H100s via OpenStack Ironic & Cyborg
+  master_flavor         = "baremetal.compute.gpu"
+  flavor                = "baremetal.compute.gpu"
   
   image                 = openstack_images_image_v2.fedora_coreos.name
   external_network_id   = data.openstack_networking_network_v2.ext_net.id
