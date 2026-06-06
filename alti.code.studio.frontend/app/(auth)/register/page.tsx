@@ -1,7 +1,6 @@
 "use client";
 
-import { Icon } from "@iconify/react";
-import { Checkbox, Input, Link as HeroLink } from "@heroui/react";
+import { Input } from "@heroui/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
@@ -234,29 +233,6 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div className="px-1 mt-1">
-              <Checkbox
-                isRequired
-                classNames={{ label: "text-xs font-medium text-gray-500 leading-tight", wrapper: "before:border-gray-300" }}
-                size="sm"
-              >
-                I agree to the{" "}
-                <HeroLink
-                  className="text-xs text-black font-semibold hover:underline"
-                  href="/terms"
-                >
-                  Terms
-                </HeroLink>
-                {" "}and{" "}
-                <HeroLink
-                  className="text-xs text-black font-semibold hover:underline"
-                  href="/privacy-policy"
-                >
-                  Privacy
-                </HeroLink>
-              </Checkbox>
-            </div>
-
             <div className="flex flex-col gap-3 mt-4">
               <Button
                 className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md"
@@ -264,6 +240,16 @@ export default function RegisterPage() {
               >
                 Create Account
               </Button>
+              <p className="text-center text-[11px] text-gray-400 mt-2">
+                By creating an account, you agree to our{" "}
+                <Link href="/terms" className="font-semibold text-black hover:underline">
+                  Terms
+                </Link>
+                {" "}&{" "}
+                <Link href="/privacy-policy" className="font-semibold text-black hover:underline">
+                  Privacy Policy
+                </Link>.
+              </p>
             </div>
           </form>
 
