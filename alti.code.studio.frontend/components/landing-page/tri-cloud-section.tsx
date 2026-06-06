@@ -6,19 +6,19 @@ import { Icon } from "@iconify/react";
 const providers = [
   {
     name: "Azure Foundry",
-    logo: <Icon icon="logos:microsoft-azure" className="w-8 h-8" />,
-    description: "Enterprise-grade deployment of OpenAI's most advanced reasoning engines.",
+    logo: <Icon icon="logos:microsoft-azure" width="32" height="32" />,
+    description: "Enterprise-grade access to OpenAI's most advanced reasoning engines.",
     models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
   },
   {
     name: "AWS Bedrock",
-    logo: <Icon icon="logos:aws" className="w-8 h-8" />,
+    logo: <Icon icon="logos:aws" width="32" height="32" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family.",
     models: ["Claude 4.7 Opus", "Claude Sonnet 5", "Claude 4.5 Haiku"],
   },
   {
     name: "GCP Vertex AI",
-    logo: <Icon icon="logos:google-cloud" className="w-8 h-8" />,
+    logo: <Icon icon="logos:google-cloud" width="32" height="32" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: ["Gemini 3.5 Pro", "Gemini 3.5 Flash", "Gemini Omni Flash"],
   }
