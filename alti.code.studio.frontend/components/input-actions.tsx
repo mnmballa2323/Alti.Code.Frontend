@@ -302,20 +302,14 @@ function PromptInputFullLineComponent({
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
         return "Gemini 3.5 Pro";
-      case "gemini-omni-flash":
-        return "Gemini Omni Flash";
       case "claude-4.7-opus":
         return "Claude 4.7 Opus";
       case "sonnet-5":
         return "Claude Sonnet 5";
-      case "claude-4.5-haiku":
-        return "Claude 4.5 Haiku";
       case "gpt-5.5-pro":
         return "GPT-5.5 Pro";
       case "gpt-5.5":
         return "GPT-5.5";
-      case "gpt-5.5-instant":
-        return "GPT-5.5 Instant";
       default:
         return "Smart Routing";
     }
@@ -641,22 +635,6 @@ function PromptInputFullLineComponent({
                       </span>
                     </div>
                   </DropdownItem>
-                  <DropdownItem
-                    key="gemini-omni-flash"
-                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
-                    textValue="Gemini Omni Flash"
-                    onPress={() => setDefaultModel("gemini-omni-flash")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-purple-400 shrink-0"
-                        icon="logos:google-gemini-icon"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini Omni Flash
-                      </span>
-                    </div>
-                  </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
@@ -700,22 +678,6 @@ function PromptInputFullLineComponent({
                       </span>
                     </div>
                   </DropdownItem>
-                  <DropdownItem
-                    key="claude-4.5-haiku"
-                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
-                    textValue="Claude 4.5 Haiku"
-                    onPress={() => setDefaultModel("claude-4.5-haiku")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-orange-400 shrink-0"
-                        icon="simple-icons:anthropic"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude 4.5 Haiku
-                      </span>
-                    </div>
-                  </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection
@@ -756,22 +718,6 @@ function PromptInputFullLineComponent({
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         GPT-5.5
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.5-instant"
-                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
-                    textValue="GPT-5.5 Instant"
-                    onPress={() => setDefaultModel("gpt-5.5-instant")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
-                        icon="simple-icons:openai"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        GPT-5.5 Instant
                       </span>
                     </div>
                   </DropdownItem>
