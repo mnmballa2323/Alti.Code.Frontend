@@ -9,20 +9,20 @@ import {
 
 export default function AppConnectorsSection() {
   const apps = [
-    { name: "Slack", icon: <SiSlack className="w-8 h-8 text-black" /> },
-    { name: "Jira", icon: <SiJira className="w-8 h-8 text-black" /> },
-    { name: "GitHub", icon: <SiGithub className="w-8 h-8 text-black" /> },
-    { name: "Linear", icon: <SiLinear className="w-8 h-8 text-black" /> },
-    { name: "Notion", icon: <SiNotion className="w-8 h-8 text-black" /> },
-    { name: "Stripe", icon: <SiStripe className="w-8 h-8 text-black" /> },
-    { name: "Zendesk", icon: <SiZendesk className="w-8 h-8 text-black" /> },
-    { name: "Discord", icon: <SiDiscord className="w-8 h-8 text-black" /> },
-    { name: "Figma", icon: <SiFigma className="w-8 h-8 text-black" /> },
-    { name: "Salesforce", icon: <SiSalesforce className="w-8 h-8 text-black" /> },
-    { name: "Twilio", icon: <SiTwilio className="w-8 h-8 text-black" /> },
-    { name: "SendGrid", icon: <SiSendgrid className="w-8 h-8 text-black" /> },
-    { name: "Datadog", icon: <SiDatadog className="w-8 h-8 text-black" /> },
-    { name: "Asana", icon: <SiAsana className="w-8 h-8 text-black" /> }
+    { name: "Slack", icon: <SiSlack className="w-8 h-8 text-[#4A154B]" /> },
+    { name: "Jira", icon: <SiJira className="w-8 h-8 text-[#0052CC]" /> },
+    { name: "GitHub", icon: <SiGithub className="w-8 h-8 text-[#181717]" /> },
+    { name: "Linear", icon: <SiLinear className="w-8 h-8 text-[#5E6AD2]" /> },
+    { name: "Notion", icon: <SiNotion className="w-8 h-8 text-[#000000]" /> },
+    { name: "Stripe", icon: <SiStripe className="w-8 h-8 text-[#008CDD]" /> },
+    { name: "Zendesk", icon: <SiZendesk className="w-8 h-8 text-[#03363D]" /> },
+    { name: "Discord", icon: <SiDiscord className="w-8 h-8 text-[#5865F2]" /> },
+    { name: "Figma", icon: <SiFigma className="w-8 h-8 text-[#F24E1E]" /> },
+    { name: "Salesforce", icon: <SiSalesforce className="w-8 h-8 text-[#00A1E0]" /> },
+    { name: "Twilio", icon: <SiTwilio className="w-8 h-8 text-[#F22F46]" /> },
+    { name: "SendGrid", icon: <SiSendgrid className="w-8 h-8 text-[#1A82E2]" /> },
+    { name: "Datadog", icon: <SiDatadog className="w-8 h-8 text-[#632CA6]" /> },
+    { name: "Asana", icon: <SiAsana className="w-8 h-8 text-[#F06A6A]" /> }
   ];
 
   // Duplicate the array to create a seamless infinite scrolling effect
