@@ -37,8 +37,8 @@ export default function AppConnectorsSection() {
             165 App Connectors. <br />
             <span className="text-gray-400">Plug into everything.</span>
           </h3>
-          <p className="text-xl text-gray-500 leading-relaxed font-medium max-w-2xl mx-auto">
-            Your agents seamlessly integrate with the tools your team already relies on. <br className="hidden md:block" />
+          <p className="text-xl text-gray-500 leading-relaxed font-medium max-w-3xl mx-auto text-balance">
+            Your agents seamlessly integrate with the tools your team already relies on. 
             Read tickets, write documentation, and automate workflows across your stack.
           </p>
         </div>
