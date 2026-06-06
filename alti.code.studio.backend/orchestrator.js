@@ -17,11 +17,18 @@ class AgentOrchestrator {
     console.log("✅ Image built successfully.\n");
   }
 
-  spawnAgent(agentId, task) {
-    console.log(`🚀 Spawning isolated container for agent: ${agentId}`);
+  spawnAgent(agentId, task, tier = 'Tier-4-Infantry') {
+    console.log(`\n🎖️  [COMMAND] Authorizing deployment of ${tier}...`);
+    console.log(`🚀 [LAUNCH] Spawning isolated container for: ${agentId}`);
     
-    // Locate the specific agent's skill file
-    const skillPath = path.resolve(__dirname, '.agent', 'skills', `${agentId}.md`);
+    // Locate the specific agent's skill file (Checking Generals, Colonels, or Infantry)
+    let skillPath = path.resolve(__dirname, '.agent', 'hierarchy', 'generals', `${agentId}.md`);
+    if (!fs.existsSync(skillPath)) {
+       skillPath = path.resolve(__dirname, '.agent', 'hierarchy', 'colonels', `${agentId}.md`);
+       if (!fs.existsSync(skillPath)) {
+          skillPath = path.resolve(__dirname, '.agent', 'skills', `${agentId}.md`);
+       }
+    }
     if (!fs.existsSync(skillPath)) {
        throw new Error(`Skill file not found for ${agentId}`);
     }
