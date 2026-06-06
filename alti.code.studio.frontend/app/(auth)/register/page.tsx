@@ -86,8 +86,8 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-black">
           Create an account
         </h1>
-        <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Join the alti code studio platform.
+        <p className="text-gray-500 text-sm mt-3">
+          Join the alti code studio platform
         </p>
       </div>
 
@@ -108,7 +108,7 @@ export default function RegisterPage() {
           </div>
 
           <div
-            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-[#F5F5F7] hover:bg-[#EBEBEF] transition-all cursor-pointer"
+            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-white border border-gray-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
             onClick={() => handleOAuthSignup("google")}
           >
             <div className="flex gap-3 items-center text-black">

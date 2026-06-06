@@ -71,14 +71,14 @@ export default function LoginPage() {
           Welcome back
         </h1>
         <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Sign in to continue to alti code studio.
+          Sign in to continue to alti code studio
         </p>
       </div>
 
       <div className="flex flex-col gap-5 mt-2">
         <div className="flex flex-col gap-3">
           <div
-            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-[#F5F5F7] hover:bg-[#EBEBEF] transition-all cursor-pointer"
+            className="w-full h-12 rounded-2xl overflow-hidden flex items-center justify-center bg-white border border-gray-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
             onClick={() => handleOAuthLogin("github")}
           >
             <div className="flex gap-3 items-center text-black">
