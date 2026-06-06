@@ -21,9 +21,12 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.5"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
   }
 
-  # Keeping state in GCS for now as agreed
   backend "gcs" {
     bucket = "alti-code-studio-tf-state-prod"
     prefix = "terraform/state"
@@ -82,8 +85,55 @@ resource "openstack_networking_router_interface_v2" "alti_router_interface" {
 }
 
 data "openstack_networking_network_v2" "ext_net" {
-  name     = "public" # Standard external network name in OpenStack
+  name     = "public"
   external = true
+}
+
+# SSH Keypair (Nova)
+resource "tls_private_key" "cluster_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "openstack_compute_keypair_v2" "k8s_keypair" {
+  name       = "alti-k8s-keypair-${var.environment}"
+  public_key = tls_private_key.cluster_key.public_key_openssh
+}
+
+# Security Groups (Neutron)
+resource "openstack_networking_secgroup_v2" "cluster_sg" {
+  name        = "alti-cluster-sg-${var.environment}"
+  description = "Strict firewall rules for the Alti Code Studio Magnum Cluster"
+}
+
+# Allow HTTP to Load Balancers
+resource "openstack_networking_secgroup_rule_v2" "allow_http" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 80
+  port_range_max    = 80
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.cluster_sg.id
+}
+
+# Allow HTTPS to Load Balancers
+resource "openstack_networking_secgroup_rule_v2" "allow_https" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 443
+  port_range_max    = 443
+  remote_ip_prefix  = "0.0.0.0/0"
+  security_group_id = openstack_networking_secgroup_v2.cluster_sg.id
+}
+
+# Allow Internal Cluster Communication
+resource "openstack_networking_secgroup_rule_v2" "allow_internal" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  remote_group_id   = openstack_networking_secgroup_v2.cluster_sg.id
+  security_group_id = openstack_networking_secgroup_v2.cluster_sg.id
 }
 
 # Magnum Kubernetes Cluster
@@ -92,6 +142,7 @@ resource "openstack_containerinfra_cluster_v1" "k8s_cluster" {
   cluster_template_id = openstack_containerinfra_clustertemplate_v1.k8s_template.id
   master_count        = 3
   node_count          = 5
+  keypair             = openstack_compute_keypair_v2.k8s_keypair.name
 }
 
 resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
@@ -103,11 +154,25 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
   flavor                = "m1.large"
   image                 = "fedora-coreos-latest"
   external_network_id   = data.openstack_networking_network_v2.ext_net.id
-  floating_ip_enabled   = true
+  
+  # Highly Secure: Master nodes are private, no floating IPs exposed
+  floating_ip_enabled   = false
+
+  labels = {
+    kube_tag                       = "v1.28.0"
+    octavia_ingress_controller_tag = "1.23.0"
+    octavia_provider               = "amphora"
+    cinder_csi_enabled             = "true"
+    master_lb_enabled              = "true"
+  }
 }
 
-# Note: Redis, PostgreSQL, and RabbitMQ will be deployed into the Magnum cluster via Helm 
-# rather than native managed services to maintain true self-hosted private cloud neutrality.
+# Object Storage (Swift)
+resource "openstack_objectstorage_container_v1" "gemini_context" {
+  name          = "alti-gemini-context-${var.environment}"
+  content_type  = "application/json"
+  force_destroy = true
+}
 
 # -------------------------------------------------------------
 # Hyperscaler API Routing (Tri-Cloud Inference)
@@ -137,7 +202,6 @@ resource "aws_iam_role" "bedrock_invocation_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Effect = "Allow"
         Principal = {
-          # This should be replaced with the actual OIDC provider URL from the OpenStack cluster
           Federated = "arn:aws:iam::123456789012:oidc-provider/openstack-k8s-oidc-url" 
         }
       }
@@ -184,3 +248,8 @@ resource "azurerm_cognitive_account" "openai" {
 output "k8s_api_address" { value = openstack_containerinfra_cluster_v1.k8s_cluster.api_address }
 output "aws_bedrock_role_arn" { value = aws_iam_role.bedrock_invocation_role.arn }
 output "azure_openai_endpoint" { value = azurerm_cognitive_account.openai.endpoint }
+output "cluster_private_ssh_key" { 
+  value     = tls_private_key.cluster_key.private_key_pem 
+  sensitive = true
+}
+output "swift_context_container" { value = openstack_objectstorage_container_v1.gemini_context.name }
