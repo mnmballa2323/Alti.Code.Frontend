@@ -7,19 +7,31 @@ const providers = [
     name: "Azure Foundry",
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
-    models: ["GPT-5.5 Instant", "GPT-5.5", "GPT-5.5 Pro"],
+    models: [
+      { name: "GPT-5.5 Instant", price: "$0.15/M" },
+      { name: "GPT-5.5", price: "$2.50/M" },
+      { name: "GPT-5.5 Pro", price: "$15.00/M" }
+    ],
   },
   {
     name: "AWS Bedrock",
     logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family of models.",
-    models: ["Claude 4.5 Haiku", "Claude Sonnet 5", "Claude 4.7 Opus"],
+    models: [
+      { name: "Claude 4.5 Haiku", price: "$0.25/M" },
+      { name: "Claude Sonnet 5", price: "$3.00/M" },
+      { name: "Claude 4.7 Opus", price: "$15.00/M" }
+    ],
   },
   {
     name: "GCP Vertex AI",
     logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
-    models: ["Gemini Omni Flash", "Gemini 3.5 Flash", "Gemini 3.5 Pro"],
+    models: [
+      { name: "Gemini Omni Flash", price: "$0.10/M" },
+      { name: "Gemini 3.5 Flash", price: "$0.35/M" },
+      { name: "Gemini 3.5 Pro", price: "$7.00/M" }
+    ],
   }
 ];
 
@@ -68,9 +80,12 @@ export default function TriCloudSection() {
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5">Supported Models</p>
                 <ul className="flex flex-col gap-4">
                   {provider.models.map((model, mIdx) => (
-                    <li key={mIdx} className="flex items-center gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-black" />
-                      <span className="text-gray-900 font-medium">{model}</span>
+                    <li key={mIdx} className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black" />
+                        <span className="text-gray-900 font-medium">{model.name}</span>
+                      </div>
+                      <span className="text-sm text-gray-500 font-medium">{model.price}</span>
                     </li>
                   ))}
                 </ul>
