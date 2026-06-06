@@ -151,24 +151,44 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
         };
     }
 
-    // Tri-Brain Autonomous Consensus Interceptor (Smart Routing)
+    // Master Router Classification (Smart Routing)
     if (!modelName || modelName === '' || modelName === 'auto' || modelName === 'default') {
-        logger.info(`🧠 [LlmGateway] Smart Routing selected. Triggering Tri-Brain Autonomous Consensus...`);
+        logger.info(`🧠 [LlmGateway] Smart Routing selected. Classifying query intent...`);
         try {
-            const consensus = await triBrainService.executeConsensusLoop(scrubbedPrompt);
-            const reply = `### 🧠 Tri-Cloud Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (AWS Bedrock)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (GCP Vertex)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure Foundry)**:\n${consensus.auditLog}`;
+            const classificationPrompt = `You are the Master Router. Classify the user query into ONE of three categories:
+1. 'RAG' - The query requires searching the current codebase, repository architecture, or files.
+2. 'CONSENSUS' - The query requires complex code generation, refactoring, secure system design, or writing significant new software logic.
+3. 'FAST' - The query is a simple question, general chat, greeting, or minor web search.
+
+User Query: "${scrubbedPrompt}"
+
+Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
+
+            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-3.1-pro', 0.1);
+            const decision = classificationResult.content.trim().toUpperCase();
             
-            await saveChatResponse(userId, sessionId, rawPrompt, 'Tri-Brain Swarm', reply);
-            
-            return {
-                reply,
-                sessionId,
-                model: 'Tri-Brain Swarm',
-                success: true
-            };
+            if (decision.includes('RAG')) {
+                logger.info(`🤖 [LlmGateway] Master Router Decision: RAG (Codebase search). Redirecting to Ultimate RAG Pipeline.`);
+                const ragResult = await ultimateRagService.synthesize(scrubbedPrompt, 'gemini-3.1-pro', 'Chat', undefined);
+                await saveChatResponse(userId, sessionId, rawPrompt, 'Auto-RAG', ragResult.synthesis);
+                return { reply: ragResult.synthesis, sessionId, model: 'Auto-RAG', success: true };
+            } else if (decision.includes('CONSENSUS')) {
+                logger.info(`🤖 [LlmGateway] Master Router Decision: CONSENSUS (Complex logic). Triggering Tri-Brain Loop...`);
+                const consensus = await triBrainService.executeConsensusLoop(scrubbedPrompt);
+                const reply = `### 🧠 Tri-Cloud Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (AWS Bedrock)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (GCP Vertex)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure Foundry)**:\n${consensus.auditLog}`;
+                await saveChatResponse(userId, sessionId, rawPrompt, 'Tri-Brain Swarm', reply);
+                return { reply, sessionId, model: 'Tri-Brain Swarm', success: true };
+            } else {
+                logger.info(`🤖 [LlmGateway] Master Router Decision: FAST (General chat). Using Liquid Tri-Cloud Router...`);
+                const reply = await triBrainService.fastInference(scrubbedPrompt);
+                await saveChatResponse(userId, sessionId, rawPrompt, 'Liquid Router', reply);
+                return { reply, sessionId, model: 'Liquid Router', success: true };
+            }
         } catch (err) {
-            logger.error(`❌ [LlmGateway] Tri-Brain consensus failed: ${err.message}`);
-            // Fall back to standard routing below if consensus loop completely crashes
+            logger.warn(`❌ [LlmGateway] Master Router classification failed: ${err.message}. Falling back to Fast Inference.`);
+            const reply = await triBrainService.fastInference(scrubbedPrompt);
+            await saveChatResponse(userId, sessionId, rawPrompt, 'Liquid Router (Fallback)', reply);
+            return { reply, sessionId, model: 'Liquid Router (Fallback)', success: true };
         }
     }
 
