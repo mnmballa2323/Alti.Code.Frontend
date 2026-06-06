@@ -54,9 +54,9 @@ export default function EnterpriseConnectorsSection() {
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-8">
         
         {/* Left Side: Text */}
-        <div className="flex flex-col gap-6 max-w-xl lg:w-[45%] z-10 text-center lg:text-left mx-auto lg:mx-0">
-          <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
-            66 Cloud Connections. <br />Zero Friction.
+        <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-black leading-tight">
+            66 Cloud Connections. Zero Friction.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Alti Code Studio isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
