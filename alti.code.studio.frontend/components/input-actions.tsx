@@ -296,8 +296,7 @@ function PromptInputFullLineComponent({
   const getModelDisplayName = (modelKey: string): string => {
     switch (modelKey) {
       case "":
-      case "auto":
-        return "Smart Routing";
+        return "Select Model";
       case "gemini-3.5-flash":
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
@@ -311,7 +310,7 @@ function PromptInputFullLineComponent({
       case "gpt-5.5":
         return "GPT-5.5";
       default:
-        return "Smart Routing";
+        return "GPT-5.5 Pro";
     }
   };
 
@@ -336,7 +335,7 @@ function PromptInputFullLineComponent({
   const token = session?.user.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
 
-  // Enforce "Smart Routing" (empty defaultModel) by default on initial component mount
+  // Enforce Select Model by default on initial component mount
   useEffect(() => {
     setDefaultModel("");
   }, [setDefaultModel]);
@@ -567,32 +566,7 @@ function PromptInputFullLineComponent({
                 className="p-0 overflow-hidden"
                 variant="flat"
               >
-                <DropdownSection
-                  className="mb-1.5 last:mb-0"
-                  classNames={{
-                    heading:
-                      "px-3 py-1 text-[11px] font-semibold text-gray-400 select-none uppercase tracking-wider",
-                    group: "flex flex-col gap-0.5",
-                  }}
-                  title="AUTONOMOUS"
-                >
-                  <DropdownItem
-                    key="auto"
-                    className="rounded-xl px-3 py-1.5 hover:bg-primary/10 data-[hover=true]:bg-primary/10 transition-colors"
-                    textValue="Smart Routing"
-                    onPress={() => setDefaultModel("")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-primary shrink-0"
-                        icon="lucide:sparkles"
-                      />
-                      <span className="text-xs font-semibold text-primary text-[12px]">
-                        Smart Routing (Auto)
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
+
 
                 <DropdownSection
                   className="mb-1.5 last:mb-0"
