@@ -1469,75 +1469,76 @@ export default function Sidebar() {
         {/* Search bar and + icon on the same line below the line */}
         <div
           className={cn(
-            "px-3 py-3 flex flex-col gap-2 border-b border-default-200",
+            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
             !isSidebarOpen && "hidden",
           )}
         >
-          {/* Top Row: Search and Plus */}
-          <div className="flex items-center gap-2 w-full">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-              <input
-                className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
-                placeholder="Search..."
-                value={leftSidebarSearch}
-                onChange={(e) => setLeftSidebarSearch(e.target.value)}
-              />
-            </div>
-            <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-              }}
-              closeDelay={0}
-              content={getPlusTooltipContent()}
-              delay={0}
-              placement="top"
-            >
-              <Button
-                isIconOnly
-                className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-                size="sm"
-                variant="flat"
-                onClick={() => {
-                  if (pathname === "/vault") {
-                    window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                  } else if (pathname === "/repositories") {
-                    window.dispatchEvent(
-                      new CustomEvent("open-repository-modal"),
-                    );
-                  } else if (pathname === "/documents") {
-                    window.dispatchEvent(new CustomEvent("open-document-modal"));
-                  } else if (pathname === "/knowledge") {
-                    window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
-                  } else {
-                    dispatch(startNewChat());
-                    router.push("/new-chat");
-                  }
-                }}
-                onMouseEnter={() => {
-                  if (pathname === "/vault") {
-                    router.prefetch("/vault");
-                  } else if (pathname === "/repositories") {
-                    router.prefetch("/repositories");
-                  } else if (pathname === "/documents") {
-                    router.prefetch("/documents");
-                  } else {
-                    router.prefetch("/new-chat");
-                  }
-                }}
-              >
-                <Plus className="size-3.5" />
-              </Button>
-            </Tooltip>
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
+            <input
+              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+              placeholder="Search..."
+              value={leftSidebarSearch}
+              onChange={(e) => setLeftSidebarSearch(e.target.value)}
+            />
           </div>
+          <Tooltip
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content={getPlusTooltipContent()}
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                if (pathname === "/vault") {
+                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                } else if (pathname === "/repositories") {
+                  window.dispatchEvent(
+                    new CustomEvent("open-repository-modal"),
+                  );
+                } else if (pathname === "/documents") {
+                  window.dispatchEvent(new CustomEvent("open-document-modal"));
+                } else if (pathname === "/knowledge") {
+                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
+                } else {
+                  dispatch(startNewChat());
+                  router.push("/new-chat");
+                }
+              }}
+              onMouseEnter={() => {
+                if (pathname === "/vault") {
+                  router.prefetch("/vault");
+                } else if (pathname === "/repositories") {
+                  router.prefetch("/repositories");
+                } else if (pathname === "/documents") {
+                  router.prefetch("/documents");
+                } else {
+                  router.prefetch("/new-chat");
+                }
+              }}
+            >
+              <Plus className="size-3.5" />
+            </Button>
+          </Tooltip>
+        </div>
 
-          <div className="h-px w-full bg-default-200 my-1" />
-
-          {/* Bottom Row: Connectors */}
-          <div className="flex items-center gap-2 w-full">
-            <Tooltip
+        {/* Connectors */}
+        <div
+          className={cn(
+            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
+            !isSidebarOpen && "hidden",
+          )}
+        >
+          <Tooltip
               showArrow
               classNames={{
                 content:
