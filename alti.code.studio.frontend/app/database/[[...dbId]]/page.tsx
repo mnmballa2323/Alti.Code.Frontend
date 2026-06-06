@@ -6,27 +6,27 @@ import { Database } from "lucide-react";
 import { Icon } from "@iconify/react";
 
 const SUPPORTED_DATABASES = [
-  { id: "postgresql", name: "PostgreSQL", icon: "logos:postgresql" },
-  { id: "mysql", name: "MySQL", icon: "logos:mysql" },
-  { id: "sqlserver", name: "SQL Server", icon: "carbon:sql" },
-  { id: "oracle", name: "Oracle", icon: "logos:oracle" },
-  { id: "mongodb", name: "MongoDB", icon: "logos:mongodb-icon" },
-  { id: "redis", name: "Redis", icon: "logos:redis" },
-  { id: "elasticsearch", name: "Elasticsearch", icon: "logos:elasticsearch" },
-  { id: "cockroachdb", name: "CockroachDB", icon: "logos:cockroachlabs" },
-  { id: "clickhouse", name: "ClickHouse", icon: "logos:clickhouse" },
-  { id: "couchbase", name: "Couchbase", icon: "logos:couchbase" },
-  { id: "neo4j", name: "Neo4j", icon: "logos:neo4j" },
-  { id: "snowflake", name: "Snowflake", icon: "logos:snowflake-icon" },
-  { id: "trino", name: "Trino", icon: "logos:trino" },
   { id: "alloydb", name: "AlloyDB", icon: "logos:google-cloud" },
-  { id: "bigquery", name: "BigQuery", icon: "logos:google-cloud" },
-  { id: "cloudsql-postgres", name: "Cloud SQL (PostgreSQL)", icon: "logos:google-cloud" },
+  { id: "bigquery", name: "BigQuery", icon: "gcp:bigquery" },
+  { id: "clickhouse", name: "ClickHouse", icon: "logos:clickhouse" },
   { id: "cloudsql-mysql", name: "Cloud SQL (MySQL)", icon: "logos:google-cloud" },
+  { id: "cloudsql-postgres", name: "Cloud SQL (PostgreSQL)", icon: "logos:google-cloud" },
   { id: "cloudsql-sqlserver", name: "Cloud SQL (SQL Server)", icon: "logos:google-cloud" },
-  { id: "spanner", name: "Spanner", icon: "logos:google-cloud" },
-  { id: "firestore", name: "Firestore", icon: "logos:firebase" },
-  { id: "knowledge-catalog", name: "Knowledge Catalog", icon: "logos:google-cloud" },
+  { id: "cockroachdb", name: "CockroachDB", icon: "logos:cockroachlabs" },
+  { id: "couchbase", name: "Couchbase", icon: "logos:couchbase" },
+  { id: "elasticsearch", name: "Elasticsearch", icon: "logos:elasticsearch" },
+  { id: "firestore", name: "Firestore", icon: "gcp:firestore" },
+  { id: "knowledge-catalog", name: "Knowledge Catalog", icon: "carbon:ibm-watson-knowledge-catalog" },
+  { id: "mongodb", name: "MongoDB", icon: "logos:mongodb-icon" },
+  { id: "mysql", name: "MySQL", icon: "logos:mysql" },
+  { id: "neo4j", name: "Neo4j", icon: "logos:neo4j" },
+  { id: "oracle", name: "Oracle", icon: "logos:oracle" },
+  { id: "postgresql", name: "PostgreSQL", icon: "logos:postgresql" },
+  { id: "redis", name: "Redis", icon: "logos:redis" },
+  { id: "snowflake", name: "Snowflake", icon: "logos:snowflake-icon" },
+  { id: "spanner", name: "Spanner", icon: "gcp:cloud-spanner" },
+  { id: "sqlserver", name: "SQL Server", icon: "devicon:microsoftsqlserver" },
+  { id: "trino", name: "Trino", icon: "logos:trino" },
 ];
 
 export default function DatabasePage({ params }: { params: Promise<{ dbId?: string[] }> }) {
@@ -43,7 +43,7 @@ export default function DatabasePage({ params }: { params: Promise<{ dbId?: stri
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
                   {selectedDb ? (
-                    <Icon icon={selectedDb.icon} className="w-6 h-6 object-contain" />
+                    <img src={`https://api.iconify.design/${selectedDb.icon.replace(":", "/")}.svg`} alt={selectedDb.name} className="w-6 h-6 object-contain" />
                   ) : (
                     <Database className="w-6 h-6 text-primary" />
                   )}
@@ -61,7 +61,7 @@ export default function DatabasePage({ params }: { params: Promise<{ dbId?: stri
             
             <div className="text-center py-12 text-default-500">
               {selectedDb ? (
-                <Icon icon={selectedDb.icon} className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                <img src={`https://api.iconify.design/${selectedDb.icon.replace(":", "/")}.svg`} alt={selectedDb.name} className="w-12 h-12 mx-auto mb-4 opacity-30" />
               ) : (
                 <Database className="w-12 h-12 mx-auto mb-4 opacity-20" />
               )}
