@@ -25,13 +25,13 @@ const OrbitRing = ({ size, duration, reverse, items }: { size: number, duration:
     >
       {items.map((item, i) => {
         const angle = (i / items.length) * 2 * Math.PI;
-        const x = radius + radius * Math.cos(angle);
-        const y = radius + radius * Math.sin(angle);
+        const x = (radius + radius * Math.cos(angle)).toFixed(4);
+        const y = (radius + radius * Math.sin(angle)).toFixed(4);
         return (
           <div 
             key={i}
             className="absolute -ml-6 -mt-6 w-12 h-12"
-            style={{ left: x, top: y }}
+            style={{ left: `${x}px`, top: `${y}px` }}
           >
             <div 
               className="w-full h-full bg-white rounded-full shadow-md flex items-center justify-center border border-gray-100 animate-spin-reverse"
