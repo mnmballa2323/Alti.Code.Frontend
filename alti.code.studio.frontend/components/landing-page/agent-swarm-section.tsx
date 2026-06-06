@@ -1,15 +1,8 @@
 "use client";
 
-import { Cpu, Network, Zap, Lock } from "lucide-react";
+import { Network } from "lucide-react";
 
 export default function AgentSwarmSection() {
-  const swarmStats = [
-    { label: "Total Specialized Agents", value: "46,397", icon: <Network className="w-5 h-5 text-black" /> },
-    { label: "Concurrent Executions", value: "Unlimited", icon: <Zap className="w-5 h-5 text-black" /> },
-    { label: "Agent Architecture", value: "Genesis Protocol", icon: <Cpu className="w-5 h-5 text-black" /> },
-    { label: "Security Boundary", value: "AgentShield", icon: <Lock className="w-5 h-5 text-black" /> },
-  ];
-
   return (
     <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-24">
@@ -31,19 +24,6 @@ export default function AgentSwarmSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
-            {swarmStats.map((stat, idx) => (
-              <div key={idx} className="flex flex-col gap-4 p-8 rounded-3xl bg-gray-50 border border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-sm">
-                    {stat.icon}
-                  </div>
-                  <span className="text-gray-500 text-sm font-semibold tracking-wide">{stat.label}</span>
-                </div>
-                <span className="text-3xl font-bold tracking-tight text-black">{stat.value}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Right Side: Visual Representation */}
