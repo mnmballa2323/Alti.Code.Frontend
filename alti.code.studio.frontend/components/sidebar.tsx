@@ -1856,7 +1856,7 @@ export default function Sidebar() {
                                 : "bg-[#f4f4f5] dark:bg-[#27272a]",
                             )}
                           >
-                            <Icon icon={db.icon} className="w-5 h-5 object-contain" />
+                            <img src={`https://api.iconify.design/${db.icon.replace(":", "/")}.svg`} alt={db.name} className="w-5 h-5 object-contain" />
                           </div>
                           <span className="text-xs text-left truncate pr-2">
                             {db.name}
