@@ -604,22 +604,6 @@ function PromptInputFullLineComponent({
                   title="GEMINI"
                 >
                   <DropdownItem
-                    key="gemini-3.5-flash"
-                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
-                    textValue="Gemini 3.5 Flash"
-                    onPress={() => setDefaultModel("gemini-3.5-flash")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-purple-500 dark:text-purple-400 shrink-0"
-                        icon="logos:google-gemini-icon"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini 3.5 Flash
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
                     key="gemini-3.5-pro"
                     className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
                     textValue="Gemini 3.5 Pro"
@@ -632,6 +616,22 @@ function PromptInputFullLineComponent({
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Gemini 3.5 Pro
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-3.5-flash"
+                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    textValue="Gemini 3.5 Flash"
+                    onPress={() => setDefaultModel("gemini-3.5-flash")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-purple-500 dark:text-purple-400 shrink-0"
+                        icon="logos:google-gemini-icon"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini 3.5 Flash
                       </span>
                     </div>
                   </DropdownItem>
