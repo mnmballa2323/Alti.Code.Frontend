@@ -6,7 +6,11 @@ import { motion } from "framer-motion";
 const SYMBOLS = [
   "{ }", "< />", "=>", "()", "⌘", "/*", "*/", "&&", "||", "01", "AI", "API", "[]",
   ">_", "===", "++", "+=", "${}", "->", "::", "NaN", "404", "git", "npm", 
-  "ts", "js", "go", "rs", "py", "{}", "()", "$", "@", "!", "?:", "<T>", "/>", "~/"
+  "ts", "js", "go", "rs", "py", "{}", "()", "$", "@", "!", "?:", "<T>", "/>", "~/",
+  "AWS", "GCP", "Azure", "SQL", "CSS", "HTML", "C++", "C#", "K8s", "Docker", "S3",
+  "EC2", "Postgres", "Redis", "TCP", "HTTP", "REST", "JSON", "YAML", "SSH", "Linux",
+  "React", "Vue", "Angular", "Swift", "Kotlin", "Java", "PHP", "Ruby", "Dart",
+  "GraphQL", "DevOps", "CI/CD", "0x", "127.0.0.1", "localhost", "sudo", "bash"
 ];
 const COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#000000"];
 
