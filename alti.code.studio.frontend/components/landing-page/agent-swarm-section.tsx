@@ -11,7 +11,7 @@ export default function AgentSwarmSection() {
         <div className="flex-1 flex flex-col gap-10">
           <div className="flex flex-col gap-6">
             <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]">
-              A 50,000+ Agent Swarm. <br />At Your Command.
+              A 50,000 Agent Swarm. <br />At Your Command.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed max-w-2xl font-medium">
               Forget single-agent chatbots. Alti Code Studio deploys a massive, dynamically coordinated 
