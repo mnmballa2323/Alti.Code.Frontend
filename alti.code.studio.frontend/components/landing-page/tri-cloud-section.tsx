@@ -73,7 +73,7 @@ export default function TriCloudSection() {
               
               <div className="w-full h-px bg-gray-100" />
               
-              <CardBody className="p-10 bg-gray-100">
+              <CardBody className="p-10 bg-gray-200">
                 <div className="flex items-center justify-between mb-5">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Supported Models</p>
                   <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
