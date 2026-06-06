@@ -120,8 +120,8 @@ export default function SwarmCanvas() {
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
       {/* Center Core Logo */}
-      <div className="relative z-10 w-24 h-24 rounded-2xl bg-white shadow-xl flex items-center justify-center border border-gray-100 p-4">
-        <Image src="/alti-logo.png" alt="Alti Logo" width={64} height={64} className="w-full h-full object-contain" />
+      <div className="relative z-10 w-24 h-24 rounded-2xl bg-black shadow-2xl flex items-center justify-center border border-gray-800 p-4">
+        <Image src="/alti-logo.png" alt="Alti Logo" width={64} height={64} className="w-full h-full object-contain invert brightness-0" />
       </div>
     </div>
   );
