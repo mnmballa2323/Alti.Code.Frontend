@@ -5,19 +5,19 @@ import { Card, CardHeader, CardBody } from "@heroui/react";
 const providers = [
   {
     name: "Azure Foundry",
-    logo: <img src="https://api.iconify.design/logos/microsoft-azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
+    logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to <br /> OpenAI's advanced models.</>,
     models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
   },
   {
     name: "AWS Bedrock",
-    logo: <img src="https://api.iconify.design/logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
+    logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family.",
     models: ["Claude 4.7 Opus", "Claude Sonnet 5", "Claude 4.5 Haiku"],
   },
   {
     name: "GCP Vertex AI",
-    logo: <img src="https://api.iconify.design/logos/google-cloud.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
+    logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: ["Gemini 3.5 Pro", "Gemini 3.5 Flash", "Gemini Omni Flash"],
   }

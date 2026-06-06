@@ -1,7 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const bgImage = pathname === "/register" ? "/assets/auth/register_bg.png" : "/assets/auth/login_bg.png";
+
   return (
     <div className="flex min-h-screen bg-white font-sans flex-col-reverse lg:flex-row">
       
@@ -9,8 +15,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="hidden lg:flex w-1/2 bg-black relative overflow-hidden flex-col justify-end border-r border-gray-900">
          <div className="absolute inset-0 z-0">
            <img 
-             src="/auth_bg_3.png" 
-             alt="Alti Code Studio" 
+             src={bgImage} 
+             alt="Alti Code Studio Auth Background" 
              className="absolute inset-0 w-full h-full object-cover" 
            />
          </div>
