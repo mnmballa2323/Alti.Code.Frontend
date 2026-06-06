@@ -13,15 +13,9 @@ export default function HeroSwarm() {
       
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-10">
         
-        {/* Top Badge */}
-        <div className="flex items-center gap-2 px-5 py-2 rounded-full border border-gray-200 bg-gray-50 shadow-sm">
-          <span className="text-sm font-medium text-gray-600 tracking-wide">The Genesis Protocol is Live</span>
-        </div>
-
         {/* Apple-style Headline */}
         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-black leading-[1.05]">
-          Autonomous engineering. <br className="hidden md:block" />
-          <span className="text-gray-400">At scale.</span>
+          Autonomous engineering.
         </h1>
 
         {/* Subtitle */}
