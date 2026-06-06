@@ -14,6 +14,8 @@ spec:
     metadata:
       labels:
         app: alti-backend-gcp
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: backend-gcp
@@ -26,6 +28,11 @@ spec:
           value: "production"
         - name: PORT
           value: "5003"
+        securityContext:
+          drop: ["ALL"]
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
         resources:
           requests:
             cpu: "500m"
