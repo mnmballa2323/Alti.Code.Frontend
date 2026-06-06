@@ -833,4 +833,9 @@ export const SAAS_MOCKS = [
     slug: "mcp_nextjs",
     icon: "logos:nextjs-icon",
   },
+  {
+    name: "Pulumi Infrastructure as Code",
+    slug: "mcp_pulumi",
+    icon: "logos:pulumi-icon",
+  },
 ];
