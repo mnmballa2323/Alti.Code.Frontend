@@ -9,9 +9,6 @@ import { useDispatch } from "react-redux";
 import { useSession, signOut } from "next-auth/react";
 
 import MobileNavSheet from "./landing-page/MobileNavSheet";
-import { ShadowToggle } from "./ShadowToggle";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { OmniSearch } from "./enterprise/search/OmniSearch";
 
 import { setContactModel } from "@/store/slice";
 
@@ -214,9 +211,6 @@ function Navbar() {
 
             {/* ✅ Auth Section Added */}
             <div className="flex gap-4 xl:gap-6 justify-center items-center">
-              <OmniSearch />
-              <LanguageSwitcher />
-              <ShadowToggle />
               {session?.user && status === "authenticated" ? (
                 <>
                   <Button
