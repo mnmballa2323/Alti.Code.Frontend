@@ -14,8 +14,10 @@ class Particle {
   constructor(width: number, height: number) {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 0.4;
-    this.vy = (Math.random() - 0.5) * 0.4;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 0.2 + 0.2;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
     this.size = Math.random() * 2 + 1;
     const colors = ["#4285F4", "#34A853", "#FBBC05", "#EA4335", "#000000", "#666666"];
     this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -29,11 +31,22 @@ class Particle {
     if (this.x < 0 || this.x > width) this.vx *= -1;
     if (this.y < 0 || this.y > height) this.vy *= -1;
     
+    // Organic wander to prevent getting stuck in straight lines
+    this.vx += (Math.random() - 0.5) * 0.02;
+    this.vy += (Math.random() - 0.5) * 0.02;
+
     // Slight pull to center to keep the swarm clustered
     const centerX = width / 2;
     const centerY = height / 2;
-    this.vx += (centerX - this.x) * 0.0001;
-    this.vy += (centerY - this.y) * 0.0001;
+    this.vx += (centerX - this.x) * 0.00005;
+    this.vy += (centerY - this.y) * 0.00005;
+
+    // Enforce max speed limit
+    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+    if (speed > 0.4) {
+      this.vx = (this.vx / speed) * 0.4;
+      this.vy = (this.vy / speed) * 0.4;
+    }
   }
 
   draw(ctx: CanvasRenderingContext2D) {
