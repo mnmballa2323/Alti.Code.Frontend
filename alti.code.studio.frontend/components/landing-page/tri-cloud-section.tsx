@@ -47,11 +47,11 @@ export default function TriCloudSection() {
           {providers.map((provider, idx) => (
             <Card 
               key={idx} 
-              className="bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-3xl overflow-hidden"
+              className="bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-3xl overflow-hidden"
               shadow="none"
             >
               <CardHeader className="flex flex-col items-start gap-6 p-10">
-                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div className="p-4 rounded-2xl bg-white border border-gray-100">
                   {provider.logo}
                 </div>
                 <div className="flex flex-col gap-2">
