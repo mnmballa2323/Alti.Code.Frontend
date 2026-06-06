@@ -10,7 +10,7 @@ export default function HeroSwarm() {
     <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
       {/* Magical animated network background */}
       <MagicCodeBackground />
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-12 md:-mt-20">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         
         {/* Apple-style Headline */}
         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-black leading-[1.05]">
