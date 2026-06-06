@@ -15,6 +15,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
            />
          </div>
          
+         {/* Logo */}
+         <div className="absolute top-8 left-12 z-30 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+           <Link href="/">
+             <img src="/logo-white.png" alt="Alti Logo" className="h-10 w-auto" />
+           </Link>
+         </div>
+         
          {/* Gradient Overlay to make text readable */}
          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none z-10" />
          
