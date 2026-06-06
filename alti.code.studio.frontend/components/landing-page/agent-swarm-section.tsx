@@ -17,7 +17,7 @@ export default function AgentSwarmSection() {
               Forget single-agent chatbots. Alti Code Studio deploys a massive, dynamically coordinated 
               swarm of over 50,000 specialized engineering agents. Whether you need a dedicated 
               PostgreSQL optimizer, a React performance auditor, or an adversarial security red-team, 
-              the swarm provisions the exact expert you need in milliseconds.
+              the swarm provisions the exact experts you need in milliseconds.
             </p>
           </div>
 
