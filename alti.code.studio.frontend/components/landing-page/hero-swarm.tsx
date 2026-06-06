@@ -1,38 +1,32 @@
 "use client";
 
 import { Button } from "@heroui/react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function HeroSwarm() {
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-black text-white px-4">
-      {/* Background Glow Effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
       
-      {/* Radial Grid Pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-black/0 via-black/80 to-black pointer-events-none z-0" />
+      {/* Super subtle radial gradient for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 via-white to-white pointer-events-none z-0" />
       
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-8 mt-10">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-10">
         
         {/* Top Badge */}
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
-          <Sparkles className="w-4 h-4 text-blue-400" />
-          <span className="text-sm font-medium text-blue-200">The Genesis Protocol is Live</span>
+        <div className="flex items-center gap-2 px-5 py-2 rounded-full border border-gray-200 bg-gray-50 shadow-sm">
+          <span className="text-sm font-medium text-gray-600 tracking-wide">The Genesis Protocol is Live</span>
         </div>
 
-        {/* Massive Headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight font-secondary leading-[1.1]">
-          The World&apos;s Most Powerful <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
-            Autonomous Swarm
-          </span>
+        {/* Apple-style Headline */}
+        <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-black leading-[1.05]">
+          Autonomous engineering. <br className="hidden md:block" />
+          <span className="text-gray-400">At scale.</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-lg md:text-2xl text-default-400 max-w-3xl font-light leading-relaxed">
-          Unleash an unstoppable network of 50,000+ specialized engineering agents powered by 
+        <p className="text-xl md:text-3xl text-gray-500 max-w-3xl font-medium leading-snug tracking-tight">
+          Unleash a network of 50,000+ specialized engineering agents powered by 
           the ultimate Tri-Cloud intelligence engine.
         </p>
 
@@ -42,38 +36,38 @@ export default function HeroSwarm() {
             as={Link} 
             href="/register" 
             size="lg" 
-            className="w-full sm:w-auto bg-white text-black font-semibold rounded-full px-10 py-6 text-lg hover:scale-105 transition-transform shadow-[0_0_40px_-10px_rgba(255,255,255,0.5)]"
+            className="w-full sm:w-auto bg-black text-white font-medium rounded-full px-12 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg"
           >
-            Deploy The Swarm <ArrowRight className="ml-2 w-5 h-5" />
+            Deploy The Swarm
           </Button>
           <Button 
             as={Link} 
             href="#architecture" 
             size="lg" 
             variant="bordered"
-            className="w-full sm:w-auto text-white border-white/20 hover:bg-white/10 rounded-full px-10 py-6 text-lg transition-colors"
+            className="w-full sm:w-auto text-black border-gray-200 hover:bg-gray-50 rounded-full px-12 py-7 text-lg transition-colors font-medium"
           >
-            View Architecture
+            View Architecture <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
 
-        {/* Social Proof / Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12 mt-20 border-t border-white/10 pt-10 text-left">
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 mt-24 text-left w-full max-w-4xl">
           <div className="flex flex-col gap-1">
-            <span className="text-4xl font-bold text-white">46,397</span>
-            <span className="text-sm text-default-500 font-medium uppercase tracking-wider">Dynamic Agents</span>
+            <span className="text-5xl font-semibold tracking-tighter text-black">46k+</span>
+            <span className="text-sm text-gray-500 font-medium">Dynamic Agents</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-4xl font-bold text-white">44+</span>
-            <span className="text-sm text-default-500 font-medium uppercase tracking-wider">Cloud Connectors</span>
+            <span className="text-5xl font-semibold tracking-tighter text-black">44</span>
+            <span className="text-sm text-gray-500 font-medium">Cloud Connectors</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-4xl font-bold text-white">3</span>
-            <span className="text-sm text-default-500 font-medium uppercase tracking-wider">Foundation Models</span>
+            <span className="text-5xl font-semibold tracking-tighter text-black">3</span>
+            <span className="text-sm text-gray-500 font-medium">Foundation Models</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-4xl font-bold text-white">Zero</span>
-            <span className="text-sm text-default-500 font-medium uppercase tracking-wider">API Markup</span>
+            <span className="text-5xl font-semibold tracking-tighter text-black">Zero</span>
+            <span className="text-sm text-gray-500 font-medium">API Markup</span>
           </div>
         </div>
       </div>

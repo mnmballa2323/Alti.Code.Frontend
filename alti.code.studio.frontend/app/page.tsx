@@ -11,7 +11,7 @@ import DeterministicControlSection from "@/components/landing-page/deterministic
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-black w-full overflow-x-hidden font-sans">
+    <div className="flex flex-col min-h-screen bg-white text-black w-full overflow-x-hidden font-sans">
       <Navbar />
       
       <main className="flex-1 flex flex-col w-full">

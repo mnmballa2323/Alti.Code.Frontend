@@ -4,29 +4,26 @@ import { Cpu, Network, Zap, Lock } from "lucide-react";
 
 export default function AgentSwarmSection() {
   const swarmStats = [
-    { label: "Total Specialized Agents", value: "46,397", icon: <Network className="w-5 h-5 text-blue-400" /> },
-    { label: "Concurrent Executions", value: "Unlimited", icon: <Zap className="w-5 h-5 text-yellow-400" /> },
-    { label: "Agent Architecture", value: "Genesis Protocol", icon: <Cpu className="w-5 h-5 text-purple-400" /> },
-    { label: "Security Boundary", value: "AgentShield", icon: <Lock className="w-5 h-5 text-green-400" /> },
+    { label: "Total Specialized Agents", value: "46,397", icon: <Network className="w-5 h-5 text-black" /> },
+    { label: "Concurrent Executions", value: "Unlimited", icon: <Zap className="w-5 h-5 text-black" /> },
+    { label: "Agent Architecture", value: "Genesis Protocol", icon: <Cpu className="w-5 h-5 text-black" /> },
+    { label: "Security Boundary", value: "AgentShield", icon: <Lock className="w-5 h-5 text-black" /> },
   ];
 
   return (
-    <section className="w-full py-24 bg-black text-white px-4 border-t border-white/5 relative overflow-hidden">
-      {/* Glow Effect */}
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-purple-900/10 blur-[150px] pointer-events-none rounded-full" />
-
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
+    <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-24">
         
         {/* Left Side: Text & Context */}
-        <div className="flex-1 flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold tracking-widest text-purple-400 uppercase">
+        <div className="flex-1 flex flex-col gap-10">
+          <div className="flex flex-col gap-6">
+            <h2 className="text-sm font-semibold tracking-widest text-gray-500 uppercase">
               The Genesis Protocol
             </h2>
-            <h3 className="text-4xl md:text-5xl font-bold font-secondary leading-tight">
-              A 50,000+ Agent Swarm At Your Command.
+            <h3 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
+              A 50,000+ Agent Swarm. <br />At Your Command.
             </h3>
-            <p className="text-lg text-default-400 leading-relaxed max-w-2xl">
+            <p className="text-xl text-gray-500 leading-relaxed max-w-2xl font-medium">
               Forget single-agent chatbots. Alti Code Studio deploys a massive, dynamically coordinated 
               swarm of over 46,000 specialized engineering agents. Whether you need a dedicated 
               PostgreSQL optimizer, a React performance auditor, or an adversarial security red-team, 
@@ -34,16 +31,16 @@ export default function AgentSwarmSection() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
             {swarmStats.map((stat, idx) => (
-              <div key={idx} className="flex flex-col gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+              <div key={idx} className="flex flex-col gap-4 p-8 rounded-3xl bg-gray-50 border border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-black/50 border border-white/5">
+                  <div className="p-3 rounded-xl bg-white border border-gray-200 shadow-sm">
                     {stat.icon}
                   </div>
-                  <span className="text-white/60 text-sm font-medium">{stat.label}</span>
+                  <span className="text-gray-500 text-sm font-semibold tracking-wide">{stat.label}</span>
                 </div>
-                <span className="text-2xl font-bold tracking-tight">{stat.value}</span>
+                <span className="text-3xl font-bold tracking-tight text-black">{stat.value}</span>
               </div>
             ))}
           </div>
@@ -51,18 +48,19 @@ export default function AgentSwarmSection() {
 
         {/* Right Side: Visual Representation */}
         <div className="flex-1 w-full flex justify-center lg:justify-end relative">
-          <div className="relative w-full max-w-md aspect-square rounded-full border border-white/10 bg-white/[0.02] flex items-center justify-center animate-[spin_60s_linear_infinite]">
-            <div className="absolute inset-0 rounded-full border border-dashed border-white/20 animate-[spin_40s_linear_infinite_reverse]" />
-            <div className="absolute inset-[20%] rounded-full border border-purple-500/30 bg-purple-500/5 animate-[pulse_4s_ease-in-out_infinite]" />
-            <div className="absolute inset-[40%] rounded-full border border-blue-500/50 bg-blue-500/10 backdrop-blur-md shadow-[0_0_60px_-15px_rgba(59,130,246,0.5)] flex items-center justify-center">
-              <Network className="w-12 h-12 text-white animate-pulse" />
+          <div className="relative w-full max-w-[400px] aspect-square rounded-[3rem] border border-gray-200 bg-gray-50 flex items-center justify-center shadow-lg">
+            {/* Minimalist rings */}
+            <div className="absolute inset-8 rounded-full border border-gray-200" />
+            <div className="absolute inset-[25%] rounded-full border border-gray-200" />
+            <div className="absolute inset-[40%] rounded-full bg-white shadow-sm flex items-center justify-center border border-gray-200">
+              <Network className="w-12 h-12 text-black" />
             </div>
             
-            {/* Simulated Nodes */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-purple-400 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.8)]" />
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-blue-400 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.8)]" />
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-pink-400 rounded-full shadow-[0_0_15px_rgba(244,114,182,0.8)]" />
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 bg-cyan-400 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+            {/* Minimalist dots representing agents */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full" />
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 bg-gray-400 rounded-full" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-gray-800 rounded-full" />
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3 h-3 bg-gray-300 rounded-full" />
           </div>
         </div>
 
