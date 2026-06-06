@@ -93,7 +93,7 @@ export default function TriCloudSection() {
                       </div>
                       <div className="flex gap-4">
                         <span className="text-sm text-gray-500 font-medium w-16 text-left">{model.inputPrice}</span>
-                        <span className="text-sm text-gray-500 font-medium w-16 text-left">{model.outputPrice}</span>
+                        <span className="text-sm text-gray-500 font-medium w-16 text-left pl-1">{model.outputPrice}</span>
                       </div>
                     </li>
                   ))}
