@@ -214,13 +214,22 @@ function Navbar() {
               <LanguageSwitcher />
               <ShadowToggle />
               {session?.user && status === "authenticated" ? (
-                <Button
-                  className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
-                  size="sm"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  Logout
-                </Button>
+                <>
+                  <Button
+                    className="rounded-full border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-6"
+                    size="sm"
+                    onClick={() => router.push("/new-chat")}
+                  >
+                    Launch App
+                  </Button>
+                  <Button
+                    className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
+                    size="sm"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                  >
+                    Logout
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
