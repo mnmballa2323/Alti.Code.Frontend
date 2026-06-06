@@ -7,19 +7,19 @@ const providers = [
     name: "Azure Foundry",
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
     description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
-    models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
+    models: ["GPT-5.5 Instant", "GPT-5.5", "GPT-5.5 Pro"],
   },
   {
     name: "AWS Bedrock",
     logo: <img src="/assets/cloud-logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family of models.",
-    models: ["Claude 4.7 Opus", "Claude Sonnet 5", "Claude 4.5 Haiku"],
+    models: ["Claude 4.5 Haiku", "Claude Sonnet 5", "Claude 4.7 Opus"],
   },
   {
     name: "GCP Vertex AI",
     logo: <img src="/assets/cloud-logos/gcp.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
-    models: ["Gemini 3.5 Pro", "Gemini 3.5 Flash", "Gemini Omni Flash"],
+    models: ["Gemini Omni Flash", "Gemini 3.5 Flash", "Gemini 3.5 Pro"],
   }
 ];
 
