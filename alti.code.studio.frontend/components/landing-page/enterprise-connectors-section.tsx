@@ -20,7 +20,7 @@ export default function EnterpriseConnectorsSection() {
             Universal Ecosystem
           </h2>
           <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
-            66 Cloud Providers. <br />Zero Friction.
+            66 Cloud Connections. <br />Zero Friction.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Alti Code Studio isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
@@ -28,7 +28,7 @@ export default function EnterpriseConnectorsSection() {
           </p>
         </div>
 
-        {/* 66 Cloud Providers Grid */}
+        {/* 66 Cloud Connections Grid */}
         <div className="w-full max-w-6xl mt-8">
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {providers.map((provider, idx) => (
