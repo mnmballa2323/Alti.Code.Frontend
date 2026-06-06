@@ -25,6 +25,14 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.23"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.11"
+    }
   }
 
   backend "gcs" {
@@ -54,6 +62,22 @@ provider "aws" {
 provider "azurerm" {
   features {}
   subscription_id = var.azure_subscription_id
+}
+
+provider "kubernetes" {
+  host                   = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.host
+  client_certificate     = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.client_certificate
+  client_key             = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.client_key
+  cluster_ca_certificate = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.cluster_ca_certificate
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.host
+    client_certificate     = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.client_certificate
+    client_key             = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.client_key
+    cluster_ca_certificate = openstack_containerinfra_cluster_v1.k8s_cluster.kubeconfig.cluster_ca_certificate
+  }
 }
 
 # -------------------------------------------------------------
@@ -172,6 +196,73 @@ resource "openstack_objectstorage_container_v1" "gemini_context" {
   name          = "alti-gemini-context-${var.environment}"
   content_type  = "application/json"
   force_destroy = true
+}
+
+# -------------------------------------------------------------
+# App Deployment (Stateful Backing Services via Helm)
+# -------------------------------------------------------------
+
+resource "helm_release" "postgresql" {
+  name       = "alti-postgres"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "postgresql"
+  version    = "12.12.10"
+  namespace  = "default"
+
+  set {
+    name  = "global.postgresql.auth.postgresPassword"
+    value = "supersecret_change_me" # In prod, inject via Secret Manager or variables
+  }
+  set {
+    name  = "primary.persistence.enabled"
+    value = "true"
+  }
+  set {
+    name  = "primary.persistence.size"
+    value = "50Gi"
+  }
+}
+
+resource "helm_release" "redis" {
+  name       = "alti-redis"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "redis"
+  version    = "18.1.5"
+  namespace  = "default"
+
+  set {
+    name  = "auth.password"
+    value = "supersecret_change_me" # In prod, inject via Secret Manager
+  }
+  set {
+    name  = "architecture"
+    value = "standalone"
+  }
+  set {
+    name  = "master.persistence.enabled"
+    value = "true"
+  }
+  set {
+    name  = "master.persistence.size"
+    value = "10Gi"
+  }
+}
+
+resource "helm_release" "rabbitmq" {
+  name       = "alti-rabbitmq"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "rabbitmq"
+  version    = "12.2.3"
+  namespace  = "default"
+
+  set {
+    name  = "auth.password"
+    value = "supersecret_change_me"
+  }
+  set {
+    name  = "persistence.enabled"
+    value = "true"
+  }
 }
 
 # -------------------------------------------------------------
