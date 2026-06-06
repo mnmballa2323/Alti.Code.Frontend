@@ -202,7 +202,7 @@ export default function LoginPage() {
                 className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md"
                 type="submit"
               >
-                Log In
+                Login
               </Button>
             </div>
           </form>
