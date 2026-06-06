@@ -2,11 +2,11 @@
 
 import { 
   SiGooglecloud, SiVercel, SiSupabase, SiMongodb, 
-  SiPostgresql, SiRedis, SiCloudflare, SiKubernetes,
+  SiPlanetscale, SiRedis, SiCloudflare, SiKubernetes,
   SiDigitalocean, SiHeroku, SiNetlify, SiFirebase, SiSnowflake
 } from "react-icons/si";
 import { 
-  FaAws, FaDocker
+  FaAws
 } from "react-icons/fa";
 import { VscAzure } from "react-icons/vsc";
 import React from "react";
@@ -104,9 +104,9 @@ export default function EnterpriseConnectorsSection() {
             items={[
               <SiSupabase key="supabase" className="w-6 h-6 text-[#3ECF8E]" />,
               <SiMongodb key="mongodb" className="w-6 h-6 text-[#47A248]" />,
-              <SiPostgresql key="postgres" className="w-6 h-6 text-[#4169E1]" />,
+              <SiPlanetscale key="planetscale" className="w-6 h-6 text-black" />,
               <SiRedis key="redis" className="w-6 h-6 text-[#DC382D]" />,
-              <FaDocker key="docker" className="w-6 h-6 text-[#2496ED]" />,
+              <SiVercel key="vercel" className="w-6 h-6 text-black" />,
               <SiCloudflare key="cloudflare" className="w-6 h-6 text-[#F38020]" />
             ]} 
           />
