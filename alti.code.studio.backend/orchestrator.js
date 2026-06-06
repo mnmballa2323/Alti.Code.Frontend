@@ -40,6 +40,7 @@ class AgentOrchestrator {
       "run", "--rm",
       "-e", `AGENT_ID=${agentId}`,
       "-e", `TASK=${task}`,
+      "-e", `TIER=${tier}`,
       "-v", `${skillPath}:/sandbox/skill.md:ro`,
       "alti-agent-base"
     ];
@@ -68,6 +69,8 @@ class AgentOrchestrator {
     return child;
   }
 }
+
+export default AgentOrchestrator;
 
 // Emulate require.main === module for ESM
 import { resolve } from 'path';
