@@ -61,7 +61,7 @@ export default function EnterpriseConnectorsSection() {
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Alti Code Studio isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
-            cloud infrastructure on the planet. From hyper-scalers to specialized databases, we integrate everywhere, for frictionless cloud deployments.
+            cloud infrastructure on the planet. From hyper-scalers to specialized providers, we integrate everywhere, for frictionless deployments.
           </p>
         </div>
 
