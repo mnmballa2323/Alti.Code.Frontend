@@ -1469,159 +1469,166 @@ export default function Sidebar() {
         {/* Search bar and + icon on the same line below the line */}
         <div
           className={cn(
-            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
+            "px-3 py-3 flex flex-col gap-2 border-b border-default-200",
             !isSidebarOpen && "hidden",
           )}
         >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-            <input
-              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
-              placeholder="Search..."
-              value={leftSidebarSearch}
-              onChange={(e) => setLeftSidebarSearch(e.target.value)}
-            />
+          {/* Top Row: Search and Plus */}
+          <div className="flex items-center gap-2 w-full">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
+              <input
+                className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+                placeholder="Search..."
+                value={leftSidebarSearch}
+                onChange={(e) => setLeftSidebarSearch(e.target.value)}
+              />
+            </div>
+            <Tooltip
+              showArrow
+              classNames={{
+                content:
+                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              }}
+              closeDelay={0}
+              content={getPlusTooltipContent()}
+              delay={0}
+              placement="top"
+            >
+              <Button
+                isIconOnly
+                className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  if (pathname === "/vault") {
+                    window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                  } else if (pathname === "/repositories") {
+                    window.dispatchEvent(
+                      new CustomEvent("open-repository-modal"),
+                    );
+                  } else if (pathname === "/documents") {
+                    window.dispatchEvent(new CustomEvent("open-document-modal"));
+                  } else if (pathname === "/knowledge") {
+                    window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
+                  } else {
+                    dispatch(startNewChat());
+                    router.push("/new-chat");
+                  }
+                }}
+                onMouseEnter={() => {
+                  if (pathname === "/vault") {
+                    router.prefetch("/vault");
+                  } else if (pathname === "/repositories") {
+                    router.prefetch("/repositories");
+                  } else if (pathname === "/documents") {
+                    router.prefetch("/documents");
+                  } else {
+                    router.prefetch("/new-chat");
+                  }
+                }}
+              >
+                <Plus className="size-3.5" />
+              </Button>
+            </Tooltip>
           </div>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="App Connections"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0",
-                pathname === "/connect-apps"
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/connect-apps");
+
+          {/* Bottom Row: Connectors */}
+          <div className="flex items-center gap-2 w-full">
+            <Tooltip
+              showArrow
+              classNames={{
+                content:
+                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
               }}
-              onMouseEnter={() => {
-                router.prefetch("/connect-apps");
-              }}
+              closeDelay={0}
+              content="App Connections"
+              delay={0}
+              placement="top"
             >
-              <LayoutGrid className="size-3.5" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="Database Connectors"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0",
-                pathname === "/database"
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/database");
+              <Button
+                isIconOnly
+                className={cn(
+                  "border rounded-lg flex-shrink-0 flex-1",
+                  pathname === "/connect-apps"
+                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+                )}
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  router.push("/connect-apps");
+                }}
+                onMouseEnter={() => {
+                  router.prefetch("/connect-apps");
+                }}
+              >
+                <LayoutGrid className="size-3.5" />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow
+              classNames={{
+                content:
+                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
               }}
-              onMouseEnter={() => {
-                router.prefetch("/database");
-              }}
+              closeDelay={0}
+              content="Database Connectors"
+              delay={0}
+              placement="top"
             >
-              <Database className="size-3.5" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="Cloud Connections"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0",
-                pathname === "/cloud"
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/cloud");
+              <Button
+                isIconOnly
+                className={cn(
+                  "border rounded-lg flex-shrink-0 flex-1",
+                  pathname === "/database"
+                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+                )}
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  router.push("/database");
+                }}
+                onMouseEnter={() => {
+                  router.prefetch("/database");
+                }}
+              >
+                <Database className="size-3.5" />
+              </Button>
+            </Tooltip>
+            <Tooltip
+              showArrow
+              classNames={{
+                content:
+                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
               }}
-              onMouseEnter={() => {
-                router.prefetch("/cloud");
-              }}
+              closeDelay={0}
+              content="Cloud Connections"
+              delay={0}
+              placement="top"
             >
-              <Cloud className="size-3.5" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content={getPlusTooltipContent()}
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                if (pathname === "/vault") {
-                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/repositories") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-repository-modal"),
-                  );
-                } else if (pathname === "/documents") {
-                  window.dispatchEvent(new CustomEvent("open-document-modal"));
-                } else if (pathname === "/knowledge") {
-                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
-                } else {
-                  dispatch(startNewChat());
-                  router.push("/new-chat");
-                }
-              }}
-              onMouseEnter={() => {
-                if (pathname === "/vault") {
-                  router.prefetch("/vault");
-                } else if (pathname === "/repositories") {
-                  router.prefetch("/repositories");
-                } else if (pathname === "/documents") {
-                  router.prefetch("/documents");
-                } else {
-                  router.prefetch("/new-chat");
-                }
-              }}
-            >
-              <Plus className="size-3.5" />
-            </Button>
-          </Tooltip>
+              <Button
+                isIconOnly
+                className={cn(
+                  "border rounded-lg flex-shrink-0 flex-1",
+                  pathname === "/cloud"
+                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+                )}
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  router.push("/cloud");
+                }}
+                onMouseEnter={() => {
+                  router.prefetch("/cloud");
+                }}
+              >
+                <Cloud className="size-3.5" />
+              </Button>
+            </Tooltip>
+          </div>
         </div>
 
         {/* 6 navigation icons toggle container */}
