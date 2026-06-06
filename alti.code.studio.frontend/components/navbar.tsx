@@ -18,9 +18,13 @@ import { setContactModel } from "@/store/slice";
 function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDesktopApp, setIsDesktopApp] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined" && "__TAURI__" in window) {
+      setIsDesktopApp(true);
+    }
   }, []);
 
   const { data: session, status } = useSession();
@@ -233,19 +237,21 @@ function Navbar() {
               ) : (
                 <>
                   <Button
-                    className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
+                    className={`rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 ${isDesktopApp ? "w-[160px]" : "px-6"}`}
                     size="sm"
                     onClick={() => router.push("/login")}
                   >
                     Login
                   </Button>
-                  <Button
-                    className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
-                    size="sm"
-                    onClick={() => router.push("/register")}
-                  >
-                    Register
-                  </Button>
+                  {!isDesktopApp && (
+                    <Button
+                      className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
+                      size="sm"
+                      onClick={() => router.push("/register")}
+                    >
+                      Register
+                    </Button>
+                  )}
                 </>
               )}
             </div>
