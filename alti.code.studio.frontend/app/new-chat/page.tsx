@@ -64,6 +64,7 @@ export default function Home() {
             <div className="w-full mt-auto">
               <PromptInputFullLineWithBottomActions
                 onSend={handleFirstMessageSend}
+                showModelDropdown={true}
               />
             </div>
           </div>
@@ -83,6 +84,7 @@ export default function Home() {
             <div className="flex w-full flex-col gap-4 max-w-2xl">
               <PromptInputFullLineWithBottomActions
                 onSend={handleFirstMessageSend}
+                showModelDropdown={true}
               />
             </div>
           </div>

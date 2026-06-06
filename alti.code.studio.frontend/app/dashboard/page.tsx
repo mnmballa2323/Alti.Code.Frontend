@@ -27,7 +27,7 @@ function DashboardPage() {
           <div className="h-[calc(100vh_-_200px)] w-full overflow-y-auto rounded-2xl">
             <MessageContainer />
           </div>
-          <PromptInputFullLineWithBottomActions />
+          <PromptInputFullLineWithBottomActions showModelDropdown={true} />
         </div>
       ) : (
         <div className="flex h-screen w-full items-center justify-center">
@@ -39,7 +39,7 @@ function DashboardPage() {
               How can I help you today?
             </h1>
             <div className="flex w-full flex-col gap-4 px-4">
-              <PromptInputFullLineWithBottomActions />
+              <PromptInputFullLineWithBottomActions showModelDropdown={true} />
             </div>
           </div>
         </div>
