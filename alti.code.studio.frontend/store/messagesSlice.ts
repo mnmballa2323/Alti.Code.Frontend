@@ -90,10 +90,10 @@ export const sendMessage = createAsyncThunk<
       // 2. Build Payload
       const payload = {
         prompt: enrichedPrompt,
-        mode: defaultModel || model || "gemini-3.1-pro",
+        mode: defaultModel || model || "auto",
         domain: messagesModel === "chat" ? "Chat" : domain,
         language: language,
-        model: defaultModel || "gemini-3.1-pro",
+        model: defaultModel || "auto",
         ...(sessionId ? { sessionId: sessionId } : {}),
       };
 
