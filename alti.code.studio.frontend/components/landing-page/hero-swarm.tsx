@@ -47,7 +47,11 @@ export default function HeroSwarm() {
         </div>
 
         {/* Statistics Banner */}
-        <div className="mt-8 w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4 transition-all hover:shadow-3xl hover:-translate-y-1">
+        <div className="mt-8 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4 transition-all hover:shadow-3xl hover:-translate-y-1">
+          <div className="flex flex-col items-center justify-center py-6 px-4 group">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">3</span>
+            <span className="text-gray-500 font-bold mt-2 text-xs md:text-sm uppercase tracking-widest text-center">Model Providers</span>
+          </div>
           <div className="flex flex-col items-center justify-center py-6 px-4 group">
             <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">50,000</span>
             <span className="text-gray-500 font-bold mt-2 text-xs md:text-sm uppercase tracking-widest text-center">Agent Swarm</span>
