@@ -32,7 +32,29 @@ const generals = [
   { id: 'cloud-arch-general', name: 'General of Multi-Cloud Architecture', domain: 'AWS, GCP, Azure, Enterprise Design' },
   { id: 'design-general', name: 'General of UI/UX Design', domain: 'Figma, Tailwind, CSS Architecture' },
   { id: 'data-eng-general', name: 'General of Data Engineering', domain: 'ETL Pipelines, Kafka, Spark, Hadoop' },
-  { id: 'quant-general', name: 'General of High-Frequency Systems', domain: 'Low-latency, Quant Trading, C++' }
+  { id: 'quant-general', name: 'General of High-Frequency Systems', domain: 'Low-latency, Quant Trading, C++' },
+  { id: 'robotics-general', name: 'General of Robotics & Autonomous Systems', domain: 'ROS, Drones, Self-Driving, Kinematics' },
+  { id: 'quantum-general', name: 'General of Quantum Computing', domain: 'Qiskit, Shor Algorithm, Quantum Entanglement' },
+  { id: 'bioinfo-general', name: 'General of Bioinformatics', domain: 'Genomics, Proteomics, Computational Biology' },
+  { id: 'spatial-general', name: 'General of Spatial Computing', domain: 'AR, VR, VisionOS, WebXR' },
+  { id: 'cv-general', name: 'General of Computer Vision', domain: 'OpenCV, Object Detection, Image Processing' },
+  { id: 'nlp-general', name: 'General of Natural Language Processing', domain: 'NLP, Speech-to-Text, Sentiment Analysis' },
+  { id: 'red-team-general', name: 'General of Offensive Security', domain: 'Penetration Testing, Red Teaming, Exploits' },
+  { id: 'iam-general', name: 'General of Identity & Access Management', domain: 'IAM, OAuth, SAML, SSO' },
+  { id: 'compliance-general', name: 'General of Governance & Compliance', domain: 'SOC2, HIPAA, GDPR, Audits' },
+  { id: 'erp-general', name: 'General of Enterprise Systems', domain: 'SAP, Salesforce, Workday, ERP' },
+  { id: 'cicd-general', name: 'General of CI/CD Pipelines', domain: 'Jenkins, GitHub Actions, GitLab CI' },
+  { id: 'edge-general', name: 'General of Edge Computing', domain: 'Cloudflare, Fastly, CDN, Edge Workers' },
+  { id: 'os-dev-general', name: 'General of Operating Systems', domain: 'Linux Kernel, Windows Internals, POSIX' },
+  { id: 'compilers-general', name: 'General of Compilers & Languages', domain: 'LLVM, Parsers, Lexers, ASTs' },
+  { id: 'graphics-general', name: 'General of 3D Graphics Programming', domain: 'Vulkan, OpenGL, DirectX, Raytracing' },
+  { id: 'audio-general', name: 'General of Audio Engineering', domain: 'DSP, WebAudio, Signal Processing' },
+  { id: 'defi-general', name: 'General of Decentralized Finance', domain: 'DeFi, Tokenomics, Liquidity Pools' },
+  { id: 'nocode-general', name: 'General of Low-Code Platforms', domain: 'Zapier, Bubble, Make, Retool' },
+  { id: 'search-general', name: 'General of Search & Retrieval', domain: 'Elasticsearch, Algolia, Lucene' },
+  { id: 'mainframe-general', name: 'General of Legacy Systems', domain: 'Mainframe, COBOL, Fortran, IBM Z' },
+  { id: 'tech-writing-general', name: 'General of Technical Documentation', domain: 'DITA, Sphinx, Markdown, Swagger' },
+  { id: 'hardware-general', name: 'General of Hardware Design', domain: 'FPGA, Verilog, VHDL, ASIC' }
 ];
 
 const colonelsPerGeneral = 5;
