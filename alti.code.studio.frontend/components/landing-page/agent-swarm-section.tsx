@@ -25,7 +25,7 @@ export default function AgentSwarmSection() {
         </div>
 
         {/* Right Side: Visual Representation */}
-        <div className="flex-1 w-full flex justify-center lg:justify-end relative">
+        <div className="flex-1 w-full flex justify-center lg:justify-center relative">
           <SwarmCanvas />
         </div>
 
