@@ -187,6 +187,7 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
     octavia_ingress_controller_tag = "1.23.0"
     octavia_provider               = "amphora"
     cinder_csi_enabled             = "true"
+    manila_csi_enabled             = "true"
     master_lb_enabled              = "true"
   }
 }
@@ -196,6 +197,63 @@ resource "openstack_objectstorage_container_v1" "gemini_context" {
   name          = "alti-gemini-context-${var.environment}"
   content_type  = "application/json"
   force_destroy = true
+}
+
+# -------------------------------------------------------------
+# Deep OpenStack Integrations: Barbican, Manila, Designate
+# -------------------------------------------------------------
+
+# Barbican (Hardware Security Module / Key Manager)
+resource "random_password" "db_password" {
+  length  = 32
+  special = true
+}
+
+resource "openstack_keymanager_secret_v1" "global_db_secret" {
+  name                      = "alti-global-db-secret-${var.environment}"
+  payload                   = random_password.db_password.result
+  payload_content_type      = "text/plain"
+  secret_type               = "opaque"
+}
+
+# Manila (Shared File Systems)
+resource "openstack_sharedfilesystem_sharenetwork_v2" "alti_sharenetwork" {
+  name              = "alti-sharenetwork-${var.environment}"
+  neutron_net_id    = openstack_networking_network_v2.alti_network.id
+  neutron_subnet_id = openstack_networking_subnet_v2.alti_subnet.id
+}
+
+resource "openstack_sharedfilesystem_share_v2" "alti_shared_cache" {
+  name             = "alti-shared-cache-${var.environment}"
+  share_proto      = "NFS"
+  size             = 100
+  share_network_id = openstack_sharedfilesystem_sharenetwork_v2.alti_sharenetwork.id
+}
+
+# Designate (DNS as a Service) & Octavia Floating IP Routing
+resource "openstack_networking_floatingip_v2" "ingress_fip" {
+  pool = data.openstack_networking_network_v2.ext_net.name
+}
+
+resource "openstack_dns_zone_v2" "alti_zone" {
+  name        = "alti.code.studio."
+  email       = "admin@alti.code.studio"
+  description = "Managed by Terraform Designate Provider"
+  type        = "PRIMARY"
+}
+
+resource "openstack_dns_recordset_v2" "root_a_record" {
+  zone_id = openstack_dns_zone_v2.alti_zone.id
+  name    = "alti.code.studio."
+  type    = "A"
+  records = [openstack_networking_floatingip_v2.ingress_fip.address]
+}
+
+resource "openstack_dns_recordset_v2" "wildcard_a_record" {
+  zone_id = openstack_dns_zone_v2.alti_zone.id
+  name    = "*.alti.code.studio."
+  type    = "A"
+  records = [openstack_networking_floatingip_v2.ingress_fip.address]
 }
 
 # -------------------------------------------------------------
@@ -211,7 +269,7 @@ resource "helm_release" "postgresql" {
 
   set {
     name  = "global.postgresql.auth.postgresPassword"
-    value = "supersecret_change_me" # In prod, inject via Secret Manager or variables
+    value = openstack_keymanager_secret_v1.global_db_secret.payload
   }
   set {
     name  = "primary.persistence.enabled"
@@ -232,7 +290,7 @@ resource "helm_release" "redis" {
 
   set {
     name  = "auth.password"
-    value = "supersecret_change_me" # In prod, inject via Secret Manager
+    value = openstack_keymanager_secret_v1.global_db_secret.payload
   }
   set {
     name  = "architecture"
@@ -257,7 +315,7 @@ resource "helm_release" "rabbitmq" {
 
   set {
     name  = "auth.password"
-    value = "supersecret_change_me"
+    value = openstack_keymanager_secret_v1.global_db_secret.payload
   }
   set {
     name  = "persistence.enabled"
