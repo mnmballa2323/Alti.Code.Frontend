@@ -1,14 +1,60 @@
 "use client";
 
+import { 
+  SiGooglecloud, SiVercel, SiSupabase, SiMongodb, 
+  SiPostgresql, SiRedis, SiCloudflare, SiKubernetes 
+} from "react-icons/si";
+import { 
+  FaAws, FaDocker, FaGithub, FaReact, FaNodeJs, FaFigma, FaDiscord 
+} from "react-icons/fa";
+import { VscAzure } from "react-icons/vsc";
+import React from "react";
+
+const OrbitRing = ({ size, duration, reverse, items }: { size: number, duration: number, reverse?: boolean, items: React.ReactNode[] }) => {
+  const radius = size / 2;
+  return (
+    <div 
+      className={`absolute rounded-full border border-gray-300 border-dashed animate-spin`}
+      style={{ 
+        width: size, 
+        height: size, 
+        animationDuration: `${duration}s`,
+        animationDirection: reverse ? 'reverse' : 'normal'
+      }}
+    >
+      {items.map((item, i) => {
+        const angle = (i / items.length) * 2 * Math.PI;
+        const x = radius + radius * Math.cos(angle);
+        const y = radius + radius * Math.sin(angle);
+        return (
+          <div 
+            key={i}
+            className="absolute -ml-6 -mt-6 w-12 h-12"
+            style={{ left: x, top: y }}
+          >
+            <div 
+              className="w-full h-full bg-white rounded-full shadow-md flex items-center justify-center border border-gray-100 animate-spin-reverse"
+              style={{ 
+                animationDuration: `${duration}s`,
+                animationDirection: reverse ? 'reverse' : 'normal'
+              }}
+            >
+              {item}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 export default function EnterpriseConnectorsSection() {
-
-
   return (
     <section className="w-full py-32 bg-[#F5F5F7] text-black px-4 sm:px-6 lg:px-8 border-t border-gray-200 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col items-center text-center gap-16">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-8">
         
-        <div className="flex flex-col gap-6 max-w-3xl">
-
+        {/* Left Side: Text */}
+        <div className="flex flex-col gap-6 max-w-xl lg:w-[45%] z-10 text-center lg:text-left mx-auto lg:mx-0">
           <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
             66 Cloud Connections. <br />Zero Friction.
           </h3>
@@ -18,7 +64,66 @@ export default function EnterpriseConnectorsSection() {
           </p>
         </div>
 
+        {/* Right Side: Orbital Ecosystem */}
+        <div className="relative w-full lg:w-[55%] h-[600px] flex items-center justify-center scale-[0.65] sm:scale-75 md:scale-90 lg:scale-100">
+          
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes spin-reverse {
+              from { transform: rotate(360deg); }
+              to { transform: rotate(0deg); }
+            }
+            .animate-spin-reverse {
+              animation: spin-reverse linear infinite;
+            }
+          `}} />
 
+          {/* Central Hub */}
+          <div className="absolute z-30 flex items-center justify-center w-24 h-24 rounded-full bg-black shadow-[0_0_60px_rgba(0,0,0,0.2)] hover:scale-105 transition-transform duration-500 cursor-pointer border border-gray-800">
+            <img src="/logo-white.png" alt="Alti Code Studio" className="w-12 h-12 object-contain" />
+          </div>
+
+          {/* Inner Orbit: Hyperscalers */}
+          <OrbitRing 
+            size={260} 
+            duration={25} 
+            items={[
+              <FaAws key="aws" className="w-6 h-6 text-[#232F3E]" />,
+              <SiGooglecloud key="gcp" className="w-6 h-6 text-[#4285F4]" />,
+              <VscAzure key="azure" className="w-6 h-6 text-[#0078D4]" />,
+              <SiVercel key="vercel" className="w-6 h-6 text-black" />
+            ]} 
+          />
+
+          {/* Middle Orbit: Databases & Core Infra */}
+          <OrbitRing 
+            size={420} 
+            duration={40} 
+            reverse
+            items={[
+              <SiSupabase key="supabase" className="w-6 h-6 text-[#3ECF8E]" />,
+              <SiMongodb key="mongodb" className="w-6 h-6 text-[#47A248]" />,
+              <SiPostgresql key="postgres" className="w-6 h-6 text-[#4169E1]" />,
+              <SiRedis key="redis" className="w-6 h-6 text-[#DC382D]" />,
+              <FaDocker key="docker" className="w-6 h-6 text-[#2496ED]" />,
+              <SiCloudflare key="cloudflare" className="w-6 h-6 text-[#F38020]" />
+            ]} 
+          />
+
+          {/* Outer Orbit: Frameworks & Tools */}
+          <OrbitRing 
+            size={580} 
+            duration={55} 
+            items={[
+              <FaGithub key="github" className="w-6 h-6 text-black" />,
+              <FaReact key="react" className="w-6 h-6 text-[#61DAFB]" />,
+              <FaNodeJs key="node" className="w-6 h-6 text-[#339933]" />,
+              <SiKubernetes key="k8s" className="w-6 h-6 text-[#326CE5]" />,
+              <FaFigma key="figma" className="w-6 h-6 text-[#F24E1E]" />,
+              <FaDiscord key="discord" className="w-6 h-6 text-[#5865F2]" />
+            ]} 
+          />
+
+        </div>
 
       </div>
     </section>
