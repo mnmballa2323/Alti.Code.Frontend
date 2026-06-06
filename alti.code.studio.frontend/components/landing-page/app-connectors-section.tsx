@@ -35,7 +35,7 @@ export default function AppConnectorsSection() {
         <div className="flex flex-col gap-6 max-w-5xl w-full px-4">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
             165 App Connectors. <br />
-            <span className="text-gray-400">Plug into everything.</span>
+            <span className="text-[#4169E1]">Plug into everything.</span>
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto">
             Your agents seamlessly integrate with the tools your team already relies on. <br className="hidden md:block" />
