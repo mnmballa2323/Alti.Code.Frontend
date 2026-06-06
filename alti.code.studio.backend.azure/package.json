@@ -1,13 +1,18 @@
 {
   "name": "alti.code.studio.backend.azure",
   "version": "1.0.0",
-  "description": "Isolated Azure Foundry Microservice for Alti Code Studio",
+  "description": "Hardened Azure Foundry Microservice for Alti Code Studio",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
+    "express-rate-limit": "^7.1.5",
+    "pino": "^8.16.2",
+    "pino-http": "^8.5.1",
     "@azure/openai": "^1.0.0-beta.12"
   }
 }

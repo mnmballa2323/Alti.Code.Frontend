@@ -79,3 +79,28 @@ spec:
       target:
         type: Utilization
         averageUtilization: 70
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: alti-backend-aws-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: alti-backend-aws
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0 # Restricted to AWS Bedrock IP ranges in production
+    ports:
+    - protocol: TCP
+      port: 443
