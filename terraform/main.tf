@@ -126,8 +126,9 @@ resource "openstack_compute_keypair_v2" "k8s_keypair" {
 
 # Security Groups (Neutron)
 resource "openstack_networking_secgroup_v2" "cluster_sg" {
-  name        = "alti-cluster-sg-${var.environment}"
-  description = "Strict firewall rules for the Alti Code Studio Magnum Cluster"
+  name                 = "alti-cluster-sg-${var.environment}"
+  description          = "Absolute Airgap: Strict firewall rules for the Alti Code Studio Magnum Cluster"
+  delete_default_rules = true # Omega-Tier: Sever all default public internet egress
 }
 
 # Allow HTTP to Load Balancers
@@ -160,6 +161,14 @@ resource "openstack_networking_secgroup_rule_v2" "allow_internal" {
   security_group_id = openstack_networking_secgroup_v2.cluster_sg.id
 }
 
+# Omega-Tier: Allow Egress ONLY to Internal Subnet and BGP Routes
+resource "openstack_networking_secgroup_rule_v2" "allow_internal_egress" {
+  direction         = "egress"
+  ethertype         = "IPv4"
+  remote_group_id   = openstack_networking_secgroup_v2.cluster_sg.id
+  security_group_id = openstack_networking_secgroup_v2.cluster_sg.id
+}
+
 # Magnum Kubernetes Cluster
 resource "openstack_containerinfra_cluster_v1" "k8s_cluster" {
   name                = "alti-k8s-${var.environment}"
@@ -174,8 +183,11 @@ resource "openstack_containerinfra_clustertemplate_v1" "k8s_template" {
   coe                   = "kubernetes"
   network_driver        = "calico"
   volume_driver         = "cinder"
-  master_flavor         = "m1.medium"
-  flavor                = "m1.large"
+  
+  # Omega-Tier: Deploy directly onto raw physical servers via OpenStack Ironic
+  master_flavor         = "baremetal.compute"
+  flavor                = "baremetal.compute"
+  
   image                 = openstack_images_image_v2.fedora_coreos.name
   external_network_id   = data.openstack_networking_network_v2.ext_net.id
   
@@ -237,6 +249,20 @@ resource "openstack_vpnaas_siteconnection_v2" "office_connection" {
   peer_id           = "198.51.100.12"
   psk               = openstack_keymanager_secret_v1.global_db_secret.payload
   local_ep_group_id = "" # Handled by defaults in older providers
+}
+
+# BGP VPN (Direct Fiber Cross-Connects to Hyperscalers)
+resource "openstack_networking_bgpvpn_v2" "hyperscaler_bgp" {
+  name           = "alti-hyperscaler-bgp-${var.environment}"
+  type           = "l3"
+  route_targets  = ["64512:100"] # Example ASN/RT for Equinix/AWS Direct Connect
+  import_targets = ["64512:100"]
+  export_targets = ["64512:100"]
+}
+
+resource "openstack_networking_bgpvpn_router_associate_v2" "bgp_router_assoc" {
+  bgpvpn_id = openstack_networking_bgpvpn_v2.hyperscaler_bgp.id
+  router_id = openstack_networking_router_v2.alti_router.id
 }
 
 # Barbican (Hardware Security Module / Key Manager)
