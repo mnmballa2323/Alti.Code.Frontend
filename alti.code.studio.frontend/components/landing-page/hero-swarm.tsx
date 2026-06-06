@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@heroui/react";
-import { ArrowRight } from "lucide-react";
+import { Icon } from "@iconify/react";
 import Link from "next/link";
 
 export default function HeroSwarm() {
@@ -28,20 +28,21 @@ export default function HeroSwarm() {
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 w-full sm:w-auto">
           <Button 
             as={Link} 
-            href="/register" 
+            href="/download/windows" 
             size="lg" 
-            className="w-full sm:w-auto bg-black text-white font-medium rounded-full px-12 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg"
+            className="w-full sm:w-auto bg-[#0078D4] text-white font-medium rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
           >
-            Deploy The Swarm
+            <Icon icon="mdi:microsoft-windows" className="text-2xl" />
+            Download for Windows
           </Button>
           <Button 
             as={Link} 
-            href="#architecture" 
+            href="/download/mac" 
             size="lg" 
-            variant="bordered"
-            className="w-full sm:w-auto text-black border-gray-200 hover:bg-gray-50 rounded-full px-12 py-7 text-lg transition-colors font-medium"
+            className="w-full sm:w-auto bg-black text-white font-medium rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
           >
-            View Architecture <ArrowRight className="ml-2 w-5 h-5" />
+            <Icon icon="mdi:apple" className="text-3xl pb-0.5" />
+            Download for Mac
           </Button>
         </div>
 
