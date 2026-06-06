@@ -1,26 +1,23 @@
 "use client";
 
 import { Card, CardHeader, CardBody } from "@heroui/react";
-import { VscAzure } from "react-icons/vsc";
-import { FaAws } from "react-icons/fa";
-import { SiGooglecloud } from "react-icons/si";
 
 const providers = [
   {
     name: "Azure Foundry",
-    logo: <VscAzure className="w-8 h-8 text-[#0078D4]" />,
-    description: "Enterprise Grade access to OpenAI's advanced models.",
+    logo: <img src="https://api.iconify.design/logos/microsoft-azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
+    description: <>Enterprise Grade access to <br /> OpenAI's advanced models.</>,
     models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
   },
   {
     name: "AWS Bedrock",
-    logo: <FaAws className="w-8 h-8 text-[#FF9900]" />,
+    logo: <img src="https://api.iconify.design/logos/aws.svg" className="w-8 h-8" alt="AWS Bedrock" />,
     description: "Highly secure, deeply integrated access to Anthropic's Claude 5 family.",
     models: ["Claude 4.7 Opus", "Claude Sonnet 5", "Claude 4.5 Haiku"],
   },
   {
     name: "GCP Vertex AI",
-    logo: <SiGooglecloud className="w-8 h-8 text-[#4285F4]" />,
+    logo: <img src="https://api.iconify.design/logos/google-cloud.svg" className="w-8 h-8" alt="GCP Vertex AI" />,
     description: "Massive context window intelligence powered by Google DeepMind.",
     models: ["Gemini 3.5 Pro", "Gemini 3.5 Flash", "Gemini Omni Flash"],
   }
