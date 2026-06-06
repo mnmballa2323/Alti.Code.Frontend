@@ -1533,6 +1533,8 @@ export default function Sidebar() {
             </Tooltip>
           </div>
 
+          <div className="h-px w-full bg-default-200 my-1" />
+
           {/* Bottom Row: Connectors */}
           <div className="flex items-center gap-2 w-full">
             <Tooltip
