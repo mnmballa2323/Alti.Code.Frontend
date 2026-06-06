@@ -3,7 +3,7 @@
 import { 
   SiGooglecloud, SiVercel, SiSupabase, SiMongodb, 
   SiPlanetscale, SiRedis, SiCloudflare, SiKubernetes,
-  SiDigitalocean, SiOracle, SiFirebase, SiSnowflake
+  SiDigitalocean, SiFirebase, SiSnowflake
 } from "react-icons/si";
 import { 
   FaAws
@@ -102,7 +102,7 @@ export default function EnterpriseConnectorsSection() {
             items={[
               <SiKubernetes key="kubernetes" className="w-6 h-6 text-[#326CE5]" />,
               <SiDigitalocean key="digitalocean" className="w-6 h-6 text-[#0080FF]" />,
-              <SiOracle key="oracle" className="w-6 h-6 text-[#F80000]" />,
+              <div key="oracle" className="w-6 h-6 flex items-center justify-center font-black text-[#F80000] text-[8px] tracking-tighter" style={{ fontFamily: 'sans-serif' }}>ORACLE</div>,
               <div key="ibm" className="w-6 h-6 flex items-center justify-center font-black text-[#0530AD] text-sm tracking-tighter" style={{ fontFamily: 'sans-serif' }}>IBM</div>,
               <SiFirebase key="firebase" className="w-6 h-6 text-[#FFCA28]" />,
               <SiSnowflake key="snowflake" className="w-6 h-6 text-[#29B5E8]" />
