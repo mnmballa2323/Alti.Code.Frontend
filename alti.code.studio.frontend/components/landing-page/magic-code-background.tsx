@@ -3,8 +3,12 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-const SYMBOLS = ["{ }", "< />", "=>", "()", "⌘", "/*", "*/", "&&", "||", "01", "AI", "API", "[]"];
-const COLORS = ["#000000", "#333333", "#666666", "#0070f3", "#7928ca"];
+const SYMBOLS = [
+  "{ }", "< />", "=>", "()", "⌘", "/*", "*/", "&&", "||", "01", "AI", "API", "[]",
+  ">_", "===", "++", "+=", "${}", "->", "::", "NaN", "404", "git", "npm", 
+  "ts", "js", "go", "rs", "py", "{}", "()", "$", "@", "!", "?:", "<T>", "/>", "~/"
+];
+const COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#000000"];
 
 class Particle {
   x: number;
@@ -64,7 +68,6 @@ export default function MagicCodeBackground() {
 
     let particles: Particle[] = [];
     let animationFrameId: number;
-    let mouse = { x: -1000, y: -1000 };
 
     const resize = () => {
       if (canvas.parentElement) {
@@ -85,20 +88,7 @@ export default function MagicCodeBackground() {
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    };
-    
-    const handleMouseLeave = () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
-    };
-
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
-    document.body.addEventListener("mouseleave", handleMouseLeave);
 
     resize();
 
@@ -108,26 +98,6 @@ export default function MagicCodeBackground() {
       for (let i = 0; i < particles.length; i++) {
         particles[i].update(canvas.width, canvas.height);
         particles[i].draw(ctx);
-
-        const dxMouse = particles[i].x - mouse.x;
-        const dyMouse = particles[i].y - mouse.y;
-        const distanceMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-
-        if (distanceMouse < 200) {
-          ctx.beginPath();
-          const gradient = ctx.createLinearGradient(particles[i].x, particles[i].y, mouse.x, mouse.y);
-          gradient.addColorStop(0, `rgba(0, 112, 243, ${0.4 * (1 - distanceMouse / 200)})`);
-          gradient.addColorStop(1, `rgba(121, 40, 202, ${0.4 * (1 - distanceMouse / 200)})`);
-          
-          ctx.strokeStyle = gradient;
-          ctx.lineWidth = 1.5;
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(mouse.x, mouse.y);
-          ctx.stroke();
-          
-          particles[i].x -= dxMouse * 0.01;
-          particles[i].y -= dyMouse * 0.01;
-        }
 
         for (let j = i + 1; j < particles.length; j++) {
             const dx = particles[i].x - particles[j].x;
@@ -152,8 +122,6 @@ export default function MagicCodeBackground() {
 
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      document.body.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -171,7 +139,7 @@ export default function MagicCodeBackground() {
         }}
         className="absolute inset-0 opacity-40"
         style={{
-          background: "radial-gradient(circle at center, rgba(121,40,202,0.15) 0%, rgba(0,112,243,0.1) 40%, rgba(255,255,255,0) 100%)",
+          background: "radial-gradient(circle at center, rgba(66,133,244,0.12) 0%, rgba(234,67,53,0.08) 35%, rgba(251,188,5,0.05) 70%, rgba(255,255,255,0) 100%)",
           backgroundSize: "400% 400%"
         }}
       />
