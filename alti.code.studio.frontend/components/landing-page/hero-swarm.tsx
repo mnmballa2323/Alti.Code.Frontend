@@ -10,7 +10,7 @@ export default function HeroSwarm() {
     <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
       {/* Magical animated network background */}
       <MagicCodeBackground />
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-10">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 mt-4">
         
         {/* Apple-style Headline */}
         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter text-black leading-[1.05]">
@@ -47,7 +47,7 @@ export default function HeroSwarm() {
         </div>
 
         {/* Statistics Banner */}
-        <div className="mt-20 w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4 transition-all hover:shadow-3xl hover:-translate-y-1">
+        <div className="mt-8 w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4 transition-all hover:shadow-3xl hover:-translate-y-1">
           <div className="flex flex-col items-center justify-center py-6 px-4 group">
             <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">50,000</span>
             <span className="text-gray-500 font-bold mt-2 text-xs md:text-sm uppercase tracking-widest">Agent Swarm</span>
