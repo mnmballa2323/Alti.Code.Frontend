@@ -130,7 +130,7 @@ export default function LoginPage() {
                   input: "text-black font-medium",
                 }}
                 name="email"
-                placeholder="Enter email"
+                placeholder="Enter Email"
                 type="email"
                 variant="flat"
               />
@@ -161,7 +161,7 @@ export default function LoginPage() {
                   </button>
                 }
                 name="password"
-                placeholder="Enter password"
+                placeholder="Enter Password"
                 type={isVisible ? "text" : "password"}
                 variant="flat"
               />

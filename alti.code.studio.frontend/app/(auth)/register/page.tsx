@@ -146,7 +146,7 @@ export default function RegisterPage() {
                   input: "text-black font-medium",
                 }}
                 name="email"
-                placeholder="Enter email"
+                placeholder="Enter Email"
                 type="email"
                 variant="flat"
               />
@@ -177,7 +177,7 @@ export default function RegisterPage() {
                   </button>
                 }
                 name="password"
-                placeholder="Enter password"
+                placeholder="Enter Password"
                 type={isVisible ? "text" : "password"}
                 variant="flat"
               />
@@ -208,7 +208,7 @@ export default function RegisterPage() {
                   </button>
                 }
                 name="confirmPassword"
-                placeholder="Confirm password"
+                placeholder="Confirm Password"
                 type={isConfirmVisible ? "text" : "password"}
                 variant="flat"
               />
