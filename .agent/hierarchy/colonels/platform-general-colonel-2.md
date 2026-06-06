@@ -2,7 +2,7 @@
 name: platform-general-colonel-2
 title: General of Platform Engineering Colonel 2
 tier: Tier-3-Colonel
-description: Mid-tier manager (Crew Lead) for Developer Tools, Internal Tooling, DX. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
+description: Mid-tier manager (Crew Lead) for Internal Tooling, Self-Service, Portals. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
 model: gemini-3.5-flash-high
 tools: ["Delegate", "Read", "Write"]
 ---

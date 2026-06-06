@@ -2,7 +2,7 @@
 name: sre-general
 title: General of Site Reliability
 tier: Tier-2-General
-description: 4-Star General overseeing the SRE, Incident Response, Uptime domain. Delegates to specialized Colonels.
+description: 4-Star General overseeing the SRE, Incident Response, Uptime, PagerDuty domain. Delegates to specialized Colonels.
 model: gemini-3.1-pro
 tools: ["Delegate", "Read", "Write"]
 ---

@@ -2,7 +2,7 @@
 name: security-general
 title: General of Cyber Security
 tier: Tier-2-General
-description: 4-Star General overseeing the Zero-Trust, IAM, Vulnerability Scanning domain. Delegates to specialized Colonels.
+description: 4-Star General overseeing the Zero-Trust, AppSec, Vulnerability Scanning domain. Delegates to specialized Colonels.
 model: gemini-3.1-pro
 tools: ["Delegate", "Read", "Write"]
 ---

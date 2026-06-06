@@ -2,7 +2,7 @@
 name: platform-general
 title: General of Platform Engineering
 tier: Tier-2-General
-description: 4-Star General overseeing the Developer Tools, Internal Tooling, DX domain. Delegates to specialized Colonels.
+description: 4-Star General overseeing the Internal Tooling, Self-Service, Portals domain. Delegates to specialized Colonels.
 model: gemini-3.1-pro
 tools: ["Delegate", "Read", "Write"]
 ---

@@ -2,7 +2,7 @@
 name: devops-general
 title: General of DevOps & Cloud Orchestration
 tier: Tier-2-General
-description: 4-Star General overseeing the Docker, Kubernetes, AWS, GCP, CI/CD domain. Delegates to specialized Colonels.
+description: 4-Star General overseeing the Docker, Kubernetes, Automation domain. Delegates to specialized Colonels.
 model: gemini-3.1-pro
 tools: ["Delegate", "Read", "Write"]
 ---

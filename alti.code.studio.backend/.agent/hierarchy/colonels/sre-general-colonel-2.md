@@ -2,7 +2,7 @@
 name: sre-general-colonel-2
 title: General of Site Reliability Colonel 2
 tier: Tier-3-Colonel
-description: Mid-tier manager (Crew Lead) for SRE, Incident Response, Uptime. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
+description: Mid-tier manager (Crew Lead) for SRE, Incident Response, Uptime, PagerDuty. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
 model: gemini-3.5-flash-high
 tools: ["Delegate", "Read", "Write"]
 ---

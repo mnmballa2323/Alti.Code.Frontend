@@ -2,7 +2,7 @@
 name: network-general-colonel-3
 title: General of Network Engineering Colonel 3
 tier: Tier-3-Colonel
-description: Mid-tier manager (Crew Lead) for TCP/IP, WebSockets, WebRTC, DNS. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
+description: Mid-tier manager (Crew Lead) for TCP/IP, BGP, Routers, DNS. Deploys squads of micro-agents (the Infantry) from the 50,000 catalog to execute specific technical tasks.
 model: gemini-3.5-flash-high
 tools: ["Delegate", "Read", "Write"]
 ---
