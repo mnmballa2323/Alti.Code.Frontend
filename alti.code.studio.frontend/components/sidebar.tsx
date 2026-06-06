@@ -2492,7 +2492,7 @@ export default function Sidebar() {
           {status === "unauthenticated" ? (
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
-                className="flex-1 h-9 bg-black text-white text-[11px] font-bold tracking-wider uppercase rounded-md"
+                className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
                 onClick={() => window.location.href = "/login"}
               >
                 Login
