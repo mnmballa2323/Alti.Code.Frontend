@@ -16,7 +16,23 @@ const generals = [
   { id: 'mobile-general', name: 'General of Mobile Platforms', domain: 'iOS, Android, React Native, Flutter' },
   { id: 'platform-general', name: 'General of Platform Engineering', domain: 'Developer Tools, Internal Tooling, DX' },
   { id: 'marketing-general', name: 'General of Growth & SEO', domain: 'Marketing, Analytics, SEO Optimization' },
-  { id: 'finops-general', name: 'General of Cloud FinOps', domain: 'Cost Optimization, Telemetry, Auditing' }
+  { id: 'finops-general', name: 'General of Cloud FinOps', domain: 'Cost Optimization, Telemetry, Auditing' },
+  { id: 'ai-general', name: 'General of AI & Machine Learning', domain: 'LLMs, Neural Networks, Agentic Systems' },
+  { id: 'web3-general', name: 'General of Web3 & Blockchain', domain: 'Smart Contracts, Solidity, Cryptography' },
+  { id: 'embedded-general', name: 'General of Embedded Systems', domain: 'IoT, C, C++, Rust, Hardware Drivers' },
+  { id: 'game-dev-general', name: 'General of Game Development', domain: 'Unity, Unreal Engine, WebGL, Shaders' },
+  { id: 'database-general', name: 'General of Database Architecture', domain: 'SQL, NoSQL, Graph DBs, Indexing' },
+  { id: 'network-general', name: 'General of Network Engineering', domain: 'TCP/IP, WebSockets, WebRTC, DNS' },
+  { id: 'api-general', name: 'General of API Design', domain: 'GraphQL, REST, gRPC, Schema Design' },
+  { id: 'sre-general', name: 'General of Site Reliability', domain: 'SRE, Incident Response, Uptime' },
+  { id: 'crypto-general', name: 'General of Applied Cryptography', domain: 'Encryption, Zero-Knowledge Proofs' },
+  { id: 'a11y-general', name: 'General of Accessibility', domain: 'a11y, WCAG Compliance, Screen Readers' },
+  { id: 'performance-general', name: 'General of Performance', domain: 'Core Web Vitals, Memory Profiling' },
+  { id: 'oss-general', name: 'General of Open Source Strategy', domain: 'Licensing, OSS Integration, Community' },
+  { id: 'cloud-arch-general', name: 'General of Multi-Cloud Architecture', domain: 'AWS, GCP, Azure, Enterprise Design' },
+  { id: 'design-general', name: 'General of UI/UX Design', domain: 'Figma, Tailwind, CSS Architecture' },
+  { id: 'data-eng-general', name: 'General of Data Engineering', domain: 'ETL Pipelines, Kafka, Spark, Hadoop' },
+  { id: 'quant-general', name: 'General of High-Frequency Systems', domain: 'Low-latency, Quant Trading, C++' }
 ];
 
 const colonelsPerGeneral = 5;
