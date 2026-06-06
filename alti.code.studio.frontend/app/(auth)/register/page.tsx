@@ -240,8 +240,8 @@ export default function RegisterPage() {
               >
                 Create Account
               </Button>
-              <p className="text-center text-[11px] text-gray-400 mt-2">
-                By creating an account, you agree to our{" "}
+              <p className="text-center text-[10px] text-gray-400 mt-2">
+                By registering, you agree to our{" "}
                 <Link href="/terms" className="font-semibold text-black hover:underline">
                   Terms of Use
                 </Link>
