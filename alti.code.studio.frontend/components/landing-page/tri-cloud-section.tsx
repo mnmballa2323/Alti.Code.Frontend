@@ -6,7 +6,7 @@ const providers = [
   {
     name: "Azure Foundry",
     logo: <img src="/assets/cloud-logos/azure.svg" className="w-8 h-8" alt="Azure Foundry" />,
-    description: <>Enterprise Grade access to <br /> OpenAI's library of advanced large language models.</>,
+    description: <>Enterprise Grade access to OpenAI's <br /> library of large language models.</>,
     models: ["GPT-5.5 Pro", "GPT-5.5", "GPT-5.5 Instant"],
   },
   {
