@@ -1520,6 +1520,37 @@ export default function Sidebar() {
                 "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
             }}
             closeDelay={0}
+            content="Database Connectors"
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className={cn(
+                "border rounded-lg flex-shrink-0",
+                pathname === "/database"
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+              )}
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                router.push("/database");
+              }}
+              onMouseEnter={() => {
+                router.prefetch("/database");
+              }}
+            >
+              <Database className="size-3.5" />
+            </Button>
+          </Tooltip>
+          <Tooltip
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
             content="Cloud Connections"
             delay={0}
             placement="top"
