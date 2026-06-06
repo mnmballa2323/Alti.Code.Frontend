@@ -80,8 +80,8 @@ export default function TriCloudSection() {
                 <div className="flex items-center justify-between mb-5">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Supported Models</p>
                   <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    <span className="w-12 text-right">Input</span>
-                    <span className="w-12 text-right">Output</span>
+                    <span className="w-16 text-right">Input</span>
+                    <span className="w-16 text-right">Output</span>
                   </div>
                 </div>
                 <ul className="flex flex-col gap-4">
@@ -92,8 +92,8 @@ export default function TriCloudSection() {
                         <span className="text-gray-900 font-medium whitespace-nowrap">{model.name}</span>
                       </div>
                       <div className="flex gap-4">
-                        <span className="text-sm text-gray-500 font-medium w-12 text-right">{model.inputPrice}</span>
-                        <span className="text-sm text-gray-500 font-medium w-12 text-right">{model.outputPrice}</span>
+                        <span className="text-sm text-gray-500 font-medium w-16 text-right">{model.inputPrice}</span>
+                        <span className="text-sm text-gray-500 font-medium w-16 text-right">{model.outputPrice}</span>
                       </div>
                     </li>
                   ))}
