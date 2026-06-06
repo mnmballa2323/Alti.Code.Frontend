@@ -121,9 +121,6 @@ export default function LoginPage() {
 
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">
-                Email
-              </label>
               <Input
                 isRequired
                 className="max-w-full"
@@ -133,16 +130,13 @@ export default function LoginPage() {
                   input: "text-black font-medium",
                 }}
                 name="email"
-                placeholder="name@example.com"
+                placeholder="Enter email"
                 type="email"
                 variant="flat"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider ml-1">
-                Password
-              </label>
               <Input
                 isRequired
                 classNames={{
@@ -167,7 +161,7 @@ export default function LoginPage() {
                   </button>
                 }
                 name="password"
-                placeholder="••••••••"
+                placeholder="Enter password"
                 type={isVisible ? "text" : "password"}
                 variant="flat"
               />
