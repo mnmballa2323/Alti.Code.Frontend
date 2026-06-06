@@ -1357,7 +1357,7 @@ export default function Sidebar() {
               alt="Alti Logo"
               className="dark:invert"
               height={22}
-              src="/android-chrome-512x512.png"
+              src="/alti-logo.png"
               width={22}
             />
           </div>
