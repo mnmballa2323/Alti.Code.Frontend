@@ -42,10 +42,7 @@ export default function DeterministicControlSection() {
             steering, and mandatory TDD workflows, our agents don&apos;t just write code—they engineer robust systems.
           </p>
 
-          {/* Trust marker */}
-          <div className="mt-8 flex items-center gap-3 text-sm font-semibold text-black bg-gray-50 border border-gray-200 px-6 py-3 rounded-full w-fit">
-            <ShieldCheck className="w-5 h-5" /> SOC2 Type II & Air-Gap Ready
-          </div>
+
         </div>
 
         {/* Right Side: Grid of Features */}
