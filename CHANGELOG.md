@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.140] - 2026-06-07 — Desktop Sidebar Logo Polish
+### Changed
+- **Desktop Sidebar**:
+  - Hid the `Inso Code` text image logo at the top-left of the sidebar when running inside the Tauri desktop app context, showing only the logo symbol icon.
+
 ## [39.37.139] - 2026-06-07 — Zero-Trust Ledger Offset Polish
 ### Changed
 - **Zero-Trust Audit Trail & Cryptographic Ledger**:

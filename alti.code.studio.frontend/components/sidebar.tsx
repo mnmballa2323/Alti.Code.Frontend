@@ -760,6 +760,16 @@ export default function Sidebar() {
   const { data: session, status } = useSession();
   const token = session?.user?.accessToken ?? null;
   const [repoSearch, setRepoSearch] = useState("");
+  const [isTauri, setIsTauri] = useState(false);
+
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      (window as any).__TAURI_INTERNALS__ !== undefined
+    ) {
+      setIsTauri(true);
+    }
+  }, []);
   const selectedRepo =
     useSelector((state: RootState) => state.system.activeWorkspace) ||
     "alti.code.studio";
@@ -1420,13 +1430,15 @@ export default function Sidebar() {
                 src="/alti-logo.png"
                 width={28}
               />
-              <Image
-                alt="Inso Code"
-                className="h-4 w-auto object-contain"
-                height={16}
-                src="/inso-logo-black.png"
-                width={80}
-              />
+              {!isTauri && (
+                <Image
+                  alt="Inso Code"
+                  className="h-4 w-auto object-contain"
+                  height={16}
+                  src="/inso-logo-black.png"
+                  width={80}
+                />
+              )}
             </div>
             {/* Dark Mode: Icon + Text */}
             <div className="hidden dark:flex items-center gap-2">
@@ -1437,13 +1449,15 @@ export default function Sidebar() {
                 src="/logo-white.png"
                 width={28}
               />
-              <Image
-                alt="Inso Code"
-                className="h-4 w-auto object-contain"
-                height={16}
-                src="/inso-logo-white.png"
-                width={80}
-              />
+              {!isTauri && (
+                <Image
+                  alt="Inso Code"
+                  className="h-4 w-auto object-contain"
+                  height={16}
+                  src="/inso-logo-white.png"
+                  width={80}
+                />
+              )}
             </div>
           </div>
           <Button
