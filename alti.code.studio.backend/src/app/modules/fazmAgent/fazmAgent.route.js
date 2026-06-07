@@ -2,6 +2,7 @@ import express from 'express';
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 import auth from '../../middlewares/auth/auth.js';
 import { FazmAgentController } from './fazmAgent.controller.js';
+import audioUploader from '../../middlewares/uploder/uploadAudio.js';
 
 const router = express.Router();
 
@@ -80,6 +81,13 @@ router.post(
     '/api/session-recording/get-upload-url',
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
     FazmAgentController.getUploadUrl
+);
+
+router.post(
+    '/api/session-recording/upload',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+    audioUploader.single('file'),
+    FazmAgentController.uploadRecording
 );
 
 router.post(

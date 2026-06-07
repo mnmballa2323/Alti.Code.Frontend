@@ -73,6 +73,18 @@ class AgentSAgent extends BaseSpecialistAgent {
             throw error;
         }
     }
+
+    async cancelGUITask(taskId) {
+        if (typeof taskId === 'object' && taskId !== null) {
+            const args = taskId;
+            return agentSService.cancelGUITask(args.taskId);
+        }
+        return agentSService.cancelGUITask(taskId);
+    }
+
+    async checkSystemDiagnostics() {
+        return agentSService.checkSystemDiagnostics();
+    }
 }
 
 export const agentSAgent = new AgentSAgent();

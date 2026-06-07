@@ -5,6 +5,21 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.169] - 2026-06-07 — Phase 2 Production-Grade Swarm Upgrades (Browser-Use, Agent-S, Fazm)
+### Added
+- **Browser-Use Live Session Inspection**:
+  - Implemented `TrackingAgent` step interception in `browser-use-api/app.py` to capture screenshots, page titles, URLs, and step counts.
+  - Exposed endpoints for session list (`GET /api/v1/browser/sessions`), step screenshot (`GET /api/v1/browser/screenshot/{task_id}/{step}`), and DOM source inspect (`GET /api/v1/browser/source/{task_id}`).
+  - Exposed service methods `getSessions()`, `getStepScreenshot()`, and `getDOMSource()` in `browserUseAgent.service.js` and wrapped them in specialist agent `browser_use.agent.js`.
+- **Agent-S GUI Trajectory Tracking & Diagnostics**:
+  - Updated python loop script template in `agent_s.service.js` to save GUI trajectory screenshots to `logs/agent_s/tasks/{taskId}/step_{step_number}.png`.
+  - Registered running python GUI execution processes under `this.activeSubprocesses` mapping.
+  - Implemented `cancelGUITask(taskId)` to gracefully terminate tasks via Unix `SIGINT`.
+  - Implemented `checkSystemDiagnostics()` to verify local python packages (`pyautogui`, `paddleocr`) and OS accessibility permissions.
+- **Fazm Audio Recording Upload & Deepgram Transcription**:
+  - Replaced mock recording upload stubs in `fazmAgent` with actual file uploads using `audioUploader` multer middleware to `/api/session-recording/upload`.
+  - Implemented real `transcribeAudio(filePath)` using the Deepgram API (with Vertex AI Gemini fallback when API key is missing).
+
 ## [39.37.168] - 2026-06-07 — Production-Grade Swarm Upgrades (Browser-Use, Agent-S, Fazm)
 ### Added
 - **Browser-Use Daemon Config & Cancellation**:

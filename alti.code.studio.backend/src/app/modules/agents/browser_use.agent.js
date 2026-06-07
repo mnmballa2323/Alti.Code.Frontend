@@ -87,6 +87,26 @@ class BrowserUseAgent extends BaseSpecialistAgent {
         }
         return BrowserUseAgentService.cancelBrowserTask(taskId);
     }
+
+    async getBrowserSessions() {
+        return BrowserUseAgentService.getBrowserSessions();
+    }
+
+    async getScreenshot(taskId, step) {
+        if (typeof taskId === 'object' && taskId !== null) {
+            const args = taskId;
+            return BrowserUseAgentService.getScreenshot(args.taskId, args.step || 'latest');
+        }
+        return BrowserUseAgentService.getScreenshot(taskId, step || 'latest');
+    }
+
+    async getPageSource(taskId) {
+        if (typeof taskId === 'object' && taskId !== null) {
+            const args = taskId;
+            return BrowserUseAgentService.getPageSource(args.taskId);
+        }
+        return BrowserUseAgentService.getPageSource(taskId);
+    }
 }
 
 export const browserUseAgent = new BrowserUseAgent();

@@ -18,8 +18,12 @@ logger = logging.getLogger("browser-use-api")
 
 app = FastAPI(title="Browser-Use API Bridge")
 
+from browser_use import Agent, ChatGoogle, Browser
+from fastapi.responses import FileResponse
+
 tasks = {}
 active_tasks = {}
+active_agents = {}
 
 class RunTaskRequest(BaseModel):
     task: str
@@ -28,6 +32,41 @@ class RunTaskRequest(BaseModel):
     user_data_dir: Optional[str] = None
     proxy: Optional[str] = None
 
+class TrackingAgent(Agent):
+    def __init__(self, *args, task_id: str = None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.task_id = task_id
+        self.step_count = 0
+        self.screenshots_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "logs", "browser_use", "screenshots", task_id
+        )
+        os.makedirs(self.screenshots_dir, exist_ok=True)
+
+    async def step(self, step_info=None):
+        await super().step(step_info)
+        self.step_count += 1
+        try:
+            page = await self.browser.get_current_page()
+            if page:
+                screenshot_path = os.path.join(self.screenshots_dir, f"step_{self.step_count}.png")
+                await page.screenshot(path=screenshot_path)
+                url = page.url
+                title = await page.title()
+                
+                if self.task_id in tasks:
+                    tasks[self.task_id]["current_step"] = self.step_count
+                    tasks[self.task_id]["current_url"] = url
+                    tasks[self.task_id]["current_title"] = title
+                    tasks[self.task_id]["live_history"].append({
+                        "step": self.step_count,
+                        "url": url,
+                        "title": title
+                    })
+                logger.info(f"Captured screenshot for {self.task_id} step {self.step_count}: {screenshot_path}")
+        except Exception as e:
+            logger.error(f"Error capturing step screenshot for {self.task_id}: {e}")
+
 @app.post("/api/v1/browser/run")
 async def run_task(request: RunTaskRequest):
     task_id = str(uuid.uuid4())
@@ -35,11 +74,14 @@ async def run_task(request: RunTaskRequest):
         "status": "running",
         "result": None,
         "history": [],
+        "live_history": [],
+        "current_step": 0,
+        "current_url": None,
+        "current_title": None,
         "error": None
     }
 
     async def execute_task():
-        from browser_use import Agent, ChatGoogle, Browser
         browser_instance = None
         try:
             logger.info(f"Starting task {task_id}: {request.task} (headless={request.headless})")
@@ -68,12 +110,14 @@ async def run_task(request: RunTaskRequest):
 
             browser_instance = Browser(**browser_kwargs)
             
-            agent = Agent(
+            agent = TrackingAgent(
                 task=request.task,
                 llm=llm,
-                browser=browser_instance
+                browser=browser_instance,
+                task_id=task_id
             )
             
+            active_agents[task_id] = agent
             history = await agent.run()
             
             final_result = ""
@@ -94,29 +138,18 @@ async def run_task(request: RunTaskRequest):
                         step_data["result"] = str(step.result)
                     history_steps.append(step_data)
                     
-            tasks[task_id] = {
-                "status": "completed",
-                "result": final_result,
-                "history": history_steps,
-                "error": None
-            }
+            tasks[task_id]["status"] = "completed"
+            tasks[task_id]["result"] = final_result
+            tasks[task_id]["history"] = history_steps
             logger.info(f"Task {task_id} completed successfully.")
         except asyncio.CancelledError:
             logger.warn(f"Task {task_id} was cancelled.")
-            tasks[task_id] = {
-                "status": "cancelled",
-                "result": None,
-                "history": [],
-                "error": "Task execution was cancelled by user request."
-            }
+            tasks[task_id]["status"] = "cancelled"
+            tasks[task_id]["error"] = "Task execution was cancelled by user request."
         except Exception as e:
             logger.error(f"Task {task_id} failed: {e}", exc_info=True)
-            tasks[task_id] = {
-                "status": "failed",
-                "result": None,
-                "history": [],
-                "error": str(e)
-            }
+            tasks[task_id]["status"] = "failed"
+            tasks[task_id]["error"] = str(e)
         finally:
             if browser_instance:
                 try:
@@ -124,6 +157,7 @@ async def run_task(request: RunTaskRequest):
                 except Exception as close_err:
                     logger.error(f"Error closing browser for task {task_id}: {close_err}")
             active_tasks.pop(task_id, None)
+            active_agents.pop(task_id, None)
 
     # Launch task as an asyncio task and store reference
     loop = asyncio.get_running_loop()
@@ -149,3 +183,46 @@ async def cancel_task(task_id: str):
         return {"status": "cancelled", "message": "Cancellation request sent."}
     
     return {"status": tasks[task_id]["status"], "message": "Task is not currently running."}
+
+@app.get("/api/v1/browser/sessions")
+async def get_sessions():
+    return tasks
+
+@app.get("/api/v1/browser/screenshot/{task_id}/{step}")
+async def get_screenshot(task_id: str, step: str):
+    screenshots_dir = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        "logs", "browser_use", "screenshots", task_id
+    )
+    if not os.path.exists(screenshots_dir):
+        raise HTTPException(status_code=404, detail="Task screenshots not found")
+    
+    if step == "latest":
+        files = [f for f in os.listdir(screenshots_dir) if f.startswith("step_") and f.endswith(".png")]
+        if not files:
+            raise HTTPException(status_code=404, detail="No screenshots found")
+        files.sort(key=lambda x: int(x.split("_")[1].split(".")[0]))
+        filename = files[-1]
+    else:
+        filename = f"step_{step}.png"
+    
+    filepath = os.path.join(screenshots_dir, filename)
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="Screenshot step not found")
+    
+    return FileResponse(filepath)
+
+@app.get("/api/v1/browser/source/{task_id}")
+async def get_source(task_id: str):
+    if task_id not in active_agents:
+        raise HTTPException(status_code=404, detail="Active session not found")
+    
+    agent = active_agents[task_id]
+    try:
+        page = await agent.browser.get_current_page()
+        if not page:
+            raise HTTPException(status_code=404, detail="No active page found in session")
+        html = await page.content()
+        return {"html": html}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get source: {str(e)}")

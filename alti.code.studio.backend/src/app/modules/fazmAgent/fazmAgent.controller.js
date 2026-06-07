@@ -71,9 +71,27 @@ const verifyMagicLink = catchAsync(async (req, res) => {
 
 // Session recording and other secondary stubs
 const getUploadUrl = catchAsync(async (req, res) => {
+    const host = req.get('host') || `localhost:${process.env.PORT || 5000}`;
+    const protocol = req.protocol || 'http';
     res.status(httpStatus.OK).json({
-        upload_url: `http://localhost:${process.env.PORT || 5000}/api/v1/oss-swarm/fazm/mock-upload`,
+        upload_url: `${protocol}://${host}/api/v1/oss-swarm/fazm/api/session-recording/upload`,
         file_path: 'recording.mp4'
+    });
+});
+
+const uploadRecording = catchAsync(async (req, res) => {
+    if (!req.file) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'No file uploaded.' });
+    }
+    
+    const filePath = req.file.path;
+    const transcript = await FazmAgentService.transcribeAudio(filePath);
+    
+    res.status(httpStatus.OK).json({
+        success: true,
+        message: 'Audio uploaded and transcribed successfully.',
+        file_path: filePath,
+        transcript: transcript
     });
 });
 
@@ -170,4 +188,5 @@ export const FazmAgentController = {
     runAutomation,
     getStatus,
     heartbeat,
+    uploadRecording,
 };

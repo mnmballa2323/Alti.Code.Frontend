@@ -1,11 +1,25 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import axios from 'axios';
+import { spawn } from 'child_process';
+import fs from 'fs';
 import { BrowserUseAgentService } from '../../src/app/modules/browserUseAgent/browserUseAgent.service.js';
 import { agentSService } from '../../src/app/modules/senses/agent_s.service.js';
 import { FazmAgentService } from '../../src/app/modules/fazmAgent/fazmAgent.service.js';
 import { redisClient } from '../../src/shared/redis.client.js';
 
 vi.mock('axios');
+vi.mock('child_process', () => ({
+    spawn: vi.fn()
+}));
+vi.mock('fs', async (importOriginal) => {
+    const actual = await importOriginal();
+    return {
+        ...actual,
+        existsSync: vi.fn(),
+        readFileSync: vi.fn()
+    };
+});
+
 vi.mock('../../src/shared/redis.client.js', () => {
     const store = new Map();
     return {
@@ -29,6 +43,19 @@ vi.mock('../../src/shared/redis.client.js', () => {
 describe('Production-Grade Swarm Agent Upgrades', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.restoreAllMocks();
+
+        // Setup default spawn mock to prevent TypeError crashes
+        spawn.mockReturnValue({
+            stdout: { on: vi.fn() },
+            stderr: { on: vi.fn() },
+            on: vi.fn().mockImplementation((event, cb) => {
+                if (event === 'close') {
+                    cb(0);
+                }
+            }),
+            kill: vi.fn()
+        });
     });
 
     describe('Browser-Use Upgrades', () => {
@@ -64,13 +91,45 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
             );
             expect(result.status).toBe('cancelled');
         });
+
+        it('should call getBrowserSessions and return all active tasks', async () => {
+            axios.get.mockResolvedValue({ data: { 'test-task': { status: 'running' } } });
+
+            const result = await BrowserUseAgentService.getBrowserSessions();
+
+            expect(axios.get).toHaveBeenCalledWith(
+                expect.stringContaining('/api/v1/browser/sessions')
+            );
+            expect(result['test-task'].status).toBe('running');
+        });
+
+        it('should call getScreenshot and fetch binary arraybuffer from endpoint', async () => {
+            const mockBuffer = Buffer.from('mock-png-bytes');
+            axios.get.mockResolvedValue({ data: mockBuffer });
+
+            const result = await BrowserUseAgentService.getScreenshot('test-id', 'latest');
+
+            expect(axios.get).toHaveBeenCalledWith(
+                expect.stringContaining('/api/v1/browser/screenshot/test-id/latest'),
+                { responseType: 'arraybuffer' }
+            );
+            expect(result.toString()).toBe('mock-png-bytes');
+        });
+
+        it('should call getPageSource and fetch DOM HTML source', async () => {
+            axios.get.mockResolvedValue({ data: { html: '<html><body>Test</body></html>' } });
+
+            const result = await BrowserUseAgentService.getPageSource('test-id');
+
+            expect(axios.get).toHaveBeenCalledWith(
+                expect.stringContaining('/api/v1/browser/source/test-id')
+            );
+            expect(result.html).toContain('Test');
+        });
     });
 
     describe('Agent-S Loop Upgrades', () => {
         it('should build python script content with custom dryRun and maxSteps options', async () => {
-            // Test that executeGUITask runs the python subprocess successfully.
-            // We mock the child_process spawning internally since it runs dynamically,
-            // but we can assert the parameter passing handles correctly.
             const taskInstruction = 'Open files';
             
             // Validate executeGUITask throws correct API error if GEMINI_API_KEY is missing
@@ -84,6 +143,59 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
 
             process.env.GEMINI_API_KEY = originalApiKey;
             agentSService.apiKey = originalApiKey || 'test-key';
+        });
+
+        it('should register active subprocesses and support cancelGUITask', async () => {
+            const mockProcess = {
+                stdout: { on: vi.fn() },
+                stderr: { on: vi.fn() },
+                on: vi.fn().mockImplementation((event, cb) => {
+                    if (event === 'close') {
+                        // simulate process exit
+                    }
+                }),
+                kill: vi.fn()
+            };
+            vi.mocked(spawn).mockReturnValue(mockProcess);
+
+            // Execute GUI task without awaiting to check map storage
+            agentSService.executeGUITask('Calculate 123 * 456', { taskId: 'test-cancel-id' });
+
+            // Yield execution to allow write and spawn to resolve
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            expect(agentSService.activeSubprocesses.has('test-cancel-id')).toBe(true);
+
+            // Cancel the task
+            const cancelResult = await agentSService.cancelGUITask('test-cancel-id');
+            expect(cancelResult.success).toBe(true);
+            expect(mockProcess.kill).toHaveBeenCalledWith('SIGINT');
+        });
+
+        it('should check system diagnostics and return parsed python information', async () => {
+            const mockStdoutOn = vi.fn().mockImplementation((event, cb) => {
+                if (event === 'data') {
+                    cb(Buffer.from(JSON.stringify({
+                        platform: 'darwin',
+                        python: '3.11.0',
+                        missing: []
+                    })));
+                }
+            });
+            const mockProcess = {
+                stdout: { on: mockStdoutOn },
+                on: vi.fn().mockImplementation((event, cb) => {
+                    if (event === 'close') {
+                        cb(0);
+                    }
+                })
+            };
+            vi.mocked(spawn).mockReturnValue(mockProcess);
+
+            const result = await agentSService.checkSystemDiagnostics();
+            expect(result.ok).toBe(true);
+            expect(result.platform).toBe('darwin');
+            expect(result.missingDependencies).toEqual([]);
         });
     });
 
@@ -112,7 +224,6 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
             const userId = 'user-stale-888';
             const tunnelUrl = 'https://tunnel-stale.fazm.io';
 
-            // Seed redis client with stale entry
             const staleTime = new Date(Date.now() - 6 * 60 * 1000).toISOString();
             const staleData = JSON.stringify({
                 tunnelUrl,
@@ -120,13 +231,90 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
                 lastHeartbeatAt: staleTime
             });
             
-            // Set internally in redis mock map
             await redisClient.set(`fazm:tunnel:${userId}`, staleData);
 
             const discoverResult = await FazmAgentService.discoverTunnel(userId);
             expect(discoverResult.online).toBe(false);
             expect(discoverResult.tunnel_url).toBeNull();
             expect(redisClient.del).toHaveBeenCalledWith(`fazm:tunnel:${userId}`);
+        });
+    });
+
+    describe('Fazm Voice Transcription Upgrades', () => {
+        let originalDeepgramKey;
+        let originalGeminiKey;
+
+        beforeEach(() => {
+            originalDeepgramKey = process.env.DEEPGRAM_API_KEY;
+            originalGeminiKey = process.env.GEMINI_API_KEY;
+        });
+
+        afterEach(() => {
+            process.env.DEEPGRAM_API_KEY = originalDeepgramKey;
+            process.env.GEMINI_API_KEY = originalGeminiKey;
+        });
+
+        it('should transcribe audio using Deepgram when deepgram key is present', async () => {
+            process.env.DEEPGRAM_API_KEY = 'dg-test-123';
+            process.env.GEMINI_API_KEY = '';
+
+            vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+            vi.spyOn(fs, 'readFileSync').mockReturnValue(Buffer.from('wav-bytes'));
+
+            axios.post.mockResolvedValue({
+                data: {
+                    results: {
+                        channels: [{
+                            alternatives: [{
+                                transcript: 'hello from voice'
+                            }]
+                        }]
+                    }
+                }
+            });
+
+            const transcript = await FazmAgentService.transcribeAudio('/tmp/test.wav');
+
+            expect(axios.post).toHaveBeenCalledWith(
+                expect.stringContaining('api.deepgram.com'),
+                expect.any(Buffer),
+                expect.objectContaining({
+                    headers: expect.objectContaining({
+                        Authorization: 'Token dg-test-123'
+                    })
+                })
+            );
+            expect(transcript).toBe('hello from voice');
+        });
+
+        it('should fallback to Gemini transcription when deepgram key is missing but gemini is present', async () => {
+            process.env.DEEPGRAM_API_KEY = '';
+            process.env.GEMINI_API_KEY = 'gemini-test-456';
+
+            vi.spyOn(fs, 'existsSync').mockReturnValue(true);
+            vi.spyOn(fs, 'readFileSync').mockReturnValue(Buffer.from('wav-bytes'));
+
+            axios.post.mockResolvedValue({
+                data: {
+                    candidates: [{
+                        content: {
+                            parts: [{
+                                text: 'hello from gemini audio'
+                            }]
+                        }
+                    }]
+                }
+            });
+
+            const transcript = await FazmAgentService.transcribeAudio('/tmp/test.wav');
+
+            expect(axios.post).toHaveBeenCalledWith(
+                expect.stringContaining('generativelanguage.googleapis.com'),
+                expect.objectContaining({
+                    contents: expect.any(Array)
+                })
+            );
+            expect(transcript).toBe('hello from gemini audio');
         });
     });
 });

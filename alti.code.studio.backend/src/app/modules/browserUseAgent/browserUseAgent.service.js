@@ -47,8 +47,49 @@ const cancelBrowserTask = async (taskId) => {
     }
 };
 
+const getBrowserSessions = async () => {
+    try {
+        const response = await axios.get(`${BROWSER_USE_API_URL}/api/v1/browser/sessions`);
+        return response.data;
+    } catch (error) {
+        throw new ApiError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            `Failed to get Browser-Use sessions: ${error.message}`
+        );
+    }
+};
+
+const getScreenshot = async (taskId, step) => {
+    try {
+        const response = await axios.get(`${BROWSER_USE_API_URL}/api/v1/browser/screenshot/${taskId}/${step}`, {
+            responseType: 'arraybuffer'
+        });
+        return response.data;
+    } catch (error) {
+        throw new ApiError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            `Failed to get Browser-Use screenshot: ${error.message}`
+        );
+    }
+};
+
+const getPageSource = async (taskId) => {
+    try {
+        const response = await axios.get(`${BROWSER_USE_API_URL}/api/v1/browser/source/${taskId}`);
+        return response.data;
+    } catch (error) {
+        throw new ApiError(
+            httpStatus.INTERNAL_SERVER_ERROR,
+            `Failed to get Browser-Use page source: ${error.message}`
+        );
+    }
+};
+
 export const BrowserUseAgentService = {
     runBrowserTask,
     getBrowserTaskStatus,
     cancelBrowserTask,
+    getBrowserSessions,
+    getScreenshot,
+    getPageSource,
 };

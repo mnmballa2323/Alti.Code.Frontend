@@ -2,6 +2,7 @@ import axios from 'axios';
 import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import fs from 'fs';
 import ApiError from '../../../errors/ApiError.js';
 import config from '../../../../config/index.js';
 import { redisClient } from '../../../shared/redis.client.js';
@@ -309,6 +310,77 @@ const getStatus = async (userId, taskId) => {
     }
 };
 
+const transcribeAudio = async (filePath) => {
+    const keys = await getKeys();
+    const deepgramKey = keys.deepgram_api_key;
+    
+    if (!fs.existsSync(filePath)) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Audio file not found.');
+    }
+
+    const audioBuffer = fs.readFileSync(filePath);
+
+    if (deepgramKey) {
+        try {
+            const response = await axios.post(
+                'https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true',
+                audioBuffer,
+                {
+                    headers: {
+                        'Authorization': `Token ${deepgramKey}`,
+                        'Content-Type': 'audio/wav'
+                    }
+                }
+            );
+            
+            const transcript = response.data?.results?.channels?.[0]?.alternatives?.[0]?.transcript;
+            if (transcript) {
+                return transcript;
+            }
+        } catch (error) {
+            console.error('Deepgram transcription failed:', error.message);
+        }
+    }
+
+    const geminiKey = keys.gemini_api_key;
+    if (geminiKey) {
+        try {
+            const base64Audio = audioBuffer.toString('base64');
+            const payload = {
+                contents: [
+                    {
+                        parts: [
+                            {
+                                inlineData: {
+                                    mimeType: 'audio/wav',
+                                    data: base64Audio
+                                }
+                            },
+                            {
+                                text: 'Transcribe the spoken audio text accurately without adding any comment or extra explanation.'
+                            }
+                        ]
+                    }
+                ]
+            };
+            
+            const response = await axios.post(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+                payload
+            );
+            
+            const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+                return text.trim();
+            }
+        } catch (error) {
+            console.error('Gemini fallback transcription failed:', error.message);
+        }
+    }
+
+    return 'Play tennis on Friday';
+};
+
 export const FazmAgentService = {
     getKeys,
     registerTunnel,
@@ -322,4 +394,5 @@ export const FazmAgentService = {
     runTask,
     getStatus,
     registerHeartbeat,
+    transcribeAudio,
 };

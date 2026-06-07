@@ -21,6 +21,7 @@ export class AgentSService {
     constructor() {
         this.apiKey = process.env.GEMINI_API_KEY || process.env.ALTI_API_KEY; // Requires Gemini 2.0 Flash or OpenAI ideally
         this.pythonPath = config.agent_s_python_path || 'python';
+        this.activeSubprocesses = new Map();
     }
 
     /**
@@ -33,11 +34,13 @@ export class AgentSService {
             throw new Error('Agent S: GEMINI_API_KEY or ALTI_API_KEY is missing from environment.');
         }
 
-        logger.info(`🖥️ Agent S (GUI Operator): Booting Python Bridge for task [${taskInstruction.substring(0, 50)}...]`);
+        const taskId = options.taskId || options.task_id || `task_${Date.now()}`;
+        const logsDir = path.resolve(process.cwd(), 'logs', 'agent_s', 'tasks', taskId);
+        const logsDirEscaped = logsDir.replace(/\\/g, '/');
+
+        logger.info(`🖥️ Agent S (GUI Operator): Booting Python Bridge for task [${taskId}] [${taskInstruction.substring(0, 50)}...]`);
 
         // Generate a transient Python script to define and run the Agent S3 instance.
-        // We use gemini as it is supported by Agent S API params via litellm/langchain inside.
-        // We configure it to use standard local screen resolution and generic TGI endpoints if needed.
         const pythonScriptContent = `
 import asyncio
 import sys
@@ -66,16 +69,12 @@ async def main():
             current_platform = "linux"
 
         # Define engine params
-        # We use Gemini for both logic and grounding out of the box for simplicity in the Cloud OS
         engine_params = {
             "engine_type": "gemini",
             "model": "gemini-3.1-flash",
             "api_key": "${this.apiKey}"
         }
 
-        # For grounding, Agent S recommends UI-TARS, but we can attempt to use gemini / fallback
-        # In this mock/bridge, since we might not have a dedicated UI-TARS endpoint, we configure
-        # the grounding engine to also just mock/fallback if it fails, or use Gemini Vision.
         engine_params_for_grounding = {
             "engine_type": "gemini",
             "model": "gemini-3.1-flash", 
@@ -84,7 +83,6 @@ async def main():
             "grounding_height": 1080,
         }
 
-        # Init Local Env (Disabled by default to prevent arbitrary bash code unless requested)
         enable_local_env = False
         local_env = LocalEnv() if enable_local_env else None
 
@@ -109,12 +107,17 @@ async def main():
         instruction = "${taskInstruction.replace(/"/g, '\\"')}"
         dry_run = ${options.dryRun !== false ? 'True' : 'False'}
         max_steps = ${options.maxSteps || 8}
+        logs_dir = "${logsDirEscaped}"
+        os.makedirs(logs_dir, exist_ok=True)
         
         trajectory = []
         
         for step in range(max_steps):
             # Take a screenshot
             screenshot = pyautogui.screenshot()
+            screenshot_path = os.path.join(logs_dir, f"step_{step + 1}.png")
+            screenshot.save(screenshot_path, format="PNG")
+            
             buffered = io.BytesIO() 
             screenshot.save(buffered, format="PNG")
             screenshot_bytes = buffered.getvalue()
@@ -133,10 +136,10 @@ async def main():
             trajectory.append({
                 "step": step + 1,
                 "action": action_str,
-                "executed": not dry_run
+                "executed": not dry_run,
+                "screenshot": f"/logs/agent_s/tasks/${taskId}/step_{step + 1}.png"
             })
 
-            # Check if action is stop / complete
             if "stop" in action_str.lower() or "finish" in action_str.lower():
                 break
 
@@ -152,7 +155,6 @@ async def main():
                     }))
                     sys.exit(1)
             else:
-                # In dry run, terminate after 1 step to avoid duplicate screenshots looping
                 break
 
         print(json.dumps({
@@ -179,6 +181,8 @@ if __name__ == '__main__':
                     env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
                 });
 
+                this.activeSubprocesses.set(taskId, pyProc);
+
                 let stdoutData = '';
                 let stderrData = '';
 
@@ -191,8 +195,9 @@ if __name__ == '__main__':
                 });
 
                 pyProc.on('close', (code) => {
+                    this.activeSubprocesses.delete(taskId);
                     try {
-                        const lines = stdoutData.trim().split('\\n');
+                        const lines = stdoutData.trim().split('\n');
                         let resultJson = null;
 
                         for (let i = lines.length - 1; i >= 0; i--) {
@@ -204,7 +209,6 @@ if __name__ == '__main__':
 
                         if (resultJson && resultJson.status === 'success') {
                             logger.info(`✅ Agent S: Task inference completed successfully.`);
-                            // Execute the GUI action locally if we were running in Desktop surrogate mode
                             resolve(resultJson.result);
                         } else if (resultJson && resultJson.status === 'error') {
                             reject(new Error(`Agent S Python Error: ${resultJson.message}\n${resultJson.trace}`));
@@ -233,6 +237,52 @@ if __name__ == '__main__':
                 await unlinkAsync(scriptPath).catch(e => logger.error("Failed to delete temp python script", e));
             }
         }
+    }
+
+    /**
+     * Cancels an active GUI task execution process.
+     * @param {string} taskId - The ID of the task to cancel.
+     */
+    async cancelGUITask(taskId) {
+        const proc = this.activeSubprocesses.get(taskId);
+        if (proc) {
+            proc.kill('SIGINT');
+            this.activeSubprocesses.delete(taskId);
+            return { success: true, message: `GUI task ${taskId} cancelled.` };
+        }
+        return { success: false, message: `No active GUI task found with ID ${taskId}.` };
+    }
+
+    /**
+     * Runs python dependency checks and environment diagnostics.
+     */
+    async checkSystemDiagnostics() {
+        return new Promise((resolve) => {
+            const pyProc = spawn(this.pythonPath, [
+                '-c',
+                "import sys, os, json; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = []; \nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing}))"
+            ]);
+            let stdout = '';
+            pyProc.stdout.on('data', d => stdout += d.toString());
+            pyProc.on('close', () => {
+                try {
+                    const parsed = JSON.parse(stdout.trim());
+                    const ok = parsed.missing.length === 0;
+                    resolve({
+                        ok,
+                        platform: parsed.platform,
+                        python: parsed.python,
+                        missingDependencies: parsed.missing,
+                        accessibilityPermissions: parsed.platform === 'darwin' ? 'Check macOS System Settings -> Privacy & Security -> Accessibility / Screen Recording' : 'OK'
+                    });
+                } catch (err) {
+                    resolve({
+                        ok: false,
+                        error: `Failed to run python diagnostics: ${stdout || err.message}`
+                    });
+                }
+            });
+        });
     }
 }
 
