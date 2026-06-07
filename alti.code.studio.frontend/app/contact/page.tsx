@@ -36,16 +36,14 @@ export default function ContactPage() {
         {/* Background Gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        {/* Centered Heading */}
-        <div className="text-center mb-12 md:mb-16 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-secondary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-black via-zinc-800 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-500">
-            Contact us
-          </h1>
-        </div>
-
         <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
           {/* Left Column: Contact Form */}
           <div className="w-full">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold font-secondary tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-black via-zinc-800 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-500">
+                Contact us
+              </h1>
+            </div>
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-12 gap-4 animate-fade-in">
                 <div className="w-16 h-16 bg-green-500/10 dark:bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-2">
