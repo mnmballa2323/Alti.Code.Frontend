@@ -73,7 +73,8 @@ export default function ZeroTrustLedgerSection() {
               Every single operation initiated by Inso Code is sandbox confined, 
               monitored, and recorded in a secure local SQLite audit database for absolute transparency. 
               Before any context leaves your workspace, local DLP rules automatically analyze and 
-              strip secrets, private keys, and passwords so credentials never touch foundational model APIs or external servers.
+              strip secrets, private keys, and passwords so credentials never touch foundational model APIs or external servers, 
+              keeping all your confidential information entirely within your own secure perimeter.
             </p>
           </div>
         </div>
