@@ -1,0 +1,1 @@
+Mock macOS installer for Alti Code Studio. Compile real installer with 'npm run tauri build'.
