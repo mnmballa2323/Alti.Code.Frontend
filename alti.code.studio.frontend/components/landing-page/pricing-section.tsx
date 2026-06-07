@@ -10,7 +10,6 @@ const plans = [
     description:
       "For individual developers who want zero-configuration, production-grade agent power.",
     icon: <Cloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    bulletColor: "bg-blue-500 dark:bg-blue-400",
     features: [
       "Hosted on Inso's secure multi-tenant cloud",
       "Unlimited access to Tri-Cloud model registry",
@@ -27,7 +26,6 @@ const plans = [
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
     icon: <Zap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
-    bulletColor: "bg-indigo-500 dark:bg-indigo-400",
     features: [
       "Hosted on Inso's secure multi-tenant cloud",
       "Shared workspaces and team project repositories",
@@ -45,7 +43,6 @@ const plans = [
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
     icon: <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
-    bulletColor: "bg-emerald-500 dark:bg-emerald-400",
     features: [
       "Custom deployment: Single-tenant private cloud",
       "Self-hosted VPC on AWS, Azure, or GCP",
@@ -130,10 +127,7 @@ export default function PricingSection() {
                 {/* Features List */}
                 <ul className="flex flex-col gap-4 mb-10">
                   {plan.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="flex items-start gap-3 text-sm">
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${plan.bulletColor}`}
-                      />
+                    <li key={fIdx} className="text-left text-sm">
                       <span className="text-gray-600 dark:text-gray-300 font-medium leading-normal">
                         {feature}
                       </span>
