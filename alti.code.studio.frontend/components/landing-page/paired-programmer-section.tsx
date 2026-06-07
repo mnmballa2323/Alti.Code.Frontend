@@ -19,13 +19,13 @@ export default function PairedProgrammerSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <FeatureCard 
             icon={<TerminalSquare className="w-8 h-8 text-black" />}
-            title="Command-Driven"
-            description="Provide the vision and intent. The AI Swarm instantly translates your commands into production-ready code."
+            title="Command Driven"
+            description="Provide the vision and intent. The AI Swarm instantly translates your commands into production ready code."
           />
           <FeatureCard 
             icon={<UserCircle className="w-8 h-8 text-black" />}
             title="Human in Control"
-            description="You make the executive decisions. The AI Swarm handles all the development, debugging, and testing."
+            description="You make the executive decisions. The AI Swarm handles all the development, testing, and debugging."
           />
           <FeatureCard 
             icon={<Code2 className="w-8 h-8 text-black" />}
