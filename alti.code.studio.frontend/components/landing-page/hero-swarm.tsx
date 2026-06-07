@@ -1,13 +1,13 @@
+"use client";
+
 import { Button } from "@heroui/react";
 import Link from "next/link";
 
 import MagicCodeBackground from "./magic-code-background";
-import AgentTraceSimulator from "./agent-trace-simulator";
-import LiveTelemetryWidget from "./live-telemetry-widget";
 
 export default function HeroSwarm() {
   return (
-    <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8 py-20">
+    <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
       {/* Magical animated network background */}
       <MagicCodeBackground />
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
@@ -54,11 +54,6 @@ export default function HeroSwarm() {
           </Button>
         </div>
 
-        {/* Trace Simulator */}
-        <div className="w-full flex justify-center mt-6">
-          <AgentTraceSimulator />
-        </div>
-
         {/* Statistics Banner */}
         <div className="mt-8 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4">
           <div className="flex flex-col items-center justify-center py-6 px-4">
@@ -101,12 +96,6 @@ export default function HeroSwarm() {
               Database Connectors
             </span>
           </div>
-        </div>
-
-        {/* Telemetry Widget */}
-        <div className="w-full">
-          <LiveTelemetryWidget />
-        </div>
       </div>
     </section>
   );
