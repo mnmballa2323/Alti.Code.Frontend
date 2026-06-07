@@ -184,11 +184,6 @@ export default function AuthLayout({
               className="h-8 w-auto"
               src="/logo-white.png"
             />
-            <img
-              alt="Inso Code"
-              className="h-6 w-auto"
-              src="/inso-logo-white.png"
-            />
           </Link>
         </div>
 
