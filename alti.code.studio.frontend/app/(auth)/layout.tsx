@@ -1,126 +1,67 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react";
 import React, { useState, useEffect, useRef } from "react";
 
-const CODE_LINES = [
-  { text: "import { AgentSwarm, TriCloudProvider } from \"@inso/sdk\";", tokens: [
-    { text: "import ", type: "keyword" },
-    { text: "{ AgentSwarm, TriCloudProvider } ", type: "type" },
-    { text: "from ", type: "keyword" },
-    { text: "\"@inso/sdk\";", type: "string" }
-  ]},
-  { text: "", tokens: [] },
-  { text: "// Initialize the autonomous agent swarm", tokens: [
-    { text: "// Initialize the autonomous agent swarm", type: "comment" }
-  ]},
-  { text: "const swarm = new AgentSwarm({", tokens: [
-    { text: "const ", type: "keyword" },
-    { text: "swarm = ", type: "text" },
-    { text: "new ", type: "keyword" },
-    { text: "AgentSwarm", type: "type" },
-    { text: "({", type: "text" }
-  ]},
-  { text: "  provider: TriCloudProvider.Gemini,", tokens: [
-    { text: "  provider: ", type: "text" },
-    { text: "TriCloudProvider", type: "type" },
-    { text: ".Gemini,", type: "text" }
-  ]},
-  { text: "  maxWorkers: 8,", tokens: [
-    { text: "  maxWorkers: ", type: "text" },
-    { text: "8", type: "number" },
-    { text: ",", type: "text" }
-  ]},
-  { text: "  security: \"zero-trust\"", tokens: [
-    { text: "  security: ", type: "text" },
-    { text: "\"zero-trust\"", type: "string" }
-  ]},
-  { text: "});", tokens: [
-    { text: "});", type: "text" }
-  ]},
-  { text: "", tokens: [] },
-  { text: "// Spawn specialized security sentinel", tokens: [
-    { text: "// Spawn specialized security sentinel", type: "comment" }
-  ]},
-  { text: "await swarm.spawn(\"sentinel\", {", tokens: [
-    { text: "await ", type: "keyword" },
-    { text: "swarm.spawn(", type: "text" },
-    { text: "\"sentinel\"", type: "string" },
-    { text: ", {", type: "text" }
-  ]},
-  { text: "  role: \"Security Auditor\",", tokens: [
-    { text: "  role: ", type: "text" },
-    { text: "\"Security Auditor\"", type: "string" },
-    { text: ",", type: "text" }
-  ]},
-  { text: "  compliance: \"SOC2\"", tokens: [
-    { text: "  compliance: ", type: "text" },
-    { text: "\"SOC2\"", type: "string" }
-  ]},
-  { text: "});", tokens: [
-    { text: "});", type: "text" }
-  ]},
-  { text: "", tokens: [] },
-  { text: "// Execute secure compilation pipeline", tokens: [
-    { text: "// Execute secure compilation pipeline", type: "comment" }
-  ]},
-  { text: "const result = await swarm.execute({", tokens: [
-    { text: "const ", type: "keyword" },
-    { text: "result = ", type: "text" },
-    { text: "await ", type: "keyword" },
-    { text: "swarm.execute({", type: "text" }
-  ]},
-  { text: "  task: \"compile_and_audit\",", tokens: [
-    { text: "  task: ", type: "text" },
-    { text: "\"compile_and_audit\"", type: "string" },
-    { text: ",", type: "text" }
-  ]},
-  { text: "  environment: \"sandbox\"", tokens: [
-    { text: "  environment: ", type: "text" },
-    { text: "\"sandbox\"", type: "string" }
-  ]},
-  { text: "});", tokens: [
-    { text: "});", type: "text" }
-  ]}
+const SWARM_STEPS = [
+  { text: "❯ inso swarm start --goal \"deploy_auth_module\"", type: "command" },
+  { text: "ℹ [SYSTEM] Initializing Inso Swarm (v2.0.0)...", type: "info" },
+  { text: "✓ [SYSTEM] Swarm registry connected to Tri-Cloud.", type: "success" },
+  { text: "● [SYSTEM] Spawning specialized agent swarms...", type: "info" },
+  { text: "  » [Agent: Planner] Formulating implementation strategy...", type: "agent" },
+  { text: "  » [Agent: Architect] Creating SOC2 compliance sandbox...", type: "agent" },
+  { text: "  » [Agent: Coder] Injecting JWT validation middleware...", type: "agent" },
+  { text: "  » [Agent: Auditor] Reviewing buffer sizes and headers...", type: "agent" },
+  { text: "✓ [Agent: Auditor] Security audit completed: 0 vulnerabilities.", type: "success" },
+  { text: "● [SYSTEM] Compiling code with Turbopack...", type: "info" },
+  { text: "  [1/2] compiling /api/auth/[...nextauth] ...", type: "detail" },
+  { text: "  [2/2] compiling /components/login-card ...", type: "detail" },
+  { text: "✓ Compiled successfully in 842ms", type: "success" },
+  { text: "🚀 [SYSTEM] Deploying sandbox to AWS VPC (us-east-1)...", type: "info" },
+  { text: "✓ Deployment complete. Service live at auth.sandbox.inso.internal", type: "success" },
+  { text: "🎉 Swarm goal achieved in 4.82s.", type: "success" },
+  { text: "", type: "empty" }
 ];
 
 function CodeTerminal() {
-  const [visibleLines, setVisibleLines] = useState<string[]>([]);
+  const [visibleLines, setVisibleLines] = useState<typeof SWARM_STEPS>([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (currentLineIndex >= CODE_LINES.length) {
+    if (currentLineIndex >= SWARM_STEPS.length) {
       const resetTimeout = setTimeout(() => {
         setVisibleLines([]);
         setCurrentLineIndex(0);
         setCurrentCharIndex(0);
-      }, 4000);
+      }, 5000);
       return () => clearTimeout(resetTimeout);
     }
 
-    const currentLine = CODE_LINES[currentLineIndex];
-    
-    // Empty line case
-    if (currentLine.text === "") {
-      setVisibleLines(prev => [...prev, ""]);
+    const currentLine = SWARM_STEPS[currentLineIndex];
+
+    if (currentLine.type === "empty") {
+      setVisibleLines(prev => [...prev, currentLine]);
       setCurrentLineIndex(prev => prev + 1);
       setCurrentCharIndex(0);
       return;
     }
 
+    // Speed up standard outputs, slow down typing command lines
+    const isCommand = currentLine.type === "command";
+    const delay = isCommand ? 35 : 12;
+
     const charTimeout = setTimeout(() => {
       if (currentCharIndex < currentLine.text.length) {
         setCurrentCharIndex(prev => prev + 1);
       } else {
-        setVisibleLines(prev => [...prev, currentLine.text]);
+        setVisibleLines(prev => [...prev, currentLine]);
         setCurrentLineIndex(prev => prev + 1);
         setCurrentCharIndex(0);
       }
-    }, 25);
+    }, delay);
 
     return () => clearTimeout(charTimeout);
   }, [currentLineIndex, currentCharIndex]);
@@ -131,77 +72,93 @@ function CodeTerminal() {
     }
   }, [visibleLines, currentCharIndex]);
 
-  // Render tokens for completed lines or the actively typing line
-  const renderLineContent = (lineIndex: number, textLength: number) => {
-    const line = CODE_LINES[lineIndex];
-    if (!line || !line.tokens) return null;
-
-    let charsProcessed = 0;
-    return (
-      <>
-        {line.tokens.map((token, idx) => {
-          if (charsProcessed >= textLength) return null;
-          
-          const remainingLength = textLength - charsProcessed;
-          const tokenTextToShow = token.text.substring(0, remainingLength);
-          charsProcessed += token.text.length;
-
-          let colorClass = "text-[#E1E1E6]";
-          if (token.type === "keyword") colorClass = "text-[#E06C75]";
-          else if (token.type === "type") colorClass = "text-[#61AFEF]";
-          else if (token.type === "string") colorClass = "text-[#98C379]";
-          else if (token.type === "comment") colorClass = "text-[#5C6370] italic";
-          else if (token.type === "number") colorClass = "text-[#D19A66]";
-
-          return (
-            <span key={idx} className={colorClass}>
-              {tokenTextToShow}
-            </span>
-          );
-        })}
-      </>
-    );
+  const getLineStyles = (type: string) => {
+    switch (type) {
+      case "command":
+        return "text-[#00C2FF] font-semibold drop-shadow-[0_0_8px_rgba(0,194,255,0.4)]";
+      case "info":
+        return "text-[#A370F7]";
+      case "success":
+        return "text-[#00E5A3] font-medium drop-shadow-[0_0_8px_rgba(0,229,163,0.4)]";
+      case "agent":
+        return "text-[#FFB800]";
+      case "detail":
+        return "text-[#8E929E]";
+      default:
+        return "text-white";
+    }
   };
 
   return (
-    <div className="w-full max-w-lg aspect-[4/3] rounded-2xl border border-neutral-800 bg-[#0B0B0C]/80 backdrop-blur-md shadow-2xl overflow-hidden flex flex-col font-mono text-xs text-[#E1E1E6]">
-      {/* Terminal Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#131316] border-b border-neutral-900 select-none">
-        <div className="flex items-center gap-1.5">
-          <div className="w-3 h-3 rounded-full bg-[#FF5F56] opacity-80" />
-          <div className="w-3 h-3 rounded-full bg-[#FFBD2E] opacity-80" />
-          <div className="w-3 h-3 rounded-full bg-[#27C93F] opacity-80" />
+    <div className="w-full max-w-xl aspect-[1.4] rounded-3xl border border-white/10 bg-[#0C0C0E]/70 backdrop-blur-2xl shadow-[0_0_60px_-15px_rgba(0,102,255,0.4)] overflow-hidden flex flex-col font-mono text-xs text-[#E1E1E6] transition-all duration-300 hover:border-white/20">
+      {/* Terminal Title Bar */}
+      <div className="flex items-center justify-between px-6 py-4 bg-[#111115]/80 border-b border-white/5 select-none">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-[#FF5F56]" />
+          <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+          <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
         </div>
-        <span className="text-neutral-500 text-[10px] font-medium tracking-tight">
-          src/inso_agent_swarm.ts
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A3] animate-pulse" />
+          <span className="text-neutral-400 text-[10px] font-semibold tracking-wider uppercase">
+            Swarm Controller
+          </span>
+        </div>
         <div className="w-12" />
       </div>
 
-      {/* Code Area */}
-      <div
-        ref={containerRef}
-        className="flex-1 p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-800 scrollbar-track-transparent flex flex-col gap-1.5 leading-relaxed"
-      >
-        {visibleLines.map((_, idx) => (
-          <div key={idx} className="whitespace-pre">
-            <span className="text-neutral-600 select-none inline-block w-6 pr-2 text-right">
-              {idx + 1}
-            </span>
-            {renderLineContent(idx, CODE_LINES[idx].text.length)}
+      {/* Terminal Panel Grid */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Swarm Metrics Sidebar */}
+        <div className="w-32 bg-[#09090B]/50 border-r border-white/5 p-4 flex flex-col gap-5 select-none">
+          <div>
+            <div className="text-[9px] text-neutral-500 font-bold tracking-wider uppercase mb-1">
+              Connection
+            </div>
+            <div className="text-[10px] text-[#00E5A3] font-semibold flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-[#00E5A3]/20 flex items-center justify-center">
+                <span className="w-1 h-1 rounded-full bg-[#00E5A3]" />
+              </span>
+              Tri-Cloud
+            </div>
           </div>
-        ))}
-        {currentLineIndex < CODE_LINES.length && (
-          <div className="whitespace-pre">
-            <span className="text-neutral-600 select-none inline-block w-6 pr-2 text-right">
-              {currentLineIndex + 1}
-            </span>
-            {renderLineContent(currentLineIndex, currentCharIndex)}
-            <span className="animate-pulse bg-[#61AFEF] text-[#61AFEF] px-[3px] ml-0.5">
-              █
-            </span>
+          <div>
+            <div className="text-[9px] text-neutral-500 font-bold tracking-wider uppercase mb-1">
+              Active Swarm
+            </div>
+            <div className="text-[10px] text-white font-semibold flex items-center gap-1">
+              4 Agents
+            </div>
           </div>
-        )}
+          <div>
+            <div className="text-[9px] text-neutral-500 font-bold tracking-wider uppercase mb-1">
+              Sandbox Env
+            </div>
+            <div className="text-[10px] text-[#00C2FF] font-semibold flex items-center gap-1">
+              VPC Active
+            </div>
+          </div>
+        </div>
+
+        {/* Console Log Area */}
+        <div
+          ref={containerRef}
+          className="flex-1 p-6 overflow-y-auto scrollbar-none flex flex-col gap-2.5 leading-relaxed bg-black/20"
+        >
+          {visibleLines.map((line, idx) => (
+            <div key={idx} className={`whitespace-pre-wrap ${getLineStyles(line.type)}`}>
+              {line.text}
+            </div>
+          ))}
+          {currentLineIndex < SWARM_STEPS.length && (
+            <div className={`whitespace-pre-wrap ${getLineStyles(SWARM_STEPS[currentLineIndex].type)}`}>
+              {SWARM_STEPS[currentLineIndex].text.substring(0, currentCharIndex)}
+              <span className="animate-pulse bg-[#00C2FF] text-[#00C2FF] px-[3px] ml-0.5 shadow-[0_0_8px_#00C2FF]">
+                █
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -215,10 +172,10 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen bg-white font-sans flex-col-reverse lg:flex-row">
       {/* Left Panel: Streaming Code Generation Terminal */}
-      <div className="hidden lg:flex w-1/2 bg-[#050506] relative overflow-hidden flex-col justify-between p-16 border-r border-neutral-900">
+      <div className="hidden lg:flex w-1/2 bg-[#040405] relative overflow-hidden flex-col justify-between p-16 border-r border-neutral-900">
         {/* Subtle Ambient Glow */}
-        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] rounded-full bg-[#0066FF]/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#0066FF]/5 blur-[100px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-[-20%] w-[90%] h-[90%] rounded-full bg-[#0066FF]/15 blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] rounded-full bg-[#0066FF]/5 blur-[110px] pointer-events-none" />
 
         {/* Logo */}
         <div className="z-30 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
