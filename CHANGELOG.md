@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.141] - 2026-06-07 — Desktop Sidebar Logo Scale Polish
+### Changed
+- **Desktop Sidebar**:
+  - Scaled down the sidebar logo symbol icon size to `h-[18px]` when running in the Tauri desktop app context to align perfectly with header controls.
+
 ## [39.37.140] - 2026-06-07 — Desktop Sidebar Logo Polish
 ### Changed
 - **Desktop Sidebar**:
