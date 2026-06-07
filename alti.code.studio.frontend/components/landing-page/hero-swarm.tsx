@@ -55,41 +55,41 @@ export default function HeroSwarm() {
         </div>
 
         {/* Statistics Banner */}
-        <div className="mt-8 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4 transition-all hover:shadow-3xl hover:-translate-y-1">
-          <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">
+        <div className="mt-8 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4">
+          <div className="flex flex-col items-center justify-center py-6 px-4">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
               3
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               Model Providers
             </span>
           </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">
+          <div className="flex flex-col items-center justify-center py-6 px-4">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
               50,000
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               Agent Swarm
             </span>
           </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">
+          <div className="flex flex-col items-center justify-center py-6 px-4">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
               66
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               Cloud Connections
             </span>
           </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">
+          <div className="flex flex-col items-center justify-center py-6 px-4">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
               165
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               App Connectors
             </span>
           </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4 group">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight group-hover:scale-105 transition-transform">
+          <div className="flex flex-col items-center justify-center py-6 px-4">
+            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
               50
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
