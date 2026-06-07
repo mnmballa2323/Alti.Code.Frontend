@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chaos-cpu-exhaustion
+  namespace: default
+spec:
+  # Delete the job after 5 minutes (300 seconds) of chaos
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: chaos-cpu-exhaustion
+    spec:
+      # Use an anti-affinity rule or specific nodeSelector in reality to target a specific node
+      # For the simulation, we'll let it land on any worker node
+      containers:
+      - name: cpu-burner
+        # Alpine image with stress-ng installed
+        image: polinux/stress-ng:latest
+        imagePullPolicy: IfNotPresent
+        # Burn 100% CPU on all available cores for 4 minutes
+        command: ["stress-ng"]
+        args: ["--cpu", "0", "--cpu-load", "100", "--timeout", "240s", "--metrics-brief"]
+        resources:
+          # Critical: We DO NOT set limits. We want this pod to consume all unallocated 
+          # Host CPU resources to simulate a "noisy neighbor" or cryptojacking attack.
+          # If applications don't have proper CPU 'requests' and 'limits' defined, 
+          # they will be starved of compute and crash.
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+      restartPolicy: Never
