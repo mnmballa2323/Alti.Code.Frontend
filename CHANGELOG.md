@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.153] - 2026-06-07 — Auth Layout Left Panel Design Enhancements
+### Changed
+- **Auth Layout**:
+  - Implemented syntax-highlighted command typing inside the terminal animation.
+  - Added an animated Agent Swarm metrics status board showing active/done/idle pills for Planner, Architect, Coder, and Auditor.
+  - Added a premium animated background grid overlay and floating radial glows for high-end aesthetics.
+  - Upgraded header typography with a subtle silver-white text gradient.
+
 ## [39.37.152] - 2026-06-07 — Bento Grid Box Height Tuning
 ### Changed
 - **Bento Grid**:

@@ -66,46 +66,85 @@ const getAgentStatus = (agentName: string, currentIndex: number) => {
     if (currentIndex === 7 || currentIndex === 8) return "active";
     if (currentIndex > 8) return "done";
   }
+
   return "idle";
 };
 
 function formatCommandLine(text: string) {
-  if (!text.startsWith("❯")) return <span className="text-neutral-300">{text}</span>;
-  
+  if (!text.startsWith("❯"))
+    return <span className="text-neutral-300">{text}</span>;
+
   const tokens: React.ReactNode[] = [];
-  tokens.push(<span key="prompt" className="text-neutral-500 mr-1.5">❯</span>);
-  
+
+  tokens.push(
+    <span key="prompt" className="text-neutral-500 mr-1.5">
+      ❯
+    </span>,
+  );
+
   let rest = text.substring(1).trimStart();
+
   if (rest.length === 0) return tokens;
-  
+
   if (rest.startsWith("inso")) {
-    tokens.push(<span key="inso" className="text-emerald-400 font-semibold">inso </span>);
+    tokens.push(
+      <span key="inso" className="text-emerald-400 font-semibold">
+        inso{" "}
+      </span>,
+    );
     rest = rest.substring(4).trimStart();
   } else {
-    tokens.push(<span key="typing-inso" className="text-neutral-200">{rest}</span>);
+    tokens.push(
+      <span key="typing-inso" className="text-neutral-200">
+        {rest}
+      </span>,
+    );
+
     return tokens;
   }
-  
+
   if (rest.startsWith("swarm start")) {
-    tokens.push(<span key="cmd" className="text-white">swarm start </span>);
+    tokens.push(
+      <span key="cmd" className="text-white">
+        swarm start{" "}
+      </span>,
+    );
     rest = rest.substring(11).trimStart();
   } else {
-    tokens.push(<span key="typing-cmd" className="text-white">{rest}</span>);
+    tokens.push(
+      <span key="typing-cmd" className="text-white">
+        {rest}
+      </span>,
+    );
+
     return tokens;
   }
-  
+
   if (rest.startsWith("--goal")) {
-    tokens.push(<span key="flag" className="text-cyan-400">--goal </span>);
+    tokens.push(
+      <span key="flag" className="text-cyan-400">
+        --goal{" "}
+      </span>,
+    );
     rest = rest.substring(6).trimStart();
   } else {
-    tokens.push(<span key="typing-flag" className="text-cyan-400">{rest}</span>);
+    tokens.push(
+      <span key="typing-flag" className="text-cyan-400">
+        {rest}
+      </span>,
+    );
+
     return tokens;
   }
-  
+
   if (rest.length > 0) {
-    tokens.push(<span key="val" className="text-amber-200">{rest}</span>);
+    tokens.push(
+      <span key="val" className="text-amber-200">
+        {rest}
+      </span>,
+    );
   }
-  
+
   return tokens;
 }
 
@@ -204,8 +243,8 @@ function CodeTerminal() {
               </div>
               <div className="text-[10px] text-[#00E5A3] font-semibold flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5A3] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E5A3]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5A3] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E5A3]" />
                 </span>
                 Tri-Cloud
               </div>
@@ -238,17 +277,27 @@ function CodeTerminal() {
                 { name: "Planner", label: "PLN" },
                 { name: "Architect", label: "ARC" },
                 { name: "Coder", label: "COD" },
-                { name: "Auditor", label: "AUD" }
+                { name: "Auditor", label: "AUD" },
               ].map((agent) => {
                 const status = getAgentStatus(agent.name, currentLineIndex);
                 let badgeClass = "bg-neutral-800 text-neutral-500";
-                if (status === "active") badgeClass = "bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse";
-                if (status === "done") badgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-                
+
+                if (status === "active")
+                  badgeClass =
+                    "bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse";
+                if (status === "done")
+                  badgeClass =
+                    "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+
                 return (
-                  <div key={agent.name} className="flex items-center justify-between">
+                  <div
+                    key={agent.name}
+                    className="flex items-center justify-between"
+                  >
                     <span>{agent.name}</span>
-                    <span className={`px-1 py-0.5 rounded text-[7.5px] font-bold tracking-wide ${badgeClass}`}>
+                    <span
+                      className={`px-1 py-0.5 rounded text-[7.5px] font-bold tracking-wide ${badgeClass}`}
+                    >
                       {agent.label}
                     </span>
                   </div>
@@ -268,7 +317,9 @@ function CodeTerminal() {
               key={idx}
               className={`whitespace-pre-wrap ${getLineStyles(line.type)}`}
             >
-              {line.type === "command" ? formatCommandLine(line.text) : line.text}
+              {line.type === "command"
+                ? formatCommandLine(line.text)
+                : line.text}
             </div>
           ))}
           {currentLineIndex < SWARM_STEPS.length && (
@@ -281,7 +332,7 @@ function CodeTerminal() {
                     SWARM_STEPS[currentLineIndex].text.substring(
                       0,
                       currentCharIndex,
-                    )
+                    ),
                   )}
                   <span className="animate-pulse bg-[#00C2FF] text-[#00C2FF] px-[3px] ml-0.5 shadow-[0_0_8px_#00C2FF]">
                     █
@@ -314,7 +365,9 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen bg-white font-sans flex-col-reverse lg:flex-row">
       {/* CSS keyframe animations for premium ambient glow effects */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes float-slow {
           0%, 100% { transform: translate(0px, 0px) scale(1); }
           33% { transform: translate(20px, -20px) scale(1.05); }
@@ -330,7 +383,9 @@ export default function AuthLayout({
         .animate-float-2 {
           animation: float-slower 22s ease-in-out infinite;
         }
-      `}} />
+      `,
+        }}
+      />
 
       {/* Left Panel: Streaming Code Generation Terminal */}
       <div className="hidden lg:flex w-1/2 bg-[#050507] relative overflow-hidden flex-col justify-between p-16 border-r border-white/5">
@@ -340,7 +395,10 @@ export default function AuthLayout({
         {/* Premium Ambient Glows */}
         <div className="absolute top-[-25%] left-[-20%] w-[90%] h-[90%] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none animate-float-1" />
         <div className="absolute bottom-[-15%] right-[-10%] w-[75%] h-[75%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none animate-float-2" />
-        <div className="absolute top-[35%] right-[15%] w-[45%] h-[45%] rounded-full bg-cyan-500/5 blur-[90px] pointer-events-none animate-float-1" style={{ animationDelay: '-4s' }} />
+        <div
+          className="absolute top-[35%] right-[15%] w-[45%] h-[45%] rounded-full bg-cyan-500/5 blur-[90px] pointer-events-none animate-float-1"
+          style={{ animationDelay: "-4s" }}
+        />
 
         {/* Interactive Terminal Window */}
         <div className="z-20 w-full flex items-center justify-center mt-4 mb-12">
