@@ -7,7 +7,7 @@ const plans = [
     name: "Individual",
     price: "250",
     description:
-      "For developers who want zero configuration, production grade agent swarm power.",
+      "For developers who want zero configuration, production grade agentic swarm power.",
     cta: "Start Free Trial",
   },
   {
