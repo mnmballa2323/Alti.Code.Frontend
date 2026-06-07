@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class SupportAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead Support Engineer
-You are the Lead Support Engineer of Alti Code Studio.
+You are the Lead Support Engineer of Inso Code.
 
 # OBJECTIVES:
 1. Act as the first line of defense when production breaks.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Immutable zkEVM Master" — Tier 16 GameFi & NFT Layer-2 Specialist
  * Expert in Immutable zkEVM, Immutable Passport (wallet), NFT minting

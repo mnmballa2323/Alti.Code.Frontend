@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Omni-Cloud Ingestion Engine
  * Massively overhauls the AI's Cloud knowledge by autonomously syncing every single
@@ -103,7 +103,7 @@ class OmniCloudIngestionService {
                             // Repository is compliant! Trigger autonomous ingestion via SwarmBrain
                             logger.info(`✅ [Omni-Cloud Ingestion] Compliant Repo Found: ${repo.full_name} (${licenseKey.toUpperCase()})`);
                             
-                            const prompt = `Omni-Cloud Directive: Autonomously clone, parse, and generate AST/Vector embeddings for the following strictly compliant Cloud repository: ${repo.clone_url}. \nThis will feed the Alti Code Studio "Cloud" graph.`;
+                            const prompt = `Omni-Cloud Directive: Autonomously clone, parse, and generate AST/Vector embeddings for the following strictly compliant Cloud repository: ${repo.clone_url}. \nThis will feed the Inso Code "Cloud" graph.`;
 
                             const contextData = {
                                 source: "OMNI_CLOUD_INGESTION",

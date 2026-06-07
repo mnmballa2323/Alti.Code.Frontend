@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Storybook Master" - Tier 13 DevEx Specialist
  * Expert in Storybook 8 CSF3 story authoring, addon ecosystem,

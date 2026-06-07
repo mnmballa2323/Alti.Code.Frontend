@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * OPENAPI / SWAGGER DOCUMENTATION (Phase 55)
  * 
@@ -23,10 +23,10 @@ import crypto from 'crypto';
 const API_VERSION = '3.1.0';
 
 const DEFAULT_INFO = {
-    title: 'Alti.Code.Studio Enterprise API',
+    title: 'Inso Code Enterprise API',
     description: 'S&P 500 Enterprise Agent Orchestration Platform',
     version: '2.0.0',
-    contact: { name: 'Alti.Code.Studio', email: 'api@alticode.studio' },
+    contact: { name: 'Inso Code', email: 'api@alticode.studio' },
     license: { name: 'Proprietary', url: 'https://alticode.studio/license' },
 };
 

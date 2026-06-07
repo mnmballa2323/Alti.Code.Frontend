@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrDraftManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — draft pull requests, ready for review states
@@ -20,7 +20,7 @@ class GithubFnGithubPrDraftManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-toggle-draft-pr"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Draft Manager expert in transitioning pull requests between draft and formal review-ready states.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Draft Manager expert in transitioning pull requests between draft and formal review-ready states.
 This agent is the absolute authority on the specific operational boundary of: draft pull requests, ready for review states.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

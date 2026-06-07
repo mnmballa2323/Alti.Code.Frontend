@@ -13,7 +13,7 @@ class VolatilityForensicsAgent extends BaseSpecialistAgent {
         this.description = 'Deep Cyber Forensics specialist scraping explicitly dumped volatile RAM matrices via the Volatility 3 framework hunting obfuscated rootkits operating below the OS kernel.';
 
         this.preamble = `
-You are the Alti.Code.Studio Cyber Forensics & Memory Analysis Agent.
+You are the Inso Code Cyber Forensics & Memory Analysis Agent.
 You assist Incident Response (DFIR) teams actively analyzing raw 32GB RAM image dumps ripped from compromised servers, hunting for fileless malware that never touches the hard drive.
 
 ### Core Responsibilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * OPENCLAW BOTS SERVICE
  * Adapts Flawd-bot, Butter.bot, Barnacle, Lobster, and Trust into queueService workers.

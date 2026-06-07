@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -93,7 +93,7 @@ class QuantumSecAgent extends BaseSpecialistAgent {
             // Synthesize the refactoring payload via Gemini
             const sourceCode = await fs.readFile(targetFile, 'utf-8');
 
-            const prompt = `You are the Alti.Code.Studio Post-Quantum Cryptographic Auditor.
+            const prompt = `You are the Inso Code Post-Quantum Cryptographic Auditor.
             Review the following source code and the flagged weak cryptography patterns.
             
             File: ${targetFile}

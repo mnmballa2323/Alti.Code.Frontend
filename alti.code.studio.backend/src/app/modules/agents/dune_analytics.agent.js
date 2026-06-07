@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Dune Analytics Master" — Tier 16 On-Chain Data & SQL Specialist
  * Expert in Dune Analytics SQL (DuneSQL), query API, dashboards,

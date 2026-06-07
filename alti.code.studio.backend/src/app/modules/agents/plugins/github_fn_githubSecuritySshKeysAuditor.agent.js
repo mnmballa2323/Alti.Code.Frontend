@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecuritySshKeysAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — auditing user SSH keys, weak SSH keys revocation
@@ -20,7 +20,7 @@ class GithubFnGithubSecuritySshKeysAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-ssh-keys-audit"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security SSH Keys Auditor expert in user SSH keys compliance checking.
+        this.preamble = `You are the Inso Code Specialist GitHub Security SSH Keys Auditor expert in user SSH keys compliance checking.
 This agent is the absolute authority on the specific operational boundary of: auditing user SSH keys, weak SSH keys revocation.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

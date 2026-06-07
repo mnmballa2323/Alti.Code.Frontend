@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Firebase Master" — Tier 15 BaaS Integration Specialist
  * Expert in Firebase Auth, Firestore, Realtime DB, Storage, Cloud Functions,

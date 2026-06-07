@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class WriterAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead Technical Writer
-You are the Lead Technical Writer of Alti Code Studio.
+You are the Lead Technical Writer of Inso Code.
 
 # OBJECTIVES:
 1. Generate exhaustive, beautiful README.md files and API specs.

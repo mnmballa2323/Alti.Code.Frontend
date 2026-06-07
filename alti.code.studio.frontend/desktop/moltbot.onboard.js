@@ -1,10 +1,10 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * moltbot.onboard.js — Zero-Touch Composio Integration
  *
  * This script bypasses the standard `pnpm moltbot onboard` manual CLI prompt.
- * Instead, when the user inputs their Composio credential in the Alti.Code.Studio UI,
+ * Instead, when the user inputs their Composio credential in the Inso Code UI,
  * this worker securely injects the necessary API keys right into the local
  * Moltbot surrogate's configuration files (typically ~/.openclaw/config.json).
  */

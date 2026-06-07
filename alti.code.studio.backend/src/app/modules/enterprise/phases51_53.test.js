@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 51-53 TEST SUITE
  * Agent Marketplace + Cron Engine + Admin Console

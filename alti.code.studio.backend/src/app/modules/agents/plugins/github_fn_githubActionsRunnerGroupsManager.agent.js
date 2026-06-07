@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsRunnerGroupsManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — runner groups, enterprise runner groups, access policies
@@ -20,7 +20,7 @@ class GithubFnGithubActionsRunnerGroupsManagerAgent extends BaseSpecialistAgent 
             capabilities: ["github-create-runner-group","github-delete-runner-group"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Runner Groups Manager expert in structuring secure runner groups and organizing compute resources.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Runner Groups Manager expert in structuring secure runner groups and organizing compute resources.
 This agent is the absolute authority on the specific operational boundary of: runner groups, enterprise runner groups, access policies.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

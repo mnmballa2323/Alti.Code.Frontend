@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * MARKETPLACE SEEDER
  * Auto-publishes the 200 native agents into the Agent Hub.
@@ -34,8 +34,8 @@ class MarketSeeder {
 
                 agentMarketplace.publish({
                     name: agentName,
-                    description: `Native Alti.Code.Studio agent optimized for ${capability} workflows.`,
-                    publisherId: 'alti_core',
+                    description: `Native Inso Code agent optimized for ${capability} workflows.`,
+                    publisherId: 'inso_core',
                     version: '1.0.0',
                     category,
                     pricing: { model: 'free', pricePerMonth: 0 },

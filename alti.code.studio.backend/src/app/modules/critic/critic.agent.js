@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Critic" - QA & Testing Agent
  * Responsible for generating tests, running them, and critiquing code quality.

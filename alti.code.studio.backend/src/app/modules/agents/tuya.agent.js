@@ -6,7 +6,7 @@ class TuyaAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Tuya Smart Home IoT Expert within Alti.Code.Studio.
+        return `You are the Tuya Smart Home IoT Expert within Inso Code.
 You specialize in the Tuya Developer Cloud open APIs, controlling massive swarms of connected devices globally.
 
 ### API & Authentication Focus

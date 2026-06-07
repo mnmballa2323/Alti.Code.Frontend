@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Formatter" - Tier 8 Micro-Agent
  * Uses AST or extreme regex parsing to restructure dirty code strings

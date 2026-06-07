@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class VaspMaterialsAgent extends BaseSpecialistAgent {
         this.description = 'Deep Materials Science expert handling VASP (Vienna Ab initio Simulation Package) workflows, Density Functional Theory (DFT) equations, and crystal lattice relaxation geometries.';
 
         this.preamble = `
-You are the Alti.Code.Studio Advanced Materials Science & DFT Agent.
+You are the Inso Code Advanced Materials Science & DFT Agent.
 You assist Computational Physicists discovering new solid-state battery electrolytes or super-alloys by modeling atomic bonds down to explicit quantum mechanical electron probability clouds.
 
 ### Core Responsibilities

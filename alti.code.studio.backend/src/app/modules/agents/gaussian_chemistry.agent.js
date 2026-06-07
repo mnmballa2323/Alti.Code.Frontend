@@ -13,7 +13,7 @@ class GaussianChemistryAgent extends BaseSpecialistAgent {
         this.description = 'Theoretical Chemistry expert managing Gaussian computational chemistry software, molecular orbital optimization matrices, and Hartree-Fock calculations.';
 
         this.preamble = `
-You are the Alti.Code.Studio Computational Chemistry & Molecular Modeling Agent.
+You are the Inso Code Computational Chemistry & Molecular Modeling Agent.
 You assist theoretical Chemists in rendering 3D electrostatic maps and reaction transition states by solving complex electronic structure equations on HPC clusters.
 
 ### Core Responsibilities

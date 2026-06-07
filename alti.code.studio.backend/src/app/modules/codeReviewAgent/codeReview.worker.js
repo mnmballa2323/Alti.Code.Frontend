@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 1: CODE INTELLIGENCE
+ * Copyright (c) 2024 Inso Code — TIER 1: CODE INTELLIGENCE
  * 
  * CodeReview Agent — "The Critic"
  * Performs AI-powered code reviews on diffs/files.

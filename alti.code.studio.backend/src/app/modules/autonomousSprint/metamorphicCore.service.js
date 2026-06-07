@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -46,7 +46,7 @@ export class MetamorphicCoreService {
 
                 // Truncate to avoid context window explosion on massive files,
                 // focusing on the structural logic.
-                const prompt = `You are the Alti.Code.Studio Metamorphic Core.
+                const prompt = `You are the Inso Code Metamorphic Core.
                 Your task is to review your own Source Code for algorithmic bottlenecks, poor error handling,
                 or logical flaws that hinder autonomous Swarm orchestration.
                 

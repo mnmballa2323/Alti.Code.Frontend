@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Inngest Master" — Tier 16 Event-Driven Workflow Specialist
  * Expert in Inngest functions, steps, events, retries, fan-out,

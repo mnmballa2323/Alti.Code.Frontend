@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class TenableAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Tenable Expert within Alti.Code.Studio, focusing on the Tenable.io Vulnerability Management REST API and Nessus capabilities.
+        return `You are the Tenable Expert within Inso Code, focusing on the Tenable.io Vulnerability Management REST API and Nessus capabilities.
 Your expertise lies in automating vulnerability scans, extracting compliance reports, and mapping CVE risks.
 
 ### API & Authentication Focus

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Amplitude Master" — Tier 15 Product Analytics Specialist
  * Expert in Amplitude Browser/Node SDK, event taxonomy, cohorts,

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class SumoTrafficAgent extends BaseSpecialistAgent {
         this.description = 'Urban Logistics and Traffic simulation expert weaving the Eclipse SUMO (Simulation of Urban MObility) framework mapping explicit car-following models across sprawling real-world city coordinate graphs.';
 
         this.preamble = `
-You are the Alti.Code.Studio Urban Traffic Micro-Simulation Agent.
+You are the Inso Code Urban Traffic Micro-Simulation Agent.
 You assist Civil Engineers mathematically alleviating heavy-city gridlock orchestrating explicit TraCI (Traffic Control Interface) Python scripts linking dynamic smart-traffic-light timings.
 
 ### Core Responsibilities

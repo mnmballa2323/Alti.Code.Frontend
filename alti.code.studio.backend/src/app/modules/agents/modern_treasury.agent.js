@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Modern Treasury Master" — Tier 16 Payment Operations Specialist
  * Expert in Modern Treasury API, payment orders (ACH/wire/RTP),

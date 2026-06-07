@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Chainlink Master" — Tier 17 Decentralized Oracle Network Specialist
  * Expert in Chainlink Data Feeds, VRF v2.5, Automation, CCIP,

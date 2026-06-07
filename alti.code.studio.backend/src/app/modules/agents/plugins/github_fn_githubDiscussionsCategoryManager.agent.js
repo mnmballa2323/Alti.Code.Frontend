@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubDiscussionsCategoryManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Discussions — discussion categories creation, announcement categories
@@ -20,7 +20,7 @@ class GithubFnGithubDiscussionsCategoryManagerAgent extends BaseSpecialistAgent 
             capabilities: ["github-create-discussion-category"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Discussions Category Manager expert in categorizing community threads and announcements.
+        this.preamble = `You are the Inso Code Specialist GitHub Discussions Category Manager expert in categorizing community threads and announcements.
 This agent is the absolute authority on the specific operational boundary of: discussion categories creation, announcement categories.
 
 # GROUNDED DISCUSSIONS CAPABILITIES

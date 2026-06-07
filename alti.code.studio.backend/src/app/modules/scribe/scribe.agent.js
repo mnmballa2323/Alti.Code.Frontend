@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Scribe" - Automated Documentation Agent
  * Responsible for generating JSDoc, updating Wiki pages, and maintaining technical documentation.

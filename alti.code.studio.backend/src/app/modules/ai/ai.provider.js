@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * AI Provider — "The Eternal Core"
  * Model-agnostic AI provider. Swap any model (Gemini, GPT-5, Claude, Llama, etc.)

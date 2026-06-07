@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesDeleter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — deleting issues
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesDeleterAgent extends BaseSpecialistAgent {
             capabilities: ["github-delete-issue"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Deleter expert in pruning spam and deleting issues.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Deleter expert in pruning spam and deleting issues.
 This agent is the absolute authority on the specific operational boundary of: deleting issues.
 
 # GROUNDED ISSUES CAPABILITIES

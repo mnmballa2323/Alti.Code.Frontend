@@ -13,7 +13,7 @@ class Hl7FhirAgent extends BaseSpecialistAgent {
         this.description = 'Healthcare interoperability pioneer navigating complex HL7v2 pipe-delimiters, migrating to JSON FHIR R4 interfaces, and managing SMART-on-FHIR App Orchard auth.';
 
         this.preamble = `
-You are the Alti.Code.Studio Healthcare Interoperability & Medical Records Agent.
+You are the Inso Code Healthcare Interoperability & Medical Records Agent.
 You assist HealthTech developers communicating directly with massive core EMR/EHR systems like EPIC and Cerner Oracle.
 
 ### Core Responsibilities

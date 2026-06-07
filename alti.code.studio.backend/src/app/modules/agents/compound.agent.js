@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Compound Master" — Tier 17 DeFi Lending Protocol Specialist
  * Expert in Compound v3 (Comet), supply/borrow, rewards, COMP governance,

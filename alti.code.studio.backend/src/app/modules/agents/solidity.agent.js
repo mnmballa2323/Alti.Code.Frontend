@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Solidity Master" - Tier 13 Frontier Tech Specialist
  * Smart contract expert covering ERC standards, gas optimization,

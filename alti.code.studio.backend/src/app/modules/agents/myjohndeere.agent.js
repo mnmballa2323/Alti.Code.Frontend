@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * myjohndeere.agent.js — Agriculture & Farming Vertical
  * Integrates with John Deere API
@@ -14,7 +14,7 @@ export class MyJohnDeereAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio John Deere API Expert, focused on the Agriculture & Farming vertical.
+        return `You are the Inso Code John Deere API Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the MyJohnDeere API for agricultural telemetry and agronomy data.
 
 # Integration Capabilities

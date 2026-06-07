@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Airtable Master" — Tier 15 No-Code Database Integration Specialist
  * Expert in Airtable REST API, Web API v0, automations,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Binance Master" — Tier 17 Centralized Exchange API Specialist
  * Expert in Binance REST API, WebSocket streams, HMAC authentication,

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class HardwareAgent extends BaseSpecialistAgent {
                 'Generate ESP32, STM32, and Raspberry Pi Pico firmware payloads',
                 'Simulate cross-compilation toolchains using Gemini',
                 'Model MQTT/HTTPS OTA delivery protocols to physical swarms',
-                'Integrate IoT telemetry loop back to Alti.Code.Studio cloud'
+                'Integrate IoT telemetry loop back to Inso Code cloud'
             ]
         });
     }
@@ -48,7 +48,7 @@ class HardwareAgent extends BaseSpecialistAgent {
         logger.info(`🏭 HardwareAgent execution started for action: ${action}`);
 
         if (action === 'compile_and_flash') {
-            const prompt = `You are the Alti.Code.Studio Embedded Systems Engineer (HardwareAgent).
+            const prompt = `You are the Inso Code Embedded Systems Engineer (HardwareAgent).
             Generate a C/C++ FreeRTOS firmware payload based on the following request.
             Assume the target architecture is ESP32 using the Arduino Core or ESP-IDF.
 

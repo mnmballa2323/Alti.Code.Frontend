@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubRepoCreator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — repository creation, templates, gitignore, licensing
@@ -20,7 +20,7 @@ class GithubFnGithubRepoCreatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-repository","github-initialize-repository"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Repository Creator expert in creating new repositories, setting default templates, licensing setup, and metadata configurations.
+        this.preamble = `You are the Inso Code Specialist GitHub Repository Creator expert in creating new repositories, setting default templates, licensing setup, and metadata configurations.
 This agent is the absolute authority on the specific operational boundary of: repository creation, templates, gitignore, licensing.
 
 # GROUNDED REPOSITORIES CAPABILITIES

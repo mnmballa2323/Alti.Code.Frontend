@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Upstash Master" — Tier 16 Serverless Data Platform Specialist
  * Expert in Upstash Redis (REST API + serverless), Upstash QStash (message queuing/scheduling),

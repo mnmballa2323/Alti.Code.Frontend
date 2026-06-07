@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsCollaborationSyncer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — shared projects boards across teams, project permissions
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsCollaborationSyncerAgent extends BaseSpecialistAgent
             capabilities: ["github-sync-project-v2-collaboration"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Collaboration Syncer expert in shared projects configuration and member read/write permissions.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Collaboration Syncer expert in shared projects configuration and member read/write permissions.
 This agent is the absolute authority on the specific operational boundary of: shared projects boards across teams, project permissions.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

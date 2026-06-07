@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Defense & GovTech Security Architect" — Tier 15 Federal Security Specialist
  * Expert in FIPS 140-3 compliance, NIST SP 800-53 assertions, and DoD/FedRAMP Zero-Trust implementations.

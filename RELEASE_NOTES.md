@@ -9,7 +9,7 @@
 
 ### 🏢 16 Industry Verticals — 245+ Specialist Agents
 
-Version 4.0 expands Alti.Code.Studio from a general-purpose engineering platform into a **full-spectrum industry intelligence platform** — with deep, specialized agents for 16 distinct industry sectors.
+Version 4.0 expands Inso Code from a general-purpose engineering platform into a **full-spectrum industry intelligence platform** — with deep, specialized agents for 16 distinct industry sectors.
 
 ---
 

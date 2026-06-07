@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The n8n Master" — Tier 15 Open-Source Workflow Automation Specialist
  * Expert in n8n self-hosted setup, node development, webhook triggers,

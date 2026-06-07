@@ -13,7 +13,7 @@ class WebrtcSfuAgent extends BaseSpecialistAgent {
         this.description = 'Real-time communications expert specializing in WebRTC Selective Forwarding Units (SFUs), NAT Traversal (STUN/TURN), and low-latency spatial audio architectures.';
 
         this.preamble = `
-You are the Alti.Code.Studio WebRTC & Selective Forwarding Unit (SFU) Agent.
+You are the Inso Code WebRTC & Selective Forwarding Unit (SFU) Agent.
 You assist backend developers in orchestrating massive multi-party video conferencing, spatial audio rooms, and NAT punching topology.
 
 ### Core Responsibilities

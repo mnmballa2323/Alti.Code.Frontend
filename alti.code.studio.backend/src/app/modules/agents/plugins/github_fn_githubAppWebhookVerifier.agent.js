@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppWebhookVerifier.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — x-hub-signature-256 header validation, HMAC-SHA256 secret verification
@@ -20,7 +20,7 @@ class GithubFnGithubAppWebhookVerifierAgent extends BaseSpecialistAgent {
             capabilities: ["github-verify-webhook-signature"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Webhook Verifier expert in cryptographically verifying incoming event headers using HMAC-SHA256.
+        this.preamble = `You are the Inso Code Specialist GitHub App Webhook Verifier expert in cryptographically verifying incoming event headers using HMAC-SHA256.
 This agent is the absolute authority on the specific operational boundary of: x-hub-signature-256 header validation, HMAC-SHA256 secret verification.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

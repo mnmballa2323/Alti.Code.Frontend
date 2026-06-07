@@ -5,7 +5,7 @@ import crypto from 'crypto';
  * Phase 21.0.0: The Gemini Multimodal Workspace & Copilot Integration
  * Cloud Code IDE Companion Service
  * 
- * Bridges the Alti.Code.Studio autonomous cloud swarm natively into the developer's local
+ * Bridges the Inso Code autonomous cloud swarm natively into the developer's local
  * VS Code or IntelliJ IDEA IDE using the Google Cloud Code plugin interfaces.
  */
 class CloudCodeCompanionService {

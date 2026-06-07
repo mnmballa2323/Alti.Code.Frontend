@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Liaison" - Protocol & Webhook Agent
  * Handles incoming events from external systems (GitHub, Stripe, etc.)

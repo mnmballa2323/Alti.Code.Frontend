@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Curve Finance Master" — Tier 17 AMM & Stableswap Specialist
  * Expert in Curve pools (StableSwap, CryptoSwap), vyper contracts,

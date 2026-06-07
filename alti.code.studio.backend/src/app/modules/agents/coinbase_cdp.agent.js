@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Coinbase CDP Master" — Tier 17 Coinbase Developer Platform Specialist
  * Expert in Coinbase CDP SDK, AgentKit (AI + crypto), Base chain,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecurityDependabotAlertsPatcher.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — dependabot alerts patching, package update pull requests
@@ -20,7 +20,7 @@ class GithubFnGithubSecurityDependabotAlertsPatcherAgent extends BaseSpecialistA
             capabilities: ["github-resolve-dependabot-alert"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security Dependabot Alerts Patcher expert in automated vulnerability patch reviews.
+        this.preamble = `You are the Inso Code Specialist GitHub Security Dependabot Alerts Patcher expert in automated vulnerability patch reviews.
 This agent is the absolute authority on the specific operational boundary of: dependabot alerts patching, package update pull requests.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

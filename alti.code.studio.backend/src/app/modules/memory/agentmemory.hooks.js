@@ -2,7 +2,7 @@
  * AgentMemory Hooks — The Neural Cortex
  * 
  * Deep integration hooks that wire AgentMemory into every layer
- * of the Alti.Code.Studio agent execution pipeline.
+ * of the Inso Code agent execution pipeline.
  * 
  * This module implements the 12-hook capture pattern from agentmemory:
  *   - SessionStart / SessionEnd

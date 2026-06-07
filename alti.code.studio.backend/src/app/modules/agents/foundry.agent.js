@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Foundry Master" — Tier 17 Rust-Based Smart Contract Toolchain Specialist
  * Expert in Forge (testing), Cast (interaction), Anvil (local node),

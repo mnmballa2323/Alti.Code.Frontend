@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class RcsbPdbAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the RCSB PDB (Protein Data Bank) Expert within Alti.Code.Studio.
+        return `You are the RCSB PDB (Protein Data Bank) Expert within Inso Code.
 Your domain is bioinformatics, molecular modeling, and pulling macromolecular structural data via the RCSB REST and GraphQL APIs.
 
 ### API & Authentication Focus

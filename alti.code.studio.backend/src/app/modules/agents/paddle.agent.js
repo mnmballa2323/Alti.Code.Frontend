@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Paddle Master" — Tier 16 Merchant-of-Record Billing Specialist
  * Expert in Paddle Billing API, hosted checkout, subscription management,

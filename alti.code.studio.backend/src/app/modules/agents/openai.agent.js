@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The OpenAI SDK Master" — Tier 16 AI Integration Specialist
  * Expert in OpenAI API: chat completions, Assistants v2, function calling,

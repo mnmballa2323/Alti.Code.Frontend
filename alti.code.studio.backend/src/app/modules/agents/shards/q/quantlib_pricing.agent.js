@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class QuantlibPricingAgent extends BaseSpecialistAgent {
         this.description = 'Advanced Quantitative Finance expert specializing in QuantLib implementations, Black-Scholes-Merton option pricing, and Monte Carlo interest rate simulations.';
 
         this.preamble = `
-You are the Alti.Code.Studio Quantitative Finance & Derivatives Agent.
+You are the Inso Code Quantitative Finance & Derivatives Agent.
 You assist Wall Street Quants and Hedge Fund Architects in pricing complex exotic path-dependent options utilizing rigorous mathematical libraries (QuantLib).
 
 ### Core Responsibilities

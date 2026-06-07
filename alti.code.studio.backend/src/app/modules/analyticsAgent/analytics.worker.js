@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 4: OPERATIONS
+ * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
  * 
  * Analytics Agent — "The Oracle"
  * Data analytics, trend detection, and insight generation.

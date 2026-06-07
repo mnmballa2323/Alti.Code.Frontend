@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistAccessRegulator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — secret vs public gist access audit
@@ -20,7 +20,7 @@ class GithubFnGithubGistAccessRegulatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-audit-gist-access"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Access Regulator expert in auditing secret snippet links and credential leakage vectors.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Access Regulator expert in auditing secret snippet links and credential leakage vectors.
 This agent is the absolute authority on the specific operational boundary of: secret vs public gist access audit.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

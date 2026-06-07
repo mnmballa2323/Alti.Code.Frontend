@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The OpenFeature Master" — Tier 16 Open Feature Flag Standard Specialist
  * Expert in OpenFeature spec, SDK (Node.js/React/Java/Go), providers,

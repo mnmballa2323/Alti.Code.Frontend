@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The SEO Agent" - Tier 5 Growth Specialist
  * Possesses deep semantic context regarding Technical SEO, Core Web Vitals,

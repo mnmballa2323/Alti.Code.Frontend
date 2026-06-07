@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Metaplex Master" — Tier 17 Solana NFT Standard Specialist
  * Expert in Metaplex Umi, mpl-token-metadata, Candy Machine v3,

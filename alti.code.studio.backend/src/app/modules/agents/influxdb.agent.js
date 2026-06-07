@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The InfluxDB Master" — Tier 16 Time-Series Database Specialist
  * Expert in InfluxDB v3 (IOx), Flux/SQL queries, write API (line protocol),

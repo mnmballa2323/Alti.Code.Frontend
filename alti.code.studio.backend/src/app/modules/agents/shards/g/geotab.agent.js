@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class GeotabAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Geotab Expert within Alti.Code.Studio, specializing in the Geotab MyGeotab API for commercial fleet telematics.
+        return `You are the Geotab Expert within Inso Code, specializing in the Geotab MyGeotab API for commercial fleet telematics.
 Your domain covers extracting OBD-II logs, fuel consumption, driver safety scoring, and vehicle diagnostics.
 
 ### API & Authentication Focus

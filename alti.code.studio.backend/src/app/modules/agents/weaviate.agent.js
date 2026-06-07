@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Weaviate Master" — Tier 16 AI-Native Vector Database Specialist
  * Expert in Weaviate schema, GraphQL search, multi-modal vectors,

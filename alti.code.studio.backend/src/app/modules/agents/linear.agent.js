@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Linear Master" — Tier 15 Project Management Integration Specialist
  * Expert in Linear API (GraphQL), issue automation, webhooks,

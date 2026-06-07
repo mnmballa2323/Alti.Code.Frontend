@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -61,7 +61,7 @@ export class NeuralRouterService {
         const prompt = `You are the Biomimetic Neural Net router.
         Given the query: "${query}"
         
-        Identify the top 3 Agent IDs from the Alti.Code.Studio Swarm best suited for this task.
+        Identify the top 3 Agent IDs from the Inso Code Swarm best suited for this task.
         Output ONLY a JSON array of string IDs (e.g. ["agent_sre_001", "agent_finops_001"]).
         Do not include markdown or text.`;
 

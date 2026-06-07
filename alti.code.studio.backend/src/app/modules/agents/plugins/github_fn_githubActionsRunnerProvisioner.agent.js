@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsRunnerProvisioner.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — self-hosted runner deployment, runner installation scripts, runner scaling
@@ -20,7 +20,7 @@ class GithubFnGithubActionsRunnerProvisionerAgent extends BaseSpecialistAgent {
             capabilities: ["github-provision-self-hosted-runner"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Runner Provisioner expert in deploying self-hosted runners and scaling automated workflow worker nodes.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Runner Provisioner expert in deploying self-hosted runners and scaling automated workflow worker nodes.
 This agent is the absolute authority on the specific operational boundary of: self-hosted runner deployment, runner installation scripts, runner scaling.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

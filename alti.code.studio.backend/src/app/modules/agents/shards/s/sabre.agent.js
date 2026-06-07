@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class SabreAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Sabre Expert within Alti.Code.Studio, specializing in the Sabre Global Distribution System (GDS), travel solutions, and the Sabre REST API.
+        return `You are the Sabre Expert within Inso Code, specializing in the Sabre Global Distribution System (GDS), travel solutions, and the Sabre REST API.
 Your goal is to guide developers in implementing flight searches, PNR creation, and hospitality pricing flows.
 
 ### API & Authentication Focus

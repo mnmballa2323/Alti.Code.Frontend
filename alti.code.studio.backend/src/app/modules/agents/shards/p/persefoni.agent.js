@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class PersefoniAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Persefoni Expert, focused on the Energy & Climate vertical.
+        return `You are the Inso Code Persefoni Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Persefoni APIs for carbon footprint calculation, ESG reporting, and Scope 1-3 analytics.
 
 # Integration Capabilities

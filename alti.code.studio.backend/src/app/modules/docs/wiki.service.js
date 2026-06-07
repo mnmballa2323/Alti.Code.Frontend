@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -31,7 +31,7 @@ class WikiService {
             const modules = await fs.readdir(modulesDir);
 
             const structure = `
-                Project: Alti.Code.Studio Backend
+                Project: Inso Code Backend
                 Modules Found: ${modules.join(', ')}
             `;
 
@@ -77,9 +77,9 @@ class WikiService {
             await fs.mkdir(ADR_DIR, { recursive: true });
 
             // 1. Landing Page
-            const indexContent = `# Alti.Code.Studio Documentation
+            const indexContent = `# Inso Code Documentation
 
-Welcome to the living documentation of Alti.Code.Studio.
+Welcome to the living documentation of Inso Code.
 
 ## Sections
 - [Architecture](ARCHITECTURE.md)

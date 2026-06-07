@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 3: COMPLIANCE & QUALITY
+ * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
  * 
  * Compliance Agent — "The Regulator"
  * GDPR, SOC2, HIPAA, FedRAMP compliance checking.

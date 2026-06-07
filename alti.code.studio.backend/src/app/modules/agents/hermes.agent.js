@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024–2026 Alti.Code.Studio
+ * Copyright (c) 2024–2026 Inso Code
  *
  * "The Hermes Vanguard"
  * A Specialist Agent wrapper mapping standard swarm brain pipelines to the

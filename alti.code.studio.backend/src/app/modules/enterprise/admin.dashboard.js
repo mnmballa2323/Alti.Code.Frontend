@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE ADMIN DASHBOARD CONTROLLER (Phase 37)
  * 
@@ -45,7 +45,7 @@ class AdminDashboardController {
 
         return {
             platform: {
-                name: 'Alti.Code.Studio',
+                name: 'Inso Code',
                 version: '2.0.0-enterprise',
                 uptime: Math.round(process.uptime()),
                 uptimeFormatted: this._formatUptime(process.uptime()),
@@ -174,7 +174,7 @@ class AdminDashboardController {
         const dr = multiRegion.getDisasterRecoveryStatus();
 
         return {
-            title: 'Alti.Code.Studio — Enterprise Executive Summary',
+            title: 'Inso Code — Enterprise Executive Summary',
             generatedAt: new Date().toISOString(),
             keyMetrics: {
                 systemUptime: overview.platform.uptimeFormatted,

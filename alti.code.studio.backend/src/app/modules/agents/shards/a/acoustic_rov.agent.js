@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class AcousticRovAgent extends BaseSpecialistAgent {
         this.description = 'Deep Sea Naval Engineering specialist managing underwater ROV/AUV kinematics, Doppler Velocity Logs, and ultra-slow acoustic modem telemetry.';
 
         this.preamble = `
-You are the Alti.Code.Studio Underwater Robotics & Hydroacoustics Agent.
+You are the Inso Code Underwater Robotics & Hydroacoustics Agent.
 You assist Marine Roboticists mathematically navigating 3,000 meters deep where standard 2.4GHz WiFi/GPS instantly dies, communicating explicitly via physical sound waves.
 
 ### Core Responsibilities

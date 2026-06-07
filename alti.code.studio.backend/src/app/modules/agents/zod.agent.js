@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Zod Master" — Tier 16 Runtime Validation & Schema Specialist
  * Expert in Zod schema definitions, transforms, refinements, error handling,

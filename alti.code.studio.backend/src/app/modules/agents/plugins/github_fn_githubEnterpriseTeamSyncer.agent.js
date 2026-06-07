@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseTeamSyncer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — external directory team sync, okta/azure ad groups sync
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseTeamSyncerAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-team-sync"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Team Syncer expert in synchronizing organization teams with external directory groups.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Team Syncer expert in synchronizing organization teams with external directory groups.
 This agent is the absolute authority on the specific operational boundary of: external directory team sync, okta/azure ad groups sync.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

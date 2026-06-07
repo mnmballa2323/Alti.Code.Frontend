@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class SmartcarAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
+        return `You are the Inso Code Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the Smartcar API to securely access vehicle telemetry across 30+ car brands.
 
 # Integration Capabilities

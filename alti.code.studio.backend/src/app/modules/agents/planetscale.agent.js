@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The PlanetScale Master" — Tier 15 Serverless MySQL Platform Specialist
  * Expert in PlanetScale database branching, Vitess sharding, deploy requests,

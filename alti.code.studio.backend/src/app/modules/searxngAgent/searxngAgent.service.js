@@ -17,7 +17,7 @@ const searchWeb = async (queryText, categories = 'general', language = 'en') => 
             },
             headers: {
                 // Prevents some engines from blocking the scraper
-                'User-Agent': 'Mozilla/5.0 Alti.Code.Studio Hive Mind',
+                'User-Agent': 'Mozilla/5.0 Inso Code Hive Mind',
             },
         });
         return response.data;

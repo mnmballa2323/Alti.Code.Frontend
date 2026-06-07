@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistBackupRestore.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — cloning gists locally, backing up snippet repositories
@@ -20,7 +20,7 @@ class GithubFnGithubGistBackupRestoreAgent extends BaseSpecialistAgent {
             capabilities: ["github-backup-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Backup Restore expert in cloning and restoring local snippet backups.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Backup Restore expert in cloning and restoring local snippet backups.
 This agent is the absolute authority on the specific operational boundary of: cloning gists locally, backing up snippet repositories.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

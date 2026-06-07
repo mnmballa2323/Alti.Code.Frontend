@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Navigator" - Resource & Scaling Agent
  * Manages infrastructure resources, scaling, and cost optimization.

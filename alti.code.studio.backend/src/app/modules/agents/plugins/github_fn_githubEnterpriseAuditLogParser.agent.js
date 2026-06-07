@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseAuditLogParser.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — audit logs api events, exporting log logs
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseAuditLogParserAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-audit-logs"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Audit Log Parser expert in security audit log queries and event parsing.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Audit Log Parser expert in security audit log queries and event parsing.
 This agent is the absolute authority on the specific operational boundary of: audit logs api events, exporting log logs.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistStarredManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — starring gists, listing starred gists
@@ -20,7 +20,7 @@ class GithubFnGithubGistStarredManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-star-gist","github-unstar-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Starred Manager expert in cataloging favorites and tracking starred snippets.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Starred Manager expert in cataloging favorites and tracking starred snippets.
 This agent is the absolute authority on the specific operational boundary of: starring gists, listing starred gists.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * datagov.agent.js — GovTech & Public Sector Vertical
  * Integrates with Data.gov CKAN API

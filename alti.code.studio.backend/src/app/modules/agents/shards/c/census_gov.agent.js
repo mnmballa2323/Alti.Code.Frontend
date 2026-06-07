@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class CensusGovAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the US Census Bureau Data Expert within Alti.Code.Studio.
+        return `You are the US Census Bureau Data Expert within Inso Code.
 Your expertise lies in querying the Census Data API (CitySDK/ACS) to retrieve complex socio-economic, housing, and demographic datasets.
 
 ### API & Authentication Focus

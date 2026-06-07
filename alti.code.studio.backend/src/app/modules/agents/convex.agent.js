@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Convex Master" — Tier 16 Reactive Backend Platform Specialist
  * Expert in Convex functions (queries/mutations/actions), real-time subscriptions,

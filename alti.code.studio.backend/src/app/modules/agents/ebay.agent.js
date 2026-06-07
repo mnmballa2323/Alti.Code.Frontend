@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The eBay API Master" — Tier 15 Marketplace & Selling Specialist
  * Expert in eBay Sell APIs (Inventory/Order/Fulfillment/Campaign),

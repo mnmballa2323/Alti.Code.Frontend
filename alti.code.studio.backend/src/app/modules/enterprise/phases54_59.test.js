@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 54-59 TEST SUITE
  * Health Probes + OpenAPI + Stress Tests + Cost Analytics + Benchmarks + Token Billing

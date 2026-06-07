@@ -43,16 +43,16 @@ export function LogCaptureAgent({
       const rawLogs = `
 ### ☁️ Google Cloud Operations (Logging + Trace)
 **Timestamp:** ${new Date().toISOString()}
-**GCP Project:** \`alti-sovereign-prod\`
-**Trace ID:** \`projects/alti-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}\`
+**GCP Project:** \`inso-sovereign-prod\`
+**Trace ID:** \`projects/inso-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}\`
 **Status:** ${data.success ? "✅ Trace Acquired" : "❌ DEGRADED"}
 
 \`\`\`json
 {
   "insertId": "1a2b3c4d5e",
-  "resource": { "type": "cloud_run_revision", "labels": { "service_name": "alti-backend" } },
+  "resource": { "type": "cloud_run_revision", "labels": { "service_name": "inso-backend" } },
   "severity": "ERROR",
-  "trace": "projects/alti-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}",
+  "trace": "projects/inso-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}",
   "textPayload": "Unhandled runtime exception in Swarm Orchestrator thread:
     at runMicrotasks (<anonymous>)
     at processTicksAndRejections (node:internal/process/task_queues:96:5)

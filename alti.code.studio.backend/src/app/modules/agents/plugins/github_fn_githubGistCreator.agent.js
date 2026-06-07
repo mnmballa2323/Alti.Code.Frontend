@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistCreator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — creating public/secret gists, multi-file gists
@@ -20,7 +20,7 @@ class GithubFnGithubGistCreatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Creator expert in publishing secret and public code snippets dynamically.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Creator expert in publishing secret and public code snippets dynamically.
 This agent is the absolute authority on the specific operational boundary of: creating public/secret gists, multi-file gists.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

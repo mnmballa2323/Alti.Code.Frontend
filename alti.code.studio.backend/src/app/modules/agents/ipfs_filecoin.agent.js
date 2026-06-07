@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The IPFS/Filecoin Master" — Tier 16 Decentralized Storage Specialist
  * Expert in IPFS (Helia/Kubo), Filecoin deals (Lighthouse, web3.storage),

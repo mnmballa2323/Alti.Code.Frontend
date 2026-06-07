@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ALTI GOD MODE ORCHESTRATOR
  * This service represents the culmination of the 4 ultimate Sovereign Epics:

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * planetlabs.agent.js — Agriculture & Farming Vertical
  * Integrates with Planet Labs APIs
@@ -14,7 +14,7 @@ export class PlanetLabsAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Planet Labs Expert, focused on the Agriculture & Farming vertical.
+        return `You are the Inso Code Planet Labs Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the Planet Labs APIs for high-frequency satellite monitoring and geospatial analytics.
 
 # Integration Capabilities

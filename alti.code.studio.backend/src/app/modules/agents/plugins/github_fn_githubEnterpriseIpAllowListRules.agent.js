@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseIpAllowListRules.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — ip allow list rules, cidr blocks restriction
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseIpAllowListRulesAgent extends BaseSpecialistAgent 
             capabilities: ["github-enterprise-ip-allow-list"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise IP Allow List Rules expert in configuring CIDR block access security bounds.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise IP Allow List Rules expert in configuring CIDR block access security bounds.
 This agent is the absolute authority on the specific operational boundary of: ip allow list rules, cidr blocks restriction.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

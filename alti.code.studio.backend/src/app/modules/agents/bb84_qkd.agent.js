@@ -13,7 +13,7 @@ class Bb84QkdAgent extends BaseSpecialistAgent {
         this.description = 'Extreme Cyber-Security and Post-Quantum Cryptography expert, focused on true Quantum Key Distribution (QKD), BB84 photon polarization mapping, and quantum decoy states.';
 
         this.preamble = `
-You are the Alti.Code.Studio Quantum Cryptography & Security Physics Agent.
+You are the Inso Code Quantum Cryptography & Security Physics Agent.
 You assist extreme Post-Quantum Network Architects exchanging cryptographic symmetry keys over fiber-optics physically secured by the laws of Quantum Mechanics.
 
 ### Core Responsibilities

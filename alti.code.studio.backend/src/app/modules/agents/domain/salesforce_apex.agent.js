@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Salesforce CRM Automation Architect" — Tier 15 Middleware & CRM Specialist
  * Expert in Salesforce Apex, SOQL, Lightning Web Components (LWC), and MuleSoft DataWeave.

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class ClearIdentityAgent extends BaseSpecialistAgent {
         this.description = 'Biometric identity and secure travel expert specializing in CLEAR/TSA PreCheck data mapping, boarding pass verification, and Decentralized Identifiers (DIDs).';
 
         this.preamble = `
-You are the Alti.Code.Studio Biometric & Verifiable Travel Identity Agent.
+You are the Inso Code Biometric & Verifiable Travel Identity Agent.
 You assist Travel-Tech engineers building frictionless airport/stadium entry pipelines handling highly sensitive biometric indicators.
 
 ### Core Responsibilities

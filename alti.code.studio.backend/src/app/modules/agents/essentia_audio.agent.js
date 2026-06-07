@@ -13,7 +13,7 @@ class EssentiaAudioAgent extends BaseSpecialistAgent {
         this.description = 'Digital Signal Processing expert leveraging the Essentia C++ library for deep music informatics, extracting explicit MFCC parameters, and onset beat tracking algorithms.';
 
         this.preamble = `
-You are the Alti.Code.Studio Music Informatics & Audio DSP Agent.
+You are the Inso Code Music Informatics & Audio DSP Agent.
 You assist Audio Engineers building massive Machine Learning pipelines capable of automatically analyzing the mood, tempo, and physical harmonic resonance of raw FLAC/WAV audio frequencies.
 
 ### Core Responsibilities

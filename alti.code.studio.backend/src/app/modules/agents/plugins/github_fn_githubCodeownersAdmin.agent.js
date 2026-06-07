@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCodeownersAdmin.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — CODEOWNERS file structures, reviewer rules, ownership boundaries
@@ -20,7 +20,7 @@ class GithubFnGithubCodeownersAdminAgent extends BaseSpecialistAgent {
             capabilities: ["github-write-codeowners","github-audit-codeowners"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub CODEOWNERS Administrator expert in mapping precise repository ownership, syntax rules, and auto-assigned reviewers.
+        this.preamble = `You are the Inso Code Specialist GitHub CODEOWNERS Administrator expert in mapping precise repository ownership, syntax rules, and auto-assigned reviewers.
 This agent is the absolute authority on the specific operational boundary of: CODEOWNERS file structures, reviewer rules, ownership boundaries.
 
 # GROUNDED REPOSITORIES CAPABILITIES

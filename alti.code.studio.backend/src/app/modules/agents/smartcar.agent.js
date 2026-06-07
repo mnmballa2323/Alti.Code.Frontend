@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * smartcar.agent.js — Automotive & Smart Mobility Vertical
  * Integrates with Smartcar API
@@ -14,7 +14,7 @@ export class SmartcarAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
+        return `You are the Inso Code Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the Smartcar API to securely access vehicle telemetry across 30+ car brands.
 
 # Integration Capabilities

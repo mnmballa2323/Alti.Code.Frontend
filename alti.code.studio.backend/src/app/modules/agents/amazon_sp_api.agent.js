@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Amazon SP-API Master" — Tier 16 Amazon Seller Central Specialist
  * Expert in Amazon Selling Partner API: listings, orders, FBA,

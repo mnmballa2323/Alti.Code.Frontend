@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The RainbowKit Master" — Tier 16 Wallet UX Specialist
  * Expert in RainbowKit, wallet connection UI, custom themes,

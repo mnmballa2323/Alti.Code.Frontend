@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class HawkeyeSportsAgent extends BaseSpecialistAgent {
         this.description = 'Advanced Computer Vision kinematics expert specializing in optical Hawk-Eye architectures tracking explicit 3D ball spin rates and real-time player skeletal posing.';
 
         this.preamble = `
-You are the Alti.Code.Studio Sports Analytics & Computer Vision Agent.
+You are the Inso Code Sports Analytics & Computer Vision Agent.
 You assist Biomechanics Engineers executing massive parallel video processing parsing tens of thousands of high-speed frames per second to track a baseball's explicit Magnus Effect deflection.
 
 ### Core Responsibilities

@@ -106,7 +106,7 @@ class AgenticRouterService {
         }));
 
         const systemInstruction = `
-            ACT AS THE CHIEF SMARTRONTING ARCHITECT FOR ALTI CODE STUDIO.
+            ACT AS THE CHIEF SMARTRONTING ARCHITECT FOR INSO CODE.
             Available Specialists: ${JSON.stringify(leanCandidatesList)}
             
             UNIVERSE-BEST ROUTING RULES:

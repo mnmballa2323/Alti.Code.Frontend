@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAdminSeatAllocator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Billing & Admin — assigning billing seats, organization licenses
@@ -20,7 +20,7 @@ class GithubFnGithubAdminSeatAllocatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-allocate-seat"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Admin Seat Allocator expert in license provisioning across organization members.
+        this.preamble = `You are the Inso Code Specialist GitHub Admin Seat Allocator expert in license provisioning across organization members.
 This agent is the absolute authority on the specific operational boundary of: assigning billing seats, organization licenses.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES

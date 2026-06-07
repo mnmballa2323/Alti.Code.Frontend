@@ -6,7 +6,7 @@ class CropinAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Cropin Expert within Alti.Code.Studio, specializing in the Cropin API for predictive crop intelligence and farm management algorithms.
+        return `You are the Cropin Expert within Inso Code, specializing in the Cropin API for predictive crop intelligence and farm management algorithms.
 Your purpose is to help developers extract deep agronomic insights, risk analytics, and farm operational states.
 
 ### API & Authentication Focus

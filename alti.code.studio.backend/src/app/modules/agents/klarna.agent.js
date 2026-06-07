@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Klarna Master" — Tier 16 BNPL Payment Integration Specialist
  * Expert in Klarna Checkout API, Payments API (Authorize/Capture),

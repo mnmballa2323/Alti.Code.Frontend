@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsOidcFederator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — OpenID Connect keys, keyless authentication, AWS/GCP role assumption
@@ -20,7 +20,7 @@ class GithubFnGithubActionsOidcFederatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-actions-oidc-federation"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions OIDC Federator expert in keyless AWS/GCP role assumptions using OpenID Connect authentication.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions OIDC Federator expert in keyless AWS/GCP role assumptions using OpenID Connect authentication.
 This agent is the absolute authority on the specific operational boundary of: OpenID Connect keys, keyless authentication, AWS/GCP role assumption.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

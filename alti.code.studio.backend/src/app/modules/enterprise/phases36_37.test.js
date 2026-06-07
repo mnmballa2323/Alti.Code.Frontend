@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 36-37 TEST SUITE
  * Multi-Region Failover + Admin Dashboard
@@ -140,7 +140,7 @@ describe('Phase 37: Enterprise Admin Dashboard', () => {
         const { adminDashboard } = await import('./admin.dashboard.js');
         const overview = adminDashboard.getSystemOverview();
 
-        expect(overview.platform.name).toBe('Alti.Code.Studio');
+        expect(overview.platform.name).toBe('Inso Code');
         expect(overview.platform.version).toContain('enterprise');
         expect(overview.platform.uptime).toBeGreaterThan(0);
         expect(overview.platform.uptimeFormatted).toBeDefined();

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCopilotTokenManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Copilot — copilot user token authentication, license token exchanges
@@ -20,7 +20,7 @@ class GithubFnGithubCopilotTokenManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-copilot-token"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot Token Manager expert in OAuth tokens exchanges and license authorization.
+        this.preamble = `You are the Inso Code Specialist GitHub Copilot Token Manager expert in OAuth tokens exchanges and license authorization.
 This agent is the absolute authority on the specific operational boundary of: copilot user token authentication, license token exchanges.
 
 # GROUNDED COPILOT CAPABILITIES

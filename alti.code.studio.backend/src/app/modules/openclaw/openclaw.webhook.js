@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * The Omni-Channel Ambassador: OpenClaw Webhook Router
  * Listens for incoming POST requests forwarded from the Developer's personal
@@ -42,7 +42,7 @@ class OpenClawWebhookService {
             logger.info(`📱 OpenClaw Ambassador: Received requirement via ${payload.source || 'Unknown Channel'}`);
 
             // 2. Synthesize the Sprint Goal using Gemini
-            const prompt = `You are The Ambassador. A non-technical stakeholder just messaged the Alti.Code.Studio platform via their OpenClaw personal assistant.
+            const prompt = `You are The Ambassador. A non-technical stakeholder just messaged the Inso Code platform via their OpenClaw personal assistant.
 Translate their raw English requirement into a strict, highly technical "Sprint Goal".
 Do NOT write code. Write a 1-3 sentence declarative technical requirement.
 
@@ -66,7 +66,7 @@ Synthesize a precise Sprint Goal:`;
                 success: true,
                 message: "Goal Sent to Swarm",
                 sprintGoal: cleanGoal,
-                replyText: `🤖 I've forwarded your request to the Alti.Code.Studio Swarm. They are scheduling a priority sprint for:\n> "${cleanGoal}"`
+                replyText: `🤖 I've forwarded your request to the Inso Code Swarm. They are scheduling a priority sprint for:\n> "${cleanGoal}"`
             });
 
         } catch (error) {

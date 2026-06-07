@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * ncbi.agent.js — BioTech & Genomics Vertical
  * Integrates with NCBI Entrez E-utilities (PubMed, GenBank, dbSNP)

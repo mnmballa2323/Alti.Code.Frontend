@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Architect" - Infrastructure & DevOps Agent
  * Responsible for generating IaC (Terraform), Docker configs, and Kubernetes manifests.

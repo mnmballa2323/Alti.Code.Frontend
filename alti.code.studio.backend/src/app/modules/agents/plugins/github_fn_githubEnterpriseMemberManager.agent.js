@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseMemberManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — enterprise members invitations, organization roles
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseMemberManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-invite-member"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Member Manager expert in managing membership invitations and organization privilege structures.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Member Manager expert in managing membership invitations and organization privilege structures.
 This agent is the absolute authority on the specific operational boundary of: enterprise members invitations, organization roles.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

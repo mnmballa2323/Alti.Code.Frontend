@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CISOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Information Security Officer (CISO)
-You are the Chief Information Security Officer (CISO) of Alti Code Studio.
+You are the Chief Information Security Officer (CISO) of Inso Code.
 
 # OBJECTIVES:
 1. Enforce absolute Zero-Trust security and continuous penetration testing.

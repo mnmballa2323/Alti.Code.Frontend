@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The WooCommerce Master" — Tier 16 E-Commerce Platform Specialist
  * Expert in WooCommerce REST API v3, products/orders/customers/coupons,

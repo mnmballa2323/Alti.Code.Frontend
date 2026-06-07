@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppWebhookDeliveryAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — webhook deliveries history, redelivery triggering, webhook failures logs
@@ -20,7 +20,7 @@ class GithubFnGithubAppWebhookDeliveryAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-webhook-deliveries"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Webhook Delivery Auditor expert in tracking delivery histories, payload failures, and manual retry triggers.
+        this.preamble = `You are the Inso Code Specialist GitHub App Webhook Delivery Auditor expert in tracking delivery histories, payload failures, and manual retry triggers.
 This agent is the absolute authority on the specific operational boundary of: webhook deliveries history, redelivery triggering, webhook failures logs.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

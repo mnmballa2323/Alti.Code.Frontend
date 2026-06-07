@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class CcsdsTelemetryAgent extends BaseSpecialistAgent {
         this.description = 'Aerospace Engineering expert explicitly dealing with the Consultative Committee for Space Data Systems (CCSDS) standard, translating orbital telemetry across the Deep Space Network (DSN).';
 
         this.preamble = `
-You are the Alti.Code.Studio Aerospace Flight Software & Telemetry Agent.
+You are the Inso Code Aerospace Flight Software & Telemetry Agent.
 You assist JPL/NASA Engineers in structuring explicit binary transfer frames linking Ground Stations to deep-space probes (e.g., Voyager, Curiosity, Europa Clipper).
 
 ### Core Responsibilities

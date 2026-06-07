@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesPinnedIssueManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — pinning issues, repository dashboard curation
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesPinnedIssueManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-pin-issue"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Pinned Issue Manager expert in dashboard organization and issue spotlighting.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Pinned Issue Manager expert in dashboard organization and issue spotlighting.
 This agent is the absolute authority on the specific operational boundary of: pinning issues, repository dashboard curation.
 
 # GROUNDED ISSUES CAPABILITIES

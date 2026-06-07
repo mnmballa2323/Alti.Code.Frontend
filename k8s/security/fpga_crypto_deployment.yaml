@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-accelerator-service
+  namespace: security
+  labels:
+    app: crypto-accelerator
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: crypto-accelerator
+  template:
+    metadata:
+      labels:
+        app: crypto-accelerator
+    spec:
+      # Target F1 FPGA instances exclusively
+      nodeSelector:
+        node.kubernetes.io/instance-type: f1.2xlarge
+      tolerations:
+      - key: "hardware/fpga"
+        operator: "Exists"
+        effect: "NoSchedule"
+      containers:
+      - name: crypto-service
+        image: alticodestudio/crypto-service:fpga-latest
+        ports:
+        - containerPort: 8443
+        env:
+        - name: OPENSSL_CONF
+          value: "/etc/ssl/fpga_engine.cnf"
+        volumeMounts:
+        - name: fpga-dev
+          mountPath: /dev/fpga0
+        - name: openssl-config
+          mountPath: /etc/ssl/fpga_engine.cnf
+          subPath: fpga_engine.cnf
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+            # Request custom FPGA resource (requires AWS FPGA device plugin for K8s)
+            aws.amazon.com/fpga: 1
+      volumes:
+      - name: fpga-dev
+        hostPath:
+          path: /dev/fpga0
+      - name: openssl-config
+        configMap:
+          name: fpga-openssl-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crypto-accelerator-svc
+  namespace: security
+spec:
+  type: ClusterIP
+  ports:
+  - port: 443
+    targetPort: 8443
+    protocol: TCP
+  selector:
+    app: crypto-accelerator

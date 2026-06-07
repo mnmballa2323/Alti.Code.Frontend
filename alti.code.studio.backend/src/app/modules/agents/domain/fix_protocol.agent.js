@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Quantitative Arbitrage Engineer" — Tier 15 Finance Specialist
  * Expert in FIX Protocol, High-Frequency Trading (HFT) optimizations, Market Data feeds, and Order Routing architectures in C++/Rust/Node.js.

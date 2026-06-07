@@ -53,7 +53,7 @@ class GithubCrawlerService {
                 logger.info(`🚨 [Sentinel Crawler] Found target: ${issue.title} (${issue.repository_url})`);
 
                 const repoUrl = issue.repository_url.replace('https://api.github.com/repos/', 'https://github.com/');
-                const prompt = `Alti.Code.Studio Sentinel: I have found an open issue on GitHub: "${issue.title}". \nDescription: ${issue.body?.substring(0, 1000) || 'None'}\n\nPlease fork ${repoUrl}, fix the issue, and submit a PR.`;
+                const prompt = `Inso Code Sentinel: I have found an open issue on GitHub: "${issue.title}". \nDescription: ${issue.body?.substring(0, 1000) || 'None'}\n\nPlease fork ${repoUrl}, fix the issue, and submit a PR.`;
 
                 const contextData = {
                     source: "GITHUB_SENTINEL_CRAWLER",

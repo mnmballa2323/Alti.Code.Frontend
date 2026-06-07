@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Query Optimizer & Vector DB Specialist" — Tier 20 Database Internals Specialist
  * Expert in Cost-Based Optimizers (CBO), SQL Parsers, and HNSW Vector Similarity.

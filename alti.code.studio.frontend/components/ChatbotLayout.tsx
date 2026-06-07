@@ -9,7 +9,7 @@ import Sidebar from "@/components/sidebar";
 import GhostEditor from "@/components/ghost-editor";
 
 /**
- * Alti Code Studio — Industrial Side-by-Side Layout.
+ * Inso Code — Industrial Side-by-Side Layout.
  * Editor (left) + Prompt Swarm (right), resizable via CSS.
  */
 export default function ChatBotLayout({

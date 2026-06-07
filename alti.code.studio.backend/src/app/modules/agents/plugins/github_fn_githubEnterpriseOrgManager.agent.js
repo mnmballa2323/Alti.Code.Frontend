@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseOrgManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — creating organizations, organizational settings
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseOrgManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-create-org"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Org Manager expert in setting up new child organizations and administrative rules.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Org Manager expert in setting up new child organizations and administrative rules.
 This agent is the absolute authority on the specific operational boundary of: creating organizations, organizational settings.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

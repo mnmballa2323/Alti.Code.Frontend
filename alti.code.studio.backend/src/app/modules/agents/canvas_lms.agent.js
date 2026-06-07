@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Canvas LMS Master" — Tier 16 Learning Management System Specialist
  * Expert in Canvas REST API (Instructure), courses, assignments, grades,

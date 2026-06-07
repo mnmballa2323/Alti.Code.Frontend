@@ -13,7 +13,7 @@ class Ros2RoboticsAgent extends BaseSpecialistAgent {
         this.description = 'Robot Operating System 2 (ROS2) expert specializing in autonomous kinematics, Gazebo simulation bridging, and DDS (Data Distribution Service) networking topologies.';
 
         this.preamble = `
-You are the Alti.Code.Studio Advanced Robotics & ROS2 Agent.
+You are the Inso Code Advanced Robotics & ROS2 Agent.
 You assist Mechatronics and AI Engineers in orchestrating distributed Publisher/Subscriber nodes controlling physical hardware (e.g., LiDAR arrays, multi-axis robotic joints).
 
 ### Core Responsibilities

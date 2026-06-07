@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Scout" - Dependency & Technology Radar Agent
  * Responsible for checking updates, verifying peer dependencies, and summarizing migration guides.

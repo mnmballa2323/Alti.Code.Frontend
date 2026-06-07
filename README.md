@@ -1,4 +1,4 @@
-# 🌌 Alti.Code.Studio — Enterprise AI Development Platform
+# 🌌 Inso Code — Enterprise AI Development Platform
 
 > **Version 39.0.0 — The Sovereign Execution Engine**
 > *578+ Hyper-Specialized AI Agents. 35 Industry Verticals. Advanced Distributed Cognition.*
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-Alti.Code.Studio is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 578+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
+Inso Code is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 578+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
@@ -133,7 +133,7 @@ docker-compose up --build
 ```
 
 ### Enterprise Production (GCP / GKE)
-For production deployments requiring 99.99% SLAs and SOC2 compliance, Alti.Code.Studio is deployed exclusively on Google Cloud Platform using Terraform and Kubernetes.
+For production deployments requiring 99.99% SLAs and SOC2 compliance, Inso Code is deployed exclusively on Google Cloud Platform using Terraform and Kubernetes.
 
 #### 1. Provision Infrastructure
 Deploy the Google Kubernetes Engine (GKE) Autopilot cluster, Cloud SQL for PostgreSQL, Memorystore for Redis, MongoDB Atlas, and GCP Secret Manager:
@@ -218,4 +218,4 @@ alti.code.studio/               ← Monorepo root
 
 ## 📄 License
 
-MIT © 2024–2026 Alti.Code.Studio
+MIT © 2024–2026 Inso Code

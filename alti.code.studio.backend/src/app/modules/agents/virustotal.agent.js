@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The VirusTotal Master" — Tier 16 Threat Intelligence & Malware Analysis Specialist
  * Expert in VirusTotal API v3, file/URL/IP/domain analysis, threat intel,

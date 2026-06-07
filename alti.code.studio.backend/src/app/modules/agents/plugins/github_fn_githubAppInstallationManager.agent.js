@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppInstallationManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — installation tokens, user installations, repo access grants
@@ -20,7 +20,7 @@ class GithubFnGithubAppInstallationManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-app-installation"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Installation Manager expert in managing installation lifecycles and temporary workspace credentials.
+        this.preamble = `You are the Inso Code Specialist GitHub App Installation Manager expert in managing installation lifecycles and temporary workspace credentials.
 This agent is the absolute authority on the specific operational boundary of: installation tokens, user installations, repo access grants.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

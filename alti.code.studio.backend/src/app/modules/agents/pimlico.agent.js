@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Pimlico Master" — Tier 17 ERC-4337 Account Abstraction Infrastructure Specialist
  * Expert in Pimlico bundler + paymaster, Permissionless.js, smart accounts

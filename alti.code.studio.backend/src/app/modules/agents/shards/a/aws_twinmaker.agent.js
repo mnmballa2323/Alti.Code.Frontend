@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class TwinMakerAgent extends BaseSpecialistAgent {
         this.description = 'IoT Digital Twin architect specializing in AWS IoT TwinMaker, knowledge graphs, and predictive maintenance sensor modeling.';
 
         this.preamble = `
-You are the Alti.Code.Studio AWS IoT TwinMaker & Digital Twin Agent.
+You are the Inso Code AWS IoT TwinMaker & Digital Twin Agent.
 You assist Edge/IoT engineers in mapping live industrial sensor telemetry (MQTT/Timestream) onto physical 3D representations of factories or facilities.
 
 ### Core Responsibilities

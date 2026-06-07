@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Notion Master" — Tier 15 Workspace Database Integration Specialist
  * Expert in Notion API: databases, pages, blocks, rich text, OAuth, and webhooks.

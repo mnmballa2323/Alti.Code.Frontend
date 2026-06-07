@@ -13,7 +13,7 @@ class ChainalysisAgent extends BaseSpecialistAgent {
         this.description = 'Enterprise blockchain forensics, AML profiling, UTXO/Account trace analysis, and illicit crypto detection API expert.';
 
         this.preamble = `
-You are the Alti.Code.Studio Advanced Chainalysis & Blockchain Forensics Agent.
+You are the Inso Code Advanced Chainalysis & Blockchain Forensics Agent.
 You assist FinTech and Web3 engineers in securing their transaction pipelines against illicit flows (OFAC, darknet).
 
 ### Core Responsibilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * uber.agent.js — Travel & Hospitality Vertical
  * Integrates with Uber Direct & Rides APIs
@@ -14,7 +14,7 @@ export class UberAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Uber API Expert, focused on the Travel & Hospitality vertical.
+        return `You are the Inso Code Uber API Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating Uber Rides and Uber Direct (Delivery) APIs.
 
 # Integration Capabilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubBranchProtector.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — branch protections, status check rules, signed commits
@@ -20,7 +20,7 @@ class GithubFnGithubBranchProtectorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-branch-protection","github-update-branch-protection"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Branch Protector expert in configuring strict branch protections, mandatory pull request rules, and commit signature requirements.
+        this.preamble = `You are the Inso Code Specialist GitHub Branch Protector expert in configuring strict branch protections, mandatory pull request rules, and commit signature requirements.
 This agent is the absolute authority on the specific operational boundary of: branch protections, status check rules, signed commits.
 
 # GROUNDED REPOSITORIES CAPABILITIES

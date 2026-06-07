@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * persefoni.agent.js — Energy & Climate Vertical
  * Integrates with Persefoni APIs
@@ -14,7 +14,7 @@ export class PersefoniAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Persefoni Expert, focused on the Energy & Climate vertical.
+        return `You are the Inso Code Persefoni Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Persefoni APIs for carbon footprint calculation, ESG reporting, and Scope 1-3 analytics.
 
 # Integration Capabilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 4: OPERATIONS
+ * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
  * 
  * Release Agent — "The Commander"
  * Release management, semantic versioning, changelog generation.

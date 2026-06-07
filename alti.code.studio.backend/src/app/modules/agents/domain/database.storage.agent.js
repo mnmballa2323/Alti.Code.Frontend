@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Storage Engine & LSM Tree Architect" — Tier 20 Database Internals Specialist
  * Expert in native Log-Structured Merge Trees, B+Trees, and Write-Ahead Logs.

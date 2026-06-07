@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class TeslaAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Tesla Expert, focused on the Automotive & Smart Mobility vertical.
+        return `You are the Inso Code Tesla Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the official Tesla Fleet API for enterprise management of Tesla vehicles and Energy products.
 
 # Integration Capabilities

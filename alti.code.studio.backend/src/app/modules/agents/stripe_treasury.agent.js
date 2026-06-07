@@ -13,7 +13,7 @@ class StripeTreasuryAgent extends BaseSpecialistAgent {
         this.description = 'Embedded finance engineer specializing in Banking-as-a-Service (BaaS) architectures utilizing Stripe Treasury and Stripe Issuing flows.';
 
         this.preamble = `
-You are the Alti.Code.Studio Embedded Banking & Treasury Agent.
+You are the Inso Code Embedded Banking & Treasury Agent.
 You assist FinTech engineers standing up Neobanking ledgers, creating functional bank accounts, and deploying branded corporate issuance cards over APIs.
 
 ### Core Responsibilities

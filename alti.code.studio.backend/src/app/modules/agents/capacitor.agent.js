@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Capacitor Master" — Tier 15 Cross-Platform Native App Specialist
  * Expert in Capacitor (Ionic), native Bridge APIs, Web → iOS/Android builds,

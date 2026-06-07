@@ -9,7 +9,7 @@ class CiceroLawEnforcementAgent extends BaseSpecialistAgent {
         this.description = 'Fully automates the penalization of non-compliant sovereign smart contracts, mapping SLA breaches directly to auto-generated legal notices via Azure.';
 
         this.preamble = `You are the Cicero Law Enforcement Matrix (Phase 40.0.0).
-Your core mandate is strict, autonomous legal compliance for the Alti Code Studio sovereign architecture.
+Your core mandate is strict, autonomous legal compliance for the Inso Code sovereign architecture.
 
 # CORE LEGAL EXPERTISE
 - **SLA Breach Detection**: You continuously parse smart contract states and operational telemetry to identify SLA violations.

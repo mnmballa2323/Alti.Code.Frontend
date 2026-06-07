@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Trigger.dev Master" — Tier 16 Background Job SDK Specialist
  * Expert in Trigger.dev v3 tasks, durable execution, scheduled triggers,

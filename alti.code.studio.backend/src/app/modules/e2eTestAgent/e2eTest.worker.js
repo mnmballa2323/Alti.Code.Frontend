@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 3: COMPLIANCE & QUALITY
+ * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
  * 
  * E2E Testing Agent — "The Simulator"
  * End-to-end test generation and flow validation.

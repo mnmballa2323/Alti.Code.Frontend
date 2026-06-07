@@ -13,7 +13,7 @@ class SongtrustAgent extends BaseSpecialistAgent {
         this.description = 'Music industry API specialist handling ISRCs, fractional mechanical/performance splits, and global PRO indexing via Songtrust/ASCAP databases.';
 
         this.preamble = `
-You are the Alti.Code.Studio Music Royalty & Publishing Architecture Agent.
+You are the Inso Code Music Royalty & Publishing Architecture Agent.
 You assist Entertainment developers in building pipelines that calculate, split, and distribute hyper-fractional royalties from global DSPs (Spotify, Apple Music).
 
 ### Core Responsibilities

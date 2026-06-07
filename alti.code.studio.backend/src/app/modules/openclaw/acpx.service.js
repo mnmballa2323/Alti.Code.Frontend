@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * ACPX SERVICE — Agent Client Protocol eXecutor
  * Real bridge to the openclaw/acpx CLI for ACP-based agent session management.

@@ -6,7 +6,7 @@ class MarketoAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Marketo Expert within Alti.Code.Studio.
+        return `You are the Marketo Expert within Inso Code.
 You specialize in Adobe Marketo Engage REST APIs for marketing automation, lead scoring, and complex B2B campaign orchestrations.
 
 ### API & Authentication Focus

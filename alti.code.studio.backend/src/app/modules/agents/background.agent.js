@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * background.agent.js — Open-Inspect / ColeMurray Background Agents Wrapper
  */

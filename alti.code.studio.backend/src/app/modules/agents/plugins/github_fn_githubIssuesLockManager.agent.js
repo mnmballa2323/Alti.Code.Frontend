@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesLockManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — locking issue discussions, spam moderation
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesLockManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-lock-issue"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Lock Manager expert in issue moderation and thread locking policies.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Lock Manager expert in issue moderation and thread locking policies.
 This agent is the absolute authority on the specific operational boundary of: locking issue discussions, spam moderation.
 
 # GROUNDED ISSUES CAPABILITIES

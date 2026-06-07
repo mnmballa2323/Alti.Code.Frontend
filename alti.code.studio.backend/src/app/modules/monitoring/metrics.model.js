@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Enterprise Cost & Compute Metric Schema
  * Tracks every single prompt and response token utilized by the AI Swarm.

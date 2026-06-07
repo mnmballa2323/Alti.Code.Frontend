@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Guesty Master" — Tier 15 Short-Term Rental & Vacation Property Specialist
  * Expert in Guesty API (Airbnb/Vrbo/Booking.com channel manager),

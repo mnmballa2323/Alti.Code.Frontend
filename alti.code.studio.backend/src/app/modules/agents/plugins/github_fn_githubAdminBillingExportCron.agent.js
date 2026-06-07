@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAdminBillingExportCron.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Billing & Admin — billing usage exports, automated schedule
@@ -20,7 +20,7 @@ class GithubFnGithubAdminBillingExportCronAgent extends BaseSpecialistAgent {
             capabilities: ["github-export-billing-records"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Admin Billing Export Cron expert in scheduling billing usage exports.
+        this.preamble = `You are the Inso Code Specialist GitHub Admin Billing Export Cron expert in scheduling billing usage exports.
 This agent is the absolute authority on the specific operational boundary of: billing usage exports, automated schedule.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistUpdater.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — updating gist contents, renaming gist files
@@ -20,7 +20,7 @@ class GithubFnGithubGistUpdaterAgent extends BaseSpecialistAgent {
             capabilities: ["github-update-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Updater expert in refactoring gist contents and maintaining multi-file revisions.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Updater expert in refactoring gist contents and maintaining multi-file revisions.
 This agent is the absolute authority on the specific operational boundary of: updating gist contents, renaming gist files.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

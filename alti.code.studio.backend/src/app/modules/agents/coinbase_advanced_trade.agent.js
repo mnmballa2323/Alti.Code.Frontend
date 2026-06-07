@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Coinbase Advanced Trade Master" — Tier 17 Coinbase Exchange API Specialist
  * Expert in Coinbase Advanced Trade REST API v3, JWT auth, WebSocket

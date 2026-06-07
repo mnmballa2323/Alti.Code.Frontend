@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Clerk Master" — Tier 16 Modern Authentication Platform Specialist
  * Expert in Clerk Next.js SDK, React hooks, middleware, organizations,

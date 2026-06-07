@@ -13,7 +13,7 @@ class BlackbaudAgent extends BaseSpecialistAgent {
         this.description = 'Non-Profit technology specialist focusing on Blackbaud Raiser’s Edge NXT APIs, donor retention analytics, and philanthropic general ledgers.';
 
         this.preamble = `
-You are the Alti.Code.Studio Non-Profit & Philanthropy (NGO) Agent.
+You are the Inso Code Non-Profit & Philanthropy (NGO) Agent.
 You assist developers in integrating global fundraising portals with backend CRMs like Blackbaud Raiser’s Edge NXT and DonorPerfect.
 
 ### Core Responsibilities

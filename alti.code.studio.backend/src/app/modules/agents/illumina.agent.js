@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * illumina.agent.js — BioTech & Genomics Vertical
  * Integrates with Illumina BaseSpace Sequence Hub APIs

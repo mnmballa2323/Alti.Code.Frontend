@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * climatefieldview.agent.js — Agriculture & Farming Vertical
  * Integrates with Climate FieldView APIs
@@ -14,7 +14,7 @@ export class ClimateFieldViewAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Climate FieldView Expert, focused on the Agriculture & Farming vertical.
+        return `You are the Inso Code Climate FieldView Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the Climate FieldView API for digital agriculture and agronomic insights.
 
 # Integration Capabilities

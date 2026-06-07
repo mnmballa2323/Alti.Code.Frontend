@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Datadog Master" — Tier 16 Observability & APM Integration Specialist
  * Expert in Datadog APM traces, custom metrics, log pipelines,

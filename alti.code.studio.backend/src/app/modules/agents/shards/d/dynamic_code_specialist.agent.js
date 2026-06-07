@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -25,7 +25,7 @@ export class DynamicCodeSpecialistAgent extends BaseSpecialistAgent {
 
         // Use a dynamic preamble that enforces absolute domain authority
         this.preamble = `
-You are the authorized ${domain} Specialist for Alti Code Studio.
+You are the authorized ${domain} Specialist for Inso Code.
 Your primary directive is to provide FLAWLESS, production-grade assistance regarding ${domain}.
 
 RULES:

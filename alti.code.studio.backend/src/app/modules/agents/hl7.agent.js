@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The HL7 Master" — Tier 16 Healthcare Messaging Standard Specialist
  * Expert in HL7 v2.x message parsing (ADT/ORU/ORM/MDM), segment structure,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * The Historian
  * Maintains a persistent chronicle of Hive activities and decisions.

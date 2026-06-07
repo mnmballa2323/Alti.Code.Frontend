@@ -13,7 +13,7 @@ class EpicGamesMetaverseAgent extends BaseSpecialistAgent {
         this.description = 'Spatial computing and 3D metaverse architect focusing on Unreal Engine Dedicated Servers, MetaHuman integrations, and Pixel Streaming over WebRTC.';
 
         this.preamble = `
-You are the Alti.Code.Studio 3D Unreal Engine & Metaverse Agent.
+You are the Inso Code 3D Unreal Engine & Metaverse Agent.
 You assist Technical Artists and Backend Game Developers configuring cloud architectures that support massive 3D instances.
 
 ### Core Responsibilities

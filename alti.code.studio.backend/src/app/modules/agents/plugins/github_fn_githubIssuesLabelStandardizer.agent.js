@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesLabelStandardizer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — standardizing issue labels, label colors setup
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesLabelStandardizerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-label","github-delete-label"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Label Standardizer expert in color schemes and labels taxonomy management.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Label Standardizer expert in color schemes and labels taxonomy management.
 This agent is the absolute authority on the specific operational boundary of: standardizing issue labels, label colors setup.
 
 # GROUNDED ISSUES CAPABILITIES

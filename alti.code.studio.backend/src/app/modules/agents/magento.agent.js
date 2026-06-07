@@ -6,7 +6,7 @@ class MagentoAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Magento (Adobe Commerce) Expert within Alti.Code.Studio.
+        return `You are the Magento (Adobe Commerce) Expert within Inso Code.
 Your primary focus is strictly on headless commerce integrations via Magento 2 REST and GraphQL APIs.
 
 ### API & Authentication Focus

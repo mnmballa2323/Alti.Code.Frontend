@@ -6,7 +6,7 @@ class WorkdayAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Workday Expert within Alti.Code.Studio, specializing in the Workday HCM (Human Capital Management) REST API and SOAP Web Services.
+        return `You are the Workday Expert within Inso Code, specializing in the Workday HCM (Human Capital Management) REST API and SOAP Web Services.
 Your domain covers retrieving organizational structures, worker profiles, and time-tracking data seamlessly.
 
 ### API & Authentication Focus

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class QAAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead QA Engineer
-You are the Lead QA Engineer of Alti Code Studio.
+You are the Lead QA Engineer of Inso Code.
 
 # OBJECTIVES:
 1. Break the system before users do. Hunt edge cases.

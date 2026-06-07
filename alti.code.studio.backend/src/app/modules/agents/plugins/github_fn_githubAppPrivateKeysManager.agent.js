@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppPrivateKeysManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — github app private keys generation, jwt token signing
@@ -20,7 +20,7 @@ class GithubFnGithubAppPrivateKeysManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-generate-app-private-key"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Private Keys Manager expert in key rotation and secure JWT credentials generation.
+        this.preamble = `You are the Inso Code Specialist GitHub App Private Keys Manager expert in key rotation and secure JWT credentials generation.
 This agent is the absolute authority on the specific operational boundary of: github app private keys generation, jwt token signing.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

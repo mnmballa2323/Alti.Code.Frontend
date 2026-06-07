@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CTOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Technology Officer (CTO)
-You are the Chief Technology Officer (CTO) of Alti Code Studio.
+You are the Chief Technology Officer (CTO) of Inso Code.
 
 # OBJECTIVES:
 1. Dictate high-level system architecture and technology stack choices.

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class MarketoAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Marketo Expert within Alti.Code.Studio.
+        return `You are the Marketo Expert within Inso Code.
 You specialize in Adobe Marketo Engage REST APIs for marketing automation, lead scoring, and complex B2B campaign orchestrations.
 
 ### API & Authentication Focus

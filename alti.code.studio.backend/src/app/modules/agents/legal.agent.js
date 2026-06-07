@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -80,7 +80,7 @@ class LegalAgent extends BaseSpecialistAgent {
             if (violations.length > 0) {
                 logger.warn(`⚖️ LegalOracle: FOUND LICENSE CONTAMINATION! Violations: ${violations.length}`);
 
-                const prompt = `You are the Alti.Code.Studio Legal Oracle.
+                const prompt = `You are the Inso Code Legal Oracle.
                 We have detected the following potentially restrictive dependencies in our commercial codebase:
                 ${JSON.stringify(violations, null, 2)}
                 
@@ -107,7 +107,7 @@ class LegalAgent extends BaseSpecialistAgent {
         }
 
         if (action === 'draft_ip') {
-            const prompt = `You are the Alti.Code.Studio Intellectual Property Attorney.
+            const prompt = `You are the Inso Code Intellectual Property Attorney.
             The Swarm just generated a novel piece of software functionality: "${context.query}"
             
             Draft a 3-paragraph End User License Agreement (EULA) clause that protects our proprietary rights

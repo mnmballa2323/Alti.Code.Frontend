@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrReviewer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — pull request reviews, inline comments, approve/reject state
@@ -20,7 +20,7 @@ class GithubFnGithubPrReviewerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-pr-review","github-submit-pr-review"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Reviewer expert in executing code reviews, leaving inline feedback, and deciding approval/rejection states.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Reviewer expert in executing code reviews, leaving inline feedback, and deciding approval/rejection states.
 This agent is the absolute authority on the specific operational boundary of: pull request reviews, inline comments, approve/reject state.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

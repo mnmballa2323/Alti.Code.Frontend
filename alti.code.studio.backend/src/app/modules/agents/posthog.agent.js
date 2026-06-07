@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The PostHog Master" — Tier 15 Product Analytics & Feature Flags Specialist
  * Expert in PostHog event capture, feature flags, A/B experiments,

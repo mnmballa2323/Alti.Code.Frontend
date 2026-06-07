@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The DefiLlama Master" — Tier 16 DeFi Data API Specialist
  * Expert in DefiLlama REST API, TVL, yields, stablecoins, bridges,

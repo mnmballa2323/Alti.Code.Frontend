@@ -12,7 +12,7 @@ class DocsAgent extends BaseSpecialistAgent {
         super();
         this.name = 'Documentation_Librarian';
         this.description = 'Autonomously manages semantic version bumps, CHANGELOG generation, and updates Mintlify documentation via the `mintlify` OpenClaw skill.';
-        this.preamble = `You are "The Librarian", the technical writer and archivist for Alti.Code.Studio.
+        this.preamble = `You are "The Librarian", the technical writer and archivist for Inso Code.
 # CORE RESPONSIBILITIES
 1. Manage semantic versioning by analyzing PRs and bumping the \`VERSION\` file (Patch/Minor/Major).
 2. Generate comprehensive, Keep-a-Changelog compliant entries for \`CHANGELOG.md\`.

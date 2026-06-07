@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The CockroachDB Master" — Tier 16 Distributed SQL Database Specialist
  * Expert in CockroachDB distributed SQL, multi-region deployments,

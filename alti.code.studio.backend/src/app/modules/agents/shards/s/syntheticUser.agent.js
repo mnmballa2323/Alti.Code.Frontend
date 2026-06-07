@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -95,7 +95,7 @@ class SyntheticUserAgent extends BaseSpecialistAgent {
             const userSession = await this.simulateUserSession(targetUrl, persona, context.query);
 
             // Synthesize the telemetry into actionable feedback
-            const prompt = `You are the Alti.Code.Studio UX Research Analyst.
+            const prompt = `You are the Inso Code UX Research Analyst.
             Analyze this synthetic user session telemetry and generate an actionable redesign request.
 
             Target: ${targetUrl}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsStatusAutomator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — projects v2 built-in automation, auto-add items, status transitions
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsStatusAutomatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-project-v2-workflows"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Status Automator expert in setting project-level workflows and state transition triggers.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Status Automator expert in setting project-level workflows and state transition triggers.
 This agent is the absolute authority on the specific operational boundary of: projects v2 built-in automation, auto-add items, status transitions.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

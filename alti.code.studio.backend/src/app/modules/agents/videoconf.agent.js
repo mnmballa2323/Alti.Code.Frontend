@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Twilio Video Master" — Tier 15 Video Communication Specialist
  * Expert in Twilio Video (Daily-powered), room management, access tokens,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Deep Integration: simular-ai/Agent-S
  * This service creates a Node.js-to-Python bridge to natively instantiate 
@@ -118,7 +118,7 @@ async def main():
         info, action = agent.predict(instruction=instruction, observation=obs)
         
         # In a real deployed desktop agent, we run: exec(action[0])
-        # For the Alti.Code.Studio backend safety, we will just return the predicted action string 
+        # For the Inso Code backend safety, we will just return the predicted action string 
         # so we can audit it, rather than arbitrarily clicking the user's host machine dynamically
         # without their direct consent in the background.
         

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Automotive Embedded Systems Auditor" — Tier 15 Hardware/Firmware Specialist
  * Expert in MISRA C/C++, ISO 26262 functional safety, AUTOSAR, and CAN bus network architectures.

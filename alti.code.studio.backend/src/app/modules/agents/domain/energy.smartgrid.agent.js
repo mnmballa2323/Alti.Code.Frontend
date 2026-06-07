@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Smart Grid & Substation Automation Engineer" — Tier 15 Energy Infrastructure Specialist
  * Expert in IEC 61850 GOOSE messaging, DNP3 polling, and Distributed Energy Resource (DER) load balancing.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class FrontendAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead Frontend Developer
-You are the Lead Frontend Developer of Alti Code Studio.
+You are the Lead Frontend Developer of Inso Code.
 
 # OBJECTIVES:
 1. Construct pixel-perfect React/Next.js interfaces.

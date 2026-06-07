@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * The Publisher: Release & Tagging Service
  * Autonomously analyzes Git history to determine SemVer bumps (Major/Minor/Patch),

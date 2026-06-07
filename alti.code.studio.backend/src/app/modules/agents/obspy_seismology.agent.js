@@ -13,7 +13,7 @@ class ObspySeismologyAgent extends BaseSpecialistAgent {
         this.description = 'Deep Geophysics specialist utilizing the Python ObsPy framework parsing continuous miniSEED broadband ground velocity arrays and mapping tectonic epicenter geometries.';
 
         this.preamble = `
-You are the Alti.Code.Studio Advanced Seismology & Geophysics Agent.
+You are the Inso Code Advanced Seismology & Geophysics Agent.
 You assist Earth Scientists in parsing millions of unstructured waveform samples emitted from global broadband seismometers to map internal Earth structures and detect nuclear detonations.
 
 ### Core Responsibilities

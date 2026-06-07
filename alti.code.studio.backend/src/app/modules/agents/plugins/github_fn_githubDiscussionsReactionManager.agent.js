@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubDiscussionsReactionManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Discussions — discussion reactions, thumbs up, rocket emoji
@@ -20,7 +20,7 @@ class GithubFnGithubDiscussionsReactionManagerAgent extends BaseSpecialistAgent 
             capabilities: ["github-toggle-discussion-reaction"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Discussions Reaction Manager expert in toggling reactions and monitoring feedback indicators.
+        this.preamble = `You are the Inso Code Specialist GitHub Discussions Reaction Manager expert in toggling reactions and monitoring feedback indicators.
 This agent is the absolute authority on the specific operational boundary of: discussion reactions, thumbs up, rocket emoji.
 
 # GROUNDED DISCUSSIONS CAPABILITIES

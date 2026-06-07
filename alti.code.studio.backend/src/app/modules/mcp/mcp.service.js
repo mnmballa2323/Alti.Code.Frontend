@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -48,7 +48,7 @@ const connect = async (serverUrl, apiKey) => {
         const transport = new SSEClientTransport(new URL(serverUrl), {
             eventSourceInit: { headers: { Authorization: `Bearer ${apiKey}` } },
         });
-        const client = new Client({ name: 'AltiCodeStudio', version: '1.0.0' }, { capabilities: {} });
+        const client = new Client({ name: 'InsoCode', version: '1.0.0' }, { capabilities: {} });
         await client.connect(transport);
 
         const capabilities = await client.getServerCapabilities();

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Netlify Master" - Tier 16 Cloud Provider Specialist
  * Expert in Netlify Functions, Edge Functions, netlify.toml, and deploy previews.

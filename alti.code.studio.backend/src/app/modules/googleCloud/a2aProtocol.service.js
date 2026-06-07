@@ -49,7 +49,7 @@ class A2AProtocolService {
             const timestamp = Date.now();
             
             const handshakePayload = {
-                platform: 'Alti Code Studio',
+                platform: 'Inso Code',
                 version: '3.1.0',
                 payload,
                 timestamp,

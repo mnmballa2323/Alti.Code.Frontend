@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Detective" - Security Audit & Forensics Agent
  * Responsible for deep SAST, log analysis, and dependency vulnerability checks.

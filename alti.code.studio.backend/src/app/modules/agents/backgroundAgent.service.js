@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * backgroundAgent.service.js — Open-Inspect (background-agents) integration service.
  * Dispatches sandbox tasks to the Cloudflare/Modal control plane.

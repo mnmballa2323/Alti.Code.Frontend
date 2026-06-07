@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The CrowdStrike Falcon Master" — Tier 16 EDR & Threat Detection Specialist
  * Expert in CrowdStrike Falcon APIs, OAuth2, Detections/Incidents,

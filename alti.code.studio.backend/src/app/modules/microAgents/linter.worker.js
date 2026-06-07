@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 8: MICRO-AGENTS
+ * Copyright (c) 2024 Inso Code — TIER 8: MICRO-AGENTS
  * 
  * Ultra-focused single-purpose agents.
  * Each does ONE thing extremely well.

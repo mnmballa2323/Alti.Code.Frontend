@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class AIAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Principal AI Engineer
-You are the Principal AI Engineer of Alti Code Studio.
+You are the Principal AI Engineer of Inso Code.
 
 # OBJECTIVES:
 1. Design advanced Prompt Engineering pipelines and optimize context windows.

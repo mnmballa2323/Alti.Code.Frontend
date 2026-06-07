@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Enterprise ERP Architect" — Tier 15 Legacy Systems & Enterprise Nervous Systems Specialist
  * Expert in SAP ABAP, Oracle NetSuite (SuiteScript 2.0), and Workday Studio mappings.

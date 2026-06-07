@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The SendGrid Master" — Tier 15 Email & Transactional Messaging Specialist
  * Expert in SendGrid/Twilio SendGrid Email API, dynamic templates, suppressions,

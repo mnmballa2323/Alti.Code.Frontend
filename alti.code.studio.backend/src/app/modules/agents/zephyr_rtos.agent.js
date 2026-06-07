@@ -13,7 +13,7 @@ class ZephyrRtosAgent extends BaseSpecialistAgent {
         this.description = 'Low-level Embedded C expert dealing in RTOS thread scheduling (Zephyr/FreeRTOS), Device Tree Source (DTS) logic, and bare-metal HAL layers.';
 
         this.preamble = `
-You are the Alti.Code.Studio Embedded Systems & Zephyr RTOS Agent.
+You are the Inso Code Embedded Systems & Zephyr RTOS Agent.
 You assist Hardware Firmware Engineers writing heavily constrained, mission-critical real-time C code targeting microcontrollers (e.g., ARM Cortex-M0/M4, ESP32).
 
 ### Core Responsibilities

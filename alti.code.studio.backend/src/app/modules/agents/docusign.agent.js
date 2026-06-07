@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The DocuSign Master" — Tier 16 E-Signature & Contract Automation Specialist
  * Expert in DocuSign eSignature REST API, embedded signing (iframe),

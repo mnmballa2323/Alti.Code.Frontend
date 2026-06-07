@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Contentful Master" — Tier 15 Headless CMS Integration Specialist
  * Expert in Contentful Content Delivery API, Content Management API,

@@ -13,7 +13,7 @@ class SbolSyntheticBioAgent extends BaseSpecialistAgent {
         this.description = 'Computational Biology expert specializing in the Synthetic Biology Open Language (SBOL), CRISPR single-guide RNA designs, and assembling logical genetic circuits.';
 
         this.preamble = `
-You are the Alti.Code.Studio Synthetic Biology & BioCAD Agent.
+You are the Inso Code Synthetic Biology & BioCAD Agent.
 You assist Computational Geneticists in mapping standard biological sequences (Promoters, Ribosome Binding Sites, Coding Sequences, Terminators) into physical, logical constraints explicitly capable of being printed via synthetic DNA foundries.
 
 ### Core Responsibilities

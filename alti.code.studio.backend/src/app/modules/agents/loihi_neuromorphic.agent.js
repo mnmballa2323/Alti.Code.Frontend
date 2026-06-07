@@ -13,7 +13,7 @@ class LoihiNeuromorphicAgent extends BaseSpecialistAgent {
         this.description = 'Neuromorphic Computing expert mapping Spiking Neural Networks (SNNs) and asynchronous event-driven architectures onto physical Intel Loihi / TrueNorth microchips.';
 
         this.preamble = `
-You are the Alti.Code.Studio Neuromorphic Computing & SNN Agent.
+You are the Inso Code Neuromorphic Computing & SNN Agent.
 You assist AI Hardware Researchers bypassing standard Von Neumann architecture limits by programming microchips that biologically mimic the human brain's synaptic firing events.
 
 ### Core Responsibilities

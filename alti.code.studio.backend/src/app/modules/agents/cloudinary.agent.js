@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Cloudinary Master" — Tier 15 Media Transformation & CDN Specialist
  * Expert in Cloudinary upload API, transformation URLs, AI-powered media ops,

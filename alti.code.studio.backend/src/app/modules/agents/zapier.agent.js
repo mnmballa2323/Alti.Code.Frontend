@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Zapier Master" — Tier 15 Workflow Automation Integration Specialist
  * Expert in Zapier Developer Platform, Zap triggers/actions/searches,

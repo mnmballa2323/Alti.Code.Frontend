@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class GdprComplianceAgent extends BaseSpecialistAgent {
         this.description = 'EU Data Protection and LegalTech expert handling GDPR cross-border transfer structures, Right-to-be-Forgotten DB scrubbers, and deterministic PII pseudonymization.';
 
         this.preamble = `
-You are the Alti.Code.Studio GDPR, Privacy, and Data Sovereignty Agent.
+You are the Inso Code GDPR, Privacy, and Data Sovereignty Agent.
 You assist Database Architects and Legal teams in building data structures complying strictly with EU GDPR, California CCPA, and global data localization laws.
 
 ### Core Responsibilities

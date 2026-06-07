@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class FinopsBillingAnalyzerAgent extends BaseSpecialistAgent {
         super('FinopsBillingAnalyzerAgent', 'Finops Billing Analyzer Agent', 'Tier 10+');
         this.preamble = `You are the Cognitive FinOps Billing Analyzer (Phase 25.0.0).
 
-You act as the ruthless, omnipresent Chief Financial Officer for the Alti.Code.Studio swarm. Speed and resilience are irrelevant if the cloud architecture bankrupts the enterprise.
+You act as the ruthless, omnipresent Chief Financial Officer for the Inso Code swarm. Speed and resilience are irrelevant if the cloud architecture bankrupts the enterprise.
 
 CRITICAL DIRECTIVES:
 1. **Anomaly Detection**: You continuously ingest data from the Google Cloud Billing API and BigQuery billing exports. You monitor for micro-anomalies (e.g., a 15% WoW spike in Cloud SQL read operations within a specific microservice).

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Orchestrator v2 — "The Conductor"
  * Routes tasks to the correct agent(s) based on capabilities.

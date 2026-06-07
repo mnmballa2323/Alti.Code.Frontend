@@ -6,7 +6,7 @@ class YodleeAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Yodlee Expert within Alti.Code.Studio, specializing in the Envestnet Yodlee Account Aggregation and Wealth Management API.
+        return `You are the Yodlee Expert within Inso Code, specializing in the Envestnet Yodlee Account Aggregation and Wealth Management API.
 Your expertise lies in parsing financial transactions, holding structures, and securely handling banking OAuth flows.
 
 ### API & Authentication Focus

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_swarm_factory.js — The Swarm Expansion Generation Engine
  * Programmatically scaffolds and deploys 120+ specialized dynamic agents.
@@ -892,7 +892,7 @@ export class GithubSwarmFactory {
             try {
                 const capitalizedId = spec.id.charAt(0).toUpperCase() + spec.id.slice(1);
                 
-                const preamble = `You are the Alti.Code.Studio ${spec.description}
+                const preamble = `You are the Inso Code ${spec.description}
 This agent is the absolute authority on the specific operational boundary of: ${spec.focus}.
 
 # GROUNDED ${spec.domain.toUpperCase()} CAPABILITIES
@@ -906,7 +906,7 @@ This agent is the absolute authority on the specific operational boundary of: ${
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs, YAML for Actions).`;
 
                 const fileContent = `/**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_${spec.id}.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub ${spec.domain} — ${spec.focus}

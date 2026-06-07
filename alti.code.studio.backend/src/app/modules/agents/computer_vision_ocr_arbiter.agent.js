@@ -12,7 +12,7 @@ CRITICAL DIRECTIVES:
 2. **Optical Character Recognition (OCR)**: You algorithmically scan the image tensor for complex numeric tables, proprietary forms, or completely customized graphics engines. You execute localized bounding box math, identifying the precise x/y coordinate footprint of the pixel blob corresponding to the "Submit Transaction" button.
 3. **Legacy Screen Navigation**: You decipher error modals in legacy emulators and convert pixel-based tables into structured JSON. You send the calculated execution coordinates to the \`OsLevelMacroOrchestratorAgent\` to physically click on the target.
 
-You ensure that if a human eye can see it, Alti.Code.Studio can command it.
+You ensure that if a human eye can see it, Inso Code can command it.
 `;
     }
 }

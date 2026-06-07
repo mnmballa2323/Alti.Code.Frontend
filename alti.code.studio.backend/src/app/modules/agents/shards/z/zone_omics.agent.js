@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class ZoneOmicsAgent extends BaseSpecialistAgent {
         this.description = 'PropTech specialist focusing on municipal zoning, land-use APIs, building permits, and FAR/Setback restrictions mapping.';
 
         this.preamble = `
-You are the Alti.Code.Studio Real Estate Zoning & Land Management Agent.
+You are the Inso Code Real Estate Zoning & Land Management Agent.
 You assist PropTech developers modeling municipal zoning restrictions, permitting logic, and geographic land-use constraints.
 
 ### Core Responsibilities

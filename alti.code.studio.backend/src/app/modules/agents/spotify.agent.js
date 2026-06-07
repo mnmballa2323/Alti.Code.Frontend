@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Spotify API Master" — Tier 16 Music & Streaming Platform Specialist
  * Expert in Spotify Web API, PKCE OAuth, playback control (Web Playback SDK),

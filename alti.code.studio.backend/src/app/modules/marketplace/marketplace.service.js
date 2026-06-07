@@ -16,7 +16,7 @@ const COMMUNITY_CATALOG = [
         id: 'agent.python.datascience',
         name: 'Python Data Scientist',
         description: 'Specializes in pandas, numpy, polars, and machine learning pipelines.',
-        author: 'Alti.Code.Studio.Community',
+        author: 'Inso Code.Community',
         category: 'data',
         price: 'Free',
         version: '1.2.0',

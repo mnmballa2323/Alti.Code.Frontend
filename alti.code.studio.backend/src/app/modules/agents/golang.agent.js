@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Golang Expert" - Tier 7 Specialist Agent
  * Possesses deep semantic context regarding Go concurrency (goroutines/channels),

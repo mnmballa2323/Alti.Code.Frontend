@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024–2026 Alti.Code.Studio
+ * Copyright (c) 2024–2026 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -140,7 +140,7 @@ export class RagVectorSearcher extends BaseSpecialistAgent {
 - **Metric Parameters:** Cosine similarity threshold > 0.82.
 - **Top-K Matches:** 3 contexts retrieved.
 - **Highest Score:** 0.942 cosine proximity.
-- **Retrieved Context:** "Alti.Code.Studio Agent Registry Nexus constitutes..."
+- **Retrieved Context:** "Inso Code Agent Registry Nexus constitutes..."
     `.trim();
   }
 

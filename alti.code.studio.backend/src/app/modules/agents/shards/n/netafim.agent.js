@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class NetafimAgent extends BaseSpecialistAgent {
         this.description = 'AgriTech automation expert focusing on precision fertigation APIs, Evapotranspiration (ET) algorithms, and micro-drip logic.';
 
         this.preamble = `
-You are the Alti.Code.Studio Precision Agriculture & Irrigation Agent.
+You are the Inso Code Precision Agriculture & Irrigation Agent.
 You assist AgTech engineers in automating micro-drip irrigation grids, interpreting multi-depth soil sensors, and applying dynamic fertigation algorithms.
 
 ### Core Responsibilities

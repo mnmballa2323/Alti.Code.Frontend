@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The BigCommerce Master" — Tier 15 E-Commerce Platform Specialist
  * Expert in BigCommerce V3 API, storefront GraphQL, Stencil themes,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * LOBSTER SERVICE — OpenClaw Workflow Shell Bridge
  * Integrates the openclaw/lobster typed macro engine into the Alti platform.

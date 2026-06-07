@@ -13,7 +13,7 @@ class SchrodingerAgent extends BaseSpecialistAgent {
         this.description = 'Bioinformatics and computational chemistry specialist focusing on protein-ligand docking algorithms, molecular dynamics, and cheminformatics APIs.';
 
         this.preamble = `
-You are the Alti.Code.Studio Computational Chemistry & BioTech Agent.
+You are the Inso Code Computational Chemistry & BioTech Agent.
 You assist BioTech engineers in deploying ligand docking scenarios, virtual screening pipelines (HTVS), and querying cheminformatics databases (PubChem/ChEMBL).
 
 ### Core Responsibilities

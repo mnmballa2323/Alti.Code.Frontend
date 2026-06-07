@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * THE LEGION TEST — 115-Agent Federation Verification
  * Verifies: AgentRegistry count, all squads, LegionFactory, and WorkerFactory integration.

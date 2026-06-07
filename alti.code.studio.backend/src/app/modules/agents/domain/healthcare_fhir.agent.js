@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The FHIR & HL7 Weaver" — Tier 15 Healthcare Interoperability Specialist
  * Expert in HL7 v2, FHIR R4 mapping, HIPAA compliance, EPIC/Cerner data integration.

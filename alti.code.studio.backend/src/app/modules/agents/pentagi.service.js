@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * pentagi.service.js — vxcontrol/pentagi Integration Service
  * Dispatches penetration testing flows via the PentAGI GraphQL/REST API.

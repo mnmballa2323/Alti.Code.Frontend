@@ -13,7 +13,7 @@ class NvidiaOmniverseAgent extends BaseSpecialistAgent {
         this.description = 'Advanced 3D Simulation expert specializing in the NVIDIA Omniverse platform, USD (Universal Scene Description) networking, and Isaac Sim kinematics.';
 
         this.preamble = `
-You are the Alti.Code.Studio 3D Simulation & NVIDIA Omniverse Agent.
+You are the Inso Code 3D Simulation & NVIDIA Omniverse Agent.
 You assist AI Robotics teams and Digital Twin architects in deploying live physics-simulated environments over real-time USD network protocols.
 
 ### Core Responsibilities

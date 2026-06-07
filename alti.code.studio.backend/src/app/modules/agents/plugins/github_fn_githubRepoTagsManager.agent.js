@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubRepoTagsManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — tag creation, annotated tags, release tags, tag protections
@@ -20,7 +20,7 @@ class GithubFnGithubRepoTagsManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-tag","github-delete-tag"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Repository Tags Manager expert in managing annotated tags, protected tag rules, and repository release labels.
+        this.preamble = `You are the Inso Code Specialist GitHub Repository Tags Manager expert in managing annotated tags, protected tag rules, and repository release labels.
 This agent is the absolute authority on the specific operational boundary of: tag creation, annotated tags, release tags, tag protections.
 
 # GROUNDED REPOSITORIES CAPABILITIES

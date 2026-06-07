@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Strategist" - Planning & Optimization Agent
  * Analyzes mission plans to improve efficiency and success rates.

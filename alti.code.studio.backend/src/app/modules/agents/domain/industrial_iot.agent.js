@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The IIoT & SCADA Integrator" — Tier 15 Manufacturing & Industrial Engineering Specialist
  * Expert in OPC UA, Modbus TCP, MQTT telemetry, and factory floor data pipelines.

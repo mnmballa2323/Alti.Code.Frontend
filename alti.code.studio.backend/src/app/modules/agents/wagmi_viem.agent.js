@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Wagmi/Viem Master" — Tier 17 Ethereum React Hooks Specialist
  * Expert in Wagmi v2, Viem, wallet connection, contract reads/writes,

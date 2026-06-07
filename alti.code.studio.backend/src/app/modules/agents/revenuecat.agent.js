@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The RevenueCat Master" — Tier 16 Mobile In-App Purchase Specialist
  * Expert in RevenueCat SDK, subscription products, entitlements,

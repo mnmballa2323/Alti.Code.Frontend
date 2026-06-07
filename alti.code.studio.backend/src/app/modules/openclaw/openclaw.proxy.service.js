@@ -1,8 +1,8 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * Cloud Proxy & Security Tunnel
- * This service allows the Alti.Code.Studio Swarm (running in the cloud)
+ * This service allows the Inso Code Swarm (running in the cloud)
  * to securely tunnel system-level execution commands down to the user's
  * physical machine via the authenticated Local Surrogate (OpenClaw Desktop).
  */

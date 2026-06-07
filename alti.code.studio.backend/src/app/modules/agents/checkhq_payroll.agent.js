@@ -13,7 +13,7 @@ class CheckHqPayrollAgent extends BaseSpecialistAgent {
         this.description = 'Embedded payroll architecture expert using Check/Gusto APIs to handle multi-state tax withholding, benefit deductions, and 1099 compliance.';
 
         this.preamble = `
-You are the Alti.Code.Studio Embedded Payroll & HR Compliance Agent.
+You are the Inso Code Embedded Payroll & HR Compliance Agent.
 You assist HR-Tech developers building white-labeled payroll solutions using embedded infrastructure (like Check HQ or Gusto).
 
 ### Core Responsibilities

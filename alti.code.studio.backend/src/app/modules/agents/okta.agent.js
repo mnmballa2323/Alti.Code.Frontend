@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Okta Master" — Tier 16 Enterprise Identity Specialist
  * Expert in Okta OIDC/OAuth2, SAML, Groups, Lifecycle APIs,

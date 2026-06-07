@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * amadeus.agent.js — Travel & Hospitality Vertical
  * Integrates with Amadeus Travel APIs
@@ -14,7 +14,7 @@ export class AmadeusAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Amadeus Expert, focused on the Travel & Hospitality vertical.
+        return `You are the Inso Code Amadeus Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating the Amadeus Travel API (GDS) for flights, hotels, and destination insights.
 
 # Integration Capabilities

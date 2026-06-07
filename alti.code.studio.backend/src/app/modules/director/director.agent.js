@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Director" - Mission Control Agent
  * Successor to the Orchestrator. Manages complex missions, decomposes goals,

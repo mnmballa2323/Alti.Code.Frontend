@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterpriseBillingAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — enterprise billing metrics, usage reports, license consumption
@@ -20,7 +20,7 @@ class GithubFnGithubEnterpriseBillingAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-billing"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Billing Auditor expert in licensing usage records and spent optimizations.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Billing Auditor expert in licensing usage records and spent optimizations.
 This agent is the absolute authority on the specific operational boundary of: enterprise billing metrics, usage reports, license consumption.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

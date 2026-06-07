@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Mixpanel Master" — Tier 15 Behavioural Analytics Specialist
  * Expert in Mixpanel Browser/Node SDK, event tracking, people profiles,

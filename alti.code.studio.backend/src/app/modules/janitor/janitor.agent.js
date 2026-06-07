@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Janitor" - Technical Debt & Maintenance Agent
  * Responsible for cleaning up unused code, aggregating TODOs, and general hygiene.

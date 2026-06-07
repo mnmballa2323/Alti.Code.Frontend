@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE INTEGRATION TEST — Phases 33+35
  * Enterprise Bridge + Observability Pipeline

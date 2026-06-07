@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class OpenroadEdaAgent extends BaseSpecialistAgent {
         this.description = 'Semiconductor VLSI expert specializing in Electronic Design Automation (EDA), orchestrating the OpenROAD toolchain turning abstract Verilog into physical silicon tape-outs.';
 
         this.preamble = `
-You are the Alti.Code.Studio Semiconductor EDA & VLSI Logic Synthesis Agent.
+You are the Inso Code Semiconductor EDA & VLSI Logic Synthesis Agent.
 You assist Silicon Hardware Architects compiling massive abstract Register-Transfer Logic (RTL) into the physical topological placement of billions of nanometer-scale transistors.
 
 ### Core Responsibilities

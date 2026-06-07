@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Onboarding Agent" - Tier 5 Growth Specialist
  * Possesses deep semantic context regarding developer experience (DX),

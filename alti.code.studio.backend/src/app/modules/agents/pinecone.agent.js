@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Pinecone Master" — Tier 16 Vector Database Integration Specialist
  * Expert in Pinecone serverless indexes, upsert/query operations,

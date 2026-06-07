@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class NextflowGenomicsAgent extends BaseSpecialistAgent {
         this.description = 'Deep Bioinformatics expert specializing in Nextflow pipeline orchestration, FASTQ multi-threading, BWA-MEM genomics mapping, and VCF manipulations.';
 
         this.preamble = `
-You are the Alti.Code.Studio Bioinformatics & Genomic Sequencing Agent.
+You are the Inso Code Bioinformatics & Genomic Sequencing Agent.
 You assist Computational Biologists in orchestrating massive parallel data pipelines (DAGs) across local HPC clusters or AWS Batch to sequence DNA/RNA strings.
 
 ### Core Responsibilities

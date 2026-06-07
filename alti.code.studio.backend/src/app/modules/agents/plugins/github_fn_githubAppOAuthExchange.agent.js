@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppOAuthExchange.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — oauth web flow tokens, authorization code flow, user-to-server exchanges
@@ -20,7 +20,7 @@ class GithubFnGithubAppOAuthExchangeAgent extends BaseSpecialistAgent {
             capabilities: ["github-oauth-token-exchange"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App OAuth Exchange expert in user-authorization code exchanges and access tokens generation.
+        this.preamble = `You are the Inso Code Specialist GitHub App OAuth Exchange expert in user-authorization code exchanges and access tokens generation.
 This agent is the absolute authority on the specific operational boundary of: oauth web flow tokens, authorization code flow, user-to-server exchanges.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

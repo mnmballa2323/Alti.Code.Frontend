@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Resend Master" — Tier 15 Modern Email API Specialist
  * Expert in Resend email API, React Email templates, domain setup,

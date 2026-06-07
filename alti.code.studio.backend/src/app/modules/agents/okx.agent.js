@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The OKX Master" — Tier 17 Multi-Asset Exchange & DEX API Specialist
  * Expert in OKX REST V5, WebSocket, HMAC-SHA256 auth, spot/swaps/options,

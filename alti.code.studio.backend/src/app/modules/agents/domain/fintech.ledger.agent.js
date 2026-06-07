@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Institutional Ledger Architect" — Tier 15 FinTech & Compliance Specialist
  * Expert in handling Stripe Treasury, Plaid, Jack Henry, FIS, KYC/AML webhooks, and idempotent transaction ledgers.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024–2026 Alti.Code.Studio
+ * Copyright (c) 2024–2026 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -145,7 +145,7 @@ export class IntegrationGithubHook extends BaseSpecialistAgent {
     return `
 🐙 **integrationGithubHook Setup Audit**
 - **Target Repository:** HKUDS/CLI-Anything.
-- **Webhook Endpoint:** https://api.alticodestudio.com/webhooks/github.
+- **Webhook Endpoint:** https://api.insocode.com/webhooks/github.
 - **Enabled Events:** [push, pull_request, workflow_run].
 - **SSL Verification:** Enabled (Enforced).
 - **Active Status:** Live (Secret token verified).

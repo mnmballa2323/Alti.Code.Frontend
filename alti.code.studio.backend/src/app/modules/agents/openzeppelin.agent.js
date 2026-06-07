@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The OpenZeppelin Master" — Tier 17 Smart Contract Security Specialist
  * Expert in OpenZeppelin Contracts v5, security patterns, upgradeable

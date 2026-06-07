@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -101,7 +101,7 @@ const generateContent = async (prompt, modelName = PRIMARY_MODEL, temperature = 
 
         // Hyper-Instruction Optimization for System 2 Reasoning
         const synthPrompt = `
-            ACT AS THE MASTER ARCHITECT OF ALTI CODE STUDIO.
+            ACT AS THE MASTER ARCHITECT OF INSO CODE.
             You are summarizing a complex autonomous engineering cycle for a user.
             
             EXECUTION CONTEXT:
@@ -173,7 +173,7 @@ const chatSession = async (history, message) => {
             }
             
             finalMessage = `
-                ACT AS THE MASTER ARCHITECT OF ALTI CODE STUDIO.
+                ACT AS THE MASTER ARCHITECT OF INSO CODE.
                 You are participating in an interactive chat session, backed by an autonomous specialist swarm.
                 
                 SWARM EXECUTION CONTEXT:

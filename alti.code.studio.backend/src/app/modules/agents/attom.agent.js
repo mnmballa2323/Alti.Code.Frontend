@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The ATTOM Property Data Master" — Tier 15 Real Estate Analytics Specialist
  * Expert in ATTOM AVM, property details, ownership, sales history,

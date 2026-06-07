@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * NANO-AGENT SERVICE — Minimal Autonomous Code Agent Pattern
  * Implements the core tool-call loop from shareAI-lab/learn-claude-code.

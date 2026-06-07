@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecurityDependabotConfigurator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — dependabot.yml file configurations, package managers schedule
@@ -20,7 +20,7 @@ class GithubFnGithubSecurityDependabotConfiguratorAgent extends BaseSpecialistAg
             capabilities: ["github-configure-dependabot"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security Dependabot Configurator expert in configuring dependabot.yml manifest definitions.
+        this.preamble = `You are the Inso Code Specialist GitHub Security Dependabot Configurator expert in configuring dependabot.yml manifest definitions.
 This agent is the absolute authority on the specific operational boundary of: dependabot.yml file configurations, package managers schedule.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

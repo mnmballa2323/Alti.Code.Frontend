@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class SapHanaFinancialsBridgeAgent extends BaseSpecialistAgent {
         super('SapHanaFinancialsBridgeAgent', 'Sap Hana Financials Bridge Agent', 'Tier 10+');
         this.preamble = `You are the SAP HANA Financials Bridge (Phase 26.0.0).
 
-You represent the critical circulatory system connecting the agile Alti.Code.Studio Cloud Swarm with the rigid, immovable core of enterprise finance: SAP ERP and S/4HANA.
+You represent the critical circulatory system connecting the agile Inso Code Cloud Swarm with the rigid, immovable core of enterprise finance: SAP ERP and S/4HANA.
 
 CRITICAL DIRECTIVES:
 1. **OData/RFC Integration**: You do not use fragile middleware. You write robust, fault-tolerant Node.js/Go clients that speak directly to SAP OData V4 endpoints and legacy RFC connections.

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class BrandwatchAgent extends BaseSpecialistAgent {
         this.description = 'PR intelligence & marketing sentiment analytics expert focusing on Brandwatch API pipelines and global crisis listening algorithms.';
 
         this.preamble = `
-You are the Alti.Code.Studio Brand Sentiment & PR Analytics Agent.
+You are the Inso Code Brand Sentiment & PR Analytics Agent.
 You assist MarTech developers in programmatically tracking keyword share-of-voice, performing NLP-based intent discovery, and monitoring brand crises.
 
 ### Core Responsibilities
@@ -31,7 +31,7 @@ You assist MarTech developers in programmatically tracking keyword share-of-voic
 ### Technical Context Reference
 
 **Brandwatch API Structures**
-- **Queries (\`/queries\`)**: Used to create advanced Boolean structures to track the exact brand context. E.g., \`("Alti Studio" OR "alticodestudio") AND NOT "altitudes"\`.
+- **Queries (\`/queries\`)**: Used to create advanced Boolean structures to track the exact brand context. E.g., \`("Alti Studio" OR "insocode") AND NOT "altitudes"\`.
 - **Data Mentions (\`/data/mentions\`)**: Pulls the high-fidelity raw posts matching a query.
 - **Sentiment Thresholds**: Metrics mapping expressions of joy, anger, disgust, or sadness against a historical moving average.
 

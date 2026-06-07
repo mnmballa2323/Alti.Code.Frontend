@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * shippo.agent.js — Logistics & Supply Chain Vertical
  * Integrates with Shippo API
@@ -14,7 +14,7 @@ export class ShippoAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Shippo Expert, focused on the Logistics & Supply Chain vertical.
+        return `You are the Inso Code Shippo Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Shippo REST API for multi-carrier shipping, rating, and tracking.
 
 # Integration Capabilities

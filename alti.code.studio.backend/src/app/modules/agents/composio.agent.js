@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Composio App Router" — Tier 13 Enterprise Integrations
  * A Swarm Agent dedicated to routing intents through ComposioHQ's

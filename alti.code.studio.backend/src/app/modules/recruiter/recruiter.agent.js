@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Recruiter" - Onboarding & HR Agent
  * Responsible for welcoming new developers, generating training plans, and managing team integration.

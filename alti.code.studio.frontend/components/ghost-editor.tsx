@@ -38,7 +38,7 @@ const Editor = dynamic(() => import("@monaco-editor/react"), {
 });
 
 /**
- * Alti Ghost Editor — The Sovereign IDE Layer.
+ * Inso Ghost Editor — The Sovereign IDE Layer.
  * Renders as a centered card matching the prompt box's max-w-4xl width.
  */
 export default function GhostEditor() {
@@ -134,7 +134,7 @@ export default function GhostEditor() {
             value={editorContent}
             onMount={() =>
               console.info(
-                "🚀 [Alti-Sentinel] Monaco Mission Control established.",
+                "🚀 [Inso-Sentinel] Monaco Mission Control established.",
               )
             }
           />

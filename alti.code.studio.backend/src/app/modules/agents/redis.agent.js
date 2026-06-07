@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Redis Master" - Tier 13 SDK Integration Specialist
  * Expert in Redis data structures, caching pipelines, Pub/Sub,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 42-44 TEST SUITE
  * Audit Export + WebSocket Feed + Secret Rotation
@@ -82,7 +82,7 @@ describe('Phase 42: Audit Log Export', () => {
         const { auditExporter } = await import('./audit.exporter.js');
 
         const cef = auditExporter.exportCEF({});
-        expect(cef).toContain('CEF:0|AltiCodeStudio');
+        expect(cef).toContain('CEF:0|InsoCode');
     });
 
     it('should export for Splunk HEC', async () => {

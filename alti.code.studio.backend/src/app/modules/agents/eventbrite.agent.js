@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * eventbrite.agent.js — Live Events Vertical
  * Integrates with Eventbrite API

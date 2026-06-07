@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The 5G Core & Network Slicing Architect" — Tier 15 Telecommunications Specialist
  * Expert in 3GPP specifications, Diameter/RADIUS authentication, eBPF packet inspection, and Open RAN.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Oracle" - Database Performance & DBA Agent
  * Responsible for query analysis, N+1 detection, and schema optimization suggestions.

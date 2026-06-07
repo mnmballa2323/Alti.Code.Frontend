@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ export class MetamorphicAgent {
     }
 
     /**
-     * Analyzes Alti.Code.Studio's own source code to detect orchestration bottlenecks 
+     * Analyzes Inso Code's own source code to detect orchestration bottlenecks 
      * and suggests architectural refactors (Self-Optimization).
      */
     async runSelfDiagnostic(targetDirectory) {

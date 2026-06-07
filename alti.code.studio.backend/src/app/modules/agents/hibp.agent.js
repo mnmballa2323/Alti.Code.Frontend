@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The HaveIBeenPwned Master" — Tier 15 Data Breach Intelligence Specialist
  * Expert in HIBP API v3, breach search by email/domain, paste lookup,

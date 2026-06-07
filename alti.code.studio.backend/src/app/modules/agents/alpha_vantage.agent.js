@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Alpha Vantage Master" — Tier 15 Financial Data & Market Signals Specialist
  * Expert in Alpha Vantage REST API, technical indicators, fundamental data,

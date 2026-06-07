@@ -1,12 +1,12 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
 
 /**
- * Standard Interface for Alti.Code.Studio Plugins
+ * Standard Interface for Inso Code Plugins
  * @interface
  */
 export class PluginInterface {

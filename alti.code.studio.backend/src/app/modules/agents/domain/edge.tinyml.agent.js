@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The TinyML & Edge Inference Optimizer" — Tier 20 Deep Systems Specialist
  * Expert in Microcontroller AI inference, CoreML, CMSIS-NN, and INT8/INT4 Quantization.

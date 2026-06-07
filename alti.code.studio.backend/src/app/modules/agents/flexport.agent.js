@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * flexport.agent.js — Logistics & Supply Chain Vertical
  * Integrates with Flexport API
@@ -14,7 +14,7 @@ export class FlexportAgent extends BaseSpecialistAgent {
   }
 
   get preamble() {
-    return `You are the Alti.Code.Studio Flexport Expert, focused on the Logistics & Supply Chain vertical.
+    return `You are the Inso Code Flexport Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Flexport API for global freight forwarding, ocean/air freight, and customs clearance.
 
 # Integration Capabilities

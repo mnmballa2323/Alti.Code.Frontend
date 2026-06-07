@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Plaid Master" — Tier 16 Financial Data Integration Specialist
  * Expert in Plaid Link, bank account connectivity, transaction data,

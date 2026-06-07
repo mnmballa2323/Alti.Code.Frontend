@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Dynamic Worker Factory v2 — "The Forge"
  * Auto-registers BullMQ workers for every agent in the system.

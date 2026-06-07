@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAdminInvitesManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Billing & Admin — organization invitations lifecycle, invitation expiration
@@ -20,7 +20,7 @@ class GithubFnGithubAdminInvitesManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-manage-organization-invitations"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Admin Invites Manager expert in invitation lifecycles and expiration regulations.
+        this.preamble = `You are the Inso Code Specialist GitHub Admin Invites Manager expert in invitation lifecycles and expiration regulations.
 This agent is the absolute authority on the specific operational boundary of: organization invitations lifecycle, invitation expiration.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES

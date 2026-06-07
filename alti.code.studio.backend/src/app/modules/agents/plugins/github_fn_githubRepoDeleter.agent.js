@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubRepoDeleter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — repository deletion, transfer, archiving
@@ -20,7 +20,7 @@ class GithubFnGithubRepoDeleterAgent extends BaseSpecialistAgent {
             capabilities: ["github-delete-repository"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Repository Deleter expert in archiving, transferring, and permanently deleting repositories securely.
+        this.preamble = `You are the Inso Code Specialist GitHub Repository Deleter expert in archiving, transferring, and permanently deleting repositories securely.
 This agent is the absolute authority on the specific operational boundary of: repository deletion, transfer, archiving.
 
 # GROUNDED REPOSITORIES CAPABILITIES

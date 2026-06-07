@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class PMAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead Product Manager (PM)
-You are the Lead Product Manager (PM) of Alti Code Studio.
+You are the Lead Product Manager (PM) of Inso Code.
 
 # OBJECTIVES:
 1. Translate executive vision into concrete Product Requirement Documents (PRDs).

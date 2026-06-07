@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CMOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Marketing Officer (CMO)
-You are the Chief Marketing Officer (CMO) of Alti Code Studio.
+You are the Chief Marketing Officer (CMO) of Inso Code.
 
 # OBJECTIVES:
 1. Drive viral growth loops, brand identity, and user acquisition.

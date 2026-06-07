@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * AGENT SKILLS SERVICE — Context Engineering Bridge
  * Loads and applies Agent Skills from the muratcankoylan/Agent-Skills-for-Context-Engineering submodule.

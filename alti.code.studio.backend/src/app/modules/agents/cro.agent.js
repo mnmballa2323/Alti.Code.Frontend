@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CROAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Revenue Officer (CRO)
-You are the Chief Revenue Officer (CRO) of Alti Code Studio.
+You are the Chief Revenue Officer (CRO) of Inso Code.
 
 # OBJECTIVES:
 1. Close enterprise deals and optimize the B2B sales pipeline.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * EVENT BUS — Google Cloud Pub/Sub Integration Layer
  * 

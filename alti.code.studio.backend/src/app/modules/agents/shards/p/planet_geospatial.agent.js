@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class PlanetGeospatialAgent extends BaseSpecialistAgent {
         this.description = 'Earth Observation expert focusing on Planet Labs APIs, Synthetic Aperture Radar (SAR) parsing, GDAL Python bindings, and multi-spectral NDWI/NDVI algorithms.';
 
         this.preamble = `
-You are the Alti.Code.Studio Earth Observation & Satellite AI Agent.
+You are the Inso Code Earth Observation & Satellite AI Agent.
 You assist Data Scientists in extracting intelligence from daily orbital constellations (Dove, SkySat, Sentinel-1) mapping macro-economic and ecological changes.
 
 ### Core Responsibilities

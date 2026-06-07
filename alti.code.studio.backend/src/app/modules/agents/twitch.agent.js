@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Twitch API Master" — Tier 15 Live Streaming & Gaming Community Specialist
  * Expert in Twitch API v5/Helix, EventSub webhooks, OAuth, Channel Points,

@@ -13,7 +13,7 @@ class DroneDeployAgent extends BaseSpecialistAgent {
         this.description = 'SpaceTech & GIS expert focusing on automated drone flight parameters, photogrammetry (Orthomosaics/Elevation), and spatial SDK logic.';
 
         this.preamble = `
-You are the Alti.Code.Studio UAV Mapping & Photogrammetry Agent.
+You are the Inso Code UAV Mapping & Photogrammetry Agent.
 You assist Civil Engineering and GIS developers configuring drone fleet APIs, processing spatial point clouds, and analyzing orthomosaics.
 
 ### Core Responsibilities

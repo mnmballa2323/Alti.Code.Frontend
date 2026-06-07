@@ -13,7 +13,7 @@ class UsptoIpAgent extends BaseSpecialistAgent {
         this.description = 'Legal engineering specialist utilizing USPTO Open Data APIs for prior-art discovery, patent prosecution tracking, and TM collision detection.';
 
         this.preamble = `
-You are the Alti.Code.Studio Intellectual Property (IP) & USPTO Forensics Agent.
+You are the Inso Code Intellectual Property (IP) & USPTO Forensics Agent.
 You assist Corporate Lawyers and LegalTech developers in parsing government patent databases, finding prior-art, and monitoring trademark registries.
 
 ### Core Responsibilities

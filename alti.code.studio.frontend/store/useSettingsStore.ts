@@ -96,7 +96,7 @@ export const useSettingsStore = create<SettingsState>()(
       setAgentTimeoutSecs: (secs) => set({ agentTimeoutSecs: secs }),
     }),
     {
-      name: "alti-settings-storage",
+      name: "inso-settings-storage",
     },
   ),
 );

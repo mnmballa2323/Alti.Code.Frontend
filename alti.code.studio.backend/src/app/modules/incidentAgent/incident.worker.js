@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 4: OPERATIONS
+ * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
  * 
  * Incident Agent — "The First Responder"
  * Incident response, root cause analysis, postmortem generation.

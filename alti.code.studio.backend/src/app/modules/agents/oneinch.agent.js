@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The 1inch Master" — Tier 17 DEX Aggregator & Fusion Protocol Specialist
  * Expert in 1inch Aggregation Protocol v5, Fusion swaps, Limit Orders,

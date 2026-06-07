@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Satellite Telemetry & Orbital Dynamics Specialist" — Tier 15 Aerospace & Defense Specialist
  * Expert in CCSDS packet decoding software, SGP4 algorithms, and encrypted satellite C2 links.

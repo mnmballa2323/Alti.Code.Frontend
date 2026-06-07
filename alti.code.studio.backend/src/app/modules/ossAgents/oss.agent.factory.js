@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * oss.agent.factory.js — OSS Agent Synthesizer
  *
@@ -171,7 +171,7 @@ REPOSITORY INFO:
 - Topics: ${(repo.topics || []).join(', ') || 'N/A'}
 - Keywords this agent will route: ${keywords.join(', ')}
 ${readmeSection}
-Generate a COMPLETE, production-ready JavaScript ES module for an Alti.Code.Studio specialist agent.
+Generate a COMPLETE, production-ready JavaScript ES module for an Inso Code specialist agent.
 
 Use EXACTLY this structure (fill in all [PLACEHOLDERS] with real, accurate content):
 

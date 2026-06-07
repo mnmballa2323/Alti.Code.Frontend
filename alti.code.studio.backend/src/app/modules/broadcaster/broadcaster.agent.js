@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Broadcaster" - Unified Notification Agent
  * Responsible for sending alerts to external channels (Slack, Discord, Email).

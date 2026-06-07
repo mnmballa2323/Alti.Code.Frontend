@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 2: DATA & INFRASTRUCTURE
+ * Copyright (c) 2024 Inso Code — TIER 2: DATA & INFRASTRUCTURE
  * 
  * Cost Agent — "The Accountant"
  * Cloud cost optimization and resource right-sizing.

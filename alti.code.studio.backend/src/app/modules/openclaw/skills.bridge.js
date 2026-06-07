@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * OPENCLAW SKILLS BRIDGE
  * Real scanner of the openclaw/skills submodule tree — reads SKILL.md files

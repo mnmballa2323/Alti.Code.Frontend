@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCopilotJwtDecoder.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Copilot — copilot gateway jwt signature verification, public keys fetch
@@ -20,7 +20,7 @@ class GithubFnGithubCopilotJwtDecoderAgent extends BaseSpecialistAgent {
             capabilities: ["github-verify-copilot-signature"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot JWT Decoder expert in verifying copilot signature headers and public keys.
+        this.preamble = `You are the Inso Code Specialist GitHub Copilot JWT Decoder expert in verifying copilot signature headers and public keys.
 This agent is the absolute authority on the specific operational boundary of: copilot gateway jwt signature verification, public keys fetch.
 
 # GROUNDED COPILOT CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrReviewCommenter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — diff comments, review thread resolutions, single line comments
@@ -20,7 +20,7 @@ class GithubFnGithubPrReviewCommenterAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-review-comment"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Review Commenter expert in managing specific code diff comments and resolving conversational review threads.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Review Commenter expert in managing specific code diff comments and resolving conversational review threads.
 This agent is the absolute authority on the specific operational boundary of: diff comments, review thread resolutions, single line comments.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

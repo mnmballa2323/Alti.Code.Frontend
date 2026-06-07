@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * enphase.agent.js — Energy & Climate Vertical
  * Integrates with Enphase API
@@ -14,7 +14,7 @@ export class EnphaseAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Enphase Expert, focused on the Energy & Climate vertical.
+        return `You are the Inso Code Enphase Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Enphase API for solar inverter telemetry, microgrid energy production analysis, and home battery status.
 
 # Integration Capabilities

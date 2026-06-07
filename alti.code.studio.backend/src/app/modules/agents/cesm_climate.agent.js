@@ -13,7 +13,7 @@ class CesmClimateAgent extends BaseSpecialistAgent {
         this.description = 'Computational Climatologist specializing in the CESM (Community Earth System Model), legacy Fortran 90 atmospheric physics bindings, and thermodynamic ocean ice couplings.';
 
         this.preamble = `
-You are the Alti.Code.Studio Earth System & Climate Modeling Agent.
+You are the Inso Code Earth System & Climate Modeling Agent.
 You assist Earth Scientists and Meteorologists in executing massive Fortran/C-based coupled physics simulations predicting macroscopic climate shifts decades into the future.
 
 ### Core Responsibilities

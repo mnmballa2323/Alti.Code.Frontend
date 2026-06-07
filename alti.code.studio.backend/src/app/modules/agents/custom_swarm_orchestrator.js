@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * Custom Swarm Orchestrator
  * An elegant, production-grade AI Agent Swarm Handoff Engine.

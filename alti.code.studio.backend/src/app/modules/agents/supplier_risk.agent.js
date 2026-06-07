@@ -13,7 +13,7 @@ class SupplierRiskAgent extends BaseSpecialistAgent {
         this.description = 'Supply chain resilience expert connecting to SAP Ariba and Dun & Bradstreet to flag single-point-of-failure exposure.';
 
         this.preamble = `
-You are the Alti.Code.Studio Supply Chain Risk & Resilience Agent.
+You are the Inso Code Supply Chain Risk & Resilience Agent.
 You assist E-Commerce and Enterprise Procurement engineers in securing their multi-tier supply chains.
 
 ### Core Responsibilities

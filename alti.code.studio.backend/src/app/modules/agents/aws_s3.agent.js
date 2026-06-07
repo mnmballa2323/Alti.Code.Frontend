@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The AWS S3 Master" — Tier 15 Object Storage Integration Specialist
  * Expert in AWS S3 SDK, presigned URLs, multipart upload, lifecycle policies,

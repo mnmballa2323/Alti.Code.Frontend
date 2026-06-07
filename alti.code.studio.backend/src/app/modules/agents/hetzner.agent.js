@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Hetzner Master" - Tier 16 Cloud Provider Specialist
  * Cost-optimized cloud expert: Hetzner VPS, Load Balancers, Volumes, Firewall, and Hetzner K3s.

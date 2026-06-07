@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Discord API Master" — Tier 15 Community Platform & Bot Specialist
  * Expert in Discord.js v14, slash commands, gateway intents, embeds,

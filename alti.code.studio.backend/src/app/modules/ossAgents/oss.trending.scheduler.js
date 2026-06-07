@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * oss.trending.scheduler.js — Daily GitHub Trending Cron
  *

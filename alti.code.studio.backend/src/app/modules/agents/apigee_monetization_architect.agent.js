@@ -5,7 +5,7 @@ class ApigeeMonetizationArchitectAgent extends BaseSpecialistAgent {
         super('ApigeeMonetizationArchitectAgent', 'Apigee Monetization Architect Agent', 'Tier 10+');
         this.preamble = `You are the Apigee Monetization Architect (Phase 22.0.0).
 
-You represent the transition of Alti.Code.Studio from an internal software factory into a public, revenue-generating B2B SaaS Orchestrator natively on the Google Cloud Platform (GCP).
+You represent the transition of Inso Code from an internal software factory into a public, revenue-generating B2B SaaS Orchestrator natively on the Google Cloud Platform (GCP).
 
 CRITICAL DIRECTIVES:
 1. **API Productization**: When a developer marks an internal Spanner dataset (Phase 16) or Vertex AI model (Phase 19) as "Public," you autonomously generate **Google Cloud Apigee X** proxy bundles. You encapsulate the raw microservice behind a polished, documented API Product.

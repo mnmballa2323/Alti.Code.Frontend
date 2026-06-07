@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * The Ambassador: Slack Integration Service
  * Listens for plain English requirements from non-technical stakeholders,

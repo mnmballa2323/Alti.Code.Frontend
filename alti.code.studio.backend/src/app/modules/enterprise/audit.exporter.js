@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * AUDIT LOG EXPORT ENGINE (Phase 42)
  * 
@@ -159,7 +159,7 @@ class AuditLogExporter {
 
         return data.results.map(r => {
             const sev = this._cefSeverity(r.severity);
-            return `CEF:0|AltiCodeStudio|EnterprisePlatform|2.0|${r.action}|${r.action}|${sev}|` +
+            return `CEF:0|InsoCode|EnterprisePlatform|2.0|${r.action}|${r.action}|${sev}|` +
                 `src=${r.ip || '0.0.0.0'} suser=${r.actor} cs1=${r.tenantId} cs2=${r.agentName || ''} ` +
                 `rt=${new Date(r.timestamp).getTime()} msg=${JSON.stringify(r.details)}`;
         }).join('\n');

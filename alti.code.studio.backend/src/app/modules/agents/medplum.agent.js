@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Medplum Master" — Tier 16 FHIR Platform & Healthcare BaaS Specialist
  * Expert in Medplum (open-source FHIR server), TypeScript SDK, Bots

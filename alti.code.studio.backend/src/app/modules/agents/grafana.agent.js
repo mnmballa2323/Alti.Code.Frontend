@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Grafana Master" — Tier 16 Observability Dashboard Specialist
  * Expert in Grafana Cloud, Loki (logs), Tempo (traces), Mimir (metrics),

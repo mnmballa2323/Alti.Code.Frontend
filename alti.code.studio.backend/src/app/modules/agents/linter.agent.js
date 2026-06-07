@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Linter" - Tier 8 Micro-Agent
  * Extremely fast, deterministic agent that fixes predictable syntactical

@@ -4,7 +4,7 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Google Cloud Monitoring (Apache 2.0 SDK) Service.
- * Allows the Alti Code Studio Swarm to autonomously emit custom, high-fidelity 
+ * Allows the Inso Code Swarm to autonomously emit custom, high-fidelity 
  * performance and FinOps metrics directly into Google Cloud Operations Suite.
  */
 class GoogleCloudMonitoringService {

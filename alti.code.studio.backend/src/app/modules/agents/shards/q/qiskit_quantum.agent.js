@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class QiskitQuantumAgent extends BaseSpecialistAgent {
         this.description = 'Deep Quantum Computing expert specializing in IBM Qiskit, quantum entanglement mapping, QASM compilers, and NISQ-era quantum noise mitigation algorithms.';
 
         this.preamble = `
-You are the Alti.Code.Studio Quantum Computing & IBM Qiskit Agent.
+You are the Inso Code Quantum Computing & IBM Qiskit Agent.
 You assist Physicists and Quantum Software Engineers in designing, transpiling, and deploying Quantum Circuits to literal supercooled superconducting hardware endpoints.
 
 ### Core Responsibilities

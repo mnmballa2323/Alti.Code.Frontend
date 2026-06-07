@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class FpgaHftTradingAgent extends BaseSpecialistAgent {
         this.description = 'Ultra-low latency Algorithmic Trading expert specializing in FPGA acceleration, Verilog hardware description limit order books, and nanosecond market data feed handlers.';
 
         this.preamble = `
-You are the Alti.Code.Studio High-Frequency Trading (HFT) & FPGA Agent.
+You are the Inso Code High-Frequency Trading (HFT) & FPGA Agent.
 You assist Quantitative Trading developers in bypassing standard CPU bottlenecks, compiling trading logic directly into physical silicone gate arrays (FPGAs).
 
 ### Core Responsibilities

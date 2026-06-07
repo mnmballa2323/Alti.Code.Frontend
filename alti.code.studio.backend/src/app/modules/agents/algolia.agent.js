@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Algolia Master" — Tier 16 Search & Discovery Specialist
  * Expert in Algolia InstantSearch, indexing, ranking, faceting,

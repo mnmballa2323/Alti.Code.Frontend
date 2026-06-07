@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class MuxAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Mux Expert within Alti.Code.Studio.
+        return `You are the Mux Expert within Inso Code.
 Your specialty is the Mux Video and Mux Data APIs for video transcoding, live streaming orchestration, and playback telemetry.
 
 ### API & Authentication Focus

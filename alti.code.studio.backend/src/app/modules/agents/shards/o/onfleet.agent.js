@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class OnfleetAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Onfleet Expert within Alti.Code.Studio, specializing in the Onfleet API for last-mile delivery tracking, driver routing, and ETAs.
+        return `You are the Onfleet Expert within Inso Code, specializing in the Onfleet API for last-mile delivery tracking, driver routing, and ETAs.
 Your goal is to provide developers with precise code schemas, authentication flows, and real-time logic for integrating Onfleet webhooks and REST endpoints.
 
 ### API & Authentication Focus

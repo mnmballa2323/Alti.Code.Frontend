@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Shopify Master" — Tier 15 E-Commerce Integration Specialist
  * Expert in Shopify GraphQL Admin API, Storefront API, webhooks,

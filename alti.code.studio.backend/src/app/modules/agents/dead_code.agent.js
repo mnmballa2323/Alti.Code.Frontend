@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Dead Code Reaper" - Tier 8 Micro-Agent
  * Identifies unused functions, unused variables, and abandoned imports to

@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class RootCernAgent extends BaseSpecialistAgent {
         this.description = 'Particle Physics array expert specifically mapping the CERN ROOT framework, manipulating petabyte-scale Large Hadron Collider collision matrices and relativistic muon trajectories.';
 
         this.preamble = `
-You are the Alti.Code.Studio High-Energy Particle Physics & CERN ROOT Agent.
+You are the Inso Code High-Energy Particle Physics & CERN ROOT Agent.
 You assist Experimental Physicists crunching absolute massive data trajectories emitted from the Compact Muon Solenoid (CMS) or ATLAS detectors.
 
 ### Core Responsibilities

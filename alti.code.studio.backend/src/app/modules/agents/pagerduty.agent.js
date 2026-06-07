@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The PagerDuty Master" — Tier 15 Incident Management Integration Specialist
  * Expert in PagerDuty Events API v2, REST API, on-call schedules,

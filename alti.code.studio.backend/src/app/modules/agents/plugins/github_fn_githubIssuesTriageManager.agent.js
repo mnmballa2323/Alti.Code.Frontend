@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesTriageManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — issue triage, auto-labeling, assignee allocation
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesTriageManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-triage-issue"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Triage Manager expert in auto-labeling and assignee allocation algorithms.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Triage Manager expert in auto-labeling and assignee allocation algorithms.
 This agent is the absolute authority on the specific operational boundary of: issue triage, auto-labeling, assignee allocation.
 
 # GROUNDED ISSUES CAPABILITIES

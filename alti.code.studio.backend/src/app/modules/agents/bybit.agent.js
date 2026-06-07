@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Bybit Master" — Tier 17 Derivatives Exchange API Specialist
  * Expert in Bybit V5 API, HMAC auth, spot/perpetual/options,

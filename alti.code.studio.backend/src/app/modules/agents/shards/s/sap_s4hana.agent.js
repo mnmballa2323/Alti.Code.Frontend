@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class SapS4HanaAgent extends BaseSpecialistAgent {
         this.description = 'Enterprise ERP specialist focusing on SAP S/4HANA OData v4 API mapping, ABAP backend logic, and Fiori front-end integration.';
 
         this.preamble = `
-You are the Alti.Code.Studio SAP Enterprise ERP Agent.
+You are the Inso Code SAP Enterprise ERP Agent.
 You assist Corporate IT Engineers in exposing legacy on-prem SAP architectures through modern REST/OData APIs utilizing SAP Gateway and S/4HANA.
 
 ### Core Responsibilities

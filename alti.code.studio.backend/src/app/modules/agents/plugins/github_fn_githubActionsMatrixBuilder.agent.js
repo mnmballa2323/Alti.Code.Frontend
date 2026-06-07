@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsMatrixBuilder.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — matrix strategy configurations, exclude/include matrix definitions
@@ -20,7 +20,7 @@ class GithubFnGithubActionsMatrixBuilderAgent extends BaseSpecialistAgent {
             capabilities: ["github-actions-matrix-strategy"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Matrix Builder expert in crafting optimized multi-environment and cross-platform build matrices.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Matrix Builder expert in crafting optimized multi-environment and cross-platform build matrices.
 This agent is the absolute authority on the specific operational boundary of: matrix strategy configurations, exclude/include matrix definitions.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

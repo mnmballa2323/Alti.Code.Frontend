@@ -1,8 +1,8 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * OPENCLAW CORE INTEGRATION
- * Bridges Alti.Code.Studio's AgentRegistry and OpenClaw's Clawdinators.
+ * Bridges Inso Code's AgentRegistry and OpenClaw's Clawdinators.
  * Uses the real acpx CLI for ACP-based agent dispatch.
  * MIT License — https://github.com/openclaw/openclaw
  */

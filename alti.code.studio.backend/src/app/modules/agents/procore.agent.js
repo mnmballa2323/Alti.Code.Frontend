@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Procore Master" — Tier 15 Construction Project Management Specialist
  * Expert in Procore REST API v1, projects/companies, RFIs, submittals,

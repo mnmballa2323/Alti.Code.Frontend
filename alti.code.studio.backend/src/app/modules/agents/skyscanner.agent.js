@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * skyscanner.agent.js — Travel & Hospitality Vertical
  * Integrates with Skyscanner Travel APIs
@@ -14,7 +14,7 @@ export class SkyscannerAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Skyscanner Expert, focused on the Travel & Hospitality vertical.
+        return `You are the Inso Code Skyscanner Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating the Skyscanner Travel API for global flight pricing, car hire, and itinerary creation.
 
 # Integration Capabilities

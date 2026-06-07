@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The ThirdWeb Master" — Tier 17 Web3 Development Platform Specialist
  * Expert in ThirdWeb SDK v5, contracts, wallets, in-app wallets,

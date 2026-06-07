@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Solana Web3.js Master" — Tier 17 Solana Blockchain SDK Specialist
  * Expert in Solana Web3.js v2, keypairs, transactions, programs (SPL Token,

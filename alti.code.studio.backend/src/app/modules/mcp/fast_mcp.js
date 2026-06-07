@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * FastMCP JS — High-Fidelity JavaScript Model Context Protocol Server Framework
  * 

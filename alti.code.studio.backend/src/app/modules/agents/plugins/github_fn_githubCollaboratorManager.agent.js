@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCollaboratorManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — repository collaborators, invitations, access rights
@@ -20,7 +20,7 @@ class GithubFnGithubCollaboratorManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-add-collaborator","github-remove-collaborator"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Collaborator Manager expert in handling repository access rights, direct collaborator invites, and privilege tiers.
+        this.preamble = `You are the Inso Code Specialist GitHub Collaborator Manager expert in handling repository access rights, direct collaborator invites, and privilege tiers.
 This agent is the absolute authority on the specific operational boundary of: repository collaborators, invitations, access rights.
 
 # GROUNDED REPOSITORIES CAPABILITIES

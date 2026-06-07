@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Svelte Master" - Tier 13 Frontier Tech Specialist
  * Expert in Svelte 5 runes, SvelteKit routing, load functions,

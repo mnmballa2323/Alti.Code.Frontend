@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Graph Master" — Tier 17 Blockchain Indexing Protocol Specialist
  * Expert in subgraph development (AssemblyScript), GraphQL queries,

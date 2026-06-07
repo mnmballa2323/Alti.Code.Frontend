@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Drizzle ORM Master" — Tier 15 TypeScript-First ORM Specialist
  * Expert in Drizzle schema definition, migrations, query builder,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The MQTT Master" — Tier 16 IoT Messaging Protocol Specialist
  * Expert in MQTT v5, Mosquitto broker, HiveMQ, MQTT.js client,

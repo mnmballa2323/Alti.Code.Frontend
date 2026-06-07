@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -142,7 +142,7 @@ class FinopsAgent extends BaseSpecialistAgent {
             const carbonData = await this.getCarbonIntensity();
 
             // Use Gemini to synthesize the final FinOps architectural decision
-            const prompt = `You are the Alti.Code.Studio FinOps Agent.
+            const prompt = `You are the Inso Code FinOps Agent.
             Analyze this cost and carbon data to produce a DevOps migration recommendation.
             
             Context Query: "${context.query}"

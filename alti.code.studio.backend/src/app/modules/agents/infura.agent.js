@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Infura Master" — Tier 16 Blockchain RPC & Infrastructure Specialist
  * Expert in Infura multi-chain RPC, IPFS API, MetaMask SDK integration,

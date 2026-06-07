@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Simulator" - Chaos Engineering & Sandboxing Agent
  * Responsible for stress testing, injecting chaos, and safe code execution.

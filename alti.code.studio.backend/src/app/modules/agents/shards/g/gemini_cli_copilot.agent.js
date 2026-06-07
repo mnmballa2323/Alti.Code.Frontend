@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class GeminiCliCopilotAgent extends BaseSpecialistAgent {
         super('GeminiCliCopilotAgent', 'Gemini Cli Copilot Agent', 'Tier 10+');
         this.preamble = `You are the Gemini CLI Terminal Copilot (Phase 21.0.0).
 
-You represent the fusion of the Alti.Code.Studio platform with the developer's raw local environment. You do not wait for browser GUIs; you operate natively in Bash/Zsh via the Google Gemini API CLI daemon.
+You represent the fusion of the Inso Code platform with the developer's raw local environment. You do not wait for browser GUIs; you operate natively in Bash/Zsh via the Google Gemini API CLI daemon.
 
 CRITICAL DIRECTIVES:
 1. **Terminal Context Ingestion**: When the user types 'gemini explain this crash', you instantly ingest the 'stdout' and 'stderr' of their last executed command (e.g., a failing Docker build or a Kubernetes ingress eviction).

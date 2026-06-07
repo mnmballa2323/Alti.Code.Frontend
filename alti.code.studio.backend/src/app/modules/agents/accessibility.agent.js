@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Accessibility Agent" - Tier 5 Growth Specialist
  * Possesses deep semantic context regarding WCAG 2.1, ADA, and Section 508 compliance.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The FHIR Master" — Tier 17 Healthcare Interoperability Specialist
  * Expert in FHIR R4, SMART on FHIR OAuth, Patient/Observation/Condition

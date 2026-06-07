@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Jira Master" — Tier 15 Project Tracking Integration Specialist
  * Expert in Jira REST API v3, Atlassian Forge, JQL, issue automation,

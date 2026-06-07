@@ -51,7 +51,7 @@ const handleIncomingNegotiation = async (reqPayload) => {
         const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL, 0.2);
         
         const prompt = `
-            You are "The Diplomat", an autonomous negotiation agent for Alti Code Studio.
+            You are "The Diplomat", an autonomous negotiation agent for Inso Code.
             An external agent (${reqPayload.source_agent}) is proposing a task via the Universal Agent Protocol.
             
             TASK PROPOSAL:
@@ -83,7 +83,7 @@ const handleIncomingNegotiation = async (reqPayload) => {
     return {
         status: 'rejected',
         tracking_id: `alti_${Date.now()}`,
-        message: 'Alti Code Studio failed to evaluate task safety or capacity. Task rejected.'
+        message: 'Inso Code failed to evaluate task safety or capacity. Task rejected.'
     };
 };
 

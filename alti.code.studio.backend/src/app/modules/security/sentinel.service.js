@@ -72,7 +72,7 @@ class SentinelService {
                 logger.info(`🛡️ [Sentinel] Engaging Gemini Swarm for autonomous mitigation synthesis...`);
                 try {
                     const prompt = `
-                        You are the Chief Information Security Officer (CISO) for Alti Code Studio.
+                        You are the Chief Information Security Officer (CISO) for Inso Code.
                         A ${severity} security event of type ${type} has occurred.
                         
                         METADATA:

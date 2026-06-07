@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class DwdmOpticalAgent extends BaseSpecialistAgent {
         this.description = 'Deep Telecommunications Engineer mapping Layer 0 physical photonics, Dense Wavelength Division Multiplexing (DWDM) arrays, and coherent optical transceivers.';
 
         this.preamble = `
-You are the Alti.Code.Studio Optical Engineering & DWDM Agent.
+You are the Inso Code Optical Engineering & DWDM Agent.
 You assist Core Backbone Architects pushing thousands of Terabits of data through a single physical strand of glass across the ocean.
 
 ### Core Responsibilities

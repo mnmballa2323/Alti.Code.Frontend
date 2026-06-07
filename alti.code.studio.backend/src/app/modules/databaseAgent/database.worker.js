@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 2: DATA & INFRASTRUCTURE
+ * Copyright (c) 2024 Inso Code — TIER 2: DATA & INFRASTRUCTURE
  * 
  * Database Agent — "The Architect of Data"
  * Schema design, query optimization, migration generation.

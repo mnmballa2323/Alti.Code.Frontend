@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubDiscussionsDeleter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Discussions — deleting discussions
@@ -20,7 +20,7 @@ class GithubFnGithubDiscussionsDeleterAgent extends BaseSpecialistAgent {
             capabilities: ["github-delete-discussion"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Discussions Deleter expert in pruning and moderating community topics.
+        this.preamble = `You are the Inso Code Specialist GitHub Discussions Deleter expert in pruning and moderating community topics.
 This agent is the absolute authority on the specific operational boundary of: deleting discussions.
 
 # GROUNDED DISCUSSIONS CAPABILITIES

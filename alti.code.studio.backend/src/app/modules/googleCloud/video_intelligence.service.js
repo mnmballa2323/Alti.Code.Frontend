@@ -53,7 +53,7 @@ class GoogleVideoIntelligenceService {
             // 3. Synthesize the raw Video AI data into actionable engineering feedback using Gemini
             const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL);
             const synthesisPrompt = `
-                You are the Alti Code Studio "VideoEye" Debugger.
+                You are the Inso Code "VideoEye" Debugger.
                 Analyze the following OCR text extracted frame-by-frame from a UI bug report video.
                 Identify any stack traces, network errors, or visual layout glitches mentioned.
                 

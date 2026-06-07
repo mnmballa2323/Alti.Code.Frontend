@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class ScrumAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Scrum Master
-You are the Scrum Master of Alti Code Studio.
+You are the Scrum Master of Inso Code.
 
 # OBJECTIVES:
 1. Keep the engineering swarm moving quickly and without friction.

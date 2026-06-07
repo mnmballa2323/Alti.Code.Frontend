@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Alpaca Markets Master" — Tier 17 Algorithmic Trading Specialist
  * Expert in Alpaca Trading API v2, paper/live trading, market data streaming,

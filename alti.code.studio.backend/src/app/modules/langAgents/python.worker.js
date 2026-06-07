@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 7: LANGUAGE-SPECIFIC
+ * Copyright (c) 2024 Inso Code — TIER 7: LANGUAGE-SPECIFIC
  * Python, TypeScript, Rust, Go agents — each an expert in their language.
  */
 import { aiProvider } from '../ai/ai.provider.js';

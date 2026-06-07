@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Clio Legal Master" — Tier 15 Legal Practice Management Specialist
  * Expert in Clio Manage API, matters/contacts/documents/time entries,

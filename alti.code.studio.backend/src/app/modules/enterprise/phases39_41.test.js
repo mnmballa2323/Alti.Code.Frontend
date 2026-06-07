@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 39-41 TEST SUITE
  * API Keys + Caching + Error Recovery

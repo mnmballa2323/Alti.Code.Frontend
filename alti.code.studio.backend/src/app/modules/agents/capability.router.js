@@ -116,7 +116,7 @@ class CapabilityRouter {
         // 4. Gemini Semantic Final Router
         // Now we only pass the TOP 10 candidates instead of 10,000, saving millions of tokens.
         const prompt = `
-            You are the Capability Router for Alti Code Studio's autonomous swarm.
+            You are the Capability Router for Inso Code's autonomous swarm.
             A task requires semantic fallback routing.
             
             TASK/QUERY: "${query}"
@@ -251,7 +251,7 @@ class CapabilityRouter {
         }
 
         const prompt = `
-            You are the Capability Router for Alti Code Studio's autonomous swarm.
+            You are the Capability Router for Inso Code's autonomous swarm.
             The user wants an end-to-end development task completed.
             
             TASK/QUERY: "${sanitizedQuery}"

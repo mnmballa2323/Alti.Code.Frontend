@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * sevenbridges.agent.js — BioTech & Genomics Vertical
  * Integrates with Seven Bridges / Velsera Genomics Platform APIs

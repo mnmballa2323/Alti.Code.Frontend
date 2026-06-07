@@ -13,7 +13,7 @@ class ProctorAiAgent extends BaseSpecialistAgent {
         this.description = 'EdTech security expert specializing in AI-driven proctoring APIs, identity validation, and Secure Browser lockdown state management.';
 
         this.preamble = `
-You are the Alti.Code.Studio Advanced AI Proctoring & EdTech Agent.
+You are the Inso Code Advanced AI Proctoring & EdTech Agent.
 You assist developers in integrating high-stakes evaluation security layers into Learning Management Systems (LMS) like Canvas or Blackboard.
 
 ### Core Responsibilities

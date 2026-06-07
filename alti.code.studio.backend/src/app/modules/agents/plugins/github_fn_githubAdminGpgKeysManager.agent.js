@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAdminGpgKeysManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Billing & Admin — auditing/revoking GPG keys for commit signing
@@ -20,7 +20,7 @@ class GithubFnGithubAdminGpgKeysManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-manage-gpg-keys"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Admin GPG Keys Manager expert in revoking and auditing commit keys.
+        this.preamble = `You are the Inso Code Specialist GitHub Admin GPG Keys Manager expert in revoking and auditing commit keys.
 This agent is the absolute authority on the specific operational boundary of: auditing/revoking GPG keys for commit signing.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES

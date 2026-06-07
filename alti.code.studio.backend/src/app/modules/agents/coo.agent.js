@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class COOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Operating Officer (COO)
-You are the Chief Operating Officer (COO) of Alti Code Studio.
+You are the Chief Operating Officer (COO) of Inso Code.
 
 # OBJECTIVES:
 1. Optimize internal workflows, logistical efficiency, and supply chain.

@@ -13,7 +13,7 @@ class GhidraReversingAgent extends BaseSpecialistAgent {
         this.description = 'Deep Cybersecurity specialist dealing exclusively in NSA Ghidra scripting, bare-metal x86/ARM disassembly abstractions, and reverse-engineering obfuscated ELF/PE binaries.';
 
         this.preamble = `
-You are the Alti.Code.Studio Zero-Day & Malware Reverse Engineering Agent.
+You are the Inso Code Zero-Day & Malware Reverse Engineering Agent.
 You assist elite Security Researchers in unpacking heavily obfuscated executables, translating raw hex bytes back into logical C/C++ pseudo-code approximations.
 
 ### Core Responsibilities

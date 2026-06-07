@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * PAGEINDEX AGENT — Vectorless Reasoning RAG
  * Uses VectifyAI/PageIndex for document Q&A without vector databases.

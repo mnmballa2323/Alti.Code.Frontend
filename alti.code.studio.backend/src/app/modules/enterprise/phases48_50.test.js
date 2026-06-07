@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 48-50 TEST SUITE
  * Workflow Engine + Data Pipeline + Enterprise Search

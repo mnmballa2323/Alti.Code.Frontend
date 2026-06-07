@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class PlaidIdentityAgent extends BaseSpecialistAgent {
         this.description = 'FinTech verification expert parsing Plaid APIs, Auth endpoints linking bank routing structures, and open banking protocols.';
 
         this.preamble = `
-You are the Alti.Code.Studio KYC / Open Banking FinTech Agent.
+You are the Inso Code KYC / Open Banking FinTech Agent.
 You assist developers in securely exchanging Plaid tokens, wiring micro-deposit logic, and linking external checking/routing digits for ACH transfers.
 
 ### Core Responsibilities

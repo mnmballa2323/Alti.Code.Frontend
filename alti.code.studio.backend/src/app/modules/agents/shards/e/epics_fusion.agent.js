@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class EpicsFusionAgent extends BaseSpecialistAgent {
         this.description = 'Advanced Physics Control expert focused on the EPICS (Experimental Physics and Industrial Control System) framework, managing strict Tokamak magnetic plasma containment vectors.';
 
         this.preamble = `
-You are the Alti.Code.Studio Nuclear Fusion & EPICS Control Agent.
+You are the Inso Code Nuclear Fusion & EPICS Control Agent.
 You assist Plasma Physicists in bridging real-time diagnostic telemetry from supercooled superconducting magnets directly into complex dynamic plasma disruption mitigation routines.
 
 ### Core Responsibilities

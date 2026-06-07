@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 6: CLOUD-SPECIFIC
+ * Copyright (c) 2024 Inso Code — TIER 6: CLOUD-SPECIFIC
  * 
  * Azure Agent — "The Enterprise"
  */

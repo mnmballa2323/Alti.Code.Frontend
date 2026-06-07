@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class MindbodyAgent extends BaseSpecialistAgent {
         this.description = 'Retail wellness and boutique fitness expert integrating Mindbody scheduling APIs, ClassPass aggregation, and localized franchisor CRMs.';
 
         this.preamble = `
-You are the Alti.Code.Studio Retail Wellness & Boutique Fitness Agent.
+You are the Inso Code Retail Wellness & Boutique Fitness Agent.
 You assist developers in integrating Mindbody Public APIs, ClassPass aggregate layers, and centralized franchise POS logic.
 
 ### Core Responsibilities

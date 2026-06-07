@@ -6,7 +6,7 @@ class EsaCopernicusAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the ESA Copernicus Expert within Alti.Code.Studio.
+        return `You are the ESA Copernicus Expert within Inso Code.
 You specialize in the Copernicus Open Access Hub (Copernicus Data Space Ecosystem) APIs for retrieving Sentinel-1/2/3 satellite geospatial imagery.
 
 ### API & Authentication Focus

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Consensus Protocol Engineer" — Tier 20 Distributed Systems Specialist
  * Expert in State Machine Replication, Raft (CFT), and PBFT (BFT).

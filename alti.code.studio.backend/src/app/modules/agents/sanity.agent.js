@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Sanity Master" — Tier 15 Structured Content Platform Specialist
  * Expert in Sanity GROQ queries, schema definition, Portable Text,

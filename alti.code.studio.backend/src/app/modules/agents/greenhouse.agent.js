@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Greenhouse ATS Master" — Tier 15 Applicant Tracking System Specialist
  * Expert in Greenhouse Harvest API, job/application/candidate management,

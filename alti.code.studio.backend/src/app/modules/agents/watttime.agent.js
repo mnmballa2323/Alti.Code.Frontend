@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * watttime.agent.js — Energy & Climate Vertical
  * Integrates with WattTime API
@@ -14,7 +14,7 @@ export class WattTimeAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio WattTime Expert, focused on the Energy & Climate vertical.
+        return `You are the Inso Code WattTime Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the WattTime API for real-time grid emissions tracking and automated load shifting.
 
 # Integration Capabilities

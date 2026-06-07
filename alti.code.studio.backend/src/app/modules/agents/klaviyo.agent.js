@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Klaviyo Master" — Tier 15 Email & SMS Marketing Automation Specialist
  * Expert in Klaviyo API v2023-12-15, profiles, events, flows/campaigns,

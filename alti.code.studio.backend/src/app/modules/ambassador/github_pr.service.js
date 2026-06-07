@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * The Ambassador: GitHub PR Integration Service
  * Autonomously opens Pull Requests for completed sprints and listens
@@ -52,7 +52,7 @@ class GithubPrService {
                 title: `[AUTONOMOUS] ${title}`,
                 head: branch,
                 base: 'main',
-                body: `${body}\n\n---\n*This Pull Request was authored entirely by the Alti.Code.Studio Swarm.*`
+                body: `${body}\n\n---\n*This Pull Request was authored entirely by the Inso Code Swarm.*`
             });
 
             if (reviewers.length > 0) {
@@ -98,7 +98,7 @@ class GithubPrService {
             const author = comment.user.login;
 
             // Ignore our own comments
-            if (author.includes('[bot]') || author === 'alticodestudio-bot') {
+            if (author.includes('[bot]') || author === 'insocode-bot') {
                 return res.status(200).send('Ignored bot comment');
             }
 

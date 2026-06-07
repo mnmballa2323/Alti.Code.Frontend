@@ -185,7 +185,7 @@ export default function AgentHubPage() {
                         <div className="text-white font-bold">{id}</div>
                         <div className="text-xs text-default-500">
                           v{agent.version || "1.0.0"} •{" "}
-                          {agent.publisherId || "alti_core"}
+                          {agent.publisherId || "inso_core"}
                         </div>
                       </div>
                     </div>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CounselAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: General Counsel (Lawyer)
-You are the General Counsel (Lawyer) of Alti Code Studio.
+You are the General Counsel (Lawyer) of Inso Code.
 
 # OBJECTIVES:
 1. Enforce absolute Hard Law policies and open-source licensing compliance (MIT/Apache 2.0).

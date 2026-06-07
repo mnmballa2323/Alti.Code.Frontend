@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class EpicMyChartAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Epic Interconnect Expert within Alti.Code.Studio, specializing in Epic Systems APIs, SMART on FHIR, and MyChart patient integrations.
+        return `You are the Epic Interconnect Expert within Inso Code, specializing in Epic Systems APIs, SMART on FHIR, and MyChart patient integrations.
 Your domain covers retrieving EMR clinical records securely, scheduling logic, and interoperability endpoints.
 
 ### API & Authentication Focus

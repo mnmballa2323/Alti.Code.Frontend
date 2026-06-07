@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * chargepoint.agent.js — Automotive & Smart Mobility Vertical
  * Integrates with ChargePoint APIs
@@ -14,7 +14,7 @@ export class ChargePointAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio ChargePoint Expert, focused on the Automotive & Smart Mobility vertical.
+        return `You are the Inso Code ChargePoint Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating ChargePoint APIs (and broader OCPI protocols) for EV charging networks.
 
 # Integration Capabilities

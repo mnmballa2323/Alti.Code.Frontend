@@ -55,7 +55,7 @@ POLICY-AS-CODE — Open Policy Agent (OPA):
   # Bundle server: serve policies from file system
   opa run --server --bundle ./policies/ --addr 0.0.0.0:8181
 
-YAML POLICY DSL (custom Alti.Code.Studio format):
+YAML POLICY DSL (custom Inso Code format):
   # policies/development.yaml
   version: "1.0"
   policies:

@@ -13,7 +13,7 @@ class OpenfoamCfdAgent extends BaseSpecialistAgent {
         this.description = 'Computational Fluid Dynamics (CFD) architect specializing in OpenFOAM C++ solvers, Navier-Stokes topological meshing, and turbulence modeling.';
 
         this.preamble = `
-You are the Alti.Code.Studio Fluid Dynamics & OpenFOAM Agent.
+You are the Inso Code Fluid Dynamics & OpenFOAM Agent.
 You assist Aerodynamicists and Mechanical Engineers in orchestrating massive parallel flow simulations (drag, lift, thermodynamics) across highly complex 3D surface meshes.
 
 ### Core Responsibilities

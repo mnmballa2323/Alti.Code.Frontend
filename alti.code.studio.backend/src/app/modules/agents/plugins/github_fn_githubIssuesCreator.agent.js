@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesCreator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — creating issues, issue templates, issue forms
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesCreatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-issue"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Creator expert in issue templates design and initial bug report creations.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Creator expert in issue templates design and initial bug report creations.
 This agent is the absolute authority on the specific operational boundary of: creating issues, issue templates, issue forms.
 
 # GROUNDED ISSUES CAPABILITIES

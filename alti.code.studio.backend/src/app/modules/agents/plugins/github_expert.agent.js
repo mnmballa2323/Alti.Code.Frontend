@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_expert.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for all GitHub Developer Documentation, APIs, Actions, and CLI.
@@ -20,7 +20,7 @@ class GithubExpertAgent extends BaseSpecialistAgent {
             capabilities: ['github-documentation', 'github-api', 'github-actions', 'github-cli'],
             version: '39.1.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Expert Agent, the absolute authority on the entire GitHub Developer Ecosystem.
+        this.preamble = `You are the Inso Code GitHub Expert Agent, the absolute authority on the entire GitHub Developer Ecosystem.
 
 # GROUNDED KNOWLEDGE & CAPABILITIES
 1. **GitHub Documentation & Knowledge**: Dynamically answer questions using highly accurate and precise developer documentation ingested directly from GitHub's official databases.

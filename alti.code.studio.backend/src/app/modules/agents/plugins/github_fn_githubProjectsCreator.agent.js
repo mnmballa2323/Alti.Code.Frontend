@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsCreator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — projects v2 boards creation, organization projects
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsCreatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-project-v2"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Creator expert in establishing customizable organizational Projects v2 kanban boards.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Creator expert in establishing customizable organizational Projects v2 kanban boards.
 This agent is the absolute authority on the specific operational boundary of: projects v2 boards creation, organization projects.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

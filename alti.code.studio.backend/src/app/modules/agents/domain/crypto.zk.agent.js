@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Zero-Knowledge Protocol Architect" — Tier 20 Deep Cryptography Specialist
  * Expert in zk-SNARKs, zk-STARKs, Halo2, Circom, and Verifiable Computation.

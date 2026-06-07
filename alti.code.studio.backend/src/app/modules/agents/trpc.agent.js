@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The tRPC Master" — Tier 16 End-to-End Type-Safe API Specialist
  * Expert in tRPC v11, Next.js App Router integration, React Query adapter,

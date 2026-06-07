@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 60-65 TEST SUITE
  * Webhooks + Data Export/Import + Dashboard Builder +

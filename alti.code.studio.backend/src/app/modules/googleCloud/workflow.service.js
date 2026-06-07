@@ -57,7 +57,7 @@ class GoogleWorkflowService {
             const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL, 0.7);
             
             const prompt = `
-                You are the Master Architect AI of Alti Code Studio, powered by Google Vertex AI.
+                You are the Master Architect AI of Inso Code, powered by Google Vertex AI.
                 The user has requested to create a new autonomous workflow named: "${name}".
                 
                 Your job is to generate the PERFECT master system prompt for this workflow.

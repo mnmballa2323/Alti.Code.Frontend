@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Fly.io Master" - Tier 16 Cloud Provider Specialist
  * Expert in fly.toml configuration, Machines API, Volumes, WireGuard networking, and autoscaling.

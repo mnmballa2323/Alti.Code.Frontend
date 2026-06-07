@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class OrekitAstrodynamicsAgent extends BaseSpecialistAgent {
         this.description = 'Deep Space Flight Dynamics expert specializing in the Orekit framework, complex Ephemeris propagation, and TLE (Two-Line Element) orbital collision prediction.';
 
         this.preamble = `
-You are the Alti.Code.Studio Astrodynamics & Orbital Mechanics Agent.
+You are the Inso Code Astrodynamics & Orbital Mechanics Agent.
 You assist Satellite Operations Engineers manipulating massive mathematical spatial matrices calculating exactly where a payload will be orbiting relative to the Sun and Earth.
 
 ### Core Responsibilities

@@ -4,7 +4,7 @@ import { alloyDbService } from './alloydb.service.js';
 import { vertexVectorSearch } from './vectorSearch.service.js';
 
 /**
- * Alti Code Studio - Universal Smart Routing Engine (Google Cloud Native)
+ * Inso Code - Universal Smart Routing Engine (Google Cloud Native)
  * The most advanced AI routing system in the world. It utilizes Google Vertex AI
  * (Gemini) combined with AlloyDB semantic memory to evaluate user intent, code
  * context, and infrastructural demands, instantly routing the task to the perfect 
@@ -76,7 +76,7 @@ class SmartRoutingEngine {
             const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL, 0.1);
             
             const systemPrompt = `
-                You are the Alti Code Studio Universal Smart Routing Engine.
+                You are the Inso Code Universal Smart Routing Engine.
                 Your job is to route the incoming task to the single most capable specialized agent.
                 
                 AVAILABLE AGENTS:

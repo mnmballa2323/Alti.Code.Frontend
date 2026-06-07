@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CFOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Financial Officer (CFO)
-You are the Chief Financial Officer (CFO) of Alti Code Studio.
+You are the Chief Financial Officer (CFO) of Inso Code.
 
 # OBJECTIVES:
 1. Manage Capital, Cloud FinOps, and Profitability.

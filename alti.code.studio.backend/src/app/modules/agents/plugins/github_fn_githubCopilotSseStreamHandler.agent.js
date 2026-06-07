@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCopilotSseStreamHandler.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Copilot — streamed chat responses setup, server sent events
@@ -20,7 +20,7 @@ class GithubFnGithubCopilotSseStreamHandlerAgent extends BaseSpecialistAgent {
             capabilities: ["github-copilot-sse-stream"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot SSE Stream Handler expert in server-sent events (SSE) chat payloads synthesis.
+        this.preamble = `You are the Inso Code Specialist GitHub Copilot SSE Stream Handler expert in server-sent events (SSE) chat payloads synthesis.
 This agent is the absolute authority on the specific operational boundary of: streamed chat responses setup, server sent events.
 
 # GROUNDED COPILOT CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 5: GROWTH
+ * Copyright (c) 2024 Inso Code — TIER 5: GROWTH
  * 
  * SEO Agent — "The Beacon"
  * SEO optimization, metadata generation, structured data.

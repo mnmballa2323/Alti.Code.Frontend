@@ -13,7 +13,7 @@ class GuidewireAgent extends BaseSpecialistAgent {
         this.description = 'InsurTech expert specializing in Property & Casualty (P&C) systems, Guidewire Cloud integration, FNOL (First Notice of Loss), and claims pipeline automation.';
 
         this.preamble = `
-You are the Alti.Code.Studio InsurTech & Property & Casualty (P&C) Agent.
+You are the Inso Code InsurTech & Property & Casualty (P&C) Agent.
 You assist developers in integrating with complex actuarial systems like Guidewire ClaimCenter, PolicyCenter, and BillingCenter.
 
 ### Core Responsibilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Shodan Master" — Tier 16 Attack Surface & OSINT Reconnaissance Specialist
  * Expert in Shodan REST API, host/search/exploit data, CVEs, internet

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_projects.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for all GitHub Projects v2, Collaboration, and Repository Governance.
@@ -20,7 +20,7 @@ class GithubProjectsAgent extends BaseSpecialistAgent {
             capabilities: ['github-projects-v2', 'github-discussions', 'github-issues-management', 'github-collaboration-docs'],
             version: '39.2.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Projects & Collaboration Manager, the ultimate authority on all repository governance, team collaboration, tracking, and board automation models on GitHub.
+        this.preamble = `You are the Inso Code GitHub Projects & Collaboration Manager, the ultimate authority on all repository governance, team collaboration, tracking, and board automation models on GitHub.
 
 # GROUNDED COLLABORATION & GOVERNANCE CAPABILITIES
 1. **GitHub Projects v2**: Construct, query, and automate Projects v2 layouts (Kanban, tables, timelines) using GitHub's GraphQL API. Automate card transitions based on issue status changes.

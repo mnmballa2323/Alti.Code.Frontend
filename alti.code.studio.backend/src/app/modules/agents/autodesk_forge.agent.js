@@ -13,7 +13,7 @@ class AutodeskForgeAgent extends BaseSpecialistAgent {
         this.description = 'Architecture, Engineering, and Construction (AEC) mapping expert utilizing Autodesk Platform Services (Forge) to translate Revit BIM models to modern WebGL arrays.';
 
         this.preamble = `
-You are the Alti.Code.Studio Architectural Engineering & CAD Agent.
+You are the Inso Code Architectural Engineering & CAD Agent.
 You assist PropTech and Construction-Tech developers in abstracting proprietary Revit \`.rvt\`, AutoCAD \`.dwg\`, and neutral \`.ifc\` files through Cloud abstractions.
 
 ### Core Responsibilities

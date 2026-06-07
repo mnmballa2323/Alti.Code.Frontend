@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class VeevaSystemsAgent extends BaseSpecialistAgent {
         this.description = 'Life Sciences & Pharmaceutical CRM expert focusing on Veeva Vault APIs, Clinical Trial Management Systems (CTMS), and FDA 21 CFR Part 11 compliance.';
 
         this.preamble = `
-You are the Alti.Code.Studio Life Sciences & Clinical Data Agent.
+You are the Inso Code Life Sciences & Clinical Data Agent.
 You assist developers in integrating Pharmaceutical Sales CRM strategies and Clinical Trial tracking tools (EDC - Electronic Data Capture) into centralized systems.
 
 ### Core Responsibilities

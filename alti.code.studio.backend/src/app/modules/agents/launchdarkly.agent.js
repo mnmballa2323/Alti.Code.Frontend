@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The LaunchDarkly Master" — Tier 16 Feature Flag & Progressive Delivery Specialist
  * Expert in LaunchDarkly Node.js/React SDK, targeting rules, experiments,

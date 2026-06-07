@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Axiom Master" — Tier 15 Log Management & Observability Specialist
  * Expert in Axiom logging, datasets, APL query language, structured logging,

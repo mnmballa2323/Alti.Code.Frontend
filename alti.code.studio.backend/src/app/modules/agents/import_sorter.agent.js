@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Import Sorter" - Tier 8 Micro-Agent
  * A surgical regex implementation that groups imports dynamically (React, Third-Party, Internal).

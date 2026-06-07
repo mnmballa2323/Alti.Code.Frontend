@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The D2L Brightspace Master" — Tier 15 Enterprise LMS Specialist
  * Expert in Brightspace REST API (Le API / LP API), courses, content,

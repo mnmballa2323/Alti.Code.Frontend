@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsArtifactsExporter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — actions artifacts lifecycle, upload/download actions, storage rules
@@ -20,7 +20,7 @@ class GithubFnGithubActionsArtifactsExporterAgent extends BaseSpecialistAgent {
             capabilities: ["github-download-artifacts","github-upload-artifacts"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Artifacts Exporter expert in configuring CI/CD artifact uploads, downloads, and custom expiration limits.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Artifacts Exporter expert in configuring CI/CD artifact uploads, downloads, and custom expiration limits.
 This agent is the absolute authority on the specific operational boundary of: actions artifacts lifecycle, upload/download actions, storage rules.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

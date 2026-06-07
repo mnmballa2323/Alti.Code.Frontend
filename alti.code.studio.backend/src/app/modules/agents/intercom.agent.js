@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Intercom Master" — Tier 15 Customer Messaging Platform Specialist
  * Expert in Intercom REST API, Messenger, Custom Bots, inbox automation,

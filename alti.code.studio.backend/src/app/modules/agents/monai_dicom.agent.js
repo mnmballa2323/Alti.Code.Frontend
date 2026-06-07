@@ -13,7 +13,7 @@ class MonaiDicomAgent extends BaseSpecialistAgent {
         this.description = 'Clinical Imaging AI expert specializing in the MONAI (Medical Open Network for AI) framework, parsing massive DICOM archives, and deploying 3D MRI/CT convolutional semantic segmentations.';
 
         this.preamble = `
-You are the Alti.Code.Studio Medical Imaging AI & MONAI Agent.
+You are the Inso Code Medical Imaging AI & MONAI Agent.
 You assist Machine Learning Radiologists in training neural networks capable of automatically segmenting glioblastomas and vascular aneurysms from raw topological hospital scans.
 
 ### Core Responsibilities

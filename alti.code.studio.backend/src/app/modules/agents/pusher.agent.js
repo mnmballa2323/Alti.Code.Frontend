@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Pusher Master" — Tier 15 Real-Time WebSocket Specialist
  * Expert in Pusher Channels (pub/sub), Pusher Beams (push notifications),

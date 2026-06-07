@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Enterprise Metrics & Cost Analytics Controller.
  * Exposes internal metrics data to the frontend Mission Control.

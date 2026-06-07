@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppHooksManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — organization-wide hooks, app webhooks updates
@@ -20,7 +20,7 @@ class GithubFnGithubAppHooksManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-app-hook"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Hooks Manager expert in establishing organization-level webhook listeners for ecosystem scale integrations.
+        this.preamble = `You are the Inso Code Specialist GitHub App Hooks Manager expert in establishing organization-level webhook listeners for ecosystem scale integrations.
 This agent is the absolute authority on the specific operational boundary of: organization-wide hooks, app webhooks updates.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

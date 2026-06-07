@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppManifestRegulator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — app manifest yaml configurations, rapid integration bootstrapping
@@ -20,7 +20,7 @@ class GithubFnGithubAppManifestRegulatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-parse-app-manifest"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Manifest Regulator expert in validating and parsing declarative app manifest configuration schemas.
+        this.preamble = `You are the Inso Code Specialist GitHub App Manifest Regulator expert in validating and parsing declarative app manifest configuration schemas.
 This agent is the absolute authority on the specific operational boundary of: app manifest yaml configurations, rapid integration bootstrapping.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistForksManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — forking gists, listing gist forks
@@ -20,7 +20,7 @@ class GithubFnGithubGistForksManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-fork-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Forks Manager expert in copying public snippets and tracking snippet lineages.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Forks Manager expert in copying public snippets and tracking snippet lineages.
 This agent is the absolute authority on the specific operational boundary of: forking gists, listing gist forks.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

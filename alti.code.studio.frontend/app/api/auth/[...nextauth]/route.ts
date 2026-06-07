@@ -64,7 +64,7 @@ const handler = NextAuth({
         if (!res.ok) {
           const errorData = await res.json();
 
-          // The Alti backend globalErrorHandler returns { status: false, message: "..." }
+          // The Inso backend globalErrorHandler returns { status: false, message: "..." }
           throw new Error(
             errorData.message || errorData.error || "Invalid credentials",
           );

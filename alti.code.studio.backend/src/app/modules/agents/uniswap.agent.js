@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Uniswap Master" — Tier 17 DEX Protocol Specialist
  * Expert in Uniswap v3/v4 SDK, swap routing, pool creation,

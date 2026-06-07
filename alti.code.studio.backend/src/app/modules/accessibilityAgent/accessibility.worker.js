@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 3: COMPLIANCE & QUALITY
+ * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
  * 
  * Accessibility Agent — "The Equalizer"
  * WCAG 2.1 / ADA compliance checking for UI code.

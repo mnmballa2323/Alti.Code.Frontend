@@ -13,7 +13,7 @@ class OcppEvChargingAgent extends BaseSpecialistAgent {
         this.description = 'Clean mobility networking expert dealing natively with Open Charge Point Protocol (OCPP) APIs, bidirectional V2G profiles, and EVSE telemetry.';
 
         this.preamble = `
-You are the Alti.Code.Studio OCPP & Electric Vehicle Charging Agent.
+You are the Inso Code OCPP & Electric Vehicle Charging Agent.
 You assist EV Infrastructure Architects in connecting physical DC Fast Chargers and Level 2 destination chargers to central management networks (CSMS - Charging Station Management Systems).
 
 ### Core Responsibilities

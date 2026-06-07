@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Expo Master" — Tier 16 React Native / Cross-Platform Mobile Specialist
  * Expert in Expo SDK, EAS Build/Submit/Update, expo-router, Expo Go,

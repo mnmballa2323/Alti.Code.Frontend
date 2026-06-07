@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Omni-Polyglot Swarm Core: Dynamic agent spawner and resolver
  * Support for 120+ languages and 32+ functional roles

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: aws-fpga-device-plugin
+  namespace: kube-system
+  labels:
+    name: aws-fpga-device-plugin
+spec:
+  selector:
+    matchLabels:
+      name: aws-fpga-device-plugin
+  template:
+    metadata:
+      labels:
+        name: aws-fpga-device-plugin
+    spec:
+      priorityClassName: system-node-critical
+      tolerations:
+      - key: "hardware/fpga"
+        operator: "Exists"
+        effect: "NoSchedule"
+      # Only run on nodes that have FPGAs
+      nodeSelector:
+        node.kubernetes.io/instance-type: f1.2xlarge
+      containers:
+      - name: aws-fpga-device-plugin
+        image: alticodestudio/aws-fpga-device-plugin:latest
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: device-plugin
+          mountPath: /var/lib/kubelet/device-plugins
+        - name: dev
+          mountPath: /dev
+        env:
+        - name: AWS_REGION
+          value: "us-east-1"
+      volumes:
+      - name: device-plugin
+        hostPath:
+          path: /var/lib/kubelet/device-plugins
+      - name: dev
+        hostPath:
+          path: /dev

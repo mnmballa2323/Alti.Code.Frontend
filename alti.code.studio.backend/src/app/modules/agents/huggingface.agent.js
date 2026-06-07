@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The HuggingFace Master" — Tier 16 Open-Source AI Model Specialist
  * Expert in HuggingFace Inference API, Hub model discovery, Transformers.js,

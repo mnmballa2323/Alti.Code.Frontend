@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistSnippetSyncer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — syncing dynamic code snippets, revision history logs
@@ -20,7 +20,7 @@ class GithubFnGithubGistSnippetSyncerAgent extends BaseSpecialistAgent {
             capabilities: ["github-sync-gist-snippets"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Snippet Syncer expert in synchronizing scratchpads and tracking revision histories.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Snippet Syncer expert in synchronizing scratchpads and tracking revision histories.
 This agent is the absolute authority on the specific operational boundary of: syncing dynamic code snippets, revision history logs.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

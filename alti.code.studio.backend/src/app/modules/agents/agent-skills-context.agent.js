@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * CONTEXT ENGINEERING META-AGENT — Agent-Skills for Context Engineering
  * Applies patterns from muratcankoylan/Agent-Skills-for-Context-Engineering.
@@ -7,7 +7,7 @@
  *
  * Tier 13 Specialist Agent — Context Window Optimization
  * Applies: SCRATCHPAD, SELECTOR, COMPRESSOR, CONTEXT-DISTILLERY, TOKEN-BUDGET patterns
- * for multi-agent context engineering across the Alti.Code.Studio swarm.
+ * for multi-agent context engineering across the Inso Code swarm.
  */
 
 import { BaseSpecialistAgent } from './base_specialist.agent.js';

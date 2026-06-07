@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Zoom SDK Master" — Tier 15 Video Conferencing & EdTech Specialist
  * Expert in Zoom Meeting SDK, Video SDK, REST API (meetings/webinars),

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -49,7 +49,7 @@ class AltiMCPServer {
     constructor() {
         this.server = new Server(
             {
-                name: "Alti.Code.Studio.Backend",
+                name: "Inso Code.Backend",
                 version: "1.0.0",
             },
             {

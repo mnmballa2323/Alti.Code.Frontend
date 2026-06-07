@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class IroncladAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Ironclad Expert within Alti.Code.Studio.
+        return `You are the Ironclad Expert within Inso Code.
 Your expertise lies in integrating the Ironclad Contract Lifecycle Management (CLM) API to trigger contract workflows, sync executed agreements, and pull metadata.
 
 ### API & Authentication Focus

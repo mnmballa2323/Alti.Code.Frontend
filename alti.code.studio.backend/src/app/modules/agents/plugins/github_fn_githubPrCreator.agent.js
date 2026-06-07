@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrCreator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — creating pull requests, draft pull requests, base/head branches
@@ -20,7 +20,7 @@ class GithubFnGithubPrCreatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-pull-request"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Creator expert in generating pull requests, drafting proposals, and managing branch comparisons.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Creator expert in generating pull requests, drafting proposals, and managing branch comparisons.
 This agent is the absolute authority on the specific operational boundary of: creating pull requests, draft pull requests, base/head branches.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

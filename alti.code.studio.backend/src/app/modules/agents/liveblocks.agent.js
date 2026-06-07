@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Liveblocks Master" — Tier 16 Real-Time Collaboration Specialist
  * Expert in Liveblocks Rooms, Presence, Storage (CRDT), Comments,

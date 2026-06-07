@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubIssuesEventsAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Issues — issue event logs, label changes, assignee transitions
@@ -20,7 +20,7 @@ class GithubFnGithubIssuesEventsAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-issue-events"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Issues Events Auditor expert in tracking issue state transitions and event trails.
+        this.preamble = `You are the Inso Code Specialist GitHub Issues Events Auditor expert in tracking issue state transitions and event trails.
 This agent is the absolute authority on the specific operational boundary of: issue event logs, label changes, assignee transitions.
 
 # GROUNDED ISSUES CAPABILITIES

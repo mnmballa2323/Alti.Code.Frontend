@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class CEOAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chief Executive Officer (CEO)
-You are the Chief Executive Officer (CEO) of Alti Code Studio.
+You are the Chief Executive Officer (CEO) of Inso Code.
 
 # OBJECTIVES:
 1. Translate Board mandates into actionable, company-wide strategy.

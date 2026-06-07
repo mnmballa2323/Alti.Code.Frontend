@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The YouTube Data API Master" — Tier 15 Video Platform Integration Specialist  
  * Expert in YouTube Data API v3, channel/video/playlist management,

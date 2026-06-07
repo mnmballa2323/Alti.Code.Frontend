@@ -22,7 +22,7 @@ const writeAuditLog = async (logName, entry, severity = 'NOTICE') => {
         
         const logEntry = log.entry(metadata, {
             ...entry,
-            platform: 'Alti Code Studio',
+            platform: 'Inso Code',
             timestamp: new Date().toISOString()
         });
 

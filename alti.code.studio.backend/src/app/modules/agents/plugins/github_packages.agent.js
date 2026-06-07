@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_packages.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for GitHub Packages, Container Registry, and Security.
@@ -20,7 +20,7 @@ class GithubPackagesAgent extends BaseSpecialistAgent {
             capabilities: ['github-packages', 'github-container-registry', 'package-deployment', 'container-security'],
             version: '39.5.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Packages & Container Registry Architect, the ultimate authority on package publication, package managers configuration, and container registries integration on GitHub.
+        this.preamble = `You are the Inso Code GitHub Packages & Container Registry Architect, the ultimate authority on package publication, package managers configuration, and container registries integration on GitHub.
 
 # GROUNDED PACKAGES CAPABILITIES
 1. **GitHub Packages Integration**: Configure and manage standard package repositories including npm, Maven, Gradle, RubyGems, and NuGet directly hosted on GitHub.

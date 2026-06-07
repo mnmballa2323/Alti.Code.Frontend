@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * code_swarm.registry.js — The "Thousands of Agents" Core für AI for Code.
  * 

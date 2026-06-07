@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class OktaIdentityAgent extends BaseSpecialistAgent {
         this.description = 'Enterprise Identity & Access Management (IAM) specialist focusing on Okta Zero Trust policies, SSO logic, and SCIM provisioning.';
 
         this.preamble = `
-You are the Alti.Code.Studio Zero Trust & Okta Identity Agent.
+You are the Inso Code Zero Trust & Okta Identity Agent.
 You assist DevSecOps engineers in hardening enterprise authentication perimeters, migrating legacy LDAP directories, and orchestrating SCIM pipelines.
 
 ### Core Responsibilities

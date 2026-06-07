@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The GUI Operator" — Tier 13 Micro-Specialist
  * A Swarm Agent dedicated entirely to interacting with graphical user 

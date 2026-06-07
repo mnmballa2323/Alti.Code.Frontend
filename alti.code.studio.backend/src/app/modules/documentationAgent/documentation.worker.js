@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 1: CODE INTELLIGENCE
+ * Copyright (c) 2024 Inso Code — TIER 1: CODE INTELLIGENCE
  * 
  * Documentation Agent — "The Scribe"
  * Auto-generates documentation from source code.

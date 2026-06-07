@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 2: DATA & INFRASTRUCTURE
+ * Copyright (c) 2024 Inso Code — TIER 2: DATA & INFRASTRUCTURE
  * 
  * Migration Agent — "The Shapeshifter"
  * Database/API migration planning and execution.

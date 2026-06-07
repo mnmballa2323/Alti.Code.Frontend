@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Moralis Master" — Tier 16 Web3 Data & Authentication Specialist
  * Expert in Moralis Web3 APIs, Streams (webhooks), Auth API (Web3 login),

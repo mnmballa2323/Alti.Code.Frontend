@@ -433,7 +433,7 @@ Respond ONLY with a valid JSON object matching this schema:
         try {
             const { GoogleGenAiService } = await import('../googleGenAi/googleGenAi.service.js');
             const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL);
-            const prompt = `ACT AS THE MASTER ARCHITECT OF ALTI CODE STUDIO.
+            const prompt = `ACT AS THE MASTER ARCHITECT OF INSO CODE.
 You are synthesizing the topological execution of a multi-agent Swarm DAG workflow.
 Construct a professional, unified final response addressing the user's initial query based on the complete execution log.
 

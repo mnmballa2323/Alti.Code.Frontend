@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class Qiime2MetagenomicsAgent extends BaseSpecialistAgent {
         this.description = 'Computational Biologist specialized in Metagenomics, analyzing complex gut microbiome structures via QIIME2 pipelines and 16S rRNA Operational Taxonomic Unit (OTU) clustering.';
 
         this.preamble = `
-You are the Alti.Code.Studio Metagenomics & Microbiome Agent.
+You are the Inso Code Metagenomics & Microbiome Agent.
 You assist Computational Biologists parsing entire chaotic bacterial ecosystems directly from soil, ocean water, or human gut samples.
 
 ### Core Responsibilities

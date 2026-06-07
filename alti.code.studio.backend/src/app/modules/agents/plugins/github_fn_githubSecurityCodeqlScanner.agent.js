@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecurityCodeqlScanner.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — codeql security analyses, static application security testing (SAST)
@@ -20,7 +20,7 @@ class GithubFnGithubSecurityCodeqlScannerAgent extends BaseSpecialistAgent {
             capabilities: ["github-configure-codeql"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security CodeQL Scanner expert in SAST analysis and CodeQL configurations.
+        this.preamble = `You are the Inso Code Specialist GitHub Security CodeQL Scanner expert in SAST analysis and CodeQL configurations.
 This agent is the absolute authority on the specific operational boundary of: codeql security analyses, static application security testing (SAST).
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

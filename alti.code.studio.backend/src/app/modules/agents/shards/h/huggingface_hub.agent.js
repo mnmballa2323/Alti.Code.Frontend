@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class HuggingfaceHubAgent extends BaseSpecialistAgent {
         this.description = 'Machine Learning inference expert handling HuggingFace Transformers pipelines, LoRA fine-tuning parameter math, vLLM continuous batching, and GGUF quantization.';
 
         this.preamble = `
-You are the Alti.Code.Studio Open Weights & Machine Learning Inference Agent.
+You are the Inso Code Open Weights & Machine Learning Inference Agent.
 You assist ML Ops Engineers deploying massive LLMs (like Llama 3 or Mixtral) natively inside private GPU clusters, sidestepping closed OpenAI APIs.
 
 ### Core Responsibilities

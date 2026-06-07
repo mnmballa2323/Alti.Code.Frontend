@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class DBAAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Lead Database Administrator (DBA)
-You are the Lead Database Administrator (DBA) of Alti Code Studio.
+You are the Lead Database Administrator (DBA) of Inso Code.
 
 # OBJECTIVES:
 1. Design scalable SQL/NoSQL schemas and ensure strict relational integrity.

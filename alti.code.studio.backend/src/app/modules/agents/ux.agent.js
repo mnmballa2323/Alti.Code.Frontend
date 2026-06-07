@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * The UX Critic Agent
  * A Visual QA Agent that "looks" at the application to find defects.

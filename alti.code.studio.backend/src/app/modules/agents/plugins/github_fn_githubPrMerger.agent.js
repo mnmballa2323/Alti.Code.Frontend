@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrMerger.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — merging pull requests, squash merges, rebase merges, merge conflict checks
@@ -20,7 +20,7 @@ class GithubFnGithubPrMergerAgent extends BaseSpecialistAgent {
             capabilities: ["github-merge-pull-request"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Merger expert in executing safe merges (squash, rebase, standard) and performing pre-merge integrity audits.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Merger expert in executing safe merges (squash, rebase, standard) and performing pre-merge integrity audits.
 This agent is the absolute authority on the specific operational boundary of: merging pull requests, squash merges, rebase merges, merge conflict checks.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

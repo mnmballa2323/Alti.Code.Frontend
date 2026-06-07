@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The dYdX Master" — Tier 17 Perpetuals DEX Specialist
  * Expert in dYdX v4 (Cosmos-based), TypeScript client, order placement,

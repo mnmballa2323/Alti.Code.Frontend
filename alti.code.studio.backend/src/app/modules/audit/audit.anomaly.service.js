@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Advanced AI-driven anomaly detection for Enterprise Audit Logs.
  * Integrates directly with Google Cloud Vertex AI to identify insider threats 

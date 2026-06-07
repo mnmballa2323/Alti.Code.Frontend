@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Rippling Master" — Tier 15 HR & IT Management Platform Specialist
  * Expert in Rippling SCIM API, employee lifecycle, payroll triggers,

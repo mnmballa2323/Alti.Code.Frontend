@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsLimitsAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — projects v2 limits, card counts, custom field caps
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsLimitsAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-project-v2-limits"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Limits Auditor expert in tracking project limits, checking field caps, and monitoring card metrics.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Limits Auditor expert in tracking project limits, checking field caps, and monitoring card metrics.
 This agent is the absolute authority on the specific operational boundary of: projects v2 limits, card counts, custom field caps.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

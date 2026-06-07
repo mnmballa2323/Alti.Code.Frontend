@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Gossip & DHT Networking Architect" — Tier 20 Distributed Systems Specialist
  * Expert in Kademlia DHTs, P2P networking, Epidemic Routing, and Eventual Consistency.

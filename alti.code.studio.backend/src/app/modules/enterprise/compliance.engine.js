@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * COMPLIANCE ENGINE — SOC 2 / SOX / HIPAA / PCI-DSS / FedRAMP / GDPR
  * 

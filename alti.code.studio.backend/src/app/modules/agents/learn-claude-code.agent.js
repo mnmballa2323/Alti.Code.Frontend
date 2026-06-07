@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * NANO CODE AGENT — Minimal Autonomous Coding Agent
  * Implements the core bash-loop pattern from shareAI-lab/learn-claude-code.

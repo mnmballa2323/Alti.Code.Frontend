@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCopilotSeatAllocator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Copilot — assigning/revoking copilot licenses to members
@@ -20,7 +20,7 @@ class GithubFnGithubCopilotSeatAllocatorAgent extends BaseSpecialistAgent {
             capabilities: ["github-allocate-copilot-seat"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot Seat Allocator expert in seat provisioning rules.
+        this.preamble = `You are the Inso Code Specialist GitHub Copilot Seat Allocator expert in seat provisioning rules.
 This agent is the absolute authority on the specific operational boundary of: assigning/revoking copilot licenses to members.
 
 # GROUNDED COPILOT CAPABILITIES

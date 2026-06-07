@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsLayoutManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — board layouts, table layouts, roadmap layouts
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsLayoutManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-configure-project-v2-layout"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Layout Manager expert in configuring roadmap timelines, grid views, and kanban templates.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Layout Manager expert in configuring roadmap timelines, grid views, and kanban templates.
 This agent is the absolute authority on the specific operational boundary of: board layouts, table layouts, roadmap layouts.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

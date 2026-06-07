@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -36,7 +36,7 @@ const getServices = async () => {
 
 const help = () => {
     console.log(`
-Alti Code Studio Gemini CLI (Native)
+Inso Code Gemini CLI (Native)
 
 Usage:
   gemini ask <prompt>          Ask Gemini a question

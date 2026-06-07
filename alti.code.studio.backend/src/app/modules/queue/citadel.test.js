@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * The Citadel Test — "The 11-Agent Federation"
  * Verifies the entire autonomous system:

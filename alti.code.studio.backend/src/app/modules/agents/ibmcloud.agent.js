@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The IBM Cloud Master" - Tier 16 Cloud Provider Specialist
  * Expert in IBM Code Engine, Watson AI services, Db2, IBM Kubernetes Service (IKS), and IAM.

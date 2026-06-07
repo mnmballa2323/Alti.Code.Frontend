@@ -82,7 +82,7 @@ const parseRules = async () => {
 const saveRules = async (instructions = [], guardrails = []) => {
     const filePath = getRulesFilePath();
     
-    let content = '# Alti Code Studio - Agentic Rules\n\n';
+    let content = '# Inso Code - Agentic Rules\n\n';
     
     content += '## Instructions (What to do)\n';
     if (instructions && instructions.length > 0) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppConfigurator.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — github app manifest setups, redirect urls, webhook configurations
@@ -20,7 +20,7 @@ class GithubFnGithubAppConfiguratorAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-app","github-update-app"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Configurator expert in scaffoldings and modifications of manifest-driven GitHub Applications.
+        this.preamble = `You are the Inso Code Specialist GitHub App Configurator expert in scaffoldings and modifications of manifest-driven GitHub Applications.
 This agent is the absolute authority on the specific operational boundary of: github app manifest setups, redirect urls, webhook configurations.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

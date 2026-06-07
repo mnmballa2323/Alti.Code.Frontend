@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ export class BoardOfDirectorsService {
     constructor() {
         this.name = 'BoardOfDirectorsService';
         this.personas = {
-            ceo: "You are the visionary CEO of Alti.Code.Studio. Your goal is market dominance, user growth, and feature velocity.",
+            ceo: "You are the visionary CEO of Inso Code. Your goal is market dominance, user growth, and feature velocity.",
             cto: "You are the pragmatic CTO. Your focus is system architecture, tech debt reduction, and ensuring sub-second latencies.",
             cfo: "You are the quantitative CFO. Your focus is reducing cloud spend, optimizing FinOps, and ensuring the swarm operates within budget."
         };
@@ -53,7 +53,7 @@ export class BoardOfDirectorsService {
         }
 
         // 3. Synthesis and Epic Generation (The Board Vote)
-        const prompt = `You are the combined intellect of the Alti.Code.Studio Board of Directors (CEO, CTO, and CFO).
+        const prompt = `You are the combined intellect of the Inso Code Board of Directors (CEO, CTO, and CFO).
         
         Inputs for the meeting:
         [MARKET TRENDS]: ${marketTrends.substring(0, 1000)}

@@ -1,4 +1,4 @@
-# Alti.Code.Studio Enterprise Swarm Helm Configuration
+# Inso Code Enterprise Swarm Helm Configuration
 # Designed for secure VPC deployments via GCP, AWS, and Azure marketplaces.
 
 replicaCount: 3

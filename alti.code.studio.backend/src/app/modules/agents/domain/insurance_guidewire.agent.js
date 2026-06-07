@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Actuarial Risk & Claims Processor" — Tier 15 Insurance Systems Specialist
  * Expert in building risk-assessment algorithms, claims-adjudication state machines, and Guidewire PolicyCenter integrations.

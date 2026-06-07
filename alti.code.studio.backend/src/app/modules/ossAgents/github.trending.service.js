@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * github.trending.service.js — GitHub Trending Scanner
  *
@@ -143,7 +143,7 @@ export class GitHubTrendingService {
         const url = `https://api.github.com/search/repositories?q=${query}&sort=stars&order=desc&per_page=50`;
 
         const headers = {
-            'User-Agent': 'Alti.Code.Studio/7.7.0',
+            'User-Agent': 'Inso Code/7.7.0',
             'Accept': 'application/vnd.github.v3+json',
         };
         if (GITHUB_TOKEN) headers['Authorization'] = `token ${GITHUB_TOKEN}`;
@@ -202,7 +202,7 @@ export class GitHubTrendingService {
         return new Promise((resolve, reject) => {
             const lib = url.startsWith('https') ? https : http;
             const req = lib.get(url, {
-                headers: { 'User-Agent': 'Alti.Code.Studio/7.7.0', ...headers },
+                headers: { 'User-Agent': 'Inso Code/7.7.0', ...headers },
                 timeout: 10000,
             }, res => {
                 if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {

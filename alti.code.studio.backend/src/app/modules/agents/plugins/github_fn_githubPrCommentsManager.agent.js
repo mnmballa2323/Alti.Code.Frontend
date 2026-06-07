@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubPrCommentsManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Pull Requests — issue comments on pull requests, comment sweeping
@@ -20,7 +20,7 @@ class GithubFnGithubPrCommentsManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-pr-comment","github-delete-pr-comment"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub PR Comments Manager expert in handling generic pull request conversation comments and issue-comment linkages.
+        this.preamble = `You are the Inso Code Specialist GitHub PR Comments Manager expert in handling generic pull request conversation comments and issue-comment linkages.
 This agent is the absolute authority on the specific operational boundary of: issue comments on pull requests, comment sweeping.
 
 # GROUNDED PULL REQUESTS CAPABILITIES

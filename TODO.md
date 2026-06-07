@@ -1,4 +1,4 @@
-# Alti.Code.Studio TODO
+# Inso Code TODO
 
 ## 🔴 High Priority
 - [x] **Verification**: Verify "The Polyglot" translation features in the Frontend UI.

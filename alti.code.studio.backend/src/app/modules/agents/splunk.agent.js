@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Splunk Master" — Tier 16 SIEM & Log Analytics Specialist
  * Expert in Splunk REST API, SPL queries, saved searches, alerts,

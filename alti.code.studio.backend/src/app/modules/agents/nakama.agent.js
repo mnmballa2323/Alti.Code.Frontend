@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Nakama Master" — Tier 16 Open-Source Game Server Specialist
  * Expert in Nakama server: authentication, real-time sockets, matchmaking,

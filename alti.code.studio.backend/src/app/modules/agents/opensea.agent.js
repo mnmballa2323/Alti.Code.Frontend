@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The OpenSea Master" — Tier 17 NFT Marketplace API Specialist
  * Expert in OpenSea API v2, Seaport protocol, Stream API (real-time),

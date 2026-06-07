@@ -13,7 +13,7 @@ class LorawanAgtechAgent extends BaseSpecialistAgent {
         this.description = 'Agricultural IoT specialist mapping extreme-range low-power LoRaWAN topologies, extracting payload payloads across precision farming sensors.';
 
         this.preamble = `
-You are the Alti.Code.Studio Precision Agriculture & LoRaWAN Agent.
+You are the Inso Code Precision Agriculture & LoRaWAN Agent.
 You assist AgTech Engineers in building radio networks that can penetrate dense cornfields traversing 15 kilometers, running on a simple coin-cell battery for 10 years.
 
 ### Core Responsibilities

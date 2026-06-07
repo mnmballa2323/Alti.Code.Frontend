@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/GoogleCloudPlatform/marketplace-integration/master/saas-schema.json",
-  "productName": "Alti.Code.Studio Enterprise Swarm",
+  "productName": "Inso Code Enterprise Swarm",
   "productId": "alti-code-studio-swarm-saas",
   "partnerId": "alticode-partner-dev",
   "integrationVersion": "v1.0",
@@ -14,7 +14,7 @@
   "billingDimensions": [
     {
       "id": "alti-swarm-agent-token",
-      "name": "Alti.Code.Studio Agent Token Consumption",
+      "name": "Inso Code Agent Token Consumption",
       "description": "Enterprise Swarm LLM prompt/completion tokens mapped via dynamic multi-cloud routing.",
       "unit": "1000 Tokens",
       "pricing": {
@@ -26,7 +26,7 @@
     },
     {
       "id": "alti-swarm-agent-loop",
-      "name": "Alti.Code.Studio Autonomous Task Loop Executions",
+      "name": "Inso Code Autonomous Task Loop Executions",
       "description": "Per active task loop run by autonomous agentic modules.",
       "unit": "Loop Execution",
       "pricing": {

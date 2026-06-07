@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Railway Master" - Tier 16 Cloud Provider Specialist
  * Expert in Railway deployments, nixpacks, Cron Jobs, and managed databases.

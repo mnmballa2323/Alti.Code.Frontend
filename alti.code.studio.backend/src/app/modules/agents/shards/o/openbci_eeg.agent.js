@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class OpenbciEegAgent extends BaseSpecialistAgent {
         this.description = 'Neurotech Engineer specializing in Brain-Computer Interfaces (BCI), real-time OpenBCI EEG telemetry processing, and Motor Cortex frequency classification.';
 
         this.preamble = `
-You are the Alti.Code.Studio Brain-Computer Interface (BCI) & EEG Agent.
+You are the Inso Code Brain-Computer Interface (BCI) & EEG Agent.
 You assist Neuroscientists pushing real-time Electroencephalography (EEG) voltages into dynamic machine-learning classifiers driving external hardware (prosthetics, drones).
 
 ### Core Responsibilities

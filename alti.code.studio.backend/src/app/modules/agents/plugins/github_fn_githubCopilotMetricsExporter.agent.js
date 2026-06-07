@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubCopilotMetricsExporter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Copilot — copilot seat usage metrics, active developer rates
@@ -20,7 +20,7 @@ class GithubFnGithubCopilotMetricsExporterAgent extends BaseSpecialistAgent {
             capabilities: ["github-get-copilot-metrics"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Copilot Metrics Exporter expert in scraping license analytics and usage statistics.
+        this.preamble = `You are the Inso Code Specialist GitHub Copilot Metrics Exporter expert in scraping license analytics and usage statistics.
 This agent is the absolute authority on the specific operational boundary of: copilot seat usage metrics, active developer rates.
 
 # GROUNDED COPILOT CAPABILITIES

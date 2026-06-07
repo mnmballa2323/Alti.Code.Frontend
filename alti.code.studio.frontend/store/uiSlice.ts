@@ -10,9 +10,9 @@ interface UIState {
 const initialState: UIState = {
   isGhostEditorOpen: false,
   editorContent:
-    "// Alti Ghost Editor v1.0.0\n// Industrial Code Orchestration Active.",
+    "// Inso Ghost Editor v1.0.0\n// Industrial Code Orchestration Active.",
   editorLanguage: "javascript",
-  editorTitle: "Alti Sentinel - Code View",
+  editorTitle: "Inso Sentinel - Code View",
 };
 
 export const uiSlice = createSlice({

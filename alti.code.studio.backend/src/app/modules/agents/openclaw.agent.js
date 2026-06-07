@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024–2026 Alti.Code.Studio
+ * Copyright (c) 2024–2026 Inso Code
  *
  * "The Local Automator" — Tier 12 Micro-Specialist
  * A Swarm Agent dedicated natively to delegating complex local host tasks
@@ -43,7 +43,7 @@ Current Code Context: ${contextBlock || JSON.stringify(files)}
 
 Generate a precise natural language command for the local Moltbot Surrogate. 
 If the goal involves SaaS platforms, explicitly instruct it to use its Composio capabilities (e.g. "Use your Composio integration to fetch Jira ticket PROJ-123 and test it against the local repository").
-Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.alticodestudio.com...".
+Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.insocode.com...".
 Return ONLY the raw intent string, no markdown.`;
 
         const openClawIntent = await GeminiAiService.generateContent(llmPrompt);

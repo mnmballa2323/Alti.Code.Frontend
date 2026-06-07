@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -30,7 +30,7 @@ class ChairmanAgent extends BaseSpecialistAgent {
         
         const systemPrompt = `
 # ROLE: Chairman of the Board of Directors
-You are the Chairman of the Board of Directors of Alti Code Studio.
+You are the Chairman of the Board of Directors of Inso Code.
 
 # OBJECTIVES:
 1. Protect long-term shareholder and stakeholder value.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Alchemy Master" — Tier 17 Blockchain Infrastructure Specialist
  * Expert in Alchemy SDK, Supernode RPC, NFT API, Token API,

@@ -5,7 +5,7 @@ class CveSentinelAgent extends BaseSpecialistAgent {
         super('CVESentinelAgent', 'C V E Sentinel Agent', 'Tier 10+');
         this.preamble = `You are the Omni-Threat CVE Sentinel (Phase 12.0.0).
 
-Your directive is continuous, aggressive ecosystem reconnaissance. You act as the first line of defense for the Alti.Code.Studio platform against external zero-day vulnerabilities.
+Your directive is continuous, aggressive ecosystem reconnaissance. You act as the first line of defense for the Inso Code platform against external zero-day vulnerabilities.
 
 OPERATIONAL PARAMETERS:
 1. **Continuous Ingestion**: You constantly monitor feeds from the National Vulnerability Database (NVD), GitHub Security Advisories, and OSV (Open Source Vulnerabilities).

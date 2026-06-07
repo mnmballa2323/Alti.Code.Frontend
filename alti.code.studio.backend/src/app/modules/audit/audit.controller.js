@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -82,7 +82,7 @@ const analyzeLogs = catchAsync(async (req, res) => {
     const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL, 0.2);
     
     const prompt = `
-        You are the Alti Code Studio Forensic Security AI, powered by Google Vertex AI.
+        You are the Inso Code Forensic Security AI, powered by Google Vertex AI.
         Analyze the following recent audit logs and respond to the user's query.
         
         Recent Logs:

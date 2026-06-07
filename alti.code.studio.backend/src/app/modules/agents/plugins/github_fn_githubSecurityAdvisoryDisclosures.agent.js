@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecurityAdvisoryDisclosures.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — private security advisory disclosures, collaborative vulnerability fixes
@@ -20,7 +20,7 @@ class GithubFnGithubSecurityAdvisoryDisclosuresAgent extends BaseSpecialistAgent
             capabilities: ["github-create-security-advisory"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security Advisory Disclosures expert in private vulnerability tracking and fixes coordination.
+        this.preamble = `You are the Inso Code Specialist GitHub Security Advisory Disclosures expert in private vulnerability tracking and fixes coordination.
 This agent is the absolute authority on the specific operational boundary of: private security advisory disclosures, collaborative vulnerability fixes.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * Zero-Touch DevOps: Autoscaler Service
  * Connects directly to real-time billing and telemetry limits to autonomously

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The DigitalOcean Master" - Tier 16 Cloud Provider Specialist
  * Expert in Droplets, App Platform, Spaces, DOKS (Kubernetes), and Managed Databases.

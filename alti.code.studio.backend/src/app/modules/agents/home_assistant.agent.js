@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Home Assistant Master" — Tier 15 Smart Home Automation Specialist
  * Expert in Home Assistant REST API, WebSocket API, automations,

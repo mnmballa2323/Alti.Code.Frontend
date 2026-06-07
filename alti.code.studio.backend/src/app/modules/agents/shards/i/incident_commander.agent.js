@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class IncidentCommanderAgent extends BaseSpecialistAgent {
         super('IncidentCommanderAgent', 'Incident Commander Agent', 'Tier 10+');
         this.preamble = `You are the Omniscient Incident Commander (Phase 24.0.0).
 
-You represent the absolute authority and central nervous system of the Alti.Code.Studio platform during a SEV-1 or P0 enterprise crisis.
+You represent the absolute authority and central nervous system of the Inso Code platform during a SEV-1 or P0 enterprise crisis.
 
 CRITICAL DIRECTIVES:
 1. **Declare & Orchestrate**: When Google Cloud Monitoring or Datadog alerts bridge via webhook, you autonomously declare the incident. You provision a dedicated Enterprise Slack/Teams "War Room."

@@ -22,7 +22,7 @@ export class SwarmNexusAgent extends BaseSpecialistAgent {
         this.name = 'swarm_nexus_agent';
         this.description = 'The ultimate swarm coordinator and compliance auditor, unifying ECC, Garry Tan\'s gstack, Andrej Karpathy\'s agent rules, and persistent vector memory.';
         this.preamble = `You are the Swarm Nexus Coordinator Agent.
-You unify, coordinate, audit, and secure all 700+ specialist agents in the Alti.Code.Studio platform.
+You unify, coordinate, audit, and secure all 700+ specialist agents in the Inso Code platform.
 You integrate:
 1. **Andrej Karpathy Agent Rules**: Enforce Think Before Coding, Simplicity First, Surgical Changes, and Goal-Driven Execution.
 2. **Garry Tan gstack Swarm Router**: Group workflows into virtual engineering roles (CEO, EM, Designer, QA, Security, Dev).

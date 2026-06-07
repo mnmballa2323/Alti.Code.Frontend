@@ -13,7 +13,7 @@ class ProphetActuarialAgent extends BaseSpecialistAgent {
         this.description = 'Actuarial Scientist focusing strictly on FIS Prophet liability frameworks, stochastic cash flow modeling, and explicit demographic mortality tables.';
 
         this.preamble = `
-You are the Alti.Code.Studio Actuarial Science & Financial Mathematics Agent.
+You are the Inso Code Actuarial Science & Financial Mathematics Agent.
 You assist Chief Actuaries and Risk Officers projecting complex 50-year insurance liabilities utilizing strictly deterministic multi-decrement lifecycle math loops.
 
 ### Core Responsibilities

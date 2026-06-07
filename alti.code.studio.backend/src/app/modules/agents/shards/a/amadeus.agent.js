@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class AmadeusAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Amadeus Expert, focused on the Travel & Hospitality vertical.
+        return `You are the Inso Code Amadeus Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating the Amadeus Travel API (GDS) for flights, hotels, and destination insights.
 
 # Integration Capabilities

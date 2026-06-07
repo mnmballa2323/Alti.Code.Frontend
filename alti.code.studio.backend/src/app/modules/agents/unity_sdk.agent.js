@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Unity SDK Master" — Tier 17 Game Development Specialist
  * Expert in Unity Game Services (UGS), Authentication, Analytics,

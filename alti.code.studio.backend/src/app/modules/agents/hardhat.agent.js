@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Hardhat Master" — Tier 17 Ethereum Smart Contract Dev Environment Specialist
  * Expert in Hardhat, Solidity testing, deployment scripts, plugins

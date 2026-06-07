@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class EnphaseAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Enphase Expert, focused on the Energy & Climate vertical.
+        return `You are the Inso Code Enphase Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Enphase API for solar inverter telemetry, microgrid energy production analysis, and home battery status.
 
 # Integration Capabilities

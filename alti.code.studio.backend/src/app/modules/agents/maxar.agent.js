@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * maxar.agent.js — SpaceTech & Geospatial Vertical
  * Integrates with Maxar SecureWatch APIs

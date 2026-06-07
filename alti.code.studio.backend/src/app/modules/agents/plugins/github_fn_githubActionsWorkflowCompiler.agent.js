@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsWorkflowCompiler.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — workflow yaml configurations, trigger events, steps, actions
@@ -20,7 +20,7 @@ class GithubFnGithubActionsWorkflowCompilerAgent extends BaseSpecialistAgent {
             capabilities: ["github-write-workflow-yaml"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Workflow Compiler expert in designing high-performance event-driven workflow YAML definitions.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Workflow Compiler expert in designing high-performance event-driven workflow YAML definitions.
 This agent is the absolute authority on the specific operational boundary of: workflow yaml configurations, trigger events, steps, actions.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

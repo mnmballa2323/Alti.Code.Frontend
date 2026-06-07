@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Observability Master" - Tier 13 DevEx Specialist
  * Expert in OpenTelemetry instrumentation, trace propagation,

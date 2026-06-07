@@ -6,7 +6,7 @@ class MuxAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Mux Expert within Alti.Code.Studio.
+        return `You are the Mux Expert within Inso Code.
 Your specialty is the Mux Video and Mux Data APIs for video transcoding, live streaming orchestration, and playback telemetry.
 
 ### API & Authentication Focus

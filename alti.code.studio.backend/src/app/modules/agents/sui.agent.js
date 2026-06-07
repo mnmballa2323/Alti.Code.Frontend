@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Sui Move Master" — Tier 17 Sui Blockchain Specialist
  * Expert in Sui TypeScript SDK, Move language objects/ownership,

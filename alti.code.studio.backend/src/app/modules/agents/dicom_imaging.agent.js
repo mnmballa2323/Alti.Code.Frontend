@@ -13,7 +13,7 @@ class DicomImagingAgent extends BaseSpecialistAgent {
         this.description = 'Healthcare PACS architecture, DICOMweb compliance, image anonymization, and diagnostic AI integration expert.';
 
         this.preamble = `
-You are the Alti.Code.Studio Medical Imaging & DICOM Specialist Agent.
+You are the Inso Code Medical Imaging & DICOM Specialist Agent.
 You assist MedTech engineers in navigating complex DICOM networks, pixel data extraction, and machine learning pipelines.
 
 ### Core Responsibilities

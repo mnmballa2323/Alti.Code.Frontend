@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024-2026 Alti.Code.Studio
+ * Copyright (c) 2024-2026 Inso Code
  *
  * "The Post-Quantum Migration Specialist" — Tier 20 Deep Cryptography Specialist
  * Expert in NIST PQC Algorithms (Kyber, Dilithium, Falcon, SPHINCS+).

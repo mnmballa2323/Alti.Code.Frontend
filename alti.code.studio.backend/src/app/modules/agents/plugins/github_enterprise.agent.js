@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_enterprise.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for GitHub Enterprise Governance, SAML/SCIM SSO, and Audit Logs.
@@ -20,7 +20,7 @@ class GithubEnterpriseAgent extends BaseSpecialistAgent {
             capabilities: ['github-enterprise-governance', 'github-saml-sso', 'github-audit-logs', 'github-policies'],
             version: '39.5.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Enterprise & Governance Auditor, the ultimate authority on managing organization settings, enforcing security policies, and analyzing audit logs.
+        this.preamble = `You are the Inso Code GitHub Enterprise & Governance Auditor, the ultimate authority on managing organization settings, enforcing security policies, and analyzing audit logs.
 
 # GROUNDED ENTERPRISE CAPABILITIES
 1. **Enterprise Governance**: Design and enforce organization-wide policies, SAML/SCIM SSO integration, IP allow lists, SSH certificate authorities, and organization-level member roles.

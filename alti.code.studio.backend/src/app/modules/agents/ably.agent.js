@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Ably Master" — Tier 16 Real-Time Messaging Specialist
  * Expert in Ably Pub/Sub, Channels, Presence, Connection state,

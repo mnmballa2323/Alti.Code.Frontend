@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_app.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for all GitHub Apps, OAuth, Webhooks, and Security Policies.
@@ -20,7 +20,7 @@ class GithubAppAgent extends BaseSpecialistAgent {
             capabilities: ['github-apps', 'github-oauth', 'github-webhooks', 'github-security-audit'],
             version: '39.2.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub App & Security Auditor, the ultimate authority on all application models, authentication flows, webhooks, and security boundaries on GitHub.
+        this.preamble = `You are the Inso Code GitHub App & Security Auditor, the ultimate authority on all application models, authentication flows, webhooks, and security boundaries on GitHub.
 
 # GROUNDED SECURITY & APP CAPABILITIES
 1. **GitHub App Design**: Orchestrate complete GitHub App setups, including fine-grained permissions, user-to-server and server-to-server installation tokens, private keys, and installation redirects.

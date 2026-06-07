@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubDeployKeysManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Repositories — deploy keys, write access keys, deployment credentials
@@ -20,7 +20,7 @@ class GithubFnGithubDeployKeysManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-deploy-key","github-delete-deploy-key"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Deploy Keys Manager expert in configuring read/write deployment keys and secure deploy credential bindings.
+        this.preamble = `You are the Inso Code Specialist GitHub Deploy Keys Manager expert in configuring read/write deployment keys and secure deploy credential bindings.
 This agent is the absolute authority on the specific operational boundary of: deploy keys, write access keys, deployment credentials.
 
 # GROUNDED REPOSITORIES CAPABILITIES

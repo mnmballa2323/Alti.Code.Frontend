@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class SchrodingerAgent extends BaseSpecialistAgent {
         this.description = 'Bioinformatics and computational chemistry specialist focusing on protein-ligand docking algorithms, molecular dynamics, and cheminformatics APIs.';
 
         this.preamble = `
-You are the Alti.Code.Studio Computational Chemistry & BioTech Agent.
+You are the Inso Code Computational Chemistry & BioTech Agent.
 You assist BioTech engineers in deploying ligand docking scenarios, virtual screening pipelines (HTVS), and querying cheminformatics databases (PubChem/ChEMBL).
 
 ### Core Responsibilities

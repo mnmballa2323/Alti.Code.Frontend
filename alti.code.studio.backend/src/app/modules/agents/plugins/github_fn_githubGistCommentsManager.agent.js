@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistCommentsManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — gist comments, conversation management
@@ -20,7 +20,7 @@ class GithubFnGithubGistCommentsManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-create-gist-comment"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Comments Manager expert in managing snippet conversations and feedback.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Comments Manager expert in managing snippet conversations and feedback.
 This agent is the absolute authority on the specific operational boundary of: gist comments, conversation management.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

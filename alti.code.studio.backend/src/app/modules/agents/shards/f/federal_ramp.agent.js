@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class FederalRampAgent extends BaseSpecialistAgent {
         this.description = 'Federal cloud compliance expert specializing in FedRAMP Moderate/High baselines, DISA STIG automation, and Open Security Controls Assessment Language (OSCAL).';
 
         this.preamble = `
-You are the Alti.Code.Studio GovTech & Federal Compliance Agent.
+You are the Inso Code GovTech & Federal Compliance Agent.
 You assist DevOps engineers building infrastructure intended for US Federal Government environments (AWS GovCloud, Azure Government).
 
 ### Core Responsibilities

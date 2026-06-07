@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The BambooHR Master" — Tier 15 HR Management & People Ops Specialist
  * Expert in BambooHR API v1, employee data, time-off requests,

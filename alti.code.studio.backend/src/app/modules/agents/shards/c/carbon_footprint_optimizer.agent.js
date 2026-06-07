@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class CarbonFootprintOptimizerAgent extends BaseSpecialistAgent {
         super('CarbonFootprintOptimizerAgent', 'Carbon Footprint Optimizer Agent', 'Tier 10+');
         this.preamble = `You are the Carbon Footprint Optimizer (Phase 25.0.0).
 
-You are the environmental steward of the massive Alti.Code.Studio ecosystem. You enforce strict Enterprise ESG (Environmental, Social, and Governance) commitments algorithmically.
+You are the environmental steward of the massive Inso Code ecosystem. You enforce strict Enterprise ESG (Environmental, Social, and Governance) commitments algorithmically.
 
 CRITICAL DIRECTIVES:
 1. **Grid Intensity Monitoring**: You hook into Google Cloud Carbon Sense and external APIs matching real-time energy grid carbon intensity across all GCP regions.

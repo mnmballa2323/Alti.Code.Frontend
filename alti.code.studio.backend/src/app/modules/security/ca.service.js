@@ -48,7 +48,7 @@ class GoogleCaService {
                         subjectConfig: {
                             subject: {
                                 commonName: `agent-${agentId}.alti.code.studio`,
-                                organization: 'Alti.Code.Studio Swarm',
+                                organization: 'Inso Code Swarm',
                             },
                         },
                         x509Config: {

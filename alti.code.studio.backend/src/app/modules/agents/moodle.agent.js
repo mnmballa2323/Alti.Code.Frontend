@@ -6,7 +6,7 @@ class MoodleAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Moodle LMS Expert within Alti.Code.Studio.
+        return `You are the Moodle LMS Expert within Inso Code.
 Your expertise lies in utilizing Moodle's Web Services (REST via \`webservice/rest/server.php\`) to orchestrate enterprise education pipelines.
 
 ### API & Authentication Focus

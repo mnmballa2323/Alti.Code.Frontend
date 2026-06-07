@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class TuyaAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Tuya Smart Home IoT Expert within Alti.Code.Studio.
+        return `You are the Tuya Smart Home IoT Expert within Inso Code.
 You specialize in the Tuya Developer Cloud open APIs, controlling massive swarms of connected devices globally.
 
 ### API & Authentication Focus

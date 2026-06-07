@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Photon Multiplayer Master" — Tier 16 Real-Time Multiplayer Specialist
  * Expert in Photon Fusion 2, Photon PUN 2, room management, RPCs,

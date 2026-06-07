@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecurityCodeScanningAlerts.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — code scanning alerts history, severity filtering
@@ -20,7 +20,7 @@ class GithubFnGithubSecurityCodeScanningAlertsAgent extends BaseSpecialistAgent 
             capabilities: ["github-get-code-scanning-alerts"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security Code Scanning Alerts expert in parsing scanning reports and alerts histories.
+        this.preamble = `You are the Inso Code Specialist GitHub Security Code Scanning Alerts expert in parsing scanning reports and alerts histories.
 This agent is the absolute authority on the specific operational boundary of: code scanning alerts history, severity filtering.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

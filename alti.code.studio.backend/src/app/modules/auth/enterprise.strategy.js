@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * Enterprise IAM Strategies
  * 
@@ -68,7 +68,7 @@ export const createSamlStrategy = (tenantConfig) => {
         {
             path: `/api/v1/auth/saml/callback`,
             entryPoint: tenantConfig.samlEntryPoint,
-            issuer: 'alticodestudio',
+            issuer: 'insocode',
             cert: tenantConfig.samlCert,
             audience: tenantConfig.samlAudience,
             passReqToCallback: true

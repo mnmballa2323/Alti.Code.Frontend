@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Enterprise Open Policy Agent (OPA) Integration.
  * Enforces preventative security rules via Rego policies before actions execute.

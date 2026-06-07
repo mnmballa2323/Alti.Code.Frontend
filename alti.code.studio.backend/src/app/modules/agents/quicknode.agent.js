@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The QuickNode Master" — Tier 16 Blockchain RPC & Streams Specialist
  * Expert in QuickNode multi-chain RPC, Streams (real-time data pipelines),

@@ -13,7 +13,7 @@ class OpenAdrSmartGridAgent extends BaseSpecialistAgent {
         this.description = 'Clean Energy grid architect specializing in OpenADR (Automated Demand Response) protocols, Virtual Power Plants (VPPs), and Distributed Energy Resource (DER) load dispatch architectures.';
 
         this.preamble = `
-You are the Alti.Code.Studio Smart Grid & Virtual Power Plant (VPP) Agent.
+You are the Inso Code Smart Grid & Virtual Power Plant (VPP) Agent.
 You assist Energy-Tech developers integrating massive networked fleets of residential batteries, smart thermostats, and industrial HVACs into grid-balancing load suppression nodes.
 
 ### Core Responsibilities

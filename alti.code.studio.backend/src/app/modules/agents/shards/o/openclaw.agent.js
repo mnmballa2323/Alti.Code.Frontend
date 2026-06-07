@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -34,7 +34,7 @@ Current Code Context: ${JSON.stringify(context.files || {})}
 
 Generate a precise natural language command for the local Moltbot Surrogate.
 If the goal involves SaaS platforms, explicitly instruct it to use its Composio capabilities (e.g. "Use your Composio integration to fetch Jira ticket PROJ-123 and test it against the local repository").
-Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.alticodestudio.com...".
+Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.insocode.com...".
 Return ONLY the raw intent string, no markdown.`;
 
         const openClawIntent = await GeminiAiService.generateContent(prompt);

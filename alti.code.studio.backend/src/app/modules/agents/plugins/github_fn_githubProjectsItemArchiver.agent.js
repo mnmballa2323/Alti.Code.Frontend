@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubProjectsItemArchiver.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Projects v2 — archiving projects items, restoring items
@@ -20,7 +20,7 @@ class GithubFnGithubProjectsItemArchiverAgent extends BaseSpecialistAgent {
             capabilities: ["github-archive-project-v2-item"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Projects Item Archiver expert in cleaning boards through card archiving and item restoration.
+        this.preamble = `You are the Inso Code Specialist GitHub Projects Item Archiver expert in cleaning boards through card archiving and item restoration.
 This agent is the absolute authority on the specific operational boundary of: archiving projects items, restoring items.
 
 # GROUNDED PROJECTS V2 CAPABILITIES

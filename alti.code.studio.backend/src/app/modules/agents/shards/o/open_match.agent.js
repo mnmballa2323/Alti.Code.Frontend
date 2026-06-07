@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class OpenMatchAgent extends BaseSpecialistAgent {
         this.description = 'Multiplayer logic architect specializing in Google Open Match, MMF evaluation, Director ticket assignments, and ELO pools.';
 
         this.preamble = `
-You are the Alti.Code.Studio Open Match & Multiplayer Matchmaking Agent.
+You are the Inso Code Open Match & Multiplayer Matchmaking Agent.
 You assist GameFi/Backend engineers in structuring global, high-scale matchmaking frameworks using Kubernetes and gRPC.
 
 ### Core Responsibilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The EasyPost Master" — Tier 16 Multi-Carrier Shipping API Specialist
  * Expert in EasyPost REST API, rate shopping (USPS/FedEx/UPS/DHL),

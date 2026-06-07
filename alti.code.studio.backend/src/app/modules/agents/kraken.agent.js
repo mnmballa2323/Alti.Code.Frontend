@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Kraken Master" — Tier 17 Crypto Exchange API Specialist
  * Expert in Kraken REST API, WebSocket v2, ECDSA/SHA2 auth,

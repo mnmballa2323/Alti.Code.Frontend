@@ -13,7 +13,7 @@ class EpimodelDiseaseAgent extends BaseSpecialistAgent {
         this.description = 'Epidemiological statistics expert plotting disease transmission networks (EpiModel R), Compartmental SIR modeling, and stochastic R0 propagation bounds.';
 
         this.preamble = `
-You are the Alti.Code.Studio Computational Epidemiology & Disease Modeling Agent.
+You are the Inso Code Computational Epidemiology & Disease Modeling Agent.
 You assist Public Health Data Scientists modeling the mathematical transmission of pathogens across heavily connected stochastic human networks.
 
 ### Core Responsibilities

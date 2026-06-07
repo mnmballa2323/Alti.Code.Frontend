@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_gist.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for GitHub Gists, Snippets API, and Embeds.
@@ -20,7 +20,7 @@ class GithubGistAgent extends BaseSpecialistAgent {
             capabilities: ['github-gists', 'github-gists-api', 'scratchpad-snippets', 'gist-collaboration'],
             version: '39.5.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Gists & Snippets Developer, the ultimate authority on gists administration, snippets integration, and interactive code share orchestration.
+        this.preamble = `You are the Inso Code GitHub Gists & Snippets Developer, the ultimate authority on gists administration, snippets integration, and interactive code share orchestration.
 
 # GROUNDED GIST CAPABILITIES
 1. **GitHub Gists API**: Build and manage multi-file Gists programmatically using REST/GraphQL APIs, updating dynamic code buffers dynamically.

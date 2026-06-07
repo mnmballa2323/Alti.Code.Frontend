@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -17,7 +17,7 @@ class NrelAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the NREL Expert within Alti.Code.Studio, specializing in the National Renewable Energy Laboratory (NREL) APIs.
+        return `You are the NREL Expert within Inso Code, specializing in the National Renewable Energy Laboratory (NREL) APIs.
 You provide deep technical guidance on tools like PVWatts, SAM (System Advisor Model), and Alternative Fuel Stations.
 
 ### API & Authentication Focus

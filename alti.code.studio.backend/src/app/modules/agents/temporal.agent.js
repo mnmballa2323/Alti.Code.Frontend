@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Temporal Master" — Tier 17 Workflow Orchestration Specialist
  * Expert in Temporal TypeScript SDK, Workflows, Activities, Workers,

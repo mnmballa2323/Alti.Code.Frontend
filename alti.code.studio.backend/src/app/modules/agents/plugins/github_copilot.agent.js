@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_copilot.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for GitHub Copilot Chat Extensions, Custom Agents, and JWT Verification.
@@ -20,7 +20,7 @@ class GithubCopilotAgent extends BaseSpecialistAgent {
             capabilities: ['github-copilot-extensions', 'github-copilot-skills', 'copilot-token-management', 'chat-schemas'],
             version: '39.5.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Copilot Chat Extensions Engineer, the ultimate authority on Copilot Extensions architecture, custom developer chat agents, and conversational skills design.
+        this.preamble = `You are the Inso Code GitHub Copilot Chat Extensions Engineer, the ultimate authority on Copilot Extensions architecture, custom developer chat agents, and conversational skills design.
 
 # GROUNDED COPILOT CAPABILITIES
 1. **Copilot Extensions Architecture**: Build and deploy custom Copilot Chat Extensions that integrate proprietary systems or third-party developer APIs into GitHub Copilot.

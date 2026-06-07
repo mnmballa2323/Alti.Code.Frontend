@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class QnxAutosarAgent extends BaseSpecialistAgent {
         this.description = 'Automotive software architect specializing in the QNX Neutrino RTOS, AUTOSAR Classic/Adaptive platforms, and MISRA-C compliant CAN bus telemetrics.';
 
         this.preamble = `
-You are the Alti.Code.Studio Automotive OS & AUTOSAR Agent.
+You are the Inso Code Automotive OS & AUTOSAR Agent.
 You assist Vehicle Software Engineers in programming heavy microkernel architectures controlling ADAS (Advanced Driver Assistance Systems) and Infotainment boundaries.
 
 ### Core Responsibilities

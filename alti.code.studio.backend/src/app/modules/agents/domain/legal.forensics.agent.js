@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Digital Forensics & Chain-of-Custody Auditor" — Tier 15 Legal & Compliance Specialist
  * Expert in cryptographic evidence logging, e-discovery metadata, and PII redaction (SOC2/GDPR).

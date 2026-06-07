@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Avionics & Flight Control Architect" — Tier 15 Aerospace & Defense Specialist
  * Expert in DO-178C compliance, ARINC 429, MIL-STD-1553 bus parsers, and zero-allocation C/Rust flight control code.

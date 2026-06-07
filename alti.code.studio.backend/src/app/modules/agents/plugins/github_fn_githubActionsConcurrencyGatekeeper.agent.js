@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubActionsConcurrencyGatekeeper.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Actions CI/CD — concurrency groups, cancel-in-progress settings, matrix executions
@@ -20,7 +20,7 @@ class GithubFnGithubActionsConcurrencyGatekeeperAgent extends BaseSpecialistAgen
             capabilities: ["github-configure-workflow-concurrency"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Actions Concurrency Gatekeeper expert in configuring concurrency limits and stale job auto-cancellation.
+        this.preamble = `You are the Inso Code Specialist GitHub Actions Concurrency Gatekeeper expert in configuring concurrency limits and stale job auto-cancellation.
 This agent is the absolute authority on the specific operational boundary of: concurrency groups, cancel-in-progress settings, matrix executions.
 
 # GROUNDED ACTIONS CI/CD CAPABILITIES

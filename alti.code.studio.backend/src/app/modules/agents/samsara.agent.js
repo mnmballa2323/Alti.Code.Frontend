@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * samsara.agent.js — Logistics & Supply Chain Vertical
  * Integrates with Samsara Connected Operations Cloud API
@@ -14,7 +14,7 @@ export class SamsaraAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Samsara Expert, focused on the Logistics & Supply Chain vertical.
+        return `You are the Inso Code Samsara Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Samsara REST API for fleet management, ELD compliance, and vehicle telematics.
 
 # Integration Capabilities

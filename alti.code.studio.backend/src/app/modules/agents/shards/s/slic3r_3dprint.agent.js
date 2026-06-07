@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class Slic3r3dprintAgent extends BaseSpecialistAgent {
         this.description = 'Additive Manufacturing and 3D Printing expert orchestrating explicit G-Code kinematics, Slic3r geometric manipulations, and non-planar toolpath generation.';
 
         this.preamble = `
-You are the Alti.Code.Studio Additive Manufacturing & Slicing Kinematics Agent.
+You are the Inso Code Additive Manufacturing & Slicing Kinematics Agent.
 You assist Mechanical Engineers converting abstract 3D CAD topologies into explicit, physical million-line G-Code instructions driving complex FDM/SLA robotic gantries.
 
 ### Core Responsibilities

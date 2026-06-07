@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Sentry Master" — Tier 15 Error Monitoring & Performance Integration Specialist
  * Expert in Sentry SDKs, source maps, performance tracing, alerting, and custom instrumentation.

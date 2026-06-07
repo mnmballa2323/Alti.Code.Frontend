@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * TENANT SERVICE — Multi-Tenant Isolation
  * 
@@ -78,7 +78,7 @@ class TenantService {
     _seedDefaults() {
         this.register({
             id: 'default',
-            name: 'Alti.Code.Studio (Dev)',
+            name: 'Inso Code (Dev)',
             plan: 'ENTERPRISE',
             region: 'us-central1',
             compliance: ['STANDARD'],

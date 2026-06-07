@@ -16,7 +16,7 @@ class GoogleGkeService {
 
     /**
      * Autonomously provisions a massive, dynamically scalable GKE Autopilot cluster 
-     * to host a newly generated Alti Code Studio project.
+     * to host a newly generated Inso Code project.
      * @param {string} clusterName - The unique ID for the generated project cluster
      */
     async provisionAutopilotCluster(clusterName) {

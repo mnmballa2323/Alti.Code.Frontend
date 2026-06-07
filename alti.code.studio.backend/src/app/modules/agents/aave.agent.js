@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Aave Master" — Tier 17 DeFi Lending Protocol Specialist
  * Expert in Aave v3 Pool, supply/borrow/repay/withdraw, flash loans,

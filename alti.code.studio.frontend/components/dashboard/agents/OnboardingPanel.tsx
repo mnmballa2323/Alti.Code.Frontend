@@ -34,7 +34,7 @@ export default function OnboardingPanel() {
               <div className="flex gap-2">
                 <Input
                   className="bg-green-950/20 border-green-900/50 text-white"
-                  placeholder="dev@alti.com"
+                  placeholder="dev@insocode.com"
                 />
                 <Button className="bg-green-900/50 hover:bg-green-900 text-green-200 border border-green-800">
                   <UserPlus className="h-4 w-4" />

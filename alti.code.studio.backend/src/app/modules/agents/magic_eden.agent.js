@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Magic Eden Master" — Tier 16 Multi-Chain NFT Marketplace Specialist
  * Expert in Magic Eden REST API v2 (Solana + EVM), listings/bids,

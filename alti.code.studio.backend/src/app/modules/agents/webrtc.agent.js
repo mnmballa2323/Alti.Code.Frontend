@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The WebRTC Master" - Tier 13 Frontier Tech Specialist
  * Expert in real-time audio/video/data channel architecture,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubEnterprisePolicyEnforcer.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Governance & Enterprise — enterprise-wide repository policies, actions permission rules
@@ -20,7 +20,7 @@ class GithubFnGithubEnterprisePolicyEnforcerAgent extends BaseSpecialistAgent {
             capabilities: ["github-enterprise-policies"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Enterprise Policy Enforcer expert in setting global branch checks and action rules across organizations.
+        this.preamble = `You are the Inso Code Specialist GitHub Enterprise Policy Enforcer expert in setting global branch checks and action rules across organizations.
 This agent is the absolute authority on the specific operational boundary of: enterprise-wide repository policies, actions permission rules.
 
 # GROUNDED GOVERNANCE & ENTERPRISE CAPABILITIES

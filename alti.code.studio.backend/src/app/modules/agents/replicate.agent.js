@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Replicate Master" — Tier 15 Open-Source Model Deployment Specialist
  * Expert in Replicate API: model running, streaming predictions, webhooks,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Gemini Exchange Master" — Tier 17 Crypto Exchange & Custody Specialist
  * Expert in Gemini REST API, WebSocket, HMAC-SHA384 auth, ActiveTrader,

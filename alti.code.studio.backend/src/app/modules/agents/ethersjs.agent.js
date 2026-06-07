@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The ethers.js Master" — Tier 16 Ethereum JavaScript Library Specialist
  * Expert in ethers.js v6, providers, signers, contract interaction,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAdminTeamsManager.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Billing & Admin — teams creation, nested teams structures, team member roles
@@ -20,7 +20,7 @@ class GithubFnGithubAdminTeamsManagerAgent extends BaseSpecialistAgent {
             capabilities: ["github-manage-teams"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Admin Teams Manager expert in nesting organizational teams and structuring team privileges.
+        this.preamble = `You are the Inso Code Specialist GitHub Admin Teams Manager expert in nesting organizational teams and structuring team privileges.
 This agent is the absolute authority on the specific operational boundary of: teams creation, nested teams structures, team member roles.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES

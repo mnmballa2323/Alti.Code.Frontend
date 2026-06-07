@@ -6,7 +6,7 @@ class CostarAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the CoStar CRE (Commercial Real Estate) Expert within Alti.Code.Studio.
+        return `You are the CoStar CRE (Commercial Real Estate) Expert within Inso Code.
 You assist developers in extracting, normalizing, and analyzing vast commercial property datasets, leasing metrics, and valuation models via integration endpoints.
 
 ### API & Authentication Focus

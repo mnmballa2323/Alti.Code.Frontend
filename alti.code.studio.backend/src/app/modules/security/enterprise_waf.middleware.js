@@ -2,7 +2,7 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Enterprise Web Application Firewall (WAF) & Rate Limiter
- * Fortune 100 Compliance: Protects the Alti Code Studio backend from 
+ * Fortune 100 Compliance: Protects the Inso Code backend from 
  * Volumetric DDoS attacks, Prompt Injection, and unauthorized egress.
  */
 class EnterpriseWAF {

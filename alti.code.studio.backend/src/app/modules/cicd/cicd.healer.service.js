@@ -23,7 +23,7 @@ class CICDHealerService {
         logger.info(`🚨 [Tri-Cloud Healer] Pillar 29: Intercepted GitHub Actions Failure. Analyzing ${rawLogs.length} chars of logs...`);
         
         const prompt = `
-You are an autonomous CI/CD Healer for the Alti Code Studio project.
+You are an autonomous CI/CD Healer for the Inso Code project.
 A GitHub Actions build just failed. Below is the massive raw terminal output.
 Analyze the entire context, find the exact line that caused the failure, explain the root cause, and generate a standard Git diff patch to fix it.
 

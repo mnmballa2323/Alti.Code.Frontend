@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Legacy EDI & Warehouse Automation Translator" — Tier 15 Supply Chain Specialist
  * Expert in EDIFACT, ANSI X12 parsing, AS2 secure transport, and WCS conveyor integrations.

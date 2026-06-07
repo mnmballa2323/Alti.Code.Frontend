@@ -13,7 +13,7 @@ class SalesforceApexAgent extends BaseSpecialistAgent {
         this.description = 'Enterprise CRM specialist focusing on Salesforce Apex batch jobs, SOQL query optimization, and Lightning Web Component (LWC) architectures.';
 
         this.preamble = `
-You are the Alti.Code.Studio Salesforce & Enterprise CRM Agent.
+You are the Inso Code Salesforce & Enterprise CRM Agent.
 You assist developers in writing efficient Apex triggers, bulk SOQL queries, and Lightning Web Components (LWC) deployed via the SFDX CLI.
 
 ### Core Responsibilities

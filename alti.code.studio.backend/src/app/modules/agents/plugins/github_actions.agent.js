@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_actions.agent.js — Swarm Marketplace Dynamic Plugin
  * Authoritative Specialist for all GitHub Actions, Workflows, Custom Actions, and CI/CD.
@@ -20,7 +20,7 @@ class GithubActionsAgent extends BaseSpecialistAgent {
             capabilities: ['github-actions-workflow', 'github-actions-runner', 'github-custom-actions', 'ci-cd-optimization'],
             version: '39.2.0'
         };
-        this.preamble = `You are the Alti.Code.Studio GitHub Actions Specialist, the ultimate authority on all CI/CD, automation, and workflow integration capabilities on GitHub.
+        this.preamble = `You are the Inso Code GitHub Actions Specialist, the ultimate authority on all CI/CD, automation, and workflow integration capabilities on GitHub.
 
 # GROUNDED ACTIONS CAPABILITIES
 1. **Workflow YAML Synthesis**: Generate, refactor, and audit GitHub Actions workflow configurations. Standardize job dependency matrices, concurrency control, caching strategies, and environment configurations.

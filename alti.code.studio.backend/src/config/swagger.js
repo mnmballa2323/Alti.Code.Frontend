@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -11,9 +11,9 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Alti.Code.Studio Backend API',
+            title: 'Inso Code Backend API',
             version: '1.0.0',
-            description: 'API documentation for the Alti.Code.Studio backend services.',
+            description: 'API documentation for the Inso Code backend services.',
         },
         servers: [
             {

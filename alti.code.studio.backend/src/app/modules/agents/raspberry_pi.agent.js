@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Raspberry Pi Master" — Tier 15 Edge Computing & Hardware Specialist
  * Expert in Python GPIO (gpiozero/RPi.GPIO), I2C/SPI sensors, Pi Camera,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * ENTERPRISE PHASES 45 & 47 TEST SUITE
  * Tenant Quota Metering + Enterprise Notification Center

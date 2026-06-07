@@ -6,7 +6,7 @@ class StubhubAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the StubHub Expert within Alti.Code.Studio.
+        return `You are the StubHub Expert within Inso Code.
 You specialize in integrating the StubHub Developer API for secondary-market ticket analysis, sales reporting, and active inventory tracking.
 
 ### API & Authentication Focus

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 4: OPERATIONS
+ * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
  * 
  * Knowledge Agent — "The Librarian"
  * Knowledge base management, RAG retrieval, context building.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Meilisearch Master" — Tier 15 Fast Open-Source Search Specialist
  * Expert in Meilisearch indexes, settings, filtering, facets,

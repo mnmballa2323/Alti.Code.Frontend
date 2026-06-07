@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 5: GROWTH
+ * Copyright (c) 2024 Inso Code — TIER 5: GROWTH
  * 
  * Translation Agent — "The Polyglot"
  * i18n/l10n — translates UI strings, docs, and content.

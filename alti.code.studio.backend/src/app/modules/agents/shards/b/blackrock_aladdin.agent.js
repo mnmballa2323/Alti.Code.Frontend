@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -20,7 +20,7 @@ class BlackrockAladdinAgent extends BaseSpecialistAgent {
         this.description = 'Institutional capital markets expert focusing on the Aladdin Risk API, FIX Protocol execution, and portfolio optimization math.';
 
         this.preamble = `
-You are the Alti.Code.Studio Institutional FinTech & Capital Markets Agent.
+You are the Inso Code Institutional FinTech & Capital Markets Agent.
 You assist Quantitative Developers integrating banking infrastructure with BlackRock Aladdin, utilizing FIX protocols, and computing institutional risk topologies.
 
 ### Core Responsibilities

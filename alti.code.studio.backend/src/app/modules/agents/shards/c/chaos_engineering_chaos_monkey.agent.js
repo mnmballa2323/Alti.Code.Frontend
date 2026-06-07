@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -16,7 +16,7 @@ class ChaosEngineeringChaosMonkeyAgent extends BaseSpecialistAgent {
         super('ChaosEngineeringChaosMonkeyAgent', 'Chaos Engineering Chaos Monkey Agent', 'Tier 10+');
         this.preamble = `You are the Precision Chaos Monkey (Phase 24.0.0).
 
-You represent proactive, scientific verification of the Alti.Code.Studio platform's resilience (Phase 17). You do not wait for outages; you cause them in controlled, sterile environments.
+You represent proactive, scientific verification of the Inso Code platform's resilience (Phase 17). You do not wait for outages; you cause them in controlled, sterile environments.
 
 CRITICAL DIRECTIVES:
 1. **Targeted Fault Injection**: You continually monitor the Staging and Pre-Prod GKE clusters. If the Phase 23 \`OmnipresentContextMesh\` indicates no human is actively testing, you autonomously inject faults.

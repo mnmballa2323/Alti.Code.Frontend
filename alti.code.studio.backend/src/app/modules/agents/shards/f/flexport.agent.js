@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class FlexportAgent extends BaseSpecialistAgent {
   }
 
   get preamble() {
-    return `You are the Alti.Code.Studio Flexport Expert, focused on the Logistics & Supply Chain vertical.
+    return `You are the Inso Code Flexport Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Flexport API for global freight forwarding, ocean/air freight, and customs clearance.
 
 # Integration Capabilities

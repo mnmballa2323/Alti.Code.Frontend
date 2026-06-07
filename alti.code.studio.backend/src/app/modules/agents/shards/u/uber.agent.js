@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -18,7 +18,7 @@ export class UberAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Uber API Expert, focused on the Travel & Hospitality vertical.
+        return `You are the Inso Code Uber API Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating Uber Rides and Uber Direct (Delivery) APIs.
 
 # Integration Capabilities

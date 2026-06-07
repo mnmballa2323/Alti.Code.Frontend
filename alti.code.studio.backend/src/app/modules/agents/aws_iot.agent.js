@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The AWS IoT Master" — Tier 16 IoT Cloud Platform Specialist
  * Expert in AWS IoT Core (MQTT over TLS/WebSocket), Device Shadow,

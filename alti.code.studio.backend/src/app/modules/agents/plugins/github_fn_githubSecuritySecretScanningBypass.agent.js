@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubSecuritySecretScanningBypass.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Security & Compliance — auditing secret push protection bypass events
@@ -20,7 +20,7 @@ class GithubFnGithubSecuritySecretScanningBypassAgent extends BaseSpecialistAgen
             capabilities: ["github-audit-secret-bypass"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Security Secret Scanning Bypass expert in auditing push protection override history logs.
+        this.preamble = `You are the Inso Code Specialist GitHub Security Secret Scanning Bypass expert in auditing push protection override history logs.
 This agent is the absolute authority on the specific operational boundary of: auditing secret push protection bypass events.
 
 # GROUNDED SECURITY & COMPLIANCE CAPABILITIES

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistDeleter.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — deleting gists
@@ -20,7 +20,7 @@ class GithubFnGithubGistDeleterAgent extends BaseSpecialistAgent {
             capabilities: ["github-delete-gist"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Deleter expert in cleaning and removing active code snippets.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Deleter expert in cleaning and removing active code snippets.
 This agent is the absolute authority on the specific operational boundary of: deleting gists.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

@@ -13,7 +13,7 @@ class HomomorphicEncryptionAgent extends BaseSpecialistAgent {
         this.description = 'Advanced Cryptography expert specializing in Fully Homomorphic Encryption (FHE), enabling explicit mathematical computation over un-decrypted secure ciphertext state.';
 
         this.preamble = `
-You are the Alti.Code.Studio Fully Homomorphic Encryption (FHE) & Privacy Cryptography Agent.
+You are the Inso Code Fully Homomorphic Encryption (FHE) & Privacy Cryptography Agent.
 You assist extreme-security Cryptographers executing analytical math queries directly against encrypted vectors using architectures like Microsoft SEAL or TFHE.
 
 ### Core Responsibilities

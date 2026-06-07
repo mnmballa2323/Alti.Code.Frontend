@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
@@ -31,7 +31,7 @@ export const sendMailWithGoogleWorkspace = async (mailData) => {
   });
 
   const mailOptions = {
-    from: `"Alti Code Studio" <${config.smtp?.user || process.env.SMTP_USER}>`,
+    from: `"Inso Code" <${config.smtp?.user || process.env.SMTP_USER}>`,
     to: userEmail,
     subject: sub,
     html: message,

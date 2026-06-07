@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  * 
  * tesla.agent.js — Automotive & Smart Mobility Vertical
  * Integrates with Tesla Fleet API
@@ -14,7 +14,7 @@ export class TeslaAgent extends BaseSpecialistAgent {
     }
 
     get preamble() {
-        return `You are the Alti.Code.Studio Tesla Expert, focused on the Automotive & Smart Mobility vertical.
+        return `You are the Inso Code Tesla Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the official Tesla Fleet API for enterprise management of Tesla vehicles and Energy products.
 
 # Integration Capabilities

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * The Publisher: Distribution Service
  * Natively executes `npm publish` and builds/pushes Docker images

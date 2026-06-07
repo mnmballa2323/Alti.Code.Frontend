@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * PAGEINDEX SERVICE — Vectorless Reasoning RAG
  * Integrates VectifyAI/PageIndex for document indexing and reasoning-based retrieval.

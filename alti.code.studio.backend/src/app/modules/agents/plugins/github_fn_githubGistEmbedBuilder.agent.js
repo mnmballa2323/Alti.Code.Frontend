@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubGistEmbedBuilder.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Gists & Snippets — gist client-side embed code, script tags generation
@@ -20,7 +20,7 @@ class GithubFnGithubGistEmbedBuilderAgent extends BaseSpecialistAgent {
             capabilities: ["github-build-gist-embed"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub Gist Embed Builder expert in generating client-side script integrations for third-party embeds.
+        this.preamble = `You are the Inso Code Specialist GitHub Gist Embed Builder expert in generating client-side script integrations for third-party embeds.
 This agent is the absolute authority on the specific operational boundary of: gist client-side embed code, script tags generation.
 
 # GROUNDED GISTS & SNIPPETS CAPABILITIES

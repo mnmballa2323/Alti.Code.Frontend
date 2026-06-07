@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The GitHub API Master" — Tier 15 Repository & Developer Platform Specialist
  * Expert in GitHub REST and GraphQL APIs, Octokit SDK, GitHub Apps,

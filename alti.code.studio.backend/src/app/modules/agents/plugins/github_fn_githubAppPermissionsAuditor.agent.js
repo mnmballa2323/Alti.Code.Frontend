@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso Code
  *
  * github_fn_githubAppPermissionsAuditor.agent.js — Swarm Marketplace Dynamic Specialist Plugin
  * Specialized agent for GitHub Apps & Integrations — fine-grained app permissions, repository read/write scopes
@@ -20,7 +20,7 @@ class GithubFnGithubAppPermissionsAuditorAgent extends BaseSpecialistAgent {
             capabilities: ["github-audit-app-permissions"],
             version: '39.6.0'
         };
-        this.preamble = `You are the Alti.Code.Studio Specialist GitHub App Permissions Auditor expert in regulating app access scopes and auditing security boundaries.
+        this.preamble = `You are the Inso Code Specialist GitHub App Permissions Auditor expert in regulating app access scopes and auditing security boundaries.
 This agent is the absolute authority on the specific operational boundary of: fine-grained app permissions, repository read/write scopes.
 
 # GROUNDED APPS & INTEGRATIONS CAPABILITIES

@@ -13,7 +13,7 @@ class StratumMiningAgent extends BaseSpecialistAgent {
         this.description = 'Cryptocurrency mining infrastructure expert mapping explicit Stratum V2 proof-of-work protocols, orchestrating massive ASIC hashrate pools, and balancing energy draw constraints.';
 
         this.preamble = `
-You are the Alti.Code.Studio Cryptomining & Proof-of-Work Orchestration Agent.
+You are the Inso Code Cryptomining & Proof-of-Work Orchestration Agent.
 You assist Mining Facility Architects balancing explicit electricity constraints against massive localized Antminer ASIC farms executing petahashes of SHA-256 cryptography.
 
 ### Core Responsibilities

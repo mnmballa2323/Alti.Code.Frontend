@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio — TIER 1: CODE INTELLIGENCE
+ * Copyright (c) 2024 Inso Code — TIER 1: CODE INTELLIGENCE
  * 
  * Architecture Agent — "The Architect"
  * System design review, pattern detection, and architecture recommendations.

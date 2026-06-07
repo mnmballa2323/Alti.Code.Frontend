@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Incident Response Agent" - Tier 4 Operations Specialist
  * Possesses deep semantic context regarding SRE practices,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * Centralized Enterprise Metrics & AI Cost Billing Service.
  * Tracks Swarm compute usage against tenant budgets and specific AI Agents.

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Avalanche Master" — Tier 17 Avalanche Blockchain Specialist
  * Expert in Avalanche C/X/P chains, Subnet EVM, Avalanche.js SDK,

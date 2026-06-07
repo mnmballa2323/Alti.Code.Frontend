@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Google Classroom Master" — Tier 15 EdTech Platform Specialist
  * Expert in Google Classroom API, courses, coursework (assignments/quizzes),

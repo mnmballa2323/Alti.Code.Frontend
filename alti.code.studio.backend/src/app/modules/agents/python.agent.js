@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  * 
  * "The Python Expert" - Tier 7 Specialist Agent
  * Possesses deep semantic context regarding Pythonic syntax, PEP 8, 

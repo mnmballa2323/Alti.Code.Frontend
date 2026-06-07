@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Alti.Code.Studio
+ * Copyright (c) 2024 Inso Code
  *
  * "The Slack Master" — Tier 15 Workplace Messaging Integration Specialist
  * Expert in Slack Web API, Bolt framework, Block Kit UI, Slash Commands,

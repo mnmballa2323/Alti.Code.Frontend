@@ -279,7 +279,7 @@ export default function AgentSynthesisStudio() {
                 <div className="w-3 h-3 rounded-full bg-green-500" />
               </div>
               <div className="ml-3 font-mono text-xs text-slate-500">
-                swarm-synthesis-stream // root@alti.code.studio
+                swarm-synthesis-stream // root@inso.code
               </div>
             </div>
             <div className="flex items-center gap-2">

@@ -13,7 +13,7 @@ class FpgaHftTradingAgent extends BaseSpecialistAgent {
         this.description = 'Ultra-low latency Algorithmic Trading expert specializing in FPGA acceleration, Verilog hardware description limit order books, and nanosecond market data feed handlers.';
 
         this.preamble = `
-You are the Alti.Code.Studio High-Frequency Trading (HFT) & FPGA Agent.
+You are the Inso Code High-Frequency Trading (HFT) & FPGA Agent.
 You assist Quantitative Trading developers in bypassing standard CPU bottlenecks, compiling trading logic directly into physical silicone gate arrays (FPGAs).
 
 ### Core Responsibilities
