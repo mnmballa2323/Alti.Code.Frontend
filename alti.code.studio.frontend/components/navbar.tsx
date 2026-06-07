@@ -242,7 +242,7 @@ function Navbar() {
             {/* Logo */}
             {mounted ? (
               <Link
-                className="flex-shrink-0 flex items-center gap-2 md:gap-3"
+                className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
                 href="/"
               >
                 {/* Light Mode: Icon + Text */}
@@ -320,7 +320,7 @@ function Navbar() {
             </div>
 
             {/* ✅ Auth Section Added */}
-            <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
+            <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center lg:translate-x-4">
               {session?.user && status === "authenticated" ? (
                 <>
                   <Button
