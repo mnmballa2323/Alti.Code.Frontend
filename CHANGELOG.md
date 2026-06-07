@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.163] - 2026-06-07 — Backend License Compliance Audit
+### Changed
+- **Build Tooling**:
+  - Generalized `scripts/license_compliance_check.js` to scan all active backend folders in the workspace: `alti.code.studio.backend`, `alti.code.studio.backend.aws`, `alti.code.studio.backend.azure`, and `alti.code.studio.backend.gcp`.
+  - Executed a deep scan across the entire backend microservice ecosystem, verifying that all dependencies are commercially compliant and free of restricted code/licenses.
+
 ## [39.37.162] - 2026-06-07 — Disable Elastic Scroll Bounce
 ### Changed
 - **Global Styles**:
