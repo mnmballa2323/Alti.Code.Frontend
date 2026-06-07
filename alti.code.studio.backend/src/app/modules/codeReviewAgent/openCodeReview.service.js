@@ -4,7 +4,7 @@
  * openCodeReview.service.js — Wrapper Service for Alibaba's open-code-review
  */
 
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
@@ -18,8 +18,7 @@ class OpenCodeReviewService {
      * Maps all LLM queries securely to our local LiteLLM / Vertex gateway to respect Tri-Cloud strategy.
      */
     _executeOcr(args = []) {
-        const cmd = `npx ocr ${args.join(' ')}`;
-        logger.info(`🔍 [OpenCodeReviewService] Running command: ${cmd}`);
+        logger.info(`🔍 [OpenCodeReviewService] Running: npx ocr ${args.join(' ')}`);
 
         // Set environment variables for the CLI to use our LiteLLM gateway
         const env = {
@@ -30,14 +29,31 @@ class OpenCodeReviewService {
         };
 
         return new Promise((resolve, reject) => {
-            exec(cmd, { env }, (error, stdout, stderr) => {
-                if (error) {
-                    logger.error(`❌ [OpenCodeReviewService] Command failed: ${stderr || error.message}`);
-                    reject(new Error(stderr || error.message));
+            const child = spawn('npx', ['ocr', ...args], { env });
+            let stdout = '';
+            let stderr = '';
+
+            child.stdout.on('data', (data) => {
+                stdout += data;
+            });
+
+            child.stderr.on('data', (data) => {
+                stderr += data;
+            });
+
+            child.on('close', (code) => {
+                if (code !== 0) {
+                    logger.error(`❌ [OpenCodeReviewService] Command failed with code ${code}: ${stderr}`);
+                    reject(new Error(stderr || `Command failed with code ${code}`));
                 } else {
                     logger.info(`✅ [OpenCodeReviewService] Command completed successfully.`);
                     resolve(stdout);
                 }
+            });
+
+            child.on('error', (err) => {
+                logger.error(`❌ [OpenCodeReviewService] Command error: ${err.message}`);
+                reject(err);
             });
         });
     }

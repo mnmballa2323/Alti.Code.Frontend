@@ -1,13 +1,28 @@
 global.self = global;
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
+import { EventEmitter } from 'events';
 import { openCodeReviewService } from '../../src/app/modules/codeReviewAgent/openCodeReview.service.js';
 import { codeReviewWorkerProcessor } from '../../src/app/modules/codeReviewAgent/codeReview.worker.js';
 import { aiProvider } from '../../src/app/modules/ai/ai.provider.js';
 
+const createMockChildProcess = (stdoutData = '', stderrData = '', code = 0) => {
+    const child = new EventEmitter();
+    child.stdout = new EventEmitter();
+    child.stderr = new EventEmitter();
+    
+    setTimeout(() => {
+        if (stdoutData) child.stdout.emit('data', Buffer.from(stdoutData));
+        if (stderrData) child.stderr.emit('data', Buffer.from(stderrData));
+        child.emit('close', code);
+    }, 10);
+    
+    return child;
+};
+
 vi.mock('child_process', () => {
     return {
-        exec: vi.fn()
+        spawn: vi.fn()
     };
 });
 
@@ -19,55 +34,62 @@ describe('OpenCodeReview Integration & Worker Tests', () => {
 
     describe('OpenCodeReviewService', () => {
         it('should correctly execute the reviewChanges command', async () => {
-            exec.mockImplementation((cmd, opts, callback) => {
-                callback(null, 'Open code review complete', '');
+            spawn.mockImplementation(() => {
+                return createMockChildProcess('Open code review complete', '', 0);
             });
 
             const output = await openCodeReviewService.reviewChanges();
             expect(output).toBe('Open code review complete');
-            expect(exec).toHaveBeenCalledTimes(1);
+            expect(spawn).toHaveBeenCalledTimes(1);
 
-            const lastCall = exec.mock.calls[0];
+            const lastCall = spawn.mock.calls[0];
             const cmd = lastCall[0];
-            const opts = lastCall[1];
-            expect(cmd).toBe('npx ocr review');
+            const args = lastCall[1];
+            const opts = lastCall[2];
+            
+            expect(cmd).toBe('npx');
+            expect(args).toEqual(['ocr', 'review']);
             expect(opts.env.OCR_LLM_URL).toContain('http://localhost:4000/v1');
             expect(opts.env.OCR_LLM_MODEL).toBe('gemini-experimental');
         });
 
         it('should correctly execute the reviewRange command', async () => {
-            exec.mockImplementation((cmd, opts, callback) => {
-                callback(null, 'Open code review complete for range', '');
+            spawn.mockImplementation(() => {
+                return createMockChildProcess('Open code review complete for range', '', 0);
             });
 
             const output = await openCodeReviewService.reviewRange('main', 'feature');
             expect(output).toBe('Open code review complete for range');
-            expect(exec).toHaveBeenCalledTimes(1);
+            expect(spawn).toHaveBeenCalledTimes(1);
 
-            const lastCall = exec.mock.calls[0];
+            const lastCall = spawn.mock.calls[0];
             const cmd = lastCall[0];
-            expect(cmd).toBe('npx ocr review --from main --to feature');
+            const args = lastCall[1];
+            expect(cmd).toBe('npx');
+            expect(args).toEqual(['ocr', 'review', '--from', 'main', '--to', 'feature']);
         });
 
         it('should correctly execute the reviewCommit command', async () => {
-            exec.mockImplementation((cmd, opts, callback) => {
-                callback(null, 'Open code review complete for commit', '');
+            spawn.mockImplementation(() => {
+                return createMockChildProcess('Open code review complete for commit', '', 0);
             });
 
             const output = await openCodeReviewService.reviewCommit('a1b2c3d');
             expect(output).toBe('Open code review complete for commit');
-            expect(exec).toHaveBeenCalledTimes(1);
+            expect(spawn).toHaveBeenCalledTimes(1);
 
-            const lastCall = exec.mock.calls[0];
+            const lastCall = spawn.mock.calls[0];
             const cmd = lastCall[0];
-            expect(cmd).toBe('npx ocr review --commit a1b2c3d');
+            const args = lastCall[1];
+            expect(cmd).toBe('npx');
+            expect(args).toEqual(['ocr', 'review', '--commit', 'a1b2c3d']);
         });
     });
 
     describe('codeReviewWorkerProcessor', () => {
         it('should execute openCodeReview and embed results in LLM prompt when useOcr is true', async () => {
-            exec.mockImplementation((cmd, opts, callback) => {
-                callback(null, 'CRITICAL: hardcoded password found', '');
+            spawn.mockImplementation(() => {
+                return createMockChildProcess('CRITICAL: hardcoded password found', '', 0);
             });
 
             const mockReason = vi.spyOn(aiProvider, 'reason').mockResolvedValue(JSON.stringify({
@@ -90,7 +112,7 @@ describe('OpenCodeReview Integration & Worker Tests', () => {
 
             const result = await codeReviewWorkerProcessor(job);
             
-            expect(exec).toHaveBeenCalledTimes(1);
+            expect(spawn).toHaveBeenCalledTimes(1);
             expect(mockReason).toHaveBeenCalledTimes(1);
 
             const sentPrompt = mockReason.mock.calls[0][0];
@@ -120,7 +142,7 @@ describe('OpenCodeReview Integration & Worker Tests', () => {
 
             const result = await codeReviewWorkerProcessor(job);
 
-            expect(exec).not.toHaveBeenCalled();
+            expect(spawn).not.toHaveBeenCalled();
             expect(mockReason).toHaveBeenCalledTimes(1);
 
             const sentPrompt = mockReason.mock.calls[0][0];
