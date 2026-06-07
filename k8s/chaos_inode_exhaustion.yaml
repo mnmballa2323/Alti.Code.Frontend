@@ -1,0 +1,78 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chaos-inode-exhaustion
+  namespace: default
+spec:
+  # Delete the job after 5 minutes
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: chaos-inode-exhaustion
+    spec:
+      containers:
+      - name: inode-burner
+        image: alpine:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "[CHAOS] Initializing Inode Exhaustion Simulator..."
+          
+          # We create a directory on the mounted hostPath (or emptyDir)
+          # and spawn background processes to touch millions of 0-byte files as fast as possible.
+          # This rapidly depletes the filesystem's inode allocation.
+          
+          mkdir -p /chaos-data/inodes
+          cd /chaos-data/inodes
+          
+          echo "[CHAOS] Spawning parallel workers to consume inodes..."
+          
+          # Spawn 10 background workers
+          for i in $(seq 1 10); do
+            (
+              # Each worker attempts to create 1 million files
+              # Using awk is much faster than a bash loop for this
+              awk 'BEGIN { for(i=1; i<=1000000; i++) { printf "" > "chaos_file_'${i}'_"i } }' 
+            ) &
+          done
+          
+          echo "[CHAOS] Workers spawned. Waiting for filesystem to run out of inodes..."
+          
+          # Monitor the inode count
+          while true; do
+            df -i /chaos-data
+            
+            # Check if we can still create files
+            if ! touch test_inode_creation 2>/dev/null; then
+              echo "[CRITICAL CHAOS] INODE EXHAUSTION ACHIEVED!"
+              echo "[CRITICAL CHAOS] The filesystem is now effectively READ-ONLY."
+              echo "[CHAOS] Validating Kubernetes resilience mechanisms:"
+              echo "  1. Kubelet must detect the inode pressure via NodeStatus (InodePressure=True)."
+              echo "  2. Kubelet must begin aggressively evicting Pods that are consuming excessive inodes."
+              echo "  3. Applications MUST crash gracefully rather than hanging indefinitely when disk writes fail with 'No space left on device'."
+              break
+            fi
+            
+            sleep 5
+          done
+          
+          echo "[CHAOS] Holding inode exhaustion state for 2 minutes to observe cluster reaction..."
+          sleep 120
+          
+          echo "[CHAOS] Cleaning up chaos files to restore node health..."
+          # Using find -delete is necessary because 'rm *' will fail with 'Argument list too long'
+          find /chaos-data/inodes -type f -delete
+          
+          echo "[CHAOS] Experiment complete."
+        volumeMounts:
+        - name: host-root
+          # Mount the host's root filesystem to consume its inodes.
+          # In a real environment, you might target /var/lib/docker or /var/lib/kubelet
+          mountPath: /chaos-data
+      volumes:
+      - name: host-root
+        hostPath:
+          path: /
+      restartPolicy: Never

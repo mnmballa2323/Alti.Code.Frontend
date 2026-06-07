@@ -1,0 +1,64 @@
+# FinOps Kubernetes Resource Quotas & Limit Ranges
+# Without strict boundaries, a single misconfigured application or runaway Horizontal Pod Autoscaler (HPA)
+# can endlessly trigger Karpenter/Cluster Autoscaler to provision hundreds of EC2 nodes,
+# instantly destroying the AWS budget.
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: default-finops-namespace-quota
+  # In a real environment, this is applied via a Kyverno Mutating Webhook or 
+  # a tool like Hierarchical Namespace Controller (HNC) to every new namespace automatically.
+  namespace: default
+spec:
+  # These hard limits represent the maximum aggregate compute cost allowed for this entire namespace
+  hard:
+    # Compute Cost Bounds
+    requests.cpu: "16"      # Max guaranteed CPU: ~4x m5.xlarge equivalents
+    requests.memory: "64Gi" # Max guaranteed RAM
+    limits.cpu: "32"        # Absolute ceiling for CPU bursts
+    limits.memory: "128Gi"  # Absolute ceiling for RAM bursts
+    
+    # Storage Cost Bounds (EBS Volumes cost money per GB)
+    requests.storage: "500Gi"            # Max total persistent storage allowed
+    persistentvolumeclaims: "10"         # Prevent creating hundreds of orphaned tiny EBS volumes
+    
+    # Network/ALB Cost Bounds
+    # Every LoadBalancer service provisions an AWS ALB/NLB which incurs an hourly charge!
+    count/services.loadbalancer: "2"     # Force developers to use Ingress controllers instead of dedicated ALBs
+    count/services.nodeport: "0"         # Security/FinOps best practice: Disable NodePorts
+
+---
+# While ResourceQuotas limit the entire namespace, LimitRanges ensure individual Pods 
+# are properly sized and actually declare their resource requirements. 
+# This prevents a single pod from accidentally requesting "16 CPUs" and hogging the entire quota.
+
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: default-finops-pod-limits
+  namespace: default
+spec:
+  limits:
+  - type: Container
+    
+    # Maximum allowed size for a single container. 
+    # Forces monolithic apps to break apart to scale horizontally.
+    max:
+      cpu: "4"
+      memory: "8Gi"
+      
+    # Minimum allowed size. Prevents the API server from being overwhelmed by 10,000 micro-pods.
+    min:
+      cpu: "50m"
+      memory: "64Mi"
+      
+    # DEFAULT values applied automatically if a developer forgets to specify resources.
+    # This is critical for FinOps: it guarantees that every Pod is trackable by KubeCost/AWS Cost Allocator
+    # and prevents the Kubernetes scheduler from "overcommitting" EC2 instances leading to OOM panics.
+    defaultRequest:
+      cpu: "100m"
+      memory: "128Mi"
+    default:
+      cpu: "500m"
+      memory: "512Mi"
