@@ -77,7 +77,8 @@ export default function Home() {
                 className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
-                How can I help you today?
+                Build The Future
+
               </h1>
             </div>
 

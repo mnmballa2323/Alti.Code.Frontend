@@ -36,8 +36,9 @@ function DashboardPage() {
               <SystemHealthWidget />
             </div>
             <h1 className="text-3xl font-semibold leading-9 text-default-foreground">
-              How can I help you today?
+              Build The Future
             </h1>
+
             <div className="flex w-full flex-col gap-4 px-4">
               <PromptInputFullLineWithBottomActions showModelDropdown={true} />
             </div>
