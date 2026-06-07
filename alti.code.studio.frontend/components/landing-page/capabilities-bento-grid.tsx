@@ -33,9 +33,8 @@ export default function CapabilitiesBentoGrid() {
                 Desktop IPC & CLI Steering
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
-                Inso Code runs tools and modifies code directly on your machine through 
-                a high-speed, secure local IPC channel. No slow virtual machines, 
-                no remote terminal latency—just direct native command steering.
+                Inso Code runs tools and modifies code directly on your machine via a secure 
+                local IPC channel with zero remote latency.
               </p>
             </div>
             
@@ -109,7 +108,7 @@ export default function CapabilitiesBentoGrid() {
                 <GitBranch className="w-4 h-4 xl:w-5 xl:h-5" />
               </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
-                Cross-Repo Submodule Sync
+                Submodule Auto-Sync
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
                 Our primary agent automatically coordinates submodules, matching branch revisions 
@@ -129,7 +128,7 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
                 Secrets are locked locally in an encrypted keyring. Agents query keys 
-                on-demand, but the raw values are never exposed or written to the filesystem.
+                on-demand, and raw values are never written to disk.
               </p>
             </div>
             
