@@ -1,35 +1,32 @@
 "use client";
 
 import React from "react";
-import { Cloud, Shield, Zap } from "lucide-react";
+import { User, Users, Building } from "lucide-react";
 
 const plans = [
   {
-    name: "Multi-Tenant Private Cloud",
+    name: "Individual",
     price: "250",
     description:
       "For individual developers who want zero-configuration, production-grade agent power.",
-    icon: <Cloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+    icon: <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
     cta: "Start Free Trial",
-    popular: false,
   },
   {
-    name: "Team Plan",
+    name: "Team",
     price: "300",
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
-    icon: <Zap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
+    icon: <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
     cta: "Upgrade Team",
-    popular: true,
   },
   {
-    name: "Enterprise Plan",
+    name: "Enterprise",
     price: "500",
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
-    icon: <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
+    icon: <Building className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
     cta: "Contact Enterprise",
-    popular: false,
   },
 ];
 
@@ -59,18 +56,8 @@ export default function PricingSection() {
           {plans.map((plan, idx) => (
             <div
               key={idx}
-              className={`relative flex flex-col justify-between p-8 md:p-10 rounded-[32px] border transition-all duration-300 ${
-                plan.popular
-                  ? "bg-slate-50 dark:bg-[#111111] border-blue-500/50 shadow-lg dark:shadow-blue-950/20 scale-105 z-10 md:-translate-y-2"
-                  : "bg-white dark:bg-black border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700"
-              }`}
+              className="relative flex flex-col justify-between p-8 md:p-10 rounded-[32px] border bg-white dark:bg-black border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300"
             >
-              {plan.popular && (
-                <span className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 px-4 py-1 text-xs font-semibold text-white bg-blue-600 rounded-full shadow-sm">
-                  Most Popular
-                </span>
-              )}
-
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
                   {/* Icon & Plan Name */}
@@ -89,9 +76,7 @@ export default function PricingSection() {
                       ${plan.price}
                     </span>
                     <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                      {plan.name === "Multi-Tenant Private Cloud"
-                        ? "/ month"
-                        : "/ user / month"}
+                      {plan.name === "Individual" ? "/ month" : "/ user / month"}
                     </span>
                   </div>
                 </div>
@@ -103,11 +88,7 @@ export default function PricingSection() {
 
               {/* Action Button */}
               <button
-                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 ${
-                  plan.popular
-                    ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg hover:shadow-blue-500/20 active:scale-[0.98]"
-                    : "bg-gray-50 hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 text-black dark:text-white border border-gray-200/50 dark:border-gray-800 active:scale-[0.98]"
-                }`}
+                className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 text-black dark:text-white border border-gray-200/50 dark:border-gray-800 active:scale-[0.98]"
               >
                 {plan.cta}
               </button>
