@@ -23,6 +23,7 @@ import { codeReviewWorkerProcessor } from '../codeReviewAgent/codeReview.worker.
 import { databaseWorkerProcessor } from '../databaseAgent/database.worker.js';
 import { architectureWorkerProcessor } from '../architectureAgent/architecture.worker.js';
 import { performanceWorkerProcessor } from '../performanceAgent/performance.worker.js';
+import { vulnerabilityHarnessService } from '../security/vulnerabilityHarness.service.js';
 
 // Live Mappings
 const guardianAgent = { 
@@ -461,6 +462,7 @@ class GraphOrchestrator {
                 promptfoo: PromptfooAgentService,
                 agent_s: agentSAgent,
                 specialist: capabilityRouter,
+                vulnerabilityHarness: vulnerabilityHarnessService,
                 fileSearch: (await import('../fileSearch/fileSearch.service.js').catch(() => ({}))).fileSearchService || {},
             };
 
