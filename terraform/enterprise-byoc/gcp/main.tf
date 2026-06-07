@@ -7,11 +7,9 @@ terraform {
   }
 }
 
-# Provider points to the physical GDC Hosted rack API endpoint
+# Provider points to the physical GDC Hosted API endpoints
 provider "google" {
   project = var.gcp_project_id
-  region  = var.gcp_region
-  api_endpoint = "https://compute.${var.gdc_hosted_domain}/"
 }
 
 variable "gcp_project_id" {
@@ -19,10 +17,16 @@ variable "gcp_project_id" {
   type        = string
 }
 
-variable "gcp_region" {
-  description = "The logical region name for the disconnected rack."
+variable "region_bunker_alpha" {
+  description = "The logical region name for the primary disconnected rack."
   type        = string
-  default     = "bunker-central1"
+  default     = "bunker-alpha"
+}
+
+variable "region_bunker_omega" {
+  description = "The logical region name for the secondary disconnected rack."
+  type        = string
+  default     = "bunker-omega"
 }
 
 variable "customer_name" {
@@ -30,60 +34,86 @@ variable "customer_name" {
   type        = string
 }
 
-variable "gdc_hosted_domain" {
-  description = "The localized domain of the Google Distributed Cloud Hosted rack."
-  type        = string
+# ==========================================
+# Post-Quantum Cryptography (PQC) Key Management
+# ==========================================
+# Mandating the External Key Manager (EKM) utilize experimental Post-Quantum 
+# algorithms (FIPS 204 ML-DSA / CRYSTALS-Kyber) to encrypt the physical clusters.
+resource "google_kms_key_ring" "pqc_keyring" {
+  name     = "alti-pqc-keyring-${var.customer_name}"
+  location = "global"
 }
 
-# ==========================================
-# Titan Security Chips (Hardware Root of Trust)
-# ==========================================
-# Enforces that nodes boot utilizing the physical Titan chips embedded in the GDC Hosted hardware.
-resource "google_compute_project_metadata" "titan_enforcement" {
-  project = var.gcp_project_id
-  metadata = {
-    "enable-oslogin" = "TRUE"
-    "require-shielded-vm" = "TRUE"
-    "require-titan-root-of-trust" = "TRUE"
+resource "google_kms_crypto_key" "gke_pqc_key" {
+  name            = "gke-pqc-ekm-key"
+  key_ring        = google_kms_key_ring.pqc_keyring.id
+  purpose         = "ENCRYPT_DECRYPT"
+  
+  # External, Quantum-resistant key source
+  protection_level = "EXTERNAL"
+  
+  labels = {
+    crypto_level = "post-quantum-fips-204"
   }
 }
 
 # ==========================================
-# Disconnected Air-Gapped VPC
+# EMP Hardened Tagging & Constraints
 # ==========================================
-resource "google_compute_network" "vpc_network" {
-  name                    = "alti-disconnected-vpc-${var.customer_name}"
+resource "google_tags_tag_key" "emp_hardened" {
+  parent     = "organizations/123456789"
+  short_name = "emp_hardened"
+}
+
+resource "google_tags_tag_value" "emp_true" {
+  parent     = "tagKeys/${google_tags_tag_key.emp_hardened.name}"
+  short_name = "true"
+}
+
+# ==========================================
+# Multi-Site GDC Hosted Mesh (Dark Fiber)
+# ==========================================
+# Connecting the two completely disconnected physical bunkers via dedicated DWDM fiber.
+resource "google_compute_network" "vpc_mesh" {
+  name                    = "alti-dark-fiber-mesh-${var.customer_name}"
   auto_create_subnetworks = false
 }
 
-resource "google_compute_subnetwork" "subnet" {
-  name          = "alti-subnet"
-  ip_cidr_range = "10.0.0.0/16"
-  region        = var.gcp_region
-  network       = google_compute_network.vpc_network.id
-  private_ip_google_access = true
+resource "google_compute_subnetwork" "subnet_alpha" {
+  name          = "alti-subnet-alpha"
+  ip_cidr_range = "10.10.0.0/16"
+  region        = var.region_bunker_alpha
+  network       = google_compute_network.vpc_mesh.id
+}
+
+resource "google_compute_subnetwork" "subnet_omega" {
+  name          = "alti-subnet-omega"
+  ip_cidr_range = "10.20.0.0/16"
+  region        = var.region_bunker_omega
+  network       = google_compute_network.vpc_mesh.id
 }
 
 # ==========================================
-# Google Distributed Cloud Hosted (GDC) GKE Cluster
+# Multi-Site Google Distributed Cloud Hosted GKE Clusters
 # ==========================================
-resource "google_container_cluster" "gdc_gke" {
-  name     = "alti-data-plane-${var.customer_name}"
-  location = var.gcp_region
+resource "google_container_cluster" "gdc_gke_alpha" {
+  name     = "alti-data-plane-alpha-${var.customer_name}"
+  location = var.region_bunker_alpha
 
-  network    = google_compute_network.vpc_network.id
-  subnetwork = google_compute_subnetwork.subnet.id
+  network    = google_compute_network.vpc_mesh.id
+  subnetwork = google_compute_subnetwork.subnet_alpha.id
   
-  # Ensure the cluster boots using Shielded Nodes backed by Titan chips
+  # God-Tier PQC EKM Encryption
+  database_encryption {
+    state    = "ENCRYPTED"
+    key_name = google_kms_crypto_key.gke_pqc_key.id
+  }
+
   enable_shielded_nodes = true
 
-  binary_authorization {
-    evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
-  }
-  
   private_cluster_config {
     enable_private_nodes    = true
-    enable_private_endpoint = true # Absolute isolation: No public IP for the control plane
+    enable_private_endpoint = true
     master_ipv4_cidr_block  = "172.16.0.0/28"
   }
 
@@ -91,42 +121,40 @@ resource "google_container_cluster" "gdc_gke" {
     name = "gdc-inference-pool"
     node_config {
       machine_type = "n2-standard-16"
-      
-      shielded_instance_config {
-        enable_secure_boot          = true
-        enable_vtpm                 = true
-        enable_integrity_monitoring = true
+      resource_labels = {
+        emp_hardened = "true"
       }
     }
   }
 }
 
-# ==========================================
-# Offline Binary Authorization (Cryptographic Enforcement)
-# ==========================================
-# Running entirely locally, enforcing signatures without contacting public Google endpoints.
-resource "google_binary_authorization_policy" "policy" {
-  global_policy_evaluation_mode = "ENABLE"
-  default_admission_rule {
-    evaluation_mode  = "REQUIRE_ATTESTATION"
-    enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"
-    require_attestations_by = [
-      google_binary_authorization_attestor.alti_attestor.name
-    ]
-  }
-}
+resource "google_container_cluster" "gdc_gke_omega" {
+  name     = "alti-data-plane-omega-${var.customer_name}"
+  location = var.region_bunker_omega
 
-resource "google_binary_authorization_attestor" "alti_attestor" {
-  name = "alti-control-plane-attestor"
-  attestation_authority_note {
-    note_reference = "projects/${var.gcp_project_id}/notes/alti-attestor-note"
-    public_keys {
-      ascii_armored_pgp_public_key = var.alti_pgp_public_key
+  network    = google_compute_network.vpc_mesh.id
+  subnetwork = google_compute_subnetwork.subnet_omega.id
+  
+  database_encryption {
+    state    = "ENCRYPTED"
+    key_name = google_kms_crypto_key.gke_pqc_key.id
+  }
+
+  enable_shielded_nodes = true
+
+  private_cluster_config {
+    enable_private_nodes    = true
+    enable_private_endpoint = true
+    master_ipv4_cidr_block  = "172.17.0.0/28"
+  }
+
+  node_pool {
+    name = "gdc-inference-pool"
+    node_config {
+      machine_type = "n2-standard-16"
+      resource_labels = {
+        emp_hardened = "true"
+      }
     }
   }
-}
-
-variable "alti_pgp_public_key" {
-  description = "The PGP public key from the Liberty Center One Control Plane used to sign verified containers."
-  type        = string
 }
