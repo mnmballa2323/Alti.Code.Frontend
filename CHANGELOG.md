@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.130] - 2026-06-07 — Landing Page Theme Loop Section Additions
+### Added
+- **Three New Premium Landing Page Sections**:
+  - **Autonomous Agent Forge (Self-Expanding Swarm)**: A white-background (`bg-white`) section containing an interactive visual workflow that simulates the dynamic compilation, testing, and deployment of specialized custom agents (such as COBOL Migrator, Stripe Ledger Auditor, and Kubernetes SecOps) into the active swarm.
+  - **Zero-Trust Audit Trail & Cryptographic Ledger**: A light-gray-background (`bg-gray-50`) section showing a cryptographic timeline representation of local agent tool executions, sandbox constraints, and real-time GCP DLP (Data Loss Prevention) sensitive data redacting.
+  - **Enterprise Capabilities Bento Grid**: A black-background (`bg-black`) grid card layout highlighting platform-level attributes: Desktop IPC & CLI Steering, AST Traversal Edits, Gossip Mesh Coordination, Semantic Cache, Cross-Repo Submodule Sync, and Hardware Secure Vault.
+- **Alternating Color Theme Loop Integration**:
+  - Linked the three components in `app/page.tsx` directly following the `DeterministicControlSection` to ensure a consistent alternating background loop pattern: Black -> White -> Gray -> Black -> White -> Gray.
+
 ## [39.37.129] - 2026-06-07 — Local Dev Startup Optimization & Landing Page Section Enhancements
 ### Changed
 - **Local Dev Server Optimization**: Restricted custom dynamic agent loading in `DynamicAgentLoaderService` to a maximum of 50 agents when in development mode, preventing event loop blocking and accelerating backend startup from minutes to seconds.

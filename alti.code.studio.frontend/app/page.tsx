@@ -14,6 +14,9 @@ import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-co
 import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
 import DatabaseConnectorsSection from "@/components/landing-page/database-connectors-section";
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
+import AgentForgeSection from "@/components/landing-page/agent-forge-section";
+import ZeroTrustLedgerSection from "@/components/landing-page/zero-trust-ledger-section";
+import CapabilitiesBentoGrid from "@/components/landing-page/capabilities-bento-grid";
 import PricingSection from "@/components/landing-page/pricing-section";
 
 export default function LandingPage() {
@@ -42,6 +45,9 @@ export default function LandingPage() {
         <AppConnectorsSection />
         <DatabaseConnectorsSection />
         <DeterministicControlSection />
+        <AgentForgeSection />
+        <ZeroTrustLedgerSection />
+        <CapabilitiesBentoGrid />
         <EnterpriseInfrastructureSection />
         <PricingSection />
       </main>
