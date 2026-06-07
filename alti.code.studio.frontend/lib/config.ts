@@ -11,3 +11,10 @@ export const API_URL =
 // Base Root Path (for WebSockets or non-versioned endpoints)
 export const SOCKET_URL = API_URL.replace("/api/v1", "");
 export const BASE_URL = SOCKET_URL;
+
+// Installer Download Links (Tauri builds)
+export const DOWNLOAD_LINKS = {
+  windows: process.env.NEXT_PUBLIC_DOWNLOAD_WINDOWS ?? "/downloads/Alti-Code-Studio_1.0.0_x64-setup.exe",
+  mac: process.env.NEXT_PUBLIC_DOWNLOAD_MAC ?? "/downloads/Alti-Code-Studio_1.0.0_x64.dmg",
+};
+
