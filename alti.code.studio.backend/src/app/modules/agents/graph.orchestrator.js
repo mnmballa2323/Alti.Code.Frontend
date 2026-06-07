@@ -24,6 +24,7 @@ import { databaseWorkerProcessor } from '../databaseAgent/database.worker.js';
 import { architectureWorkerProcessor } from '../architectureAgent/architecture.worker.js';
 import { performanceWorkerProcessor } from '../performanceAgent/performance.worker.js';
 import { vulnerabilityHarnessService } from '../security/vulnerabilityHarness.service.js';
+import { openCodeReviewService } from '../codeReviewAgent/openCodeReview.service.js';
 
 // Live Mappings
 const guardianAgent = { 
@@ -41,6 +42,11 @@ const codeReviewAgent = { review: (args) => codeReviewWorkerProcessor({ data: ar
 const databaseAgent = { optimize: (args) => databaseWorkerProcessor({ data: args }) };
 const architectureAgent = { map: (args) => architectureWorkerProcessor({ data: args }) };
 const performanceAgent = { analyze: (args) => performanceWorkerProcessor({ data: args }) };
+const openCodeReviewAgent = {
+    reviewChanges: (args) => openCodeReviewService.reviewChanges(args),
+    reviewRange: (args) => openCodeReviewService.reviewRange(args?.from, args?.to),
+    reviewCommit: (args) => openCodeReviewService.reviewCommit(args?.commitHash)
+};
 
 // Fallback Stubs for remaining secondary agents
 const surferAgent = {};
@@ -430,6 +436,7 @@ class GraphOrchestrator {
                 compliance: complianceAgent,
                 economist: economistAgent,
                 codereview: codeReviewAgent,
+                openCodeReview: openCodeReviewAgent,
                 architecture: architectureAgent,
                 performance: performanceAgent,
                 e2e: e2eTestAgent,
