@@ -7,18 +7,26 @@ terraform {
   }
 }
 
+# Provider points to the physically disconnected Azure Stack Hub appliance URL, not public Azure.
 provider "azurerm" {
   features {}
+  environment = "custom"
+  metadata_host = "management.${var.stack_hub_domain}"
 }
 
 variable "location" {
-  description = "The Azure region to deploy the Alti Code Studio Data Plane."
+  description = "The physical location of the Azure Stack Hub appliance (e.g., bunker-alpha)."
   type        = string
-  default     = "East US"
+  default     = "local"
 }
 
 variable "customer_name" {
   description = "The name of the Enterprise customer."
+  type        = string
+}
+
+variable "stack_hub_domain" {
+  description = "The domain name assigned to the local Azure Stack Hub infrastructure."
   type        = string
 }
 
@@ -30,39 +38,13 @@ resource "azurerm_resource_group" "rg" {
 }
 
 # ==========================================
-# God-Tier Hardware Cryptography (Managed HSM)
+# Disconnected Air-Gapped VNet
 # ==========================================
-resource "azurerm_key_vault_managed_hardware_security_module" "mhsm" {
-  name                       = "altimhsm${var.customer_name}"
-  resource_group_name        = azurerm_resource_group.rg.name
-  location                   = azurerm_resource_group.rg.location
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  sku_name                   = "Standard_B1"
-  purge_protection_enabled   = true
-  soft_delete_retention_days = 90
-  
-  admin_object_ids = [data.azurerm_client_config.current.object_id]
-}
-
-# ==========================================
-# VNet & Networking (DDoS Standard)
-# ==========================================
-resource "azurerm_network_ddos_protection_plan" "ddos" {
-  name                = "alti-ddos-protection"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
 resource "azurerm_virtual_network" "vnet" {
-  name                = "alti-vnet-${var.customer_name}"
+  name                = "alti-disconnected-vnet-${var.customer_name}"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  
-  ddos_protection_plan {
-    id     = azurerm_network_ddos_protection_plan.ddos.id
-    enable = true
-  }
 }
 
 resource "azurerm_subnet" "aks_subnet" {
@@ -70,53 +52,46 @@ resource "azurerm_subnet" "aks_subnet" {
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
-  private_endpoint_network_policies_enabled = true
-}
-
-resource "azurerm_subnet" "pe_subnet" {
-  name                 = "private-endpoint-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.2.0/24"]
 }
 
 # ==========================================
-# Dedicated Host (Physical Hardware Isolation)
+# Disconnected Hardware Cryptography
 # ==========================================
-resource "azurerm_dedicated_host_group" "dhg" {
-  name                = "alti-host-group"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  platform_fault_domain_count = 1
-}
-
-resource "azurerm_dedicated_host" "dh" {
-  name                    = "alti-physical-host"
-  location                = azurerm_resource_group.rg.location
-  dedicated_host_group_id = azurerm_dedicated_host_group.dhg.id
-  sku_name                = "DCsv3-Type1"
+# In Azure Stack Hub, Key Vault runs locally on the disconnected hardware appliance.
+resource "azurerm_key_vault" "local_kv" {
+  name                        = "altikv${var.customer_name}"
+  location                    = azurerm_resource_group.rg.location
+  resource_group_name         = azurerm_resource_group.rg.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = "standard"
+  purge_protection_enabled    = true
 }
 
 # ==========================================
-# Confidential Computing AKS (Intel SGX Memory Encryption)
+# Azure Arc for Kubernetes (Control Plane Projection)
 # ==========================================
-resource "azurerm_kubernetes_cluster" "aks" {
+# This projects the management of the disconnected cluster to Liberty Center One over a secure private link,
+# without exposing the data plane workloads.
+resource "azurerm_kubernetes_cluster_extension" "arc" {
+  name           = "azure-arc"
+  cluster_id     = azurerm_kubernetes_cluster.aks_stack.id
+  extension_type = "microsoft.azurearc.data"
+}
+
+# ==========================================
+# AKS on Azure Stack Hub (Disconnected Data Plane)
+# ==========================================
+resource "azurerm_kubernetes_cluster" "aks_stack" {
   name                = "alti-data-plane-${var.customer_name}"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   dns_prefix          = "alti-${var.customer_name}"
 
-  # God-Tier: Intel SGX hardware memory encryption VMs
   default_node_pool {
-    name           = "confpool"
+    name           = "default"
     node_count     = 3
-    vm_size        = "Standard_DC4s_v3" # Intel SGX enabled
+    vm_size        = "Standard_NC6s_v3" # Assumes GPU capacity exists on the local appliance
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
-    host_group_id  = azurerm_dedicated_host_group.dhg.id
-  }
-
-  confidential_computing {
-    sgx_quote_helper_enabled = true
   }
 
   identity { type = "SystemAssigned" }
@@ -128,52 +103,19 @@ resource "azurerm_kubernetes_cluster" "aks" {
 }
 
 # ==========================================
-# Active Threat Hunting & SIEM
+# Azure ExpressRoute Direct (Physical Fiber Bypass)
 # ==========================================
-resource "azurerm_security_center_subscription_pricing" "defender_containers" {
-  tier          = "Standard"
-  resource_type = "Containers"
-}
+# If the bunker needs to occasionally sync weights with Public Azure OpenAI, it bypasses the internet completely.
+resource "azurerm_express_route_circuit" "erc" {
+  name                  = "alti-expressroute-direct"
+  resource_group_name   = azurerm_resource_group.rg.name
+  location              = azurerm_resource_group.rg.location
+  service_provider_name = "Equinix"
+  peering_location      = "Silicon Valley"
+  bandwidth_in_mbps     = 10000
 
-resource "azurerm_log_analytics_workspace" "law" {
-  name                = "alti-sentinel-law-${var.customer_name}"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  sku                 = "PerGB2018"
-}
-
-resource "azurerm_sentinel_log_analytics_workspace_onboarding" "sentinel" {
-  workspace_id = azurerm_log_analytics_workspace.law.id
-}
-
-# ==========================================
-# Azure OpenAI Cognitive Service & Private Link
-# ==========================================
-resource "azurerm_cognitive_account" "openai" {
-  name                          = "alti-openai-${var.customer_name}"
-  location                      = azurerm_resource_group.rg.location
-  resource_group_name           = azurerm_resource_group.rg.name
-  kind                          = "OpenAI"
-  sku_name                      = "S0"
-  public_network_access_enabled = false
-}
-
-resource "azurerm_private_endpoint" "openai_pe" {
-  name                = "openai-private-endpoint"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  subnet_id           = azurerm_subnet.pe_subnet.id
-
-  private_service_connection {
-    name                           = "openai-privatelink"
-    private_connection_resource_id = azurerm_cognitive_account.openai.id
-    subresource_names              = ["account"]
-    is_manual_connection           = false
+  sku {
+    tier   = "Premium"
+    family = "MeteredData"
   }
-}
-
-resource "azurerm_role_assignment" "aks_to_openai" {
-  scope                = azurerm_cognitive_account.openai.id
-  role_definition_name = "Cognitive Services OpenAI User"
-  principal_id         = azurerm_kubernetes_cluster.aks.kubelet_identity[0].object_id
 }
