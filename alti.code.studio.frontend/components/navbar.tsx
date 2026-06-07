@@ -1,5 +1,5 @@
 "use client";
-import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, Send } from "lucide-react";
+import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, SendHorizontal } from "lucide-react";
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -45,7 +45,7 @@ function Navbar() {
     { name: "Capabilities Bento Grid", icon: Grid },
     { name: "Enterprise Infrastructure", icon: Server },
     { name: "Pricing", icon: CreditCard },
-    { name: "Contact Us", icon: Send }
+    { name: "Contact Us", icon: SendHorizontal }
   ];
 
   useEffect(() => {
