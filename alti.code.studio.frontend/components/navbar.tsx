@@ -30,35 +30,7 @@ function Navbar() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const links = [
-    { href: "/", label: "Home", type: "route" },
-    { href: "#howItsWork", label: "Product", type: "anchor" },
-    { href: "#security", label: "Features", type: "anchor" },
-    { href: "/mission-control", label: "Mission Control", type: "route" },
-    { href: "#", label: "Contact", type: "action" },
-  ];
 
-  // Handle drawer close when clicking on links
-  const handleLinkClick = (item: any) => {
-    if (item.label === "Contact" || item.type === "action") {
-      dispatch(setContactModel(true));
-    } else if (item.type === "anchor") {
-      // Handle anchor links with offset
-      const element = document.querySelector(item.href);
-
-      if (element) {
-        const offsetTop =
-          element.getBoundingClientRect().top + window.pageYOffset - 80;
-
-        window.scrollTo({
-          top: offsetTop,
-          behavior: "smooth",
-        });
-      }
-    }
-
-    setIsDrawerOpen(false);
-  };
 
   // Handle button clicks in drawer
   const handleAuthClick = (path: any) => {
@@ -206,36 +178,7 @@ function Navbar() {
               />
             )}
 
-            {/* Desktop Navigation Links (Centered) */}
-            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <ul className="flex items-center gap-8 xl:gap-12">
-                {links.map((item, index) => (
-                  <li key={index}>
-                    {item.type === "anchor" ? (
-                      <button
-                        className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleLinkClick(item);
-                        }}
-                      >
-                        {item.label}
-                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
-                      </button>
-                    ) : (
-                      <Link
-                        className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
-                        href={item.href}
-                        onClick={() => handleLinkClick(item)}
-                      >
-                        {item.label}
-                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+
 
             {/* ✅ Auth Section Added */}
             <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
