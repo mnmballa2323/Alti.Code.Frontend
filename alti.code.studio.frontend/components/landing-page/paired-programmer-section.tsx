@@ -20,17 +20,17 @@ export default function PairedProgrammerSection() {
           <FeatureCard 
             icon={<TerminalSquare className="w-8 h-8 text-black" />}
             title="Command-Driven"
-            description="Provide the vision. The AI parses your intent and translates it into production-ready code instantly."
+            description="Provide the vision and intent. The AI Swarm instantly translates your commands into production-ready code."
           />
           <FeatureCard 
             icon={<UserCircle className="w-8 h-8 text-black" />}
             title="Human in Control"
-            description="You make the executive decisions. The swarm handles the development, debugging, and testing."
+            description="You make the executive decisions. The AI Swarm handles all the development, debugging, and testing."
           />
           <FeatureCard 
             icon={<Code2 className="w-8 h-8 text-black" />}
             title="Native Integration"
-            description="It reads your codebase, understands your unique conventions, and writes code exactly like you do."
+            description="It reads your entire codebase, understands your unique conventions, and writes code exactly the way you do."
           />
         </div>
       </div>
@@ -47,7 +47,7 @@ function FeatureCard({ icon, title, description }: { icon: React.ReactNode, titl
       <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
         {title}
       </h3>
-      <p className="text-gray-500 leading-relaxed font-medium">
+      <p className="text-gray-500 leading-relaxed font-medium text-balance">
         {description}
       </p>
     </div>
