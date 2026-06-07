@@ -42,6 +42,9 @@ function PreFooter() {
                   Secure local swarms with cloud orchestration. Engineered for
                   absolute speed and precision.
                 </p>
+                <p className="text-xs text-neutral-500 mt-4 text-center lg:text-left">
+                  © {new Date().getFullYear()} Inso Code Technologies, Inc. All rights reserved.
+                </p>
               </div>
             </div>
           </div>
@@ -138,48 +141,7 @@ function PreFooter() {
           </div>
         </div>
 
-        {/* Bottom copyright and social media bar */}
-        <div className="border-t border-neutral-900 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <span>
-              © {new Date().getFullYear()} Inso Code Technologies, Inc. All rights reserved.
-            </span>
-          </div>
-          <div className="flex gap-4 text-lg">
-            <a
-              className="hover:text-white transition-colors"
-              href="https://github.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Icon icon="ri:github-fill" />
-            </a>
-            <a
-              className="hover:text-white transition-colors"
-              href="https://x.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Icon icon="ri:twitter-x-fill" />
-            </a>
-            <a
-              className="hover:text-white transition-colors"
-              href="https://discord.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Icon icon="ri:discord-fill" />
-            </a>
-            <a
-              className="hover:text-white transition-colors"
-              href="https://linkedin.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Icon icon="ri:linkedin-box-fill" />
-            </a>
-          </div>
-        </div>
+
       </div>
 
       {/* Contact Modal */}
