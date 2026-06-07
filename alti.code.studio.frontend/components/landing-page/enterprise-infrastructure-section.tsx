@@ -20,7 +20,7 @@ export default function EnterpriseInfrastructureSection() {
           
           {/* Card 1: Multi Tenant Private Cloud */}
           <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-black text-white">
+            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
               <Cloud className="w-6 h-6" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
@@ -33,7 +33,7 @@ export default function EnterpriseInfrastructureSection() {
 
           {/* Card 2: Single Tenant Private Cloud */}
           <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-black text-white">
+            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
               <Lock className="w-6 h-6" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
@@ -46,7 +46,7 @@ export default function EnterpriseInfrastructureSection() {
 
           {/* Card 3: Self Hosted VPC */}
           <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-black text-white">
+            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
               <Server className="w-6 h-6" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
