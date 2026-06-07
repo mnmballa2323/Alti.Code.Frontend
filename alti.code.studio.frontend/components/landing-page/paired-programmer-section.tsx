@@ -8,7 +8,7 @@ export default function PairedProgrammerSection() {
         
         {/* Apple-style Headline */}
         <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white mb-6">
-          Your AI pair programmer.
+          Your AI pair programmer!
         </h2>
         
         <p className="text-xl md:text-2xl text-gray-400 w-full font-medium tracking-tight mb-16 leading-relaxed">
