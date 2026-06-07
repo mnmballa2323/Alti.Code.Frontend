@@ -85,12 +85,12 @@ export default function AgentForgeSection() {
 
   return (
     <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         
         {/* Left Side: Copy */}
-        <div className="lg:col-span-5 flex flex-col gap-8">
+        <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-6">
-            <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black">
+            <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black lg:whitespace-nowrap">
               Autonomous Agent Forge. <br />
               Self Expanding Swarm.
             </h3>
@@ -138,7 +138,7 @@ export default function AgentForgeSection() {
         </div>
 
         {/* Right Side: Interactive Panel */}
-        <div className="lg:col-span-7 w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4">
           <div className="w-full bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 md:p-8 flex flex-col gap-6 text-white min-h-[500px]">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
