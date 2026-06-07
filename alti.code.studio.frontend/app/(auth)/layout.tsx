@@ -16,7 +16,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
          <div className="absolute inset-0 z-0">
            <img 
              src={bgImage} 
-             alt="Alti Code Studio Auth Background" 
+             alt="Inso Code Auth Background" 
              className="absolute inset-0 w-full h-full object-cover" 
            />
          </div>
@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
          {/* Logo */}
          <div className="absolute top-8 left-12 z-30 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
            <Link href="/">
-             <img src="/logo-white.png" alt="Alti Logo" className="h-10 w-auto" />
+             <img src="/logo-white.png" alt="Inso Logo" className="h-10 w-auto" />
            </Link>
          </div>
          
@@ -36,7 +36,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
              Build the future.
            </h2>
            <p className="text-gray-300 text-lg xl:text-xl font-medium">
-             Join the alti code studio platform and accelerate your engineering team with autonomous AI agents.
+             Join the Inso Code platform and accelerate your engineering team with autonomous AI agents.
            </p>
          </div>
       </div>
