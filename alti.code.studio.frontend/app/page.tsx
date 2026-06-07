@@ -5,6 +5,7 @@ import PreFooter from "@/components/landing-page/pre-footer";
 
 import HeroSwarm from "@/components/landing-page/hero-swarm";
 import PairedProgrammerSection from "@/components/landing-page/paired-programmer-section";
+import EnterpriseInfrastructureSection from "@/components/landing-page/enterprise-infrastructure-section";
 import TriCloudSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
@@ -38,6 +39,7 @@ export default function LandingPage() {
         <EnterpriseConnectorsSection />
         <AppConnectorsSection />
         <DeterministicControlSection />
+        <EnterpriseInfrastructureSection />
       </main>
 
       <PreFooter />

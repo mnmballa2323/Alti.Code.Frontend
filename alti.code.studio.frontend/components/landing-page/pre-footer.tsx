@@ -30,7 +30,7 @@ function PreFooter() {
               />
               <div className="flex flex-col gap-3 lg:gap-5">
                 <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-white">
-                  10x faster software development 🚀
+                  Your AI Pair Programmer.
                 </p>
               </div>
             </div>
