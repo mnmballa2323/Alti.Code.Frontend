@@ -13,6 +13,11 @@ interface Step {
 export default function AgentForgeSection() {
   const [isForging, setIsForging] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
+  const logEndRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [logs]);
   const [steps, setSteps] = useState<Step[]>([
     { id: 1, label: "Extracting Context & API Specs", status: "idle", detail: "Parsing OpenAPI specs and DB models..." },
     { id: 2, label: "Synthesizing Agent Prompt & Tools", status: "idle", detail: "Generating targeted steering guidelines..." },
@@ -128,10 +133,10 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-[400px] md:h-[300px]">
               
               {/* Progress Steps */}
-              <div className="md:col-span-6 flex flex-col gap-5 justify-center">
+              <div className="md:col-span-6 flex flex-col gap-5 justify-center h-full">
                 {steps.map(step => (
                   <div key={step.id} className="flex gap-4">
                     <div className="flex flex-col items-center">
@@ -173,7 +178,7 @@ export default function AgentForgeSection() {
               </div>
 
               {/* Console Output */}
-              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[10px] text-zinc-400 select-none overflow-hidden h-[280px] md:h-full relative">
+              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[10px] text-zinc-400 select-none overflow-hidden h-full relative">
                 <div className="absolute top-2 right-3 flex items-center gap-1.5 bg-black/60 px-2 py-0.5 rounded border border-zinc-800 text-[8px] text-zinc-500 font-bold uppercase tracking-wider">
                   <Sparkles className="w-2.5 h-2.5 text-zinc-500" />
                   Logs
@@ -193,6 +198,7 @@ export default function AgentForgeSection() {
                       {log}
                     </div>
                   ))}
+                  <div ref={logEndRef} />
                 </div>
               </div>
             </div>
