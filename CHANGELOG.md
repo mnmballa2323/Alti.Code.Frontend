@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.157] - 2026-06-07 — Database Connectors Copy Polish
+### Changed
+- **Database Connectors**:
+  - Removed "under guardrails" from the section description to shorten and streamline the text.
+
 ## [39.37.156] - 2026-06-07 — Pricing Sub-text Wrap Formatting
 ### Changed
 - **Pricing**:

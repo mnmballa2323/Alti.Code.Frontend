@@ -161,7 +161,7 @@ export default function DatabaseConnectorsSection() {
             Securely connect your agents to SQL, NoSQL, and vector databases.{" "}
             <br className="hidden md:block" />
             Inspect schemas, generate optimized queries, and manage migrations
-            safely under guardrails.
+            safely.
           </p>
         </div>
 
