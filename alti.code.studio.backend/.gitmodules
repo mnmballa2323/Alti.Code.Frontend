@@ -16,3 +16,6 @@
 [submodule "submodules/ruflo"]
 	path = submodules/ruflo
 	url = https://github.com/ruvnet/ruflo
+[submodule "submodules/defending-code-reference-harness"]
+	path = submodules/defending-code-reference-harness
+	url = https://github.com/anthropics/defending-code-reference-harness.git
