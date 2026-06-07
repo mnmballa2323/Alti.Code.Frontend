@@ -7,7 +7,8 @@ const plans = [
   {
     name: "Multi-Tenant Private Cloud",
     price: "250",
-    description: "For individual developers who want zero-configuration, production-grade agent power.",
+    description:
+      "For individual developers who want zero-configuration, production-grade agent power.",
     icon: <Cloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
     features: [
       "Hosted on Inso's secure multi-tenant cloud",
@@ -22,7 +23,8 @@ const plans = [
   {
     name: "Team Plan",
     price: "300",
-    description: "For engineering teams collaborating on complex swarms and shared workflows.",
+    description:
+      "For engineering teams collaborating on complex swarms and shared workflows.",
     icon: <Zap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
     features: [
       "Hosted on Inso's secure multi-tenant cloud",
@@ -38,7 +40,8 @@ const plans = [
   {
     name: "Enterprise Plan",
     price: "500",
-    description: "For enterprises requiring complete data sovereignty and custom cloud environments.",
+    description:
+      "For enterprises requiring complete data sovereignty and custom cloud environments.",
     icon: <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
     features: [
       "Custom deployment: Single-tenant private cloud",
@@ -55,9 +58,11 @@ const plans = [
 
 export default function PricingSection() {
   return (
-    <section className="w-full py-24 bg-white dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300" id="pricing">
+    <section
+      className="w-full py-24 bg-white dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
+      id="pricing"
+    >
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
-        
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">
           <div className="px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-full tracking-wider uppercase">
@@ -67,7 +72,8 @@ export default function PricingSection() {
             Predictable Pricing.
           </h2>
           <p className="text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-            Deploy autonomous agent swarms in our secure multi-tenant cloud or your own enterprise tenant. No hidden fees.
+            Deploy autonomous agent swarms in our secure multi-tenant cloud or
+            your own enterprise tenant. No hidden fees.
           </p>
         </div>
 
@@ -101,9 +107,13 @@ export default function PricingSection() {
 
                 {/* Price Display */}
                 <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl md:text-5xl font-black text-black dark:text-white">${plan.price}</span>
+                  <span className="text-4xl md:text-5xl font-black text-black dark:text-white">
+                    ${plan.price}
+                  </span>
                   <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                    {plan.name === "Multi-Tenant Private Cloud" ? "/ month" : "/ user / month"}
+                    {plan.name === "Multi-Tenant Private Cloud"
+                      ? "/ month"
+                      : "/ user / month"}
                   </span>
                 </div>
 
@@ -142,7 +152,6 @@ export default function PricingSection() {
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );
