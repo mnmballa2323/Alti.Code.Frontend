@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.154] - 2026-06-07 — Pricing Sub-text Clarification
+### Changed
+- **Pricing**:
+  - Updated the sub-text below the "Predictable Pricing" header to explicitly clarify that fees listed are flat platform fees, and that token/inference costs are paid separately (either via custom keys or at-cost).
+
 ## [39.37.153] - 2026-06-07 — Auth Layout Left Panel Design Enhancements
 ### Changed
 - **Auth Layout**:

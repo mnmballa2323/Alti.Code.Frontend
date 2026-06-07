@@ -45,8 +45,8 @@ export default function PricingSection() {
             Predictable Pricing.
           </h2>
           <p className="text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-            Deploy autonomous agent swarms in our secure multi-tenant cloud or
-            your own enterprise tenant. No hidden fees.
+            Flat platform fee for swarm orchestration and secure sandboxing. 
+            Bring your own model API keys or pay token inference at cost.
           </p>
         </div>
 
