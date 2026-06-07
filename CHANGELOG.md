@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.129] - 2026-06-07 — Local Dev Startup Optimization & Landing Page Section Enhancements
+### Changed
+- **Local Dev Server Optimization**: Restricted custom dynamic agent loading in `DynamicAgentLoaderService` to a maximum of 50 agents when in development mode, preventing event loop blocking and accelerating backend startup from minutes to seconds.
+- **Landing Page Design Enhancements**:
+  - Toggled background color of the **165 App Connectors** section to white (`bg-white`) and the **50 Database Connectors** section to light gray (`bg-gray-50`) to create a clean alternating visual layout.
+  - Set the background color of the **Predictable Pricing** section to light gray (`bg-gray-50`) to make the white pricing cards pop visually.
+
 ## [39.37.128] - 2026-05-29 — Advanced Graphics, 3D Rendering & Game Engine Swarm Deployment
 ### Added
 - **Ten Highly Specialized Declarative Graphics, 3D Rendering & Game Engine Agents**:
