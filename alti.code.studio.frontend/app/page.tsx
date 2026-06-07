@@ -13,6 +13,7 @@ import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
 import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
+import PricingSection from "@/components/landing-page/pricing-section";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function LandingPage() {
         <AppConnectorsSection />
         <DeterministicControlSection />
         <EnterpriseInfrastructureSection />
+        <PricingSection />
       </main>
 
       <PreFooter />

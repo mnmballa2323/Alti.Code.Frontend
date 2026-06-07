@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fpga-cryptographic-entropy-seeder
+  namespace: security-ops
+  labels:
+    app: fpga-entropy-seeder
+spec:
+  selector:
+    matchLabels:
+      app: fpga-entropy-seeder
+  template:
+    metadata:
+      labels:
+        app: fpga-entropy-seeder
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      # This DaemonSet MUST run exclusively on AWS F1 FPGA nodes
+      nodeSelector:
+        node.kubernetes.io/instance-type: f1.2xlarge
+      hostNetwork: true
+      containers:
+      - name: entropy-seeder
+        image: python:3.10-slim
+        securityContext:
+          # Required to write directly to hardware character devices
+          privileged: true
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo "=================================================="
+          echo "  FPGA CRYPTOGRAPHIC ENTROPY SEEDER (TRNG)        "
+          echo "=================================================="
+          
+          # FPGAs are entirely deterministic. They require high-quality randomness
+          # from the host OS to securely generate Initialization Vectors (IVs) and Nonces.
+          # We will read 4096 bytes of true randomness from the Host Kernel's entropy pool
+          # and write it directly into the FPGA's Control/Status Register (CSR) or Mailbox.
+          
+          # The specific FPGA character device exposed by the AWS XDMA driver
+          FPGA_MAILBOX="/dev/xdma0_user"
+          
+          if [ ! -c "$FPGA_MAILBOX" ]; then
+            echo "[CRITICAL] FPGA device $FPGA_MAILBOX not found! Is the AWS XDMA driver loaded?"
+            echo "[CRITICAL] Cryptographic operations cannot proceed without safe entropy."
+            exit 1
+          fi
+          
+          echo "[*] Connected to FPGA hardware mailbox: $FPGA_MAILBOX"
+          echo "[*] Initiating continuous cryptographic entropy stream (4096 bytes/sec)..."
+          
+          # We use /dev/urandom which leverages the Linux CSPRNG (Cryptographically Secure Pseudo-Random Number Generator)
+          # In a highly specialized environment, this might be /dev/hwrng (Hardware RNG).
+          
+          while true; do
+            # Read exactly 4KB of random bytes
+            ENTROPY=$(head -c 4096 /dev/urandom)
+            
+            # Pipe it directly into the FPGA's PCIe memory map
+            # Note: We use 'dd' to precisely write without line breaks or interpretation
+            dd if=/dev/urandom of=$FPGA_MAILBOX bs=4096 count=1 status=none
+            
+            if [ $? -ne 0 ]; then
+                echo "[WARNING] Failed to push entropy to FPGA! PCIe link may be unstable."
+            else
+                # We print a heartbeat every 10 seconds to avoid log spam
+                if [ $(( $(date +%s) % 10 )) -eq 0 ]; then
+                    echo "[HEARTBEAT] Pushed 4KB of Cryptographic Entropy to FPGA Silicon."
+                fi
+            fi
+            
+            # Maintain a steady 1Hz refresh rate
+            sleep 1
+          done
+        volumeMounts:
+        - name: dev-dir
+          mountPath: /dev
+      volumes:
+      - name: dev-dir
+        # We must mount the Host's /dev directory to access /dev/xdma0_user and /dev/urandom natively
+        hostPath:
+          path: /dev
