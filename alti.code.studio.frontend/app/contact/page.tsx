@@ -36,7 +36,7 @@ export default function ContactPage() {
         {/* Background Gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
           {/* Left Column: Contact Form */}
           <div className="w-full">
             <div className="text-center mb-8">
@@ -111,8 +111,10 @@ export default function ContactPage() {
           </div>
 
           {/* Right Column: Interactive Agent Swarm Animation */}
-          <div className="flex items-center justify-center w-full">
-            <AgentSwarmAnimation />
+          <div className="flex items-start justify-end w-full md:pt-[80px]">
+            <div className="w-full max-w-[424px]">
+              <AgentSwarmAnimation />
+            </div>
           </div>
         </div>
       </main>
