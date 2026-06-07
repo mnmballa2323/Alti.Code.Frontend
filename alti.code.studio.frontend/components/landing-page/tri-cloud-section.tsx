@@ -1,5 +1,4 @@
-"use client";
-
+import React, { useState } from "react";
 import { Card, CardHeader, CardBody } from "@heroui/react";
 
 const providers = [
@@ -22,6 +21,7 @@ const providers = [
       { name: "GPT-5.5", inputPrice: "$5.00", outputPrice: "$30.00" },
       { name: "GPT-5.5 Pro", inputPrice: "$10.00", outputPrice: "$45.00" },
     ],
+    tasks: ["Compliance auditing", "Zero-trust verification", "Secure legal analysis"],
   },
   {
     name: "AWS Bedrock",
@@ -38,6 +38,7 @@ const providers = [
       { name: "Claude Sonnet 4.6", inputPrice: "$3.00", outputPrice: "$15.00" },
       { name: "Claude Opus 4.8", inputPrice: "$5.00", outputPrice: "$25.00" },
     ],
+    tasks: ["Iterative code execution", "Refactoring & structure", "Self-healing loops"],
   },
   {
     name: "GCP Vertex AI",
@@ -54,10 +55,13 @@ const providers = [
       { name: "Gemini 3.5 Flash", inputPrice: "$1.50", outputPrice: "$9.00" },
       { name: "Gemini 3.1 Pro", inputPrice: "$2.00", outputPrice: "$12.00" },
     ],
+    tasks: ["Workspace index tracing", "Deep RAG caching", "Multimodal asset design"],
   },
 ];
 
 export default function TriCloudSection() {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
   return (
     <section
       className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8"
@@ -83,8 +87,14 @@ export default function TriCloudSection() {
           {providers.map((provider, idx) => (
             <Card
               key={idx}
-              className="bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-3xl overflow-hidden"
+              className={`bg-gray-50 border transition-all duration-300 rounded-3xl overflow-hidden ${
+                hoveredIdx === idx
+                  ? "border-black scale-[1.02] shadow-xl"
+                  : "border-gray-100 shadow-sm"
+              }`}
               shadow="none"
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
             >
               <CardHeader className="flex flex-col items-start gap-6 p-10">
                 <div className="p-4 rounded-2xl bg-white border border-gray-100">
@@ -99,6 +109,22 @@ export default function TriCloudSection() {
                   </p>
                 </div>
               </CardHeader>
+
+              {/* Task Badges Panel */}
+              <div className="px-10 pb-6 flex flex-wrap gap-1.5">
+                {provider.tasks.map((task, tIdx) => (
+                  <span
+                    key={tIdx}
+                    className={`text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full border tracking-wider transition-colors ${
+                      hoveredIdx === idx
+                        ? "bg-black text-white border-black"
+                        : "bg-white text-gray-400 border-gray-200"
+                    }`}
+                  >
+                    {task}
+                  </span>
+                ))}
+              </div>
 
               <div className="w-full h-px bg-gray-100" />
 
