@@ -80,7 +80,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open the Disk Image</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Locate <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> in your Downloads folder and open it.
+                    Locate the downloaded <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> file in your system <strong>Downloads folder</strong> and double-click to mount the installer.
                   </p>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Drag to Applications</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Drag the **Inso Code** icon into your **Applications** folder in the window that appears.
+                    Drag the <strong>Inso Code application icon</strong> directly into the <strong>Applications shortcut folder</strong> inside the installer window.
                   </p>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open & Trust App</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Double-click Inso Code from your Applications folder. If prompted with a security warning, right-click the app and choose "Open".
+                    Launch <strong>Inso Code</strong> from your Applications directory, and select <strong>Open</strong> if macOS prompts you with a developer verification warning.
                   </p>
                 </div>
               </div>
