@@ -25,10 +25,10 @@ export default function AgentForgeSection() {
   }, [logs]);
 
   const [steps, setSteps] = useState<Step[]>([
-    { id: 1, label: "Extracting Context & API Specs", status: "idle", detail: "Parsing OpenAPI specs and DB models..." },
-    { id: 2, label: "Synthesizing Agent Prompt & Tools", status: "idle", detail: "Generating targeted steering guidelines..." },
-    { id: 3, label: "Executing Sandboxed Test Suite", status: "idle", detail: "Verifying 80%+ test coverage in virtual environment..." },
-    { id: 4, label: "Deploying to Gossip Swarm Mesh", status: "idle", detail: "Broadcasting agent descriptor to all nodes..." },
+    { id: 1, label: "Extract Context & Specs", status: "idle", detail: "" },
+    { id: 2, label: "Synthesize Agent Tools", status: "idle", detail: "" },
+    { id: 3, label: "Execute Sandbox Tests", status: "idle", detail: "" },
+    { id: 4, label: "Deploy to Swarm Mesh", status: "idle", detail: "" },
   ]);
 
   const runForgeSimulation = () => {
@@ -152,10 +152,10 @@ export default function AgentForgeSection() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[245px]">
               
               {/* Progress Steps */}
-              <div className="md:col-span-6 flex flex-col gap-4 justify-center h-full">
+              <div className="md:col-span-6 flex flex-col gap-3 justify-center h-full">
                 {steps.map(step => (
-                  <div key={step.id} className="flex gap-4">
-                    <div className="flex flex-col items-center">
+                  <div key={step.id} className="flex gap-4 items-center relative">
+                    <div className="flex flex-col items-center shrink-0">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-bold transition-all duration-300 ${
                           step.status === "success"
@@ -175,18 +175,15 @@ export default function AgentForgeSection() {
                       </div>
                       {step.id < 4 && (
                         <div
-                          className={`w-0.5 h-8 my-1 transition-colors duration-500 ${
+                          className={`w-0.5 h-6 my-0.5 transition-colors duration-500 ${
                             step.status === "success" ? "bg-emerald-500/50" : "bg-zinc-800"
                           }`}
                         />
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pb-3">
                       <p className={`text-xs font-bold leading-none ${step.status === "running" ? "text-white" : step.status === "success" ? "text-zinc-300" : "text-zinc-500"}`}>
                         {step.label}
-                      </p>
-                      <p className="text-[10px] text-zinc-500 mt-1.5 leading-normal font-medium max-w-[200px]">
-                        {step.detail}
                       </p>
                     </div>
                   </div>
