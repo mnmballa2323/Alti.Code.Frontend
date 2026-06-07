@@ -75,9 +75,7 @@ export default function PricingSection() {
                       ${plan.price}
                     </span>
                     <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                      {plan.name === "Individual"
-                        ? "/ month"
-                        : "/ user / month"}
+                      / month
                     </span>
                   </div>
                 </div>
