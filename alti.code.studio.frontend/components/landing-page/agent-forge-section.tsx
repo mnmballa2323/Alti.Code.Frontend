@@ -111,7 +111,7 @@ export default function AgentForgeSection() {
               Need a specialized agent for a database migration, custom third party integration, 
               or proprietary API? Specify your requirements and allow the forge to autonomously 
               construct tools, execute test suites, apply strict execution guardrails, and deploy 
-              the new expert to your active swarm mesh in less than three seconds.
+              the new expert to your active swarm mesh in less than three seconds with zero downtime or lag.
             </p>
           </div>
         </div>
