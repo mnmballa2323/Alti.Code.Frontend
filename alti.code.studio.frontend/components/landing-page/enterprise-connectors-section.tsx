@@ -87,11 +87,11 @@ export default function EnterpriseConnectorsSection() {
           />
 
           {/* Central Hub */}
-          <div className="absolute z-30 flex items-center justify-center w-24 h-24 rounded-full bg-black shadow-[0_0_60px_rgba(0,0,0,0.2)] hover:scale-105 transition-transform duration-500 cursor-pointer border border-gray-800">
+          <div className="absolute z-30 flex items-center justify-center w-24 h-24 rounded-full bg-white shadow-[0_0_60px_rgba(255,255,255,0.15)] hover:scale-105 transition-transform duration-500 cursor-pointer border border-gray-200">
             <img
               alt="Inso Code"
               className="w-12 h-12 object-contain"
-              src="/logo-white.png"
+              src="/alti-logo.png"
             />
           </div>
 
