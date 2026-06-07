@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fpga-spot-termination-handler
+  namespace: security
+  labels:
+    app: fpga-termination-handler
+spec:
+  selector:
+    matchLabels:
+      app: fpga-termination-handler
+  template:
+    metadata:
+      labels:
+        app: fpga-termination-handler
+    spec:
+      # This DaemonSet MUST only run on nodes that actually possess FPGA hardware
+      nodeSelector:
+        hardware: fpga
+      # Tolerate the FPGA taints so it can be scheduled
+      tolerations:
+      - key: "hardware"
+        operator: "Equal"
+        value: "fpga"
+        effect: "NoSchedule"
+      # Requires hostNetwork to query the AWS EC2 Metadata service
+      hostNetwork: true
+      serviceAccountName: fpga-node-drainer
+      containers:
+      - name: termination-handler
+        # We can use a standard python/bash image equipped with kubectl and the AWS CLI
+        image: amazon/aws-cli:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true # Required to interact with the FPGA physical device
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo "Starting FPGA Spot Interruption Handler..."
+          
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          mv kubectl /usr/local/bin/
+          
+          TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null)
+          NODE_NAME=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/local-hostname)
+          
+          while true; do
+            # Poll the AWS EC2 Spot Instance Interruption Notice endpoint
+            HTTP_CODE=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" -s -w "%{http_code}" -o /dev/null http://169.254.169.254/latest/meta-data/spot/instance-action)
+            
+            if [ "$HTTP_CODE" -eq 200 ]; then
+              echo "[CRITICAL] Spot Instance Interruption Notice Received!"
+              echo "AWS is reclaiming this FPGA node in exactly 2 minutes."
+              
+              # 1. Cordon the node immediately so no new Crypto Pods are scheduled here
+              echo "Cordoning node $NODE_NAME..."
+              kubectl cordon $NODE_NAME
+              
+              # 2. Trigger Istio to stop routing traffic to pods on this node
+              # By deleting the local pods instantly, Istio endpoints are removed from the Envoy mesh
+              echo "Evicting local cryptographic workloads..."
+              kubectl get pods --all-namespaces --field-selector spec.nodeName=$NODE_NAME -l tier=hardware-fpga -o name | xargs -I {} kubectl delete {} --grace-period=10
+              
+              # 3. Safely un-map the physical FPGA hardware via the AWS SDK
+              # This ensures no DMA (Direct Memory Access) operations corrupt the host kernel during shutdown
+              echo "Unloading Amazon FPGA Image (AFI) from physical silicon..."
+              if [ -x "$(command -v fpga-clear-local-image)" ]; then
+                fpga-clear-local-image -S 0
+              fi
+              
+              echo "FPGA hardware safely secured. Awaiting physical AWS termination."
+              # Sleep forever until the node dies
+              sleep 3600
+            fi
+            
+            # Poll every 5 seconds
+            sleep 5
+          done
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fpga-node-drainer
+  namespace: security
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fpga-node-drainer-role
+rules:
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "patch"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "delete"]
+- apiGroups: ["apps"]
+  resources: ["daemonsets"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fpga-node-drainer-binding
+subjects:
+- kind: ServiceAccount
+  name: fpga-node-drainer
+  namespace: security
+roleRef:
+  kind: ClusterRole
+  name: fpga-node-drainer-role
+  apiGroup: rbac.authorization.k8s.io

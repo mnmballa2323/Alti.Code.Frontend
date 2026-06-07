@@ -44,10 +44,9 @@ export default function TriCloudSection() {
             No API Keys. No Rate Limits.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
-            Direct SDK connections to foundational models are blocked for security. 
-            Instead, Inso Code routes every prompt through our ultra-secure, 
-            zero-markup Tri-Cloud infrastructure. You get unlimited access to the absolute 
-            latest state-of-the-art models.
+            Direct SDK connections to foundational models are strictly blocked for enterprise security. 
+            Instead, Inso Code routes every prompt through our ultra-secure, zero-markup Tri-Cloud 
+            infrastructure. You get unlimited, high-performance access to the absolute latest state-of-the-art models for all your production projects.
           </p>
         </div>
 
