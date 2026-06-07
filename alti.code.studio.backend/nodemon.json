@@ -13,6 +13,7 @@
     ".git/**",
     "*.bak",
     "*.refactored.bak",
+    "src/app/modules/agents/custom/**",
     "generated/**",
     "data/**",
     "Alti.Code.Studio.backup/**"
