@@ -5,6 +5,28 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.135] - 2026-06-07 — Zero-Trust Ledger Spacing Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Removed the `text-justify` typography class from the copy text to use natural word spacing instead of forced justified alignment.
+
+## [39.37.134] - 2026-06-07 — Zero-Trust Ledger Translation Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Re-positioned the timeline card back to the right using `lg:translate-x-20` on desktop, keeping it bleeding off the screen for a stylish and premium look.
+
+## [39.37.133] - 2026-06-07 — Zero-Trust Ledger Copy & Shift Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Removed all hyphens/dashes from the left column copy text.
+  - Added `text-justify` typography class to the copy text to ensure it fills each line perfectly.
+
+## [39.37.132] - 2026-06-07 — Zero-Trust Ledger Position & Dimensions Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Decreased the height of the timeline card on desktop to `lg:h-[460px]` with a premium fade-out gradient overlay at the bottom of the timeline list to create a clean, elegant cropped look.
+  - Adjusted the card dimensions: widened the timeline card to `lg:w-[130%]` to bleed off the page to the right.
+
 ## [39.37.131] - 2026-06-07 — Landing Page Zero-Trust Ledger Section Polish
 ### Changed
 - **Zero-Trust Audit Trail & Cryptographic Ledger**:

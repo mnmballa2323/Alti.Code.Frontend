@@ -70,10 +70,10 @@ export default function ZeroTrustLedgerSection() {
               Cryptographic Ledger.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed font-medium">
-              Every operation initiated by Inso Code is sandbox-confined, 
+              Every operation initiated by Inso Code is sandbox confined, 
               monitored, and recorded in a local SQLite audit database. 
               Before any context leaves your workspace, local DLP rules automatically 
-              strip secrets, private keys, and passwords—so credentials never touch foundational model APIs.
+              strip secrets, private keys, and passwords so credentials never touch foundational model APIs.
             </p>
           </div>
         </div>
