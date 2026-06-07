@@ -48,62 +48,8 @@ function PreFooter() {
 
           {/* Navigation Links Section */}
           <div className="w-full lg:w-auto">
-            {/* Desktop/Tablet Grid Layout */}
-            <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
-              {/* Platform Column */}
-              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
-                <p className="text-white font-medium text-base">Platform</p>
-                <ul className="flex flex-col gap-2 lg:gap-3">
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/"
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/#section-12"
-                    >
-                      Pricing
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/faq"
-                    >
-                      FAQ
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/news"
-                    >
-                      Changelog
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Company Column */}
-              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
-                <p className="text-white font-medium text-base">Company</p>
-                <ul className="flex flex-col gap-2 lg:gap-3">
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/contact"
-                    >
-                      Contact Us
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
+            {/* Desktop/Tablet Layout */}
+            <div className="hidden sm:block max-w-2xl lg:max-w-none mx-auto lg:mx-0">
               {/* Office Column */}
               <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[200px]">
                 <p className="text-white font-medium text-base">Office</p>
@@ -117,54 +63,8 @@ function PreFooter() {
               </div>
             </div>
 
-            {/* Mobile Accordion-style Layout */}
+            {/* Mobile Layout */}
             <div className="sm:hidden flex flex-col gap-6">
-              <div className="flex flex-col gap-4">
-                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
-                  Platform
-                </p>
-                <div className="grid grid-cols-2 gap-3">
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/#section-12"
-                  >
-                    Pricing
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/faq"
-                  >
-                    FAQ
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/news"
-                  >
-                    Changelog
-                  </Link>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
-                  Company
-                </p>
-                <div className="grid grid-cols-2 gap-3">
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/contact"
-                  >
-                    Contact Us
-                  </Link>
-                </div>
-              </div>
-
               <div className="flex flex-col gap-4">
                 <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
                   Office
