@@ -50,9 +50,9 @@ function PreFooter() {
           <div className="w-full lg:w-auto">
             {/* Desktop/Tablet Grid Layout */}
             <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
-              {/* Company Column */}
+              {/* Platform Column */}
               <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
-                <p className="text-white font-medium text-base">Company</p>
+                <p className="text-white font-medium text-base">Platform</p>
                 <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
@@ -65,48 +65,17 @@ function PreFooter() {
                   <li>
                     <Link
                       className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="#howItsWork"
-                    >
-                      Product
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="#security"
-                    >
-                      Features
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="#pricing"
+                      href="/#section-12"
                     >
                       Pricing
                     </Link>
                   </li>
-                </ul>
-              </div>
-
-              {/* Platform Column */}
-              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
-                <p className="text-white font-medium text-base">Platform</p>
-                <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
                       className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/mission-control"
+                      href="/faq"
                     >
-                      Mission Control
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
-                      href="/marketplace"
-                    >
-                      Marketplace
+                      FAQ
                     </Link>
                   </li>
                   <li>
@@ -117,12 +86,19 @@ function PreFooter() {
                       Changelog
                     </Link>
                   </li>
+                </ul>
+              </div>
+
+              {/* Company Column */}
+              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
+                <p className="text-white font-medium text-base">Company</p>
+                <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
                       className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
                       href="/contact"
                     >
-                      Contact Sales
+                      Contact Us
                     </Link>
                   </li>
                 </ul>
@@ -145,7 +121,7 @@ function PreFooter() {
             <div className="sm:hidden flex flex-col gap-6">
               <div className="flex flex-col gap-4">
                 <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
-                  Company
+                  Platform
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <Link
@@ -156,41 +132,15 @@ function PreFooter() {
                   </Link>
                   <Link
                     className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="#howItsWork"
-                  >
-                    Product
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="#security"
-                  >
-                    Features
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="#pricing"
+                    href="/#section-12"
                   >
                     Pricing
                   </Link>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-4">
-                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
-                  Platform
-                </p>
-                <div className="grid grid-cols-2 gap-3">
                   <Link
                     className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/mission-control"
+                    href="/faq"
                   >
-                    Mission Control
-                  </Link>
-                  <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
-                    href="/marketplace"
-                  >
-                    Marketplace
+                    FAQ
                   </Link>
                   <Link
                     className="text-neutral-400 font-secondary font-normal text-sm"
@@ -198,11 +148,19 @@ function PreFooter() {
                   >
                     Changelog
                   </Link>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
+                  Company
+                </p>
+                <div className="grid grid-cols-2 gap-3">
                   <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm text-left"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
                     href="/contact"
                   >
-                    Contact Sales
+                    Contact Us
                   </Link>
                 </div>
               </div>
