@@ -67,7 +67,7 @@ export default function DownloadMacPage() {
 
           {/* Right Side: Instructions (col-span-5) */}
           <div className="md:col-span-5 flex flex-col justify-center">
-            <h2 className="text-xs font-bold text-gray-400 mb-6">
+            <h2 className="text-xs font-bold text-gray-400 mb-6 pl-10">
               How to install on macOS
             </h2>
 
