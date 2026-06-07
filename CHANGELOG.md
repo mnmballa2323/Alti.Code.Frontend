@@ -5,6 +5,21 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.152] - 2026-06-07 — Bento Grid Box Height Tuning
+### Changed
+- **Bento Grid**:
+  - Decreased the auto-row heights of all six boxes further to 150px/180px.
+  - Reduced top and bottom card paddings to 10px/14px (`py-2.5 xl:py-3.5`) to keep text and visuals vertically centered without overflowing.
+  - Adjusted Card 1's visual terminal padding to `p-2 xl:p-2.5` and Card 6's keyring visual height to `h-[100px] lg:h-[95px] xl:h-[115px]` to keep visuals proportioned and centered.
+
+## [39.37.151] - 2026-06-07 — Bento Grid Box Height & Card 6 Copy Polish
+### Changed
+- **Bento Grid**:
+  - Reduced the overall height of all six boxes in the bento grid from 190px/220px to 165px/195px.
+  - Decreased the vertical padding inside all cards from 20px/24px to 14px/16px to conserve vertical space.
+  - Appended "under any scenario." to Card 6's description to perfectly fill its last line of text.
+  - Scaled down the visual terminals and keyring components inside Cards 1 and 6 to fit the shorter grid cells.
+
 ## [39.37.150] - 2026-06-07 — Bento Grid Card 4 Copy Polish
 ### Changed
 - **Bento Grid**:

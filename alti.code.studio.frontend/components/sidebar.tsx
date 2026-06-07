@@ -1425,7 +1425,10 @@ export default function Sidebar() {
             <div className="flex items-center gap-2 dark:hidden">
               <Image
                 alt="Inso Logo Icon"
-                className={cn("w-auto object-contain", isTauri ? "h-[18px]" : "h-6")}
+                className={cn(
+                  "w-auto object-contain",
+                  isTauri ? "h-[18px]" : "h-6",
+                )}
                 height={24}
                 src="/alti-logo.png"
                 width={28}
@@ -1444,7 +1447,10 @@ export default function Sidebar() {
             <div className="hidden dark:flex items-center gap-2">
               <Image
                 alt="Inso Logo Icon"
-                className={cn("w-auto object-contain", isTauri ? "h-[18px]" : "h-6")}
+                className={cn(
+                  "w-auto object-contain",
+                  isTauri ? "h-[18px]" : "h-6",
+                )}
                 height={24}
                 src="/logo-white.png"
                 width={28}

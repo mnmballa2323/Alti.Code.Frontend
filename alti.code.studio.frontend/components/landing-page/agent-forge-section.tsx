@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Play, Sparkles, Terminal, Check, Loader2, Cpu, Code } from "lucide-react";
+import { Play, Sparkles, Check, Loader2 } from "lucide-react";
 
 interface Step {
   id: number;
@@ -38,7 +38,7 @@ export default function AgentForgeSection() {
 
     setIsForging(true);
     setLogs([]);
-    setSteps(prev => prev.map(s => ({ ...s, status: "idle" })));
+    setSteps((prev) => prev.map((s) => ({ ...s, status: "idle" })));
 
     let currentStep = 0;
     const logsList = [
@@ -52,30 +52,34 @@ export default function AgentForgeSection() {
       "Test 1-18 passed. 100% code coverage achieved.",
       "Generating unique cryptographic identifier...",
       "Broadcasting metadata to gossip mesh (active nodes: 50,000)...",
-      "Agent Forge Complete. Agent online."
+      "Agent Forge Complete. Agent online.",
     ];
 
     let logIndex = 0;
+
     logIntervalRef.current = setInterval(() => {
       if (logIndex < logsList.length) {
-        setLogs(prev => [...prev, logsList[logIndex]]);
+        setLogs((prev) => [...prev, logsList[logIndex]]);
         logIndex++;
       }
     }, 400);
 
     stepIntervalRef.current = setInterval(() => {
       if (currentStep < 4) {
-        setSteps(prev => prev.map((s, idx) => {
-          if (idx === currentStep) return { ...s, status: "running" };
-          if (idx < currentStep) return { ...s, status: "success" };
-          return s;
-        }));
+        setSteps((prev) =>
+          prev.map((s, idx) => {
+            if (idx === currentStep) return { ...s, status: "running" };
+            if (idx < currentStep) return { ...s, status: "success" };
+
+            return s;
+          }),
+        );
         currentStep++;
       } else {
         if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
         if (logIntervalRef.current) clearInterval(logIntervalRef.current);
-        setSteps(prev => prev.map(s => ({ ...s, status: "success" })));
-        
+        setSteps((prev) => prev.map((s) => ({ ...s, status: "success" })));
+
         restartTimeoutRef.current = setTimeout(() => {
           setIsForging(false);
           runForgeSimulation();
@@ -88,6 +92,7 @@ export default function AgentForgeSection() {
     const timer = setTimeout(() => {
       runForgeSimulation();
     }, 1000);
+
     return () => {
       clearTimeout(timer);
       if (logIntervalRef.current) clearInterval(logIntervalRef.current);
@@ -99,7 +104,6 @@ export default function AgentForgeSection() {
   return (
     <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-        
         {/* Left Side: Copy */}
         <div className="flex flex-col gap-8 lg:order-2 lg:-translate-x-12">
           <div className="flex flex-col gap-6">
@@ -108,10 +112,11 @@ export default function AgentForgeSection() {
               Self Expanding Swarm.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed font-medium">
-              Need a specialized agent for a database migration, custom third party integration, 
-              or proprietary API? Specify your requirements and allow the forge to autonomously 
-              construct tools, execute test suites, apply strict execution guardrails, and deploy 
-              the new expert to your active swarm mesh in less than three seconds.
+              Need a specialized agent for a database migration, custom third
+              party integration, or proprietary API? Specify your requirements
+              and allow the forge to autonomously construct tools, execute test
+              suites, apply strict execution guardrails, and deploy the new
+              expert to your active swarm mesh in less than three seconds.
             </p>
           </div>
         </div>
@@ -130,9 +135,9 @@ export default function AgentForgeSection() {
                 </span>
               </div>
               <button
+                className="flex items-center gap-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl hover:bg-zinc-200 transition-colors disabled:opacity-50"
                 disabled={isForging}
                 onClick={runForgeSimulation}
-                className="flex items-center gap-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl hover:bg-zinc-200 transition-colors disabled:opacity-50"
               >
                 {isForging ? (
                   <>
@@ -150,19 +155,21 @@ export default function AgentForgeSection() {
 
             {/* Content Layout */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[245px]">
-              
               {/* Progress Steps */}
               <div className="md:col-span-6 flex flex-col gap-3 justify-center h-full">
-                {steps.map(step => (
-                  <div key={step.id} className="flex gap-4 items-center relative">
+                {steps.map((step) => (
+                  <div
+                    key={step.id}
+                    className="flex gap-4 items-center relative"
+                  >
                     <div className="flex flex-col items-center shrink-0">
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-bold transition-all duration-300 ${
                           step.status === "success"
                             ? "bg-emerald-500 border-emerald-500 text-white"
                             : step.status === "running"
-                            ? "bg-white border-white text-black animate-pulse"
-                            : "bg-zinc-900 border-zinc-800 text-zinc-500"
+                              ? "bg-white border-white text-black animate-pulse"
+                              : "bg-zinc-900 border-zinc-800 text-zinc-500"
                         }`}
                       >
                         {step.status === "success" ? (
@@ -176,13 +183,17 @@ export default function AgentForgeSection() {
                       {step.id < 4 && (
                         <div
                           className={`w-0.5 h-6 my-0.5 transition-colors duration-500 ${
-                            step.status === "success" ? "bg-emerald-500/50" : "bg-zinc-800"
+                            step.status === "success"
+                              ? "bg-emerald-500/50"
+                              : "bg-zinc-800"
                           }`}
                         />
                       )}
                     </div>
                     <div className="flex-1 min-w-0 pb-3">
-                      <p className={`text-xs font-bold leading-none ${step.status === "running" ? "text-white" : step.status === "success" ? "text-zinc-300" : "text-zinc-500"}`}>
+                      <p
+                        className={`text-xs font-bold leading-none ${step.status === "running" ? "text-white" : step.status === "success" ? "text-zinc-300" : "text-zinc-500"}`}
+                      >
                         {step.label}
                       </p>
                     </div>
@@ -196,18 +207,27 @@ export default function AgentForgeSection() {
                   <Sparkles className="w-2.5 h-2.5 text-zinc-500" />
                   Logs
                 </div>
-                <div ref={logContainerRef} className="flex-1 overflow-y-auto space-y-1.5 pr-2 pt-2 scrollbar-thin">
+                <div
+                  ref={logContainerRef}
+                  className="flex-1 overflow-y-auto space-y-1.5 pr-2 pt-2 scrollbar-thin"
+                >
                   {logs.length === 0 && (
-                    <span className="text-zinc-600 block animate-pulse">Waiting to start forge...</span>
+                    <span className="text-zinc-600 block animate-pulse">
+                      Waiting to start forge...
+                    </span>
                   )}
                   {logs.map((log, index) => (
                     <div
                       key={index}
                       className={`leading-relaxed transition-all duration-300 ${
-                        index === logs.length - 1 ? "text-emerald-400 font-bold" : "text-zinc-400"
+                        index === logs.length - 1
+                          ? "text-emerald-400 font-bold"
+                          : "text-zinc-400"
                       }`}
                     >
-                      <span className="text-zinc-600 mr-1.5 select-none">&gt;</span>
+                      <span className="text-zinc-600 mr-1.5 select-none">
+                        &gt;
+                      </span>
                       {log}
                     </div>
                   ))}
@@ -216,7 +236,6 @@ export default function AgentForgeSection() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

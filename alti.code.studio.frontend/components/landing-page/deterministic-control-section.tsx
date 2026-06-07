@@ -20,8 +20,7 @@ export default function DeterministicControlSection() {
       name: "Security Sentinel",
       x: 200,
       y: 60,
-      description:
-        "Running static analysis and vulnerability scans...",
+      description: "Running static analysis and vulnerability scans...",
       iconPath: (
         <path
           d="M194 54 V49 A6 6 0 0 1 206 49 V54 M190 54 H210 V68 H190 Z"
@@ -36,8 +35,7 @@ export default function DeterministicControlSection() {
       name: "TDD Guide",
       x: 320,
       y: 148,
-      description:
-        "Writing unit tests and enforcing code coverage...",
+      description: "Writing unit tests and enforcing code coverage...",
       iconPath: (
         <path
           d="M312 148 L317 153 L327 143 M308 148 A12 12 0 1 1 332 148 A12 12 0 1 1 308 148"
@@ -52,8 +50,7 @@ export default function DeterministicControlSection() {
       name: "Code Reviewer",
       x: 280,
       y: 280,
-      description:
-        "Verifying style compliance and design patterns...",
+      description: "Verifying style compliance and design patterns...",
       iconPath: (
         <>
           <circle
@@ -80,8 +77,7 @@ export default function DeterministicControlSection() {
       name: "Database Expert",
       x: 120,
       y: 280,
-      description:
-        "Inspecting database schemas and migrations...",
+      description: "Inspecting database schemas and migrations...",
       iconPath: (
         <>
           <ellipse
@@ -113,8 +109,7 @@ export default function DeterministicControlSection() {
       name: "API Designer",
       x: 80,
       y: 148,
-      description:
-        "Validating API routes and response payloads...",
+      description: "Validating API routes and response payloads...",
       iconPath: (
         <>
           <path
@@ -281,11 +276,11 @@ export default function DeterministicControlSection() {
                 />
                 {/* Supreme Commander Logo Icon */}
                 <image
+                  height="32"
                   href="/alti-logo.png"
+                  width="32"
                   x="184"
                   y="164"
-                  width="32"
-                  height="32"
                 />
               </g>
             </svg>
