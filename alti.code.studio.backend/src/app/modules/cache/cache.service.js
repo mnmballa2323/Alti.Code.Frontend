@@ -18,6 +18,11 @@ class CacheService {
     async init() {
         if (this.isConnected) return;
 
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.isConnected = false;
+            return;
+        }
+
         try {
             this.client = createClient({
                 url: process.env.REDIS_URL || 'redis://localhost:6379',

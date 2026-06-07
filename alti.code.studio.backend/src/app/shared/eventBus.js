@@ -21,6 +21,13 @@ class AntigravityEventBus {
     async connect() {
         if (this.isConnected) return;
 
+        if (process.env.DISABLE_REDIS === 'true') {
+            console.warn('⚠️ Redis disabled via env. Switching to local Nervous System (Mock Mode).');
+            this.isMock = true;
+            this.isConnected = true;
+            return;
+        }
+
         try {
             const redisUrl = config.redis_url || 'redis://localhost:6379';
 
@@ -47,6 +54,12 @@ class AntigravityEventBus {
             this.isConnected = true;
         } catch (error) {
             console.warn('⚠️ Redis unreachable. Switching to local Nervous System (Mock Mode).');
+            try {
+                if (this.publisher) this.publisher.disconnect();
+            } catch (e) {}
+            try {
+                if (this.subscriber) this.subscriber.disconnect();
+            } catch (e) {}
             this.isMock = true;
             this.isConnected = true;
         }
