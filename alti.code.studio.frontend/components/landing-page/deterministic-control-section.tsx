@@ -114,7 +114,7 @@ export default function DeterministicControlSection() {
         </div>
 
         {/* Right Column (Animation Window) */}
-        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-zinc-950 rounded-2xl border border-zinc-800 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-slate-100 select-none">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-zinc-900 border border-zinc-800 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-slate-100 select-none rounded-2xl">
           {/* SVG Swarm Canvas */}
           <div className="flex-1 min-h-0 relative flex items-center justify-center py-2">
             <style
@@ -232,7 +232,7 @@ export default function DeterministicControlSection() {
           </div>
 
           {/* Interactive Agent Description Card */}
-          <div className="bg-zinc-900/40 border border-zinc-900 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
+          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 font-sans">
