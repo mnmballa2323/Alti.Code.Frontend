@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.139] - 2026-06-07 — Zero-Trust Ledger Offset Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Tweak timeline card layout to `lg:translate-x-8` to pull it slightly to the left, balancing the empty space and improving structural cohesion while keeping it bleeding off the screen.
+
 ## [39.37.138] - 2026-06-07 — Zero-Trust Ledger Copy Shortening
 ### Changed
 - **Zero-Trust Audit Trail & Cryptographic Ledger**:
