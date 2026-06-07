@@ -107,7 +107,7 @@ export default function AgentForgeSection() {
               Autonomous Agent Forge. <br />
               Self Expanding Swarm.
             </h3>
-            <p className="text-xl text-gray-500 leading-relaxed font-medium text-justify">
+            <p className="text-xl text-gray-500 leading-relaxed font-medium">
               Need a specialized agent for a database migration, custom third party integration, 
               or proprietary API? Specify your requirements and allow the forge to autonomously 
               construct tools, execute test suites, apply strict execution guardrails, and deploy 
