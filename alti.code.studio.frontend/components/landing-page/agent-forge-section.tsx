@@ -118,7 +118,7 @@ export default function AgentForgeSection() {
 
         {/* Right Side: Interactive Panel */}
         <div className="w-full flex flex-col gap-4 lg:order-1">
-          <div className="w-full max-w-[480px] mx-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[360px]">
+          <div className="w-full max-w-[420px] mx-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[340px]">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
               <div className="flex items-center gap-2.5">
@@ -149,7 +149,7 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[360px] md:h-[230px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[210px]">
               
               {/* Progress Steps */}
               <div className="md:col-span-6 flex flex-col gap-4 justify-center h-full">
