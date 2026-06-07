@@ -1,15 +1,13 @@
 "use client";
 
 import React from "react";
-import { User, Users, Building } from "lucide-react";
 
 const plans = [
   {
     name: "Individual",
     price: "250",
     description:
-      "For individual developers who want zero-configuration, production-grade agent power.",
-    icon: <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
+      "For developers who want zero-config, production-grade agent power.",
     cta: "Start Free Trial",
   },
   {
@@ -17,7 +15,6 @@ const plans = [
     price: "300",
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
-    icon: <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
     cta: "Upgrade Team",
   },
   {
@@ -25,9 +22,6 @@ const plans = [
     price: "500",
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
-    icon: (
-      <Building className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
-    ),
     cta: "Contact Enterprise",
   },
 ];
@@ -59,18 +53,13 @@ export default function PricingSection() {
             >
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
-                  {/* Icon & Plan Name */}
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="p-3 rounded-2xl bg-gray-50 dark:bg-neutral-900 border border-gray-100 dark:border-gray-800">
-                      {plan.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-black dark:text-white tracking-tight">
-                      {plan.name}
-                    </h3>
-                  </div>
+                  {/* Plan Name */}
+                  <h3 className="text-2xl font-bold text-black dark:text-white tracking-tight mb-6 text-left">
+                    {plan.name}
+                  </h3>
 
                   {/* Price Display */}
-                  <div className="flex items-baseline gap-1 mb-6">
+                  <div className="flex items-baseline gap-1 mb-6 text-left">
                     <span className="text-4xl md:text-5xl font-black text-black dark:text-white">
                       ${plan.price}
                     </span>
@@ -80,13 +69,13 @@ export default function PricingSection() {
                   </div>
                 </div>
 
-                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium mt-auto">
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium mt-auto text-left">
                   {plan.description}
                 </p>
               </div>
 
               {/* Action Button */}
-              <button className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 text-black dark:text-white border border-gray-200/50 dark:border-gray-800 active:scale-[0.98]">
+              <button className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white border border-transparent dark:bg-blue-500 dark:hover:bg-blue-600 active:scale-[0.98]">
                 {plan.cta}
               </button>
             </div>
