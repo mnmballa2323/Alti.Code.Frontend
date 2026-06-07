@@ -25,7 +25,7 @@ const MobileNavSheet = () => {
     { href: "/", label: "Home", type: "route" },
     { href: "#howItsWork", label: "Product", type: "anchor" },
     { href: "#security", label: "Features", type: "anchor" },
-    { href: "#", label: "Contact", type: "action" },
+    { href: "/contact", label: "Contact", type: "route" },
   ];
 
   // Handle drawer close when clicking on links

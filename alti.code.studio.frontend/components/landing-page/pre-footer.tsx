@@ -118,14 +118,12 @@ function PreFooter() {
                     </Link>
                   </li>
                   <li>
-                    <button
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors cursor-pointer bg-transparent border-0 p-0 text-left align-baseline"
-                      onClick={() => {
-                        dispatch(setContactModel(true));
-                      }}
+                    <Link
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/contact"
                     >
                       Contact Sales
-                    </button>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -200,12 +198,12 @@ function PreFooter() {
                   >
                     Changelog
                   </Link>
-                  <button
-                    className="text-neutral-400 font-secondary font-normal text-sm text-left bg-transparent border-0 p-0"
-                    onClick={() => dispatch(setContactModel(true))}
+                  <Link
+                    className="text-neutral-400 font-secondary font-normal text-sm text-left"
+                    href="/contact"
                   >
                     Contact Sales
-                  </button>
+                  </Link>
                 </div>
               </div>
 
