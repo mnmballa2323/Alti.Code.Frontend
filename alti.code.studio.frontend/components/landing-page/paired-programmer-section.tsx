@@ -25,7 +25,7 @@ export default function PairedProgrammerSection() {
           <FeatureCard 
             icon={<UserCircle className="w-8 h-8 text-black" />}
             title="Human in Control"
-            description="You make the executive decisions. The swarm handles the boilerplate, debugging, and testing."
+            description="You make the executive decisions. The swarm handles the development, debugging, and testing."
           />
           <FeatureCard 
             icon={<Code2 className="w-8 h-8 text-black" />}
@@ -40,7 +40,7 @@ export default function PairedProgrammerSection() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <div className="flex flex-col items-start text-left p-8 rounded-3xl bg-white border border-transparent shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex flex-col items-start text-left p-8 rounded-3xl bg-gray-100 border border-transparent shadow-sm hover:shadow-md transition-shadow">
       <div className="mb-6">
         {icon}
       </div>
