@@ -60,7 +60,7 @@ export default function EnterpriseConnectorsSection() {
             66 Cloud Connections. Zero Friction. All Power.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
-            Alti Code Studio isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
+            Inso Code isn&apos;t a walled garden. Your swarm connects directly to the absolute best 
             cloud infrastructure on the planet. From hyper-scalers to specialized providers, we integrate everywhere, for frictionless deployments.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function EnterpriseConnectorsSection() {
 
           {/* Central Hub */}
           <div className="absolute z-30 flex items-center justify-center w-24 h-24 rounded-full bg-black shadow-[0_0_60px_rgba(0,0,0,0.2)] hover:scale-105 transition-transform duration-500 cursor-pointer border border-gray-800">
-            <img src="/logo-white.png" alt="Alti Code Studio" className="w-12 h-12 object-contain" />
+            <img src="/logo-white.png" alt="Inso Code" className="w-12 h-12 object-contain" />
           </div>
 
           {/* Inner Orbit: Hyperscalers */}

@@ -45,7 +45,7 @@ export default function TriCloudSection() {
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Direct SDK connections to foundational models are blocked for security. 
-            Instead, Alti Code Studio routes every prompt through our ultra-secure, 
+            Instead, Inso Code routes every prompt through our ultra-secure, 
             zero-markup Tri-Cloud infrastructure. You get unlimited access to the absolute 
             latest state-of-the-art models.
           </p>

@@ -95,7 +95,7 @@ export default function CliAnythingPage() {
   const [workspacePath, setWorkspacePath] = useState(
     "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend",
   );
-  const [appName, setAppName] = useState("alti-cli");
+  const [appName, setAppName] = useState("inso-cli");
   const [compilingStatus, setCompilingStatus] = useState<
     "idle" | "compiling" | "done" | "error"
   >("idle");

@@ -159,7 +159,7 @@ function Navbar() {
             <Link className="flex-shrink-0" href="/">
               <Image
                 priority
-                alt="Alti Code Studio"
+                alt="Inso Code"
                 className="h-10 w-10 object-contain"
                 height={40}
                 src="/alti-logo.png"

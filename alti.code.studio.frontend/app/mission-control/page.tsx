@@ -773,7 +773,7 @@ export default function MissionControlPage() {
               Mission Control
             </h1>
             <p className="text-white/40 text-sm mt-1">
-              Alti.Code.Studio · v6.6.0 · Fully Autonomous
+              Inso Code · v6.6.0 · Fully Autonomous
             </p>
           </div>
           <div className="flex gap-2">

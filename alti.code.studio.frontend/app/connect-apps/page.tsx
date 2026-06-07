@@ -1823,7 +1823,7 @@ export default function ConnectAppsPage() {
                       <p className="text-xs text-default-500 leading-relaxed px-2">
                         Integrate {selectedApp.name} to seamlessly execute
                         automated workflows, synchronize data, and orchestrate{" "}
-                        {selectedApp.name} actions directly within Alti.
+                        {selectedApp.name} actions directly within Inso Code.
                       </p>
                     </div>
 

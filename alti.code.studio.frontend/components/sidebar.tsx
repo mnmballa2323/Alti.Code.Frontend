@@ -1407,7 +1407,7 @@ export default function Sidebar() {
             )}
           >
             <Image
-              alt="Alti Logo"
+              alt="Inso Logo"
               className="dark:invert"
               height={22}
               src="/alti-logo.png"

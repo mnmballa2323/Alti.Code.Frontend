@@ -157,7 +157,7 @@ export default function CodeStudioPage() {
               <div className="flex bg-[#0d1117] flex-col items-center justify-start h-full text-gray-500 overflow-y-auto w-full p-8">
                 <div className="text-center mb-8 mt-4">
                   <h3 className="text-2xl font-semibold text-gray-200">
-                    Alti.Code.Studio Epic
+                    Inso Code Epic
                   </h3>
                   <p className="text-sm mt-2 max-w-lg mx-auto">
                     Select a file from the explorer to edit, or deploy an

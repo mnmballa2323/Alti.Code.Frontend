@@ -1,5 +1,5 @@
 # ==============================================================================
-# ALTI CODE STUDIO: SOVEREIGN FRONTEND DOCKERFILE
+# INSO CODE: SOVEREIGN FRONTEND DOCKERFILE
 # ==============================================================================
 # This Dockerfile utilizes a multi-stage Next.js standalone build pattern to 
 # strictly enforce zero-trust sovereign deployment principles.

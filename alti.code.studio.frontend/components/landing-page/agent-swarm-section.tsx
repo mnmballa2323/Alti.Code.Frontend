@@ -15,7 +15,7 @@ export default function AgentSwarmSection() {
               A 50,000 Agent Swarm. <br />At Your Command.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed max-w-2xl font-medium">
-              Forget single-agent chatbots. Alti Code Studio deploys a massive, dynamically coordinated 
+              Forget single-agent chatbots. Inso Code deploys a massive, dynamically coordinated 
               swarm of over 50,000 specialized engineering agents. Whether you need a dedicated 
               PostgreSQL optimizer, a React performance auditor, or an adversarial security red-team, 
               the swarm provisions the exact experts you need in milliseconds.

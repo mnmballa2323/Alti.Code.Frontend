@@ -1,4 +1,4 @@
-# Alti Code Studio Frontend - Agentic Rules
+# Inso Code Frontend - Agentic Rules
 
 ## Instructions (What to do)
 - Always use **Tailwind CSS** and **HeroUI** components for styling and layout.
@@ -15,4 +15,3 @@
 - **Do NOT** introduce new UI component libraries; strictly stick to HeroUI.
 - **Do NOT** use React Class components; exclusively use functional components with Hooks.
 - **Do NOT** commit sensitive tokens, API keys, or hardcoded passwords to the repository.
-re

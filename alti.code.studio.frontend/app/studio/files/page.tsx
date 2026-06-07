@@ -128,7 +128,7 @@ function TerminalPanel() {
     {
       id: nid(),
       type: "system",
-      text: "Alti Code Studio Terminal v6.7.0 · Secured Shell",
+      text: "Inso Code Terminal v6.7.0 · Secured Shell",
     },
     {
       id: nid(),

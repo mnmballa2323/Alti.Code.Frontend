@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Phase 46: Forward the audio blob to the Alti.Code.Studio backend
+    // Forward the audio blob to the Inso Code backend
     // The backend will transcribe via Whisper and trigger a graph.orchestrator.js sprint
     const backendFormData = new FormData();
 
