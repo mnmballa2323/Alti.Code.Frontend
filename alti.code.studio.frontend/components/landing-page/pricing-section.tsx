@@ -131,7 +131,9 @@ export default function PricingSection() {
                 <ul className="flex flex-col gap-4 mb-10">
                   {plan.features.map((feature, fIdx) => (
                     <li key={fIdx} className="flex items-start gap-3 text-sm">
-                      <span className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${plan.bulletColor}`} />
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0 ${plan.bulletColor}`}
+                      />
                       <span className="text-gray-600 dark:text-gray-300 font-medium leading-normal">
                         {feature}
                       </span>
