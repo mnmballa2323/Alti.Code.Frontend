@@ -10,14 +10,7 @@ interface Step {
   detail: string;
 }
 
-const templates = [
-  { name: "COBOL Migrator", desc: "Translates legacy mainframe logic to secure Go microservices.", icon: Cpu },
-  { name: "Stripe Ledger Auditor", desc: "Monitors webhook payloads and reconciles transaction states.", icon: Terminal },
-  { name: "Kubernetes SecOps", desc: "Audits YAML manifests and enforces zero-privilege namespaces.", icon: Code },
-];
-
 export default function AgentForgeSection() {
-  const [selectedTemplate, setSelectedTemplate] = useState(0);
   const [isForging, setIsForging] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const [steps, setSteps] = useState<Step[]>([
@@ -81,7 +74,7 @@ export default function AgentForgeSection() {
       runForgeSimulation();
     }, 1000);
     return () => clearTimeout(timer);
-  }, [selectedTemplate]);
+  }, []);
 
   return (
     <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
@@ -99,41 +92,6 @@ export default function AgentForgeSection() {
               Specify your requirements and watch the Forge write tools, run mock test suites, 
               compile guardrails, and register the new expert to your active swarm mesh—all in seconds.
             </p>
-          </div>
-
-          {/* Quick templates */}
-          <div className="flex flex-col gap-4 mt-2">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              Select Specialist Blueprint
-            </p>
-            <div className="flex flex-col gap-3">
-              {templates.map((tpl, idx) => {
-                const Icon = tpl.icon;
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      if (!isForging) {
-                        setSelectedTemplate(idx);
-                      }
-                    }}
-                    className={`flex items-start gap-4 p-4 rounded-2xl border text-left transition-all duration-300 ${
-                      selectedTemplate === idx
-                        ? "border-black bg-gray-50 shadow-sm"
-                        : "border-gray-100 hover:border-gray-300 bg-white"
-                    }`}
-                  >
-                    <div className={`p-2 rounded-xl border ${selectedTemplate === idx ? "bg-white border-black/10" : "bg-gray-50 border-gray-100"}`}>
-                      <Icon className="w-5 h-5 text-black" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-bold text-black truncate">{tpl.name}</h4>
-                      <p className="text-xs text-gray-500 font-medium mt-0.5 leading-relaxed">{tpl.desc}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
         </div>
 
