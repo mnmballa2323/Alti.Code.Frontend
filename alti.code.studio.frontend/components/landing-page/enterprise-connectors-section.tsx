@@ -18,7 +18,7 @@ const OrbitRing = ({
 
   return (
     <div
-      className={`absolute rounded-full border border-gray-300 border-dashed animate-spin`}
+      className={`absolute rounded-full border border-zinc-800 border-dashed animate-spin`}
       style={{
         width: size,
         height: size,
@@ -55,14 +55,14 @@ const OrbitRing = ({
 
 export default function EnterpriseConnectorsSection() {
   return (
-    <section className="w-full py-32 bg-[#F5F5F7] text-black px-4 sm:px-6 lg:px-8 border-t border-gray-200 overflow-hidden">
+    <section className="w-full py-32 bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-8 lg:justify-between">
         {/* Left Side: Text */}
         <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">
-          <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-black leading-tight">
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
             66 Cloud Connections. Zero Friction. All Power.
           </h3>
-          <p className="text-xl text-gray-500 leading-relaxed font-medium">
+          <p className="text-xl text-zinc-400 leading-relaxed font-medium">
             Inso Code isn&apos;t a walled garden. Your swarm connects directly
             to the absolute best cloud infrastructure on the planet. From
             hyper-scalers to specialized providers, we integrate everywhere, for
