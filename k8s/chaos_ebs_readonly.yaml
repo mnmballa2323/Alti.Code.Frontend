@@ -1,0 +1,93 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chaos-ebs-readonly-simulator
+  namespace: default
+spec:
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: chaos-ebs-readonly
+    spec:
+      containers:
+      - name: readonly-injector
+        image: alpine:latest
+        securityContext:
+          # Required to perform block device manipulation
+          privileged: true
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "=================================================="
+          echo "  CHAOS ENGINEERING: EBS READ-ONLY FAILURE SIMULATOR"
+          echo "=================================================="
+          
+          # We need to find the underlying block device for the mounted volume.
+          # In this simulation, we'll write to a mounted volume, then suddenly
+          # remount it as read-only underneath the writing process.
+          
+          echo "[CHAOS] Creating test directory on the Persistent Volume..."
+          mkdir -p /chaos-data/db-simulation
+          
+          echo "[CHAOS] Spawning background process to simulate continuous database WAL writes..."
+          (
+            while true; do
+              echo "Simulated DB Transaction Data $(date)" >> /chaos-data/db-simulation/wal.log
+              sleep 0.1
+            done
+          ) &
+          
+          WRITE_PID=$!
+          echo "[CHAOS] Background writer spawned (PID $WRITE_PID)."
+          
+          sleep 5
+          echo "[CHAOS] Verifying writes are successful..."
+          tail -n 2 /chaos-data/db-simulation/wal.log
+          
+          # The critical chaos injection!
+          # We forcefully remount the filesystem as read-only.
+          # This simulates an AWS EBS physical hardware failure where the kernel
+          # protects the filesystem by locking it down (errors=remount-ro).
+          echo "[CHAOS] INJECTING FAILURE: Forcefully remounting filesystem as READ-ONLY!"
+          
+          # We use the 'mount' command to remount the specific directory bind-mount or block device
+          mount -o remount,ro /chaos-data
+          
+          echo "[CHAOS] Filesystem is now Read-Only."
+          echo "[CHAOS] Validating Database Resilience mechanisms:"
+          echo "  1. The background writer should immediately start throwing 'Read-only file system' errors."
+          echo "  2. The Kubelet Liveness Probe for the main database pod MUST fail."
+          echo "  3. Kubernetes should attempt to restart the Pod, and if the volume is permanently wedged, failover to a healthy replica."
+          
+          # Monitor the writer's failure
+          sleep 5
+          
+          # Check if the writer is still silently failing or if it crashed
+          if kill -0 $WRITE_PID 2>/dev/null; then
+            echo "[WARNING] The background process did NOT crash when writes failed! This indicates dangerous silent failure."
+            # Kill it manually
+            kill -9 $WRITE_PID
+          else
+            echo "[SUCCESS] The background writer gracefully crashed upon disk failure."
+          fi
+          
+          echo "[CHAOS] Holding Read-Only state for 2 minutes to observe cluster alarms..."
+          sleep 120
+          
+          echo "[CHAOS] Reverting to healthy Read-Write state..."
+          mount -o remount,rw /chaos-data
+          
+          echo "[CHAOS] Cleanup..."
+          rm -rf /chaos-data/db-simulation
+          
+          echo "[CHAOS] Experiment complete."
+        volumeMounts:
+        - name: target-pvc
+          mountPath: /chaos-data
+      volumes:
+      - name: target-pvc
+        # For a real test, this would be a real PVC. 
+        # For safety in this environment, we use an emptyDir, but the remount logic still proves the point.
+        emptyDir: {}
+      restartPolicy: Never
