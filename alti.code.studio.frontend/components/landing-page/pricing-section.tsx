@@ -10,13 +10,6 @@ const plans = [
     description:
       "For individual developers who want zero-configuration, production-grade agent power.",
     icon: <Cloud className="w-6 h-6 text-blue-600 dark:text-blue-400" />,
-    features: [
-      "Hosted on Inso's secure multi-tenant cloud",
-      "Unlimited access to Tri-Cloud model registry",
-      "Standard execution queue for agent sandboxes",
-      "Automatic scaling and zero infrastructure setup",
-      "Community support & standard Slack channel access",
-    ],
     cta: "Start Free Trial",
     popular: false,
   },
@@ -26,14 +19,6 @@ const plans = [
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
     icon: <Zap className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />,
-    features: [
-      "Hosted on Inso's secure multi-tenant cloud",
-      "Shared workspaces and team project repositories",
-      "Priority execution queue and higher concurrency",
-      "Collaborative agent review loops and control loops",
-      "Team-wide secrets management & access logs",
-      "Priority developer support with 8hr response SLA",
-    ],
     cta: "Upgrade Team",
     popular: true,
   },
@@ -43,14 +28,6 @@ const plans = [
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
     icon: <Shield className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
-    features: [
-      "Custom deployment: Single-tenant private cloud",
-      "Self-hosted VPC on AWS, Azure, or GCP",
-      "Full data sovereignty with zero external egress",
-      "Custom agent hooks and VPC peering configurations",
-      "Bring Your Own Keys (BYOK) model integration",
-      "Dedicated account manager & 24/7 emergency phone SLA",
-    ],
     cta: "Contact Enterprise",
     popular: false,
   },
@@ -94,46 +71,34 @@ export default function PricingSection() {
                 </span>
               )}
 
-              <div>
-                {/* Icon & Plan Name */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 rounded-2xl bg-gray-50 dark:bg-neutral-900 border border-gray-100 dark:border-gray-800">
-                    {plan.icon}
+              <div className="flex-1 flex flex-col justify-between mb-8">
+                <div>
+                  {/* Icon & Plan Name */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="p-3 rounded-2xl bg-gray-50 dark:bg-neutral-900 border border-gray-100 dark:border-gray-800">
+                      {plan.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-black dark:text-white tracking-tight">
+                      {plan.name}
+                    </h3>
                   </div>
-                  <h3 className="text-xl font-bold text-black dark:text-white tracking-tight">
-                    {plan.name}
-                  </h3>
+
+                  {/* Price Display */}
+                  <div className="flex items-baseline gap-1 mb-6">
+                    <span className="text-4xl md:text-5xl font-black text-black dark:text-white">
+                      ${plan.price}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                      {plan.name === "Multi-Tenant Private Cloud"
+                        ? "/ month"
+                        : "/ user / month"}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Price Display */}
-                <div className="flex items-baseline gap-1 mb-6">
-                  <span className="text-4xl md:text-5xl font-black text-black dark:text-white">
-                    ${plan.price}
-                  </span>
-                  <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                    {plan.name === "Multi-Tenant Private Cloud"
-                      ? "/ month"
-                      : "/ user / month"}
-                  </span>
-                </div>
-
-                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8 font-medium">
+                <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium mt-auto">
                   {plan.description}
                 </p>
-
-                {/* Divider */}
-                <div className="w-full h-px bg-gray-100 dark:bg-gray-800 mb-8" />
-
-                {/* Features List */}
-                <ul className="flex flex-col gap-4 mb-10">
-                  {plan.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="text-left text-sm">
-                      <span className="text-gray-600 dark:text-gray-300 font-medium leading-normal">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
               </div>
 
               {/* Action Button */}
