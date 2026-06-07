@@ -48,6 +48,7 @@ textarea {
 
 html {
   scroll-behavior: smooth !important;
+  overscroll-behavior-y: none;
 }
 
 tbody tr {
@@ -208,6 +209,7 @@ label::after {
   }
   body {
     @apply bg-background text-foreground;
+    overscroll-behavior-y: none;
   }
 }
 

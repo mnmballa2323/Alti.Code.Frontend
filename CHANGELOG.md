@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.162] - 2026-06-07 — Disable Elastic Scroll Bounce
+### Changed
+- **Global Styles**:
+  - Added `overscroll-behavior-y: none` to the `html` and `body` rules to prevent the browser from scrolling past vertical limits, eliminating the white gap/jump below the black footer on macOS/iOS devices.
+
 ## [39.37.161] - 2026-06-07 — Cookies Policy Addition
 ### Added
 - **Footer**:
