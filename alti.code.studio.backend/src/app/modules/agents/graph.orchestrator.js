@@ -14,6 +14,7 @@ import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 // Core Live Agents
 import { gcpSentinel } from '../googleCloud/gcpSentinel.service.js';
 import { BrowserUseAgentService } from '../browserUseAgent/browserUseAgent.service.js';
+import { FazmAgentService } from '../fazmAgent/fazmAgent.service.js';
 import { LangGraphAgentService } from '../langGraphAgent/langGraphAgent.service.js';
 import { OpenHandsAgentService } from '../openHandsAgent/openHandsAgent.service.js';
 import { CrewAiAgentService } from '../crewAiAgent/crewAiAgent.service.js';
@@ -449,6 +450,7 @@ class GraphOrchestrator {
                 surgeon: surgeonAgent,
                 guardian: guardianAgent,
                 browser: BrowserUseAgentService,
+                fazm: FazmAgentService,
                 crawl4ai: Crawl4AiAgentService,
                 mcp: McpAgentService,
                 openInterpreter: OpenInterpreterAgentService,

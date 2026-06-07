@@ -87,6 +87,7 @@ try {
               if (file === 'oss.agents.route.js') basePath = '/oss-agents';
               if (file === 'openHandsAgent.route.js') basePath = '/oss-swarm/openhands';
               if (file === 'browserUseAgent.route.js') basePath = '/oss-swarm/browser-use';
+              if (file === 'fazmAgent.route.js') basePath = '/oss-swarm/fazm';
               if (file === 'crewAiAgent.route.js') basePath = '/oss-swarm/crew-ai';
               if (file === 'langGraphAgent.route.js') basePath = '/oss-swarm/langgraph';
               if (file === 'dspyAgent.route.js') basePath = '/oss-swarm/dspy';

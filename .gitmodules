@@ -37,3 +37,6 @@
 [submodule "submodules/agentmemory"]
 	path = submodules/agentmemory
 	url = https://github.com/rohitg00/agentmemory
+[submodule "submodules/fazm"]
+	path = submodules/fazm
+	url = https://github.com/mediar-ai/fazm
