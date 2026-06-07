@@ -1,4 +1,4 @@
-# Alti.Code.Studio Roadmap
+# Inso Code Roadmap
 
 ## 🌌 Long-Term Vision
 
