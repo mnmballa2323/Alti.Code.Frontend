@@ -39,17 +39,16 @@ export default function CapabilitiesBentoGrid() {
             </div>
             
             {/* Visual Terminal */}
-            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm my-2 lg:my-3">
-              <div className="flex items-center gap-1.5 pb-2 border-b border-zinc-900 text-zinc-600">
+            <div className="w-full max-w-sm h-[130px] lg:h-[125px] xl:h-[150px] bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none">
+              <div className="flex items-center gap-1.5 pb-1.5 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="ml-2">ipc_stream::localhost:5000</span>
               </div>
-              <div><span className="text-zinc-600 mr-1.5">[IPC]</span> connected to local daemon version 2.0.0</div>
-              <div><span className="text-zinc-600 mr-1.5">[IPC]</span> starting subagent: Codebase Researcher (PID: 8493)</div>
-              <div><span className="text-zinc-600 mr-1.5">[CLI]</span> exec: <span className="text-zinc-300">cargo test --all-features</span></div>
-              <div className="text-emerald-400 font-semibold"><span className="text-zinc-600 mr-1.5">[CLI]</span> success: 42 tests passed (481ms)</div>
+              <div><span className="text-zinc-600 mr-1.5">[IPC]</span> connected to local daemon v2.0.0</div>
+              <div><span className="text-zinc-600 mr-1.5">[IPC]</span> running subagent: Codebase Researcher</div>
+              <div className="text-emerald-400 font-semibold"><span className="text-zinc-600 mr-1.5">[CLI]</span> cargo test: 42 passed (481ms)</div>
             </div>
           </div>
 
@@ -64,7 +63,7 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
                 Instead of simple regex matching, our agents build Abstract Syntax Trees to 
-                surgically modify codebase nodes. Edits are type-safe and compilation-proof.
+                surgically modify codebase nodes. Edits are type safe and compilation proof.
               </p>
             </div>
           </div>
@@ -79,8 +78,8 @@ export default function CapabilitiesBentoGrid() {
                 Gossip Mesh Coordination
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
-                50,000 specialist agents remain synchronized via a peer-to-peer gossip network. 
-                State changes propagate in sub-10ms across local and cloud swarms.
+                50,000 specialist agents remain synchronized via a peer to peer gossip network. 
+                State changes propagate in sub 10ms across local and cloud swarms.
               </p>
             </div>
           </div>
@@ -108,7 +107,7 @@ export default function CapabilitiesBentoGrid() {
                 <GitBranch className="w-4 h-4 xl:w-5 xl:h-5" />
               </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
-                Submodule Auto-Sync
+                Submodule Auto Sync
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
                 Our primary agent automatically coordinates submodules, matching branch revisions 
@@ -128,22 +127,21 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
                 Secrets are locked locally in an encrypted keyring. Agents query keys 
-                on-demand, and raw values are never written to disk.
+                on demand, and raw values are never written to disk.
               </p>
             </div>
             
             {/* Keyring Visual */}
-            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm my-2 lg:my-3">
-              <div className="flex items-center gap-1.5 pb-2 border-b border-zinc-900 text-zinc-600">
+            <div className="w-full max-w-sm h-[130px] lg:h-[125px] xl:h-[150px] bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none">
+              <div className="flex items-center gap-1.5 pb-1.5 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
-                <span className="ml-2">secure_keyring::aes-256-gcm</span>
+                <span className="ml-2">secure_keyring::aes256gcm</span>
               </div>
               <div className="flex justify-between"><span className="text-zinc-600">[status]</span> <span className="text-emerald-400 font-semibold">LOCKED</span></div>
               <div className="flex justify-between"><span className="text-zinc-600">[keys]</span> <span>3 active identities</span></div>
               <div className="flex justify-between"><span className="text-zinc-600">[auth]</span> <span>biometric / hardware pin</span></div>
-              <div className="text-[8px] text-zinc-600 pt-1 border-t border-zinc-900 mt-1">no plain text keys written to disk</div>
             </div>
           </div>
 

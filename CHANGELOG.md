@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.143] - 2026-06-07 — Bento Grid Dash Removal Polish
+### Changed
+- **Bento Grid**:
+  - Removed all hyphens and dashes from user facing text inside the bento grid section, including "type safe", "compilation proof", "peer to peer", "sub 10ms", "Submodule Auto Sync", "on demand", and "aes256gcm".
+
 ## [39.37.142] - 2026-06-07 — Bento Grid Layout & Text Polish
 ### Changed
 - **Bento Grid**:
