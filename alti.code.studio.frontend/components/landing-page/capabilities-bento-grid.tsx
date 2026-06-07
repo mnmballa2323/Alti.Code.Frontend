@@ -19,10 +19,10 @@ export default function CapabilitiesBentoGrid() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-12 gap-4 lg:gap-4 xl:gap-5 auto-rows-auto lg:auto-rows-[190px] xl:auto-rows-[220px]">
+        <div className="grid grid-cols-12 gap-4 lg:gap-4 xl:gap-5 auto-rows-auto lg:auto-rows-[165px] xl:auto-rows-[195px]">
           
           {/* Card 1: Desktop IPC & CLI */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] group-hover:bg-blue-500/10 transition-all duration-500" />
             <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
@@ -35,7 +35,7 @@ export default function CapabilitiesBentoGrid() {
             </div>
             
             {/* Visual Terminal */}
-            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none w-full max-w-sm">
+            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-3 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none w-full max-w-sm">
               <div className="flex items-center gap-1.5 pb-1.5 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
@@ -49,7 +49,7 @@ export default function CapabilitiesBentoGrid() {
           </div>
 
           {/* Card 2: AST Traversal */}
-          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 AST Traversal Edits
@@ -62,7 +62,7 @@ export default function CapabilitiesBentoGrid() {
           </div>
 
           {/* Card 3: Gossip Mesh Coordination */}
-          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Gossip Mesh Coordination
@@ -75,7 +75,7 @@ export default function CapabilitiesBentoGrid() {
           </div>
 
           {/* Card 4: Semantic Prompt Cache */}
-          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Semantic Cache
@@ -88,7 +88,7 @@ export default function CapabilitiesBentoGrid() {
           </div>
 
           {/* Card 5: Git Submodule Auto-Sync */}
-          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Submodule Auto Sync
@@ -101,19 +101,19 @@ export default function CapabilitiesBentoGrid() {
           </div>
 
           {/* Card 6: Private Vault */}
-          <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-3.5 xl:px-6 xl:py-4 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Hardware Secure Vault
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
                 Secrets are locked locally in an encrypted keyring. Agents query keys 
-                on demand, and raw values are never written to disk.
+                on demand, and raw values are never written to disk under any scenario.
               </p>
             </div>
             
             {/* Keyring Visual */}
-            <div className="w-full max-w-sm h-[130px] lg:h-[125px] xl:h-[150px] bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none">
+            <div className="w-full max-w-sm h-[115px] lg:h-[110px] xl:h-[130px] bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-3.5 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none">
               <div className="flex items-center gap-1.5 pb-1.5 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />

@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.150] - 2026-06-07 — Bento Grid Card 4 Copy Polish
+### Changed
+- **Bento Grid**:
+  - Expanded the Card 4 (Semantic Cache) description to balance and fill the fourth line of text without wrapping to a fifth line.
+
 ## [39.37.149] - 2026-06-07 — Bento Grid Card 1 Copy Polish
 ### Changed
 - **Bento Grid**:
