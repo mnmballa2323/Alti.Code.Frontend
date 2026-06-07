@@ -1,0 +1,74 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: fpga-crypto-injector
+  labels:
+    app: fpga-crypto-injector
+spec:
+  webhooks:
+  - name: fpga-injector.security.svc.cluster.local
+    clientConfig:
+      service:
+        name: fpga-crypto-injector-svc
+        namespace: security
+        path: "/mutate"
+      # caBundle is dynamically injected by cert-manager
+      caBundle: "Cg=="
+    rules:
+    - operations: ["CREATE"]
+      apiGroups: [""]
+      apiVersions: ["v1"]
+      resources: ["pods"]
+    failurePolicy: Ignore
+    admissionReviewVersions: ["v1", "v1beta1"]
+    sideEffects: None
+    namespaceSelector:
+      matchLabels:
+        fpga-crypto-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fpga-crypto-injector
+  namespace: security
+  labels:
+    app: fpga-crypto-injector
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fpga-crypto-injector
+  template:
+    metadata:
+      labels:
+        app: fpga-crypto-injector
+    spec:
+      containers:
+      - name: webhook
+        image: alticodestudio/fpga-webhook-injector:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8443
+        env:
+        - name: FPGA_SERVICE_URL
+          value: "https://crypto-accelerator-svc.security.svc.cluster.local:8443"
+        volumeMounts:
+        - name: webhook-certs
+          mountPath: /etc/webhook/certs
+          readOnly: true
+      volumes:
+      - name: webhook-certs
+        secret:
+          secretName: fpga-crypto-injector-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fpga-crypto-injector-svc
+  namespace: security
+spec:
+  ports:
+  - port: 443
+    targetPort: 8443
+  selector:
+    app: fpga-crypto-injector
