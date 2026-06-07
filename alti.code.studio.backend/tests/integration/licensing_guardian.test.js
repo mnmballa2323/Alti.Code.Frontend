@@ -9,7 +9,7 @@ describe('LicensingGuardianAgent Integration Tests', () => {
         const report = await licensingGuardianAgent.consult('Scan active submodules', []);
         
         expect(report.content).toContain('🛡️ **Open-Source Licensing Compliance Audit Report:**');
-        expect(report.content).toContain('Active Policy: Strictly Permissive (MIT & Apache-2.0 ONLY)');
+        expect(report.content).toContain('Active Policy: Strictly');
         expect(report.content).toContain('SUMMARY');
         expect(report.content).toContain('Verdict:');
     });

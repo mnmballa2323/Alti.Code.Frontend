@@ -3,6 +3,26 @@ import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 import auth from '../../middlewares/auth/auth.js';
 import { FazmAgentController } from './fazmAgent.controller.js';
 import audioUploader from '../../middlewares/uploder/uploadAudio.js';
+import fs from 'fs';
+import multer from 'multer';
+import path from 'path';
+
+// Ensure attachments directory exists
+fs.mkdirSync('uploads/attachments/', { recursive: true });
+
+const attachmentStorage = multer.diskStorage({
+    destination: 'uploads/attachments/',
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `${Date.now()}${ext}`);
+    }
+});
+
+const attachmentUploader = multer({
+    storage: attachmentStorage,
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB max file size
+});
+
 
 const router = express.Router();
 
@@ -101,6 +121,14 @@ router.post(
     auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
     FazmAgentController.getAttachmentUploadUrl
 );
+
+router.post(
+    '/mock-upload',
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+    attachmentUploader.single('file'),
+    FazmAgentController.uploadAttachment
+);
+
 
 // Composio stubs
 router.post(

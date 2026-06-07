@@ -5,7 +5,21 @@ import fs from 'fs';
 import { BrowserUseAgentService } from '../../src/app/modules/browserUseAgent/browserUseAgent.service.js';
 import { agentSService } from '../../src/app/modules/senses/agent_s.service.js';
 import { FazmAgentService } from '../../src/app/modules/fazmAgent/fazmAgent.service.js';
+import { FazmAgentController } from '../../src/app/modules/fazmAgent/fazmAgent.controller.js';
+import { composioService } from '../../src/app/modules/mcp/composio.service.js';
 import { redisClient } from '../../src/shared/redis.client.js';
+
+
+vi.mock('../../src/app/modules/mcp/composio.service.js', () => ({
+    composioService: {
+        initiateConnection: vi.fn(),
+        getConnections: vi.fn(),
+        disconnectApp: vi.fn(),
+        executeTool: vi.fn(),
+        getToolkitTools: vi.fn()
+    }
+}));
+
 
 vi.mock('axios');
 vi.mock('child_process', () => ({
@@ -161,8 +175,12 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
             // Execute GUI task without awaiting to check map storage
             agentSService.executeGUITask('Calculate 123 * 456', { taskId: 'test-cancel-id' });
 
-            // Yield execution to allow write and spawn to resolve
-            await new Promise(resolve => setTimeout(resolve, 50));
+            // Yield execution using a polling loop to allow write and spawn to resolve robustly
+            for (let i = 0; i < 25; i++) {
+                if (agentSService.activeSubprocesses.has('test-cancel-id')) break;
+                await new Promise(resolve => setTimeout(resolve, 20));
+            }
+
 
             expect(agentSService.activeSubprocesses.has('test-cancel-id')).toBe(true);
 
@@ -178,7 +196,8 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
                     cb(Buffer.from(JSON.stringify({
                         platform: 'darwin',
                         python: '3.11.0',
-                        missing: []
+                        missing: [],
+                        accessibility_trusted: true
                     })));
                 }
             });
@@ -196,7 +215,62 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
             expect(result.ok).toBe(true);
             expect(result.platform).toBe('darwin');
             expect(result.missingDependencies).toEqual([]);
+            expect(result.accessibilityPermissions).toBe('Granted');
         });
+
+        it('should check system diagnostics and report accessibility permission denied on macOS', async () => {
+            const mockStdoutOn = vi.fn().mockImplementation((event, cb) => {
+                if (event === 'data') {
+                    cb(Buffer.from(JSON.stringify({
+                        platform: 'darwin',
+                        python: '3.11.0',
+                        missing: [],
+                        accessibility_trusted: false
+                    })));
+                }
+            });
+            const mockProcess = {
+                stdout: { on: mockStdoutOn },
+                on: vi.fn().mockImplementation((event, cb) => {
+                    if (event === 'close') {
+                        cb(0);
+                    }
+                })
+            };
+            vi.mocked(spawn).mockReturnValue(mockProcess);
+
+            const result = await agentSService.checkSystemDiagnostics();
+            expect(result.ok).toBe(false);
+            expect(result.accessibilityPermissions).toContain('Denied');
+        });
+
+        it('should return result and trajectory object on executeGUITask success', async () => {
+            const mockStdoutOn = vi.fn().mockImplementation((event, cb) => {
+                if (event === 'data') {
+                    cb(Buffer.from(JSON.stringify({
+                        status: 'success',
+                        result: 'Task completed successfully',
+                        trajectory: [{ step: 1, action: 'click', executed: true }]
+                    })));
+                }
+            });
+            const mockProcess = {
+                stdout: { on: mockStdoutOn },
+                stderr: { on: vi.fn() },
+                on: vi.fn().mockImplementation((event, cb) => {
+                    if (event === 'close') {
+                        cb(0);
+                    }
+                }),
+                kill: vi.fn()
+            };
+            vi.mocked(spawn).mockReturnValue(mockProcess);
+
+            const result = await agentSService.executeGUITask('Calculate 123 * 456');
+            expect(result.result).toBe('Task completed successfully');
+            expect(result.trajectory).toEqual([{ step: 1, action: 'click', executed: true }]);
+        });
+
     });
 
     describe('Fazm Heartbeat Upgrades', () => {
@@ -317,4 +391,110 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
             expect(transcript).toBe('hello from gemini audio');
         });
     });
+
+    describe('Fazm Controller and Composio Upgrades', () => {
+        let mockReq;
+        let mockRes;
+
+        beforeEach(() => {
+            mockReq = {
+                user: { id: 'test-user-123' },
+                body: {},
+                params: {},
+                headers: {},
+                file: null
+            };
+            mockRes = {
+                status: vi.fn().mockReturnThis(),
+                json: vi.fn().mockReturnThis(),
+                send: vi.fn().mockReturnThis(),
+                setHeader: vi.fn()
+            };
+        });
+
+        it('should call composioConnect and initiate connection via composioService', async () => {
+            mockReq.body = { appName: 'github' };
+            composioService.initiateConnection.mockResolvedValue({
+                redirectUrl: 'https://oauth.composio.com/github',
+                connectionId: 'conn-github-111'
+            });
+
+            await FazmAgentController.composioConnect(mockReq, mockRes);
+
+            expect(composioService.initiateConnection).toHaveBeenCalledWith('github', 'test-user-123');
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                url: 'https://oauth.composio.com/github',
+                connectionId: 'conn-github-111'
+            });
+        });
+
+        it('should call composioStatus and return active connection details', async () => {
+            composioService.getConnections.mockResolvedValue([{ id: 'conn-github-111', appName: 'github' }]);
+
+            await FazmAgentController.composioStatus(mockReq, mockRes);
+
+            expect(composioService.getConnections).toHaveBeenCalledWith('test-user-123');
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                connected: true,
+                count: 1,
+                connections: [{ id: 'conn-github-111', appName: 'github' }]
+            });
+        });
+
+        it('should call composioDisconnect and disconnect app', async () => {
+            mockReq.body = { appName: 'github' };
+            composioService.disconnectApp.mockResolvedValue(true);
+
+            await FazmAgentController.composioDisconnect(mockReq, mockRes);
+
+            expect(composioService.disconnectApp).toHaveBeenCalledWith('github', 'test-user-123');
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({ ok: true });
+        });
+
+        it('should call composioMcp and list tools when action is not provided', async () => {
+            mockReq.params = { toolkit: 'github' };
+            composioService.getToolkitTools.mockResolvedValue([{ id: 'github_create_issue', name: 'Create Issue' }]);
+
+            await FazmAgentController.composioMcp(mockReq, mockRes);
+
+            expect(composioService.getToolkitTools).toHaveBeenCalledWith('github');
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                success: true,
+                tools: [{ id: 'github_create_issue', name: 'Create Issue' }]
+            });
+        });
+
+        it('should call composioMcp and execute tool when action is provided', async () => {
+            mockReq.params = { toolkit: 'github' };
+            mockReq.body = { action: 'github_create_issue', args: { title: 'Bug' } };
+            composioService.executeTool.mockResolvedValue({ id: 'issue-101' });
+
+            await FazmAgentController.composioMcp(mockReq, mockRes);
+
+            expect(composioService.executeTool).toHaveBeenCalledWith('github_create_issue', { title: 'Bug' }, 'test-user-123');
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                success: true,
+                result: { id: 'issue-101' }
+            });
+        });
+
+        it('should call uploadAttachment and return uploaded file path', async () => {
+            mockReq.file = { path: 'uploads/attachments/screenshot.png' };
+
+            await FazmAgentController.uploadAttachment(mockReq, mockRes);
+
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({
+                success: true,
+                message: 'Attachment uploaded successfully.',
+                file_path: 'uploads/attachments/screenshot.png'
+            });
+        });
+    });
 });
+

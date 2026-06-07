@@ -209,14 +209,20 @@ if __name__ == '__main__':
 
                         if (resultJson && resultJson.status === 'success') {
                             logger.info(`✅ Agent S: Task inference completed successfully.`);
-                            resolve(resultJson.result);
+                            resolve({
+                                result: resultJson.result,
+                                trajectory: resultJson.trajectory || []
+                            });
                         } else if (resultJson && resultJson.status === 'error') {
                             reject(new Error(`Agent S Python Error: ${resultJson.message}\n${resultJson.trace}`));
                         } else {
                             if (code !== 0) {
                                 reject(new Error(`Python script exited with code ${code}. \nSTDERR: ${stderrData}`));
                             } else {
-                                resolve("Task completed without standard JSON output. " + stdoutData);
+                                resolve({
+                                    result: "Task completed without standard JSON output. " + stdoutData,
+                                    trajectory: []
+                                });
                             }
                         }
 
@@ -260,7 +266,7 @@ if __name__ == '__main__':
         return new Promise((resolve) => {
             const pyProc = spawn(this.pythonPath, [
                 '-c',
-                "import sys, os, json; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = []; \nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing}))"
+                "import sys, os, json, ctypes; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = [];\nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nis_trusted = True\nif sys.platform == 'darwin':\n    try:\n        app_services = ctypes.CDLL('/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices')\n        is_trusted = bool(app_services.AXIsProcessTrusted())\n    except Exception:\n        is_trusted = False\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing, 'accessibility_trusted': is_trusted}))"
             ]);
             let stdout = '';
             pyProc.stdout.on('data', d => stdout += d.toString());
@@ -268,12 +274,15 @@ if __name__ == '__main__':
                 try {
                     const parsed = JSON.parse(stdout.trim());
                     const ok = parsed.missing.length === 0;
+                    const accessibilityTrusted = parsed.accessibility_trusted !== undefined ? parsed.accessibility_trusted : true;
                     resolve({
-                        ok,
+                        ok: ok && accessibilityTrusted,
                         platform: parsed.platform,
                         python: parsed.python,
                         missingDependencies: parsed.missing,
-                        accessibilityPermissions: parsed.platform === 'darwin' ? 'Check macOS System Settings -> Privacy & Security -> Accessibility / Screen Recording' : 'OK'
+                        accessibilityPermissions: parsed.platform === 'darwin'
+                            ? (accessibilityTrusted ? 'Granted' : 'Denied - Please enable in macOS System Settings -> Privacy & Security -> Accessibility')
+                            : 'OK'
                     });
                 } catch (err) {
                     resolve({

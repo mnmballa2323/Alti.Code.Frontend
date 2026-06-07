@@ -22,7 +22,9 @@ describe('AgentS Specialist Agent Integration', () => {
             status: 'success',
             agent: 'AgentS',
             s_action: 'Agent S predicted GUI Action:\nimport time; time.sleep(1.333)',
+            trajectory: [],
             message: 'Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).'
         });
+
     });
 });

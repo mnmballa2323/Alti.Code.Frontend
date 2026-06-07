@@ -5,6 +5,19 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.170] - 2026-06-07 — Phase 2.1 Deep Swarm Integration Upgrades (Browser-Use, Agent-S, Fazm)
+### Added
+- **Browser-Use Live Action Tracing**:
+  - Enhanced `TrackingAgent.step()` to capture and record Pydantic model action payloads and action results dynamically at each execution step.
+  - Appended structured actions and results to `live_history` inside the task registry in real time.
+- **Agent-S GUI Trajectories & OS Permissions**:
+  - Updated python GUI template loop to serialize and return the step action trajectory list JSON structure.
+  - Expose the trajectory in `agent_s.agent.js` and `shards/a/agent_s.agent.js` response payloads.
+  - Added ctypes-based ApplicationServices `AXIsProcessTrusted()` API check on macOS platforms to test accessibility trust permissions in system diagnostics.
+- **Fazm Composio Integrations & Attachment Uploads**:
+  - Replaced mock Composio endpoints with active calls to `@composio/core` client instance using the backend `composioService` to initiate connection, check status, disconnect, and execute tools.
+  - Mounted a real multer-based file upload route under `/mock-upload` allowing the desktop client to upload screenshot and other chat attachments directly to `uploads/attachments/`.
+
 ## [39.37.169] - 2026-06-07 — Phase 2 Production-Grade Swarm Upgrades (Browser-Use, Agent-S, Fazm)
 ### Added
 - **Browser-Use Live Session Inspection**:

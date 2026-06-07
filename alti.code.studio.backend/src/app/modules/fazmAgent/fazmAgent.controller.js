@@ -2,6 +2,8 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { FazmAgentService } from './fazmAgent.service.js';
+import { composioService } from '../mcp/composio.service.js';
+
 
 const getUserId = (req) => {
     return req.user?.id || req.user?.uid || req.user?.sub || req.user?.email || 'unknown';
@@ -107,19 +109,61 @@ const getAttachmentUploadUrl = catchAsync(async (req, res) => {
 });
 
 const composioConnect = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).json({ url: `http://localhost:${process.env.PORT || 5000}` });
+    const { appName, app } = req.body;
+    const userId = getUserId(req);
+    const targetApp = appName || app || 'github';
+    
+    const connection = await composioService.initiateConnection(targetApp, userId);
+    res.status(httpStatus.OK).json({
+        url: connection.redirectUrl,
+        connectionId: connection.connectionId
+    });
 });
 
 const composioStatus = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).json({ connected: false });
+    const userId = getUserId(req);
+    const connections = await composioService.getConnections(userId);
+    const connected = connections && connections.length > 0;
+    
+    res.status(httpStatus.OK).json({
+        connected,
+        count: connections ? connections.length : 0,
+        connections: connections || []
+    });
 });
 
 const composioDisconnect = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).json({ ok: true });
+    const { appName, app } = req.body;
+    const userId = getUserId(req);
+    const targetApp = appName || app || 'github';
+    
+    const ok = await composioService.disconnectApp(targetApp, userId);
+    res.status(httpStatus.OK).json({ ok });
 });
 
 const composioMcp = catchAsync(async (req, res) => {
-    res.status(httpStatus.OK).json({ ok: true });
+    const { toolkit } = req.params;
+    const { action, args } = req.body;
+    const userId = getUserId(req);
+    
+    if (action) {
+        const result = await composioService.executeTool(action, args || {}, userId);
+        res.status(httpStatus.OK).json({ success: true, result });
+    } else {
+        const tools = await composioService.getToolkitTools(toolkit);
+        res.status(httpStatus.OK).json({ success: true, tools });
+    }
+});
+
+const uploadAttachment = catchAsync(async (req, res) => {
+    if (!req.file) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'No file uploaded.' });
+    }
+    res.status(httpStatus.OK).json({
+        success: true,
+        message: 'Attachment uploaded successfully.',
+        file_path: req.file.path
+    });
 });
 
 const runAutomation = catchAsync(async (req, res) => {
@@ -189,4 +233,5 @@ export const FazmAgentController = {
     getStatus,
     heartbeat,
     uploadRecording,
+    uploadAttachment,
 };

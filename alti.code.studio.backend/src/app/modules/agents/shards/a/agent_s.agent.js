@@ -24,11 +24,14 @@ class AgentSAgent extends BaseSpecialistAgent {
         try {
             // Forward the goal instruction directly to the Simular AI Agent-S multimodal framework
             const guiOutput = await agentSService.executeGUITask(context.goal);
+            const outputResult = typeof guiOutput === 'object' ? guiOutput.result : guiOutput;
+            const trajectory = typeof guiOutput === 'object' ? guiOutput.trajectory : [];
 
             return {
                 status: 'success',
                 agent: this.name,
-                s_action: guiOutput,
+                s_action: outputResult,
+                trajectory: trajectory,
                 message: `Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).`
             };
         } catch (error) {

@@ -54,16 +54,47 @@ class TrackingAgent(Agent):
                 url = page.url
                 title = await page.title()
                 
+                step_entry = {
+                    "step": self.step_count,
+                    "url": url,
+                    "title": title,
+                    "actions": [],
+                    "results": []
+                }
+                
+                # Intercept action and result data from self.history if present
+                if hasattr(self, 'history') and self.history and len(self.history.history) > 0:
+                    last_h = self.history.history[-1]
+                    if hasattr(last_h, 'model_output') and last_h.model_output:
+                        if hasattr(last_h.model_output, 'action') and last_h.model_output.action:
+                            for act in last_h.model_output.action:
+                                try:
+                                    if hasattr(act, 'model_dump'):
+                                        step_entry["actions"].append(act.model_dump(exclude_none=True))
+                                    elif hasattr(act, 'dict'):
+                                        step_entry["actions"].append(act.dict(exclude_none=True))
+                                    else:
+                                        step_entry["actions"].append(str(act))
+                                except Exception:
+                                    step_entry["actions"].append(str(act))
+                    if hasattr(last_h, 'result') and last_h.result:
+                        for res in last_h.result:
+                            try:
+                                if hasattr(res, 'model_dump'):
+                                    step_entry["results"].append(res.model_dump(exclude_none=True))
+                                elif hasattr(res, 'dict'):
+                                    step_entry["results"].append(res.dict(exclude_none=True))
+                                else:
+                                    step_entry["results"].append(str(res))
+                            except Exception:
+                                step_entry["results"].append(str(res))
+                
                 if self.task_id in tasks:
                     tasks[self.task_id]["current_step"] = self.step_count
                     tasks[self.task_id]["current_url"] = url
                     tasks[self.task_id]["current_title"] = title
-                    tasks[self.task_id]["live_history"].append({
-                        "step": self.step_count,
-                        "url": url,
-                        "title": title
-                    })
-                logger.info(f"Captured screenshot for {self.task_id} step {self.step_count}: {screenshot_path}")
+                    tasks[self.task_id]["live_history"].append(step_entry)
+                logger.info(f"Captured screenshot and action logs for {self.task_id} step {self.step_count}: {screenshot_path}")
         except Exception as e:
             logger.error(f"Error capturing step screenshot for {self.task_id}: {e}")
 
