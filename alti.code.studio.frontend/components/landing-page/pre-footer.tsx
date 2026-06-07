@@ -21,13 +21,22 @@ function PreFooter() {
           {/* Logo and Tagline Section */}
           <div className="flex flex-col items-between justify-between">
             <div className="flex flex-col gap-6 lg:gap-10 items-center lg:items-start text-center lg:text-left">
-              <Image
-                alt="logo image"
-                className="h-8 w-auto object-contain"
-                height={32}
-                src="/inso-logo-white.png"
-                width={160}
-              />
+              <div className="flex items-center gap-3">
+                <Image
+                  alt="Inso Logo Icon"
+                  className="h-8 w-auto object-contain"
+                  height={32}
+                  src="/logo-white.png"
+                  width={37}
+                />
+                <Image
+                  alt="Inso Code"
+                  className="h-6 w-auto object-contain"
+                  height={24}
+                  src="/inso-logo-white.png"
+                  width={120}
+                />
+              </div>
               <div className="flex flex-col gap-3 lg:gap-5">
                 <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-white">
                   Your AI Pair Programmer.

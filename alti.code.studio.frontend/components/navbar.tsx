@@ -156,23 +156,45 @@ function Navbar() {
         <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
           {/* Logo */}
           {mounted ? (
-            <Link className="flex-shrink-0" href="/">
-              <Image
-                priority
-                alt="Inso Code"
-                className="h-8 w-auto object-contain dark:hidden"
-                height={32}
-                src="/inso-logo-black.png"
-                width={160}
-              />
-              <Image
-                priority
-                alt="Inso Code"
-                className="h-8 w-auto object-contain hidden dark:block"
-                height={32}
-                src="/inso-logo-white.png"
-                width={160}
-              />
+            <Link className="flex-shrink-0 flex items-center gap-2 md:gap-3" href="/">
+              {/* Light Mode: Icon + Text */}
+              <div className="flex items-center gap-2 md:gap-3 dark:hidden">
+                <Image
+                  priority
+                  alt="Inso Logo Icon"
+                  className="h-8 w-auto object-contain"
+                  height={32}
+                  src="/alti-logo.png"
+                  width={37}
+                />
+                <Image
+                  priority
+                  alt="Inso Code"
+                  className="h-6 w-auto object-contain"
+                  height={24}
+                  src="/inso-logo-black.png"
+                  width={120}
+                />
+              </div>
+              {/* Dark Mode: Icon + Text */}
+              <div className="hidden dark:flex items-center gap-2 md:gap-3">
+                <Image
+                  priority
+                  alt="Inso Logo Icon"
+                  className="h-8 w-auto object-contain"
+                  height={32}
+                  src="/logo-white.png"
+                  width={37}
+                />
+                <Image
+                  priority
+                  alt="Inso Code"
+                  className="h-6 w-auto object-contain"
+                  height={24}
+                  src="/inso-logo-white.png"
+                  width={120}
+                />
+              </div>
             </Link>
           ) : (
             <div
