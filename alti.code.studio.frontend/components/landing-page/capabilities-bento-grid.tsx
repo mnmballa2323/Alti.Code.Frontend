@@ -30,7 +30,7 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
                 Inso Code runs tools and modifies code directly on your machine via secure 
-                local IPC with zero latency, avoiding slow virtual machines.
+                local IPC with zero latency, avoiding slow virtual machines to deliver maximum local speed.
               </p>
             </div>
             
@@ -82,7 +82,7 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
                 Saves up to 80% on inference costs. Prompt prefix caching detects 
-                identical schema analysis requests and serves them locally, instantly.
+                identical schema analysis requests and serves them locally, instantly with zero delay.
               </p>
             </div>
           </div>

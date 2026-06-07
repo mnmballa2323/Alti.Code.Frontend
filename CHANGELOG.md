@@ -5,6 +5,26 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.149] - 2026-06-07 — Bento Grid Card 1 Copy Polish
+### Changed
+- **Bento Grid**:
+  - Added the word "maximum" to Card 1's description to fully balance and fill the fourth line of text.
+
+## [39.37.148] - 2026-06-07 — Bento Grid Card 1 Copy Polish
+### Changed
+- **Bento Grid**:
+  - Expanded the Card 1 description slightly to fill the space on the last line and prevent orphan words.
+
+## [39.37.147] - 2026-06-07 — Bento Grid Card 1 Copy Tuning
+### Changed
+- **Bento Grid**:
+  - Fine-tuned the description of Card 1 (Desktop IPC & CLI Steering) to be exactly 136 characters, wrapping into four balanced lines of text without orphan words.
+
+## [39.37.146] - 2026-06-07 — Bento Grid Card 1 Copy Expansion
+### Changed
+- **Bento Grid**:
+  - Expanded the Card 1 description to fill the space made by icon removal.
+
 ## [39.37.145] - 2026-06-07 — Bento Grid Icon Removal
 ### Changed
 - **Bento Grid**:
