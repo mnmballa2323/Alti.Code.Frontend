@@ -39,7 +39,7 @@ export default function CapabilitiesBentoGrid() {
             </div>
             
             {/* Visual Terminal */}
-            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm">
+            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm my-2 lg:my-3">
               <div className="flex items-center gap-1.5 pb-2 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
@@ -133,7 +133,7 @@ export default function CapabilitiesBentoGrid() {
             </div>
             
             {/* Keyring Visual */}
-            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm">
+            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col gap-1 xl:gap-1.5 shadow-inner select-none w-full max-w-sm my-2 lg:my-3">
               <div className="flex items-center gap-1.5 pb-2 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />

@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.142] - 2026-06-07 — Bento Grid Layout & Text Polish
+### Changed
+- **Bento Grid**:
+  - Restructured bento grid layout to a 2-row symmetric layout on desktop to fit the screen height without scrolling.
+  - Shortened sub-text to exactly two lines, utilizing lowercase "inso code" and zero dashes/hyphens.
+  - Shortened descriptions for the first box (Desktop IPC & CLI Steering) and the last box (Hardware Secure Vault) to prevent word cutoff and fit card heights.
+  - Added a symmetric keyring console visual component to the Hardware Secure Vault card.
+  - Shortened the title of the fifth card to "Submodule Auto-Sync" to fit on a single line.
+
 ## [39.37.141] - 2026-06-07 — Desktop Sidebar Logo Scale Polish
 ### Changed
 - **Desktop Sidebar**:
