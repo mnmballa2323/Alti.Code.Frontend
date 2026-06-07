@@ -12,6 +12,7 @@ import TriCloudSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
 import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
+import DatabaseConnectorsSection from "@/components/landing-page/database-connectors-section";
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
 import PricingSection from "@/components/landing-page/pricing-section";
 
@@ -39,6 +40,7 @@ export default function LandingPage() {
         <AgentSwarmSection />
         <EnterpriseConnectorsSection />
         <AppConnectorsSection />
+        <DatabaseConnectorsSection />
         <DeterministicControlSection />
         <EnterpriseInfrastructureSection />
         <PricingSection />
