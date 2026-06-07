@@ -25,7 +25,9 @@ const plans = [
     price: "500",
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
-    icon: <Building className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />,
+    icon: (
+      <Building className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+    ),
     cta: "Contact Enterprise",
   },
 ];
@@ -39,9 +41,6 @@ export default function PricingSection() {
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">
-          <div className="px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-full tracking-wider uppercase">
-            Flexible Plans
-          </div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-black dark:text-white leading-tight">
             Predictable Pricing.
           </h2>
@@ -76,7 +75,9 @@ export default function PricingSection() {
                       ${plan.price}
                     </span>
                     <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                      {plan.name === "Individual" ? "/ month" : "/ user / month"}
+                      {plan.name === "Individual"
+                        ? "/ month"
+                        : "/ user / month"}
                     </span>
                   </div>
                 </div>
@@ -87,9 +88,7 @@ export default function PricingSection() {
               </div>
 
               {/* Action Button */}
-              <button
-                className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 text-black dark:text-white border border-gray-200/50 dark:border-gray-800 active:scale-[0.98]"
-              >
+              <button className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-gray-50 hover:bg-gray-100 dark:bg-neutral-950 dark:hover:bg-neutral-900 text-black dark:text-white border border-gray-200/50 dark:border-gray-800 active:scale-[0.98]">
                 {plan.cta}
               </button>
             </div>
