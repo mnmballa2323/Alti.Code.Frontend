@@ -42,9 +42,14 @@ class DynamicAgentLoaderService {
     async loadAll() {
         try {
             const files = fs.readdirSync(this.customDir);
-            const jsonFiles = files.filter(file => file.endsWith('.json'));
+            let jsonFiles = files.filter(file => file.endsWith('.json'));
             
             logger.info(`[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Beginning bulk hydration...`);
+            
+            if (process.env.NODE_ENV !== 'production' && jsonFiles.length > 50) {
+                logger.info(`⚠️ [Dynamic Loader] Local Dev Optimization: Limiting bulk hydration to 50 agents (out of ${jsonFiles.length}) to prevent startup block.`);
+                jsonFiles = jsonFiles.slice(0, 50);
+            }
             
             const BATCH_SIZE = 50;
             for (let i = 0; i < jsonFiles.length; i += BATCH_SIZE) {

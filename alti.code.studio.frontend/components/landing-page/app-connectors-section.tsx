@@ -150,7 +150,7 @@ export default function AppConnectorsSection() {
   const marqueeApps = [...apps, ...apps];
 
   return (
-    <section className="w-full py-32 bg-gray-50 text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
+    <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col gap-16 items-center text-center">
         <div className="flex flex-col gap-6 max-w-5xl w-full px-4">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
