@@ -96,6 +96,7 @@ export default function HeroSwarm() {
               Database Connectors
             </span>
           </div>
+        </div>
       </div>
     </section>
   );
