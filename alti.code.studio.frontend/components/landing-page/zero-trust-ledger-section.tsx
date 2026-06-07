@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Shield, EyeOff, CheckCircle2, Key, Database, Terminal } from "lucide-react";
+import { EyeOff, CheckCircle2, Key, Database, Terminal } from "lucide-react";
 
 interface AuditEvent {
   time: string;
@@ -60,19 +60,11 @@ export default function ZeroTrustLedgerSection() {
 
   return (
     <section className="w-full py-32 bg-gray-50 text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-16 lg:gap-24">
         
         {/* Left Column: Copy */}
-        <div className="flex-1 flex flex-col gap-8 lg:max-w-xl">
+        <div className="lg:col-span-7 flex flex-col gap-8">
           <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-3">
-              <span className="p-2 bg-white rounded-xl border border-gray-100 shadow-sm">
-                <Shield className="w-6 h-6 text-black" />
-              </span>
-              <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">
-                Audited & Secure
-              </span>
-            </div>
             <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black">
               Zero-Trust Audit Trail. <br />
               Cryptographic Ledger.
@@ -87,7 +79,7 @@ export default function ZeroTrustLedgerSection() {
         </div>
 
         {/* Right Column: Ledger Timeline */}
-        <div className="flex-1 w-full">
+        <div className="lg:col-span-5 w-full">
           <div className="bg-white border border-gray-200/80 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative">
             
             {/* Header */}

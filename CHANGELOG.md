@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.131] - 2026-06-07 — Landing Page Zero-Trust Ledger Section Polish
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Removed the `Audited & Secure` Shield icon and text label to clean up the heading visual layout.
+  - Switched layout structure from simple flexbox to a CSS grid-cols-12 layout. Shifted the ledger timeline graphic to the right (`col-span-5`) and expanded the text copy column to `col-span-7`, leaving more space for the text on the left and moving the graphic more to the right.
+  - Cleaned up unused `Shield` import in `zero-trust-ledger-section.tsx`.
+
 ## [39.37.130] - 2026-06-07 — Landing Page Theme Loop Section Additions
 ### Added
 - **Three New Premium Landing Page Sections**:
