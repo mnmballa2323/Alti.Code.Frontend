@@ -57,13 +57,11 @@ export default function ContactPage() {
             ) : (
               <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 dark:text-neutral-500 uppercase tracking-wider" htmlFor="name">
-                    Full Name
-                  </label>
                   <input
                     className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="name"
-                    placeholder="John Doe"
+                    aria-label="Enter Full Name"
+                    placeholder="Enter Full Name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -71,14 +69,12 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 dark:text-neutral-500 uppercase tracking-wider" htmlFor="email">
-                    Email Address *
-                  </label>
                   <input
                     required
                     className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="email"
-                    placeholder="john@example.com"
+                    aria-label="Enter Email Address"
+                    placeholder="Enter Email Address"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -86,14 +82,12 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-gray-400 dark:text-neutral-500 uppercase tracking-wider" htmlFor="message">
-                    Your Message *
-                  </label>
                   <textarea
                     required
                     className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all resize-none text-black dark:text-white"
                     id="message"
-                    placeholder="Tell us what you're building..."
+                    aria-label="Enter Your Message"
+                    placeholder="Enter Your Message"
                     rows={5}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
