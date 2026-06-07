@@ -30,7 +30,7 @@ export default function CapabilitiesBentoGrid() {
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
                 Inso Code runs tools and modifies code directly on your machine via secure 
-                local IPC with zero latency.
+                local IPC with zero latency, avoiding slow virtual machines.
               </p>
             </div>
             
