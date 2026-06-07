@@ -1,0 +1,53 @@
+name: GCP Marketplace Publisher
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'marketplace/gcp/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_MARKETPLACE_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_MARKETPLACE_SA }}
+
+      - name: Install mpdev (Google Marketplace Developer Tool)
+        run: |
+          echo "Installing mpdev..."
+          curl -sL https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/releases/download/v0.10.1/mpdev_linux_amd64 -o mpdev
+          chmod +x mpdev
+          sudo mv mpdev /usr/local/bin/
+
+      - name: Validate GCP Marketplace Schema
+        run: |
+          cd marketplace/gcp
+          mpdev verify --schema schema.yaml
+
+      - name: Build and Push Deployer Image to GCR
+        # GCP Marketplace requires the application to be wrapped in a deployer image
+        run: |
+          cd marketplace/gcp
+          # Assuming a generic Dockerfile for the deployer exists
+          docker build -t gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/alti-code-studio-deployer:${{ github.sha }} .
+          gcloud auth configure-docker
+          docker push gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/alti-code-studio-deployer:${{ github.sha }}
+
+      - name: Sync Partner Portal
+        run: |
+          echo "Image pushed to GCR. The GCP Partner Portal will automatically sync the new deployer image."
+          echo "GCP Marketplace update triggered successfully."

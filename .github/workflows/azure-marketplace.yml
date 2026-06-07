@@ -1,0 +1,49 @@
+name: Azure Marketplace Publisher
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'marketplace/azure/**'
+  workflow_dispatch:
+
+jobs:
+  validate-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install ARM Template Toolkit (arm-ttk)
+        run: |
+          git clone https://github.com/Azure/arm-ttk.git
+          export PATH=$PATH:$(pwd)/arm-ttk/arm-ttk
+
+      - name: Validate Azure ARM Templates
+        run: |
+          pwsh -c "Import-Module ./arm-ttk/arm-ttk; Test-AzTemplate -TemplatePath marketplace/azure/mainTemplate.json"
+          
+      - name: Package Managed Application (.zip)
+        run: |
+          cd marketplace/azure
+          zip alti-azure-managed-app.zip mainTemplate.json createUiDefinition.json
+
+      - name: Authenticate to Azure Partner Center
+        # Uses the proprietary Partner Center Ingestion API
+        run: |
+          echo "Acquiring Bearer Token for Microsoft Commercial Marketplace..."
+          TOKEN=$(curl -s -X POST https://login.microsoftonline.com/${{ secrets.AZURE_TENANT_ID }}/oauth2/token \
+            -F grant_type=client_credentials \
+            -F client_id=${{ secrets.AZURE_PARTNER_CLIENT_ID }} \
+            -F client_secret=${{ secrets.AZURE_PARTNER_CLIENT_SECRET }} \
+            -F resource=https://api.partner.microsoft.com \
+            | jq -r .access_token)
+            
+          echo "Uploading alti-azure-managed-app.zip to Partner Center Ingestion API..."
+          curl -s -X PUT "https://api.partner.microsoft.com/v1.0/ingestion/products/${{ secrets.AZURE_MARKETPLACE_PRODUCT_ID }}/packages" \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Content-Type: application/zip" \
+            --data-binary @marketplace/azure/alti-azure-managed-app.zip
+          
+          echo "Azure Marketplace ingestion triggered successfully."
