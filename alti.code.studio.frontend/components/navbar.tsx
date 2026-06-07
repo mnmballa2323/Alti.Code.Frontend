@@ -10,8 +10,6 @@ import { useSession, signOut } from "next-auth/react";
 
 import MobileNavSheet from "./landing-page/MobileNavSheet";
 
-import { setContactModel } from "@/store/slice";
-
 function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -29,8 +27,6 @@ function Navbar() {
   const { theme } = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-
-
 
   // Handle button clicks in drawer
   const handleAuthClick = (path: any) => {
@@ -177,8 +173,6 @@ function Navbar() {
                 style={{ width: 160, height: 32 }}
               />
             )}
-
-
 
             {/* ✅ Auth Section Added */}
             <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">

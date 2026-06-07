@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setContactModel, setRequestDemoModel } from "@/store/slice";
+import { setContactModel } from "@/store/slice";
 
 function PreFooter() {
   const dispatch = useDispatch();
@@ -39,7 +39,8 @@ function PreFooter() {
               </div>
               <div className="flex flex-col gap-2">
                 <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-neutral-400">
-                  Secure local swarms with cloud orchestration. Engineered for absolute speed and precision.
+                  Secure local swarms with cloud orchestration. Engineered for
+                  absolute speed and precision.
                 </p>
               </div>
             </div>
@@ -227,25 +228,53 @@ function PreFooter() {
         {/* Bottom copyright and social media bar */}
         <div className="border-t border-neutral-900 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <span>© {new Date().getFullYear()} Inso Code Technologies, Inc.</span>
+            <span>
+              © {new Date().getFullYear()} Inso Code Technologies, Inc.
+            </span>
             <span className="hidden md:inline text-neutral-800">|</span>
             <div className="flex gap-4">
-              <Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <Link href="/" className="hover:text-white transition-colors">Terms of Service</Link>
-              <Link href="/" className="hover:text-white transition-colors">Cookies Policy</Link>
+              <Link className="hover:text-white transition-colors" href="/">
+                Privacy Policy
+              </Link>
+              <Link className="hover:text-white transition-colors" href="/">
+                Terms of Service
+              </Link>
+              <Link className="hover:text-white transition-colors" href="/">
+                Cookies Policy
+              </Link>
             </div>
           </div>
           <div className="flex gap-4 text-lg">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              className="hover:text-white transition-colors"
+              href="https://github.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <Icon icon="ri:github-fill" />
             </a>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              className="hover:text-white transition-colors"
+              href="https://x.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <Icon icon="ri:twitter-x-fill" />
             </a>
-            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              className="hover:text-white transition-colors"
+              href="https://discord.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <Icon icon="ri:discord-fill" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+            <a
+              className="hover:text-white transition-colors"
+              href="https://linkedin.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <Icon icon="ri:linkedin-box-fill" />
             </a>
           </div>
