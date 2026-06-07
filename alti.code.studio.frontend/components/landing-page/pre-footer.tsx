@@ -48,8 +48,39 @@ function PreFooter() {
 
           {/* Navigation Links Section */}
           <div className="w-full lg:w-auto">
-            {/* Desktop/Tablet Layout */}
-            <div className="hidden sm:block max-w-2xl lg:max-w-none mx-auto lg:mx-0">
+            {/* Desktop/Tablet Grid Layout */}
+            <div className="hidden sm:grid grid-cols-2 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
+              {/* Legal Column */}
+              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
+                <p className="text-white font-medium text-base">Legal</p>
+                <ul className="flex flex-col gap-2 lg:gap-3">
+                  <li>
+                    <Link
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/"
+                    >
+                      Terms of Use
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/"
+                    >
+                      Cookies Policy
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
               {/* Office Column */}
               <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[200px]">
                 <p className="text-white font-medium text-base">Office</p>
@@ -65,6 +96,32 @@ function PreFooter() {
 
             {/* Mobile Layout */}
             <div className="sm:hidden flex flex-col gap-6">
+              <div className="flex flex-col gap-4">
+                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
+                  Legal
+                </p>
+                <div className="grid grid-cols-1 gap-3">
+                  <Link
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/"
+                  >
+                    Privacy Policy
+                  </Link>
+                  <Link
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/"
+                  >
+                    Terms of Use
+                  </Link>
+                  <Link
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/"
+                  >
+                    Cookies Policy
+                  </Link>
+                </div>
+              </div>
+
               <div className="flex flex-col gap-4">
                 <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
                   Office
@@ -85,20 +142,8 @@ function PreFooter() {
         <div className="border-t border-neutral-900 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <span>
-              © {new Date().getFullYear()} Inso Code Technologies, Inc.
+              © {new Date().getFullYear()} Inso Code Technologies, Inc. All rights reserved.
             </span>
-            <span className="hidden md:inline text-neutral-800">|</span>
-            <div className="flex gap-4">
-              <Link className="hover:text-white transition-colors" href="/">
-                Privacy Policy
-              </Link>
-              <Link className="hover:text-white transition-colors" href="/">
-                Terms of Service
-              </Link>
-              <Link className="hover:text-white transition-colors" href="/">
-                Cookies Policy
-              </Link>
-            </div>
           </div>
           <div className="flex gap-4 text-lg">
             <a
