@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import PreFooter from "@/components/landing-page/pre-footer";
 
 import HeroSwarm from "@/components/landing-page/hero-swarm";
+import PairedProgrammerSection from "@/components/landing-page/paired-programmer-section";
 import TriCloudSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
@@ -31,6 +32,7 @@ export default function LandingPage() {
       
       <main className="flex-1 flex flex-col w-full">
         <HeroSwarm />
+        <PairedProgrammerSection />
         <TriCloudSection />
         <AgentSwarmSection />
         <EnterpriseConnectorsSection />
@@ -42,3 +44,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
