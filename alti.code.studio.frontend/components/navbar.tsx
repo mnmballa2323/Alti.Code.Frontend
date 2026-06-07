@@ -4,7 +4,7 @@ import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSession, signOut } from "next-auth/react";
@@ -27,9 +27,39 @@ function Navbar() {
 
   const { theme } = useTheme();
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useDispatch();
 
   const [activeSection, setActiveSection] = useState(0);
+
+  useEffect(() => {
+    if (pathname === "/contact") {
+      setActiveSection(13);
+    } else if (pathname === "/") {
+      const handleInitialSync = () => {
+        const scrollPosition = window.scrollY + 120;
+        let found = false;
+
+        for (let i = 0; i <= 12; i++) {
+          const el = document.getElementById(`section-${i}`);
+          if (el) {
+            const top = el.offsetTop;
+            const height = el.offsetHeight;
+            if (scrollPosition >= top && scrollPosition < top + height) {
+              setActiveSection(i);
+              found = true;
+              break;
+            }
+          }
+        }
+        if (!found) {
+          setActiveSection(0);
+        }
+      };
+      // Wait for mount/render to sync
+      setTimeout(handleInitialSync, 100);
+    }
+  }, [pathname]);
 
   const sections = [
     { name: "Home", icon: Home },
