@@ -4,6 +4,16 @@ import { logger } from '../../../shared/logger.js';
 
 class RedisCacheService {
     constructor() {
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.client = {
+                get: async () => null,
+                set: async () => {},
+                del: async () => {},
+                on: () => {}
+            };
+            return;
+        }
+
         // Fallback to local Redis if no ElastiCache / managed redis is configured
         const redisUrl = config.redis?.url || 'redis://localhost:6379';
         

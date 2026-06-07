@@ -17,6 +17,11 @@ class RedisClientWrapper {
     init() {
         if (this.client) return;
 
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.isEnabled = false;
+            return;
+        }
+
         const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
         try {

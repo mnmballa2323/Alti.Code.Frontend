@@ -1,0 +1,21 @@
+{
+  "watch": ["src", "server.js", "index.js"],
+  "ext": "js,json,cjs,mjs",
+  "ignore": [
+    "*.log",
+    "*.jsonl",
+    "*.txt",
+    "logs/**",
+    "uploads/**",
+    "tests/**",
+    "node_modules/**",
+    ".shadow/**",
+    ".git/**",
+    "*.bak",
+    "*.refactored.bak",
+    "generated/**",
+    "data/**",
+    "Alti.Code.Studio.backup/**"
+  ],
+  "delay": "1000"
+}

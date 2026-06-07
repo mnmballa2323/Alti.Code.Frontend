@@ -13,6 +13,11 @@ class GoogleCloudMemorystoreService {
     }
 
     async init() {
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.isInitialized = false;
+            return;
+        }
+
         try {
             // In GCP, Memorystore IP is typically provided via environment variables or VPC configuration
             const redisHost = process.env.REDIS_HOST || '10.0.0.3';

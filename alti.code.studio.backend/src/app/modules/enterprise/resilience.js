@@ -16,7 +16,7 @@
 import { logger } from '../../../shared/logger.js';
 import Redis from 'ioredis';
 
-const REDIS_HOST = process.env.REDIS_URL || process.env.GCP_REDIS_HOST;
+const REDIS_HOST = process.env.DISABLE_REDIS === 'true' ? null : (process.env.REDIS_URL || process.env.GCP_REDIS_HOST);
 const redis = REDIS_HOST ? new Redis(REDIS_HOST, { showFriendlyErrorStack: true, maxRetriesPerRequest: 3 }) : null;
 
 // ── Circuit Breaker States ──

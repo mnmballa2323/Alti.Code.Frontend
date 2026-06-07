@@ -104,6 +104,13 @@ class JobQueueService {
         this.workers = new Map();
         this.isMockMode = false;
 
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.isMockMode = true;
+            this.readinessPromise = Promise.resolve();
+            logger.warn('⚠️ JobQueue: Redis disabled via env. Switching to MOCK MODE.');
+            return;
+        }
+
         try {
             const configObj = this.getConnectionConfig();
             logger.info('JobQueueService: Config object:', configObj);
@@ -128,6 +135,9 @@ class JobQueueService {
                     logger.info('JobQueueService: testRedis error:', err.message);
                     logger.warn('⚠️ JobQueue: Redis not available. Switching to MOCK MODE.');
                     this.isMockMode = true;
+                    try {
+                        testRedis.disconnect();
+                    } catch (e) {}
                     resolve(); // Resolve anyway, we are ready in mock mode
                 });
             });
