@@ -100,6 +100,45 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
 
+  # ==========================================
+  # Observability: CloudWatch Dashboard
+  # ==========================================
+  AltiTelemetryDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub "Alti-Security-Telemetry-${CustomerName}"
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0, "y": 0, "width": 12, "height": 6,
+              "properties": {
+                "metrics": [
+                  [ "AltiCodeStudio", "TokensProcessed", "ClusterName", "${AltiDataPlaneCluster}" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${AWS::Region}",
+                "title": "AI Token Throughput (God-Tier Infrastructure)"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12, "y": 0, "width": 12, "height": 6,
+              "properties": {
+                "metrics": [
+                  [ "AWS/EC2", "NitroEnclaveMemoryUtilization", "ClusterName", "${AltiDataPlaneCluster}" ]
+                ],
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "${AWS::Region}",
+                "title": "Nitro Enclave Memory Encryption Status"
+              }
+            }
+          ]
+        }
+
 Outputs:
   ClusterName:
     Description: The name of the deployed Alti Code Studio cluster.

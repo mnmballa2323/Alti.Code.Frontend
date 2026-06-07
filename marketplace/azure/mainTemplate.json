@@ -77,6 +77,49 @@
       "identity": {
         "type": "SystemAssigned"
       }
+    },
+    {
+      "type": "Microsoft.Portal/dashboards",
+      "apiVersion": "2020-09-01-preview",
+      "name": "[concat('Alti-Telemetry-', parameters('customerName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "lenses": [
+          {
+            "order": 0,
+            "parts": [
+              {
+                "position": {
+                  "x": 0, "y": 0, "rowSpan": 4, "colSpan": 6
+                },
+                "metadata": {
+                  "inputs": [
+                    {
+                      "name": "ComponentId",
+                      "value": {
+                        "SubscriptionId": "[subscription().subscriptionId]",
+                        "ResourceGroup": "[resourceGroup().name]",
+                        "Name": "[variables('aksClusterName')]",
+                        "Type": "Microsoft.ContainerService/managedClusters"
+                      }
+                    }
+                  ],
+                  "type": "Extension/HubsExtension/PartType/MarkdownPart",
+                  "settings": {
+                    "content": {
+                      "settings": {
+                        "content": "## Alti Code Studio - Azure Confidential Computing\n\nMonitor Intel SGX Enclave Memory Encryption Status and AI Token Throughput below.",
+                        "title": "God-Tier Isolation Status",
+                        "subtitle": "Marketplace Edition"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
   "outputs": {

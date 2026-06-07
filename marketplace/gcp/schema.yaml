@@ -46,7 +46,13 @@ properties:
     description: Enforce deployment only on physical servers with verified Titan chips.
     default: true
 
-outputs:
+  enableStackdriverDashboards:
+    type: boolean
+    title: Provision Cloud Monitoring Dashboards
+    description: Automatically deploy custom Dashboards visualizing Titan Chip Validation and Confidential Computing health.
+    default: true
+
+Outputs:
   clusterName:
     type: string
     description: The name of the GKE cluster.
