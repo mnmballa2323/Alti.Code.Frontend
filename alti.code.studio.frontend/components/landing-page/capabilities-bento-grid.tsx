@@ -14,8 +14,9 @@ export default function CapabilitiesBentoGrid() {
             Engineered for scale.
           </h3>
           <p className="text-xl text-zinc-400 leading-relaxed font-medium">
-            Under the hood, Inso Code is built on system-level components that 
-            ensure speed, security, and absolute precision.
+            Under the hood, inso code is built on system level components that coordinate local daemons, 
+            optimize syntax tree modifications, and ensure peer to peer gossip synchronization to deliver 
+            speed, security, and absolute precision.
           </p>
         </div>
 
