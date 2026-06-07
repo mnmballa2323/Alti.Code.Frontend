@@ -41,7 +41,7 @@ export default function TriCloudSection() {
         <div className="flex flex-col items-center text-center gap-6 max-w-4xl">
 
           <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
-            No API Keys. <br />No Rate Limits.
+            No API Keys. No Rate Limits.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Direct SDK connections to foundational models are blocked for security. 
