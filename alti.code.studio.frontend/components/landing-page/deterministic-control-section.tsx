@@ -114,7 +114,7 @@ export default function DeterministicControlSection() {
         </div>
 
         {/* Right Column (Animation Window) */}
-        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-zinc-900 border border-zinc-800 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-slate-100 select-none rounded-2xl">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-white border border-zinc-200 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-zinc-900 select-none rounded-2xl">
           {/* SVG Swarm Canvas */}
           <div className="flex-1 min-h-0 relative flex items-center justify-center py-2">
             <style
@@ -133,7 +133,7 @@ export default function DeterministicControlSection() {
               }
               .flow-dots-inactive {
                 animation: flow-dots 2s linear infinite;
-                stroke: #27272A;
+                stroke: #E4E4E7;
                 stroke-width: 1.5px;
                 stroke-dasharray: 6 4;
               }
@@ -186,8 +186,8 @@ export default function DeterministicControlSection() {
                       r="18"
                       className={`transition-colors duration-500 ${
                         isActive
-                          ? "fill-emerald-950/80 stroke-emerald-500"
-                          : "fill-zinc-950 stroke-zinc-800"
+                          ? "fill-emerald-50/90 stroke-emerald-500"
+                          : "fill-white stroke-zinc-200"
                       }`}
                       strokeWidth="2"
                     />
@@ -195,7 +195,7 @@ export default function DeterministicControlSection() {
                     {/* Icon Container */}
                     <g
                       className={`transition-colors duration-500 ${
-                        isActive ? "text-emerald-400" : "text-zinc-500"
+                        isActive ? "text-emerald-600" : "text-zinc-400"
                       }`}
                     >
                       {agent.iconPath}
@@ -211,35 +211,37 @@ export default function DeterministicControlSection() {
                   cx="200"
                   cy="180"
                   r="36"
-                  className="fill-none stroke-blue-500/20 stroke-1 animate-pulse"
+                  className="fill-none stroke-blue-500/10 stroke-1 animate-pulse"
                 />
                 <circle
                   cx="200"
                   cy="180"
                   r="26"
-                  className="fill-blue-950/90 stroke-blue-500"
-                  strokeWidth="2.5"
-                />
-                {/* Supreme Commander Star/Hexagon Icon */}
-                <path
-                  d="M200 171 L203 177 L209 178 L204 183 L206 189 L200 186 L194 189 L196 183 L191 178 L197 177 Z"
-                  fill="none"
-                  stroke="#38BDF8"
+                  className="fill-blue-50 stroke-blue-500"
                   strokeWidth="2"
                 />
+                {/* Supreme Commander Logo Icon */}
+                <g transform="translate(184, 164)">
+                  <path
+                    d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+                    fill="#2563EB"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                  />
+                </g>
               </g>
             </svg>
           </div>
 
           {/* Interactive Agent Description Card */}
-          <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
+          <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 font-sans">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-600 font-sans">
                 {agents[activeStep].name}
               </span>
             </div>
-            <p className="text-xs text-slate-300 mt-1.5 leading-relaxed font-sans font-medium">
+            <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed font-sans font-medium">
               {agents[activeStep].description}
             </p>
           </div>
