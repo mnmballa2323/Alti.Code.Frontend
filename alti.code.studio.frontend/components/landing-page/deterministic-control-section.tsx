@@ -291,14 +291,14 @@ export default function DeterministicControlSection() {
           </div>
 
           {/* Interactive Agent Description Card */}
-          <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3.5 mt-2 flex-shrink-0 transition-all duration-500 min-h-[76px] flex flex-col justify-center">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-600 font-sans">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 font-sans">
                 {agents[activeStep].name}
               </span>
             </div>
-            <p className="text-xs text-zinc-600 mt-1.5 leading-relaxed font-sans font-medium">
+            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed font-sans font-medium">
               {agents[activeStep].description}
             </p>
           </div>
