@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Terminal, GitBranch, Shield, Zap, Code2, Network } from "lucide-react";
 
 export default function CapabilitiesBentoGrid() {
   return (
@@ -25,21 +24,18 @@ export default function CapabilitiesBentoGrid() {
           {/* Card 1: Desktop IPC & CLI */}
           <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] group-hover:bg-blue-500/10 transition-all duration-500" />
-            <div className="flex flex-col gap-3 max-w-xs w-full">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-blue-400 shrink-0">
-                <Terminal className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
+            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Desktop IPC & CLI Steering
               </h4>
               <p className="text-xs xl:text-sm text-zinc-400 leading-relaxed font-medium">
-                Inso Code runs tools and modifies code directly on your machine via a secure 
-                local IPC channel with zero remote latency.
+                Inso Code runs tools and modifies code directly on your machine via secure 
+                local IPC with zero latency.
               </p>
             </div>
             
             {/* Visual Terminal */}
-            <div className="w-full max-w-sm h-[130px] lg:h-[125px] xl:h-[150px] bg-black border border-zinc-800 rounded-2xl p-2.5 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none">
+            <div className="flex-1 bg-black border border-zinc-800 rounded-2xl p-3 xl:p-4 font-mono text-[9px] xl:text-[10px] text-zinc-500 flex flex-col justify-between shadow-inner select-none w-full max-w-sm">
               <div className="flex items-center gap-1.5 pb-1.5 border-b border-zinc-900 text-zinc-600">
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
                 <span className="w-2 h-2 rounded-full bg-zinc-800" />
@@ -55,9 +51,6 @@ export default function CapabilitiesBentoGrid() {
           {/* Card 2: AST Traversal */}
           <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-emerald-400 shrink-0">
-                <Code2 className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 AST Traversal Edits
               </h4>
@@ -71,9 +64,6 @@ export default function CapabilitiesBentoGrid() {
           {/* Card 3: Gossip Mesh Coordination */}
           <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-purple-400 shrink-0">
-                <Network className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Gossip Mesh Coordination
               </h4>
@@ -87,9 +77,6 @@ export default function CapabilitiesBentoGrid() {
           {/* Card 4: Semantic Prompt Cache */}
           <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-yellow-400 shrink-0">
-                <Zap className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Semantic Cache
               </h4>
@@ -103,9 +90,6 @@ export default function CapabilitiesBentoGrid() {
           {/* Card 5: Git Submodule Auto-Sync */}
           <div className="col-span-12 md:col-span-3 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
             <div className="flex flex-col gap-2 xl:gap-3">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-red-400 shrink-0">
-                <GitBranch className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Submodule Auto Sync
               </h4>
@@ -118,10 +102,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 6: Private Vault */}
           <div className="col-span-12 md:col-span-6 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 p-5 xl:p-6 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
-            <div className="flex flex-col gap-3 max-w-xs w-full">
-              <div className="w-9 h-9 xl:w-10 xl:h-10 rounded-xl bg-zinc-900 border border-zinc-800/80 flex items-center justify-center text-cyan-400 shrink-0">
-                <Shield className="w-4 h-4 xl:w-5 xl:h-5" />
-              </div>
+            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Hardware Secure Vault
               </h4>

@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.145] - 2026-06-07 — Bento Grid Icon Removal
+### Changed
+- **Bento Grid**:
+  - Removed all icon badges from bento grid card components to save vertical space, create a cleaner aesthetic, and prevent card contents from feeling cramped.
+
+## [39.37.144] - 2026-06-07 — Bento Grid Card 1 Copy Polish
+### Changed
+- **Bento Grid**:
+  - Shortened the description for Card 1 (Desktop IPC & CLI Steering) to prevent orphan words on the fourth line and ensure it fits perfectly within three lines.
+
 ## [39.37.143] - 2026-06-07 — Bento Grid Dash Removal Polish
 ### Changed
 - **Bento Grid**:
