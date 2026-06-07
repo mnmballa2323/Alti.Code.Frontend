@@ -118,7 +118,7 @@ export default function AgentForgeSection() {
 
         {/* Right Side: Interactive Panel */}
         <div className="w-full flex flex-col gap-4 lg:order-1">
-          <div className="w-full max-w-[420px] mx-auto lg:ml-0 lg:mr-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[340px]">
+          <div className="w-full max-w-[420px] mx-auto lg:ml-0 lg:mr-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[370px]">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
               <div className="flex items-center gap-2.5">
@@ -126,7 +126,7 @@ export default function AgentForgeSection() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 <span className="text-xs font-bold text-zinc-400 ml-2 font-mono">
-                  agent_forge_daemon v2.4
+                  Inso Code
                 </span>
               </div>
               <button
@@ -149,7 +149,7 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[210px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[245px]">
               
               {/* Progress Steps */}
               <div className="md:col-span-6 flex flex-col gap-4 justify-center h-full">
