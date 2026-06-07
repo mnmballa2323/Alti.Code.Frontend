@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto-accelerator-software-fallback
+  namespace: security
+  labels:
+    app: crypto-accelerator
+    tier: software-fallback
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: crypto-accelerator
+      tier: software-fallback
+  template:
+    metadata:
+      labels:
+        app: crypto-accelerator
+        tier: software-fallback
+    spec:
+      containers:
+      - name: crypto-service
+        # This image uses standard CPU-based OpenSSL instead of the AWS FPGA SDK
+        image: alticodestudio/crypto-service-software:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8443
+        resources:
+          requests:
+            cpu: "2" # Requires heavy CPU since it lacks hardware acceleration
+            memory: "4Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: crypto-routing-mesh
+  namespace: security
+spec:
+  hosts:
+  - "crypto-service.internal.cluster.local"
+  http:
+  - match:
+    - uri:
+        prefix: "/api/v1/crypto/rsa4096"
+    - uri:
+        prefix: "/api/v1/crypto/ecdsa"
+    - headers:
+        X-Requires-Hardware-Acceleration:
+          exact: "true"
+    route:
+    # Primary Route: Try the FPGA Hardware Accelerator first
+    - destination:
+        host: crypto-accelerator-svc.security.svc.cluster.local
+        subset: hardware-fpga
+      weight: 100
+    # Fallback Route: If the FPGA circuit breaker trips or instances are unavailable, 
+    # Istio automatically routes to the CPU Software Fallback to prevent total outage
+    - destination:
+        host: crypto-accelerator-svc.security.svc.cluster.local
+        subset: software-fallback
+      weight: 0
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: connect-failure,refused-stream,unavailable,cancelled,retriable-status-codes
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: fpga-crypto-subsets
+  namespace: security
+spec:
+  host: crypto-accelerator-svc.security.svc.cluster.local
+  subsets:
+  - name: hardware-fpga
+    labels:
+      tier: hardware-fpga
+  - name: software-fallback
+    labels:
+      tier: software-fallback
