@@ -35,6 +35,19 @@ module.exports = {
       env: {
         NODE_ENV: "development"
       }
+    },
+    {
+      name: "fazm-acp-bridge",
+      script: "npm",
+      args: "start",
+      cwd: "/Users/michaelmeram/workspace/alti.code.studio/submodules/fazm/acp-bridge",
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "development",
+        PORT: 7800
+      }
     }
   ]
 };
