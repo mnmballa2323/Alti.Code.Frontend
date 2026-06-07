@@ -21,7 +21,7 @@ export default function DeterministicControlSection() {
       x: 200,
       y: 60,
       description:
-        "Running real-time static analysis and vulnerability scans...",
+        "Running static analysis and vulnerability scans...",
       iconPath: (
         <path
           d="M194 54 V49 A6 6 0 0 1 206 49 V54 M190 54 H210 V68 H190 Z"
@@ -37,7 +37,7 @@ export default function DeterministicControlSection() {
       x: 320,
       y: 148,
       description:
-        "Writing unit tests first and enforcing 80%+ coverage checks...",
+        "Writing unit tests and enforcing code coverage...",
       iconPath: (
         <path
           d="M312 148 L317 153 L327 143 M308 148 A12 12 0 1 1 332 148 A12 12 0 1 1 308 148"
@@ -53,7 +53,7 @@ export default function DeterministicControlSection() {
       x: 280,
       y: 280,
       description:
-        "Verifying style compliance, cognitive complexity, and design patterns...",
+        "Verifying style compliance and design patterns...",
       iconPath: (
         <>
           <circle
@@ -81,7 +81,7 @@ export default function DeterministicControlSection() {
       x: 120,
       y: 280,
       description:
-        "Inspecting database schemas and validating migration scripts...",
+        "Inspecting database schemas and migrations...",
       iconPath: (
         <>
           <ellipse
@@ -114,7 +114,7 @@ export default function DeterministicControlSection() {
       x: 80,
       y: 148,
       description:
-        "Validating API route configurations and response payloads...",
+        "Validating API routes and response payloads...",
       iconPath: (
         <>
           <path
@@ -299,7 +299,7 @@ export default function DeterministicControlSection() {
                 {agents[activeStep].name}
               </span>
             </div>
-            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed font-sans font-medium">
+            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed font-sans font-medium truncate">
               {agents[activeStep].description}
             </p>
           </div>
