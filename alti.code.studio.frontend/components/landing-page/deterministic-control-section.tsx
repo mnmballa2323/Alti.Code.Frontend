@@ -159,7 +159,7 @@ export default function DeterministicControlSection() {
             Deterministic Output. <br />
             Absolute Security.
           </h3>
-          <p className="text-xl text-zinc-200 leading-relaxed font-medium text-balance">
+          <p className="text-xl text-zinc-400 leading-relaxed font-medium text-balance">
             Most AI coding tools are unpredictable black boxes. Inso Code is
             built for enterprise engineering teams who demand absolute control.
             With native guardrails, deterministic instruction steering, and
