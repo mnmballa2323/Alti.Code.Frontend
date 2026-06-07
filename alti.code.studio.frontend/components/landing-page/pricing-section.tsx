@@ -9,6 +9,7 @@ const plans = [
     description:
       "For developers who want zero configuration, production grade agentic swarm power.",
     cta: "Start Free Trial",
+    buttonClass: "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
   },
   {
     name: "Team",
@@ -16,6 +17,7 @@ const plans = [
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
     cta: "Upgrade Team",
+    buttonClass: "bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600",
   },
   {
     name: "Enterprise",
@@ -23,6 +25,7 @@ const plans = [
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
     cta: "Contact Enterprise",
+    buttonClass: "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
   },
 ];
 
@@ -75,7 +78,9 @@ export default function PricingSection() {
               </div>
 
               {/* Action Button */}
-              <button className="w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white border border-transparent dark:bg-blue-500 dark:hover:bg-blue-600 active:scale-[0.98]">
+              <button
+                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] ${plan.buttonClass}`}
+              >
                 {plan.cta}
               </button>
             </div>
