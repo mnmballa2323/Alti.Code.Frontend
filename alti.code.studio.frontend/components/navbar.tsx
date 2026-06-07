@@ -36,6 +36,28 @@ function Navbar() {
     if (pathname === "/contact") {
       setActiveSection(13);
     } else if (pathname === "/") {
+      if (typeof window !== "undefined") {
+        const targetStr = sessionStorage.getItem("scrollTargetSection");
+        if (targetStr) {
+          const index = parseInt(targetStr, 10);
+          sessionStorage.removeItem("scrollTargetSection");
+          if (!isNaN(index)) {
+            setTimeout(() => {
+              const el = document.getElementById(`section-${index}`);
+              if (el) {
+                const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                window.scrollTo({
+                  top: offsetTop,
+                  behavior: "smooth",
+                });
+                setActiveSection(index);
+              }
+            }, 200);
+            return;
+          }
+        }
+      }
+
       const handleInitialSync = () => {
         const scrollPosition = window.scrollY + 120;
         let found = false;
@@ -129,7 +151,8 @@ function Navbar() {
     }
 
     if (typeof window !== "undefined" && window.location.pathname !== "/") {
-      router.push(`/#section-${index}`);
+      sessionStorage.setItem("scrollTargetSection", String(index));
+      router.push("/");
       return;
     }
 
