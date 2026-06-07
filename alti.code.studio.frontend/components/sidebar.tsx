@@ -1406,20 +1406,40 @@ export default function Sidebar() {
               !isSidebarOpen && "hidden",
             )}
           >
-            <Image
-              alt="Inso Logo"
-              className="h-6 w-auto object-contain dark:hidden"
-              height={24}
-              src="/inso-logo-black.png"
-              width={120}
-            />
-            <Image
-              alt="Inso Logo"
-              className="h-6 w-auto object-contain hidden dark:block"
-              height={24}
-              src="/inso-logo-white.png"
-              width={120}
-            />
+            {/* Light Mode: Icon + Text */}
+            <div className="flex items-center gap-2 dark:hidden">
+              <Image
+                alt="Inso Logo Icon"
+                className="h-6 w-auto object-contain"
+                height={24}
+                src="/alti-logo.png"
+                width={28}
+              />
+              <Image
+                alt="Inso Code"
+                className="h-4 w-auto object-contain"
+                height={16}
+                src="/inso-logo-black.png"
+                width={80}
+              />
+            </div>
+            {/* Dark Mode: Icon + Text */}
+            <div className="hidden dark:flex items-center gap-2">
+              <Image
+                alt="Inso Logo Icon"
+                className="h-6 w-auto object-contain"
+                height={24}
+                src="/logo-white.png"
+                width={28}
+              />
+              <Image
+                alt="Inso Code"
+                className="h-4 w-auto object-contain"
+                height={16}
+                src="/inso-logo-white.png"
+                width={80}
+              />
+            </div>
           </div>
           <Button
             isIconOnly
