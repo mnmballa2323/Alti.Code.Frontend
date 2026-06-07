@@ -292,7 +292,7 @@ function Navbar() {
             )}
 
             {/* Gray Toggle Menu (Centered) */}
-            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -ml-10">
+            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
               <div className="flex items-center gap-3 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-1.5 rounded-full shadow-inner">
                 {sections.map((sec, index) => {
                   const IconComponent = sec.icon;
