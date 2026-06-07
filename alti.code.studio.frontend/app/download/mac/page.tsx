@@ -36,7 +36,7 @@ export default function DownloadMacPage() {
           {/* Left Side: Title & Action Buttons (col-span-5) */}
           <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left gap-5">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight">
-              Downloading Alti Code Studio
+              Downloading Inso Code
             </h1>
             <p className="text-gray-500 text-sm md:text-base leading-relaxed">
               Your download for macOS should begin automatically. If it didn't start, please click below.
@@ -80,7 +80,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open the Disk Image</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Locate <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Alti-Code-Studio.dmg</code> in your Downloads folder and open it.
+                    Locate <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> in your Downloads folder and open it.
                   </p>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Drag to Applications</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Drag the **Alti Code Studio** icon into your **Applications** folder in the window that appears.
+                    Drag the **Inso Code** icon into your **Applications** folder in the window that appears.
                   </p>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open & Trust App</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Double-click Alti Code Studio from your Applications folder. If prompted with a security warning, right-click the app and choose "Open".
+                    Double-click Inso Code from your Applications folder. If prompted with a security warning, right-click the app and choose "Open".
                   </p>
                 </div>
               </div>
