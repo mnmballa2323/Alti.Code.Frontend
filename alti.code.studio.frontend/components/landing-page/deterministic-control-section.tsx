@@ -243,13 +243,6 @@ export default function DeterministicControlSection() {
               {agents[activeStep].description}
             </p>
           </div>
-
-          {/* Bottom Status bar */}
-          <div className="mt-3.5 flex items-center justify-between text-[10px] text-zinc-600 border-t border-zinc-900 pt-3 flex-shrink-0 font-sans font-semibold">
-            <div>50,000 agents mapped</div>
-            <div>latency: 18ms</div>
-            <div>orchestrator: active</div>
-          </div>
         </div>
       </div>
     </section>
