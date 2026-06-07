@@ -90,6 +90,16 @@ const runRefinementCycle = async () => {
     logger('Step 2: Executing deep security vulnerability audit & patching...');
     await execute('npm audit fix --fund=false');
 
+    // 2.5. Vulnerability Harness Autonomous Triage and Patching
+    logger('Step 2.5: Running autonomous vulnerability scanning and patch synthesis...');
+    try {
+        // Run harness on src directory to verify codebase vulnerabilities
+        await vulnerabilityHarnessService.run('src', 1);
+        logger('✅ Autonomous vulnerability scanning wave complete.');
+    } catch (err) {
+        logger(`⚠️ Vulnerability scan encountered an issue: ${err.message}`);
+    }
+
     // 3. Regex Hardening
     logger('Step 3: Synthesizing structural code improvements...');
     optimizeAST();
