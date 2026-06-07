@@ -52,7 +52,7 @@ const providers = [
       "Massive context window intelligence powered by Google DeepMind.",
     models: [
       { name: "Gemini 3.5 Flash", inputPrice: "$1.50", outputPrice: "$9.00" },
-      { name: "Gemini 3.5 Pro", inputPrice: "$7.00", outputPrice: "$21.00" },
+      { name: "Gemini 3.1 Pro", inputPrice: "$2.00", outputPrice: "$12.00" },
     ],
   },
 ];
