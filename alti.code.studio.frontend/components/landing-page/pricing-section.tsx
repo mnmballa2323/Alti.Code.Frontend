@@ -45,7 +45,8 @@ export default function PricingSection() {
             Predictable Pricing.
           </h2>
           <p className="text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-            Flat platform fee for swarm orchestration and secure sandboxing. 
+            Flat platform fee for swarm orchestration and secure sandboxing.
+            <br />
             Inference token usage is tracked and billed directly at cost.
           </p>
         </div>

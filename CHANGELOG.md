@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.156] - 2026-06-07 — Pricing Sub-text Wrap Formatting
+### Changed
+- **Pricing**:
+  - Inserted a line break before "Inference" in the header sub-text to push it to the second line for clean, balanced wrapping.
+
 ## [39.37.155] - 2026-06-07 — Pricing Billing Wording Correction
 ### Changed
 - **Pricing**:
