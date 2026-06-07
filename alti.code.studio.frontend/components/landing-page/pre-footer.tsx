@@ -23,10 +23,10 @@ function PreFooter() {
             <div className="flex flex-col gap-6 lg:gap-10 items-center lg:items-start text-center lg:text-left">
               <Image
                 alt="logo image"
-                className="h-10 w-10 object-contain"
-                height={40}
-                src="/logo-white.png"
-                width={40}
+                className="h-8 w-auto object-contain"
+                height={32}
+                src="/inso-logo-white.png"
+                width={160}
               />
               <div className="flex flex-col gap-3 lg:gap-5">
                 <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-white">

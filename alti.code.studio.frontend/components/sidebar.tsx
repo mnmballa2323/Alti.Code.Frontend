@@ -1408,10 +1408,17 @@ export default function Sidebar() {
           >
             <Image
               alt="Inso Logo"
-              className="dark:invert"
-              height={22}
-              src="/alti-logo.png"
-              width={22}
+              className="h-6 w-auto object-contain dark:hidden"
+              height={24}
+              src="/inso-logo-black.png"
+              width={120}
+            />
+            <Image
+              alt="Inso Logo"
+              className="h-6 w-auto object-contain hidden dark:block"
+              height={24}
+              src="/inso-logo-white.png"
+              width={120}
             />
           </div>
           <Button

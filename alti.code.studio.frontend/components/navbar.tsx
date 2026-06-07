@@ -160,16 +160,24 @@ function Navbar() {
               <Image
                 priority
                 alt="Inso Code"
-                className="h-10 w-10 object-contain"
-                height={40}
-                src="/alti-logo.png"
-                width={40}
+                className="h-8 w-auto object-contain dark:hidden"
+                height={32}
+                src="/inso-logo-black.png"
+                width={160}
+              />
+              <Image
+                priority
+                alt="Inso Code"
+                className="h-8 w-auto object-contain hidden dark:block"
+                height={32}
+                src="/inso-logo-white.png"
+                width={160}
               />
             </Link>
           ) : (
             <div
               className="animate-pulse dark:bg-gray-800 bg-gray-200 rounded"
-              style={{ width: 100, height: 40.11 }}
+              style={{ width: 160, height: 32 }}
             />
           )}
 

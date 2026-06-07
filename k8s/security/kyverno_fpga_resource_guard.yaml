@@ -1,0 +1,77 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-fpga-resource-limits
+  annotations:
+    policies.kyverno.io/title: Strict FPGA Hardware Resource Guard
+    policies.kyverno.io/category: FinOps, Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/description: >-
+      AWS F1 instances provide hardware FPGAs (aws.amazon.com/fpga). These slots are
+      highly constrained and expensive. This policy prevents misconfigured deployments 
+      from requesting multiple FPGAs per pod or unauthorized applications from 
+      hoarding cryptographic hardware capacity.
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    # Rule 1: Limit FPGA Requests to exactly 1 per Pod
+    - name: limit-fpga-requests-per-pod
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      validate:
+        message: "A single Pod cannot request more than 1 FPGA (aws.amazon.com/fpga: 1). Hardware hoarding is prohibited."
+        # This JMESPath expression checks every container in the pod.
+        # If any container requests aws.amazon.com/fpga, the value MUST be "1".
+        deny:
+          conditions:
+            any:
+            - key: "{{ request.object.spec.containers[].resources.requests.\"aws.amazon.com/fpga\" | [] }}"
+              operator: AnyNotIn
+              value:
+                - "1"
+                - null
+                - ""
+
+    # Rule 2: Require Tier-1 Label for FPGA Access
+    - name: require-auth-label-for-fpga
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      # This precondition ensures we only evaluate pods that actually request an FPGA
+      preconditions:
+        any:
+        - key: "{{ request.object.spec.containers[].resources.requests.\"aws.amazon.com/fpga\" || '0' }}"
+          operator: AnyIn
+          value:
+          - "1"
+      validate:
+        message: "Unauthorized Hardware Access. Only pods labeled with 'crypto-tier: tier-1' are authorized to be scheduled onto FPGA nodes."
+        pattern:
+          metadata:
+            labels:
+              crypto-tier: "tier-1"
+
+    # Rule 3: Restrict FPGA workloads to specific namespaces
+    - name: restrict-fpga-namespaces
+      match:
+        any:
+        - resources:
+            kinds:
+            - Pod
+      preconditions:
+        any:
+        - key: "{{ request.object.spec.containers[].resources.requests.\"aws.amazon.com/fpga\" || '0' }}"
+          operator: AnyIn
+          value:
+          - "1"
+      validate:
+        message: "FPGA workloads are only permitted in the 'security-ops' or 'crypto-core' namespaces."
+        pattern:
+          metadata:
+            namespace: "?(security-ops|crypto-core)"

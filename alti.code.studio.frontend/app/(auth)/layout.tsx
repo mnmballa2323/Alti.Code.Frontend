@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
          {/* Logo */}
          <div className="absolute top-8 left-12 z-30 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
            <Link href="/">
-             <img src="/logo-white.png" alt="Inso Logo" className="h-10 w-auto" />
+             <img src="/inso-logo-white.png" alt="Inso Logo" className="h-8 w-auto" />
            </Link>
          </div>
          
