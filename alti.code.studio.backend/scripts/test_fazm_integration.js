@@ -1,3 +1,4 @@
+import '../polyfill.js';
 import { FazmAgentService } from '../src/app/modules/fazmAgent/fazmAgent.service.js';
 import { graphOrchestrator } from '../src/app/modules/agents/graph.orchestrator.js';
 
