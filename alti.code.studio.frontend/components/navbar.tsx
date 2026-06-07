@@ -1,5 +1,5 @@
 "use client";
-import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, SendHorizontal } from "lucide-react";
+import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, Mail } from "lucide-react";
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -97,7 +97,7 @@ function Navbar() {
     { name: "Capabilities Bento Grid", icon: Grid },
     { name: "Enterprise Infrastructure", icon: Server },
     { name: "Pricing", icon: CreditCard },
-    { name: "Contact Us", icon: SendHorizontal }
+    { name: "Contact Us", icon: Mail }
   ];
 
   useEffect(() => {
@@ -330,13 +330,7 @@ function Navbar() {
                           : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
                       }`}
                     >
-                      <IconComponent
-                        className={`w-[20px] h-[20px] transition-transform duration-300 ${
-                          sec.name === "Contact Us"
-                            ? "-rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                            : ""
-                        }`}
-                      />
+                      <IconComponent className="w-[20px] h-[20px]" />
                       
                       {/* Tooltip */}
                       <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
