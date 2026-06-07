@@ -35,7 +35,7 @@ const plans = [
 export default function PricingSection() {
   return (
     <section
-      className="w-full py-24 bg-white dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
+      className="w-full py-24 bg-gray-50 dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
       id="pricing"
     >
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
