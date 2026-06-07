@@ -79,11 +79,11 @@ export default function ZeroTrustLedgerSection() {
         </div>
 
         {/* Right Column: Ledger Timeline */}
-        <div className="lg:col-span-5 w-full">
-          <div className="bg-white border border-gray-200/80 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative">
+        <div className="lg:col-span-5 w-full lg:w-[130%] lg:translate-x-20">
+          <div className="bg-white border border-gray-200/80 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative lg:h-[460px] overflow-hidden justify-between">
             
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-100 shrink-0">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                 <span className="text-xs font-bold text-gray-600 uppercase tracking-wider font-mono">
@@ -95,85 +95,90 @@ export default function ZeroTrustLedgerSection() {
               </span>
             </div>
 
-            {/* Timeline Events */}
-            <div className="relative flex flex-col gap-8 pl-4">
-              {/* Vertical connecting line */}
-              <div className="absolute left-[29px] top-4 bottom-4 w-[2px] bg-gray-100" />
+            {/* Timeline Events Scroll/Crop Wrapper */}
+            <div className="relative flex-1 overflow-hidden min-h-0 py-1">
+              <div className="relative flex flex-col gap-8 pl-4">
+                {/* Vertical connecting line */}
+                <div className="absolute left-[29px] top-4 bottom-4 w-[2px] bg-gray-100" />
 
-              {events.map((event, idx) => {
-                const IconComponent = event.icon;
-                const isHovered = hoveredIndex === idx;
+                {events.map((event, idx) => {
+                  const IconComponent = event.icon;
+                  const isHovered = hoveredIndex === idx;
 
-                return (
-                  <div
-                    key={idx}
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    className="relative flex gap-6 items-start group cursor-pointer transition-all duration-300"
-                  >
-                    {/* Time Label on left */}
-                    <div className="text-[10px] text-gray-400 font-mono font-bold pt-1.5 w-16 text-right shrink-0">
-                      {event.time}
-                    </div>
-
-                    {/* Timeline Node Icon */}
+                  return (
                     <div
-                      className={`relative z-10 w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 transition-all duration-300 ${
-                        isHovered
-                          ? "bg-black border-black text-white shadow-md"
-                          : "bg-white border-gray-200 text-gray-500 group-hover:border-gray-400"
-                      }`}
+                      key={idx}
+                      onMouseEnter={() => setHoveredIndex(idx)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                      className="relative flex gap-6 items-start group cursor-pointer transition-all duration-300"
                     >
-                      <IconComponent className="w-4 h-4" />
-                    </div>
-
-                    {/* Content Box */}
-                    <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-                      <div className="flex items-baseline justify-between gap-4">
-                        <h4 className="text-sm font-bold text-black group-hover:text-neutral-900 transition-colors">
-                          {event.title}
-                        </h4>
-                        <span className="text-[9px] text-gray-400 font-mono truncate max-w-[120px]">
-                          {event.hash.substring(0, 16)}...
-                        </span>
+                      {/* Time Label on left */}
+                      <div className="text-[10px] text-gray-400 font-mono font-bold pt-1.5 w-16 text-right shrink-0">
+                        {event.time}
                       </div>
-                      <p className="text-xs text-gray-500 font-medium leading-relaxed">
-                        {event.desc}
-                      </p>
 
-                      {/* Expanded View for DLP details */}
-                      {(event.rawText || event.redactedText) && (
-                        <div
-                          className={`mt-2 p-3.5 bg-gray-50 border border-gray-100 rounded-xl font-mono text-[9px] flex flex-col gap-2 overflow-hidden transition-all duration-300 ${
-                            isHovered ? "border-gray-200 shadow-sm" : ""
-                          }`}
-                        >
-                          {event.rawText && (
-                            <div className="text-gray-400 line-through truncate">
-                              <span className="text-[8px] font-bold text-red-500 bg-red-50 px-1 py-0.5 rounded mr-1.5 font-sans uppercase">
-                                Source
-                              </span>
-                              {event.rawText}
-                            </div>
-                          )}
-                          {event.redactedText && (
-                            <div className="text-emerald-600 font-bold truncate">
-                              <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded mr-1.5 font-sans uppercase">
-                                Redacted
-                              </span>
-                              {event.redactedText}
-                            </div>
-                          )}
+                      {/* Timeline Node Icon */}
+                      <div
+                        className={`relative z-10 w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 transition-all duration-300 ${
+                          isHovered
+                            ? "bg-black border-black text-white shadow-md"
+                            : "bg-white border-gray-200 text-gray-500 group-hover:border-gray-400"
+                        }`}
+                      >
+                        <IconComponent className="w-4 h-4" />
+                      </div>
+
+                      {/* Content Box */}
+                      <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                        <div className="flex items-baseline justify-between gap-4">
+                          <h4 className="text-sm font-bold text-black group-hover:text-neutral-900 transition-colors">
+                            {event.title}
+                          </h4>
+                          <span className="text-[9px] text-gray-400 font-mono truncate max-w-[120px]">
+                            {event.hash.substring(0, 16)}...
+                          </span>
                         </div>
-                      )}
+                        <p className="text-xs text-gray-500 font-medium leading-relaxed">
+                          {event.desc}
+                        </p>
+
+                        {/* Expanded View for DLP details */}
+                        {(event.rawText || event.redactedText) && (
+                          <div
+                            className={`mt-2 p-3.5 bg-gray-50 border border-gray-100 rounded-xl font-mono text-[9px] flex flex-col gap-2 overflow-hidden transition-all duration-300 ${
+                              isHovered ? "border-gray-200 shadow-sm" : ""
+                            }`}
+                          >
+                            {event.rawText && (
+                              <div className="text-gray-400 line-through truncate">
+                                <span className="text-[8px] font-bold text-red-500 bg-red-50 px-1 py-0.5 rounded mr-1.5 font-sans uppercase">
+                                  Source
+                                </span>
+                                {event.rawText}
+                              </div>
+                            )}
+                            {event.redactedText && (
+                              <div className="text-emerald-600 font-bold truncate">
+                                <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1 py-0.5 rounded mr-1.5 font-sans uppercase">
+                                  Redacted
+                                </span>
+                                {event.redactedText}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+
+              {/* Fade-out overlay for cropped look */}
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none z-20" />
             </div>
 
             {/* Footer */}
-            <div className="border-t border-gray-100 pt-4 flex items-center justify-between text-[10px] text-gray-400 font-semibold font-mono">
+            <div className="border-t border-gray-100 pt-4 flex items-center justify-between text-[10px] text-gray-400 font-semibold font-mono shrink-0">
               <span>Ledger Security: SHA-256 HMAC-signed</span>
               <span>Audit logs synchronized</span>
             </div>
