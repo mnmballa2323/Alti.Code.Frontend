@@ -100,12 +100,12 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button
-                  className="w-full rounded-2xl bg-black dark:bg-white text-white dark:text-black font-bold py-4 hover:opacity-90 transition-opacity mt-2"
+                <button
+                  className="w-full rounded-2xl bg-black dark:bg-white text-white dark:text-black font-bold py-4 text-sm hover:opacity-90 transition-opacity mt-2 border border-transparent"
                   type="submit"
                 >
                   Send Message
-                </Button>
+                </button>
               </form>
             )}
           </div>
