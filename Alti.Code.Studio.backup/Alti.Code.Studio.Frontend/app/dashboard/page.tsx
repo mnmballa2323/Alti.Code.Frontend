@@ -28,7 +28,7 @@ function page() {
         <div className="flex h-screen w-full items-center justify-center">
           <div className="flex w-full max-w-4xl flex-col items-center gap-8">
             <h1 className="text-3xl font-semibold leading-9 text-default-foreground">
-              How can I help you today?
+              Build The Future
             </h1>
             <div className="flex w-full flex-col gap-4 px-4">
               <PromptInputFullLineWithBottomActions />
