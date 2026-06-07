@@ -92,7 +92,7 @@ export default function AgentForgeSection() {
           <div className="flex flex-col gap-6">
             <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black">
               Autonomous Agent Forge. <br />
-              Self-Expanding Swarm.
+              Self Expanding Swarm.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed font-medium">
               Need a specialist for a bespoke service, legacy codebase, or proprietary API? 
