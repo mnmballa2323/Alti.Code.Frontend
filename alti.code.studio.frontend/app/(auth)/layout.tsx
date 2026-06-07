@@ -176,19 +176,8 @@ export default function AuthLayout({
         <div className="absolute top-[-20%] left-[-20%] w-[90%] h-[90%] rounded-full bg-[#0066FF]/15 blur-[130px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] rounded-full bg-[#0066FF]/5 blur-[110px] pointer-events-none" />
 
-        {/* Logo */}
-        <div className="z-30 flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
-          <Link className="flex items-center gap-2" href="/">
-            <img
-              alt="Inso Logo Icon"
-              className="h-8 w-auto"
-              src="/logo-white.png"
-            />
-          </Link>
-        </div>
-
         {/* Interactive Terminal Window */}
-        <div className="z-20 w-full flex items-center justify-center my-8">
+        <div className="z-20 w-full flex items-center justify-center mt-4 mb-12">
           <CodeTerminal />
         </div>
 
