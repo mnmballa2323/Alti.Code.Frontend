@@ -80,7 +80,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open the Disk Image</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Locate the <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> inside your Downloads folder and double-click it to mount the installer bundle.
+                    Locate the <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> inside your Downloads folder and double-click it to mount the installer.
                   </p>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Drag to Applications</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Drag the Inso Code application icon directly into the Applications shortcut folder inside the setup window.
+                    Drag the Inso Code application icon directly into the Applications folder in the setup window.
                   </p>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function DownloadMacPage() {
                 <div>
                   <h3 className="font-bold text-sm text-black">Open & Trust App</h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Launch Inso Code from your Applications folder, and click Open if macOS prompts a developer security alert.
+                    Launch Inso Code from your Applications folder, and click Open if macOS prompts a security alert.
                   </p>
                 </div>
               </div>
