@@ -20,7 +20,7 @@ const providers = [
     ),
     models: [
       { name: "GPT-5.5", inputPrice: "$5.00", outputPrice: "$30.00" },
-      { name: "GPT-5.5 Pro", inputPrice: "$15.00", outputPrice: "$75.00" },
+      { name: "GPT-5.5 Pro", inputPrice: "$10.00", outputPrice: "$45.00" },
     ],
   },
   {
