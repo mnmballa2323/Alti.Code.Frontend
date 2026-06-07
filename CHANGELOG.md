@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.138] - 2026-06-07 — Zero-Trust Ledger Copy Shortening
+### Changed
+- **Zero-Trust Audit Trail & Cryptographic Ledger**:
+  - Shortened and refactored the copy text in the left column to be concise, clean, and punchy (around 4 lines), ensuring zero hyphens or dashes and natural spacing.
+
 ## [39.37.137] - 2026-06-07 — Zero-Trust Ledger Copy Final Line Polish
 ### Changed
 - **Zero-Trust Audit Trail & Cryptographic Ledger**:
