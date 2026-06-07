@@ -33,9 +33,9 @@ export default function DownloadWindowsPage() {
         {/* Floating Design Container */}
         <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-center bg-white border border-gray-100 rounded-[32px] p-8 md:p-12 shadow-xl">
           
-          {/* Left Side: Title & Action Buttons (col-span-5) */}
-          <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left gap-5">
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight">
+          {/* Left Side: Title & Action Buttons (col-span-6) */}
+          <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left gap-5">
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight md:whitespace-nowrap">
               Downloading Inso Code
             </h1>
             <p className="text-gray-500 text-sm md:text-base leading-relaxed">
@@ -65,8 +65,8 @@ export default function DownloadWindowsPage() {
           {/* Desktop Divider (col-span-1) */}
           <div className="hidden md:block w-px h-64 bg-gray-100 col-span-1 justify-self-center" />
 
-          {/* Right Side: Instructions (col-span-6) */}
-          <div className="md:col-span-6 flex flex-col justify-center">
+          {/* Right Side: Instructions (col-span-5) */}
+          <div className="md:col-span-5 flex flex-col justify-center">
             <h2 className="text-xs uppercase font-bold tracking-widest text-gray-400 mb-6 flex items-center gap-2">
               <Info className="w-4 h-4 text-black" />
               How to install on Windows
