@@ -264,7 +264,7 @@ function Navbar() {
 
             {/* Gray Toggle Menu (Centered) */}
             <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="flex items-center gap-1 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-1 rounded-full shadow-inner">
+              <div className="flex items-center gap-3 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-1.5 rounded-full shadow-inner">
                 {sections.map((sec, index) => {
                   const IconComponent = sec.icon;
                   const isActive = activeSection === index;
@@ -272,16 +272,16 @@ function Navbar() {
                     <button
                       key={index}
                       onClick={() => handleSectionClick(index)}
-                      className={`relative group p-1.5 rounded-full transition-all duration-300 ${
+                      className={`relative group p-2.5 rounded-full transition-all duration-300 ${
                         isActive
                           ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
                           : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
                       }`}
                     >
-                      <IconComponent className="w-[18px] h-[18px]" />
+                      <IconComponent className="w-[20px] h-[20px]" />
                       
                       {/* Tooltip */}
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                      <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
                         {sec.name}
                       </span>
                     </button>
