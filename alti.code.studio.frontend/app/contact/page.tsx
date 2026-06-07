@@ -31,7 +31,7 @@ export default function ContactPage() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-black text-black dark:text-white w-full overflow-x-hidden font-sans">
       <Navbar />
 
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-16 md:py-24 relative">
+      <main className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center px-4 py-16 md:py-24 relative">
         {/* Background Gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
