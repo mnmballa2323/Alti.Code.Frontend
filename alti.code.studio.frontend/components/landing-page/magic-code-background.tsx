@@ -4,13 +4,82 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 const SYMBOLS = [
-  "{ }", "< />", "=>", "()", "⌘", "/*", "*/", "&&", "||", "01", "AI", "API", "[]",
-  ">_", "===", "++", "+=", "${}", "->", "::", "NaN", "404", "git", "npm", 
-  "ts", "js", "go", "rs", "py", "{}", "()", "$", "@", "!", "?:", "<T>", "/>", "~/",
-  "AWS", "GCP", "Azure", "SQL", "CSS", "HTML", "C++", "C#", "K8s", "Docker", "S3",
-  "EC2", "Postgres", "Redis", "TCP", "HTTP", "REST", "JSON", "YAML", "SSH", "Linux",
-  "React", "Vue", "Angular", "Swift", "Kotlin", "Java", "PHP", "Ruby", "Dart",
-  "GraphQL", "DevOps", "CI/CD", "0x", "127.0.0.1", "localhost", "sudo", "bash"
+  "{ }",
+  "< />",
+  "=>",
+  "()",
+  "⌘",
+  "/*",
+  "*/",
+  "&&",
+  "||",
+  "01",
+  "AI",
+  "API",
+  "[]",
+  ">_",
+  "===",
+  "++",
+  "+=",
+  "${}",
+  "->",
+  "::",
+  "NaN",
+  "404",
+  "git",
+  "npm",
+  "ts",
+  "js",
+  "go",
+  "rs",
+  "py",
+  "{}",
+  "()",
+  "$",
+  "@",
+  "!",
+  "?:",
+  "<T>",
+  "/>",
+  "~/",
+  "AWS",
+  "GCP",
+  "Azure",
+  "SQL",
+  "CSS",
+  "HTML",
+  "C++",
+  "C#",
+  "K8s",
+  "Docker",
+  "S3",
+  "EC2",
+  "Postgres",
+  "Redis",
+  "TCP",
+  "HTTP",
+  "REST",
+  "JSON",
+  "YAML",
+  "SSH",
+  "Linux",
+  "React",
+  "Vue",
+  "Angular",
+  "Swift",
+  "Kotlin",
+  "Java",
+  "PHP",
+  "Ruby",
+  "Dart",
+  "GraphQL",
+  "DevOps",
+  "CI/CD",
+  "0x",
+  "127.0.0.1",
+  "localhost",
+  "sudo",
+  "bash",
 ];
 const COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#34A853", "#000000"];
 
@@ -32,7 +101,7 @@ class Particle {
     this.vx = (Math.random() - 0.5) * 0.5;
     this.vy = (Math.random() - 0.5) * 0.5;
     this.symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
-    this.size = Math.random() * 10 + 14; 
+    this.size = Math.random() * 10 + 14;
     this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
     this.alpha = Math.random() * 0.3 + 0.1;
     this.pulse = Math.random() * Math.PI;
@@ -50,6 +119,7 @@ class Particle {
 
   draw(ctx: CanvasRenderingContext2D) {
     const currentAlpha = this.alpha + Math.sin(this.pulse) * 0.1;
+
     ctx.font = `bold ${this.size}px Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`;
     ctx.fillStyle = this.color;
     ctx.globalAlpha = Math.max(0.05, currentAlpha);
@@ -65,9 +135,11 @@ export default function MagicCodeBackground() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return;
 
     let particles: Particle[] = [];
@@ -75,18 +147,19 @@ export default function MagicCodeBackground() {
 
     const resize = () => {
       if (canvas.parentElement) {
-          canvas.width = canvas.parentElement.offsetWidth;
-          canvas.height = canvas.parentElement.offsetHeight;
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = canvas.parentElement.offsetHeight;
       } else {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
       initParticles();
     };
 
     const initParticles = () => {
       particles = [];
-      const numParticles = Math.floor((canvas.width * canvas.height) / 10000); 
+      const numParticles = Math.floor((canvas.width * canvas.height) / 10000);
+
       for (let i = 0; i < numParticles; i++) {
         particles.push(new Particle(canvas.width, canvas.height));
       }
@@ -104,18 +177,18 @@ export default function MagicCodeBackground() {
         particles[i].draw(ctx);
 
         for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 120) {
-              ctx.beginPath();
-              ctx.strokeStyle = `rgba(100, 100, 100, ${0.1 * (1 - distance / 120)})`;
-              ctx.lineWidth = 0.5;
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.stroke();
-            }
+          if (distance < 120) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(100, 100, 100, ${0.1 * (1 - distance / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
         }
       }
 
@@ -132,25 +205,29 @@ export default function MagicCodeBackground() {
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-      <motion.div 
-        animate={{ 
-          backgroundPosition: ["0% 0%", "100% 100%", "0% 100%", "100% 0%", "0% 0%"] 
-        }}
-        transition={{ 
-          duration: 30, 
-          ease: "linear", 
-          repeat: Infinity 
+      <motion.div
+        animate={{
+          backgroundPosition: [
+            "0% 0%",
+            "100% 100%",
+            "0% 100%",
+            "100% 0%",
+            "0% 0%",
+          ],
         }}
         className="absolute inset-0 opacity-40"
         style={{
-          background: "radial-gradient(circle at center, rgba(66,133,244,0.12) 0%, rgba(234,67,53,0.08) 35%, rgba(251,188,5,0.05) 70%, rgba(255,255,255,0) 100%)",
-          backgroundSize: "400% 400%"
+          background:
+            "radial-gradient(circle at center, rgba(66,133,244,0.12) 0%, rgba(234,67,53,0.08) 35%, rgba(251,188,5,0.05) 70%, rgba(255,255,255,0) 100%)",
+          backgroundSize: "400% 400%",
+        }}
+        transition={{
+          duration: 30,
+          ease: "linear",
+          repeat: Infinity,
         }}
       />
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full"
-      />
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" />
     </div>
   );
 }

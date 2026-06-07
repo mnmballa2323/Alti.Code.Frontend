@@ -2,7 +2,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { useDispatch } from "react-redux";
-import { Bot, Sparkles, Send, CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
+import { CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import AgentCreationWizard from "@/components/agents/agent-creation-wizard";
@@ -68,13 +68,11 @@ function AgentPageContent() {
   const handleChatSend = (e?: React.FormEvent, promptOverride?: string) => {
     if (e) e.preventDefault();
     const text = promptOverride || chatMessage;
+
     if (!text.trim()) return;
 
     // Add user message
-    setMockMessages((prev) => [
-      ...prev,
-      { role: "user", content: text },
-    ]);
+    setMockMessages((prev) => [...prev, { role: "user", content: text }]);
     if (!promptOverride) setChatMessage("");
 
     // Simulate Agent Background Work
@@ -119,7 +117,7 @@ function AgentPageContent() {
             };
 
             // Remove action blocks since the final output is delivered
-            const filtered = updated.filter(msg => !msg.action);
+            const filtered = updated.filter((msg) => !msg.action);
 
             return [
               ...filtered,
@@ -178,73 +176,73 @@ function AgentPageContent() {
                       />
                     </div>
                   </div>
-
-
                 </div>
               ) : (
                 // Agent Chat Mode
                 <div className="flex flex-col h-full w-full max-w-4xl mx-auto animate-in fade-in duration-300">
                   {/* Messages Area */}
                   <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
-              {mockMessages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  {msg.role === "user" ? (
-                    <div className="bg-black dark:bg-white text-white dark:text-black px-5 py-3.5 rounded-2xl max-w-[75%] text-[15px] shadow-sm">
-                      {msg.content}
-                    </div>
-                  ) : (
-                    <div className="flex flex-col max-w-[85%] gap-2">
-                      {msg.action && (
-                        <ActionBlock
-                          action={msg.action}
-                          status={msg.actionStatus as any}
+                    {mockMessages.map((msg, i) => (
+                      <div
+                        key={i}
+                        className={`flex w-full ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                      >
+                        {msg.role === "user" ? (
+                          <div className="bg-black dark:bg-white text-white dark:text-black px-5 py-3.5 rounded-2xl max-w-[75%] text-[15px] shadow-sm">
+                            {msg.content}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col max-w-[85%] gap-2">
+                            {msg.action && (
+                              <ActionBlock
+                                action={msg.action}
+                                status={msg.actionStatus as any}
+                              />
+                            )}
+                            {msg.content && (
+                              <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 px-5 py-3.5 rounded-2xl text-[15px] shadow-sm whitespace-pre-wrap">
+                                {msg.content}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Input Area */}
+                  <div className="p-6 bg-transparent">
+                    <form className="relative group" onSubmit={handleChatSend}>
+                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+                      <div className="relative flex items-center bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all p-2 gap-1">
+                        <button
+                          className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0"
+                          type="button"
+                        >
+                          <Paperclip size={20} />
+                        </button>
+                        <input
+                          className="flex-1 bg-transparent border-none outline-none px-2 py-3 text-[15px] text-gray-900 dark:text-white placeholder:text-gray-400"
+                          placeholder="Message your agent..."
+                          type="text"
+                          value={chatMessage}
+                          onChange={(e) => setChatMessage(e.target.value)}
                         />
-                      )}
-                      {msg.content && (
-                        <div className="bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 px-5 py-3.5 rounded-2xl text-[15px] shadow-sm whitespace-pre-wrap">
-                          {msg.content}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        {chatMessage ? (
+                          <ArrowUp
+                            className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:opacity-80 transition-opacity shrink-0"
+                            onClick={(e: any) => handleChatSend(e)}
+                          />
+                        ) : (
+                          <AudioRecorder
+                            className="w-10 h-10 p-2.5 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex-none shrink-0 hover:opacity-80 transition-opacity"
+                            setMessage={setChatMessage}
+                          />
+                        )}
+                      </div>
+                    </form>
+                  </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Input Area */}
-            <div className="p-6 bg-transparent">
-              <form className="relative group" onSubmit={handleChatSend}>
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-                <div className="relative flex items-center bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all p-2 gap-1">
-                  <button type="button" className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0">
-                    <Paperclip size={20} />
-                  </button>
-                  <input
-                    className="flex-1 bg-transparent border-none outline-none px-2 py-3 text-[15px] text-gray-900 dark:text-white placeholder:text-gray-400"
-                    placeholder="Message your agent..."
-                    type="text"
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                  />
-                  {chatMessage ? (
-                    <ArrowUp
-                      className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:opacity-80 transition-opacity shrink-0"
-                      onClick={(e: any) => handleChatSend(e)}
-                    />
-                  ) : (
-                    <AudioRecorder 
-                      className="w-10 h-10 p-2.5 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex-none shrink-0 hover:opacity-80 transition-opacity"
-                      setMessage={setChatMessage} 
-                    />
-                  )}
-                </div>
-              </form>
-
-            </div>
-          </div>
               )}
             </div>
             <AgentRightSidebar />

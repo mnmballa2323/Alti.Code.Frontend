@@ -16,28 +16,39 @@ class Particle {
     this.angle = Math.random() * Math.PI * 2;
     // Max distance is slightly larger than the container to spawn outside
     const maxDist = Math.max(width, height) / 1.2;
+
     this.distance = initial ? Math.random() * maxDist : maxDist;
-    
+
     // Orbital speed and inward suction speed
     this.speed = Math.random() * 0.01 + 0.002;
     this.inwardSpeed = Math.random() * 0.4 + 0.1;
-    
+
     this.size = Math.random() * 2 + 1;
-    const colors = ["#4285F4", "#34A853", "#FBBC05", "#EA4335", "#111111", "#444444"];
+    const colors = [
+      "#4285F4",
+      "#34A853",
+      "#FBBC05",
+      "#EA4335",
+      "#111111",
+      "#444444",
+    ];
+
     this.color = colors[Math.floor(Math.random() * colors.length)];
   }
 
   update(width: number, height: number) {
     // Spin faster as they approach the center (simulating gravity well / black hole)
     const angularVelocity = this.speed * (150 / Math.max(30, this.distance));
+
     this.angle += angularVelocity;
-    
+
     // Move inward
     this.distance -= this.inwardSpeed;
 
     // If swallowed by the center, respawn at the edge
     if (this.distance < 5) {
       const maxDist = Math.max(width, height) / 1.2;
+
       this.distance = maxDist;
       this.angle = Math.random() * Math.PI * 2;
     }
@@ -60,25 +71,30 @@ export default function SwarmCanvas() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return;
 
     // Handle Resize
     const resizeCanvas = () => {
       const parent = canvas.parentElement;
+
       if (parent) {
         canvas.width = parent.clientWidth;
         canvas.height = parent.clientHeight;
       }
     };
+
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
     // Initialize Particles
     const particles: Particle[] = [];
     const particleCount = 200; // Vortex looks great with higher density
+
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle(canvas.width, canvas.height, true));
     }
@@ -107,6 +123,7 @@ export default function SwarmCanvas() {
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             const opacity = 1 - distance / 45;
+
             ctx.strokeStyle = `rgba(80, 80, 80, ${opacity * 0.3})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
@@ -127,8 +144,8 @@ export default function SwarmCanvas() {
 
   return (
     <div className="relative w-full max-w-[360px] aspect-square rounded-[2rem] bg-white border border-gray-200 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.08)] flex items-center justify-center">
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
     </div>

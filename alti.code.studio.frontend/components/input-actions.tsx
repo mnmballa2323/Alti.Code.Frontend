@@ -566,8 +566,6 @@ function PromptInputFullLineComponent({
                 className="p-0 overflow-hidden"
                 variant="flat"
               >
-
-
                 <DropdownSection
                   className="mb-1.5 last:mb-0"
                   classNames={{

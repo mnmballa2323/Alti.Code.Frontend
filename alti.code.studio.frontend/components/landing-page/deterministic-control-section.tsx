@@ -10,9 +10,11 @@ export default function DeterministicControlSection() {
             Absolute Security.
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
-            Most AI coding tools are unpredictable black boxes. Inso Code is built for enterprise 
-            engineering teams who demand absolute control. With built-in guardrails, deterministic instruction 
-            steering, and mandatory TDD workflows, our agents don&apos;t just write code—they engineer robust systems.
+            Most AI coding tools are unpredictable black boxes. Inso Code is
+            built for enterprise engineering teams who demand absolute control.
+            With built-in guardrails, deterministic instruction steering, and
+            mandatory TDD workflows, our agents don&apos;t just write code—they
+            engineer robust systems.
           </p>
         </div>
       </div>

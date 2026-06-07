@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, LogOut, Settings, Table2 } from "lucide-react";
+import { CreditCard, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "./ui/button";
@@ -29,7 +29,6 @@ const MyAccountDropdown = () => {
 
         <DropdownMenuContent align="start" className="w-64">
           <DropdownMenuGroup>
-
             <DropdownMenuItem className="relative">
               <span className="flex items-center space-x-2">
                 <CreditCard className="size-5" />

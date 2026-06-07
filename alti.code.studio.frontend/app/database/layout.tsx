@@ -1,4 +1,5 @@
 import React from "react";
+
 import ChatBotLayout from "@/components/ChatbotLayout";
 
 export default function DatabaseLayout({

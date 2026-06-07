@@ -3,7 +3,6 @@
 import React, { useState, useRef } from "react";
 import {
   User,
-  AlignLeft,
   FileText,
   Shield,
   Database,
@@ -15,8 +14,6 @@ import {
   Upload,
 } from "lucide-react";
 import { cn } from "@heroui/react";
-
-import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 
 const STEPS = [
   { id: "name", label: "NAME", icon: User, title: "Enter Project Name" },
@@ -418,7 +415,7 @@ export default function AgentCreationWizard({
 
             {/* Step 5: PUBLISH */}
             {currentStep === 4 && (
-              <div 
+              <div
                 className="relative w-full flex items-center bg-white border border-gray-200 rounded-full px-2 py-2 shadow-[0_2px_10px_rgba(0,0,0,0.02)] transition-shadow hover:shadow-[0_2px_15px_rgba(0,0,0,0.05)] hover:border-gray-300 animate-in fade-in slide-in-from-bottom-4 duration-500 cursor-pointer group"
                 onClick={() => {
                   onComplete({
@@ -440,7 +437,7 @@ export default function AgentCreationWizard({
                 >
                   <ChevronLeft size={16} strokeWidth={2.5} />
                 </button>
-                
+
                 <div className="flex-1 flex justify-center items-center pointer-events-none">
                   <span className="text-[15px] font-medium text-gray-400 group-hover:text-gray-600 transition-colors">
                     Publish Agent

@@ -92,7 +92,11 @@ const SUPPORTED_DATABASES = [
   { id: "firestore", name: "Firestore", icon: "gcp:firestore" },
   { id: "ibm-db2", name: "IBM Db2", icon: "logos:ibm" },
   { id: "influxdb", name: "InfluxDB", icon: "logos:influxdb" },
-  { id: "knowledge-catalog", name: "Knowledge Catalog", icon: "carbon:ibm-watson-knowledge-catalog" },
+  {
+    id: "knowledge-catalog",
+    name: "Knowledge Catalog",
+    icon: "carbon:ibm-watson-knowledge-catalog",
+  },
   { id: "looker", name: "Looker", icon: "logos:looker" },
   { id: "mariadb", name: "MariaDB", icon: "logos:mariadb" },
   { id: "memcached", name: "Memcached", icon: "logos:memcached" },
@@ -975,6 +979,7 @@ export default function Sidebar() {
             { id: agentIdParam, name: agentNameParam, prompt: "" },
           ];
         }
+
         return prev;
       });
       setSelectedAgentId(agentIdParam);
@@ -1619,98 +1624,98 @@ export default function Sidebar() {
           )}
         >
           <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content="App Connections"
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className={cn(
+                "border rounded-lg flex-shrink-0 flex-1",
+                pathname === "/connect-apps"
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+              )}
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                router.push("/connect-apps");
               }}
-              closeDelay={0}
-              content="App Connections"
-              delay={0}
-              placement="top"
-            >
-              <Button
-                isIconOnly
-                className={cn(
-                  "border rounded-lg flex-shrink-0 flex-1",
-                  pathname === "/connect-apps"
-                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-                )}
-                size="sm"
-                variant="flat"
-                onClick={() => {
-                  router.push("/connect-apps");
-                }}
-                onMouseEnter={() => {
-                  router.prefetch("/connect-apps");
-                }}
-              >
-                <LayoutGrid className="size-3.5" />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              onMouseEnter={() => {
+                router.prefetch("/connect-apps");
               }}
-              closeDelay={0}
-              content="Database Connectors"
-              delay={0}
-              placement="top"
             >
-              <Button
-                isIconOnly
-                className={cn(
-                  "border rounded-lg flex-shrink-0 flex-1",
-                  pathname.startsWith("/database")
-                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-                )}
-                size="sm"
-                variant="flat"
-                onClick={() => {
-                  router.push("/database");
-                }}
-                onMouseEnter={() => {
-                  router.prefetch("/database");
-                }}
-              >
-                <Database className="size-3.5" />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              <LayoutGrid className="size-3.5" />
+            </Button>
+          </Tooltip>
+          <Tooltip
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content="Database Connectors"
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className={cn(
+                "border rounded-lg flex-shrink-0 flex-1",
+                pathname.startsWith("/database")
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+              )}
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                router.push("/database");
               }}
-              closeDelay={0}
-              content="Cloud Connections"
-              delay={0}
-              placement="top"
+              onMouseEnter={() => {
+                router.prefetch("/database");
+              }}
             >
-              <Button
-                isIconOnly
-                className={cn(
-                  "border rounded-lg flex-shrink-0 flex-1",
-                  pathname === "/cloud"
-                    ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                    : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-                )}
-                size="sm"
-                variant="flat"
-                onClick={() => {
-                  router.push("/cloud");
-                }}
-                onMouseEnter={() => {
-                  router.prefetch("/cloud");
-                }}
-              >
-                <Cloud className="size-3.5" />
-              </Button>
-            </Tooltip>
+              <Database className="size-3.5" />
+            </Button>
+          </Tooltip>
+          <Tooltip
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content="Cloud Connections"
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className={cn(
+                "border rounded-lg flex-shrink-0 flex-1",
+                pathname === "/cloud"
+                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
+                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
+              )}
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                router.push("/cloud");
+              }}
+              onMouseEnter={() => {
+                router.prefetch("/cloud");
+              }}
+            >
+              <Cloud className="size-3.5" />
+            </Button>
+          </Tooltip>
         </div>
 
         {/* 6 navigation icons toggle container */}
@@ -1876,7 +1881,9 @@ export default function Sidebar() {
               <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
                 {(() => {
                   const filtered = SUPPORTED_DATABASES.filter((db) =>
-                    db.name.toLowerCase().includes(leftSidebarSearch.toLowerCase())
+                    db.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
                   );
 
                   if (filtered.length === 0) {
@@ -1912,7 +1919,11 @@ export default function Sidebar() {
                                 : "bg-[#f4f4f5] dark:bg-[#27272a]",
                             )}
                           >
-                            <img src={`/database-logos/${db.id}.${db.id === 'alloydb' ? 'png' : 'svg'}`} alt={db.name} className="w-5 h-5 object-contain" />
+                            <img
+                              alt={db.name}
+                              className="w-5 h-5 object-contain"
+                              src={`/database-logos/${db.id}.${db.id === "alloydb" ? "png" : "svg"}`}
+                            />
                           </div>
                           <span className="text-xs text-left truncate pr-2">
                             {db.name}
@@ -2679,7 +2690,7 @@ export default function Sidebar() {
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
                 className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
-                onClick={() => window.location.href = "/login"}
+                onClick={() => (window.location.href = "/login")}
               >
                 Login
               </Button>

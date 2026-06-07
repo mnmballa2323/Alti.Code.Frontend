@@ -286,8 +286,8 @@ export default function MarketplacePage() {
         {/* Footer note */}
         <p className="text-center text-xs text-default-500 mt-10 pb-4">
           <Icon className="inline mr-1" icon="solar:info-circle-linear" />
-          Newly installed agents activate on the next server reload ·
-          Inso Code v3.1.0
+          Newly installed agents activate on the next server reload · Inso Code
+          v3.1.0
         </p>
       </div>
 

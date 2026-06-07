@@ -16,20 +16,25 @@ import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+
 import { RootState } from "@/store";
 
 export default function AgentRightSidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("history");
-  
+
   const searchParams = useSearchParams();
   const agentName = searchParams?.get("name") || "Agent Settings";
 
   const { data: session } = useSession();
   const token = session?.user?.accessToken ?? null;
-  const selectedRepo = useSelector((state: RootState) => state.system.activeWorkspace) || "alti.code.studio";
-  const documents = useSelector((state: RootState) => state.system.documents || []);
+  const selectedRepo =
+    useSelector((state: RootState) => state.system.activeWorkspace) ||
+    "alti.code.studio";
+  const documents = useSelector(
+    (state: RootState) => state.system.documents || [],
+  );
 
   const { data: rulesData } = useQuery({
     queryKey: ["codebase-rules", token, selectedRepo],
@@ -41,6 +46,7 @@ export default function AgentRightSidebar() {
         },
       });
       const data = await res.json();
+
       return data.success ? data.data : { instructions: [], guardrails: [] };
     },
     enabled: !!token,
@@ -117,7 +123,8 @@ export default function AgentRightSidebar() {
         <Tooltip
           showArrow
           classNames={{
-            content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            content:
+              "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
           }}
           closeDelay={0}
           content="New"
@@ -159,7 +166,8 @@ export default function AgentRightSidebar() {
                 key={item.label}
                 showArrow
                 classNames={{
-                  content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                  content:
+                    "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
                 }}
                 closeDelay={0}
                 content={item.label}
@@ -197,54 +205,80 @@ export default function AgentRightSidebar() {
           className="flex-1 px-2 mt-2 min-h-0 w-full scrollbar-hide overflow-y-auto"
         >
           <div className="flex flex-col gap-1 w-full pb-4">
-            {activeTab === "instructions" && (
-              instructions.length > 0 ? (
-                instructions.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase())).map((item: any) => (
-                  <div key={item.id} className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                    <FileText className="size-3.5 mr-2 text-default-400 shrink-0" />
-                    <span className="truncate">{item.name}</span>
-                  </div>
-                ))
+            {activeTab === "instructions" &&
+              (instructions.length > 0 ? (
+                instructions
+                  .filter((item: any) =>
+                    item.name.toLowerCase().includes(search.toLowerCase()),
+                  )
+                  .map((item: any) => (
+                    <div
+                      key={item.id}
+                      className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    >
+                      <FileText className="size-3.5 mr-2 text-default-400 shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                  ))
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center w-full opacity-60">
-                  <span className="text-xs text-default-400">No instructions found.</span>
+                  <span className="text-xs text-default-400">
+                    No instructions found.
+                  </span>
                 </div>
-              )
-            )}
+              ))}
 
-            {activeTab === "guardrails" && (
-              guardrails.length > 0 ? (
-                guardrails.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase())).map((item: any) => (
-                  <div key={item.id} className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                    <Shield className="size-3.5 mr-2 text-default-400 shrink-0" />
-                    <span className="truncate">{item.name}</span>
-                  </div>
-                ))
+            {activeTab === "guardrails" &&
+              (guardrails.length > 0 ? (
+                guardrails
+                  .filter((item: any) =>
+                    item.name.toLowerCase().includes(search.toLowerCase()),
+                  )
+                  .map((item: any) => (
+                    <div
+                      key={item.id}
+                      className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    >
+                      <Shield className="size-3.5 mr-2 text-default-400 shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                  ))
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center w-full opacity-60">
-                  <span className="text-xs text-default-400">No guardrails found.</span>
+                  <span className="text-xs text-default-400">
+                    No guardrails found.
+                  </span>
                 </div>
-              )
-            )}
+              ))}
 
-            {activeTab === "data" && (
-              documents.length > 0 ? (
-                documents.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase())).map((item: any) => (
-                  <div key={item.id} className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                    <Database className="size-3.5 mr-2 text-default-400 shrink-0" />
-                    <span className="truncate">{item.name}</span>
-                  </div>
-                ))
+            {activeTab === "data" &&
+              (documents.length > 0 ? (
+                documents
+                  .filter((item: any) =>
+                    item.name.toLowerCase().includes(search.toLowerCase()),
+                  )
+                  .map((item: any) => (
+                    <div
+                      key={item.id}
+                      className="w-full flex items-center px-3 py-2.5 rounded-xl bg-[#F4F4F6] dark:bg-default-50 text-xs text-default-700 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                    >
+                      <Database className="size-3.5 mr-2 text-default-400 shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                  ))
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center w-full opacity-60">
-                  <span className="text-xs text-default-400">No data found.</span>
+                  <span className="text-xs text-default-400">
+                    No data found.
+                  </span>
                 </div>
-              )
-            )}
+              ))}
 
             {activeTab === "history" && (
               <div className="flex flex-col items-center justify-center py-12 text-center w-full opacity-60">
-                <span className="text-xs text-default-400">Chat history will appear here.</span>
+                <span className="text-xs text-default-400">
+                  Chat history will appear here.
+                </span>
               </div>
             )}
           </div>

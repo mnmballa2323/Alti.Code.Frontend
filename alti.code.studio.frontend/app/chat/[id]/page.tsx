@@ -121,7 +121,6 @@ const SingleChatPage = () => {
               <PromptInputFullLineWithBottomActions
                 hideAgents={true}
                 hideDropdown={true}
-                showModelDropdown={true}
                 placeholder="Enter prompt here..."
                 rightActions={
                   <Tooltip>
@@ -145,6 +144,7 @@ const SingleChatPage = () => {
                     </TooltipContent>
                   </Tooltip>
                 }
+                showModelDropdown={true}
                 onSend={handleSend}
               />
             </div>

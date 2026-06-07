@@ -153,89 +153,92 @@ function Navbar() {
     <>
       <div className="h-[80px] w-full">
         <div className="bg-white dark:bg-black flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
-        <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
-          {/* Logo */}
-          {mounted ? (
-            <Link className="flex-shrink-0 flex items-center gap-2 md:gap-3" href="/">
-              {/* Light Mode: Icon + Text */}
-              <div className="flex items-center gap-2 md:gap-3 dark:hidden">
-                <Image
-                  priority
-                  alt="Inso Logo Icon"
-                  className="h-8 w-auto object-contain"
-                  height={32}
-                  src="/alti-logo.png"
-                  width={37}
-                />
-                <Image
-                  priority
-                  alt="Inso Code"
-                  className="h-6 w-auto object-contain"
-                  height={24}
-                  src="/inso-logo-black.png"
-                  width={120}
-                />
-              </div>
-              {/* Dark Mode: Icon + Text */}
-              <div className="hidden dark:flex items-center gap-2 md:gap-3">
-                <Image
-                  priority
-                  alt="Inso Logo Icon"
-                  className="h-8 w-auto object-contain"
-                  height={32}
-                  src="/logo-white.png"
-                  width={37}
-                />
-                <Image
-                  priority
-                  alt="Inso Code"
-                  className="h-6 w-auto object-contain"
-                  height={24}
-                  src="/inso-logo-white.png"
-                  width={120}
-                />
-              </div>
-            </Link>
-          ) : (
-            <div
-              className="animate-pulse dark:bg-gray-800 bg-gray-200 rounded"
-              style={{ width: 160, height: 32 }}
-            />
-          )}
+          <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
+            {/* Logo */}
+            {mounted ? (
+              <Link
+                className="flex-shrink-0 flex items-center gap-2 md:gap-3"
+                href="/"
+              >
+                {/* Light Mode: Icon + Text */}
+                <div className="flex items-center gap-2 md:gap-3 dark:hidden">
+                  <Image
+                    priority
+                    alt="Inso Logo Icon"
+                    className="h-8 w-auto object-contain"
+                    height={32}
+                    src="/alti-logo.png"
+                    width={37}
+                  />
+                  <Image
+                    priority
+                    alt="Inso Code"
+                    className="h-6 w-auto object-contain"
+                    height={24}
+                    src="/inso-logo-black.png"
+                    width={120}
+                  />
+                </div>
+                {/* Dark Mode: Icon + Text */}
+                <div className="hidden dark:flex items-center gap-2 md:gap-3">
+                  <Image
+                    priority
+                    alt="Inso Logo Icon"
+                    className="h-8 w-auto object-contain"
+                    height={32}
+                    src="/logo-white.png"
+                    width={37}
+                  />
+                  <Image
+                    priority
+                    alt="Inso Code"
+                    className="h-6 w-auto object-contain"
+                    height={24}
+                    src="/inso-logo-white.png"
+                    width={120}
+                  />
+                </div>
+              </Link>
+            ) : (
+              <div
+                className="animate-pulse dark:bg-gray-800 bg-gray-200 rounded"
+                style={{ width: 160, height: 32 }}
+              />
+            )}
 
-          {/* Desktop Navigation Links (Centered) */}
-          <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <ul className="flex items-center gap-8 xl:gap-12">
-              {links.map((item, index) => (
-                <li key={index}>
-                  {item.type === "anchor" ? (
-                    <button
-                      className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleLinkClick(item);
-                      }}
-                    >
-                      {item.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
-                    </button>
-                  ) : (
-                    <Link
-                      className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
-                      href={item.href}
-                      onClick={() => handleLinkClick(item)}
-                    >
-                      {item.label}
-                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Desktop Navigation Links (Centered) */}
+            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <ul className="flex items-center gap-8 xl:gap-12">
+                {links.map((item, index) => (
+                  <li key={index}>
+                    {item.type === "anchor" ? (
+                      <button
+                        className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleLinkClick(item);
+                        }}
+                      >
+                        {item.label}
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
+                      </button>
+                    ) : (
+                      <Link
+                        className="font-semibold text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 relative group"
+                        href={item.href}
+                        onClick={() => handleLinkClick(item)}
+                      >
+                        {item.label}
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-black dark:bg-white transition-all duration-200 group-hover:w-full" />
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* ✅ Auth Section Added */}
-          <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
+            {/* ✅ Auth Section Added */}
+            <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
               {session?.user && status === "authenticated" ? (
                 <>
                   <Button
@@ -275,12 +278,12 @@ function Navbar() {
               )}
             </div>
 
-          <div className="lg:hidden">
-            <MobileNavSheet />
-          </div>
+            <div className="lg:hidden">
+              <MobileNavSheet />
+            </div>
 
-          {/* Mobile Hamburger Menu */}
-          {/* <div className="lg:hidden flex items-center gap-4">
+            {/* Mobile Hamburger Menu */}
+            {/* <div className="lg:hidden flex items-center gap-4">
             <Button
               onClick={() => router.push("/login")}
               className="rounded-full dark:bg-white dark:text-black bg-black text-white text-xs px-4 py-2"
@@ -299,8 +302,8 @@ function Navbar() {
               />
             </motion.button>
           </div> */}
+          </div>
         </div>
-      </div>
       </div>
 
       {/* Mobile Drawer */}

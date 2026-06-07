@@ -2,11 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const images = [
-  "/auth_bg_1.png",
-  "/auth_bg_2.png",
-  "/auth_bg_3.png"
-];
+const images = ["/auth_bg_1.png", "/auth_bg_2.png", "/auth_bg_3.png"];
 
 export default function AuthCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,12 +20,12 @@ export default function AuthCarousel() {
       <AnimatePresence initial={false}>
         <motion.img
           key={currentIndex}
-          src={images[currentIndex]}
-          initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full object-cover"
+          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          src={images[currentIndex]}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
         />
       </AnimatePresence>
     </div>
