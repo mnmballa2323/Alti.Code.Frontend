@@ -118,7 +118,7 @@ export default function AgentForgeSection() {
 
         {/* Right Side: Interactive Panel */}
         <div className="w-full flex flex-col gap-4 lg:order-1">
-          <div className="w-full max-w-[420px] mx-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[340px]">
+          <div className="w-full max-w-[420px] mx-auto lg:ml-0 lg:mr-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[340px]">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
               <div className="flex items-center gap-2.5">
