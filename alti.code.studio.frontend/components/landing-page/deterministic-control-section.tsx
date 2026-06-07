@@ -113,26 +113,8 @@ export default function DeterministicControlSection() {
           </p>
         </div>
 
-        {/* Right Column (Swarm Network Animation) */}
+        {/* Right Column (Animation Window) */}
         <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-zinc-950 rounded-2xl border border-zinc-800 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-slate-100 select-none">
-          {/* Header Controls */}
-          <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-2 flex-shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/80" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-              <div className="w-3 h-3 rounded-full bg-green-500/80" />
-            </div>
-            <div className="text-xs font-mono text-slate-500">
-              inso code
-            </div>
-            <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider font-sans">
-                Active Orchestration
-              </span>
-            </div>
-          </div>
-
           {/* SVG Swarm Canvas */}
           <div className="flex-1 min-h-0 relative flex items-center justify-center py-2">
             <style
