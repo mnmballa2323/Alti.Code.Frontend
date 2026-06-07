@@ -101,7 +101,7 @@ function CodeTerminal() {
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A3] animate-pulse" />
           <span className="text-neutral-400 text-[10px] font-semibold tracking-wider uppercase">
-            Swarm Controller
+            Inso Code
           </span>
         </div>
         <div className="w-12" />
