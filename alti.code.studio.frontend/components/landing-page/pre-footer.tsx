@@ -14,10 +14,10 @@ function PreFooter() {
   );
 
   return (
-    <div className="w-full bg-black py-10 md:py-16 lg:py-20">
+    <div className="w-full bg-black py-10 md:py-16 lg:py-20 border-t border-white/5">
       <div className="wrapper px-4 md:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-8 min-h-[240px] ">
+        <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-8 min-h-[240px]">
           {/* Logo and Tagline Section */}
           <div className="flex flex-col items-between justify-between">
             <div className="flex flex-col gap-6 lg:gap-10 items-center lg:items-start text-center lg:text-left">
@@ -38,23 +38,24 @@ function PreFooter() {
                 />
               </div>
               <div className="flex flex-col gap-3 lg:gap-5">
-                <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-white">
-                  Your AI Pair Programmer.
+                <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-neutral-400">
+                  Secure local swarms with cloud orchestration. Engineered for absolute speed and precision.
                 </p>
               </div>
             </div>
           </div>
+
           {/* Navigation Links Section */}
           <div className="w-full lg:w-auto">
             {/* Desktop/Tablet Grid Layout */}
-            <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-8 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
+            <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
               {/* Company Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[200px]">
+              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[150px]">
                 <p className="text-white font-medium text-base">Company</p>
                 <ul className="flex flex-col gap-4 lg:gap-6">
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
                       href="/"
                     >
                       Home
@@ -62,7 +63,7 @@ function PreFooter() {
                   </li>
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
                       href="#howItsWork"
                     >
                       Product
@@ -70,85 +71,79 @@ function PreFooter() {
                   </li>
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="#features"
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="#security"
                     >
                       Features
                     </Link>
                   </li>
-
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors cursor-pointer"
-                      href="#"
-                      // onClick={() => {
-                      //   dispatch(setContactModel(true));
-                      // }}
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="#pricing"
                     >
-                      Contact
+                      Pricing
                     </Link>
                   </li>
                 </ul>
               </div>
 
-              {/* Info Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[200px]">
-                <p className="text-white font-medium text-base">Info</p>
+              {/* Platform Column */}
+              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[150px]">
+                <p className="text-white font-medium text-base">Platform</p>
                 <ul className="flex flex-col gap-4 lg:gap-6">
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="/faq"
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/mission-control"
                     >
-                      FAQ
+                      Mission Control
                     </Link>
                   </li>
                   <li>
                     <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors cursor-pointer"
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      href="/marketplace"
+                    >
+                      Marketplace
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
                       href="/news"
+                    >
+                      Changelog
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors cursor-pointer bg-transparent border-0 p-0 text-left align-baseline"
                       onClick={() => {
-                        dispatch(setRequestDemoModel(true));
+                        dispatch(setContactModel(true));
                       }}
                     >
-                      News
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="/"
-                    >
-                      Privacy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="/"
-                    >
-                      Terms
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      className="text-white font-secondary font-normal text-sm hover:text-gray-300 transition-colors"
-                      href="/"
-                    >
-                      Cookies
-                    </Link>
+                      Contact Sales
+                    </button>
                   </li>
                 </ul>
               </div>
 
               {/* Office Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[200px] col-span-2 md:col-span-1">
+              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[200px]">
                 <p className="text-white font-medium text-base">Office</p>
-                <ul className="flex flex-col gap-4 lg:gap-6">
-                  <li className="text-white font-secondary font-normal text-sm leading-6">
+                <ul className="flex flex-col gap-4 lg:gap-6 text-neutral-400 font-secondary font-normal text-sm leading-relaxed">
+                  <li>
                     575 Market Street
                     <br />
                     San Francisco, CA 94105
+                  </li>
+                  <li className="flex items-center gap-2 text-xs">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]"></span>
+                    </span>
+                    All Systems Operational
                   </li>
                 </ul>
               </div>
@@ -162,70 +157,61 @@ function PreFooter() {
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <Link
-                    className="text-white font-secondary font-normal text-sm"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
                     href="/"
                   >
                     Home
                   </Link>
                   <Link
-                    className="text-white font-secondary font-normal text-sm"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
                     href="#howItsWork"
                   >
                     Product
                   </Link>
                   <Link
-                    className="text-white font-secondary font-normal text-sm"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
                     href="#security"
                   >
-                    Security
+                    Features
                   </Link>
-
                   <Link
-                    className="text-white font-secondary font-normal text-sm cursor-pointer"
-                    href="#"
-                    onClick={() => dispatch(setContactModel(true))}
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="#pricing"
                   >
-                    Contact
+                    Pricing
                   </Link>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4">
                 <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
-                  Info
+                  Platform
                 </p>
                 <div className="grid grid-cols-2 gap-3">
                   <Link
-                    className="text-white font-secondary font-normal text-sm"
-                    href="/faq"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/mission-control"
                   >
-                    FAQ
+                    Mission Control
                   </Link>
                   <Link
-                    className="text-white font-secondary font-normal text-sm cursor-pointer"
-                    href="#"
-                    onClick={() => dispatch(setRequestDemoModel(true))}
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/marketplace"
                   >
-                    News
+                    Marketplace
                   </Link>
                   <Link
-                    className="text-white font-secondary font-normal text-sm"
-                    href="/"
+                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    href="/news"
                   >
-                    Privacy
+                    Changelog
                   </Link>
-                  <Link
-                    className="text-white font-secondary font-normal text-sm"
-                    href="/"
+                  <button
+                    className="text-neutral-400 font-secondary font-normal text-sm text-left bg-transparent border-0 p-0"
+                    onClick={() => dispatch(setContactModel(true))}
                   >
-                    Terms
-                  </Link>
-                  <Link
-                    className="text-white font-secondary font-normal text-sm"
-                    href="/"
-                  >
-                    Cookies
-                  </Link>
+                    Contact Sales
+                  </button>
                 </div>
               </div>
 
@@ -233,13 +219,48 @@ function PreFooter() {
                 <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
                   Office
                 </p>
-                <p className="text-white font-secondary font-normal text-sm leading-6">
-                  575 Market Street
-                  <br />
-                  San Francisco, CA 94105
-                </p>
+                <div className="flex flex-col gap-2 text-neutral-400 font-secondary font-normal text-sm leading-6">
+                  <p>
+                    575 Market Street
+                    <br />
+                    San Francisco, CA 94105
+                  </p>
+                  <p className="flex items-center gap-2 text-xs mt-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]"></span>
+                    </span>
+                    All Systems Operational
+                  </p>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Bottom copyright and social media bar */}
+        <div className="border-t border-neutral-900 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <span>© {new Date().getFullYear()} Inso Code Technologies, Inc.</span>
+            <span className="hidden md:inline text-neutral-800">|</span>
+            <div className="flex gap-4">
+              <Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/" className="hover:text-white transition-colors">Terms of Service</Link>
+            </div>
+          </div>
+          <div className="flex gap-4 text-lg">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              <Icon icon="ri:github-fill" />
+            </a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              <Icon icon="ri:twitter-x-fill" />
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              <Icon icon="ri:discord-fill" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              <Icon icon="ri:linkedin-box-fill" />
+            </a>
           </div>
         </div>
       </div>
