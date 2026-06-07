@@ -101,7 +101,7 @@ export default function AgentForgeSection() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
         
         {/* Left Side: Copy */}
-        <div className="flex flex-col gap-8 lg:order-2">
+        <div className="flex flex-col gap-8 lg:order-2 lg:-translate-x-12">
           <div className="flex flex-col gap-6">
             <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black lg:whitespace-nowrap">
               Autonomous Agent Forge. <br />
