@@ -48,13 +48,19 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   policy_arn = aws_iam_policy.idle_instance_lambda_policy.arn
 }
 
+data "archive_file" "idle_lambda_zip" {
+  type        = "zip"
+  source_file = "${path.module}/index.py"
+  output_path = "${path.module}/idle_replacement_payload.zip"
+}
+
 resource "aws_lambda_function" "idle_instance_replacement" {
-  filename         = "idle_replacement_payload.zip"
+  filename         = data.archive_file.idle_lambda_zip.output_path
   function_name    = "replace-idle-with-spot"
   role             = aws_iam_role.idle_instance_lambda_role.arn
   handler          = "index.handler"
   runtime          = "python3.9"
-  source_code_hash = filebase64sha256("idle_replacement_payload.zip")
+  source_code_hash = data.archive_file.idle_lambda_zip.output_base64sha256
 
   environment {
     variables = {
