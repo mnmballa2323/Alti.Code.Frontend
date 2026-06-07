@@ -99,7 +99,6 @@ function CodeTerminal() {
           <div className="w-3 h-3 rounded-full bg-[#27C93F]" />
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5A3] animate-pulse" />
           <span className="text-neutral-400 text-[10px] font-semibold tracking-wider uppercase">
             Inso Code
           </span>
