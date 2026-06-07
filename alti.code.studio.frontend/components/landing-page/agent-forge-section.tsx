@@ -107,10 +107,12 @@ export default function AgentForgeSection() {
               Autonomous Agent Forge. <br />
               Self Expanding Swarm.
             </h3>
-            <p className="text-xl text-gray-500 leading-relaxed font-medium">
-              Need a specialist for a bespoke service, legacy codebase, or proprietary API? 
-              Specify your requirements and watch the Forge write tools, run mock test suites, 
-              compile guardrails, and register the new expert to your active swarm mesh—all in seconds.
+            <p className="text-xl text-gray-500 leading-relaxed font-medium text-justify">
+              Need a highly specialized agent for a legacy database migration, custom third party 
+              integration, or proprietary system interface? You can define your exact architectural 
+              requirements and allow the forge engine to autonomously construct custom tools, execute 
+              virtual test coverage suites, apply strict execution guardrails, and deploy the new expert 
+              directly to your active synchronized node mesh in less than three seconds.
             </p>
           </div>
         </div>
