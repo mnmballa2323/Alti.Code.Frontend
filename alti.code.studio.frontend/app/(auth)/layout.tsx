@@ -195,6 +195,17 @@ export default function AuthLayout({
 
       {/* Right Panel: Auth Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative">
+        {/* Logo in top right */}
+        <div className="absolute top-8 right-8 sm:top-12 sm:right-12">
+          <Link href="/">
+            <img
+              alt="Inso Logo Icon"
+              className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
+              src="/alti-logo.png"
+            />
+          </Link>
+        </div>
+
         {/* Back Button */}
         <div className="absolute top-8 left-8 sm:top-12 sm:left-12">
           <Link
