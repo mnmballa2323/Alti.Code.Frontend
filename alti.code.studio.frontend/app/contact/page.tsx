@@ -6,6 +6,7 @@ import { Button } from "@heroui/button";
 
 import Navbar from "@/components/navbar";
 import PreFooter from "@/components/landing-page/pre-footer";
+import AgentSwarmAnimation from "@/components/landing-page/AgentSwarmAnimation";
 
 export default function ContactPage() {
   const [email, setEmail] = useState("");
@@ -35,9 +36,17 @@ export default function ContactPage() {
         {/* Background Gradients */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
           {/* Left Column: Contact Form */}
           <div className="w-full">
+            <div className="mb-8">
+              <span className="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
+                Contact Sales & Support
+              </span>
+              <h1 className="text-4xl md:text-5xl font-bold font-secondary mt-2 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-black via-zinc-800 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-500">
+                Get in touch
+              </h1>
+            </div>
             {submitted ? (
               <div className="flex flex-col items-center justify-center text-center py-12 gap-4 animate-fade-in">
                 <div className="w-16 h-16 bg-green-500/10 dark:bg-green-500/20 text-green-500 rounded-full flex items-center justify-center mb-2">
@@ -88,7 +97,7 @@ export default function ContactPage() {
                     id="message"
                     aria-label="Enter Your Message"
                     placeholder="Enter Your Message"
-                    rows={5}
+                    rows={8}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                   />
@@ -104,46 +113,9 @@ export default function ContactPage() {
             )}
           </div>
 
-          {/* Right Column: Heading and Info */}
-          <div className="flex flex-col gap-6 md:sticky md:top-28">
-            <div>
-              <span className="text-sm font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase">
-                Contact Sales & Support
-              </span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-secondary mt-2 tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-black via-zinc-800 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-500">
-                Get in touch
-              </h1>
-            </div>
-
-            <p className="text-gray-600 dark:text-neutral-400 font-normal text-base md:text-lg leading-relaxed max-w-md">
-              Have questions about Alti Code Studio? Our team is here to help you scale your local agent swarms with enterprise cloud orchestration.
-            </p>
-
-            <div className="flex flex-col gap-4 mt-4">
-              <div className="flex items-center gap-4 text-gray-600 dark:text-neutral-400">
-                <div className="p-3 bg-gray-100 dark:bg-zinc-900 rounded-xl border border-gray-200/50 dark:border-zinc-800/50">
-                  <Icon className="w-5 h-5" icon="lucide:mail" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 dark:text-neutral-500 font-medium">Email Us</p>
-                  <a className="text-sm font-semibold text-black dark:text-white hover:underline" href="mailto:support@insocode.com">
-                    support@insocode.com
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-gray-600 dark:text-neutral-400">
-                <div className="p-3 bg-gray-100 dark:bg-zinc-900 rounded-xl border border-gray-200/50 dark:border-zinc-800/50">
-                  <Icon className="w-5 h-5" icon="lucide:map-pin" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400 dark:text-neutral-500 font-medium">Our HQ</p>
-                  <p className="text-sm font-semibold text-black dark:text-white">
-                    575 Market St, San Francisco, CA 94105
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* Right Column: Interactive Agent Swarm Animation */}
+          <div className="flex items-center justify-center w-full">
+            <AgentSwarmAnimation />
           </div>
         </div>
       </main>
