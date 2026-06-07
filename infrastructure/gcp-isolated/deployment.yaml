@@ -1,0 +1,22 @@
+# Generated Kubernetes deployment for stack: gcp-isolated
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcp-isolated-deployment
+  labels:
+    app: gcp-isolated
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gcp-isolated
+  template:
+    metadata:
+      labels:
+        app: gcp-isolated
+    spec:
+      containers:
+      - name: gcp-isolated-container
+        image: gcr.io/my-project/gcp-isolated:latest
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,22 @@
+# Generated Kubernetes deployment for stack: aws-isolated
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-isolated-deployment
+  labels:
+    app: aws-isolated
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aws-isolated
+  template:
+    metadata:
+      labels:
+        app: aws-isolated
+    spec:
+      containers:
+      - name: aws-isolated-container
+        image: gcr.io/my-project/aws-isolated:latest
+        ports:
+        - containerPort: 8080

@@ -1,4 +1,4 @@
-name: Deploy to AWS
+name: Deploy to AZURE
 on:
   push:
     branches:
@@ -17,4 +17,4 @@ jobs:
           node-version: '20'
 
       - name: Deploy
-        run: echo "Deploying to AWS using region aws-isolated-region..."
+        run: echo "Deploying to AZURE using region azure-isolated-region..."

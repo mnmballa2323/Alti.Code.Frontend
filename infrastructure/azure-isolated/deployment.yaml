@@ -1,0 +1,22 @@
+# Generated Kubernetes deployment for stack: azure-isolated
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-isolated-deployment
+  labels:
+    app: azure-isolated
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: azure-isolated
+  template:
+    metadata:
+      labels:
+        app: azure-isolated
+    spec:
+      containers:
+      - name: azure-isolated-container
+        image: gcr.io/my-project/azure-isolated:latest
+        ports:
+        - containerPort: 8080
