@@ -36,7 +36,7 @@ const providers = [
       "Highly secure, deeply integrated access to Anthropic's Claude family of models.",
     models: [
       { name: "Claude Sonnet 4.6", inputPrice: "$3.00", outputPrice: "$15.00" },
-      { name: "Claude 4.7 Opus", inputPrice: "$15.00", outputPrice: "$75.00" },
+      { name: "Claude Opus 4.8", inputPrice: "$15.00", outputPrice: "$75.00" },
     ],
   },
   {
