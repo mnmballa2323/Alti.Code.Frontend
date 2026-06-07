@@ -14,10 +14,14 @@ export default function AgentForgeSection() {
   const [isForging, setIsForging] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
   const logEndRef = React.useRef<HTMLDivElement>(null);
+  const logIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+  const stepIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+  const restartTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     logEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
+
   const [steps, setSteps] = useState<Step[]>([
     { id: 1, label: "Extracting Context & API Specs", status: "idle", detail: "Parsing OpenAPI specs and DB models..." },
     { id: 2, label: "Synthesizing Agent Prompt & Tools", status: "idle", detail: "Generating targeted steering guidelines..." },
@@ -26,11 +30,12 @@ export default function AgentForgeSection() {
   ]);
 
   const runForgeSimulation = () => {
-    if (isForging) return;
+    if (logIntervalRef.current) clearInterval(logIntervalRef.current);
+    if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+    if (restartTimeoutRef.current) clearTimeout(restartTimeoutRef.current);
+
     setIsForging(true);
     setLogs([]);
-    
-    // Reset steps
     setSteps(prev => prev.map(s => ({ ...s, status: "idle" })));
 
     let currentStep = 0;
@@ -49,14 +54,14 @@ export default function AgentForgeSection() {
     ];
 
     let logIndex = 0;
-    const logInterval = setInterval(() => {
+    logIntervalRef.current = setInterval(() => {
       if (logIndex < logsList.length) {
         setLogs(prev => [...prev, logsList[logIndex]]);
         logIndex++;
       }
     }, 400);
 
-    const stepInterval = setInterval(() => {
+    stepIntervalRef.current = setInterval(() => {
       if (currentStep < 4) {
         setSteps(prev => prev.map((s, idx) => {
           if (idx === currentStep) return { ...s, status: "running" };
@@ -65,20 +70,28 @@ export default function AgentForgeSection() {
         }));
         currentStep++;
       } else {
-        clearInterval(stepInterval);
-        clearInterval(logInterval);
+        if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+        if (logIntervalRef.current) clearInterval(logIntervalRef.current);
         setSteps(prev => prev.map(s => ({ ...s, status: "success" })));
-        setIsForging(false);
+        
+        restartTimeoutRef.current = setTimeout(() => {
+          setIsForging(false);
+          runForgeSimulation();
+        }, 3000);
       }
     }, 1200);
   };
 
-  // Run simulation once on mount automatically for visual appeal
   useEffect(() => {
     const timer = setTimeout(() => {
       runForgeSimulation();
     }, 1000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (logIntervalRef.current) clearInterval(logIntervalRef.current);
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      if (restartTimeoutRef.current) clearTimeout(restartTimeoutRef.current);
+    };
   }, []);
 
   return (
@@ -102,7 +115,7 @@ export default function AgentForgeSection() {
 
         {/* Right Side: Interactive Panel */}
         <div className="w-full flex flex-col gap-4">
-          <div className="w-full bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 md:p-8 flex flex-col gap-6 text-white min-h-[500px]">
+          <div className="w-full max-w-xl mx-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[400px]">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
               <div className="flex items-center gap-2.5">
@@ -133,10 +146,10 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-[400px] md:h-[300px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[360px] md:h-[260px]">
               
               {/* Progress Steps */}
-              <div className="md:col-span-6 flex flex-col gap-5 justify-center h-full">
+              <div className="md:col-span-6 flex flex-col gap-4 justify-center h-full">
                 {steps.map(step => (
                   <div key={step.id} className="flex gap-4">
                     <div className="flex flex-col items-center">
@@ -178,7 +191,7 @@ export default function AgentForgeSection() {
               </div>
 
               {/* Console Output */}
-              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[10px] text-zinc-400 select-none overflow-hidden h-full relative">
+              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[9px] text-zinc-400 select-none overflow-hidden h-full relative">
                 <div className="absolute top-2 right-3 flex items-center gap-1.5 bg-black/60 px-2 py-0.5 rounded border border-zinc-800 text-[8px] text-zinc-500 font-bold uppercase tracking-wider">
                   <Sparkles className="w-2.5 h-2.5 text-zinc-500" />
                   Logs
