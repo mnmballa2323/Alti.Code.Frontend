@@ -3,6 +3,107 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { FazmAgentService } from './fazmAgent.service.js';
 
+const getUserId = (req) => {
+    return req.user?.id || req.user?.uid || req.user?.sub || req.user?.email || 'unknown';
+};
+
+const getKeys = catchAsync(async (req, res) => {
+    const result = await FazmAgentService.getKeys();
+    res.status(httpStatus.OK).json(result);
+});
+
+const registerTunnel = catchAsync(async (req, res) => {
+    const { tunnel_url } = req.body;
+    if (!tunnel_url) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'tunnel_url is required.' });
+    }
+    const userId = getUserId(req);
+    const result = await FazmAgentService.registerTunnel(userId, tunnel_url);
+    res.status(httpStatus.OK).json(result);
+});
+
+const unregisterTunnel = catchAsync(async (req, res) => {
+    const userId = getUserId(req);
+    const result = await FazmAgentService.unregisterTunnel(userId);
+    res.status(httpStatus.OK).json(result);
+});
+
+const discoverTunnel = catchAsync(async (req, res) => {
+    const userId = getUserId(req);
+    const result = await FazmAgentService.discoverTunnel(userId);
+    res.status(httpStatus.OK).json(result);
+});
+
+const subjectToken = catchAsync(async (req, res) => {
+    const deviceId = req.headers['x-device-id'] || 'default-device';
+    const token = await FazmAgentService.generateSubjectToken(deviceId);
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(httpStatus.OK).send(token);
+});
+
+const jwks = catchAsync(async (req, res) => {
+    const result = FazmAgentService.getJwks();
+    res.status(httpStatus.OK).json(result);
+});
+
+const oidcConfig = catchAsync(async (req, res) => {
+    const result = FazmAgentService.getOidcConfig();
+    res.status(httpStatus.OK).json(result);
+});
+
+const requestMagicLink = catchAsync(async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'email is required.' });
+    }
+    const result = await FazmAgentService.requestMagicLink(email);
+    res.status(httpStatus.OK).json(result);
+});
+
+const verifyMagicLink = catchAsync(async (req, res) => {
+    const { email, code } = req.body;
+    if (!email || !code) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'email and code are required.' });
+    }
+    const result = await FazmAgentService.verifyMagicLink(email, code);
+    res.status(httpStatus.OK).json(result);
+});
+
+// Session recording and other secondary stubs
+const getUploadUrl = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({
+        upload_url: `http://localhost:${process.env.PORT || 5000}/api/v1/oss-swarm/fazm/mock-upload`,
+        file_path: 'recording.mp4'
+    });
+});
+
+const autoEnroll = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({ ok: true });
+});
+
+const getAttachmentUploadUrl = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({
+        upload_url: `http://localhost:${process.env.PORT || 5000}/api/v1/oss-swarm/fazm/mock-upload`,
+        file_path: 'attachment.png'
+    });
+});
+
+const composioConnect = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({ url: `http://localhost:${process.env.PORT || 5000}` });
+});
+
+const composioStatus = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({ connected: false });
+});
+
+const composioDisconnect = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({ ok: true });
+});
+
+const composioMcp = catchAsync(async (req, res) => {
+    res.status(httpStatus.OK).json({ ok: true });
+});
+
 const runAutomation = catchAsync(async (req, res) => {
     const { task } = req.body;
     
@@ -10,7 +111,8 @@ const runAutomation = catchAsync(async (req, res) => {
         return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'task is required.' });
     }
 
-    const result = await FazmAgentService.runTask(task);
+    const userId = getUserId(req);
+    const result = await FazmAgentService.runTask(userId, task);
 
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
@@ -27,7 +129,8 @@ const getStatus = catchAsync(async (req, res) => {
         return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'taskId is required.' });
     }
 
-    const status = await FazmAgentService.getStatus(taskId);
+    const userId = getUserId(req);
+    const status = await FazmAgentService.getStatus(userId, taskId);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -37,7 +140,34 @@ const getStatus = catchAsync(async (req, res) => {
     });
 });
 
+const heartbeat = catchAsync(async (req, res) => {
+    const { tunnel_url } = req.body;
+    if (!tunnel_url) {
+        return res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'tunnel_url is required.' });
+    }
+    const userId = getUserId(req);
+    const result = await FazmAgentService.registerHeartbeat(userId, tunnel_url);
+    res.status(httpStatus.OK).json(result);
+});
+
 export const FazmAgentController = {
+    getKeys,
+    registerTunnel,
+    unregisterTunnel,
+    discoverTunnel,
+    subjectToken,
+    jwks,
+    oidcConfig,
+    requestMagicLink,
+    verifyMagicLink,
+    getUploadUrl,
+    autoEnroll,
+    getAttachmentUploadUrl,
+    composioConnect,
+    composioStatus,
+    composioDisconnect,
+    composioMcp,
     runAutomation,
     getStatus,
+    heartbeat,
 };

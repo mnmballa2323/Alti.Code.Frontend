@@ -13,30 +13,64 @@ import { logger } from '../../../shared/logger.js';
 
 class AgentSAgent extends BaseSpecialistAgent {
     constructor() {
-        super('AgentS', 'The GUI Operator', 'Tier 13');
+        super();
+        this.name = 'AgentS';
+        this.description = 'The GUI Operator';
+        this.tier = 'Tier 13';
     }
 
-    async _invoke(context) {
-        logger.info(`🤖 GUI Operator: Receiving swarm intent for graphical desktop control: "${context.goal}"`);
+    async _invoke(context, contextBlock) {
+        let goal;
+        let isDirectInvoke = false;
+
+        if (typeof context === 'object' && context !== null) {
+            goal = context.goal;
+            isDirectInvoke = true;
+        } else if (typeof context === 'string') {
+            goal = context;
+        }
+
+        if (!goal) {
+            throw new Error('Goal prompt is required for Agent-S GUI execution.');
+        }
+
+        logger.info(`🤖 GUI Operator: Receiving swarm intent for graphical desktop control: "${goal}"`);
 
         try {
-            // Forward the goal instruction directly to the Simular AI Agent-S multimodal framework
-            const guiOutput = await agentSService.executeGUITask(context.goal);
+            const options = {
+                dryRun: context.dryRun !== undefined ? context.dryRun : (context.dry_run !== undefined ? context.dry_run : true),
+                maxSteps: context.maxSteps || context.max_steps || 8
+            };
 
-            return {
+            // Forward the goal instruction directly to the Simular AI Agent-S multimodal framework
+            const guiOutput = await agentSService.executeGUITask(goal, options);
+
+            if (isDirectInvoke) {
+                return {
+                    status: 'success',
+                    agent: this.name,
+                    s_action: guiOutput,
+                    message: `Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).`
+                };
+            }
+
+            return JSON.stringify({
                 status: 'success',
                 agent: this.name,
                 s_action: guiOutput,
                 message: `Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).`
-            };
+            }, null, 2);
         } catch (error) {
             logger.error(`❌ GUI Operator: Agent-S execution failed: ${error.message}`);
-            return {
-                status: 'error',
-                agent: this.name,
-                error: error.message,
-                message: 'Failed to complete GUI interaction task.'
-            };
+            if (isDirectInvoke) {
+                return {
+                    status: 'error',
+                    agent: this.name,
+                    error: error.message,
+                    message: 'Failed to complete GUI interaction task.'
+                };
+            }
+            throw error;
         }
     }
 }

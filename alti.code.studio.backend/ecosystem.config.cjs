@@ -48,6 +48,19 @@ module.exports = {
         NODE_ENV: "development",
         PORT: 7800
       }
+    },
+    {
+      name: "browser-use-api",
+      script: "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/browser-use-api/.venv/bin/uvicorn",
+      args: "app:app --host 0.0.0.0 --port 3018",
+      cwd: "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/browser-use-api",
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "development",
+        GEMINI_API_KEY: process.env.GEMINI_API_KEY || ""
+      }
     }
   ]
 };

@@ -5,7 +5,7 @@
  */
 
 import { agentSAgent } from '../src/app/modules/agents/agent_s.agent.js';
-import { logger } from '../src/app/shared/logger.js';
+import { logger } from '../src/shared/logger.js';
 
 async function runTest() {
     logger.info("🧪 Starting Agent S GUI Automation Test via AgentSAgent...");

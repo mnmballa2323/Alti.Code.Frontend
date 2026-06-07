@@ -70,6 +70,8 @@ const configObject = {
     dlp_inspect_template: process.env.GCP_DLP_INSPECT_TEMPLATE || null,
   },
   social_login_secret: process.env.SOCIAL_LOGIN_SECRET,
+  browser_use_url: process.env.BROWSER_USE_URL || 'http://localhost:3018',
+  agent_s_python_path: process.env.AGENT_S_PYTHON_PATH || path.join(process.cwd(), '.venv-agent-s/bin/python'),
 };
 
 export const loadEnterpriseSecrets = async () => {

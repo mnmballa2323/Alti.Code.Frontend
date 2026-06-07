@@ -12,6 +12,7 @@ import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
+import config from '../../../../config/index.js';
 
 const writeFileAsync = promisify(fs.writeFile);
 const unlinkAsync = promisify(fs.unlink);
@@ -19,6 +20,7 @@ const unlinkAsync = promisify(fs.unlink);
 export class AgentSService {
     constructor() {
         this.apiKey = process.env.GEMINI_API_KEY || process.env.ALTI_API_KEY; // Requires Gemini 2.0 Flash or OpenAI ideally
+        this.pythonPath = config.agent_s_python_path || 'python';
     }
 
     /**
@@ -26,7 +28,7 @@ export class AgentSService {
      * @param {string} taskInstruction - Natural language objective (e.g. "Close VS Code", "Open calculator and type 5 + 5")
      * @returns {Promise<string>} The output of the action execution
      */
-    async executeGUITask(taskInstruction) {
+    async executeGUITask(taskInstruction, options = {}) {
         if (!this.apiKey) {
             throw new Error('Agent S: GEMINI_API_KEY or ALTI_API_KEY is missing from environment.');
         }
@@ -58,7 +60,7 @@ async def main():
     try:
         # Detect platform
         current_platform = "windows"
-        if sys.platform === "darwin":
+        if sys.platform == "darwin":
             current_platform = "darwin"
         elif sys.platform.startswith("linux"):
             current_platform = "linux"
@@ -103,36 +105,67 @@ async def main():
             enable_reflection=True
         )
         
-        # Take a screenshot
-        screenshot = pyautogui.screenshot()
-        buffered = io.BytesIO() 
-        screenshot.save(buffered, format="PNG")
-        screenshot_bytes = buffered.getvalue()
-
-        obs = {
-          "screenshot": screenshot_bytes,
-        }
-
-        # Run Prediction
+        # Run Prediction Loop
         instruction = "${taskInstruction.replace(/"/g, '\\"')}"
-        info, action = agent.predict(instruction=instruction, observation=obs)
+        dry_run = ${options.dryRun !== false ? 'True' : 'False'}
+        max_steps = ${options.maxSteps || 8}
         
-        # In a real deployed desktop agent, we run: exec(action[0])
-        # For the Inso Code backend safety, we will just return the predicted action string 
-        # so we can audit it, rather than arbitrarily clicking the user's host machine dynamically
-        # without their direct consent in the background.
+        trajectory = []
         
+        for step in range(max_steps):
+            # Take a screenshot
+            screenshot = pyautogui.screenshot()
+            buffered = io.BytesIO() 
+            screenshot.save(buffered, format="PNG")
+            screenshot_bytes = buffered.getvalue()
+
+            obs = {
+              "screenshot": screenshot_bytes,
+            }
+            
+            # Predict next action
+            info, action = agent.predict(instruction=instruction, observation=obs)
+            
+            action_str = action[0] if action and len(action) > 0 else None
+            if not action_str:
+                break
+                
+            trajectory.append({
+                "step": step + 1,
+                "action": action_str,
+                "executed": not dry_run
+            })
+
+            # Check if action is stop / complete
+            if "stop" in action_str.lower() or "finish" in action_str.lower():
+                break
+
+            if not dry_run:
+                try:
+                    exec(action_str)
+                    await asyncio.sleep(1.0)
+                except Exception as exec_err:
+                    print(json.dumps({
+                        "status": "error",
+                        "message": f"Execution failed at step {step + 1}: {str(exec_err)}",
+                        "trajectory": trajectory
+                    }))
+                    sys.exit(1)
+            else:
+                # In dry run, terminate after 1 step to avoid duplicate screenshots looping
+                break
+
         print(json.dumps({
             "status": "success", 
-            "result": "Agent S predicted GUI Action:\\n" + str(action[0]),
-            "raw_action": action[0]
+            "result": f"Agent S executed {len(trajectory)} steps. Dry Run: {dry_run}",
+            "trajectory": trajectory
         }))
 
     except Exception as e:
         print(json.dumps({"status": "error", "message": str(e), "trace": traceback.format_exc()}))
         sys.exit(1)
 
-if __name__ === '__main__':
+if __name__ == '__main__':
     asyncio.run(main())
 `;
 
@@ -142,7 +175,7 @@ if __name__ === '__main__':
             await writeFileAsync(scriptPath, pythonScriptContent, 'utf-8');
 
             return await new Promise((resolve, reject) => {
-                const pyProc = spawn('python', [scriptPath], {
+                const pyProc = spawn(this.pythonPath, [scriptPath], {
                     env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
                 });
 

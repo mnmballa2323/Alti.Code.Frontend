@@ -17,6 +17,9 @@ import { spatial3DNerfAgent } from './spatial_3d_nerf.agent.js';
 import { neuralBciParserAgent } from './neural_bci_parser.agent.js';
 import { hapticKinematicsAgent } from './haptic_kinematics.agent.js';
 import { omniAudioSynthesisAgent } from './omni_audio_synthesis.agent.js';
+import { agentSAgent } from './agent_s.agent.js';
+import { browserUseAgent } from './browser_use.agent.js';
+import { fazmAgent } from './fazm.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
@@ -1707,6 +1710,33 @@ agentRegistry.register({
     capabilities: ['tts', 'voice-cloning', 'spatial-audio', 'real-time-dubbing'],
     version: '1.0.0',
     instance: omniAudioSynthesisAgent
+});
+
+agentRegistry.register({
+    name: agentSAgent.name,
+    description: agentSAgent.description,
+    queue: 'agent-s-queue',
+    capabilities: ['gui-operator', 'physical-mouse-actions', 'pyautogui-control', 'screen-understanding'],
+    version: '1.0.0',
+    instance: agentSAgent
+});
+
+agentRegistry.register({
+    name: browserUseAgent.name,
+    description: browserUseAgent.description,
+    queue: 'browser-use-queue',
+    capabilities: ['browser-operator', 'web-automation', 'playwright-control', 'web-scraping'],
+    version: '1.0.0',
+    instance: browserUseAgent
+});
+
+agentRegistry.register({
+    name: fazmAgent.name,
+    description: fazmAgent.description,
+    queue: 'fazm-queue',
+    capabilities: ['desktop-voice-operator', 'desktop-automation', 'voice-intents', 'peer-relay-tunneling'],
+    version: '1.0.0',
+    instance: fazmAgent
 });
 
 // ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────

@@ -40,3 +40,9 @@
 [submodule "submodules/fazm"]
 	path = submodules/fazm
 	url = https://github.com/mediar-ai/fazm
+[submodule "submodules/browser-use"]
+	path = submodules/browser-use
+	url = https://github.com/browser-use/browser-use
+[submodule "submodules/agent-s"]
+	path = submodules/agent-s
+	url = https://github.com/simular-ai/agent-s

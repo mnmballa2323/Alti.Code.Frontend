@@ -5,6 +5,60 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.168] - 2026-06-07 — Production-Grade Swarm Upgrades (Browser-Use, Agent-S, Fazm)
+### Added
+- **Browser-Use Daemon Config & Cancellation**:
+  - Upgraded Python daemon (`browser-use-api/app.py`) to support browser custom profiles, headless/headful toggle, chrome executable path, proxy settings, and task cancellation via `DELETE /api/v1/browser/cancel/{task_id}`.
+  - Updated Node.js service (`browserUseAgent.service.js`) and Specialist Agent (`browser_use.agent.js`) to parse and forward these options to the API daemon.
+- **Agent-S Multi-Step Loops**:
+  - Implemented multi-step loop execution inside Agent-S service python script template, allowing up to `maxSteps` steps of interactive execution.
+  - Added dry-run protection (`dryRun: true` by default) to predict coordinate GUI actions without running them on the host operating system.
+- **Fazm Tunnel Keep-Alive**:
+  - Added active tunnel heartbeat keep-alive endpoint (`POST /api/relay/heartbeat`) in Fazm routing and service logic.
+  - Implemented tunnel discovery with 5-minute keep-alive check.
+- **Test Coverage**:
+  - Added test suite `tests/integration/swarm_opensource_upgrades.test.js` to verify configurations, cancellation, dry-run toggles, and heartbeat keep-alives.
+
+## [39.37.167] - 2026-06-07 — Deep Swarm Integration of Open-Source Agents
+### Added
+- **Open-source swarm specialist agents registration**:
+  - Implemented the official Specialist Agent wrapper classes `browser_use.agent.js` and `fazm.agent.js` extending `BaseSpecialistAgent` with direct service delegation methods (`runBrowserTask`, `runTask`, etc.) to support both direct invocation and standard consultations.
+  - Refined `agent_s.agent.js` to robustly handle both direct invocation and standard consultations.
+  - Registered all three agents (`AgentS`, `BrowserUse`, `Fazm`) in `agent.registry.js` under Tier 13 (Advanced I/O Agent) with their corresponding capabilities and queues.
+  - Configured `graph.orchestrator.js` to dynamically load the Specialist Agent wrappers at runtime.
+  - Added new integration test suite `tests/integration/swarm_opensource_integrations.test.js` to verify routing, capabilities, and consultation logic.
+
+## [39.37.166] - 2026-06-07 — Agent-S (GUI Operator) Backend Integration
+### Added
+- **Agent-S agent integration**:
+  - Registered the official `agent-s` repository as a Git submodule in `submodules/agent-s`.
+  - Created `scripts/setup-agent-s.sh` to initialize the Python virtual environment `.venv-agent-s` and install `gui-agents` in editable mode with dependencies like `pyautogui` and `paddleocr`.
+  - Configured backend `config/index.js` to support and export `agent_s_python_path`.
+  - Modified `agent_s.service.js` to spawn the python script using the local virtual environment Python interpreter.
+  - Created the Specialist Agent wrapper `agent_s.agent.js` ("The GUI Operator" Tier 13 Swarm Agent) overriding the BaseSpecialistAgent constructor metadata.
+  - Created integration test suite `tests/integration/agent_s.test.js` and script-based verification harness `scripts/test_agent_s.js`.
+
+## [39.37.165] - 2026-06-07 — Browser-Use Agent Backend Integration
+### Added
+- **Browser-Use agent integration**:
+  - Registered the official `browser-use` repository as a Git submodule in `submodules/browser-use`.
+  - Created a Python-based FastAPI API daemon `browser-use-api` running on port `3018` to host the agent.
+  - Implemented `/api/v1/browser/run` and `/api/v1/browser/status/{taskId}` endpoints in the daemon to run browser automation asynchronously using background tasks.
+  - Configured `ChatGoogle` Gemini model integration with dynamic model selection and support for GCP Vertex AI.
+  - Created `setup-browser-use.sh` to initialize the environment, cache python dependencies, and build the local module in editable mode.
+  - Configured backend `config/index.js` to export `browser_use_url`.
+  - Registered `browser-use-api` inside `ecosystem.config.cjs` to run under PM2 process management.
+  - Implemented integration test suite `tests/integration/browserUseAgent.test.js` and verification script `test_browser_use_integration.js`.
+
+## [39.37.164] - 2026-06-07 — Fazm Swarm Agent Backend Integration
+### Added
+- **Fazm agent integration**:
+  - Implemented all Fazm backend endpoints in the Express backend module `fazmAgent`.
+  - Added OIDC configuration, JWKS key sets, and signed custom tokens for Workload Identity Federation compatibility.
+  - Implemented client API key retrieval service supporting ElevenLabs, Deepgram, and Gemini Flash credentials.
+  - Created a robust tunnel-relay registry in Redis (with memory fallback) supporting remote peer-to-peer discovery and client task execution forwarding.
+  - Added stub integrations for Composio tool-calling, Stripe billing, and session-recording endpoints.
+
 ## [39.37.163] - 2026-06-07 — Backend License Compliance Audit
 ### Changed
 - **Build Tooling**:

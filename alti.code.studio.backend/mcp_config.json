@@ -23,6 +23,11 @@
       "command": "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/submodules/graphify/.venv/bin/python",
       "args": ["-m", "graphify", "mcp"],
       "env": {}
+    },
+    "fazm": {
+      "command": "node",
+      "args": ["/Users/michaelmeram/workspace/alti.code.studio/submodules/fazm/acp-bridge/dist/fazm-tools-stdio.js"],
+      "env": {}
     }
   }
 }

@@ -7,3 +7,14 @@ data/chronicle.json
 releases/
 .wireit/
 cloud_sovereign_repos/
+
+# Python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
