@@ -20,12 +20,12 @@ export default function PairedProgrammerSection() {
           <FeatureCard 
             icon={<TerminalSquare className="w-8 h-8 text-black" />}
             title="Command Driven"
-            description="Provide the vision and intent. The AI Swarm instantly translates your commands into production ready code."
+            description="Provide the vision and intent. The AI swarm instantly translates your commands into production ready code."
           />
           <FeatureCard 
             icon={<UserCircle className="w-8 h-8 text-black" />}
             title="Human in Control"
-            description="You make the executive decisions. The AI Swarm handles all the development, testing, and debugging."
+            description="You make the executive decisions. The AI swarm handles all the development, testing, and debugging."
           />
           <FeatureCard 
             icon={<Code2 className="w-8 h-8 text-black" />}
