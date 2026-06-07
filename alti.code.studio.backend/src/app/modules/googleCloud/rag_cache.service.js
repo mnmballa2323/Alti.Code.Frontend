@@ -10,6 +10,14 @@ import config from '../../../../config/index.js';
  */
 class GoogleRagCacheService {
     constructor() {
+        if (process.env.DISABLE_REDIS === 'true') {
+            this.client = {
+                get: async () => null,
+                setEx: async () => {}
+            };
+            return;
+        }
+
         try {
             // Assumes Memorystore Redis instance is provisioned and VPC-peered
             this.client = redis.createClient({
