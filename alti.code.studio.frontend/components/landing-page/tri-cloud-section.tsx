@@ -72,9 +72,9 @@ export default function TriCloudSection() {
           <p className="text-xl text-gray-500 leading-relaxed font-medium">
             Direct SDK connections to foundational models are strictly blocked
             for security. <br className="hidden md:block" />
-            Inso Code routes every prompt through our
-            ultra-secure, zero-markup Tri-Cloud infrastructure. You get
-            unlimited access to all the latest state-of-the-art models.
+            Inso Code routes every prompt through our ultra-secure, zero-markup
+            Tri-Cloud infrastructure. You get unlimited access to all the latest
+            state-of-the-art models.
           </p>
         </div>
 

@@ -158,8 +158,10 @@ export default function DatabaseConnectorsSection() {
             <span className="text-[#10B981]">Instant data layer access.</span>
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto">
-            Securely connect your agents to SQL, NoSQL, and vector databases. <br className="hidden md:block" />
-            Inspect schemas, generate optimized queries, and manage migrations safely under guardrails.
+            Securely connect your agents to SQL, NoSQL, and vector databases.{" "}
+            <br className="hidden md:block" />
+            Inspect schemas, generate optimized queries, and manage migrations
+            safely under guardrails.
           </p>
         </div>
 

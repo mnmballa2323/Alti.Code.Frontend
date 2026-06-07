@@ -5,23 +5,47 @@ import { Icon } from "@iconify/react";
 import React, { useState, useEffect, useRef } from "react";
 
 const SWARM_STEPS = [
-  { text: "❯ inso swarm start --goal \"deploy_auth_module\"", type: "command" },
+  { text: '❯ inso swarm start --goal "deploy_auth_module"', type: "command" },
   { text: "ℹ [SYSTEM] Initializing Inso Swarm (v2.0.0)...", type: "info" },
-  { text: "✓ [SYSTEM] Swarm registry connected to Tri-Cloud.", type: "success" },
+  {
+    text: "✓ [SYSTEM] Swarm registry connected to Tri-Cloud.",
+    type: "success",
+  },
   { text: "● [SYSTEM] Spawning specialized agent swarms...", type: "info" },
-  { text: "  » [Agent: Planner] Formulating implementation strategy...", type: "agent" },
-  { text: "  » [Agent: Architect] Creating SOC2 compliance sandbox...", type: "agent" },
-  { text: "  » [Agent: Coder] Injecting JWT validation middleware...", type: "agent" },
-  { text: "  » [Agent: Auditor] Reviewing buffer sizes and headers...", type: "agent" },
-  { text: "✓ [Agent: Auditor] Security audit completed: 0 vulnerabilities.", type: "success" },
+  {
+    text: "  » [Agent: Planner] Formulating implementation strategy...",
+    type: "agent",
+  },
+  {
+    text: "  » [Agent: Architect] Creating SOC2 compliance sandbox...",
+    type: "agent",
+  },
+  {
+    text: "  » [Agent: Coder] Injecting JWT validation middleware...",
+    type: "agent",
+  },
+  {
+    text: "  » [Agent: Auditor] Reviewing buffer sizes and headers...",
+    type: "agent",
+  },
+  {
+    text: "✓ [Agent: Auditor] Security audit completed: 0 vulnerabilities.",
+    type: "success",
+  },
   { text: "● [SYSTEM] Compiling code with Turbopack...", type: "info" },
   { text: "  [1/2] compiling /api/auth/[...nextauth] ...", type: "detail" },
   { text: "  [2/2] compiling /components/login-card ...", type: "detail" },
   { text: "✓ Compiled successfully in 842ms", type: "success" },
-  { text: "🚀 [SYSTEM] Deploying sandbox to AWS VPC (us-east-1)...", type: "info" },
-  { text: "✓ Deployment complete. Service live at auth.sandbox.inso.internal", type: "success" },
+  {
+    text: "🚀 [SYSTEM] Deploying sandbox to AWS VPC (us-east-1)...",
+    type: "info",
+  },
+  {
+    text: "✓ Deployment complete. Service live at auth.sandbox.inso.internal",
+    type: "success",
+  },
   { text: "🎉 Swarm goal achieved in 4.82s.", type: "success" },
-  { text: "", type: "empty" }
+  { text: "", type: "empty" },
 ];
 
 function CodeTerminal() {
@@ -37,15 +61,17 @@ function CodeTerminal() {
         setCurrentLineIndex(0);
         setCurrentCharIndex(0);
       }, 5000);
+
       return () => clearTimeout(resetTimeout);
     }
 
     const currentLine = SWARM_STEPS[currentLineIndex];
 
     if (currentLine.type === "empty") {
-      setVisibleLines(prev => [...prev, currentLine]);
-      setCurrentLineIndex(prev => prev + 1);
+      setVisibleLines((prev) => [...prev, currentLine]);
+      setCurrentLineIndex((prev) => prev + 1);
       setCurrentCharIndex(0);
+
       return;
     }
 
@@ -55,10 +81,10 @@ function CodeTerminal() {
 
     const charTimeout = setTimeout(() => {
       if (currentCharIndex < currentLine.text.length) {
-        setCurrentCharIndex(prev => prev + 1);
+        setCurrentCharIndex((prev) => prev + 1);
       } else {
-        setVisibleLines(prev => [...prev, currentLine]);
-        setCurrentLineIndex(prev => prev + 1);
+        setVisibleLines((prev) => [...prev, currentLine]);
+        setCurrentLineIndex((prev) => prev + 1);
         setCurrentCharIndex(0);
       }
     }, delay);
@@ -145,13 +171,21 @@ function CodeTerminal() {
           className="flex-1 p-6 overflow-y-auto scrollbar-none flex flex-col gap-2.5 leading-relaxed bg-black/20"
         >
           {visibleLines.map((line, idx) => (
-            <div key={idx} className={`whitespace-pre-wrap ${getLineStyles(line.type)}`}>
+            <div
+              key={idx}
+              className={`whitespace-pre-wrap ${getLineStyles(line.type)}`}
+            >
               {line.text}
             </div>
           ))}
           {currentLineIndex < SWARM_STEPS.length && (
-            <div className={`whitespace-pre-wrap ${getLineStyles(SWARM_STEPS[currentLineIndex].type)}`}>
-              {SWARM_STEPS[currentLineIndex].text.substring(0, currentCharIndex)}
+            <div
+              className={`whitespace-pre-wrap ${getLineStyles(SWARM_STEPS[currentLineIndex].type)}`}
+            >
+              {SWARM_STEPS[currentLineIndex].text.substring(
+                0,
+                currentCharIndex,
+              )}
               <span className="animate-pulse bg-[#00C2FF] text-[#00C2FF] px-[3px] ml-0.5 shadow-[0_0_8px_#00C2FF]">
                 █
               </span>
