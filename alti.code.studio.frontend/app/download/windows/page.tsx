@@ -79,7 +79,7 @@ export default function DownloadWindowsPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-black">Run the Installer</h3>
-                  <p className="text-xs text-gray-505 mt-1 leading-relaxed">
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                     Locate the <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code-setup.exe</code> in your Downloads folder and double-click to launch the software setup wizard.
                   </p>
                 </div>
@@ -91,7 +91,7 @@ export default function DownloadWindowsPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-black">Configure Settings</h3>
-                  <p className="text-xs text-gray-505 mt-1 leading-relaxed">
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                     Follow the installation prompts, choose your target folder path, and click Install to copy application files.
                   </p>
                 </div>
@@ -103,7 +103,7 @@ export default function DownloadWindowsPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-black">Launch Inso Code</h3>
-                  <p className="text-xs text-gray-505 mt-1 leading-relaxed">
+                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                     Double-click the desktop shortcut icon or search for Inso Code in the Start menu to launch your workspace.
                   </p>
                 </div>
