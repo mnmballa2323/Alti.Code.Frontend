@@ -37,19 +37,19 @@ export default function LandingPage() {
       <Navbar />
 
       <main className="flex-1 flex flex-col w-full">
-        <HeroSwarm />
-        <PairedProgrammerSection />
-        <TriCloudSection />
-        <AgentSwarmSection />
-        <EnterpriseConnectorsSection />
-        <AppConnectorsSection />
-        <DatabaseConnectorsSection />
-        <DeterministicControlSection />
-        <AgentForgeSection />
-        <ZeroTrustLedgerSection />
-        <CapabilitiesBentoGrid />
-        <EnterpriseInfrastructureSection />
-        <PricingSection />
+        <div id="section-0"><HeroSwarm /></div>
+        <div id="section-1"><PairedProgrammerSection /></div>
+        <div id="section-2"><TriCloudSection /></div>
+        <div id="section-3"><AgentSwarmSection /></div>
+        <div id="section-4"><EnterpriseConnectorsSection /></div>
+        <div id="section-5"><AppConnectorsSection /></div>
+        <div id="section-6"><DatabaseConnectorsSection /></div>
+        <div id="section-7"><DeterministicControlSection /></div>
+        <div id="section-8"><AgentForgeSection /></div>
+        <div id="section-9"><ZeroTrustLedgerSection /></div>
+        <div id="section-10"><CapabilitiesBentoGrid /></div>
+        <div id="section-11"><EnterpriseInfrastructureSection /></div>
+        <div id="section-12"><PricingSection /></div>
       </main>
 
       <PreFooter />

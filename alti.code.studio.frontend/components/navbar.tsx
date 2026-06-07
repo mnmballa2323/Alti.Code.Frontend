@@ -1,4 +1,6 @@
 "use client";
+import { setContactModel } from "@/store/slice";
+import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, Mail } from "lucide-react";
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -27,6 +29,92 @@ function Navbar() {
   const { theme } = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const [activeSection, setActiveSection] = useState(0);
+
+  const sections = [
+    { name: "Home", icon: Home },
+    { name: "Paired Programmer", icon: Laptop },
+    { name: "Tri-Cloud", icon: Cloud },
+    { name: "Agent Swarm", icon: Network },
+    { name: "Enterprise Connectors", icon: Lock },
+    { name: "App Connectors", icon: Puzzle },
+    { name: "Database Connectors", icon: Database },
+    { name: "Deterministic Control", icon: Sliders },
+    { name: "Agent Forge", icon: Cpu },
+    { name: "Zero Trust Ledger", icon: ShieldCheck },
+    { name: "Capabilities Bento Grid", icon: Grid },
+    { name: "Enterprise Infrastructure", icon: Server },
+    { name: "Pricing", icon: CreditCard },
+    { name: "Contact Us", icon: Mail }
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window === "undefined" || window.location.pathname !== "/") return;
+
+      const scrollPosition = window.scrollY + 120;
+
+      for (let i = 0; i <= 12; i++) {
+        const el = document.getElementById(`section-${i}`);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(i);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#section-")) {
+      const index = parseInt(hash.replace("#section-", ""), 10);
+      if (!isNaN(index)) {
+        setTimeout(() => {
+          const el = document.getElementById(`section-${index}`);
+          if (el) {
+            const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth",
+            });
+            setActiveSection(index);
+          }
+        }, 300);
+      }
+    }
+  }, []);
+
+  const handleSectionClick = (index: number) => {
+    if (index === 13) {
+      dispatch(setContactModel(true));
+      return;
+    }
+
+    if (typeof window !== "undefined" && window.location.pathname !== "/") {
+      router.push(`/#section-${index}`);
+      return;
+    }
+
+    setActiveSection(index);
+
+    const el = document.getElementById(`section-${index}`);
+    if (el) {
+      const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Handle button clicks in drawer
   const handleAuthClick = (path: any) => {
@@ -173,6 +261,34 @@ function Navbar() {
                 style={{ width: 160, height: 32 }}
               />
             )}
+
+            {/* Gray Toggle Menu (Centered) */}
+            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="flex items-center gap-1 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-1 rounded-full shadow-inner">
+                {sections.map((sec, index) => {
+                  const IconComponent = sec.icon;
+                  const isActive = activeSection === index;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => handleSectionClick(index)}
+                      className={`relative group p-1.5 rounded-full transition-all duration-300 ${
+                        isActive
+                          ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
+                          : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
+                      }`}
+                    >
+                      <IconComponent className="w-[18px] h-[18px]" />
+                      
+                      {/* Tooltip */}
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                        {sec.name}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
             {/* ✅ Auth Section Added */}
             <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center">
