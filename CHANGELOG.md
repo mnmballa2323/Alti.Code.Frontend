@@ -5,6 +5,19 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.159] - 2026-06-07 — Footer Height Reduction
+### Changed
+- **Footer**:
+  - Made the footer extremely compact by reducing vertical padding, removing the minimum height constraint, and decreasing internal column and element gaps.
+
+## [39.37.158] - 2026-06-07 — Footer Redesign & Navigation Polish
+### Changed
+- **Footer**:
+  - Redesigned the footer component with a modern bottom bar containing copyright notice, privacy/terms links, and interactive social media icons (GitHub, X, Discord, LinkedIn).
+  - Aligned navigation columns (Company, Platform, Office) to link to actual pages (Mission Control, Marketplace, Changelog) and added a live "All Systems Operational" green pulse indicator.
+- **Bento Grid**:
+  - Added `id="features"` to the capabilities bento grid container to allow direct smooth scroll anchoring.
+
 ## [39.37.157] - 2026-06-07 — Database Connectors Copy Polish
 ### Changed
 - **Database Connectors**:

@@ -14,13 +14,13 @@ function PreFooter() {
   );
 
   return (
-    <div className="w-full bg-black py-10 md:py-16 lg:py-20 border-t border-white/5">
+    <div className="w-full bg-black py-6 md:py-8 lg:py-10 border-t border-white/5">
       <div className="wrapper px-4 md:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-8 min-h-[240px]">
+        <div className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12">
           {/* Logo and Tagline Section */}
           <div className="flex flex-col items-between justify-between">
-            <div className="flex flex-col gap-6 lg:gap-10 items-center lg:items-start text-center lg:text-left">
+            <div className="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
               <div className="flex items-center gap-3">
                 <Image
                   alt="Inso Logo Icon"
@@ -37,7 +37,7 @@ function PreFooter() {
                   width={120}
                 />
               </div>
-              <div className="flex flex-col gap-3 lg:gap-5">
+              <div className="flex flex-col gap-2">
                 <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-neutral-400">
                   Secure local swarms with cloud orchestration. Engineered for absolute speed and precision.
                 </p>
@@ -50,9 +50,9 @@ function PreFooter() {
             {/* Desktop/Tablet Grid Layout */}
             <div className="hidden sm:grid grid-cols-2 md:grid-cols-3 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
               {/* Company Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[150px]">
+              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
                 <p className="text-white font-medium text-base">Company</p>
-                <ul className="flex flex-col gap-4 lg:gap-6">
+                <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
                       className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
@@ -89,9 +89,9 @@ function PreFooter() {
               </div>
 
               {/* Platform Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[150px]">
+              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
                 <p className="text-white font-medium text-base">Platform</p>
-                <ul className="flex flex-col gap-4 lg:gap-6">
+                <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
                       className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
@@ -130,9 +130,9 @@ function PreFooter() {
               </div>
 
               {/* Office Column */}
-              <div className="flex flex-col gap-6 lg:gap-10 w-full lg:w-[200px]">
+              <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[200px]">
                 <p className="text-white font-medium text-base">Office</p>
-                <ul className="flex flex-col gap-4 lg:gap-6 text-neutral-400 font-secondary font-normal text-sm leading-relaxed">
+                <ul className="flex flex-col gap-2 lg:gap-3 text-neutral-400 font-secondary font-normal text-sm leading-relaxed">
                   <li>
                     575 Market Street
                     <br />
@@ -239,7 +239,7 @@ function PreFooter() {
         </div>
 
         {/* Bottom copyright and social media bar */}
-        <div className="border-t border-neutral-900 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
+        <div className="border-t border-neutral-900 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <span>© {new Date().getFullYear()} Inso Code Technologies, Inc.</span>
             <span className="hidden md:inline text-neutral-800">|</span>

@@ -4,7 +4,7 @@ import React from "react";
 
 export default function CapabilitiesBentoGrid() {
   return (
-    <section className="w-full lg:h-screen lg:min-h-[720px] flex flex-col justify-center bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900 py-16 lg:py-0 overflow-hidden">
+    <section id="features" className="w-full lg:h-screen lg:min-h-[720px] flex flex-col justify-center bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900 py-16 lg:py-0 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col gap-6 lg:gap-8 xl:gap-10 w-full">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
