@@ -13,13 +13,15 @@ interface Step {
 export default function AgentForgeSection() {
   const [isForging, setIsForging] = useState(false);
   const [logs, setLogs] = useState<string[]>([]);
-  const logEndRef = React.useRef<HTMLDivElement>(null);
+  const logContainerRef = React.useRef<HTMLDivElement>(null);
   const logIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
   const stepIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
   const restartTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
   }, [logs]);
 
   const [steps, setSteps] = useState<Step[]>([
@@ -196,7 +198,7 @@ export default function AgentForgeSection() {
                   <Sparkles className="w-2.5 h-2.5 text-zinc-500" />
                   Logs
                 </div>
-                <div className="flex-1 overflow-y-auto space-y-1.5 pr-2 pt-2 scrollbar-thin">
+                <div ref={logContainerRef} className="flex-1 overflow-y-auto space-y-1.5 pr-2 pt-2 scrollbar-thin">
                   {logs.length === 0 && (
                     <span className="text-zinc-600 block animate-pulse">Waiting to start forge...</span>
                   )}
@@ -211,7 +213,6 @@ export default function AgentForgeSection() {
                       {log}
                     </div>
                   ))}
-                  <div ref={logEndRef} />
                 </div>
               </div>
             </div>
