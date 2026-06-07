@@ -11,8 +11,8 @@ export default function PairedProgrammerSection() {
           Your AI pair programmer.
         </h2>
         
-        <p className="text-xl md:text-2xl text-gray-400 max-w-3xl font-medium tracking-tight mb-16 leading-relaxed">
-          It doesn't replace you. It amplifies you. You are the architect, and the swarm is your tireless engineering team ready to execute every command.
+        <p className="text-xl md:text-2xl text-gray-400 w-full font-medium tracking-tight mb-16 leading-relaxed">
+          It doesn't replace you. It amplifies you. You are the architect, and<br className="hidden md:block" /> the swarm is your tireless engineering team ready to execute every command.
         </p>
 
         {/* Simple Features Grid */}
