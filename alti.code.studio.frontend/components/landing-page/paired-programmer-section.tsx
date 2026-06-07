@@ -12,23 +12,23 @@ export default function PairedProgrammerSection() {
         </h2>
         
         <p className="text-xl md:text-2xl text-gray-400 w-full font-medium tracking-tight mb-16 leading-relaxed">
-          It doesn't replace you. It amplifies you. You are the architect, and<br className="hidden md:block" /> the swarm is your tireless engineering team ready to execute every command.
+          It doesn't replace you. It amplifies you. You are the architect, and the<br className="hidden md:block" /> swarm is your tireless engineering team ready to execute every command.
         </p>
 
         {/* Simple Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <FeatureCard 
-            icon={<TerminalSquare className="w-8 h-8 text-white" />}
+            icon={<TerminalSquare className="w-8 h-8 text-black" />}
             title="Command-Driven"
             description="Provide the vision. The AI parses your intent and translates it into production-ready code instantly."
           />
           <FeatureCard 
-            icon={<UserCircle className="w-8 h-8 text-white" />}
+            icon={<UserCircle className="w-8 h-8 text-black" />}
             title="Human in Control"
             description="You make the executive decisions. The swarm handles the boilerplate, debugging, and testing."
           />
           <FeatureCard 
-            icon={<Code2 className="w-8 h-8 text-white" />}
+            icon={<Code2 className="w-8 h-8 text-black" />}
             title="Native Integration"
             description="It reads your codebase, understands your unique conventions, and writes code exactly like you do."
           />
@@ -40,14 +40,14 @@ export default function PairedProgrammerSection() {
 
 function FeatureCard({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
   return (
-    <div className="flex flex-col items-start text-left p-8 rounded-3xl bg-[#0a0a0a] border border-white/10 shadow-sm hover:border-white/20 transition-colors">
+    <div className="flex flex-col items-start text-left p-8 rounded-3xl bg-white border border-transparent shadow-sm hover:shadow-md transition-shadow">
       <div className="mb-6">
         {icon}
       </div>
-      <h3 className="text-2xl font-bold text-white tracking-tight mb-3">
+      <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
         {title}
       </h3>
-      <p className="text-gray-400 leading-relaxed font-medium">
+      <p className="text-gray-500 leading-relaxed font-medium">
         {description}
       </p>
     </div>
