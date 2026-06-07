@@ -26,7 +26,7 @@ export default function DownloadWindowsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 text-black flex flex-col font-sans overflow-hidden">
+    <div className="min-h-screen bg-gray-100 text-black flex flex-col font-sans overflow-hidden">
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center px-6 py-8 md:py-0 h-[calc(100vh-80px)]">
