@@ -58,7 +58,7 @@ export default function ContactPage() {
               <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2">
                   <input
-                    className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
+                    className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="name"
                     aria-label="Enter Full Name"
                     placeholder="Enter Full Name"
@@ -71,7 +71,7 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-2">
                   <input
                     required
-                    className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
+                    className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="email"
                     aria-label="Enter Email Address"
                     placeholder="Enter Email Address"
@@ -84,7 +84,7 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-2">
                   <textarea
                     required
-                    className="w-full bg-transparent border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all resize-none text-black dark:text-white"
+                    className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all resize-none text-black dark:text-white"
                     id="message"
                     aria-label="Enter Your Message"
                     placeholder="Enter Your Message"
@@ -95,7 +95,7 @@ export default function ContactPage() {
                 </div>
 
                 <Button
-                  className="w-full rounded-full bg-black dark:bg-white text-white dark:text-black font-bold py-4 hover:opacity-90 transition-opacity mt-2"
+                  className="w-full rounded-2xl bg-black dark:bg-white text-white dark:text-black font-bold py-4 hover:opacity-90 transition-opacity mt-2"
                   type="submit"
                 >
                   Send Message
