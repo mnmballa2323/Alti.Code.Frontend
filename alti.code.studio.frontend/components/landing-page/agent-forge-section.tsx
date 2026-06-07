@@ -217,12 +217,6 @@ export default function AgentForgeSection() {
                 </div>
               </div>
             </div>
-
-            {/* Status footer */}
-            <div className="flex items-center justify-between border-t border-zinc-900 pt-4 text-[10px] font-medium text-zinc-500">
-              <span>Swarm State: Ready</span>
-              <span>Active Swarm Capacity: 50,001 Agents</span>
-            </div>
           </div>
         </div>
 
