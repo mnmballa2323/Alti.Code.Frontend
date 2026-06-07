@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.161] - 2026-06-07 — Cookies Policy Addition
+### Added
+- **Footer**:
+  - Added "Cookies Policy" link to the bottom row of the footer next to Privacy Policy and Terms of Service.
+
 ## [39.37.160] - 2026-06-07 — Footer Indicator Removal
 ### Changed
 - **Footer**:

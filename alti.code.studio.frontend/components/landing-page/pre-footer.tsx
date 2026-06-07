@@ -232,6 +232,7 @@ function PreFooter() {
             <div className="flex gap-4">
               <Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="/" className="hover:text-white transition-colors">Terms of Service</Link>
+              <Link href="/" className="hover:text-white transition-colors">Cookies Policy</Link>
             </div>
           </div>
           <div className="flex gap-4 text-lg">
