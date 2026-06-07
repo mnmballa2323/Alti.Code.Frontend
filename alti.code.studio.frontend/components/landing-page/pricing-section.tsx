@@ -46,7 +46,7 @@ export default function PricingSection() {
           </h2>
           <p className="text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
             Flat platform fee for swarm orchestration and secure sandboxing. 
-            Bring your own model API keys or pay token inference at cost.
+            Inference token usage is tracked and billed directly at cost.
           </p>
         </div>
 

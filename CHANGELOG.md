@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.155] - 2026-06-07 — Pricing Billing Wording Correction
+### Changed
+- **Pricing**:
+  - Corrected the header sub-text to specify that token/inference usage is tracked and billed directly at cost, removing references to bringing custom API keys.
+
 ## [39.37.154] - 2026-06-07 — Pricing Sub-text Clarification
 ### Changed
 - **Pricing**:
