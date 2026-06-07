@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Cpu, Code, Search, Shield, Database, Terminal, Cloud } from "lucide-react";
+import { Code, Search, Shield, Database, Cloud } from "lucide-react";
+import Image from "next/image";
 
 export default function AgentSwarmAnimation() {
   // Floating node items for orbit ring 1 (inner)
@@ -54,13 +55,14 @@ export default function AgentSwarmAnimation() {
           }}
           className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 via-purple-600 to-pink-500 flex items-center justify-center text-white border border-white/20 relative z-20 cursor-pointer"
         >
-          <Cpu className="w-8 h-8 animate-pulse" />
+          <Image
+            src="/logo-white.png"
+            alt="Alti Logo"
+            width={32}
+            height={32}
+            className="w-8 h-8 object-contain"
+          />
         </motion.div>
-        
-        {/* Core title badge */}
-        <span className="mt-3 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-white/80 dark:bg-zinc-800/80 border border-gray-200/50 dark:border-zinc-700/50 shadow-sm text-black dark:text-white relative z-20 select-none">
-          Alti Core
-        </span>
 
         {/* Floating background data particles */}
         {[...Array(4)].map((_, i) => (
