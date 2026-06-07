@@ -12,7 +12,12 @@ const fs = require('fs');
 const path = require('path');
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..');
-const BACKEND_DIR = path.join(WORKSPACE_ROOT, 'alti.code.studio.backend');
+const BACKEND_DIRS = [
+    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend'),
+    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend.aws'),
+    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend.azure'),
+    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend.gcp')
+];
 
 const BLOCKED_KEYWORDS = [
     'multica-ai/multica',
@@ -220,50 +225,58 @@ function runAudit() {
 
     // --- Part 3: Backend NPM Dependencies Audit ---
     console.log('\n🔍 Scanning Backend NPM Dependencies...');
-    const backendPkgPath = path.join(BACKEND_DIR, 'package.json');
-    const backendNodeModules = path.join(BACKEND_DIR, 'node_modules');
+    for (const backendDir of BACKEND_DIRS) {
+        const dirName = path.basename(backendDir);
+        console.log(`\nAuditing directory: [${dirName}]`);
+        const backendPkgPath = path.join(backendDir, 'package.json');
+        const backendNodeModules = path.join(backendDir, 'node_modules');
 
-    if (fs.existsSync(backendPkgPath)) {
-        try {
-            const pkg = JSON.parse(fs.readFileSync(backendPkgPath, 'utf8'));
-            const deps = { ...pkg.dependencies, ...pkg.devDependencies };
-            
-            console.log(`Auditing ${Object.keys(deps).length} backend dependencies...`);
-            let compliantCount = 0;
-            let violationCount = 0;
+        if (fs.existsSync(backendPkgPath)) {
+            try {
+                const pkg = JSON.parse(fs.readFileSync(backendPkgPath, 'utf8'));
+                const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+                
+                console.log(`Auditing ${Object.keys(deps).length} backend dependencies in ${dirName}...`);
+                let compliantCount = 0;
+                let violationCount = 0;
 
-            for (const [depName, depVer] of Object.entries(deps)) {
-                // Check if name contains blocked keywords
-                for (const kw of BLOCKED_KEYWORDS) {
-                    if (depName.includes(kw)) {
-                        auditPassed = false;
-                        errors.push(`❌ Forbidden package dependency detected in package.json: "${depName}"`);
-                    }
-                }
-
-                // Check physical node_modules package.json for resolved license
-                const depDir = path.join(backendNodeModules, depName);
-                if (fs.existsSync(depDir)) {
-                    const result = auditDirectoryLicense(depDir, depName);
-                    if (result.isCompliant) {
-                        compliantCount++;
-                    } else {
-                        violationCount++;
-                        // Certain essential platform dependencies like pg, redis, mongoose use BSD/ISC
-                        // If they are strictly required standard libs, we log them. 
-                        // But we make sure no copyleft (GPL) or mixed/multica licenses are there.
-                        if (result.reason.includes('GPL') || result.reason.includes('Mixed') || depName.includes('multica')) {
+                for (const [depName, depVer] of Object.entries(deps)) {
+                    // Check if name contains blocked keywords
+                    for (const kw of BLOCKED_KEYWORDS) {
+                        if (depName.includes(kw)) {
                             auditPassed = false;
-                            errors.push(`❌ Dependency violation in [${depName}]: ${result.reason}`);
-                        } else {
-                            console.log(`ℹ️ Permissive standard dependency [${depName}]: ${result.reason}`);
+                            errors.push(`❌ Forbidden package dependency detected in [${dirName}] package.json: "${depName}"`);
                         }
                     }
+
+                    // Check physical node_modules package.json for resolved license
+                    const depDir = path.join(backendNodeModules, depName);
+                    if (fs.existsSync(depDir)) {
+                        const result = auditDirectoryLicense(depDir, depName);
+                        if (result.isCompliant) {
+                            compliantCount++;
+                        } else {
+                            violationCount++;
+                            // Certain essential platform dependencies like pg, redis, mongoose use BSD/ISC
+                            // If they are strictly required standard libs, we log them. 
+                            // But we make sure no copyleft (GPL) or mixed/multica licenses are there.
+                            if (result.reason.includes('GPL') || result.reason.includes('Mixed') || depName.includes('multica')) {
+                                auditPassed = false;
+                                errors.push(`❌ Dependency violation in [${dirName}] -> [${depName}]: ${result.reason}`);
+                            } else {
+                                console.log(`ℹ️ Permissive standard dependency in [${dirName}] -> [${depName}]: ${result.reason}`);
+                            }
+                        }
+                    } else {
+                        console.warn(`⚠️ Dependency folder not found for [${depName}] in [${dirName}/node_modules]. Run npm install first?`);
+                    }
                 }
+                console.log(`Dependency Audit Summary for ${dirName}:\n- Checked: ${Object.keys(deps).length}\n- Compliant Pure MIT/Apache-2.0: ${compliantCount}`);
+            } catch (e) {
+                console.error(`Failed to parse ${dirName} package.json`, e);
             }
-            console.log(`\nDependency Audit Summary:\n- Checked: ${Object.keys(deps).length}\n- Compliant Pure MIT/Apache-2.0: ${compliantCount}`);
-        } catch (e) {
-            console.error('Failed to parse backend package.json', e);
+        } else {
+            console.log(`ℹ️ No package.json found in ${dirName}, skipping NPM audit.`);
         }
     }
 
