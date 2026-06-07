@@ -123,7 +123,7 @@ export default function DeterministicControlSection() {
               <div className="w-3 h-3 rounded-full bg-green-500/80" />
             </div>
             <div className="text-xs font-mono text-slate-500">
-              inso-swarm-network.svg
+              inso code
             </div>
             <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5 rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
