@@ -23,6 +23,9 @@ import { fazmAgent } from './fazm.agent.js';
 import { figmaExporterAgent } from './figma_exporter.agent.js';
 import { researchPaperScraperAgent } from './research_paper_scraper.agent.js';
 import { voiceDesktopLauncherAgent } from './voice_desktop_launcher.agent.js';
+import { spreadsheetFormatterAgent } from './spreadsheet_formatter.agent.js';
+import { socialMediaMonitorAgent } from './social_media_monitor.agent.js';
+import { voiceMeetingMinuterAgent } from './voice_meeting_minuter.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
@@ -1767,6 +1770,33 @@ agentRegistry.register({
     capabilities: ['voice-desktop-launcher', 'desktop-automation', 'voice-intents', 'app-launching'],
     version: '1.0.0',
     instance: voiceDesktopLauncherAgent
+});
+
+agentRegistry.register({
+    name: spreadsheetFormatterAgent.name,
+    description: spreadsheetFormatterAgent.description,
+    queue: 'spreadsheet-formatter-queue',
+    capabilities: ['spreadsheet-formatter', 'spreadsheet-automation', 'gui-operator', 'layout-formatting'],
+    version: '1.0.0',
+    instance: spreadsheetFormatterAgent
+});
+
+agentRegistry.register({
+    name: socialMediaMonitorAgent.name,
+    description: socialMediaMonitorAgent.description,
+    queue: 'social-media-monitor-queue',
+    capabilities: ['social-media-monitor', 'social-monitoring', 'browser-operator', 'web-automation'],
+    version: '1.0.0',
+    instance: socialMediaMonitorAgent
+});
+
+agentRegistry.register({
+    name: voiceMeetingMinuterAgent.name,
+    description: voiceMeetingMinuterAgent.description,
+    queue: 'voice-meeting-minuter-queue',
+    capabilities: ['voice-meeting-minuter', 'meeting-transcription', 'voice-intents', 'meeting-minutes'],
+    version: '1.0.0',
+    instance: voiceMeetingMinuterAgent
 });
 
 // ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────
