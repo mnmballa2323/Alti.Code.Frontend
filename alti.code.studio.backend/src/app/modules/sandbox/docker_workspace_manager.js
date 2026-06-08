@@ -11,6 +11,7 @@
  */
 
 import { exec } from 'child_process';
+import * as hostFs from 'fs';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import ivm from 'isolated-vm';
@@ -255,43 +256,35 @@ export class DockerWorkspaceManager {
             };
 
             jail.setSync('_fsWriteFileSync', function(filePath, data, opts) {
-                const fs = require('fs');
-                fs.writeFileSync(resolveSafePath(filePath), data, opts);
+                hostFs.writeFileSync(resolveSafePath(filePath), data, opts);
             });
 
             jail.setSync('_fsReadFileSync', function(filePath, opts) {
-                const fs = require('fs');
-                return fs.readFileSync(resolveSafePath(filePath), opts);
+                return hostFs.readFileSync(resolveSafePath(filePath), opts);
             });
 
             jail.setSync('_fsExistsSync', function(filePath) {
-                const fs = require('fs');
-                return fs.existsSync(resolveSafePath(filePath));
+                return hostFs.existsSync(resolveSafePath(filePath));
             });
 
             jail.setSync('_fsMkdirSync', function(filePath, opts) {
-                const fs = require('fs');
-                fs.mkdirSync(resolveSafePath(filePath), opts);
+                hostFs.mkdirSync(resolveSafePath(filePath), opts);
             });
 
             jail.setSync('_fsReaddirSync', function(filePath, opts) {
-                const fs = require('fs');
-                return fs.readdirSync(resolveSafePath(filePath), opts);
+                return hostFs.readdirSync(resolveSafePath(filePath), opts);
             });
 
             jail.setSync('_fsRmSync', function(filePath, opts) {
-                const fs = require('fs');
-                fs.rmSync(resolveSafePath(filePath), opts);
+                hostFs.rmSync(resolveSafePath(filePath), opts);
             });
 
             jail.setSync('_fsUnlinkSync', function(filePath) {
-                const fs = require('fs');
-                fs.unlinkSync(resolveSafePath(filePath));
+                hostFs.unlinkSync(resolveSafePath(filePath));
             });
 
             jail.setSync('_fsStatSync', function(filePath) {
-                const fs = require('fs');
-                const stats = fs.statSync(resolveSafePath(filePath));
+                const stats = hostFs.statSync(resolveSafePath(filePath));
                 return {
                     size: stats.size,
                     isFile: stats.isFile(),
@@ -523,41 +516,18 @@ export class DockerWorkspaceManager {
         const containerResult = await this.startOssContainer(moduleName, targetHostPath, options);
 
         if (containerResult.isMock) {
-            // Mock sandbox fallback simulation
-            const mockLogs = [];
-            const mockErrors = [];
-            let mockSuccess = true;
-            try {
-                const customConsole = {
-                    log: (...args) => mockLogs.push(args.join(' ')),
-                    error: (...args) => mockErrors.push(args.join(' '))
-                };
-                const sandbox = {
-                    console: customConsole,
-                    setTimeout,
-                    setInterval,
-                    clearTimeout,
-                    clearInterval,
-                    Buffer,
-                    process: { env: {} }
-                };
-                const timeoutMs = options.timeoutMs || options.timeout || 5000;
-                vm.runInNewContext(code, sandbox, { timeout: timeoutMs });
-            } catch (e) {
-                mockSuccess = false;
-                mockErrors.push(e.message);
-            }
+            const result = await this._executeMockInVM(code, targetHostPath, options);
 
             try {
                 rmSync(tempHostPath, { force: true });
             } catch (e) {}
 
             return {
-                success: mockSuccess,
-                exitCode: mockSuccess ? 0 : 1,
-                logs: mockLogs,
-                errors: mockErrors,
-                durationMs: Date.now() - startTime,
+                success: result.success,
+                exitCode: result.success ? 0 : 1,
+                logs: result.logs,
+                errors: result.errors,
+                durationMs: result.durationMs,
                 isMock: true
             };
         }

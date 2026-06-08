@@ -259,31 +259,28 @@ export class AgentContainerOrchestrator {
         let executionReport = null;
 
         if (containerResult.isMock) {
-            // High-fidelity Mock execution simulation via unprivileged sandboxed node subprocess
-            const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
             try {
-                const mockConsole = {
-                    log: (...logs) => {
-                        const joined = logs.join(' ');
-                        if (joined.startsWith('RESULT_PAYLOAD:')) {
-                            executionReport = JSON.parse(joined.replace('RESULT_PAYLOAD:', ''));
-                        } else {
-                            stdoutLogs.push(joined);
-                        }
-                    },
-                    error: (...logs) => stderrLogs.push(logs.join(' '))
-                };
+                const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
+                const manager = new DockerWorkspaceManager(this.baseSandboxDir);
+                const mockResult = await manager._executeMockInVM(executableScript, hostWorkspacePath, options);
 
-                // Safe standard sandbox IIFE simulation
-                const runner = new AsyncFunction('console', `
-                    try {
-                        ${executableScript}
-                    } catch (e) {
-                        console.error(e.message);
+                mockResult.logs.forEach(line => {
+                    if (line.startsWith('RESULT_PAYLOAD:')) {
+                        try {
+                            executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
+                        } catch (e) {}
+                    } else {
+                        stdoutLogs.push(line);
                     }
-                `);
+                });
 
-                await runner(mockConsole);
+                mockResult.errors.forEach(line => {
+                    stderrLogs.push(line);
+                });
+
+                if (!mockResult.success && !executionReport) {
+                    executionReport = { success: false, error: mockResult.errors.join('\n') };
+                }
             } catch (e) {
                 executionReport = { success: false, error: e.message };
             }
