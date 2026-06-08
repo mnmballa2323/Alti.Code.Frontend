@@ -86,7 +86,7 @@ class SelfExpandingSwarmService {
             // 4. Attempt to dynamically load and register the agent
             report.status = 'registering';
             try {
-                const moduleUrl = `file://${filePath}`;
+                const moduleUrl = `file://${filePath}?t=${Date.now()}`;
                 const module = await import(moduleUrl);
                 
                 // Retrieve the exported class instance
