@@ -26,6 +26,9 @@ import { voiceDesktopLauncherAgent } from './voice_desktop_launcher.agent.js';
 import { spreadsheetFormatterAgent } from './spreadsheet_formatter.agent.js';
 import { socialMediaMonitorAgent } from './social_media_monitor.agent.js';
 import { voiceMeetingMinuterAgent } from './voice_meeting_minuter.agent.js';
+import { desktopFileOrganizerAgent } from './desktop_file_organizer.agent.js';
+import { webDependencyAuditorAgent } from './web_dependency_auditor.agent.js';
+import { voiceEmailDictatorAgent } from './voice_email_dictator.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
@@ -1797,6 +1800,33 @@ agentRegistry.register({
     capabilities: ['voice-meeting-minuter', 'meeting-transcription', 'voice-intents', 'meeting-minutes'],
     version: '1.0.0',
     instance: voiceMeetingMinuterAgent
+});
+
+agentRegistry.register({
+    name: desktopFileOrganizerAgent.name,
+    description: desktopFileOrganizerAgent.description,
+    queue: 'desktop-file-organizer-queue',
+    capabilities: ['desktop-file-organizer', 'file-automation', 'gui-operator', 'file-organization'],
+    version: '1.0.0',
+    instance: desktopFileOrganizerAgent
+});
+
+agentRegistry.register({
+    name: webDependencyAuditorAgent.name,
+    description: webDependencyAuditorAgent.description,
+    queue: 'web-dependency-auditor-queue',
+    capabilities: ['web-dependency-auditor', 'dependency-security-auditing', 'browser-operator', 'web-automation'],
+    version: '1.0.0',
+    instance: webDependencyAuditorAgent
+});
+
+agentRegistry.register({
+    name: voiceEmailDictatorAgent.name,
+    description: voiceEmailDictatorAgent.description,
+    queue: 'voice-email-dictator-queue',
+    capabilities: ['voice-email-dictator', 'email-formatting', 'voice-intents', 'email-drafting'],
+    version: '1.0.0',
+    instance: voiceEmailDictatorAgent
 });
 
 // ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────
