@@ -13,7 +13,7 @@
 import { exec } from 'child_process';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
-import vm from 'vm';
+import ivm from 'isolated-vm';
 
 export class DockerWorkspaceManager {
     /**
@@ -220,6 +220,156 @@ export class DockerWorkspaceManager {
     }
 
     /**
+     * Executes code inside isolated-vm with mocked console, process, and secure fs modules.
+     */
+    async _executeMockInVM(code, hostWorkspacePath, options = {}) {
+        const startTime = Date.now();
+        const logs = [];
+        const errors = [];
+        let success = true;
+        let isolate;
+        try {
+            isolate = new ivm.Isolate({ memoryLimit: options.memoryLimit || 128 });
+            const context = isolate.createContextSync();
+            const jail = context.global;
+            
+            jail.setSync('global', jail);
+            
+            jail.setSync('_hostLog', function(msg) {
+                logs.push(msg);
+            });
+            jail.setSync('_hostError', function(msg) {
+                errors.push(msg);
+            });
+
+            const resolveSafePath = (filePath) => {
+                let targetPath = filePath;
+                if (targetPath.startsWith('/workspace')) {
+                    targetPath = targetPath.replace('/workspace', hostWorkspacePath);
+                }
+                targetPath = resolve(targetPath);
+                if (!targetPath.startsWith(hostWorkspacePath)) {
+                    throw new Error(`Zero-Trust Violation: Path traversal attempt outside workspace: ${targetPath}`);
+                }
+                return targetPath;
+            };
+
+            jail.setSync('_fsWriteFileSync', function(filePath, data, opts) {
+                const fs = require('fs');
+                fs.writeFileSync(resolveSafePath(filePath), data, opts);
+            });
+
+            jail.setSync('_fsReadFileSync', function(filePath, opts) {
+                const fs = require('fs');
+                return fs.readFileSync(resolveSafePath(filePath), opts);
+            });
+
+            jail.setSync('_fsExistsSync', function(filePath) {
+                const fs = require('fs');
+                return fs.existsSync(resolveSafePath(filePath));
+            });
+
+            jail.setSync('_fsMkdirSync', function(filePath, opts) {
+                const fs = require('fs');
+                fs.mkdirSync(resolveSafePath(filePath), opts);
+            });
+
+            jail.setSync('_fsReaddirSync', function(filePath, opts) {
+                const fs = require('fs');
+                return fs.readdirSync(resolveSafePath(filePath), opts);
+            });
+
+            jail.setSync('_fsRmSync', function(filePath, opts) {
+                const fs = require('fs');
+                fs.rmSync(resolveSafePath(filePath), opts);
+            });
+
+            jail.setSync('_fsUnlinkSync', function(filePath) {
+                const fs = require('fs');
+                fs.unlinkSync(resolveSafePath(filePath));
+            });
+
+            jail.setSync('_fsStatSync', function(filePath) {
+                const fs = require('fs');
+                const stats = fs.statSync(resolveSafePath(filePath));
+                return {
+                    size: stats.size,
+                    isFile: stats.isFile(),
+                    isDirectory: stats.isDirectory()
+                };
+            });
+
+            jail.setSync('_hostGetuid', () => process.getuid ? process.getuid() : 1000);
+            jail.setSync('_hostGetgid', () => process.getgid ? process.getgid() : 1000);
+
+            const setupCode = `
+                const fsMock = {
+                    writeFileSync: _fsWriteFileSync,
+                    readFileSync: _fsReadFileSync,
+                    existsSync: _fsExistsSync,
+                    mkdirSync: _fsMkdirSync,
+                    readdirSync: _fsReaddirSync,
+                    rmSync: _fsRmSync,
+                    unlinkSync: _fsUnlinkSync,
+                    statSync: function(filePath) {
+                        const res = _fsStatSync(filePath);
+                        return {
+                            size: res.size,
+                            isFile: () => res.isFile,
+                            isDirectory: () => res.isDirectory
+                        };
+                    }
+                };
+
+                globalThis.console = {
+                    log: function(...args) {
+                        _hostLog(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
+                    },
+                    error: function(...args) {
+                        _hostError(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
+                    }
+                };
+
+                globalThis.require = function(mod) {
+                    if (mod === 'fs') return fsMock;
+                    throw new Error("Module not found: " + mod);
+                };
+
+                globalThis._hostImport = async function(mod) {
+                    if (mod === 'fs') return fsMock;
+                    throw new Error("Module not found: " + mod);
+                };
+
+                globalThis.process = {
+                    env: {},
+                    cwd: () => '/workspace',
+                    getuid: () => _hostGetuid(),
+                    getgid: () => _hostGetgid()
+                };
+            `;
+            context.evalSync(setupCode);
+
+            const processedCode = code.replace(/import\(/g, '_hostImport(');
+            const timeoutMs = options.timeoutMs || options.timeout || 5000;
+            await context.eval(processedCode, { timeout: timeoutMs, promise: true });
+        } catch (e) {
+            success = false;
+            errors.push(e.message);
+        } finally {
+            if (isolate) {
+                isolate.dispose();
+            }
+        }
+
+        return {
+            success,
+            logs,
+            errors,
+            durationMs: Date.now() - startTime
+        };
+    }
+
+    /**
      * Securely executes JavaScript or shell code inside the user's dedicated environment.
      */
     async executeCode(userId, code, options = {}) {
@@ -236,30 +386,7 @@ export class DockerWorkspaceManager {
         const containerResult = await this.startUserContainer(userId, options);
 
         if (containerResult.isMock) {
-            // High-fidelity Mock execution simulation using sandboxed evaluation
-            const mockLogs = [];
-            const mockErrors = [];
-            let mockSuccess = true;
-            try {
-                const customConsole = {
-                    log: (...args) => mockLogs.push(args.join(' ')),
-                    error: (...args) => mockErrors.push(args.join(' '))
-                };
-                const sandbox = {
-                    console: customConsole,
-                    setTimeout,
-                    setInterval,
-                    clearTimeout,
-                    clearInterval,
-                    Buffer,
-                    process: { env: {} }
-                };
-                const timeoutMs = options.timeoutMs || options.timeout || 5000;
-                vm.runInNewContext(code, sandbox, { timeout: timeoutMs });
-            } catch (e) {
-                mockSuccess = false;
-                mockErrors.push(e.message);
-            }
+            const result = await this._executeMockInVM(code, hostPath, options);
 
             // Cleanup temp file
             try {
@@ -267,10 +394,10 @@ export class DockerWorkspaceManager {
             } catch (e) {}
 
             return {
-                success: mockSuccess,
-                logs: mockLogs,
-                errors: mockErrors,
-                durationMs: Date.now() - startTime,
+                success: result.success,
+                logs: result.logs,
+                errors: result.errors,
+                durationMs: result.durationMs,
                 isMock: true
             };
         }

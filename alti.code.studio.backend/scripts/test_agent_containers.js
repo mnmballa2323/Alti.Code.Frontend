@@ -5,6 +5,14 @@
  * Verifies absolute isolation boundaries, unprivileged runtime, and shared volume mountings.
  */
 
+import { spawnSync } from 'child_process';
+if (typeof process !== 'undefined' && process.execArgv && !process.execArgv.includes('--no-node-snapshot')) {
+    const result = spawnSync(process.execPath, ['--no-node-snapshot', ...process.execArgv, ...process.argv.slice(1)], {
+        stdio: 'inherit'
+    });
+    process.exit(result.status ?? 0);
+}
+
 import { WorkspaceIsolator } from '../src/app/modules/sandbox/workspace_isolator.js';
 import { AgentContainerOrchestrator } from '../src/app/modules/sandbox/agent_container_orchestrator.js';
 import { DockerWorkspaceManager } from '../src/app/modules/sandbox/docker_workspace_manager.js';
