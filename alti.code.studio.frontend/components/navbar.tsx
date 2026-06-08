@@ -30,7 +30,7 @@ function Navbar() {
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeSection, setActiveSection] = useState(-1);
 
   useEffect(() => {
     if (pathname === "/contact") {
@@ -80,6 +80,8 @@ function Navbar() {
       };
       // Wait for mount/render to sync
       setTimeout(handleInitialSync, 100);
+    } else {
+      setActiveSection(-1);
     }
   }, [pathname]);
 
