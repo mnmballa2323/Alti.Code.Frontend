@@ -3,6 +3,58 @@ import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { logger } from '../../../shared/logger.js';
 import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk'; // Bedrock Wrapper
 import { AzureOpenAI } from 'openai'; // Azure Foundry Wrapper
+import * as parser from '@babel/parser';
+import traverseModule from '@babel/traverse';
+
+const traverse = traverseModule.default || traverseModule;
+
+function instrumentCode(code) {
+    try {
+        const ast = parser.parse(code, {
+            sourceType: 'module',
+            plugins: ['jsx', 'typescript']
+        });
+        
+        const edits = [];
+        
+        traverse(ast, {
+            Function(path) {
+                const node = path.node;
+                let name = 'anonymous';
+                if (node.id && node.id.name) {
+                    name = node.id.name;
+                } else if (path.parentPath.isVariableDeclarator() && path.parentPath.node.id.name) {
+                    name = path.parentPath.node.id.name;
+                } else if (path.parentPath.isAssignmentExpression() && path.parentPath.node.left.name) {
+                    name = path.parentPath.node.left.name;
+                }
+                
+                if (node.body && node.body.type === 'BlockStatement') {
+                    const bodyNode = node.body;
+                    edits.push({
+                        type: 'wrap',
+                        start: bodyNode.start,
+                        end: bodyNode.end,
+                        name: name
+                    });
+                }
+            }
+        });
+        
+        edits.sort((a, b) => b.start - a.start);
+        
+        let result = code;
+        for (const edit of edits) {
+            const blockContent = result.substring(edit.start + 1, edit.end - 1);
+            const wrapper = `{\n  const _span = opentelemetry.trace.getTracer('tri-brain').startSpan('${edit.name}');\n  try {\n${blockContent}\n  } finally {\n    _span.end();\n  }\n}`;
+            result = result.substring(0, edit.start) + wrapper + result.substring(edit.end);
+        }
+        return result;
+    } catch (err) {
+        logger.error(`[Tri-Brain] AST instrumentation failed: ${err.message}. Returning original code.`);
+        return code;
+    }
+}
 
 /**
  * The Tri-Brain Consensus System
@@ -32,9 +84,10 @@ class TriBrainService {
     /**
      * Executes the Tri-Cloud Autonomous Convergence Loop
      * @param {string} taskDescription The high-level coding task from GitHub or user.
+     * @param {number} attempt Current retry attempt index.
      * @returns {string} The final cryptographically approved code.
      */
-    async executeConsensusLoop(taskDescription) {
+    async executeConsensusLoop(taskDescription, attempt = 1) {
         logger.info(`🧠 [Tri-Brain] Initiating Convergence for task: ${taskDescription.substring(0, 50)}...`);
 
         // 🛡️ Pre-computation: Scrub the incoming intent through GCP Cloud DLP
@@ -83,11 +136,7 @@ ${graphContext}
 
         // Pillar 31: Auto-Injecting Telemetry (AST Rewriter)
         logger.info(`🔭 [Tri-Brain] Pillar 31: Rewriting AST to inject OpenTelemetry spans...`);
-        // Simulating an AST manipulation replacing function declarations with traced wrappers
-        initialCode = initialCode.replace(/function\s+(\w+)\s*\(([^)]*)\)\s*\{/g, 
-            `function $1($2) {\\n  const _span = opentelemetry.trace.getTracer('tri-brain').startSpan('$1');\\n  try {`);
-        initialCode = initialCode.replace(/return\s+(.*?);/g, 
-            `_span.end();\\n  return $1;`);
+        initialCode = instrumentCode(initialCode);
 
         // Step 2: The QA Engineer (GCP Vertex / Gemini 3.1 Pro) writes exhaustive tests
         logger.info(`🧪 [Tri-Brain] Step 2: Gemini 3.1 Pro (GCP) writing integration tests...`);
@@ -138,7 +187,21 @@ ${graphContext}
             logger.warn(`❌ [Tri-Brain] CISO Rejected the PR. Initiating self-healing loop...`);
             // Recursive self-healing loop: feed vulnerabilities back to Claude
             const healingIntent = `${safeIntent}\n\nThe DevSecOps auditor rejected the previous attempt with these reasons:\n${cisoDecision}\n\nPlease rewrite the code to fix these issues.`;
-            return this.executeConsensusLoop(healingIntent); // Recurse until flawless
+            
+            const maxRetries = 3;
+            if (attempt >= maxRetries) {
+                logger.error(`🚨 [Tri-Brain] Consensus healing loop failed after ${attempt} attempts. Escalating to Human-in-the-Loop!`);
+                const { humanInLoopEscalatorAgent } = await import('./human_in_loop_escalator.agent.js');
+                const escalationResult = await humanInLoopEscalatorAgent.consult(healingIntent);
+                return {
+                    status: 'ESCALATED',
+                    code: initialCode,
+                    tests: testSuite,
+                    auditLog: `Consensus failed after ${attempt} attempts. Escalated to human. Feedback: ${escalationResult}`
+                };
+            }
+            
+            return this.executeConsensusLoop(healingIntent, attempt + 1); // Recurse until flawless
         }
     }
 

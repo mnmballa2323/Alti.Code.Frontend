@@ -9,20 +9,42 @@ import vm from 'vm';
 class ASTMetamorphService {
     constructor() {
         // A dedicated safe execution sandbox for AI-generated code snippets
-        this.context = vm.createContext({
-            console: {
-                log: (...args) => logger.info(`[Metamorph/V8] ${args.join(' ')}`),
-                error: (...args) => logger.error(`[Metamorph/V8] ${args.join(' ')}`),
-                warn: (...args) => logger.warn(`[Metamorph/V8] ${args.join(' ')}`),
-            },
-            Math,
-            Date,
-            JSON,
-            // Injecting a reference dictionary for live function pointers
-            registry: {}
-        });
+        const sandbox = Object.create(null);
+        
+        sandbox.console = Object.create(null);
+        sandbox.console.log = (...args) => logger.info(`[Metamorph/V8] ${args.join(' ')}`);
+        sandbox.console.error = (...args) => logger.error(`[Metamorph/V8] ${args.join(' ')}`);
+        sandbox.console.warn = (...args) => logger.warn(`[Metamorph/V8] ${args.join(' ')}`);
+        
+        Object.setPrototypeOf(sandbox.console.log, null);
+        Object.setPrototypeOf(sandbox.console.error, null);
+        Object.setPrototypeOf(sandbox.console.warn, null);
+        
+        sandbox.Math = Math;
+        sandbox.Date = Date;
+        sandbox.JSON = JSON;
+        
+        sandbox.registry = Object.create(null);
+        
+        this.context = vm.createContext(sandbox);
+        
+        // Block constructor lookup on core prototypes inside the context
+        const hardeningScript = `
+            Object.defineProperty(Object.prototype, 'constructor', {
+                get() { return null; },
+                set() {},
+                configurable: false
+            });
+            Object.defineProperty(Function.prototype, 'constructor', {
+                get() { return null; },
+                set() {},
+                configurable: false
+            });
+        `;
+        vm.runInContext(hardeningScript, this.context);
+        
         this.isReady = true;
-        logger.info('🧬 [AST Metamorph] V8 Hot-Swapping Sandbox Context initialized.');
+        logger.info('🧬 [AST Metamorph] V8 Hot-Swapping Sandbox Context initialized with hardening.');
     }
 
     /**
@@ -31,7 +53,11 @@ class ASTMetamorphService {
      * @param {Function} originalFunction 
      */
     registerFunction(functionName, originalFunction) {
-        this.context.registry[functionName] = originalFunction;
+        // Wrap the original function securely to prevent VM sandbox prototype escapes
+        const secureWrapper = (...args) => originalFunction(...args);
+        Object.setPrototypeOf(secureWrapper, null);
+        
+        this.context.registry[functionName] = secureWrapper;
         logger.info(`🔗 [AST Metamorph] Function '${functionName}' bound to runtime swap registry.`);
     }
 
