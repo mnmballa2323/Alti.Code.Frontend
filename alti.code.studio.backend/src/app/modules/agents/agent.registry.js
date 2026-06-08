@@ -29,6 +29,9 @@ import { voiceMeetingMinuterAgent } from './voice_meeting_minuter.agent.js';
 import { desktopFileOrganizerAgent } from './desktop_file_organizer.agent.js';
 import { webDependencyAuditorAgent } from './web_dependency_auditor.agent.js';
 import { voiceEmailDictatorAgent } from './voice_email_dictator.agent.js';
+import { systemPreferencesTunerAgent } from './system_preferences_tuner.agent.js';
+import { webPriceTrackerAgent } from './web_price_tracker.agent.js';
+import { voiceCalendarSchedulerAgent } from './voice_calendar_scheduler.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
@@ -1827,6 +1830,33 @@ agentRegistry.register({
     capabilities: ['voice-email-dictator', 'email-formatting', 'voice-intents', 'email-drafting'],
     version: '1.0.0',
     instance: voiceEmailDictatorAgent
+});
+
+agentRegistry.register({
+    name: systemPreferencesTunerAgent.name,
+    description: systemPreferencesTunerAgent.description,
+    queue: 'system-preferences-tuner-queue',
+    capabilities: ['system-preferences-tuner', 'settings-gui-tuner', 'agent-s-navigation', 'system-configuration'],
+    version: '1.0.0',
+    instance: systemPreferencesTunerAgent
+});
+
+agentRegistry.register({
+    name: webPriceTrackerAgent.name,
+    description: webPriceTrackerAgent.description,
+    queue: 'web-price-tracker-queue',
+    capabilities: ['web-price-tracker', 'e-commerce-monitoring', 'browser-scraping', 'price-comparison'],
+    version: '1.0.0',
+    instance: webPriceTrackerAgent
+});
+
+agentRegistry.register({
+    name: voiceCalendarSchedulerAgent.name,
+    description: voiceCalendarSchedulerAgent.description,
+    queue: 'voice-calendar-scheduler-queue',
+    capabilities: ['voice-calendar-scheduler', 'vocal-scheduling-intent', 'calendar-automation', 'meeting-booking'],
+    version: '1.0.0',
+    instance: voiceCalendarSchedulerAgent
 });
 
 // ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────
