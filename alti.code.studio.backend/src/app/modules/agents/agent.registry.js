@@ -20,6 +20,9 @@ import { omniAudioSynthesisAgent } from './omni_audio_synthesis.agent.js';
 import { agentSAgent } from './agent_s.agent.js';
 import { browserUseAgent } from './browser_use.agent.js';
 import { fazmAgent } from './fazm.agent.js';
+import { figmaExporterAgent } from './figma_exporter.agent.js';
+import { researchPaperScraperAgent } from './research_paper_scraper.agent.js';
+import { voiceDesktopLauncherAgent } from './voice_desktop_launcher.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
@@ -1737,6 +1740,33 @@ agentRegistry.register({
     capabilities: ['desktop-voice-operator', 'desktop-automation', 'voice-intents', 'peer-relay-tunneling'],
     version: '1.0.0',
     instance: fazmAgent
+});
+
+agentRegistry.register({
+    name: figmaExporterAgent.name,
+    description: figmaExporterAgent.description,
+    queue: 'figma-exporter-queue',
+    capabilities: ['figma-exporter', 'figma-automation', 'gui-operator', 'asset-export'],
+    version: '1.0.0',
+    instance: figmaExporterAgent
+});
+
+agentRegistry.register({
+    name: researchPaperScraperAgent.name,
+    description: researchPaperScraperAgent.description,
+    queue: 'research-paper-scraper-queue',
+    capabilities: ['research-paper-scraper', 'academic-scraping', 'browser-operator', 'web-automation'],
+    version: '1.0.0',
+    instance: researchPaperScraperAgent
+});
+
+agentRegistry.register({
+    name: voiceDesktopLauncherAgent.name,
+    description: voiceDesktopLauncherAgent.description,
+    queue: 'voice-desktop-launcher-queue',
+    capabilities: ['voice-desktop-launcher', 'desktop-automation', 'voice-intents', 'app-launching'],
+    version: '1.0.0',
+    instance: voiceDesktopLauncherAgent
 });
 
 // ──── TIER 14: HIGH-VALUE ENTERPRISE B2B ────
