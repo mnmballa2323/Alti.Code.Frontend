@@ -107,6 +107,11 @@ class WorkerFactory {
      * Boot all workers — Armada (file-based) + Legion (auto-generated).
      */
     async init() {
+        if (process.env.DISABLE_REDIS === 'true') {
+            logger.warn('⚠️ WorkerFactory: Redis disabled via env. Bypassing worker initialization.');
+            return;
+        }
+
         // ── PHASE 1: Boot Legion (auto-generated processors) ──
         const legion = legionFactory.boot();
         this.legionCount = legion.count;

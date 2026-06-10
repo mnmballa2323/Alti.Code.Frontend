@@ -74,6 +74,27 @@ const getMemory = async (sessionId, key) => {
 const init = async () => {
     if (isConnected) return;
 
+    if (process.env.DISABLE_REDIS === 'true') {
+        logger.warn('⚠️ Synapse: Redis disabled via env. Switching to local in-memory Mock Mode.');
+        isConnected = true;
+        isMock = true;
+
+        registerLocalAgent(healerAgent);
+        registerLocalAgent(prophetAgent);
+        registerLocalAgent(breakerAgent);
+        registerLocalAgent(polyglotAgent);
+        registerLocalAgent(engineAgent);
+        registerLocalAgent(strategistAgent);
+        registerLocalAgent(criticAgent);
+        registerLocalAgent(architectAgent);
+        registerLocalAgent(composerAgent);
+        registerLocalAgent(guardianAgent);
+        registerLocalAgent(diplomatAgent);
+        registerLocalAgent(historianAgent);
+        registerLocalAgent(analystAgent);
+        return;
+    }
+
     try {
         const redisUrl = config.redis.url || 'redis://localhost:6379';
 
