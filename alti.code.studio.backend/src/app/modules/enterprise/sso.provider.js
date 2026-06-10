@@ -13,6 +13,9 @@
  */
 
 import { logger } from '../../../shared/logger.js';
+import jwt from 'jsonwebtoken';
+import config from '../../../../config/index.js';
+import { prisma } from '../../../config/prisma.js';
 
 // ── GCP Region Constants ──
 const GCP_REGIONS = {
@@ -92,7 +95,7 @@ class EnterpriseSSO {
     }
 
     /**
-     * Validate a Bearer token (JWT from Google Cloud Identity Platform)
+     * Validate a Bearer token (JWT from Google Cloud Identity Platform or Local Auth)
      * @param {string} token - Bearer token
      * @returns {object} - { userId, email, tenantId, role, permissions, region }
      */
@@ -101,6 +104,49 @@ class EnterpriseSSO {
             throw new Error('AUTH_NO_TOKEN: No authentication token provided or invalid type');
         }
 
+        // 1. Try local JWT verification first
+        try {
+            const verified = jwt.verify(token, config.jwt.access_token);
+            if (verified && verified._id) {
+                const user = await prisma.user.findUnique({
+                    where: { id: verified._id },
+                    include: { tenant: true }
+                });
+
+                if (user) {
+                    const userRole = user.role || 'user';
+                    let identityRole = ROLES.DEVELOPER;
+                    if (userRole === 'admin' || userRole === 'ADMIN') {
+                        identityRole = ROLES.SUPER_ADMIN; // Wildcard * permissions
+                    } else if (user.tenantRole === 'owner' || user.tenantRole === 'admin') {
+                        identityRole = ROLES.ADMIN;
+                    } else if (user.tenantRole === 'developer') {
+                        identityRole = ROLES.DEVELOPER;
+                    } else if (user.tenantRole === 'viewer') {
+                        identityRole = ROLES.VIEWER;
+                    }
+
+                    return {
+                        userId: user.id,
+                        email: user.email,
+                        name: user.email.split('@')[0],
+                        tenantId: user.tenantId || 'default',
+                        role: identityRole,
+                        region: 'us-central1',
+                        permissions: PERMISSIONS[identityRole] || PERMISSIONS[ROLES.VIEWER],
+                        iat: verified.iat,
+                        exp: verified.exp,
+                    };
+                }
+            }
+        } catch (localErr) {
+            if (localErr.name === 'TokenExpiredError') {
+                throw new Error('AUTH_TOKEN_EXPIRED: Token has expired');
+            }
+            // Fall through to parse as external Google Cloud Identity token
+        }
+
+        // 2. Google Cloud Identity / SSO token verification
         try {
             // Decode JWT (in production, verify signature against Google's public keys)
             const parts = token.split('.');

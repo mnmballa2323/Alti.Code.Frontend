@@ -33,12 +33,23 @@ export const UserRepository = {
     const date = new Date();
     date.setDate(date.getDate() + 1);
 
-    return prisma.user.create({
-      data: {
-        ...userData,
-        confirmationToken,
-        confirmationTokenExpires: date,
-      },
+    return prisma.$transaction(async (tx) => {
+      const tenantName = `Workspace - ${userData.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+      const tenant = await tx.tenant.create({
+        data: {
+          name: tenantName,
+        },
+      });
+
+      return tx.user.create({
+        data: {
+          ...userData,
+          tenantId: tenant.id,
+          tenantRole: 'owner',
+          confirmationToken,
+          confirmationTokenExpires: date,
+        },
+      });
     });
   },
 
@@ -95,15 +106,26 @@ export const UserRepository = {
     }
 
     // Create new social user
-    return prisma.user.create({
-      data: {
-        email,
-        googleId: provider === 'google' ? id : null,
-        githubId: provider === 'github' ? id : null,
-        avatar,
-        provider,
-        role: 'user',
-      },
+    return prisma.$transaction(async (tx) => {
+      const tenantName = `Workspace - ${email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+      const tenant = await tx.tenant.create({
+        data: {
+          name: tenantName,
+        },
+      });
+
+      return tx.user.create({
+        data: {
+          email,
+          googleId: provider === 'google' ? id : null,
+          githubId: provider === 'github' ? id : null,
+          avatar,
+          provider,
+          role: 'user',
+          tenantId: tenant.id,
+          tenantRole: 'owner',
+        },
+      });
     });
   }
 };

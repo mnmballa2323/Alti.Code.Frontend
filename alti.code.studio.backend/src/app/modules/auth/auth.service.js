@@ -14,6 +14,8 @@ import { sendMailWithGoogleWorkspace } from '../../middlewares/sendEmail/sendMai
 import { registrationOtpTemplate } from './auth.utils.js';
 import { logger } from '../../../shared/logger.js';
 import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres DAL
+import { prisma } from '../../../config/prisma.js';
+import crypto from 'crypto';
 
 const deleteUserAccountService = async userId => {
   return UserRepository.deleteUser(userId);
@@ -72,7 +74,7 @@ const loginService = async (email, password) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email and password are required');
   }
   
-  const user = await UserRepository.findByEmail(email);
+  let user = await UserRepository.findByEmail(email);
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found, please register first');
@@ -91,14 +93,26 @@ const loginService = async (email, password) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid credentials');
   }
 
+  // Lazy tenant provisioning
+  if (!user.tenantId) {
+    const tenantName = `Workspace - ${user.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+    const tenant = await prisma.tenant.create({
+      data: { name: tenantName }
+    });
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { tenantId: tenant.id, tenantRole: 'owner' }
+    });
+  }
+
   const accessToken = jwtHelpers.createToken(
-    { _id: user.id, role: user.role },
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
     config.jwt.access_token,
     config.jwt.access_expires_in,
   );
   
   const refreshToken = jwtHelpers.createToken(
-    { _id: user.id, role: user.role },
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
     config.jwt.refresh_token,
     config.jwt.refresh_expires_in,
   );
@@ -162,15 +176,27 @@ const socialLoginService = async (payload) => {
      throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid social login handshake');
   }
 
-  const user = await UserRepository.upsertSocialUser(payload);
+  let user = await UserRepository.upsertSocialUser(payload);
+
+  // Lazy tenant provisioning
+  if (!user.tenantId) {
+    const tenantName = `Workspace - ${user.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+    const tenant = await prisma.tenant.create({
+      data: { name: tenantName }
+    });
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { tenantId: tenant.id, tenantRole: 'owner' }
+    });
+  }
 
   const accessToken = jwtHelpers.createToken(
-    { _id: user.id, role: user.role },
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
     config.jwt.access_token,
     config.jwt.access_expires_in,
   );
   const refreshToken = jwtHelpers.createToken(
-    { _id: user.id, role: user.role },
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
     config.jwt.refresh_token,
     config.jwt.refresh_expires_in,
   );
@@ -189,12 +215,12 @@ export const authService = {
   getUserService,
   generateUserTokens: (user) => {
     const accessToken = jwtHelpers.createToken(
-      { _id: user.id || user._id, role: user.role },
+      { _id: user.id || user._id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
       config.jwt.access_token,
       config.jwt.access_expires_in,
     );
     const refreshToken = jwtHelpers.createToken(
-      { _id: user.id || user._id, role: user.role },
+      { _id: user.id || user._id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
       config.jwt.refresh_token,
       config.jwt.refresh_expires_in,
     );
