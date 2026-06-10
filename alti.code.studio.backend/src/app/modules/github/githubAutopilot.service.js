@@ -23,36 +23,52 @@ const runCommand = (cmd, cwd) => {
     });
 };
 
+// Mutex chain to serialize git commands and prevent concurrent index.lock conflicts
+let gitMutex = Promise.resolve();
+
+const acquireGitLock = () => {
+    let release;
+    const nextLock = new Promise(resolve => { release = resolve; });
+    const currentLock = gitMutex;
+    gitMutex = nextLock;
+    return currentLock.then(() => release);
+};
+
+const SECRET_PATTERNS = [
+    /aws[_-]?key/i,
+    /aws[_-]?secret/i,
+    /api[_-]?key/i,
+    /client[_-]?secret/i,
+    /private[_-]?key/i,
+    /db[_-]?password/i,
+    /postgres:\/\/[^:]+:[^@]+@/i,
+    /mongodb\+srv:\/\/[^:]+:[^@]+@/i,
+    /AIzaSy[A-Za-z0-9_-]{35}/,
+    /sk-[a-zA-Z0-9]{48}/,
+    /xox[baprs]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24}/,
+    /ghp_[a-zA-Z0-9]{36}/
+];
+
+const COMBINED_SECRET_REGEX = new RegExp(
+    SECRET_PATTERNS.map(r => `(${r.source})`).join('|'),
+    'i'
+);
+
 const scanForSecrets = async (cwd) => {
     const { success, stdout } = await runCommand('git diff HEAD', cwd);
-    if (!success) return { hasSecret: false };
+    if (!success || !stdout) return { hasSecret: false };
 
-    const secretRegexes = [
-        /aws[_-]?key/i,
-        /aws[_-]?secret/i,
-        /api[_-]?key/i,
-        /client[_-]?secret/i,
-        /private[_-]?key/i,
-        /db[_-]?password/i,
-        /postgres:\/\/[^:]+:[^@]+@/i,
-        /mongodb\+srv:\/\/[^:]+:[^@]+@/i,
-        /AIzaSy[A-Za-z0-9_-]{35}/,
-        /sk-[a-zA-Z0-9]{48}/,
-        /xox[baprs]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24}/,
-        /ghp_[a-zA-Z0-9]{36}/
-    ];
-
-    const lines = stdout.split('\n');
+    // Limit scan to first 10,000 lines to prevent Event Loop blocking
+    const lines = stdout.split('\n').slice(0, 10000);
     for (const line of lines) {
         if (line.startsWith('+') && !line.startsWith('+++')) {
-            for (const regex of secretRegexes) {
-                if (regex.test(line)) {
-                    if (!line.toLowerCase().includes('placeholder') && 
-                        !line.toLowerCase().includes('mock') &&
-                        !line.toLowerCase().includes('test') &&
-                        !line.toLowerCase().includes('example')) {
-                        return { hasSecret: true, line: line.trim() };
-                    }
+            if (COMBINED_SECRET_REGEX.test(line)) {
+                const lineLower = line.toLowerCase();
+                if (!lineLower.includes('placeholder') && 
+                    !lineLower.includes('mock') &&
+                    !lineLower.includes('test') &&
+                    !lineLower.includes('example')) {
+                    return { hasSecret: true, line: line.trim() };
                 }
             }
         }
@@ -145,32 +161,37 @@ const handleMentionComment = async (payload) => {
         if (isPR && process.env.NODE_ENV !== 'test') {
             const workspaceRoot = path.resolve(process.cwd(), '../');
             
-            // Save current branch name to restore later
-            const { stdout: originalBranch } = await runCommand('git rev-parse --abbrev-ref HEAD', workspaceRoot);
-            
-            logger.info(`🔄 [GitHub Bot] Checking out PR branch: ${branchName}`);
-            await runCommand(`git fetch origin ${branchName} && git checkout ${branchName}`, workspaceRoot);
-
+            const releaseLock = await acquireGitLock();
             try {
-                const { swarmBrain } = await import('../agents/swarm_brain.js');
-                agentResult = await swarmBrain.executeTask(cleanPrompt, []);
+                // Save current branch name to restore later
+                const { stdout: originalBranch } = await runCommand('git rev-parse --abbrev-ref HEAD', workspaceRoot);
                 
-                // Perform Secrets/PII Guardrail Scan
-                const secretScan = await scanForSecrets(workspaceRoot);
-                if (secretScan.hasSecret) {
-                    logger.error(`🛑 [GitHub Bot] Security violation detected. Secret leak blocked: ${secretScan.line}`);
-                    throw new Error(`Security Alert: Generated modifications contain a potential secret/token: ${secretScan.line.substring(0, 30)}...`);
-                }
+                logger.info(`🔄 [GitHub Bot] Checking out PR branch: ${branchName}`);
+                await runCommand(`git fetch origin ${branchName} && git checkout ${branchName}`, workspaceRoot);
 
-                // Commit and push changes
-                logger.info(`📦 [GitHub Bot] Committing and pushing changes to ${branchName}...`);
-                await runCommand(`git commit -am "chore(agent): address @insocode comment" && git push origin ${branchName}`, workspaceRoot);
+                try {
+                    const { swarmBrain } = await import('../agents/swarm_brain.js');
+                    agentResult = await swarmBrain.executeTask(cleanPrompt, []);
+                    
+                    // Perform Secrets/PII Guardrail Scan
+                    const secretScan = await scanForSecrets(workspaceRoot);
+                    if (secretScan.hasSecret) {
+                        logger.error(`🛑 [GitHub Bot] Security violation detected. Secret leak blocked: ${secretScan.line}`);
+                        throw new Error(`Security Alert: Generated modifications contain a potential secret/token: ${secretScan.line.substring(0, 30)}...`);
+                    }
+
+                    // Commit and push changes
+                    logger.info(`📦 [GitHub Bot] Committing and pushing changes to ${branchName}...`);
+                    await runCommand(`git commit -am "chore(agent): address @insocode comment" && git push origin ${branchName}`, workspaceRoot);
+                } finally {
+                    // Discard dirty working tree changes to protect host workspace
+                    await runCommand('git reset --hard HEAD && git clean -fd', workspaceRoot).catch(() => {});
+                    // Restore original branch
+                    logger.info(`🔄 [GitHub Bot] Restoring original branch: ${originalBranch.trim()}`);
+                    await runCommand(`git checkout ${originalBranch.trim()}`, workspaceRoot);
+                }
             } finally {
-                // Discard dirty working tree changes to protect host workspace
-                await runCommand('git reset --hard HEAD && git clean -fd', workspaceRoot).catch(() => {});
-                // Restore original branch
-                logger.info(`🔄 [GitHub Bot] Restoring original branch: ${originalBranch.trim()}`);
-                await runCommand(`git checkout ${originalBranch.trim()}`, workspaceRoot);
+                releaseLock();
             }
         } else {
             // For regular issues or tests, execute in read-only/consultant mode
@@ -243,40 +264,45 @@ const handleFailedWorkflow = async (payload) => {
 
         const workspaceRoot = path.resolve(process.cwd(), '../');
 
-        // Save current branch name to restore later
-        const { stdout: originalBranch } = await runCommand('git rev-parse --abbrev-ref HEAD', workspaceRoot);
-
-        logger.info(`🔄 [GitHub Bot] Checking out failing branch: ${branchName}`);
-        await runCommand(`git fetch origin ${branchName} && git checkout ${branchName}`, workspaceRoot);
-
         let healingOutput = '';
+        const releaseLock = await acquireGitLock();
         try {
-            const repairPrompt = `The GitHub Actions CI/CD workflow failed on step: "${failedSteps}".
+            // Save current branch name to restore later
+            const { stdout: originalBranch } = await runCommand('git rev-parse --abbrev-ref HEAD', workspaceRoot);
+
+            logger.info(`🔄 [GitHub Bot] Checking out failing branch: ${branchName}`);
+            await runCommand(`git fetch origin ${branchName} && git checkout ${branchName}`, workspaceRoot);
+
+            try {
+                const repairPrompt = `The GitHub Actions CI/CD workflow failed on step: "${failedSteps}".
 Here are the build logs:
 \`\`\`text
 ${logText.substring(0, 8000)}
 \`\`\`
 Please inspect the codebase, locate the file causing the build failure, and edit it to fix the issue.`;
 
-            const { swarmBrain } = await import('../agents/swarm_brain.js');
-            healingOutput = await swarmBrain.executeTask(repairPrompt, []);
+                const { swarmBrain } = await import('../agents/swarm_brain.js');
+                healingOutput = await swarmBrain.executeTask(repairPrompt, []);
 
-            // Perform Secrets/PII Guardrail Scan
-            const secretScan = await scanForSecrets(workspaceRoot);
-            if (secretScan.hasSecret) {
-                logger.error(`🛑 [GitHub Bot] Security violation detected. Secret leak blocked: ${secretScan.line}`);
-                throw new Error(`Security Alert: Generated modifications contain a potential secret/token: ${secretScan.line.substring(0, 30)}...`);
+                // Perform Secrets/PII Guardrail Scan
+                const secretScan = await scanForSecrets(workspaceRoot);
+                if (secretScan.hasSecret) {
+                    logger.error(`🛑 [GitHub Bot] Security violation detected. Secret leak blocked: ${secretScan.line}`);
+                    throw new Error(`Security Alert: Generated modifications contain a potential secret/token: ${secretScan.line.substring(0, 30)}...`);
+                }
+
+                // Commit and push changes
+                logger.info(`📦 [GitHub Bot] Committing and pushing self-healing fix to ${branchName}...`);
+                await runCommand(`git commit -am "fix(agent): auto-heal CI/CD build failure" && git push origin ${branchName}`, workspaceRoot);
+            } finally {
+                // Discard dirty working tree changes to protect host workspace
+                await runCommand('git reset --hard HEAD && git clean -fd', workspaceRoot).catch(() => {});
+                // Restore original branch
+                logger.info(`🔄 [GitHub Bot] Restoring original branch: ${originalBranch.trim()}`);
+                await runCommand(`git checkout ${originalBranch.trim()}`, workspaceRoot);
             }
-
-            // Commit and push changes
-            logger.info(`📦 [GitHub Bot] Committing and pushing self-healing fix to ${branchName}...`);
-            await runCommand(`git commit -am "fix(agent): auto-heal CI/CD build failure" && git push origin ${branchName}`, workspaceRoot);
         } finally {
-            // Discard dirty working tree changes to protect host workspace
-            await runCommand('git reset --hard HEAD && git clean -fd', workspaceRoot).catch(() => {});
-            // Restore original branch
-            logger.info(`🔄 [GitHub Bot] Restoring original branch: ${originalBranch.trim()}`);
-            await runCommand(`git checkout ${originalBranch.trim()}`, workspaceRoot);
+            releaseLock();
         }
 
         // Post notification comment to the commit

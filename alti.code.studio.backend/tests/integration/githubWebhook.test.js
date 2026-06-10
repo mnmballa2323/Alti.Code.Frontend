@@ -272,7 +272,7 @@ describe('GitHub Bot & Webhook Integration Tests', () => {
             // Mock exec to return a diff containing a secret key
             vi.mocked(exec).mockImplementation((cmd, options, callback) => {
                 if (cmd.includes('diff')) {
-                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678"', '');
+                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678901234567890"', '');
                 } else if (cmd.includes('rev-parse')) {
                     callback(null, 'main-branch', '');
                 } else {
@@ -388,7 +388,7 @@ describe('GitHub Bot & Webhook Integration Tests', () => {
             // Mock exec to return a diff containing a secret key
             vi.mocked(exec).mockImplementation((cmd, options, callback) => {
                 if (cmd.includes('diff')) {
-                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678"', '');
+                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678901234567890"', '');
                 } else if (cmd.includes('rev-parse')) {
                     callback(null, 'main-branch', '');
                 } else {
