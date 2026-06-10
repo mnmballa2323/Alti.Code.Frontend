@@ -36,17 +36,25 @@ vi.mock('octokit', () => {
         data: { id: 456 }
     });
 
-    const mockRequest = vi.fn().mockImplementation((route) => {
-        if (route.includes('/logs')) {
+    const mockRequest = vi.fn().mockImplementation(async (route) => {
+        if (route && route.includes('/logs')) {
             return { data: 'npm test failed with exit code 1' };
         }
         return { data: {} };
     });
 
+    globalThis.__mockOctokit = {
+        mockPullsGet,
+        mockCreateComment,
+        mockListJobsForWorkflowRun,
+        mockCreateCommitComment,
+        mockRequest
+    };
+
     return {
-        Octokit: vi.fn().mockImplementation(() => {
-            return {
-                rest: {
+        Octokit: class {
+            constructor() {
+                this.rest = {
                     pulls: {
                         get: mockPullsGet
                     },
@@ -59,12 +67,20 @@ vi.mock('octokit', () => {
                     repos: {
                         createCommitComment: mockCreateCommitComment
                     }
-                },
-                request: mockRequest
-            };
-        })
+                };
+                this.request = mockRequest;
+            }
+        }
     };
 });
+
+const {
+    mockPullsGet,
+    mockCreateComment,
+    mockListJobsForWorkflowRun,
+    mockCreateCommitComment,
+    mockRequest
+} = globalThis.__mockOctokit;
 
 // Mock child_process exec
 vi.mock('child_process', () => {
@@ -118,6 +134,7 @@ const makeMockRes = () => {
 describe('GitHub Bot & Webhook Integration Tests', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        vi.restoreAllMocks();
     });
 
     describe('1. Webhook Routing Interception', () => {
