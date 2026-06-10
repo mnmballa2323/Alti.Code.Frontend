@@ -277,7 +277,7 @@ function Navbar() {
                     alt="Inso Logo Icon"
                     className="h-8 w-auto object-contain"
                     height={32}
-                    src="/assets/logo-icon-black.png"
+                    src="/assets/logo-icon-black.png?v=2"
                     width={37}
                   />
                   <Image
@@ -296,7 +296,7 @@ function Navbar() {
                     alt="Inso Logo Icon"
                     className="h-8 w-auto object-contain"
                     height={32}
-                    src="/assets/logo-icon-white.png"
+                    src="/assets/logo-icon-white.png?v=2"
                     width={37}
                   />
                   <Image

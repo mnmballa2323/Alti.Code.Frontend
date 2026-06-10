@@ -1430,7 +1430,7 @@ export default function Sidebar() {
                   isTauri ? "h-[18px]" : "h-6",
                 )}
                 height={24}
-                src="/assets/logo-icon-black.png"
+                src="/assets/logo-icon-black.png?v=2"
                 width={28}
               />
               {!isTauri && (
@@ -1452,7 +1452,7 @@ export default function Sidebar() {
                   isTauri ? "h-[18px]" : "h-6",
                 )}
                 height={24}
-                src="/assets/logo-icon-white.png"
+                src="/assets/logo-icon-white.png?v=2"
                 width={28}
               />
               {!isTauri && (
