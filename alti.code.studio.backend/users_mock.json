@@ -1,0 +1,32 @@
+[
+  {
+    "id": "84644de4-219b-4e40-84ea-55cefe3c71cd",
+    "tenantId": "e469748e-9b5d-4525-b4fb-40f6bf7fe9db",
+    "tenantRole": "owner",
+    "provider": "local",
+    "googleId": null,
+    "githubId": null,
+    "avatar": null,
+    "email": "admin@alti.com",
+    "password": "$2b$10$US7HpoINCoLAM.ibYl8qVu9plx2UJKrAmYU2m3G5lRss3Mx.OKIQu",
+    "role": "admin",
+    "isSubscribed": true,
+    "subscriptionPrice": null,
+    "subscriptionPlan": "command",
+    "subscriptionDur": "month",
+    "subscriptionExp": null,
+    "subscriptionStat": "paid",
+    "invoiceUrl": null,
+    "promptsUsed": 0,
+    "imagesUsed": 0,
+    "lastResetAt": "2026-06-10T21:47:29.528Z",
+    "confirmationToken": null,
+    "confirmationTokenExpires": null,
+    "resetPasswordOTP": null,
+    "resetPasswordExpires": null,
+    "deleteAccountOTP": null,
+    "deleteAccountExpires": null,
+    "createdAt": "2026-06-10T21:47:29.528Z",
+    "updatedAt": "2026-06-10T21:47:29.528Z"
+  }
+]
