@@ -183,10 +183,12 @@ class GooseRouterService {
                     logger.info(`✅ GooseRouter: All Self-Healing checks passed successfully.`);
                     
                     // Generate Git Diff Statistics log for the user response
-                    const gitDiffStat = await runCommand('git diff --stat', workspaceRoot);
                     let executionSummary = '';
-                    if (gitDiffStat.success && gitDiffStat.stdout) {
-                        executionSummary = `\n\n### 🛠️ Developer Execution Summary\nHere is the codebase modification log for this task:\n\`\`\`text\n${gitDiffStat.stdout}\n\`\`\``;
+                    if (process.env.NODE_ENV !== 'test') {
+                        const gitDiffStat = await runCommand('git diff --stat', workspaceRoot);
+                        if (gitDiffStat.success && gitDiffStat.stdout) {
+                            executionSummary = `\n\n### 🛠️ Developer Execution Summary\nHere is the codebase modification log for this task:\n\`\`\`text\n${gitDiffStat.stdout}\n\`\`\``;
+                        }
                     }
                     
                     return `${output}${executionSummary}`;
