@@ -404,6 +404,19 @@ If you require assistance from another specialized agent to complete your task, 
             }
         }
 
+        // 🪶 GOOSE ROUTER: Route development/modification tasks to local Goose execution
+        try {
+            const { gooseRouterService } = await import('../goose/gooseRouter.service.js');
+            if (gooseRouterService.shouldRouteToGoose(injectedPrompt)) {
+                logger.info(`🪶 SwarmBrain: Task classified as development/modification. Routing to Goose.`);
+                const gooseResult = await gooseRouterService.executeTask(injectedPrompt, context, onProgress);
+                if (onProgress) onProgress({ status: 'completed', finalResult: gooseResult });
+                return gooseResult;
+            }
+        } catch (gooseError) {
+            logger.warn(`⚠️ SwarmBrain: Goose routing failed. Falling back to standard specialists: ${gooseError.message}`);
+        }
+
         const { nodes, edges } = await this.getSpecialistWorkflow(injectedPrompt);
         logger.info(`🧠 SwarmBrain: Orchestrating Non-Linear DAG with ${nodes.length} nodes and ${edges.length} edges.`);
         if (onProgress) onProgress({ status: 'orchestrating', message: `DAG Generated with ${nodes.length} nodes and ${edges.length} edges` });
