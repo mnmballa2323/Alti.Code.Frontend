@@ -1582,7 +1582,6 @@ export default function PromptInputFullLineWithBottomActions({
 
   return (
     <div className="flex w-full flex-col gap-4 mb-6 !z-50">
-      <DaemonStatusViewer />
       <PromptInputFullLineComponent
         customActions={customActions}
         hideAgents={hideAgents}
