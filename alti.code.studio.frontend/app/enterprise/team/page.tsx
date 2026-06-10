@@ -147,6 +147,11 @@ export default function TeamPage() {
                     placeholder="Enter team workspace name"
                     value={teamName}
                     variant="bordered"
+                    labelPlacement="outside"
+                    classNames={{
+                      label: "text-white/80 font-medium pb-1.5",
+                      input: "text-white",
+                    }}
                     onValueChange={setTeamName}
                   />
                 </div>
@@ -238,17 +243,27 @@ export default function TeamPage() {
                 placeholder="colleague@example.com"
                 value={inviteEmail}
                 variant="bordered"
+                labelPlacement="outside"
+                classNames={{
+                  label: "text-white/80 font-medium pb-1.5",
+                  input: "text-white",
+                }}
                 onValueChange={setInviteEmail}
               />
               <Select
                 label="Workspace Role"
                 selectedKeys={[inviteRole]}
                 variant="bordered"
+                labelPlacement="outside"
+                classNames={{
+                  label: "text-white/80 font-medium pb-1.5",
+                  value: "text-white",
+                }}
                 onChange={(e) => setInviteRole(e.target.value)}
               >
-                <SelectItem key="admin">Admin</SelectItem>
-                <SelectItem key="developer">Developer</SelectItem>
-                <SelectItem key="viewer">Viewer</SelectItem>
+                <SelectItem key="admin" className="text-black dark:text-white">Admin</SelectItem>
+                <SelectItem key="developer" className="text-black dark:text-white">Developer</SelectItem>
+                <SelectItem key="viewer" className="text-black dark:text-white">Viewer</SelectItem>
               </Select>
               <Button
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-500/20"
