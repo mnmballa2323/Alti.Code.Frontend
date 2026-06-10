@@ -49,7 +49,13 @@ const getSwarmTelemetry = async () => {
     let daemonUptime = null;
     try {
         // Look up using ps command - grep inside square brackets [a] avoids matching the grep command itself
-        const { stdout } = await execAsync('ps aux | grep "[a]utonomous_agent_generator.js"');
+        let stdout = '';
+        try {
+            const result = await execAsync('ps aux | grep -E "[a]utonomous_agent_generator.js|[a]utonomous_agent_factory.js"');
+            stdout = result.stdout;
+        } catch (err) {
+            stdout = '';
+        }
         const line = stdout.trim();
         if (line) {
             daemonRunning = true;
