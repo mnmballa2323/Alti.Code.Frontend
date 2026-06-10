@@ -59,10 +59,26 @@ export default function TeamMembersPage() {
     }
   };
 
+  const formatRole = (role: string) => {
+    if (!role) return "Developer";
+    const r = role.toLowerCase();
+    if (r === "admin" || r === "owner") return "Owner";
+    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+  };
+
+  // Merge current user into members list if not already returned by the API
+  const displayedMembers = [...members];
+  if (currentUser && !displayedMembers.some((m) => m.email === currentUser.email)) {
+    displayedMembers.push({
+      id: currentUser.id || "current-user",
+      name: currentUser.name || `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() || undefined,
+      email: currentUser.email,
+      role: currentUser.role || "owner",
+    });
+  }
+
   return (
     <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
-
-
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
@@ -70,84 +86,67 @@ export default function TeamMembersPage() {
         </div>
       ) : (
         <div className="space-y-4">
-          {members.length > 0 ? (
-            members.map((member) => {
-              const isYou = member.email === currentUser?.email;
-              
-              // Try to split name into first and last, or extract from email
-              const nameParts = member.name ? member.name.trim().split(/\s+/) : [];
-              const firstName = nameParts[0] || member.email.split("@")[0];
-              const lastName = nameParts.slice(1).join(" ") || "";
+          {displayedMembers.length > 0 ? (
+            <div className="w-full">
+              {/* Table Header */}
+              <div className="grid grid-cols-12 gap-4 px-6 py-3 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase border-b border-neutral-100 dark:border-neutral-800 mb-4">
+                <div className="col-span-3">First Name</div>
+                <div className="col-span-3">Last Name</div>
+                <div className="col-span-4">Email Address</div>
+                <div className="col-span-2">Role Type</div>
+              </div>
 
-              return (
-                <div
-                  key={member.id}
-                  className="flex items-center justify-between p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200"
-                >
-                  <div className="flex items-center gap-4 flex-1">
-                    {/* Initials Avatar */}
-                    <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-650 dark:text-neutral-300 font-semibold shrink-0 uppercase">
-                      {firstName.substring(0, 1)}
-                      {lastName ? lastName.substring(0, 1) : ""}
-                    </div>
+              {/* Table Body */}
+              <div className="space-y-3">
+                {displayedMembers.map((member) => {
+                  const isYou = member.email === currentUser?.email;
+                  
+                  // Try to split name into first and last, or extract from email if not set
+                  const nameParts = member.name ? member.name.trim().split(/\s+/) : [];
+                  const firstName = nameParts[0] ? (member.name ? nameParts[0] : "") : "";
+                  const lastName = nameParts.slice(1).join(" ") || "";
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1 items-center ml-2">
-                      <div className="md:col-span-1">
-                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold tracking-wider uppercase">
-                          First Name
-                        </p>
-                        <p className="font-semibold text-neutral-800 dark:text-white text-sm capitalize">
-                          {firstName}
-                        </p>
-                      </div>
-                      <div className="md:col-span-1">
-                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold tracking-wider uppercase">
-                          Last Name
-                        </p>
-                        <p className="font-semibold text-neutral-800 dark:text-white text-sm capitalize">
-                          {lastName || "—"}
-                        </p>
-                      </div>
-                      <div className="md:col-span-2">
-                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold tracking-wider uppercase">
-                          Email Address
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <p className="text-neutral-600 dark:text-neutral-300 text-sm font-medium">
-                            {member.email}
-                          </p>
-                          {isYou && (
-                            <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-850 text-neutral-550 dark:text-neutral-400 rounded border border-neutral-200/50 dark:border-neutral-700/50">
-                              YOU
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pr-6 text-right">
-                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-bold tracking-wider uppercase">
-                        Role Type
-                      </p>
-                      <span className="text-xs font-semibold px-2.5 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-lg capitalize">
-                        {member.role || "developer"}
-                      </span>
-                    </div>
-                  </div>
-
-                  {!isYou && (
-                    <button
-                      onClick={() => handleRemove(member.id, member.email)}
-                      className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                  return (
+                    <div
+                      key={member.id}
+                      className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200"
                     >
-                      <Trash2 className="w-4 h-4 text-neutral-400" />
-                    </button>
-                  )}
-                </div>
-              );
-            })
+                      <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
+                        {firstName || "—"}
+                      </div>
+                      <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
+                        {lastName || "—"}
+                      </div>
+                      <div className="col-span-4 flex items-center gap-2">
+                        <span className="text-neutral-600 dark:text-neutral-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                          {member.email}
+                        </span>
+                        {isYou && (
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40">
+                            You
+                          </span>
+                        )}
+                      </div>
+                      <div className="col-span-2 flex items-center justify-between">
+                        <span className="text-neutral-800 dark:text-neutral-200 font-medium">
+                          {formatRole(member.role)}
+                        </span>
+                        {!isYou && (
+                          <button
+                            onClick={() => handleRemove(member.id, member.email)}
+                            className="p-1 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded transition-colors ml-auto"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           ) : (
-            <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+            <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
               No members configured.
             </div>
           )}

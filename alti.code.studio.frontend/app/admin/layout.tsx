@@ -90,9 +90,32 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
 
 
+  const getActiveGroup = () => {
+    if (
+      pathname.startsWith("/admin/members") ||
+      pathname.startsWith("/admin/team-members") ||
+      pathname.startsWith("/admin/billing") ||
+      pathname.startsWith("/admin/invoices")
+    ) {
+      return "Platform Admin";
+    }
+    if (
+      pathname.startsWith("/admin/data") ||
+      pathname.startsWith("/admin/instructions") ||
+      pathname.startsWith("/admin/guardrails") ||
+      pathname.startsWith("/admin/projects")
+    ) {
+      return "Platform Manager";
+    }
+    if (pathname.startsWith("/admin/audit")) {
+      return "System Operations";
+    }
+    return "Platform Admin";
+  };
+
   const getPageTitle = () => {
-    if (pathname.startsWith("/admin/members")) return "Invite Members";
-    if (pathname.startsWith("/admin/team-members")) return "Member Management";
+    if (pathname.startsWith("/admin/members")) return "Invite";
+    if (pathname.startsWith("/admin/team-members")) return "Members";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
     if (pathname.startsWith("/admin/data")) return "Knowledge";
@@ -112,13 +135,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <img
             src="/logo-black.png"
             alt="Inso Code Logo"
-            className="w-5 h-5 object-contain block dark:hidden"
+            className="w-5 h-5 object-contain block dark:hidden animate-fade-in"
           />
           <img
             src="/logo-white.png"
             alt="Inso Code Logo"
-            className="w-5 h-5 object-contain hidden dark:block"
+            className="w-5 h-5 object-contain hidden dark:block animate-fade-in"
           />
+          <span className="font-semibold text-neutral-900 dark:text-white text-[14px]">
+            {getActiveGroup()}
+          </span>
         </div>
 
         {/* Right header: page title */}
@@ -132,27 +158,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {renderNavGroup("Platform Admin", adminItems)}
-          {renderNavGroup("Platform Manager", managerItems)}
-          {renderNavGroup("System Operations", systemItems)}
+          {getActiveGroup() === "Platform Admin" && renderNavGroup("", adminItems)}
+          {getActiveGroup() === "Platform Manager" && renderNavGroup("", managerItems)}
+          {getActiveGroup() === "System Operations" && renderNavGroup("", systemItems)}
         </div>
 
         {/* Main Content Pane */}
         <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
-          {/* Subtle Background Watermark Logo */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] dark:opacity-[0.04] z-0 select-none">
-            <img
-              src="/inso-logo-black.png"
-              alt="Inso Code Watermark"
-              className="w-80 h-80 object-contain block dark:hidden"
-            />
-            <img
-              src="/inso-logo-white.png"
-              alt="Inso Code Watermark"
-              className="w-80 h-80 object-contain hidden dark:block"
-            />
-          </div>
-
           {/* Content Children */}
           <div className="flex-1 overflow-y-auto p-10 z-10 relative flex flex-col h-full">
             {children}
