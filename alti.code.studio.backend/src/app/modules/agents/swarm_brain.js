@@ -404,17 +404,60 @@ If you require assistance from another specialized agent to complete your task, 
             }
         }
 
-        // 🪶 GOOSE ROUTER: Route development/modification tasks to local Goose execution
+        // 🪶 SMART AGENT ROUTER: Route codebase modification tasks to Goose or Claw-Code
         try {
             const { gooseRouterService } = await import('../goose/gooseRouter.service.js');
-            if (gooseRouterService.shouldRouteToGoose(injectedPrompt)) {
-                logger.info(`🪶 SwarmBrain: Task classified as development/modification. Routing to Goose.`);
-                const gooseResult = await gooseRouterService.executeTask(injectedPrompt, context, onProgress);
-                if (onProgress) onProgress({ status: 'completed', finalResult: gooseResult });
-                return gooseResult;
+            const { clawCodeRouterService } = await import('../clawCode/clawCodeRouter.service.js');
+            const fs = await import('fs');
+
+            const isCodeTask = gooseRouterService.shouldRouteToGoose(injectedPrompt) || 
+                               clawCodeRouterService.shouldRouteToClawCode(injectedPrompt);
+
+            if (isCodeTask) {
+                // Determine preferred agent based on API keys and configuration
+                const hasAnthropic = !!(process.env.ANTHROPIC_API_KEY);
+                const hasGemini = !!(config.gemini_secret_key || process.env.GEMINI_API_KEY);
+                const clawBinaryExists = fs.existsSync(clawCodeRouterService.clawPath);
+                
+                let preferredAgent = 'goose';
+                if (clawBinaryExists && (hasAnthropic || process.env.PREFERRED_AGENT === 'claw' || !hasGemini)) {
+                    preferredAgent = 'claw';
+                }
+
+                logger.info(`🧠 SwarmBrain: Code task detected. Preferred execution agent: ${preferredAgent.toUpperCase()}`);
+
+                if (preferredAgent === 'claw') {
+                    try {
+                        logger.info(`🤖 SwarmBrain: Routing code task to Claw-Code.`);
+                        const clawResult = await clawCodeRouterService.executeTask(injectedPrompt, context, onProgress);
+                        if (onProgress) onProgress({ status: 'completed', finalResult: clawResult });
+                        return clawResult;
+                    } catch (clawError) {
+                        logger.warn(`⚠️ SwarmBrain: Claw-Code execution failed. Attempting failover to Goose... Error: ${clawError.message}`);
+                        const gooseResult = await gooseRouterService.executeTask(injectedPrompt, context, onProgress);
+                        if (onProgress) onProgress({ status: 'completed', finalResult: gooseResult });
+                        return gooseResult;
+                    }
+                } else {
+                    try {
+                        logger.info(`🤖 SwarmBrain: Routing code task to Goose.`);
+                        const gooseResult = await gooseRouterService.executeTask(injectedPrompt, context, onProgress);
+                        if (onProgress) onProgress({ status: 'completed', finalResult: gooseResult });
+                        return gooseResult;
+                    } catch (gooseError) {
+                        if (clawBinaryExists) {
+                            logger.warn(`⚠️ SwarmBrain: Goose execution failed. Attempting failover to Claw-Code... Error: ${gooseError.message}`);
+                            const clawResult = await clawCodeRouterService.executeTask(injectedPrompt, context, onProgress);
+                            if (onProgress) onProgress({ status: 'completed', finalResult: clawResult });
+                            return clawResult;
+                        } else {
+                            throw gooseError;
+                        }
+                    }
+                }
             }
-        } catch (gooseError) {
-            logger.warn(`⚠️ SwarmBrain: Goose routing failed. Falling back to standard specialists: ${gooseError.message}`);
+        } catch (routerError) {
+            logger.warn(`⚠️ SwarmBrain: Smart Agent Router failed or bypassed. Falling back to standard specialists: ${routerError.message}`);
         }
 
         const { nodes, edges } = await this.getSpecialistWorkflow(injectedPrompt);
