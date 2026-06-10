@@ -1,3 +1,16 @@
 {$CUSTOMER_DOMAIN} {
-    reverse_proxy alti-backend:3000
+    # Route Core API queries to the backend node
+    handle /api/v1/* {
+        reverse_proxy alti-backend:3000
+    }
+
+    # Route Socket.IO events to the backend
+    handle /socket.io/* {
+        reverse_proxy alti-backend:3000
+    }
+
+    # Route UI pages, auth, and other queries to the frontend
+    handle {
+        reverse_proxy alti-frontend:3000
+    }
 }
