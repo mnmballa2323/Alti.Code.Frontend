@@ -48,16 +48,13 @@ export default function KnowledgePage() {
 
   return (
     <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
-      {/* Header and Back Button */}
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-xl font-bold text-neutral-900 dark:text-white">
-          Knowledge
-        </h1>
+      {/* Back Button */}
+      <div className="flex justify-end mb-8">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-neutral-600 dark:text-neutral-300 bg-neutral-100/80 hover:bg-neutral-200/80 dark:bg-neutral-800/80 dark:hover:bg-neutral-700/80 border border-neutral-200/50 dark:border-neutral-700/50 rounded-xl transition-all"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl transition-all shadow-sm"
         >
-          <ArrowLeft className="w-3.5 h-3.5" />
+          <ArrowLeft className="w-4 h-4 text-neutral-500" />
           Back to Dashboard
         </Link>
       </div>

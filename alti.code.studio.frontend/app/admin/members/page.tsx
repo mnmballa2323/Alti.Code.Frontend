@@ -42,9 +42,6 @@ export default function InvitePage() {
 
   return (
     <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
-      <h1 className="text-xl font-bold text-neutral-900 dark:text-white mb-6">
-        Invite
-      </h1>
 
       <form onSubmit={handleInvite} className="space-y-6">
         {/* 2x2 Grid */}

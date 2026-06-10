@@ -110,7 +110,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const getPageTitle = () => {
-    if (pathname.startsWith("/admin/members")) return "Invite";
+    if (pathname.startsWith("/admin/members")) return "Invite Members";
     if (pathname.startsWith("/admin/team-members")) return "Members";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
