@@ -24,7 +24,7 @@ const createCheckoutSessionService = async (user, plan) => {
   if (!plan || !plan.plan_name || !plan.price) {
     throw new Error('PaymentService: Valid plan definition is required');
   }
-  if (!['launch', 'build', 'scale', 'command'].includes(plan.plan_name)) {
+  if (!['launch', 'build', 'scale', 'command', 'enterprise-aws', 'enterprise-gcp', 'enterprise-azure'].includes(plan.plan_name)) {
     throw new Error('Invalid plan name: ' + plan.plan_name);
   }
   if (!['month', 'year'].includes(plan.duration)) {

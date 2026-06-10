@@ -3,6 +3,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 import { AzureOpenAI } from 'openai';
 import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
 import { prisma } from '../../../config/prisma.js';
+import SubscriptionModel from '../payment/payment.model.js';
 import { VaultService } from '../vault/vault.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { logger } from '../../../shared/logger.js';
@@ -117,6 +118,68 @@ const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
 const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperature = 0.5, domain = 'Full Stack') => {
     logger.info(`🔀 [LlmGateway] Triage routing prompt to model: ${modelName} | Domain: ${domain}`);
 
+    // Fetch active subscription for model lock enforcement (Enterprise plan logic)
+    let subscription = null;
+    try {
+        if (userId && userId !== 'system_dev_user') {
+            subscription = await SubscriptionModel.findOne(
+                { userId, paymentStatus: 'paid', expiresAt: { $gte: new Date() } },
+                {},
+                { sort: { expiresAt: -1 } }
+            );
+        }
+    } catch (e) {
+        logger.error('Failed to retrieve user subscription in LlmGateway:', e);
+    }
+
+    let actualModelName = modelName;
+    if (subscription && ['enterprise-aws', 'enterprise-gcp', 'enterprise-azure'].includes(subscription.plan_name)) {
+        logger.info(`🏢 [LlmGateway] Enforcing enterprise model vendor lock for plan: ${subscription.plan_name}`);
+        if (subscription.plan_name === 'enterprise-aws') {
+            // Must use AWS Bedrock only
+            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
+                actualModelName = 'anthropic.claude-5-sonnet-20241022-v2:0'; // Default AWS model
+                logger.info(`🏢 [LlmGateway] Enterprise AWS: Auto-routing overridden to default Bedrock model: ${actualModelName}`);
+            } else {
+                const isAwsModel = actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.');
+                if (!isAwsModel) {
+                    throw new ApiError(
+                        httpStatus.FORBIDDEN,
+                        `Security Enforcement: Your AWS Enterprise plan restricts you exclusively to AWS Bedrock models. Model '${actualModelName}' is blocked.`
+                    );
+                }
+            }
+        } else if (subscription.plan_name === 'enterprise-gcp') {
+            // Must use GCP Vertex only
+            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
+                actualModelName = 'gemini-3.1-pro'; // Default GCP model
+                logger.info(`🏢 [LlmGateway] Enterprise GCP: Auto-routing overridden to default Vertex model: ${actualModelName}`);
+            } else {
+                const isGcpModel = actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/');
+                if (!isGcpModel) {
+                    throw new ApiError(
+                        httpStatus.FORBIDDEN,
+                        `Security Enforcement: Your GCP Enterprise plan restricts you exclusively to GCP Vertex AI models. Model '${actualModelName}' is blocked.`
+                    );
+                }
+            }
+        } else if (subscription.plan_name === 'enterprise-azure') {
+            // Must use Azure OpenAI only
+            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
+                actualModelName = 'azure/gpt-5.5'; // Default Azure model
+                logger.info(`🏢 [LlmGateway] Enterprise Azure: Auto-routing overridden to default Azure OpenAI model: ${actualModelName}`);
+            } else {
+                const isAwsOrGcp = actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.') || actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/');
+                if (isAwsOrGcp) {
+                    throw new ApiError(
+                        httpStatus.FORBIDDEN,
+                        `Security Enforcement: Your Azure Enterprise plan restricts you exclusively to Azure OpenAI Foundry models. Model '${actualModelName}' is blocked.`
+                    );
+                }
+            }
+        }
+    }
+
     // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
     let scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
@@ -126,7 +189,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
         logger.info(`🗜️ [LlmGateway] Compressing context with Headroom AI...`);
         const messages = [{ role: 'user', content: scrubbedPrompt }];
         const result = await compress(messages, { 
-            model: modelName && modelName !== 'auto' && modelName !== 'default' ? modelName : 'gpt-4o',
+            model: actualModelName && actualModelName !== 'auto' && actualModelName !== 'default' ? actualModelName : 'gpt-4o',
             baseUrl: process.env.HEADROOM_PROXY_URL || 'http://localhost:8787'
         });
         if (result && result.messages && result.messages.length > 0) {
@@ -138,7 +201,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     }
 
     // Deep Research Interceptor
-    if (modelName === 'Deep Research' || domain === 'Research') {
+    if (actualModelName === 'Deep Research' || domain === 'Research') {
         logger.info(`🔬 [LlmGateway] Deep Research Interceptor: Initiating deep crawling pipeline...`);
         const researchResult = await researchService.executeDeepResearch(scrubbedPrompt, 'deep');
         const reply = researchResult.content;
@@ -152,7 +215,7 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     }
 
     // Master Router Classification (Smart Routing)
-    if (!modelName || modelName === '' || modelName === 'auto' || modelName === 'default') {
+    if (!actualModelName || actualModelName === '' || actualModelName === 'auto' || actualModelName === 'default') {
         logger.info(`🧠 [LlmGateway] Smart Routing selected. Classifying query intent...`);
         try {
             const classificationPrompt = `You are the Master Router. Classify the user query into ONE of three categories:
@@ -194,7 +257,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
 
 
     // Agentic classification: Should we use codebase RAG search?
-    if (domain === 'Chat' || modelName === 'chat') {
+    if (domain === 'Chat' || actualModelName === 'chat') {
         try {
             const classificationPrompt = `You are an agentic router. Given the user query, classify if it requires searching the codebase or requires information about the codebase/repository code/architecture.
 User Query: "${scrubbedPrompt}"
@@ -206,15 +269,15 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             
             if (decision.includes('RAG')) {
                 logger.info(`🤖 [LlmGateway] Agentic Route: Detected codebase query. Redirecting to Ultimate RAG Pipeline.`);
-                const ragResult = await ultimateRagService.synthesize(scrubbedPrompt, modelName, 'Chat', undefined);
+                const ragResult = await ultimateRagService.synthesize(scrubbedPrompt, actualModelName, 'Chat', undefined);
                 
                 // Persist chat response to Postgres ChatHistory (JSONB)
-                await saveChatResponse(userId, sessionId, rawPrompt, modelName, ragResult.synthesis);
+                await saveChatResponse(userId, sessionId, rawPrompt, actualModelName, ragResult.synthesis);
                 
                 return {
                     reply: ragResult.synthesis,
                     sessionId,
-                    model: modelName,
+                    model: actualModelName,
                     success: true
                 };
             } else {
@@ -229,7 +292,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     let rulesContext = '';
 
     // Strict isolation boundary for Chat Page: prohibit code generation & modifications
-    if (domain === 'Chat' || modelName === 'chat') {
+    if (domain === 'Chat' || actualModelName === 'chat') {
         rulesContext += '=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===\n';
         rulesContext += '1. You are operating in the isolated CHAT workspace.\n';
         rulesContext += '2. You are allowed to answer codebase architecture queries, search the web, explain concepts, and assist with non-development questions.\n';
@@ -265,13 +328,13 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     const creds = await VaultService.getRawCredentials(userId);
 
     let reply = '';
-    let usedModelName = modelName;
+    let usedModelName = actualModelName;
 
     // 1. Google Gemini (Vertex AI natively or API Key fallback)
-    if (modelName.startsWith('gemini-') || modelName.startsWith('google/')) {
+    if (actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/')) {
         const geminiApiKey = creds.geminiApiKey || process.env.GEMINI_API_KEY;
         const gcpProjectId = creds.gcpProjectId || process.env.GCP_PROJECT_ID;
-        const cleanModelName = modelName.replace(/^google\//, '');
+        const cleanModelName = actualModelName.replace(/^google\//, '');
 
         try {
             if (gcpProjectId && (creds.gcpPrivateKey || process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
@@ -315,7 +378,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         }
     }
     // 2. AWS Bedrock Connection for Anthropic
-    else if (modelName.startsWith('claude-') || modelName.startsWith('sonnet-')) {
+    else if (actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.')) {
         logger.info('🧠 [LlmGateway] Calling AWS Bedrock Anthropic endpoint...');
         const awsAccessKeyId = creds.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
         const awsSecretAccessKey = creds.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
@@ -337,7 +400,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             });
 
             // Fallback mapper for model names if they don't have the anthropic prefix
-            let bedrockModelId = modelName;
+            let bedrockModelId = actualModelName;
             if (!bedrockModelId.startsWith('anthropic.')) {
                 if (bedrockModelId.includes('haiku')) bedrockModelId = 'anthropic.claude-5-haiku-20241022-v1:0';
                 else if (bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
@@ -382,7 +445,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             endpoint = endpoint.split('/openai')[0];
         }
 
-        const cleanModelName = modelName.replace(/^azure\//, '');
+        const cleanModelName = actualModelName.replace(/^azure\//, '');
         
         try {
             const azureClient = new AzureOpenAI({
