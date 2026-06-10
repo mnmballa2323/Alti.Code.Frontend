@@ -119,10 +119,8 @@ export default function TeamMembersPage() {
             <div className="w-full">
               {/* Table Header */}
               <div className="grid grid-cols-12 gap-4 px-6 py-3 text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase border-b border-neutral-100 dark:border-neutral-800 mb-4">
-                <div className="col-span-3">First Name</div>
-                <div className="col-span-3">Last Name</div>
-                <div className="col-span-4">Email Address</div>
-                <div className="col-span-2">Role Type</div>
+                <div className="col-span-8">Email Address</div>
+                <div className="col-span-4">Role Type</div>
               </div>
 
               {/* Table Body */}
@@ -130,30 +128,13 @@ export default function TeamMembersPage() {
                 {displayedMembers.map((member) => {
                   const isYou = member.email === currentUser?.email;
 
-                  // Try to split name into first and last, or extract from email if not set
-                  const nameParts = member.name
-                    ? member.name.trim().split(/\s+/)
-                    : [];
-                  const firstName = nameParts[0]
-                    ? member.name
-                      ? nameParts[0]
-                      : ""
-                    : "";
-                  const lastName = nameParts.slice(1).join(" ") || "";
-
                   return (
                     <div
                       key={member.id}
                       className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200"
                     >
-                      <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
-                        {firstName || "—"}
-                      </div>
-                      <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
-                        {lastName || "—"}
-                      </div>
-                      <div className="col-span-4 flex items-center gap-2">
-                        <span className="text-neutral-600 dark:text-neutral-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                      <div className="col-span-8 flex items-center gap-2 min-w-0">
+                        <span className="text-neutral-850 dark:text-neutral-100 font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
                           {member.email}
                         </span>
                         {isYou && (
@@ -162,7 +143,7 @@ export default function TeamMembersPage() {
                           </span>
                         )}
                       </div>
-                      <div className="col-span-2 flex items-center justify-between">
+                      <div className="col-span-4 flex items-center justify-between">
                         <span className="text-neutral-800 dark:text-neutral-200 font-medium">
                           {formatRole(member.role)}
                         </span>
