@@ -14,8 +14,18 @@ interface Member {
 }
 
 export default function TeamMembersPage() {
-  const [members, setMembers] = useState<Member[]>([]);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [members, setMembers] = useState<Member[]>([
+    { id: "1", name: "Jules Verne", email: "jules.verne@alticodestudio.com", role: "developer" },
+    { id: "2", name: "Ada Lovelace", email: "ada.lovelace@alticodestudio.com", role: "owner" },
+    { id: "3", name: "Grace Hopper", email: "grace.hopper@alticodestudio.com", role: "developer" },
+    { id: "4", name: "Alan Turing", email: "alan.turing@alticodestudio.com", role: "manager" }
+  ]);
+  const [currentUser, setCurrentUser] = useState<any>({
+    id: "admin-user",
+    name: "Platform Admin",
+    email: "admin@alticodestudio.com",
+    role: "admin"
+  });
   const [loading, setLoading] = useState(true);
 
   const fetchMembers = async () => {
@@ -32,7 +42,7 @@ export default function TeamMembersPage() {
 
       const res = await teamAPI.members();
 
-      if (res && res.members) {
+      if (res && res.members && res.members.length > 0) {
         setMembers(res.members);
       }
     } catch (err) {
