@@ -13,8 +13,12 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@postgres:5432/alti_db
       - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-}
     deploy:
       resources:
         limits:
@@ -37,8 +41,12 @@ services:
       - NODE_ENV=production
       - PORT=3000
       - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@postgres:5432/alti_db
       - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-}
     deploy:
       resources:
         limits:
@@ -105,7 +113,7 @@ services:
     command: postgres -c shared_buffers=2GB -c work_mem=64MB -c effective_cache_size=6GB -c max_connections=250 -c autovacuum_max_workers=5 -c autovacuum_vacuum_scale_factor=0.05 -c autovacuum_analyze_scale_factor=0.02 -c wal_level=replica -c archive_mode=on -c archive_command="test ! -f /var/backups/postgres/wals/%f && cp %p /var/backups/postgres/wals/%f"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=alti_db
     deploy:
       resources:
@@ -144,6 +152,9 @@ services:
       - NEXT_PUBLIC_API_URL=https://${CUSTOMER_DOMAIN}
       - NEXTAUTH_URL=https://${CUSTOMER_DOMAIN}
       - NEXTAUTH_SECRET=7f51152a514d3c907b8b4a2e5f5f4b26
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-}
     deploy:
       resources:
         limits:

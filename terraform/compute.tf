@@ -2,6 +2,12 @@
 # ALTI CODE STUDIO: Single-Tenant VPC & Compute Node Provisioning
 # ==============================================================================
 
+# ── 0. Cryptographically Secure Dynamic Tenant Database Password ──
+resource "random_password" "db_password" {
+  length  = 32
+  special = false
+}
+
 # ── 1. Customer-Specific VPC Network ──
 resource "openstack_networking_network_v2" "customer_vpc" {
   name           = "alti-vpc-${var.customer_id}"
@@ -223,6 +229,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               PORT=5000
               NODE_ENV=production
               CUSTOMER_DOMAIN=${var.customer_domain}
+              DB_PASSWORD=${random_password.db_password.result}
               # Stripe config
               NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51MlI9pAP2f3pNlGaofGvvj1eu7sSgRfze6CNAqOC7OFkafRyOdQEECDNJ7ckGwd78fV2o6PkOExZfJcPLNSJUnz300G2iSnF25
               EOT

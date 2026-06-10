@@ -1,4 +1,20 @@
 {$CUSTOMER_DOMAIN} {
+    # Enforce strict security response headers (WAF Shielding)
+    header {
+        # Enable HTTP Strict Transport Security (HSTS) for 1 year
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        # Prevent Clickjacking
+        X-Frame-Options "DENY"
+        # Prevent MIME-type sniffing
+        X-Content-Type-Options "nosniff"
+        # Enable XSS protection
+        X-XSS-Protection "1; mode=block"
+        # Referrer Policy
+        Referrer-Policy "strict-origin-when-cross-origin"
+        # Content Security Policy (CSP) - hardened to permit Socket.IO and dynamic UI execution
+        Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss: https:;"
+    }
+
     # Route Core API queries to the backend node
     handle /api/v1/* {
         import /etc/caddy/active_backend.conf
