@@ -158,9 +158,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {getActiveGroup() === "Platform Admin" && renderNavGroup("", adminItems)}
-          {getActiveGroup() === "Platform Manager" && renderNavGroup("", managerItems)}
-          {getActiveGroup() === "System Operations" && renderNavGroup("", systemItems)}
+          {renderNavGroup("Platform Admin", adminItems)}
+          {renderNavGroup("Platform Manager", managerItems)}
+          {renderNavGroup("System Operations", systemItems)}
         </div>
 
         {/* Main Content Pane */}
