@@ -342,7 +342,14 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               BLUEGREEN
               chmod +x /usr/local/bin/deploy_blue_green.sh
 
-              # 10. Start the production database, cache, proxy and frontend services
+              # 10. Configure Centralized Egress Log Forwarding (SIEM Integration)
+              if [ -n "${var.syslog_server_ip}" ]; then
+                echo "Configuring log forwarding to SIEM server: ${var.syslog_server_ip}..."
+                echo "*.* @${var.syslog_server_ip}:${var.syslog_server_port}" >> /etc/rsyslog.d/90-siem-forward.conf
+                systemctl restart rsyslog
+              fi
+
+              # 11. Start the production database, cache, proxy and frontend services
               cd /opt/alti-code-studio
               echo "reverse_proxy alti-backend-blue:3000" > ./active_backend.conf
               docker-compose -f docker-compose.prod.yml up -d postgres redis prometheus grafana jaeger caddy alti-frontend

@@ -27,6 +27,44 @@ SUBNET_CIDR="10.240.0.0/24"
 DOMAIN=""
 DRY_RUN=false
 
+# Helper: Cloudflare DNS A-record sync
+provision_dns() {
+    local domain=$1
+    local ip=$2
+
+    if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ZONE_ID" ]; then
+        echo -e "${YELLOW}ℹ Skipping automated Cloudflare DNS configuration (CLOUDFLARE_API_TOKEN or CLOUDFLARE_ZONE_ID not set).${NC}"
+        return 0
+    fi
+
+    echo -e "\n[DNS] ${YELLOW}Syncing Cloudflare DNS record for ${domain} -> ${ip}...${NC}"
+
+    # Search for existing A record
+    local record_search
+    record_search=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records?type=A&name=${domain}" \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json")
+
+    local record_id
+    record_id=$(echo "$record_search" | grep -o '"id":"[^"]*' | head -n 1 | cut -d'"' -f4 || true)
+
+    if [ -n "$record_id" ]; then
+        echo -e "[DNS] Updating existing DNS A-record (ID: ${record_id})..."
+        curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records/${record_id}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"${domain}\",\"content\":\"${ip}\",\"ttl\":120,\"proxied\":false}" > /dev/null
+        echo -e "${GREEN}✔ DNS A-record updated successfully.${NC}"
+    else
+        echo -e "[DNS] Creating new DNS A-record..."
+        curl -s -X POST "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_ZONE_ID}/dns_records" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "{\"type\":\"A\",\"name\":\"${domain}\",\"content\":\"${ip}\",\"ttl\":120,\"proxied\":false}" > /dev/null
+        echo -e "${GREEN}✔ DNS A-record created successfully.${NC}"
+    fi
+}
+
 # Helper usage instructions
 usage() {
     echo -e "Usage: ./deploy_openstack.sh [options]"
@@ -110,6 +148,9 @@ if [ "$MODE" == "vm" ]; then
     VM_IP=$(terraform output -raw backend_vm_public_ip)
     echo -e "${GREEN}✔ Customer node floating IP allocated: ${VM_IP}${NC}"
 
+    # Sync Cloudflare DNS record
+    provision_dns "$DOMAIN" "$VM_IP"
+
     echo -e "\n[4/5] ${YELLOW}Bootstrapping VM Node Stack...${NC}"
     echo -e "• Bootstrapping script is executing in background on the server."
     echo -e "• It will install Docker, Docker-compose, clone the repository, and start services."
@@ -155,6 +196,20 @@ else
     # Install with customer-specific namespace and configuration environment variables
     REGISTRY="${REGISTRY}" CUSTOMER_ID="${CUSTOMER}" CUSTOMER_DOMAIN="${DOMAIN}" ./omni_sovereign_operator.sh openstack "alti-sovereign-${CUSTOMER}"
     
+    # Extract external IP of the ingress gateway
+    echo -e "\n[DNS] Resolving Ingress LoadBalancer IP..."
+    INGRESS_IP=$(kubectl get svc -n "alti-sovereign-${CUSTOMER}" omni-backend-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+    if [ -z "$INGRESS_IP" ]; then
+        INGRESS_IP=$(kubectl get ingress omni-backend-ingress -n "alti-sovereign-${CUSTOMER}" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+    fi
+
+    if [ -n "$INGRESS_IP" ]; then
+        echo -e "${GREEN}✔ Ingress LoadBalancer IP resolved: ${INGRESS_IP}${NC}"
+        provision_dns "$DOMAIN" "$INGRESS_IP"
+    else
+        echo -e "${YELLOW}⚠ Could not resolve load balancer ingress IP. Skipping DNS sync.${NC}"
+    fi
+
     echo -e "=================================================================="
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER KUBERNETES DEPLOYMENT COMPLETE! ✨${NC}"
     echo -e "=================================================================="

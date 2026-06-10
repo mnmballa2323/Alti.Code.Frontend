@@ -159,6 +159,18 @@ variable "customer_domain" {
   default     = "generic-tenant.insocode.com"
 }
 
+variable "syslog_server_ip" {
+  description = "IP address or DNS hostname of the central enterprise syslog/SIEM server"
+  type        = string
+  default     = ""
+}
+
+variable "syslog_server_port" {
+  description = "Destination port of the central enterprise syslog/SIEM server"
+  type        = string
+  default     = "514"
+}
+
 
 
 
