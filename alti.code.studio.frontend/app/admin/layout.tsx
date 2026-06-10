@@ -142,9 +142,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain hidden dark:block animate-fade-in"
           />
-          <span className="font-semibold text-neutral-900 dark:text-white text-[14px]">
-            {getActiveGroup()}
-          </span>
         </div>
 
         {/* Right header: page title */}
