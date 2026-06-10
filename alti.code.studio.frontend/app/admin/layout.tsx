@@ -46,6 +46,7 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname() || "";
   const [isAdmin, setIsAdmin] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -55,11 +56,14 @@ export default function AdminLayout({
         if (token) {
           const res = await getUserData(token);
 
-          if (
-            res?.success &&
-            (res?.data?.role === "admin" || res?.data?.role === "ADMIN")
-          ) {
-            setIsAdmin(true);
+          if (res?.success && res?.data) {
+            setProfile(res.data);
+            if (
+              res.data.role === "admin" ||
+              res.data.role === "ADMIN"
+            ) {
+              setIsAdmin(true);
+            }
           }
         }
       } catch (err) {
@@ -156,11 +160,26 @@ export default function AdminLayout({
           />
         </div>
 
-        {/* Right header: page title */}
-        <div className="flex-1 h-full flex items-center px-10">
+        {/* Right header: page title and user info */}
+        <div className="flex-1 h-full flex items-center justify-between px-10">
           <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
             {getPageTitle()}
           </span>
+          {profile && (
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-end">
+                <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-150">
+                  {profile.email}
+                </span>
+                <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+                  {profile.role || "Admin"}
+                </span>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-xs">
+                {(profile.email || "A").charAt(0).toUpperCase()}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
