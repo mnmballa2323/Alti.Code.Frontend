@@ -108,7 +108,34 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               #!/bin/bash
               set -ex
 
-              # 1. Install Docker & Docker-Compose dependencies
+              # 1. Host Tuning (Lamborghini Mode)
+              echo "Applying OS performance optimizations..."
+              
+              # Increase open file descriptor limits
+              cat <<LIMITS >> /etc/security/limits.conf
+              * soft nofile 65536
+              * hard nofile 65536
+              root soft nofile 65536
+              root hard nofile 65536
+              LIMITS
+              echo "session required pam_limits.so" >> /etc/pam.d/common-session
+
+              # Tune TCP backlog, buffers, and virtual memory overcommit
+              cat <<SYSCTL >> /etc/sysctl.conf
+              vm.overcommit_memory=1
+              fs.file-max=2097152
+              vm.max_map_count=262144
+              net.core.somaxconn=1024
+              net.ipv4.tcp_max_syn_backlog=2048
+              net.core.netdev_max_backlog=2500
+              net.ipv4.tcp_rmem=4096 87380 16777216
+              net.ipv4.tcp_wmem=4096 65536 16777216
+              net.core.default_qdisc=fq
+              net.ipv4.tcp_congestion_control=bbr
+              SYSCTL
+              sysctl -p
+
+              # 2. Install Docker & Docker-Compose dependencies
               apt-get update
               apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release git
 
@@ -127,17 +154,35 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               # Symlink docker-compose for compatibility
               ln -sf /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
 
-              # Enable and start Docker
-              systemctl enable docker
-              systemctl start docker
+              # 3. Configure Docker Daemon optimizations
+              mkdir -p /etc/docker
+              cat <<DOCKER > /etc/docker/daemon.json
+              {
+                "log-driver": "json-file",
+                "log-opts": {
+                  "max-size": "50m",
+                  "max-file": "3"
+                },
+                "max-concurrent-downloads": 10,
+                "max-concurrent-uploads": 5,
+                "features": {
+                  "buildkit": true
+                }
+              }
+              DOCKER
 
-              # 2. Clone the Alti Code Studio repository
+              # Enable and start Docker
+              systemctl daemon-reload
+              systemctl enable docker
+              systemctl start docker || systemctl restart docker
+
+              # 4. Clone the Alti Code Studio repository
               mkdir -p /opt/alti-code-studio
               git clone https://github.com/${var.github_repository}.git /opt/alti-code-studio
 
               cd /opt/alti-code-studio
 
-              # 3. Create production environment variables configuration
+              # 5. Create production environment variables configuration
               cat <<EOT > .env
               PORT=5000
               NODE_ENV=production
@@ -145,7 +190,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51MlI9pAP2f3pNlGaofGvvj1eu7sSgRfze6CNAqOC7OFkafRyOdQEECDNJ7ckGwd78fV2o6PkOExZfJcPLNSJUnz300G2iSnF25
               EOT
 
-              # 4. Start the production backend stack using docker-compose
+              # 6. Start the production backend stack using docker-compose
               docker-compose -f docker-compose.prod.yml up -d --build
               EOF
 }
