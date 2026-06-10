@@ -226,10 +226,6 @@ ${newErrors.join('\n\n')}
      * Spawn raw Claw-Code process.
      */
     async _runClawCli(prompt, context = [], onProgress = null) {
-        if (process.env.NODE_ENV === 'test') {
-            return 'Task completed by Claw-Code (Mocked under Test Environment).';
-        }
-
         return new Promise((resolve, reject) => {
             const contextBlock = context.join('\n');
             const fullPrompt = contextBlock ? `${contextBlock}\n\nTask: ${prompt}` : prompt;
