@@ -141,4 +141,17 @@ variable "openstack_router_id" {
   default     = "" # Empty means a new router or unattached if not needed, we will handle conditionally or default
 }
 
+variable "openstack_boot_volume_size" {
+  description = "Size of the persistent boot volume in GB (disk space)"
+  type        = number
+  default     = 100
+}
+
+variable "openstack_boot_volume_type" {
+  description = "Type of the Cinder boot volume (e.g. hsm-encrypted-nvme, standard, ssd)"
+  type        = string
+  default     = "hsm-encrypted-nvme"
+}
+
+
 

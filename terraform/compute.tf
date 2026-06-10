@@ -77,10 +77,20 @@ resource "openstack_networking_secgroup_rule_v2" "backend_port_rule" {
 # ── 3. Namespaced Compute Node ──
 resource "openstack_compute_instance_v2" "backend_instance" {
   name            = "alti-backend-${var.customer_id}-node"
-  image_name      = var.openstack_image_name
   flavor_name     = var.openstack_flavor_name
   key_pair        = var.openstack_keypair_name
   security_groups = ["default", openstack_networking_secgroup_v2.backend_secgroup.name]
+
+  # Boot VM from persistent Cinder volume with explicit disk capacity and type
+  block_device {
+    uuid                  = var.openstack_image_name
+    source_type           = "image"
+    destination_type      = "volume"
+    volume_size           = var.openstack_boot_volume_size
+    volume_type           = var.openstack_boot_volume_type
+    boot_index            = 0
+    delete_on_termination = true
+  }
 
   # Deploy VM inside the customer-specific VPC network
   network {
