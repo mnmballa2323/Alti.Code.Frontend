@@ -104,7 +104,7 @@ export default function ZeroTrustLedgerSection() {
             <div className="relative flex-1 overflow-hidden min-h-0 py-1">
               <div className="relative flex flex-col gap-8 pl-4">
                 {/* Vertical connecting line */}
-                <div className="absolute left-[29px] top-4 bottom-4 w-[2px] bg-gray-100" />
+                <div className="absolute left-[34px] sm:left-[122px] top-4 bottom-4 w-[2px] bg-gray-100" />
 
                 {events.map((event, idx) => {
                   const IconComponent = event.icon;
@@ -118,7 +118,7 @@ export default function ZeroTrustLedgerSection() {
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
                       {/* Time Label on left */}
-                      <div className="text-[10px] text-gray-400 font-mono font-bold pt-1.5 w-16 text-right shrink-0">
+                      <div className="hidden sm:block text-[10px] text-gray-400 font-mono font-bold pt-1.5 w-16 text-right shrink-0">
                         {event.time}
                       </div>
 
@@ -136,9 +136,14 @@ export default function ZeroTrustLedgerSection() {
                       {/* Content Box */}
                       <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                         <div className="flex items-baseline justify-between gap-4">
-                          <h4 className="text-sm font-bold text-black group-hover:text-neutral-900 transition-colors">
-                            {event.title}
-                          </h4>
+                          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                            <h4 className="text-sm font-bold text-black group-hover:text-neutral-900 transition-colors">
+                              {event.title}
+                            </h4>
+                            <span className="sm:hidden text-[9px] text-gray-400 font-mono">
+                              {event.time}
+                            </span>
+                          </div>
                           <span className="text-[9px] text-gray-400 font-mono truncate max-w-[120px]">
                             {event.hash.substring(0, 16)}...
                           </span>
