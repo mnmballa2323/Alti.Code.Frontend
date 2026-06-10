@@ -1,18 +1,43 @@
-# Generated Terraform configuration for stack: azure-isolated
-
-provider "google" {
-  project = var.project_id
-  region  = "us-central1"
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
 }
 
-resource "google_compute_network" "vpc_network" {
-  name = "azure-isolated-vpc"
-  auto_create_subnetworks = false
+provider "azurerm" {
+  features {}
 }
 
-resource "google_compute_subnetwork" "subnet" {
-  name          = "azure-isolated-subnet"
-  ip_cidr_range = "10.0.1.0/24"
-  region        = "us-central1"
-  network       = google_compute_network.vpc_network.id
+variable "resource_group_name" {
+  description = "The name of the Azure resource group"
+  type        = string
+  default     = "azure-isolated-rg"
+}
+
+variable "location" {
+  description = "The Azure region for deployment"
+  type        = string
+  default     = "eastus"
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location
+}
+
+resource "azurerm_virtual_network" "vnet" {
+  name                = "azure-isolated-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                 = "azure-isolated-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
 }

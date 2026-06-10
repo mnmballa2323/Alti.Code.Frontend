@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: azure-isolated-container
-        image: gcr.io/my-project/azure-isolated:latest
+        image: myacr.azurecr.io/azure-isolated:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 5002
