@@ -5,6 +5,9 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    user: "10001:10001"
+    cap_drop:
+      - ALL
     restart: unless-stopped
     ports:
       - "3000-3002:3000" # Expose scaled instances
@@ -26,6 +29,8 @@ services:
 
   redis:
     image: redis:alpine
+    cap_drop:
+      - ALL
     restart: unless-stopped
     command: redis-server --maxmemory 1gb --maxmemory-policy allkeys-lru
     ports:
@@ -39,6 +44,8 @@ services:
 
   prometheus:
     image: prom/prometheus
+    cap_drop:
+      - ALL
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
@@ -68,6 +75,8 @@ services:
 
   postgres:
     image: ankane/pgvector:latest
+    cap_drop:
+      - ALL
     restart: unless-stopped
     ports:
       - "5432:5432"
@@ -101,6 +110,10 @@ services:
 
   caddy:
     image: caddy:alpine
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
     restart: unless-stopped
     ports:
       - "80:80"

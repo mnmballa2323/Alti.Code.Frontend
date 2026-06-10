@@ -143,6 +143,8 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               apt-get install -y ufw fail2ban
               ufw default deny incoming
               ufw default allow outgoing
+              # Block egress to Cloud Metadata IP (SSRF protection)
+              ufw deny out to 169.254.169.254
               ufw allow 22/tcp   # Secure SSH
               ufw allow 80/tcp   # HTTP SSL Negotiation (Certbot)
               ufw allow 443/tcp  # HTTPS Secure API Gateway
@@ -242,7 +244,26 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               chmod +x /usr/local/bin/backup_postgres.sh
               (crontab -l 2>/dev/null; echo "0 2 * * * /usr/local/bin/backup_postgres.sh") | crontab -
 
-              # 8. Start the production backend stack using docker-compose
+              # 8. Configure Self-Healing API Health Monitor Script
+              cat <<'HEALTHCHECK' > /usr/local/bin/alti_health_check.sh
+              #!/bin/bash
+              URL="http://localhost:5000/api/v1/healthz"
+              LOGFILE="/var/log/alti_self_healing.log"
+              
+              STATUS_CODE=$(curl -s -o /dev/null -w "%%{http_code}" --max-time 5 "$$URL")
+              
+              if [ "$$STATUS_CODE" != "200" ]; then
+                echo "$$(date '+%%Y-%%m-%%d %%H:%%M:%%S') - HEALTH CHECK FAILED (Status: $$STATUS_CODE). Restarting backend stack..." >> "$$LOGFILE"
+                cd /opt/alti-code-studio
+                docker-compose -f docker-compose.prod.yml restart alti-backend >> "$$LOGFILE" 2>&1
+              else
+                echo "$$(date '+%%Y-%%m-%%d %%H:%%M:%%S') - Health OK (Status: 200)" >> "$$LOGFILE"
+              fi
+              HEALTHCHECK
+              chmod +x /usr/local/bin/alti_health_check.sh
+              (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/alti_health_check.sh") | crontab -
+
+              # 9. Start the production backend stack using docker-compose
               docker-compose -f docker-compose.prod.yml up -d --build
               EOF
 }
