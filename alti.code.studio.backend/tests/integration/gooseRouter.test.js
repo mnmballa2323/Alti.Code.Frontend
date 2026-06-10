@@ -12,20 +12,27 @@ test('GooseRouter: shouldRouteToGoose classification', () => {
     expect(gooseRouterService.shouldRouteToGoose('fix the sidebar links')).toBe(true);
 });
 
-test('GooseRouter: executes task by spawning Goose CLI and returning stdout', async () => {
+test('GooseRouter: executes task by spawning Goose CLI and returning stdout with progress streaming', async () => {
     const mockProcess = new EventEmitter();
     mockProcess.stdout = new EventEmitter();
     mockProcess.stderr = new EventEmitter();
 
     spawn.mockReturnValue(mockProcess);
 
+    const progressCalls = [];
+    const onProgress = (payload) => {
+        progressCalls.push(payload);
+    };
+
     setTimeout(() => {
         mockProcess.stdout.emit('data', Buffer.from('Goose successfully updated the file layout.tsx'));
         mockProcess.emit('close', 0);
     }, 10);
 
-    const result = await gooseRouterService.executeTask('fix the sidebar links');
+    const result = await gooseRouterService.executeTask('fix the sidebar links', [], onProgress);
     expect(result).toContain('Goose successfully updated the file');
+    expect(progressCalls.length).toBeGreaterThan(0);
+    expect(progressCalls.some(p => p.status === 'executing' && p.message.includes('Goose successfully'))).toBe(true);
 });
 
 test('SwarmBrain to Goose Router Integration', async () => {

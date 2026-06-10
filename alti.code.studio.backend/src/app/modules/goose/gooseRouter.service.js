@@ -98,11 +98,20 @@ class GooseRouterService {
                 ? path.resolve(process.cwd()) 
                 : path.resolve(process.cwd(), '../alti.code.studio.frontend');
 
-            // 1. ESLint Static Analysis check
+            // 1. Prisma schema validation check
+            if (file.endsWith('.prisma')) {
+                logger.info(`🔍 QualityGate: Running Prisma schema validation check on ${relativePath}...`);
+                const prismaResult = await runCommand('npx prisma validate', cwd);
+                if (!prismaResult.success) {
+                    errors.push(`[Prisma Validation Error in ${relativePath}]:\n${prismaResult.stdout || prismaResult.stderr}`);
+                }
+            }
+
+            // 2. ESLint Static Analysis check
             if (file.endsWith('.js') || file.endsWith('.jsx') || file.endsWith('.ts') || file.endsWith('.tsx')) {
                 const eslintPath = path.join(cwd, 'node_modules/.bin/eslint');
                 if (fs.existsSync(eslintPath)) {
-                    logger.info(`🔍 GooseRouter: Running ESLint check on ${relativePath}...`);
+                    logger.info(`🔍 QualityGate: Running ESLint check on ${relativePath}...`);
                     const lintResult = await runCommand(`npx eslint ${relativePath}`, cwd);
                     if (!lintResult.success) {
                         errors.push(`[ESLint Error in ${relativePath}]:\n${lintResult.stdout || lintResult.stderr}`);
@@ -110,11 +119,11 @@ class GooseRouterService {
                 }
             }
 
-            // 2. TypeScript Type Safety check (Frontend only)
+            // 3. TypeScript Type Safety check (Frontend only)
             if (isFrontend && (file.endsWith('.ts') || file.endsWith('.tsx'))) {
                 const tscPath = path.join(cwd, 'node_modules/.bin/tsc');
                 if (fs.existsSync(tscPath)) {
-                    logger.info(`🔍 GooseRouter: Running TypeScript compiler checks on frontend...`);
+                    logger.info(`🔍 QualityGate: Running TypeScript compiler checks on frontend...`);
                     const tscResult = await runCommand('npx tsc --noEmit', cwd);
                     if (!tscResult.success) {
                         const tscOutput = tscResult.stdout || tscResult.stderr;
@@ -125,6 +134,32 @@ class GooseRouterService {
                                 .join('\n');
                             errors.push(`[TypeScript Compiler Error in ${baseName}]:\n${fileErrors}`);
                         }
+                    }
+                }
+            }
+
+            // 4. Vitest Unit/Integration Test verification
+            if (file.endsWith('.js') || file.endsWith('.ts')) {
+                const baseName = path.basename(file);
+                const baseNameWithoutExt = baseName.replace(/\.(js|ts)$/, '');
+                
+                // Construct candidate test file paths
+                const candidates = [
+                    path.join(cwd, 'tests/integration', `${baseNameWithoutExt}.test.js`),
+                    path.join(cwd, 'tests/integration', `${baseNameWithoutExt}.spec.js`),
+                    path.join(cwd, 'tests/unit', `${baseNameWithoutExt}.test.js`),
+                    path.join(path.dirname(path.join(cwd, relativePath)), `${baseNameWithoutExt}.test.js`),
+                    path.join(path.dirname(path.join(cwd, relativePath)), `${baseNameWithoutExt}.spec.js`)
+                ];
+
+                for (const candidate of candidates) {
+                    if (fs.existsSync(candidate)) {
+                        logger.info(`🔍 QualityGate: Running matching Vitest regression test suite: ${path.basename(candidate)}...`);
+                        const testResult = await runCommand(`npx vitest run ${candidate}`, cwd);
+                        if (!testResult.success) {
+                            errors.push(`[Vitest Regression Test Failure in ${path.basename(candidate)}]:\n${testResult.stdout || testResult.stderr}`);
+                        }
+                        break; // Execute only the first matching test suite to keep it fast
                     }
                 }
             }
@@ -262,12 +297,18 @@ ${newErrors.join('\n\n')}
                 const chunk = data.toString();
                 stdout += chunk;
                 logger.debug(`[Goose STDOUT] ${chunk.trim()}`);
+                if (onProgress) {
+                    onProgress({ status: 'executing', message: chunk });
+                }
             });
 
             gooseProcess.stderr.on('data', (data) => {
                 const chunk = data.toString();
                 stderr += chunk;
                 logger.warn(`[Goose STDERR] ${chunk.trim()}`);
+                if (onProgress) {
+                    onProgress({ status: 'executing', message: chunk });
+                }
             });
 
             gooseProcess.on('close', (code) => {

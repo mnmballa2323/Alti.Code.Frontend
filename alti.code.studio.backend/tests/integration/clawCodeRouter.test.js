@@ -13,20 +13,27 @@ test('ClawCodeRouter: shouldRouteToClawCode classification', () => {
     expect(clawCodeRouterService.shouldRouteToClawCode('fix the sidebar links')).toBe(true);
 });
 
-test('ClawCodeRouter: executes task by spawning Claw CLI and returning stdout', async () => {
+test('ClawCodeRouter: executes task by spawning Claw CLI and returning stdout with progress streaming', async () => {
     const mockProcess = new EventEmitter();
     mockProcess.stdout = new EventEmitter();
     mockProcess.stderr = new EventEmitter();
 
     spawn.mockReturnValue(mockProcess);
 
+    const progressCalls = [];
+    const onProgress = (payload) => {
+        progressCalls.push(payload);
+    };
+
     setTimeout(() => {
         mockProcess.stdout.emit('data', Buffer.from('Claw-Code successfully updated the file layout.tsx'));
         mockProcess.emit('close', 0);
     }, 10);
 
-    const result = await clawCodeRouterService.executeTask('fix the sidebar links');
+    const result = await clawCodeRouterService.executeTask('fix the sidebar links', [], onProgress);
     expect(result).toContain('Claw-Code successfully updated the file');
+    expect(progressCalls.length).toBeGreaterThan(0);
+    expect(progressCalls.some(p => p.status === 'executing' && p.message.includes('Claw-Code successfully'))).toBe(true);
 });
 
 test('SwarmBrain to Claw-Code Router Integration', async () => {
