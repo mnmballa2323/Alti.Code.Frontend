@@ -86,7 +86,7 @@ export default function TriCloudSection() {
               className="bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-3xl overflow-hidden"
               shadow="none"
             >
-              <CardHeader className="flex flex-col items-start gap-6 p-10">
+              <CardHeader className="flex flex-col items-start gap-6 p-6 sm:p-10">
                 <div className="p-4 rounded-2xl bg-white border border-gray-100">
                   {provider.logo}
                 </div>
@@ -102,14 +102,14 @@ export default function TriCloudSection() {
 
               <div className="w-full h-px bg-gray-100" />
 
-              <CardBody className="p-10 bg-gray-200">
+              <CardBody className="p-6 sm:p-10 bg-gray-200">
                 <div className="flex items-center justify-between mb-5">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
                     Supported Models
                   </p>
-                  <div className="flex gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    <span className="w-16 text-left">Input</span>
-                    <span className="w-16 text-left pl-1">Output</span>
+                  <div className="flex gap-2 sm:gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <span className="w-12 sm:w-16 text-left">Input</span>
+                    <span className="w-12 sm:w-16 text-left pl-1">Output</span>
                   </div>
                 </div>
                 <ul className="flex flex-col gap-4">
@@ -118,17 +118,17 @@ export default function TriCloudSection() {
                       key={mIdx}
                       className="flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
                         <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                        <span className="text-gray-900 font-medium whitespace-nowrap">
+                        <span className="text-gray-900 font-medium whitespace-nowrap text-sm sm:text-base truncate max-w-[110px] sm:max-w-none">
                           {model.name}
                         </span>
                       </div>
-                      <div className="flex gap-4">
-                        <span className="text-sm text-gray-500 font-medium w-16 text-left">
+                      <div className="flex gap-2 sm:gap-4 shrink-0">
+                        <span className="text-xs sm:text-sm text-gray-500 font-medium w-12 sm:w-16 text-left">
                           {model.inputPrice}
                         </span>
-                        <span className="text-sm text-gray-500 font-medium w-16 text-left pl-1">
+                        <span className="text-xs sm:text-sm text-gray-500 font-medium w-12 sm:w-16 text-left pl-1">
                           {model.outputPrice}
                         </span>
                       </div>

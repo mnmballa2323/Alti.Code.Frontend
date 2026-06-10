@@ -71,7 +71,7 @@ export default function EnterpriseConnectorsSection() {
         </div>
 
         {/* Right Side: Orbital Ecosystem (Now visually on Left) */}
-        <div className="relative w-full lg:w-[50%] h-[600px] flex items-center justify-center lg:-translate-x-16 scale-[0.65] sm:scale-75 md:scale-90 lg:scale-100">
+        <div className="relative w-full lg:w-[50%] h-[320px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:-translate-x-16 scale-[0.65] sm:scale-75 md:scale-90 lg:scale-100">
           <style
             dangerouslySetInnerHTML={{
               __html: `

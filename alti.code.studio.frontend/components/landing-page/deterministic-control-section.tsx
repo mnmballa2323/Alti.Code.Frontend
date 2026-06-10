@@ -294,7 +294,7 @@ export default function DeterministicControlSection() {
                 {agents[activeStep].name}
               </span>
             </div>
-            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed font-sans font-medium truncate">
+            <p className="text-xs text-zinc-300 mt-1.5 leading-relaxed font-sans font-medium">
               {agents[activeStep].description}
             </p>
           </div>

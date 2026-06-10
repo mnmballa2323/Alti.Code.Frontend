@@ -154,9 +154,9 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-[340px] md:h-[245px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-auto md:h-[245px]">
               {/* Progress Steps */}
-              <div className="md:col-span-6 flex flex-col gap-3 justify-center h-full">
+              <div className="md:col-span-6 flex flex-col gap-3 justify-center py-2">
                 {steps.map((step) => (
                   <div
                     key={step.id}
@@ -166,7 +166,7 @@ export default function AgentForgeSection() {
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-bold transition-all duration-300 ${
                           step.status === "success"
-                            ? "bg-emerald-500 border-emerald-500 text-white"
+                             ? "bg-emerald-500 border-emerald-500 text-white"
                             : step.status === "running"
                               ? "bg-white border-white text-black animate-pulse"
                               : "bg-zinc-900 border-zinc-800 text-zinc-500"
@@ -202,7 +202,7 @@ export default function AgentForgeSection() {
               </div>
 
               {/* Console Output */}
-              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[9px] text-zinc-400 select-none overflow-hidden h-full relative">
+              <div className="md:col-span-6 flex flex-col bg-black/40 border border-zinc-800/80 rounded-2xl p-4 font-mono text-[9px] text-zinc-400 select-none overflow-hidden h-[180px] md:h-full relative">
                 <div className="absolute top-2 right-3 flex items-center gap-1.5 bg-black/60 px-2 py-0.5 rounded border border-zinc-800 text-[8px] text-zinc-500 font-bold uppercase tracking-wider">
                   <Sparkles className="w-2.5 h-2.5 text-zinc-500" />
                   Logs
