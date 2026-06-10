@@ -94,21 +94,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Internal Navigation Sidebar */}
       <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-8 px-5">
         <div className="flex items-center gap-3 mb-8 px-2">
-          {/* Hexagon Outline Logo Icon */}
-          <svg
-            viewBox="0 0 100 100"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-5 h-5 text-neutral-800 dark:text-neutral-200"
-          >
-            <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" />
-            <path d="M50 10 L50 90" />
-            <path d="M50 50 L85 30" />
-            <path d="M50 50 L15 30" />
-          </svg>
+          {/* Official Inso Code Logo */}
+          <img
+            src="/inso-logo-black.png"
+            alt="Inso Code Logo"
+            className="w-6 h-6 object-contain block dark:hidden"
+          />
+          <img
+            src="/inso-logo-white.png"
+            alt="Inso Code Logo"
+            className="w-6 h-6 object-contain hidden dark:block"
+          />
           <span className="font-semibold text-neutral-900 dark:text-white text-[15px]">
             Platform Console
           </span>
@@ -122,23 +118,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col h-full bg-[#F9FAFB] dark:bg-[#0d1117] relative overflow-hidden">
+      <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
         {/* Subtle Background Watermark Logo */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] dark:opacity-[0.05] z-0 select-none">
-          <svg
-            viewBox="0 0 100 100"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="w-72 h-72 text-neutral-800 dark:text-white"
-          >
-            <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" />
-            <path d="M50 10 L50 90" />
-            <path d="M50 50 L85 30" />
-            <path d="M50 50 L15 30" />
-          </svg>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] dark:opacity-[0.04] z-0 select-none">
+          <img
+            src="/inso-logo-black.png"
+            alt="Inso Code Watermark"
+            className="w-80 h-80 object-contain block dark:hidden"
+          />
+          <img
+            src="/inso-logo-white.png"
+            alt="Inso Code Watermark"
+            className="w-80 h-80 object-contain hidden dark:block"
+          />
         </div>
 
         {/* Content Children */}
