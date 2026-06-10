@@ -94,3 +94,38 @@ variable "openstack_baremetal_flavor" {
   type        = string
   default     = "baremetal.cyborg.h100"
 }
+
+# ==========================================
+# OpenStack Compute VM Configurations (VM Fallback)
+# ==========================================
+
+variable "openstack_image_name" {
+  description = "Glance image name or UUID for the VM deployment"
+  type        = string
+  default     = "Ubuntu 22.04 LTS"
+}
+
+variable "openstack_flavor_name" {
+  description = "Nova compute flavor name or UUID for the VM deployment"
+  type        = string
+  default     = "m1.large"
+}
+
+variable "openstack_keypair_name" {
+  description = "Name of the existing OpenStack SSH key pair"
+  type        = string
+  default     = "sovereign-key"
+}
+
+variable "openstack_network_name" {
+  description = "Name of the target private network for the VM instance"
+  type        = string
+  default     = "private"
+}
+
+variable "openstack_floating_ip_pool" {
+  description = "Name of the public network/pool for floating IP allocation"
+  type        = string
+  default     = "public"
+}
+

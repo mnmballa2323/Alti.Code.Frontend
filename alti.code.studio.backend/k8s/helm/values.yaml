@@ -22,6 +22,7 @@ sovereign:
 omniCloud:
   activeProvider: "google-cloud" # Default, dynamically overridden by CI/CD or Router
   supportedProviders:
+    - openstack
     - aws
     - google-cloud
     - azure
