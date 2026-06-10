@@ -153,5 +153,12 @@ variable "openstack_boot_volume_type" {
   default     = "hsm-encrypted-nvme"
 }
 
+variable "customer_domain" {
+  description = "The target public domain for this customer (used for SSL/TLS certificates)"
+  type        = string
+  default     = "generic-tenant.insocode.com"
+}
+
+
 
 

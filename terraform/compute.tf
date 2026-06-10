@@ -135,8 +135,28 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               SYSCTL
               sysctl -p
 
-              # 2. Install Docker & Docker-Compose dependencies
+              # 2. Host Hardening (Fortune 100 Security Standards)
+              echo "Enforcing host security hardening..."
+              
+              # Set up UFW (Uncomplicated Firewall) rules
               apt-get update
+              apt-get install -y ufw
+              ufw default deny incoming
+              ufw default allow outgoing
+              ufw allow 22/tcp   # Secure SSH
+              ufw allow 80/tcp   # HTTP SSL Negotiation (Certbot)
+              ufw allow 443/tcp  # HTTPS Secure API Gateway
+              ufw allow 5000/tcp # Core Backend API Port
+              ufw --force enable
+
+              # SSH Hardening (Disable password and root logins)
+              sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config || true
+              sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config || true
+              sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config || true
+              sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config || true
+              systemctl restart ssh || systemctl restart sshd
+
+              # 3. Install Docker & Docker-Compose dependencies
               apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release git
 
               # Add Docker's official GPG key
@@ -154,7 +174,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               # Symlink docker-compose for compatibility
               ln -sf /usr/libexec/docker/cli-plugins/docker-compose /usr/local/bin/docker-compose
 
-              # 3. Configure Docker Daemon optimizations
+              # 4. Configure Docker Daemon optimizations
               mkdir -p /etc/docker
               cat <<DOCKER > /etc/docker/daemon.json
               {
@@ -176,21 +196,39 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               systemctl enable docker
               systemctl start docker || systemctl restart docker
 
-              # 4. Clone the Alti Code Studio repository
+              # 5. Clone the Alti Code Studio repository
               mkdir -p /opt/alti-code-studio
               git clone https://github.com/${var.github_repository}.git /opt/alti-code-studio
 
               cd /opt/alti-code-studio
 
-              # 5. Create production environment variables configuration
+              # 6. Create production environment variables configuration
               cat <<EOT > .env
               PORT=5000
               NODE_ENV=production
+              CUSTOMER_DOMAIN=${var.customer_domain}
               # Stripe config
               NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51MlI9pAP2f3pNlGaofGvvj1eu7sSgRfze6CNAqOC7OFkafRyOdQEECDNJ7ckGwd78fV2o6PkOExZfJcPLNSJUnz300G2iSnF25
               EOT
 
-              # 6. Start the production backend stack using docker-compose
+              # 7. Configure Nightly Postgres Backup Script & Cron Job
+              mkdir -p /var/backups/postgres
+              cat <<'BACKUP' > /usr/local/bin/backup_postgres.sh
+              #!/bin/bash
+              BACKUP_DIR="/var/backups/postgres"
+              DATE=$(date +%Y-%m-%d_%H%M%S)
+              FILENAME="$${BACKUP_DIR}/postgres_backup_$${DATE}.sql.gz"
+              
+              # Dump database and gzip
+              docker exec -t alti_backend_postgres_1 pg_dumpall -U postgres | gzip > "$$FILENAME"
+              
+              # Retain 14 days of history
+              find "$$BACKUP_DIR" -type f -name "*.sql.gz" -mtime +14 -delete
+              BACKUP
+              chmod +x /usr/local/bin/backup_postgres.sh
+              (crontab -l 2>/dev/null; echo "0 2 * * * /usr/local/bin/backup_postgres.sh") | crontab -
+
+              # 8. Start the production backend stack using docker-compose
               docker-compose -f docker-compose.prod.yml up -d --build
               EOF
 }

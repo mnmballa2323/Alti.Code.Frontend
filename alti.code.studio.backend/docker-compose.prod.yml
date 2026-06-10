@@ -85,9 +85,28 @@ services:
     networks:
       - alti-net
 
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CUSTOMER_DOMAIN=${CUSTOMER_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - alti-backend
+    networks:
+      - alti-net
+
 networks:
   alti-net:
     driver: bridge
 
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:

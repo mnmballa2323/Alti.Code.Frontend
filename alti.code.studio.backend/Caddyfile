@@ -1,0 +1,3 @@
+{$CUSTOMER_DOMAIN} {
+    reverse_proxy alti-backend:3000
+}

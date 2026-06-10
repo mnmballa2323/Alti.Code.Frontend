@@ -24,6 +24,7 @@ echo -e "${CYAN}================================================================
 MODE="vm"
 CUSTOMER="generic-tenant"
 SUBNET_CIDR="10.240.0.0/24"
+DOMAIN=""
 DRY_RUN=false
 
 # Helper usage instructions
@@ -32,6 +33,7 @@ usage() {
     echo -e "Options:"
     echo -e "  --customer <name>   Unique name/id of the customer tenant (default: generic-tenant)"
     echo -e "  --subnet <cidr>     Private subnet CIDR range for this customer's VPC (default: 10.240.0.0/24)"
+    echo -e "  --domain <name>     Custom domain mapping for TLS/SSL routing (default: <customer>.insocode.com)"
     echo -e "  --mode <vm|k8s>     vm (standalone docker-compose node) or k8s (Magnum cluster) (default: vm)"
     echo -e "  --dry-run           Validate configurations without deploying infrastructure"
     echo -e "  --help              Display this message"
@@ -43,6 +45,7 @@ while [[ "$#" -gt 0 ]]; do
     case $1 in
         --customer) CUSTOMER="$2"; shift ;;
         --subnet) SUBNET_CIDR="$2"; shift ;;
+        --domain) DOMAIN="$2"; shift ;;
         --mode) MODE="$2"; shift ;;
         --dry-run) DRY_RUN=true ;;
         --help) usage ;;
@@ -50,6 +53,11 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+# Set default domain if not provided
+if [ -z "$DOMAIN" ]; then
+    DOMAIN="${CUSTOMER}.insocode.com"
+fi
 
 # Validate Mode
 if [ "$MODE" != "k8s" ] && [ "$MODE" != "vm" ]; then
@@ -90,6 +98,7 @@ terraform workspace select ${CUSTOMER} || terraform workspace new ${CUSTOMER}
 echo -e "Applying customer VPC and Compute VM resource rules (Subnet: ${SUBNET_CIDR})..."
 terraform apply -var="customer_id=${CUSTOMER}" \
                 -var="customer_subnet_cidr=${SUBNET_CIDR}" \
+                -var="customer_domain=${DOMAIN}" \
                 -auto-approve
 
 echo -e "${GREEN}✔ Customer-isolated VPC infrastructure provisioned successfully.${NC}"
@@ -111,8 +120,12 @@ if [ "$MODE" == "vm" ]; then
     echo -e "=================================================================="
     echo -e "• Customer ID:    ${CYAN}${CUSTOMER}${NC}"
     echo -e "• VPC Subnet:     ${CYAN}${SUBNET_CIDR}${NC}"
-    echo -e "• Live API URL:   ${CYAN}http://${VM_IP}:5000/api/v1/healthz${NC}"
+    echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
+    echo -e "• Direct IP API:  ${CYAN}http://${VM_IP}:5000/api/v1/healthz${NC}"
     echo -e "• SSH Access:     ${CYAN}ssh -i <key> ubuntu@${VM_IP}${NC}"
+    echo -e "• Next Steps:     Configure your DNS (e.g. GoDaddy) to point A Record"
+    echo -e "                  for ${DOMAIN} to IP ${VM_IP}."
+    echo -e "                  Caddy will automatically provision Let's Encrypt SSL."
     echo -e "=================================================================="
 
 else
