@@ -96,8 +96,20 @@ variable "openstack_baremetal_flavor" {
 }
 
 # ==========================================
-# OpenStack Compute VM Configurations (VM Fallback)
+# OpenStack Compute VM & Single-Tenant VPC Configurations
 # ==========================================
+
+variable "customer_id" {
+  description = "Unique identifier for the customer/tenant (used to prefix resources)"
+  type        = string
+  default     = "generic-tenant"
+}
+
+variable "customer_subnet_cidr" {
+  description = "Private subnet CIDR range for the customer VPC"
+  type        = string
+  default     = "10.240.0.0/24"
+}
 
 variable "openstack_image_name" {
   description = "Glance image name or UUID for the VM deployment"
@@ -106,7 +118,7 @@ variable "openstack_image_name" {
 }
 
 variable "openstack_flavor_name" {
-  description = "Nova compute flavor name or UUID for the VM deployment"
+  description = "Nova compute flavor name or UUID for the VM deployment (CPU-only)"
   type        = string
   default     = "m1.large"
 }
@@ -117,15 +129,16 @@ variable "openstack_keypair_name" {
   default     = "sovereign-key"
 }
 
-variable "openstack_network_name" {
-  description = "Name of the target private network for the VM instance"
-  type        = string
-  default     = "private"
-}
-
 variable "openstack_floating_ip_pool" {
   description = "Name of the public network/pool for floating IP allocation"
   type        = string
   default     = "public"
 }
+
+variable "openstack_router_id" {
+  description = "The UUID of the external gateway router in Liberty Center One"
+  type        = string
+  default     = "" # Empty means a new router or unattached if not needed, we will handle conditionally or default
+}
+
 

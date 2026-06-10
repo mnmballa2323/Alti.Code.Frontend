@@ -1,11 +1,33 @@
 # ==============================================================================
-# ALTI CODE STUDIO: OpenStack Compute VM Resource (Sovereign Node)
+# ALTI CODE STUDIO: Single-Tenant VPC & Compute Node Provisioning
 # ==============================================================================
 
-# ── Security Group ──
+# ── 1. Customer-Specific VPC Network ──
+resource "openstack_networking_network_v2" "customer_vpc" {
+  name           = "alti-vpc-${var.customer_id}"
+  admin_state_up = true
+}
+
+# Private Subnet inside the VPC
+resource "openstack_networking_subnet_v2" "customer_subnet" {
+  name            = "alti-subnet-${var.customer_id}"
+  network_id      = openstack_networking_network_v2.customer_vpc.id
+  cidr            = var.customer_subnet_cidr
+  ip_version      = 4
+  dns_nameservers = ["1.1.1.1", "8.8.8.8"]
+}
+
+# Attach Subnet to the Gateway Router for outbound API calls (AWS, GCP, Azure)
+resource "openstack_networking_router_interface_v2" "router_interface" {
+  count     = var.openstack_router_id != "" ? 1 : 0
+  router_id = var.openstack_router_id
+  subnet_id = openstack_networking_subnet_v2.customer_subnet.id
+}
+
+# ── 2. Isolated Security Group ──
 resource "openstack_networking_secgroup_v2" "backend_secgroup" {
-  name        = "alti-backend-secgroup"
-  description = "Security group for Alti Code Studio Backend VM"
+  name        = "alti-backend-${var.customer_id}-secgroup"
+  description = "Security group for Alti Backend Node - Customer ${var.customer_id}"
 }
 
 # SSH Rule
@@ -41,7 +63,7 @@ resource "openstack_networking_secgroup_rule_v2" "https_rule" {
   security_group_id = openstack_networking_secgroup_v2.backend_secgroup.id
 }
 
-# Backend Port Rule
+# Backend API Port Rule
 resource "openstack_networking_secgroup_rule_v2" "backend_port_rule" {
   direction         = "ingress"
   ethertype         = "IPv4"
@@ -52,31 +74,22 @@ resource "openstack_networking_secgroup_rule_v2" "backend_port_rule" {
   security_group_id = openstack_networking_secgroup_v2.backend_secgroup.id
 }
 
-# Redis Port Rule (Restricted to internal communications)
-resource "openstack_networking_secgroup_rule_v2" "redis_port_rule" {
-  direction         = "ingress"
-  ethertype         = "IPv4"
-  protocol          = "tcp"
-  port_range_min    = 6379
-  port_range_max    = 6379
-  remote_ip_prefix  = "10.0.0.0/8" # Private internal CIDR only
-  security_group_id = openstack_networking_secgroup_v2.backend_secgroup.id
-}
-
-# ── Compute VM Instance ──
+# ── 3. Namespaced Compute Node ──
 resource "openstack_compute_instance_v2" "backend_instance" {
-  name            = "alti-backend-sovereign-node"
+  name            = "alti-backend-${var.customer_id}-node"
   image_name      = var.openstack_image_name
   flavor_name     = var.openstack_flavor_name
   key_pair        = var.openstack_keypair_name
   security_groups = ["default", openstack_networking_secgroup_v2.backend_secgroup.name]
 
+  # Deploy VM inside the customer-specific VPC network
   network {
-    name = var.openstack_network_name
+    uuid = openstack_networking_network_v2.customer_vpc.id
   }
 
   metadata = {
     role        = "backend-sovereign"
+    customer_id = var.customer_id
     environment = var.environment
   }
 
@@ -127,7 +140,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               EOF
 }
 
-# ── Floating IP Allocation & Association ──
+# ── 4. Floating IP Association ──
 resource "openstack_networking_floatingip_v2" "backend_fip" {
   pool = var.openstack_floating_ip_pool
 }
@@ -137,13 +150,18 @@ resource "openstack_compute_floatingip_associate_v2" "backend_fip_assoc" {
   instance_id = openstack_compute_instance_v2.backend_instance.id
 }
 
-# ── Outputs ──
+# ── 5. Outputs ──
 output "backend_vm_private_ip" {
-  description = "Private IP of the backend Compute Instance"
+  description = "Private IP of the customer backend Compute Instance"
   value       = openstack_compute_instance_v2.backend_instance.access_ip_v4
 }
 
 output "backend_vm_public_ip" {
-  description = "Public Floating IP of the backend Compute Instance"
+  description = "Public Floating IP of the customer backend Compute Instance"
   value       = openstack_networking_floatingip_v2.backend_fip.address
+}
+
+output "customer_vpc_network_id" {
+  description = "VPC Network UUID for the customer"
+  value       = openstack_networking_network_v2.customer_vpc.id
 }
