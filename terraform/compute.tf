@@ -140,7 +140,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               
               # Set up UFW (Uncomplicated Firewall) rules
               apt-get update
-              apt-get install -y ufw
+              apt-get install -y ufw fail2ban
               ufw default deny incoming
               ufw default allow outgoing
               ufw allow 22/tcp   # Secure SSH
@@ -148,6 +148,20 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               ufw allow 443/tcp  # HTTPS Secure API Gateway
               ufw allow 5000/tcp # Core Backend API Port
               ufw --force enable
+
+              # Enable Fail2ban to block SSH brute-force attacks
+              cat <<FAIL2BAN > /etc/fail2ban/jail.local
+              [sshd]
+              enabled = true
+              port = 22
+              filter = sshd
+              logpath = /var/log/auth.log
+              maxretry = 3
+              bantime = 86400
+              findtime = 600
+              FAIL2BAN
+              systemctl enable fail2ban
+              systemctl restart fail2ban
 
               # SSH Hardening (Disable password and root logins)
               sed -i 's/#PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config || true

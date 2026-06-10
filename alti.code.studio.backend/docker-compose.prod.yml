@@ -71,7 +71,7 @@ services:
     restart: unless-stopped
     ports:
       - "5432:5432"
-    command: postgres -c shared_buffers=2GB -c work_mem=64MB -c effective_cache_size=6GB -c max_connections=250
+    command: postgres -c shared_buffers=2GB -c work_mem=64MB -c effective_cache_size=6GB -c max_connections=250 -c autovacuum_max_workers=5 -c autovacuum_vacuum_scale_factor=0.05 -c autovacuum_analyze_scale_factor=0.02
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
