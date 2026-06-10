@@ -25,6 +25,24 @@ export const handleWebhook = async (req, res) => {
                 GithubReviewAgentService.autoReviewPR('system', 'webhook', repository.owner.login, repository.name, pull_request.number)
                     .catch(e => logger.error(`Failed automated PR review for ${repository.full_name}#${pull_request.number}`, e));
             }
+        } else if (eventType === 'issue_comment' || eventType === 'pull_request_review_comment') {
+            const { action, comment, repository, issue, pull_request } = req.body;
+            if (action === 'created' && comment && comment.body) {
+                const bodyLower = comment.body.toLowerCase();
+                if (bodyLower.includes('@insocode') || bodyLower.includes('@inso-code')) {
+                    const number = pull_request ? pull_request.number : (issue ? issue.number : null);
+                    logger.info(`💬 [Webhook] Comment mention detected in ${repository.full_name}#${number}. Triggering Bot execution...`);
+                    GithubAutopilotService.handleMentionComment(req.body)
+                        .catch(e => logger.error(`Failed bot execution for comment on ${repository.full_name}`, e));
+                }
+            }
+        } else if (eventType === 'workflow_run') {
+            const { action, workflow_run, repository } = req.body;
+            if (action === 'completed' && workflow_run && workflow_run.conclusion === 'failure') {
+                logger.info(`🚨 [Webhook] Workflow failure detected in ${repository.full_name} branch ${workflow_run.head_branch}. Triggering self-healing...`);
+                GithubAutopilotService.handleFailedWorkflow(req.body)
+                    .catch(e => logger.error(`Failed bot self-healing for workflow run in ${repository.full_name}`, e));
+            }
         }
 
         res.status(httpStatus.OK).send({ success: true, message: 'Webhook received.' });
