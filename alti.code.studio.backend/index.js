@@ -183,7 +183,7 @@ app.use(hpp());
 
 // Prevent DOS attacks with toobusy
 app.use((req, res, next) => {
-    if (toobusy()) {
+    if (process.env.NODE_ENV === 'production' && toobusy()) {
         res.status(503).send('Server too busy!');
     } else {
         next();
