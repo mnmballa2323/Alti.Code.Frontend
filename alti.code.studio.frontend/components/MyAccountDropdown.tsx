@@ -1,7 +1,8 @@
 "use client";
 
-import { CreditCard, LogOut, Settings } from "lucide-react";
+import { CreditCard, LogOut, Settings, Building, Shield } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { Button } from "./ui/button";
 import {
@@ -14,9 +15,27 @@ import {
 } from "./ui/dropdown-menu";
 
 import { useModalStore } from "@/store/useModalStore";
+import { getUserData } from "@/lib/user";
 
 const MyAccountDropdown = () => {
   const { onOpen } = useModalStore();
+  const [profile, setProfile] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const res = await getUserData(token);
+          if (res?.success && res?.data) {
+            setProfile(res.data);
+          }
+        }
+      } catch (e) {
+        console.error("Failed to fetch user profile in dropdown:", e);
+      }
+    })();
+  }, []);
 
   return (
     <div className="w-full">
@@ -38,6 +57,28 @@ const MyAccountDropdown = () => {
                 </Link>
               </span>
             </DropdownMenuItem>
+
+            <DropdownMenuItem className="relative">
+              <span className="flex items-center space-x-2">
+                <Building className="size-5" />
+                <Link href="/enterprise/team">
+                  <span className="absolute inset-0" />
+                  Workspace Settings
+                </Link>
+              </span>
+            </DropdownMenuItem>
+
+            {(profile?.role === "admin" || profile?.role === "ADMIN") && (
+              <DropdownMenuItem className="relative">
+                <span className="flex items-center space-x-2">
+                  <Shield className="size-5 text-indigo-400" />
+                  <Link href="/enterprise/admin">
+                    <span className="absolute inset-0" />
+                    Admin Console
+                  </Link>
+                </span>
+              </DropdownMenuItem>
+            )}
 
             <DropdownMenuItem
               onClick={() =>

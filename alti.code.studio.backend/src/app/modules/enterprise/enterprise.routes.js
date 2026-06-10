@@ -946,62 +946,125 @@ router.get('/cron/stats', rbac('audit:read'), (req, res) => {
 // Admin Console (Phase 53)
 // ═══════════════════════════════════════════════
 
-router.post('/admin/tenants', rbac('platform:manage'), (req, res) => {
-    res.status(201).json(adminConsole.createTenant(req.body));
+// ═══════════════════════════════════════════════
+// Admin Console (Phase 53) - PostgreSQL/Prisma Persisted
+// ═══════════════════════════════════════════════
+
+router.post('/admin/tenants', rbac('platform:manage'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.createTenant(req.body);
+        res.status(201).json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.put('/admin/tenants/:tenantId', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.updateTenant(req.params.tenantId, req.body)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.put('/admin/tenants/:tenantId', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.updateTenant(req.params.tenantId, req.body);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.post('/admin/tenants/:tenantId/suspend', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.suspendTenant(req.params.tenantId, req.body.reason)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.post('/admin/tenants/:tenantId/suspend', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.suspendTenant(req.params.tenantId, req.body.reason);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.post('/admin/tenants/:tenantId/reactivate', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.reactivateTenant(req.params.tenantId)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.post('/admin/tenants/:tenantId/reactivate', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.reactivateTenant(req.params.tenantId);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.get('/admin/tenants', rbac('platform:manage'), (req, res) => {
-    res.json(adminConsole.listTenants(req.query));
+router.get('/admin/tenants', rbac('platform:manage'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.listTenants(req.query);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.post('/admin/users', rbac('tenants:configure'), (req, res) => {
-    res.status(201).json(adminConsole.provisionUser(req.body));
+router.post('/admin/users', rbac('tenants:configure'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.provisionUser(req.body);
+        res.status(201).json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.delete('/admin/users/:userId', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.deprovisionUser(req.params.userId)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.delete('/admin/users/:userId', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.deprovisionUser(req.params.userId);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.get('/admin/users', rbac('audit:read'), (req, res) => {
-    res.json(adminConsole.listUsers(req.query.tenantId));
+router.get('/admin/users', rbac('audit:read'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.listUsers(req.query.tenantId);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.post('/admin/users/bulk-invite', rbac('tenants:configure'), (req, res) => {
-    res.json(adminConsole.bulkInvite(req.body.tenantId, req.body.emails));
+router.post('/admin/users/bulk-invite', rbac('tenants:configure'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.bulkInvite(req.body.tenantId, req.body.emails);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.post('/admin/teams', rbac('tenants:configure'), (req, res) => {
-    res.status(201).json(adminConsole.createTeam(req.body));
+router.post('/admin/teams', rbac('tenants:configure'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.createTeam(req.body);
+        res.status(201).json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
-router.post('/admin/teams/:teamId/members', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.addTeamMember(req.params.teamId, req.body.userId)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.post('/admin/teams/:teamId/members', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.addTeamMember(req.params.teamId, req.body.userId);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.delete('/admin/teams/:teamId/members/:userId', rbac('tenants:configure'), (req, res) => {
-    try { res.json(adminConsole.removeTeamMember(req.params.teamId, req.params.userId)); }
-    catch (err) { res.status(400).json({ error: err.message }); }
+router.delete('/admin/teams/:teamId/members/:userId', rbac('tenants:configure'), async (req, res) => {
+    try {
+        const result = await adminConsole.removeTeamMember(req.params.teamId, req.params.userId);
+        res.json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
 });
 
-router.get('/admin/teams', rbac('audit:read'), (req, res) => {
-    res.json(adminConsole.listTeams(req.query.tenantId));
+router.get('/admin/teams', rbac('audit:read'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.listTeams(req.query.tenantId);
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
 });
 
 router.post('/admin/maintenance', rbac('platform:manage'), (req, res) => {
@@ -1025,8 +1088,95 @@ router.get('/admin/audit-log', rbac('platform:manage'), (req, res) => {
     res.json(adminConsole.getAuditLog(parseInt(req.query.limit) || 50));
 });
 
-router.get('/admin/stats', rbac('platform:manage'), (req, res) => {
-    res.json(adminConsole.getStats());
+router.get('/admin/stats', rbac('platform:manage'), async (req, res, next) => {
+    try {
+        const result = await adminConsole.getStats();
+        res.json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ── Team settings for standard multi-tenant users ──
+
+router.get('/team/members', rbac(), async (req, res, next) => {
+    try {
+        const members = await prisma.user.findMany({
+            where: { tenantId: req.tenantId }
+        });
+        res.json({ members });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.post('/team/members', rbac(), async (req, res, next) => {
+    try {
+        const { email, role } = req.body;
+        if (!email) return res.status(400).json({ error: 'Email is required' });
+
+        // Check if user already exists
+        let user = await prisma.user.findUnique({ where: { email } });
+        if (user) {
+            // Update tenant relationship
+            user = await prisma.user.update({
+                where: { id: user.id },
+                data: {
+                    tenantId: req.tenantId,
+                    tenantRole: role || 'developer',
+                }
+            });
+        } else {
+            // Create a placeholder member user
+            user = await prisma.user.create({
+                data: {
+                    email,
+                    role: 'user',
+                    tenantId: req.tenantId,
+                    tenantRole: role || 'developer',
+                }
+            });
+        }
+        res.status(201).json(user);
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        // Verify user belongs to the caller's tenant first to prevent unauthorized deletions
+        const user = await prisma.user.findFirst({
+            where: { id: userId, tenantId: req.tenantId }
+        });
+        if (!user) return res.status(404).json({ error: 'Member not found in this team' });
+
+        if (user.tenantRole === 'owner') {
+            return res.status(400).json({ error: 'Cannot remove the owner of the workspace' });
+        }
+
+        // Dissociate from tenant by deleting the user record
+        await prisma.user.delete({ where: { id: userId } });
+        res.json({ success: true, message: 'Member removed from team' });
+    } catch (err) {
+        next(err);
+    }
+});
+
+router.put('/team/name', rbac(), async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        if (!name) return res.status(400).json({ error: 'Team name is required' });
+
+        const tenant = await prisma.tenant.update({
+            where: { id: req.tenantId },
+            data: { name }
+        });
+        res.json({ success: true, tenant });
+    } catch (err) {
+        next(err);
+    }
 });
 
 // ═══════════════════════════════════════════════

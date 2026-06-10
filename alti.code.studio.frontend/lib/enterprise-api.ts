@@ -251,6 +251,16 @@ export const adminAPI = {
 };
 
 // ═══════════════════════════════════════════════
+// Team Settings (Multi-Tenant Management)
+// ═══════════════════════════════════════════════
+export const teamAPI = {
+  members: () => unwrap(API.get("/team/members")),
+  inviteMember: (d: { email: string; role?: string }) => unwrap(API.post("/team/members", d)),
+  removeMember: (userId: string) => unwrap(API.delete(`/team/members/${userId}`)),
+  renameTeam: (d: { name: string }) => unwrap(API.put("/team/name", d)),
+};
+
+// ═══════════════════════════════════════════════
 // Agent Marketplace
 // ═══════════════════════════════════════════════
 export const marketplaceAPI = {
