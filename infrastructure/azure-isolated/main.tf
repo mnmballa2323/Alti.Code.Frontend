@@ -12,15 +12,16 @@ provider "azurerm" {
 }
 
 variable "resource_group_name" {
-  description = "The name of the Azure resource group"
-  type        = string
-  default     = "azure-isolated-rg"
-}
-
 variable "location" {
-  description = "The Azure region for deployment"
+  description = "The Azure region to deploy resources."
   type        = string
   default     = "eastus"
+}
+
+variable "resource_group_name" {
+  description = "The name of the resource group."
+  type        = string
+  default     = "azure-isolated-rg"
 }
 
 resource "azurerm_resource_group" "rg" {
