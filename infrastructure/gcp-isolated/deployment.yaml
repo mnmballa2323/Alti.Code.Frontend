@@ -19,4 +19,4 @@ spec:
       - name: gcp-isolated-container
         image: gcr.io/my-project/gcp-isolated:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 5003

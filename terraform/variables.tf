@@ -1,5 +1,5 @@
 variable "openstack_auth_url" {
-  description = "OpenStack Identity API endpoint (e.g., Liberty Center One Keyston)"
+  description = "OpenStack Identity API endpoint (e.g., Liberty Center One Keystone)"
   type        = string
 }
 
@@ -59,4 +59,38 @@ variable "github_repository" {
   description = "The GitHub repository for Workload Identity Federation (e.g. mnmballa2323/alti.code.studio)"
   type        = string
   default     = "mnmballa2323/alti.code.studio"
+}
+
+# ==========================================
+# OpenStack Liberty Center One Configurations
+# ==========================================
+
+variable "openstack_external_network_aws_id" {
+  description = "The UUID of the physical AWS direct connect fiber network in Liberty Center One"
+  type        = string
+  default     = "physical-aws-fiber-net-id"
+}
+
+variable "openstack_external_network_azure_id" {
+  description = "The UUID of the physical Azure expressroute fiber network in Liberty Center One"
+  type        = string
+  default     = "physical-azure-fiber-net-id"
+}
+
+variable "openstack_external_network_gcp_id" {
+  description = "The UUID of the physical GCP interconnect fiber network in Liberty Center One"
+  type        = string
+  default     = "physical-gcp-fiber-net-id"
+}
+
+variable "openstack_magnum_template_id" {
+  description = "The UUID or name of the Magnum cluster template in Liberty Center One"
+  type        = string
+  default     = "magnum-template-id"
+}
+
+variable "openstack_baremetal_flavor" {
+  description = "The compute flavor for the bare-metal GPU nodes in Liberty Center One"
+  type        = string
+  default     = "baremetal.cyborg.h100"
 }

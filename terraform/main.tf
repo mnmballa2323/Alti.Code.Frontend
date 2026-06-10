@@ -8,7 +8,10 @@ terraform {
 }
 
 provider "openstack" {
-  cloud = "liberty-center-one"
+  cloud     = "liberty-center-one"
+  auth_url  = var.openstack_auth_url
+  tenant_id = var.openstack_tenant_id
+  region    = var.openstack_region
 }
 
 # ==========================================
@@ -18,19 +21,19 @@ provider "openstack" {
 resource "openstack_networking_router_v2" "aws_vrf" {
   name                = "aws-direct-connect-vrf"
   admin_state_up      = true
-  external_network_id = "physical-aws-fiber-net-id"
+  external_network_id = var.openstack_external_network_aws_id
 }
 
 resource "openstack_networking_router_v2" "azure_vrf" {
   name                = "azure-expressroute-vrf"
   admin_state_up      = true
-  external_network_id = "physical-azure-fiber-net-id"
+  external_network_id = var.openstack_external_network_azure_id
 }
 
 resource "openstack_networking_router_v2" "gcp_vrf" {
   name                = "gcp-interconnect-vrf"
   admin_state_up      = true
-  external_network_id = "physical-gcp-fiber-net-id"
+  external_network_id = var.openstack_external_network_gcp_id
 }
 
 # ==========================================
@@ -39,7 +42,7 @@ resource "openstack_networking_router_v2" "gcp_vrf" {
 
 resource "openstack_containerinfra_cluster_v1" "k8s_sovereign" {
   name                = "alti-sovereign-cluster"
-  cluster_template_id = "magnum-template-id"
+  cluster_template_id = var.openstack_magnum_template_id
   master_count        = 3
   
   # Default node group (Control Plane / System Components)
@@ -51,7 +54,7 @@ resource "openstack_containerinfra_nodegroup_v1" "aws_baremetal_nodes" {
   name       = "aws-baremetal-island"
   cluster_id = openstack_containerinfra_cluster_v1.k8s_sovereign.id
   node_count = 5
-  flavor_id  = "baremetal.cyborg.h100" # Physical GPU nodes
+  flavor     = var.openstack_baremetal_flavor # Physical GPU nodes
   labels = {
     "sovereign.cloud/environment"  = "aws"
     "sovereign.cloud/vrf"          = "aws-direct-connect"
@@ -64,7 +67,7 @@ resource "openstack_containerinfra_nodegroup_v1" "azure_baremetal_nodes" {
   name       = "azure-baremetal-island"
   cluster_id = openstack_containerinfra_cluster_v1.k8s_sovereign.id
   node_count = 5
-  flavor_id  = "baremetal.cyborg.h100"
+  flavor     = var.openstack_baremetal_flavor
   labels = {
     "sovereign.cloud/environment"  = "azure"
     "sovereign.cloud/vrf"          = "azure-expressroute"
@@ -77,7 +80,7 @@ resource "openstack_containerinfra_nodegroup_v1" "gcp_baremetal_nodes" {
   name       = "gcp-baremetal-island"
   cluster_id = openstack_containerinfra_cluster_v1.k8s_sovereign.id
   node_count = 5
-  flavor_id  = "baremetal.cyborg.h100"
+  flavor     = var.openstack_baremetal_flavor
   labels = {
     "sovereign.cloud/environment"  = "gcp"
     "sovereign.cloud/vrf"          = "gcp-interconnect"
