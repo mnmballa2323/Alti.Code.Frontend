@@ -23,7 +23,7 @@ const tabs = [
   { href: "/enterprise/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/enterprise/marketplace", label: "Marketplace", icon: Store },
   { href: "/enterprise/data", label: "Data Hub", icon: Database },
-  { href: "/enterprise/admin", label: "Admin", icon: KeyRound },
+  { href: "/admin", label: "Admin", icon: KeyRound },
 ];
 
 export default function EnterpriseLayout({
@@ -55,7 +55,7 @@ export default function EnterpriseLayout({
           {/* Tab Navigation */}
           <nav className="flex gap-1 overflow-x-auto scrollbar-hide -mb-px">
             {tabs.map((tab) => {
-              const isActive = pathname === tab.href;
+              const isActive = tab.href === "/admin" ? pathname.startsWith("/admin") : pathname === tab.href;
 
               return (
                 <Link

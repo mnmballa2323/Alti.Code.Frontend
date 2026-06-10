@@ -72,7 +72,7 @@ const MyAccountDropdown = () => {
               <DropdownMenuItem className="relative">
                 <span className="flex items-center space-x-2">
                   <Shield className="size-5 text-indigo-400" />
-                  <Link href="/enterprise/admin">
+                  <Link href="/admin">
                     <span className="absolute inset-0" />
                     Admin Console
                   </Link>
