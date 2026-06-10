@@ -1,6 +1,6 @@
 # MARKETPLACE PRICING & TIERING STRATEGY
 
-Alti Code Studio supports native hyperscaler billing via the AWS Marketplace, Azure Marketplace, and Google Cloud Marketplace.
+Inso Code supports native hyperscaler billing via the AWS Marketplace, Azure Marketplace, and Google Cloud Marketplace.
 
 ## 1. INFRASTRUCTURE COSTS (PAID TO HYPERSCALER)
 The BYOC Data Plane utilizes highly specialized, military-grade cloud resources. The customer pays their cloud provider (AWS/Azure/GCP) directly for the underlying compute.
@@ -23,8 +23,8 @@ Designed for massive-scale enterprise deployments utilizing the God-Tier and Zen
 - **Platform Fee:** $120,000 / year (Fixed fee covering the Liberty Center One mTLS tether).
 - **Unlimited Usage:** No per-token metering.
 - **Support:** 24/7/365 Dedicated SRE line.
-- *Customer negotiates the license directly with Alti, then imports the License Key into the Marketplace deployment wizard.*
+- *Customer negotiates the license directly with Inso Code, then imports the License Key into the Marketplace deployment wizard.*
 
 ## 3. PROFESSIONAL SERVICES (OPTIONAL)
-For deploying the **Disconnected Air-Gapped** or **Zenith Space-Linked** architectures, Alti provides specialized clearance-holding engineers to assist with physical rack delivery, dark fiber routing, and satellite configuration.
+For deploying the **Disconnected Air-Gapped** or **Zenith Space-Linked** architectures, Inso Code provides specialized clearance-holding engineers to assist with physical rack delivery, dark fiber routing, and satellite configuration.
 - **Rate:** $500 / hour, billed via Private Marketplace Offers.

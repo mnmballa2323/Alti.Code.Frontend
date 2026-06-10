@@ -1430,7 +1430,7 @@ export default function Sidebar() {
                   isTauri ? "h-[18px]" : "h-6",
                 )}
                 height={24}
-                src="/alti-logo.png"
+                src="/assets/logo-icon-black.png"
                 width={28}
               />
               {!isTauri && (
@@ -1452,7 +1452,7 @@ export default function Sidebar() {
                   isTauri ? "h-[18px]" : "h-6",
                 )}
                 height={24}
-                src="/logo-white.png"
+                src="/assets/logo-icon-white.png"
                 width={28}
               />
               {!isTauri && (

@@ -36,9 +36,9 @@ export default function ZeroTrustLedgerSection() {
       title: "GCP DLP Redaction Check",
       desc: "Scanned prompt payload for PII and API keys. Flagged Google Cloud Service Account credentials.",
       rawText:
-        'client_email: "owner@alti-prod.iam.gserviceaccount.com", private_key: "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDhO..."',
+        'client_email: "owner@inso-prod.iam.gserviceaccount.com", private_key: "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDhO..."',
       redactedText:
-        'client_email: "owner@alti-prod.iam.gserviceaccount.com", private_key: "[REDACTED_GCP_PRIVATE_KEY]"',
+        'client_email: "owner@inso-prod.iam.gserviceaccount.com", private_key: "[REDACTED_GCP_PRIVATE_KEY]"',
       hash: "sha256:4c3d2e1b0a9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d",
       icon: EyeOff,
     },

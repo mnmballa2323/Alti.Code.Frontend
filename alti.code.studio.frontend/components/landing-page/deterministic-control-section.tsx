@@ -277,7 +277,7 @@ export default function DeterministicControlSection() {
                 {/* Supreme Commander Logo Icon */}
                 <image
                   height="32"
-                  href="/alti-logo.png"
+                  href="/inso-logo-black.png"
                   width="32"
                   x="184"
                   y="164"

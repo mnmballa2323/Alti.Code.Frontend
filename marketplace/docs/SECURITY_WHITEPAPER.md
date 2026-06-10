@@ -1,13 +1,13 @@
 # SECURITY ARCHITECTURE WHITEPAPER
 
-**ALTI CODE STUDIO - ENTERPRISE SOVEREIGN DATA PLANE**
+**INSO CODE - ENTERPRISE SOVEREIGN DATA PLANE**
 **Prepared for: AWS FTR, Azure Security Review, GCP App Validation**
 
 ## 1. EXECUTIVE SUMMARY
 Alti Code Studio provides a military-grade, Bring Your Own Cloud (BYOC) sovereign data plane for enterprise AI coding. This architecture guarantees that proprietary source code and intellectual property never leave the boundaries of the customer's physically isolated infrastructure.
 
 ## 2. HARDWARE CONFIDENTIAL COMPUTING
-Alti deploys its containerized workloads directly onto hardware-encrypted memory partitions.
+Inso Code deploys its containerized workloads directly onto hardware-encrypted memory partitions.
 - **AWS:** Amazon EC2 instances utilizing AWS Nitro Enclaves. The AWS hypervisor mathematically cannot access the isolated memory space.
 - **Azure:** Azure Confidential Computing VMs utilizing Intel Software Guard Extensions (SGX).
 - **GCP:** Google Kubernetes Engine (GKE) running on AMD Secure Encrypted Virtualization (SEV) nodes.
@@ -17,7 +17,7 @@ All cryptographic keys utilized by the Data Plane are stored in single-tenant, h
 - **Post-Quantum Cryptography (PQC):** The Zenith-tier architecture enforces Post-Quantum Key Encapsulation (PQ-KEM), such as ML-DSA / CRYSTALS-Kyber, securing transit against "Store-now-decrypt-later" quantum computing attacks.
 
 ## 4. AIR-GAPPED PHYSICAL ISOLATION
-For environments requiring DoD IL6 or Top Secret compliance, Alti offers fully disconnected configurations:
+For environments requiring DoD IL6 or Top Secret compliance, Inso Code offers fully disconnected configurations:
 - **AWS Outposts & Snowball Edge**
 - **Azure Stack Hub**
 - **Google Distributed Cloud (GDC) Hosted**
@@ -33,4 +33,4 @@ The perimeter is actively defended by machine-learning-driven threat intelligenc
 - Google Cloud Binary Authorization (Cryptographic validation of container origins)
 
 ## 7. CONCLUSION
-The Alti Code Studio Data Plane represents the absolute pinnacle of modern infrastructure engineering, pushing the limits of physics, cryptography, and orbital communications to ensure perfect data sovereignty.
+The Inso Code Data Plane represents the absolute pinnacle of modern infrastructure engineering, pushing the limits of physics, cryptography, and orbital communications to ensure perfect data sovereignty.

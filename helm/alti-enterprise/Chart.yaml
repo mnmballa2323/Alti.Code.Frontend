@@ -1,6 +1,6 @@
 apiVersion: v2
 name: alti-enterprise-byoc
-description: Alti Code Studio Data Plane for Bring-Your-Own-Cloud (BYOC) Enterprise Deployments.
+description: Inso Code Data Plane for Bring-Your-Own-Cloud (BYOC) Enterprise Deployments.
 type: application
 version: 1.0.0
 appVersion: "1.0"

@@ -425,7 +425,7 @@ export default function AuthLayout({
             <img
               alt="Inso Logo Icon"
               className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
-              src="/alti-logo.png"
+              src="/inso-logo-black.png"
             />
           </Link>
         </div>

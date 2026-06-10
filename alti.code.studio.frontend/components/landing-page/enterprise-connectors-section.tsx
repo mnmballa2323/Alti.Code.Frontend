@@ -91,7 +91,7 @@ export default function EnterpriseConnectorsSection() {
             <img
               alt="Inso Code"
               className="w-12 h-12 object-contain"
-              src="/alti-logo.png"
+              src="/inso-logo-black.png"
             />
           </div>
 
