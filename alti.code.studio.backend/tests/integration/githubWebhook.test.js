@@ -258,6 +258,85 @@ describe('GitHub Bot & Webhook Integration Tests', () => {
             const containsGitCheckout = execCalls.some(c => c.includes('git checkout'));
             expect(containsGitCheckout).toBe(false);
         });
+
+        it('should block commits and reject if a potential secret is detected in the generated diff', async () => {
+            const payload = {
+                repository: { owner: { login: 'test-owner' }, name: 'test-repo' },
+                comment: { body: 'Hey @insocode add key' },
+                pull_request: { number: 42 }
+            };
+
+            const originalEnv = process.env.NODE_ENV;
+            process.env.NODE_ENV = 'development';
+
+            // Mock exec to return a diff containing a secret key
+            vi.mocked(exec).mockImplementation((cmd, options, callback) => {
+                if (cmd.includes('diff')) {
+                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678"', '');
+                } else if (cmd.includes('rev-parse')) {
+                    callback(null, 'main-branch', '');
+                } else {
+                    callback(null, 'success', '');
+                }
+            });
+
+            try {
+                await expect(GithubAutopilotService.handleMentionComment(payload)).rejects.toThrow(
+                    /Security Alert/
+                );
+                
+                // Assert that git commit was NOT called
+                const execCalls = vi.mocked(exec).mock.calls.map(call => call[0]);
+                const hasCommit = execCalls.some(c => c.includes('git commit'));
+                expect(hasCommit).toBe(false);
+
+                // Assert that reset and clean were still called in finally block
+                expect(execCalls).toContainEqual(expect.stringContaining('git reset --hard HEAD && git clean -fd'));
+            } finally {
+                process.env.NODE_ENV = originalEnv;
+            }
+        });
+
+        it('should clean up the workspace and checkout the original branch if SwarmBrain fails', async () => {
+            const payload = {
+                repository: { owner: { login: 'test-owner' }, name: 'test-repo' },
+                comment: { body: 'Hey @insocode fail' },
+                pull_request: { number: 42 }
+            };
+
+            const originalEnv = process.env.NODE_ENV;
+            process.env.NODE_ENV = 'development';
+
+            // Spy on SwarmBrain to throw an error
+            const { swarmBrain } = await import('../../src/app/modules/agents/swarm_brain.js');
+            const taskSpy = vi.spyOn(swarmBrain, 'executeTask').mockRejectedValue(new Error('Swarm execution crashed'));
+
+            // Mock exec
+            vi.mocked(exec).mockImplementation((cmd, options, callback) => {
+                if (cmd.includes('rev-parse')) {
+                    callback(null, 'main-branch', '');
+                } else {
+                    callback(null, 'success', '');
+                }
+            });
+
+            try {
+                await expect(GithubAutopilotService.handleMentionComment(payload)).rejects.toThrow(
+                    'Swarm execution crashed'
+                );
+
+                const execCalls = vi.mocked(exec).mock.calls.map(call => call[0]);
+                
+                // Assert that workspace cleanup was run
+                expect(execCalls).toContainEqual(expect.stringContaining('git reset --hard HEAD && git clean -fd'));
+                
+                // Assert that original branch was restored
+                expect(execCalls).toContainEqual(expect.stringContaining('git checkout main-branch'));
+            } finally {
+                process.env.NODE_ENV = originalEnv;
+                taskSpy.mockRestore();
+            }
+        });
     });
 
     describe('3. Autopilot Service: handleFailedWorkflow (Self-Healing)', () => {
@@ -292,6 +371,43 @@ describe('GitHub Bot & Webhook Integration Tests', () => {
 
                 // Verify git restore command executed
                 expect(execCalls).toContainEqual(expect.stringContaining('git checkout main-branch'));
+            } finally {
+                process.env.NODE_ENV = originalEnv;
+            }
+        });
+
+        it('should block self-healing commits and reject if a potential secret is detected in the generated diff', async () => {
+            const payload = {
+                repository: { owner: { login: 'test-owner' }, name: 'test-repo' },
+                workflow_run: { id: 777, head_branch: 'bugfix-branch', head_sha: 'sha123' }
+            };
+
+            const originalEnv = process.env.NODE_ENV;
+            process.env.NODE_ENV = 'development';
+
+            // Mock exec to return a diff containing a secret key
+            vi.mocked(exec).mockImplementation((cmd, options, callback) => {
+                if (cmd.includes('diff')) {
+                    callback(null, '+++ b/config.js\n+ const key = "AIzaSyFakeGoogleKey123456789012345678"', '');
+                } else if (cmd.includes('rev-parse')) {
+                    callback(null, 'main-branch', '');
+                } else {
+                    callback(null, 'success', '');
+                }
+            });
+
+            try {
+                await expect(GithubAutopilotService.handleFailedWorkflow(payload)).rejects.toThrow(
+                    /Security Alert/
+                );
+
+                // Assert that git commit was NOT called
+                const execCalls = vi.mocked(exec).mock.calls.map(call => call[0]);
+                const hasCommit = execCalls.some(c => c.includes('git commit'));
+                expect(hasCommit).toBe(false);
+
+                // Assert that reset and clean were still called in finally block
+                expect(execCalls).toContainEqual(expect.stringContaining('git reset --hard HEAD && git clean -fd'));
             } finally {
                 process.env.NODE_ENV = originalEnv;
             }
