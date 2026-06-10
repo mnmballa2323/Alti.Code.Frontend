@@ -122,7 +122,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col h-full bg-[#FFFFFF] dark:bg-[#0d1117] relative overflow-hidden">
+      <div className="flex-1 flex flex-col h-full bg-[#F9FAFB] dark:bg-[#0d1117] relative overflow-hidden">
         {/* Subtle Background Watermark Logo */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] dark:opacity-[0.05] z-0 select-none">
           <svg
