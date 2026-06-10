@@ -34,6 +34,18 @@ variable "customer_name" {
   type        = string
 }
 
+variable "gcp_organization_id" {
+  description = "The GCP Organization ID for resource tagging."
+  type        = string
+  default     = "123456789"
+}
+
+variable "external_key_uri" {
+  description = "The URI of the external quantum-resistant key on the EKM."
+  type        = string
+  default     = "https://ekm.local/keys/pqc-key-1"
+}
+
 # ==========================================
 # Post-Quantum Cryptography (PQC) Key Management
 # ==========================================
@@ -52,6 +64,10 @@ resource "google_kms_crypto_key" "gke_pqc_key" {
   # External, Quantum-resistant key source
   protection_level = "EXTERNAL"
   
+  external_key_options {
+    external_key_uri = var.external_key_uri
+  }
+  
   labels = {
     crypto_level = "post-quantum-fips-204"
   }
@@ -61,7 +77,7 @@ resource "google_kms_crypto_key" "gke_pqc_key" {
 # EMP Hardened Tagging & Constraints
 # ==========================================
 resource "google_tags_tag_key" "emp_hardened" {
-  parent     = "organizations/123456789"
+  parent     = "organizations/${var.gcp_organization_id}"
   short_name = "emp_hardened"
 }
 

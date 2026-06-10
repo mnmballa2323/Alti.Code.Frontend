@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: aws-isolated-container
-        image: gcr.io/my-project/aws-isolated:latest
+        image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/alti-aws-backend:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 5001

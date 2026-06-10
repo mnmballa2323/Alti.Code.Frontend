@@ -5,6 +5,11 @@ provider "google" {
   region  = "us-central1"
 }
 
+variable "project_id" {
+  description = "The GCP Project ID."
+  type        = string
+}
+
 resource "google_compute_network" "vpc_network" {
   name = "gcp-isolated-vpc"
   auto_create_subnetworks = false

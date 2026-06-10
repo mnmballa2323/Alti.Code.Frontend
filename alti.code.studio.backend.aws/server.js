@@ -4,7 +4,7 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const pino = require('pino');
 const pinoHttp = require('pino-http');
-const { BedrockRuntimeClient } = require('@aws-sdk/client-bedrock-runtime');
+const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 const app = express();
@@ -30,7 +30,6 @@ app.get('/healthz', (req, res) => {
   res.status(200).json({ status: 'healthy', environment: 'aws-bedrock' });
 });
 
-const { InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 
 app.post('/api/v1/aws/invoke', async (req, res) => {
   logger.info({ event: 'aws_inference_started' }, 'Processing AWS Bedrock request');

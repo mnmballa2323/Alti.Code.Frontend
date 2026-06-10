@@ -40,6 +40,7 @@ app.post('/api/v1/gcp/invoke', async (req, res) => {
   const modelName = model || 'gemini-3.1-pro';
   try {
     const ai = new GoogleGenAI({
+      enterprise: true,
       project: process.env.GCP_PROJECT_ID || process.env.GCP_PROJECT,
       location: process.env.GCP_LOCATION || 'us-central1'
     });
