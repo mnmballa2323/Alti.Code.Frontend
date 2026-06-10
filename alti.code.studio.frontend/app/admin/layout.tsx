@@ -89,25 +89,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   };
 
-  const getSidebarHeader = () => {
-    if (
-      pathname.startsWith("/admin/members") ||
-      pathname.startsWith("/admin/team-members") ||
-      pathname.startsWith("/admin/billing") ||
-      pathname.startsWith("/admin/invoices")
-    ) {
-      return "Platform Admin";
-    }
-    if (
-      pathname.startsWith("/admin/data") ||
-      pathname.startsWith("/admin/instructions") ||
-      pathname.startsWith("/admin/guardrails") ||
-      pathname.startsWith("/admin/projects")
-    ) {
-      return "Platform Manager";
-    }
-    return "Platform Console";
-  };
+
 
   const getPageTitle = () => {
     if (pathname.startsWith("/admin/members")) return "Invite Members";
@@ -129,18 +111,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Left header: aligns with sidebar width */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
           <img
-            src="/inso-logo-black.png"
+            src="/logo-black.png"
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain block dark:hidden"
           />
           <img
-            src="/inso-logo-white.png"
+            src="/logo-white.png"
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain hidden dark:block"
           />
-          <span className="font-semibold text-neutral-900 dark:text-white text-[14px]">
-            {getSidebarHeader()}
-          </span>
         </div>
 
         {/* Right header: page title */}
