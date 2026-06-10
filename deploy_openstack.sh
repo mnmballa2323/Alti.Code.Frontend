@@ -134,21 +134,26 @@ else
     openstack coe cluster config alti-sovereign-cluster
     echo -e "${GREEN}✔ kubectl context updated for cluster 'alti-sovereign-cluster'.${NC}"
 
-    echo -e "\n[4/5] ${YELLOW}Building and Uploading Docker Container Image...${NC}"
+    echo -e "\n[4/5] ${YELLOW}Building and Uploading Docker Container Images...${NC}"
     REGISTRY="registry.internal.libertycenterone.com"
-    IMAGE_NAME="${REGISTRY}/alti-backend-${CUSTOMER}:latest"
+    BACKEND_IMAGE="${REGISTRY}/alti-backend-${CUSTOMER}:latest"
+    FRONTEND_IMAGE="${REGISTRY}/alti-frontend-${CUSTOMER}:latest"
     
-    echo -e "Building backend image: ${IMAGE_NAME}..."
-    docker build -t ${IMAGE_NAME} ../alti.code.studio.backend
+    echo -e "Building backend image: ${BACKEND_IMAGE}..."
+    docker build -t ${BACKEND_IMAGE} ../alti.code.studio.backend
     
-    echo -e "Pushing image to private registry..."
-    docker push ${IMAGE_NAME}
-    echo -e "${GREEN}✔ Image pushed to registry.${NC}"
+    echo -e "Building frontend image: ${FRONTEND_IMAGE}..."
+    docker build -t ${FRONTEND_IMAGE} ../alti.code.studio.frontend
+    
+    echo -e "Pushing images to private registry..."
+    docker push ${BACKEND_IMAGE}
+    docker push ${FRONTEND_IMAGE}
+    echo -e "${GREEN}✔ Images pushed to registry.${NC}"
 
     echo -e "\n[5/5] ${YELLOW}Executing Helm Sovereign Deployment Chart...${NC}"
     cd ../alti.code.studio.backend/k8s
-    # Install with customer-specific namespace
-    ./omni_sovereign_operator.sh openstack "alti-sovereign-${CUSTOMER}"
+    # Install with customer-specific namespace and configuration environment variables
+    REGISTRY="${REGISTRY}" CUSTOMER_ID="${CUSTOMER}" CUSTOMER_DOMAIN="${DOMAIN}" ./omni_sovereign_operator.sh openstack "alti-sovereign-${CUSTOMER}"
     
     echo -e "=================================================================="
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER KUBERNETES DEPLOYMENT COMPLETE! ✨${NC}"

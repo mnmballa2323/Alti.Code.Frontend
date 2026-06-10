@@ -50,9 +50,16 @@ sleep 1
 echo -e "${GREEN}✔ FIPS 140-2 Level 3 HSM profiles bound to target nodes.${NC}"
 
 echo -e "\n[4/5] ${YELLOW}Deploying Sovereign Helm Chart to ${PROVIDER^^}...${NC}"
+REGISTRY=${REGISTRY:-"registry.internal.libertycenterone.com"}
+CUSTOMER_ID=${CUSTOMER_ID:-"generic-tenant"}
+CUSTOMER_DOMAIN=${CUSTOMER_DOMAIN:-"generic-tenant.insocode.com"}
+
 helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_DIR} \
   --namespace ${NAMESPACE} \
   --set omniCloud.activeProvider=${PROVIDER} \
+  --set image.repository=${REGISTRY}/alti-backend-${CUSTOMER_ID} \
+  --set frontend.image.repository=${REGISTRY}/alti-frontend-${CUSTOMER_ID} \
+  --set customerDomain=${CUSTOMER_DOMAIN} \
   --set sovereign.strictIngress=true \
   --set sovereign.strictEgress=true \
   --set sovereign.gVisorSandbox=true

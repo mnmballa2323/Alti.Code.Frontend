@@ -1,0 +1,61 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend
+  labels:
+    app.kubernetes.io/name: alti-code-studio-frontend
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    sovereign-tier: frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alti-code-studio-frontend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alti-code-studio-frontend
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        sovereign-tier: frontend
+    spec:
+      {{- if .Values.sovereign.gVisorSandbox }}
+      runtimeClassName: gvisor # Enforce Strict Hardware-Virtualization Sandbox Runtime
+      {{- end }}
+      containers:
+        - name: frontend-ui
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.frontend.service.port }}
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://{{ .Values.customerDomain }}"
+            - name: NEXTAUTH_URL
+              value: "https://{{ .Values.customerDomain }}"
+            - name: NEXTAUTH_SECRET
+              value: "7f51152a514d3c907b8b4a2e5f5f4b26"
+          {{- if .Values.sovereign.fips140_2_enabled }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1001
+            capabilities:
+              drop: ["ALL"]
+          {{- end }}
+          resources:
+            {{- toYaml .Values.frontend.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+      volumes:
+        - name: tmp-dir
+          emptyDir:
+            medium: Memory
+{{- end }}
