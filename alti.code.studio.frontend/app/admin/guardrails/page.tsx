@@ -15,7 +15,8 @@ const initialGuardrails: GuardrailRule[] = [
 ];
 
 export default function GuardrailsPage() {
-  const [guardrails, setGuardrails] = useState<GuardrailRule[]>(initialGuardrails);
+  const [guardrails, setGuardrails] =
+    useState<GuardrailRule[]>(initialGuardrails);
   const [newGuardrail, setNewGuardrail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -46,13 +47,15 @@ export default function GuardrailsPage() {
   const handleSaveEdit = (index: number) => {
     if (!editText.trim()) return;
     setGuardrails((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, text: editText.trim() } : item))
+      prev.map((item, i) =>
+        i === index ? { ...item, text: editText.trim() } : item,
+      ),
     );
     setEditingIndex(null);
   };
 
   const filteredGuardrails = guardrails.filter((guard) =>
-    guard.text.toLowerCase().includes(searchQuery.toLowerCase())
+    guard.text.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -60,8 +63,8 @@ export default function GuardrailsPage() {
       {/* Back Button */}
       <div className="flex justify-end mb-8">
         <Link
-          href="/dashboard"
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl transition-all shadow-sm"
+          href="/dashboard"
         >
           <ArrowLeft className="w-4 h-4 text-neutral-500" />
           Back to Dashboard
@@ -70,17 +73,20 @@ export default function GuardrailsPage() {
 
       <div className="space-y-6">
         {/* Input Row */}
-        <form onSubmit={handleSend} className="relative flex items-center bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-1.5 shadow-sm">
+        <form
+          className="relative flex items-center bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-1.5 shadow-sm"
+          onSubmit={handleSend}
+        >
           <input
-            type="text"
+            className="flex-1 bg-transparent px-4 py-2.5 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none"
             placeholder="Enter new guardrail"
+            type="text"
             value={newGuardrail}
             onChange={(e) => setNewGuardrail(e.target.value)}
-            className="flex-1 bg-transparent px-4 py-2.5 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none"
           />
           <button
-            type="submit"
             className="h-9 px-6 bg-[#7e7e82] hover:bg-[#6c6c70] dark:bg-[#48484a] dark:hover:bg-[#545456] text-white font-medium rounded-xl text-sm transition-all flex items-center justify-center shrink-0 shadow-sm"
+            type="submit"
           >
             Send
           </button>
@@ -92,11 +98,11 @@ export default function GuardrailsPage() {
             <Search className="w-4 h-4" />
           </span>
           <input
-            type="text"
+            className="flex-1 bg-transparent pl-3 pr-4 py-2.5 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none"
             placeholder="Search guardrails"
+            type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent pl-3 pr-4 py-2.5 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none"
           />
         </div>
 
@@ -117,21 +123,21 @@ export default function GuardrailsPage() {
                     {editingIndex === index ? (
                       <div className="flex gap-2 items-center">
                         <input
+                          autoFocus
+                          className="flex-1 h-9 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 rounded-lg text-sm focus:outline-none text-neutral-800 dark:text-neutral-200"
                           type="text"
                           value={editText}
                           onChange={(e) => setEditText(e.target.value)}
-                          className="flex-1 h-9 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 rounded-lg text-sm focus:outline-none text-neutral-800 dark:text-neutral-200"
-                          autoFocus
                         />
                         <button
-                          onClick={() => handleSaveEdit(index)}
                           className="px-3 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-semibold rounded-lg hover:bg-neutral-800 dark:hover:bg-white transition-colors"
+                          onClick={() => handleSaveEdit(index)}
                         >
                           Save
                         </button>
                         <button
-                          onClick={() => setEditingIndex(null)}
                           className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-semibold rounded-lg hover:bg-neutral-200 transition-colors"
+                          onClick={() => setEditingIndex(null)}
                         >
                           Cancel
                         </button>
@@ -152,14 +158,14 @@ export default function GuardrailsPage() {
                 {editingIndex !== index && (
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleStartEdit(index, guard.text)}
                       className="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                      onClick={() => handleStartEdit(index, guard.text)}
                     >
                       <Edit2 className="w-4 h-4 text-neutral-400" />
                     </button>
                     <button
-                      onClick={() => handleDelete(index)}
                       className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                      onClick={() => handleDelete(index)}
                     >
                       <Trash2 className="w-4 h-4 text-neutral-400" />
                     </button>

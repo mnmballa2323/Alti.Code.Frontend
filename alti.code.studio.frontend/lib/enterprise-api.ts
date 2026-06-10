@@ -255,8 +255,10 @@ export const adminAPI = {
 // ═══════════════════════════════════════════════
 export const teamAPI = {
   members: () => unwrap(API.get("/team/members")),
-  inviteMember: (d: { email: string; role?: string }) => unwrap(API.post("/team/members", d)),
-  removeMember: (userId: string) => unwrap(API.delete(`/team/members/${userId}`)),
+  inviteMember: (d: { email: string; role?: string }) =>
+    unwrap(API.post("/team/members", d)),
+  removeMember: (userId: string) =>
+    unwrap(API.delete(`/team/members/${userId}`)),
   renameTeam: (d: { name: string }) => unwrap(API.put("/team/name", d)),
 };
 

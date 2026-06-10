@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@heroui/react";
-import { ArrowLeft, Download, Info } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 
 import { DOWNLOAD_LINKS } from "@/lib/config";
 import Navbar from "@/components/navbar";
@@ -14,6 +14,7 @@ export default function DownloadMacPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const link = document.createElement("a");
+
       link.href = DOWNLOAD_LINKS.mac;
       link.download = "";
       document.body.appendChild(link);
@@ -32,29 +33,29 @@ export default function DownloadMacPage() {
       <main className="flex-grow flex items-center justify-center px-6 py-8 md:py-0 h-[calc(100vh-80px)]">
         {/* Floating Design Container */}
         <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 lg:gap-16 items-center bg-white border border-gray-100 rounded-[32px] p-8 md:p-12 shadow-xl">
-          
           {/* Left Side: Title & Action Buttons (col-span-6) */}
           <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left gap-5">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight md:whitespace-nowrap">
               Downloading Inso Code
             </h1>
             <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-              Your download for macOS should begin automatically. If it didn't start, please click below.
+              Your download for macOS should begin automatically. If it didn't
+              start, please click below.
             </p>
 
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-3 w-full mt-2">
               <Button
                 as="a"
-                href={DOWNLOAD_LINKS.mac}
                 className="w-full lg:w-auto bg-black text-white font-semibold rounded-full px-8 py-6 text-sm hover:scale-[1.02] transition-transform shadow-md flex items-center justify-center gap-2"
+                href={DOWNLOAD_LINKS.mac}
               >
                 <Download className="w-4 h-4" />
                 Download DMG
               </Button>
               <Button
                 as={Link}
-                href="/"
                 className="w-full lg:w-auto bg-gray-50 border border-gray-200 text-gray-700 font-semibold rounded-full px-8 py-6 text-sm hover:bg-gray-100 hover:text-black transition-colors flex items-center justify-center gap-2"
+                href="/"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Home
@@ -77,9 +78,16 @@ export default function DownloadMacPage() {
                   1
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-black">Open the Disk Image</h3>
+                  <h3 className="font-bold text-sm text-black">
+                    Open the Disk Image
+                  </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Locate the <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">Inso-Code.dmg</code> inside your Downloads folder and double-click it to mount the installer.
+                    Locate the{" "}
+                    <code className="bg-gray-50 px-1.5 py-0.5 rounded border border-gray-200 font-mono text-[10px] text-black">
+                      Inso-Code.dmg
+                    </code>{" "}
+                    inside your Downloads folder and double-click it to mount
+                    the installer.
                   </p>
                 </div>
               </div>
@@ -89,9 +97,12 @@ export default function DownloadMacPage() {
                   2
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-black">Drag to Applications</h3>
+                  <h3 className="font-bold text-sm text-black">
+                    Drag to Applications
+                  </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Drag the Inso Code application icon directly into the Applications folder in the setup window.
+                    Drag the Inso Code application icon directly into the
+                    Applications folder in the setup window.
                   </p>
                 </div>
               </div>
@@ -101,18 +112,19 @@ export default function DownloadMacPage() {
                   3
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-black">Open & Trust App</h3>
+                  <h3 className="font-bold text-sm text-black">
+                    Open & Trust App
+                  </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Launch Inso Code from your Applications folder, and click Open if macOS prompts a security alert.
+                    Launch Inso Code from your Applications folder, and click
+                    Open if macOS prompts a security alert.
                   </p>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </main>
     </div>
   );
 }
-

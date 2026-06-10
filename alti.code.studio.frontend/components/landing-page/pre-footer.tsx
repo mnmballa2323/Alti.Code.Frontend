@@ -43,7 +43,8 @@ function PreFooter() {
                   absolute speed and precision.
                 </p>
                 <p className="text-xs text-neutral-500 mt-4 text-center lg:text-left">
-                  © {new Date().getFullYear()} Inso Code Technologies, Inc. All rights reserved.
+                  © {new Date().getFullYear()} Inso Code Technologies, Inc. All
+                  rights reserved.
                 </p>
               </div>
             </div>
@@ -140,8 +141,6 @@ function PreFooter() {
             </div>
           </div>
         </div>
-
-
       </div>
 
       {/* Contact Modal */}

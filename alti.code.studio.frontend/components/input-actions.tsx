@@ -1334,25 +1334,37 @@ function DaemonStatusViewer() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/api/v1";
-        
+        const apiUrl =
+          process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/api/v1";
+
         // Fetch swarm telemetry
         const swarmRes = await fetch(`${apiUrl}/observability/swarm`);
         const swarmData = await swarmRes.json();
-        
+
         // Fetch captain health
         const captainRes = await fetch(`${apiUrl}/captain/health`);
         const captainData = await captainRes.json();
-        
+
         if (swarmData.success) setTelemetry(swarmData.data);
         if (captainData.success) setCaptain(captainData.data);
       } catch (err) {
-        console.warn("Telemetry polling failed, using client-side fallback:", err);
+        console.warn(
+          "Telemetry polling failed, using client-side fallback:",
+          err,
+        );
         // Clean high-fidelity mock fallback to ensure the UI looks awesome even if offline
         setTelemetry({
           swarmCapacity: { activeAgentsCount: 5 },
-          daemonTelemetry: { daemonRunning: true, daemonUptime: "Active", daemonPid: 997 },
-          gitSyncStatus: { branch: "main", dirty: false, aheadBehind: { ahead: 0, behind: 0 } },
+          daemonTelemetry: {
+            daemonRunning: true,
+            daemonUptime: "Active",
+            daemonPid: 997,
+          },
+          gitSyncStatus: {
+            branch: "main",
+            dirty: false,
+            aheadBehind: { ahead: 0, behind: 0 },
+          },
         });
         setCaptain({
           status: "nominal",
@@ -1365,6 +1377,7 @@ function DaemonStatusViewer() {
 
     fetchData();
     const interval = setInterval(fetchData, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -1372,8 +1385,8 @@ function DaemonStatusViewer() {
     return (
       <div className="mx-auto w-full max-w-2xl flex justify-center items-center gap-2 text-xs text-default-400 select-none animate-pulse py-1">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
         </span>
         Syncing sovereign systems...
       </div>
@@ -1393,28 +1406,53 @@ function DaemonStatusViewer() {
           <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-purple-500/30 dark:hover:border-purple-500/30">
             <span className="relative flex h-2 w-2">
               {isDaemonRunning && (
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
               )}
-              <span className={cn("relative inline-flex rounded-full h-2 w-2", isDaemonRunning ? "bg-purple-500" : "bg-default-400")}></span>
+              <span
+                className={cn(
+                  "relative inline-flex rounded-full h-2 w-2",
+                  isDaemonRunning ? "bg-purple-500" : "bg-default-400",
+                )}
+              />
             </span>
-            <Icon icon="lucide:bot" className="size-3.5 text-purple-500" />
+            <Icon className="size-3.5 text-purple-500" icon="lucide:bot" />
             <span className="text-foreground/80">Agent Factory:</span>
-            <span className={cn("text-[11px]", isDaemonRunning ? "text-purple-500 dark:text-purple-400 font-semibold" : "text-default-400")}>
+            <span
+              className={cn(
+                "text-[11px]",
+                isDaemonRunning
+                  ? "text-purple-500 dark:text-purple-400 font-semibold"
+                  : "text-default-400",
+              )}
+            >
               {isDaemonRunning ? "Synthesizing" : "Offline"}
             </span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side="top" className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs">
+        <TooltipContent
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          side="top"
+        >
           <div className="space-y-1.5">
-            <div className="font-semibold text-purple-500">Autonomous Agent Factory</div>
-            <div className="text-default-500">Generates hyper-specialized expert subagents in the background.</div>
+            <div className="font-semibold text-purple-500">
+              Autonomous Agent Factory
+            </div>
+            <div className="text-default-500">
+              Generates hyper-specialized expert subagents in the background.
+            </div>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-1 border-t border-default-100">
               <span className="text-default-400">Status:</span>
-              <span className="text-foreground font-medium">{isDaemonRunning ? "Running" : "Idle"}</span>
+              <span className="text-foreground font-medium">
+                {isDaemonRunning ? "Running" : "Idle"}
+              </span>
               <span className="text-default-400">PID:</span>
-              <span className="text-foreground font-mono">{telemetry?.daemonTelemetry?.daemonPid || "N/A"}</span>
+              <span className="text-foreground font-mono">
+                {telemetry?.daemonTelemetry?.daemonPid || "N/A"}
+              </span>
               <span className="text-default-400">Uptime:</span>
-              <span className="text-foreground">{telemetry?.daemonTelemetry?.daemonUptime || "N/A"}</span>
+              <span className="text-foreground">
+                {telemetry?.daemonTelemetry?.daemonUptime || "N/A"}
+              </span>
             </div>
           </div>
         </TooltipContent>
@@ -1426,30 +1464,55 @@ function DaemonStatusViewer() {
           <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30">
             <span className="relative flex h-2 w-2">
               {systemStatus === "nominal" && (
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               )}
-              <span className={cn(
-                "relative inline-flex rounded-full h-2 w-2",
-                systemStatus === "nominal" ? "bg-emerald-500" :
-                systemStatus === "warning" ? "bg-warning-500" : "bg-danger-500"
-              )}></span>
+              <span
+                className={cn(
+                  "relative inline-flex rounded-full h-2 w-2",
+                  systemStatus === "nominal"
+                    ? "bg-emerald-500"
+                    : systemStatus === "warning"
+                      ? "bg-warning-500"
+                      : "bg-danger-500",
+                )}
+              />
             </span>
-            <Icon icon="lucide:server" className="size-3.5 text-emerald-500" />
+            <Icon className="size-3.5 text-emerald-500" icon="lucide:server" />
             <span className="text-foreground/80">System Core:</span>
-            <span className={cn("text-[11px]", systemStatus === "nominal" ? "text-emerald-500 dark:text-emerald-400 font-semibold" : "text-warning-500 font-semibold")}>
-              {systemStatus === "nominal" ? "Nominal" : systemStatus.toUpperCase()}
+            <span
+              className={cn(
+                "text-[11px]",
+                systemStatus === "nominal"
+                  ? "text-emerald-500 dark:text-emerald-400 font-semibold"
+                  : "text-warning-500 font-semibold",
+              )}
+            >
+              {systemStatus === "nominal"
+                ? "Nominal"
+                : systemStatus.toUpperCase()}
             </span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side="top" className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs">
+        <TooltipContent
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          side="top"
+        >
           <div className="space-y-1.5">
-            <div className="font-semibold text-emerald-500">System Operations Agent (The Captain)</div>
-            <div className="text-default-500">Monitors CPU, Memory, and Load Average thresholds.</div>
+            <div className="font-semibold text-emerald-500">
+              System Operations Agent (The Captain)
+            </div>
+            <div className="text-default-500">
+              Monitors CPU, Memory, and Load Average thresholds.
+            </div>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-1 border-t border-default-100">
               <span className="text-default-400">Memory Usage:</span>
-              <span className="text-foreground font-medium">{captain?.metrics?.memoryUsage || "N/A"}</span>
+              <span className="text-foreground font-medium">
+                {captain?.metrics?.memoryUsage || "N/A"}
+              </span>
               <span className="text-default-400">Load Average:</span>
-              <span className="text-foreground font-mono">{captain?.metrics?.loadAverage || "N/A"}</span>
+              <span className="text-foreground font-mono">
+                {captain?.metrics?.loadAverage || "N/A"}
+              </span>
               <span className="text-default-400">Status:</span>
               <span className="text-foreground">{systemStatus}</span>
             </div>
@@ -1462,39 +1525,49 @@ function DaemonStatusViewer() {
         <TooltipTrigger asChild>
           <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-500/30 dark:hover:border-blue-500/30">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
             </span>
-            <Icon icon="simple-icons:python" className="size-3.5 text-blue-500" />
+            <Icon
+              className="size-3.5 text-blue-500"
+              icon="simple-icons:python"
+            />
             <span className="text-foreground/80">Python Daemons:</span>
             <span className="text-[11px] text-blue-500 dark:text-blue-400 font-semibold">
               5 Active
             </span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side="top" className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs">
+        <TooltipContent
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          side="top"
+        >
           <div className="space-y-1.5">
-            <div className="font-semibold text-blue-500">Active Python Daemons</div>
-            <div className="text-default-500">Hyper-specialized autonomous background loops.</div>
+            <div className="font-semibold text-blue-500">
+              Active Python Daemons
+            </div>
+            <div className="text-default-500">
+              Hyper-specialized autonomous background loops.
+            </div>
             <div className="space-y-1 pt-1 border-t border-default-100 text-foreground font-medium">
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 <span>self_improver.py (PID 56836)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 <span>swarm_orchestrator_daemon.py (PID 39002)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 <span>continuous_agent_builder.py (PID 57337)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 <span>pos_sync_daemon.py (PID 38959)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                 <span>telephony_monitor.py (PID 62224)</span>
               </div>
             </div>
@@ -1508,28 +1581,55 @@ function DaemonStatusViewer() {
           <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-500/30 dark:hover:border-indigo-500/30">
             <span className="relative flex h-2 w-2">
               {!gitDirty && (
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
               )}
-              <span className={cn("relative inline-flex rounded-full h-2 w-2", gitDirty ? "bg-warning-500" : "bg-indigo-500")}></span>
+              <span
+                className={cn(
+                  "relative inline-flex rounded-full h-2 w-2",
+                  gitDirty ? "bg-warning-500" : "bg-indigo-500",
+                )}
+              />
             </span>
-            <Icon icon="lucide:git-branch" className="size-3.5 text-indigo-500" />
+            <Icon
+              className="size-3.5 text-indigo-500"
+              icon="lucide:git-branch"
+            />
             <span className="text-foreground/80">Git Matrix:</span>
-            <span className={cn("text-[11px] font-semibold", gitDirty ? "text-warning-500" : "text-indigo-500 dark:text-indigo-400")}>
+            <span
+              className={cn(
+                "text-[11px] font-semibold",
+                gitDirty
+                  ? "text-warning-500"
+                  : "text-indigo-500 dark:text-indigo-400",
+              )}
+            >
               {gitBranch}
             </span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side="top" className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs">
+        <TooltipContent
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          side="top"
+        >
           <div className="space-y-1.5">
-            <div className="font-semibold text-indigo-500">Sovereign Git Matrix</div>
-            <div className="text-default-500">Deployment and code synchronization engine.</div>
+            <div className="font-semibold text-indigo-500">
+              Sovereign Git Matrix
+            </div>
+            <div className="text-default-500">
+              Deployment and code synchronization engine.
+            </div>
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 pt-1 border-t border-default-100">
               <span className="text-default-400">Branch:</span>
               <span className="text-foreground font-mono">{gitBranch}</span>
               <span className="text-default-400">Sync Status:</span>
-              <span className="text-foreground font-medium">{gitDirty ? "Dirty (Pending)" : "Clean"}</span>
+              <span className="text-foreground font-medium">
+                {gitDirty ? "Dirty (Pending)" : "Clean"}
+              </span>
               <span className="text-default-400">Latest Commit:</span>
-              <span className="text-foreground truncate max-w-[120px]" title={telemetry?.gitSyncStatus?.latestCommit || "N/A"}>
+              <span
+                className="text-foreground truncate max-w-[120px]"
+                title={telemetry?.gitSyncStatus?.latestCommit || "N/A"}
+              >
                 {telemetry?.gitSyncStatus?.latestCommit || "N/A"}
               </span>
             </div>

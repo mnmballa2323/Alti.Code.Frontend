@@ -78,7 +78,6 @@ export default function Home() {
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
                 Build The Future
-
               </h1>
             </div>
 

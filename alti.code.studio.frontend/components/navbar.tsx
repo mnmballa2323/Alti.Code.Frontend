@@ -1,5 +1,20 @@
 "use client";
-import { Home, Laptop, Cloud, Network, Lock, Puzzle, Database, Sliders, Cpu, ShieldCheck, Grid, Server, CreditCard, Mail } from "lucide-react";
+import {
+  Home,
+  Laptop,
+  Cloud,
+  Network,
+  Lock,
+  Puzzle,
+  Database,
+  Sliders,
+  Cpu,
+  ShieldCheck,
+  Grid,
+  Server,
+  CreditCard,
+  Mail,
+} from "lucide-react";
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -38,14 +53,19 @@ function Navbar() {
     } else if (pathname === "/") {
       if (typeof window !== "undefined") {
         const targetStr = sessionStorage.getItem("scrollTargetSection");
+
         if (targetStr) {
           const index = parseInt(targetStr, 10);
+
           sessionStorage.removeItem("scrollTargetSection");
           if (!isNaN(index)) {
             setTimeout(() => {
               const el = document.getElementById(`section-${index}`);
+
               if (el) {
-                const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+                const offsetTop =
+                  el.getBoundingClientRect().top + window.pageYOffset - 80;
+
                 window.scrollTo({
                   top: offsetTop,
                   behavior: "smooth",
@@ -53,6 +73,7 @@ function Navbar() {
                 setActiveSection(index);
               }
             }, 200);
+
             return;
           }
         }
@@ -64,9 +85,11 @@ function Navbar() {
 
         for (let i = 0; i <= 12; i++) {
           const el = document.getElementById(`section-${i}`);
+
           if (el) {
             const top = el.offsetTop;
             const height = el.offsetHeight;
+
             if (scrollPosition >= top && scrollPosition < top + height) {
               setActiveSection(i);
               found = true;
@@ -78,6 +101,7 @@ function Navbar() {
           setActiveSection(0);
         }
       };
+
       // Wait for mount/render to sync
       setTimeout(handleInitialSync, 100);
     } else {
@@ -99,20 +123,23 @@ function Navbar() {
     { name: "Capabilities Bento Grid", icon: Grid },
     { name: "Enterprise Infrastructure", icon: Server },
     { name: "Pricing", icon: CreditCard },
-    { name: "Contact Us", icon: Mail }
+    { name: "Contact Us", icon: Mail },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
-      if (typeof window === "undefined" || window.location.pathname !== "/") return;
+      if (typeof window === "undefined" || window.location.pathname !== "/")
+        return;
 
       const scrollPosition = window.scrollY + 120;
 
       for (let i = 0; i <= 12; i++) {
         const el = document.getElementById(`section-${i}`);
+
         if (el) {
           const top = el.offsetTop;
           const height = el.offsetHeight;
+
           if (scrollPosition >= top && scrollPosition < top + height) {
             setActiveSection(i);
             break;
@@ -122,19 +149,25 @@ function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     const hash = window.location.hash;
+
     if (hash && hash.startsWith("#section-")) {
       const index = parseInt(hash.replace("#section-", ""), 10);
+
       if (!isNaN(index)) {
         setTimeout(() => {
           const el = document.getElementById(`section-${index}`);
+
           if (el) {
-            const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+            const offsetTop =
+              el.getBoundingClientRect().top + window.pageYOffset - 80;
+
             window.scrollTo({
               top: offsetTop,
               behavior: "smooth",
@@ -149,20 +182,25 @@ function Navbar() {
   const handleSectionClick = (index: number) => {
     if (index === 13) {
       router.push("/contact");
+
       return;
     }
 
     if (typeof window !== "undefined" && window.location.pathname !== "/") {
       sessionStorage.setItem("scrollTargetSection", String(index));
       router.push("/");
+
       return;
     }
 
     setActiveSection(index);
 
     const el = document.getElementById(`section-${index}`);
+
     if (el) {
-      const offsetTop = el.getBoundingClientRect().top + window.pageYOffset - 80;
+      const offsetTop =
+        el.getBoundingClientRect().top + window.pageYOffset - 80;
+
       window.scrollTo({
         top: offsetTop,
         behavior: "smooth",
@@ -322,18 +360,19 @@ function Navbar() {
                 {sections.map((sec, index) => {
                   const IconComponent = sec.icon;
                   const isActive = activeSection === index;
+
                   return (
                     <button
                       key={index}
-                      onClick={() => handleSectionClick(index)}
                       className={`relative group p-2.5 rounded-full transition-all duration-300 ${
                         isActive
                           ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
                           : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
                       }`}
+                      onClick={() => handleSectionClick(index)}
                     >
                       <IconComponent className="w-[20px] h-[20px]" />
-                      
+
                       {/* Tooltip */}
                       <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
                         {sec.name}

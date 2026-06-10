@@ -27,9 +27,12 @@ export default function KnowledgePage() {
     if (!newKnowledge.trim()) return;
 
     const newFile: KnowledgeFile = {
-      name: newKnowledge.trim().endsWith(".png") || newKnowledge.trim().endsWith(".txt") || newKnowledge.trim().endsWith(".pdf")
-        ? newKnowledge.trim()
-        : `${newKnowledge.trim()}.txt`,
+      name:
+        newKnowledge.trim().endsWith(".png") ||
+        newKnowledge.trim().endsWith(".txt") ||
+        newKnowledge.trim().endsWith(".pdf")
+          ? newKnowledge.trim()
+          : `${newKnowledge.trim()}.txt`,
       size: `${(Math.random() * 0.5 + 0.01).toFixed(2)} MB`,
       type: newKnowledge.trim().split(".").pop()?.toUpperCase() || "TXT",
     };
@@ -43,7 +46,7 @@ export default function KnowledgePage() {
   };
 
   const filteredFiles = files.filter((f) =>
-    f.name.toLowerCase().includes(searchQuery.toLowerCase())
+    f.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -51,8 +54,8 @@ export default function KnowledgePage() {
       {/* Back Button */}
       <div className="flex justify-end mb-8">
         <Link
-          href="/dashboard"
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl transition-all shadow-sm"
+          href="/dashboard"
         >
           <ArrowLeft className="w-4 h-4 text-neutral-500" />
           Back to Dashboard
@@ -61,17 +64,17 @@ export default function KnowledgePage() {
 
       <div className="space-y-6">
         {/* Upload Row */}
-        <form onSubmit={handleUpload} className="flex gap-3 items-center">
+        <form className="flex gap-3 items-center" onSubmit={handleUpload}>
           <input
-            type="text"
+            className="flex-1 h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="Enter new knowledge"
+            type="text"
             value={newKnowledge}
             onChange={(e) => setNewKnowledge(e.target.value)}
-            className="flex-1 h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
           <button
-            type="submit"
             className="h-11 px-5 bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-white text-white dark:text-neutral-900 font-semibold rounded-xl text-sm transition-all flex items-center gap-2 shrink-0 shadow-sm"
+            type="submit"
           >
             <Upload className="w-4 h-4" />
             Upload
@@ -84,11 +87,11 @@ export default function KnowledgePage() {
             <Search className="w-4 h-4" />
           </span>
           <input
-            type="text"
+            className="w-full h-11 bg-white dark:bg-[#161b22] pl-11 pr-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="Search knowledge"
+            type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full h-11 bg-white dark:bg-[#161b22] pl-11 pr-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
         </div>
 
@@ -116,8 +119,8 @@ export default function KnowledgePage() {
                 </div>
 
                 <button
-                  onClick={() => handleDelete(file.name)}
                   className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                  onClick={() => handleDelete(file.name)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

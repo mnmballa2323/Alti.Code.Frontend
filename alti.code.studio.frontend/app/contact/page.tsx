@@ -51,7 +51,8 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-2xl font-bold">Message sent!</h3>
                 <p className="text-sm text-gray-500 dark:text-neutral-400 max-w-xs leading-relaxed">
-                  Thank you for reaching out. A swarm specialist will get back to you shortly.
+                  Thank you for reaching out. A swarm specialist will get back
+                  to you shortly.
                 </p>
                 <Button
                   className="rounded-full bg-black dark:bg-white text-white dark:text-black font-semibold mt-4 px-6"
@@ -64,9 +65,9 @@ export default function ContactPage() {
               <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2">
                   <input
+                    aria-label="Enter Full Name"
                     className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="name"
-                    aria-label="Enter Full Name"
                     placeholder="Enter Full Name"
                     type="text"
                     value={name}
@@ -77,9 +78,9 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-2">
                   <input
                     required
+                    aria-label="Enter Email Address"
                     className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all text-black dark:text-white"
                     id="email"
-                    aria-label="Enter Email Address"
                     placeholder="Enter Email Address"
                     type="email"
                     value={email}
@@ -90,9 +91,9 @@ export default function ContactPage() {
                 <div className="flex flex-col gap-2">
                   <textarea
                     required
+                    aria-label="Enter Your Message"
                     className="w-full bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition-all resize-none text-black dark:text-white"
                     id="message"
-                    aria-label="Enter Your Message"
                     placeholder="Enter Your Message"
                     rows={8}
                     value={message}

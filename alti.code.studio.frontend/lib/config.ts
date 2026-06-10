@@ -14,7 +14,10 @@ export const BASE_URL = SOCKET_URL;
 
 // Installer Download Links (Tauri builds)
 export const DOWNLOAD_LINKS = {
-  windows: process.env.NEXT_PUBLIC_DOWNLOAD_WINDOWS ?? "/downloads/Inso-Code_1.0.0_x64-setup.exe",
-  mac: process.env.NEXT_PUBLIC_DOWNLOAD_MAC ?? "/downloads/Inso-Code_1.0.0_x64.dmg",
+  windows:
+    process.env.NEXT_PUBLIC_DOWNLOAD_WINDOWS ??
+    "/downloads/Inso-Code_1.0.0_x64-setup.exe",
+  mac:
+    process.env.NEXT_PUBLIC_DOWNLOAD_MAC ??
+    "/downloads/Inso-Code_1.0.0_x64.dmg",
 };
-

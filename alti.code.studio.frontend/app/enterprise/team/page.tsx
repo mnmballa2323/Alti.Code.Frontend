@@ -26,7 +26,6 @@ import {
   Save,
   CreditCard,
   TrendingUp,
-  ShieldAlert,
 } from "lucide-react";
 
 import { teamAPI } from "@/lib/enterprise-api";
@@ -46,6 +45,7 @@ export default function TeamPage() {
     try {
       const token = localStorage.getItem("token") || "";
       const profileResult = await getUserData(token);
+
       if (profileResult?.success && profileResult?.data) {
         setCurrentUser(profileResult.data);
         if (profileResult.data.tenant) {
@@ -54,6 +54,7 @@ export default function TeamPage() {
       }
 
       const res = await teamAPI.members();
+
       if (res && res.members) {
         setMembers(res.members);
       }
@@ -108,7 +109,9 @@ export default function TeamPage() {
     return (
       <div className="flex h-96 items-center justify-center">
         <Spinner color="secondary" size="lg" />
-        <span className="ml-3 text-default-400">Loading Workspace Settings...</span>
+        <span className="ml-3 text-default-400">
+          Loading Workspace Settings...
+        </span>
       </div>
     );
   }
@@ -124,7 +127,8 @@ export default function TeamPage() {
       <div>
         <h2 className="text-2xl font-bold text-white">Workspace Settings</h2>
         <p className="text-sm text-default-400">
-          Manage your multi-tenant workspace team, invitations, and dynamic seat billing
+          Manage your multi-tenant workspace team, invitations, and dynamic seat
+          billing
         </p>
       </div>
 
@@ -136,22 +140,24 @@ export default function TeamPage() {
             <CardHeader className="px-6 py-4 border-b border-white/10">
               <div className="flex items-center gap-2">
                 <Building className="w-5 h-5 text-indigo-400" />
-                <h3 className="text-lg font-bold text-white">Workspace Identity</h3>
+                <h3 className="text-lg font-bold text-white">
+                  Workspace Identity
+                </h3>
               </div>
             </CardHeader>
             <CardBody className="space-y-4 px-6 py-5">
               <div className="flex gap-3 items-end">
                 <div className="flex-1">
                   <Input
-                    label="Workspace Name"
-                    placeholder="Enter team workspace name"
-                    value={teamName}
-                    variant="bordered"
-                    labelPlacement="outside"
                     classNames={{
                       label: "text-white/80 font-medium pb-1.5",
                       input: "text-white",
                     }}
+                    label="Workspace Name"
+                    labelPlacement="outside"
+                    placeholder="Enter team workspace name"
+                    value={teamName}
+                    variant="bordered"
                     onValueChange={setTeamName}
                   />
                 </div>
@@ -188,13 +194,21 @@ export default function TeamPage() {
                     <TableRow key={member.id}>
                       <TableCell>
                         <div className="flex flex-col">
-                          <span className="font-semibold text-white">{member.email}</span>
-                          <span className="text-xs text-default-400">ID: {member.id}</span>
+                          <span className="font-semibold text-white">
+                            {member.email}
+                          </span>
+                          <span className="text-xs text-default-400">
+                            ID: {member.id}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell>
                         <Chip
-                          color={member.tenantRole === "owner" ? "secondary" : "primary"}
+                          color={
+                            member.tenantRole === "owner"
+                              ? "secondary"
+                              : "primary"
+                          }
                           size="sm"
                           variant="flat"
                         >
@@ -209,8 +223,8 @@ export default function TeamPage() {
                       <TableCell>
                         {member.tenantRole !== "owner" && (
                           <Button
-                            color="danger"
                             isIconOnly
+                            color="danger"
                             size="sm"
                             variant="light"
                             onPress={() => handleRemoveMember(member.id)}
@@ -239,31 +253,40 @@ export default function TeamPage() {
             </CardHeader>
             <CardBody className="space-y-4 px-6 py-5">
               <Input
-                label="Email Address"
-                placeholder="colleague@example.com"
-                value={inviteEmail}
-                variant="bordered"
-                labelPlacement="outside"
                 classNames={{
                   label: "text-white/80 font-medium pb-1.5",
                   input: "text-white",
                 }}
+                label="Email Address"
+                labelPlacement="outside"
+                placeholder="colleague@example.com"
+                value={inviteEmail}
+                variant="bordered"
                 onValueChange={setInviteEmail}
               />
               <Select
-                label="Workspace Role"
-                selectedKeys={[inviteRole]}
-                variant="bordered"
-                labelPlacement="outside"
                 classNames={{
                   label: "text-white/80 font-medium pb-1.5",
                   value: "text-white",
                 }}
+                label="Workspace Role"
+                labelPlacement="outside"
+                selectedKeys={[inviteRole]}
+                variant="bordered"
                 onChange={(e) => setInviteRole(e.target.value)}
               >
-                <SelectItem key="admin" className="text-black dark:text-white">Admin</SelectItem>
-                <SelectItem key="developer" className="text-black dark:text-white">Developer</SelectItem>
-                <SelectItem key="viewer" className="text-black dark:text-white">Viewer</SelectItem>
+                <SelectItem key="admin" className="text-black dark:text-white">
+                  Admin
+                </SelectItem>
+                <SelectItem
+                  key="developer"
+                  className="text-black dark:text-white"
+                >
+                  Developer
+                </SelectItem>
+                <SelectItem key="viewer" className="text-black dark:text-white">
+                  Viewer
+                </SelectItem>
               </Select>
               <Button
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-lg shadow-emerald-500/20"
@@ -282,7 +305,9 @@ export default function TeamPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-5 h-5 text-indigo-400" />
-                  <span className="font-bold text-white">Dynamic Seat Billing</span>
+                  <span className="font-bold text-white">
+                    Dynamic Seat Billing
+                  </span>
                 </div>
                 <Chip color="secondary" variant="flat">
                   {currentUser?.subscriptionPlan || "Launch"} Plan
@@ -309,8 +334,9 @@ export default function TeamPage() {
               <div className="flex gap-2 items-start text-xs text-default-400">
                 <TrendingUp className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <p>
-                  Like Vercel, workspace members are put directly on the owner's billing. 
-                  Adding or removing active developer seats takes effect immediately.
+                  Like Vercel, workspace members are put directly on the owner's
+                  billing. Adding or removing active developer seats takes
+                  effect immediately.
                 </p>
               </div>
             </CardBody>

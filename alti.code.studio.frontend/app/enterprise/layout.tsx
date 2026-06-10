@@ -55,7 +55,10 @@ export default function EnterpriseLayout({
           {/* Tab Navigation */}
           <nav className="flex gap-1 overflow-x-auto scrollbar-hide -mb-px">
             {tabs.map((tab) => {
-              const isActive = tab.href === "/admin" ? pathname.startsWith("/admin") : pathname === tab.href;
+              const isActive =
+                tab.href === "/admin"
+                  ? pathname.startsWith("/admin")
+                  : pathname === tab.href;
 
               return (
                 <Link

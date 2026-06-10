@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Trash2, Loader2 } from "lucide-react";
+
 import { teamAPI } from "@/lib/enterprise-api";
 import { getUserData } from "@/lib/user";
 
@@ -20,14 +21,17 @@ export default function TeamMembersPage() {
   const fetchMembers = async () => {
     try {
       const token = localStorage.getItem("token") || "";
+
       if (token) {
         const userRes = await getUserData(token);
+
         if (userRes?.success && userRes?.data) {
           setCurrentUser(userRes.data);
         }
       }
 
       const res = await teamAPI.members();
+
       if (res && res.members) {
         setMembers(res.members);
       }
@@ -45,9 +49,13 @@ export default function TeamMembersPage() {
   const handleRemove = async (id: string, email: string) => {
     if (id === currentUser?.id) {
       alert("You cannot remove yourself from the workspace.");
+
       return;
     }
-    if (!confirm(`Are you sure you want to remove ${email} from the workspace?`)) return;
+    if (
+      !confirm(`Are you sure you want to remove ${email} from the workspace?`)
+    )
+      return;
 
     try {
       await teamAPI.removeMember(id);
@@ -62,16 +70,25 @@ export default function TeamMembersPage() {
   const formatRole = (role: string) => {
     if (!role) return "Developer";
     const r = role.toLowerCase();
+
     if (r === "admin" || r === "owner") return "Owner";
+
     return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
   };
 
   // Merge current user into members list if not already returned by the API
   const displayedMembers = [...members];
-  if (currentUser && !displayedMembers.some((m) => m.email === currentUser.email)) {
+
+  if (
+    currentUser &&
+    !displayedMembers.some((m) => m.email === currentUser.email)
+  ) {
     displayedMembers.push({
       id: currentUser.id || "current-user",
-      name: currentUser.name || `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() || undefined,
+      name:
+        currentUser.name ||
+        `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
+        undefined,
       email: currentUser.email,
       role: currentUser.role || "owner",
     });
@@ -82,7 +99,9 @@ export default function TeamMembersPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">Loading workspace members...</p>
+          <p className="text-sm text-neutral-500">
+            Loading workspace members...
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -100,10 +119,16 @@ export default function TeamMembersPage() {
               <div className="space-y-3">
                 {displayedMembers.map((member) => {
                   const isYou = member.email === currentUser?.email;
-                  
+
                   // Try to split name into first and last, or extract from email if not set
-                  const nameParts = member.name ? member.name.trim().split(/\s+/) : [];
-                  const firstName = nameParts[0] ? (member.name ? nameParts[0] : "") : "";
+                  const nameParts = member.name
+                    ? member.name.trim().split(/\s+/)
+                    : [];
+                  const firstName = nameParts[0]
+                    ? member.name
+                      ? nameParts[0]
+                      : ""
+                    : "";
                   const lastName = nameParts.slice(1).join(" ") || "";
 
                   return (
@@ -133,8 +158,10 @@ export default function TeamMembersPage() {
                         </span>
                         {!isYou && (
                           <button
-                            onClick={() => handleRemove(member.id, member.email)}
                             className="p-1 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded transition-colors ml-auto"
+                            onClick={() =>
+                              handleRemove(member.id, member.email)
+                            }
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

@@ -166,7 +166,7 @@ export default function AgentForgeSection() {
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-bold transition-all duration-300 ${
                           step.status === "success"
-                             ? "bg-emerald-500 border-emerald-500 text-white"
+                            ? "bg-emerald-500 border-emerald-500 text-white"
                             : step.status === "running"
                               ? "bg-white border-white text-black animate-pulse"
                               : "bg-zinc-900 border-zinc-800 text-zinc-500"

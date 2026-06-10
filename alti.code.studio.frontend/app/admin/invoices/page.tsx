@@ -29,8 +29,8 @@ export default function InvoicesPage() {
           Invoices
         </h1>
         <Link
-          href="/dashboard"
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800 border border-neutral-200 dark:border-neutral-800 rounded-xl transition-all shadow-sm"
+          href="/dashboard"
         >
           <ArrowLeft className="w-4 h-4 text-neutral-500" />
           Back to Dashboard
@@ -78,8 +78,8 @@ export default function InvoicesPage() {
             </div>
 
             <button
-              onClick={() => handleDownload(inv.id)}
               className="p-2.5 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-805/40 transition-colors flex items-center gap-2 border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22]"
+              onClick={() => handleDownload(inv.id)}
             >
               <Download className="w-4 h-4" />
               <span className="text-xs font-semibold px-0.5">PDF</span>

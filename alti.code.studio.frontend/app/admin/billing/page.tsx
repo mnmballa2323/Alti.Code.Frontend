@@ -12,8 +12,14 @@ export default function BillingPage() {
 
   const handleSaveCard = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!cardholderName.trim() || !cardNumber.trim() || !expiry.trim() || !cvc.trim()) {
+    if (
+      !cardholderName.trim() ||
+      !cardNumber.trim() ||
+      !expiry.trim() ||
+      !cvc.trim()
+    ) {
       alert("All card details are required.");
+
       return;
     }
     setLoading(true);
@@ -26,45 +32,45 @@ export default function BillingPage() {
 
   return (
     <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
-      <form onSubmit={handleSaveCard} className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSaveCard}>
         {/* 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
-            type="text"
+            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="Cardholder Name"
+            type="text"
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
-            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
           <input
-            type="text"
+            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="Card Number"
+            type="text"
             value={cardNumber}
             onChange={(e) => setCardNumber(e.target.value)}
-            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
           <input
-            type="text"
+            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="Expiry Date (MM/YY)"
+            type="text"
             value={expiry}
             onChange={(e) => setExpiry(e.target.value)}
-            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
           <input
-            type="text"
+            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
             placeholder="CVC"
+            type="text"
             value={cvc}
             onChange={(e) => setCvc(e.target.value)}
-            className="w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all"
           />
         </div>
 
         {/* Footer: Action Button */}
         <div className="flex flex-col md:flex-row md:items-center justify-end gap-4 pt-4">
           <button
-            type="submit"
-            disabled={loading}
             className="h-10 px-6 bg-neutral-800 dark:bg-neutral-200 hover:bg-neutral-900 dark:hover:bg-white text-white dark:text-neutral-950 font-semibold rounded-xl text-sm transition-all shadow-md shadow-neutral-800/10 flex items-center justify-center gap-2 self-end md:self-auto"
+            disabled={loading}
+            type="submit"
           >
             {loading ? (
               <>

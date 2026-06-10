@@ -12,6 +12,7 @@ import {
   Shield,
   Activity,
 } from "lucide-react";
+
 import { getUserData } from "@/lib/user";
 
 interface SidebarItem {
@@ -38,7 +39,11 @@ const systemItems: SidebarItem[] = [
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const pathname = usePathname() || "";
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -46,9 +51,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     (async () => {
       try {
         const token = localStorage.getItem("token");
+
         if (token) {
           const res = await getUserData(token);
-          if (res?.success && (res?.data?.role === "admin" || res?.data?.role === "ADMIN")) {
+
+          if (
+            res?.success &&
+            (res?.data?.role === "admin" || res?.data?.role === "ADMIN")
+          ) {
             setIsAdmin(true);
           }
         }
@@ -71,14 +81,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             return (
               <a
                 key={item.label}
-                href={item.href}
                 className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all cursor-pointer ${
                   isActive
                     ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold"
                     : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
                 }`}
+                href={item.href}
               >
-                <item.icon className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`} />
+                <item.icon
+                  className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`}
+                />
                 {item.label}
               </a>
             );
@@ -87,8 +99,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
     );
   };
-
-
 
   const getActiveGroup = () => {
     if (
@@ -110,6 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (pathname.startsWith("/admin/audit")) {
       return "System Operations";
     }
+
     return "Platform Admin";
   };
 
@@ -123,6 +134,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
     if (pathname.startsWith("/admin/projects")) return "Projects";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
+
     return "Platform Admin";
   };
 
@@ -133,14 +145,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Left header: aligns with sidebar width */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
           <img
-            src="/logo-black.png"
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain block dark:hidden animate-fade-in"
+            src="/logo-black.png"
           />
           <img
-            src="/logo-white.png"
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain hidden dark:block animate-fade-in"
+            src="/logo-white.png"
           />
         </div>
 

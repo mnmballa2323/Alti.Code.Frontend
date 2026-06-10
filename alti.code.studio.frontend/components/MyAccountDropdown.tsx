@@ -25,8 +25,10 @@ const MyAccountDropdown = () => {
     (async () => {
       try {
         const token = localStorage.getItem("token");
+
         if (token) {
           const res = await getUserData(token);
+
           if (res?.success && res?.data) {
             setProfile(res.data);
           }
