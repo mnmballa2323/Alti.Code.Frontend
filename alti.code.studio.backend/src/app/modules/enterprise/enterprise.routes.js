@@ -1110,7 +1110,7 @@ router.get('/team/members', rbac(), async (req, res, next) => {
         });
         res.json({ members });
     } catch (err) {
-        console.warn('⚠️ [Postgres Offline] Falling back to mock users database for /team/members');
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for /team/members');
         try {
             const mockFilePath = path.join(process.cwd(), 'users_mock.json');
             if (fs.existsSync(mockFilePath)) {
@@ -1119,7 +1119,7 @@ router.get('/team/members', rbac(), async (req, res, next) => {
                 return res.json({ members });
             }
         } catch (e) {
-            console.error('Error reading mock users:', e);
+            logger.error('Error reading mock users:', e);
         }
         next(err);
     }
@@ -1154,7 +1154,7 @@ router.post('/team/members', rbac(), async (req, res, next) => {
         }
         res.status(201).json(user);
     } catch (err) {
-        console.warn('⚠️ [Postgres Offline] Falling back to mock users database for POST /team/members');
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for POST /team/members');
         try {
             const mockFilePath = path.join(process.cwd(), 'users_mock.json');
             if (fs.existsSync(mockFilePath)) {
@@ -1183,7 +1183,7 @@ router.post('/team/members', rbac(), async (req, res, next) => {
                 return res.status(201).json(user);
             }
         } catch (e) {
-            console.error('Error modifying mock users:', e);
+            logger.error('Error modifying mock users:', e);
         }
         next(err);
     }
@@ -1206,7 +1206,7 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
         await prisma.user.delete({ where: { id: userId } });
         res.json({ success: true, message: 'Member removed from team' });
     } catch (err) {
-        console.warn('⚠️ [Postgres Offline] Falling back to mock users database for DELETE /team/members/:userId');
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for DELETE /team/members/:userId');
         try {
             const mockFilePath = path.join(process.cwd(), 'users_mock.json');
             if (fs.existsSync(mockFilePath)) {
@@ -1224,7 +1224,7 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
                 return res.json({ success: true, message: 'Member removed from team' });
             }
         } catch (e) {
-            console.error('Error deleting mock user:', e);
+            logger.error('Error deleting mock user:', e);
         }
         next(err);
     }
@@ -1241,7 +1241,7 @@ router.put('/team/name', rbac(), async (req, res, next) => {
         });
         res.json({ success: true, tenant });
     } catch (err) {
-        console.warn('⚠️ [Postgres Offline] Falling back to mock response for PUT /team/name');
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock response for PUT /team/name');
         res.json({ success: true, tenant: { id: req.tenantId, name: req.body.name } });
     }
 });
