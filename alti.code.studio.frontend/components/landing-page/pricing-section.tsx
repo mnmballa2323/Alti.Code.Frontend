@@ -5,7 +5,7 @@ import React from "react";
 const plans = [
   {
     name: "Individual",
-    price: "250",
+    price: "1,000",
     description:
       "For developers who want zero configuration, production grade agentic swarm power.",
     cta: "Start Free Trial",
@@ -14,7 +14,7 @@ const plans = [
   },
   {
     name: "Team",
-    price: "300",
+    price: "1,500",
     description:
       "For engineering teams collaborating on complex swarms and shared workflows.",
     cta: "Upgrade Team",
@@ -23,7 +23,7 @@ const plans = [
   },
   {
     name: "Enterprise",
-    price: "500",
+    price: "2,500",
     description:
       "For enterprises requiring complete data sovereignty and custom cloud environments.",
     cta: "Contact Enterprise",
