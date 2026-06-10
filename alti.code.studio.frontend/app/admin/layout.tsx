@@ -9,9 +9,9 @@ import {
   CreditCard,
   FileText,
   BookOpen,
-  Compass,
-  Shield,
   FolderOpen,
+  Shield,
+  Activity,
 } from "lucide-react";
 import { getUserData } from "@/lib/user";
 
@@ -35,6 +35,10 @@ const managerItems: SidebarItem[] = [
   { label: "Projects", href: "/admin/projects", icon: FolderOpen },
 ];
 
+const systemItems: SidebarItem[] = [
+  { label: "Audit Logs", href: "/admin/audit", icon: Activity },
+];
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "";
   const [isAdmin, setIsAdmin] = useState(false);
@@ -55,14 +59,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     })();
   }, []);
 
-  const isManagerMode = 
-    pathname.startsWith("/admin/data") ||
-    pathname.startsWith("/admin/instructions") ||
-    pathname.startsWith("/admin/guardrails") ||
-    pathname.startsWith("/admin/projects") ||
-    pathname.startsWith("/admin/platform-manager");
-  const sidebarTitle = isManagerMode ? "Platform Manager" : "Platform Admin";
-  const currentItems = isManagerMode ? managerItems : adminItems;
+  const renderNavGroup = (title: string, items: SidebarItem[]) => {
+    return (
+      <div className="mb-6">
+        <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+          {title}
+        </h3>
+        <nav className="flex flex-col gap-1">
+          {items.map((item) => {
+            const isActive = pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all ${
+                  isActive
+                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold"
+                    : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
+                }`}
+              >
+                <item.icon className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+    );
+  };
 
   return (
     <div className="flex h-screen w-full bg-[#FFFFFF] dark:bg-[#0d1117] text-neutral-800 dark:text-neutral-200 font-sans overflow-hidden">
@@ -85,33 +110,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <path d="M50 50 L15 30" />
           </svg>
           <span className="font-semibold text-neutral-900 dark:text-white text-[15px]">
-            {sidebarTitle}
+            Platform Console
           </span>
         </div>
 
-        <nav className="flex-1 flex flex-col gap-1">
-          {currentItems.map((item) => {
-            // Match href exactly or matches path prefix for active highlighting
-            const isActive = isManagerMode 
-              ? pathname.startsWith(item.href.split("?")[0]) 
-              : pathname === item.href || (pathname === "/admin/platform-admin" && item.href === "/admin/members");
-
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all ${
-                  isActive
-                    ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold"
-                    : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
-                }`}
-              >
-                <item.icon className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="flex-1 overflow-y-auto pr-1 -mr-2">
+          {renderNavGroup("Platform Admin", adminItems)}
+          {renderNavGroup("Platform Manager", managerItems)}
+          {renderNavGroup("System Operations", systemItems)}
+        </div>
       </div>
 
       {/* Main Content Pane */}
