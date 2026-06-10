@@ -287,6 +287,10 @@ export class DockerWorkspaceManager {
                     if (mod === 'fs') return fsMock;
                     throw new Error("Module not found: " + mod);
                 },
+                _hostImport: async (mod) => {
+                    if (mod === 'fs') return fsMock;
+                    throw new Error("Module not found: " + mod);
+                },
                 process: {
                     env: {},
                     cwd: () => '/workspace',
@@ -299,8 +303,13 @@ export class DockerWorkspaceManager {
             sandbox.global = sandbox;
 
             const timeoutMs = options.timeoutMs || options.timeout || 5000;
-            const script = new vm.Script(code);
+            const processedCode = code.replace(/import\(/g, '_hostImport(').replace(/run\(\);/g, 'global._execPromise = run();');
+            const script = new vm.Script(processedCode);
             script.runInNewContext(sandbox, { timeout: timeoutMs });
+
+            if (sandbox._execPromise) {
+                await sandbox._execPromise;
+            }
         } catch (e) {
             success = false;
             errors.push(e.message);
