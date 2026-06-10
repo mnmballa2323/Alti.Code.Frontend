@@ -1,12 +1,12 @@
 {$CUSTOMER_DOMAIN} {
     # Route Core API queries to the backend node
     handle /api/v1/* {
-        reverse_proxy alti-backend:3000
+        import /etc/caddy/active_backend.conf
     }
 
     # Route Socket.IO events to the backend
     handle /socket.io/* {
-        reverse_proxy alti-backend:3000
+        import /etc/caddy/active_backend.conf
     }
 
     # Route UI pages, auth, and other queries to the frontend

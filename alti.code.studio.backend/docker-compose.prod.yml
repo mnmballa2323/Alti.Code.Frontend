@@ -1,7 +1,31 @@
 version: '3.8'
 
 services:
-  alti-backend:
+  alti-backend-blue:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    user: "10001:10001"
+    cap_drop:
+      - ALL
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+    depends_on:
+      - redis
+      - jaeger
+    networks:
+      - alti-net
+
+  alti-backend-green:
     build: 
       context: .
       dockerfile: Dockerfile
@@ -78,7 +102,7 @@ services:
     restart: unless-stopped
     ports:
       - "5432:5432"
-    command: postgres -c shared_buffers=2GB -c work_mem=64MB -c effective_cache_size=6GB -c max_connections=250 -c autovacuum_max_workers=5 -c autovacuum_vacuum_scale_factor=0.05 -c autovacuum_analyze_scale_factor=0.02
+    command: postgres -c shared_buffers=2GB -c work_mem=64MB -c effective_cache_size=6GB -c max_connections=250 -c autovacuum_max_workers=5 -c autovacuum_vacuum_scale_factor=0.05 -c autovacuum_analyze_scale_factor=0.02 -c wal_level=replica -c archive_mode=on -c archive_command="test ! -f /var/backups/postgres/wals/%f && cp %p /var/backups/postgres/wals/%f"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -89,6 +113,7 @@ services:
           memory: 4096M
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - /var/backups/postgres/wals:/var/backups/postgres/wals
     networks:
       - alti-net
 
@@ -124,7 +149,8 @@ services:
         limits:
           memory: 2048M
     depends_on:
-      - alti-backend
+      - redis
+      - postgres
     networks:
       - alti-net
 
@@ -142,10 +168,10 @@ services:
       - CUSTOMER_DOMAIN=${CUSTOMER_DOMAIN}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./active_backend.conf:/etc/caddy/active_backend.conf
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - alti-backend
       - alti-frontend
     networks:
       - alti-net

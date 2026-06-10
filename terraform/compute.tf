@@ -229,6 +229,10 @@ resource "openstack_compute_instance_v2" "backend_instance" {
 
               # 7. Configure Nightly Postgres Backup Script & Cron Job
               mkdir -p /var/backups/postgres
+              mkdir -p /var/backups/postgres/wals
+              chown -R 999:999 /var/backups/postgres/wals
+              chmod -R 700 /var/backups/postgres/wals
+
               cat <<'BACKUP' > /usr/local/bin/backup_postgres.sh
               #!/bin/bash
               BACKUP_DIR="/var/backups/postgres"
@@ -247,15 +251,20 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               # 8. Configure Self-Healing API Health Monitor Script
               cat <<'HEALTHCHECK' > /usr/local/bin/alti_health_check.sh
               #!/bin/bash
-              URL="http://localhost:5000/api/v1/healthz"
+              URL="http://localhost/api/v1/healthz"
               LOGFILE="/var/log/alti_self_healing.log"
+              STACK_DIR="/opt/alti-code-studio"
               
               STATUS_CODE=$(curl -s -o /dev/null -w "%%{http_code}" --max-time 5 "$$URL")
               
               if [ "$$STATUS_CODE" != "200" ]; then
-                echo "$$(date '+%%Y-%%m-%%d %%H:%%M:%%S') - HEALTH CHECK FAILED (Status: $$STATUS_CODE). Restarting backend stack..." >> "$$LOGFILE"
-                cd /opt/alti-code-studio
-                docker-compose -f docker-compose.prod.yml restart alti-backend >> "$$LOGFILE" 2>&1
+                echo "$$(date '+%%Y-%%m-%%d %%H:%%M:%%S') - HEALTH CHECK FAILED (Status: $$STATUS_CODE). Repairing active backend container..." >> "$$LOGFILE"
+                cd "$$STACK_DIR"
+                ACTIVE="blue"
+                if [ -f "./active_backend.conf" ] && grep -q "alti-backend-green" "./active_backend.conf"; then
+                  ACTIVE="green"
+                fi
+                docker-compose -f docker-compose.prod.yml restart "alti-backend-$$ACTIVE" >> "$$LOGFILE" 2>&1
               else
                 echo "$$(date '+%%Y-%%m-%%d %%H:%%M:%%S') - Health OK (Status: 200)" >> "$$LOGFILE"
               fi
@@ -263,8 +272,63 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               chmod +x /usr/local/bin/alti_health_check.sh
               (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/alti_health_check.sh") | crontab -
 
-              # 9. Start the production backend stack using docker-compose
-              docker-compose -f docker-compose.prod.yml up -d --build
+              # 9. Configure Host Blue-Green Deployment Orchestration Script
+              cat <<'BLUEGREEN' > /usr/local/bin/deploy_blue_green.sh
+              #!/bin/bash
+              set -e
+              STACK_DIR="/opt/alti-code-studio"
+              cd "$$STACK_DIR"
+              
+              ACTIVE="blue"
+              if [ -f "./active_backend.conf" ] && grep -q "alti-backend-green" "./active_backend.conf"; then
+                ACTIVE="green"
+              fi
+              
+              if [ "$$ACTIVE" == "blue" ]; then
+                TARGET="green"
+                PORT=3002
+              else
+                TARGET="blue"
+                PORT=3000
+              fi
+              
+              echo "Active stack is $$ACTIVE. Preparing to deploy to target stack: $$TARGET..."
+              docker-compose -f docker-compose.prod.yml up -d --build "alti-backend-$$TARGET"
+              
+              echo "Polling http://localhost:$$PORT/api/v1/healthz until online..."
+              SUCCESS=0
+              for i in {1..30}; do
+                STATUS=$$(curl -s -o /dev/null -w "%%{http_code}" --max-time 2 "http://localhost:$$PORT/api/v1/healthz" || true)
+                if [ "$$STATUS" == "200" ]; then
+                  SUCCESS=1
+                  break
+                fi
+                sleep 2
+              done
+              
+              if [ "$$SUCCESS" -ne 1 ]; then
+                echo "ERROR: Target stack $$TARGET failed to respond. Aborting deployment."
+                exit 1
+              fi
+              
+              echo "Target stack $$TARGET is healthy! Switching Caddy traffic routing..."
+              echo "reverse_proxy alti-backend-$$TARGET:3000" > "./active_backend.conf"
+              docker-compose -f docker-compose.prod.yml exec -t caddy caddy reload --config /etc/caddy/Caddyfile
+              
+              echo "Caddy routed traffic to $$TARGET successfully. Stopping old stack: $$ACTIVE..."
+              docker-compose -f docker-compose.prod.yml stop "alti-backend-$$ACTIVE"
+              
+              echo "Blue-Green deployment complete. Now serving on $$TARGET."
+              BLUEGREEN
+              chmod +x /usr/local/bin/deploy_blue_green.sh
+
+              # 10. Start the production database, cache, proxy and frontend services
+              cd /opt/alti-code-studio
+              echo "reverse_proxy alti-backend-blue:3000" > ./active_backend.conf
+              docker-compose -f docker-compose.prod.yml up -d postgres redis prometheus grafana jaeger caddy alti-frontend
+              
+              # Execute the first blue-green deployment to build/run the backend service container
+              /usr/local/bin/deploy_blue_green.sh
               EOF
 }
 
