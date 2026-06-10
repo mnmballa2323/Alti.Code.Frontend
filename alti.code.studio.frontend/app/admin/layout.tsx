@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   UserPlus,
@@ -70,10 +69,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             const isActive = pathname.startsWith(item.href);
 
             return (
-              <Link
+              <a
                 key={item.label}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all ${
+                className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all cursor-pointer ${
                   isActive
                     ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold"
                     : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
@@ -81,7 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               >
                 <item.icon className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`} />
                 {item.label}
-              </Link>
+              </a>
             );
           })}
         </nav>
@@ -132,7 +131,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
-        <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto">
+        <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
           {renderNavGroup("Platform Manager", managerItems)}
           {renderNavGroup("System Operations", systemItems)}
