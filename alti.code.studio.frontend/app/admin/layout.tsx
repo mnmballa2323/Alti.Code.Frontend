@@ -29,10 +29,10 @@ const adminItems: SidebarItem[] = [
 ];
 
 const managerItems: SidebarItem[] = [
-  { label: "Knowledge", href: "/admin/data", icon: FolderOpen },
-  { label: "Instructions", href: "/admin/instructions", icon: BookOpen },
+  { label: "Knowledge", href: "/admin/data", icon: BookOpen },
+  { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
-  { label: "Projects", href: "/admin/projects", icon: Compass },
+  { label: "Projects", href: "/admin/projects", icon: FolderOpen },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
