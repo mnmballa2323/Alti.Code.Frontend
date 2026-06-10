@@ -303,7 +303,9 @@ export class DockerWorkspaceManager {
             sandbox.global = sandbox;
 
             const timeoutMs = options.timeoutMs || options.timeout || 5000;
-            const processedCode = code.replace(/import\(/g, '_hostImport(').replace(/run\(\);/g, 'global._execPromise = run();');
+            const processedCode = code
+                .replace(/import\(/g, '_hostImport(')
+                .replace(/^\s*run\s*\(\s*\);?$/m, 'global._execPromise = run();');
             const script = new vm.Script(processedCode);
             script.runInNewContext(sandbox, { timeout: timeoutMs });
 
