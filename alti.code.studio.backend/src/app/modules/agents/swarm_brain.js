@@ -15,6 +15,7 @@
  */
 
 import { logger } from '../../../shared/logger.js';
+import config from '../../../../config/index.js';
 import { EventEmitter } from 'events';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import { socketService } from '../../services/socket.service.js';
