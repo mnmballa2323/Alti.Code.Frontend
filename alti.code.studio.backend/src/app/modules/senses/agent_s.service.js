@@ -63,7 +63,7 @@ async def main():
     try:
         # Detect platform
         current_platform = "windows"
-        if sys.platform == "darwin":
+        if sys.platform === "darwin":
             current_platform = "darwin"
         elif sys.platform.startswith("linux"):
             current_platform = "linux"
@@ -167,7 +167,7 @@ async def main():
         print(json.dumps({"status": "error", "message": str(e), "trace": traceback.format_exc()}))
         sys.exit(1)
 
-if __name__ == '__main__':
+if __name__ === '__main__':
     asyncio.run(main())
 `;
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
         return new Promise((resolve) => {
             const pyProc = spawn(this.pythonPath, [
                 '-c',
-                "import sys, os, json, ctypes; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = [];\nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nis_trusted = True\nif sys.platform == 'darwin':\n    try:\n        app_services = ctypes.CDLL('/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices')\n        is_trusted = bool(app_services.AXIsProcessTrusted())\n    except Exception:\n        is_trusted = False\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing, 'accessibility_trusted': is_trusted}))"
+                "import sys, os, json, ctypes; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = [];\nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nis_trusted = True\nif sys.platform === 'darwin':\n    try:\n        app_services = ctypes.CDLL('/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices')\n        is_trusted = bool(app_services.AXIsProcessTrusted())\n    except Exception:\n        is_trusted = False\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing, 'accessibility_trusted': is_trusted}))"
             ]);
             let stdout = '';
             pyProc.stdout.on('data', d => stdout += d.toString());

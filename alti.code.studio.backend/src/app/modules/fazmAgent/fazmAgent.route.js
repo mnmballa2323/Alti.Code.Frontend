@@ -23,7 +23,6 @@ const attachmentUploader = multer({
     limits: { fileSize: 50 * 1024 * 1024 } // 50MB max file size
 });
 
-
 const router = express.Router();
 
 // ─── Public Endpoints ───
@@ -128,7 +127,6 @@ router.post(
     attachmentUploader.single('file'),
     FazmAgentController.uploadAttachment
 );
-
 
 // Composio stubs
 router.post(

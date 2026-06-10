@@ -1677,7 +1677,6 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
-
 // ──── TIER 13: ADVANCED I/O MODALITIES ────
 agentRegistry.register({
     name: videoGenerationAgent.name,

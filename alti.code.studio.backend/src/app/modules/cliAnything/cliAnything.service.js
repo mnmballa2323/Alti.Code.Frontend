@@ -271,10 +271,10 @@ def history(ctx):
     else:
         click.echo("📜 History Trail:")
         for idx, entry in enumerate(session["history"]):
-            marker = "➡️" if idx == session["pointer"] else " "
+            marker = "➡️" if idx === session["pointer"] else " "
             click.echo(f"{marker} [{entry['id']}] {entry['action']} ({entry['payload']})")
 
-if __name__ == '__main__':
+if __name__ === '__main__':
     cli(obj={})
   `.trim();
 
@@ -372,7 +372,7 @@ class TestStatefulCLI(unittest.TestCase):
         self.assertTrue(redo_data["success"])
         self.assertEqual(redo_data["new_pointer"], 0)
 
-if __name__ == '__main__':
+if __name__ === '__main__':
     unittest.main()
   `.trim();
 
@@ -551,8 +551,8 @@ def ${cleanPromptName}(ctx):
 `;
 
     // Inject before __main__ if present, otherwise append
-    if (code.includes("if __name__ == '__main__':")) {
-      code = code.replace("if __name__ == '__main__':", `${newCommandCode}\nif __name__ == '__main__':`);
+    if (code.includes("if __name__ === '__main__':")) {
+      code = code.replace("if __name__ === '__main__':", `${newCommandCode}\nif __name__ === '__main__':`);
     } else {
       code += newCommandCode;
     }

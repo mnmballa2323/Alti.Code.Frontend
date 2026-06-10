@@ -16,7 +16,6 @@ import { researchService } from '../research/research.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
 import { compress } from 'headroom-ai';
 
-
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
  */
@@ -254,7 +253,6 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
             return { reply, sessionId, model: 'Liquid Router (Fallback)', success: true };
         }
     }
-
 
     // Agentic classification: Should we use codebase RAG search?
     if (domain === 'Chat' || actualModelName === 'chat') {

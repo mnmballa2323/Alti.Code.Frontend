@@ -154,7 +154,7 @@ const runSingleDevopsCycle = async () => {
     const status = await execute('git status --porcelain');
     if (status.output && status.output.trim().length > 0) {
         logger('Local changes detected! Committing improvements to Git matrix...');
-        await execute('git add src/ ../terraform/ scripts/test_billing_tenancy.js src/app/modules/llmGateway/llmGateway.service.js src/app/modules/payment/payment.model.js src/app/modules/payment/payment.service.js');
+        await execute('git add src/ scripts/test_billing_tenancy.js autonomous_devops_loop.js');
         const commitResult = await execute('git commit -m "chore(loop): autonomous devops refinement, billing compliance & cloud vendor locks"');
         if (commitResult.success) {
             const pushResult = await execute('git push');

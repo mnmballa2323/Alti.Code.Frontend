@@ -4,7 +4,6 @@ import sendResponse from '../../../shared/sendResponse.js';
 import { FazmAgentService } from './fazmAgent.service.js';
 import { composioService } from '../mcp/composio.service.js';
 
-
 const getUserId = (req) => {
     return req.user?.id || req.user?.uid || req.user?.sub || req.user?.email || 'unknown';
 };
