@@ -80,6 +80,20 @@ resource "openstack_networking_secgroup_rule_v2" "backend_port_rule" {
   security_group_id = openstack_networking_secgroup_v2.backend_secgroup.id
 }
 
+# Standalone Bootable Cinder Volume with Encryption Metadata
+resource "openstack_blockstorage_volume_v3" "boot_volume" {
+  name        = "alti-boot-vol-${var.customer_id}"
+  size        = var.openstack_boot_volume_size
+  volume_type = var.openstack_boot_volume_type
+  image_id    = var.openstack_image_name
+  
+  metadata = {
+    encrypted   = "true"
+    fips-140-2  = "true"
+    customer_id = var.customer_id
+  }
+}
+
 # ── 3. Namespaced Compute Node ──
 resource "openstack_compute_instance_v2" "backend_instance" {
   name            = "alti-backend-${var.customer_id}-node"
@@ -87,13 +101,12 @@ resource "openstack_compute_instance_v2" "backend_instance" {
   key_pair        = var.openstack_keypair_name
   security_groups = ["default", openstack_networking_secgroup_v2.backend_secgroup.name]
 
+  # Standalone Bootable Cinder Volume with Encryption Metadata
   # Boot VM from persistent Cinder volume with explicit disk capacity and type
   block_device {
-    uuid                  = var.openstack_image_name
-    source_type           = "image"
+    uuid                  = openstack_blockstorage_volume_v3.boot_volume.id
+    source_type           = "volume"
     destination_type      = "volume"
-    volume_size           = var.openstack_boot_volume_size
-    volume_type           = var.openstack_boot_volume_type
     boot_index            = 0
     delete_on_termination = true
   }
