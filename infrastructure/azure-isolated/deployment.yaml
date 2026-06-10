@@ -17,6 +17,21 @@ spec:
     spec:
       containers:
       - name: azure-isolated-container
-        image: myacr.azurecr.io/azure-isolated:latest
+        image: alticodestudio.azurecr.io/alti-azure-backend:latest
         ports:
         - containerPort: 5002
+        env:
+        - name: PORT
+          value: "5002"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: AZURE_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: endpoint
+        - name: AZURE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-secrets
+              key: api-key

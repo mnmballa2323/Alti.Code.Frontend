@@ -10,4 +10,4 @@ FROM gcr.io/distroless/nodejs20-debian11
 WORKDIR /app
 COPY --from=builder /app /app
 EXPOSE 5002
-CMD ["server.js"]
+CMD ["--require", "./instrumentation.js", "server.js"]

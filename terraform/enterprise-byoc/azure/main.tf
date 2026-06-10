@@ -34,14 +34,42 @@ variable "stack_hub_domain" {
 }
 
 # ==========================================
+# Resource Groups
+# ==========================================
+resource "azurerm_resource_group" "quantum_rg" {
+  name     = "alti-quantum-rg"
+  location = "westus"
+}
+
+resource "azurerm_resource_group" "space_rg" {
+  name     = "alti-space-rg"
+  location = "westus2"
+}
+
+resource "azurerm_resource_group" "network_rg" {
+  name     = "alti-network-rg"
+  location = "westus"
+}
+
+resource "azurerm_resource_group" "bunker_alpha_rg" {
+  name     = "alti-bunker-alpha-rg"
+  location = var.location_bunker_alpha
+}
+
+resource "azurerm_resource_group" "bunker_omega_rg" {
+  name     = "alti-bunker-omega-rg"
+  location = var.location_bunker_omega
+}
+
+# ==========================================
 # Azure Quantum Key Generation (QKD)
 # ==========================================
 # Generating cryptographically perfect keys using quantum physical properties.
 # These keys are injected into the local Key Vault for absolute cryptographic security.
 resource "azurerm_quantum_workspace" "qkd_workspace" {
   name                = "alti-quantum-${var.customer_name}"
-  location            = "westus" # Logic lives in public cloud, keys pumped down physical line
-  resource_group_name = "alti-quantum-rg"
+  location            = azurerm_resource_group.quantum_rg.location
+  resource_group_name = azurerm_resource_group.quantum_rg.name
   providers {
     provider_sku = "Honeywell"
   }
@@ -53,8 +81,8 @@ resource "azurerm_quantum_workspace" "qkd_workspace" {
 # Communicates directly with spacecraft, completely bypassing terrestrial networks.
 resource "azurerm_orbital_spacecraft" "leo_sat" {
   name                = "alti-constellation-alpha"
-  location            = "westus2"
-  resource_group_name = "alti-space-rg"
+  location            = azurerm_resource_group.space_rg.location
+  resource_group_name = azurerm_resource_group.space_rg.name
   title_line          = "ALTI-SAT-1"
   norad_id            = "99999"
   tle_line1           = "1 99999U 24001A   24123.12345678  .00000000  00000-0  00000-0 0  9999"
@@ -70,8 +98,8 @@ resource "azurerm_orbital_spacecraft" "leo_sat" {
 
 resource "azurerm_orbital_contact_profile" "contact" {
   name                = "alti-bunker-contact"
-  location            = "westus2"
-  resource_group_name = "alti-space-rg"
+  location            = azurerm_resource_group.space_rg.location
+  resource_group_name = azurerm_resource_group.space_rg.name
   minimum_variable_contact_duration = "PT5M"
   auto_tracking_configuration = "disabled"
   
@@ -97,7 +125,7 @@ resource "azurerm_orbital_contact_profile" "contact" {
 # Bypassing the internet to sync the two disconnected physical bunkers.
 resource "azurerm_express_route_circuit" "dark_fiber_mesh" {
   name                  = "alti-bunker-mesh"
-  resource_group_name   = "alti-network-rg"
+  resource_group_name   = azurerm_resource_group.network_rg.name
   location              = "local"
   service_provider_name = "Equinix"
   peering_location      = "Silicon Valley"
@@ -115,7 +143,7 @@ resource "azurerm_express_route_circuit" "dark_fiber_mesh" {
 resource "azurerm_kubernetes_cluster" "aks_bunker_alpha" {
   name                = "alti-data-plane-alpha-${var.customer_name}"
   location            = var.location_bunker_alpha
-  resource_group_name = "alti-bunker-alpha-rg"
+  resource_group_name = azurerm_resource_group.bunker_alpha_rg.name
   dns_prefix          = "alti-alpha"
 
   default_node_pool {
@@ -129,7 +157,7 @@ resource "azurerm_kubernetes_cluster" "aks_bunker_alpha" {
 resource "azurerm_kubernetes_cluster" "aks_bunker_omega" {
   name                = "alti-data-plane-omega-${var.customer_name}"
   location            = var.location_bunker_omega
-  resource_group_name = "alti-bunker-omega-rg"
+  resource_group_name = azurerm_resource_group.bunker_omega_rg.name
   dns_prefix          = "alti-omega"
 
   default_node_pool {
