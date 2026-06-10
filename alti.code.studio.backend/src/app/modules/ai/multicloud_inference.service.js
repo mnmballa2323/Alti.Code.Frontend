@@ -74,16 +74,31 @@ class MultiCloudInferenceService {
      */
     async _executeGcp(prompt, activeAgent, modelId) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on Google Cloud Vertex AI using model ${modelId}...`);
-        
         const startTime = Date.now();
-        // Call Vertex Service
-        const text = await vertexService.generateContent(prompt, { agentName: activeAgent });
-        const latency = Date.now() - startTime;
+        let text = '';
+        let latency = 0;
 
-        // Calculate and record dynamic marketplace usage
+        const gcpUrl = process.env.GCP_INFERENCE_URL || 'http://localhost:5003/api/v1/gcp/invoke';
+        try {
+            logger.info(`Sending GCP request to microservice: ${gcpUrl}`);
+            const res = await fetch(gcpUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: modelId }),
+                signal: AbortSignal.timeout(15000)
+            });
+            if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
+            const data = await res.json();
+            text = data.content;
+            latency = Date.now() - startTime;
+        } catch (e) {
+            logger.warn(`GCP Microservice unavailable (${e.message}). Falling back to local SDK...`);
+            text = await vertexService.generateContent(prompt, { agentName: activeAgent });
+            latency = Date.now() - startTime;
+        }
+
         const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
         const completionTokens = Math.max(1, Math.ceil(text.length / 4));
-        
         await this._recordMarketplaceBilling('gcp', promptTokens, completionTokens, modelId, latency);
 
         return {
@@ -101,50 +116,58 @@ class MultiCloudInferenceService {
     async _executeAwsBedrock(prompt, activeAgent, modelId) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on AWS Bedrock using model ${modelId}...`);
         const startTime = Date.now();
-
         let text = '';
-        let promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-        let completionTokens = 0;
+        let latency = 0;
 
-        // AWS Bedrock Native REST Client shape
-        if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-            try {
-                const region = process.env.AWS_REGION || 'us-east-1';
-                const endpoint = `https://bedrock-runtime.${region}.amazonaws.com/model/${modelId}/invoke`;
-                
-                // Construct standard Bedrock Invoke request payload
-                const body = JSON.stringify({
-                    prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
-                    max_tokens_to_sample: 4096,
-                    temperature: 0.1
-                });
-
-                const res = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // SigV4 authorization would be signed here in production
-                        'Authorization': `AWS4-HMAC-SHA256 Credential=${process.env.AWS_ACCESS_KEY_ID}/...`
-                    },
-                    body
-                });
-
-                if (!res.ok) throw new Error(`AWS Bedrock REST API returned status ${res.status}`);
-                const data = await res.json();
-                text = data.completion;
-                completionTokens = Math.max(1, Math.ceil(text.length / 4));
-            } catch (e) {
-                logger.error(`[AWS Bedrock Client] API call failed: ${e.message}. Falling back to Bedrock simulated mode.`);
+        const awsUrl = process.env.AWS_INFERENCE_URL || 'http://localhost:5001/api/v1/aws/invoke';
+        try {
+            logger.info(`Sending AWS request to microservice: ${awsUrl}`);
+            const res = await fetch(awsUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: modelId }),
+                signal: AbortSignal.timeout(15000)
+            });
+            if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
+            const data = await res.json();
+            text = data.content;
+            latency = Date.now() - startTime;
+        } catch (e) {
+            logger.warn(`AWS Microservice unavailable (${e.message}). Falling back to local Bedrock client...`);
+            let promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
+            if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+                try {
+                    const region = process.env.AWS_REGION || 'us-east-1';
+                    const endpoint = `https://bedrock-runtime.${region}.amazonaws.com/model/${modelId}/invoke`;
+                    const body = JSON.stringify({
+                        prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
+                        max_tokens_to_sample: 4096,
+                        temperature: 0.1
+                    });
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `AWS4-HMAC-SHA256 Credential=${process.env.AWS_ACCESS_KEY_ID}/...`
+                        },
+                        body
+                    });
+                    if (!res.ok) throw new Error(`AWS Bedrock REST API returned status ${res.status}`);
+                    const data = await res.json();
+                    text = data.completion;
+                } catch (err) {
+                    logger.error(`[AWS Bedrock Client] API call failed: ${err.message}. Falling back to Bedrock simulated mode.`);
+                    text = this._getSimulatedResponse(prompt, 'AWS Bedrock Anthropic Claude 3.5 Sonnet');
+                }
+            } else {
+                logger.warn('⚠️ No AWS Bedrock credentials found. Executing in secure Bedrock Marketplace simulated mode.');
                 text = this._getSimulatedResponse(prompt, 'AWS Bedrock Anthropic Claude 3.5 Sonnet');
-                completionTokens = Math.max(1, Math.ceil(text.length / 4));
             }
-        } else {
-            logger.warn('⚠️ No AWS Bedrock credentials found. Executing in secure Bedrock Marketplace simulated mode.');
-            text = this._getSimulatedResponse(prompt, 'AWS Bedrock Anthropic Claude 3.5 Sonnet');
-            completionTokens = Math.max(1, Math.ceil(text.length / 4));
+            latency = Date.now() - startTime;
         }
 
-        const latency = Date.now() - startTime;
+        const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
+        const completionTokens = Math.max(1, Math.ceil(text.length / 4));
         await this._recordMarketplaceBilling('aws', promptTokens, completionTokens, modelId, latency);
 
         return {
@@ -162,46 +185,57 @@ class MultiCloudInferenceService {
     async _executeAzureFoundry(prompt, activeAgent, modelId) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on Azure AI Studio Foundry using model ${modelId}...`);
         const startTime = Date.now();
-
         let text = '';
-        let promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-        let completionTokens = 0;
+        let latency = 0;
 
-        if (process.env.AZURE_API_KEY) {
-            try {
-                const endpoint = process.env.AZURE_ENDPOINT || 'https://my-azure-foundry-resource.openai.azure.com';
-                const deploymentId = modelId;
-                const url = `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
-
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'api-key': process.env.AZURE_API_KEY
-                    },
-                    body: JSON.stringify({
-                        messages: [{ role: 'user', content: prompt }],
-                        max_tokens: 4096,
-                        temperature: 0.1
-                    })
-                });
-
-                if (!res.ok) throw new Error(`Azure Foundry API returned status ${res.status}`);
-                const data = await res.json();
-                text = data.choices[0].message.content;
-                completionTokens = Math.max(1, Math.ceil(text.length / 4));
-            } catch (e) {
-                logger.error(`[Azure Foundry Client] API call failed: ${e.message}. Falling back to Azure simulated mode.`);
+        const azureUrl = process.env.AZURE_INFERENCE_URL || 'http://localhost:5002/api/v1/azure/invoke';
+        try {
+            logger.info(`Sending Azure request to microservice: ${azureUrl}`);
+            const res = await fetch(azureUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: modelId }),
+                signal: AbortSignal.timeout(15000)
+            });
+            if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
+            const data = await res.json();
+            text = data.content;
+            latency = Date.now() - startTime;
+        } catch (e) {
+            logger.warn(`Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client...`);
+            if (process.env.AZURE_API_KEY) {
+                try {
+                    const endpoint = process.env.AZURE_ENDPOINT || 'https://my-azure-foundry-resource.openai.azure.com';
+                    const deploymentId = modelId;
+                    const url = `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'api-key': process.env.AZURE_API_KEY
+                        },
+                        body: JSON.stringify({
+                            messages: [{ role: 'user', content: prompt }],
+                            max_tokens: 4096,
+                            temperature: 0.1
+                        })
+                    });
+                    if (!res.ok) throw new Error(`Azure Foundry API returned status ${res.status}`);
+                    const data = await res.json();
+                    text = data.choices[0].message.content;
+                } catch (err) {
+                    logger.error(`[Azure Foundry Client] API call failed: ${err.message}. Falling back to Azure simulated mode.`);
+                    text = this._getSimulatedResponse(prompt, 'Azure Foundry GPT-4o');
+                }
+            } else {
+                logger.warn('⚠️ No Azure Foundry credentials found. Executing in secure Azure Marketplace simulated mode.');
                 text = this._getSimulatedResponse(prompt, 'Azure Foundry GPT-4o');
-                completionTokens = Math.max(1, Math.ceil(text.length / 4));
             }
-        } else {
-            logger.warn('⚠️ No Azure Foundry credentials found. Executing in secure Azure Marketplace simulated mode.');
-            text = this._getSimulatedResponse(prompt, 'Azure Foundry GPT-4o');
-            completionTokens = Math.max(1, Math.ceil(text.length / 4));
+            latency = Date.now() - startTime;
         }
 
-        const latency = Date.now() - startTime;
+        const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
+        const completionTokens = Math.max(1, Math.ceil(text.length / 4));
         await this._recordMarketplaceBilling('azure', promptTokens, completionTokens, modelId, latency);
 
         return {

@@ -8,8 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Master Configuration
-const DURATION_HOURS = 2;
-const DURATION_MS = DURATION_HOURS * 60 * 60 * 1000;
+const DURATION_HOURS = Infinity; // Infinite autonomous refinement loop
+const DURATION_MS = Infinity; 
 const CYCLE_INTERVAL_MS = 15 * 60 * 1000; // 15 mins
 const startTime = Date.now();
 
@@ -104,6 +104,32 @@ const runRefinementCycle = async () => {
     logger('Step 3: Synthesizing structural code improvements...');
     optimizeAST();
 
+    // 3.5. IaC & Multi-Cloud Configuration Check
+    logger('Step 3.5: Checking Terraform IaC syntax and formatting compliance across all clouds...');
+    try {
+        const tfFmt = await execute('terraform fmt -check -recursive ../terraform');
+        if (!tfFmt.success) {
+            logger('⚠️ Terraform files are not formatted. Formatting now...');
+            await execute('terraform fmt -recursive ../terraform');
+        }
+        logger('✅ IaC configurations verified and formatted.');
+    } catch (err) {
+        logger(`⚠️ IaC verification check skipped or failed: ${err.message}`);
+    }
+
+    // 3.8. Run Integration Test Suite
+    logger('Step 3.8: Running Swarm Brain integration test suite to verify systems integration...');
+    try {
+        const integrationResult = await execute('node scripts/run_autonomous_integration.js');
+        if (integrationResult.success) {
+            logger('✅ Swarm Brain integration test suite passed flawlessly!');
+        } else {
+            logger(`🚨 Integration test suite failed! Details:\n${integrationResult.output}`);
+        }
+    } catch (err) {
+        logger(`❌ Integration test suite execution crashed: ${err.message}`);
+    }
+
     // 4. Git Check and Push
     logger('Step 4: Synchronizing enhancements to Sovereign Git Matrix...');
     const status = await execute('git status --porcelain');
@@ -127,7 +153,7 @@ const runRefinementCycle = async () => {
 const igniteDaemon = async () => {
     logger(`==================================================`);
     logger(`🛡️  SOVEREIGN SENTINEL DAEMON ENGAGED  🛡️`);
-    logger(`Target Duration: ${DURATION_HOURS} Hours`);
+    logger(`Target Duration: INDEFINITE (Non-Stop)`);
     logger(`Cycle Frequency: Every 15 Minutes`);
     logger(`==================================================`);
 

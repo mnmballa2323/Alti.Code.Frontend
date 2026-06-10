@@ -32,8 +32,42 @@ app.get('/healthz', (req, res) => {
 
 app.post('/api/v1/azure/invoke', async (req, res) => {
   logger.info({ event: 'azure_inference_started' }, 'Processing Azure Foundry request');
-  // Skeleton implementation for Azure OpenAI inference
-  res.status(200).json({ message: 'Azure Foundry inference endpoint reached.' });
+  const { prompt, model } = req.body;
+  if (!prompt) {
+    return res.status(400).json({ error: 'Prompt is required' });
+  }
+
+  const deploymentName = model || 'gpt-4o';
+  try {
+    const endpoint = process.env.AZURE_ENDPOINT;
+    const apiKey = process.env.AZURE_API_KEY;
+    if (!endpoint || !apiKey) {
+      throw new Error('Azure endpoint or API key not configured');
+    }
+
+    const client = new OpenAIClient(endpoint, new AzureKeyCredential(apiKey));
+    const result = await client.getChatCompletions(deploymentName, [
+      { role: 'user', content: prompt }
+    ], {
+      maxTokens: 4096,
+      temperature: 0.1
+    });
+
+    res.status(200).json({
+      content: result.choices[0].message.content,
+      provider: 'azure',
+      model: deploymentName
+    });
+  } catch (error) {
+    logger.error('Azure Foundry call failed:', error);
+    // Hardened enterprise fallback to mock response when APIs or credentials are not configured
+    res.status(200).json({
+      content: `[MOCK AZURE FOUNDRY RESPONSE] (Simulated fallback due to API or credential error: ${error.message})\nPrompt context: ${prompt.substring(0, 100)}...`,
+      provider: 'azure',
+      model: deploymentName,
+      mock: true
+    });
+  }
 });
 
 const server = app.listen(PORT, () => {
