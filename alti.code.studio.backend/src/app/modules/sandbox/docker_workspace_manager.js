@@ -14,7 +14,7 @@ import { exec } from 'child_process';
 import * as hostFs from 'fs';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
-import ivm from 'isolated-vm';
+import vm from 'vm';
 
 export class DockerWorkspaceManager {
     /**
@@ -221,28 +221,15 @@ export class DockerWorkspaceManager {
     }
 
     /**
-     * Executes code inside isolated-vm with mocked console, process, and secure fs modules.
+     * Executes code inside built-in vm with mocked console, process, and secure fs modules.
      */
     async _executeMockInVM(code, hostWorkspacePath, options = {}) {
         const startTime = Date.now();
         const logs = [];
         const errors = [];
         let success = true;
-        let isolate;
-        try {
-            isolate = new ivm.Isolate({ memoryLimit: options.memoryLimit || 128 });
-            const context = isolate.createContextSync();
-            const jail = context.global;
-            
-            jail.setSync('global', jail);
-            
-            jail.setSync('_hostLog', function(msg) {
-                logs.push(msg);
-            });
-            jail.setSync('_hostError', function(msg) {
-                errors.push(msg);
-            });
 
+        try {
             const resolveSafePath = (filePath) => {
                 let targetPath = filePath;
                 if (targetPath.startsWith('/workspace')) {
@@ -255,103 +242,68 @@ export class DockerWorkspaceManager {
                 return targetPath;
             };
 
-            jail.setSync('_fsWriteFileSync', function(filePath, data, opts) {
-                hostFs.writeFileSync(resolveSafePath(filePath), data, opts);
-            });
+            const fsMock = {
+                writeFileSync: (filePath, data, opts) => {
+                    hostFs.writeFileSync(resolveSafePath(filePath), data, opts);
+                },
+                readFileSync: (filePath, opts) => {
+                    return hostFs.readFileSync(resolveSafePath(filePath), opts);
+                },
+                existsSync: (filePath) => {
+                    return hostFs.existsSync(resolveSafePath(filePath));
+                },
+                mkdirSync: (filePath, opts) => {
+                    hostFs.mkdirSync(resolveSafePath(filePath), opts);
+                },
+                readdirSync: (filePath, opts) => {
+                    return hostFs.readdirSync(resolveSafePath(filePath), opts);
+                },
+                rmSync: (filePath, opts) => {
+                    hostFs.rmSync(resolveSafePath(filePath), opts);
+                },
+                unlinkSync: (filePath) => {
+                    hostFs.unlinkSync(resolveSafePath(filePath));
+                },
+                statSync: (filePath) => {
+                    const stats = hostFs.statSync(resolveSafePath(filePath));
+                    return {
+                        size: stats.size,
+                        isFile: () => stats.isFile(),
+                        isDirectory: () => stats.isDirectory()
+                    };
+                }
+            };
 
-            jail.setSync('_fsReadFileSync', function(filePath, opts) {
-                return hostFs.readFileSync(resolveSafePath(filePath), opts);
-            });
-
-            jail.setSync('_fsExistsSync', function(filePath) {
-                return hostFs.existsSync(resolveSafePath(filePath));
-            });
-
-            jail.setSync('_fsMkdirSync', function(filePath, opts) {
-                hostFs.mkdirSync(resolveSafePath(filePath), opts);
-            });
-
-            jail.setSync('_fsReaddirSync', function(filePath, opts) {
-                return hostFs.readdirSync(resolveSafePath(filePath), opts);
-            });
-
-            jail.setSync('_fsRmSync', function(filePath, opts) {
-                hostFs.rmSync(resolveSafePath(filePath), opts);
-            });
-
-            jail.setSync('_fsUnlinkSync', function(filePath) {
-                hostFs.unlinkSync(resolveSafePath(filePath));
-            });
-
-            jail.setSync('_fsStatSync', function(filePath) {
-                const stats = hostFs.statSync(resolveSafePath(filePath));
-                return {
-                    size: stats.size,
-                    isFile: stats.isFile(),
-                    isDirectory: stats.isDirectory()
-                };
-            });
-
-            jail.setSync('_hostGetuid', () => process.getuid ? process.getuid() : 1000);
-            jail.setSync('_hostGetgid', () => process.getgid ? process.getgid() : 1000);
-
-            const setupCode = `
-                const fsMock = {
-                    writeFileSync: _fsWriteFileSync,
-                    readFileSync: _fsReadFileSync,
-                    existsSync: _fsExistsSync,
-                    mkdirSync: _fsMkdirSync,
-                    readdirSync: _fsReaddirSync,
-                    rmSync: _fsRmSync,
-                    unlinkSync: _fsUnlinkSync,
-                    statSync: function(filePath) {
-                        const res = _fsStatSync(filePath);
-                        return {
-                            size: res.size,
-                            isFile: () => res.isFile,
-                            isDirectory: () => res.isDirectory
-                        };
-                    }
-                };
-
-                globalThis.console = {
-                    log: function(...args) {
-                        _hostLog(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
+            const sandbox = {
+                console: {
+                    log: (...args) => {
+                        logs.push(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
                     },
-                    error: function(...args) {
-                        _hostError(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
+                    error: (...args) => {
+                        errors.push(args.map(x => (x === null ? 'null' : x === undefined ? 'undefined' : typeof x === 'object' ? JSON.stringify(x) : String(x))).join(' '));
                     }
-                };
-
-                globalThis.require = function(mod) {
+                },
+                require: (mod) => {
                     if (mod === 'fs') return fsMock;
                     throw new Error("Module not found: " + mod);
-                };
-
-                globalThis._hostImport = async function(mod) {
-                    if (mod === 'fs') return fsMock;
-                    throw new Error("Module not found: " + mod);
-                };
-
-                globalThis.process = {
+                },
+                process: {
                     env: {},
                     cwd: () => '/workspace',
-                    getuid: () => _hostGetuid(),
-                    getgid: () => _hostGetgid()
-                };
-            `;
-            context.evalSync(setupCode);
+                    getuid: () => (process.getuid ? process.getuid() : 1000),
+                    getgid: () => (process.getgid ? process.getgid() : 1000)
+                },
+                globalThis: null
+            };
+            sandbox.globalThis = sandbox;
+            sandbox.global = sandbox;
 
-            const processedCode = code.replace(/import\(/g, '_hostImport(');
             const timeoutMs = options.timeoutMs || options.timeout || 5000;
-            await context.eval(processedCode, { timeout: timeoutMs, promise: true });
+            const script = new vm.Script(code);
+            script.runInNewContext(sandbox, { timeout: timeoutMs });
         } catch (e) {
             success = false;
             errors.push(e.message);
-        } finally {
-            if (isolate) {
-                isolate.dispose();
-            }
         }
 
         return {
