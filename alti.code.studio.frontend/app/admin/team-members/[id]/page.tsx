@@ -10,8 +10,6 @@ import {
   Database,
   TrendingUp,
   CheckCircle2,
-  Calendar,
-  User,
   AlertCircle
 } from "lucide-react";
 
@@ -263,178 +261,116 @@ export default function MemberDetailsPage() {
         </p>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Analytics */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Metrics Overview Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {/* Tokens card */}
-            <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Total Tokens</span>
-                <Cpu className="w-4 h-4" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                  {details.tokensTotal}
-                </span>
-                <span className="text-xs text-neutral-450 dark:text-neutral-500 mt-1 leading-relaxed">
-                  {details.tokensIn} in / {details.tokensOut} out
-                </span>
-              </div>
+      {/* Main Content Area */}
+      <div className="w-full space-y-6">
+        {/* Metrics Overview Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {/* Tokens card */}
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Total Tokens</span>
+              <Cpu className="w-4 h-4" />
             </div>
-
-            {/* Spend card */}
-            <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Spend Allocation</span>
-                <DollarSign className="w-4 h-4" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                  ${details.spendCurrent.toFixed(2)}
-                </span>
-                <span className="text-xs text-neutral-450 dark:text-neutral-500 mt-1">
-                  Budget limit: ${details.spendLimit.toFixed(2)}
-                </span>
-              </div>
-            </div>
-
-            {/* Executions card */}
-            <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Task Operations</span>
-                <Database className="w-4 h-4" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                  {details.tasksCount}
-                </span>
-                <span className="text-xs text-emerald-600 dark:text-emerald-450 font-semibold mt-1 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  {details.tasksSuccess} Success Rate
-                </span>
-              </div>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+                {details.tokensTotal}
+              </span>
+              <span className="text-xs text-neutral-455 dark:text-neutral-550 mt-1 leading-relaxed">
+                {details.tokensIn} in / {details.tokensOut} out
+              </span>
             </div>
           </div>
 
-          {/* Weekly token activity box */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold">
-                <TrendingUp className="w-4 h-4 text-neutral-400" />
-                <span>Weekly Token Activity</span>
-              </div>
-              <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">Daily Token Processing</span>
+          {/* Spend card */}
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Spend Allocation</span>
+              <DollarSign className="w-4 h-4" />
             </div>
-
-            <div className="h-24 w-full flex items-end justify-between px-2 gap-4">
-              {details.sparkline.map((val, idx) => {
-                const maxVal = Math.max(...details.sparkline);
-                const heightPct = (val / maxVal) * 100;
-                return (
-                  <div key={idx} className="flex flex-col items-center gap-2 flex-1 group/bar relative">
-                    {/* Tooltip */}
-                    <span className="absolute bottom-full mb-1.5 opacity-0 group-hover/bar:opacity-100 pointer-events-none transition-opacity bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-950 text-[10px] font-bold px-2 py-0.5 rounded shadow-lg z-10 whitespace-nowrap">
-                      {val}k tokens
-                    </span>
-                    {/* Bar */}
-                    <div
-                      className="w-full max-w-[28px] bg-neutral-100 dark:bg-neutral-800 group-hover/bar:bg-neutral-850 dark:group-hover/bar:bg-neutral-300 rounded-md transition-all duration-200"
-                      style={{ height: `${Math.max(12, heightPct * 0.85)}px` }}
-                    />
-                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium select-none">
-                      {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][idx]}
-                    </span>
-                  </div>
-                );
-              })}
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+                ${details.spendCurrent.toFixed(2)}
+              </span>
+              <span className="text-xs text-neutral-455 dark:text-neutral-550 mt-1">
+                Budget limit: ${details.spendLimit.toFixed(2)}
+              </span>
             </div>
           </div>
 
-          {/* Timeline box */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-6">
-            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold">
-              <Activity className="w-4 h-4 text-neutral-400" />
-              <span>Activity History & Audit Logs</span>
+          {/* Executions card */}
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
+              <span className="text-[11px] font-bold uppercase tracking-wider">Task Operations</span>
+              <Database className="w-4 h-4" />
             </div>
-
-            <div className="space-y-6 pl-2 relative border-l border-neutral-100 dark:border-neutral-800 ml-2">
-              {details.activity.map((act, index) => (
-                <div key={index} className="relative pl-6">
-                  {/* Dot */}
-                  <div className="absolute -left-[5.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white dark:bg-[#161b22] border-2 border-neutral-400 dark:border-neutral-500" />
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-sm text-neutral-700 dark:text-neutral-200 font-medium leading-relaxed">
-                      {act.action}
-                    </span>
-                    <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                      {act.time}
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+                {details.tasksCount}
+              </span>
+              <span className="text-xs text-emerald-600 dark:text-emerald-450 font-semibold mt-1 flex items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                {details.tasksSuccess} Success Rate
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Right Column: User details summary cards */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Identity card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
-            <div className={`w-18 h-18 rounded-full flex items-center justify-center text-2xl font-bold ${details.avatarColor} shadow-inner mb-4`}>
-              {details.avatarInitials}
+        {/* Weekly token activity box */}
+        <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold">
+              <TrendingUp className="w-4 h-4 text-neutral-400" />
+              <span>Weekly Token Activity</span>
             </div>
-            <h2 className="text-base font-bold text-neutral-850 dark:text-neutral-100 capitalize">
-              {member.name || member.email.split("@")[0]}
-            </h2>
-            <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{member.email}</p>
-
-            <div className="w-full border-t border-neutral-100 dark:border-neutral-850 my-5" />
-
-            <div className="w-full space-y-3">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-neutral-400 dark:text-neutral-500 font-medium">Joined Date</span>
-                <span className="font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-neutral-455" />
-                  <span>June 2026</span>
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-neutral-400 dark:text-neutral-500 font-medium">Verification Status</span>
-                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-450 border border-emerald-100/40 dark:border-emerald-900/40 rounded-full font-semibold">
-                  Verified
-                </span>
-              </div>
-            </div>
+            <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">Daily Token Processing</span>
           </div>
 
-          {/* Budget Limit gauge card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-4">
-            <h3 className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-              Budget & Limit Usage
-            </h3>
-            <div className="flex flex-col">
-              <div className="flex justify-between items-end">
-                <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                  ${details.spendCurrent.toFixed(2)}
-                </span>
-                <span className="text-xs text-neutral-450 dark:text-neutral-500 mb-1">
-                  of ${details.spendLimit.toFixed(2)} limit
-                </span>
+          <div className="h-24 w-full flex items-end justify-between px-2 gap-4">
+            {details.sparkline.map((val, idx) => {
+              const maxVal = Math.max(...details.sparkline);
+              const heightPct = (val / maxVal) * 100;
+              return (
+                <div key={idx} className="flex flex-col items-center gap-2 flex-1 group/bar relative">
+                  {/* Tooltip */}
+                  <span className="absolute bottom-full mb-1.5 opacity-0 group-hover/bar:opacity-100 pointer-events-none transition-opacity bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-950 text-[10px] font-bold px-2 py-0.5 rounded shadow-lg z-10 whitespace-nowrap">
+                    {val}k tokens
+                  </span>
+                  {/* Bar */}
+                  <div
+                    className="w-full max-w-[28px] bg-neutral-100 dark:bg-neutral-800 group-hover/bar:bg-neutral-850 dark:group-hover/bar:bg-neutral-300 rounded-md transition-all duration-200"
+                    style={{ height: `${Math.max(12, heightPct * 0.85)}px` }}
+                  />
+                  <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium select-none">
+                    {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][idx]}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Timeline box */}
+        <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-6">
+          <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold">
+            <Activity className="w-4 h-4 text-neutral-400" />
+            <span>Activity History & Audit Logs</span>
+          </div>
+
+          <div className="space-y-6 pl-2 relative border-l border-neutral-100 dark:border-neutral-800 ml-2">
+            {details.activity.map((act, index) => (
+              <div key={index} className="relative pl-6">
+                {/* Dot */}
+                <div className="absolute -left-[5.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white dark:bg-[#161b22] border-2 border-neutral-400 dark:border-neutral-500" />
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-sm text-neutral-700 dark:text-neutral-200 font-medium leading-relaxed">
+                    {act.action}
+                  </span>
+                  <span className="text-xs text-neutral-400 dark:text-neutral-500">
+                    {act.time}
+                  </span>
+                </div>
               </div>
-              {/* Progress bar */}
-              <div className="w-full bg-neutral-100 dark:bg-neutral-800 h-2 rounded-full mt-3 overflow-hidden">
-                <div
-                  className="bg-neutral-800 dark:bg-neutral-300 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${Math.min(100, (details.spendCurrent / details.spendLimit) * 100)}%` }}
-                />
-              </div>
-              <span className="text-[10px] text-neutral-400 dark:text-neutral-500 mt-2 font-medium">
-                Resets monthly on the 1st of each calendar month.
-              </span>
-            </div>
+            ))}
           </div>
         </div>
       </div>

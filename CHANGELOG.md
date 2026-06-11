@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.173] - 2026-06-11 — Full Width Analytics Page
+### Changed
+- **Page Layout**:
+  - Removed the right-hand identity card and budget gauge card.
+  - Expanded the left-hand metrics grids, weekly token activity charts, and activity/audit logs to occupy the full page width.
+  - Removed background, borders, and shadows from the "Back to Members" navbar button.
+
 ## [39.37.172] - 2026-06-11 — Member Details Page Header & Content Hardening
 ### Changed
 - **Navbar Member details**:
