@@ -13,6 +13,8 @@ import createRateLimiter from '../../middlewares/rateLimit/authLimiter.js';
 import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 import { authController } from './auth.controller.js';
 import { AuthValidation } from './auth.validation.js';
+import { createSamlStrategy, createOIDCStrategy } from './enterprise.strategy.js';
+import { prisma } from '../../config/prisma.js';
 // import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 
 const router = express.Router();

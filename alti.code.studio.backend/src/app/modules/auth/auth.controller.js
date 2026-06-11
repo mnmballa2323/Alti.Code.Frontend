@@ -503,3 +503,39 @@ export const authController = {
   githubAuthCallback,
 };
 
+const ssoAuthCallback = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { accessToken, refreshToken } = authService.generateUserTokens(user);
+
+  // Set Refresh Token into cookie
+  const cookieOption = {
+    secure: config.env === 'production',
+    httpOnly: true,
+    sameSite: 'strict',
+  };
+  res.cookie('refreshToken', refreshToken, cookieOption);
+
+  // Redirect to frontend
+  const frontendUrl = config.client_url || 'http://localhost:3001';
+  res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
+});
+
+export const authController = {
+  register,
+  login,
+  socialLogin,
+  refreshToken,
+  confirmEmail,
+  getUser,
+  updateUser,
+  forgetPassword,
+  resetPassword,
+  deleteUserAccount,
+  deleteUserAccountOTP,
+  changePassword,
+  sendMailWithGoogleController,
+  googleAuthCallback,
+  githubAuthCallback,
+  ssoAuthCallback,
+};
+
