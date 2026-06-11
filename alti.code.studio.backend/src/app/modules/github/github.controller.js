@@ -576,17 +576,357 @@ export const addCollaborator = async (req, res) => {
   }
 };
 
-export const removeCollaborator = async (req, res) => {
+  async removeCollaborator(owner, repo, username) {
+    logger.info(
+      `🐙 [GitHub Service] Removing collaborator ${username} from ${owner}/${repo}`,
+    );
+    try {
+      const response = await octokit.rest.repos.removeCollaborator({
+        owner,
+        repo,
+        username,
+      });
+      return response.status === 204;
+    } catch (error) {
+      logger.error(
+        `Failed to remove collaborator ${username} from ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+};
+
+// ==========================================
+// 13. Git Database Plumbing Handlers
+// ==========================================
+export const getRef = async (req, res) => {
   try {
-    const { owner, repo, username } = req.params;
-    const result = await GithubService.removeCollaborator(
+    const { owner, repo } = req.params;
+    const ref = req.params[0];
+    const result = await GithubService.getRef(owner, repo, ref);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting Git ref:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createRef = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createRef(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating Git ref:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateRef = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const ref = req.params[0];
+    const result = await GithubService.updateRef(owner, repo, ref, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error updating Git ref:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createBlob = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createBlob(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating Git blob:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createTree = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createTree(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating Git tree:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCommit = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createCommit(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating Git commit:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 14. Organizations & Teams Handlers
+// ==========================================
+export const listOrganizations = async (req, res) => {
+  try {
+    const result = await GithubService.listOrganizations(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing organizations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listTeams = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listTeams(org, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing teams:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listTeamMembers = async (req, res) => {
+  try {
+    const { org, team_slug } = req.params;
+    const result = await GithubService.listTeamMembers(org, team_slug);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing team members:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 15. Repository Webhooks Handlers
+// ==========================================
+export const listWebhooks = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listWebhooks(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing webhooks:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createWebhook = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createWebhook(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating webhook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteWebhook = async (req, res) => {
+  try {
+    const { owner, repo, hookId } = req.params;
+    const result = await GithubService.deleteWebhook(
       owner,
       repo,
-      username,
+      parseInt(hookId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, deleted: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error deleting webhook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 16. Actions Secrets & Variables Handlers
+// ==========================================
+export const getActionsPublicKey = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getActionsPublicKey(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting Actions public key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrUpdateRepoSecret = async (req, res) => {
+  try {
+    const { owner, repo, secretName } = req.params;
+    const result = await GithubService.createOrUpdateRepoSecret(
+      owner,
+      repo,
+      secretName,
+      req.body,
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitHub Controller] Error removing collaborator:', error);
+    logger.error('[GitHub Controller] Error setting Actions secret:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listRepoVariables = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoVariables(
+      owner,
+      repo,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing repo variables:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createRepoVariable = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { name, value } = req.body;
+    const result = await GithubService.createRepoVariable(
+      owner,
+      repo,
+      name,
+      value,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating repo variable:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateRepoVariable = async (req, res) => {
+  try {
+    const { owner, repo, name } = req.params;
+    const { value } = req.body;
+    const result = await GithubService.updateRepoVariable(
+      owner,
+      repo,
+      name,
+      value,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error updating repo variable:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 17. Codespaces Handlers
+// ==========================================
+export const listCodespaces = async (req, res) => {
+  try {
+    const result = await GithubService.listCodespaces(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing Codespaces:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCodespace = async (req, res) => {
+  try {
+    const { owner, repo } = req.body;
+    const result = await GithubService.createCodespace(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating Codespace:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteCodespace = async (req, res) => {
+  try {
+    const { codespaceName } = req.params;
+    const result = await GithubService.deleteCodespace(codespaceName);
+    res.status(httpStatus.OK).json({ success: true, deleted: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error deleting Codespace:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 18. Dependabot Alerts Handlers
+// ==========================================
+export const listDependabotAlerts = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listDependabotAlerts(
+      owner,
+      repo,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing Dependabot alerts:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 19. Copilot Handlers
+// ==========================================
+export const getCopilotBillingForUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await GithubService.getCopilotBillingForUser(username);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting Copilot details:', error);
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -632,4 +972,26 @@ export const GithubController = {
   listCollaborators,
   addCollaborator,
   removeCollaborator,
+  getRef,
+  createRef,
+  updateRef,
+  createBlob,
+  createTree,
+  createCommit,
+  listOrganizations,
+  listTeams,
+  listTeamMembers,
+  listWebhooks,
+  createWebhook,
+  deleteWebhook,
+  getActionsPublicKey,
+  createOrUpdateRepoSecret,
+  listRepoVariables,
+  createRepoVariable,
+  updateRepoVariable,
+  listCodespaces,
+  createCodespace,
+  deleteCodespace,
+  listDependabotAlerts,
+  getCopilotBillingForUser,
 };
