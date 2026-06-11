@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.188] - 2026-06-11 — Phase 7 GitHub REST API & SDK Entrenchment
+### Added
+- **Custom Properties**: Added definitions, listings, details retrieval, removal, and value assignments for custom properties at organization and repository levels.
+- **Rulesets**: Integrated rulesets management (CRUD) for both organization and repository boundaries.
+- **Copilot Seats**: Implemented seat listing, allocation, and revocation for Copilot in organizations.
+- **PR Reviews**: Enabled pull request review lifecycle endpoints (listing, details, drafts, submits, dismissals).
+- **Issue Comments**: Integrated comments management (listing, creation, updates, deletes) on issues and pull requests.
+- **User profile Keys & Emails**: Exposed endpoints to configure user SSH keys and profile emails directly.
+- **Unit Testing**: Added 37 unit tests verifying Phase 7 endpoints, bringing the total passing tests to 145.
+
 ## [39.37.187] - 2026-06-11 — Phase 6 GitHub REST API & SDK Entrenchment
 ### Added
 - **Codes of Conduct**: Added service methods and controller endpoints to retrieve all Codes of Conduct and get a specific code by key.

@@ -2302,11 +2302,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockProperty,
     });
 
-    const result = await GithubService.createOrUpdateCustomProperty('my-org', 'env', {
-      value_type: 'string',
-    });
+    const result = await GithubService.createOrUpdateCustomProperty(
+      'my-org',
+      'env',
+      {
+        value_type: 'string',
+      },
+    );
     expect(result).toEqual(mockProperty);
-    expect(mockOctokit.rest.orgs.createOrUpdateCustomProperty).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.orgs.createOrUpdateCustomProperty,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       custom_property_name: 'env',
       value_type: 'string',
@@ -2356,15 +2362,21 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should set custom properties values for a repository', async () => {
     const mockResponse = { success: true };
-    mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues.mockResolvedValue({
-      data: mockResponse,
-    });
+    mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues.mockResolvedValue(
+      {
+        data: mockResponse,
+      },
+    );
 
-    const result = await GithubService.createOrUpdateRepoCustomPropertiesValues('owner', 'repo', [
-      { property_name: 'env', value: 'production' },
-    ]);
+    const result = await GithubService.createOrUpdateRepoCustomPropertiesValues(
+      'owner',
+      'repo',
+      [{ property_name: 'env', value: 'production' }],
+    );
     expect(result).toEqual(mockResponse);
-    expect(mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       properties: [{ property_name: 'env', value: 'production' }],
@@ -2377,9 +2389,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockValues,
     });
 
-    const result = await GithubService.getRepoCustomPropertiesValues('owner', 'repo');
+    const result = await GithubService.getRepoCustomPropertiesValues(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockValues);
-    expect(mockOctokit.rest.repos.getCustomPropertiesValues).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.getCustomPropertiesValues,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -2545,7 +2562,10 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 44. Copilot Org Seat Management
   // ==========================================
   it('should list Copilot seats for organization', async () => {
-    const mockSeats = { total_seats: 2, seats: [{ assignee: { login: 'user1' } }] };
+    const mockSeats = {
+      total_seats: 2,
+      seats: [{ assignee: { login: 'user1' } }],
+    };
     mockOctokit.rest.copilot.listSeatsForOrg.mockResolvedValue({
       data: mockSeats,
     });
@@ -2563,7 +2583,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockResponse,
     });
 
-    const result = await GithubService.addCopilotSeatsToOrg('my-org', ['user1']);
+    const result = await GithubService.addCopilotSeatsToOrg('my-org', [
+      'user1',
+    ]);
     expect(result).toEqual(mockResponse);
     expect(mockOctokit.rest.copilot.addSeatsToOrg).toHaveBeenCalledWith({
       org: 'my-org',
@@ -2577,7 +2599,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockResponse,
     });
 
-    const result = await GithubService.removeCopilotSeatsFromOrg('my-org', ['user1']);
+    const result = await GithubService.removeCopilotSeatsFromOrg('my-org', [
+      'user1',
+    ]);
     expect(result).toEqual(mockResponse);
     expect(mockOctokit.rest.copilot.removeSeatsFromOrg).toHaveBeenCalledWith({
       org: 'my-org',
@@ -2586,17 +2610,25 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   });
 
   it('should get Copilot seat details for user', async () => {
-    const mockDetails = { assignee: { login: 'user1' }, created_at: '2026-06-11T00:00:00Z' };
+    const mockDetails = {
+      assignee: { login: 'user1' },
+      created_at: '2026-06-11T00:00:00Z',
+    };
     mockOctokit.rest.copilot.getSeatDetailsForUser.mockResolvedValue({
       data: mockDetails,
     });
 
-    const result = await GithubService.getCopilotSeatDetailsForUser('my-org', 'user1');
+    const result = await GithubService.getCopilotSeatDetailsForUser(
+      'my-org',
+      'user1',
+    );
     expect(result).toEqual(mockDetails);
-    expect(mockOctokit.rest.copilot.getSeatDetailsForUser).toHaveBeenCalledWith({
-      org: 'my-org',
-      username: 'user1',
-    });
+    expect(mockOctokit.rest.copilot.getSeatDetailsForUser).toHaveBeenCalledWith(
+      {
+        org: 'my-org',
+        username: 'user1',
+      },
+    );
   });
 
   // ==========================================
@@ -2608,7 +2640,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockReviews,
     });
 
-    const result = await GithubService.listPullRequestReviews('owner', 'repo', 5);
+    const result = await GithubService.listPullRequestReviews(
+      'owner',
+      'repo',
+      5,
+    );
     expect(result).toEqual(mockReviews);
     expect(mockOctokit.rest.pulls.listReviews).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2623,7 +2659,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockReview,
     });
 
-    const result = await GithubService.getPullRequestReview('owner', 'repo', 5, 10);
+    const result = await GithubService.getPullRequestReview(
+      'owner',
+      'repo',
+      5,
+      10,
+    );
     expect(result).toEqual(mockReview);
     expect(mockOctokit.rest.pulls.getReview).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2639,10 +2680,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockReview,
     });
 
-    const result = await GithubService.createPullRequestReview('owner', 'repo', 5, {
-      event: 'COMMENT',
-      body: 'Looks good',
-    });
+    const result = await GithubService.createPullRequestReview(
+      'owner',
+      'repo',
+      5,
+      {
+        event: 'COMMENT',
+        body: 'Looks good',
+      },
+    );
     expect(result).toEqual(mockReview);
     expect(mockOctokit.rest.pulls.createReview).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2659,10 +2705,16 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockReview,
     });
 
-    const result = await GithubService.submitPullRequestReview('owner', 'repo', 5, 10, {
-      event: 'APPROVE',
-      body: 'Approved indeed',
-    });
+    const result = await GithubService.submitPullRequestReview(
+      'owner',
+      'repo',
+      5,
+      10,
+      {
+        event: 'APPROVE',
+        body: 'Approved indeed',
+      },
+    );
     expect(result).toEqual(mockReview);
     expect(mockOctokit.rest.pulls.submitReview).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2680,7 +2732,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockReview,
     });
 
-    const result = await GithubService.dismissPullRequestReview('owner', 'repo', 5, 10, 'Outdated');
+    const result = await GithubService.dismissPullRequestReview(
+      'owner',
+      'repo',
+      5,
+      10,
+      'Outdated',
+    );
     expect(result).toEqual(mockReview);
     expect(mockOctokit.rest.pulls.dismissReview).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2730,7 +2788,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockComment,
     });
 
-    const result = await GithubService.createIssueComment('owner', 'repo', 12, 'new comment');
+    const result = await GithubService.createIssueComment(
+      'owner',
+      'repo',
+      12,
+      'new comment',
+    );
     expect(result).toEqual(mockComment);
     expect(mockOctokit.rest.issues.createComment).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2746,7 +2809,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockComment,
     });
 
-    const result = await GithubService.updateIssueComment('owner', 'repo', 100, 'updated comment');
+    const result = await GithubService.updateIssueComment(
+      'owner',
+      'repo',
+      100,
+      'updated comment',
+    );
     expect(result).toEqual(mockComment);
     expect(mockOctokit.rest.issues.updateComment).toHaveBeenCalledWith({
       owner: 'owner',
@@ -2782,7 +2850,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
     const result = await GithubService.listEmailsForAuthenticatedUser();
     expect(result).toEqual(mockEmails);
-    expect(mockOctokit.rest.users.listEmailsForAuthenticatedUser).toHaveBeenCalled();
+    expect(
+      mockOctokit.rest.users.listEmailsForAuthenticatedUser,
+    ).toHaveBeenCalled();
   });
 
   it('should add emails for authenticated user', async () => {
@@ -2791,9 +2861,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockEmails,
     });
 
-    const result = await GithubService.addEmailsForAuthenticatedUser(['new@example.com']);
+    const result = await GithubService.addEmailsForAuthenticatedUser([
+      'new@example.com',
+    ]);
     expect(result).toEqual(mockEmails);
-    expect(mockOctokit.rest.users.addEmailsForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.addEmailsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       emails: ['new@example.com'],
     });
   });
@@ -2804,22 +2878,30 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockResponse,
     });
 
-    const result = await GithubService.deleteEmailsForAuthenticatedUser(['new@example.com']);
+    const result = await GithubService.deleteEmailsForAuthenticatedUser([
+      'new@example.com',
+    ]);
     expect(result).toEqual(mockResponse);
-    expect(mockOctokit.rest.users.deleteEmailsForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.deleteEmailsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       emails: ['new@example.com'],
     });
   });
 
   it('should list public SSH keys for authenticated user', async () => {
     const mockKeys = [{ id: 123, key: 'ssh-rsa AAA...' }];
-    mockOctokit.rest.users.listPublicKeysForAuthenticatedUser.mockResolvedValue({
-      data: mockKeys,
-    });
+    mockOctokit.rest.users.listPublicKeysForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockKeys,
+      },
+    );
 
     const result = await GithubService.listPublicKeysForAuthenticatedUser();
     expect(result).toEqual(mockKeys);
-    expect(mockOctokit.rest.users.listPublicKeysForAuthenticatedUser).toHaveBeenCalled();
+    expect(
+      mockOctokit.rest.users.listPublicKeysForAuthenticatedUser,
+    ).toHaveBeenCalled();
   });
 
   it('should add public SSH key for authenticated user', async () => {
@@ -2828,9 +2910,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       data: mockKey,
     });
 
-    const result = await GithubService.addPublicKeyForAuthenticatedUser('work-mac', 'ssh-rsa AAA...');
+    const result = await GithubService.addPublicKeyForAuthenticatedUser(
+      'work-mac',
+      'ssh-rsa AAA...',
+    );
     expect(result).toEqual(mockKey);
-    expect(mockOctokit.rest.users.addPublicKeyForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.addPublicKeyForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       title: 'work-mac',
       key: 'ssh-rsa AAA...',
     });
@@ -2838,13 +2925,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should delete public SSH key for authenticated user', async () => {
     const mockResponse = { success: true };
-    mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser.mockResolvedValue({
-      data: mockResponse,
-    });
+    mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockResponse,
+      },
+    );
 
     const result = await GithubService.deletePublicKeyForAuthenticatedUser(123);
     expect(result).toEqual(mockResponse);
-    expect(mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       key_id: 123,
     });
   });
@@ -2853,8 +2944,8 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockError = new Error('API Failure');
     mockOctokit.rest.orgs.getCustomProperty.mockRejectedValue(mockError);
 
-    await expect(GithubService.getCustomProperty('my-org', 'env')).rejects.toThrow(
-      'API Failure',
-    );
+    await expect(
+      GithubService.getCustomProperty('my-org', 'env'),
+    ).rejects.toThrow('API Failure');
   });
 });

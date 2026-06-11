@@ -447,7 +447,10 @@ router.get(
 router.get('/orgs/:org/campaigns', GithubController.listOrgCampaigns);
 
 // 42. Custom Properties API
-router.get('/orgs/:org/custom-properties', GithubController.listCustomProperties);
+router.get(
+  '/orgs/:org/custom-properties',
+  GithubController.listCustomProperties,
+);
 router.get(
   '/orgs/:org/custom-properties/:propertyName',
   GithubController.getCustomProperty,
@@ -487,10 +490,7 @@ router.delete(
 router.get('/orgs/:org/rulesets', GithubController.getOrgRulesets);
 router.get('/orgs/:org/rulesets/:rulesetId', GithubController.getOrgRuleset);
 router.post('/orgs/:org/rulesets', GithubController.createOrgRuleset);
-router.put(
-  '/orgs/:org/rulesets/:rulesetId',
-  GithubController.updateOrgRuleset,
-);
+router.put('/orgs/:org/rulesets/:rulesetId', GithubController.updateOrgRuleset);
 router.delete(
   '/orgs/:org/rulesets/:rulesetId',
   GithubController.deleteOrgRuleset,

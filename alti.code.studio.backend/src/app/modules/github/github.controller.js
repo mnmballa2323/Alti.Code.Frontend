@@ -2355,7 +2355,10 @@ export const removeCopilotSeatsFromOrg = async (req, res) => {
   try {
     const { org } = req.params;
     const { usernames } = req.body;
-    const result = await GithubService.removeCopilotSeatsFromOrg(org, usernames);
+    const result = await GithubService.removeCopilotSeatsFromOrg(
+      org,
+      usernames,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(
