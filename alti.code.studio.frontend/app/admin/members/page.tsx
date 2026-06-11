@@ -78,11 +78,12 @@ export default function InvitePage() {
             <button
               type="button"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className={`w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all flex items-center justify-between cursor-pointer ${
+              className={`w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 transition-all flex items-center justify-between cursor-pointer ${
                 role === ""
                   ? "text-neutral-400 dark:text-neutral-500 font-normal"
-                  : "text-neutral-800 dark:text-neutral-200 font-semibold"
+                  : "text-neutral-800 dark:text-neutral-200 font-normal"
               }`}
+              style={{ fontWeight: 400 }}
             >
               <span>
                 {role === ""
@@ -111,7 +112,7 @@ export default function InvitePage() {
                   onClick={() => setDropdownOpen(false)}
                 />
                 {/* Dropdown Options */}
-                <div className="absolute top-full left-0 mt-1.5 w-full bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                <div className="absolute top-full left-0 mt-1.5 w-full bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0">
                   {[
                     { value: "developer", label: "Developer" },
                     { value: "manager", label: "Manager" },
@@ -124,11 +125,12 @@ export default function InvitePage() {
                         setRole(item.value);
                         setDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 ${
+                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${
                         role === item.value
-                          ? "text-neutral-900 dark:text-white font-bold bg-neutral-50/60 dark:bg-neutral-800/20"
-                          : "text-neutral-600 dark:text-neutral-450 font-semibold"
+                          ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20"
+                          : "text-neutral-650 dark:text-neutral-400"
                       }`}
+                      style={{ fontWeight: 400 }}
                     >
                       {item.label}
                     </button>

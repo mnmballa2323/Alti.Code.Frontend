@@ -232,7 +232,7 @@ export default function TeamMembersPage() {
                         <div className="col-span-2 flex items-center justify-between">
                           <div className="relative flex items-center w-full max-w-[120px]">
                             {isYou ? (
-                              <span className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 py-1">
+                              <span className="text-sm text-neutral-800 dark:text-neutral-200 py-1" style={{ fontWeight: 400 }}>
                                 Admin
                               </span>
                             ) : (
@@ -240,7 +240,8 @@ export default function TeamMembersPage() {
                                 <button
                                   type="button"
                                   onClick={() => setOpenDropdownId(openDropdownId === member.id ? null : member.id)}
-                                  className="w-full flex items-center justify-between bg-transparent px-2 py-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors focus:outline-none cursor-pointer"
+                                  className="w-full flex items-center justify-between bg-transparent px-2 py-1 text-sm text-neutral-800 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 cursor-pointer"
+                                  style={{ fontWeight: 400 }}
                                 >
                                   <span>{formatRole(member.role)}</span>
                                   <svg
@@ -269,7 +270,7 @@ export default function TeamMembersPage() {
                                       onClick={() => setOpenDropdownId(null)}
                                     />
                                     {/* Dropdown Options Box */}
-                                    <div className="absolute top-full left-0 mt-1.5 w-full min-w-[120px] bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                                    <div className="absolute top-full left-0 mt-1.5 w-full min-w-[120px] bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0">
                                       {["admin", "manager", "developer"].map((r) => (
                                         <button
                                           key={r}
@@ -278,11 +279,12 @@ export default function TeamMembersPage() {
                                             handleRoleChange(member.id, r);
                                             setOpenDropdownId(null);
                                           }}
-                                          className={`w-full text-left px-3 py-2 text-xs font-semibold transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 ${
+                                          className={`w-full text-left px-3 py-2 text-xs transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${
                                             member.role?.toLowerCase() === r
-                                              ? "text-neutral-900 dark:text-white font-bold bg-neutral-50/60 dark:bg-neutral-800/20"
+                                              ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20"
                                               : "text-neutral-650 dark:text-neutral-400"
                                           }`}
+                                          style={{ fontWeight: 400 }}
                                         >
                                           {formatRole(r)}
                                         </button>
