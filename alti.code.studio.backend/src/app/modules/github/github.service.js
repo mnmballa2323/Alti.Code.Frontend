@@ -7528,4 +7528,734 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 83. Repository Branch Protection
+  // ==========================================
+  async getBranch(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching detailed branch information for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getBranch({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch branch information for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getBranchProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching branch protection settings for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getBranchProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { protected: false };
+      }
+      logger.error(
+        `Failed to fetch branch protection settings for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateBranchProtection(
+    owner,
+    repo,
+    branch,
+    requiredStatusChecks,
+    enforceAdmins,
+    requiredPullRequestReviews,
+    restrictions,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating branch protection rules for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const params = {
+        owner,
+        repo,
+        branch,
+        required_status_checks: requiredStatusChecks,
+        enforce_admins: enforceAdmins,
+        required_pull_request_reviews: requiredPullRequestReviews,
+        restrictions,
+      };
+      const { data } = await octokit.rest.repos.updateBranchProtection(params);
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update branch protection rules for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteBranchProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting branch protection rules for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const response = await octokit.rest.repos.deleteBranchProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete branch protection rules for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getAdminBranchProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching admin branch protection enforcement status for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getAdminBranchProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { enforced: false };
+      }
+      logger.error(
+        `Failed to fetch admin branch protection enforcement for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setAdminBranchProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Enabling admin branch protection enforcement for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.setAdminBranchProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to enable admin branch protection enforcement for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteAdminBranchProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Disabling admin branch protection enforcement for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const response = await octokit.rest.repos.deleteAdminBranchProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to disable admin branch protection enforcement for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 84. PR Review & Commit Signature Protection
+  // ==========================================
+  async getPullRequestReviewProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching PR review protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getPullRequestReviewProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { enabled: false };
+      }
+      logger.error(
+        `Failed to fetch PR review protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updatePullRequestReviewProtection(
+    owner,
+    repo,
+    branch,
+    dismissStaleReviews,
+    requireCodeOwnerReviews,
+    requiredApprovingReviewCount,
+    bypassPullRequestAllowances,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating PR review protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const params = {
+        owner,
+        repo,
+        branch,
+      };
+      if (dismissStaleReviews !== undefined)
+        params.dismiss_stale_reviews = dismissStaleReviews;
+      if (requireCodeOwnerReviews !== undefined)
+        params.require_code_owner_reviews = requireCodeOwnerReviews;
+      if (requiredApprovingReviewCount !== undefined)
+        params.required_approving_review_count = requiredApprovingReviewCount;
+      if (bypassPullRequestAllowances !== undefined)
+        params.bypass_pull_request_allowances = bypassPullRequestAllowances;
+      const { data } =
+        await octokit.rest.repos.updatePullRequestReviewProtection(params);
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update PR review protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deletePullRequestReviewProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting PR review protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const response =
+        await octokit.rest.repos.deletePullRequestReviewProtection({
+          owner,
+          repo,
+          branch,
+        });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete PR review protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getCommitSignatureProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching commit signature protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getCommitSignatureProtection({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { enabled: false };
+      }
+      logger.error(
+        `Failed to fetch commit signature protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createCommitSignatureProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Creating commit signature protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.createCommitSignatureProtection(
+        { owner, repo, branch },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create commit signature protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteCommitSignatureProtection(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting commit signature protection for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const response =
+        await octokit.rest.repos.deleteCommitSignatureProtection({
+          owner,
+          repo,
+          branch,
+        });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete commit signature protection for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 85. Branch Access Restrictions
+  // ==========================================
+  async getAccessRestrictions(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching access restrictions for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.getAccessRestrictions({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { enabled: false };
+      }
+      logger.error(
+        `Failed to fetch access restrictions for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteAccessRestrictions(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting access restrictions for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const response = await octokit.rest.repos.deleteAccessRestrictions({
+        owner,
+        repo,
+        branch,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete access restrictions for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listAppsWithAccessToProtectedBranch(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Listing apps with push access to protected branch ${branch} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.repos.listAppsWithAccessToProtectedBranch({
+          owner,
+          repo,
+          branch,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list apps with push access to protected branch ${branch} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addAppsAccessRestrictions(owner, repo, branch, apps) {
+    logger.info(
+      `🐙 [GitHub Service] Adding app push access restrictions to ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.addAppsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        apps,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to add app push access restrictions to ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setAppsAccessRestrictions(owner, repo, branch, apps) {
+    logger.info(
+      `🐙 [GitHub Service] Setting app push access restrictions for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.setAppsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        apps,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set app push access restrictions for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async removeAppsAccessRestrictions(owner, repo, branch, apps) {
+    logger.info(
+      `🐙 [GitHub Service] Removing app push access restrictions from ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.removeAppsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        apps,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to remove app push access restrictions from ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listTeamsWithAccessToProtectedBranch(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Listing teams with push access to protected branch ${branch} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.repos.listTeamsWithAccessToProtectedBranch({
+          owner,
+          repo,
+          branch,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list teams with push access to protected branch ${branch} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addTeamsAccessRestrictions(owner, repo, branch, teams) {
+    logger.info(
+      `🐙 [GitHub Service] Adding team push access restrictions to ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.addTeamsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        teams,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to add team push access restrictions to ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setTeamsAccessRestrictions(owner, repo, branch, teams) {
+    logger.info(
+      `🐙 [GitHub Service] Setting team push access restrictions for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.setTeamsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        teams,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set team push access restrictions for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async removeTeamsAccessRestrictions(owner, repo, branch, teams) {
+    logger.info(
+      `🐙 [GitHub Service] Removing team push access restrictions from ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.removeTeamsAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        teams,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to remove team push access restrictions from ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listUsersWithAccessToProtectedBranch(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Listing users with push access to protected branch ${branch} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.repos.listUsersWithAccessToProtectedBranch({
+          owner,
+          repo,
+          branch,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list users with push access to protected branch ${branch} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addUsersAccessRestrictions(owner, repo, branch, users) {
+    logger.info(
+      `🐙 [GitHub Service] Adding user push access restrictions to ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.addUsersAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        users,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to add user push access restrictions to ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setUsersAccessRestrictions(owner, repo, branch, users) {
+    logger.info(
+      `🐙 [GitHub Service] Setting user push access restrictions for ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.setUsersAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        users,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set user push access restrictions for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async removeUsersAccessRestrictions(owner, repo, branch, users) {
+    logger.info(
+      `🐙 [GitHub Service] Removing user push access restrictions from ${owner}/${repo} branch ${branch}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.removeUsersAccessRestrictions({
+        owner,
+        repo,
+        branch,
+        users,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to remove user push access restrictions from ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 86. Repository Teams, Tags & Management
+  // ==========================================
+  async listRepoTeams(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Listing teams with access to repo ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.listTeams({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list teams with access to repo ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addOrUpdateTeamPermissionsForRepo(
+    owner,
+    repo,
+    org,
+    teamSlug,
+    permission,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Setting permissions for team ${teamSlug} to ${permission} in repo ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.teams.addOrUpdateTeamPermissionsInOrg(
+        {
+          org,
+          team_slug: teamSlug,
+          owner,
+          repo,
+          permission,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set permissions for team ${teamSlug} in repo ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async removeTeamFromRepo(owner, repo, org, teamSlug) {
+    logger.info(
+      `🐙 [GitHub Service] Removing team ${teamSlug} access from repo ${owner}/${repo}`,
+    );
+    try {
+      const response = await octokit.rest.teams.removeTeam({
+        org,
+        team_slug: teamSlug,
+        owner,
+        repo,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to remove team ${teamSlug} access from repo ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listRepoTags(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Listing tags for repo ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.listTags({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list tags for repo ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async renameBranch(owner, repo, branch, newName) {
+    logger.info(
+      `🐙 [GitHub Service] Renaming branch ${branch} to ${newName} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.renameBranch({
+        owner,
+        repo,
+        branch,
+        new_name: newName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to rename branch ${branch} to ${newName} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async mergeUpstream(owner, repo, branch) {
+    logger.info(
+      `🐙 [GitHub Service] Merging upstream changes into branch ${branch} of fork ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.repos.mergeUpstream({
+        owner,
+        repo,
+        branch,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to merge upstream changes for ${owner}/${repo} branch ${branch}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };
+
