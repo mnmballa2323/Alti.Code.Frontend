@@ -158,19 +158,40 @@ router.post('/repos/:owner/:repo/git/commits', GithubController.createCommit);
 // 14. Organizations & Teams API
 router.get('/orgs', GithubController.listOrganizations);
 router.get('/orgs/:org/teams', GithubController.listTeams);
-router.get('/orgs/:org/teams/:team_slug/members', GithubController.listTeamMembers);
+router.get(
+  '/orgs/:org/teams/:team_slug/members',
+  GithubController.listTeamMembers,
+);
 
 // 15. Repository Webhooks API
 router.get('/repos/:owner/:repo/hooks', GithubController.listWebhooks);
 router.post('/repos/:owner/:repo/hooks', GithubController.createWebhook);
-router.delete('/repos/:owner/:repo/hooks/:hookId', GithubController.deleteWebhook);
+router.delete(
+  '/repos/:owner/:repo/hooks/:hookId',
+  GithubController.deleteWebhook,
+);
 
 // 16. Actions Secrets & Variables API
-router.get('/repos/:owner/:repo/actions/secrets/public-key', GithubController.getActionsPublicKey);
-router.put('/repos/:owner/:repo/actions/secrets/:secretName', GithubController.createOrUpdateRepoSecret);
-router.get('/repos/:owner/:repo/actions/variables', GithubController.listRepoVariables);
-router.post('/repos/:owner/:repo/actions/variables', GithubController.createRepoVariable);
-router.patch('/repos/:owner/:repo/actions/variables/:name', GithubController.updateRepoVariable);
+router.get(
+  '/repos/:owner/:repo/actions/secrets/public-key',
+  GithubController.getActionsPublicKey,
+);
+router.put(
+  '/repos/:owner/:repo/actions/secrets/:secretName',
+  GithubController.createOrUpdateRepoSecret,
+);
+router.get(
+  '/repos/:owner/:repo/actions/variables',
+  GithubController.listRepoVariables,
+);
+router.post(
+  '/repos/:owner/:repo/actions/variables',
+  GithubController.createRepoVariable,
+);
+router.patch(
+  '/repos/:owner/:repo/actions/variables/:name',
+  GithubController.updateRepoVariable,
+);
 
 // 17. Codespaces API
 router.get('/codespaces', GithubController.listCodespaces);
@@ -178,40 +199,97 @@ router.post('/codespaces', GithubController.createCodespace);
 router.delete('/codespaces/:codespaceName', GithubController.deleteCodespace);
 
 // 18. Dependabot Alerts API
-router.get('/repos/:owner/:repo/dependabot/alerts', GithubController.listDependabotAlerts);
+router.get(
+  '/repos/:owner/:repo/dependabot/alerts',
+  GithubController.listDependabotAlerts,
+);
 
 // 19. Copilot API
-router.get('/copilot/billing/:username', GithubController.getCopilotBillingForUser);
+router.get(
+  '/copilot/billing/:username',
+  GithubController.getCopilotBillingForUser,
+);
 
 // 20. Discussions API
 router.get('/repos/:owner/:repo/discussions', GithubController.listDiscussions);
-router.get('/repos/:owner/:repo/discussions/:number', GithubController.getDiscussion);
-router.post('/repos/:owner/:repo/discussions', GithubController.createDiscussion);
-router.post('/repos/:owner/:repo/discussions/:discussionId/comments', GithubController.createDiscussionComment);
+router.get(
+  '/repos/:owner/:repo/discussions/:number',
+  GithubController.getDiscussion,
+);
+router.post(
+  '/repos/:owner/:repo/discussions',
+  GithubController.createDiscussion,
+);
+router.post(
+  '/repos/:owner/:repo/discussions/:discussionId/comments',
+  GithubController.createDiscussionComment,
+);
 
 // 21. Checks API
 router.post('/repos/:owner/:repo/checks/runs', GithubController.createCheckRun);
-router.patch('/repos/:owner/:repo/checks/runs/:checkRunId', GithubController.updateCheckRun);
-router.get('/repos/:owner/:repo/checks/refs/:ref', GithubController.listCheckRunsForRef);
-router.post('/repos/:owner/:repo/checks/suites', GithubController.createCheckSuite);
+router.patch(
+  '/repos/:owner/:repo/checks/runs/:checkRunId',
+  GithubController.updateCheckRun,
+);
+router.get(
+  '/repos/:owner/:repo/checks/refs/:ref',
+  GithubController.listCheckRunsForRef,
+);
+router.post(
+  '/repos/:owner/:repo/checks/suites',
+  GithubController.createCheckSuite,
+);
 
 // 22. Deployments & Environments API
 router.get('/repos/:owner/:repo/deployments', GithubController.listDeployments);
-router.post('/repos/:owner/:repo/deployments', GithubController.createDeployment);
-router.post('/repos/:owner/:repo/deployments/:deploymentId/statuses', GithubController.createDeploymentStatus);
-router.get('/repos/:owner/:repo/environments', GithubController.listEnvironments);
-router.put('/repos/:owner/:repo/environments/:environmentName', GithubController.createOrUpdateEnvironment);
+router.post(
+  '/repos/:owner/:repo/deployments',
+  GithubController.createDeployment,
+);
+router.post(
+  '/repos/:owner/:repo/deployments/:deploymentId/statuses',
+  GithubController.createDeploymentStatus,
+);
+router.get(
+  '/repos/:owner/:repo/environments',
+  GithubController.listEnvironments,
+);
+router.put(
+  '/repos/:owner/:repo/environments/:environmentName',
+  GithubController.createOrUpdateEnvironment,
+);
 
 // 23. Code & Secret Scanning API
-router.get('/repos/:owner/:repo/scanning/code/alerts', GithubController.listCodeScanningAlerts);
-router.get('/repos/:owner/:repo/scanning/code/alerts/:alertNumber', GithubController.getCodeScanningAlert);
-router.get('/repos/:owner/:repo/scanning/secret/alerts', GithubController.listSecretScanningAlerts);
-router.get('/repos/:owner/:repo/scanning/secret/alerts/:alertNumber', GithubController.getSecretScanningAlert);
+router.get(
+  '/repos/:owner/:repo/scanning/code/alerts',
+  GithubController.listCodeScanningAlerts,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/code/alerts/:alertNumber',
+  GithubController.getCodeScanningAlert,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/secret/alerts',
+  GithubController.listSecretScanningAlerts,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/secret/alerts/:alertNumber',
+  GithubController.getSecretScanningAlert,
+);
 
 // 24. Actions Artifacts & Workflow Jobs API
-router.get('/repos/:owner/:repo/actions/runs/:runId/jobs', GithubController.listWorkflowJobs);
-router.get('/repos/:owner/:repo/actions/runs/:runId/artifacts', GithubController.listWorkflowRunArtifacts);
-router.get('/repos/:owner/:repo/actions/artifacts/:artifactId/download', GithubController.downloadWorkflowArtifact);
+router.get(
+  '/repos/:owner/:repo/actions/runs/:runId/jobs',
+  GithubController.listWorkflowJobs,
+);
+router.get(
+  '/repos/:owner/:repo/actions/runs/:runId/artifacts',
+  GithubController.listWorkflowRunArtifacts,
+);
+router.get(
+  '/repos/:owner/:repo/actions/artifacts/:artifactId/download',
+  GithubController.downloadWorkflowArtifact,
+);
 
 export const GithubRoutes = router;
 export default router;

@@ -732,7 +732,9 @@ export const GithubService = {
   // 13. Git Database Plumbing API
   // ==========================================
   async getRef(owner, repo, ref) {
-    logger.info(`🐙 [GitHub Service] Fetching Git ref: ${ref} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Git ref: ${ref} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.git.getRef({ owner, repo, ref });
       return data;
@@ -743,13 +745,15 @@ export const GithubService = {
   },
 
   async createRef(owner, repo, refData) {
-    logger.info(`🐙 [GitHub Service] Creating Git ref: ${refData.ref} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating Git ref: ${refData.ref} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.git.createRef({
         owner,
         repo,
         ref: refData.ref,
-        sha: refData.sha
+        sha: refData.sha,
       });
       return data;
     } catch (error) {
@@ -759,14 +763,16 @@ export const GithubService = {
   },
 
   async updateRef(owner, repo, ref, refData) {
-    logger.info(`🐙 [GitHub Service] Updating Git ref: ${ref} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating Git ref: ${ref} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.git.updateRef({
         owner,
         repo,
         ref,
         sha: refData.sha,
-        force: refData.force ?? false
+        force: refData.force ?? false,
       });
       return data;
     } catch (error) {
@@ -782,7 +788,7 @@ export const GithubService = {
         owner,
         repo,
         content: blobData.content,
-        encoding: blobData.encoding || 'utf-8'
+        encoding: blobData.encoding || 'utf-8',
       });
       return data;
     } catch (error) {
@@ -798,7 +804,7 @@ export const GithubService = {
         owner,
         repo,
         tree: treeData.tree,
-        base_tree: treeData.base_tree
+        base_tree: treeData.base_tree,
       });
       return data;
     } catch (error) {
@@ -818,7 +824,7 @@ export const GithubService = {
         parents: commitData.parents,
         author: commitData.author,
         committer: commitData.committer,
-        signature: commitData.signature
+        signature: commitData.signature,
       });
       return data;
     } catch (error) {
@@ -835,7 +841,7 @@ export const GithubService = {
     try {
       const { data } = await octokit.rest.orgs.listForAuthenticatedUser({
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -850,7 +856,7 @@ export const GithubService = {
       const { data } = await octokit.rest.teams.list({
         org,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -864,11 +870,14 @@ export const GithubService = {
     try {
       const { data } = await octokit.rest.teams.listMembersInOrg({
         org,
-        team_slug: teamSlug
+        team_slug: teamSlug,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list team members for ${org}/${teamSlug}:`, error);
+      logger.error(
+        `Failed to list team members for ${org}/${teamSlug}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -883,7 +892,7 @@ export const GithubService = {
         owner,
         repo,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -901,7 +910,7 @@ export const GithubService = {
         name: hookData.name || 'web',
         config: hookData.config,
         events: hookData.events,
-        active: hookData.active ?? true
+        active: hookData.active ?? true,
       });
       return data;
     } catch (error) {
@@ -911,16 +920,21 @@ export const GithubService = {
   },
 
   async deleteWebhook(owner, repo, hookId) {
-    logger.info(`🐙 [GitHub Service] Deleting webhook ${hookId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting webhook ${hookId} for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.deleteWebhook({
         owner,
         repo,
-        hook_id: hookId
+        hook_id: hookId,
       });
       return response.status === 204;
     } catch (error) {
-      logger.error(`Failed to delete webhook ${hookId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete webhook ${hookId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -929,29 +943,42 @@ export const GithubService = {
   // 16. Actions Secrets & Variables API
   // ==========================================
   async getActionsPublicKey(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Fetching Actions public key for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Actions public key for ${owner}/${repo}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.getRepoPublicKey({ owner, repo });
+      const { data } = await octokit.rest.actions.getRepoPublicKey({
+        owner,
+        repo,
+      });
       return data;
     } catch (error) {
-      logger.error(`Failed to fetch Actions public key for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to fetch Actions public key for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createOrUpdateRepoSecret(owner, repo, secretName, secretData) {
-    logger.info(`🐙 [GitHub Service] Creating or updating Actions secret ${secretName} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating or updating Actions secret ${secretName} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.createOrUpdateRepoSecret({
         owner,
         repo,
         secret_name: secretName,
         encrypted_value: secretData.encrypted_value,
-        key_id: secretData.key_id
+        key_id: secretData.key_id,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to set secret ${secretName} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to set secret ${secretName} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -963,7 +990,7 @@ export const GithubService = {
         owner,
         repo,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -973,33 +1000,43 @@ export const GithubService = {
   },
 
   async createRepoVariable(owner, repo, name, value) {
-    logger.info(`🐙 [GitHub Service] Creating variable ${name} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating variable ${name} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.createRepoVariable({
         owner,
         repo,
         name,
-        value
+        value,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create variable ${name} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create variable ${name} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateRepoVariable(owner, repo, name, value) {
-    logger.info(`🐙 [GitHub Service] Updating variable ${name} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating variable ${name} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.updateRepoVariable({
         owner,
         repo,
         name,
-        value
+        value,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update variable ${name} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update variable ${name} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1012,7 +1049,7 @@ export const GithubService = {
     try {
       const { data } = await octokit.rest.codespaces.listForAuthenticatedUser({
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -1024,14 +1061,16 @@ export const GithubService = {
   async createCodespace(owner, repo, codespaceData) {
     logger.info(`🐙 [GitHub Service] Creating Codespace for ${owner}/${repo}`);
     try {
-      const { data } = await octokit.rest.codespaces.createWithRepoForAuthenticatedUser({
-        owner,
-        repo,
-        ref: codespaceData.ref,
-        machine: codespaceData.machine,
-        devcontainer_path: codespaceData.devcontainer_path,
-        multi_repo_permissions_opt_out: codespaceData.multi_repo_permissions_opt_out
-      });
+      const { data } =
+        await octokit.rest.codespaces.createWithRepoForAuthenticatedUser({
+          owner,
+          repo,
+          ref: codespaceData.ref,
+          machine: codespaceData.machine,
+          devcontainer_path: codespaceData.devcontainer_path,
+          multi_repo_permissions_opt_out:
+            codespaceData.multi_repo_permissions_opt_out,
+        });
       return data;
     } catch (error) {
       logger.error(`Failed to create Codespace for ${owner}/${repo}:`, error);
@@ -1042,9 +1081,11 @@ export const GithubService = {
   async deleteCodespace(codespaceName) {
     logger.info(`🐙 [GitHub Service] Deleting Codespace: ${codespaceName}`);
     try {
-      const response = await octokit.rest.codespaces.deleteForAuthenticatedUser({
-        codespace_name: codespaceName
-      });
+      const response = await octokit.rest.codespaces.deleteForAuthenticatedUser(
+        {
+          codespace_name: codespaceName,
+        },
+      );
       return response.status === 204;
     } catch (error) {
       logger.error(`Failed to delete Codespace ${codespaceName}:`, error);
@@ -1056,7 +1097,9 @@ export const GithubService = {
   // 18. Dependabot Alerts API
   // ==========================================
   async listDependabotAlerts(owner, repo, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing Dependabot alerts for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing Dependabot alerts for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.dependabot.listAlertsForRepo({
         owner,
@@ -1064,11 +1107,14 @@ export const GithubService = {
         state: params.state,
         severity: params.severity,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list Dependabot alerts for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list Dependabot alerts for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1077,14 +1123,19 @@ export const GithubService = {
   // 19. Copilot API
   // ==========================================
   async getCopilotBillingForUser(username) {
-    logger.info(`🐙 [GitHub Service] Fetching Copilot details for user: ${username}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Copilot details for user: ${username}`,
+    );
     try {
       const { data } = await octokit.rest.copilot.getBillingDetailsForUser({
-        username
+        username,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to fetch Copilot billing details for ${username}:`, error);
+      logger.error(
+        `Failed to fetch Copilot billing details for ${username}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1114,7 +1165,7 @@ export const GithubService = {
       const result = await octokit.graphql(query, {
         owner,
         repo,
-        first: params.per_page || 30
+        first: params.per_page || 30,
       });
       return result.repository?.discussions?.nodes || [];
     } catch (error) {
@@ -1124,7 +1175,9 @@ export const GithubService = {
   },
 
   async getDiscussion(owner, repo, discussionNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching discussion #${discussionNumber} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching discussion #${discussionNumber} for ${owner}/${repo}`,
+    );
     try {
       const query = `
         query($owner: String!, $repo: String!, $number: Int!) {
@@ -1150,17 +1203,22 @@ export const GithubService = {
       const result = await octokit.graphql(query, {
         owner,
         repo,
-        number: parseInt(discussionNumber, 10)
+        number: parseInt(discussionNumber, 10),
       });
       return result.repository?.discussion || null;
     } catch (error) {
-      logger.error(`Failed to get discussion #${discussionNumber} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get discussion #${discussionNumber} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createDiscussion(owner, repo, categoryId, title, body) {
-    logger.info(`🐙 [GitHub Service] Creating discussion: "${title}" in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating discussion: "${title}" in ${owner}/${repo}`,
+    );
     try {
       // 1. Fetch the Repository Node ID
       const repoQuery = `
@@ -1193,7 +1251,7 @@ export const GithubService = {
         repositoryId,
         categoryId,
         title,
-        body
+        body,
       });
       return result.createDiscussion?.discussion || null;
     } catch (error) {
@@ -1203,7 +1261,9 @@ export const GithubService = {
   },
 
   async createDiscussionComment(owner, repo, discussionId, body) {
-    logger.info(`🐙 [GitHub Service] Creating comment on discussion ID: ${discussionId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating comment on discussion ID: ${discussionId} in ${owner}/${repo}`,
+    );
     try {
       const mutation = `
         mutation($discussionId: ID!, $body: String!) {
@@ -1218,11 +1278,14 @@ export const GithubService = {
       `;
       const result = await octokit.graphql(mutation, {
         discussionId,
-        body
+        body,
       });
       return result.addDiscussionComment?.comment || null;
     } catch (error) {
-      logger.error(`Failed to create discussion comment in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create discussion comment in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1231,7 +1294,9 @@ export const GithubService = {
   // 21. Checks API
   // ==========================================
   async createCheckRun(owner, repo, checkData) {
-    logger.info(`🐙 [GitHub Service] Creating check run: "${checkData.name}" for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating check run: "${checkData.name}" for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.checks.create({
         owner,
@@ -1241,7 +1306,7 @@ export const GithubService = {
         status: checkData.status,
         conclusion: checkData.conclusion,
         completed_at: checkData.completed_at,
-        output: checkData.output
+        output: checkData.output,
       });
       return data;
     } catch (error) {
@@ -1251,7 +1316,9 @@ export const GithubService = {
   },
 
   async updateCheckRun(owner, repo, checkRunId, checkData) {
-    logger.info(`🐙 [GitHub Service] Updating check run #${checkRunId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating check run #${checkRunId} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.checks.update({
         owner,
@@ -1260,37 +1327,47 @@ export const GithubService = {
         status: checkData.status,
         conclusion: checkData.conclusion,
         completed_at: checkData.completed_at,
-        output: checkData.output
+        output: checkData.output,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update check run ${checkRunId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update check run ${checkRunId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listCheckRunsForRef(owner, repo, ref) {
-    logger.info(`🐙 [GitHub Service] Listing check runs for ref: ${ref} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing check runs for ref: ${ref} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.checks.listForRef({
         owner,
         repo,
-        ref
+        ref,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list check runs for ${ref} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list check runs for ${ref} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createCheckSuite(owner, repo, suiteData) {
-    logger.info(`🐙 [GitHub Service] Creating check suite for SHA: ${suiteData.head_sha} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating check suite for SHA: ${suiteData.head_sha} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.checks.createSuite({
         owner,
         repo,
-        head_sha: suiteData.head_sha
+        head_sha: suiteData.head_sha,
       });
       return data;
     } catch (error) {
@@ -1313,7 +1390,7 @@ export const GithubService = {
         task: params.task,
         environment: params.environment,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -1336,7 +1413,7 @@ export const GithubService = {
         environment: deploymentData.environment,
         description: deploymentData.description,
         transient_environment: deploymentData.transient_environment,
-        production_environment: deploymentData.production_environment
+        production_environment: deploymentData.production_environment,
       });
       return data;
     } catch (error) {
@@ -1346,7 +1423,9 @@ export const GithubService = {
   },
 
   async createDeploymentStatus(owner, repo, deploymentId, statusData) {
-    logger.info(`🐙 [GitHub Service] Creating deployment status for deployment #${deploymentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating deployment status for deployment #${deploymentId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.createDeploymentStatus({
         owner,
@@ -1358,23 +1437,28 @@ export const GithubService = {
         description: statusData.description,
         environment: statusData.environment,
         environment_url: statusData.environment_url,
-        auto_inactive: statusData.auto_inactive
+        auto_inactive: statusData.auto_inactive,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create deployment status for deployment #${deploymentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create deployment status for deployment #${deploymentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listEnvironments(owner, repo, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing environments for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing environments for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listEnvironments({
         owner,
         repo,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
@@ -1383,8 +1467,15 @@ export const GithubService = {
     }
   },
 
-  async createOrUpdateEnvironment(owner, repo, environmentName, environmentData = {}) {
-    logger.info(`🐙 [GitHub Service] Creating/updating environment "${environmentName}" for ${owner}/${repo}`);
+  async createOrUpdateEnvironment(
+    owner,
+    repo,
+    environmentName,
+    environmentData = {},
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Creating/updating environment "${environmentName}" for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.createOrUpdateEnvironment({
         owner,
@@ -1393,11 +1484,14 @@ export const GithubService = {
         wait_timer: environmentData.wait_timer,
         prevent_self_review: environmentData.prevent_self_review,
         reviewers: environmentData.reviewers,
-        deployment_branch_policy: environmentData.deployment_branch_policy
+        deployment_branch_policy: environmentData.deployment_branch_policy,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to set environment "${environmentName}" for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to set environment "${environmentName}" for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1406,7 +1500,9 @@ export const GithubService = {
   // 23. Code & Secret Scanning API
   // ==========================================
   async listCodeScanningAlerts(owner, repo, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing Code Scanning alerts for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing Code Scanning alerts for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.listAlertsForRepo({
         owner,
@@ -1414,32 +1510,42 @@ export const GithubService = {
         state: params.state,
         severity: params.severity,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list Code Scanning alerts for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list Code Scanning alerts for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getCodeScanningAlert(owner, repo, alertNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching Code Scanning alert #${alertNumber} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Code Scanning alert #${alertNumber} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.getAlert({
         owner,
         repo,
-        alert_number: parseInt(alertNumber, 10)
+        alert_number: parseInt(alertNumber, 10),
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get Code Scanning alert #${alertNumber} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get Code Scanning alert #${alertNumber} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listSecretScanningAlerts(owner, repo, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing Secret Scanning alerts for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing Secret Scanning alerts for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.secretScanning.listAlertsForRepo({
         owner,
@@ -1447,26 +1553,34 @@ export const GithubService = {
         state: params.state,
         secret_type: params.secret_type,
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list Secret Scanning alerts for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list Secret Scanning alerts for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getSecretScanningAlert(owner, repo, alertNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching Secret Scanning alert #${alertNumber} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Secret Scanning alert #${alertNumber} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.secretScanning.getAlert({
         owner,
         repo,
-        alert_number: parseInt(alertNumber, 10)
+        alert_number: parseInt(alertNumber, 10),
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get Secret Scanning alert #${alertNumber} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get Secret Scanning alert #${alertNumber} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1475,53 +1589,67 @@ export const GithubService = {
   // 24. Actions Artifacts & Workflow Jobs API
   // ==========================================
   async listWorkflowJobs(owner, repo, runId, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing workflow jobs for run #${runId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing workflow jobs for run #${runId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.listJobsForWorkflowRun({
         owner,
         repo,
         run_id: parseInt(runId, 10),
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list workflow jobs for run #${runId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list workflow jobs for run #${runId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listWorkflowRunArtifacts(owner, repo, runId, params = {}) {
-    logger.info(`🐙 [GitHub Service] Listing workflow artifacts for run #${runId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing workflow artifacts for run #${runId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.listWorkflowRunArtifacts({
         owner,
         repo,
         run_id: parseInt(runId, 10),
         per_page: params.per_page || 30,
-        page: params.page || 1
+        page: params.page || 1,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list workflow artifacts for run #${runId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list workflow artifacts for run #${runId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async downloadWorkflowArtifact(owner, repo, artifactId) {
-    logger.info(`🐙 [GitHub Service] Downloading workflow artifact #${artifactId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Downloading workflow artifact #${artifactId} for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.actions.downloadArtifact({
         owner,
         repo,
         artifact_id: parseInt(artifactId, 10),
-        archive_format: 'zip'
+        archive_format: 'zip',
       });
       return { url: response.url };
     } catch (error) {
-      logger.error(`Failed to download workflow artifact #${artifactId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to download workflow artifact #${artifactId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
-  }
+  },
 };
-

@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.184] - 2026-06-11 — Phase 3 GitHub REST API & SDK Entrenchment
+### Added
+- **GitHub Discussions**: Implemented repository discussions querying/creation and comment posting using raw GraphQL queries via the pre-existing direct GraphQL engine.
+- **Checks API**: Added support for creating check runs, updating check run details, listing check runs for specific references, and creating check suites.
+- **Deployments & Environments**: Integrated methods to list/create deployments, update deployment status, list repository environments, and create or update environments.
+- **Security Scanning (Code & Secret Scanning)**: Exposed endpoints to query code scanning alerts, get code scanning alert details, list secret scanning alerts, and get secret scanning alert details.
+- **Actions Artifacts & Workflow Jobs**: Added methods to list workflow run jobs, list run build artifacts, and download artifacts.
+- **Unit Testing**: Extended the unit test suite to 63 passing test cases verifying all new Phase 3 endpoints.
+
 ## [39.37.183] - 2026-06-11 — Phase 2 GitHub API, SDK, and MCP Entrenchment
 ### Added
 - **Git Database Plumbing**: Implemented wrappers for low-level plumbing operations (`getRef`, `createRef`, `updateRef`, `createBlob`, `createTree`, `createCommit`).

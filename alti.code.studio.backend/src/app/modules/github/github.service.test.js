@@ -949,11 +949,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       repository: { discussions: { nodes: mockNodes } },
     });
 
-    const result = await GithubService.listDiscussions('owner', 'repo', { per_page: 10 });
+    const result = await GithubService.listDiscussions('owner', 'repo', {
+      per_page: 10,
+    });
     expect(result).toEqual(mockNodes);
     expect(mockOctokit.graphql).toHaveBeenCalledWith(
-      expect.stringContaining('query($owner: String!, $repo: String!, $first: Int)'),
-      { owner: 'owner', repo: 'repo', first: 10 }
+      expect.stringContaining(
+        'query($owner: String!, $repo: String!, $first: Int)',
+      ),
+      { owner: 'owner', repo: 'repo', first: 10 },
     );
   });
 
@@ -966,8 +970,10 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const result = await GithubService.getDiscussion('owner', 'repo', 42);
     expect(result).toEqual(mockDisc);
     expect(mockOctokit.graphql).toHaveBeenCalledWith(
-      expect.stringContaining('query($owner: String!, $repo: String!, $number: Int!)'),
-      { owner: 'owner', repo: 'repo', number: 42 }
+      expect.stringContaining(
+        'query($owner: String!, $repo: String!, $number: Int!)',
+      ),
+      { owner: 'owner', repo: 'repo', number: 42 },
     );
   });
 
@@ -978,17 +984,30 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       .mockResolvedValueOnce({ repository: { id: 'repo123' } })
       .mockResolvedValueOnce({ createDiscussion: { discussion: mockDisc } });
 
-    const result = await GithubService.createDiscussion('owner', 'repo', 'cat123', 'new title', 'new body');
+    const result = await GithubService.createDiscussion(
+      'owner',
+      'repo',
+      'cat123',
+      'new title',
+      'new body',
+    );
     expect(result).toEqual(mockDisc);
     expect(mockOctokit.graphql).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('query($owner: String!, $repo: String!)'),
-      { owner: 'owner', repo: 'repo' }
+      { owner: 'owner', repo: 'repo' },
     );
     expect(mockOctokit.graphql).toHaveBeenNthCalledWith(
       2,
-      expect.stringContaining('mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!)'),
-      { repositoryId: 'repo123', categoryId: 'cat123', title: 'new title', body: 'new body' }
+      expect.stringContaining(
+        'mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!)',
+      ),
+      {
+        repositoryId: 'repo123',
+        categoryId: 'cat123',
+        title: 'new title',
+        body: 'new body',
+      },
     );
   });
 
@@ -998,11 +1017,16 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       addDiscussionComment: { comment: mockComment },
     });
 
-    const result = await GithubService.createDiscussionComment('owner', 'repo', 'disc123', 'nice post');
+    const result = await GithubService.createDiscussionComment(
+      'owner',
+      'repo',
+      'disc123',
+      'nice post',
+    );
     expect(result).toEqual(mockComment);
     expect(mockOctokit.graphql).toHaveBeenCalledWith(
       expect.stringContaining('mutation($discussionId: ID!, $body: String!)'),
-      { discussionId: 'disc123', body: 'nice post' }
+      { discussionId: 'disc123', body: 'nice post' },
     );
   });
 
@@ -1011,8 +1035,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockCheck = { id: 1, name: 'linter' };
     mockOctokit.rest.checks.create.mockResolvedValue({ data: mockCheck });
 
-    const checkData = { name: 'linter', head_sha: 'sha123', status: 'completed', conclusion: 'success' };
-    const result = await GithubService.createCheckRun('owner', 'repo', checkData);
+    const checkData = {
+      name: 'linter',
+      head_sha: 'sha123',
+      status: 'completed',
+      conclusion: 'success',
+    };
+    const result = await GithubService.createCheckRun(
+      'owner',
+      'repo',
+      checkData,
+    );
     expect(result).toEqual(mockCheck);
     expect(mockOctokit.rest.checks.create).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1031,7 +1064,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.checks.update.mockResolvedValue({ data: mockCheck });
 
     const checkData = { status: 'completed', conclusion: 'success' };
-    const result = await GithubService.updateCheckRun('owner', 'repo', 101, checkData);
+    const result = await GithubService.updateCheckRun(
+      'owner',
+      'repo',
+      101,
+      checkData,
+    );
     expect(result).toEqual(mockCheck);
     expect(mockOctokit.rest.checks.update).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1048,7 +1086,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockRuns = { total_count: 1, check_runs: [{ id: 1 }] };
     mockOctokit.rest.checks.listForRef.mockResolvedValue({ data: mockRuns });
 
-    const result = await GithubService.listCheckRunsForRef('owner', 'repo', 'main');
+    const result = await GithubService.listCheckRunsForRef(
+      'owner',
+      'repo',
+      'main',
+    );
     expect(result).toEqual(mockRuns);
     expect(mockOctokit.rest.checks.listForRef).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1061,7 +1103,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockSuite = { id: 2, head_sha: 'sha123' };
     mockOctokit.rest.checks.createSuite.mockResolvedValue({ data: mockSuite });
 
-    const result = await GithubService.createCheckSuite('owner', 'repo', { head_sha: 'sha123' });
+    const result = await GithubService.createCheckSuite('owner', 'repo', {
+      head_sha: 'sha123',
+    });
     expect(result).toEqual(mockSuite);
     expect(mockOctokit.rest.checks.createSuite).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1073,9 +1117,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 22. Deployments & Environments API
   it('should list deployments', async () => {
     const mockDeployments = [{ id: 1, environment: 'production' }];
-    mockOctokit.rest.repos.listDeployments.mockResolvedValue({ data: mockDeployments });
+    mockOctokit.rest.repos.listDeployments.mockResolvedValue({
+      data: mockDeployments,
+    });
 
-    const result = await GithubService.listDeployments('owner', 'repo', { environment: 'production' });
+    const result = await GithubService.listDeployments('owner', 'repo', {
+      environment: 'production',
+    });
     expect(result).toEqual(mockDeployments);
     expect(mockOctokit.rest.repos.listDeployments).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1091,10 +1139,20 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should create deployment', async () => {
     const mockDeployment = { id: 2 };
-    mockOctokit.rest.repos.createDeployment.mockResolvedValue({ data: mockDeployment });
+    mockOctokit.rest.repos.createDeployment.mockResolvedValue({
+      data: mockDeployment,
+    });
 
-    const deploymentData = { ref: 'main', environment: 'production', task: 'deploy' };
-    const result = await GithubService.createDeployment('owner', 'repo', deploymentData);
+    const deploymentData = {
+      ref: 'main',
+      environment: 'production',
+      task: 'deploy',
+    };
+    const result = await GithubService.createDeployment(
+      'owner',
+      'repo',
+      deploymentData,
+    );
     expect(result).toEqual(mockDeployment);
     expect(mockOctokit.rest.repos.createDeployment).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1113,10 +1171,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should create deployment status', async () => {
     const mockStatus = { id: 3, state: 'success' };
-    mockOctokit.rest.repos.createDeploymentStatus.mockResolvedValue({ data: mockStatus });
+    mockOctokit.rest.repos.createDeploymentStatus.mockResolvedValue({
+      data: mockStatus,
+    });
 
     const statusData = { state: 'success', environment: 'production' };
-    const result = await GithubService.createDeploymentStatus('owner', 'repo', 505, statusData);
+    const result = await GithubService.createDeploymentStatus(
+      'owner',
+      'repo',
+      505,
+      statusData,
+    );
     expect(result).toEqual(mockStatus);
     expect(mockOctokit.rest.repos.createDeploymentStatus).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1133,10 +1198,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   });
 
   it('should list environments', async () => {
-    const mockEnvironments = { total_count: 1, environments: [{ id: 1, name: 'production' }] };
-    mockOctokit.rest.repos.listEnvironments.mockResolvedValue({ data: mockEnvironments });
+    const mockEnvironments = {
+      total_count: 1,
+      environments: [{ id: 1, name: 'production' }],
+    };
+    mockOctokit.rest.repos.listEnvironments.mockResolvedValue({
+      data: mockEnvironments,
+    });
 
-    const result = await GithubService.listEnvironments('owner', 'repo', { page: 2 });
+    const result = await GithubService.listEnvironments('owner', 'repo', {
+      page: 2,
+    });
     expect(result).toEqual(mockEnvironments);
     expect(mockOctokit.rest.repos.listEnvironments).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1148,11 +1220,20 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should create or update environment', async () => {
     const mockEnv = { name: 'production' };
-    mockOctokit.rest.repos.createOrUpdateEnvironment.mockResolvedValue({ data: mockEnv });
+    mockOctokit.rest.repos.createOrUpdateEnvironment.mockResolvedValue({
+      data: mockEnv,
+    });
 
-    const result = await GithubService.createOrUpdateEnvironment('owner', 'repo', 'production', { wait_timer: 30 });
+    const result = await GithubService.createOrUpdateEnvironment(
+      'owner',
+      'repo',
+      'production',
+      { wait_timer: 30 },
+    );
     expect(result).toEqual(mockEnv);
-    expect(mockOctokit.rest.repos.createOrUpdateEnvironment).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.createOrUpdateEnvironment,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       environment_name: 'production',
@@ -1166,11 +1247,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 23. Code & Secret Scanning API
   it('should list code scanning alerts', async () => {
     const mockAlerts = [{ number: 1, rule: { id: 'xss' } }];
-    mockOctokit.rest.codeScanning.listAlertsForRepo.mockResolvedValue({ data: mockAlerts });
+    mockOctokit.rest.codeScanning.listAlertsForRepo.mockResolvedValue({
+      data: mockAlerts,
+    });
 
-    const result = await GithubService.listCodeScanningAlerts('owner', 'repo', { state: 'open' });
+    const result = await GithubService.listCodeScanningAlerts('owner', 'repo', {
+      state: 'open',
+    });
     expect(result).toEqual(mockAlerts);
-    expect(mockOctokit.rest.codeScanning.listAlertsForRepo).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeScanning.listAlertsForRepo,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       state: 'open',
@@ -1182,9 +1269,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should get code scanning alert details', async () => {
     const mockAlert = { number: 45, rule: {} };
-    mockOctokit.rest.codeScanning.getAlert.mockResolvedValue({ data: mockAlert });
+    mockOctokit.rest.codeScanning.getAlert.mockResolvedValue({
+      data: mockAlert,
+    });
 
-    const result = await GithubService.getCodeScanningAlert('owner', 'repo', 45);
+    const result = await GithubService.getCodeScanningAlert(
+      'owner',
+      'repo',
+      45,
+    );
     expect(result).toEqual(mockAlert);
     expect(mockOctokit.rest.codeScanning.getAlert).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1195,11 +1288,19 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should list secret scanning alerts', async () => {
     const mockAlerts = [{ number: 2, secret_type: 'slack_token' }];
-    mockOctokit.rest.secretScanning.listAlertsForRepo.mockResolvedValue({ data: mockAlerts });
+    mockOctokit.rest.secretScanning.listAlertsForRepo.mockResolvedValue({
+      data: mockAlerts,
+    });
 
-    const result = await GithubService.listSecretScanningAlerts('owner', 'repo', { state: 'open' });
+    const result = await GithubService.listSecretScanningAlerts(
+      'owner',
+      'repo',
+      { state: 'open' },
+    );
     expect(result).toEqual(mockAlerts);
-    expect(mockOctokit.rest.secretScanning.listAlertsForRepo).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.secretScanning.listAlertsForRepo,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       state: 'open',
@@ -1211,9 +1312,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should get secret scanning alert details', async () => {
     const mockAlert = { number: 88, secret_type: 'slack_token' };
-    mockOctokit.rest.secretScanning.getAlert.mockResolvedValue({ data: mockAlert });
+    mockOctokit.rest.secretScanning.getAlert.mockResolvedValue({
+      data: mockAlert,
+    });
 
-    const result = await GithubService.getSecretScanningAlert('owner', 'repo', 88);
+    const result = await GithubService.getSecretScanningAlert(
+      'owner',
+      'repo',
+      88,
+    );
     expect(result).toEqual(mockAlert);
     expect(mockOctokit.rest.secretScanning.getAlert).toHaveBeenCalledWith({
       owner: 'owner',
@@ -1225,11 +1332,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 24. Actions Artifacts & Workflow Jobs API
   it('should list workflow run jobs', async () => {
     const mockJobs = { jobs: [{ id: 1, name: 'build' }] };
-    mockOctokit.rest.actions.listJobsForWorkflowRun.mockResolvedValue({ data: mockJobs });
+    mockOctokit.rest.actions.listJobsForWorkflowRun.mockResolvedValue({
+      data: mockJobs,
+    });
 
-    const result = await GithubService.listWorkflowJobs('owner', 'repo', 7788, { page: 3 });
+    const result = await GithubService.listWorkflowJobs('owner', 'repo', 7788, {
+      page: 3,
+    });
     expect(result).toEqual(mockJobs);
-    expect(mockOctokit.rest.actions.listJobsForWorkflowRun).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.listJobsForWorkflowRun,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       run_id: 7788,
@@ -1240,11 +1353,20 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should list workflow run artifacts', async () => {
     const mockArtifacts = { artifacts: [{ id: 1, name: 'build-zip' }] };
-    mockOctokit.rest.actions.listWorkflowRunArtifacts.mockResolvedValue({ data: mockArtifacts });
+    mockOctokit.rest.actions.listWorkflowRunArtifacts.mockResolvedValue({
+      data: mockArtifacts,
+    });
 
-    const result = await GithubService.listWorkflowRunArtifacts('owner', 'repo', 7788, { per_page: 10 });
+    const result = await GithubService.listWorkflowRunArtifacts(
+      'owner',
+      'repo',
+      7788,
+      { per_page: 10 },
+    );
     expect(result).toEqual(mockArtifacts);
-    expect(mockOctokit.rest.actions.listWorkflowRunArtifacts).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.listWorkflowRunArtifacts,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       run_id: 7788,
@@ -1257,7 +1379,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockResponse = { url: 'http://redirect-url-to-zip.com' };
     mockOctokit.rest.actions.downloadArtifact.mockResolvedValue(mockResponse);
 
-    const result = await GithubService.downloadWorkflowArtifact('owner', 'repo', 12345);
+    const result = await GithubService.downloadWorkflowArtifact(
+      'owner',
+      'repo',
+      12345,
+    );
     expect(result).toEqual({ url: 'http://redirect-url-to-zip.com' });
     expect(mockOctokit.rest.actions.downloadArtifact).toHaveBeenCalledWith({
       owner: 'owner',
