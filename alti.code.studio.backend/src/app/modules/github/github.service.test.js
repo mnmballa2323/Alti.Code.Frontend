@@ -6,6 +6,12 @@ vi.mock('octokit', () => {
     graphql: vi.fn(),
     request: vi.fn(),
     rest: {
+      classroom: {
+        listClassrooms: vi.fn(),
+        getClassroom: vi.fn(),
+        listAssignmentsForClassroom: vi.fn(),
+        getAssignment: vi.fn(),
+      },
       users: {
         getAuthenticated: vi.fn(),
         listEmailsForAuthenticatedUser: vi.fn(),
@@ -47,6 +53,12 @@ vi.mock('octokit', () => {
         createRepoRuleset: vi.fn(),
         updateRepoRuleset: vi.fn(),
         deleteRepoRuleset: vi.fn(),
+        listDeployKeys: vi.fn(),
+        getDeployKey: vi.fn(),
+        createDeployKey: vi.fn(),
+        deleteDeployKey: vi.fn(),
+        createCommitStatus: vi.fn(),
+        listStatusesForRef: vi.fn(),
       },
       issues: {
         listForRepo: vi.fn(),
@@ -58,6 +70,18 @@ vi.mock('octokit', () => {
         createComment: vi.fn(),
         updateComment: vi.fn(),
         deleteComment: vi.fn(),
+        listLabelsForRepo: vi.fn(),
+        getLabel: vi.fn(),
+        createLabel: vi.fn(),
+        updateLabel: vi.fn(),
+        deleteLabel: vi.fn(),
+        addLabels: vi.fn(),
+        removeLabel: vi.fn(),
+        listMilestones: vi.fn(),
+        getMilestone: vi.fn(),
+        createMilestone: vi.fn(),
+        updateMilestone: vi.fn(),
+        deleteMilestone: vi.fn(),
       },
       pulls: {
         list: vi.fn(),
@@ -69,6 +93,12 @@ vi.mock('octokit', () => {
         createReview: vi.fn(),
         submitReview: vi.fn(),
         dismissReview: vi.fn(),
+        listReviewComments: vi.fn(),
+        getReviewComment: vi.fn(),
+        createReviewComment: vi.fn(),
+        updateReviewComment: vi.fn(),
+        deleteReviewComment: vi.fn(),
+        checkIfMerged: vi.fn(),
       },
       actions: {
         listRepoWorkflows: vi.fn(),
@@ -82,6 +112,15 @@ vi.mock('octokit', () => {
         listJobsForWorkflowRun: vi.fn(),
         listWorkflowRunArtifacts: vi.fn(),
         downloadArtifact: vi.fn(),
+        listWorkflowRuns: vi.fn(),
+        getWorkflow: vi.fn(),
+        getWorkflowRun: vi.fn(),
+        listSelfHostedRunnersForOrg: vi.fn(),
+        listSelfHostedRunnersForRepo: vi.fn(),
+        getSelfHostedRunnerForOrg: vi.fn(),
+        getSelfHostedRunnerForRepo: vi.fn(),
+        deleteSelfHostedRunnerFromOrg: vi.fn(),
+        deleteSelfHostedRunnerFromRepo: vi.fn(),
       },
       gists: {
         list: vi.fn(),
@@ -121,6 +160,16 @@ vi.mock('octokit', () => {
       teams: {
         list: vi.fn(),
         listMembersInOrg: vi.fn(),
+        listDiscussionsInOrg: vi.fn(),
+        getDiscussionInOrg: vi.fn(),
+        createDiscussionInOrg: vi.fn(),
+        updateDiscussionInOrg: vi.fn(),
+        deleteDiscussionInOrg: vi.fn(),
+        listDiscussionCommentsInOrg: vi.fn(),
+        getDiscussionCommentInOrg: vi.fn(),
+        createDiscussionCommentInOrg: vi.fn(),
+        updateDiscussionCommentInOrg: vi.fn(),
+        deleteDiscussionCommentInOrg: vi.fn(),
       },
       codespaces: {
         listForAuthenticatedUser: vi.fn(),
@@ -2947,5 +2996,936 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     await expect(
       GithubService.getCustomProperty('my-org', 'env'),
     ).rejects.toThrow('API Failure');
+  });
+
+  // ==========================================
+  // 48. GitHub Classroom API Tests
+  // ==========================================
+  it('should list classrooms', async () => {
+    const mockClassrooms = [{ id: 1, name: 'Class 1' }];
+    mockOctokit.rest.classroom.listClassrooms.mockResolvedValue({
+      data: mockClassrooms,
+    });
+
+    const result = await GithubService.listClassrooms();
+    expect(result).toEqual(mockClassrooms);
+    expect(mockOctokit.rest.classroom.listClassrooms).toHaveBeenCalled();
+  });
+
+  it('should get classroom by ID', async () => {
+    const mockClassroom = { id: 1, name: 'Class 1' };
+    mockOctokit.rest.classroom.getClassroom.mockResolvedValue({
+      data: mockClassroom,
+    });
+
+    const result = await GithubService.getClassroom(1);
+    expect(result).toEqual(mockClassroom);
+    expect(mockOctokit.rest.classroom.getClassroom).toHaveBeenCalledWith({
+      classroom_id: 1,
+    });
+  });
+
+  it('should list assignments for classroom', async () => {
+    const mockAssignments = [{ id: 10, title: 'HW 1' }];
+    mockOctokit.rest.classroom.listAssignmentsForClassroom.mockResolvedValue({
+      data: mockAssignments,
+    });
+
+    const result = await GithubService.listAssignmentsForClassroom(1);
+    expect(result).toEqual(mockAssignments);
+    expect(
+      mockOctokit.rest.classroom.listAssignmentsForClassroom,
+    ).toHaveBeenCalledWith({
+      classroom_id: 1,
+    });
+  });
+
+  it('should get assignment details', async () => {
+    const mockAssignment = { id: 10, title: 'HW 1' };
+    mockOctokit.rest.classroom.getAssignment.mockResolvedValue({
+      data: mockAssignment,
+    });
+
+    const result = await GithubService.getAssignment(10);
+    expect(result).toEqual(mockAssignment);
+    expect(mockOctokit.rest.classroom.getAssignment).toHaveBeenCalledWith({
+      assignment_id: 10,
+    });
+  });
+
+  // ==========================================
+  // 49. Actions Workflows & Runs API Tests
+  // ==========================================
+  it('should list repo workflows', async () => {
+    const mockWorkflows = {
+      total_count: 1,
+      workflows: [{ id: 123, name: 'CI' }],
+    };
+    mockOctokit.rest.actions.listRepoWorkflows.mockResolvedValue({
+      data: mockWorkflows,
+    });
+
+    const result = await GithubService.listRepoWorkflows('owner', 'repo');
+    expect(result).toEqual(mockWorkflows);
+    expect(mockOctokit.rest.actions.listRepoWorkflows).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should get workflow details', async () => {
+    const mockWorkflow = { id: 123, name: 'CI' };
+    mockOctokit.rest.actions.getWorkflow.mockResolvedValue({
+      data: mockWorkflow,
+    });
+
+    const result = await GithubService.getWorkflow('owner', 'repo', 'ci.yml');
+    expect(result).toEqual(mockWorkflow);
+    expect(mockOctokit.rest.actions.getWorkflow).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      workflow_id: 'ci.yml',
+    });
+  });
+
+  it('should list workflow runs', async () => {
+    const mockRuns = { total_count: 1, workflow_runs: [{ id: 999 }] };
+    mockOctokit.rest.actions.listWorkflowRuns.mockResolvedValue({
+      data: mockRuns,
+    });
+
+    const result = await GithubService.listWorkflowRuns('owner', 'repo', {
+      event: 'push',
+    });
+    expect(result).toEqual(mockRuns);
+    expect(mockOctokit.rest.actions.listWorkflowRuns).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      event: 'push',
+    });
+  });
+
+  it('should get workflow run details', async () => {
+    const mockRun = { id: 999, status: 'completed' };
+    mockOctokit.rest.actions.getWorkflowRun.mockResolvedValue({
+      data: mockRun,
+    });
+
+    const result = await GithubService.getWorkflowRun('owner', 'repo', 999);
+    expect(result).toEqual(mockRun);
+    expect(mockOctokit.rest.actions.getWorkflowRun).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      run_id: 999,
+    });
+  });
+
+  it('should create workflow dispatch', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.actions.createWorkflowDispatch.mockResolvedValue({
+      data: mockResponse,
+      status: 204,
+    });
+
+    const result = await GithubService.createWorkflowDispatch(
+      'owner',
+      'repo',
+      'ci.yml',
+      'main',
+      { env: 'prod' },
+    );
+    expect(result).toEqual(mockResponse);
+    expect(
+      mockOctokit.rest.actions.createWorkflowDispatch,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      workflow_id: 'ci.yml',
+      ref: 'main',
+      inputs: { env: 'prod' },
+    });
+  });
+
+  // ==========================================
+  // 50. Self-Hosted Runners API Tests
+  // ==========================================
+  it('should list self-hosted runners for organization', async () => {
+    const mockRunners = {
+      total_count: 1,
+      runners: [{ id: 1, name: 'Runner 1' }],
+    };
+    mockOctokit.rest.actions.listSelfHostedRunnersForOrg.mockResolvedValue({
+      data: mockRunners,
+    });
+
+    const result = await GithubService.listSelfHostedRunnersForOrg('my-org');
+    expect(result).toEqual(mockRunners);
+    expect(
+      mockOctokit.rest.actions.listSelfHostedRunnersForOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should list self-hosted runners for repository', async () => {
+    const mockRunners = {
+      total_count: 1,
+      runners: [{ id: 1, name: 'Runner 1' }],
+    };
+    mockOctokit.rest.actions.listSelfHostedRunnersForRepo.mockResolvedValue({
+      data: mockRunners,
+    });
+
+    const result = await GithubService.listSelfHostedRunnersForRepo(
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockRunners);
+    expect(
+      mockOctokit.rest.actions.listSelfHostedRunnersForRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should get self-hosted runner for organization', async () => {
+    const mockRunner = { id: 1, name: 'Runner 1' };
+    mockOctokit.rest.actions.getSelfHostedRunnerForOrg.mockResolvedValue({
+      data: mockRunner,
+    });
+
+    const result = await GithubService.getSelfHostedRunnerForOrg('my-org', 1);
+    expect(result).toEqual(mockRunner);
+    expect(
+      mockOctokit.rest.actions.getSelfHostedRunnerForOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      runner_id: 1,
+    });
+  });
+
+  it('should get self-hosted runner for repository', async () => {
+    const mockRunner = { id: 1, name: 'Runner 1' };
+    mockOctokit.rest.actions.getSelfHostedRunnerForRepo.mockResolvedValue({
+      data: mockRunner,
+    });
+
+    const result = await GithubService.getSelfHostedRunnerForRepo(
+      'owner',
+      'repo',
+      1,
+    );
+    expect(result).toEqual(mockRunner);
+    expect(
+      mockOctokit.rest.actions.getSelfHostedRunnerForRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      runner_id: 1,
+    });
+  });
+
+  it('should delete self-hosted runner from organization', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.actions.deleteSelfHostedRunnerFromOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteSelfHostedRunnerFromOrg(
+      'my-org',
+      1,
+    );
+    expect(result).toEqual(mockResponse);
+    expect(
+      mockOctokit.rest.actions.deleteSelfHostedRunnerFromOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      runner_id: 1,
+    });
+  });
+
+  it('should delete self-hosted runner from repository', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.actions.deleteSelfHostedRunnerFromRepo.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteSelfHostedRunnerFromRepo(
+      'owner',
+      'repo',
+      1,
+    );
+    expect(result).toEqual(mockResponse);
+    expect(
+      mockOctokit.rest.actions.deleteSelfHostedRunnerFromRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      runner_id: 1,
+    });
+  });
+
+  // ==========================================
+  // 51. Issue Labels & Milestones API Tests
+  // ==========================================
+  it('should list labels for repository', async () => {
+    const mockLabels = [{ id: 1, name: 'bug', color: 'red' }];
+    mockOctokit.rest.issues.listLabelsForRepo.mockResolvedValue({
+      data: mockLabels,
+    });
+
+    const result = await GithubService.listLabelsForRepo('owner', 'repo');
+    expect(result).toEqual(mockLabels);
+    expect(mockOctokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should get specific label', async () => {
+    const mockLabel = { id: 1, name: 'bug', color: 'red' };
+    mockOctokit.rest.issues.getLabel.mockResolvedValue({
+      data: mockLabel,
+    });
+
+    const result = await GithubService.getLabel('owner', 'repo', 'bug');
+    expect(result).toEqual(mockLabel);
+    expect(mockOctokit.rest.issues.getLabel).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'bug',
+    });
+  });
+
+  it('should create label', async () => {
+    const mockLabel = { id: 1, name: 'bug', color: 'red' };
+    mockOctokit.rest.issues.createLabel.mockResolvedValue({
+      data: mockLabel,
+    });
+
+    const result = await GithubService.createLabel('owner', 'repo', {
+      name: 'bug',
+      color: 'red',
+    });
+    expect(result).toEqual(mockLabel);
+    expect(mockOctokit.rest.issues.createLabel).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'bug',
+      color: 'red',
+    });
+  });
+
+  it('should update label', async () => {
+    const mockLabel = { id: 1, name: 'bug', color: 'blue' };
+    mockOctokit.rest.issues.updateLabel.mockResolvedValue({
+      data: mockLabel,
+    });
+
+    const result = await GithubService.updateLabel('owner', 'repo', 'bug', {
+      color: 'blue',
+    });
+    expect(result).toEqual(mockLabel);
+    expect(mockOctokit.rest.issues.updateLabel).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'bug',
+      color: 'blue',
+    });
+  });
+
+  it('should delete label', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.issues.deleteLabel.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteLabel('owner', 'repo', 'bug');
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.issues.deleteLabel).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'bug',
+    });
+  });
+
+  it('should add labels to issue', async () => {
+    const mockLabels = [{ name: 'bug' }];
+    mockOctokit.rest.issues.addLabels.mockResolvedValue({
+      data: mockLabels,
+    });
+
+    const result = await GithubService.addLabelsToIssue('owner', 'repo', 5, [
+      'bug',
+    ]);
+    expect(result).toEqual(mockLabels);
+    expect(mockOctokit.rest.issues.addLabels).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 5,
+      labels: ['bug'],
+    });
+  });
+
+  it('should remove label from issue', async () => {
+    const mockLabels = [];
+    mockOctokit.rest.issues.removeLabel.mockResolvedValue({
+      data: mockLabels,
+    });
+
+    const result = await GithubService.removeLabelFromIssue(
+      'owner',
+      'repo',
+      5,
+      'bug',
+    );
+    expect(result).toEqual(mockLabels);
+    expect(mockOctokit.rest.issues.removeLabel).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 5,
+      name: 'bug',
+    });
+  });
+
+  it('should list milestones', async () => {
+    const mockMilestones = [{ id: 1, title: 'v1.0' }];
+    mockOctokit.rest.issues.listMilestones.mockResolvedValue({
+      data: mockMilestones,
+    });
+
+    const result = await GithubService.listMilestones('owner', 'repo', {
+      state: 'open',
+    });
+    expect(result).toEqual(mockMilestones);
+    expect(mockOctokit.rest.issues.listMilestones).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      state: 'open',
+    });
+  });
+
+  it('should get specific milestone', async () => {
+    const mockMilestone = { id: 1, title: 'v1.0' };
+    mockOctokit.rest.issues.getMilestone.mockResolvedValue({
+      data: mockMilestone,
+    });
+
+    const result = await GithubService.getMilestone('owner', 'repo', 1);
+    expect(result).toEqual(mockMilestone);
+    expect(mockOctokit.rest.issues.getMilestone).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      milestone_number: 1,
+    });
+  });
+
+  it('should create milestone', async () => {
+    const mockMilestone = { id: 1, title: 'v1.0' };
+    mockOctokit.rest.issues.createMilestone.mockResolvedValue({
+      data: mockMilestone,
+    });
+
+    const result = await GithubService.createMilestone('owner', 'repo', {
+      title: 'v1.0',
+    });
+    expect(result).toEqual(mockMilestone);
+    expect(mockOctokit.rest.issues.createMilestone).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      title: 'v1.0',
+    });
+  });
+
+  it('should update milestone', async () => {
+    const mockMilestone = { id: 1, title: 'v1.1' };
+    mockOctokit.rest.issues.updateMilestone.mockResolvedValue({
+      data: mockMilestone,
+    });
+
+    const result = await GithubService.updateMilestone('owner', 'repo', 1, {
+      title: 'v1.1',
+    });
+    expect(result).toEqual(mockMilestone);
+    expect(mockOctokit.rest.issues.updateMilestone).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      milestone_number: 1,
+      title: 'v1.1',
+    });
+  });
+
+  it('should delete milestone', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.issues.deleteMilestone.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteMilestone('owner', 'repo', 1);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.issues.deleteMilestone).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      milestone_number: 1,
+    });
+  });
+
+  // ==========================================
+  // 52. Repository Deploy Keys & Commit Statuses API Tests
+  // ==========================================
+  it('should list deploy keys', async () => {
+    const mockKeys = [{ id: 1, title: 'deploy' }];
+    mockOctokit.rest.repos.listDeployKeys.mockResolvedValue({
+      data: mockKeys,
+    });
+
+    const result = await GithubService.listDeployKeys('owner', 'repo');
+    expect(result).toEqual(mockKeys);
+    expect(mockOctokit.rest.repos.listDeployKeys).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should get specific deploy key', async () => {
+    const mockKey = { id: 1, title: 'deploy' };
+    mockOctokit.rest.repos.getDeployKey.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.getDeployKey('owner', 'repo', 1);
+    expect(result).toEqual(mockKey);
+    expect(mockOctokit.rest.repos.getDeployKey).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      key_id: 1,
+    });
+  });
+
+  it('should add deploy key', async () => {
+    const mockKey = { id: 1, title: 'deploy' };
+    mockOctokit.rest.repos.createDeployKey.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.addDeployKey(
+      'owner',
+      'repo',
+      'deploy',
+      'ssh-rsa AAA...',
+      false,
+    );
+    expect(result).toEqual(mockKey);
+    expect(mockOctokit.rest.repos.createDeployKey).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      title: 'deploy',
+      key: 'ssh-rsa AAA...',
+      read_only: false,
+    });
+  });
+
+  it('should delete deploy key', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.repos.deleteDeployKey.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteDeployKey('owner', 'repo', 1);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.repos.deleteDeployKey).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      key_id: 1,
+    });
+  });
+
+  it('should create commit status', async () => {
+    const mockStatus = { id: 1, state: 'success' };
+    mockOctokit.rest.repos.createCommitStatus.mockResolvedValue({
+      data: mockStatus,
+    });
+
+    const result = await GithubService.createCommitStatus(
+      'owner',
+      'repo',
+      'sha123',
+      { state: 'success', context: 'ci' },
+    );
+    expect(result).toEqual(mockStatus);
+    expect(mockOctokit.rest.repos.createCommitStatus).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      sha: 'sha123',
+      state: 'success',
+      context: 'ci',
+    });
+  });
+
+  it('should list commit statuses for ref', async () => {
+    const mockStatuses = [{ id: 1, state: 'success' }];
+    mockOctokit.rest.repos.listStatusesForRef.mockResolvedValue({
+      data: mockStatuses,
+    });
+
+    const result = await GithubService.listCommitStatusesForRef(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockStatuses);
+    expect(mockOctokit.rest.repos.listStatusesForRef).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ref: 'main',
+    });
+  });
+
+  // ==========================================
+  // 53. PR Review Comments & Merges API Tests
+  // ==========================================
+  it('should list PR review comments', async () => {
+    const mockComments = [{ id: 1, body: 'comment' }];
+    mockOctokit.rest.pulls.listReviewComments.mockResolvedValue({
+      data: mockComments,
+    });
+
+    const result = await GithubService.listReviewComments('owner', 'repo', 5);
+    expect(result).toEqual(mockComments);
+    expect(mockOctokit.rest.pulls.listReviewComments).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+    });
+  });
+
+  it('should get PR review comment', async () => {
+    const mockComment = { id: 1, body: 'comment' };
+    mockOctokit.rest.pulls.getReviewComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.getReviewComment('owner', 'repo', 1);
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.pulls.getReviewComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 1,
+    });
+  });
+
+  it('should create PR review comment', async () => {
+    const mockComment = { id: 1, body: 'comment' };
+    mockOctokit.rest.pulls.createReviewComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.createReviewComment('owner', 'repo', 5, {
+      body: 'comment',
+    });
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.pulls.createReviewComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      body: 'comment',
+    });
+  });
+
+  it('should update PR review comment', async () => {
+    const mockComment = { id: 1, body: 'updated' };
+    mockOctokit.rest.pulls.updateReviewComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.updateReviewComment(
+      'owner',
+      'repo',
+      1,
+      'updated',
+    );
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.pulls.updateReviewComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 1,
+      body: 'updated',
+    });
+  });
+
+  it('should delete PR review comment', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.pulls.deleteReviewComment.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteReviewComment('owner', 'repo', 1);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.pulls.deleteReviewComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 1,
+    });
+  });
+
+  it('should merge pull request', async () => {
+    const mockResponse = { merged: true };
+    mockOctokit.rest.pulls.merge.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.mergePullRequest('owner', 'repo', 5, {
+      commit_title: 'merge',
+    });
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.pulls.merge).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      commit_title: 'merge',
+    });
+  });
+
+  it('should check if PR is merged', async () => {
+    mockOctokit.rest.pulls.checkIfMerged.mockResolvedValue({
+      status: 204,
+    });
+
+    const result = await GithubService.checkIfPullRequestMerged(
+      'owner',
+      'repo',
+      5,
+    );
+    expect(result).toEqual({ merged: true });
+    expect(mockOctokit.rest.pulls.checkIfMerged).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+    });
+  });
+
+  it('should return merged false if checkIfMerged returns 404', async () => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    mockOctokit.rest.pulls.checkIfMerged.mockRejectedValue(error);
+
+    const result = await GithubService.checkIfPullRequestMerged(
+      'owner',
+      'repo',
+      5,
+    );
+    expect(result).toEqual({ merged: false });
+  });
+
+  // ==========================================
+  // 54. Team Discussions API Tests
+  // ==========================================
+  it('should list team discussions', async () => {
+    const mockDiscussions = [{ id: 1, title: 'discussion' }];
+    mockOctokit.rest.teams.listDiscussionsInOrg.mockResolvedValue({
+      data: mockDiscussions,
+    });
+
+    const result = await GithubService.listTeamDiscussions('my-org', 'my-team');
+    expect(result).toEqual(mockDiscussions);
+    expect(mockOctokit.rest.teams.listDiscussionsInOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+    });
+  });
+
+  it('should get team discussion', async () => {
+    const mockDiscussion = { id: 1, title: 'discussion' };
+    mockOctokit.rest.teams.getDiscussionInOrg.mockResolvedValue({
+      data: mockDiscussion,
+    });
+
+    const result = await GithubService.getTeamDiscussion(
+      'my-org',
+      'my-team',
+      1,
+    );
+    expect(result).toEqual(mockDiscussion);
+    expect(mockOctokit.rest.teams.getDiscussionInOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+    });
+  });
+
+  it('should create team discussion', async () => {
+    const mockDiscussion = { id: 1, title: 'discussion' };
+    mockOctokit.rest.teams.createDiscussionInOrg.mockResolvedValue({
+      data: mockDiscussion,
+    });
+
+    const result = await GithubService.createTeamDiscussion(
+      'my-org',
+      'my-team',
+      { title: 'discussion', body: 'hello' },
+    );
+    expect(result).toEqual(mockDiscussion);
+    expect(mockOctokit.rest.teams.createDiscussionInOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      title: 'discussion',
+      body: 'hello',
+    });
+  });
+
+  it('should update team discussion', async () => {
+    const mockDiscussion = { id: 1, title: 'updated' };
+    mockOctokit.rest.teams.updateDiscussionInOrg.mockResolvedValue({
+      data: mockDiscussion,
+    });
+
+    const result = await GithubService.updateTeamDiscussion(
+      'my-org',
+      'my-team',
+      1,
+      { title: 'updated' },
+    );
+    expect(result).toEqual(mockDiscussion);
+    expect(mockOctokit.rest.teams.updateDiscussionInOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+      title: 'updated',
+    });
+  });
+
+  it('should delete team discussion', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.teams.deleteDiscussionInOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteTeamDiscussion(
+      'my-org',
+      'my-team',
+      1,
+    );
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.teams.deleteDiscussionInOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+    });
+  });
+
+  it('should list team discussion comments', async () => {
+    const mockComments = [{ id: 1, body: 'comment' }];
+    mockOctokit.rest.teams.listDiscussionCommentsInOrg.mockResolvedValue({
+      data: mockComments,
+    });
+
+    const result = await GithubService.listTeamDiscussionComments(
+      'my-org',
+      'my-team',
+      1,
+    );
+    expect(result).toEqual(mockComments);
+    expect(
+      mockOctokit.rest.teams.listDiscussionCommentsInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+    });
+  });
+
+  it('should get team discussion comment', async () => {
+    const mockComment = { id: 1, body: 'comment' };
+    mockOctokit.rest.teams.getDiscussionCommentInOrg.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.getTeamDiscussionComment(
+      'my-org',
+      'my-team',
+      1,
+      10,
+    );
+    expect(result).toEqual(mockComment);
+    expect(
+      mockOctokit.rest.teams.getDiscussionCommentInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+      comment_number: 10,
+    });
+  });
+
+  it('should create team discussion comment', async () => {
+    const mockComment = { id: 1, body: 'comment' };
+    mockOctokit.rest.teams.createDiscussionCommentInOrg.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.createTeamDiscussionComment(
+      'my-org',
+      'my-team',
+      1,
+      'comment',
+    );
+    expect(result).toEqual(mockComment);
+    expect(
+      mockOctokit.rest.teams.createDiscussionCommentInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+      body: 'comment',
+    });
+  });
+
+  it('should update team discussion comment', async () => {
+    const mockComment = { id: 1, body: 'updated' };
+    mockOctokit.rest.teams.updateDiscussionCommentInOrg.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.updateTeamDiscussionComment(
+      'my-org',
+      'my-team',
+      1,
+      10,
+      'updated',
+    );
+    expect(result).toEqual(mockComment);
+    expect(
+      mockOctokit.rest.teams.updateDiscussionCommentInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+      comment_number: 10,
+      body: 'updated',
+    });
+  });
+
+  it('should delete team discussion comment', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.teams.deleteDiscussionCommentInOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteTeamDiscussionComment(
+      'my-org',
+      'my-team',
+      1,
+      10,
+    );
+    expect(result).toEqual(mockResponse);
+    expect(
+      mockOctokit.rest.teams.deleteDiscussionCommentInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      team_slug: 'my-team',
+      discussion_number: 1,
+      comment_number: 10,
+    });
   });
 });

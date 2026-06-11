@@ -3126,14 +3126,21 @@ export const GithubService = {
   },
 
   async listAssignmentsForClassroom(classroomId) {
-    logger.info(`🐙 [GitHub Service] Listing assignments for classroom ${classroomId}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing assignments for classroom ${classroomId}`,
+    );
     try {
-      const { data } = await octokit.rest.classroom.listAssignmentsForClassroom({
-        classroom_id: parseInt(classroomId, 10),
-      });
+      const { data } = await octokit.rest.classroom.listAssignmentsForClassroom(
+        {
+          classroom_id: parseInt(classroomId, 10),
+        },
+      );
       return data;
     } catch (error) {
-      logger.error(`Failed to list assignments for classroom ${classroomId}:`, error);
+      logger.error(
+        `Failed to list assignments for classroom ${classroomId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3169,7 +3176,9 @@ export const GithubService = {
   },
 
   async getWorkflow(owner, repo, workflowId) {
-    logger.info(`🐙 [GitHub Service] Fetching workflow ${workflowId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching workflow ${workflowId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getWorkflow({
         owner,
@@ -3178,13 +3187,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get workflow ${workflowId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get workflow ${workflowId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listWorkflowRuns(owner, repo, queryParams = {}) {
-    logger.info(`🐙 [GitHub Service] Listing workflow runs for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing workflow runs for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.listWorkflowRuns({
         owner,
@@ -3199,7 +3213,9 @@ export const GithubService = {
   },
 
   async getWorkflowRun(owner, repo, runId) {
-    logger.info(`🐙 [GitHub Service] Fetching workflow run ${runId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching workflow run ${runId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getWorkflowRun({
         owner,
@@ -3208,13 +3224,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get workflow run ${runId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get workflow run ${runId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createWorkflowDispatch(owner, repo, workflowId, ref, inputs = {}) {
-    logger.info(`🐙 [GitHub Service] Creating workflow dispatch for ${workflowId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating workflow dispatch for ${workflowId} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.actions.createWorkflowDispatch({
         owner,
@@ -3225,7 +3246,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to create workflow dispatch for ${workflowId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create workflow dispatch for ${workflowId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3234,7 +3258,9 @@ export const GithubService = {
   // 50. Self-Hosted Runners API
   // ==========================================
   async listSelfHostedRunnersForOrg(org) {
-    logger.info(`🐙 [GitHub Service] Listing self-hosted runners for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing self-hosted runners for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.actions.listSelfHostedRunnersForOrg({
         org,
@@ -3247,7 +3273,9 @@ export const GithubService = {
   },
 
   async listSelfHostedRunnersForRepo(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing self-hosted runners for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing self-hosted runners for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.listSelfHostedRunnersForRepo({
         owner,
@@ -3255,13 +3283,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list self-hosted runners for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list self-hosted runners for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getSelfHostedRunnerForOrg(org, runnerId) {
-    logger.info(`🐙 [GitHub Service] Fetching self-hosted runner ${runnerId} for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching self-hosted runner ${runnerId} for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getSelfHostedRunnerForOrg({
         org,
@@ -3269,13 +3302,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get self-hosted runner ${runnerId} for org ${org}:`, error);
+      logger.error(
+        `Failed to get self-hosted runner ${runnerId} for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getSelfHostedRunnerForRepo(owner, repo, runnerId) {
-    logger.info(`🐙 [GitHub Service] Fetching self-hosted runner ${runnerId} for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching self-hosted runner ${runnerId} for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getSelfHostedRunnerForRepo({
         owner,
@@ -3284,36 +3322,52 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get self-hosted runner ${runnerId} for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get self-hosted runner ${runnerId} for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteSelfHostedRunnerFromOrg(org, runnerId) {
-    logger.info(`🐙 [GitHub Service] Deleting self-hosted runner ${runnerId} from org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting self-hosted runner ${runnerId} from org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.deleteSelfHostedRunnerFromOrg({
-        org,
-        runner_id: parseInt(runnerId, 10),
-      });
+      const response = await octokit.rest.actions.deleteSelfHostedRunnerFromOrg(
+        {
+          org,
+          runner_id: parseInt(runnerId, 10),
+        },
+      );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete self-hosted runner ${runnerId} from org ${org}:`, error);
+      logger.error(
+        `Failed to delete self-hosted runner ${runnerId} from org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteSelfHostedRunnerFromRepo(owner, repo, runnerId) {
-    logger.info(`🐙 [GitHub Service] Deleting self-hosted runner ${runnerId} from repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting self-hosted runner ${runnerId} from repo ${owner}/${repo}`,
+    );
     try {
-      const response = await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
-        owner,
-        repo,
-        runner_id: parseInt(runnerId, 10),
-      });
+      const response =
+        await octokit.rest.actions.deleteSelfHostedRunnerFromRepo({
+          owner,
+          repo,
+          runner_id: parseInt(runnerId, 10),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete self-hosted runner ${runnerId} from repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete self-hosted runner ${runnerId} from repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3336,7 +3390,9 @@ export const GithubService = {
   },
 
   async getLabel(owner, repo, name) {
-    logger.info(`🐙 [GitHub Service] Fetching label "${name}" in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching label "${name}" in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.getLabel({
         owner,
@@ -3366,7 +3422,9 @@ export const GithubService = {
   },
 
   async updateLabel(owner, repo, name, labelData) {
-    logger.info(`🐙 [GitHub Service] Updating label "${name}" in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating label "${name}" in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.updateLabel({
         owner,
@@ -3376,13 +3434,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update label "${name}" in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update label "${name}" in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteLabel(owner, repo, name) {
-    logger.info(`🐙 [GitHub Service] Deleting label "${name}" in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting label "${name}" in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.issues.deleteLabel({
         owner,
@@ -3391,13 +3454,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete label "${name}" in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete label "${name}" in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addLabelsToIssue(owner, repo, issueNumber, labels) {
-    logger.info(`🐙 [GitHub Service] Adding labels to issue #${issueNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding labels to issue #${issueNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.addLabels({
         owner,
@@ -3407,13 +3475,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to add labels to issue #${issueNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to add labels to issue #${issueNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeLabelFromIssue(owner, repo, issueNumber, name) {
-    logger.info(`🐙 [GitHub Service] Removing label "${name}" from issue #${issueNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing label "${name}" from issue #${issueNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.removeLabel({
         owner,
@@ -3423,7 +3496,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to remove label "${name}" from issue #${issueNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to remove label "${name}" from issue #${issueNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3444,7 +3520,9 @@ export const GithubService = {
   },
 
   async getMilestone(owner, repo, milestoneNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching milestone #${milestoneNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching milestone #${milestoneNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.getMilestone({
         owner,
@@ -3453,7 +3531,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get milestone #${milestoneNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get milestone #${milestoneNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3474,7 +3555,9 @@ export const GithubService = {
   },
 
   async updateMilestone(owner, repo, milestoneNumber, milestoneData) {
-    logger.info(`🐙 [GitHub Service] Updating milestone #${milestoneNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating milestone #${milestoneNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.issues.updateMilestone({
         owner,
@@ -3484,13 +3567,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update milestone #${milestoneNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update milestone #${milestoneNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteMilestone(owner, repo, milestoneNumber) {
-    logger.info(`🐙 [GitHub Service] Deleting milestone #${milestoneNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting milestone #${milestoneNumber} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.issues.deleteMilestone({
         owner,
@@ -3499,7 +3587,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete milestone #${milestoneNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete milestone #${milestoneNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3522,7 +3613,9 @@ export const GithubService = {
   },
 
   async getDeployKey(owner, repo, keyId) {
-    logger.info(`🐙 [GitHub Service] Fetching deploy key #${keyId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching deploy key #${keyId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getDeployKey({
         owner,
@@ -3531,7 +3624,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get deploy key #${keyId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get deploy key #${keyId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3554,7 +3650,9 @@ export const GithubService = {
   },
 
   async deleteDeployKey(owner, repo, keyId) {
-    logger.info(`🐙 [GitHub Service] Deleting deploy key #${keyId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting deploy key #${keyId} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.deleteDeployKey({
         owner,
@@ -3563,13 +3661,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete deploy key #${keyId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete deploy key #${keyId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createCommitStatus(owner, repo, sha, statusData) {
-    logger.info(`🐙 [GitHub Service] Creating commit status for SHA ${sha} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating commit status for SHA ${sha} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.createCommitStatus({
         owner,
@@ -3579,13 +3682,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create commit status for SHA ${sha} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create commit status for SHA ${sha} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listCommitStatusesForRef(owner, repo, ref) {
-    logger.info(`🐙 [GitHub Service] Listing commit statuses for ref ${ref} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing commit statuses for ref ${ref} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listStatusesForRef({
         owner,
@@ -3594,7 +3702,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list commit statuses for ref ${ref} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list commit statuses for ref ${ref} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3603,7 +3714,9 @@ export const GithubService = {
   // 53. PR Review Comments & Merges API
   // ==========================================
   async listReviewComments(owner, repo, pullNumber) {
-    logger.info(`🐙 [GitHub Service] Listing review comments for PR #${pullNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing review comments for PR #${pullNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.pulls.listReviewComments({
         owner,
@@ -3612,13 +3725,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list review comments for PR #${pullNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list review comments for PR #${pullNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getReviewComment(owner, repo, commentId) {
-    logger.info(`🐙 [GitHub Service] Fetching review comment #${commentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching review comment #${commentId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.pulls.getReviewComment({
         owner,
@@ -3627,13 +3745,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get review comment #${commentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get review comment #${commentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createReviewComment(owner, repo, pullNumber, commentData) {
-    logger.info(`🐙 [GitHub Service] Creating review comment on PR #${pullNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating review comment on PR #${pullNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.pulls.createReviewComment({
         owner,
@@ -3643,13 +3766,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create review comment on PR #${pullNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create review comment on PR #${pullNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateReviewComment(owner, repo, commentId, body) {
-    logger.info(`🐙 [GitHub Service] Updating review comment #${commentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating review comment #${commentId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.pulls.updateReviewComment({
         owner,
@@ -3659,13 +3787,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update review comment #${commentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update review comment #${commentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteReviewComment(owner, repo, commentId) {
-    logger.info(`🐙 [GitHub Service] Deleting review comment #${commentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting review comment #${commentId} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.pulls.deleteReviewComment({
         owner,
@@ -3674,13 +3807,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete review comment #${commentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete review comment #${commentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async mergePullRequest(owner, repo, pullNumber, mergeData = {}) {
-    logger.info(`🐙 [GitHub Service] Merging PR #${pullNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Merging PR #${pullNumber} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.pulls.merge({
         owner,
@@ -3690,13 +3828,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to merge PR #${pullNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to merge PR #${pullNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async checkIfPullRequestMerged(owner, repo, pullNumber) {
-    logger.info(`🐙 [GitHub Service] Checking if PR #${pullNumber} in ${owner}/${repo} is merged`);
+    logger.info(
+      `🐙 [GitHub Service] Checking if PR #${pullNumber} in ${owner}/${repo} is merged`,
+    );
     try {
       const response = await octokit.rest.pulls.checkIfMerged({
         owner,
@@ -3710,7 +3853,10 @@ export const GithubService = {
       if (error.status === 404) {
         return { merged: false };
       }
-      logger.error(`Failed to check merge status for PR #${pullNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to check merge status for PR #${pullNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3719,7 +3865,9 @@ export const GithubService = {
   // 54. Team Discussions API
   // ==========================================
   async listTeamDiscussions(org, teamSlug) {
-    logger.info(`🐙 [GitHub Service] Listing discussions for team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing discussions for team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.listDiscussionsInOrg({
         org,
@@ -3727,13 +3875,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list discussions for team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to list discussions for team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getTeamDiscussion(org, teamSlug, discussionNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching discussion #${discussionNumber} for team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching discussion #${discussionNumber} for team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.getDiscussionInOrg({
         org,
@@ -3742,13 +3895,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to get discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createTeamDiscussion(org, teamSlug, discussionData) {
-    logger.info(`🐙 [GitHub Service] Creating discussion for team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating discussion for team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.createDiscussionInOrg({
         org,
@@ -3757,13 +3915,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create discussion for team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to create discussion for team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateTeamDiscussion(org, teamSlug, discussionNumber, discussionData) {
-    logger.info(`🐙 [GitHub Service] Updating discussion #${discussionNumber} for team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating discussion #${discussionNumber} for team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.updateDiscussionInOrg({
         org,
@@ -3773,13 +3936,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to update discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteTeamDiscussion(org, teamSlug, discussionNumber) {
-    logger.info(`🐙 [GitHub Service] Deleting discussion #${discussionNumber} for team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting discussion #${discussionNumber} for team ${teamSlug} in org ${org}`,
+    );
     try {
       const response = await octokit.rest.teams.deleteDiscussionInOrg({
         org,
@@ -3788,13 +3956,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to delete discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listTeamDiscussionComments(org, teamSlug, discussionNumber) {
-    logger.info(`🐙 [GitHub Service] Listing comments for discussion #${discussionNumber} on team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing comments for discussion #${discussionNumber} on team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.listDiscussionCommentsInOrg({
         org,
@@ -3803,13 +3976,23 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list comments for discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to list comments for discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async getTeamDiscussionComment(org, teamSlug, discussionNumber, commentNumber) {
-    logger.info(`🐙 [GitHub Service] Fetching comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`);
+  async getTeamDiscussionComment(
+    org,
+    teamSlug,
+    discussionNumber,
+    commentNumber,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.getDiscussionCommentInOrg({
         org,
@@ -3819,13 +4002,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to get comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createTeamDiscussionComment(org, teamSlug, discussionNumber, body) {
-    logger.info(`🐙 [GitHub Service] Creating comment on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating comment on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.createDiscussionCommentInOrg({
         org,
@@ -3835,13 +4023,24 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create comment on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to create comment on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async updateTeamDiscussionComment(org, teamSlug, discussionNumber, commentNumber, body) {
-    logger.info(`🐙 [GitHub Service] Updating comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`);
+  async updateTeamDiscussionComment(
+    org,
+    teamSlug,
+    discussionNumber,
+    commentNumber,
+    body,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.teams.updateDiscussionCommentInOrg({
         org,
@@ -3852,13 +4051,23 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to update comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async deleteTeamDiscussionComment(org, teamSlug, discussionNumber, commentNumber) {
-    logger.info(`🐙 [GitHub Service] Deleting comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`);
+  async deleteTeamDiscussionComment(
+    org,
+    teamSlug,
+    discussionNumber,
+    commentNumber,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}`,
+    );
     try {
       const response = await octokit.rest.teams.deleteDiscussionCommentInOrg({
         org,
@@ -3868,7 +4077,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`, error);
+      logger.error(
+        `Failed to delete comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },

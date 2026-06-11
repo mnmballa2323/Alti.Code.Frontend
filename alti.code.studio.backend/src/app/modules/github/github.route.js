@@ -566,5 +566,174 @@ router.delete(
   GithubController.deletePublicKeyForAuthenticatedUser,
 );
 
+// 48. GitHub Classroom API
+router.get('/classrooms', GithubController.listClassrooms);
+router.get('/classrooms/:classroomId', GithubController.getClassroom);
+router.get(
+  '/classrooms/:classroomId/assignments',
+  GithubController.listAssignmentsForClassroom,
+);
+router.get('/assignments/:assignmentId', GithubController.getAssignment);
+
+// 49. Actions Workflows & Runs API
+router.get('/repos/:owner/:repo/workflows', GithubController.listRepoWorkflows);
+router.get(
+  '/repos/:owner/:repo/workflows/:workflowId',
+  GithubController.getWorkflow,
+);
+router.get(
+  '/repos/:owner/:repo/workflow-runs',
+  GithubController.listWorkflowRuns,
+);
+router.get(
+  '/repos/:owner/:repo/workflow-runs/:runId',
+  GithubController.getWorkflowRun,
+);
+router.post(
+  '/repos/:owner/:repo/workflows/:workflowId/dispatches',
+  GithubController.createWorkflowDispatch,
+);
+
+// 50. Self-Hosted Runners API
+router.get('/orgs/:org/runners', GithubController.listSelfHostedRunnersForOrg);
+router.get(
+  '/repos/:owner/:repo/runners',
+  GithubController.listSelfHostedRunnersForRepo,
+);
+router.get(
+  '/orgs/:org/runners/:runnerId',
+  GithubController.getSelfHostedRunnerForOrg,
+);
+router.get(
+  '/repos/:owner/:repo/runners/:runnerId',
+  GithubController.getSelfHostedRunnerForRepo,
+);
+router.delete(
+  '/orgs/:org/runners/:runnerId',
+  GithubController.deleteSelfHostedRunnerFromOrg,
+);
+router.delete(
+  '/repos/:owner/:repo/runners/:runnerId',
+  GithubController.deleteSelfHostedRunnerFromRepo,
+);
+
+// 51. Issue Labels & Milestones API
+router.get('/repos/:owner/:repo/labels', GithubController.listLabelsForRepo);
+router.get('/repos/:owner/:repo/labels/:name', GithubController.getLabel);
+router.post('/repos/:owner/:repo/labels', GithubController.createLabel);
+router.patch('/repos/:owner/:repo/labels/:name', GithubController.updateLabel);
+router.delete('/repos/:owner/:repo/labels/:name', GithubController.deleteLabel);
+router.post(
+  '/repos/:owner/:repo/issues/:issueNumber/labels',
+  GithubController.addLabelsToIssue,
+);
+router.delete(
+  '/repos/:owner/:repo/issues/:issueNumber/labels/:name',
+  GithubController.removeLabelFromIssue,
+);
+router.get('/repos/:owner/:repo/milestones', GithubController.listMilestones);
+router.get(
+  '/repos/:owner/:repo/milestones/:milestoneNumber',
+  GithubController.getMilestone,
+);
+router.post('/repos/:owner/:repo/milestones', GithubController.createMilestone);
+router.patch(
+  '/repos/:owner/:repo/milestones/:milestoneNumber',
+  GithubController.updateMilestone,
+);
+router.delete(
+  '/repos/:owner/:repo/milestones/:milestoneNumber',
+  GithubController.deleteMilestone,
+);
+
+// 52. Repository Deploy Keys & Commit Statuses API
+router.get('/repos/:owner/:repo/keys', GithubController.listDeployKeys);
+router.get('/repos/:owner/:repo/keys/:keyId', GithubController.getDeployKey);
+router.post('/repos/:owner/:repo/keys', GithubController.addDeployKey);
+router.delete(
+  '/repos/:owner/:repo/keys/:keyId',
+  GithubController.deleteDeployKey,
+);
+router.post(
+  '/repos/:owner/:repo/statuses/:sha',
+  GithubController.createCommitStatus,
+);
+router.get(
+  '/repos/:owner/:repo/commits/:ref/statuses',
+  GithubController.listCommitStatusesForRef,
+);
+
+// 53. PR Review Comments & Merges API
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/comments',
+  GithubController.listReviewComments,
+);
+router.get(
+  '/repos/:owner/:repo/pulls/comments/:commentId',
+  GithubController.getReviewComment,
+);
+router.post(
+  '/repos/:owner/:repo/pulls/:pullNumber/comments',
+  GithubController.createReviewComment,
+);
+router.patch(
+  '/repos/:owner/:repo/pulls/comments/:commentId',
+  GithubController.updateReviewComment,
+);
+router.delete(
+  '/repos/:owner/:repo/pulls/comments/:commentId',
+  GithubController.deleteReviewComment,
+);
+router.put(
+  '/repos/:owner/:repo/pulls/:pullNumber/merge',
+  GithubController.mergePullRequest,
+);
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/merge',
+  GithubController.checkIfPullRequestMerged,
+);
+
+// 54. Team Discussions API
+router.get(
+  '/orgs/:org/teams/:teamSlug/discussions',
+  GithubController.listTeamDiscussions,
+);
+router.get(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber',
+  GithubController.getTeamDiscussion,
+);
+router.post(
+  '/orgs/:org/teams/:teamSlug/discussions',
+  GithubController.createTeamDiscussion,
+);
+router.patch(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber',
+  GithubController.updateTeamDiscussion,
+);
+router.delete(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber',
+  GithubController.deleteTeamDiscussion,
+);
+router.get(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber/comments',
+  GithubController.listTeamDiscussionComments,
+);
+router.get(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber/comments/:commentNumber',
+  GithubController.getTeamDiscussionComment,
+);
+router.post(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber/comments',
+  GithubController.createTeamDiscussionComment,
+);
+router.patch(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber/comments/:commentNumber',
+  GithubController.updateTeamDiscussionComment,
+);
+router.delete(
+  '/orgs/:org/teams/:teamSlug/discussions/:discussionNumber/comments/:commentNumber',
+  GithubController.deleteTeamDiscussionComment,
+);
+
 export const GithubRoutes = router;
 export default router;

@@ -2697,10 +2697,982 @@ export const deletePublicKeyForAuthenticatedUser = async (req, res) => {
     const result = await GithubService.deletePublicKeyForAuthenticatedUser(
       parseInt(keyId, 10),
     );
-    res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(
       `[GitHub Controller] Error deleting public key #${keyId} for authenticated user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 48. GitHub Classroom API Handlers
+// ==========================================
+export const listClassrooms = async (req, res) => {
+  try {
+    const result = await GithubService.listClassrooms();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing classrooms:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getClassroom = async (req, res) => {
+  try {
+    const { classroomId } = req.params;
+    const result = await GithubService.getClassroom(parseInt(classroomId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting classroom ${classroomId}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAssignmentsForClassroom = async (req, res) => {
+  try {
+    const { classroomId } = req.params;
+    const result = await GithubService.listAssignmentsForClassroom(
+      parseInt(classroomId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing assignments for classroom ${classroomId}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getAssignment = async (req, res) => {
+  try {
+    const { assignmentId } = req.params;
+    const result = await GithubService.getAssignment(
+      parseInt(assignmentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting assignment ${assignmentId}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 49. Actions Workflows & Runs API Handlers
+// ==========================================
+export const listRepoWorkflows = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoWorkflows(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing workflows for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getWorkflow = async (req, res) => {
+  try {
+    const { owner, repo, workflowId } = req.params;
+    const result = await GithubService.getWorkflow(owner, repo, workflowId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting workflow ${workflowId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listWorkflowRuns = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listWorkflowRuns(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing workflow runs for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getWorkflowRun = async (req, res) => {
+  try {
+    const { owner, repo, runId } = req.params;
+    const result = await GithubService.getWorkflowRun(
+      owner,
+      repo,
+      parseInt(runId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting workflow run ${runId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createWorkflowDispatch = async (req, res) => {
+  try {
+    const { owner, repo, workflowId } = req.params;
+    const { ref, inputs } = req.body;
+    const result = await GithubService.createWorkflowDispatch(
+      owner,
+      repo,
+      workflowId,
+      ref,
+      inputs,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating workflow dispatch for ${workflowId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 50. Self-Hosted Runners API Handlers
+// ==========================================
+export const listSelfHostedRunnersForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listSelfHostedRunnersForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing self-hosted runners for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listSelfHostedRunnersForRepo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listSelfHostedRunnersForRepo(
+      owner,
+      repo,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing self-hosted runners for repo ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getSelfHostedRunnerForOrg = async (req, res) => {
+  try {
+    const { org, runnerId } = req.params;
+    const result = await GithubService.getSelfHostedRunnerForOrg(
+      org,
+      parseInt(runnerId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting self-hosted runner ${runnerId} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getSelfHostedRunnerForRepo = async (req, res) => {
+  try {
+    const { owner, repo, runnerId } = req.params;
+    const result = await GithubService.getSelfHostedRunnerForRepo(
+      owner,
+      repo,
+      parseInt(runnerId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting self-hosted runner ${runnerId} for repo ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteSelfHostedRunnerFromOrg = async (req, res) => {
+  try {
+    const { org, runnerId } = req.params;
+    const result = await GithubService.deleteSelfHostedRunnerFromOrg(
+      org,
+      parseInt(runnerId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting self-hosted runner ${runnerId} from org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteSelfHostedRunnerFromRepo = async (req, res) => {
+  try {
+    const { owner, repo, runnerId } = req.params;
+    const result = await GithubService.deleteSelfHostedRunnerFromRepo(
+      owner,
+      repo,
+      parseInt(runnerId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting self-hosted runner ${runnerId} from repo ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 51. Issue Labels & Milestones API Handlers
+// ==========================================
+export const listLabelsForRepo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listLabelsForRepo(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing labels for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getLabel = async (req, res) => {
+  try {
+    const { owner, repo, name } = req.params;
+    const result = await GithubService.getLabel(owner, repo, name);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting label "${name}" in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createLabel = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createLabel(owner, repo, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating label in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateLabel = async (req, res) => {
+  try {
+    const { owner, repo, name } = req.params;
+    const result = await GithubService.updateLabel(owner, repo, name, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating label "${name}" in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteLabel = async (req, res) => {
+  try {
+    const { owner, repo, name } = req.params;
+    const result = await GithubService.deleteLabel(owner, repo, name);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting label "${name}" in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addLabelsToIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const { labels } = req.body;
+    const result = await GithubService.addLabelsToIssue(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+      labels,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding labels to issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeLabelFromIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber, name } = req.params;
+    const result = await GithubService.removeLabelFromIssue(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+      name,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing label "${name}" from issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listMilestones = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listMilestones(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing milestones for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMilestone = async (req, res) => {
+  try {
+    const { owner, repo, milestoneNumber } = req.params;
+    const result = await GithubService.getMilestone(
+      owner,
+      repo,
+      parseInt(milestoneNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting milestone #${milestoneNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createMilestone = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createMilestone(owner, repo, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating milestone in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateMilestone = async (req, res) => {
+  try {
+    const { owner, repo, milestoneNumber } = req.params;
+    const result = await GithubService.updateMilestone(
+      owner,
+      repo,
+      parseInt(milestoneNumber, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating milestone #${milestoneNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteMilestone = async (req, res) => {
+  try {
+    const { owner, repo, milestoneNumber } = req.params;
+    const result = await GithubService.deleteMilestone(
+      owner,
+      repo,
+      parseInt(milestoneNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting milestone #${milestoneNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 52. Repository Deploy Keys & Commit Statuses API Handlers
+// ==========================================
+export const listDeployKeys = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listDeployKeys(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing deploy keys for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getDeployKey = async (req, res) => {
+  try {
+    const { owner, repo, keyId } = req.params;
+    const result = await GithubService.getDeployKey(
+      owner,
+      repo,
+      parseInt(keyId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting deploy key #${keyId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addDeployKey = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { title, key, readOnly } = req.body;
+    const result = await GithubService.addDeployKey(
+      owner,
+      repo,
+      title,
+      key,
+      readOnly,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding deploy key in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteDeployKey = async (req, res) => {
+  try {
+    const { owner, repo, keyId } = req.params;
+    const result = await GithubService.deleteDeployKey(
+      owner,
+      repo,
+      parseInt(keyId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting deploy key #${keyId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCommitStatus = async (req, res) => {
+  try {
+    const { owner, repo, sha } = req.params;
+    const result = await GithubService.createCommitStatus(
+      owner,
+      repo,
+      sha,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating commit status for SHA ${sha} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listCommitStatusesForRef = async (req, res) => {
+  try {
+    const { owner, repo, ref } = req.params;
+    const result = await GithubService.listCommitStatusesForRef(
+      owner,
+      repo,
+      ref,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing commit statuses for ref ${ref} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 53. PR Review Comments & Merges API Handlers
+// ==========================================
+export const listReviewComments = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.listReviewComments(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing review comments for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getReviewComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.getReviewComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting review comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createReviewComment = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.createReviewComment(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating review comment on PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateReviewComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.updateReviewComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating review comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteReviewComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.deleteReviewComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting review comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const mergePullRequest = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.mergePullRequest(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error merging PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const checkIfPullRequestMerged = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.checkIfPullRequestMerged(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error checking merge status for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 54. Team Discussions API Handlers
+// ==========================================
+export const listTeamDiscussions = async (req, res) => {
+  try {
+    const { org, teamSlug } = req.params;
+    const result = await GithubService.listTeamDiscussions(org, teamSlug);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing discussions for team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getTeamDiscussion = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber } = req.params;
+    const result = await GithubService.getTeamDiscussion(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createTeamDiscussion = async (req, res) => {
+  try {
+    const { org, teamSlug } = req.params;
+    const result = await GithubService.createTeamDiscussion(
+      org,
+      teamSlug,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating discussion for team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateTeamDiscussion = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber } = req.params;
+    const result = await GithubService.updateTeamDiscussion(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteTeamDiscussion = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber } = req.params;
+    const result = await GithubService.deleteTeamDiscussion(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting discussion #${discussionNumber} for team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listTeamDiscussionComments = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber } = req.params;
+    const result = await GithubService.listTeamDiscussionComments(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing comments for discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getTeamDiscussionComment = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber, commentNumber } = req.params;
+    const result = await GithubService.getTeamDiscussionComment(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+      parseInt(commentNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createTeamDiscussionComment = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.createTeamDiscussionComment(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating comment on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateTeamDiscussionComment = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber, commentNumber } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.updateTeamDiscussionComment(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+      parseInt(commentNumber, 10),
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteTeamDiscussionComment = async (req, res) => {
+  try {
+    const { org, teamSlug, discussionNumber, commentNumber } = req.params;
+    const result = await GithubService.deleteTeamDiscussionComment(
+      org,
+      teamSlug,
+      parseInt(discussionNumber, 10),
+      parseInt(commentNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting comment #${commentNumber} on discussion #${discussionNumber} on team ${teamSlug} in org ${org}:`,
       error,
     );
     res
@@ -2869,4 +3841,54 @@ export const GithubController = {
   listPublicKeysForAuthenticatedUser,
   addPublicKeyForAuthenticatedUser,
   deletePublicKeyForAuthenticatedUser,
+  listClassrooms,
+  getClassroom,
+  listAssignmentsForClassroom,
+  getAssignment,
+  listRepoWorkflows,
+  getWorkflow,
+  listWorkflowRuns,
+  getWorkflowRun,
+  createWorkflowDispatch,
+  listSelfHostedRunnersForOrg,
+  listSelfHostedRunnersForRepo,
+  getSelfHostedRunnerForOrg,
+  getSelfHostedRunnerForRepo,
+  deleteSelfHostedRunnerFromOrg,
+  deleteSelfHostedRunnerFromRepo,
+  listLabelsForRepo,
+  getLabel,
+  createLabel,
+  updateLabel,
+  deleteLabel,
+  addLabelsToIssue,
+  removeLabelFromIssue,
+  listMilestones,
+  getMilestone,
+  createMilestone,
+  updateMilestone,
+  deleteMilestone,
+  listDeployKeys,
+  getDeployKey,
+  addDeployKey,
+  deleteDeployKey,
+  createCommitStatus,
+  listCommitStatusesForRef,
+  listReviewComments,
+  getReviewComment,
+  createReviewComment,
+  updateReviewComment,
+  deleteReviewComment,
+  mergePullRequest,
+  checkIfPullRequestMerged,
+  listTeamDiscussions,
+  getTeamDiscussion,
+  createTeamDiscussion,
+  updateTeamDiscussion,
+  deleteTeamDiscussion,
+  listTeamDiscussionComments,
+  getTeamDiscussionComment,
+  createTeamDiscussionComment,
+  updateTeamDiscussionComment,
+  deleteTeamDiscussionComment,
 };

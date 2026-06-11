@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.189] - 2026-06-11 — Phase 8 GitHub REST API & SDK Entrenchment
+### Added
+- **Classroom API**: Enabled listing classrooms, retrieving classroom details, listing assignments, and assignment details.
+- **Workflows & Runs**: Integrated repository workflows listing, specific workflow retrieval, workflow runs queries, run details, and manual dispatch triggers.
+- **Self-Hosted Runners**: Implemented self-hosted runner listings, details, and deletion endpoints for organizations and repositories.
+- **Issue Labels & Milestones**: Integrated labels CRUD, assign/unassign labels on issues, and milestones CRUD.
+- **Deploy Keys & Commit Statuses**: Exposed deploy keys CRUD for repositories, commit statuses creation (statuses state, context, target_url), and statuses list for git refs.
+- **PR Review Comments & Merges**: Integrated review comments CRUD and merges (check merged, merge PR) on pull requests.
+- **Team Discussions**: Implemented team discussions CRUD and comments CRUD within organization teams.
+- **Unit Testing**: Added 51 unit tests to cover Phase 8 endpoints, bringing the total passing tests to 196.
+
 ## [39.37.188] - 2026-06-11 — Phase 7 GitHub REST API & SDK Entrenchment
 ### Added
 - **Custom Properties**: Added definitions, listings, details retrieval, removal, and value assignments for custom properties at organization and repository levels.
