@@ -68,16 +68,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [25000, 12000, 8000, 45000, 90000, 120000, 85000, 60000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [420000, 510000, 590000, 480000, 730000, 260000, 410000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [730000, 260000, 410000, 420000, 510000, 590000, 480000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [1800000, 2100000, 1900000, 2420000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [1200000, 1400000, 1800000, 1500000, 2200000, 2800000, 3200000, 2900000, 3500000, 4100000, 3800000, 4800000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [3200000, 2900000, 3500000, 4100000, 3800000, 4800000, 1200000, 1400000, 1800000, 1500000, 2200000, 2800000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -128,16 +128,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [8000, 3000, 1000, 12000, 28000, 35000, 22000, 15000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [90000, 110000, 120000, 110000, 160000, 50000, 80000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [160000, 50000, 80000, 90000, 110000, 120000, 110000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [380000, 410000, 390000, 480000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [210000, 240000, 320000, 290000, 380000, 450000, 510000, 480000, 550000, 620000, 590000, 710000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [510000, 480000, 550000, 620000, 590000, 710000, 210000, 240000, 320000, 290000, 380000, 450000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -192,16 +192,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [15000, 8000, 5000, 32000, 75000, 98000, 68000, 42000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [290000, 360000, 420000, 330000, 510000, 190000, 440000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [510000, 190000, 440000, 290000, 360000, 420000, 330000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [1200000, 1500000, 1350000, 1780000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [800000, 950000, 1200000, 1100000, 1500000, 1900000, 2100000, 1850000, 2300000, 2700000, 2500000, 3340000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [2100000, 1850000, 2300000, 2700000, 2500000, 3340000, 800000, 950000, 1200000, 1100000, 1500000, 1900000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -252,16 +252,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [2000, 1000, 500, 6000, 14000, 18000, 11000, 8000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [50000, 80000, 90000, 70000, 110000, 40000, 65000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [110000, 40000, 65000, 50000, 80000, 90000, 70000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [210000, 240000, 220000, 280000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [120000, 150000, 180000, 160000, 220000, 290000, 310000, 285000, 330000, 380000, 360000, 505000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [310000, 285000, 330000, 380000, 360000, 505000, 120000, 150000, 180000, 160000, 220000, 290000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -308,16 +308,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [22000, 11000, 7000, 38000, 79000, 95000, 78000, 51000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [380000, 420000, 490000, 350000, 580000, 210000, 490000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [580000, 210000, 490000, 380000, 420000, 490000, 350000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [1450000, 1680000, 1520000, 1890000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [950000, 1100000, 1350000, 1200000, 1700000, 2100000, 2350000, 2100000, 2600000, 3050000, 2900000, 3810000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [2350000, 2100000, 2600000, 3050000, 2900000, 3810000, 950000, 1100000, 1350000, 1200000, 1700000, 2100000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -360,16 +360,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [9000, 4000, 1500, 15000, 31000, 38000, 26000, 18000]
           },
           "1W": {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            values: [105000, 140000, 155000, 120000, 170000, 60000, 145000]
+            labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
+            values: [170000, 60000, 145000, 105000, 140000, 155000, 120000]
           },
           "1M": {
             labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
             values: [490000, 560000, 520000, 630000]
           },
           "1Y": {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            values: [310000, 350000, 450000, 410000, 580000, 690000, 780000, 720000, 890000, 990000, 950000, 1400000]
+            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            values: [780000, 720000, 890000, 990000, 950000, 1400000, 310000, 350000, 450000, 410000, 580000, 690000]
           },
           "All": {
             labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
@@ -410,6 +410,115 @@ const theme = {
   progressColor: "bg-blue-600 dark:bg-blue-500"
 };
 
+// Simulated dates and times for charting anchored on Thursday, June 11, 2026
+const getDateTime = (
+  timeframe: "1D" | "1W" | "1M" | "1Y" | "All",
+  index: number,
+  label: string
+) => {
+  if (timeframe === "1D") {
+    // label is "12 AM", "3 AM", etc.
+    const isToday = index >= 4; // last 4 points are today
+    const dateStr = isToday ? "Jun 11, 2026" : "Jun 10, 2026";
+    return { date: dateStr, time: label };
+  }
+  if (timeframe === "1W") {
+    const dateMapping: Record<string, string> = {
+      Fri: "Jun 5, 2026",
+      Sat: "Jun 6, 2026",
+      Sun: "Jun 7, 2026",
+      Mon: "Jun 8, 2026",
+      Tue: "Jun 9, 2026",
+      Wed: "Jun 10, 2026",
+      Thu: "Jun 11, 2026"
+    };
+    const timeMapping: Record<string, string> = {
+      Fri: "3:10 PM",
+      Sat: "1:05 PM",
+      Sun: "5:50 PM",
+      Mon: "4:32 PM",
+      Tue: "2:15 PM",
+      Wed: "6:45 PM",
+      Thu: "12:40 AM"
+    };
+    return {
+      date: dateMapping[label] || "Jun 11, 2026",
+      time: timeMapping[label] || "12:00 PM"
+    };
+  }
+  if (timeframe === "1M") {
+    const dateMapping: Record<string, string> = {
+      "Week 1": "May 17, 2026",
+      "Week 2": "May 24, 2026",
+      "Week 3": "May 31, 2026",
+      "Week 4": "Jun 7, 2026"
+    };
+    return {
+      date: dateMapping[label] || "Jun 7, 2026",
+      time: "11:59 PM"
+    };
+  }
+  if (timeframe === "1Y") {
+    const dateMapping: Record<string, string> = {
+      Jul: "Jul 31, 2025",
+      Aug: "Aug 31, 2025",
+      Sep: "Sep 30, 2025",
+      Oct: "Oct 31, 2025",
+      Nov: "Nov 30, 2025",
+      Dec: "Dec 31, 2025",
+      Jan: "Jan 31, 2026",
+      Feb: "Feb 28, 2026",
+      Mar: "Mar 31, 2026",
+      Apr: "Apr 30, 2026",
+      May: "May 31, 2026",
+      Jun: "Jun 11, 2026"
+    };
+    return {
+      date: dateMapping[label] || "Jun 2026",
+      time: "11:59 PM"
+    };
+  }
+  const dateMapping: Record<string, string> = {
+    "Q1 '25": "Mar 31, 2025",
+    "Q2 '25": "Jun 30, 2025",
+    "Q3 '25": "Sep 30, 2025",
+    "Q4 '25": "Dec 31, 2025",
+    "Q1 '26": "Mar 31, 2026",
+    "Q2 '26": "Jun 11, 2026"
+  };
+  return {
+    date: dateMapping[label] || "Jun 2026",
+    time: "11:59 PM"
+  };
+};
+
+// Helper to determine a clean ceiling value for the Y-axis token scale based on data maximums
+const getYScaleCeiling = (maxVal: number) => {
+  if (maxVal <= 150000) return 150000;
+  if (maxVal <= 500000) return 500000;
+  if (maxVal <= 1000000) return 1000000;
+  if (maxVal <= 2500000) return 2500000;
+  if (maxVal <= 5000000) return 5000000;
+  if (maxVal <= 10000000) return 10000000;
+  if (maxVal <= 25000000) return 25000000;
+  if (maxVal <= 50000000) return 50000000;
+  return 100000000; // 100M
+};
+
+// Formats token ceiling values into clean readable labels for static Y-axis rendering
+const getYScaleLabels = (ceiling: number) => {
+  const formatVal = (val: number) => {
+    if (val >= 1000000) return parseFloat((val / 1000000).toFixed(2)) + "M";
+    if (val >= 1000) return parseFloat((val / 1000).toFixed(2)) + "k";
+    return val.toString();
+  };
+  return {
+    top: formatVal(ceiling),
+    mid: formatVal(ceiling / 2),
+    bottom: "0"
+  };
+};
+
 export default function ModelUsagePage() {
   const [activeTab, setActiveTab] = useState<"aws" | "gcp" | "azure">("azure");
   const data = initialUsageData[activeTab];
@@ -448,17 +557,23 @@ export default function ModelUsagePage() {
     // Scale local cursor coordinate to SVG coordinate space
     const relativeX = (x / rect.width) * svgWidth;
     
+    const chartWidth = 430;
+    const xOffset = 15;
+    const yOffset = 10;
+    const chartHeight = 90;
+    
+    // Clamp relativeX to chart plot area
+    const clampedX = Math.max(xOffset, Math.min(xOffset + chartWidth, relativeX));
+    
     // Get closest data point index
-    const index = Math.max(0, Math.min(pointsCount - 1, Math.round((relativeX / svgWidth) * (pointsCount - 1))));
+    const index = Math.max(0, Math.min(pointsCount - 1, Math.round(((clampedX - xOffset) / chartWidth) * (pointsCount - 1))));
     
-    // Calculate Y height for this point
+    // Calculate coordinates for the selected point
     const maxVal = Math.max(...values, 1);
-    const svgHeight = 100;
-    const paddingY = 10;
+    const yScaleCeiling = getYScaleCeiling(maxVal);
     const val = values[index];
-    
-    const calculatedX = (index / (pointsCount - 1)) * svgWidth;
-    const calculatedY = svgHeight - paddingY - ((val / maxVal) * (svgHeight - 2 * paddingY));
+    const calculatedX = xOffset + (index / (pointsCount - 1)) * chartWidth;
+    const calculatedY = yOffset + chartHeight - ((val / yScaleCeiling) * chartHeight);
 
     setHoveredData(prev => ({
       ...prev,
@@ -524,13 +639,17 @@ export default function ModelUsagePage() {
 
             // Generate coordinates for SVG Stock Chart
             const maxVal = Math.max(...values, 1);
-            const svgWidth = 500;
-            const svgHeight = 100;
-            const paddingY = 10;
+            const yScaleCeiling = getYScaleCeiling(maxVal);
+            const yScaleLabels = getYScaleLabels(yScaleCeiling);
+
+            const chartWidth = 430;
+            const chartHeight = 90;
+            const xOffset = 15;
+            const yOffset = 10;
 
             const coords = values.map((val, i) => {
-              const x = (i / (values.length - 1)) * svgWidth;
-              const y = svgHeight - paddingY - ((val / maxVal) * (svgHeight - 2 * paddingY));
+              const x = xOffset + (i / (values.length - 1)) * chartWidth;
+              const y = yOffset + chartHeight - ((val / yScaleCeiling) * chartHeight);
               return { x, y };
             });
 
@@ -539,12 +658,22 @@ export default function ModelUsagePage() {
               return acc + `${i === 0 ? "M" : "L"} ${c.x} ${c.y}`;
             }, "");
 
-            const areaPath = linePath + ` L ${svgWidth} ${svgHeight} L 0 ${svgHeight} Z`;
+            const areaPath = linePath + ` L ${xOffset + chartWidth} ${yOffset + chartHeight} L ${xOffset} ${yOffset + chartHeight} Z`;
 
             // Tooltip calculations on Hover
             const activeHover = hoveredData[model.name];
             const activeValue = activeHover ? values[activeHover.index] : values[values.length - 1];
             const activeLabel = activeHover ? labels[activeHover.index] : labels[labels.length - 1];
+
+            // Resolve date and time
+            const hoverDT = activeHover
+              ? getDateTime(selectedTimeframe, activeHover.index, labels[activeHover.index])
+              : getDateTime(selectedTimeframe, labels.length - 1, labels[labels.length - 1]);
+
+            // Static axis endpoints datetime
+            const firstDT = getDateTime(selectedTimeframe, 0, labels[0]);
+            const midDT = getDateTime(selectedTimeframe, Math.floor(labels.length / 2), labels[Math.floor(labels.length / 2)]);
+            const lastDT = getDateTime(selectedTimeframe, labels.length - 1, labels[labels.length - 1]);
 
             return (
               <div 
@@ -625,7 +754,7 @@ export default function ModelUsagePage() {
                             {formatTokens(activeValue)}
                           </span>
                           <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
-                            {activeLabel}
+                            {hoverDT.date} @ {hoverDT.time}
                           </span>
                         </div>
                       </div>
@@ -649,10 +778,10 @@ export default function ModelUsagePage() {
                     </div>
 
                     {/* Chart Canvas Area */}
-                    <div className="relative h-28 w-full pt-1 select-none">
+                    <div className="relative h-36 w-full pt-1 select-none">
                       <svg
                         className="w-full h-full overflow-visible cursor-crosshair"
-                        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                        viewBox="0 0 500 130"
                         preserveAspectRatio="none"
                         onMouseMove={(e) => handleMouseMove(e, model.name, labels, values)}
                         onMouseLeave={() => handleMouseLeave(model.name)}
@@ -664,6 +793,39 @@ export default function ModelUsagePage() {
                             <stop offset="100%" stopColor="#2563eb" stopOpacity="0.00" />
                           </linearGradient>
                         </defs>
+
+                        {/* Faint background grid lines */}
+                        <line x1="15" y1="10" x2="445" y2="10" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                        <line x1="15" y1="55" x2="445" y2="55" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                        <line x1="15" y1="100" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+
+                        {/* Bottom Axis Line */}
+                        <line x1="15" y1="100" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
+
+                        {/* Right Axis Line */}
+                        <line x1="445" y1="10" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
+
+                        {/* Static Bottom Axis Labels (Dates) */}
+                        <text x="15" y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                          {firstDT.date}
+                        </text>
+                        <text x={15 + chartWidth / 2} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="middle">
+                          {midDT.date}
+                        </text>
+                        <text x={15 + chartWidth} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
+                          {lastDT.date}
+                        </text>
+
+                        {/* Static Right Axis Labels (Tokens) */}
+                        <text x="452" y="14" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                          {yScaleLabels.top}
+                        </text>
+                        <text x="452" y="59" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                          {yScaleLabels.mid}
+                        </text>
+                        <text x="452" y="103" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                          {yScaleLabels.bottom}
+                        </text>
 
                         {/* Fill Gradient Area under line */}
                         <path
@@ -689,23 +851,70 @@ export default function ModelUsagePage() {
                             {/* Crosshair vertical line */}
                             <line
                               x1={activeHover.x}
-                              y1={0}
+                              y1={10}
                               x2={activeHover.x}
-                              y2={svgHeight}
-                              stroke="rgba(37, 99, 235, 0.25)"
+                              y2={100}
+                              stroke="rgba(37, 99, 235, 0.35)"
                               strokeWidth="1.5"
                               strokeDasharray="3 3"
+                            />
+                            {/* Crosshair horizontal line */}
+                            <line
+                              x1={15}
+                              y1={activeHover.y}
+                              x2={445}
+                              y2={activeHover.y}
+                              stroke="rgba(37, 99, 235, 0.35)"
+                              strokeWidth="1.5"
+                              strokeDasharray="3 3"
+                            />
+                            {/* Crosshair pulse outer circle */}
+                            <circle
+                              cx={activeHover.x}
+                              cy={activeHover.y}
+                              r="9"
+                              fill="#2563eb"
+                              fillOpacity="0.15"
                             />
                             {/* Crosshair pulse dot */}
                             <circle
                               cx={activeHover.x}
                               cy={activeHover.y}
-                              r="5"
+                              r="4"
                               fill="#2563eb"
                               stroke="white"
-                              strokeWidth="2"
-                              className="animate-pulse"
+                              strokeWidth="1.5"
                             />
+
+                            {/* Sliding interactive Date badge on the bottom axis */}
+                            <g transform={`translate(${Math.max(50, Math.min(410, activeHover.x))}, 118)`}>
+                              <rect x="-38" y="-9" width="76" height="15" rx="3" fill="#2563eb" />
+                              <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                {hoverDT.date.split(",")[0]}
+                              </text>
+                            </g>
+
+                            {/* Sliding interactive Token badge on the right axis */}
+                            <g transform={`translate(473, ${Math.max(16, Math.min(94, activeHover.y))})`}>
+                              <rect x="-26" y="-8" width="52" height="15" rx="3" fill="#2563eb" />
+                              <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                {formatTokens(activeValue)}
+                              </text>
+                            </g>
+
+                            {/* Segmented capsule tooltip showing Date and Token Use to the right of the exact intersection */}
+                            <g transform={`translate(${activeHover.x > 320 ? activeHover.x - 145 : activeHover.x + 10}, ${activeHover.y - 11})`}>
+                              <rect x="0" y="0" width="136" height="22" rx="11" fill="rgba(15, 15, 17, 0.95)" stroke="#2563eb" strokeWidth="1.5" />
+                              <text x="34" y="14" fill="#ffffff" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                {selectedTimeframe === "1D" 
+                                  ? `${hoverDT.date.split(" ")[0]} ${hoverDT.date.split(" ")[1].replace(",", "")} ${hoverDT.time}`
+                                  : hoverDT.date.split(",")[0]}
+                              </text>
+                              <line x1="68" y1="3" x2="68" y2="19" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
+                              <text x="102" y="14" fill="#3b82f6" fontSize="8.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                {formatTokens(activeValue)}
+                              </text>
+                            </g>
                           </>
                         )}
                       </svg>
@@ -744,3 +953,4 @@ export default function ModelUsagePage() {
     </div>
   );
 }
+
