@@ -25,9 +25,12 @@ class DeerFlowService {
     isAvailable() {
         if (this._available === null) {
             // Check for the deer-flow entry point
-            const hasPkg = fs.existsSync(path.join(this.basePath, 'package.json'));
+            const hasPkg = fs.existsSync(path.join(this.basePath, 'package.json')) ||
+                fs.existsSync(path.join(this.basePath, 'frontend', 'package.json'));
             const hasPy = fs.existsSync(path.join(this.basePath, 'pyproject.toml')) ||
-                fs.existsSync(path.join(this.basePath, 'requirements.txt'));
+                fs.existsSync(path.join(this.basePath, 'requirements.txt')) ||
+                fs.existsSync(path.join(this.basePath, 'backend', 'pyproject.toml')) ||
+                fs.existsSync(path.join(this.basePath, 'backend', 'requirements.txt'));
             this._available = hasPkg || hasPy;
             if (!this._available) {
                 logger.warn('[deer-flow] Submodule not initialized or entry point not found.');
