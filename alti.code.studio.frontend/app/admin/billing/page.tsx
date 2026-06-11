@@ -176,25 +176,11 @@ export default function BillingPage() {
       </form>
 
       {/* Saved Cards Section */}
-      <div className="space-y-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-base font-bold text-neutral-800 dark:text-neutral-200">
-              Cards on File
-            </h3>
-            <p className="text-xs text-neutral-400 dark:text-neutral-500">
-              Manage your payment methods and default billing card.
-            </p>
-          </div>
-          <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full">
-            {savedCards.length} {savedCards.length === 1 ? "card" : "cards"}
-          </span>
-        </div>
-
+      <div className="space-y-3">
         {savedCards.length > 0 ? (
           <div className="space-y-3">
             {/* Header row */}
-            <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/40 dark:border-neutral-800/60 rounded-xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase">
+            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
               <div className="col-span-4">Card / Brand</div>
               <div className="col-span-3">Cardholder Name</div>
               <div className="col-span-2">Expires</div>
