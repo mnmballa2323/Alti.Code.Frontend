@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.183] - 2026-06-11 — Phase 2 GitHub API, SDK, and MCP Entrenchment
+### Added
+- **Git Database Plumbing**: Implemented wrappers for low-level plumbing operations (`getRef`, `createRef`, `updateRef`, `createBlob`, `createTree`, `createCommit`).
+- **Organizations & Teams**: Integrated methods to list organizations, teams, and team members.
+- **Repository Webhooks**: Added ability to list, create, and delete webhooks directly from the platform.
+- **Actions Secrets & Variables**: Implemented Actions public key retrieval, encrypted secret creation/update, and variables management.
+- **Codespaces**: Added support for listing, creating, and deleting Codespaces.
+- **Dependabot**: Integrated Dependabot repository alerts listing.
+- **Copilot**: Added support for checking Copilot billing details for specific users.
+- **Unit Testing**: Extended the unit test suite to 43 passing test cases verifying all new Phase 2 methods.
+
 ## [39.37.182] - 2026-06-11 — Complete GitHub API, SDK, and MCP Entrenchment
 ### Added
 - **Expanded GitHub Service**: Implemented new wrapper namespaces and methods for GraphQL API query execution, complete GitHub Search (repos, code, issues, users), Git Data and file contents commits/deletes, Releases (creating, listing, latest), and Collaborators (listing, adding, removing).
