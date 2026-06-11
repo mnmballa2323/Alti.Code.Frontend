@@ -190,7 +190,7 @@ const AuditPage = () => {
             <div>Actor</div>
             <div>Action</div>
             <div>Status</div>
-            <div className="text-right pr-6">IP Address</div>
+            <div className="text-right pr-8">IP Address</div>
           </div>
         </div>
 
