@@ -172,7 +172,7 @@ export default function KnowledgePage() {
           <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             <div className="p-6 text-center">
               <h2 className="text-base font-bold text-neutral-800 dark:text-neutral-200 mb-2">
-                Remove Knowledge File
+                Remove File
               </h2>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
                 Are you sure you want to remove{" "}
