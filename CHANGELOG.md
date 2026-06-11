@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.193] - 2026-06-11 — Phase 12 GitHub REST API & SDK Entrenchment
+### Added
+- **Dependabot Org & Repo Secrets**: Integrated Dependabot secrets management for both Organization and Repository scopes, including public keys, secret details, creation/updates, deletion, and Repository selection for organization secrets.
+- **Organization Webhooks**: Added organization webhook management: listing, creation, details, updates, deletion, and pinging.
+- **PR Review Requests & PR Files**: Added listRequestedReviewers, requestReviewersForPullRequest, removeRequestedReviewersFromPullRequest, and listPullRequestFiles methods, controllers, and routes.
+- **Issue Assignees**: Added listAssignees, checkAssignee, addAssigneesToIssue, and removeAssigneesFromIssue methods, controllers, and routes.
+- **Release Assets**: Added listReleaseAssets, getReleaseAsset, updateReleaseAsset, and deleteReleaseAsset methods, controllers, and routes.
+- **Starring & Subscriptions**: Added listStargazersForRepo, listReposStarredByAuthenticatedUser, checkIfRepoIsStarredByUser, starRepoForAuthenticatedUser, unstarRepoForAuthenticatedUser, getRepoSubscription, setRepoSubscription, and deleteRepoSubscription methods, controllers, and routes.
+- **Unit Testing**: Added 42 new unit tests to achieve 369 passing tests total.
+
 ## [39.37.192] - 2026-06-11 — Phase 11 GitHub REST API & SDK Entrenchment
 ### Added
 - **Repository Security & Dependabot**: Added enablePrivateVulnerabilityReporting, disablePrivateVulnerabilityReporting, enableDependabotAlerts, disableDependabotAlerts, enableDependabotSecurityUpdates, and disableDependabotSecurityUpdates methods, controllers, and routes.
