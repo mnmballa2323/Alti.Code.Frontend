@@ -15,6 +15,56 @@ export default function BillingPage() {
   const [modalTitle, setModalTitle] = useState("");
   const [modalMessage, setModalMessage] = useState("");
 
+  // Saved Cards State
+  interface SavedCard {
+    id: string;
+    cardholderName: string;
+    brand: string;
+    last4: string;
+    expiry: string;
+    isPrimary: boolean;
+  }
+
+  const [savedCards, setSavedCards] = useState<SavedCard[]>([
+    {
+      id: "card-1",
+      cardholderName: "Ada Lovelace",
+      brand: "Visa",
+      last4: "4242",
+      expiry: "12/27",
+      isPrimary: true,
+    },
+    {
+      id: "card-2",
+      cardholderName: "Alan Turing",
+      brand: "Mastercard",
+      last4: "8888",
+      expiry: "09/28",
+      isPrimary: false,
+    },
+    {
+      id: "card-3",
+      cardholderName: "Grace Hopper",
+      brand: "Amex",
+      last4: "1007",
+      expiry: "03/29",
+      isPrimary: false,
+    },
+  ]);
+
+  const detectBrand = (num: string) => {
+    const clean = num.replace(/\s+/g, "");
+    if (clean.startsWith("4")) return "Visa";
+    if (clean.startsWith("5")) return "Mastercard";
+    if (clean.startsWith("3")) return "Amex";
+    return "Card";
+  };
+
+  const getLast4 = (num: string) => {
+    const clean = num.replace(/\s+/g, "");
+    return clean.slice(-4) || "0000";
+  };
+
   const handleSaveCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
@@ -29,18 +79,50 @@ export default function BillingPage() {
 
       return;
     }
+
     setLoading(true);
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      setModalTitle("Billing Saved");
-      setModalMessage("Your billing details have been updated successfully!");
+
+      const newCard: SavedCard = {
+        id: `card-${Date.now()}`,
+        cardholderName: cardholderName.trim(),
+        brand: detectBrand(cardNumber),
+        last4: getLast4(cardNumber),
+        expiry: expiry.trim(),
+        isPrimary: savedCards.length === 0, // Make primary if it's the first card
+      };
+
+      setSavedCards((prev) => [...prev, newCard]);
+
+      // Reset form fields
+      setCardholderName("");
+      setCardNumber("");
+      setExpiry("");
+      setCvc("");
+
+      setModalTitle("Card Added");
+      setModalMessage("Your card details have been successfully added to your account!");
       setModalOpen(true);
     }, 1000);
   };
 
+  const handleSetPrimary = (id: string) => {
+    setSavedCards((prev) =>
+      prev.map((card) => ({
+        ...card,
+        isPrimary: card.id === id,
+      }))
+    );
+  };
+
+  const handleRemoveCard = (id: string) => {
+    setSavedCards((prev) => prev.filter((card) => card.id !== id));
+  };
+
   return (
-    <div className="w-full flex flex-col h-full justify-start pt-6">
+    <div className="w-full flex flex-col h-full justify-start pt-6 space-y-10">
       <form className="space-y-6" onSubmit={handleSaveCard}>
         {/* 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -92,6 +174,100 @@ export default function BillingPage() {
           </button>
         </div>
       </form>
+
+      {/* Saved Cards Section */}
+      <div className="space-y-4 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-bold text-neutral-800 dark:text-neutral-200">
+              Cards on File
+            </h3>
+            <p className="text-xs text-neutral-400 dark:text-neutral-500">
+              Manage your payment methods and default billing card.
+            </p>
+          </div>
+          <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-full">
+            {savedCards.length} {savedCards.length === 1 ? "card" : "cards"}
+          </span>
+        </div>
+
+        {savedCards.length > 0 ? (
+          <div className="space-y-3">
+            {/* Header row */}
+            <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-neutral-50/50 dark:bg-neutral-900/30 border border-neutral-200/40 dark:border-neutral-800/60 rounded-xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase">
+              <div className="col-span-4">Card / Brand</div>
+              <div className="col-span-3">Cardholder Name</div>
+              <div className="col-span-2">Expires</div>
+              <div className="col-span-3 flex justify-end pr-2">Actions</div>
+            </div>
+
+            {/* List */}
+            {savedCards.map((card) => (
+              <div
+                key={card.id}
+                className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-300 dark:hover:border-neutral-700"
+              >
+                <div className="col-span-4 flex items-center gap-3">
+                  {/* Brand Icon or Tag */}
+                  <span className={`px-2 py-1 text-[10px] font-extrabold tracking-wider rounded border ${
+                    card.brand === "Visa"
+                      ? "bg-blue-50/60 dark:bg-blue-900/10 border-blue-200/50 dark:border-blue-800/30 text-blue-600 dark:text-blue-400"
+                      : card.brand === "Mastercard"
+                      ? "bg-orange-50/60 dark:bg-orange-900/10 border-orange-200/50 dark:border-orange-800/30 text-orange-600 dark:text-orange-400"
+                      : card.brand === "Amex"
+                      ? "bg-cyan-50/60 dark:bg-cyan-900/10 border-cyan-200/50 dark:border-cyan-800/30 text-cyan-600 dark:text-cyan-400"
+                      : "bg-neutral-50/60 dark:bg-neutral-900/10 border-neutral-200/50 dark:border-neutral-800/30 text-neutral-600 dark:text-neutral-400"
+                  }`}>
+                    {card.brand.toUpperCase()}
+                  </span>
+                  <span className="font-mono text-neutral-700 dark:text-neutral-300 font-medium">
+                    •••• {card.last4}
+                  </span>
+                  {card.isPrimary && (
+                    <span className="px-2 py-0.5 text-[9px] font-bold bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-900 rounded-md">
+                      Primary
+                    </span>
+                  )}
+                </div>
+
+                <div className="col-span-3 text-neutral-850 dark:text-neutral-300 font-medium truncate">
+                  {card.cardholderName}
+                </div>
+
+                <div className="col-span-2 text-neutral-500 dark:text-neutral-400 font-medium">
+                  {card.expiry}
+                </div>
+
+                <div className="col-span-3 flex items-center justify-end gap-2">
+                  {!card.isPrimary && (
+                    <button
+                      onClick={() => handleSetPrimary(card.id)}
+                      className="px-2.5 py-1.5 text-xs font-semibold text-neutral-550 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800/40 rounded-lg border border-neutral-200 dark:border-neutral-800 transition-colors cursor-pointer"
+                    >
+                      Make Primary
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleRemoveCard(card.id)}
+                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer ${
+                      card.isPrimary
+                        ? "text-neutral-350 dark:text-neutral-600 border-neutral-100 dark:border-neutral-850 cursor-not-allowed"
+                        : "text-red-500 hover:text-red-650 hover:bg-red-50/50 dark:hover:bg-red-950/15 border-neutral-200 dark:border-neutral-800 hover:border-red-200 dark:hover:border-red-900/40"
+                    }`}
+                    disabled={card.isPrimary}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+            No saved cards on file. Add a card above to get started.
+          </div>
+        )}
+      </div>
 
       {/* Custom Unified Notification Modal */}
       {modalOpen && (
