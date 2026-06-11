@@ -105,12 +105,26 @@ export default function TeamMembersPage() {
     });
   }
 
+  const getMemberFirstName = (member: Member) => {
+    if (member.name) {
+      const parts = member.name.trim().split(/\s+/);
+      if (parts[0]) return parts[0];
+    }
+    return member.email.split("@")[0] || "";
+  };
+
   const filteredMembers = displayedMembers.filter((member) => {
     const query = searchQuery.toLowerCase();
     const fullName = member.name ? member.name.toLowerCase() : "";
     const email = member.email ? member.email.toLowerCase() : "";
     const role = member.role ? member.role.toLowerCase() : "";
     return fullName.includes(query) || email.includes(query) || role.includes(query);
+  });
+
+  const sortedFilteredMembers = [...filteredMembers].sort((a, b) => {
+    const nameA = getMemberFirstName(a).toLowerCase();
+    const nameB = getMemberFirstName(b).toLowerCase();
+    return nameA.localeCompare(nameB);
   });
 
   return (
@@ -148,8 +162,8 @@ export default function TeamMembersPage() {
 
               {/* Table Body */}
               <div className="space-y-3">
-                {filteredMembers.length > 0 ? (
-                  filteredMembers.map((member) => {
+                {sortedFilteredMembers.length > 0 ? (
+                  sortedFilteredMembers.map((member) => {
                     const isYou = member.email === currentUser?.email;
 
                     // Try to split name into first and last, or extract from email if not set
