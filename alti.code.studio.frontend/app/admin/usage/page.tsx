@@ -410,17 +410,32 @@ const theme = {
   progressColor: "bg-blue-600 dark:bg-blue-500"
 };
 
-// Simulated dates and times for charting anchored on Thursday, June 11, 2026
+// Simulated dates and times for charting anchored on current local time
 const getDateTime = (
   timeframe: "1D" | "1W" | "1M" | "1Y" | "All",
   index: number,
   label: string
 ) => {
   if (timeframe === "1D") {
-    // label is "12 AM", "3 AM", etc.
-    const isToday = index >= 4; // last 4 points are today
-    const dateStr = isToday ? "Jun 11, 2026" : "Jun 10, 2026";
-    return { date: dateStr, time: label };
+    const now = new Date();
+    // 8 points spaced 3 hours apart, ending at the current time
+    const d = new Date(now.getTime() - (7 - index) * 3 * 60 * 60 * 1000);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthStr = months[d.getMonth()];
+    const dayVal = d.getDate();
+    const yearVal = d.getFullYear();
+    
+    let hours = d.getHours();
+    const minutes = d.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    const minStr = minutes < 10 ? "0" + minutes : minutes;
+    
+    return {
+      date: `${monthStr} ${dayVal}, ${yearVal}`,
+      time: `${hours}:${minStr} ${ampm}`
+    };
   }
   if (timeframe === "1W") {
     const dateMapping: Record<string, string> = {
@@ -635,7 +650,12 @@ export default function ModelUsagePage() {
             // Get selected timeframe state or fallback to default "1W"
             const selectedTimeframe = timeframes[model.name] || "1W";
             const timeframeData = model.timeframes[selectedTimeframe];
-            const { labels, values } = timeframeData;
+            const values = timeframeData.values;
+
+            // Generate dynamic labels for 1D to match current local time
+            const labels = selectedTimeframe === "1D"
+              ? Array.from({ length: values.length }).map((_, i) => getDateTime("1D", i, "").time)
+              : timeframeData.labels;
 
             // Generate coordinates for SVG Stock Chart
             const maxVal = Math.max(...values, 1);
@@ -686,11 +706,6 @@ export default function ModelUsagePage() {
                     <div>
                       <h3 className="text-base font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                         {model.name}
-                        {model.isPrimary && (
-                          <Chip className="bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[8px] border-none font-bold h-4" size="sm">
-                            Primary
-                          </Chip>
-                        )}
                       </h3>
                       <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Version: {model.version}</p>
                     </div>
@@ -702,44 +717,19 @@ export default function ModelUsagePage() {
                     </div>
                   </div>
 
-                  {/* 2. Key Metrics Grid */}
-                  <div className="grid grid-cols-2 gap-4">
-                    {/* API Requests */}
-                    <div className="bg-neutral-50/40 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-850 p-3 rounded-2xl flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
-                        <Activity size={14} />
-                      </div>
-                      <div>
-                        <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">API Calls</span>
-                        <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{model.requests.toLocaleString()}</span>
-                      </div>
+                  {/* 2. Key Metrics Card */}
+                  <div className="bg-neutral-50/40 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-850 p-3 rounded-2xl flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
+                      <Cpu size={14} />
                     </div>
-
-                    {/* Latency */}
-                    <div className="bg-neutral-50/40 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-850 p-3 rounded-2xl flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
-                        <Clock size={14} />
-                      </div>
+                    <div className="flex-1 flex justify-between items-center pr-2">
                       <div>
-                        <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Avg Latency</span>
-                        <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{model.avgLatency}ms</span>
+                        <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
+                        <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokens(modelTokens)}</span>
                       </div>
-                    </div>
-
-                    {/* Total Tokens */}
-                    <div className="bg-neutral-50/40 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-850 p-3 rounded-2xl flex items-center gap-3 col-span-2">
-                      <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
-                        <Cpu size={14} />
-                      </div>
-                      <div className="flex-1 flex justify-between items-center pr-2">
-                        <div>
-                          <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
-                          <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokens(modelTokens)}</span>
-                        </div>
-                        <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium">
-                          In: {formatTokens(model.inputTokens)} | Out: {formatTokens(model.outputTokens)}
-                        </span>
-                      </div>
+                      <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium">
+                        In: {formatTokens(model.inputTokens)} | Out: {formatTokens(model.outputTokens)}
+                      </span>
                     </div>
                   </div>
 
@@ -805,15 +795,15 @@ export default function ModelUsagePage() {
                         {/* Right Axis Line */}
                         <line x1="445" y1="10" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
 
-                        {/* Static Bottom Axis Labels (Dates) */}
+                        {/* Static Bottom Axis Labels (Dates for >1D, Times for 1D) */}
                         <text x="15" y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
-                          {firstDT.date}
+                          {selectedTimeframe === "1D" ? firstDT.time : firstDT.date}
                         </text>
                         <text x={15 + chartWidth / 2} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="middle">
-                          {midDT.date}
+                          {selectedTimeframe === "1D" ? midDT.time : midDT.date}
                         </text>
                         <text x={15 + chartWidth} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
-                          {lastDT.date}
+                          {selectedTimeframe === "1D" ? lastDT.time : lastDT.date}
                         </text>
 
                         {/* Static Right Axis Labels (Tokens) */}
@@ -886,11 +876,11 @@ export default function ModelUsagePage() {
                               strokeWidth="1.5"
                             />
 
-                            {/* Sliding interactive Date badge on the bottom axis */}
+                            {/* Sliding interactive Date/Time badge on the bottom axis */}
                             <g transform={`translate(${Math.max(50, Math.min(410, activeHover.x))}, 118)`}>
                               <rect x="-38" y="-9" width="76" height="15" rx="3" fill="#2563eb" />
                               <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                                {hoverDT.date.split(",")[0]}
+                                {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
                               </text>
                             </g>
 
@@ -911,7 +901,7 @@ export default function ModelUsagePage() {
                                   : hoverDT.date.split(",")[0]}
                               </text>
                               <line x1="68" y1="3" x2="68" y2="19" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-                              <text x="102" y="14" fill="#3b82f6" fontSize="8.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                              <text x="102" y="14" fill="#ffffff" fontSize="8.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {formatTokens(activeValue)}
                               </text>
                             </g>
@@ -922,29 +912,7 @@ export default function ModelUsagePage() {
                   </div>
                 </div>
 
-                {/* 4. Recent Logs for this specific model */}
-                <div className="space-y-3 pt-4 border-t border-neutral-100 dark:border-neutral-850">
-                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <FileText size={10} /> Model Activity Log
-                  </span>
-                  
-                  <div className="space-y-2.5">
-                    {model.recentRequests.map((req) => (
-                      <div key={req.id} className="text-xs border-b border-neutral-100/50 dark:border-neutral-850/40 pb-2 last:border-b-0 last:pb-0 space-y-0.5">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <p className="text-neutral-500 dark:text-neutral-400 truncate flex-1 pr-4">
-                            "{req.promptSnippet}"
-                          </p>
-                          <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono shrink-0">{req.timestamp}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-[9px] text-neutral-400 font-medium">
-                          <span>{req.tokens} t | {req.latency}ms</span>
-                          <span className="font-bold text-neutral-800 dark:text-neutral-350">${req.cost.toFixed(4)}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+
               </div>
             );
           })}
