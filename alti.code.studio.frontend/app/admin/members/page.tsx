@@ -11,6 +11,7 @@ export default function InvitePage() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,43 +75,67 @@ export default function InvitePage() {
             onChange={(e) => setEmail(e.target.value)}
           />
           <div className="relative">
-            <select
-              className={`w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all appearance-none cursor-pointer ${
+            <button
+              type="button"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className={`w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-all flex items-center justify-between cursor-pointer ${
                 role === ""
-                  ? "text-neutral-400 dark:text-neutral-500"
-                  : "text-neutral-800 dark:text-neutral-200"
+                  ? "text-neutral-400 dark:text-neutral-500 font-normal"
+                  : "text-neutral-800 dark:text-neutral-200 font-semibold"
               }`}
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
             >
-              <option disabled hidden value="">
-                Select Role Type
-              </option>
-              <option
-                className="text-neutral-800 dark:text-neutral-200"
-                value="developer"
+              <span>
+                {role === ""
+                  ? "Select Role Type"
+                  : role === "developer"
+                  ? "Developer"
+                  : role === "manager"
+                  ? "Manager"
+                  : "Admin"}
+              </span>
+              <svg
+                className={`fill-current h-4 w-4 text-neutral-500 transition-transform duration-200 ${
+                  dropdownOpen ? "rotate-180" : ""
+                }`}
+                viewBox="0 0 20 20"
               >
-                Developer
-              </option>
-              <option
-                className="text-neutral-800 dark:text-neutral-200"
-                value="manager"
-              >
-                Manager
-              </option>
-              <option
-                className="text-neutral-800 dark:text-neutral-200"
-                value="admin"
-              >
-                Admin
-              </option>
-            </select>
-            {/* Custom chevron indicator */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-neutral-500">
-              <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                 <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
               </svg>
-            </div>
+            </button>
+
+            {dropdownOpen && (
+              <>
+                {/* Backdrop overlay */}
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setDropdownOpen(false)}
+                />
+                {/* Dropdown Options */}
+                <div className="absolute top-full left-0 mt-1.5 w-full bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                  {[
+                    { value: "developer", label: "Developer" },
+                    { value: "manager", label: "Manager" },
+                    { value: "admin", label: "Admin" },
+                  ].map((item) => (
+                    <button
+                      key={item.value}
+                      type="button"
+                      onClick={() => {
+                        setRole(item.value);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 ${
+                        role === item.value
+                          ? "text-neutral-900 dark:text-white font-bold bg-neutral-50/60 dark:bg-neutral-800/20"
+                          : "text-neutral-600 dark:text-neutral-450 font-semibold"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
