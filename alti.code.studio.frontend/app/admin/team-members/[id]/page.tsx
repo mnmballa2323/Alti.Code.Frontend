@@ -839,7 +839,8 @@ export default function MemberDetailsPage() {
                 <div
                   className="grid gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm"
                   style={{
-                    gridTemplateColumns: "90px 120px 4fr 1.2fr 120px",
+                    gridTemplateColumns:
+                      "90px 120px minmax(0, 4fr) minmax(0, 1.2fr) 120px",
                   }}
                 >
                   <div>Date</div>
@@ -887,7 +888,8 @@ export default function MemberDetailsPage() {
                           <div
                             className="grid gap-4 items-center text-sm"
                             style={{
-                              gridTemplateColumns: "90px 120px 4fr 1.2fr 120px",
+                              gridTemplateColumns:
+                                "90px 120px minmax(0, 4fr) minmax(0, 1.2fr) 120px",
                             }}
                           >
                             <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
