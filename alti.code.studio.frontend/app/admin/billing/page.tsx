@@ -308,11 +308,6 @@ export default function BillingPage() {
                   <span className="font-mono text-neutral-700 dark:text-neutral-300 font-medium">
                     •••• {card.last4}
                   </span>
-                  {card.isPrimary && (
-                    <span className="px-2 py-0.5 text-[9px] font-bold bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-900 rounded-md">
-                      Primary
-                    </span>
-                  )}
                 </div>
 
                 <div className="col-span-3 text-neutral-850 dark:text-neutral-300 font-medium truncate">
@@ -324,7 +319,11 @@ export default function BillingPage() {
                 </div>
 
                 <div className="col-span-3 flex items-center justify-end gap-2">
-                  {!card.isPrimary && (
+                  {card.isPrimary ? (
+                    <span className="px-2.5 py-1.5 text-xs font-semibold bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-950 rounded-lg select-none border border-neutral-800 dark:border-neutral-200 shadow-sm">
+                      Primary
+                    </span>
+                  ) : (
                     <button
                       onClick={() => handleSetPrimary(card.id)}
                       className="px-2.5 py-1.5 text-xs font-semibold text-neutral-550 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800/40 rounded-lg border border-neutral-200 dark:border-neutral-800 transition-colors cursor-pointer"
