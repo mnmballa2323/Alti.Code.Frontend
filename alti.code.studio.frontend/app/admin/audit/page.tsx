@@ -253,7 +253,7 @@ const AuditPage = () => {
                         {logTime}
                       </div>
                       <div
-                        className="font-medium text-neutral-800 dark:text-neutral-200 truncate"
+                        className="text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate"
                         title={log.actor}
                       >
                         {log.actor}
