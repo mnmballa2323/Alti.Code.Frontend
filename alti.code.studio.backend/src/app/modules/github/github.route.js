@@ -1114,6 +1114,180 @@ router.delete(
   GithubController.removeSelectedRepoFromOrgCodespacesSecret,
 );
 
+// Dependabot Organization Secrets
+router.get(
+  '/orgs/:org/dependabot/secrets/public-key',
+  GithubController.getDependabotOrgPublicKey,
+);
+router.get(
+  '/orgs/:org/dependabot/secrets',
+  GithubController.listDependabotOrgSecrets,
+);
+router.get(
+  '/orgs/:org/dependabot/secrets/:secretName',
+  GithubController.getDependabotOrgSecret,
+);
+router.put(
+  '/orgs/:org/dependabot/secrets/:secretName',
+  GithubController.createOrUpdateDependabotOrgSecret,
+);
+router.delete(
+  '/orgs/:org/dependabot/secrets/:secretName',
+  GithubController.deleteDependabotOrgSecret,
+);
+router.get(
+  '/orgs/:org/dependabot/secrets/:secretName/repositories',
+  GithubController.listSelectedReposForDependabotOrgSecret,
+);
+router.put(
+  '/orgs/:org/dependabot/secrets/:secretName/repositories',
+  GithubController.setSelectedReposForDependabotOrgSecret,
+);
+router.put(
+  '/orgs/:org/dependabot/secrets/:secretName/repositories/:repositoryId',
+  GithubController.addSelectedRepoToDependabotOrgSecret,
+);
+router.delete(
+  '/orgs/:org/dependabot/secrets/:secretName/repositories/:repositoryId',
+  GithubController.removeSelectedRepoFromDependabotOrgSecret,
+);
+
+// Dependabot Repository Secrets
+router.get(
+  '/repos/:owner/:repo/dependabot/secrets/public-key',
+  GithubController.getDependabotRepoPublicKey,
+);
+router.get(
+  '/repos/:owner/:repo/dependabot/secrets',
+  GithubController.listDependabotRepoSecrets,
+);
+router.get(
+  '/repos/:owner/:repo/dependabot/secrets/:secretName',
+  GithubController.getDependabotRepoSecret,
+);
+router.put(
+  '/repos/:owner/:repo/dependabot/secrets/:secretName',
+  GithubController.createOrUpdateDependabotRepoSecret,
+);
+router.delete(
+  '/repos/:owner/:repo/dependabot/secrets/:secretName',
+  GithubController.deleteDependabotRepoSecret,
+);
+
+// Organization Webhooks
+router.get(
+  '/orgs/:org/webhooks',
+  GithubController.listOrgWebhooks,
+);
+router.post(
+  '/orgs/:org/webhooks',
+  GithubController.createOrgWebhook,
+);
+router.get(
+  '/orgs/:org/webhooks/:webhookId',
+  GithubController.getOrgWebhook,
+);
+router.patch(
+  '/orgs/:org/webhooks/:webhookId',
+  GithubController.updateOrgWebhook,
+);
+router.delete(
+  '/orgs/:org/webhooks/:webhookId',
+  GithubController.deleteOrgWebhook,
+);
+router.post(
+  '/orgs/:org/webhooks/:webhookId/pings',
+  GithubController.pingOrgWebhook,
+);
+
+// PR Review Requests & Files
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/requested_reviewers',
+  GithubController.listRequestedReviewers,
+);
+router.post(
+  '/repos/:owner/:repo/pulls/:pullNumber/requested_reviewers',
+  GithubController.requestReviewersForPullRequest,
+);
+router.delete(
+  '/repos/:owner/:repo/pulls/:pullNumber/requested_reviewers',
+  GithubController.removeRequestedReviewersFromPullRequest,
+);
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/files',
+  GithubController.listPullRequestFiles,
+);
+
+// Issue Assignees
+router.get(
+  '/repos/:owner/:repo/assignees',
+  GithubController.listAssignees,
+);
+router.get(
+  '/repos/:owner/:repo/assignees/:assignee',
+  GithubController.checkAssignee,
+);
+router.post(
+  '/repos/:owner/:repo/issues/:issueNumber/assignees',
+  GithubController.addAssigneesToIssue,
+);
+router.delete(
+  '/repos/:owner/:repo/issues/:issueNumber/assignees',
+  GithubController.removeAssigneesFromIssue,
+);
+
+// Release Assets
+router.get(
+  '/repos/:owner/:repo/releases/:releaseId/assets',
+  GithubController.listReleaseAssets,
+);
+router.get(
+  '/repos/:owner/:repo/releases/assets/:assetId',
+  GithubController.getReleaseAsset,
+);
+router.patch(
+  '/repos/:owner/:repo/releases/assets/:assetId',
+  GithubController.updateReleaseAsset,
+);
+router.delete(
+  '/repos/:owner/:repo/releases/assets/:assetId',
+  GithubController.deleteReleaseAsset,
+);
+
+// Repository Starring & Subscriptions
+router.get(
+  '/repos/:owner/:repo/stargazers',
+  GithubController.listStargazersForRepo,
+);
+router.get(
+  '/user/starred',
+  GithubController.listReposStarredByAuthenticatedUser,
+);
+router.get(
+  '/user/starred/:owner/:repo',
+  GithubController.checkIfRepoIsStarredByUser,
+);
+router.put(
+  '/user/starred/:owner/:repo',
+  GithubController.starRepoForAuthenticatedUser,
+);
+router.delete(
+  '/user/starred/:owner/:repo',
+  GithubController.unstarRepoForAuthenticatedUser,
+);
+router.get(
+  '/repos/:owner/:repo/subscription',
+  GithubController.getRepoSubscription,
+);
+router.put(
+  '/repos/:owner/:repo/subscription',
+  GithubController.setRepoSubscription,
+);
+router.delete(
+  '/repos/:owner/:repo/subscription',
+  GithubController.deleteRepoSubscription,
+);
+
 // Repository Security & Private Reporting
 router.put(
   '/repos/:owner/:repo/private-vulnerability-reporting',

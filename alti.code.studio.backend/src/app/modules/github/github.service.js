@@ -6715,4 +6715,598 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 76. Dependabot Organization Secrets
+  // ==========================================
+  async getDependabotOrgPublicKey(org) {
+    logger.info(`🐙 [GitHub Service] Fetching Dependabot public key for org ${org}`);
+    try {
+      const { data } = await octokit.rest.dependabot.getOrgPublicKey({ org });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Dependabot public key for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listDependabotOrgSecrets(org) {
+    logger.info(`🐙 [GitHub Service] Listing Dependabot secrets for org ${org}`);
+    try {
+      const { data } = await octokit.rest.dependabot.listOrgSecrets({ org });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Dependabot secrets for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getDependabotOrgSecret(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Dependabot secret "${secretName}" for org ${org}`);
+    try {
+      const { data } = await octokit.rest.dependabot.getOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Dependabot secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateDependabotOrgSecret(org, secretName, encryptedValue, keyId, visibility = 'all', selectedRepositoryIds) {
+    logger.info(`🐙 [GitHub Service] Creating or updating Dependabot secret "${secretName}" for org ${org}`);
+    try {
+      const params = {
+        org,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+        visibility,
+      };
+      if (selectedRepositoryIds) {
+        params.selected_repository_ids = selectedRepositoryIds;
+      }
+      const response = await octokit.rest.dependabot.createOrUpdateOrgSecret(params);
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create or update Dependabot secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteDependabotOrgSecret(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Dependabot secret "${secretName}" for org ${org}`);
+    try {
+      const response = await octokit.rest.dependabot.deleteOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Dependabot secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listSelectedReposForDependabotOrgSecret(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Listing selected repos for Dependabot secret "${secretName}" in org ${org}`);
+    try {
+      const { data } = await octokit.rest.dependabot.listSelectedReposForOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list selected repos for Dependabot secret "${secretName}" in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async setSelectedReposForDependabotOrgSecret(org, secretName, repositoryIds) {
+    logger.info(`🐙 [GitHub Service] Setting selected repos for Dependabot secret "${secretName}" in org ${org}`);
+    try {
+      const response = await octokit.rest.dependabot.setSelectedReposForOrgSecret({
+        org,
+        secret_name: secretName,
+        selected_repository_ids: repositoryIds,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to set selected repos for Dependabot secret "${secretName}" in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async addSelectedRepoToDependabotOrgSecret(org, secretName, repositoryId) {
+    logger.info(`🐙 [GitHub Service] Adding repo ${repositoryId} to Dependabot secret "${secretName}" in org ${org}`);
+    try {
+      const response = await octokit.rest.dependabot.addSelectedRepoToOrgSecret({
+        org,
+        secret_name: secretName,
+        repository_id: repositoryId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to add repo ${repositoryId} to Dependabot secret "${secretName}" in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async removeSelectedRepoFromDependabotOrgSecret(org, secretName, repositoryId) {
+    logger.info(`🐙 [GitHub Service] Removing repo ${repositoryId} from Dependabot secret "${secretName}" in org ${org}`);
+    try {
+      const response = await octokit.rest.dependabot.removeSelectedRepoFromOrgSecret({
+        org,
+        secret_name: secretName,
+        repository_id: repositoryId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to remove repo ${repositoryId} from Dependabot secret "${secretName}" in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 77. Dependabot Repository Secrets
+  // ==========================================
+  async getDependabotRepoPublicKey(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Fetching Dependabot public key for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.dependabot.getRepoPublicKey({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Dependabot public key for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listDependabotRepoSecrets(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Listing Dependabot secrets for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.dependabot.listRepoSecrets({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Dependabot secrets for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getDependabotRepoSecret(owner, repo, secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Dependabot secret "${secretName}" for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.dependabot.getRepoSecret({
+        owner,
+        repo,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Dependabot secret "${secretName}" for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateDependabotRepoSecret(owner, repo, secretName, encryptedValue, keyId) {
+    logger.info(`🐙 [GitHub Service] Creating or updating Dependabot secret "${secretName}" for ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.dependabot.createOrUpdateRepoSecret({
+        owner,
+        repo,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create or update Dependabot secret "${secretName}" for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteDependabotRepoSecret(owner, repo, secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Dependabot secret "${secretName}" for ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.dependabot.deleteRepoSecret({
+        owner,
+        repo,
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Dependabot secret "${secretName}" for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 78. Organization Webhooks
+  // ==========================================
+  async listOrgWebhooks(org) {
+    logger.info(`🐙 [GitHub Service] Listing webhooks for org ${org}`);
+    try {
+      const { data } = await octokit.rest.orgs.listWebhooks({ org });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list webhooks for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrgWebhook(org, name, config, events, active = true) {
+    logger.info(`🐙 [GitHub Service] Creating webhook for org ${org}`);
+    try {
+      const { data } = await octokit.rest.orgs.createWebhook({
+        org,
+        name,
+        config,
+        events,
+        active,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create webhook for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgWebhook(org, webhookId) {
+    logger.info(`🐙 [GitHub Service] Fetching webhook #${webhookId} for org ${org}`);
+    try {
+      const { data } = await octokit.rest.orgs.getWebhook({
+        org,
+        webhook_id: parseInt(webhookId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch webhook #${webhookId} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async updateOrgWebhook(org, webhookId, config, events, active) {
+    logger.info(`🐙 [GitHub Service] Updating webhook #${webhookId} for org ${org}`);
+    try {
+      const params = {
+        org,
+        webhook_id: parseInt(webhookId, 10),
+      };
+      if (config) params.config = config;
+      if (events) params.events = events;
+      if (active !== undefined) params.active = active;
+      const { data } = await octokit.rest.orgs.updateWebhook(params);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update webhook #${webhookId} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteOrgWebhook(org, webhookId) {
+    logger.info(`🐙 [GitHub Service] Deleting webhook #${webhookId} for org ${org}`);
+    try {
+      const response = await octokit.rest.orgs.deleteWebhook({
+        org,
+        webhook_id: parseInt(webhookId, 10),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete webhook #${webhookId} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async pingOrgWebhook(org, webhookId) {
+    logger.info(`🐙 [GitHub Service] Pinging webhook #${webhookId} for org ${org}`);
+    try {
+      const response = await octokit.rest.orgs.pingWebhook({
+        org,
+        webhook_id: parseInt(webhookId, 10),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to ping webhook #${webhookId} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 79. Pull Request Review Requests & Files
+  // ==========================================
+  async listRequestedReviewers(owner, repo, pullNumber) {
+    logger.info(`🐙 [GitHub Service] Listing requested reviewers for ${owner}/${repo} PR #${pullNumber}`);
+    try {
+      const { data } = await octokit.rest.pulls.listRequestedReviewers({
+        owner,
+        repo,
+        pull_number: parseInt(pullNumber, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list requested reviewers for ${owner}/${repo} PR #${pullNumber}:`, error);
+      throw error;
+    }
+  },
+
+  async requestReviewersForPullRequest(owner, repo, pullNumber, reviewers, teamReviewers) {
+    logger.info(`🐙 [GitHub Service] Requesting reviewers for ${owner}/${repo} PR #${pullNumber}`);
+    try {
+      const params = {
+        owner,
+        repo,
+        pull_number: parseInt(pullNumber, 10),
+      };
+      if (reviewers) params.reviewers = reviewers;
+      if (teamReviewers) params.team_reviewers = teamReviewers;
+      const { data } = await octokit.rest.pulls.requestReviewers(params);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to request reviewers for ${owner}/${repo} PR #${pullNumber}:`, error);
+      throw error;
+    }
+  },
+
+  async removeRequestedReviewersFromPullRequest(owner, repo, pullNumber, reviewers, teamReviewers) {
+    logger.info(`🐙 [GitHub Service] Removing requested reviewers from ${owner}/${repo} PR #${pullNumber}`);
+    try {
+      const params = {
+        owner,
+        repo,
+        pull_number: parseInt(pullNumber, 10),
+      };
+      if (reviewers) params.reviewers = reviewers;
+      if (teamReviewers) params.team_reviewers = teamReviewers;
+      const response = await octokit.rest.pulls.removeRequestedReviewers(params);
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to remove requested reviewers from ${owner}/${repo} PR #${pullNumber}:`, error);
+      throw error;
+    }
+  },
+
+  async listPullRequestFiles(owner, repo, pullNumber) {
+    logger.info(`🐙 [GitHub Service] Listing files for ${owner}/${repo} PR #${pullNumber}`);
+    try {
+      const { data } = await octokit.rest.pulls.listFiles({
+        owner,
+        repo,
+        pull_number: parseInt(pullNumber, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list files for ${owner}/${repo} PR #${pullNumber}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 80. Issue Assignees
+  // ==========================================
+  async listAssignees(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Listing assignees for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.issues.listAssignees({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list assignees for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async checkAssignee(owner, repo, assignee) {
+    logger.info(`🐙 [GitHub Service] Checking if ${assignee} can be assigned in ${owner}/${repo}`);
+    try {
+      await octokit.rest.issues.checkUserCanBeAssigned({
+        owner,
+        repo,
+        assignee,
+      });
+      return { assignable: true };
+    } catch (error) {
+      if (error.status === 404) {
+        return { assignable: false };
+      }
+      logger.error(`Failed to check if ${assignee} can be assigned in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async addAssigneesToIssue(owner, repo, issueNumber, assignees) {
+    logger.info(`🐙 [GitHub Service] Adding assignees to ${owner}/${repo} issue #${issueNumber}`);
+    try {
+      const { data } = await octokit.rest.issues.addAssignees({
+        owner,
+        repo,
+        issue_number: parseInt(issueNumber, 10),
+        assignees,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to add assignees to ${owner}/${repo} issue #${issueNumber}:`, error);
+      throw error;
+    }
+  },
+
+  async removeAssigneesFromIssue(owner, repo, issueNumber, assignees) {
+    logger.info(`🐙 [GitHub Service] Removing assignees from ${owner}/${repo} issue #${issueNumber}`);
+    try {
+      const { data } = await octokit.rest.issues.removeAssignees({
+        owner,
+        repo,
+        issue_number: parseInt(issueNumber, 10),
+        assignees,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to remove assignees from ${owner}/${repo} issue #${issueNumber}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 81. Release Assets
+  // ==========================================
+  async listReleaseAssets(owner, repo, releaseId) {
+    logger.info(`🐙 [GitHub Service] Listing assets for ${owner}/${repo} release #${releaseId}`);
+    try {
+      const { data } = await octokit.rest.repos.listReleaseAssets({
+        owner,
+        repo,
+        release_id: parseInt(releaseId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list assets for ${owner}/${repo} release #${releaseId}:`, error);
+      throw error;
+    }
+  },
+
+  async getReleaseAsset(owner, repo, assetId) {
+    logger.info(`🐙 [GitHub Service] Fetching asset #${assetId} details for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.getReleaseAsset({
+        owner,
+        repo,
+        asset_id: parseInt(assetId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get details for asset #${assetId} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async updateReleaseAsset(owner, repo, assetId, name, label) {
+    logger.info(`🐙 [GitHub Service] Updating asset #${assetId} in ${owner}/${repo}`);
+    try {
+      const params = {
+        owner,
+        repo,
+        asset_id: parseInt(assetId, 10),
+      };
+      if (name) params.name = name;
+      if (label !== undefined) params.label = label;
+      const { data } = await octokit.rest.repos.updateReleaseAsset(params);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update asset #${assetId} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteReleaseAsset(owner, repo, assetId) {
+    logger.info(`🐙 [GitHub Service] Deleting asset #${assetId} from ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.repos.deleteReleaseAsset({
+        owner,
+        repo,
+        asset_id: parseInt(assetId, 10),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete asset #${assetId} from ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 82. Repository Starring & Subscriptions
+  // ==========================================
+  async listStargazersForRepo(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Listing stargazers for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.activity.listStargazersForRepo({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list stargazers for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listReposStarredByAuthenticatedUser() {
+    logger.info(`🐙 [GitHub Service] Listing repositories starred by authenticated user`);
+    try {
+      const { data } = await octokit.rest.activity.listReposStarredByAuthenticatedUser();
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list repositories starred by authenticated user:`, error);
+      throw error;
+    }
+  },
+
+  async checkIfRepoIsStarredByUser(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Checking if ${owner}/${repo} is starred by authenticated user`);
+    try {
+      await octokit.rest.activity.checkRepoIsStarredByAuthenticatedUser({ owner, repo });
+      return { starred: true };
+    } catch (error) {
+      if (error.status === 404) {
+        return { starred: false };
+      }
+      logger.error(`Failed to check if ${owner}/${repo} is starred:`, error);
+      throw error;
+    }
+  },
+
+  async starRepoForAuthenticatedUser(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Starring repository ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.activity.starRepoForAuthenticatedUser({ owner, repo });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to star repository ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async unstarRepoForAuthenticatedUser(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Unstarring repository ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.activity.unstarRepoForAuthenticatedUser({ owner, repo });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to unstar repository ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getRepoSubscription(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Fetching subscription details for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.activity.getRepoSubscription({ owner, repo });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch subscription for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async setRepoSubscription(owner, repo, subscribed = true, ignored = false) {
+    logger.info(`🐙 [GitHub Service] Setting subscription details for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.activity.setRepoSubscription({
+        owner,
+        repo,
+        subscribed,
+        ignored,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to set subscription for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteRepoSubscription(owner, repo) {
+    logger.info(`🐙 [GitHub Service] Deleting subscription details for ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.activity.deleteRepoSubscription({ owner, repo });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete subscription for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
 };

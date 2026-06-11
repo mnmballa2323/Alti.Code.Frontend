@@ -5370,6 +5370,489 @@ export const addSelectedRepoToOrgCodespacesSecret = async (req, res) => {
   }
 };
 
+export const getDependabotOrgPublicKey = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getDependabotOrgPublicKey(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching Dependabot org public key:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listDependabotOrgSecrets = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listDependabotOrgSecrets(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing Dependabot org secrets:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.getDependabotOrgSecret(org, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createOrUpdateDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const { encryptedValue, keyId, visibility, selectedRepositoryIds } = req.body;
+    const result = await GithubService.createOrUpdateDependabotOrgSecret(
+      org,
+      secretName,
+      encryptedValue,
+      keyId,
+      visibility,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating/updating Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.deleteDependabotOrgSecret(org, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listSelectedReposForDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.listSelectedReposForDependabotOrgSecret(org, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing selected repos for Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const setSelectedReposForDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const { repositoryIds } = req.body;
+    const result = await GithubService.setSelectedReposForDependabotOrgSecret(org, secretName, repositoryIds);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error setting selected repos for Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const addSelectedRepoToDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result = await GithubService.addSelectedRepoToDependabotOrgSecret(
+      org,
+      secretName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding selected repo to Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const removeSelectedRepoFromDependabotOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result = await GithubService.removeSelectedRepoFromDependabotOrgSecret(
+      org,
+      secretName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing selected repo from Dependabot org secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getDependabotRepoPublicKey = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getDependabotRepoPublicKey(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching Dependabot repo public key:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listDependabotRepoSecrets = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listDependabotRepoSecrets(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing Dependabot repo secrets:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getDependabotRepoSecret = async (req, res) => {
+  try {
+    const { owner, repo, secretName } = req.params;
+    const result = await GithubService.getDependabotRepoSecret(owner, repo, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching Dependabot repo secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createOrUpdateDependabotRepoSecret = async (req, res) => {
+  try {
+    const { owner, repo, secretName } = req.params;
+    const { encryptedValue, keyId } = req.body;
+    const result = await GithubService.createOrUpdateDependabotRepoSecret(
+      owner,
+      repo,
+      secretName,
+      encryptedValue,
+      keyId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating/updating Dependabot repo secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteDependabotRepoSecret = async (req, res) => {
+  try {
+    const { owner, repo, secretName } = req.params;
+    const result = await GithubService.deleteDependabotRepoSecret(owner, repo, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting Dependabot repo secret:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listOrgWebhooks = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listOrgWebhooks(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing org webhooks:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createOrgWebhook = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { name, config, events, active } = req.body;
+    const result = await GithubService.createOrgWebhook(org, name, config, events, active);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating org webhook:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgWebhook = async (req, res) => {
+  try {
+    const { org, webhookId } = req.params;
+    const result = await GithubService.getOrgWebhook(org, parseInt(webhookId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching org webhook:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateOrgWebhook = async (req, res) => {
+  try {
+    const { org, webhookId } = req.params;
+    const { config, events, active } = req.body;
+    const result = await GithubService.updateOrgWebhook(org, parseInt(webhookId, 10), config, events, active);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating org webhook:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteOrgWebhook = async (req, res) => {
+  try {
+    const { org, webhookId } = req.params;
+    const result = await GithubService.deleteOrgWebhook(org, parseInt(webhookId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting org webhook:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const pingOrgWebhook = async (req, res) => {
+  try {
+    const { org, webhookId } = req.params;
+    const result = await GithubService.pingOrgWebhook(org, parseInt(webhookId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error pinging org webhook:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listRequestedReviewers = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.listRequestedReviewers(owner, repo, parseInt(pullNumber, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing requested reviewers:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const requestReviewersForPullRequest = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const { reviewers, teamReviewers } = req.body;
+    const result = await GithubService.requestReviewersForPullRequest(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      reviewers,
+      teamReviewers,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error requesting PR reviewers:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const removeRequestedReviewersFromPullRequest = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const { reviewers, teamReviewers } = req.body;
+    const result = await GithubService.removeRequestedReviewersFromPullRequest(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      reviewers,
+      teamReviewers,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing requested PR reviewers:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listPullRequestFiles = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.listPullRequestFiles(owner, repo, parseInt(pullNumber, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing PR files:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listAssignees = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listAssignees(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing assignees:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const checkAssignee = async (req, res) => {
+  try {
+    const { owner, repo, assignee } = req.params;
+    const result = await GithubService.checkAssignee(owner, repo, assignee);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error checking assignee:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const addAssigneesToIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const { assignees } = req.body;
+    const result = await GithubService.addAssigneesToIssue(owner, repo, parseInt(issueNumber, 10), assignees);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding issue assignees:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const removeAssigneesFromIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const { assignees } = req.body;
+    const result = await GithubService.removeAssigneesFromIssue(owner, repo, parseInt(issueNumber, 10), assignees);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing issue assignees:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listReleaseAssets = async (req, res) => {
+  try {
+    const { owner, repo, releaseId } = req.params;
+    const result = await GithubService.listReleaseAssets(owner, repo, parseInt(releaseId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing release assets:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getReleaseAsset = async (req, res) => {
+  try {
+    const { owner, repo, assetId } = req.params;
+    const result = await GithubService.getReleaseAsset(owner, repo, parseInt(assetId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error fetching release asset:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateReleaseAsset = async (req, res) => {
+  try {
+    const { owner, repo, assetId } = req.params;
+    const { name, label } = req.body;
+    const result = await GithubService.updateReleaseAsset(owner, repo, parseInt(assetId, 10), name, label);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating release asset:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteReleaseAsset = async (req, res) => {
+  try {
+    const { owner, repo, assetId } = req.params;
+    const result = await GithubService.deleteReleaseAsset(owner, repo, parseInt(assetId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting release asset:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listStargazersForRepo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listStargazersForRepo(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing repository stargazers:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listReposStarredByAuthenticatedUser = async (req, res) => {
+  try {
+    const result = await GithubService.listReposStarredByAuthenticatedUser();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing repositories starred by user:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const checkIfRepoIsStarredByUser = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.checkIfRepoIsStarredByUser(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error checking if repo starred by user:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const starRepoForAuthenticatedUser = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.starRepoForAuthenticatedUser(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error starring repository:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const unstarRepoForAuthenticatedUser = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.unstarRepoForAuthenticatedUser(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error unstarring repository:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getRepoSubscription = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoSubscription(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting repository subscription:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const setRepoSubscription = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { subscribed, ignored } = req.body;
+    const result = await GithubService.setRepoSubscription(owner, repo, subscribed, ignored);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error setting repository subscription:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteRepoSubscription = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.deleteRepoSubscription(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting repository subscription:`, error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
 export const enablePrivateVulnerabilityReporting = async (req, res) => {
   try {
     const { owner, repo } = req.params;
@@ -5992,7 +6475,46 @@ export const GithubController = {
   listSelectedReposForOrgCodespacesSecret,
   setSelectedReposForOrgCodespacesSecret,
   addSelectedRepoToOrgCodespacesSecret,
-  removeSelectedRepoFromOrgCodespacesSecret,
+  getDependabotOrgPublicKey,
+  listDependabotOrgSecrets,
+  getDependabotOrgSecret,
+  createOrUpdateDependabotOrgSecret,
+  deleteDependabotOrgSecret,
+  listSelectedReposForDependabotOrgSecret,
+  setSelectedReposForDependabotOrgSecret,
+  addSelectedRepoToDependabotOrgSecret,
+  removeSelectedRepoFromDependabotOrgSecret,
+  getDependabotRepoPublicKey,
+  listDependabotRepoSecrets,
+  getDependabotRepoSecret,
+  createOrUpdateDependabotRepoSecret,
+  deleteDependabotRepoSecret,
+  listOrgWebhooks,
+  createOrgWebhook,
+  getOrgWebhook,
+  updateOrgWebhook,
+  deleteOrgWebhook,
+  pingOrgWebhook,
+  listRequestedReviewers,
+  requestReviewersForPullRequest,
+  removeRequestedReviewersFromPullRequest,
+  listPullRequestFiles,
+  listAssignees,
+  checkAssignee,
+  addAssigneesToIssue,
+  removeAssigneesFromIssue,
+  listReleaseAssets,
+  getReleaseAsset,
+  updateReleaseAsset,
+  deleteReleaseAsset,
+  listStargazersForRepo,
+  listReposStarredByAuthenticatedUser,
+  checkIfRepoIsStarredByUser,
+  starRepoForAuthenticatedUser,
+  unstarRepoForAuthenticatedUser,
+  getRepoSubscription,
+  setRepoSubscription,
+  deleteRepoSubscription,
   enablePrivateVulnerabilityReporting,
   disablePrivateVulnerabilityReporting,
   enableDependabotAlerts,
