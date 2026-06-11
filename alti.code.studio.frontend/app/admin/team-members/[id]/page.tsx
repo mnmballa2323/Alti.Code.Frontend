@@ -485,29 +485,6 @@ export default function MemberDetailsPage() {
     };
   };
 
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-40 h-full w-full">
-        <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-3" />
-        <p className="text-sm text-neutral-500">Loading member statistics...</p>
-      </div>
-    );
-  }
-
-  if (!member) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 h-full w-full text-center px-6">
-        <AlertCircle className="w-12 h-12 text-neutral-300 dark:text-neutral-700 mb-4" />
-        <h2 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-1">Member Not Found</h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-455 mb-6">
-          The requested member directory could not be located or has been decommissioned.
-        </p>
-      </div>
-    );
-  }
-
-  const details = getMemberDetails(member);
-
   useEffect(() => {
     if (activeTab !== "audit" || !member) return;
 
@@ -539,7 +516,8 @@ export default function MemberDetailsPage() {
             setLogs(filtered);
             setLogsTotalPages(1);
           } else {
-            const filtered = details.auditLogs.filter(
+            const detailsObj = getMemberDetails(member);
+            const filtered = detailsObj.auditLogs.filter(
               (log) =>
                 log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -549,7 +527,8 @@ export default function MemberDetailsPage() {
           }
         } catch (error) {
           console.error("Failed to fetch audit logs, loading mock data", error);
-          const filtered = details.auditLogs.filter(
+          const detailsObj = getMemberDetails(member);
+          const filtered = detailsObj.auditLogs.filter(
             (log) =>
               log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
               log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -566,6 +545,29 @@ export default function MemberDetailsPage() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [logsPage, searchTerm, activeTab, member?.email, accessToken]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-40 h-full w-full">
+        <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-3" />
+        <p className="text-sm text-neutral-500">Loading member statistics...</p>
+      </div>
+    );
+  }
+
+  if (!member) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 h-full w-full text-center px-6">
+        <AlertCircle className="w-12 h-12 text-neutral-300 dark:text-neutral-700 mb-4" />
+        <h2 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-1">Member Not Found</h2>
+        <p className="text-sm text-neutral-500 dark:text-neutral-455 mb-6">
+          The requested member directory could not be located or has been decommissioned.
+        </p>
+      </div>
+    );
+  }
+
+  const details = getMemberDetails(member);
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 space-y-6 pb-12">
