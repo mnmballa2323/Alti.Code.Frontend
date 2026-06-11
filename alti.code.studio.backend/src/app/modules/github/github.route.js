@@ -405,5 +405,46 @@ router.get('/rate-limit', GithubController.getRateLimit);
 router.get('/meta', GithubController.getMetaServerInfo);
 router.post('/markdown', GithubController.renderMarkdown);
 
+// 37. Codes of Conduct API
+router.get('/codes-of-conduct', GithubController.getAllCodesOfConduct);
+router.get('/codes-of-conduct/:key', GithubController.getConductCode);
+
+// 38. Private Registries API
+router.get(
+  '/orgs/:org/private-registries',
+  GithubController.listOrgPrivateRegistries,
+);
+router.get(
+  '/orgs/:org/private-registries/:secretName',
+  GithubController.getOrgPrivateRegistry,
+);
+
+// 39. Reactions API
+router.post(
+  '/repos/:owner/:repo/issues/:issueNumber/reactions',
+  GithubController.createReactionForIssue,
+);
+router.get(
+  '/repos/:owner/:repo/issues/:issueNumber/reactions',
+  GithubController.listReactionsForIssue,
+);
+router.delete(
+  '/repos/:owner/:repo/issues/:issueNumber/reactions/:reactionId',
+  GithubController.deleteReactionForIssue,
+);
+
+// 40. Hosted Compute (Org Runner Network settings) API
+router.get(
+  '/orgs/:org/hosted-compute/network-configurations',
+  GithubController.listNetworkConfigurationsForOrg,
+);
+router.get(
+  '/orgs/:org/hosted-compute/network-settings',
+  GithubController.getNetworkSettingsForOrg,
+);
+
+// 41. Campaigns API
+router.get('/orgs/:org/campaigns', GithubController.listOrgCampaigns);
+
 export const GithubRoutes = router;
 export default router;

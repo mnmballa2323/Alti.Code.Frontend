@@ -1829,6 +1829,195 @@ export const renderMarkdown = async (req, res) => {
   }
 };
 
+// ==========================================
+// 37. Codes of Conduct API
+// ==========================================
+export const getAllCodesOfConduct = async (req, res) => {
+  try {
+    const result = await GithubService.getAllCodesOfConduct();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting all codes of conduct:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getConductCode = async (req, res) => {
+  try {
+    const { key } = req.params;
+    const result = await GithubService.getConductCode(key);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting conduct code for key ${key}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 38. Private Registries API
+// ==========================================
+export const listOrgPrivateRegistries = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listOrgPrivateRegistries(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing private registries for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgPrivateRegistry = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.getOrgPrivateRegistry(org, secretName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting private registry configuration ${secretName} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 39. Reactions API
+// ==========================================
+export const createReactionForIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const { content } = req.body;
+    const result = await GithubService.createReactionForIssue(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+      content,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating reaction for issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listReactionsForIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const result = await GithubService.listReactionsForIssue(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing reactions for issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteReactionForIssue = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber, reactionId } = req.params;
+    const result = await GithubService.deleteReactionForIssue(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+      parseInt(reactionId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting reaction #${reactionId} for issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 40. Hosted Compute (Org Runner Network settings)
+// ==========================================
+export const listNetworkConfigurationsForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listNetworkConfigurationsForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing network configurations for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getNetworkSettingsForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getNetworkSettingsForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error fetching network settings for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 41. Campaigns
+// ==========================================
+export const listOrgCampaigns = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listOrgCampaigns(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing campaigns for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getAuthenticatedUser,
   listRepositories,
@@ -1943,4 +2132,14 @@ export const GithubController = {
   getRateLimit,
   getMetaServerInfo,
   renderMarkdown,
+  getAllCodesOfConduct,
+  getConductCode,
+  listOrgPrivateRegistries,
+  getOrgPrivateRegistry,
+  createReactionForIssue,
+  listReactionsForIssue,
+  deleteReactionForIssue,
+  listNetworkConfigurationsForOrg,
+  getNetworkSettingsForOrg,
+  listOrgCampaigns,
 };

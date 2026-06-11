@@ -178,6 +178,26 @@ vi.mock('octokit', () => {
       markdown: {
         render: vi.fn(),
       },
+      codesOfConduct: {
+        getAllCodesOfConduct: vi.fn(),
+        getConductCode: vi.fn(),
+      },
+      privateRegistries: {
+        listOrgPrivateRegistries: vi.fn(),
+        getOrgPrivateRegistry: vi.fn(),
+      },
+      reactions: {
+        createForIssue: vi.fn(),
+        listForIssue: vi.fn(),
+        deleteForIssue: vi.fn(),
+      },
+      hostedCompute: {
+        listNetworkConfigurationsForOrg: vi.fn(),
+        getNetworkSettingsForOrg: vi.fn(),
+      },
+      campaigns: {
+        listOrgCampaigns: vi.fn(),
+      },
     },
   };
   globalThis.__mockOctokit = mockOctokitInstance;
@@ -2035,6 +2055,205 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       text: '# hello',
       mode: 'markdown',
       context: undefined,
+    });
+  });
+
+  // ==========================================
+  // 37. Codes of Conduct API
+  // ==========================================
+  it('should get all Codes of Conduct', async () => {
+    const mockConducts = [
+      { key: 'contributor_covenant', name: 'Contributor Covenant' },
+    ];
+    mockOctokit.rest.codesOfConduct.getAllCodesOfConduct.mockResolvedValue({
+      data: mockConducts,
+    });
+
+    const result = await GithubService.getAllCodesOfConduct();
+    expect(result).toEqual(mockConducts);
+    expect(
+      mockOctokit.rest.codesOfConduct.getAllCodesOfConduct,
+    ).toHaveBeenCalled();
+  });
+
+  it('should get a specific Code of Conduct by key', async () => {
+    const mockConduct = {
+      key: 'contributor_covenant',
+      name: 'Contributor Covenant',
+    };
+    mockOctokit.rest.codesOfConduct.getConductCode.mockResolvedValue({
+      data: mockConduct,
+    });
+
+    const result = await GithubService.getConductCode('contributor_covenant');
+    expect(result).toEqual(mockConduct);
+    expect(mockOctokit.rest.codesOfConduct.getConductCode).toHaveBeenCalledWith(
+      {
+        key: 'contributor_covenant',
+      },
+    );
+  });
+
+  it('should propagate errors when getAllCodesOfConduct fails', async () => {
+    const mockError = new Error('API Failure');
+    mockOctokit.rest.codesOfConduct.getAllCodesOfConduct.mockRejectedValue(
+      mockError,
+    );
+
+    await expect(GithubService.getAllCodesOfConduct()).rejects.toThrow(
+      'API Failure',
+    );
+  });
+
+  // ==========================================
+  // 38. Private Registries API
+  // ==========================================
+  it('should list private registries for organization', async () => {
+    const mockRegistries = { total_count: 1, registries: [{ name: 'npm' }] };
+    mockOctokit.rest.privateRegistries.listOrgPrivateRegistries.mockResolvedValue(
+      {
+        data: mockRegistries,
+      },
+    );
+
+    const result = await GithubService.listOrgPrivateRegistries('my-org');
+    expect(result).toEqual(mockRegistries);
+    expect(
+      mockOctokit.rest.privateRegistries.listOrgPrivateRegistries,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get a specific private registry for organization', async () => {
+    const mockRegistry = { name: 'npm', created_at: '2026-06-11T00:00:00Z' };
+    mockOctokit.rest.privateRegistries.getOrgPrivateRegistry.mockResolvedValue({
+      data: mockRegistry,
+    });
+
+    const result = await GithubService.getOrgPrivateRegistry('my-org', 'npm');
+    expect(result).toEqual(mockRegistry);
+    expect(
+      mockOctokit.rest.privateRegistries.getOrgPrivateRegistry,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'npm',
+    });
+  });
+
+  // ==========================================
+  // 39. Reactions API
+  // ==========================================
+  it('should create reaction for an issue', async () => {
+    const mockReaction = { id: 1, content: 'heart' };
+    mockOctokit.rest.reactions.createForIssue.mockResolvedValue({
+      data: mockReaction,
+    });
+
+    const result = await GithubService.createReactionForIssue(
+      'owner',
+      'repo',
+      42,
+      'heart',
+    );
+    expect(result).toEqual(mockReaction);
+    expect(mockOctokit.rest.reactions.createForIssue).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 42,
+      content: 'heart',
+    });
+  });
+
+  it('should list reactions for an issue', async () => {
+    const mockReactions = [{ id: 1, content: 'heart' }];
+    mockOctokit.rest.reactions.listForIssue.mockResolvedValue({
+      data: mockReactions,
+    });
+
+    const result = await GithubService.listReactionsForIssue(
+      'owner',
+      'repo',
+      42,
+    );
+    expect(result).toEqual(mockReactions);
+    expect(mockOctokit.rest.reactions.listForIssue).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 42,
+    });
+  });
+
+  it('should delete reaction for an issue', async () => {
+    const mockDeleteResult = { success: true };
+    mockOctokit.rest.reactions.deleteForIssue.mockResolvedValue({
+      data: mockDeleteResult,
+    });
+
+    const result = await GithubService.deleteReactionForIssue(
+      'owner',
+      'repo',
+      42,
+      99,
+    );
+    expect(result).toEqual(mockDeleteResult);
+    expect(mockOctokit.rest.reactions.deleteForIssue).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 42,
+      reaction_id: 99,
+    });
+  });
+
+  // ==========================================
+  // 40. Hosted Compute (Org Runner Network settings)
+  // ==========================================
+  it('should list network configurations for hosted compute in organization', async () => {
+    const mockConfigs = { network_configurations: [{ id: 'net-1' }] };
+    mockOctokit.rest.hostedCompute.listNetworkConfigurationsForOrg.mockResolvedValue(
+      {
+        data: mockConfigs,
+      },
+    );
+
+    const result =
+      await GithubService.listNetworkConfigurationsForOrg('my-org');
+    expect(result).toEqual(mockConfigs);
+    expect(
+      mockOctokit.rest.hostedCompute.listNetworkConfigurationsForOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should fetch network settings for hosted compute in organization', async () => {
+    const mockSettings = { network_settings: { id: 'net-1' } };
+    mockOctokit.rest.hostedCompute.getNetworkSettingsForOrg.mockResolvedValue({
+      data: mockSettings,
+    });
+
+    const result = await GithubService.getNetworkSettingsForOrg('my-org');
+    expect(result).toEqual(mockSettings);
+    expect(
+      mockOctokit.rest.hostedCompute.getNetworkSettingsForOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  // ==========================================
+  // 41. Campaigns
+  // ==========================================
+  it('should list campaigns for organization', async () => {
+    const mockCampaigns = { campaigns: [{ id: 'camp-1' }] };
+    mockOctokit.rest.campaigns.listOrgCampaigns.mockResolvedValue({
+      data: mockCampaigns,
+    });
+
+    const result = await GithubService.listOrgCampaigns('my-org');
+    expect(result).toEqual(mockCampaigns);
+    expect(mockOctokit.rest.campaigns.listOrgCampaigns).toHaveBeenCalledWith({
+      org: 'my-org',
     });
   });
 });

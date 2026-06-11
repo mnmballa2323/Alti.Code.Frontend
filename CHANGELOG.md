@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.187] - 2026-06-11 — Phase 6 GitHub REST API & SDK Entrenchment
+### Added
+- **Codes of Conduct**: Added service methods and controller endpoints to retrieve all Codes of Conduct and get a specific code by key.
+- **Private Registries**: Integrated private registry configuration listings and retrieval endpoints for organizations.
+- **Reactions**: Implemented issue reactions CRUD endpoints allowing users to create, list, and delete issue reactions.
+- **Hosted Compute**: Added endpoints to query hosted compute network configurations and network settings for organizations.
+- **Campaigns**: Enabled listing organization campaigns.
+- **Unit Testing**: Added 11 unit tests to test the Phase 6 service wrappers, bringing the total passing test cases to 108.
+
 ## [39.37.186] - 2026-06-11 — Phase 5 GitHub REST API & SDK Entrenchment
 ### Added
 - **Code Security**: Added global vulnerability advisories listing, repository security advisory details, and organization security configuration lists.

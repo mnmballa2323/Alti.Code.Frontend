@@ -2248,4 +2248,190 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 37. Codes of Conduct API
+  // ==========================================
+  async getAllCodesOfConduct() {
+    logger.info('🐙 [GitHub Service] Fetching all Codes of Conduct');
+    try {
+      const { data } = await octokit.rest.codesOfConduct.getAllCodesOfConduct();
+      return data;
+    } catch (error) {
+      logger.error('Failed to get all Codes of Conduct:', error);
+      throw error;
+    }
+  },
+
+  async getConductCode(key) {
+    logger.info(`🐙 [GitHub Service] Fetching conduct code: ${key}`);
+    try {
+      const { data } = await octokit.rest.codesOfConduct.getConductCode({
+        key,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get conduct code ${key}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 38. Private Registries API
+  // ==========================================
+  async listOrgPrivateRegistries(org) {
+    logger.info(`🐙 [GitHub Service] Listing private registries for org ${org}`);
+    try {
+      const { data } =
+        await octokit.rest.privateRegistries.listOrgPrivateRegistries({
+          org,
+        });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list private registries for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgPrivateRegistry(org, secretName) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching private registry configuration ${secretName} for org ${org}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.privateRegistries.getOrgPrivateRegistry({
+          org,
+          secret_name: secretName,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get private registry configuration ${secretName} for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 39. Reactions API
+  // ==========================================
+  async createReactionForIssue(owner, repo, issueNumber, content) {
+    logger.info(
+      `🐙 [GitHub Service] Creating reaction "${content}" on issue #${issueNumber} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.reactions.createForIssue({
+        owner,
+        repo,
+        issue_number: parseInt(issueNumber, 10),
+        content,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create reaction on issue #${issueNumber} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listReactionsForIssue(owner, repo, issueNumber) {
+    logger.info(
+      `🐙 [GitHub Service] Listing reactions on issue #${issueNumber} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.reactions.listForIssue({
+        owner,
+        repo,
+        issue_number: parseInt(issueNumber, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list reactions on issue #${issueNumber} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteReactionForIssue(owner, repo, issueNumber, reactionId) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting reaction #${reactionId} on issue #${issueNumber} in ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.reactions.deleteForIssue({
+        owner,
+        repo,
+        issue_number: parseInt(issueNumber, 10),
+        reaction_id: parseInt(reactionId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to delete reaction #${reactionId} on issue #${issueNumber} in ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 40. Hosted Compute (Org Runner Network settings)
+  // ==========================================
+  async listNetworkConfigurationsForOrg(org) {
+    logger.info(
+      `🐙 [GitHub Service] Listing network configurations for hosted compute in org ${org}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.hostedCompute.listNetworkConfigurationsForOrg({
+          org,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list network configurations for hosted compute in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getNetworkSettingsForOrg(org) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching network settings for hosted compute in org ${org}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.hostedCompute.getNetworkSettingsForOrg({
+          org,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch network settings for hosted compute in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 41. Campaigns
+  // ==========================================
+  async listOrgCampaigns(org) {
+    logger.info(`🐙 [GitHub Service] Listing campaigns for org ${org}`);
+    try {
+      const { data } = await octokit.rest.campaigns.listOrgCampaigns({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list campaigns for org ${org}:`, error);
+      throw error;
+    }
+  },
 };
