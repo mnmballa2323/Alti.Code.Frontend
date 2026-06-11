@@ -652,6 +652,16 @@ export default function ModelUsagePage() {
             const timeframeData = model.timeframes[selectedTimeframe];
             const values = timeframeData.values;
 
+            // Calculate dynamic tokens processed for the selected timeframe
+            const timeframeTotal = values.reduce((acc, v) => acc + v, 0);
+            const totalStaticTokens = model.inputTokens + model.outputTokens;
+            const inputRatio = totalStaticTokens > 0 ? model.inputTokens / totalStaticTokens : 0.8;
+            const dynamicInput = Math.round(timeframeTotal * inputRatio);
+            const dynamicOutput = timeframeTotal - dynamicInput;
+
+            // Calculate dynamic cost for the selected timeframe based on input/output split
+            const dynamicCost = (dynamicInput / 1000000) * model.pricingPer1MInput + (dynamicOutput / 1000000) * model.pricingPer1MOutput;
+
             // Generate dynamic labels for 1D to match current local time
             const labels = selectedTimeframe === "1D"
               ? Array.from({ length: values.length }).map((_, i) => getDateTime("1D", i, "").time)
@@ -710,7 +720,7 @@ export default function ModelUsagePage() {
                       <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Version: {model.version}</p>
                     </div>
                     <div className="text-right">
-                      <span className="text-lg font-bold text-neutral-950 dark:text-white">${model.cost.toFixed(2)}</span>
+                      <span className="text-lg font-bold text-neutral-950 dark:text-white">${dynamicCost.toFixed(2)}</span>
                       <p className="text-[9px] text-neutral-400 dark:text-neutral-500">
                         ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M</span>
                       </p>
@@ -718,17 +728,14 @@ export default function ModelUsagePage() {
                   </div>
 
                   {/* 2. Key Metrics Card */}
-                  <div className="bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
-                      <Cpu size={14} />
-                    </div>
+                  <div className="bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center">
                     <div className="flex-1 flex justify-between items-center pr-2">
                       <div>
                         <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
-                        <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokens(modelTokens)}</span>
+                        <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokens(timeframeTotal)}</span>
                       </div>
                       <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium">
-                        In: {formatTokens(model.inputTokens)} | Out: {formatTokens(model.outputTokens)}
+                        In: {formatTokens(dynamicInput)} | Out: {formatTokens(dynamicOutput)}
                       </span>
                     </div>
                   </div>
@@ -736,19 +743,7 @@ export default function ModelUsagePage() {
                   {/* 3. Stock-Market Style Interactive Line Chart */}
                   <div className="space-y-4 pt-2">
                     {/* Timeframe controls row & value display */}
-                    <div className="flex justify-between items-end border-b border-neutral-100/50 dark:border-neutral-800/50 pb-2">
-                      <div className="space-y-0.5">
-                        <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block">Token Volume Trend</span>
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">
-                            {formatTokens(activeValue)}
-                          </span>
-                          <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
-                            {hoverDT.date} @ {hoverDT.time}
-                          </span>
-                        </div>
-                      </div>
-
+                    <div className="flex justify-between items-center border-b border-neutral-100/50 dark:border-neutral-800/50 pb-2">
                       {/* Stock selectors: 1D / 1W / 1M / 1Y / All */}
                       <div className="flex gap-1 bg-neutral-100/60 dark:bg-neutral-900 p-0.5 rounded-lg border border-neutral-200/50 dark:border-neutral-800 text-[9px] font-bold">
                         {(["1D", "1W", "1M", "1Y", "All"] as const).map((tf) => (
@@ -764,6 +759,16 @@ export default function ModelUsagePage() {
                             {tf}
                           </button>
                         ))}
+                      </div>
+
+                      {/* Right-aligned value display */}
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">
+                          {formatTokens(activeValue)}
+                        </span>
+                        <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
+                          {hoverDT.date} @ {hoverDT.time}
+                        </span>
                       </div>
                     </div>
 
