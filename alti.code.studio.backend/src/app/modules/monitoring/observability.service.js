@@ -51,12 +51,12 @@ class ObservabilityService extends EventEmitter {
         }
 
         // Initialize GCP Logging client in production environments
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
             this.gcpLogging = new Logging();
             this.gcpLog = this.gcpLogging.log(this.logName);
             logger.info('🔭 Observability: GCP Logging client initialized.');
         } else {
-            logger.info('🔭 Observability: GCP Logging client not initialized (not in production).');
+            logger.info('🔭 Observability: GCP Logging client not initialized (private cloud or local dev).');
         }
 
         // Initialize OpenTelemetry

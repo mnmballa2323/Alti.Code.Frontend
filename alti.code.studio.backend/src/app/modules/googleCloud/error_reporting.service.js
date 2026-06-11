@@ -10,6 +10,12 @@ class GoogleErrorReportingService {
     constructor() {
         this.projectId = config.gcp_project_id || process.env.GOOGLE_CLOUD_PROJECT || 'alti-code-studio';
 
+        if (config.private_cloud_mode) {
+            console.log('🛡️ [ErrorReporting] Private cloud mode active. GCP ErrorReporting disabled.');
+            this.errors = null;
+            return;
+        }
+
         try {
             // Initialize Google Cloud Error Reporting
             this.errors = new ErrorReporting({

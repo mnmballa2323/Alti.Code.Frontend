@@ -11,6 +11,12 @@ class GoogleRecaptchaService {
         this.projectId = config.gcp.project_id;
         this.siteKey = config.gcp.recaptcha_site_key || 'alti-site-key';
         
+        if (config.private_cloud_mode) {
+            logger.info('🛡️ [reCAPTCHA] Private cloud mode active. GCP reCAPTCHA client disabled.');
+            this.client = null;
+            return;
+        }
+
         try {
             this.client = new RecaptchaEnterpriseServiceClient();
         } catch (error) {
@@ -27,6 +33,11 @@ class GoogleRecaptchaService {
     async createAssessment(token, recaptchaAction) {
         logger.info(`🛡️ [reCAPTCHA] Assessing request risk for action: ${recaptchaAction}...`);
         
+        if (!this.client) {
+            logger.info('🛡️ [reCAPTCHA] GCP Client offline or private cloud mode active. Returning mock risk score (0.9).');
+            return 0.9;
+        }
+
         try {
             const projectPath = this.client.projectPath(this.projectId);
             

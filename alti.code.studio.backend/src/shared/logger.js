@@ -36,7 +36,7 @@ const errorTransports = [
 ];
 
 // 🌐 Deep Google Integration: Google Cloud Logging (Winston Transport)
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
   try {
     // If we are in production, completely override standard logging with Google Cloud Native Logging
     const loggingWinston = new LoggingWinston({
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
     console.warn('⚠️ Google Cloud Logging transport could not be initialized:', error.message);
   }
 } else {
-  console.log('⚠️ Local Dev: Skipping Google Cloud Logging transport to avoid auth crash. Using standard Console output.');
+  console.log('⚠️ Skipping Google Cloud Logging transport (local dev or private cloud mode).');
 }
 
 // Success logger

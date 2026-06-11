@@ -13,6 +13,9 @@ class GoogleCloudStorageService {
             if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
                 return false;
             }
+            if (process.env.PRIVATE_CLOUD_MODE === 'true') {
+                return false;
+            }
             if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
                 return true;
             }
