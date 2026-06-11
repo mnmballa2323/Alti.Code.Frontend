@@ -678,7 +678,7 @@ export default function ModelUsagePage() {
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-6 max-w-5xl mx-auto">
-      <div className="space-y-6">
+      <div className="space-y-6 pb-12">
         {/* Centered Provider Toggle Header */}
         <div className="flex justify-center w-full border-b border-neutral-100 dark:border-neutral-800/80 pb-6 mb-2">
           <div className="flex gap-2 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/50 dark:border-neutral-800 shrink-0 shadow-sm">
@@ -1009,7 +1009,7 @@ export default function ModelUsagePage() {
         </div>
 
         {/* Legacy Models Section */}
-        <div className="relative">
+        <div>
           {/* Title Bar Card */}
           <div className="border border-neutral-200 dark:border-neutral-800 rounded-3xl bg-white dark:bg-[#161b22] p-6 shadow-sm">
             <button 
@@ -1035,7 +1035,7 @@ export default function ModelUsagePage() {
 
           {/* Floating Dropdown Box Panel */}
           {isArchivedExpanded && (
-            <div className="absolute top-full left-0 right-0 mt-3 z-30 space-y-3">
+            <div className="mt-3 z-30 space-y-3">
               {archivedModelsData[activeTab].map((model) => (
                 <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl gap-4 shadow-md hover:shadow-lg transition-shadow duration-200">
                   <div className="space-y-1">
