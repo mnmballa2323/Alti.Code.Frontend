@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.171] - 2026-06-11 — Private Cloud Security & Member Insights Upgrades
+### Added
+- **Private Cloud Hardening (Liberty Center One)**:
+  - Added global `PRIVATE_CLOUD_MODE` env configuration to bypass Google Cloud dependencies (Logging, Error Reporting, Storage, Pub/Sub, reCAPTCHA Enterprise).
+  - Mocked reCAPTCHA client backend with high-confidence mock score (`0.9`) to allow air-gapped logins and registrations.
+  - Forced Google Cloud Storage and Pub/Sub clients into local directory and EventEmitter fallbacks under private cloud mode.
+- **Interactive Team Members Page**:
+  - Implemented interactive member details drawer displaying Profile initials/avatars, spend limit controls, token cumulative telemetry (tokens in/out), task executions success rate, weekly token activity bar chart, and activity stream list.
+  - Configured hover-visible trash icon for member rows (garbage icon appears only on hover or scroll hover).
+  - Fixed vertical alignment of member row role dropdowns with the "ROLE" column header.
+
 ## [39.37.170] - 2026-06-07 — Phase 2.1 Deep Swarm Integration Upgrades (Browser-Use, Agent-S, Fazm)
 ### Added
 - **Browser-Use Live Action Tracing**:
