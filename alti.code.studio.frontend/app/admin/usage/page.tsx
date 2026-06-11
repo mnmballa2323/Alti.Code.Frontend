@@ -1008,30 +1008,34 @@ export default function ModelUsagePage() {
           })}
         </div>
 
-        {/* Archived & Legacy Models Section */}
-        <div className="border border-neutral-200 dark:border-neutral-800 rounded-3xl bg-white dark:bg-[#161b22] p-6 space-y-4">
-          <button 
-            onClick={() => setIsArchivedExpanded(!isArchivedExpanded)}
-            className="flex items-center justify-between w-full text-left focus:outline-none group"
-          >
-            <div className="flex items-center">
-              <div>
-                <h4 className="text-sm font-bold text-neutral-850 dark:text-neutral-200">Legacy Models</h4>
-                <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Historical billing data</p>
-              </div>
-            </div>
-            <svg 
-              className={`w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-white transition-transform duration-200 ${isArchivedExpanded ? 'rotate-180' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
+        {/* Legacy Models Section */}
+        <div className="relative">
+          {/* Title Bar Card */}
+          <div className="border border-neutral-200 dark:border-neutral-800 rounded-3xl bg-white dark:bg-[#161b22] p-6 shadow-sm">
+            <button 
+              onClick={() => setIsArchivedExpanded(!isArchivedExpanded)}
+              className="flex items-center justify-between w-full text-left focus:outline-none group"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+              <div className="flex items-center">
+                <div>
+                  <h4 className="text-sm font-bold text-neutral-850 dark:text-neutral-200">Legacy Models</h4>
+                  <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Historical billing data</p>
+                </div>
+              </div>
+              <svg 
+                className={`w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-white transition-transform duration-200 ${isArchivedExpanded ? 'rotate-180' : ''}`} 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
 
+          {/* Floating Dropdown Box Panel */}
           {isArchivedExpanded && (
-            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 space-y-3">
+            <div className="absolute top-full left-0 right-0 mt-3 p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-xl z-30 space-y-3">
               {archivedModelsData[activeTab].map((model) => (
                 <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-neutral-50/50 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 rounded-2xl gap-4">
                   <div className="space-y-1">

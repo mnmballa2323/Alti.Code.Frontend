@@ -57,9 +57,9 @@ export default function AdminLayout({
     }
   }, [profile]);
 
-  const renderNavGroup = (title: string, items: SidebarItem[]) => {
+  const renderNavGroup = (title: string, items: SidebarItem[], extraClass = "") => {
     return (
-      <div className="mb-6">
+      <div className={`mb-6 ${extraClass}`}>
         <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
           {title}
         </h3>
@@ -170,7 +170,7 @@ export default function AdminLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
-          {renderNavGroup("Platform Manager", managerItems)}
+          {renderNavGroup("Platform Manager", managerItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
