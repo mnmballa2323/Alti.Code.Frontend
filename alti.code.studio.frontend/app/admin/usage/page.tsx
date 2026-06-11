@@ -702,7 +702,7 @@ export default function ModelUsagePage() {
               >
                 {/* 1. Header Info */}
                 <div className="space-y-4">
-                  <div className="flex items-start justify-between border-b border-neutral-100 dark:border-neutral-850 pb-3">
+                  <div className="flex items-start justify-between border-b border-neutral-300 dark:border-neutral-700 -mx-6 px-6 pb-3">
                     <div>
                       <h3 className="text-base font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                         {model.name}
@@ -718,7 +718,7 @@ export default function ModelUsagePage() {
                   </div>
 
                   {/* 2. Key Metrics Card */}
-                  <div className="bg-neutral-50/40 dark:bg-neutral-900/10 border border-neutral-100 dark:border-neutral-850 p-3 rounded-2xl flex items-center gap-3">
+                  <div className="bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${theme.bg} ${theme.primary}`}>
                       <Cpu size={14} />
                     </div>
