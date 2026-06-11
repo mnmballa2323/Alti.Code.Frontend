@@ -782,7 +782,9 @@ export default function CloudPage() {
                     </div>
 
                     {/* Tri-Cloud AI Gateway Endpoint Section */}
-                    {["AWS", "Amazon", "Google", "GCP", "Azure"].some(x => selectedProvider?.includes(x)) && (
+                    {["AWS", "Amazon", "Google", "GCP", "Azure"].some((x) =>
+                      selectedProvider?.includes(x),
+                    ) && (
                       <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none" />
                         <div className="flex items-center gap-3 mb-4">
@@ -794,25 +796,38 @@ export default function CloudPage() {
                               Tri-Cloud AI Gateway Routing
                             </h4>
                             <p className="text-[10px] text-gray-400">
-                              Sovereign proxy path enforced for foundational model inference.
+                              Sovereign proxy path enforced for foundational
+                              model inference.
                             </p>
                           </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                           <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active Gateway</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                              Active Gateway
+                            </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider?.includes("Azure") ? "Azure OpenAI Foundry" :
-                               (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP") ? "GCP Vertex AI Gateway" : "AWS Bedrock Gateway")}
+                              {selectedProvider?.includes("Azure")
+                                ? "Azure OpenAI Foundry"
+                                : selectedProvider?.includes("Google") ||
+                                    selectedProvider?.includes("GCP")
+                                  ? "GCP Vertex AI Gateway"
+                                  : "AWS Bedrock Gateway"}
                             </div>
                           </div>
 
                           <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active Model</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                              Active Model
+                            </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider?.includes("Azure") ? "GPT-5.5 (State-of-the-Art)" :
-                               (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP") ? "Gemini 3.5 Flash (State-of-the-Art)" : "Claude Sonnet 4.6 (State-of-the-Art)")}
+                              {selectedProvider?.includes("Azure")
+                                ? "GPT-5.5 (State-of-the-Art)"
+                                : selectedProvider?.includes("Google") ||
+                                    selectedProvider?.includes("GCP")
+                                  ? "Gemini 3.5 Flash (State-of-the-Art)"
+                                  : "Claude Sonnet 4.6 (State-of-the-Art)"}
                             </div>
                           </div>
                         </div>
@@ -1070,9 +1085,9 @@ export default function CloudPage() {
                   Global Cloud Infrastructure
                 </h1>
                 <p className="text-sm text-gray-500 max-w-md leading-relaxed">
-                  Select a cloud provider from the sidebar to configure IAM roles,
-                  sync workloads, and deploy agentic services securely across your
-                  infrastructure.
+                  Select a cloud provider from the sidebar to configure IAM
+                  roles, sync workloads, and deploy agentic services securely
+                  across your infrastructure.
                 </p>
               </div>
 
@@ -1087,7 +1102,8 @@ export default function CloudPage() {
                       Tri-Cloud AI Inference Gateway
                     </h2>
                     <p className="text-xs text-gray-500 mt-0.5">
-                      Sovereign secure routing to latest foundation models. Direct SDK connections are blocked for compliance.
+                      Sovereign secure routing to latest foundation models.
+                      Direct SDK connections are blocked for compliance.
                     </p>
                   </div>
                 </div>
@@ -1100,7 +1116,11 @@ export default function CloudPage() {
                         <span className="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">
                           AWS Bedrock
                         </span>
-                        <Chip className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold" size="sm" variant="flat">
+                        <Chip
+                          className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold"
+                          size="sm"
+                          variant="flat"
+                        >
                           Active
                         </Chip>
                       </div>
@@ -1108,13 +1128,16 @@ export default function CloudPage() {
                         Claude Sonnet 4.6
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
-                        State-of-the-art agentic reasoning and visual code translation.
+                        State-of-the-art agentic reasoning and visual code
+                        translation.
                       </p>
                     </div>
                     <div className="border-t border-default-100 dark:border-default-800/60 pt-3 mt-auto">
                       <div className="flex justify-between items-center text-[10px] text-gray-400 dark:text-gray-500">
                         <span>Encryption</span>
-                        <span className="font-mono text-gray-700 dark:text-gray-300">mTLS / KMS</span>
+                        <span className="font-mono text-gray-700 dark:text-gray-300">
+                          mTLS / KMS
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -1126,7 +1149,11 @@ export default function CloudPage() {
                         <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
                           GCP Vertex AI
                         </span>
-                        <Chip className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold" size="sm" variant="flat">
+                        <Chip
+                          className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold"
+                          size="sm"
+                          variant="flat"
+                        >
                           Active
                         </Chip>
                       </div>
@@ -1134,13 +1161,16 @@ export default function CloudPage() {
                         Gemini 3.5 Flash
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
-                        Ultra-long 2M context window for full-repo audits & diagnostics.
+                        Ultra-long 2M context window for full-repo audits &
+                        diagnostics.
                       </p>
                     </div>
                     <div className="border-t border-default-100 dark:border-default-800/60 pt-3 mt-auto">
                       <div className="flex justify-between items-center text-[10px] text-gray-400 dark:text-gray-500">
                         <span>Encryption</span>
-                        <span className="font-mono text-gray-700 dark:text-gray-300">BeyondCorp</span>
+                        <span className="font-mono text-gray-700 dark:text-gray-300">
+                          BeyondCorp
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -1152,7 +1182,11 @@ export default function CloudPage() {
                         <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider">
                           Azure OpenAI
                         </span>
-                        <Chip className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold" size="sm" variant="flat">
+                        <Chip
+                          className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none text-[10px] font-bold"
+                          size="sm"
+                          variant="flat"
+                        >
                           Active
                         </Chip>
                       </div>
@@ -1160,13 +1194,16 @@ export default function CloudPage() {
                         GPT-5.5
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
-                        High-throughput low-latency token generation for swarm synthesis.
+                        High-throughput low-latency token generation for swarm
+                        synthesis.
                       </p>
                     </div>
                     <div className="border-t border-default-100 dark:border-default-800/60 pt-3 mt-auto">
                       <div className="flex justify-between items-center text-[10px] text-gray-400 dark:text-gray-500">
                         <span>Encryption</span>
-                        <span className="font-mono text-gray-700 dark:text-gray-300">Private Link</span>
+                        <span className="font-mono text-gray-700 dark:text-gray-300">
+                          Private Link
+                        </span>
                       </div>
                     </div>
                   </div>

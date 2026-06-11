@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import clsx from "clsx";
 import { Metadata, Viewport } from "next";
+
 import { Providers } from "./providers";
 import ClientQueryProvider from "./QueryClientProvider";
 

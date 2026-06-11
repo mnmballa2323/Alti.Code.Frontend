@@ -48,20 +48,23 @@ export default function AdminLayout({
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
-  const isMemberDetail = pathname.startsWith("/admin/team-members/") && pathname !== "/admin/team-members";
+  const isMemberDetail =
+    pathname.startsWith("/admin/team-members/") &&
+    pathname !== "/admin/team-members";
 
   useEffect(() => {
     if (profile) {
-      if (
-        profile.role === "admin" ||
-        profile.role === "ADMIN"
-      ) {
+      if (profile.role === "admin" || profile.role === "ADMIN") {
         setIsAdmin(true);
       }
     }
   }, [profile]);
 
-  const renderNavGroup = (title: string, items: SidebarItem[], extraClass = "") => {
+  const renderNavGroup = (
+    title: string,
+    items: SidebarItem[],
+    extraClass = "",
+  ) => {
     return (
       <div className={`mb-6 ${extraClass}`}>
         <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
@@ -150,13 +153,15 @@ export default function AdminLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between px-10">
           <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-            {isMemberDetail ? (activeMemberName || "Ada Lovelace") : getPageTitle()}
+            {isMemberDetail
+              ? activeMemberName || "Ada Lovelace"
+              : getPageTitle()}
           </span>
           <div className="flex items-center gap-6">
             {isMemberDetail && (
               <Link
-                href="/admin/team-members"
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
+                href="/admin/team-members"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Members</span>

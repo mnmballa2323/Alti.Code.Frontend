@@ -27,9 +27,9 @@ import {
   CreditCard,
   TrendingUp,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { teamAPI } from "@/lib/enterprise-api";
-import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store";
 
 export default function TeamPage() {

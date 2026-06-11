@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Trash2, Loader2, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { teamAPI } from "@/lib/enterprise-api";
-import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store";
 
 interface Member {
@@ -44,7 +44,9 @@ export default function TeamMembersPage() {
     },
   ]);
   const { status } = useSession();
-  const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
+  const currentUserFromStore = useAppSelector(
+    (state) => state.user.data,
+  ) as any;
   const [currentUser, setCurrentUser] = useState<any>({
     id: "admin-user",
     name: "Platform Admin",
@@ -256,8 +258,10 @@ export default function TeamMembersPage() {
                     return (
                       <div
                         key={member.id}
-                        onClick={() => router.push(`/admin/team-members/${member.id}`)}
                         className="group grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
+                        onClick={() =>
+                          router.push(`/admin/team-members/${member.id}`)
+                        }
                       >
                         <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
                           {firstName || "—"}

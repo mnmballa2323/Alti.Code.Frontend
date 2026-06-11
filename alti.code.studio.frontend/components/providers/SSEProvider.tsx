@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import toast from "react-hot-toast";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
 import { API_URL } from "@/lib/config";
 import {
@@ -50,10 +51,8 @@ export const SSEProvider = ({ children }: { children: React.ReactNode }) => {
   const dismissError = useCallback(() => setConnectionError(null), []);
 
   useEffect(() => {
-    let eventSource: EventSource | null = null;
-    let retryDelay = INITIAL_RETRY_DELAY_MS;
-    let retryTimer: ReturnType<typeof setTimeout> | null = null;
     let unmounted = false;
+    let ctrl: AbortController | null = null;
 
     const apiUrl = API_URL;
 
@@ -62,130 +61,121 @@ export const SSEProvider = ({ children }: { children: React.ReactNode }) => {
 
       const url = `${apiUrl}/synapse/stream`;
 
-      eventSource = new EventSource(url);
+      ctrl = new AbortController();
 
-      eventSource.onopen = () => {
-        if (unmounted) return;
-
-        setIsConnected(true);
-        setConnectionError(null);
-        retryDelay = INITIAL_RETRY_DELAY_MS; // reset back-off on success
-        toast.success("Connected to Real-Time Updates", {
-          id: "sse-connected",
-          duration: 3000,
-        });
-      };
-
-      eventSource.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-
-          if (data.type === "connected") {
-            return;
+      fetchEventSource(url, {
+        signal: ctrl.signal,
+        onopen: async (response) => {
+          if (unmounted) return;
+          if (
+            response.ok &&
+            response.headers.get("content-type")?.includes("text/event-stream")
+          ) {
+            setIsConnected(true);
+            setConnectionError(null);
+            toast.success("Connected to Real-Time Updates", {
+              id: "sse-connected",
+              duration: 3000,
+            });
           }
+        },
+        onmessage: (event) => {
+          if (unmounted) return;
+          try {
+            const data = JSON.parse(event.data);
 
-          if (data.type === "broadcast") {
-            toast(
-              `📢 ${data.from}: ${data.payload.message || "New Broadcast"}`,
-              {
-                icon: "📡",
-                duration: 5000,
-              },
-            );
+            if (data.type === "connected") {
+              return;
+            }
 
-            return;
-          }
+            if (data.type === "broadcast") {
+              toast(
+                `📢 ${data.from}: ${data.payload.message || "New Broadcast"}`,
+                {
+                  icon: "📡",
+                  duration: 5000,
+                },
+              );
 
-          if (data.type === "os_command") {
-            const { action, command, args, path, content, callbackUrl } =
-              data.payload;
+              return;
+            }
 
-            const runAction = async () => {
-              try {
-                let result: any;
+            if (data.type === "os_command") {
+              const { action, command, args, path, content, callbackUrl } =
+                data.payload;
 
-                toast.loading(`[Swarm] Running native OS action: ${action}`, {
-                  id: "os_action",
-                });
+              const runAction = async () => {
+                try {
+                  let result: any;
 
-                if (action === "execute") {
-                  result = await executeOsCommand(command, args || []);
-                } else if (action === "read") {
-                  result = await readOsFile(path);
-                } else if (action === "write") {
-                  await writeOsFile(path, content);
-                  result = "Success";
-                } else if (action === "list") {
-                  result = await listOsDirectory(path);
-                } else {
-                  throw new Error(`Unknown OS action: ${action}`);
-                }
-
-                toast.success(`[Swarm] Native action complete`, {
-                  id: "os_action",
-                });
-
-                if (callbackUrl) {
-                  await fetch(callbackUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ success: true, result }),
+                  toast.loading(`[Swarm] Running native OS action: ${action}`, {
+                    id: "os_action",
                   });
-                }
-              } catch (err: any) {
-                toast.error(`[Swarm] Native action failed: ${err.message}`, {
-                  id: "os_action",
-                });
-                if (callbackUrl) {
-                  await fetch(callbackUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      success: false,
-                      error: err.message,
-                    }),
+
+                  if (action === "execute") {
+                    result = await executeOsCommand(command, args || []);
+                  } else if (action === "read") {
+                    result = await readOsFile(path);
+                  } else if (action === "write") {
+                    await writeOsFile(path, content);
+                    result = "Success";
+                  } else if (action === "list") {
+                    result = await listOsDirectory(path);
+                  } else {
+                    throw new Error(`Unknown OS action: ${action}`);
+                  }
+
+                  toast.success(`[Swarm] Native action complete`, {
+                    id: "os_action",
                   });
+
+                  if (callbackUrl) {
+                    await fetch(callbackUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ success: true, result }),
+                    });
+                  }
+                } catch (err: any) {
+                  toast.error(`[Swarm] Native action failed: ${err.message}`, {
+                    id: "os_action",
+                  });
+                  if (callbackUrl) {
+                    await fetch(callbackUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        success: false,
+                        error: err.message,
+                      }),
+                    });
+                  }
                 }
-              }
-            };
+              };
 
-            runAction();
+              runAction();
 
-            return;
+              return;
+            }
+          } catch (e) {
+            console.error("❌ [SSE] Failed to parse message", e);
           }
-        } catch (e) {
-          console.error("❌ [SSE] Failed to parse message", e);
-        }
-      };
-
-      eventSource.onerror = () => {
-        if (unmounted) return;
-        console.error("❌ [SSE] Connection lost");
-        eventSource?.close();
-        eventSource = null;
-
-        setIsConnected(false);
-        setConnectionError(
-          `Live connection lost. Retrying in ${Math.round(retryDelay / 1000)}s…`,
-        );
-
-        // Exponential back-off retry
-        retryTimer = setTimeout(() => {
-          if (!unmounted) {
-            retryDelay = Math.min(retryDelay * 2, MAX_RETRY_DELAY_MS);
-            connect();
-          }
-        }, retryDelay);
-      };
+        },
+        onerror: (err) => {
+          if (unmounted) return;
+          console.error("❌ [SSE] Connection lost", err);
+          setIsConnected(false);
+          setConnectionError("Live connection lost. Retrying…");
+          // fetchEventSource automatically handles retries under the hood
+        },
+      });
     };
 
     connect();
 
     return () => {
       unmounted = true;
-
-      eventSource?.close();
-      if (retryTimer) clearTimeout(retryTimer);
+      if (ctrl) ctrl.abort();
     };
   }, []);
 
