@@ -1,8 +1,6 @@
 import "@/styles/globals.css";
 import clsx from "clsx";
 import { Metadata, Viewport } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
-
 import { Providers } from "./providers";
 import ClientQueryProvider from "./QueryClientProvider";
 
@@ -10,9 +8,8 @@ import { ModalProvider } from "@/components/modals/ModalProvider";
 import { fontSans, fontSecondary, fontSerif } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
 
-// 🌐 Deep Google Integration: GA4, reCAPTCHA v3, & Web Vitals
+// 🌐 Deep Google Integration: reCAPTCHA v3
 import { RecaptchaProvider } from "@/components/providers/RecaptchaProvider";
-import { GoogleWebVitals } from "@/components/GoogleWebVitals";
 
 export const metadata: Metadata = {
   title: {
@@ -59,13 +56,11 @@ export default function RootLayout({
               >
                 {children}
                 <ModalProvider />
-                <GoogleWebVitals />
               </Providers>
             </I18nProvider>
           </ClientQueryProvider>
         </RecaptchaProvider>
       </body>
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXXXXX"} />
     </html>
   );
 }
