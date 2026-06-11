@@ -5,6 +5,7 @@ interface UIState {
   editorContent: string;
   editorLanguage: string;
   editorTitle: string;
+  activeMemberName: string | null;
 }
 
 const initialState: UIState = {
@@ -13,6 +14,7 @@ const initialState: UIState = {
     "// Inso Ghost Editor v1.0.0\n// Industrial Code Orchestration Active.",
   editorLanguage: "javascript",
   editorTitle: "Inso Sentinel - Code View",
+  activeMemberName: null,
 };
 
 export const uiSlice = createSlice({
@@ -37,6 +39,9 @@ export const uiSlice = createSlice({
     closeGhostEditor: (state) => {
       state.isGhostEditorOpen = false;
     },
+    setActiveMemberName: (state, action: PayloadAction<string | null>) => {
+      state.activeMemberName = action.payload;
+    },
   },
 });
 
@@ -47,6 +52,7 @@ export const {
   setGhostEditorTitle,
   openGhostEditor,
   closeGhostEditor,
+  setActiveMemberName,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

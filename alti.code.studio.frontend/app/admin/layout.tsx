@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import {
   UserPlus,
   Users,
@@ -11,6 +12,7 @@ import {
   Shield,
   Activity,
   BarChart3,
+  ArrowLeft,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -43,8 +45,10 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname() || "";
   const profileFromStore = useAppSelector((state) => state.user.data);
+  const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
+  const isMemberDetail = pathname.startsWith("/admin/team-members/") && pathname !== "/admin/team-members";
 
   useEffect(() => {
     if (profile) {
@@ -146,23 +150,34 @@ export default function AdminLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between px-10">
           <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-            {getPageTitle()}
+            {isMemberDetail ? (activeMemberName || "Ada Lovelace") : getPageTitle()}
           </span>
-          {profile && (
-            <div className="flex items-center gap-3">
-              <div className="flex flex-col items-end">
-                <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-150">
-                  {profile.email}
-                </span>
-                <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                  {profile.role || "Admin"}
-                </span>
+          <div className="flex items-center gap-6">
+            {isMemberDetail && (
+              <Link
+                href="/admin/team-members"
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-xl text-xs font-bold transition-all cursor-pointer border border-neutral-200/50 dark:border-neutral-800/80 shadow-sm"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Members</span>
+              </Link>
+            )}
+            {profile && (
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-end">
+                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-150">
+                    {profile.email}
+                  </span>
+                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+                    {profile.role || "Admin"}
+                  </span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-xs">
+                  {(profile.email || "A").charAt(0).toUpperCase()}
+                </div>
               </div>
-              <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-xs">
-                {(profile.email || "A").charAt(0).toUpperCase()}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

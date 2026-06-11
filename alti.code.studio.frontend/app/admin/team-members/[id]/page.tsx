@@ -1,11 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useParams } from "next/navigation";
 import {
-  ArrowLeft,
-  Trash2,
   Loader2,
   DollarSign,
   Activity,
@@ -14,14 +11,14 @@ import {
   TrendingUp,
   CheckCircle2,
   Calendar,
-  ShieldAlert,
   User,
   AlertCircle
 } from "lucide-react";
 
 import { teamAPI } from "@/lib/enterprise-api";
 import { useSession } from "next-auth/react";
-import { useAppSelector } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
+import { setActiveMemberName } from "@/store/uiSlice";
 
 interface Member {
   id: string;
@@ -32,17 +29,14 @@ interface Member {
 
 export default function MemberDetailsPage() {
   const params = useParams();
-  const router = useRouter();
   const { status } = useSession();
   const id = params?.id as string;
+  const dispatch = useAppDispatch();
 
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
-  const [openDropdownOpen, setOpenDropdownOpen] = useState(false);
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
-  const isYou = member?.email === currentUserFromStore?.email;
 
   const staticMockMembers: Member[] = [
     {
@@ -92,12 +86,16 @@ export default function MemberDetailsPage() {
       }
 
       setMember(foundMember);
+      if (foundMember) {
+        dispatch(setActiveMemberName(foundMember.name || foundMember.email.split("@")[0]));
+      }
     } catch (err) {
       console.error("Failed to load member details:", err);
       // Fallback immediately to static mock
       const found = staticMockMembers.find((m) => m.id === id);
       if (found) {
         setMember(found);
+        dispatch(setActiveMemberName(found.name || found.email.split("@")[0]));
       }
     } finally {
       setLoading(false);
@@ -110,39 +108,13 @@ export default function MemberDetailsPage() {
     }
   }, [id, status, currentUserFromStore]);
 
-  const handleRoleChange = async (newRole: string) => {
-    if (!member) return;
-    try {
-      await teamAPI.updateMemberRole(member.id, newRole);
-      setMember((prev) => (prev ? { ...prev, role: newRole } : null));
-      setOpenDropdownOpen(false);
-      alert(`Role updated successfully to ${formatRole(newRole)}.`);
-    } catch (err) {
-      console.error("Failed to update role:", err);
-      alert("Failed to update member role. Please try again.");
-    }
-  };
+  useEffect(() => {
+    return () => {
+      dispatch(setActiveMemberName(null));
+    };
+  }, [dispatch]);
 
-  const handleRemove = async () => {
-    if (!member) return;
-    try {
-      await teamAPI.removeMember(member.id);
-      alert("Member removed successfully.");
-      router.push("/admin/team-members");
-    } catch (err) {
-      console.error("Failed to remove member:", err);
-      alert("Failed to remove member. Please try again.");
-    } finally {
-      setDeleteConfirmOpen(false);
-    }
-  };
 
-  const formatRole = (role: string) => {
-    if (!role) return "Developer";
-    const r = role.toLowerCase();
-    if (r === "admin" || r === "owner") return "Admin";
-    return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
-  };
 
   const getMemberDetails = (memberObj: Member) => {
     const emailLower = memberObj.email.toLowerCase();
@@ -273,15 +245,9 @@ export default function MemberDetailsPage() {
       <div className="flex flex-col items-center justify-center py-20 h-full w-full text-center px-6">
         <AlertCircle className="w-12 h-12 text-neutral-300 dark:text-neutral-700 mb-4" />
         <h2 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-1">Member Not Found</h2>
-        <p className="text-sm text-neutral-500 dark:text-neutral-450 mb-6">
+        <p className="text-sm text-neutral-500 dark:text-neutral-455 mb-6">
           The requested member directory could not be located or has been decommissioned.
         </p>
-        <Link
-          href="/admin/team-members"
-          className="flex items-center gap-2 px-4 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-750 dark:text-neutral-200 rounded-xl text-sm font-medium transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" /> Back to Members
-        </Link>
       </div>
     );
   }
@@ -290,86 +256,11 @@ export default function MemberDetailsPage() {
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 space-y-6 pb-12">
-      {/* Breadcrumb Header */}
-      <div className="flex flex-col">
-        <Link
-          href="/admin/team-members"
-          className="flex items-center gap-2 text-xs font-bold text-neutral-400 hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-350 uppercase tracking-wider mb-3 w-fit"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Members
-        </Link>
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-              {member.name || member.email.split("@")[0]}
-            </h1>
-            <p className="text-xs text-neutral-450 dark:text-neutral-500 mt-1">
-              Comprehensive operational logs, billing allocations, and workspace usage statistics.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            {/* Role Manager */}
-            {isYou ? (
-              <span className="text-xs font-semibold text-neutral-550 dark:text-neutral-400 uppercase tracking-wider bg-neutral-100 dark:bg-neutral-800/40 border border-neutral-200/40 dark:border-neutral-700/40 px-3 py-1.5 rounded-full">
-                Role: Admin (You)
-              </span>
-            ) : (
-              <div className="relative">
-                <button
-                  className="flex items-center gap-2 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 px-4 py-2 text-sm text-neutral-800 dark:text-neutral-200 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors focus:outline-none cursor-pointer"
-                  onClick={() => setOpenDropdownOpen(!openDropdownOpen)}
-                >
-                  <span>Role: {formatRole(member.role)}</span>
-                  <svg
-                    className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
-                      openDropdownOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                  </svg>
-                </button>
-
-                {openDropdownOpen && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setOpenDropdownOpen(false)} />
-                    <div className="absolute right-0 top-full mt-2 w-40 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
-                      {["admin", "manager", "developer"].map((r) => (
-                        <button
-                          key={r}
-                          className={`w-full text-left px-4 py-2 text-xs transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 ${
-                            member.role?.toLowerCase() === r
-                              ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20 font-semibold"
-                              : "text-neutral-600 dark:text-neutral-400"
-                          }`}
-                          type="button"
-                          onClick={() => handleRoleChange(r)}
-                        >
-                          {formatRole(r)}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* Remove Action */}
-            {!isYou && (
-              <button
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-red-500 bg-red-50 hover:bg-red-100 dark:bg-red-950/20 dark:hover:bg-red-950/40 rounded-xl transition-all cursor-pointer border border-red-100/40 dark:border-red-900/40"
-                onClick={() => setDeleteConfirmOpen(true)}
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>Remove Member</span>
-              </button>
-            )}
-          </div>
-        </div>
+      {/* Header Description */}
+      <div>
+        <p className="text-xs text-neutral-455 dark:text-neutral-500 mt-1">
+          Comprehensive operational logs, billing allocations, and workspace usage statistics.
+        </p>
       </div>
 
       {/* Main Grid */}
@@ -504,12 +395,6 @@ export default function MemberDetailsPage() {
 
             <div className="w-full space-y-3">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-neutral-400 dark:text-neutral-500 font-medium">Workspace Role</span>
-                <span className="font-semibold text-neutral-700 dark:text-neutral-300 capitalize">
-                  {formatRole(member.role)}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-xs">
                 <span className="text-neutral-400 dark:text-neutral-500 font-medium">Joined Date</span>
                 <span className="font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5 text-neutral-455" />
@@ -554,44 +439,6 @@ export default function MemberDetailsPage() {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {deleteConfirmOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-          <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-6 text-center">
-              <ShieldAlert className="w-10 h-10 text-red-500 mx-auto mb-3" />
-              <h2 className="text-base font-bold text-neutral-850 dark:text-neutral-200 mb-2">
-                Remove Workspace Member
-              </h2>
-              <p className="text-xs text-neutral-500 dark:text-neutral-450 px-4 leading-relaxed">
-                Are you absolutely sure you want to remove{" "}
-                <span className="font-semibold text-neutral-750 dark:text-neutral-300">{member.email}</span> from
-                this workspace? All active API tokens will be revoked.
-              </p>
-            </div>
-
-            <div className="border-t border-neutral-100 dark:border-neutral-800" />
-
-            <div className="flex w-full">
-              <button
-                className="flex-1 py-3.5 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
-                onClick={() => setDeleteConfirmOpen(false)}
-              >
-                Cancel
-              </button>
-
-              <div className="border-r border-neutral-100 dark:border-neutral-800" />
-
-              <button
-                className="flex-1 py-3.5 text-sm font-semibold text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
-                onClick={handleRemove}
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

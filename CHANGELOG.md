@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.172] - 2026-06-11 — Member Details Page Header & Content Hardening
+### Changed
+- **Navbar Member details**:
+  - Moved member's name to the navbar top left when viewing details.
+  - Placed "Back to Members" button on the navbar top right when viewing details.
+  - Removed member role selector controls, workspace role displays, and delete/removal actions from the details page.
+
 ## [39.37.171] - 2026-06-11 — Private Cloud Security & Member Insights Upgrades
 ### Added
 - **Private Cloud Hardening (Liberty Center One)**:
