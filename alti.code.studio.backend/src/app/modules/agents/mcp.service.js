@@ -12,6 +12,7 @@ import { logger } from '../../../shared/logger.js';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import configObject from '../../../../config/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { EventEmitter } from 'events';
@@ -131,12 +132,27 @@ class McpBridgeService extends EventEmitter {
         const config = this.servers.get(serverName);
         if (!config) throw new Error(`MCP server [${serverName}] not found in config.`);
 
-        logger.info(`🚀 [MCP] Spawning MCP server ${serverName} via STDIO...`);
+        const cleanedEnv = {};
+        if (config.env) {
+            for (const [key, value] of Object.entries(config.env)) {
+                if (value !== undefined && value !== '') {
+                    cleanedEnv[key] = value;
+                }
+            }
+        }
+
+        if (serverName === 'github') {
+            const token = process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN || cleanedEnv.GITHUB_TOKEN || cleanedEnv.GITHUB_PERSONAL_ACCESS_TOKEN || configObject.github_token;
+            if (token) {
+                cleanedEnv.GITHUB_TOKEN = token;
+                cleanedEnv.GITHUB_PERSONAL_ACCESS_TOKEN = token;
+            }
+        }
 
         const transport = new StdioClientTransport({
             command: config.command,
             args: config.args,
-            env: { ...process.env, ...(config.env || {}) }
+            env: { ...process.env, ...cleanedEnv }
         });
 
         const client = new Client({ name: 'alti-swarm-mcp-bridge', version: '1.0.0' }, { capabilities: {} });

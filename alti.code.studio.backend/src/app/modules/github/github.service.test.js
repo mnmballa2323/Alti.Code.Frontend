@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Define the mock inside the hoisted block to avoid ReferenceError on hoisting
 vi.mock('octokit', () => {
     const mockOctokitInstance = {
+        graphql: vi.fn(),
         rest: {
             users: {
                 getAuthenticated: vi.fn()
@@ -12,7 +13,18 @@ vi.mock('octokit', () => {
                 createForAuthenticatedUser: vi.fn(),
                 get: vi.fn(),
                 delete: vi.fn(),
-                listBranches: vi.fn()
+                listBranches: vi.fn(),
+                getContent: vi.fn(),
+                createOrUpdateFileContents: vi.fn(),
+                deleteFile: vi.fn(),
+                listCommits: vi.fn(),
+                compareCommits: vi.fn(),
+                listReleases: vi.fn(),
+                createRelease: vi.fn(),
+                getLatestRelease: vi.fn(),
+                listCollaborators: vi.fn(),
+                addCollaborator: vi.fn(),
+                removeCollaborator: vi.fn()
             },
             issues: {
                 listForRepo: vi.fn(),
@@ -39,6 +51,12 @@ vi.mock('octokit', () => {
             projects: {
                 listForRepo: vi.fn(),
                 createForRepo: vi.fn()
+            },
+            search: {
+                repos: vi.fn(),
+                code: vi.fn(),
+                issuesAndPullRequests: vi.fn(),
+                users: vi.fn()
             }
         }
     };
@@ -180,6 +198,182 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
             description: 'test gist',
             files: { 'test.js': { content: 'test' } },
             public: false
+        });
+    });
+
+    // 7. Projects
+    it('should list projects for a repository', async () => {
+        const mockProjects = [{ id: 1, name: 'Project 1' }];
+        mockOctokit.rest.projects.listForRepo.mockResolvedValue({ data: mockProjects });
+
+        const result = await GithubService.listProjects('owner', 'repo', { state: 'open' });
+        expect(result).toEqual(mockProjects);
+        expect(mockOctokit.rest.projects.listForRepo).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            state: 'open',
+            per_page: 30,
+            page: 1
+        });
+    });
+
+    it('should create a project in a repository', async () => {
+        const mockProject = { id: 2, name: 'New Project' };
+        mockOctokit.rest.projects.createForRepo.mockResolvedValue({ data: mockProject });
+
+        const result = await GithubService.createProject('owner', 'repo', { name: 'New Project', body: 'Desc' });
+        expect(result).toEqual(mockProject);
+        expect(mockOctokit.rest.projects.createForRepo).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            name: 'New Project',
+            body: 'Desc'
+        });
+    });
+
+    // 8. GraphQL
+    it('should execute GraphQL queries', async () => {
+        const mockResponse = { repository: { name: 'test' } };
+        mockOctokit.graphql.mockResolvedValue(mockResponse);
+
+        const result = await GithubService.graphql('query { repo }', { var1: 'val' });
+        expect(result).toEqual(mockResponse);
+        expect(mockOctokit.graphql).toHaveBeenCalledWith('query { repo }', { var1: 'val' });
+    });
+
+    // 9. Search
+    it('should search repositories', async () => {
+        const mockRes = { items: [{ name: 'matched' }] };
+        mockOctokit.rest.search.repos.mockResolvedValue({ data: mockRes });
+
+        const result = await GithubService.searchRepositories('vitest', { page: 2 });
+        expect(result).toEqual(mockRes);
+        expect(mockOctokit.rest.search.repos).toHaveBeenCalledWith({
+            q: 'vitest',
+            sort: undefined,
+            order: undefined,
+            per_page: 30,
+            page: 2
+        });
+    });
+
+    it('should search code', async () => {
+        const mockRes = { items: [{ path: 'matched.js' }] };
+        mockOctokit.rest.search.code.mockResolvedValue({ data: mockRes });
+
+        const result = await GithubService.searchCode('import x', { sort: 'indexed' });
+        expect(result).toEqual(mockRes);
+        expect(mockOctokit.rest.search.code).toHaveBeenCalledWith({
+            q: 'import x',
+            sort: 'indexed',
+            order: undefined,
+            per_page: 30,
+            page: 1
+        });
+    });
+
+    // 10. Git Data / Contents
+    it('should fetch file content', async () => {
+        const mockContent = { type: 'file', content: 'base64' };
+        mockOctokit.rest.repos.getContent.mockResolvedValue({ data: mockContent });
+
+        const result = await GithubService.getFileContent('owner', 'repo', 'src/index.js', 'main');
+        expect(result).toEqual(mockContent);
+        expect(mockOctokit.rest.repos.getContent).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            path: 'src/index.js',
+            ref: 'main'
+        });
+    });
+
+    it('should commit or update a file', async () => {
+        const mockCommit = { commit: { sha: 'commitsha' } };
+        mockOctokit.rest.repos.createOrUpdateFileContents.mockResolvedValue({ data: mockCommit });
+
+        const fileData = { message: 'update', content: 'dGVzdA==', sha: 'oldsha', branch: 'main' };
+        const result = await GithubService.createOrUpdateFile('owner', 'repo', 'src/index.js', fileData);
+        expect(result).toEqual(mockCommit);
+        expect(mockOctokit.rest.repos.createOrUpdateFileContents).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            path: 'src/index.js',
+            message: 'update',
+            content: 'dGVzdA==',
+            sha: 'oldsha',
+            branch: 'main',
+            committer: undefined,
+            author: undefined
+        });
+    });
+
+    it('should list commits for a repository', async () => {
+        const mockCommits = [{ sha: 'sha1' }];
+        mockOctokit.rest.repos.listCommits.mockResolvedValue({ data: mockCommits });
+
+        const result = await GithubService.listCommits('owner', 'repo', { path: 'src/index.js' });
+        expect(result).toEqual(mockCommits);
+        expect(mockOctokit.rest.repos.listCommits).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            sha: undefined,
+            path: 'src/index.js',
+            author: undefined,
+            since: undefined,
+            until: undefined,
+            per_page: 30,
+            page: 1
+        });
+    });
+
+    // 11. Releases
+    it('should list releases', async () => {
+        const mockReleases = [{ tag_name: 'v1.0.0' }];
+        mockOctokit.rest.repos.listReleases.mockResolvedValue({ data: mockReleases });
+
+        const result = await GithubService.listReleases('owner', 'repo', { page: 3 });
+        expect(result).toEqual(mockReleases);
+        expect(mockOctokit.rest.repos.listReleases).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            per_page: 30,
+            page: 3
+        });
+    });
+
+    it('should fetch the latest release', async () => {
+        const mockRelease = { tag_name: 'v2.0.0' };
+        mockOctokit.rest.repos.getLatestRelease.mockResolvedValue({ data: mockRelease });
+
+        const result = await GithubService.getLatestRelease('owner', 'repo');
+        expect(result).toEqual(mockRelease);
+        expect(mockOctokit.rest.repos.getLatestRelease).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    });
+
+    // 12. Collaborators
+    it('should add a collaborator', async () => {
+        const mockRes = { invite_id: 123 };
+        mockOctokit.rest.repos.addCollaborator.mockResolvedValue({ data: mockRes });
+
+        const result = await GithubService.addCollaborator('owner', 'repo', 'user1', 'admin');
+        expect(result).toEqual(mockRes);
+        expect(mockOctokit.rest.repos.addCollaborator).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            username: 'user1',
+            permission: 'admin'
+        });
+    });
+
+    it('should remove a collaborator', async () => {
+        mockOctokit.rest.repos.removeCollaborator.mockResolvedValue({ status: 204 });
+
+        const result = await GithubService.removeCollaborator('owner', 'repo', 'user1');
+        expect(result).toBe(true);
+        expect(mockOctokit.rest.repos.removeCollaborator).toHaveBeenCalledWith({
+            owner: 'owner',
+            repo: 'repo',
+            username: 'user1'
         });
     });
 });
