@@ -81,11 +81,6 @@ const sidebarItems: SidebarItem[] = [
     title: "Chat",
   },
   {
-    key: "usage",
-    href: "/dashboard/usage",
-    title: "Model Usage",
-  },
-  {
     key: "billing",
     href: "/dashboard/billing",
     title: "Billing",

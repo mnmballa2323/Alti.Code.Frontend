@@ -10,7 +10,7 @@ import {
   BookOpen,
   Shield,
   Activity,
-  Cpu,
+  BarChart3,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -27,13 +27,13 @@ const adminItems: SidebarItem[] = [
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
+  { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
 ];
 
 const managerItems: SidebarItem[] = [
   { label: "Knowledge", href: "/admin/data", icon: BookOpen },
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
-  { label: "AI Gateways", href: "/admin/gateways", icon: Cpu },
 ];
 
 export default function AdminLayout({
@@ -95,15 +95,15 @@ export default function AdminLayout({
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/billing") ||
       pathname.startsWith("/admin/invoices") ||
-      pathname.startsWith("/admin/audit")
+      pathname.startsWith("/admin/audit") ||
+      pathname.startsWith("/admin/usage")
     ) {
       return "Platform Admin";
     }
     if (
       pathname.startsWith("/admin/data") ||
       pathname.startsWith("/admin/instructions") ||
-      pathname.startsWith("/admin/guardrails") ||
-      pathname.startsWith("/admin/gateways")
+      pathname.startsWith("/admin/guardrails")
     ) {
       return "Platform Manager";
     }
@@ -119,7 +119,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/data")) return "Knowledge";
     if (pathname.startsWith("/admin/instructions")) return "Instructions";
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
-    if (pathname.startsWith("/admin/gateways")) return "AI Gateways";
+    if (pathname.startsWith("/admin/usage")) return "Model Usage";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
 
     return "Platform Admin";
