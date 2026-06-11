@@ -1,62 +1,65 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const mockOctokit = {
-    rest: {
-        users: {
-            getAuthenticated: vi.fn()
-        },
-        repos: {
-            listForAuthenticatedUser: vi.fn(),
-            createForAuthenticatedUser: vi.fn(),
-            get: vi.fn(),
-            delete: vi.fn(),
-            listBranches: vi.fn()
-        },
-        issues: {
-            listForRepo: vi.fn(),
-            create: vi.fn(),
-            get: vi.fn(),
-            update: vi.fn()
-        },
-        pulls: {
-            list: vi.fn(),
-            create: vi.fn(),
-            get: vi.fn(),
-            merge: vi.fn()
-        },
-        actions: {
-            listRepoWorkflows: vi.fn(),
-            createWorkflowDispatch: vi.fn(),
-            listWorkflowRunsForRepo: vi.fn()
-        },
-        gists: {
-            list: vi.fn(),
-            create: vi.fn(),
-            delete: vi.fn()
-        },
-        projects: {
-            listForRepo: vi.fn(),
-            createForRepo: vi.fn()
-        }
-    }
-};
-
-// Mock the octokit module before importing the service
+// Define the mock inside the hoisted block to avoid ReferenceError on hoisting
 vi.mock('octokit', () => {
+    const mockOctokitInstance = {
+        rest: {
+            users: {
+                getAuthenticated: vi.fn()
+            },
+            repos: {
+                listForAuthenticatedUser: vi.fn(),
+                createForAuthenticatedUser: vi.fn(),
+                get: vi.fn(),
+                delete: vi.fn(),
+                listBranches: vi.fn()
+            },
+            issues: {
+                listForRepo: vi.fn(),
+                create: vi.fn(),
+                get: vi.fn(),
+                update: vi.fn()
+            },
+            pulls: {
+                list: vi.fn(),
+                create: vi.fn(),
+                get: vi.fn(),
+                merge: vi.fn()
+            },
+            actions: {
+                listRepoWorkflows: vi.fn(),
+                createWorkflowDispatch: vi.fn(),
+                listWorkflowRunsForRepo: vi.fn()
+            },
+            gists: {
+                list: vi.fn(),
+                create: vi.fn(),
+                delete: vi.fn()
+            },
+            projects: {
+                listForRepo: vi.fn(),
+                createForRepo: vi.fn()
+            }
+        }
+    };
+    globalThis.__mockOctokit = mockOctokitInstance;
     return {
         Octokit: class {
             constructor() {
-                return mockOctokit;
+                return mockOctokitInstance;
             }
         }
     };
 });
 
-// Now import the service which uses the mocked Octokit constructor
+// Import service after mock setup
 import { GithubService } from './github.service.js';
 
 describe('GithubService - Direct GitHub API Wrapper', () => {
+    let mockOctokit;
+
     beforeEach(() => {
+        mockOctokit = globalThis.__mockOctokit;
         vi.clearAllMocks();
     });
 
