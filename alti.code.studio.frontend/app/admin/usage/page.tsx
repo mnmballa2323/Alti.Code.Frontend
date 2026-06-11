@@ -551,13 +551,12 @@ const getYScaleLabels = (ceiling: number) => {
     bottom: "0"
   };
 };
-
 interface ArchivedModelInfo {
   name: string;
   version: string;
   decommissionedDate: string;
-  totalTokens: string;
-  requests: string;
+  tokensIn: string;
+  tokensOut: string;
   cost: number;
 }
 
@@ -567,16 +566,16 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       name: "GPT-4",
       version: "v4.0",
       decommissionedDate: "March 15, 2026",
-      totalTokens: "125.40M",
-      requests: "245,610",
+      tokensIn: "92.15M",
+      tokensOut: "33.25M",
       cost: 1254.00
     },
     {
       name: "GPT-3.5-Turbo",
       version: "v3.5",
       decommissionedDate: "November 20, 2025",
-      totalTokens: "450.12M",
-      requests: "1,894,320",
+      tokensIn: "310.08M",
+      tokensOut: "140.04M",
       cost: 900.24
     }
   ],
@@ -585,16 +584,16 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       name: "Claude 3.5 Sonnet",
       version: "v3.5 (Legacy)",
       decommissionedDate: "December 10, 2025",
-      totalTokens: "85.20M",
-      requests: "189,450",
+      tokensIn: "60.40M",
+      tokensOut: "24.80M",
       cost: 255.60
     },
     {
       name: "Claude 3 Haiku",
       version: "v3.0",
       decommissionedDate: "August 05, 2025",
-      totalTokens: "320.15M",
-      requests: "2,410,500",
+      tokensIn: "240.10M",
+      tokensOut: "80.05M",
       cost: 96.04
     }
   ],
@@ -603,20 +602,21 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       name: "Gemini 1.5 Pro",
       version: "v1.5",
       decommissionedDate: "February 28, 2026",
-      totalTokens: "180.45M",
-      requests: "398,210",
+      tokensIn: "135.30M",
+      tokensOut: "45.15M",
       cost: 360.90
     },
     {
       name: "Gemini 1.0 Pro",
       version: "v1.0",
       decommissionedDate: "October 15, 2025",
-      totalTokens: "290.10M",
-      requests: "1,245,900",
+      tokensIn: "210.05M",
+      tokensOut: "80.05M",
       cost: 290.10
     }
   ]
 };
+
 
 export default function ModelUsagePage() {
   const [activeTab, setActiveTab] = useState<"aws" | "gcp" | "azure">("azure");
@@ -1050,11 +1050,15 @@ export default function ModelUsagePage() {
                   
                   <div className="flex gap-6 text-right sm:text-right">
                     <div>
-                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Total Tokens</span>
-                      <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355">{model.totalTokens}</span>
+                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens In</span>
+                      <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355">{model.tokensIn}</span>
                     </div>
                     <div>
-                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Historical Cost</span>
+                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Out</span>
+                      <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355">{model.tokensOut}</span>
+                    </div>
+                    <div>
+                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Total Cost</span>
                       <span className="text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200">${model.cost.toFixed(2)}</span>
                     </div>
                   </div>
