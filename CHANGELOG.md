@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.191] - 2026-06-11 — Phase 10 GitHub REST API & SDK Entrenchment
+### Added
+- **Advanced Security Scanning**: Added updateCodeScanningAlert, listCodeScanningAlertInstances, listCodeScanningAnalyses, getCodeScanningAnalysis, deleteCodeScanningAnalysis, uploadCodeScanningSarif, listSecretScanningBypassApprovals, and createSecretScanningBypassApproval methods, controllers, and routes.
+- **Commit Comments**: Added listCommitComments, getCommitComment, createCommitComment, updateCommitComment, and deleteCommitComment methods, controllers, and routes.
+- **Repository Forks & Invitations**: Added listForks, createFork, listRepoInvitations, deleteRepoInvitation, and updateRepoInvitation methods, controllers, and routes.
+- **Repository Pages**: Added getPagesInfo, createPagesSite, updatePagesSite, deletePagesSite, listPagesBuilds, getPagesBuildInfo, and requestPagesBuild methods, controllers, and routes.
+- **Actions Runner Groups & Workflow Permissions**: Added listOrgRunnerGroups, getOrgRunnerGroup, createOrgRunnerGroup, updateOrgRunnerGroup, deleteOrgRunnerGroup, getActionsPermissionsForOrg, setActionsPermissionsForOrg, getActionsPermissionsForRepo, and setActionsPermissionsForRepo methods, controllers, and routes.
+- **Selected Repository Org Secrets & Variables**: Added listSelectedReposForOrgSecret, setSelectedReposForOrgSecret, addSelectedRepoToOrgSecret, removeSelectedRepoFromOrgSecret, listSelectedReposForOrgVariable, setSelectedReposForOrgVariable, addSelectedRepoToOrgVariable, removeSelectedRepoFromOrgVariable, listSelectedReposForOrgCodespacesSecret, setSelectedReposForOrgCodespacesSecret, addSelectedRepoToOrgCodespacesSecret, and removeSelectedRepoFromOrgCodespacesSecret methods, controllers, and routes.
+- **Unit Testing**: Added 46 new unit tests to achieve 290 passing tests total.
+
 ## [39.37.190] - 2026-06-11 — Phase 9 GitHub REST API & SDK Entrenchment
 ### Added
 - **SCIM Organization Member Provisioning**: Integrated listing identities, provisioning users, retrieving provisioning info, replacing user identities, updating provisioned users, and deleting users from organizations.
