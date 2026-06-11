@@ -10,6 +10,7 @@ import {
   CheckCircle,
   XCircle,
   ShieldAlert,
+  ChevronDown,
 } from "lucide-react";
 
 import { SOCKET_URL } from "@/lib/config";
@@ -84,6 +85,14 @@ const AuditPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [expandedLogs, setExpandedLogs] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedLogs((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const fetchLogs = async () => {
     setLoading(true);
@@ -192,11 +201,17 @@ const AuditPage = () => {
               logs.map((log) => {
                 const logDate = new Date(log.timestamp).toLocaleDateString();
                 const logTime = new Date(log.timestamp).toLocaleTimeString();
+                const isExpanded = !!expandedLogs[log._id];
 
                 return (
                   <div
                     key={log._id}
-                    className="flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3"
+                    className={`flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3 ${
+                      log.metadata
+                        ? "cursor-pointer hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-md"
+                        : ""
+                    }`}
+                    onClick={() => log.metadata && toggleExpand(log._id)}
                   >
                     <div className="grid grid-cols-12 gap-4 items-center text-sm">
                       <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
@@ -215,12 +230,21 @@ const AuditPage = () => {
                         {getStatusIcon(log.status)}
                         <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{log.status}</span>
                       </div>
-                      <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400 text-right">
-                        {log.ipAddress || "—"}
+                      <div className="col-span-2 flex items-center justify-end gap-2 text-right">
+                        <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                          {log.ipAddress || "—"}
+                        </span>
+                        {log.metadata && (
+                          <ChevronDown
+                            className={`w-4 h-4 text-neutral-450 dark:text-neutral-500 transition-transform duration-200 shrink-0 ${
+                              isExpanded ? "rotate-180" : ""
+                            }`}
+                          />
+                        )}
                       </div>
                     </div>
-                    {log.metadata && (
-                      <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all">
+                    {log.metadata && isExpanded && (
+                      <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all animate-in fade-in slide-in-from-top-1 duration-200">
                         <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-450 dark:text-neutral-500 block mb-1">
                           Metadata
                         </span>
