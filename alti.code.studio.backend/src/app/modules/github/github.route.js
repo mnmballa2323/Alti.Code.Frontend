@@ -11,33 +11,39 @@ const router = express.Router();
  * Validates the GitHub Webhook HMAC signature to prevent spoofing
  */
 const verifyGitHubSignature = (req, res, next) => {
-    const signature = req.headers['x-hub-signature-256'];
-    const payload = JSON.stringify(req.body);
-    const secret = config.github.webhook_secret;
+  const signature = req.headers['x-hub-signature-256'];
+  const payload = JSON.stringify(req.body);
+  const secret = config.github.webhook_secret;
 
-    if (process.env.NODE_ENV === 'test') {
-        return next();
-    }
+  if (process.env.NODE_ENV === 'test') {
+    return next();
+  }
 
-    if (!secret) {
-        logger.warn('⚠️ [GitHub Webhook] Webhook secret not configured in env. Bypassing verification for local development.');
-        return next();
-    }
+  if (!secret) {
+    logger.warn(
+      '⚠️ [GitHub Webhook] Webhook secret not configured in env. Bypassing verification for local development.',
+    );
+    return next();
+  }
 
-    if (!signature) {
-        logger.warn('⚠️ [GitHub Webhook] Missing signature header. Rejecting request.');
-        return res.status(401).send('Unauthorized');
-    }
+  if (!signature) {
+    logger.warn(
+      '⚠️ [GitHub Webhook] Missing signature header. Rejecting request.',
+    );
+    return res.status(401).send('Unauthorized');
+  }
 
-    const hmac = crypto.createHmac('sha256', secret);
-    const digest = 'sha256=' + hmac.update(payload).digest('hex');
+  const hmac = crypto.createHmac('sha256', secret);
+  const digest = 'sha256=' + hmac.update(payload).digest('hex');
 
-    if (signature !== digest) {
-        logger.warn('⚠️ [GitHub Webhook] Signature mismatch. Possible spoofing attack.');
-        return res.status(401).send('Unauthorized');
-    }
+  if (signature !== digest) {
+    logger.warn(
+      '⚠️ [GitHub Webhook] Signature mismatch. Possible spoofing attack.',
+    );
+    return res.status(401).send('Unauthorized');
+  }
 
-    next();
+  next();
 };
 
 /**
@@ -45,7 +51,11 @@ const verifyGitHubSignature = (req, res, next) => {
  * @desc Handle incoming GitHub Webhooks for Continuous RAG Ingestion and Auto-Review
  * @access Protected via HMAC Signature
  */
-router.post('/webhook', verifyGitHubSignature, GithubWebhookController.handleWebhook);
+router.post(
+  '/webhook',
+  verifyGitHubSignature,
+  GithubWebhookController.handleWebhook,
+);
 
 // ===========================================================================
 // Direct GitHub REST/GraphQL API Integration (No middle layer)
@@ -71,11 +81,17 @@ router.patch('/issues/:owner/:repo/:number', GithubController.updateIssue);
 router.get('/pulls/:owner/:repo', GithubController.listPullRequests);
 router.post('/pulls/:owner/:repo', GithubController.createPullRequest);
 router.get('/pulls/:owner/:repo/:number', GithubController.getPullRequest);
-router.put('/pulls/:owner/:repo/:number/merge', GithubController.mergePullRequest);
+router.put(
+  '/pulls/:owner/:repo/:number/merge',
+  GithubController.mergePullRequest,
+);
 
 // 5. Actions (CI/CD workflows)
 router.get('/actions/:owner/:repo/workflows', GithubController.listWorkflows);
-router.post('/actions/:owner/:repo/workflows/:workflowId/dispatches', GithubController.triggerWorkflowDispatch);
+router.post(
+  '/actions/:owner/:repo/workflows/:workflowId/dispatches',
+  GithubController.triggerWorkflowDispatch,
+);
 router.get('/actions/:owner/:repo/runs', GithubController.listWorkflowRuns);
 
 // 6. Gists
@@ -98,20 +114,38 @@ router.get('/search/users', GithubController.searchUsers);
 
 // 10. Git Data / Contents API
 router.get('/repos/:owner/:repo/contents/*', GithubController.getFileContent);
-router.put('/repos/:owner/:repo/contents/*', GithubController.createOrUpdateFile);
+router.put(
+  '/repos/:owner/:repo/contents/*',
+  GithubController.createOrUpdateFile,
+);
 router.delete('/repos/:owner/:repo/contents/*', GithubController.deleteFile);
 router.get('/repos/:owner/:repo/commits', GithubController.listCommits);
-router.get('/repos/:owner/:repo/compare/:base...:head', GithubController.compareCommits);
+router.get(
+  '/repos/:owner/:repo/compare/:base...:head',
+  GithubController.compareCommits,
+);
 
 // 11. Releases API
 router.get('/repos/:owner/:repo/releases', GithubController.listReleases);
 router.post('/repos/:owner/:repo/releases', GithubController.createRelease);
-router.get('/repos/:owner/:repo/releases/latest', GithubController.getLatestRelease);
+router.get(
+  '/repos/:owner/:repo/releases/latest',
+  GithubController.getLatestRelease,
+);
 
 // 12. Collaborators API
-router.get('/repos/:owner/:repo/collaborators', GithubController.listCollaborators);
-router.put('/repos/:owner/:repo/collaborators/:username', GithubController.addCollaborator);
-router.delete('/repos/:owner/:repo/collaborators/:username', GithubController.removeCollaborator);
+router.get(
+  '/repos/:owner/:repo/collaborators',
+  GithubController.listCollaborators,
+);
+router.put(
+  '/repos/:owner/:repo/collaborators/:username',
+  GithubController.addCollaborator,
+);
+router.delete(
+  '/repos/:owner/:repo/collaborators/:username',
+  GithubController.removeCollaborator,
+);
 
 export const GithubRoutes = router;
 export default router;

@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.182] - 2026-06-11 — Complete GitHub API, SDK, and MCP Entrenchment
+### Added
+- **Expanded GitHub Service**: Implemented new wrapper namespaces and methods for GraphQL API query execution, complete GitHub Search (repos, code, issues, users), Git Data and file contents commits/deletes, Releases (creating, listing, latest), and Collaborators (listing, adding, removing).
+- **Expanded REST Controller**: Created controller actions for all new operations to support full user interface integration.
+- **REST Endpoints Mapping**: Registered new routing paths under `/api/github/*` to expose all new REST capabilities.
+- **MCP Fallback Security**: Patched standard MCP Client presets and stdio connection logic to ensure `github` preset and dynamic MCP connections securely bind token fallbacks from `config.github_token` and filter out empty override configurations.
+- **Unit Testing**: Extended the unit test suite in `github.service.test.js` to 21 passing test cases (100% mocked coverage for new features).
+
 ## [39.37.181] - 2026-06-11 — Direct GitHub API & SDK Integration
 ### Added
 - **Direct GitHub Service**: Created `github.service.js` wrapping core GitHub API namespaces (Users, Repos, Issues, Pull Requests, Actions, Gists, Projects) directly utilizing the Octokit SDK with no middle layers.

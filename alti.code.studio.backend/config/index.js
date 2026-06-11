@@ -32,17 +32,22 @@ const configObject = {
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5000/api/v1/auth/google/callback',
+    callbackUrl:
+      process.env.GOOGLE_CALLBACK_URL ||
+      'http://localhost:5000/api/v1/auth/google/callback',
     searchApiKey: process.env.GOOGLE_SEARCH_API_KEY,
     searchCx: process.env.GOOGLE_SEARCH_CX,
   },
   github: {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackUrl: process.env.GITHUB_CALLBACK_URL || 'http://localhost:5000/api/v1/auth/github/callback',
+    callbackUrl:
+      process.env.GITHUB_CALLBACK_URL ||
+      'http://localhost:5000/api/v1/auth/github/callback',
     webhook_secret: process.env.GITHUB_WEBHOOK_SECRET,
   },
-  github_token: process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+  github_token:
+    process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
 
   mailgun: {
     mailgun_domain: process.env.MAILGUN_DOMAIN,
@@ -67,13 +72,16 @@ const configObject = {
     model_name: process.env.GEMINI_MODEL || 'gemini-experimental', // Hard Law: Always use the latest auto-updating Vertex model
     kms_key_ring: process.env.GCP_KMS_KEY_RING || 'audit-key-ring',
     kms_crypto_key: process.env.GCP_KMS_CRYPTO_KEY || 'audit-signer',
-    audit_gcs_bucket: process.env.GCP_AUDIT_BUCKET || 'alti-code-studio-worm-audit',
+    audit_gcs_bucket:
+      process.env.GCP_AUDIT_BUCKET || 'alti-code-studio-worm-audit',
     pubsub_audit_topic: process.env.GCP_PUBSUB_AUDIT_TOPIC || 'audit-alerts',
     dlp_inspect_template: process.env.GCP_DLP_INSPECT_TEMPLATE || null,
   },
   social_login_secret: process.env.SOCIAL_LOGIN_SECRET,
   browser_use_url: process.env.BROWSER_USE_URL || 'http://localhost:3018',
-  agent_s_python_path: process.env.AGENT_S_PYTHON_PATH || path.join(process.cwd(), '.venv-agent-s/bin/python'),
+  agent_s_python_path:
+    process.env.AGENT_S_PYTHON_PATH ||
+    path.join(process.cwd(), '.venv-agent-s/bin/python'),
   private_cloud_mode: process.env.PRIVATE_CLOUD_MODE === 'true',
   smtp: {
     host: process.env.SMTP_HOST,
@@ -90,7 +98,8 @@ const configObject = {
     environment: process.env.APPLE_ENVIRONMENT || 'sandbox',
   },
   pkl: {
-    configPath: process.env.PKL_CONFIG_PATH || path.join(process.cwd(), 'config.pkl'),
+    configPath:
+      process.env.PKL_CONFIG_PATH || path.join(process.cwd(), 'config.pkl'),
   },
   stirlingPdfUrl: process.env.STIRLING_PDF_URL || 'http://localhost:8082',
 };
@@ -100,17 +109,30 @@ export const loadEnterpriseSecrets = async () => {
     return; // Prevent network dependencies during unit tests
   }
   try {
-    const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
+    const { SecretManagerServiceClient } =
+      await import('@google-cloud/secret-manager');
     const client = new SecretManagerServiceClient();
     const project = configObject.gcp.project_id;
 
     const secretsMap = {
-      'DATABASE_LOCAL': (val) => { configObject.database_local = val; },
-      'REDIS_URL': (val) => { configObject.redis.url = val; },
-      'JWT_ACCESS_TOKEN': (val) => { configObject.jwt.access_token = val; },
-      'GOOGLE_CLIENT_SECRET': (val) => { configObject.google.clientSecret = val; },
-      'GITHUB_CLIENT_SECRET': (val) => { configObject.github.clientSecret = val; },
-      'GEMINI_API_KEY': (val) => { configObject.gemini_secret_key = val; }
+      DATABASE_LOCAL: val => {
+        configObject.database_local = val;
+      },
+      REDIS_URL: val => {
+        configObject.redis.url = val;
+      },
+      JWT_ACCESS_TOKEN: val => {
+        configObject.jwt.access_token = val;
+      },
+      GOOGLE_CLIENT_SECRET: val => {
+        configObject.google.clientSecret = val;
+      },
+      GITHUB_CLIENT_SECRET: val => {
+        configObject.github.clientSecret = val;
+      },
+      GEMINI_API_KEY: val => {
+        configObject.gemini_secret_key = val;
+      },
     };
 
     for (const [secretName, updater] of Object.entries(secretsMap)) {
@@ -132,4 +154,3 @@ export const loadEnterpriseSecrets = async () => {
 };
 
 export default configObject;
-
