@@ -526,7 +526,7 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockRef = { ref: 'refs/heads/new-feature', object: { sha: 'sha123' } };
     mockOctokit.rest.git.createRef.mockResolvedValue({ data: mockRef });
 
-    const result = await GithubService.createRef('owner', 'repo', 'refs/heads/new-feature', 'sha123');
+    const result = await GithubService.createRef('owner', 'repo', { ref: 'refs/heads/new-feature', sha: 'sha123' });
     expect(result).toEqual(mockRef);
     expect(mockOctokit.rest.git.createRef).toHaveBeenCalledWith({
       owner: 'owner',
@@ -540,7 +540,7 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockRef = { ref: 'refs/heads/main', object: { sha: 'sha456' } };
     mockOctokit.rest.git.updateRef.mockResolvedValue({ data: mockRef });
 
-    const result = await GithubService.updateRef('owner', 'repo', 'heads/main', 'sha456', true);
+    const result = await GithubService.updateRef('owner', 'repo', 'heads/main', { sha: 'sha456', force: true });
     expect(result).toEqual(mockRef);
     expect(mockOctokit.rest.git.updateRef).toHaveBeenCalledWith({
       owner: 'owner',
@@ -555,7 +555,7 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const mockBlob = { sha: 'blobsha123', url: 'http://...' };
     mockOctokit.rest.git.createBlob.mockResolvedValue({ data: mockBlob });
 
-    const result = await GithubService.createBlob('owner', 'repo', 'content', 'utf-8');
+    const result = await GithubService.createBlob('owner', 'repo', { content: 'content', encoding: 'utf-8' });
     expect(result).toEqual(mockBlob);
     expect(mockOctokit.rest.git.createBlob).toHaveBeenCalledWith({
       owner: 'owner',
