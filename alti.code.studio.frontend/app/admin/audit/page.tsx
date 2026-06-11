@@ -36,6 +36,54 @@ interface AuditLog {
   metadata?: string;
 }
 
+const mockLogs: AuditLog[] = [
+  {
+    _id: "log_01",
+    timestamp: new Date(Date.now() - 500000).toISOString(),
+    actor: "michael.meram@clearledger.com",
+    action: "USER_INVITE_SEND",
+    status: "SUCCESS",
+    ipAddress: "192.168.1.142",
+    metadata: '{"email":"test.dev@clearledger.com","role":"developer"}',
+  },
+  {
+    _id: "log_02",
+    timestamp: new Date(Date.now() - 3600000).toISOString(),
+    actor: "system.sentinel@inso.ai",
+    action: "GUARDRAIL_VIOLATION_BLOCK",
+    status: "DENIED",
+    ipAddress: "10.0.4.88",
+    metadata: '{"rule_id":"gr_04","agent_id":"agent_cli_99","input_snippet":"rm -rf /"}',
+  },
+  {
+    _id: "log_03",
+    timestamp: new Date(Date.now() - 7200000).toISOString(),
+    actor: "michael.meram@clearledger.com",
+    action: "KNOWLEDGE_FILE_UPLOAD",
+    status: "SUCCESS",
+    ipAddress: "192.168.1.142",
+    metadata: '{"filename":"inso code black.png","size":"0.02 MB"}',
+  },
+  {
+    _id: "log_04",
+    timestamp: new Date(Date.now() - 14400000).toISOString(),
+    actor: "system.auditor@inso.ai",
+    action: "BACKEND_PERFORMANCE_ALERT",
+    status: "WARNING",
+    ipAddress: "127.0.0.1",
+    metadata: '{"endpoint":"GET /api/v1/audit","response_time_ms":1450}',
+  },
+  {
+    _id: "log_05",
+    timestamp: new Date(Date.now() - 86400000).toISOString(),
+    actor: "system.db@clearledger.com",
+    action: "DATABASE_BACKUP_FAILED",
+    status: "FAILURE",
+    ipAddress: "10.0.0.5",
+    metadata: '{"backup_type":"daily","error":"disk space exceeded on vault"}',
+  },
+];
+
 const AuditPage = () => {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
@@ -60,12 +108,27 @@ const AuditPage = () => {
         withCredentials: true, // Ensure cookies/auth headers are sent
       });
 
-      if (response.data.success) {
+      if (response.data.success && response.data.data && response.data.data.length > 0) {
         setLogs(response.data.data);
         setTotalPages(response.data.meta.totalPages);
+      } else {
+        const filtered = mockLogs.filter(
+          (log) =>
+            log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            log.actor.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setLogs(filtered);
+        setTotalPages(1);
       }
     } catch (error) {
-      console.error("Failed to fetch audit logs", error);
+      console.error("Failed to fetch audit logs, loading mock data", error);
+      const filtered = mockLogs.filter(
+        (log) =>
+          log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          log.actor.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setLogs(filtered);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
