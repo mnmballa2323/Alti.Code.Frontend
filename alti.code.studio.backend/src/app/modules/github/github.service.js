@@ -4084,4 +4084,712 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 55. SCIM Organization Member Provisioning
+  // ==========================================
+  async listProvisionedIdentities(org) {
+    logger.info(`🐙 [GitHub Service] Listing SCIM provisioned identities for org ${org}`);
+    try {
+      const response = await octokit.request('GET /scim/v2/organizations/{org}/Users', {
+        org,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to list SCIM provisioned identities for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async provisionAndInviteUser(org, scimData) {
+    logger.info(`🐙 [GitHub Service] Provisioning SCIM user for org ${org}`);
+    try {
+      const response = await octokit.request('POST /scim/v2/organizations/{org}/Users', {
+        org,
+        data: scimData,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to provision SCIM user for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getProvisioningInformation(org, scimUserId) {
+    logger.info(`🐙 [GitHub Service] Fetching SCIM user ${scimUserId} for org ${org}`);
+    try {
+      const response = await octokit.request('GET /scim/v2/organizations/{org}/Users/{scim_user_id}', {
+        org,
+        scim_user_id: scimUserId,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to get SCIM provisioning info for user ${scimUserId} in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async replaceProvisionedUser(org, scimUserId, scimData) {
+    logger.info(`🐙 [GitHub Service] Replacing SCIM user ${scimUserId} for org ${org}`);
+    try {
+      const response = await octokit.request('PUT /scim/v2/organizations/{org}/Users/{scim_user_id}', {
+        org,
+        scim_user_id: scimUserId,
+        data: scimData,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to replace SCIM user ${scimUserId} in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async updateProvisionedUser(org, scimUserId, scimData) {
+    logger.info(`🐙 [GitHub Service] Updating SCIM user ${scimUserId} for org ${org}`);
+    try {
+      const response = await octokit.request('PATCH /scim/v2/organizations/{org}/Users/{scim_user_id}', {
+        org,
+        scim_user_id: scimUserId,
+        data: scimData,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to update SCIM user ${scimUserId} in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteUserFromOrg(org, scimUserId) {
+    logger.info(`🐙 [GitHub Service] Deleting SCIM user ${scimUserId} from org ${org}`);
+    try {
+      const response = await octokit.request('DELETE /scim/v2/organizations/{org}/Users/{scim_user_id}', {
+        org,
+        scim_user_id: scimUserId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete SCIM user ${scimUserId} from org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 56. Codespaces Secrets API
+  // ==========================================
+  async getCodespacesPublicKeyForAuthenticatedUser() {
+    logger.info('🐙 [GitHub Service] Fetching Codespaces public key for authenticated user');
+    try {
+      const { data } = await octokit.rest.codespaces.getPublicKeyForAuthenticatedUser();
+      return data;
+    } catch (error) {
+      logger.error('Failed to get Codespaces public key for user:', error);
+      throw error;
+    }
+  },
+
+  async listCodespacesSecretsForAuthenticatedUser() {
+    logger.info('🐙 [GitHub Service] Listing Codespaces secrets for authenticated user');
+    try {
+      const { data } = await octokit.rest.codespaces.listSecretsForAuthenticatedUser();
+      return data;
+    } catch (error) {
+      logger.error('Failed to list Codespaces secrets for user:', error);
+      throw error;
+    }
+  },
+
+  async getCodespacesSecretForAuthenticatedUser(secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Codespaces secret "${secretName}" for authenticated user`);
+    try {
+      const { data } = await octokit.rest.codespaces.getSecretForAuthenticatedUser({
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Codespaces secret "${secretName}" for user:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateCodespacesSecretForAuthenticatedUser(secretName, encryptedValue, keyId) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Codespaces secret "${secretName}" for authenticated user`);
+    try {
+      const response = await octokit.rest.codespaces.createOrUpdateSecretForAuthenticatedUser({
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create/update Codespaces secret "${secretName}" for user:`, error);
+      throw error;
+    }
+  },
+
+  async deleteCodespacesSecretForAuthenticatedUser(secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Codespaces secret "${secretName}" for authenticated user`);
+    try {
+      const response = await octokit.rest.codespaces.deleteSecretForAuthenticatedUser({
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Codespaces secret "${secretName}" for user:`, error);
+      throw error;
+    }
+  },
+
+  async getCodespacesPublicKeyForOrg(org) {
+    logger.info(`🐙 [GitHub Service] Fetching Codespaces public key for org ${org}`);
+    try {
+      const { data } = await octokit.rest.codespaces.getOrgPublicKey({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Codespaces public key for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listCodespacesSecretsForOrg(org) {
+    logger.info(`🐙 [GitHub Service] Listing Codespaces secrets for org ${org}`);
+    try {
+      const { data } = await octokit.rest.codespaces.listOrgSecrets({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Codespaces secrets for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getCodespacesSecretForOrg(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Codespaces secret "${secretName}" for org ${org}`);
+    try {
+      const { data } = await octokit.rest.codespaces.getOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Codespaces secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateCodespacesSecretForOrg(org, secretName, encryptedValue, keyId, selectedRepositoryIds = []) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Codespaces secret "${secretName}" for org ${org}`);
+    try {
+      const response = await octokit.rest.codespaces.createOrUpdateOrgSecret({
+        org,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+        visibility: selectedRepositoryIds.length > 0 ? 'selected' : 'all',
+        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create/update Codespaces secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteCodespacesSecretForOrg(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Codespaces secret "${secretName}" from org ${org}`);
+    try {
+      const response = await octokit.rest.codespaces.deleteOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Codespaces secret "${secretName}" from org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 57. Actions Organization Secrets & Variables
+  // ==========================================
+  async getActionsPublicKeyForOrg(org) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions public key for org ${org}`);
+    try {
+      const { data } = await octokit.rest.actions.getOrgPublicKey({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions public key for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listOrgSecrets(org) {
+    logger.info(`🐙 [GitHub Service] Listing Actions secrets for org ${org}`);
+    try {
+      const { data } = await octokit.rest.actions.listOrgSecrets({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Actions secrets for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgSecret(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions secret "${secretName}" for org ${org}`);
+    try {
+      const { data } = await octokit.rest.actions.getOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateOrgSecret(org, secretName, encryptedValue, keyId, selectedRepositoryIds = []) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Actions secret "${secretName}" for org ${org}`);
+    try {
+      const response = await octokit.rest.actions.createOrUpdateOrgSecret({
+        org,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+        visibility: selectedRepositoryIds.length > 0 ? 'selected' : 'all',
+        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create/update Actions secret "${secretName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteOrgSecret(org, secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Actions secret "${secretName}" from org ${org}`);
+    try {
+      const response = await octokit.rest.actions.deleteOrgSecret({
+        org,
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Actions secret "${secretName}" from org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listOrgVariables(org) {
+    logger.info(`🐙 [GitHub Service] Listing Actions variables for org ${org}`);
+    try {
+      const { data } = await octokit.rest.actions.listOrgVariables({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Actions variables for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgVariable(org, variableName) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions variable "${variableName}" for org ${org}`);
+    try {
+      const { data } = await octokit.rest.actions.getOrgVariable({
+        org,
+        variable_name: variableName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions variable "${variableName}" for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateOrgVariable(org, variableName, value, selectedRepositoryIds = []) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Actions variable "${variableName}" for org ${org}`);
+    try {
+      const response = await octokit.rest.actions.createOrgVariable({
+        org,
+        name: variableName,
+        value,
+        visibility: selectedRepositoryIds.length > 0 ? 'selected' : 'all',
+        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      // If variable exists, we might need to update it
+      try {
+        const updateResponse = await octokit.rest.actions.updateOrgVariable({
+          org,
+          variable_name: variableName,
+          name: variableName,
+          value,
+          visibility: selectedRepositoryIds.length > 0 ? 'selected' : 'all',
+          selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
+        });
+        return updateResponse.data || { success: true };
+      } catch (updateError) {
+        logger.error(`Failed to create/update Actions variable "${variableName}" for org ${org}:`, error);
+        throw updateError;
+      }
+    }
+  },
+
+  async deleteOrgVariable(org, variableName) {
+    logger.info(`🐙 [GitHub Service] Deleting Actions variable "${variableName}" from org ${org}`);
+    try {
+      const response = await octokit.rest.actions.deleteOrgVariable({
+        org,
+        variable_name: variableName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Actions variable "${variableName}" from org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 58. Actions Environment Secrets & Variables
+  // ==========================================
+  async getActionsPublicKeyForEnvironment(repositoryId, environmentName) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions public key for env ${environmentName} in repo ID ${repositoryId}`);
+    try {
+      const { data } = await octokit.rest.actions.getEnvironmentPublicKey({
+        repository_id: parseInt(repositoryId, 10),
+        environment_name: environmentName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions public key for env ${environmentName} in repo ID ${repositoryId}:`, error);
+      throw error;
+    }
+  },
+
+  async listEnvironmentSecrets(owner, repo, environmentName) {
+    logger.info(`🐙 [GitHub Service] Listing Actions secrets for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.listEnvironmentSecrets({
+        owner,
+        repo,
+        environment_name: environmentName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Actions secrets for env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnvironmentSecret(owner, repo, environmentName, secretName) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions secret "${secretName}" for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.getEnvironmentSecret({
+        owner,
+        repo,
+        environment_name: environmentName,
+        secret_name: secretName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions secret "${secretName}" for env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateEnvironmentSecret(owner, repo, environmentName, secretName, encryptedValue, keyId) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Actions secret "${secretName}" for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.actions.createOrUpdateEnvironmentSecret({
+        owner,
+        repo,
+        environment_name: environmentName,
+        secret_name: secretName,
+        encrypted_value: encryptedValue,
+        key_id: keyId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to create/update Actions secret "${secretName}" for env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteEnvironmentSecret(owner, repo, environmentName, secretName) {
+    logger.info(`🐙 [GitHub Service] Deleting Actions secret "${secretName}" from env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.actions.deleteEnvironmentSecret({
+        owner,
+        repo,
+        environment_name: environmentName,
+        secret_name: secretName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Actions secret "${secretName}" from env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listEnvironmentVariables(owner, repo, environmentName) {
+    logger.info(`🐙 [GitHub Service] Listing Actions variables for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.listEnvironmentVariables({
+        owner,
+        repo,
+        environment_name: environmentName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Actions variables for env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnvironmentVariable(owner, repo, environmentName, variableName) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions variable "${variableName}" for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.getEnvironmentVariable({
+        owner,
+        repo,
+        environment_name: environmentName,
+        variable_name: variableName,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions variable "${variableName}" for env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateEnvironmentVariable(owner, repo, environmentName, variableName, value) {
+    logger.info(`🐙 [GitHub Service] Creating/updating Actions variable "${variableName}" for env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.actions.createEnvironmentVariable({
+        owner,
+        repo,
+        environment_name: environmentName,
+        name: variableName,
+        value,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      try {
+        const updateResponse = await octokit.rest.actions.updateEnvironmentVariable({
+          owner,
+          repo,
+          environment_name: environmentName,
+          variable_name: variableName,
+          name: variableName,
+          value,
+        });
+        return updateResponse.data || { success: true };
+      } catch (updateError) {
+        logger.error(`Failed to create/update Actions variable "${variableName}" for env ${environmentName} in ${owner}/${repo}:`, error);
+        throw updateError;
+      }
+    }
+  },
+
+  async deleteEnvironmentVariable(owner, repo, environmentName, variableName) {
+    logger.info(`🐙 [GitHub Service] Deleting Actions variable "${variableName}" from env ${environmentName} in ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.actions.deleteEnvironmentVariable({
+        owner,
+        repo,
+        environment_name: environmentName,
+        variable_name: variableName,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete Actions variable "${variableName}" from env ${environmentName} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 59. Secret Scanning Org Alerts & Locations
+  // ==========================================
+  async listSecretScanningAlertsForOrg(org) {
+    logger.info(`🐙 [GitHub Service] Listing secret scanning alerts for org ${org}`);
+    try {
+      const { data } = await octokit.rest.secretScanning.listAlertsForOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list secret scanning alerts for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getSecretScanningAlertForOrg(org, alertNumber) {
+    logger.info(`🐙 [GitHub Service] Fetching secret scanning alert #${alertNumber} for org ${org}`);
+    try {
+      // Standard Octokit does not have a separate getAlertForOrg, we use standard endpoint via request or getAlert.
+      // GitHub REST API: GET /orgs/{org}/secret-scanning/alerts/{alert_number}
+      const response = await octokit.request('GET /orgs/{org}/secret-scanning/alerts/{alert_number}', {
+        org,
+        alert_number: parseInt(alertNumber, 10),
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to get secret scanning alert #${alertNumber} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async updateSecretScanningAlertForOrg(org, alertNumber, state, resolution = null) {
+    logger.info(`🐙 [GitHub Service] Updating secret scanning alert #${alertNumber} for org ${org}`);
+    try {
+      // GitHub REST API: PATCH /orgs/{org}/secret-scanning/alerts/{alert_number}
+      const response = await octokit.request('PATCH /orgs/{org}/secret-scanning/alerts/{alert_number}', {
+        org,
+        alert_number: parseInt(alertNumber, 10),
+        state,
+        resolution,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to update secret scanning alert #${alertNumber} for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async listSecretScanningLocations(owner, repo, alertNumber) {
+    logger.info(`🐙 [GitHub Service] Listing locations for secret scanning alert #${alertNumber} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.secretScanning.listLocationsForAlert({
+        owner,
+        repo,
+        alert_number: parseInt(alertNumber, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list locations for secret scanning alert #${alertNumber} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 60. Enterprise Admin Policies, Runners & Billing
+  // ==========================================
+  async getEnterpriseActionsPermissions(enterprise) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions permissions for enterprise ${enterprise}`);
+    try {
+      const { data } = await octokit.rest.enterpriseAdmin.getActionsPermissionsEnterprise({
+        enterprise,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Actions permissions for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async setEnterpriseActionsPermissions(enterprise, permissionsData) {
+    logger.info(`🐙 [GitHub Service] Setting Actions permissions for enterprise ${enterprise}`);
+    try {
+      const response = await octokit.rest.enterpriseAdmin.setActionsPermissionsEnterprise({
+        enterprise,
+        ...permissionsData,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to set Actions permissions for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async listSelfHostedRunnersForEnterprise(enterprise) {
+    logger.info(`🐙 [GitHub Service] Listing self-hosted runners for enterprise ${enterprise}`);
+    try {
+      const { data } = await octokit.rest.enterpriseAdmin.listSelfHostedRunnersForEnterprise({
+        enterprise,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list self-hosted runners for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async getSelfHostedRunnerForEnterprise(enterprise, runnerId) {
+    logger.info(`🐙 [GitHub Service] Fetching self-hosted runner ${runnerId} for enterprise ${enterprise}`);
+    try {
+      const { data } = await octokit.rest.enterpriseAdmin.getSelfHostedRunnerForEnterprise({
+        enterprise,
+        runner_id: parseInt(runnerId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get self-hosted runner ${runnerId} for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteSelfHostedRunnerFromEnterprise(enterprise, runnerId) {
+    logger.info(`🐙 [GitHub Service] Deleting self-hosted runner ${runnerId} from enterprise ${enterprise}`);
+    try {
+      const response = await octokit.rest.enterpriseAdmin.deleteSelfHostedRunnerFromEnterprise({
+        enterprise,
+        runner_id: parseInt(runnerId, 10),
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete self-hosted runner ${runnerId} from enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnterpriseActionsBilling(enterprise) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions billing for enterprise ${enterprise}`);
+    try {
+      // Enterprise billing is fetched via request or enterpriseAdmin billing endpoints.
+      // GET /enterprises/{enterprise}/settings/billing/actions
+      const response = await octokit.request('GET /enterprises/{enterprise}/settings/billing/actions', {
+        enterprise,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to get Actions billing for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnterprisePackagesBilling(enterprise) {
+    logger.info(`🐙 [GitHub Service] Fetching Packages billing for enterprise ${enterprise}`);
+    try {
+      // GET /enterprises/{enterprise}/settings/billing/packages
+      const response = await octokit.request('GET /enterprises/{enterprise}/settings/billing/packages', {
+        enterprise,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to get Packages billing for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnterpriseSharedStorageBilling(enterprise) {
+    logger.info(`🐙 [GitHub Service] Fetching Shared Storage billing for enterprise ${enterprise}`);
+    try {
+      // GET /enterprises/{enterprise}/settings/billing/shared-storage
+      const response = await octokit.request('GET /enterprises/{enterprise}/settings/billing/shared-storage', {
+        enterprise,
+      });
+      return response.data;
+    } catch (error) {
+      logger.error(`Failed to get Shared Storage billing for enterprise ${enterprise}:`, error);
+      throw error;
+    }
+  },
 };

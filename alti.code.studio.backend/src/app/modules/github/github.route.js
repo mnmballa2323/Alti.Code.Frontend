@@ -735,5 +735,75 @@ router.delete(
   GithubController.deleteTeamDiscussionComment,
 );
 
+// ==========================================
+// 55. SCIM Organization Member Provisioning API
+// ==========================================
+router.get('/orgs/:org/scim/users', GithubController.listProvisionedIdentities);
+router.post('/orgs/:org/scim/users', GithubController.provisionAndInviteUser);
+router.get('/orgs/:org/scim/users/:scimUserId', GithubController.getProvisioningInformation);
+router.put('/orgs/:org/scim/users/:scimUserId', GithubController.replaceProvisionedUser);
+router.patch('/orgs/:org/scim/users/:scimUserId', GithubController.updateProvisionedUser);
+router.delete('/orgs/:org/scim/users/:scimUserId', GithubController.deleteUserFromOrg);
+
+// ==========================================
+// 56. Codespaces Secrets API
+// ==========================================
+router.get('/user/codespaces/secrets/public-key', GithubController.getCodespacesPublicKeyForAuthenticatedUser);
+router.get('/user/codespaces/secrets', GithubController.listCodespacesSecretsForAuthenticatedUser);
+router.get('/user/codespaces/secrets/:secretName', GithubController.getCodespacesSecretForAuthenticatedUser);
+router.put('/user/codespaces/secrets/:secretName', GithubController.createOrUpdateCodespacesSecretForAuthenticatedUser);
+router.delete('/user/codespaces/secrets/:secretName', GithubController.deleteCodespacesSecretForAuthenticatedUser);
+router.get('/orgs/:org/codespaces/secrets/public-key', GithubController.getCodespacesPublicKeyForOrg);
+router.get('/orgs/:org/codespaces/secrets', GithubController.listCodespacesSecretsForOrg);
+router.get('/orgs/:org/codespaces/secrets/:secretName', GithubController.getCodespacesSecretForOrg);
+router.put('/orgs/:org/codespaces/secrets/:secretName', GithubController.createOrUpdateCodespacesSecretForOrg);
+router.delete('/orgs/:org/codespaces/secrets/:secretName', GithubController.deleteCodespacesSecretForOrg);
+
+// ==========================================
+// 57. Actions Organization Secrets & Variables API
+// ==========================================
+router.get('/orgs/:org/actions/secrets/public-key', GithubController.getActionsPublicKeyForOrg);
+router.get('/orgs/:org/actions/secrets', GithubController.listOrgSecrets);
+router.get('/orgs/:org/actions/secrets/:secretName', GithubController.getOrgSecret);
+router.put('/orgs/:org/actions/secrets/:secretName', GithubController.createOrUpdateOrgSecret);
+router.delete('/orgs/:org/actions/secrets/:secretName', GithubController.deleteOrgSecret);
+router.get('/orgs/:org/actions/variables', GithubController.listOrgVariables);
+router.get('/orgs/:org/actions/variables/:variableName', GithubController.getOrgVariable);
+router.put('/orgs/:org/actions/variables/:variableName', GithubController.createOrUpdateOrgVariable);
+router.delete('/orgs/:org/actions/variables/:variableName', GithubController.deleteOrgVariable);
+
+// ==========================================
+// 58. Actions Environment Secrets & Variables API
+// ==========================================
+router.get('/repos/environments/:repositoryId/:environmentName/public-key', GithubController.getActionsPublicKeyForEnvironment);
+router.get('/repos/:owner/:repo/environments/:environmentName/secrets', GithubController.listEnvironmentSecrets);
+router.get('/repos/:owner/:repo/environments/:environmentName/secrets/:secretName', GithubController.getEnvironmentSecret);
+router.put('/repos/:owner/:repo/environments/:environmentName/secrets/:secretName', GithubController.createOrUpdateEnvironmentSecret);
+router.delete('/repos/:owner/:repo/environments/:environmentName/secrets/:secretName', GithubController.deleteEnvironmentSecret);
+router.get('/repos/:owner/:repo/environments/:environmentName/variables', GithubController.listEnvironmentVariables);
+router.get('/repos/:owner/:repo/environments/:environmentName/variables/:variableName', GithubController.getEnvironmentVariable);
+router.put('/repos/:owner/:repo/environments/:environmentName/variables/:variableName', GithubController.createOrUpdateEnvironmentVariable);
+router.delete('/repos/:owner/:repo/environments/:environmentName/variables/:variableName', GithubController.deleteEnvironmentVariable);
+
+// ==========================================
+// 59. Secret Scanning Org-Level & Locations API
+// ==========================================
+router.get('/orgs/:org/secret-scanning/alerts', GithubController.listSecretScanningAlertsForOrg);
+router.get('/orgs/:org/secret-scanning/alerts/:alertNumber', GithubController.getSecretScanningAlertForOrg);
+router.patch('/orgs/:org/secret-scanning/alerts/:alertNumber', GithubController.updateSecretScanningAlertForOrg);
+router.get('/repos/:owner/:repo/secret-scanning/alerts/:alertNumber/locations', GithubController.listSecretScanningLocations);
+
+// ==========================================
+// 60. Enterprise Admin Action Policies, Runners & Billing API
+// ==========================================
+router.get('/enterprises/:enterprise/actions/permissions', GithubController.getEnterpriseActionsPermissions);
+router.put('/enterprises/:enterprise/actions/permissions', GithubController.setEnterpriseActionsPermissions);
+router.get('/enterprises/:enterprise/runners', GithubController.listSelfHostedRunnersForEnterprise);
+router.get('/enterprises/:enterprise/runners/:runnerId', GithubController.getSelfHostedRunnerForEnterprise);
+router.delete('/enterprises/:enterprise/runners/:runnerId', GithubController.deleteSelfHostedRunnerFromEnterprise);
+router.get('/enterprises/:enterprise/billing/actions', GithubController.getEnterpriseActionsBilling);
+router.get('/enterprises/:enterprise/billing/packages', GithubController.getEnterprisePackagesBilling);
+router.get('/enterprises/:enterprise/billing/shared-storage', GithubController.getEnterpriseSharedStorageBilling);
+
 export const GithubRoutes = router;
 export default router;
