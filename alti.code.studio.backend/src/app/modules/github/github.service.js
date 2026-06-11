@@ -5045,6 +5045,50 @@ export const GithubService = {
     }
   },
 
+  async getEnterpriseActionsBilling(enterprise) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching Actions billing for enterprise ${enterprise}`,
+    );
+    try {
+      // GET /enterprises/{enterprise}/settings/billing/actions
+      const response = await octokit.request(
+        'GET /enterprises/{enterprise}/settings/billing/actions',
+        {
+          enterprise,
+        },
+      );
+      return response.data;
+    } catch (error) {
+      logger.error(
+        `Failed to get Actions billing for enterprise ${enterprise}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getEnterprisePackagesBilling(enterprise) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching Packages billing for enterprise ${enterprise}`,
+    );
+    try {
+      // GET /enterprises/{enterprise}/settings/billing/packages
+      const response = await octokit.request(
+        'GET /enterprises/{enterprise}/settings/billing/packages',
+        {
+          enterprise,
+        },
+      );
+      return response.data;
+    } catch (error) {
+      logger.error(
+        `Failed to get Packages billing for enterprise ${enterprise}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
   // ==========================================
   // 61. Advanced Security Scanning
   // ==========================================
