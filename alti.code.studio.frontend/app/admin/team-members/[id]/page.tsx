@@ -4,12 +4,9 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   Loader2,
-  DollarSign,
   Activity,
   Cpu,
-  Database,
   TrendingUp,
-  CheckCircle2,
   AlertCircle
 } from "lucide-react";
 
@@ -258,55 +255,19 @@ export default function MemberDetailsPage() {
 
       {/* Main Content Area */}
       <div className="w-full space-y-6">
-        {/* Metrics Overview Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {/* Tokens card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Total Tokens</span>
-              <Cpu className="w-4 h-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                {details.tokensTotal}
-              </span>
-              <span className="text-xs text-neutral-455 dark:text-neutral-550 mt-1 leading-relaxed">
-                {details.tokensIn} in / {details.tokensOut} out
-              </span>
-            </div>
+        {/* Metrics Overview: Tokens Only */}
+        <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider">Total Tokens</span>
+            <Cpu className="w-4 h-4" />
           </div>
-
-          {/* Spend card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Spend Allocation</span>
-              <DollarSign className="w-4 h-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                ${details.spendCurrent.toFixed(2)}
-              </span>
-              <span className="text-xs text-neutral-455 dark:text-neutral-550 mt-1">
-                Budget limit: ${details.spendLimit.toFixed(2)}
-              </span>
-            </div>
-          </div>
-
-          {/* Executions card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
-            <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider">Task Operations</span>
-              <Database className="w-4 h-4" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-                {details.tasksCount}
-              </span>
-              <span className="text-xs text-emerald-600 dark:text-emerald-450 font-semibold mt-1 flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                {details.tasksSuccess} Success Rate
-              </span>
-            </div>
+          <div className="flex flex-col">
+            <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+              {details.tokensTotal}
+            </span>
+            <span className="text-xs text-neutral-455 dark:text-neutral-550 mt-1 leading-relaxed">
+              {details.tokensIn} in / {details.tokensOut} out
+            </span>
           </div>
         </div>
 

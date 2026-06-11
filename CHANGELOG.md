@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.175] - 2026-06-11 — Token Analytics Filter
+### Changed
+- **Metrics Grid**:
+  - Removed spend allocation and task operations cards from the member details view to show only token use statistics and audit logs as requested.
+
 ## [39.37.174] - 2026-06-11 — Removed Detail Description
 ### Changed
 - **Page Header**:
