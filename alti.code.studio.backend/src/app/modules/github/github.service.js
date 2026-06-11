@@ -359,5 +359,290 @@ export const GithubService = {
             logger.error(`Failed to create project in ${owner}/${repo}:`, error);
             throw error;
         }
+    },
+
+    // ==========================================
+    // 8. GraphQL API
+    // ==========================================
+    async graphql(query, variables = {}) {
+        logger.info('🐙 [GitHub Service] Executing GraphQL query');
+        try {
+            const data = await octokit.graphql(query, variables);
+            return data;
+        } catch (error) {
+            logger.error('Failed to execute GraphQL query:', error);
+            throw error;
+        }
+    },
+
+    // ==========================================
+    // 9. Search API
+    // ==========================================
+    async searchRepositories(q, params = {}) {
+        logger.info('🐙 [GitHub Service] Searching repositories:', q);
+        try {
+            const { data } = await octokit.rest.search.repos({
+                q,
+                sort: params.sort,
+                order: params.order,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error('Failed to search repositories:', error);
+            throw error;
+        }
+    },
+
+    async searchCode(q, params = {}) {
+        logger.info('🐙 [GitHub Service] Searching code:', q);
+        try {
+            const { data } = await octokit.rest.search.code({
+                q,
+                sort: params.sort,
+                order: params.order,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error('Failed to search code:', error);
+            throw error;
+        }
+    },
+
+    async searchIssues(q, params = {}) {
+        logger.info('🐙 [GitHub Service] Searching issues:', q);
+        try {
+            const { data } = await octokit.rest.search.issuesAndPullRequests({
+                q,
+                sort: params.sort,
+                order: params.order,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error('Failed to search issues:', error);
+            throw error;
+        }
+    },
+
+    async searchUsers(q, params = {}) {
+        logger.info('🐙 [GitHub Service] Searching users:', q);
+        try {
+            const { data } = await octokit.rest.search.users({
+                q,
+                sort: params.sort,
+                order: params.order,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error('Failed to search users:', error);
+            throw error;
+        }
+    },
+
+    // ==========================================
+    // 10. Git Data / Contents API
+    // ==========================================
+    async getFileContent(owner, repo, path, ref) {
+        logger.info(`🐙 [GitHub Service] Fetching file content: ${owner}/${repo}/${path} (ref: ${ref})`);
+        try {
+            const { data } = await octokit.rest.repos.getContent({
+                owner,
+                repo,
+                path,
+                ref
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to fetch file content for ${owner}/${repo}/${path}:`, error);
+            throw error;
+        }
+    },
+
+    async createOrUpdateFile(owner, repo, path, fileData) {
+        logger.info(`🐙 [GitHub Service] Committing file: ${owner}/${repo}/${path}`);
+        try {
+            const { data } = await octokit.rest.repos.createOrUpdateFileContents({
+                owner,
+                repo,
+                path,
+                message: fileData.message,
+                content: fileData.content,
+                sha: fileData.sha,
+                branch: fileData.branch,
+                committer: fileData.committer,
+                author: fileData.author
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to commit file to ${owner}/${repo}/${path}:`, error);
+            throw error;
+        }
+    },
+
+    async deleteFile(owner, repo, path, fileData) {
+        logger.info(`🐙 [GitHub Service] Deleting file: ${owner}/${repo}/${path}`);
+        try {
+            const { data } = await octokit.rest.repos.deleteFile({
+                owner,
+                repo,
+                path,
+                message: fileData.message,
+                sha: fileData.sha,
+                branch: fileData.branch,
+                committer: fileData.committer,
+                author: fileData.author
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to delete file from ${owner}/${repo}/${path}:`, error);
+            throw error;
+        }
+    },
+
+    async listCommits(owner, repo, params = {}) {
+        logger.info(`🐙 [GitHub Service] Listing commits for ${owner}/${repo}`, params);
+        try {
+            const { data } = await octokit.rest.repos.listCommits({
+                owner,
+                repo,
+                sha: params.sha,
+                path: params.path,
+                author: params.author,
+                since: params.since,
+                until: params.until,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to list commits for ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    async compareCommits(owner, repo, base, head) {
+        logger.info(`🐙 [GitHub Service] Comparing ${base}...${head} in ${owner}/${repo}`);
+        try {
+            const { data } = await octokit.rest.repos.compareCommits({
+                owner,
+                repo,
+                base,
+                head
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to compare commits in ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    // ==========================================
+    // 11. Releases API
+    // ==========================================
+    async listReleases(owner, repo, params = {}) {
+        logger.info(`🐙 [GitHub Service] Listing releases for ${owner}/${repo}`);
+        try {
+            const { data } = await octokit.rest.repos.listReleases({
+                owner,
+                repo,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to list releases for ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    async createRelease(owner, repo, releaseData) {
+        logger.info(`🐙 [GitHub Service] Creating release in ${owner}/${repo}:`, releaseData.tag_name);
+        try {
+            const { data } = await octokit.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: releaseData.tag_name,
+                target_commitish: releaseData.target_commitish,
+                name: releaseData.name,
+                body: releaseData.body,
+                draft: releaseData.draft,
+                prerelease: releaseData.prerelease,
+                discussion_category_name: releaseData.discussion_category_name,
+                generate_release_notes: releaseData.generate_release_notes
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to create release in ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    async getLatestRelease(owner, repo) {
+        logger.info(`🐙 [GitHub Service] Fetching latest release for ${owner}/${repo}`);
+        try {
+            const { data } = await octokit.rest.repos.getLatestRelease({ owner, repo });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to get latest release for ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    // ==========================================
+    // 12. Collaborators API
+    // ==========================================
+    async listCollaborators(owner, repo, params = {}) {
+        logger.info(`🐙 [GitHub Service] Listing collaborators for ${owner}/${repo}`);
+        try {
+            const { data } = await octokit.rest.repos.listCollaborators({
+                owner,
+                repo,
+                affiliation: params.affiliation,
+                per_page: params.per_page || 30,
+                page: params.page || 1
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to list collaborators for ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    async addCollaborator(owner, repo, username, permission = 'push') {
+        logger.info(`🐙 [GitHub Service] Adding collaborator ${username} to ${owner}/${repo} (permission: ${permission})`);
+        try {
+            const { data } = await octokit.rest.repos.addCollaborator({
+                owner,
+                repo,
+                username,
+                permission
+            });
+            return data;
+        } catch (error) {
+            logger.error(`Failed to add collaborator ${username} to ${owner}/${repo}:`, error);
+            throw error;
+        }
+    },
+
+    async removeCollaborator(owner, repo, username) {
+        logger.info(`🐙 [GitHub Service] Removing collaborator ${username} from ${owner}/${repo}`);
+        try {
+            const response = await octokit.rest.repos.removeCollaborator({
+                owner,
+                repo,
+                username
+            });
+            return response.status === 204;
+        } catch (error) {
+            logger.error(`Failed to remove collaborator ${username} from ${owner}/${repo}:`, error);
+            throw error;
+        }
     }
 };

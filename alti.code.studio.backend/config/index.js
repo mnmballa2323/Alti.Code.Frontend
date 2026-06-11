@@ -42,6 +42,7 @@ const configObject = {
     callbackUrl: process.env.GITHUB_CALLBACK_URL || 'http://localhost:5000/api/v1/auth/github/callback',
     webhook_secret: process.env.GITHUB_WEBHOOK_SECRET,
   },
+  github_token: process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
 
   mailgun: {
     mailgun_domain: process.env.MAILGUN_DOMAIN,

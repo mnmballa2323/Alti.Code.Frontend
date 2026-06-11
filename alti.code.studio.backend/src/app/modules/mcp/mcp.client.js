@@ -8,6 +8,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { logger } from '../../../shared/logger.js';
+import config from '../../../../config/index.js';
 
 /** Preset MCP server configurations loaded from env or defaults. */
 export const PRESETS = [
@@ -181,7 +182,17 @@ class McpClientService {
                     logger.info(`🔌 MCP: Preset [${preset.name}] skipped — set ${preset.envKey}=true to enable.`);
                     return { name: preset.name, status: 'DISABLED', hint: `Set ${preset.envKey}=true` };
                 }
-                await this.connect(preset.name, preset.command, preset.args);
+                let env = {};
+                if (preset.name === 'github') {
+                    const token = process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN || config.github_token;
+                    if (token) {
+                        env = {
+                            GITHUB_PERSONAL_ACCESS_TOKEN: token,
+                            GITHUB_TOKEN: token
+                        };
+                    }
+                }
+                await this.connect(preset.name, preset.command, preset.args, env);
                 return { name: preset.name, status: 'CONNECTED' };
             })
         );

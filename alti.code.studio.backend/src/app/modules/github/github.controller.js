@@ -261,6 +261,202 @@ export const createProject = async (req, res) => {
     }
 };
 
+// ==========================================
+// 8. GraphQL API
+// ==========================================
+export const graphql = async (req, res) => {
+    try {
+        const { query, variables } = req.body;
+        const result = await GithubService.graphql(query, variables);
+        res.status(httpStatus.OK).json({ success: true, data: result });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error executing GraphQL query:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+// ==========================================
+// 9. Search API
+// ==========================================
+export const searchRepositories = async (req, res) => {
+    try {
+        const { q } = req.query;
+        const repos = await GithubService.searchRepositories(q, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: repos });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error searching repos:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const searchCode = async (req, res) => {
+    try {
+        const { q } = req.query;
+        const code = await GithubService.searchCode(q, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: code });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error searching code:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const searchIssues = async (req, res) => {
+    try {
+        const { q } = req.query;
+        const issues = await GithubService.searchIssues(q, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: issues });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error searching issues:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const searchUsers = async (req, res) => {
+    try {
+        const { q } = req.query;
+        const users = await GithubService.searchUsers(q, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: users });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error searching users:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+// ==========================================
+// 10. Git Data / Contents API
+// ==========================================
+export const getFileContent = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const filePath = req.params[0]; // Captured wildcard path
+        const { ref } = req.query;
+        const content = await GithubService.getFileContent(owner, repo, filePath, ref);
+        res.status(httpStatus.OK).json({ success: true, data: content });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error getting file content:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const createOrUpdateFile = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const filePath = req.params[0];
+        const fileContent = await GithubService.createOrUpdateFile(owner, repo, filePath, req.body);
+        res.status(httpStatus.OK).json({ success: true, data: fileContent });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error committing file:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const deleteFile = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const filePath = req.params[0];
+        const result = await GithubService.deleteFile(owner, repo, filePath, req.body);
+        res.status(httpStatus.OK).json({ success: true, data: result });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error deleting file:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const listCommits = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const commits = await GithubService.listCommits(owner, repo, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: commits });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error listing commits:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const compareCommits = async (req, res) => {
+    try {
+        const { owner, repo, base, head } = req.params;
+        const comparison = await GithubService.compareCommits(owner, repo, base, head);
+        res.status(httpStatus.OK).json({ success: true, data: comparison });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error comparing commits:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+// ==========================================
+// 11. Releases API
+// ==========================================
+export const listReleases = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const releases = await GithubService.listReleases(owner, repo, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: releases });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error listing releases:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const createRelease = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const release = await GithubService.createRelease(owner, repo, req.body);
+        res.status(httpStatus.CREATED).json({ success: true, data: release });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error creating release:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const getLatestRelease = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const release = await GithubService.getLatestRelease(owner, repo);
+        res.status(httpStatus.OK).json({ success: true, data: release });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error getting latest release:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+// ==========================================
+// 12. Collaborators API
+// ==========================================
+export const listCollaborators = async (req, res) => {
+    try {
+        const { owner, repo } = req.params;
+        const collaborators = await GithubService.listCollaborators(owner, repo, req.query);
+        res.status(httpStatus.OK).json({ success: true, data: collaborators });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error listing collaborators:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const addCollaborator = async (req, res) => {
+    try {
+        const { owner, repo, username } = req.params;
+        const { permission } = req.body;
+        const result = await GithubService.addCollaborator(owner, repo, username, permission);
+        res.status(httpStatus.OK).json({ success: true, data: result });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error adding collaborator:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
+export const removeCollaborator = async (req, res) => {
+    try {
+        const { owner, repo, username } = req.params;
+        const result = await GithubService.removeCollaborator(owner, repo, username);
+        res.status(httpStatus.OK).json({ success: true, data: result });
+    } catch (error) {
+        logger.error('[GitHub Controller] Error removing collaborator:', error);
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    }
+};
+
 export const GithubController = {
     getAuthenticatedUser,
     listRepositories,
@@ -283,5 +479,21 @@ export const GithubController = {
     createGist,
     deleteGist,
     listProjects,
-    createProject
+    createProject,
+    graphql,
+    searchRepositories,
+    searchCode,
+    searchIssues,
+    searchUsers,
+    getFileContent,
+    createOrUpdateFile,
+    deleteFile,
+    listCommits,
+    compareCommits,
+    listReleases,
+    createRelease,
+    getLatestRelease,
+    listCollaborators,
+    addCollaborator,
+    removeCollaborator
 };

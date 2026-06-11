@@ -87,5 +87,31 @@ router.delete('/gists/:gistId', GithubController.deleteGist);
 router.get('/projects/:owner/:repo', GithubController.listProjects);
 router.post('/projects/:owner/:repo', GithubController.createProject);
 
+// 8. GraphQL API
+router.post('/graphql', GithubController.graphql);
+
+// 9. Search API
+router.get('/search/repos', GithubController.searchRepositories);
+router.get('/search/code', GithubController.searchCode);
+router.get('/search/issues', GithubController.searchIssues);
+router.get('/search/users', GithubController.searchUsers);
+
+// 10. Git Data / Contents API
+router.get('/repos/:owner/:repo/contents/*', GithubController.getFileContent);
+router.put('/repos/:owner/:repo/contents/*', GithubController.createOrUpdateFile);
+router.delete('/repos/:owner/:repo/contents/*', GithubController.deleteFile);
+router.get('/repos/:owner/:repo/commits', GithubController.listCommits);
+router.get('/repos/:owner/:repo/compare/:base...:head', GithubController.compareCommits);
+
+// 11. Releases API
+router.get('/repos/:owner/:repo/releases', GithubController.listReleases);
+router.post('/repos/:owner/:repo/releases', GithubController.createRelease);
+router.get('/repos/:owner/:repo/releases/latest', GithubController.getLatestRelease);
+
+// 12. Collaborators API
+router.get('/repos/:owner/:repo/collaborators', GithubController.listCollaborators);
+router.put('/repos/:owner/:repo/collaborators/:username', GithubController.addCollaborator);
+router.delete('/repos/:owner/:repo/collaborators/:username', GithubController.removeCollaborator);
+
 export const GithubRoutes = router;
 export default router;
