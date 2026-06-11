@@ -2018,6 +2018,694 @@ export const listOrgCampaigns = async (req, res) => {
   }
 };
 
+// ==========================================
+// 42. Custom Properties API Handlers
+// ==========================================
+export const createOrUpdateCustomProperty = async (req, res) => {
+  try {
+    const { org, propertyName } = req.params;
+    const result = await GithubService.createOrUpdateCustomProperty(
+      org,
+      propertyName,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating/updating custom property ${propertyName} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCustomProperty = async (req, res) => {
+  try {
+    const { org, propertyName } = req.params;
+    const result = await GithubService.getCustomProperty(org, propertyName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting custom property ${propertyName} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeCustomProperty = async (req, res) => {
+  try {
+    const { org, propertyName } = req.params;
+    const result = await GithubService.removeCustomProperty(org, propertyName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing custom property ${propertyName} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listCustomProperties = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listCustomProperties(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing custom properties for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrUpdateRepoCustomPropertiesValues = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { properties } = req.body;
+    const result = await GithubService.createOrUpdateRepoCustomPropertiesValues(
+      owner,
+      repo,
+      properties,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting custom properties values for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRepoCustomPropertiesValues = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoCustomPropertiesValues(
+      owner,
+      repo,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting custom properties values for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 43. Rulesets API Handlers
+// ==========================================
+export const getRepoRulesets = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoRulesets(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing rulesets for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRepoRuleset = async (req, res) => {
+  try {
+    const { owner, repo, rulesetId } = req.params;
+    const result = await GithubService.getRepoRuleset(
+      owner,
+      repo,
+      parseInt(rulesetId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting ruleset #${rulesetId} for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createRepoRuleset = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createRepoRuleset(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating ruleset for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateRepoRuleset = async (req, res) => {
+  try {
+    const { owner, repo, rulesetId } = req.params;
+    const result = await GithubService.updateRepoRuleset(
+      owner,
+      repo,
+      parseInt(rulesetId, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating ruleset #${rulesetId} for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteRepoRuleset = async (req, res) => {
+  try {
+    const { owner, repo, rulesetId } = req.params;
+    const result = await GithubService.deleteRepoRuleset(
+      owner,
+      repo,
+      parseInt(rulesetId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting ruleset #${rulesetId} for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgRulesets = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOrgRulesets(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing rulesets for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgRuleset = async (req, res) => {
+  try {
+    const { org, rulesetId } = req.params;
+    const result = await GithubService.getOrgRuleset(
+      org,
+      parseInt(rulesetId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting ruleset #${rulesetId} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrgRuleset = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.createOrgRuleset(org, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating ruleset for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateOrgRuleset = async (req, res) => {
+  try {
+    const { org, rulesetId } = req.params;
+    const result = await GithubService.updateOrgRuleset(
+      org,
+      parseInt(rulesetId, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating ruleset #${rulesetId} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteOrgRuleset = async (req, res) => {
+  try {
+    const { org, rulesetId } = req.params;
+    const result = await GithubService.deleteOrgRuleset(
+      org,
+      parseInt(rulesetId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting ruleset #${rulesetId} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 44. Copilot Org Seat Management Handlers
+// ==========================================
+export const listCopilotSeatsForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listCopilotSeatsForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing Copilot seats for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addCopilotSeatsToOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { usernames } = req.body;
+    const result = await GithubService.addCopilotSeatsToOrg(org, usernames);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding Copilot seats for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeCopilotSeatsFromOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { usernames } = req.body;
+    const result = await GithubService.removeCopilotSeatsFromOrg(org, usernames);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing Copilot seats for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCopilotSeatDetailsForUser = async (req, res) => {
+  try {
+    const { org, username } = req.params;
+    const result = await GithubService.getCopilotSeatDetailsForUser(
+      org,
+      username,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting Copilot seat details for ${username} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 45. Pull Request Reviews API Handlers
+// ==========================================
+export const listPullRequestReviews = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.listPullRequestReviews(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing reviews for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPullRequestReview = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber, reviewId } = req.params;
+    const result = await GithubService.getPullRequestReview(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      parseInt(reviewId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting review #${reviewId} for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPullRequestReview = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber } = req.params;
+    const result = await GithubService.createPullRequestReview(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating review for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const submitPullRequestReview = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber, reviewId } = req.params;
+    const result = await GithubService.submitPullRequestReview(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      parseInt(reviewId, 10),
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error submitting review #${reviewId} for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const dismissPullRequestReview = async (req, res) => {
+  try {
+    const { owner, repo, pullNumber, reviewId } = req.params;
+    const { message } = req.body;
+    const result = await GithubService.dismissPullRequestReview(
+      owner,
+      repo,
+      parseInt(pullNumber, 10),
+      parseInt(reviewId, 10),
+      message,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error dismissing review #${reviewId} for PR #${pullNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 46. Issue Comments API Handlers
+// ==========================================
+export const listIssueComments = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const result = await GithubService.listIssueComments(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing comments for issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssueComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.getIssueComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createIssueComment = async (req, res) => {
+  try {
+    const { owner, repo, issueNumber } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.createIssueComment(
+      owner,
+      repo,
+      parseInt(issueNumber, 10),
+      body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating comment on issue #${issueNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateIssueComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.updateIssueComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteIssueComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.deleteIssueComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting comment #${commentId} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 47. User Keys & Emails API Handlers
+// ==========================================
+export const listEmailsForAuthenticatedUser = async (req, res) => {
+  try {
+    const result = await GithubService.listEmailsForAuthenticatedUser();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error listing emails for authenticated user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addEmailsForAuthenticatedUser = async (req, res) => {
+  try {
+    const { emails } = req.body;
+    const result = await GithubService.addEmailsForAuthenticatedUser(emails);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error adding emails for authenticated user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteEmailsForAuthenticatedUser = async (req, res) => {
+  try {
+    const { emails } = req.body;
+    const result = await GithubService.deleteEmailsForAuthenticatedUser(emails);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error deleting emails for authenticated user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPublicKeysForAuthenticatedUser = async (req, res) => {
+  try {
+    const result = await GithubService.listPublicKeysForAuthenticatedUser();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error listing public keys for authenticated user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addPublicKeyForAuthenticatedUser = async (req, res) => {
+  try {
+    const { title, key } = req.body;
+    const result = await GithubService.addPublicKeyForAuthenticatedUser(
+      title,
+      key,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error adding public key for authenticated user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePublicKeyForAuthenticatedUser = async (req, res) => {
+  try {
+    const { keyId } = req.params;
+    const result = await GithubService.deletePublicKeyForAuthenticatedUser(
+      parseInt(keyId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting public key #${keyId} for authenticated user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getAuthenticatedUser,
   listRepositories,
@@ -2142,4 +2830,40 @@ export const GithubController = {
   listNetworkConfigurationsForOrg,
   getNetworkSettingsForOrg,
   listOrgCampaigns,
+  createOrUpdateCustomProperty,
+  getCustomProperty,
+  removeCustomProperty,
+  listCustomProperties,
+  createOrUpdateRepoCustomPropertiesValues,
+  getRepoCustomPropertiesValues,
+  getRepoRulesets,
+  getRepoRuleset,
+  createRepoRuleset,
+  updateRepoRuleset,
+  deleteRepoRuleset,
+  getOrgRulesets,
+  getOrgRuleset,
+  createOrgRuleset,
+  updateOrgRuleset,
+  deleteOrgRuleset,
+  listCopilotSeatsForOrg,
+  addCopilotSeatsToOrg,
+  removeCopilotSeatsFromOrg,
+  getCopilotSeatDetailsForUser,
+  listPullRequestReviews,
+  getPullRequestReview,
+  createPullRequestReview,
+  submitPullRequestReview,
+  dismissPullRequestReview,
+  listIssueComments,
+  getIssueComment,
+  createIssueComment,
+  updateIssueComment,
+  deleteIssueComment,
+  listEmailsForAuthenticatedUser,
+  addEmailsForAuthenticatedUser,
+  deleteEmailsForAuthenticatedUser,
+  listPublicKeysForAuthenticatedUser,
+  addPublicKeyForAuthenticatedUser,
+  deletePublicKeyForAuthenticatedUser,
 };

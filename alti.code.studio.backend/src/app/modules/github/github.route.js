@@ -446,5 +446,125 @@ router.get(
 // 41. Campaigns API
 router.get('/orgs/:org/campaigns', GithubController.listOrgCampaigns);
 
+// 42. Custom Properties API
+router.get('/orgs/:org/custom-properties', GithubController.listCustomProperties);
+router.get(
+  '/orgs/:org/custom-properties/:propertyName',
+  GithubController.getCustomProperty,
+);
+router.put(
+  '/orgs/:org/custom-properties/:propertyName',
+  GithubController.createOrUpdateCustomProperty,
+);
+router.delete(
+  '/orgs/:org/custom-properties/:propertyName',
+  GithubController.removeCustomProperty,
+);
+router.get(
+  '/repos/:owner/:repo/custom-properties',
+  GithubController.getRepoCustomPropertiesValues,
+);
+router.patch(
+  '/repos/:owner/:repo/custom-properties',
+  GithubController.createOrUpdateRepoCustomPropertiesValues,
+);
+
+// 43. Rulesets API
+router.get('/repos/:owner/:repo/rulesets', GithubController.getRepoRulesets);
+router.get(
+  '/repos/:owner/:repo/rulesets/:rulesetId',
+  GithubController.getRepoRuleset,
+);
+router.post('/repos/:owner/:repo/rulesets', GithubController.createRepoRuleset);
+router.put(
+  '/repos/:owner/:repo/rulesets/:rulesetId',
+  GithubController.updateRepoRuleset,
+);
+router.delete(
+  '/repos/:owner/:repo/rulesets/:rulesetId',
+  GithubController.deleteRepoRuleset,
+);
+router.get('/orgs/:org/rulesets', GithubController.getOrgRulesets);
+router.get('/orgs/:org/rulesets/:rulesetId', GithubController.getOrgRuleset);
+router.post('/orgs/:org/rulesets', GithubController.createOrgRuleset);
+router.put(
+  '/orgs/:org/rulesets/:rulesetId',
+  GithubController.updateOrgRuleset,
+);
+router.delete(
+  '/orgs/:org/rulesets/:rulesetId',
+  GithubController.deleteOrgRuleset,
+);
+
+// 44. Copilot Org Seat Management API
+router.get('/orgs/:org/copilot/seats', GithubController.listCopilotSeatsForOrg);
+router.post('/orgs/:org/copilot/seats', GithubController.addCopilotSeatsToOrg);
+router.delete(
+  '/orgs/:org/copilot/seats',
+  GithubController.removeCopilotSeatsFromOrg,
+);
+router.get(
+  '/orgs/:org/copilot/seats/:username',
+  GithubController.getCopilotSeatDetailsForUser,
+);
+
+// 45. Pull Request Reviews API
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/reviews',
+  GithubController.listPullRequestReviews,
+);
+router.get(
+  '/repos/:owner/:repo/pulls/:pullNumber/reviews/:reviewId',
+  GithubController.getPullRequestReview,
+);
+router.post(
+  '/repos/:owner/:repo/pulls/:pullNumber/reviews',
+  GithubController.createPullRequestReview,
+);
+router.post(
+  '/repos/:owner/:repo/pulls/:pullNumber/reviews/:reviewId/events',
+  GithubController.submitPullRequestReview,
+);
+router.put(
+  '/repos/:owner/:repo/pulls/:pullNumber/reviews/:reviewId/dismissals',
+  GithubController.dismissPullRequestReview,
+);
+
+// 46. Issue Comments API
+router.get(
+  '/repos/:owner/:repo/issues/:issueNumber/comments',
+  GithubController.listIssueComments,
+);
+router.get(
+  '/repos/:owner/:repo/issues/comments/:commentId',
+  GithubController.getIssueComment,
+);
+router.post(
+  '/repos/:owner/:repo/issues/:issueNumber/comments',
+  GithubController.createIssueComment,
+);
+router.patch(
+  '/repos/:owner/:repo/issues/comments/:commentId',
+  GithubController.updateIssueComment,
+);
+router.delete(
+  '/repos/:owner/:repo/issues/comments/:commentId',
+  GithubController.deleteIssueComment,
+);
+
+// 47. User Keys & Emails API
+router.get('/user/emails', GithubController.listEmailsForAuthenticatedUser);
+router.post('/user/emails', GithubController.addEmailsForAuthenticatedUser);
+router.delete(
+  '/user/emails',
+  GithubController.deleteEmailsForAuthenticatedUser,
+);
+router.get('/user/keys', GithubController.listPublicKeysForAuthenticatedUser);
+router.post('/user/keys', GithubController.addPublicKeyForAuthenticatedUser);
+router.delete(
+  '/user/keys/:keyId',
+  GithubController.deletePublicKeyForAuthenticatedUser,
+);
+
 export const GithubRoutes = router;
 export default router;
