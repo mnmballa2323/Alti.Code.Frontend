@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.186] - 2026-06-11 — Phase 5 GitHub REST API & SDK Entrenchment
+### Added
+- **Code Security**: Added global vulnerability advisories listing, repository security advisory details, and organization security configuration lists.
+- **Dependency Graph**: Implemented SBOM export for individual repositories.
+- **Packages**: Integrated endpoints for listing organization packages and retrieving version metadata.
+- **OIDC Customization**: Enabled retrieving and updating organization OIDC subject claim templates.
+- **Migrations**: Added organization migration import/export start and progress checks.
+- **Emojis, Gitignore templates & Licenses**: Added support for listing emojis, listing gitignore templates, getting gitignore template contents, and querying repository license structures.
+- **Rate Limit, Meta & Markdown**: Integrated API rate limit status checks, server configuration metadata retrievals, and markdown rendering engines.
+- **Unit Testing**: Expanded the test suite to 97 passing tests covering all Phase 5 modules.
+
 ## [39.37.185] - 2026-06-11 — Phase 4 GitHub REST API & SDK Entrenchment
 ### Added
 - **GitHub Apps & Installations**: Added methods to retrieve authenticated app details, list installations, get installation details, list accessible repositories, and create installation access tokens.
