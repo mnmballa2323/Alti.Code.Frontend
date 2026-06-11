@@ -60,7 +60,7 @@ export default function InvoicesPage() {
             </div>
 
             {/* Table Body */}
-            <div className="space-y-3 mt-3">
+            <div className="space-y-3 mt-6">
               {filteredInvoices.length > 0 ? (
                 filteredInvoices.map((inv) => {
                   return (
