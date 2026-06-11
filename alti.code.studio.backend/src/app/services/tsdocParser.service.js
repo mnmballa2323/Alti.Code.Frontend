@@ -14,6 +14,24 @@ class TSDocParserService {
   }
 
   /**
+   * Helper to recursively extract plain text from TSDoc AST nodes.
+   * @param {Object} node TSDoc AST Node
+   * @returns {string} Extracted text
+   */
+  _extractText(node) {
+    if (!node) return '';
+    if (node.text) return node.text;
+    
+    // Some nodes (like DocSoftBreak) represent spacing
+    if (node.kind === 'SoftBreak') return '\n';
+    
+    if (node.nodes && node.nodes.length > 0) {
+      return node.nodes.map(n => this._extractText(n)).join('');
+    }
+    return '';
+  }
+
+  /**
    * Parses a raw comment block string (including /** and * symbols).
    * @param {string} commentString The raw comment block text
    * @returns {Object} Structured data containing tags, summary, and parameters
@@ -27,60 +45,31 @@ class TSDocParserService {
       const parserContext = this.parser.parseString(commentString);
       const docComment = parserContext.docComment;
 
-      const summaryLines = [];
+      let summary = '';
       const params = [];
       let returns = '';
       const tags = [];
 
       // Extract Summary
       if (docComment.summarySection) {
-        // TSDoc node traversal to extract summary text
-        const nodes = docComment.summarySection.nodes;
-        for (const node of nodes) {
-          if (node.nodes) {
-            for (const child of node.nodes) {
-              if (child.text) {
-                summaryLines.push(child.text);
-              }
-            }
-          }
-        }
+        summary = this._extractText(docComment.summarySection).trim();
       }
 
-      // Extract Block Tags (@param, @returns, etc)
+      // Extract Block Tags (@param)
       if (docComment.params && docComment.params.blocks) {
         for (const param of docComment.params.blocks) {
           const paramName = param.parameterName || '';
-          const paramDesc = [];
-          if (param.description && param.description.nodes) {
-            for (const n of param.description.nodes) {
-              if (n.nodes) {
-                for (const c of n.nodes) {
-                  if (c.text) paramDesc.push(c.text);
-                }
-              }
-            }
-          }
+          const paramDesc = param.description ? this._extractText(param.description).trim() : '';
           params.push({
             name: paramName,
-            description: paramDesc.join(' ').trim()
+            description: paramDesc
           });
         }
       }
 
       // Extract returns
-      if (docComment.returnsBlock) {
-        const returnsDesc = [];
-        if (docComment.returnsBlock.description && docComment.returnsBlock.description.nodes) {
-          for (const n of docComment.returnsBlock.description.nodes) {
-            if (n.nodes) {
-              for (const c of n.nodes) {
-                if (c.text) returnsDesc.push(c.text);
-              }
-            }
-          }
-        }
-        returns = returnsDesc.join(' ').trim();
+      if (docComment.returnsBlock && docComment.returnsBlock.description) {
+        returns = this._extractText(docComment.returnsBlock.description).trim();
       }
 
       // Extract custom modifiers/tags
@@ -93,7 +82,7 @@ class TSDocParserService {
       }
 
       return {
-        summary: summaryLines.join(' ').trim(),
+        summary,
         params,
         returns,
         tags
