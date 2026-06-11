@@ -5,6 +5,10 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.180] - 2026-06-11 — Updated Member Details Audit Logs Search Placeholder
+### Changed
+- **Search Placeholder**: Updated the search input placeholder from "Search by action or actor..." to "Search by action..." on the individual member details page to reflect the removal of the redundant Actor column.
+
 ## [39.37.179] - 2026-06-11 — Removed Redundant Actor Column on Member Details
 ### Removed
 - **Actor Column Removal**: Removed the "Actor" header title and column cells from the audit logs table on the individual member details page, as it redundantly displays the email of the active member who has already been selected.
