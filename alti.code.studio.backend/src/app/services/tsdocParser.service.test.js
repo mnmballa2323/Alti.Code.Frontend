@@ -21,9 +21,9 @@ describe('TSDocParserService', () => {
     expect(parsed.summary).toBe('Calculates the total sum.');
     expect(parsed.params.length).toBe(2);
     expect(parsed.params[0].name).toBe('a');
-    expect(parsed.params[0].description).toBe('- The first number');
+    expect(parsed.params[0].description).toBe('The first number');
     expect(parsed.params[1].name).toBe('b');
-    expect(parsed.params[1].description).toBe('- The second number');
+    expect(parsed.params[1].description).toBe('The second number');
     expect(parsed.returns).toBe('The total cost');
   });
 });

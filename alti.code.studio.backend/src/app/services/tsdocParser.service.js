@@ -59,7 +59,7 @@ class TSDocParserService {
       if (docComment.params && docComment.params.blocks) {
         for (const param of docComment.params.blocks) {
           const paramName = param.parameterName || '';
-          const paramDesc = param.description ? this._extractText(param.description).trim() : '';
+          const paramDesc = param.content ? this._extractText(param.content).trim() : '';
           params.push({
             name: paramName,
             description: paramDesc
@@ -68,8 +68,8 @@ class TSDocParserService {
       }
 
       // Extract returns
-      if (docComment.returnsBlock && docComment.returnsBlock.description) {
-        returns = this._extractText(docComment.returnsBlock.description).trim();
+      if (docComment.returnsBlock && docComment.returnsBlock.content) {
+        returns = this._extractText(docComment.returnsBlock.content).trim();
       }
 
       // Extract custom modifiers/tags
