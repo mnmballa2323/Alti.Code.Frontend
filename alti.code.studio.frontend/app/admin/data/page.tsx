@@ -20,6 +20,8 @@ export default function KnowledgePage() {
   const [files, setFiles] = useState<KnowledgeFile[]>(initialFiles);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDragging, setIsDragging] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const addFiles = (selectedFiles: FileList | null) => {
@@ -60,8 +62,17 @@ export default function KnowledgePage() {
     fileInputRef.current?.click();
   };
 
-  const handleDelete = (name: string) => {
-    setFiles((prev) => prev.filter((f) => f.name !== name));
+  const handleDeleteClick = (name: string) => {
+    setFileToDelete(name);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (fileToDelete) {
+      setFiles((prev) => prev.filter((f) => f.name !== fileToDelete));
+      setFileToDelete(null);
+      setDeleteConfirmOpen(false);
+    }
   };
 
   const filteredFiles = files.filter((f) =>
@@ -141,7 +152,7 @@ export default function KnowledgePage() {
 
                 <button
                   className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                  onClick={() => handleDelete(file.name)}
+                  onClick={() => handleDeleteClick(file.name)}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -154,6 +165,52 @@ export default function KnowledgePage() {
           )}
         </div>
       </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {deleteConfirmOpen && fileToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+          <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <h2 className="text-base font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+                Remove Knowledge File
+              </h2>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
+                Are you sure you want to remove{" "}
+                <span className="font-semibold text-neutral-700 dark:text-neutral-300 font-mono break-all">
+                  {fileToDelete}
+                </span>
+                ?
+              </p>
+            </div>
+            
+            {/* Horizontal border line */}
+            <div className="border-t border-neutral-100 dark:border-neutral-800" />
+            
+            {/* Footer Buttons Split by Vertical Line */}
+            <div className="flex w-full">
+              <button
+                className="flex-1 py-3 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
+                onClick={() => {
+                  setDeleteConfirmOpen(false);
+                  setFileToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              
+              {/* Vertical divider line */}
+              <div className="border-r border-neutral-100 dark:border-neutral-800" />
+              
+              <button
+                className="flex-1 py-3 text-sm font-medium text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
+                onClick={confirmDelete}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
