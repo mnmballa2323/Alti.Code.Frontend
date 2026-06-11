@@ -3690,8 +3690,13 @@ export const listProvisionedIdentities = async (req, res) => {
     const result = await GithubService.listProvisionedIdentities(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitHub Controller] Error listing SCIM provisioned identities:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitHub Controller] Error listing SCIM provisioned identities:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3702,40 +3707,62 @@ export const provisionAndInviteUser = async (req, res) => {
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitHub Controller] Error provisioning SCIM user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getProvisioningInformation = async (req, res) => {
   try {
     const { org, scimUserId } = req.params;
-    const result = await GithubService.getProvisioningInformation(org, scimUserId);
+    const result = await GithubService.getProvisioningInformation(
+      org,
+      scimUserId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitHub Controller] Error getting SCIM provisioning information:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitHub Controller] Error getting SCIM provisioning information:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const replaceProvisionedUser = async (req, res) => {
   try {
     const { org, scimUserId } = req.params;
-    const result = await GithubService.replaceProvisionedUser(org, scimUserId, req.body);
+    const result = await GithubService.replaceProvisionedUser(
+      org,
+      scimUserId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitHub Controller] Error replacing SCIM user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const updateProvisionedUser = async (req, res) => {
   try {
     const { org, scimUserId } = req.params;
-    const result = await GithubService.updateProvisionedUser(org, scimUserId, req.body);
+    const result = await GithubService.updateProvisionedUser(
+      org,
+      scimUserId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitHub Controller] Error updating SCIM user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3746,7 +3773,9 @@ export const deleteUserFromOrg = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitHub Controller] Error deleting SCIM user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3755,59 +3784,94 @@ export const deleteUserFromOrg = async (req, res) => {
 // ==========================================
 export const getCodespacesPublicKeyForAuthenticatedUser = async (req, res) => {
   try {
-    const result = await GithubService.getCodespacesPublicKeyForAuthenticatedUser();
+    const result =
+      await GithubService.getCodespacesPublicKeyForAuthenticatedUser();
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitHub Controller] Error getting Codespaces public key for user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitHub Controller] Error getting Codespaces public key for user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listCodespacesSecretsForAuthenticatedUser = async (req, res) => {
   try {
-    const result = await GithubService.listCodespacesSecretsForAuthenticatedUser();
+    const result =
+      await GithubService.listCodespacesSecretsForAuthenticatedUser();
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitHub Controller] Error listing Codespaces secrets for user:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitHub Controller] Error listing Codespaces secrets for user:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getCodespacesSecretForAuthenticatedUser = async (req, res) => {
   try {
     const { secretName } = req.params;
-    const result = await GithubService.getCodespacesSecretForAuthenticatedUser(secretName);
+    const result =
+      await GithubService.getCodespacesSecretForAuthenticatedUser(secretName);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Codespaces secret "${secretName}" for user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Codespaces secret "${secretName}" for user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
-export const createOrUpdateCodespacesSecretForAuthenticatedUser = async (req, res) => {
+export const createOrUpdateCodespacesSecretForAuthenticatedUser = async (
+  req,
+  res,
+) => {
   try {
     const { secretName } = req.params;
     const { encrypted_value, key_id } = req.body;
-    const result = await GithubService.createOrUpdateCodespacesSecretForAuthenticatedUser(
-      secretName,
-      encrypted_value,
-      key_id,
-    );
+    const result =
+      await GithubService.createOrUpdateCodespacesSecretForAuthenticatedUser(
+        secretName,
+        encrypted_value,
+        key_id,
+      );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Codespaces secret "${secretName}" for user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Codespaces secret "${secretName}" for user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteCodespacesSecretForAuthenticatedUser = async (req, res) => {
   try {
     const { secretName } = req.params;
-    const result = await GithubService.deleteCodespacesSecretForAuthenticatedUser(secretName);
+    const result =
+      await GithubService.deleteCodespacesSecretForAuthenticatedUser(
+        secretName,
+      );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Codespaces secret "${secretName}" for user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Codespaces secret "${secretName}" for user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3817,8 +3881,13 @@ export const getCodespacesPublicKeyForOrg = async (req, res) => {
     const result = await GithubService.getCodespacesPublicKeyForOrg(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Codespaces public key for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Codespaces public key for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3828,19 +3897,32 @@ export const listCodespacesSecretsForOrg = async (req, res) => {
     const result = await GithubService.listCodespacesSecretsForOrg(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing Codespaces secrets for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing Codespaces secrets for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getCodespacesSecretForOrg = async (req, res) => {
   try {
     const { org, secretName } = req.params;
-    const result = await GithubService.getCodespacesSecretForOrg(org, secretName);
+    const result = await GithubService.getCodespacesSecretForOrg(
+      org,
+      secretName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Codespaces secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Codespaces secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3857,19 +3939,32 @@ export const createOrUpdateCodespacesSecretForOrg = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Codespaces secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Codespaces secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteCodespacesSecretForOrg = async (req, res) => {
   try {
     const { org, secretName } = req.params;
-    const result = await GithubService.deleteCodespacesSecretForOrg(org, secretName);
+    const result = await GithubService.deleteCodespacesSecretForOrg(
+      org,
+      secretName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Codespaces secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Codespaces secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3882,8 +3977,13 @@ export const getActionsPublicKeyForOrg = async (req, res) => {
     const result = await GithubService.getActionsPublicKeyForOrg(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions public key for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions public key for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3893,8 +3993,13 @@ export const listOrgSecrets = async (req, res) => {
     const result = await GithubService.listOrgSecrets(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing Actions secrets for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing Actions secrets for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3904,8 +4009,13 @@ export const getOrgSecret = async (req, res) => {
     const result = await GithubService.getOrgSecret(org, secretName);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3922,8 +4032,13 @@ export const createOrUpdateOrgSecret = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Actions secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Actions secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3933,8 +4048,13 @@ export const deleteOrgSecret = async (req, res) => {
     const result = await GithubService.deleteOrgSecret(org, secretName);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Actions secret "${secretName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Actions secret "${secretName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3944,8 +4064,13 @@ export const listOrgVariables = async (req, res) => {
     const result = await GithubService.listOrgVariables(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing Actions variables for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing Actions variables for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3955,8 +4080,13 @@ export const getOrgVariable = async (req, res) => {
     const result = await GithubService.getOrgVariable(org, variableName);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions variable "${variableName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions variable "${variableName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3972,8 +4102,13 @@ export const createOrUpdateOrgVariable = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Actions variable "${variableName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Actions variable "${variableName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -3983,8 +4118,13 @@ export const deleteOrgVariable = async (req, res) => {
     const result = await GithubService.deleteOrgVariable(org, variableName);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Actions variable "${variableName}" for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Actions variable "${variableName}" for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4000,30 +4140,54 @@ export const getActionsPublicKeyForEnvironment = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions public key for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions public key for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listEnvironmentSecrets = async (req, res) => {
   try {
     const { owner, repo, environmentName } = req.params;
-    const result = await GithubService.listEnvironmentSecrets(owner, repo, environmentName);
+    const result = await GithubService.listEnvironmentSecrets(
+      owner,
+      repo,
+      environmentName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing Actions secrets for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing Actions secrets for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getEnvironmentSecret = async (req, res) => {
   try {
     const { owner, repo, environmentName, secretName } = req.params;
-    const result = await GithubService.getEnvironmentSecret(owner, repo, environmentName, secretName);
+    const result = await GithubService.getEnvironmentSecret(
+      owner,
+      repo,
+      environmentName,
+      secretName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions secret "${secretName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions secret "${secretName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4041,41 +4205,75 @@ export const createOrUpdateEnvironmentSecret = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Actions secret "${secretName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Actions secret "${secretName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteEnvironmentSecret = async (req, res) => {
   try {
     const { owner, repo, environmentName, secretName } = req.params;
-    const result = await GithubService.deleteEnvironmentSecret(owner, repo, environmentName, secretName);
+    const result = await GithubService.deleteEnvironmentSecret(
+      owner,
+      repo,
+      environmentName,
+      secretName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Actions secret "${secretName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Actions secret "${secretName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listEnvironmentVariables = async (req, res) => {
   try {
     const { owner, repo, environmentName } = req.params;
-    const result = await GithubService.listEnvironmentVariables(owner, repo, environmentName);
+    const result = await GithubService.listEnvironmentVariables(
+      owner,
+      repo,
+      environmentName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing Actions variables for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing Actions variables for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getEnvironmentVariable = async (req, res) => {
   try {
     const { owner, repo, environmentName, variableName } = req.params;
-    const result = await GithubService.getEnvironmentVariable(owner, repo, environmentName, variableName);
+    const result = await GithubService.getEnvironmentVariable(
+      owner,
+      repo,
+      environmentName,
+      variableName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions variable "${variableName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions variable "${variableName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4092,19 +4290,34 @@ export const createOrUpdateEnvironmentVariable = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating/updating Actions variable "${variableName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating/updating Actions variable "${variableName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteEnvironmentVariable = async (req, res) => {
   try {
     const { owner, repo, environmentName, variableName } = req.params;
-    const result = await GithubService.deleteEnvironmentVariable(owner, repo, environmentName, variableName);
+    const result = await GithubService.deleteEnvironmentVariable(
+      owner,
+      repo,
+      environmentName,
+      variableName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting Actions variable "${variableName}" for environment ${environmentName}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting Actions variable "${variableName}" for environment ${environmentName}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4117,19 +4330,32 @@ export const listSecretScanningAlertsForOrg = async (req, res) => {
     const result = await GithubService.listSecretScanningAlertsForOrg(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing secret scanning alerts for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing secret scanning alerts for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getSecretScanningAlertForOrg = async (req, res) => {
   try {
     const { org, alertNumber } = req.params;
-    const result = await GithubService.getSecretScanningAlertForOrg(org, parseInt(alertNumber, 10));
+    const result = await GithubService.getSecretScanningAlertForOrg(
+      org,
+      parseInt(alertNumber, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting secret scanning alert #${alertNumber} for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting secret scanning alert #${alertNumber} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4145,19 +4371,33 @@ export const updateSecretScanningAlertForOrg = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error updating secret scanning alert #${alertNumber} for org ${org}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error updating secret scanning alert #${alertNumber} for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listSecretScanningLocations = async (req, res) => {
   try {
     const { owner, repo, alertNumber } = req.params;
-    const result = await GithubService.listSecretScanningLocations(owner, repo, parseInt(alertNumber, 10));
+    const result = await GithubService.listSecretScanningLocations(
+      owner,
+      repo,
+      parseInt(alertNumber, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing secret scanning locations for alert #${alertNumber} in ${owner}/${repo}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing secret scanning locations for alert #${alertNumber} in ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4167,55 +4407,91 @@ export const listSecretScanningLocations = async (req, res) => {
 export const getEnterpriseActionsPermissions = async (req, res) => {
   try {
     const { enterprise } = req.params;
-    const result = await GithubService.getEnterpriseActionsPermissions(enterprise);
+    const result =
+      await GithubService.getEnterpriseActionsPermissions(enterprise);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions permissions for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions permissions for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const setEnterpriseActionsPermissions = async (req, res) => {
   try {
     const { enterprise } = req.params;
-    const result = await GithubService.setEnterpriseActionsPermissions(enterprise, req.body);
+    const result = await GithubService.setEnterpriseActionsPermissions(
+      enterprise,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error setting Actions permissions for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error setting Actions permissions for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listSelfHostedRunnersForEnterprise = async (req, res) => {
   try {
     const { enterprise } = req.params;
-    const result = await GithubService.listSelfHostedRunnersForEnterprise(enterprise);
+    const result =
+      await GithubService.listSelfHostedRunnersForEnterprise(enterprise);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing self-hosted runners for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing self-hosted runners for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getSelfHostedRunnerForEnterprise = async (req, res) => {
   try {
     const { enterprise, runnerId } = req.params;
-    const result = await GithubService.getSelfHostedRunnerForEnterprise(enterprise, parseInt(runnerId, 10));
+    const result = await GithubService.getSelfHostedRunnerForEnterprise(
+      enterprise,
+      parseInt(runnerId, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting self-hosted runner ${runnerId} for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting self-hosted runner ${runnerId} for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteSelfHostedRunnerFromEnterprise = async (req, res) => {
   try {
     const { enterprise, runnerId } = req.params;
-    const result = await GithubService.deleteSelfHostedRunnerFromEnterprise(enterprise, parseInt(runnerId, 10));
+    const result = await GithubService.deleteSelfHostedRunnerFromEnterprise(
+      enterprise,
+      parseInt(runnerId, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting self-hosted runner ${runnerId} from enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error deleting self-hosted runner ${runnerId} from enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4225,8 +4501,13 @@ export const getEnterpriseActionsBilling = async (req, res) => {
     const result = await GithubService.getEnterpriseActionsBilling(enterprise);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Actions billing for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Actions billing for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -4236,19 +4517,30 @@ export const getEnterprisePackagesBilling = async (req, res) => {
     const result = await GithubService.getEnterprisePackagesBilling(enterprise);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Packages billing for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Packages billing for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getEnterpriseSharedStorageBilling = async (req, res) => {
   try {
     const { enterprise } = req.params;
-    const result = await GithubService.getEnterpriseSharedStorageBilling(enterprise);
+    const result =
+      await GithubService.getEnterpriseSharedStorageBilling(enterprise);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting Shared Storage billing for enterprise ${enterprise}:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error getting Shared Storage billing for enterprise ${enterprise}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 

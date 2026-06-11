@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.190] - 2026-06-11 — Phase 9 GitHub REST API & SDK Entrenchment
+### Added
+- **SCIM Organization Member Provisioning**: Integrated listing identities, provisioning users, retrieving provisioning info, replacing user identities, updating provisioned users, and deleting users from organizations.
+- **Codespaces Secrets API**: Implemented public key, secret listing, details retrieval, creation/updates, and deletion endpoints for both authenticated users and organization scopes.
+- **Actions Organization Secrets & Variables**: Integrated organization public key, secrets management, and variables management (with fallback update logic).
+- **Actions Environment Secrets & Variables**: Added environment public key, environment secrets management, and environment variables management (with fallback update logic).
+- **Secret Scanning Org-Level & Locations**: Integrated organization secret scanning alerts listing, alert details retrieval, status updates, and finding scanning locations.
+- **Enterprise Admin Action Policies, Runners & Billing**: Integrated enterprise actions permissions management, enterprise self-hosted runners management (listing, details, deletion), and enterprise setting billing (actions, packages, shared-storage).
+- **Unit Testing**: Added 48 unit tests to cover all Phase 9 endpoints and variable creation fallbacks, bringing the total passing tests to 244.
+
 ## [39.37.189] - 2026-06-11 — Phase 8 GitHub REST API & SDK Entrenchment
 ### Added
 - **Classroom API**: Enabled listing classrooms, retrieving classroom details, listing assignments, and assignment details.

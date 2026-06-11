@@ -129,7 +129,7 @@ vi.mock('octokit', () => {
         listOrgVariables: vi.fn(),
         getOrgVariable: vi.fn(),
         createOrgVariable: vi.fn(),
-        createOrUpdateOrgVariable: vi.fn(),
+        updateOrgVariable: vi.fn(),
         deleteOrgVariable: vi.fn(),
         getEnvironmentPublicKey: vi.fn(),
         listEnvironmentSecrets: vi.fn(),
@@ -3966,5 +3966,882 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       discussion_number: 1,
       comment_number: 10,
     });
+  });
+
+  // ==========================================
+  // 55. SCIM Organization Member Provisioning
+  // ==========================================
+  it('should list SCIM provisioned identities', async () => {
+    const mockIdentities = [{ id: 'scim-1' }];
+    mockOctokit.request.mockResolvedValue({ data: mockIdentities });
+
+    const result = await GithubService.listProvisionedIdentities('my-org');
+    expect(result).toEqual(mockIdentities);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /scim/v2/organizations/{org}/Users',
+      { org: 'my-org' },
+    );
+  });
+
+  it('should provision and invite SCIM user', async () => {
+    const mockUser = { id: 'scim-1' };
+    const scimData = { userName: 'user' };
+    mockOctokit.request.mockResolvedValue({ data: mockUser });
+
+    const result = await GithubService.provisionAndInviteUser(
+      'my-org',
+      scimData,
+    );
+    expect(result).toEqual(mockUser);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'POST /scim/v2/organizations/{org}/Users',
+      { org: 'my-org', data: scimData },
+    );
+  });
+
+  it('should get SCIM provisioning information', async () => {
+    const mockUser = { id: 'scim-1' };
+    mockOctokit.request.mockResolvedValue({ data: mockUser });
+
+    const result = await GithubService.getProvisioningInformation(
+      'my-org',
+      'scim-1',
+    );
+    expect(result).toEqual(mockUser);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /scim/v2/organizations/{org}/Users/{scim_user_id}',
+      { org: 'my-org', scim_user_id: 'scim-1' },
+    );
+  });
+
+  it('should replace SCIM provisioned user', async () => {
+    const mockUser = { id: 'scim-1' };
+    const scimData = { userName: 'user' };
+    mockOctokit.request.mockResolvedValue({ data: mockUser });
+
+    const result = await GithubService.replaceProvisionedUser(
+      'my-org',
+      'scim-1',
+      scimData,
+    );
+    expect(result).toEqual(mockUser);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'PUT /scim/v2/organizations/{org}/Users/{scim_user_id}',
+      { org: 'my-org', scim_user_id: 'scim-1', data: scimData },
+    );
+  });
+
+  it('should update SCIM provisioned user', async () => {
+    const mockUser = { id: 'scim-1' };
+    const scimData = { userName: 'user' };
+    mockOctokit.request.mockResolvedValue({ data: mockUser });
+
+    const result = await GithubService.updateProvisionedUser(
+      'my-org',
+      'scim-1',
+      scimData,
+    );
+    expect(result).toEqual(mockUser);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'PATCH /scim/v2/organizations/{org}/Users/{scim_user_id}',
+      { org: 'my-org', scim_user_id: 'scim-1', data: scimData },
+    );
+  });
+
+  it('should delete SCIM user from organization', async () => {
+    const mockRes = { success: true };
+    mockOctokit.request.mockResolvedValue({ data: mockRes });
+
+    const result = await GithubService.deleteUserFromOrg('my-org', 'scim-1');
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'DELETE /scim/v2/organizations/{org}/Users/{scim_user_id}',
+      { org: 'my-org', scim_user_id: 'scim-1' },
+    );
+  });
+
+  // ==========================================
+  // 56. Codespaces Secrets API
+  // ==========================================
+  it('should get Codespaces public key for user', async () => {
+    const mockKey = { key_id: 'key1' };
+    mockOctokit.rest.codespaces.getPublicKeyForAuthenticatedUser.mockResolvedValue(
+      { data: mockKey },
+    );
+
+    const result =
+      await GithubService.getCodespacesPublicKeyForAuthenticatedUser();
+    expect(result).toEqual(mockKey);
+    expect(
+      mockOctokit.rest.codespaces.getPublicKeyForAuthenticatedUser,
+    ).toHaveBeenCalled();
+  });
+
+  it('should list Codespaces secrets for user', async () => {
+    const mockSecrets = [{ name: 'sec1' }];
+    mockOctokit.rest.codespaces.listSecretsForAuthenticatedUser.mockResolvedValue(
+      { data: mockSecrets },
+    );
+
+    const result =
+      await GithubService.listCodespacesSecretsForAuthenticatedUser();
+    expect(result).toEqual(mockSecrets);
+    expect(
+      mockOctokit.rest.codespaces.listSecretsForAuthenticatedUser,
+    ).toHaveBeenCalled();
+  });
+
+  it('should get Codespaces secret for user', async () => {
+    const mockSecret = { name: 'sec1' };
+    mockOctokit.rest.codespaces.getSecretForAuthenticatedUser.mockResolvedValue(
+      { data: mockSecret },
+    );
+
+    const result =
+      await GithubService.getCodespacesSecretForAuthenticatedUser('sec1');
+    expect(result).toEqual(mockSecret);
+    expect(
+      mockOctokit.rest.codespaces.getSecretForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should create or update Codespaces secret for user', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.codespaces.createOrUpdateSecretForAuthenticatedUser.mockResolvedValue(
+      { data: mockRes },
+    );
+
+    const result =
+      await GithubService.createOrUpdateCodespacesSecretForAuthenticatedUser(
+        'sec1',
+        'enc1',
+        'key1',
+      );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.codespaces.createOrUpdateSecretForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      secret_name: 'sec1',
+      encrypted_value: 'enc1',
+      key_id: 'key1',
+    });
+  });
+
+  it('should delete Codespaces secret for user', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.codespaces.deleteSecretForAuthenticatedUser.mockResolvedValue(
+      { data: mockRes },
+    );
+
+    const result =
+      await GithubService.deleteCodespacesSecretForAuthenticatedUser('sec1');
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.codespaces.deleteSecretForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should get Codespaces public key for org', async () => {
+    const mockKey = { key_id: 'key1' };
+    mockOctokit.rest.codespaces.getOrgPublicKey.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.getCodespacesPublicKeyForOrg('my-org');
+    expect(result).toEqual(mockKey);
+    expect(mockOctokit.rest.codespaces.getOrgPublicKey).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should list Codespaces secrets for org', async () => {
+    const mockSecrets = [{ name: 'sec1' }];
+    mockOctokit.rest.codespaces.listOrgSecrets.mockResolvedValue({
+      data: mockSecrets,
+    });
+
+    const result = await GithubService.listCodespacesSecretsForOrg('my-org');
+    expect(result).toEqual(mockSecrets);
+    expect(mockOctokit.rest.codespaces.listOrgSecrets).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get Codespaces secret for org', async () => {
+    const mockSecret = { name: 'sec1' };
+    mockOctokit.rest.codespaces.getOrgSecret.mockResolvedValue({
+      data: mockSecret,
+    });
+
+    const result = await GithubService.getCodespacesSecretForOrg(
+      'my-org',
+      'sec1',
+    );
+    expect(result).toEqual(mockSecret);
+    expect(mockOctokit.rest.codespaces.getOrgSecret).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should create or update Codespaces secret for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.codespaces.createOrUpdateOrgSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateCodespacesSecretForOrg(
+      'my-org',
+      'sec1',
+      'enc1',
+      'key1',
+      ['123'],
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.codespaces.createOrUpdateOrgSecret,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+      encrypted_value: 'enc1',
+      key_id: 'key1',
+      visibility: 'selected',
+      selected_repository_ids: [123],
+    });
+  });
+
+  it('should delete Codespaces secret for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.codespaces.deleteOrgSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.deleteCodespacesSecretForOrg(
+      'my-org',
+      'sec1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.rest.codespaces.deleteOrgSecret).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+    });
+  });
+
+  // ==========================================
+  // 57. Actions Organization Secrets & Variables
+  // ==========================================
+  it('should get Actions public key for org', async () => {
+    const mockKey = { key_id: 'key1' };
+    mockOctokit.rest.actions.getOrgPublicKey.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.getActionsPublicKeyForOrg('my-org');
+    expect(result).toEqual(mockKey);
+    expect(mockOctokit.rest.actions.getOrgPublicKey).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should list Actions secrets for org', async () => {
+    const mockSecrets = [{ name: 'sec1' }];
+    mockOctokit.rest.actions.listOrgSecrets.mockResolvedValue({
+      data: mockSecrets,
+    });
+
+    const result = await GithubService.listOrgSecrets('my-org');
+    expect(result).toEqual(mockSecrets);
+    expect(mockOctokit.rest.actions.listOrgSecrets).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get Actions secret for org', async () => {
+    const mockSecret = { name: 'sec1' };
+    mockOctokit.rest.actions.getOrgSecret.mockResolvedValue({
+      data: mockSecret,
+    });
+
+    const result = await GithubService.getOrgSecret('my-org', 'sec1');
+    expect(result).toEqual(mockSecret);
+    expect(mockOctokit.rest.actions.getOrgSecret).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should create Actions secret for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createOrUpdateOrgSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateOrgSecret(
+      'my-org',
+      'sec1',
+      'enc1',
+      'key1',
+      ['123'],
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.createOrUpdateOrgSecret,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+      encrypted_value: 'enc1',
+      key_id: 'key1',
+      visibility: 'selected',
+      selected_repository_ids: [123],
+    });
+  });
+
+  it('should delete Actions secret for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.deleteOrgSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.deleteOrgSecret('my-org', 'sec1');
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.rest.actions.deleteOrgSecret).toHaveBeenCalledWith({
+      org: 'my-org',
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should list Actions variables for org', async () => {
+    const mockVars = [{ name: 'var1' }];
+    mockOctokit.rest.actions.listOrgVariables.mockResolvedValue({
+      data: mockVars,
+    });
+
+    const result = await GithubService.listOrgVariables('my-org');
+    expect(result).toEqual(mockVars);
+    expect(mockOctokit.rest.actions.listOrgVariables).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get Actions variable for org', async () => {
+    const mockVar = { name: 'var1' };
+    mockOctokit.rest.actions.getOrgVariable.mockResolvedValue({
+      data: mockVar,
+    });
+
+    const result = await GithubService.getOrgVariable('my-org', 'var1');
+    expect(result).toEqual(mockVar);
+    expect(mockOctokit.rest.actions.getOrgVariable).toHaveBeenCalledWith({
+      org: 'my-org',
+      variable_name: 'var1',
+    });
+  });
+
+  it('should create Actions variable for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createOrgVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateOrgVariable(
+      'my-org',
+      'var1',
+      'val1',
+      ['123'],
+    );
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.rest.actions.createOrgVariable).toHaveBeenCalledWith({
+      org: 'my-org',
+      name: 'var1',
+      value: 'val1',
+      visibility: 'selected',
+      selected_repository_ids: [123],
+    });
+  });
+
+  it('should update Actions variable for org when creation fails (fallback)', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createOrgVariable.mockRejectedValue(
+      new Error('Variable already exists'),
+    );
+    mockOctokit.rest.actions.updateOrgVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateOrgVariable(
+      'my-org',
+      'var1',
+      'val1',
+      ['123'],
+    );
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.rest.actions.createOrgVariable).toHaveBeenCalled();
+    expect(mockOctokit.rest.actions.updateOrgVariable).toHaveBeenCalledWith({
+      org: 'my-org',
+      variable_name: 'var1',
+      name: 'var1',
+      value: 'val1',
+      visibility: 'selected',
+      selected_repository_ids: [123],
+    });
+  });
+
+  it('should delete Actions variable for org', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.deleteOrgVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.deleteOrgVariable('my-org', 'var1');
+    expect(result).toEqual(mockRes);
+    expect(mockOctokit.rest.actions.deleteOrgVariable).toHaveBeenCalledWith({
+      org: 'my-org',
+      variable_name: 'var1',
+    });
+  });
+
+  // ==========================================
+  // 58. Actions Environment Secrets & Variables
+  // ==========================================
+  it('should get Actions public key for environment', async () => {
+    const mockKey = { key_id: 'key1' };
+    mockOctokit.rest.actions.getEnvironmentPublicKey.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.getActionsPublicKeyForEnvironment(
+      123,
+      'prod',
+    );
+    expect(result).toEqual(mockKey);
+    expect(
+      mockOctokit.rest.actions.getEnvironmentPublicKey,
+    ).toHaveBeenCalledWith({
+      repository_id: 123,
+      environment_name: 'prod',
+    });
+  });
+
+  it('should list Actions secrets for environment', async () => {
+    const mockSecrets = [{ name: 'sec1' }];
+    mockOctokit.rest.actions.listEnvironmentSecrets.mockResolvedValue({
+      data: mockSecrets,
+    });
+
+    const result = await GithubService.listEnvironmentSecrets(
+      'owner',
+      'repo',
+      'prod',
+    );
+    expect(result).toEqual(mockSecrets);
+    expect(
+      mockOctokit.rest.actions.listEnvironmentSecrets,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+    });
+  });
+
+  it('should get Actions secret for environment', async () => {
+    const mockSecret = { name: 'sec1' };
+    mockOctokit.rest.actions.getEnvironmentSecret.mockResolvedValue({
+      data: mockSecret,
+    });
+
+    const result = await GithubService.getEnvironmentSecret(
+      'owner',
+      'repo',
+      'prod',
+      'sec1',
+    );
+    expect(result).toEqual(mockSecret);
+    expect(mockOctokit.rest.actions.getEnvironmentSecret).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should create or update Actions secret for environment', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createOrUpdateEnvironmentSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateEnvironmentSecret(
+      'owner',
+      'repo',
+      'prod',
+      'sec1',
+      'enc1',
+      'key1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.createOrUpdateEnvironmentSecret,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      secret_name: 'sec1',
+      encrypted_value: 'enc1',
+      key_id: 'key1',
+    });
+  });
+
+  it('should delete Actions secret for environment', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.deleteEnvironmentSecret.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.deleteEnvironmentSecret(
+      'owner',
+      'repo',
+      'prod',
+      'sec1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.deleteEnvironmentSecret,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      secret_name: 'sec1',
+    });
+  });
+
+  it('should list Actions variables for environment', async () => {
+    const mockVars = [{ name: 'var1' }];
+    mockOctokit.rest.actions.listEnvironmentVariables.mockResolvedValue({
+      data: mockVars,
+    });
+
+    const result = await GithubService.listEnvironmentVariables(
+      'owner',
+      'repo',
+      'prod',
+    );
+    expect(result).toEqual(mockVars);
+    expect(
+      mockOctokit.rest.actions.listEnvironmentVariables,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+    });
+  });
+
+  it('should get Actions variable for environment', async () => {
+    const mockVar = { name: 'var1' };
+    mockOctokit.rest.actions.getEnvironmentVariable.mockResolvedValue({
+      data: mockVar,
+    });
+
+    const result = await GithubService.getEnvironmentVariable(
+      'owner',
+      'repo',
+      'prod',
+      'var1',
+    );
+    expect(result).toEqual(mockVar);
+    expect(
+      mockOctokit.rest.actions.getEnvironmentVariable,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      variable_name: 'var1',
+    });
+  });
+
+  it('should create Actions variable for environment', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createEnvironmentVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateEnvironmentVariable(
+      'owner',
+      'repo',
+      'prod',
+      'var1',
+      'val1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.createEnvironmentVariable,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      name: 'var1',
+      value: 'val1',
+    });
+  });
+
+  it('should update Actions variable for environment when creation fails (fallback)', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.createEnvironmentVariable.mockRejectedValue(
+      new Error('Variable already exists'),
+    );
+    mockOctokit.rest.actions.updateEnvironmentVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.createOrUpdateEnvironmentVariable(
+      'owner',
+      'repo',
+      'prod',
+      'var1',
+      'val1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.createEnvironmentVariable,
+    ).toHaveBeenCalled();
+    expect(
+      mockOctokit.rest.actions.updateEnvironmentVariable,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      variable_name: 'var1',
+      name: 'var1',
+      value: 'val1',
+    });
+  });
+
+  it('should delete Actions variable for environment', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.actions.deleteEnvironmentVariable.mockResolvedValue({
+      data: mockRes,
+    });
+
+    const result = await GithubService.deleteEnvironmentVariable(
+      'owner',
+      'repo',
+      'prod',
+      'var1',
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.actions.deleteEnvironmentVariable,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'prod',
+      variable_name: 'var1',
+    });
+  });
+
+  // ==========================================
+  // 59. Secret Scanning Org Alerts & Locations
+  // ==========================================
+  it('should list secret scanning alerts for org', async () => {
+    const mockAlerts = [{ number: 1 }];
+    mockOctokit.rest.secretScanning.listAlertsForOrg.mockResolvedValue({
+      data: mockAlerts,
+    });
+
+    const result = await GithubService.listSecretScanningAlertsForOrg('my-org');
+    expect(result).toEqual(mockAlerts);
+    expect(
+      mockOctokit.rest.secretScanning.listAlertsForOrg,
+    ).toHaveBeenCalledWith({ org: 'my-org' });
+  });
+
+  it('should get secret scanning alert for org', async () => {
+    const mockAlert = { number: 1 };
+    mockOctokit.request.mockResolvedValue({ data: mockAlert });
+
+    const result = await GithubService.getSecretScanningAlertForOrg(
+      'my-org',
+      1,
+    );
+    expect(result).toEqual(mockAlert);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /orgs/{org}/secret-scanning/alerts/{alert_number}',
+      { org: 'my-org', alert_number: 1 },
+    );
+  });
+
+  it('should update secret scanning alert for org', async () => {
+    const mockAlert = { number: 1, state: 'resolved' };
+    mockOctokit.request.mockResolvedValue({ data: mockAlert });
+
+    const result = await GithubService.updateSecretScanningAlertForOrg(
+      'my-org',
+      1,
+      'resolved',
+      'false_positive',
+    );
+    expect(result).toEqual(mockAlert);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'PATCH /orgs/{org}/secret-scanning/alerts/{alert_number}',
+      {
+        org: 'my-org',
+        alert_number: 1,
+        state: 'resolved',
+        resolution: 'false_positive',
+      },
+    );
+  });
+
+  it('should list secret scanning locations', async () => {
+    const mockLocations = [{ path: 'README.md' }];
+    mockOctokit.rest.secretScanning.listLocationsForAlert.mockResolvedValue({
+      data: mockLocations,
+    });
+
+    const result = await GithubService.listSecretScanningLocations(
+      'owner',
+      'repo',
+      1,
+    );
+    expect(result).toEqual(mockLocations);
+    expect(
+      mockOctokit.rest.secretScanning.listLocationsForAlert,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      alert_number: 1,
+    });
+  });
+
+  // ==========================================
+  // 60. Enterprise Admin Policies, Runners & Billing
+  // ==========================================
+  it('should get enterprise Actions permissions', async () => {
+    const mockPerms = { enabled_organizations: 'all' };
+    mockOctokit.rest.enterpriseAdmin.getActionsPermissionsEnterprise.mockResolvedValue(
+      { data: mockPerms },
+    );
+
+    const result =
+      await GithubService.getEnterpriseActionsPermissions('my-ent');
+    expect(result).toEqual(mockPerms);
+    expect(
+      mockOctokit.rest.enterpriseAdmin.getActionsPermissionsEnterprise,
+    ).toHaveBeenCalledWith({
+      enterprise: 'my-ent',
+    });
+  });
+
+  it('should set enterprise Actions permissions', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.enterpriseAdmin.setActionsPermissionsEnterprise.mockResolvedValue(
+      { data: mockRes },
+    );
+
+    const result = await GithubService.setEnterpriseActionsPermissions(
+      'my-ent',
+      { enabled_organizations: 'all' },
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.enterpriseAdmin.setActionsPermissionsEnterprise,
+    ).toHaveBeenCalledWith({
+      enterprise: 'my-ent',
+      enabled_organizations: 'all',
+    });
+  });
+
+  it('should list self-hosted runners for enterprise', async () => {
+    const mockRunners = [{ id: 1 }];
+    mockOctokit.rest.enterpriseAdmin.listSelfHostedRunnersForEnterprise.mockResolvedValue(
+      { data: mockRunners },
+    );
+
+    const result =
+      await GithubService.listSelfHostedRunnersForEnterprise('my-ent');
+    expect(result).toEqual(mockRunners);
+    expect(
+      mockOctokit.rest.enterpriseAdmin.listSelfHostedRunnersForEnterprise,
+    ).toHaveBeenCalledWith({
+      enterprise: 'my-ent',
+    });
+  });
+
+  it('should get self-hosted runner for enterprise', async () => {
+    const mockRunner = { id: 1 };
+    mockOctokit.rest.enterpriseAdmin.getSelfHostedRunnerForEnterprise.mockResolvedValue(
+      { data: mockRunner },
+    );
+
+    const result = await GithubService.getSelfHostedRunnerForEnterprise(
+      'my-ent',
+      1,
+    );
+    expect(result).toEqual(mockRunner);
+    expect(
+      mockOctokit.rest.enterpriseAdmin.getSelfHostedRunnerForEnterprise,
+    ).toHaveBeenCalledWith({
+      enterprise: 'my-ent',
+      runner_id: 1,
+    });
+  });
+
+  it('should delete self-hosted runner from enterprise', async () => {
+    const mockRes = { success: true };
+    mockOctokit.rest.enterpriseAdmin.deleteSelfHostedRunnerFromEnterprise.mockResolvedValue(
+      { data: mockRes },
+    );
+
+    const result = await GithubService.deleteSelfHostedRunnerFromEnterprise(
+      'my-ent',
+      1,
+    );
+    expect(result).toEqual(mockRes);
+    expect(
+      mockOctokit.rest.enterpriseAdmin.deleteSelfHostedRunnerFromEnterprise,
+    ).toHaveBeenCalledWith({
+      enterprise: 'my-ent',
+      runner_id: 1,
+    });
+  });
+
+  it('should get Actions billing for enterprise', async () => {
+    const mockBilling = { total_minutes_used: 500 };
+    mockOctokit.request.mockResolvedValue({ data: mockBilling });
+
+    const result = await GithubService.getEnterpriseActionsBilling('my-ent');
+    expect(result).toEqual(mockBilling);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /enterprises/{enterprise}/settings/billing/actions',
+      { enterprise: 'my-ent' },
+    );
+  });
+
+  it('should get Packages billing for enterprise', async () => {
+    const mockBilling = { total_gigabytes_bandwidth_used: 100 };
+    mockOctokit.request.mockResolvedValue({ data: mockBilling });
+
+    const result = await GithubService.getEnterprisePackagesBilling('my-ent');
+    expect(result).toEqual(mockBilling);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /enterprises/{enterprise}/settings/billing/packages',
+      { enterprise: 'my-ent' },
+    );
+  });
+
+  it('should get Shared Storage billing for enterprise', async () => {
+    const mockBilling = { estimated_paid_storage_for_month: 10.5 };
+    mockOctokit.request.mockResolvedValue({ data: mockBilling });
+
+    const result =
+      await GithubService.getEnterpriseSharedStorageBilling('my-ent');
+    expect(result).toEqual(mockBilling);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /enterprises/{enterprise}/settings/billing/shared-storage',
+      { enterprise: 'my-ent' },
+    );
   });
 });
