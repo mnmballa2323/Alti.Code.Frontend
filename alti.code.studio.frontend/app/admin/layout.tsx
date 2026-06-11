@@ -8,7 +8,6 @@ import {
   CreditCard,
   FileText,
   BookOpen,
-  FolderOpen,
   Shield,
   Activity,
 } from "lucide-react";
@@ -32,7 +31,6 @@ const managerItems: SidebarItem[] = [
   { label: "Knowledge", href: "/admin/data", icon: BookOpen },
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
-  { label: "Projects", href: "/admin/projects", icon: FolderOpen },
 ];
 
 const systemItems: SidebarItem[] = [
@@ -116,8 +114,7 @@ export default function AdminLayout({
     if (
       pathname.startsWith("/admin/data") ||
       pathname.startsWith("/admin/instructions") ||
-      pathname.startsWith("/admin/guardrails") ||
-      pathname.startsWith("/admin/projects")
+      pathname.startsWith("/admin/guardrails")
     ) {
       return "Platform Manager";
     }
@@ -136,7 +133,6 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/data")) return "Knowledge";
     if (pathname.startsWith("/admin/instructions")) return "Instructions";
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
-    if (pathname.startsWith("/admin/projects")) return "Projects";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
 
     return "Platform Admin";
