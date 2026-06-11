@@ -177,9 +177,9 @@ const AuditPage = () => {
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
             <div className="col-span-1">Date</div>
-            <div className="col-span-2">Time</div>
+            <div className="col-span-1">Time</div>
             <div className="col-span-3">Actor</div>
-            <div className="col-span-2">Action</div>
+            <div className="col-span-3">Action</div>
             <div className="col-span-2">Status</div>
             <div className="col-span-2 text-right">IP Address</div>
           </div>
@@ -217,13 +217,13 @@ const AuditPage = () => {
                       <div className="col-span-1 font-mono text-xs text-neutral-600 dark:text-neutral-400">
                         {logDate}
                       </div>
-                      <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                      <div className="col-span-1 font-mono text-xs text-neutral-600 dark:text-neutral-400">
                         {logTime}
                       </div>
                       <div className="col-span-3 font-medium text-neutral-800 dark:text-neutral-200 truncate" title={log.actor}>
                         {log.actor}
                       </div>
-                      <div className="col-span-2 text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
+                      <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
                         {log.action}
                       </div>
                       <div className="col-span-2 flex items-center gap-2">
