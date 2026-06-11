@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.181] - 2026-06-11 — Direct GitHub API & SDK Integration
+### Added
+- **Direct GitHub Service**: Created `github.service.js` wrapping core GitHub API namespaces (Users, Repos, Issues, Pull Requests, Actions, Gists, Projects) directly utilizing the Octokit SDK with no middle layers.
+- **REST Controller**: Created `github.controller.js` to map HTTP requests directly to service methods, returning standardized envelopes.
+- **HTTP Routing**: Registered REST endpoints in `github.route.js` exposing complete CRUD operations for repositories, issues, PRs, actions, gists, and projects.
+- **Unit Testing**: Wrote a complete test suite in `github.service.test.js` covering all SDK wrapper methods with 100% mocked coverage.
+
 ## [39.37.180] - 2026-06-11 — Updated Member Details Audit Logs Search Placeholder
 ### Changed
 - **Search Placeholder**: Updated the search input placeholder from "Search by action or actor..." to "Search by action..." on the individual member details page to reflect the removal of the redundant Actor column.
