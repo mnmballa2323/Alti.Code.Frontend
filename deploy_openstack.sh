@@ -104,20 +104,22 @@ if [ "$MODE" != "k8s" ] && [ "$MODE" != "vm" ]; then
 fi
 
 # 1. Validate OpenStack Environment Credentials
-echo -e "\n[1/5] ${YELLOW}Validating OpenStack CLI Authentication...${NC}"
-if [ -z "$OS_AUTH_URL" ] && [ ! -f ~/.config/openstack/clouds.yaml ]; then
-    echo -e "${RED}❌ ERROR: No OpenStack credentials detected.${NC}"
-    echo -e "Please source your Keystone keystonerc profile or make sure ~/.config/openstack/clouds.yaml exists."
-    exit 1
+if [ "$DRY_RUN" = false ]; then
+    echo -e "\n[1/5] ${YELLOW}Validating OpenStack CLI Authentication...${NC}"
+    if [ -z "$OS_AUTH_URL" ] && [ ! -f ~/.config/openstack/clouds.yaml ]; then
+        echo -e "${RED}❌ ERROR: No OpenStack credentials detected.${NC}"
+        echo -e "Please source your Keystone keystonerc profile or make sure ~/.config/openstack/clouds.yaml exists."
+        exit 1
+    fi
+    echo -e "${GREEN}✔ OpenStack credentials detected.${NC}"
 fi
-echo -e "${GREEN}✔ OpenStack credentials detected.${NC}"
 
 # 2. Provision Isolated Infrastructure via Terraform
 echo -e "\n[2/5] ${YELLOW}Executing Terraform IaC with State Isolation...${NC}"
 cd terraform
 
 if [ "$DRY_RUN" = true ]; then
-    echo -e "${YELLOW}Running dry-run validation for Customer: ${CUSTOMER^^}...${NC}"
+    echo -e "${YELLOW}Running dry-run validation for Customer: $(echo "$CUSTOMER" | tr '[:lower:]' '[:upper:]')...${NC}"
     terraform init -backend=false
     terraform validate
     echo -e "${GREEN}✔ Terraform configurations validated successfully (Dry-Run).${NC}"
