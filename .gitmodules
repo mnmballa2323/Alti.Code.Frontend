@@ -46,3 +46,6 @@
 [submodule "submodules/agent-s"]
 	path = submodules/agent-s
 	url = https://github.com/simular-ai/agent-s
+[submodule "submodules/awesome-design-md"]
+	path = submodules/awesome-design-md
+	url = https://github.com/VoltAgent/awesome-design-md
