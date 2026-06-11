@@ -1035,9 +1035,9 @@ export default function ModelUsagePage() {
 
           {/* Floating Dropdown Box Panel */}
           {isArchivedExpanded && (
-            <div className="absolute top-full left-0 right-0 mt-3 p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-xl z-30 space-y-3">
+            <div className="absolute top-full left-0 right-0 mt-3 z-30 space-y-3">
               {archivedModelsData[activeTab].map((model) => (
-                <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-neutral-50/50 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 rounded-2xl gap-4">
+                <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl gap-4 shadow-md hover:shadow-lg transition-shadow duration-200">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150">{model.name}</span>
