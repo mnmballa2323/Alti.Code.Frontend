@@ -173,7 +173,7 @@ export default function TeamMembersPage() {
               </div>
 
               {/* Table Body */}
-              <div className="space-y-3 mt-3">
+              <div className="space-y-3 mt-6">
                 {sortedFilteredMembers.length > 0 ? (
                   sortedFilteredMembers.map((member) => {
                     const isYou = member.email === currentUser?.email;
