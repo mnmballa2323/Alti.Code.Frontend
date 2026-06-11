@@ -1114,5 +1114,163 @@ router.delete(
   GithubController.removeSelectedRepoFromOrgCodespacesSecret,
 );
 
+// Repository Security & Private Reporting
+router.put(
+  '/repos/:owner/:repo/private-vulnerability-reporting',
+  GithubController.enablePrivateVulnerabilityReporting,
+);
+router.delete(
+  '/repos/:owner/:repo/private-vulnerability-reporting',
+  GithubController.disablePrivateVulnerabilityReporting,
+);
+
+// Dependabot Configurations
+router.put(
+  '/repos/:owner/:repo/dependabot/alerts',
+  GithubController.enableDependabotAlerts,
+);
+router.delete(
+  '/repos/:owner/:repo/dependabot/alerts',
+  GithubController.disableDependabotAlerts,
+);
+router.put(
+  '/repos/:owner/:repo/dependabot/security-updates',
+  GithubController.enableDependabotSecurityUpdates,
+);
+router.delete(
+  '/repos/:owner/:repo/dependabot/security-updates',
+  GithubController.disableDependabotSecurityUpdates,
+);
+
+// Organization Security Managers
+router.get(
+  '/orgs/:org/security-managers',
+  GithubController.listSecurityManagerTeams,
+);
+router.put(
+  '/orgs/:org/security-managers/teams/:teamSlug',
+  GithubController.addSecurityManagerTeam,
+);
+router.delete(
+  '/orgs/:org/security-managers/teams/:teamSlug',
+  GithubController.removeSecurityManagerTeam,
+);
+
+// Repository Autolinks
+router.get(
+  '/repos/:owner/:repo/autolinks',
+  GithubController.listAutolinks,
+);
+router.post(
+  '/repos/:owner/:repo/autolinks',
+  GithubController.createAutolink,
+);
+router.get(
+  '/repos/:owner/:repo/autolinks/:autolinkId',
+  GithubController.getAutolink,
+);
+router.delete(
+  '/repos/:owner/:repo/autolinks/:autolinkId',
+  GithubController.deleteAutolink,
+);
+
+// Organization Profile, Membership & Outside Collaborators
+router.get(
+  '/orgs/:org',
+  GithubController.getOrgInfo,
+);
+router.patch(
+  '/orgs/:org',
+  GithubController.updateOrgSettings,
+);
+router.get(
+  '/orgs/:org/memberships/:username',
+  GithubController.getOrgMembership,
+);
+router.put(
+  '/orgs/:org/memberships/:username',
+  GithubController.addOrUpdateOrgMembership,
+);
+router.delete(
+  '/orgs/:org/members/:username',
+  GithubController.removeOrgMember,
+);
+router.get(
+  '/orgs/:org/outside-collaborators',
+  GithubController.listOutsideCollaborators,
+);
+router.delete(
+  '/orgs/:org/outside-collaborators/:username',
+  GithubController.removeOutsideCollaborator,
+);
+router.put(
+  '/orgs/:org/members/:username/convert-to-outside-collaborator',
+  GithubController.convertMemberToOutsideCollaborator,
+);
+
+// Organization Blocks
+router.get(
+  '/orgs/:org/blocks',
+  GithubController.listBlockedUsersForOrg,
+);
+router.get(
+  '/orgs/:org/blocks/:username',
+  GithubController.checkIfUserBlockedByOrg,
+);
+router.put(
+  '/orgs/:org/blocks/:username',
+  GithubController.blockUserForOrg,
+);
+router.delete(
+  '/orgs/:org/blocks/:username',
+  GithubController.unblockUserForOrg,
+);
+
+// Authenticated User Blocks
+router.get(
+  '/user/blocks',
+  GithubController.listBlockedUsersForUser,
+);
+router.get(
+  '/user/blocks/:username',
+  GithubController.checkIfUserBlockedByUser,
+);
+router.put(
+  '/user/blocks/:username',
+  GithubController.blockUserForUser,
+);
+router.delete(
+  '/user/blocks/:username',
+  GithubController.unblockUserForUser,
+);
+
+// Codespaces Admin & Stop/Start Lifecycle
+router.get(
+  '/orgs/:org/codespaces',
+  GithubController.listOrgCodespaces,
+);
+router.post(
+  '/codespaces/:codespaceName/stop',
+  GithubController.stopCodespace,
+);
+router.post(
+  '/codespaces/:codespaceName/start',
+  GithubController.startCodespace,
+);
+router.delete(
+  '/orgs/:org/members/:username/codespaces/:codespaceName',
+  GithubController.deleteOrgCodespace,
+);
+
+// Organization Security Advisories
+router.get(
+  '/orgs/:org/security-advisories',
+  GithubController.listOrgSecurityAdvisories,
+);
+router.post(
+  '/orgs/:org/security-advisories',
+  GithubController.createOrgSecurityAdvisory,
+);
+
 export const GithubRoutes = router;
 export default router;

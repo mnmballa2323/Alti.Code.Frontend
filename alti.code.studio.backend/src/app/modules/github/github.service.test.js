@@ -20,6 +20,10 @@ vi.mock('octokit', () => {
         listPublicKeysForAuthenticatedUser: vi.fn(),
         addPublicKeyForAuthenticatedUser: vi.fn(),
         deletePublicKeyForAuthenticatedUser: vi.fn(),
+        listBlockedForAuthenticatedUser: vi.fn(),
+        checkBlockedForAuthenticatedUser: vi.fn(),
+        block: vi.fn(),
+        unblock: vi.fn(),
       },
       repos: {
         listForAuthenticatedUser: vi.fn(),
@@ -76,6 +80,16 @@ vi.mock('octokit', () => {
         listPagesBuilds: vi.fn(),
         getPagesBuild: vi.fn(),
         requestPagesBuild: vi.fn(),
+        enablePrivateVulnerabilityReporting: vi.fn(),
+        disablePrivateVulnerabilityReporting: vi.fn(),
+        enableDependabotAlerts: vi.fn(),
+        disableDependabotAlerts: vi.fn(),
+        enableAutomatedSecurityFixes: vi.fn(),
+        disableAutomatedSecurityFixes: vi.fn(),
+        listAutolinks: vi.fn(),
+        createAutolink: vi.fn(),
+        getAutolink: vi.fn(),
+        deleteAutolink: vi.fn(),
       },
       issues: {
         listForRepo: vi.fn(),
@@ -210,6 +224,23 @@ vi.mock('octokit', () => {
         createOrgRuleset: vi.fn(),
         updateOrgRuleset: vi.fn(),
         deleteOrgRuleset: vi.fn(),
+        listSecurityManagerTeams: vi.fn(),
+        addSecurityManagerTeam: vi.fn(),
+        removeSecurityManagerTeam: vi.fn(),
+        get: vi.fn(),
+        update: vi.fn(),
+        getMembershipForUser: vi.fn(),
+        setMembershipForUser: vi.fn(),
+        removeMember: vi.fn(),
+        listOutsideCollaborators: vi.fn(),
+        removeOutsideCollaborator: vi.fn(),
+        convertMemberToOutsideCollaborator: vi.fn(),
+        listBlockedUsers: vi.fn(),
+        checkBlockedUser: vi.fn(),
+        blockUser: vi.fn(),
+        unblockUser: vi.fn(),
+        listSecurityAdvisories: vi.fn(),
+        createSecurityAdvisory: vi.fn(),
       },
       teams: {
         list: vi.fn(),
@@ -243,6 +274,10 @@ vi.mock('octokit', () => {
         setSelectedReposForOrgSecret: vi.fn(),
         addSelectedRepoToOrgSecret: vi.fn(),
         removeSelectedRepoFromOrgSecret: vi.fn(),
+        listInOrg: vi.fn(),
+        stopForAuthenticatedUser: vi.fn(),
+        startForAuthenticatedUser: vi.fn(),
+        deleteFromOrg: vi.fn(),
       },
       dependabot: {
         listAlertsForRepo: vi.fn(),
@@ -5710,6 +5745,400 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       org: 'org',
       secret_name: 'secret',
       repository_id: 123,
+    });
+  });
+
+  // 67. Repository Security & Private Reporting
+  it('should enable private vulnerability reporting', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.enablePrivateVulnerabilityReporting.mockResolvedValue({ data: mockData });
+    const result = await GithubService.enablePrivateVulnerabilityReporting('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.enablePrivateVulnerabilityReporting).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should disable private vulnerability reporting', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.disablePrivateVulnerabilityReporting.mockResolvedValue({ data: mockData });
+    const result = await GithubService.disablePrivateVulnerabilityReporting('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.disablePrivateVulnerabilityReporting).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // 68. Dependabot Configurations
+  it('should enable Dependabot alerts', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.enableDependabotAlerts.mockResolvedValue({ data: mockData });
+    const result = await GithubService.enableDependabotAlerts('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.enableDependabotAlerts).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should disable Dependabot alerts', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.disableDependabotAlerts.mockResolvedValue({ data: mockData });
+    const result = await GithubService.disableDependabotAlerts('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.disableDependabotAlerts).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should enable Dependabot security updates', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.enableAutomatedSecurityFixes.mockResolvedValue({ data: mockData });
+    const result = await GithubService.enableDependabotSecurityUpdates('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.enableAutomatedSecurityFixes).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should disable Dependabot security updates', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.disableAutomatedSecurityFixes.mockResolvedValue({ data: mockData });
+    const result = await GithubService.disableDependabotSecurityUpdates('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.disableAutomatedSecurityFixes).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // 69. Organization Security Managers
+  it('should list security manager teams', async () => {
+    const mockData = [{ id: 1, name: 'Security' }];
+    mockOctokit.rest.orgs.listSecurityManagerTeams.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listSecurityManagerTeams('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listSecurityManagerTeams).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should add a security manager team', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.addSecurityManagerTeam.mockResolvedValue({ data: mockData });
+    const result = await GithubService.addSecurityManagerTeam('org', 'team-slug');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.addSecurityManagerTeam).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-slug',
+    });
+  });
+
+  it('should remove a security manager team', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.removeSecurityManagerTeam.mockResolvedValue({ data: mockData });
+    const result = await GithubService.removeSecurityManagerTeam('org', 'team-slug');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.removeSecurityManagerTeam).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-slug',
+    });
+  });
+
+  // 70. Repository Autolinks
+  it('should list autolinks', async () => {
+    const mockData = [{ id: 1, key_prefix: 'TICKET-' }];
+    mockOctokit.rest.repos.listAutolinks.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listAutolinks('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.listAutolinks).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should create an autolink', async () => {
+    const mockData = { id: 1, key_prefix: 'TICKET-' };
+    mockOctokit.rest.repos.createAutolink.mockResolvedValue({ data: mockData });
+    const result = await GithubService.createAutolink('owner', 'repo', 'TICKET-', 'https://example.com/<num>', true);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.createAutolink).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      key_prefix: 'TICKET-',
+      url_template: 'https://example.com/<num>',
+      is_alphanumeric: true,
+    });
+  });
+
+  it('should get an autolink', async () => {
+    const mockData = { id: 1, key_prefix: 'TICKET-' };
+    mockOctokit.rest.repos.getAutolink.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getAutolink('owner', 'repo', 1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.getAutolink).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      autolink_id: 1,
+    });
+  });
+
+  it('should delete an autolink', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deleteAutolink.mockResolvedValue({ data: mockData });
+    const result = await GithubService.deleteAutolink('owner', 'repo', 1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.deleteAutolink).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      autolink_id: 1,
+    });
+  });
+
+  // 71. Organization Profile, Membership & Outside Collaborators
+  it('should get org info', async () => {
+    const mockData = { id: 1, login: 'org' };
+    mockOctokit.rest.orgs.get.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getOrgInfo('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.get).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should update org settings', async () => {
+    const mockData = { id: 1, login: 'org' };
+    mockOctokit.rest.orgs.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.updateOrgSettings('org', { description: 'Updated' });
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.update).toHaveBeenCalledWith({
+      org: 'org',
+      description: 'Updated',
+    });
+  });
+
+  it('should get org membership', async () => {
+    const mockData = { state: 'active', role: 'admin' };
+    mockOctokit.rest.orgs.getMembershipForUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getOrgMembership('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.getMembershipForUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should add or update org membership', async () => {
+    const mockData = { state: 'pending', role: 'member' };
+    mockOctokit.rest.orgs.setMembershipForUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.addOrUpdateOrgMembership('org', 'username', 'member');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.setMembershipForUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+      role: 'member',
+    });
+  });
+
+  it('should remove org member', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.removeMember.mockResolvedValue({ data: mockData });
+    const result = await GithubService.removeOrgMember('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.removeMember).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should list outside collaborators', async () => {
+    const mockData = [{ id: 1, login: 'collab' }];
+    mockOctokit.rest.orgs.listOutsideCollaborators.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listOutsideCollaborators('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listOutsideCollaborators).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should remove outside collaborator', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.removeOutsideCollaborator.mockResolvedValue({ data: mockData });
+    const result = await GithubService.removeOutsideCollaborator('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.removeOutsideCollaborator).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should convert member to outside collaborator', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.convertMemberToOutsideCollaborator.mockResolvedValue({ data: mockData });
+    const result = await GithubService.convertMemberToOutsideCollaborator('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.convertMemberToOutsideCollaborator).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  // 72. Organization Blocks
+  it('should list blocked users for org', async () => {
+    const mockData = [{ id: 1, login: 'blocked' }];
+    mockOctokit.rest.orgs.listBlockedUsers.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listBlockedUsersForOrg('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listBlockedUsers).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should check if user blocked by org (blocked)', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.checkBlockedUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.checkIfUserBlockedByOrg('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.checkBlockedUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should check if user blocked by org (not blocked 404)', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.orgs.checkBlockedUser.mockRejectedValue(error404);
+    const result = await GithubService.checkIfUserBlockedByOrg('org', 'username');
+    expect(result).toEqual({ blocked: false });
+    expect(mockOctokit.rest.orgs.checkBlockedUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should block user for org', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.blockUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.blockUserForOrg('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.blockUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  it('should unblock user for org', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.unblockUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.unblockUserForOrg('org', 'username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.unblockUser).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+    });
+  });
+
+  // 73. Authenticated User Blocks
+  it('should list blocked users for user', async () => {
+    const mockData = [{ id: 1, login: 'blocked' }];
+    mockOctokit.rest.users.listBlockedForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listBlockedUsersForUser();
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listBlockedForAuthenticatedUser).toHaveBeenCalled();
+  });
+
+  it('should check if user blocked by user (blocked)', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.checkIfUserBlockedByUser('username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.checkBlockedForAuthenticatedUser).toHaveBeenCalledWith({
+      username: 'username',
+    });
+  });
+
+  it('should check if user blocked by user (not blocked 404)', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockRejectedValue(error404);
+    const result = await GithubService.checkIfUserBlockedByUser('username');
+    expect(result).toEqual({ blocked: false });
+    expect(mockOctokit.rest.users.checkBlockedForAuthenticatedUser).toHaveBeenCalledWith({
+      username: 'username',
+    });
+  });
+
+  it('should block user for user', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.block.mockResolvedValue({ data: mockData });
+    const result = await GithubService.blockUserForUser('username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.block).toHaveBeenCalledWith({ username: 'username' });
+  });
+
+  it('should unblock user for user', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.unblock.mockResolvedValue({ data: mockData });
+    const result = await GithubService.unblockUserForUser('username');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.unblock).toHaveBeenCalledWith({ username: 'username' });
+  });
+
+  // 74. Codespaces Admin & Stop/Start Lifecycle
+  it('should list org codespaces', async () => {
+    const mockData = [{ id: 1, name: 'codespace' }];
+    mockOctokit.rest.codespaces.listInOrg.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listOrgCodespaces('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codespaces.listInOrg).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should stop a codespace', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.codespaces.stopForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.stopCodespace('codespace');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codespaces.stopForAuthenticatedUser).toHaveBeenCalledWith({
+      codespace_name: 'codespace',
+    });
+  });
+
+  it('should start a codespace', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.codespaces.startForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    const result = await GithubService.startCodespace('codespace');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codespaces.startForAuthenticatedUser).toHaveBeenCalledWith({
+      codespace_name: 'codespace',
+    });
+  });
+
+  it('should delete org codespace', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.codespaces.deleteFromOrg.mockResolvedValue({ data: mockData });
+    const result = await GithubService.deleteOrgCodespace('org', 'username', 'codespace');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codespaces.deleteFromOrg).toHaveBeenCalledWith({
+      org: 'org',
+      username: 'username',
+      codespace_name: 'codespace',
+    });
+  });
+
+  // 75. Organization Security Advisories
+  it('should list org security advisories', async () => {
+    const mockData = [{ id: 1, ghsa_id: 'GHSA-xxx' }];
+    mockOctokit.rest.orgs.listSecurityAdvisories.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listOrgSecurityAdvisories('org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listSecurityAdvisories).toHaveBeenCalledWith({ org: 'org' });
+  });
+
+  it('should create org security advisory', async () => {
+    const mockData = { id: 1, ghsa_id: 'GHSA-xxx' };
+    mockOctokit.rest.orgs.createSecurityAdvisory.mockResolvedValue({ data: mockData });
+    const result = await GithubService.createOrgSecurityAdvisory('org', { summary: 'S1' });
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.createSecurityAdvisory).toHaveBeenCalledWith({
+      org: 'org',
+      summary: 'S1',
     });
   });
 });
