@@ -103,7 +103,7 @@ export default function KnowledgePage() {
           />
           {/* Left side text/placeholder */}
           <div className="flex-1 px-4 text-sm text-neutral-400 dark:text-neutral-500 select-none truncate font-medium flex items-center">
-            Attach files or drag and drop here...
+            Click here to attach files...
           </div>
           
           {/* Right side upload button - directly adjacent with no gap */}
@@ -175,11 +175,10 @@ export default function KnowledgePage() {
                 Remove File
               </h2>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
-                Are you sure you want to remove{" "}
-                <span className="font-semibold text-neutral-700 dark:text-neutral-300 font-mono break-all">
+                Are you sure you want to remove
+                <span className="block font-semibold text-neutral-700 dark:text-neutral-300 font-mono break-all mt-1.5">
                   {fileToDelete}
                 </span>
-                ?
               </p>
             </div>
             
