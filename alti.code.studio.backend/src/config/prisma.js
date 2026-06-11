@@ -7,7 +7,7 @@ const basePrisma = new PrismaClient({
   log: ['error', 'warn'],
 });
 
-export const prisma = basePrisma.$extends({
+const queryExtensions = {
   query: {
     $allModels: {
       async $allOperations({ model, operation, args, query }) {
@@ -29,7 +29,6 @@ export const prisma = basePrisma.$extends({
         if (cachedStr) {
             try {
                 const cachedData = JSON.parse(cachedStr);
-                // logger.info(\`⚡ [DataLayer] Redis Cache HIT for \${model}.\${operation}\`);
                 return cachedData;
             } catch(e) {
                 /* Malformed cache, fall through */
@@ -48,7 +47,38 @@ export const prisma = basePrisma.$extends({
       }
     }
   }
-});
+};
+
+export const prisma = basePrisma.$extends(queryExtensions);
+
+// Dynamic connection pool caching dedicated database clients per tenant
+const clientPool = new Map();
+
+export const getTenantPrisma = (tenantId, dedicatedDbUrl) => {
+  if (!tenantId || !dedicatedDbUrl) {
+    return prisma;
+  }
+
+  if (clientPool.has(tenantId)) {
+    return clientPool.get(tenantId);
+  }
+
+  const tenantBasePrisma = new PrismaClient({
+    datasources: {
+      db: {
+        url: dedicatedDbUrl,
+      },
+    },
+    log: ['error', 'warn'],
+  });
+
+  // Inject same Redis caching client extensions to tenant DB connections
+  const tenantPrisma = tenantBasePrisma.$extends(queryExtensions);
+  clientPool.set(tenantId, tenantPrisma);
+  
+  logger.info(`🔌 [DataLayer] Dynamically provisioned dedicated connection pool for Tenant ID: ${tenantId}`);
+  return tenantPrisma;
+};
 
 export async function connectPrisma() {
   try {

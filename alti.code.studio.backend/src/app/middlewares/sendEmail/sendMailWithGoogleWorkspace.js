@@ -19,19 +19,25 @@ import { logger } from '../../../shared/logger.js';
 export const sendMailWithGoogleWorkspace = async (mailData) => {
   const { sub, message, userEmail } = mailData;
 
-  // Configure transporter using standard Google Workspace / Gmail SMTP
+  const smtpHost = config.smtp?.host || 'smtp.gmail.com';
+  const smtpPort = parseInt(config.smtp?.port || '465', 10);
+  const smtpSecure = config.smtp?.secure !== 'false'; // Defaults to secure true
+  const smtpUser = config.smtp?.user;
+  const smtpPass = config.smtp?.pass;
+
+  // Configure transporter dynamically for local or public SMTP relays
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465, // SSL
-    secure: true,
-    auth: {
-      user: config.smtp?.user || process.env.SMTP_USER,
-      pass: config.smtp?.pass || process.env.SMTP_PASS,
-    },
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: smtpUser && smtpPass ? {
+      user: smtpUser,
+      pass: smtpPass,
+    } : undefined,
   });
 
   const mailOptions = {
-    from: `"Inso Code" <${config.smtp?.user || process.env.SMTP_USER}>`,
+    from: `"Inso Code" <${smtpUser || 'no-reply@insocode.com'}>`,
     to: userEmail,
     subject: sub,
     html: message,

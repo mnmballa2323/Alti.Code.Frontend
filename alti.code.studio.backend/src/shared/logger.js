@@ -6,7 +6,7 @@
  */
 
 import winston, { format } from 'winston';
-import { EventBusTransport } from './winstonTransport.js';
+import { EventBusTransport, LokiTransport } from './winstonTransport.js';
 import { LoggingWinston } from '@google-cloud/logging-winston';
 import { errorReportingService } from '../app/modules/googleCloud/error_reporting.service.js';
 
@@ -34,6 +34,14 @@ const errorTransports = [
   new winston.transports.Console(),
   new EventBusTransport(),
 ];
+
+// Mount Grafana Loki private cloud transport if URL is provided
+if (process.env.LOKI_URL) {
+  const loki = new LokiTransport();
+  transports.push(loki);
+  errorTransports.push(loki);
+  console.log('✅ Local Grafana Loki (Winston Transport) activated.');
+}
 
 // 🌐 Deep Google Integration: Google Cloud Logging (Winston Transport)
 if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {

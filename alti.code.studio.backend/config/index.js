@@ -74,6 +74,13 @@ const configObject = {
   browser_use_url: process.env.BROWSER_USE_URL || 'http://localhost:3018',
   agent_s_python_path: process.env.AGENT_S_PYTHON_PATH || path.join(process.cwd(), '.venv-agent-s/bin/python'),
   private_cloud_mode: process.env.PRIVATE_CLOUD_MODE === 'true',
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: process.env.SMTP_PORT,
+    secure: process.env.SMTP_SECURE,
+    user: process.env.SMTP_USER || process.env.email,
+    pass: process.env.SMTP_PASS || process.env.password,
+  },
 };
 
 export const loadEnterpriseSecrets = async () => {

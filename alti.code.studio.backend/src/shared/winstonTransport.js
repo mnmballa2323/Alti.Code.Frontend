@@ -46,3 +46,53 @@ export class EventBusTransport extends Transport {
         if (callback) callback();
     }
 }
+
+export class LokiTransport extends Transport {
+    constructor(opts) {
+        super(opts);
+        this.lokiUrl = opts?.lokiUrl || process.env.LOKI_URL;
+        this.env = process.env.NODE_ENV || 'development';
+    }
+
+    async log(info, callback) {
+        setImmediate(async () => {
+            if (!this.lokiUrl) {
+                return;
+            }
+
+            // Prevent recursion by avoiding LOKI log loops
+            if (info.message && info.message.includes('[LOKI]')) {
+                return;
+            }
+
+            const timestampNs = (Date.now() * 1000000).toString();
+            const logLine = `${info.timestamp || new Date().toISOString()} [${info.label || 'INSO Code'}] ${info.level.toUpperCase()}: ${info.message}`;
+
+            const payload = {
+                streams: [
+                    {
+                        stream: {
+                            job: 'alti-code-studio',
+                            level: info.level,
+                            environment: this.env
+                        },
+                        values: [
+                            [timestampNs, logLine]
+                        ]
+                    }
+                ]
+            };
+
+            try {
+                const axios = (await import('axios')).default;
+                await axios.post(this.lokiUrl, payload, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            } catch (err) {
+                // Fail silently to avoid crash loops
+            }
+        });
+
+        if (callback) callback();
+    }
+}
