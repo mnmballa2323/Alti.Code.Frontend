@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   Loader2,
-  Activity,
   Cpu,
   TrendingUp,
   AlertCircle,
@@ -13,14 +12,14 @@ import {
   CheckCircle,
   XCircle,
   ShieldAlert,
-  ChevronDown
+  ChevronDown,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
 
 import { teamAPI } from "@/lib/enterprise-api";
-import { useSession } from "next-auth/react";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
-import axios from "axios";
 import { SOCKET_URL } from "@/lib/config";
 
 interface AuditLog {
@@ -32,7 +31,6 @@ interface AuditLog {
   ipAddress?: string;
   metadata?: string;
 }
-
 
 interface Member {
   id: string;
@@ -52,7 +50,9 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
 
-  const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
+  const currentUserFromStore = useAppSelector(
+    (state) => state.user.data,
+  ) as any;
 
   // Audit Logs State
   const [logs, setLogs] = useState<AuditLog[]>([]);
@@ -122,10 +122,17 @@ export default function MemberDetailsPage() {
       }
 
       // Check if current user
-      if (!foundMember && currentUserFromStore && (currentUserFromStore.id === id || id === "current-user")) {
+      if (
+        !foundMember &&
+        currentUserFromStore &&
+        (currentUserFromStore.id === id || id === "current-user")
+      ) {
         foundMember = {
           id: currentUserFromStore.id || "current-user",
-          name: currentUserFromStore.name || `${currentUserFromStore.firstName || ""} ${currentUserFromStore.lastName || ""}`.trim() || undefined,
+          name:
+            currentUserFromStore.name ||
+            `${currentUserFromStore.firstName || ""} ${currentUserFromStore.lastName || ""}`.trim() ||
+            undefined,
           email: currentUserFromStore.email,
           role: currentUserFromStore.role || "admin",
         };
@@ -133,12 +140,17 @@ export default function MemberDetailsPage() {
 
       setMember(foundMember);
       if (foundMember) {
-        dispatch(setActiveMemberName(foundMember.name || foundMember.email.split("@")[0]));
+        dispatch(
+          setActiveMemberName(
+            foundMember.name || foundMember.email.split("@")[0],
+          ),
+        );
       }
     } catch (err) {
       console.error("Failed to load member details:", err);
       // Fallback immediately to static mock
       const found = staticMockMembers.find((m) => m.id === id);
+
       if (found) {
         setMember(found);
         dispatch(setActiveMemberName(found.name || found.email.split("@")[0]));
@@ -160,8 +172,6 @@ export default function MemberDetailsPage() {
     };
   }, [dispatch]);
 
-
-
   const getMemberDetails = (memberObj: Member) => {
     const emailLower = memberObj.email.toLowerCase();
     const isAda = emailLower.includes("ada");
@@ -171,7 +181,8 @@ export default function MemberDetailsPage() {
 
     if (isAda) {
       return {
-        avatarColor: "bg-purple-100 text-purple-750 dark:bg-purple-950/40 dark:text-purple-400",
+        avatarColor:
+          "bg-purple-100 text-purple-750 dark:bg-purple-950/40 dark:text-purple-400",
         avatarInitials: "AL",
         spendCurrent: 42.15,
         spendLimit: 100.0,
@@ -182,12 +193,36 @@ export default function MemberDetailsPage() {
         tasksSuccess: "99.4%",
         sparkline: [25, 45, 12, 60, 40, 85, 30],
         activity: [
-          { time: "5 minutes ago", action: "Ran code generator model gemini-1.5-pro", category: "code" },
-          { time: "2 hours ago", action: "Pushed 14 new modules to enterprise-auth", category: "git" },
-          { time: "1 day ago", action: "Modified deployment parameters in production config", category: "config" },
-          { time: "2 days ago", action: "Requested audit log export for compliance review", category: "audit" },
-          { time: "4 days ago", action: "Updated prompt instructions for Legal-Analyst agent", category: "agent" },
-          { time: "1 week ago", action: "Triggered build sweep for staging branch", category: "deploy" },
+          {
+            time: "5 minutes ago",
+            action: "Ran code generator model gemini-1.5-pro",
+            category: "code",
+          },
+          {
+            time: "2 hours ago",
+            action: "Pushed 14 new modules to enterprise-auth",
+            category: "git",
+          },
+          {
+            time: "1 day ago",
+            action: "Modified deployment parameters in production config",
+            category: "config",
+          },
+          {
+            time: "2 days ago",
+            action: "Requested audit log export for compliance review",
+            category: "audit",
+          },
+          {
+            time: "4 days ago",
+            action: "Updated prompt instructions for Legal-Analyst agent",
+            category: "agent",
+          },
+          {
+            time: "1 week ago",
+            action: "Triggered build sweep for staging branch",
+            category: "deploy",
+          },
         ],
         auditLogs: [
           {
@@ -197,7 +232,8 @@ export default function MemberDetailsPage() {
             action: "MODEL_RUN_CODE_GENERATOR",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"model":"gemini-1.5-pro","prompt_tokens":120400,"completion_tokens":25400}'
+            metadata:
+              '{"model":"gemini-1.5-pro","prompt_tokens":120400,"completion_tokens":25400}',
           },
           {
             _id: "ada_log_02",
@@ -206,7 +242,8 @@ export default function MemberDetailsPage() {
             action: "GIT_PUSH_ENTERPRISE_AUTH",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"repo":"enterprise-auth","branch":"main","commits_count":14,"hash":"7e9f3b1"}'
+            metadata:
+              '{"repo":"enterprise-auth","branch":"main","commits_count":14,"hash":"7e9f3b1"}',
           },
           {
             _id: "ada_log_03",
@@ -215,7 +252,8 @@ export default function MemberDetailsPage() {
             action: "DEPLOY_CONFIG_MODIFY",
             status: "WARNING" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"environment":"production","modified_keys":["replicaCount","memoryLimit"],"reason":"high load scaling"}'
+            metadata:
+              '{"environment":"production","modified_keys":["replicaCount","memoryLimit"],"reason":"high load scaling"}',
           },
           {
             _id: "ada_log_04",
@@ -224,7 +262,8 @@ export default function MemberDetailsPage() {
             action: "AUDIT_LOG_EXPORT_REQUEST",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"target_format":"csv","export_scope":"entire_org","compliance_id":"comp_881"}'
+            metadata:
+              '{"target_format":"csv","export_scope":"entire_org","compliance_id":"comp_881"}',
           },
           {
             _id: "ada_log_05",
@@ -233,7 +272,8 @@ export default function MemberDetailsPage() {
             action: "AGENT_PROMPT_UPDATE",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"agent_name":"Legal-Analyst","version":"v2.1","changed_instructions":"Enforce strict compliance checks"}'
+            metadata:
+              '{"agent_name":"Legal-Analyst","version":"v2.1","changed_instructions":"Enforce strict compliance checks"}',
           },
           {
             _id: "ada_log_06",
@@ -242,16 +282,18 @@ export default function MemberDetailsPage() {
             action: "BUILD_SWEEP_TRIGGER",
             status: "FAILURE" as const,
             ipAddress: "192.168.1.15",
-            metadata: '{"branch":"staging","error":"Webpack bundle compilation timed out after 300s"}'
-          }
-        ]
+            metadata:
+              '{"branch":"staging","error":"Webpack bundle compilation timed out after 300s"}',
+          },
+        ],
       };
     }
     if (isAlan) {
       return {
-        avatarColor: "bg-blue-100 text-blue-750 dark:bg-blue-950/40 dark:text-blue-400",
+        avatarColor:
+          "bg-blue-100 text-blue-750 dark:bg-blue-950/40 dark:text-blue-400",
         avatarInitials: "AT",
-        spendCurrent: 88.50,
+        spendCurrent: 88.5,
         spendLimit: 150.0,
         tokensTotal: "6.8M",
         tokensIn: "4.2M",
@@ -260,12 +302,36 @@ export default function MemberDetailsPage() {
         tasksSuccess: "98.7%",
         sparkline: [60, 80, 45, 90, 75, 110, 85],
         activity: [
-          { time: "12 minutes ago", action: "Executed optimization sweep on db-indexing script", category: "perf" },
-          { time: "1 hour ago", action: "Completed full codebase audit for security telemetry", category: "audit" },
-          { time: "4 hours ago", action: "Created new workspace group 'security-hardening'", category: "admin" },
-          { time: "3 days ago", action: "Modified role permissions for Developer group", category: "admin" },
-          { time: "5 days ago", action: "Verified private cloud local logging transport config", category: "security" },
-          { time: "1 week ago", action: "Updated database migration schemas for user billing", category: "database" },
+          {
+            time: "12 minutes ago",
+            action: "Executed optimization sweep on db-indexing script",
+            category: "perf",
+          },
+          {
+            time: "1 hour ago",
+            action: "Completed full codebase audit for security telemetry",
+            category: "audit",
+          },
+          {
+            time: "4 hours ago",
+            action: "Created new workspace group 'security-hardening'",
+            category: "admin",
+          },
+          {
+            time: "3 days ago",
+            action: "Modified role permissions for Developer group",
+            category: "admin",
+          },
+          {
+            time: "5 days ago",
+            action: "Verified private cloud local logging transport config",
+            category: "security",
+          },
+          {
+            time: "1 week ago",
+            action: "Updated database migration schemas for user billing",
+            category: "database",
+          },
         ],
         auditLogs: [
           {
@@ -275,7 +341,8 @@ export default function MemberDetailsPage() {
             action: "DB_INDEX_OPTIMIZATION_SWEEP",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.22",
-            metadata: '{"script":"db-indexing.sql","tables_affected":["transactions","users"],"latency_improvement":"42%"}'
+            metadata:
+              '{"script":"db-indexing.sql","tables_affected":["transactions","users"],"latency_improvement":"42%"}',
           },
           {
             _id: "alan_log_02",
@@ -284,7 +351,8 @@ export default function MemberDetailsPage() {
             action: "CODEBASE_SECURITY_AUDIT",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.22",
-            metadata: '{"scope":"all_submodules","vulnerabilities_found":0,"scanned_files_count":4820}'
+            metadata:
+              '{"scope":"all_submodules","vulnerabilities_found":0,"scanned_files_count":4820}',
           },
           {
             _id: "alan_log_03",
@@ -293,7 +361,8 @@ export default function MemberDetailsPage() {
             action: "WORKSPACE_GROUP_CREATE",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.22",
-            metadata: '{"group_name":"security-hardening","description":"Group for automated security sweeps"}'
+            metadata:
+              '{"group_name":"security-hardening","description":"Group for automated security sweeps"}',
           },
           {
             _id: "alan_log_04",
@@ -302,7 +371,8 @@ export default function MemberDetailsPage() {
             action: "ROLE_PERMISSIONS_MODIFY",
             status: "DENIED" as const,
             ipAddress: "10.0.0.12",
-            metadata: '{"target_group":"Developer","denied_reason":"Requires dual authorization to elevate developer permissions"}'
+            metadata:
+              '{"target_group":"Developer","denied_reason":"Requires dual authorization to elevate developer permissions"}',
           },
           {
             _id: "alan_log_05",
@@ -311,7 +381,8 @@ export default function MemberDetailsPage() {
             action: "LOGGING_TRANSPORT_VERIFY",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.22",
-            metadata: '{"transport":"fluentd","encryption":"TLSv1.3","destination":"private_cloud_vault"}'
+            metadata:
+              '{"transport":"fluentd","encryption":"TLSv1.3","destination":"private_cloud_vault"}',
           },
           {
             _id: "alan_log_06",
@@ -320,16 +391,18 @@ export default function MemberDetailsPage() {
             action: "DB_MIGRATION_UPDATE",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.22",
-            metadata: '{"version":"20260610_billing","down_migration_available":true,"lock_timeout_ms":5000}'
-          }
-        ]
+            metadata:
+              '{"version":"20260610_billing","down_migration_available":true,"lock_timeout_ms":5000}',
+          },
+        ],
       };
     }
     if (isGrace) {
       return {
-        avatarColor: "bg-emerald-100 text-emerald-750 dark:bg-emerald-950/40 dark:text-emerald-400",
+        avatarColor:
+          "bg-emerald-100 text-emerald-750 dark:bg-emerald-950/40 dark:text-emerald-400",
         avatarInitials: "GH",
-        spendCurrent: 14.80,
+        spendCurrent: 14.8,
         spendLimit: 50.0,
         tokensTotal: "1.1M",
         tokensIn: "800k",
@@ -338,11 +411,31 @@ export default function MemberDetailsPage() {
         tasksSuccess: "99.1%",
         sparkline: [10, 15, 30, 20, 45, 25, 15],
         activity: [
-          { time: "1 hour ago", action: "Deployed staging build v2.4.1-rc3", category: "deploy" },
-          { time: "3 hours ago", action: "Patched memory leaks in telemetry-parser daemon", category: "bugfix" },
-          { time: "1 day ago", action: "Ran performance benchmark tests on landing page", category: "perf" },
-          { time: "2 days ago", action: "Refactored legacy logging dependencies", category: "cleanup" },
-          { time: "5 days ago", action: "Added unit tests for recaptcha service mock fallback", category: "test" },
+          {
+            time: "1 hour ago",
+            action: "Deployed staging build v2.4.1-rc3",
+            category: "deploy",
+          },
+          {
+            time: "3 hours ago",
+            action: "Patched memory leaks in telemetry-parser daemon",
+            category: "bugfix",
+          },
+          {
+            time: "1 day ago",
+            action: "Ran performance benchmark tests on landing page",
+            category: "perf",
+          },
+          {
+            time: "2 days ago",
+            action: "Refactored legacy logging dependencies",
+            category: "cleanup",
+          },
+          {
+            time: "5 days ago",
+            action: "Added unit tests for recaptcha service mock fallback",
+            category: "test",
+          },
         ],
         auditLogs: [
           {
@@ -352,7 +445,8 @@ export default function MemberDetailsPage() {
             action: "STAGING_BUILD_DEPLOY",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.44",
-            metadata: '{"version":"v2.4.1-rc3","environment":"staging","checks_passed":true}'
+            metadata:
+              '{"version":"v2.4.1-rc3","environment":"staging","checks_passed":true}',
           },
           {
             _id: "grace_log_02",
@@ -361,7 +455,8 @@ export default function MemberDetailsPage() {
             action: "TELEMETRY_PARSER_BUGFIX",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.44",
-            metadata: '{"daemon":"telemetry-parser","leak_size_kb":450,"files_modified":["parser.go"]}'
+            metadata:
+              '{"daemon":"telemetry-parser","leak_size_kb":450,"files_modified":["parser.go"]}',
           },
           {
             _id: "grace_log_03",
@@ -370,7 +465,8 @@ export default function MemberDetailsPage() {
             action: "PERF_BENCHMARK_RUN",
             status: "WARNING" as const,
             ipAddress: "192.168.1.44",
-            metadata: '{"target":"landing_page","lcp_ms":2850,"inp_ms":220,"status":"needs_optimization"}'
+            metadata:
+              '{"target":"landing_page","lcp_ms":2850,"inp_ms":220,"status":"needs_optimization"}',
           },
           {
             _id: "grace_log_04",
@@ -379,7 +475,8 @@ export default function MemberDetailsPage() {
             action: "LOGGING_DEPS_REFACTOR",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.44",
-            metadata: '{"removed_packages":["winston-legacy"],"added_packages":["pino"],"bundle_reduction_kb":142}'
+            metadata:
+              '{"removed_packages":["winston-legacy"],"added_packages":["pino"],"bundle_reduction_kb":142}',
           },
           {
             _id: "grace_log_05",
@@ -388,16 +485,18 @@ export default function MemberDetailsPage() {
             action: "UNIT_TEST_ADD",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.44",
-            metadata: '{"service":"recaptcha-mock","tests_added_count":8,"coverage_increase":"1.4%"}'
-          }
-        ]
+            metadata:
+              '{"service":"recaptcha-mock","tests_added_count":8,"coverage_increase":"1.4%"}',
+          },
+        ],
       };
     }
     if (isJules) {
       return {
-        avatarColor: "bg-amber-100 text-amber-750 dark:bg-amber-950/40 dark:text-amber-400",
+        avatarColor:
+          "bg-amber-100 text-amber-750 dark:bg-amber-950/40 dark:text-amber-400",
         avatarInitials: "JV",
-        spendCurrent: 3.20,
+        spendCurrent: 3.2,
         spendLimit: 50.0,
         tokensTotal: "240k",
         tokensIn: "180k",
@@ -406,9 +505,21 @@ export default function MemberDetailsPage() {
         tasksSuccess: "100%",
         sparkline: [2, 5, 10, 8, 4, 12, 5],
         activity: [
-          { time: "4 hours ago", action: "Initialized scratchpad folder in workspace root", category: "setup" },
-          { time: "1 day ago", action: "Drafted system-instructions.md draft", category: "docs" },
-          { time: "3 days ago", action: "Accepted invitation to workspace", category: "admin" },
+          {
+            time: "4 hours ago",
+            action: "Initialized scratchpad folder in workspace root",
+            category: "setup",
+          },
+          {
+            time: "1 day ago",
+            action: "Drafted system-instructions.md draft",
+            category: "docs",
+          },
+          {
+            time: "3 days ago",
+            action: "Accepted invitation to workspace",
+            category: "admin",
+          },
         ],
         auditLogs: [
           {
@@ -418,7 +529,7 @@ export default function MemberDetailsPage() {
             action: "WORKSPACE_FOLDER_INIT",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.88",
-            metadata: '{"folder_path":"/scratchpad","is_git_ignored":true}'
+            metadata: '{"folder_path":"/scratchpad","is_git_ignored":true}',
           },
           {
             _id: "jules_log_02",
@@ -427,7 +538,7 @@ export default function MemberDetailsPage() {
             action: "DOCS_DRAFT_CREATE",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.88",
-            metadata: '{"file":"system-instructions.md","word_count":425}'
+            metadata: '{"file":"system-instructions.md","word_count":425}',
           },
           {
             _id: "jules_log_03",
@@ -436,21 +547,28 @@ export default function MemberDetailsPage() {
             action: "WORKSPACE_INVITE_ACCEPT",
             status: "SUCCESS" as const,
             ipAddress: "192.168.1.88",
-            metadata: '{"workspace_id":"ws_dev_main","role":"developer"}'
-          }
-        ]
+            metadata: '{"workspace_id":"ws_dev_main","role":"developer"}',
+          },
+        ],
       };
     }
 
     // Default fallback
     const initials = memberObj.name
-      ? memberObj.name.trim().split(/\s+/).map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+      ? memberObj.name
+          .trim()
+          .split(/\s+/)
+          .map((n) => n[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase()
       : memberObj.email.slice(0, 2).toUpperCase();
 
     return {
-      avatarColor: "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-350",
+      avatarColor:
+        "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-350",
       avatarInitials: initials,
-      spendCurrent: 12.50,
+      spendCurrent: 12.5,
       spendLimit: 100.0,
       tokensTotal: "840k",
       tokensIn: "600k",
@@ -459,8 +577,16 @@ export default function MemberDetailsPage() {
       tasksSuccess: "99.0%",
       sparkline: [12, 18, 15, 22, 14, 30, 10],
       activity: [
-        { time: "2 hours ago", action: "Viewed members directory list", category: "audit" },
-        { time: "1 day ago", action: "Updated personal profile settings", category: "settings" },
+        {
+          time: "2 hours ago",
+          action: "Viewed members directory list",
+          category: "audit",
+        },
+        {
+          time: "1 day ago",
+          action: "Updated personal profile settings",
+          category: "settings",
+        },
       ],
       auditLogs: [
         {
@@ -470,7 +596,7 @@ export default function MemberDetailsPage() {
           action: "MEMBERS_LIST_VIEW",
           status: "SUCCESS" as const,
           ipAddress: "192.168.1.99",
-          metadata: '{"filtered_by":null,"limit":50}'
+          metadata: '{"filtered_by":null,"limit":50}',
         },
         {
           _id: "fallback_log_02",
@@ -479,9 +605,9 @@ export default function MemberDetailsPage() {
           action: "PROFILE_SETTINGS_UPDATE",
           status: "SUCCESS" as const,
           ipAddress: "192.168.1.99",
-          metadata: '{"fields_updated":["avatar","displayName"]}'
-        }
-      ]
+          metadata: '{"fields_updated":["avatar","displayName"]}',
+        },
+      ],
     };
   };
 
@@ -498,7 +624,9 @@ export default function MemberDetailsPage() {
               limit: 50,
               action: searchTerm,
             },
-            headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+            headers: accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : {},
             withCredentials: true,
           });
 
@@ -508,11 +636,13 @@ export default function MemberDetailsPage() {
             response.data.data.length > 0
           ) {
             const memberEmail = member.email.toLowerCase();
-            const filtered = response.data.data.filter((log: any) =>
-              log.actor?.toLowerCase() === memberEmail &&
-              (log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-               log.actor.toLowerCase().includes(searchTerm.toLowerCase()))
+            const filtered = response.data.data.filter(
+              (log: any) =>
+                log.actor?.toLowerCase() === memberEmail &&
+                (log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  log.actor.toLowerCase().includes(searchTerm.toLowerCase())),
             );
+
             setLogs(filtered);
             setLogsTotalPages(1);
           } else {
@@ -522,6 +652,7 @@ export default function MemberDetailsPage() {
                 log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
             );
+
             setLogs(filtered);
             setLogsTotalPages(1);
           }
@@ -533,6 +664,7 @@ export default function MemberDetailsPage() {
               log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
               log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
           );
+
           setLogs(filtered);
           setLogsTotalPages(1);
         } finally {
@@ -559,9 +691,12 @@ export default function MemberDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20 h-full w-full text-center px-6">
         <AlertCircle className="w-12 h-12 text-neutral-300 dark:text-neutral-700 mb-4" />
-        <h2 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-1">Member Not Found</h2>
+        <h2 className="text-lg font-bold text-neutral-800 dark:text-neutral-200 mb-1">
+          Member Not Found
+        </h2>
         <p className="text-sm text-neutral-500 dark:text-neutral-455 mb-6">
-          The requested member directory could not be located or has been decommissioned.
+          The requested member directory could not be located or has been
+          decommissioned.
         </p>
       </div>
     );
@@ -575,22 +710,22 @@ export default function MemberDetailsPage() {
       <div className="flex justify-center w-full border-b border-neutral-100 dark:border-neutral-800/80 pb-6 mb-2">
         <div className="flex gap-2 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/50 dark:border-neutral-800 shrink-0 shadow-sm">
           <button
-            onClick={() => setActiveTab("usage")}
             className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
               activeTab === "usage"
                 ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                 : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
             }`}
+            onClick={() => setActiveTab("usage")}
           >
             Model Usage
           </button>
           <button
-            onClick={() => setActiveTab("audit")}
             className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
               activeTab === "audit"
                 ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                 : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
             }`}
+            onClick={() => setActiveTab("audit")}
           >
             Audit Logs
           </button>
@@ -604,7 +739,9 @@ export default function MemberDetailsPage() {
             {/* Metrics Overview: Tokens Only */}
             <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 shadow-sm">
               <div className="flex items-center justify-between text-neutral-400 dark:text-neutral-500 mb-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Total Tokens</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider">
+                  Total Tokens
+                </span>
                 <Cpu className="w-4 h-4" />
               </div>
               <div className="flex flex-col">
@@ -624,15 +761,21 @@ export default function MemberDetailsPage() {
                   <TrendingUp className="w-4 h-4 text-neutral-400" />
                   <span>Weekly Token Activity</span>
                 </div>
-                <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">Daily Token Processing</span>
+                <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">
+                  Daily Token Processing
+                </span>
               </div>
 
               <div className="h-24 w-full flex items-end justify-between px-2 gap-4">
                 {details.sparkline.map((val, idx) => {
                   const maxVal = Math.max(...details.sparkline);
                   const heightPct = (val / maxVal) * 100;
+
                   return (
-                    <div key={idx} className="flex flex-col items-center gap-2 flex-1 group/bar relative">
+                    <div
+                      key={idx}
+                      className="flex flex-col items-center gap-2 flex-1 group/bar relative"
+                    >
                       {/* Tooltip */}
                       <span className="absolute bottom-full mb-1.5 opacity-0 group-hover/bar:opacity-100 pointer-events-none transition-opacity bg-neutral-800 text-white dark:bg-neutral-200 dark:text-neutral-950 text-[10px] font-bold px-2 py-0.5 rounded shadow-lg z-10 whitespace-nowrap">
                         {val}k tokens
@@ -640,10 +783,22 @@ export default function MemberDetailsPage() {
                       {/* Bar */}
                       <div
                         className="w-full max-w-[28px] bg-neutral-100 dark:bg-neutral-800 group-hover/bar:bg-neutral-850 dark:group-hover/bar:bg-neutral-300 rounded-md transition-all duration-200"
-                        style={{ height: `${Math.max(12, heightPct * 0.85)}px` }}
+                        style={{
+                          height: `${Math.max(12, heightPct * 0.85)}px`,
+                        }}
                       />
                       <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium select-none">
-                        {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][idx]}
+                        {
+                          [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday",
+                            "Sunday",
+                          ][idx]
+                        }
                       </span>
                     </div>
                   );
@@ -687,7 +842,9 @@ export default function MemberDetailsPage() {
               {loadingLogs ? (
                 <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm">
                   <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-                  <p className="text-sm text-neutral-500">Loading audit logs...</p>
+                  <p className="text-sm text-neutral-500">
+                    Loading audit logs...
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -697,8 +854,12 @@ export default function MemberDetailsPage() {
                     </div>
                   ) : (
                     logs.map((log) => {
-                      const logDate = new Date(log.timestamp).toLocaleDateString();
-                      const logTime = new Date(log.timestamp).toLocaleTimeString();
+                      const logDate = new Date(
+                        log.timestamp,
+                      ).toLocaleDateString();
+                      const logTime = new Date(
+                        log.timestamp,
+                      ).toLocaleTimeString();
                       const isExpanded = !!expandedLogs[log._id];
 
                       return (
@@ -714,8 +875,7 @@ export default function MemberDetailsPage() {
                           <div
                             className="grid gap-4 items-center text-sm"
                             style={{
-                              gridTemplateColumns:
-                                "90px 120px 4fr 1.2fr 1.5fr",
+                              gridTemplateColumns: "90px 120px 4fr 1.2fr 1.5fr",
                             }}
                           >
                             <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
@@ -778,7 +938,9 @@ export default function MemberDetailsPage() {
                       <button
                         className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
                         disabled={logsPage === logsTotalPages || loadingLogs}
-                        onClick={() => setLogsPage((p) => Math.min(logsTotalPages, p + 1))}
+                        onClick={() =>
+                          setLogsPage((p) => Math.min(logsTotalPages, p + 1))
+                        }
                       >
                         Next
                       </button>
@@ -790,7 +952,6 @@ export default function MemberDetailsPage() {
           </div>
         )}
       </div>
-
     </div>
   );
 }
