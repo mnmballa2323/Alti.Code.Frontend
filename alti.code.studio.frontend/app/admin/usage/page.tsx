@@ -815,10 +815,10 @@ export default function ModelUsagePage() {
                       </div>
                       <div className="text-right flex flex-col justify-between h-8">
                         <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pt-[1px]">
-                          In: {formatTokens(dynamicInput)}
+                          {formatTokens(dynamicInput)} <span className="opacity-60">tokens in</span>
                         </span>
                         <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pb-[1px]">
-                          Out: {formatTokens(dynamicOutput)}
+                          {formatTokens(dynamicOutput)} <span className="opacity-60">tokens out</span>
                         </span>
                       </div>
                     </div>
