@@ -25,16 +25,13 @@ const adminItems: SidebarItem[] = [
   { label: "Members", href: "/admin/team-members", icon: Users },
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
+  { label: "Audit Logs", href: "/admin/audit", icon: Activity },
 ];
 
 const managerItems: SidebarItem[] = [
   { label: "Knowledge", href: "/admin/data", icon: BookOpen },
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
-];
-
-const systemItems: SidebarItem[] = [
-  { label: "Audit Logs", href: "/admin/audit", icon: Activity },
 ];
 
 export default function AdminLayout({
@@ -107,7 +104,8 @@ export default function AdminLayout({
       pathname.startsWith("/admin/members") ||
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/billing") ||
-      pathname.startsWith("/admin/invoices")
+      pathname.startsWith("/admin/invoices") ||
+      pathname.startsWith("/admin/audit")
     ) {
       return "Platform Admin";
     }
@@ -117,9 +115,6 @@ export default function AdminLayout({
       pathname.startsWith("/admin/guardrails")
     ) {
       return "Platform Manager";
-    }
-    if (pathname.startsWith("/admin/audit")) {
-      return "System Operations";
     }
 
     return "Platform Admin";
@@ -184,7 +179,6 @@ export default function AdminLayout({
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
           {renderNavGroup("Platform Manager", managerItems)}
-          {renderNavGroup("System Operations", systemItems)}
         </div>
 
         {/* Main Content Pane */}

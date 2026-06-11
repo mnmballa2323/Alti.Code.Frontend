@@ -95,24 +95,7 @@ const AuditPage = () => {
   };
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            System Audit Logs
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Immutable record of all critical system activities.
-          </p>
-        </div>
-        <Badge
-          className="px-4 py-1 border-yellow-500 text-yellow-600"
-          variant="outline"
-        >
-          Admin Access Only
-        </Badge>
-      </div>
-
+    <div className="w-full flex flex-col h-full justify-start pt-6">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
