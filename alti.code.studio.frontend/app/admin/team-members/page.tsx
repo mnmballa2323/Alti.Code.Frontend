@@ -15,10 +15,10 @@ interface Member {
 
 export default function TeamMembersPage() {
   const [members, setMembers] = useState<Member[]>([
-    { id: "1", name: "Jules Verne", email: "jules.verne@alticodestudio.com", role: "developer" },
     { id: "2", name: "Ada Lovelace", email: "ada.lovelace@alticodestudio.com", role: "owner" },
+    { id: "4", name: "Alan Turing", email: "alan.turing@alticodestudio.com", role: "manager" },
     { id: "3", name: "Grace Hopper", email: "grace.hopper@alticodestudio.com", role: "developer" },
-    { id: "4", name: "Alan Turing", email: "alan.turing@alticodestudio.com", role: "manager" }
+    { id: "1", name: "Jules Verne", email: "jules.verne@alticodestudio.com", role: "developer" }
   ]);
   const [currentUser, setCurrentUser] = useState<any>({
     id: "admin-user",
@@ -110,7 +110,9 @@ export default function TeamMembersPage() {
       const parts = member.name.trim().split(/\s+/);
       if (parts[0]) return parts[0];
     }
-    return member.email.split("@")[0] || "";
+    const emailPrefix = member.email.split("@")[0] || "";
+    const parts = emailPrefix.split(/[\._\-]/);
+    return parts[0] || "";
   };
 
   const filteredMembers = displayedMembers.filter((member) => {
@@ -167,15 +169,18 @@ export default function TeamMembersPage() {
                     const isYou = member.email === currentUser?.email;
 
                     // Try to split name into first and last, or extract from email if not set
-                    const nameParts = member.name
-                      ? member.name.trim().split(/\s+/)
-                      : [];
-                    const firstName = nameParts[0]
-                      ? member.name
-                        ? nameParts[0]
-                        : ""
-                      : "";
-                    const lastName = nameParts.slice(1).join(" ") || "";
+                    let firstName = "";
+                    let lastName = "";
+                    if (member.name) {
+                      const nameParts = member.name.trim().split(/\s+/);
+                      firstName = nameParts[0] || "";
+                      lastName = nameParts.slice(1).join(" ") || "";
+                    } else {
+                      const emailPrefix = member.email.split("@")[0] || "";
+                      const parts = emailPrefix.split(/[\._\-]/);
+                      firstName = parts[0] ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1) : "";
+                      lastName = parts.slice(1).join(" ") ? parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(" ") : "";
+                    }
 
                     return (
                       <div
