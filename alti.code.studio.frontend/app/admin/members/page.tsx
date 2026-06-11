@@ -13,15 +13,24 @@ export default function InvitePage() {
   const [loading, setLoading] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  // Custom Modal State for Unified Dialogs
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!role) {
-      alert("Please select a role type");
+      setModalTitle("Role Required");
+      setModalMessage("Please select a role type before sending an invitation.");
+      setModalOpen(true);
 
       return;
     }
     if (!email.trim()) {
-      alert("Email address is required");
+      setModalTitle("Email Required");
+      setModalMessage("Email address is required to send an invitation.");
+      setModalOpen(true);
 
       return;
     }
@@ -31,24 +40,31 @@ export default function InvitePage() {
         email: email.trim(),
         role: role,
       });
-      alert(`Successfully invited ${email}!`);
+      setModalTitle("Invitation Sent");
+      setModalMessage(`Successfully invited ${email}!`);
+      setModalOpen(true);
       // Reset form
       setFirstName("");
       setLastName("");
       setEmail("");
       setRole("");
     } catch (err: any) {
-      alert(
+      console.error("Invite member failed:", err);
+      const errorMessage =
+        err.response?.data?.message ||
         err.response?.data?.error ||
-          "Failed to send invitation. Please try again.",
-      );
+        err.message ||
+        "Failed to send invitation. Please try again.";
+      setModalTitle("Invitation Failed");
+      setModalMessage(errorMessage);
+      setModalOpen(true);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
+    <div className="w-full flex flex-col h-full justify-start pt-6">
       <form className="space-y-6" onSubmit={handleInvite}>
         {/* 2x2 Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -163,6 +179,35 @@ export default function InvitePage() {
           </button>
         </div>
       </form>
+
+      {/* Custom Unified Notification Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+          <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <h2 className="text-base font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+                {modalTitle}
+              </h2>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
+                {modalMessage}
+              </p>
+            </div>
+            
+            {/* Horizontal border line */}
+            <div className="border-t border-neutral-100 dark:border-neutral-800" />
+            
+            {/* Footer Button Split */}
+            <div className="flex w-full">
+              <button
+                className="flex-1 py-3 text-sm font-medium text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none cursor-pointer"
+                onClick={() => setModalOpen(false)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
