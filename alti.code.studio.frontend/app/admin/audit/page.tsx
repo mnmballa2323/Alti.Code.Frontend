@@ -190,7 +190,7 @@ const AuditPage = () => {
             <div>Actor</div>
             <div>Action</div>
             <div>Status</div>
-            <div className="text-right">IP Address</div>
+            <div className="text-right pr-6">IP Address</div>
           </div>
         </div>
 
@@ -257,12 +257,14 @@ const AuditPage = () => {
                         <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                           {log.ipAddress || "—"}
                         </span>
-                        {log.metadata && (
+                        {log.metadata ? (
                           <ChevronDown
                             className={`w-4 h-4 text-neutral-450 dark:text-neutral-500 transition-transform duration-200 shrink-0 ${
                               isExpanded ? "rotate-180" : ""
                             }`}
                           />
+                        ) : (
+                          <div className="w-4 h-4 shrink-0" />
                         )}
                       </div>
                     </div>

@@ -617,6 +617,20 @@ export default function MemberDetailsPage() {
     const delayDebounceFn = setTimeout(() => {
       const fetchLogs = async () => {
         setLoadingLogs(true);
+        if (!accessToken) {
+          const detailsObj = getMemberDetails(member);
+          const filtered = detailsObj.auditLogs.filter(
+            (log) =>
+              log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+
+          setLogs(filtered);
+          setLogsTotalPages(1);
+          setLoadingLogs(false);
+
+          return;
+        }
         try {
           const response = await axios.get(`${SOCKET_URL}/api/v1/audit`, {
             params: {
@@ -624,9 +638,7 @@ export default function MemberDetailsPage() {
               limit: 50,
               action: searchTerm,
             },
-            headers: accessToken
-              ? { Authorization: `Bearer ${accessToken}` }
-              : {},
+            headers: { Authorization: `Bearer ${accessToken}` },
             withCredentials: true,
           });
 
@@ -834,7 +846,7 @@ export default function MemberDetailsPage() {
                   <div>Time</div>
                   <div>Action</div>
                   <div>Status</div>
-                  <div className="text-right">IP Address</div>
+                  <div className="text-right pr-6">IP Address</div>
                 </div>
               </div>
 
@@ -900,12 +912,14 @@ export default function MemberDetailsPage() {
                               <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                                 {log.ipAddress || "—"}
                               </span>
-                              {log.metadata && (
+                              {log.metadata ? (
                                 <ChevronDown
                                   className={`w-4 h-4 text-neutral-450 dark:text-neutral-500 transition-transform duration-200 shrink-0 ${
                                     isExpanded ? "rotate-180" : ""
                                   }`}
                                 />
+                              ) : (
+                                <div className="w-4 h-4 shrink-0" />
                               )}
                             </div>
                           </div>
