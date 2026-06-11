@@ -6321,34 +6321,58 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 76. Dependabot Organization Secrets
   it('should get dependabot org public key', async () => {
     const mockData = { key_id: 'key-123', key: 'pk-123' };
-    mockOctokit.rest.dependabot.getOrgPublicKey.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.dependabot.getOrgPublicKey.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.getDependabotOrgPublicKey('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.getOrgPublicKey).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.dependabot.getOrgPublicKey).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should list dependabot org secrets', async () => {
     const mockData = { total_count: 1, secrets: [{ name: 'S1' }] };
-    mockOctokit.rest.dependabot.listOrgSecrets.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.dependabot.listOrgSecrets.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listDependabotOrgSecrets('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.listOrgSecrets).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.dependabot.listOrgSecrets).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should get dependabot org secret', async () => {
     const mockData = { name: 'S1', visibility: 'all' };
-    mockOctokit.rest.dependabot.getOrgSecret.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.dependabot.getOrgSecret.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.getDependabotOrgSecret('org', 'S1');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.getOrgSecret).toHaveBeenCalledWith({ org: 'org', secret_name: 'S1' });
+    expect(mockOctokit.rest.dependabot.getOrgSecret).toHaveBeenCalledWith({
+      org: 'org',
+      secret_name: 'S1',
+    });
   });
 
   it('should create or update dependabot org secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.createOrUpdateOrgSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.createOrUpdateDependabotOrgSecret('org', 'S1', 'val', 'key', 'all', [1]);
+    mockOctokit.rest.dependabot.createOrUpdateOrgSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createOrUpdateDependabotOrgSecret(
+      'org',
+      'S1',
+      'val',
+      'key',
+      'all',
+      [1],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.createOrUpdateOrgSecret).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.dependabot.createOrUpdateOrgSecret,
+    ).toHaveBeenCalledWith({
       org: 'org',
       secret_name: 'S1',
       encrypted_value: 'val',
@@ -6360,26 +6384,46 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should delete dependabot org secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.deleteOrgSecret.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.dependabot.deleteOrgSecret.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.deleteDependabotOrgSecret('org', 'S1');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.deleteOrgSecret).toHaveBeenCalledWith({ org: 'org', secret_name: 'S1' });
+    expect(mockOctokit.rest.dependabot.deleteOrgSecret).toHaveBeenCalledWith({
+      org: 'org',
+      secret_name: 'S1',
+    });
   });
 
   it('should list selected repos for dependabot org secret', async () => {
     const mockData = { total_count: 1, repositories: [{ id: 1 }] };
-    mockOctokit.rest.dependabot.listSelectedReposForOrgSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.listSelectedReposForDependabotOrgSecret('org', 'S1');
+    mockOctokit.rest.dependabot.listSelectedReposForOrgSecret.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.listSelectedReposForDependabotOrgSecret(
+      'org',
+      'S1',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.listSelectedReposForOrgSecret).toHaveBeenCalledWith({ org: 'org', secret_name: 'S1' });
+    expect(
+      mockOctokit.rest.dependabot.listSelectedReposForOrgSecret,
+    ).toHaveBeenCalledWith({ org: 'org', secret_name: 'S1' });
   });
 
   it('should set selected repos for dependabot org secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.setSelectedReposForOrgSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.setSelectedReposForDependabotOrgSecret('org', 'S1', [1, 2]);
+    mockOctokit.rest.dependabot.setSelectedReposForOrgSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setSelectedReposForDependabotOrgSecret(
+      'org',
+      'S1',
+      [1, 2],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.setSelectedReposForOrgSecret).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.dependabot.setSelectedReposForOrgSecret,
+    ).toHaveBeenCalledWith({
       org: 'org',
       secret_name: 'S1',
       selected_repository_ids: [1, 2],
@@ -6388,10 +6432,18 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should add selected repo to dependabot org secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.addSelectedRepoToOrgSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.addSelectedRepoToDependabotOrgSecret('org', 'S1', 1);
+    mockOctokit.rest.dependabot.addSelectedRepoToOrgSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addSelectedRepoToDependabotOrgSecret(
+      'org',
+      'S1',
+      1,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.addSelectedRepoToOrgSecret).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.dependabot.addSelectedRepoToOrgSecret,
+    ).toHaveBeenCalledWith({
       org: 'org',
       secret_name: 'S1',
       repository_id: 1,
@@ -6400,10 +6452,19 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should remove selected repo from dependabot org secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.removeSelectedRepoFromOrgSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.removeSelectedRepoFromDependabotOrgSecret('org', 'S1', 1);
+    mockOctokit.rest.dependabot.removeSelectedRepoFromOrgSecret.mockResolvedValue(
+      { data: mockData },
+    );
+    const result =
+      await GithubService.removeSelectedRepoFromDependabotOrgSecret(
+        'org',
+        'S1',
+        1,
+      );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.removeSelectedRepoFromOrgSecret).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.dependabot.removeSelectedRepoFromOrgSecret,
+    ).toHaveBeenCalledWith({
       org: 'org',
       secret_name: 'S1',
       repository_id: 1,
@@ -6413,34 +6474,70 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 77. Dependabot Repository Secrets
   it('should get dependabot repo public key', async () => {
     const mockData = { key_id: 'key-123', key: 'pk-123' };
-    mockOctokit.rest.dependabot.getRepoPublicKey.mockResolvedValue({ data: mockData });
-    const result = await GithubService.getDependabotRepoPublicKey('owner', 'repo');
+    mockOctokit.rest.dependabot.getRepoPublicKey.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getDependabotRepoPublicKey(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.getRepoPublicKey).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(mockOctokit.rest.dependabot.getRepoPublicKey).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
   });
 
   it('should list dependabot repo secrets', async () => {
     const mockData = { total_count: 1, secrets: [{ name: 'S1' }] };
-    mockOctokit.rest.dependabot.listRepoSecrets.mockResolvedValue({ data: mockData });
-    const result = await GithubService.listDependabotRepoSecrets('owner', 'repo');
+    mockOctokit.rest.dependabot.listRepoSecrets.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listDependabotRepoSecrets(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.listRepoSecrets).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(mockOctokit.rest.dependabot.listRepoSecrets).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
   });
 
   it('should get dependabot repo secret', async () => {
     const mockData = { name: 'S1' };
-    mockOctokit.rest.dependabot.getRepoSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.getDependabotRepoSecret('owner', 'repo', 'S1');
+    mockOctokit.rest.dependabot.getRepoSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getDependabotRepoSecret(
+      'owner',
+      'repo',
+      'S1',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.getRepoSecret).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', secret_name: 'S1' });
+    expect(mockOctokit.rest.dependabot.getRepoSecret).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      secret_name: 'S1',
+    });
   });
 
   it('should create or update dependabot repo secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.createOrUpdateRepoSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.createOrUpdateDependabotRepoSecret('owner', 'repo', 'S1', 'val', 'key');
+    mockOctokit.rest.dependabot.createOrUpdateRepoSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createOrUpdateDependabotRepoSecret(
+      'owner',
+      'repo',
+      'S1',
+      'val',
+      'key',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.createOrUpdateRepoSecret).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.dependabot.createOrUpdateRepoSecret,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       secret_name: 'S1',
@@ -6451,10 +6548,20 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should delete dependabot repo secret', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.dependabot.deleteRepoSecret.mockResolvedValue({ data: mockData });
-    const result = await GithubService.deleteDependabotRepoSecret('owner', 'repo', 'S1');
+    mockOctokit.rest.dependabot.deleteRepoSecret.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteDependabotRepoSecret(
+      'owner',
+      'repo',
+      'S1',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.dependabot.deleteRepoSecret).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', secret_name: 'S1' });
+    expect(mockOctokit.rest.dependabot.deleteRepoSecret).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      secret_name: 'S1',
+    });
   });
 
   // 78. Organization Webhooks
@@ -6463,13 +6570,21 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.listWebhooks.mockResolvedValue({ data: mockData });
     const result = await GithubService.listOrgWebhooks('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.listWebhooks).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.orgs.listWebhooks).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should create org webhook', async () => {
     const mockData = { id: 1, name: 'web' };
     mockOctokit.rest.orgs.createWebhook.mockResolvedValue({ data: mockData });
-    const result = await GithubService.createOrgWebhook('org', 'web', { url: 'url' }, ['push'], true);
+    const result = await GithubService.createOrgWebhook(
+      'org',
+      'web',
+      { url: 'url' },
+      ['push'],
+      true,
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.createWebhook).toHaveBeenCalledWith({
       org: 'org',
@@ -6485,13 +6600,22 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.getWebhook.mockResolvedValue({ data: mockData });
     const result = await GithubService.getOrgWebhook('org', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.getWebhook).toHaveBeenCalledWith({ org: 'org', webhook_id: 1 });
+    expect(mockOctokit.rest.orgs.getWebhook).toHaveBeenCalledWith({
+      org: 'org',
+      webhook_id: 1,
+    });
   });
 
   it('should update org webhook', async () => {
     const mockData = { id: 1, name: 'web' };
     mockOctokit.rest.orgs.updateWebhook.mockResolvedValue({ data: mockData });
-    const result = await GithubService.updateOrgWebhook('org', 1, { url: 'new' }, ['push'], false);
+    const result = await GithubService.updateOrgWebhook(
+      'org',
+      1,
+      { url: 'new' },
+      ['push'],
+      false,
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.updateWebhook).toHaveBeenCalledWith({
       org: 'org',
@@ -6507,7 +6631,10 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.deleteWebhook.mockResolvedValue({ data: mockData });
     const result = await GithubService.deleteOrgWebhook('org', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.deleteWebhook).toHaveBeenCalledWith({ org: 'org', webhook_id: 1 });
+    expect(mockOctokit.rest.orgs.deleteWebhook).toHaveBeenCalledWith({
+      org: 'org',
+      webhook_id: 1,
+    });
   });
 
   it('should ping org webhook', async () => {
@@ -6515,22 +6642,43 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.pingWebhook.mockResolvedValue({ data: mockData });
     const result = await GithubService.pingOrgWebhook('org', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.pingWebhook).toHaveBeenCalledWith({ org: 'org', webhook_id: 1 });
+    expect(mockOctokit.rest.orgs.pingWebhook).toHaveBeenCalledWith({
+      org: 'org',
+      webhook_id: 1,
+    });
   });
 
   // 79. Pull Request Review Requests & Files
   it('should list requested reviewers', async () => {
     const mockData = { users: [], teams: [] };
-    mockOctokit.rest.pulls.listRequestedReviewers.mockResolvedValue({ data: mockData });
-    const result = await GithubService.listRequestedReviewers('owner', 'repo', 1);
+    mockOctokit.rest.pulls.listRequestedReviewers.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listRequestedReviewers(
+      'owner',
+      'repo',
+      1,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.pulls.listRequestedReviewers).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', pull_number: 1 });
+    expect(mockOctokit.rest.pulls.listRequestedReviewers).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 1,
+    });
   });
 
   it('should request reviewers for pull request', async () => {
     const mockData = { id: 1 };
-    mockOctokit.rest.pulls.requestReviewers.mockResolvedValue({ data: mockData });
-    const result = await GithubService.requestReviewersForPullRequest('owner', 'repo', 1, ['rev'], ['team']);
+    mockOctokit.rest.pulls.requestReviewers.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.requestReviewersForPullRequest(
+      'owner',
+      'repo',
+      1,
+      ['rev'],
+      ['team'],
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.pulls.requestReviewers).toHaveBeenCalledWith({
       owner: 'owner',
@@ -6543,10 +6691,20 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should remove requested reviewers from pull request', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.pulls.removeRequestedReviewers.mockResolvedValue({ data: mockData });
-    const result = await GithubService.removeRequestedReviewersFromPullRequest('owner', 'repo', 1, ['rev'], ['team']);
+    mockOctokit.rest.pulls.removeRequestedReviewers.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeRequestedReviewersFromPullRequest(
+      'owner',
+      'repo',
+      1,
+      ['rev'],
+      ['team'],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.pulls.removeRequestedReviewers).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.pulls.removeRequestedReviewers,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       pull_number: 1,
@@ -6560,7 +6718,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.pulls.listFiles.mockResolvedValue({ data: mockData });
     const result = await GithubService.listPullRequestFiles('owner', 'repo', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.pulls.listFiles).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', pull_number: 1 });
+    expect(mockOctokit.rest.pulls.listFiles).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 1,
+    });
   });
 
   // 80. Issue Assignees
@@ -6569,14 +6731,21 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.issues.listAssignees.mockResolvedValue({ data: mockData });
     const result = await GithubService.listAssignees('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.issues.listAssignees).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(mockOctokit.rest.issues.listAssignees).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
   });
 
   it('should check if user can be assigned (assignable)', async () => {
-    mockOctokit.rest.issues.checkUserCanBeAssigned.mockResolvedValue({ data: {} });
+    mockOctokit.rest.issues.checkUserCanBeAssigned.mockResolvedValue({
+      data: {},
+    });
     const result = await GithubService.checkAssignee('owner', 'repo', 'user');
     expect(result).toEqual({ assignable: true });
-    expect(mockOctokit.rest.issues.checkUserCanBeAssigned).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', assignee: 'user' });
+    expect(mockOctokit.rest.issues.checkUserCanBeAssigned).toHaveBeenCalledWith(
+      { owner: 'owner', repo: 'repo', assignee: 'user' },
+    );
   });
 
   it('should check if user can be assigned (not assignable 404)', async () => {
@@ -6585,46 +6754,87 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.issues.checkUserCanBeAssigned.mockRejectedValue(error404);
     const result = await GithubService.checkAssignee('owner', 'repo', 'user');
     expect(result).toEqual({ assignable: false });
-    expect(mockOctokit.rest.issues.checkUserCanBeAssigned).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', assignee: 'user' });
+    expect(mockOctokit.rest.issues.checkUserCanBeAssigned).toHaveBeenCalledWith(
+      { owner: 'owner', repo: 'repo', assignee: 'user' },
+    );
   });
 
   it('should add assignees to issue', async () => {
     const mockData = { id: 1 };
     mockOctokit.rest.issues.addAssignees.mockResolvedValue({ data: mockData });
-    const result = await GithubService.addAssigneesToIssue('owner', 'repo', 1, ['user']);
+    const result = await GithubService.addAssigneesToIssue('owner', 'repo', 1, [
+      'user',
+    ]);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.issues.addAssignees).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', issue_number: 1, assignees: ['user'] });
+    expect(mockOctokit.rest.issues.addAssignees).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 1,
+      assignees: ['user'],
+    });
   });
 
   it('should remove assignees from issue', async () => {
     const mockData = { id: 1 };
-    mockOctokit.rest.issues.removeAssignees.mockResolvedValue({ data: mockData });
-    const result = await GithubService.removeAssigneesFromIssue('owner', 'repo', 1, ['user']);
+    mockOctokit.rest.issues.removeAssignees.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeAssigneesFromIssue(
+      'owner',
+      'repo',
+      1,
+      ['user'],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.issues.removeAssignees).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', issue_number: 1, assignees: ['user'] });
+    expect(mockOctokit.rest.issues.removeAssignees).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 1,
+      assignees: ['user'],
+    });
   });
 
   // 81. Release Assets
   it('should list release assets', async () => {
     const mockData = [{ id: 1, name: 'asset' }];
-    mockOctokit.rest.repos.listReleaseAssets.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.repos.listReleaseAssets.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listReleaseAssets('owner', 'repo', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.listReleaseAssets).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', release_id: 1 });
+    expect(mockOctokit.rest.repos.listReleaseAssets).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      release_id: 1,
+    });
   });
 
   it('should get release asset', async () => {
     const mockData = { id: 1, name: 'asset' };
-    mockOctokit.rest.repos.getReleaseAsset.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.repos.getReleaseAsset.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.getReleaseAsset('owner', 'repo', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.getReleaseAsset).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', asset_id: 1 });
+    expect(mockOctokit.rest.repos.getReleaseAsset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      asset_id: 1,
+    });
   });
 
   it('should update release asset', async () => {
     const mockData = { id: 1, name: 'asset' };
-    mockOctokit.rest.repos.updateReleaseAsset.mockResolvedValue({ data: mockData });
-    const result = await GithubService.updateReleaseAsset('owner', 'repo', 1, 'new', 'label');
+    mockOctokit.rest.repos.updateReleaseAsset.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updateReleaseAsset(
+      'owner',
+      'repo',
+      1,
+      'new',
+      'label',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.repos.updateReleaseAsset).toHaveBeenCalledWith({
       owner: 'owner',
@@ -6637,73 +6847,127 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should delete release asset', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.deleteReleaseAsset.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.repos.deleteReleaseAsset.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.deleteReleaseAsset('owner', 'repo', 1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.deleteReleaseAsset).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo', asset_id: 1 });
+    expect(mockOctokit.rest.repos.deleteReleaseAsset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      asset_id: 1,
+    });
   });
 
   // 82. Repository Starring & Subscriptions
   it('should list stargazers for repo', async () => {
     const mockData = [{ login: 'user' }];
-    mockOctokit.rest.activity.listStargazersForRepo.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.activity.listStargazersForRepo.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listStargazersForRepo('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.listStargazersForRepo).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.listStargazersForRepo,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 
   it('should list repos starred by authenticated user', async () => {
     const mockData = [{ id: 1, name: 'repo' }];
-    mockOctokit.rest.activity.listReposStarredByAuthenticatedUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.activity.listReposStarredByAuthenticatedUser.mockResolvedValue(
+      { data: mockData },
+    );
     const result = await GithubService.listReposStarredByAuthenticatedUser();
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.listReposStarredByAuthenticatedUser).toHaveBeenCalled();
+    expect(
+      mockOctokit.rest.activity.listReposStarredByAuthenticatedUser,
+    ).toHaveBeenCalled();
   });
 
   it('should check if repo is starred by user (starred)', async () => {
-    mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser.mockResolvedValue({ data: {} });
-    const result = await GithubService.checkIfRepoIsStarredByUser('owner', 'repo');
+    mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser.mockResolvedValue(
+      { data: {} },
+    );
+    const result = await GithubService.checkIfRepoIsStarredByUser(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual({ starred: true });
-    expect(mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 
   it('should check if repo is starred by user (not starred 404)', async () => {
     const error404 = new Error('Not Found');
     error404.status = 404;
-    mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser.mockRejectedValue(error404);
-    const result = await GithubService.checkIfRepoIsStarredByUser('owner', 'repo');
+    mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser.mockRejectedValue(
+      error404,
+    );
+    const result = await GithubService.checkIfRepoIsStarredByUser(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual({ starred: false });
-    expect(mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.checkRepoIsStarredByAuthenticatedUser,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 
   it('should star repo for authenticated user', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.activity.starRepoForAuthenticatedUser.mockResolvedValue({ data: mockData });
-    const result = await GithubService.starRepoForAuthenticatedUser('owner', 'repo');
+    mockOctokit.rest.activity.starRepoForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.starRepoForAuthenticatedUser(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.starRepoForAuthenticatedUser).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.starRepoForAuthenticatedUser,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 
   it('should unstar repo for authenticated user', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.activity.unstarRepoForAuthenticatedUser.mockResolvedValue({ data: mockData });
-    const result = await GithubService.unstarRepoForAuthenticatedUser('owner', 'repo');
+    mockOctokit.rest.activity.unstarRepoForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.unstarRepoForAuthenticatedUser(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.unstarRepoForAuthenticatedUser).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.unstarRepoForAuthenticatedUser,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 
   it('should get repo subscription', async () => {
     const mockData = { subscribed: true, ignored: false };
-    mockOctokit.rest.activity.getRepoSubscription.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.activity.getRepoSubscription.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.getRepoSubscription('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.getRepoSubscription).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(mockOctokit.rest.activity.getRepoSubscription).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
   });
 
   it('should set repo subscription', async () => {
     const mockData = { subscribed: true, ignored: false };
-    mockOctokit.rest.activity.setRepoSubscription.mockResolvedValue({ data: mockData });
-    const result = await GithubService.setRepoSubscription('owner', 'repo', true, false);
+    mockOctokit.rest.activity.setRepoSubscription.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setRepoSubscription(
+      'owner',
+      'repo',
+      true,
+      false,
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.activity.setRepoSubscription).toHaveBeenCalledWith({
       owner: 'owner',
@@ -6715,9 +6979,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should delete repo subscription', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.activity.deleteRepoSubscription.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.activity.deleteRepoSubscription.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.deleteRepoSubscription('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.deleteRepoSubscription).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+    expect(
+      mockOctokit.rest.activity.deleteRepoSubscription,
+    ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
   });
 });

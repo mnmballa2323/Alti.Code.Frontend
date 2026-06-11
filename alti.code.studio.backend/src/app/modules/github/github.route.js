@@ -1175,18 +1175,9 @@ router.delete(
 );
 
 // Organization Webhooks
-router.get(
-  '/orgs/:org/webhooks',
-  GithubController.listOrgWebhooks,
-);
-router.post(
-  '/orgs/:org/webhooks',
-  GithubController.createOrgWebhook,
-);
-router.get(
-  '/orgs/:org/webhooks/:webhookId',
-  GithubController.getOrgWebhook,
-);
+router.get('/orgs/:org/webhooks', GithubController.listOrgWebhooks);
+router.post('/orgs/:org/webhooks', GithubController.createOrgWebhook);
+router.get('/orgs/:org/webhooks/:webhookId', GithubController.getOrgWebhook);
 router.patch(
   '/orgs/:org/webhooks/:webhookId',
   GithubController.updateOrgWebhook,
@@ -1219,10 +1210,7 @@ router.get(
 );
 
 // Issue Assignees
-router.get(
-  '/repos/:owner/:repo/assignees',
-  GithubController.listAssignees,
-);
+router.get('/repos/:owner/:repo/assignees', GithubController.listAssignees);
 router.get(
   '/repos/:owner/:repo/assignees/:assignee',
   GithubController.checkAssignee,
