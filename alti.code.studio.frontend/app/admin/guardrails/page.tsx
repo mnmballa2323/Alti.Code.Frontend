@@ -73,7 +73,7 @@ export default function GuardrailsPage() {
             onChange={(e) => setNewGuardrail(e.target.value)}
           />
           <button
-            className="h-9 px-6 bg-[#7e7e82] hover:bg-[#6c6c70] dark:bg-[#48484a] dark:hover:bg-[#545456] text-white font-medium rounded-xl text-sm transition-all flex items-center justify-center shrink-0 shadow-sm"
+            className="h-9 px-6 bg-neutral-900 dark:bg-neutral-100 hover:bg-neutral-800 dark:hover:bg-white text-white dark:text-neutral-900 font-semibold rounded-xl text-sm transition-all flex items-center justify-center shrink-0 shadow-sm"
             type="submit"
           >
             Send
