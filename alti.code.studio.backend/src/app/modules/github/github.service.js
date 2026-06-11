@@ -1087,5 +1087,441 @@ export const GithubService = {
       logger.error(`Failed to fetch Copilot billing details for ${username}:`, error);
       throw error;
     }
+  },
+
+  // ==========================================
+  // 20. Discussions API (GraphQL-backed)
+  // ==========================================
+  async listDiscussions(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing discussions for ${owner}/${repo}`);
+    try {
+      const query = `
+        query($owner: String!, $repo: String!, $first: Int) {
+          repository(owner: $owner, name: $repo) {
+            discussions(first: $first) {
+              nodes {
+                id
+                number
+                title
+                body
+                createdAt
+                url
+              }
+            }
+          }
+        }
+      `;
+      const result = await octokit.graphql(query, {
+        owner,
+        repo,
+        first: params.per_page || 30
+      });
+      return result.repository?.discussions?.nodes || [];
+    } catch (error) {
+      logger.error(`Failed to list discussions for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getDiscussion(owner, repo, discussionNumber) {
+    logger.info(`🐙 [GitHub Service] Fetching discussion #${discussionNumber} for ${owner}/${repo}`);
+    try {
+      const query = `
+        query($owner: String!, $repo: String!, $number: Int!) {
+          repository(owner: $owner, name: $repo) {
+            discussion(number: $number) {
+              id
+              number
+              title
+              body
+              createdAt
+              url
+              comments(first: 30) {
+                nodes {
+                  id
+                  body
+                  createdAt
+                }
+              }
+            }
+          }
+        }
+      `;
+      const result = await octokit.graphql(query, {
+        owner,
+        repo,
+        number: parseInt(discussionNumber, 10)
+      });
+      return result.repository?.discussion || null;
+    } catch (error) {
+      logger.error(`Failed to get discussion #${discussionNumber} for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createDiscussion(owner, repo, categoryId, title, body) {
+    logger.info(`🐙 [GitHub Service] Creating discussion: "${title}" in ${owner}/${repo}`);
+    try {
+      // 1. Fetch the Repository Node ID
+      const repoQuery = `
+        query($owner: String!, $repo: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+          }
+        }
+      `;
+      const repoResult = await octokit.graphql(repoQuery, { owner, repo });
+      const repositoryId = repoResult.repository?.id;
+
+      if (!repositoryId) {
+        throw new Error(`Repository ID not found for ${owner}/${repo}`);
+      }
+
+      // 2. Create the Discussion
+      const mutation = `
+        mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
+          createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, title: $title, body: $body}) {
+            discussion {
+              id
+              number
+              url
+            }
+          }
+        }
+      `;
+      const result = await octokit.graphql(mutation, {
+        repositoryId,
+        categoryId,
+        title,
+        body
+      });
+      return result.createDiscussion?.discussion || null;
+    } catch (error) {
+      logger.error(`Failed to create discussion for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createDiscussionComment(owner, repo, discussionId, body) {
+    logger.info(`🐙 [GitHub Service] Creating comment on discussion ID: ${discussionId} in ${owner}/${repo}`);
+    try {
+      const mutation = `
+        mutation($discussionId: ID!, $body: String!) {
+          addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
+            comment {
+              id
+              body
+              createdAt
+            }
+          }
+        }
+      `;
+      const result = await octokit.graphql(mutation, {
+        discussionId,
+        body
+      });
+      return result.addDiscussionComment?.comment || null;
+    } catch (error) {
+      logger.error(`Failed to create discussion comment in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 21. Checks API
+  // ==========================================
+  async createCheckRun(owner, repo, checkData) {
+    logger.info(`🐙 [GitHub Service] Creating check run: "${checkData.name}" for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.checks.create({
+        owner,
+        repo,
+        name: checkData.name,
+        head_sha: checkData.head_sha,
+        status: checkData.status,
+        conclusion: checkData.conclusion,
+        completed_at: checkData.completed_at,
+        output: checkData.output
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create check run for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async updateCheckRun(owner, repo, checkRunId, checkData) {
+    logger.info(`🐙 [GitHub Service] Updating check run #${checkRunId} for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.checks.update({
+        owner,
+        repo,
+        check_run_id: checkRunId,
+        status: checkData.status,
+        conclusion: checkData.conclusion,
+        completed_at: checkData.completed_at,
+        output: checkData.output
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update check run ${checkRunId} for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listCheckRunsForRef(owner, repo, ref) {
+    logger.info(`🐙 [GitHub Service] Listing check runs for ref: ${ref} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.checks.listForRef({
+        owner,
+        repo,
+        ref
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list check runs for ${ref} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createCheckSuite(owner, repo, suiteData) {
+    logger.info(`🐙 [GitHub Service] Creating check suite for SHA: ${suiteData.head_sha} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.checks.createSuite({
+        owner,
+        repo,
+        head_sha: suiteData.head_sha
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create check suite in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 22. Deployments & Environments API
+  // ==========================================
+  async listDeployments(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing deployments for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.listDeployments({
+        owner,
+        repo,
+        sha: params.sha,
+        ref: params.ref,
+        task: params.task,
+        environment: params.environment,
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list deployments for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createDeployment(owner, repo, deploymentData) {
+    logger.info(`🐙 [GitHub Service] Creating deployment for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.createDeployment({
+        owner,
+        repo,
+        ref: deploymentData.ref,
+        task: deploymentData.task,
+        auto_merge: deploymentData.auto_merge,
+        required_contexts: deploymentData.required_contexts,
+        payload: deploymentData.payload,
+        environment: deploymentData.environment,
+        description: deploymentData.description,
+        transient_environment: deploymentData.transient_environment,
+        production_environment: deploymentData.production_environment
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create deployment for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createDeploymentStatus(owner, repo, deploymentId, statusData) {
+    logger.info(`🐙 [GitHub Service] Creating deployment status for deployment #${deploymentId} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.createDeploymentStatus({
+        owner,
+        repo,
+        deployment_id: deploymentId,
+        state: statusData.state,
+        target_url: statusData.target_url,
+        log_url: statusData.log_url,
+        description: statusData.description,
+        environment: statusData.environment,
+        environment_url: statusData.environment_url,
+        auto_inactive: statusData.auto_inactive
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create deployment status for deployment #${deploymentId} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listEnvironments(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing environments for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.listEnvironments({
+        owner,
+        repo,
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list environments for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async createOrUpdateEnvironment(owner, repo, environmentName, environmentData = {}) {
+    logger.info(`🐙 [GitHub Service] Creating/updating environment "${environmentName}" for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.repos.createOrUpdateEnvironment({
+        owner,
+        repo,
+        environment_name: environmentName,
+        wait_timer: environmentData.wait_timer,
+        prevent_self_review: environmentData.prevent_self_review,
+        reviewers: environmentData.reviewers,
+        deployment_branch_policy: environmentData.deployment_branch_policy
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to set environment "${environmentName}" for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 23. Code & Secret Scanning API
+  // ==========================================
+  async listCodeScanningAlerts(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing Code Scanning alerts for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.codeScanning.listAlertsForRepo({
+        owner,
+        repo,
+        state: params.state,
+        severity: params.severity,
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Code Scanning alerts for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getCodeScanningAlert(owner, repo, alertNumber) {
+    logger.info(`🐙 [GitHub Service] Fetching Code Scanning alert #${alertNumber} for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.codeScanning.getAlert({
+        owner,
+        repo,
+        alert_number: parseInt(alertNumber, 10)
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Code Scanning alert #${alertNumber} for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listSecretScanningAlerts(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing Secret Scanning alerts for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.secretScanning.listAlertsForRepo({
+        owner,
+        repo,
+        state: params.state,
+        secret_type: params.secret_type,
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list Secret Scanning alerts for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async getSecretScanningAlert(owner, repo, alertNumber) {
+    logger.info(`🐙 [GitHub Service] Fetching Secret Scanning alert #${alertNumber} for ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.secretScanning.getAlert({
+        owner,
+        repo,
+        alert_number: parseInt(alertNumber, 10)
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get Secret Scanning alert #${alertNumber} for ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 24. Actions Artifacts & Workflow Jobs API
+  // ==========================================
+  async listWorkflowJobs(owner, repo, runId, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing workflow jobs for run #${runId} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.listJobsForWorkflowRun({
+        owner,
+        repo,
+        run_id: parseInt(runId, 10),
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list workflow jobs for run #${runId} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listWorkflowRunArtifacts(owner, repo, runId, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing workflow artifacts for run #${runId} in ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.actions.listWorkflowRunArtifacts({
+        owner,
+        repo,
+        run_id: parseInt(runId, 10),
+        per_page: params.per_page || 30,
+        page: params.page || 1
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list workflow artifacts for run #${runId} in ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async downloadWorkflowArtifact(owner, repo, artifactId) {
+    logger.info(`🐙 [GitHub Service] Downloading workflow artifact #${artifactId} for ${owner}/${repo}`);
+    try {
+      const response = await octokit.rest.actions.downloadArtifact({
+        owner,
+        repo,
+        artifact_id: parseInt(artifactId, 10),
+        archive_format: 'zip'
+      });
+      return { url: response.url };
+    } catch (error) {
+      logger.error(`Failed to download workflow artifact #${artifactId} for ${owner}/${repo}:`, error);
+      throw error;
+    }
   }
 };
+
