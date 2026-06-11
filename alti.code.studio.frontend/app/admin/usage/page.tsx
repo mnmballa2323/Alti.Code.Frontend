@@ -813,9 +813,14 @@ export default function ModelUsagePage() {
                         <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
                         <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokens(timeframeTotal)}</span>
                       </div>
-                      <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium">
-                        In: {formatTokens(dynamicInput)} | Out: {formatTokens(dynamicOutput)}
-                      </span>
+                      <div className="text-right flex flex-col justify-between h-8">
+                        <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pt-[1px]">
+                          In: {formatTokens(dynamicInput)}
+                        </span>
+                        <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pb-[1px]">
+                          Out: {formatTokens(dynamicOutput)}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
