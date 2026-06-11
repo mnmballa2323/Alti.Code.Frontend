@@ -22,6 +22,7 @@ import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
+import { tenantDbRouter } from '../middlewares/tenantDb.js';
 
 // 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection)
 router.use(enterpriseWAF.rateLimiter);
@@ -33,6 +34,9 @@ router.use('/auth', authRoutes);
 // 🛡️ Global Zero-Trust Boundary (IAP verification for all subsequent routes)
 // Note: In development, verifyIAPToken bypasses automatically if no token is present.
 router.use(iapService.verifyIAPToken);
+
+// 🔌 Dynamic Database Context Router per Tenant
+router.use(tenantDbRouter);
 
 // 🔐 Enterprise FinOps & RBAC Policy
 router.use(rbacService.enforceModelTierPolicy());

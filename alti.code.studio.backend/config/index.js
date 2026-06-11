@@ -81,6 +81,16 @@ const configObject = {
     user: process.env.SMTP_USER || process.env.email,
     pass: process.env.SMTP_PASS || process.env.password,
   },
+  apple: {
+    bundleId: process.env.APPLE_BUNDLE_ID || 'com.insocode.alti',
+    keyId: process.env.APPLE_KEY_ID || '',
+    issuerId: process.env.APPLE_ISSUER_ID || '',
+    encodedKey: process.env.APPLE_ENCODED_KEY || '',
+    environment: process.env.APPLE_ENVIRONMENT || 'sandbox',
+  },
+  pkl: {
+    configPath: process.env.PKL_CONFIG_PATH || path.join(process.cwd(), 'config.pkl'),
+  },
 };
 
 export const loadEnterpriseSecrets = async () => {

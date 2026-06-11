@@ -191,4 +191,74 @@ router.get(
   authController.githubAuthCallback,
 );
 
+// Keycloak SAML SSO Routes
+router.get('/saml/login/:tenantId', async (req, res, next) => {
+  const { tenantId } = req.params;
+  try {
+    const tenantConfig = await prisma.tenant.findUnique({
+      where: { id: tenantId },
+    });
+    if (!tenantConfig || !tenantConfig.samlEntryPoint) {
+      return res.status(400).json({ error: 'SAML not configured for this tenant.' });
+    }
+    const strategyName = `saml-${tenantId}`;
+    if (!passport._strategies[strategyName]) {
+      passport.use(strategyName, createSamlStrategy(tenantConfig));
+    }
+    passport.authenticate(strategyName, {
+      additionalParams: { RelayState: tenantId },
+    })(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/saml/callback', async (req, res, next) => {
+  const tenantId = req.body.RelayState;
+  if (!tenantId) {
+    return res.status(400).json({ error: 'RelayState/tenantId is required.' });
+  }
+  const strategyName = `saml-${tenantId}`;
+  passport.authenticate(strategyName, { session: false }, (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ error: 'SSO Authentication failed.' });
+    req.user = user;
+    authController.ssoAuthCallback(req, res, next);
+  })(req, res, next);
+});
+
+// Keycloak OIDC SSO Routes
+router.get('/oidc/login/:tenantId', async (req, res, next) => {
+  const { tenantId } = req.params;
+  try {
+    const tenantConfig = await prisma.tenant.findUnique({
+      where: { id: tenantId },
+    });
+    if (!tenantConfig || !tenantConfig.oidcIssuer) {
+      return res.status(400).json({ error: 'OIDC not configured for this tenant.' });
+    }
+    const strategyName = `oidc-${tenantId}`;
+    if (!passport._strategies[strategyName]) {
+      passport.use(strategyName, createOIDCStrategy(tenantConfig));
+    }
+    passport.authenticate(strategyName)(req, res, next);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/oidc/callback', async (req, res, next) => {
+  const tenantId = req.query.state || req.session?.tenantId; 
+  if (!tenantId) {
+    return res.status(400).json({ error: 'State/tenantId is required.' });
+  }
+  const strategyName = `oidc-${tenantId}`;
+  passport.authenticate(strategyName, { session: false }, (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.status(401).json({ error: 'SSO Authentication failed.' });
+    req.user = user;
+    authController.ssoAuthCallback(req, res, next);
+  })(req, res, next);
+});
+
 export const authRoutes = router;
