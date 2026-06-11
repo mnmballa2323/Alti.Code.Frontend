@@ -433,7 +433,7 @@ export default function CloudPage() {
             },
             {
               id: `bedrock-${Math.floor(Math.random() * 1000)}`,
-              name: "Bedrock Claude 3.5 Sonnet",
+              name: "Bedrock Claude Sonnet 4.6",
               status: "Running",
               region: "us-west-2",
               cpu: "82%",
@@ -460,7 +460,7 @@ export default function CloudPage() {
             },
             {
               id: `vertex-${Math.floor(Math.random() * 1000)}`,
-              name: "Vertex AI Gemini 3.1 Pro",
+              name: "Vertex AI Gemini 3.5 Flash",
               status: "Running",
               region: "europe-west1",
               cpu: "78%",
@@ -484,7 +484,7 @@ export default function CloudPage() {
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure OpenAI GPT-4o Foundry",
+              name: "Azure OpenAI GPT-5.5 Foundry",
               status: "Running",
               region: "westeurope",
               cpu: "88%",
@@ -550,7 +550,7 @@ export default function CloudPage() {
           },
           {
             id: `bedrock-${Math.floor(Math.random() * 1000)}`,
-            name: "Bedrock Claude 3.5 Sonnet",
+            name: "Bedrock Claude Sonnet 4.6",
             status: "Running",
             region: "us-west-2",
             cpu: "82%",
@@ -577,7 +577,7 @@ export default function CloudPage() {
           },
           {
             id: `vertex-${Math.floor(Math.random() * 1000)}`,
-            name: "Vertex AI Gemini 3.1 Pro",
+            name: "Vertex AI Gemini 3.5 Flash",
             status: "Running",
             region: "europe-west1",
             cpu: "78%",
@@ -601,7 +601,7 @@ export default function CloudPage() {
           },
           {
             id: `openai-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure OpenAI GPT-4o Foundry",
+            name: "Azure OpenAI GPT-5.5 Foundry",
             status: "Running",
             region: "westeurope",
             cpu: "88%",
@@ -811,8 +811,8 @@ export default function CloudPage() {
                           <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Active Model</span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider?.includes("Azure") ? "GPT-4o (State-of-the-Art)" :
-                               (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP") ? "Gemini 3.1 Pro (State-of-the-Art)" : "Claude 3.5 Sonnet (State-of-the-Art)")}
+                              {selectedProvider?.includes("Azure") ? "GPT-5.5 (State-of-the-Art)" :
+                               (selectedProvider?.includes("Google") || selectedProvider?.includes("GCP") ? "Gemini 3.5 Flash (State-of-the-Art)" : "Claude Sonnet 4.6 (State-of-the-Art)")}
                             </div>
                           </div>
                         </div>
@@ -1105,7 +1105,7 @@ export default function CloudPage() {
                         </Chip>
                       </div>
                       <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-                        Claude 3.5 Sonnet
+                        Claude Sonnet 4.6
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
                         State-of-the-art agentic reasoning and visual code translation.
@@ -1131,7 +1131,7 @@ export default function CloudPage() {
                         </Chip>
                       </div>
                       <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-                        Gemini 3.1 Pro
+                        Gemini 3.5 Flash
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
                         Ultra-long 2M context window for full-repo audits & diagnostics.
@@ -1157,7 +1157,7 @@ export default function CloudPage() {
                         </Chip>
                       </div>
                       <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-1">
-                        GPT-4o
+                        GPT-5.5
                       </h3>
                       <p className="text-[11px] text-gray-400 dark:text-gray-500 leading-normal mb-3">
                         High-throughput low-latency token generation for swarm synthesis.

@@ -52,16 +52,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
   azure: {
     models: [
       {
-        name: "GPT-4o",
-        version: "2024-05-13",
+        name: "GPT-5.5",
+        version: "v5.5",
         isPrimary: true,
         inputTokens: 4120000,
         outputTokens: 1200000,
         requests: 10240,
         avgLatency: 720,
-        cost: 16.60,
-        pricingPer1MInput: 2.50,
-        pricingPer1MOutput: 10.00,
+        cost: 56.60,
+        pricingPer1MInput: 5.00,
+        pricingPer1MOutput: 30.00,
         timeframes: {
           "1D": {
             labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
@@ -86,42 +86,42 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gpt4o-1",
+            id: "req-gpt55-1",
             timestamp: "Just now",
             promptSnippet: "Assemble dynamic view transitions layouts for admin routes...",
             tokens: 4320,
             latency: 680,
-            cost: 0.0151,
+            cost: 0.151,
           },
           {
-            id: "req-gpt4o-2",
+            id: "req-gpt55-2",
             timestamp: "18 mins ago",
             promptSnippet: "Optimize database connection pooling parameters for PostgreSQL...",
             tokens: 2840,
             latency: 750,
-            cost: 0.0092,
+            cost: 0.092,
           },
           {
-            id: "req-gpt4o-3",
+            id: "req-gpt55-3",
             timestamp: "1 hr ago",
             promptSnippet: "Translate system documentation translation assets for French localization...",
             tokens: 1850,
             latency: 620,
-            cost: 0.0058,
+            cost: 0.058,
           },
         ]
       },
       {
-        name: "GPT-4o-mini",
-        version: "2024-07-18",
+        name: "GPT-5.5 Pro",
+        version: "v5.5 Pro",
         isPrimary: false,
         inputTokens: 950000,
         outputTokens: 150000,
         requests: 4262,
         avgLatency: 280,
-        cost: 2.30,
-        pricingPer1MInput: 0.15,
-        pricingPer1MOutput: 0.60,
+        cost: 16.25,
+        pricingPer1MInput: 10.00,
+        pricingPer1MOutput: 45.00,
         timeframes: {
           "1D": {
             labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
@@ -146,28 +146,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gpt4omini-1",
+            id: "req-gpt55pro-1",
             timestamp: "45 mins ago",
             promptSnippet: "Form autofill handler autocomplete listeners implementation...",
             tokens: 820,
             latency: 250,
-            cost: 0.0002,
+            cost: 0.002,
           },
           {
-            id: "req-gpt4omini-2",
+            id: "req-gpt55pro-2",
             timestamp: "2 hrs ago",
             promptSnippet: "Sanitize HTML string utility function input checks...",
             tokens: 450,
             latency: 220,
-            cost: 0.0001,
+            cost: 0.001,
           },
           {
-            id: "req-gpt4omini-3",
+            id: "req-gpt55pro-3",
             timestamp: "5 hrs ago",
             promptSnippet: "Fetch user profile status header check values...",
             tokens: 350,
             latency: 290,
-            cost: 0.0001,
+            cost: 0.001,
           },
         ]
       }
@@ -176,14 +176,14 @@ const initialUsageData: Record<string, ProviderUsageData> = {
   aws: {
     models: [
       {
-        name: "Claude 3.5 Sonnet",
-        version: "v2 (Latest)",
+        name: "Claude Sonnet 4.6",
+        version: "v4.6",
         isPrimary: true,
         inputTokens: 2450000,
         outputTokens: 890000,
         requests: 7650,
         avgLatency: 820,
-        cost: 11.80,
+        cost: 20.70,
         pricingPer1MInput: 3.00,
         pricingPer1MOutput: 15.00,
         timeframes: {
@@ -210,7 +210,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-claude-1",
+            id: "req-claude46-1",
             timestamp: "2 mins ago",
             promptSnippet: "Explain clean architecture module dependencies in Kotlin KMP...",
             tokens: 1820,
@@ -218,7 +218,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0078,
           },
           {
-            id: "req-claude-2",
+            id: "req-claude46-2",
             timestamp: "12 mins ago",
             promptSnippet: "Refactor MonacoEditor.tsx component layout parameters...",
             tokens: 3450,
@@ -226,7 +226,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0142,
           },
           {
-            id: "req-claude-3",
+            id: "req-claude46-3",
             timestamp: "2 hrs ago",
             promptSnippet: "Parse incoming git diff layout representation regex helper...",
             tokens: 1250,
@@ -236,16 +236,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ]
       },
       {
-        name: "Claude 3 Opus",
-        version: "v1",
+        name: "Claude Opus 4.8",
+        version: "v4.8",
         isPrimary: false,
         inputTokens: 320000,
         outputTokens: 185000,
         requests: 782,
         avgLatency: 2100,
-        cost: 3.02,
-        pricingPer1MInput: 15.00,
-        pricingPer1MOutput: 75.00,
+        cost: 6.23,
+        pricingPer1MInput: 5.00,
+        pricingPer1MOutput: 25.00,
         timeframes: {
           "1D": {
             labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
@@ -270,7 +270,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-opus-1",
+            id: "req-opus48-1",
             timestamp: "1 hr ago",
             promptSnippet: "Execute security scan rules auditor for Supabase postgres.sql...",
             tokens: 8900,
@@ -278,7 +278,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.185,
           },
           {
-            id: "req-opus-2",
+            id: "req-opus48-2",
             timestamp: "4 hrs ago",
             promptSnippet: "Audit multi-agent coordination loop deadlocks and race conditions...",
             tokens: 12400,
@@ -292,16 +292,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
   gcp: {
     models: [
       {
-        name: "Gemini 1.5 Pro",
-        version: "v1.5",
+        name: "Gemini 3.5 Flash",
+        version: "v3.5",
         isPrimary: true,
         inputTokens: 3100000,
         outputTokens: 710000,
         requests: 6920,
         avgLatency: 980,
-        cost: 4.86,
-        pricingPer1MInput: 1.25,
-        pricingPer1MOutput: 5.00,
+        cost: 11.04,
+        pricingPer1MInput: 1.50,
+        pricingPer1MOutput: 9.00,
         timeframes: {
           "1D": {
             labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
@@ -326,7 +326,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gemini-1",
+            id: "req-gemini35-1",
             timestamp: "24 mins ago",
             promptSnippet: "Perform evolutionary conservation phyloP scores lookup UCSC...",
             tokens: 12400,
@@ -334,7 +334,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0182,
           },
           {
-            id: "req-gemini-2",
+            id: "req-gemini35-2",
             timestamp: "1 hr ago",
             promptSnippet: "Resolve biological ontology terms resolution lookup EBI OLS...",
             tokens: 4120,
@@ -344,16 +344,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ]
       },
       {
-        name: "Gemini 1.5 Flash",
-        version: "v1.5",
+        name: "Gemini 3.1 Pro",
+        version: "v3.1",
         isPrimary: false,
         inputTokens: 1100000,
         outputTokens: 300000,
         requests: 4283,
         avgLatency: 340,
-        cost: 1.26,
-        pricingPer1MInput: 0.075,
-        pricingPer1MOutput: 0.30,
+        cost: 5.80,
+        pricingPer1MInput: 2.00,
+        pricingPer1MOutput: 12.00,
         timeframes: {
           "1D": {
             labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
@@ -378,7 +378,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-flash-1",
+            id: "req-gemini31-1",
             timestamp: "5 mins ago",
             promptSnippet: "Lookup clinical evidence pathogen classification ClinVar...",
             tokens: 950,
@@ -386,7 +386,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0001,
           },
           {
-            id: "req-flash-2",
+            id: "req-gemini31-2",
             timestamp: "3 hrs ago",
             promptSnippet: "Check active server healthz ping route status check...",
             tokens: 120,
@@ -572,8 +572,8 @@ export default function ModelUsagePage() {
     // Scale local cursor coordinate to SVG coordinate space
     const relativeX = (x / rect.width) * svgWidth;
     
-    const chartWidth = 430;
-    const xOffset = 15;
+    const chartWidth = 500;
+    const xOffset = 0;
     const yOffset = 10;
     const chartHeight = 90;
     
@@ -662,9 +662,9 @@ export default function ModelUsagePage() {
             const yScaleCeiling = getYScaleCeiling(maxVal);
             const yScaleLabels = getYScaleLabels(yScaleCeiling);
 
-            const chartWidth = 430;
+            const chartWidth = 500;
             const chartHeight = 90;
-            const xOffset = 15;
+            const xOffset = 0;
             const yOffset = 10;
 
             const coords = values.map((val, i) => {
@@ -712,7 +712,7 @@ export default function ModelUsagePage() {
                     <div className="text-right">
                       <span className="text-lg font-bold text-neutral-950 dark:text-white">${model.cost.toFixed(2)}</span>
                       <p className="text-[9px] text-neutral-400 dark:text-neutral-500">
-                        ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M t</span>
+                        ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M</span>
                       </p>
                     </div>
                   </div>
@@ -785,35 +785,35 @@ export default function ModelUsagePage() {
                         </defs>
 
                         {/* Faint background grid lines */}
-                        <line x1="15" y1="10" x2="445" y2="10" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
-                        <line x1="15" y1="55" x2="445" y2="55" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
-                        <line x1="15" y1="100" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                        <line x1="0" y1="10" x2="500" y2="10" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                        <line x1="0" y1="55" x2="500" y2="55" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                        <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
 
                         {/* Bottom Axis Line */}
-                        <line x1="15" y1="100" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
+                        <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
 
                         {/* Right Axis Line */}
-                        <line x1="445" y1="10" x2="445" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
+                        <line x1="500" y1="10" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
 
                         {/* Static Bottom Axis Labels (Dates for >1D, Times for 1D) */}
-                        <text x="15" y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                        <text x="0" y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
                           {selectedTimeframe === "1D" ? firstDT.time : firstDT.date}
                         </text>
-                        <text x={15 + chartWidth / 2} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="middle">
+                        <text x={chartWidth / 2} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="middle">
                           {selectedTimeframe === "1D" ? midDT.time : midDT.date}
                         </text>
-                        <text x={15 + chartWidth} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
+                        <text x={chartWidth} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
                           {selectedTimeframe === "1D" ? lastDT.time : lastDT.date}
                         </text>
 
                         {/* Static Right Axis Labels (Tokens) */}
-                        <text x="452" y="14" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                        <text x="495" y="14" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
                           {yScaleLabels.top}
                         </text>
-                        <text x="452" y="59" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                        <text x="495" y="59" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
                           {yScaleLabels.mid}
                         </text>
-                        <text x="452" y="103" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
+                        <text x="495" y="103" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
                           {yScaleLabels.bottom}
                         </text>
 
@@ -850,9 +850,9 @@ export default function ModelUsagePage() {
                             />
                             {/* Crosshair horizontal line */}
                             <line
-                              x1={15}
+                              x1={0}
                               y1={activeHover.y}
-                              x2={445}
+                              x2={500}
                               y2={activeHover.y}
                               stroke="rgba(37, 99, 235, 0.35)"
                               strokeWidth="1.5"
@@ -877,7 +877,7 @@ export default function ModelUsagePage() {
                             />
 
                             {/* Sliding interactive Date/Time badge on the bottom axis */}
-                            <g transform={`translate(${Math.max(50, Math.min(410, activeHover.x))}, 118)`}>
+                            <g transform={`translate(${Math.max(38, Math.min(462, activeHover.x))}, 118)`}>
                               <rect x="-38" y="-9" width="76" height="15" rx="3" fill="#2563eb" />
                               <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
@@ -885,9 +885,9 @@ export default function ModelUsagePage() {
                             </g>
 
                             {/* Sliding interactive Token badge on the right axis */}
-                            <g transform={`translate(473, ${Math.max(16, Math.min(94, activeHover.y))})`}>
-                              <rect x="-26" y="-8" width="52" height="15" rx="3" fill="#2563eb" />
-                              <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                            <g transform={`translate(500, ${Math.max(18, Math.min(92, activeHover.y))})`}>
+                              <rect x="-52" y="-8" width="52" height="15" rx="3" fill="#2563eb" />
+                              <text x="-26" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {formatTokens(activeValue)}
                               </text>
                             </g>
