@@ -1157,14 +1157,8 @@ router.delete(
 );
 
 // Repository Autolinks
-router.get(
-  '/repos/:owner/:repo/autolinks',
-  GithubController.listAutolinks,
-);
-router.post(
-  '/repos/:owner/:repo/autolinks',
-  GithubController.createAutolink,
-);
+router.get('/repos/:owner/:repo/autolinks', GithubController.listAutolinks);
+router.post('/repos/:owner/:repo/autolinks', GithubController.createAutolink);
 router.get(
   '/repos/:owner/:repo/autolinks/:autolinkId',
   GithubController.getAutolink,
@@ -1175,14 +1169,8 @@ router.delete(
 );
 
 // Organization Profile, Membership & Outside Collaborators
-router.get(
-  '/orgs/:org',
-  GithubController.getOrgInfo,
-);
-router.patch(
-  '/orgs/:org',
-  GithubController.updateOrgSettings,
-);
+router.get('/orgs/:org', GithubController.getOrgInfo);
+router.patch('/orgs/:org', GithubController.updateOrgSettings);
 router.get(
   '/orgs/:org/memberships/:username',
   GithubController.getOrgMembership,
@@ -1191,10 +1179,7 @@ router.put(
   '/orgs/:org/memberships/:username',
   GithubController.addOrUpdateOrgMembership,
 );
-router.delete(
-  '/orgs/:org/members/:username',
-  GithubController.removeOrgMember,
-);
+router.delete('/orgs/:org/members/:username', GithubController.removeOrgMember);
 router.get(
   '/orgs/:org/outside-collaborators',
   GithubController.listOutsideCollaborators,
@@ -1209,50 +1194,26 @@ router.put(
 );
 
 // Organization Blocks
-router.get(
-  '/orgs/:org/blocks',
-  GithubController.listBlockedUsersForOrg,
-);
+router.get('/orgs/:org/blocks', GithubController.listBlockedUsersForOrg);
 router.get(
   '/orgs/:org/blocks/:username',
   GithubController.checkIfUserBlockedByOrg,
 );
-router.put(
-  '/orgs/:org/blocks/:username',
-  GithubController.blockUserForOrg,
-);
+router.put('/orgs/:org/blocks/:username', GithubController.blockUserForOrg);
 router.delete(
   '/orgs/:org/blocks/:username',
   GithubController.unblockUserForOrg,
 );
 
 // Authenticated User Blocks
-router.get(
-  '/user/blocks',
-  GithubController.listBlockedUsersForUser,
-);
-router.get(
-  '/user/blocks/:username',
-  GithubController.checkIfUserBlockedByUser,
-);
-router.put(
-  '/user/blocks/:username',
-  GithubController.blockUserForUser,
-);
-router.delete(
-  '/user/blocks/:username',
-  GithubController.unblockUserForUser,
-);
+router.get('/user/blocks', GithubController.listBlockedUsersForUser);
+router.get('/user/blocks/:username', GithubController.checkIfUserBlockedByUser);
+router.put('/user/blocks/:username', GithubController.blockUserForUser);
+router.delete('/user/blocks/:username', GithubController.unblockUserForUser);
 
 // Codespaces Admin & Stop/Start Lifecycle
-router.get(
-  '/orgs/:org/codespaces',
-  GithubController.listOrgCodespaces,
-);
-router.post(
-  '/codespaces/:codespaceName/stop',
-  GithubController.stopCodespace,
-);
+router.get('/orgs/:org/codespaces', GithubController.listOrgCodespaces);
+router.post('/codespaces/:codespaceName/stop', GithubController.stopCodespace);
 router.post(
   '/codespaces/:codespaceName/start',
   GithubController.startCodespace,

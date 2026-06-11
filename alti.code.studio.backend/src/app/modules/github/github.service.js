@@ -6080,29 +6080,41 @@ export const GithubService = {
   // 67. Repository Security & Private Reporting
   // ==========================================
   async enablePrivateVulnerabilityReporting(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Enabling private vulnerability reporting for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Enabling private vulnerability reporting for ${owner}/${repo}`,
+    );
     try {
-      const response = await octokit.rest.repos.enablePrivateVulnerabilityReporting({
-        owner,
-        repo,
-      });
+      const response =
+        await octokit.rest.repos.enablePrivateVulnerabilityReporting({
+          owner,
+          repo,
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to enable private vulnerability reporting for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to enable private vulnerability reporting for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async disablePrivateVulnerabilityReporting(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Disabling private vulnerability reporting for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Disabling private vulnerability reporting for ${owner}/${repo}`,
+    );
     try {
-      const response = await octokit.rest.repos.disablePrivateVulnerabilityReporting({
-        owner,
-        repo,
-      });
+      const response =
+        await octokit.rest.repos.disablePrivateVulnerabilityReporting({
+          owner,
+          repo,
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to disable private vulnerability reporting for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to disable private vulnerability reporting for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6111,7 +6123,9 @@ export const GithubService = {
   // 68. Dependabot Configurations
   // ==========================================
   async enableDependabotAlerts(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Enabling Dependabot alerts for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Enabling Dependabot alerts for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.enableDependabotAlerts({
         owner,
@@ -6119,13 +6133,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to enable Dependabot alerts for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to enable Dependabot alerts for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async disableDependabotAlerts(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Disabling Dependabot alerts for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Disabling Dependabot alerts for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.disableDependabotAlerts({
         owner,
@@ -6133,13 +6152,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to disable Dependabot alerts for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to disable Dependabot alerts for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async enableDependabotSecurityUpdates(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Enabling Dependabot automated security fixes for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Enabling Dependabot automated security fixes for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.enableAutomatedSecurityFixes({
         owner,
@@ -6147,13 +6171,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to enable Dependabot automated security fixes for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to enable Dependabot automated security fixes for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async disableDependabotSecurityUpdates(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Disabling Dependabot automated security fixes for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Disabling Dependabot automated security fixes for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.disableAutomatedSecurityFixes({
         owner,
@@ -6161,7 +6190,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to disable Dependabot automated security fixes for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to disable Dependabot automated security fixes for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6170,20 +6202,27 @@ export const GithubService = {
   // 69. Organization Security Managers
   // ==========================================
   async listSecurityManagerTeams(org) {
-    logger.info(`🐙 [GitHub Service] Listing security manager teams for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing security manager teams for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.listSecurityManagerTeams({
         org,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list security manager teams for org ${org}:`, error);
+      logger.error(
+        `Failed to list security manager teams for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addSecurityManagerTeam(org, teamSlug) {
-    logger.info(`🐙 [GitHub Service] Adding security manager team "${teamSlug}" for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding security manager team "${teamSlug}" for org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.addSecurityManagerTeam({
         org,
@@ -6191,13 +6230,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to add security manager team "${teamSlug}" for org ${org}:`, error);
+      logger.error(
+        `Failed to add security manager team "${teamSlug}" for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeSecurityManagerTeam(org, teamSlug) {
-    logger.info(`🐙 [GitHub Service] Removing security manager team "${teamSlug}" for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing security manager team "${teamSlug}" for org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.removeSecurityManagerTeam({
         org,
@@ -6205,7 +6249,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove security manager team "${teamSlug}" for org ${org}:`, error);
+      logger.error(
+        `Failed to remove security manager team "${teamSlug}" for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6214,7 +6261,9 @@ export const GithubService = {
   // 70. Repository Autolinks
   // ==========================================
   async listAutolinks(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing autolink references for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing autolink references for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listAutolinks({
         owner,
@@ -6222,13 +6271,24 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list autolink references for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list autolink references for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async createAutolink(owner, repo, keyPrefix, urlTemplate, isAlphanumeric = true) {
-    logger.info(`🐙 [GitHub Service] Creating autolink reference for ${owner}/${repo}`);
+  async createAutolink(
+    owner,
+    repo,
+    keyPrefix,
+    urlTemplate,
+    isAlphanumeric = true,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Creating autolink reference for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.createAutolink({
         owner,
@@ -6239,13 +6299,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create autolink reference for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create autolink reference for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getAutolink(owner, repo, autolinkId) {
-    logger.info(`🐙 [GitHub Service] Fetching autolink #${autolinkId} details for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching autolink #${autolinkId} details for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getAutolink({
         owner,
@@ -6254,13 +6319,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get autolink #${autolinkId} details for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get autolink #${autolinkId} details for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteAutolink(owner, repo, autolinkId) {
-    logger.info(`🐙 [GitHub Service] Deleting autolink #${autolinkId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting autolink #${autolinkId} for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.deleteAutolink({
         owner,
@@ -6269,7 +6339,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete autolink #${autolinkId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete autolink #${autolinkId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6305,7 +6378,9 @@ export const GithubService = {
   },
 
   async getOrgMembership(org, username) {
-    logger.info(`🐙 [GitHub Service] Fetching membership details of ${username} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching membership details of ${username} in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.getMembershipForUser({
         org,
@@ -6313,13 +6388,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to fetch membership details of ${username} in org ${org}:`, error);
+      logger.error(
+        `Failed to fetch membership details of ${username} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addOrUpdateOrgMembership(org, username, role) {
-    logger.info(`🐙 [GitHub Service] Setting membership of ${username} to role "${role}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Setting membership of ${username} to role "${role}" in org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.setMembershipForUser({
         org,
@@ -6328,7 +6408,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to set membership of ${username} in org ${org}:`, error);
+      logger.error(
+        `Failed to set membership of ${username} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6348,20 +6431,27 @@ export const GithubService = {
   },
 
   async listOutsideCollaborators(org) {
-    logger.info(`🐙 [GitHub Service] Listing outside collaborators for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing outside collaborators for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.listOutsideCollaborators({
         org,
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list outside collaborators for org ${org}:`, error);
+      logger.error(
+        `Failed to list outside collaborators for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeOutsideCollaborator(org, username) {
-    logger.info(`🐙 [GitHub Service] Removing outside collaborator ${username} from org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing outside collaborator ${username} from org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.removeOutsideCollaborator({
         org,
@@ -6369,21 +6459,30 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove outside collaborator ${username} from org ${org}:`, error);
+      logger.error(
+        `Failed to remove outside collaborator ${username} from org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async convertMemberToOutsideCollaborator(org, username) {
-    logger.info(`🐙 [GitHub Service] Converting org member ${username} to outside collaborator in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Converting org member ${username} to outside collaborator in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.orgs.convertMemberToOutsideCollaborator({
-        org,
-        username,
-      });
+      const response =
+        await octokit.rest.orgs.convertMemberToOutsideCollaborator({
+          org,
+          username,
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to convert org member ${username} to outside collaborator in org ${org}:`, error);
+      logger.error(
+        `Failed to convert org member ${username} to outside collaborator in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6405,7 +6504,9 @@ export const GithubService = {
   },
 
   async checkIfUserBlockedByOrg(org, username) {
-    logger.info(`🐙 [GitHub Service] Checking if user ${username} is blocked by org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Checking if user ${username} is blocked by org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.checkBlockedUser({
         org,
@@ -6416,7 +6517,10 @@ export const GithubService = {
       if (error.status === 404) {
         return { blocked: false };
       }
-      logger.error(`Failed to check if user ${username} is blocked by org ${org}:`, error);
+      logger.error(
+        `Failed to check if user ${username} is blocked by org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6436,7 +6540,9 @@ export const GithubService = {
   },
 
   async unblockUserForOrg(org, username) {
-    logger.info(`🐙 [GitHub Service] Unblocking user ${username} for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Unblocking user ${username} for org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.unblockUser({
         org,
@@ -6453,9 +6559,12 @@ export const GithubService = {
   // 73. Authenticated User Blocks
   // ==========================================
   async listBlockedUsersForUser() {
-    logger.info(`🐙 [GitHub Service] Listing blocked users for authenticated user`);
+    logger.info(
+      `🐙 [GitHub Service] Listing blocked users for authenticated user`,
+    );
     try {
-      const { data } = await octokit.rest.users.listBlockedForAuthenticatedUser();
+      const { data } =
+        await octokit.rest.users.listBlockedForAuthenticatedUser();
       return data;
     } catch (error) {
       logger.error(`Failed to list blocked users for user:`, error);
@@ -6464,17 +6573,23 @@ export const GithubService = {
   },
 
   async checkIfUserBlockedByUser(username) {
-    logger.info(`🐙 [GitHub Service] Checking if user ${username} is blocked by authenticated user`);
+    logger.info(
+      `🐙 [GitHub Service] Checking if user ${username} is blocked by authenticated user`,
+    );
     try {
-      const response = await octokit.rest.users.checkBlockedForAuthenticatedUser({
-        username,
-      });
+      const response =
+        await octokit.rest.users.checkBlockedForAuthenticatedUser({
+          username,
+        });
       return response.data || { success: true };
     } catch (error) {
       if (error.status === 404) {
         return { blocked: false };
       }
-      logger.error(`Failed to check if user ${username} is blocked by user:`, error);
+      logger.error(
+        `Failed to check if user ${username} is blocked by user:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6548,7 +6663,9 @@ export const GithubService = {
   },
 
   async deleteOrgCodespace(org, username, codespaceName) {
-    logger.info(`🐙 [GitHub Service] Deleting Codespace "${codespaceName}" for user ${username} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting Codespace "${codespaceName}" for user ${username} in org ${org}`,
+    );
     try {
       const response = await octokit.rest.codespaces.deleteFromOrg({
         org,
@@ -6557,7 +6674,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete Codespace "${codespaceName}" for user ${username} in org ${org}:`, error);
+      logger.error(
+        `Failed to delete Codespace "${codespaceName}" for user ${username} in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -6566,7 +6686,9 @@ export const GithubService = {
   // 75. Organization Security Advisories
   // ==========================================
   async listOrgSecurityAdvisories(org) {
-    logger.info(`🐙 [GitHub Service] Listing security advisories for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing security advisories for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.listSecurityAdvisories({
         org,
@@ -6579,7 +6701,9 @@ export const GithubService = {
   },
 
   async createOrgSecurityAdvisory(org, advisoryData) {
-    logger.info(`🐙 [GitHub Service] Creating security advisory for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Creating security advisory for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.createSecurityAdvisory({
         org,

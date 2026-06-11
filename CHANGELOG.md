@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.192] - 2026-06-11 — Phase 11 GitHub REST API & SDK Entrenchment
+### Added
+- **Repository Security & Dependabot**: Added enablePrivateVulnerabilityReporting, disablePrivateVulnerabilityReporting, enableDependabotAlerts, disableDependabotAlerts, enableDependabotSecurityUpdates, and disableDependabotSecurityUpdates methods, controllers, and routes.
+- **Organization Security Managers**: Added listSecurityManagerTeams, addSecurityManagerTeam, and removeSecurityManagerTeam methods, controllers, and routes.
+- **Repository Autolinks**: Added listAutolinks, createAutolink, getAutolink, and deleteAutolink methods, controllers, and routes.
+- **Organization Profile & Membership**: Added getOrgInfo, updateOrgSettings, getOrgMembership, addOrUpdateOrgMembership, removeOrgMember, listOutsideCollaborators, removeOutsideCollaborator, and convertMemberToOutsideCollaborator methods, controllers, and routes.
+- **Organization & User Blocks**: Added listBlockedUsersForOrg, checkIfUserBlockedByOrg, blockUserForOrg, unblockUserForOrg, listBlockedUsersForUser, checkIfUserBlockedByUser, blockUserForUser, and unblockUserForUser methods, controllers, and routes.
+- **Codespaces Lifecycle**: Added listOrgCodespaces, stopCodespace, startCodespace, and deleteOrgCodespace methods, controllers, and routes.
+- **Organization Security Advisories**: Added listOrgSecurityAdvisories and createOrgSecurityAdvisory methods, controllers, and routes.
+- **Unit Testing**: Added 37 new unit tests to achieve 327 passing tests total.
+
 ## [39.37.191] - 2026-06-11 — Phase 10 GitHub REST API & SDK Entrenchment
 ### Added
 - **Advanced Security Scanning**: Added updateCodeScanningAlert, listCodeScanningAlertInstances, listCodeScanningAnalyses, getCodeScanningAnalysis, deleteCodeScanningAnalysis, uploadCodeScanningSarif, listSecretScanningBypassApprovals, and createSecretScanningBypassApproval methods, controllers, and routes.

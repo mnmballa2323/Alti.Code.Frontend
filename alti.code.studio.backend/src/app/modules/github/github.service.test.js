@@ -5751,10 +5751,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 67. Repository Security & Private Reporting
   it('should enable private vulnerability reporting', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.enablePrivateVulnerabilityReporting.mockResolvedValue({ data: mockData });
-    const result = await GithubService.enablePrivateVulnerabilityReporting('owner', 'repo');
+    mockOctokit.rest.repos.enablePrivateVulnerabilityReporting.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.enablePrivateVulnerabilityReporting(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.enablePrivateVulnerabilityReporting).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.enablePrivateVulnerabilityReporting,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -5762,10 +5769,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should disable private vulnerability reporting', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.disablePrivateVulnerabilityReporting.mockResolvedValue({ data: mockData });
-    const result = await GithubService.disablePrivateVulnerabilityReporting('owner', 'repo');
+    mockOctokit.rest.repos.disablePrivateVulnerabilityReporting.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.disablePrivateVulnerabilityReporting(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.disablePrivateVulnerabilityReporting).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.disablePrivateVulnerabilityReporting,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -5774,7 +5788,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 68. Dependabot Configurations
   it('should enable Dependabot alerts', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.enableDependabotAlerts.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.repos.enableDependabotAlerts.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.enableDependabotAlerts('owner', 'repo');
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.repos.enableDependabotAlerts).toHaveBeenCalledWith({
@@ -5785,21 +5801,32 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should disable Dependabot alerts', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.disableDependabotAlerts.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.repos.disableDependabotAlerts.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.disableDependabotAlerts('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.disableDependabotAlerts).toHaveBeenCalledWith({
-      owner: 'owner',
-      repo: 'repo',
-    });
+    expect(mockOctokit.rest.repos.disableDependabotAlerts).toHaveBeenCalledWith(
+      {
+        owner: 'owner',
+        repo: 'repo',
+      },
+    );
   });
 
   it('should enable Dependabot security updates', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.enableAutomatedSecurityFixes.mockResolvedValue({ data: mockData });
-    const result = await GithubService.enableDependabotSecurityUpdates('owner', 'repo');
+    mockOctokit.rest.repos.enableAutomatedSecurityFixes.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.enableDependabotSecurityUpdates(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.enableAutomatedSecurityFixes).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.enableAutomatedSecurityFixes,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -5807,10 +5834,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should disable Dependabot security updates', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.repos.disableAutomatedSecurityFixes.mockResolvedValue({ data: mockData });
-    const result = await GithubService.disableDependabotSecurityUpdates('owner', 'repo');
+    mockOctokit.rest.repos.disableAutomatedSecurityFixes.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.disableDependabotSecurityUpdates(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.repos.disableAutomatedSecurityFixes).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.repos.disableAutomatedSecurityFixes,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -5819,16 +5853,25 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 69. Organization Security Managers
   it('should list security manager teams', async () => {
     const mockData = [{ id: 1, name: 'Security' }];
-    mockOctokit.rest.orgs.listSecurityManagerTeams.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.orgs.listSecurityManagerTeams.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listSecurityManagerTeams('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.listSecurityManagerTeams).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.orgs.listSecurityManagerTeams).toHaveBeenCalledWith(
+      { org: 'org' },
+    );
   });
 
   it('should add a security manager team', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.orgs.addSecurityManagerTeam.mockResolvedValue({ data: mockData });
-    const result = await GithubService.addSecurityManagerTeam('org', 'team-slug');
+    mockOctokit.rest.orgs.addSecurityManagerTeam.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addSecurityManagerTeam(
+      'org',
+      'team-slug',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.addSecurityManagerTeam).toHaveBeenCalledWith({
       org: 'org',
@@ -5838,10 +5881,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should remove a security manager team', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.orgs.removeSecurityManagerTeam.mockResolvedValue({ data: mockData });
-    const result = await GithubService.removeSecurityManagerTeam('org', 'team-slug');
+    mockOctokit.rest.orgs.removeSecurityManagerTeam.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeSecurityManagerTeam(
+      'org',
+      'team-slug',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.removeSecurityManagerTeam).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.orgs.removeSecurityManagerTeam,
+    ).toHaveBeenCalledWith({
       org: 'org',
       team_slug: 'team-slug',
     });
@@ -5862,7 +5912,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   it('should create an autolink', async () => {
     const mockData = { id: 1, key_prefix: 'TICKET-' };
     mockOctokit.rest.repos.createAutolink.mockResolvedValue({ data: mockData });
-    const result = await GithubService.createAutolink('owner', 'repo', 'TICKET-', 'https://example.com/<num>', true);
+    const result = await GithubService.createAutolink(
+      'owner',
+      'repo',
+      'TICKET-',
+      'https://example.com/<num>',
+      true,
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.repos.createAutolink).toHaveBeenCalledWith({
       owner: 'owner',
@@ -5909,7 +5965,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   it('should update org settings', async () => {
     const mockData = { id: 1, login: 'org' };
     mockOctokit.rest.orgs.update.mockResolvedValue({ data: mockData });
-    const result = await GithubService.updateOrgSettings('org', { description: 'Updated' });
+    const result = await GithubService.updateOrgSettings('org', {
+      description: 'Updated',
+    });
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.update).toHaveBeenCalledWith({
       org: 'org',
@@ -5919,7 +5977,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should get org membership', async () => {
     const mockData = { state: 'active', role: 'admin' };
-    mockOctokit.rest.orgs.getMembershipForUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.orgs.getMembershipForUser.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.getOrgMembership('org', 'username');
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.getMembershipForUser).toHaveBeenCalledWith({
@@ -5930,8 +5990,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should add or update org membership', async () => {
     const mockData = { state: 'pending', role: 'member' };
-    mockOctokit.rest.orgs.setMembershipForUser.mockResolvedValue({ data: mockData });
-    const result = await GithubService.addOrUpdateOrgMembership('org', 'username', 'member');
+    mockOctokit.rest.orgs.setMembershipForUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addOrUpdateOrgMembership(
+      'org',
+      'username',
+      'member',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.setMembershipForUser).toHaveBeenCalledWith({
       org: 'org',
@@ -5953,18 +6019,29 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should list outside collaborators', async () => {
     const mockData = [{ id: 1, login: 'collab' }];
-    mockOctokit.rest.orgs.listOutsideCollaborators.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.orgs.listOutsideCollaborators.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listOutsideCollaborators('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.listOutsideCollaborators).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.orgs.listOutsideCollaborators).toHaveBeenCalledWith(
+      { org: 'org' },
+    );
   });
 
   it('should remove outside collaborator', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.orgs.removeOutsideCollaborator.mockResolvedValue({ data: mockData });
-    const result = await GithubService.removeOutsideCollaborator('org', 'username');
+    mockOctokit.rest.orgs.removeOutsideCollaborator.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeOutsideCollaborator(
+      'org',
+      'username',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.removeOutsideCollaborator).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.orgs.removeOutsideCollaborator,
+    ).toHaveBeenCalledWith({
       org: 'org',
       username: 'username',
     });
@@ -5972,10 +6049,17 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should convert member to outside collaborator', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.orgs.convertMemberToOutsideCollaborator.mockResolvedValue({ data: mockData });
-    const result = await GithubService.convertMemberToOutsideCollaborator('org', 'username');
+    mockOctokit.rest.orgs.convertMemberToOutsideCollaborator.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.convertMemberToOutsideCollaborator(
+      'org',
+      'username',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.convertMemberToOutsideCollaborator).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.orgs.convertMemberToOutsideCollaborator,
+    ).toHaveBeenCalledWith({
       org: 'org',
       username: 'username',
     });
@@ -5984,16 +6068,25 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 72. Organization Blocks
   it('should list blocked users for org', async () => {
     const mockData = [{ id: 1, login: 'blocked' }];
-    mockOctokit.rest.orgs.listBlockedUsers.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.orgs.listBlockedUsers.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listBlockedUsersForOrg('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.listBlockedUsers).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.orgs.listBlockedUsers).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should check if user blocked by org (blocked)', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.orgs.checkBlockedUser.mockResolvedValue({ data: mockData });
-    const result = await GithubService.checkIfUserBlockedByOrg('org', 'username');
+    mockOctokit.rest.orgs.checkBlockedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.checkIfUserBlockedByOrg(
+      'org',
+      'username',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.checkBlockedUser).toHaveBeenCalledWith({
       org: 'org',
@@ -6005,7 +6098,10 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     const error404 = new Error('Not Found');
     error404.status = 404;
     mockOctokit.rest.orgs.checkBlockedUser.mockRejectedValue(error404);
-    const result = await GithubService.checkIfUserBlockedByOrg('org', 'username');
+    const result = await GithubService.checkIfUserBlockedByOrg(
+      'org',
+      'username',
+    );
     expect(result).toEqual({ blocked: false });
     expect(mockOctokit.rest.orgs.checkBlockedUser).toHaveBeenCalledWith({
       org: 'org',
@@ -6038,18 +6134,26 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 73. Authenticated User Blocks
   it('should list blocked users for user', async () => {
     const mockData = [{ id: 1, login: 'blocked' }];
-    mockOctokit.rest.users.listBlockedForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.users.listBlockedForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listBlockedUsersForUser();
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.listBlockedForAuthenticatedUser).toHaveBeenCalled();
+    expect(
+      mockOctokit.rest.users.listBlockedForAuthenticatedUser,
+    ).toHaveBeenCalled();
   });
 
   it('should check if user blocked by user (blocked)', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.checkIfUserBlockedByUser('username');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.checkBlockedForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.checkBlockedForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       username: 'username',
     });
   });
@@ -6057,10 +6161,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   it('should check if user blocked by user (not blocked 404)', async () => {
     const error404 = new Error('Not Found');
     error404.status = 404;
-    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockRejectedValue(error404);
+    mockOctokit.rest.users.checkBlockedForAuthenticatedUser.mockRejectedValue(
+      error404,
+    );
     const result = await GithubService.checkIfUserBlockedByUser('username');
     expect(result).toEqual({ blocked: false });
-    expect(mockOctokit.rest.users.checkBlockedForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.checkBlockedForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       username: 'username',
     });
   });
@@ -6070,7 +6178,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.users.block.mockResolvedValue({ data: mockData });
     const result = await GithubService.blockUserForUser('username');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.block).toHaveBeenCalledWith({ username: 'username' });
+    expect(mockOctokit.rest.users.block).toHaveBeenCalledWith({
+      username: 'username',
+    });
   });
 
   it('should unblock user for user', async () => {
@@ -6078,7 +6188,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.users.unblock.mockResolvedValue({ data: mockData });
     const result = await GithubService.unblockUserForUser('username');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.unblock).toHaveBeenCalledWith({ username: 'username' });
+    expect(mockOctokit.rest.users.unblock).toHaveBeenCalledWith({
+      username: 'username',
+    });
   });
 
   // 74. Codespaces Admin & Stop/Start Lifecycle
@@ -6087,33 +6199,49 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codespaces.listInOrg.mockResolvedValue({ data: mockData });
     const result = await GithubService.listOrgCodespaces('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codespaces.listInOrg).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.codespaces.listInOrg).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should stop a codespace', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.codespaces.stopForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.codespaces.stopForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.stopCodespace('codespace');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codespaces.stopForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codespaces.stopForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       codespace_name: 'codespace',
     });
   });
 
   it('should start a codespace', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.codespaces.startForAuthenticatedUser.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.codespaces.startForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.startCodespace('codespace');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codespaces.startForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codespaces.startForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       codespace_name: 'codespace',
     });
   });
 
   it('should delete org codespace', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.codespaces.deleteFromOrg.mockResolvedValue({ data: mockData });
-    const result = await GithubService.deleteOrgCodespace('org', 'username', 'codespace');
+    mockOctokit.rest.codespaces.deleteFromOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteOrgCodespace(
+      'org',
+      'username',
+      'codespace',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.codespaces.deleteFromOrg).toHaveBeenCalledWith({
       org: 'org',
@@ -6125,16 +6253,24 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 75. Organization Security Advisories
   it('should list org security advisories', async () => {
     const mockData = [{ id: 1, ghsa_id: 'GHSA-xxx' }];
-    mockOctokit.rest.orgs.listSecurityAdvisories.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.orgs.listSecurityAdvisories.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.listOrgSecurityAdvisories('org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.orgs.listSecurityAdvisories).toHaveBeenCalledWith({ org: 'org' });
+    expect(mockOctokit.rest.orgs.listSecurityAdvisories).toHaveBeenCalledWith({
+      org: 'org',
+    });
   });
 
   it('should create org security advisory', async () => {
     const mockData = { id: 1, ghsa_id: 'GHSA-xxx' };
-    mockOctokit.rest.orgs.createSecurityAdvisory.mockResolvedValue({ data: mockData });
-    const result = await GithubService.createOrgSecurityAdvisory('org', { summary: 'S1' });
+    mockOctokit.rest.orgs.createSecurityAdvisory.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createOrgSecurityAdvisory('org', {
+      summary: 'S1',
+    });
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.createSecurityAdvisory).toHaveBeenCalledWith({
       org: 'org',

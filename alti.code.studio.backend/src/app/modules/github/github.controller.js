@@ -5373,22 +5373,38 @@ export const addSelectedRepoToOrgCodespacesSecret = async (req, res) => {
 export const enablePrivateVulnerabilityReporting = async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const result = await GithubService.enablePrivateVulnerabilityReporting(owner, repo);
+    const result = await GithubService.enablePrivateVulnerabilityReporting(
+      owner,
+      repo,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error enabling private vulnerability reporting:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error enabling private vulnerability reporting:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const disablePrivateVulnerabilityReporting = async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const result = await GithubService.disablePrivateVulnerabilityReporting(owner, repo);
+    const result = await GithubService.disablePrivateVulnerabilityReporting(
+      owner,
+      repo,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error disabling private vulnerability reporting:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error disabling private vulnerability reporting:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5398,8 +5414,13 @@ export const enableDependabotAlerts = async (req, res) => {
     const result = await GithubService.enableDependabotAlerts(owner, repo);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error enabling Dependabot alerts:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error enabling Dependabot alerts:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5409,30 +5430,51 @@ export const disableDependabotAlerts = async (req, res) => {
     const result = await GithubService.disableDependabotAlerts(owner, repo);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error disabling Dependabot alerts:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error disabling Dependabot alerts:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const enableDependabotSecurityUpdates = async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const result = await GithubService.enableDependabotSecurityUpdates(owner, repo);
+    const result = await GithubService.enableDependabotSecurityUpdates(
+      owner,
+      repo,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error enabling Dependabot security updates:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error enabling Dependabot security updates:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const disableDependabotSecurityUpdates = async (req, res) => {
   try {
     const { owner, repo } = req.params;
-    const result = await GithubService.disableDependabotSecurityUpdates(owner, repo);
+    const result = await GithubService.disableDependabotSecurityUpdates(
+      owner,
+      repo,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error disabling Dependabot security updates:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error disabling Dependabot security updates:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5442,8 +5484,13 @@ export const listSecurityManagerTeams = async (req, res) => {
     const result = await GithubService.listSecurityManagerTeams(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing security manager teams:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing security manager teams:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5453,8 +5500,13 @@ export const addSecurityManagerTeam = async (req, res) => {
     const result = await GithubService.addSecurityManagerTeam(org, teamSlug);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error adding security manager team:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error adding security manager team:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5464,8 +5516,13 @@ export const removeSecurityManagerTeam = async (req, res) => {
     const result = await GithubService.removeSecurityManagerTeam(org, teamSlug);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error removing security manager team:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error removing security manager team:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5476,7 +5533,9 @@ export const listAutolinks = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error listing autolinks:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5484,33 +5543,53 @@ export const createAutolink = async (req, res) => {
   try {
     const { owner, repo } = req.params;
     const { keyPrefix, urlTemplate, isAlphanumeric } = req.body;
-    const result = await GithubService.createAutolink(owner, repo, keyPrefix, urlTemplate, isAlphanumeric);
+    const result = await GithubService.createAutolink(
+      owner,
+      repo,
+      keyPrefix,
+      urlTemplate,
+      isAlphanumeric,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error creating autolink:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getAutolink = async (req, res) => {
   try {
     const { owner, repo, autolinkId } = req.params;
-    const result = await GithubService.getAutolink(owner, repo, parseInt(autolinkId, 10));
+    const result = await GithubService.getAutolink(
+      owner,
+      repo,
+      parseInt(autolinkId, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error getting autolink:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteAutolink = async (req, res) => {
   try {
     const { owner, repo, autolinkId } = req.params;
-    const result = await GithubService.deleteAutolink(owner, repo, parseInt(autolinkId, 10));
+    const result = await GithubService.deleteAutolink(
+      owner,
+      repo,
+      parseInt(autolinkId, 10),
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error deleting autolink:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5521,7 +5600,9 @@ export const getOrgInfo = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error getting org info:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5533,7 +5614,9 @@ export const updateOrgSettings = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error updating org settings:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5544,7 +5627,9 @@ export const getOrgMembership = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error getting org membership:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5552,11 +5637,20 @@ export const addOrUpdateOrgMembership = async (req, res) => {
   try {
     const { org, username } = req.params;
     const { role } = req.body;
-    const result = await GithubService.addOrUpdateOrgMembership(org, username, role);
+    const result = await GithubService.addOrUpdateOrgMembership(
+      org,
+      username,
+      role,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error adding/updating org membership:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error adding/updating org membership:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5567,7 +5661,9 @@ export const removeOrgMember = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error removing org member:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5577,8 +5673,13 @@ export const listOutsideCollaborators = async (req, res) => {
     const result = await GithubService.listOutsideCollaborators(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing outside collaborators:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing outside collaborators:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5588,19 +5689,32 @@ export const removeOutsideCollaborator = async (req, res) => {
     const result = await GithubService.removeOutsideCollaborator(org, username);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error removing outside collaborator:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error removing outside collaborator:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const convertMemberToOutsideCollaborator = async (req, res) => {
   try {
     const { org, username } = req.params;
-    const result = await GithubService.convertMemberToOutsideCollaborator(org, username);
+    const result = await GithubService.convertMemberToOutsideCollaborator(
+      org,
+      username,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error converting member to outside collaborator:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error converting member to outside collaborator:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5610,8 +5724,13 @@ export const listBlockedUsersForOrg = async (req, res) => {
     const result = await GithubService.listBlockedUsersForOrg(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing blocked users for org:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing blocked users for org:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5621,8 +5740,13 @@ export const checkIfUserBlockedByOrg = async (req, res) => {
     const result = await GithubService.checkIfUserBlockedByOrg(org, username);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error checking if user blocked by org:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error checking if user blocked by org:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5633,7 +5757,9 @@ export const blockUserForOrg = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error blocking user for org:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5644,7 +5770,9 @@ export const unblockUserForOrg = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error unblocking user for org:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5653,8 +5781,13 @@ export const listBlockedUsersForUser = async (req, res) => {
     const result = await GithubService.listBlockedUsersForUser();
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing blocked users for user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing blocked users for user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5664,8 +5797,13 @@ export const checkIfUserBlockedByUser = async (req, res) => {
     const result = await GithubService.checkIfUserBlockedByUser(username);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error checking if user blocked by user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error checking if user blocked by user:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5676,7 +5814,9 @@ export const blockUserForUser = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error blocking user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5687,7 +5827,9 @@ export const unblockUserForUser = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error unblocking user:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5698,7 +5840,9 @@ export const listOrgCodespaces = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error listing org codespaces:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5709,7 +5853,9 @@ export const stopCodespace = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error stopping codespace:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5720,18 +5866,26 @@ export const startCodespace = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error starting codespace:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteOrgCodespace = async (req, res) => {
   try {
     const { org, username, codespaceName } = req.params;
-    const result = await GithubService.deleteOrgCodespace(org, username, codespaceName);
+    const result = await GithubService.deleteOrgCodespace(
+      org,
+      username,
+      codespaceName,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error deleting org codespace:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5741,8 +5895,13 @@ export const listOrgSecurityAdvisories = async (req, res) => {
     const result = await GithubService.listOrgSecurityAdvisories(org);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing org security advisories:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error listing org security advisories:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -5750,11 +5909,19 @@ export const createOrgSecurityAdvisory = async (req, res) => {
   try {
     const { org } = req.params;
     const advisoryData = req.body;
-    const result = await GithubService.createOrgSecurityAdvisory(org, advisoryData);
+    const result = await GithubService.createOrgSecurityAdvisory(
+      org,
+      advisoryData,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error creating org security advisory:`, error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      `[GitHub Controller] Error creating org security advisory:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
