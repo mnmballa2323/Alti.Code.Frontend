@@ -147,5 +147,41 @@ router.delete(
   GithubController.removeCollaborator,
 );
 
+// 13. Git Database Plumbing API
+router.get('/repos/:owner/:repo/git/ref/*', GithubController.getRef);
+router.post('/repos/:owner/:repo/git/refs', GithubController.createRef);
+router.patch('/repos/:owner/:repo/git/ref/*', GithubController.updateRef);
+router.post('/repos/:owner/:repo/git/blobs', GithubController.createBlob);
+router.post('/repos/:owner/:repo/git/trees', GithubController.createTree);
+router.post('/repos/:owner/:repo/git/commits', GithubController.createCommit);
+
+// 14. Organizations & Teams API
+router.get('/orgs', GithubController.listOrganizations);
+router.get('/orgs/:org/teams', GithubController.listTeams);
+router.get('/orgs/:org/teams/:team_slug/members', GithubController.listTeamMembers);
+
+// 15. Repository Webhooks API
+router.get('/repos/:owner/:repo/hooks', GithubController.listWebhooks);
+router.post('/repos/:owner/:repo/hooks', GithubController.createWebhook);
+router.delete('/repos/:owner/:repo/hooks/:hookId', GithubController.deleteWebhook);
+
+// 16. Actions Secrets & Variables API
+router.get('/repos/:owner/:repo/actions/secrets/public-key', GithubController.getActionsPublicKey);
+router.put('/repos/:owner/:repo/actions/secrets/:secretName', GithubController.createOrUpdateRepoSecret);
+router.get('/repos/:owner/:repo/actions/variables', GithubController.listRepoVariables);
+router.post('/repos/:owner/:repo/actions/variables', GithubController.createRepoVariable);
+router.patch('/repos/:owner/:repo/actions/variables/:name', GithubController.updateRepoVariable);
+
+// 17. Codespaces API
+router.get('/codespaces', GithubController.listCodespaces);
+router.post('/codespaces', GithubController.createCodespace);
+router.delete('/codespaces/:codespaceName', GithubController.deleteCodespace);
+
+// 18. Dependabot Alerts API
+router.get('/repos/:owner/:repo/dependabot/alerts', GithubController.listDependabotAlerts);
+
+// 19. Copilot API
+router.get('/copilot/billing/:username', GithubController.getCopilotBillingForUser);
+
 export const GithubRoutes = router;
 export default router;
