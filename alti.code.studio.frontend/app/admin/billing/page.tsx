@@ -3,99 +3,62 @@
 import React, { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-// CardLogo component rendering high-fidelity vector SVGs for all major card networks
+// CardLogo component rendering the actual official badge logo for each card network from local assets
 const CardLogo = ({ brand }: { brand: string }) => {
   const brandLower = brand.toLowerCase();
+  let logoPath = "";
+
   switch (brandLower) {
     case "visa":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#1A1F71" />
-          <text x="16" y="14" fontFamily="sans-serif" fontStyle="italic" fontWeight="900" fontSize="9" fill="#FFF" textAnchor="middle">VISA</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/visa.svg";
+      break;
     case "mastercard":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#1e293b" />
-          <circle cx="12" cy="10" r="6.5" fill="#EB001B" />
-          <circle cx="20" cy="10" r="6.5" fill="#F79E1B" fillOpacity="0.85" />
-          <path d="M14.5 10a6.5 6.5 0 0 1 3-5.4 6.5 6.5 0 0 1 0 10.8 6.5 6.5 0 0 1-3-5.4z" fill="#FF5F00" />
-        </svg>
-      );
+      logoPath = "/assets/cards/mastercard.svg";
+      break;
     case "amex":
     case "american express":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#0070CD" />
-          <text x="16" y="13" fontFamily="sans-serif" fontWeight="900" fontSize="7" fill="#FFFFFF" textAnchor="middle" letterSpacing="0.3">AMEX</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/amex.svg";
+      break;
     case "discover":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#111827" />
-          <text x="16" y="13" fontFamily="sans-serif" fontWeight="900" fontSize="5.5" fill="#FFF" textAnchor="middle" letterSpacing="0.2">DISCOVER</text>
-          <circle cx="25" cy="10" r="2" fill="#FF6B00" />
-        </svg>
-      );
+      logoPath = "/assets/cards/discover.svg";
+      break;
     case "diners":
     case "diners club":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#0079C1" />
-          <circle cx="16" cy="10" r="6.5" stroke="#FFF" strokeWidth="1" fill="none" />
-          <path d="M12.5 10h7M16 6.5v7" stroke="#FFF" strokeWidth="0.8" />
-          <text x="16" y="18.5" fontFamily="sans-serif" fontWeight="900" fontSize="2.8" fill="#FFF" textAnchor="middle">DINERS</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/diners.svg";
+      break;
     case "jcb":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#FFF" stroke="#e2e8f0" strokeWidth="1" />
-          <rect x="3.5" y="3.5" width="7.5" height="13" rx="1.5" fill="#003594" />
-          <rect x="12.2" y="3.5" width="7.5" height="13" rx="1.5" fill="#D0011B" />
-          <rect x="21" y="3.5" width="7.5" height="13" rx="1.5" fill="#008631" />
-          <text x="16" y="12" fontFamily="sans-serif" fontWeight="900" fontSize="5.8" fill="#FFF" textAnchor="middle">JCB</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/jcb.svg";
+      break;
     case "unionpay":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#FFF" stroke="#e2e8f0" strokeWidth="1" />
-          <path d="M2.5 2.5h13.5v15H2.5z" fill="#C51A1B" />
-          <path d="M16 2.5h13.5v15H16z" fill="#005A87" />
-          <path d="M11 2.5l5.5 15h-4.5l-5.5-15z" fill="#00A254" />
-          <text x="16" y="12" fontFamily="sans-serif" fontWeight="900" fontSize="4.2" fill="#FFF" textAnchor="middle" letterSpacing="0.1">UPI</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/unionpay.svg";
+      break;
     case "elo":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#0f172a" />
-          <circle cx="16" cy="10" r="5.5" fill="#E61C24" />
-          <circle cx="19.5" cy="10" r="3.5" fill="#F9A01B" />
-          <text x="14.5" y="12.5" fontFamily="sans-serif" fontWeight="900" fontSize="6" fill="#FFF" textAnchor="middle" fontStyle="italic">elo</text>
-        </svg>
-      );
+      logoPath = "/assets/cards/elo.svg";
+      break;
     case "maestro":
-      return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#0f172a" />
-          <circle cx="12" cy="10" r="6.5" fill="#00A3E0" fillOpacity="0.9" />
-          <circle cx="20" cy="10" r="6.5" fill="#EB001B" fillOpacity="0.9" />
-          <path d="M14.5 10a6.5 6.5 0 0 1 3-5.4 6.5 6.5 0 0 1 0 10.8 6.5 6.5 0 0 1-3-5.4z" fill="#7A00E0" fillOpacity="0.7" />
-        </svg>
-      );
+      logoPath = "/assets/cards/maestro.svg";
+      break;
     default:
       return (
-        <svg viewBox="0 0 32 20" className="w-10 h-6 select-none shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="32" height="20" rx="4" fill="#64748b" />
-          <rect x="4" y="4" width="7" height="4.5" rx="0.5" fill="#F59E0B" />
-          <line x1="4" y1="12.5" x2="28" y2="12.5" stroke="#cbd5e1" strokeWidth="2.5" />
-        </svg>
+        <div className="w-10 h-6.5 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md flex items-center justify-center select-none shrink-0">
+          <svg viewBox="0 0 32 20" className="w-6 h-4 text-neutral-400 dark:text-neutral-500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="20" rx="4" fill="currentColor" fillOpacity="0.1" />
+            <rect x="4" y="4" width="7" height="4.5" rx="0.5" fill="currentColor" fillOpacity="0.4" />
+            <line x1="4" y1="12.5" x2="28" y2="12.5" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.4" />
+          </svg>
+        </div>
       );
   }
+
+  return (
+    <div className="w-10 h-6.5 rounded-md overflow-hidden bg-white border border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-center select-none shrink-0 shadow-sm">
+      <img
+        src={logoPath}
+        alt={`${brand} logo`}
+        className="w-full h-full object-contain p-0.5"
+      />
+    </div>
+  );
 };
 
 export default function BillingPage() {
