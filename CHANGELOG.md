@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.178] - 2026-06-11 — Fix React Rules of Hooks violation on Member Details
+### Fixed
+- **Hook Placement Alignment**: Moved the audit logs fetch `useEffect` above all early return checks (`if (loading)` and `if (!member)`) in `MemberDetailsPage` to ensure a consistent execution order of React hooks on every render.
+- **Dynamic Context Resolution**: Internalized mock fallback data derivation in the effect's catch/else paths so that it doesn't depend on the late-defined `details` reference.
+
 ## [39.37.177] - 2026-06-11 — Individual Team Member Audit Logs UI Alignment
 ### Added
 - **Replicated Global Table UI**: Designed the individual member's Audit Logs tab to match the global `/admin/audit` page exactly, utilizing the same custom grid template layout for Date, Time, Actor, Action, Status, and IP Address columns.
