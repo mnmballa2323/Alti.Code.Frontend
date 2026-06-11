@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   Loader2,
-  Cpu,
-  TrendingUp,
   AlertCircle,
   Search,
   AlertTriangle,
@@ -60,7 +58,7 @@ interface ModelUsageInfo {
     "1W": TimeframeData;
     "1M": TimeframeData;
     "1Y": TimeframeData;
-    "All": TimeframeData;
+    All: TimeframeData;
   };
   recentRequests: {
     id: string;
@@ -87,40 +85,74 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         outputTokens: 1200000,
         requests: 10240,
         avgLatency: 720,
-        cost: 56.60,
-        pricingPer1MInput: 5.00,
-        pricingPer1MOutput: 30.00,
+        cost: 56.6,
+        pricingPer1MInput: 5.0,
+        pricingPer1MOutput: 30.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [25000, 12000, 8000, 45000, 90000, 120000, 85000, 60000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [25000, 12000, 8000, 45000, 90000, 120000, 85000, 60000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [730000, 260000, 410000, 420000, 510000, 590000, 480000]
+            values: [730000, 260000, 410000, 420000, 510000, 590000, 480000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              240000, 260000, 280000, 230000, 250000, 290000, 270000, 260000, 240000, 250000,
-              280000, 300000, 260000, 250000, 270000, 290000, 300000, 270000, 260000, 280000,
-              300000, 310000, 280000, 270000, 290000, 300000, 320000, 290000, 280000, 250000
-            ]
+              240000, 260000, 280000, 230000, 250000, 290000, 270000, 260000,
+              240000, 250000, 280000, 300000, 260000, 250000, 270000, 290000,
+              300000, 270000, 260000, 280000, 300000, 310000, 280000, 270000,
+              290000, 300000, 320000, 290000, 280000, 250000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [3200000, 2900000, 3500000, 4100000, 3800000, 4800000, 1200000, 1400000, 1800000, 1500000, 2200000, 2800000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              3200000, 2900000, 3500000, 4100000, 3800000, 4800000, 1200000,
+              1400000, 1800000, 1500000, 2200000, 2800000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [8500000, 11000000, 13000000, 12000000, 16000000, 19500000]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [8500000, 11000000, 13000000, 12000000, 16000000, 19500000],
+          },
         },
         recentRequests: [
           {
             id: "req-gpt55-1",
             timestamp: "Just now",
-            promptSnippet: "Assemble dynamic view transitions layouts for admin routes...",
+            promptSnippet:
+              "Assemble dynamic view transitions layouts for admin routes...",
             tokens: 4320,
             latency: 680,
             cost: 0.151,
@@ -128,7 +160,8 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-gpt55-2",
             timestamp: "18 mins ago",
-            promptSnippet: "Optimize database connection pooling parameters for PostgreSQL...",
+            promptSnippet:
+              "Optimize database connection pooling parameters for PostgreSQL...",
             tokens: 2840,
             latency: 750,
             cost: 0.092,
@@ -136,12 +169,13 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-gpt55-3",
             timestamp: "1 hr ago",
-            promptSnippet: "Translate system documentation translation assets for French localization...",
+            promptSnippet:
+              "Translate system documentation translation assets for French localization...",
             tokens: 1850,
             latency: 620,
             cost: 0.058,
           },
-        ]
+        ],
       },
       {
         name: "GPT-5.5 Pro",
@@ -152,39 +186,73 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         requests: 4262,
         avgLatency: 280,
         cost: 16.25,
-        pricingPer1MInput: 10.00,
-        pricingPer1MOutput: 45.00,
+        pricingPer1MInput: 10.0,
+        pricingPer1MOutput: 45.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [8000, 3000, 1000, 12000, 28000, 35000, 22000, 15000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [8000, 3000, 1000, 12000, 28000, 35000, 22000, 15000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [160000, 50000, 80000, 90000, 110000, 120000, 110000]
+            values: [160000, 50000, 80000, 90000, 110000, 120000, 110000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              49000, 53000, 57000, 47000, 51000, 59000, 55000, 53000, 49000, 51000,
-              57000, 61000, 53000, 51000, 55000, 59000, 60000, 54000, 52000, 56000,
-              60000, 62000, 56000, 54000, 58000, 60000, 64000, 58000, 56000, 50000
-            ]
+              49000, 53000, 57000, 47000, 51000, 59000, 55000, 53000, 49000,
+              51000, 57000, 61000, 53000, 51000, 55000, 59000, 60000, 54000,
+              52000, 56000, 60000, 62000, 56000, 54000, 58000, 60000, 64000,
+              58000, 56000, 50000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [510000, 480000, 550000, 620000, 590000, 710000, 210000, 240000, 320000, 290000, 380000, 450000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              510000, 480000, 550000, 620000, 590000, 710000, 210000, 240000,
+              320000, 290000, 380000, 450000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [1200000, 1800000, 2400000, 2200000, 3200000, 4100000]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [1200000, 1800000, 2400000, 2200000, 3200000, 4100000],
+          },
         },
         recentRequests: [
           {
             id: "req-gpt55pro-1",
             timestamp: "45 mins ago",
-            promptSnippet: "Form autofill handler autocomplete listeners implementation...",
+            promptSnippet:
+              "Form autofill handler autocomplete listeners implementation...",
             tokens: 820,
             latency: 250,
             cost: 0.002,
@@ -192,7 +260,8 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-gpt55pro-2",
             timestamp: "2 hrs ago",
-            promptSnippet: "Sanitize HTML string utility function input checks...",
+            promptSnippet:
+              "Sanitize HTML string utility function input checks...",
             tokens: 450,
             latency: 220,
             cost: 0.001,
@@ -205,9 +274,9 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             latency: 290,
             cost: 0.001,
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   aws: {
     models: [
@@ -219,40 +288,74 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         outputTokens: 890000,
         requests: 7650,
         avgLatency: 820,
-        cost: 20.70,
-        pricingPer1MInput: 3.00,
-        pricingPer1MOutput: 15.00,
+        cost: 20.7,
+        pricingPer1MInput: 3.0,
+        pricingPer1MOutput: 15.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [15000, 8000, 5000, 32000, 75000, 98000, 68000, 42000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [15000, 8000, 5000, 32000, 75000, 98000, 68000, 42000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [510000, 190000, 440000, 290000, 360000, 420000, 330000]
+            values: [510000, 190000, 440000, 290000, 360000, 420000, 330000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              170000, 185000, 198000, 163000, 177000, 206000, 192000, 185000, 171000, 178000,
-              199000, 213000, 185000, 178000, 192000, 206000, 213000, 192000, 185000, 199000,
-              213000, 220000, 199000, 192000, 206000, 213000, 227000, 206000, 199000, 168000
-            ]
+              170000, 185000, 198000, 163000, 177000, 206000, 192000, 185000,
+              171000, 178000, 199000, 213000, 185000, 178000, 192000, 206000,
+              213000, 192000, 185000, 199000, 213000, 220000, 199000, 192000,
+              206000, 213000, 227000, 206000, 199000, 168000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [2100000, 1850000, 2300000, 2700000, 2500000, 3340000, 800000, 950000, 1200000, 1100000, 1500000, 1900000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              2100000, 1850000, 2300000, 2700000, 2500000, 3340000, 800000,
+              950000, 1200000, 1100000, 1500000, 1900000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [5500000, 7200000, 8900000, 8100000, 11200000, 13400000]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [5500000, 7200000, 8900000, 8100000, 11200000, 13400000],
+          },
         },
         recentRequests: [
           {
             id: "req-claude46-1",
             timestamp: "2 mins ago",
-            promptSnippet: "Explain clean architecture module dependencies in Kotlin KMP...",
+            promptSnippet:
+              "Explain clean architecture module dependencies in Kotlin KMP...",
             tokens: 1820,
             latency: 780,
             cost: 0.0078,
@@ -260,7 +363,8 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-claude46-2",
             timestamp: "12 mins ago",
-            promptSnippet: "Refactor MonacoEditor.tsx component layout parameters...",
+            promptSnippet:
+              "Refactor MonacoEditor.tsx component layout parameters...",
             tokens: 3450,
             latency: 950,
             cost: 0.0142,
@@ -268,12 +372,13 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-claude46-3",
             timestamp: "2 hrs ago",
-            promptSnippet: "Parse incoming git diff layout representation regex helper...",
+            promptSnippet:
+              "Parse incoming git diff layout representation regex helper...",
             tokens: 1250,
             latency: 890,
             cost: 0.0049,
           },
-        ]
+        ],
       },
       {
         name: "Claude Opus 4.8",
@@ -284,39 +389,73 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         requests: 782,
         avgLatency: 2100,
         cost: 6.23,
-        pricingPer1MInput: 5.00,
-        pricingPer1MOutput: 25.00,
+        pricingPer1MInput: 5.0,
+        pricingPer1MOutput: 25.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [2000, 1000, 500, 6000, 14000, 18000, 11000, 8000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [2000, 1000, 500, 6000, 14000, 18000, 11000, 8000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [110000, 40000, 65000, 50000, 80000, 90000, 70000]
+            values: [110000, 40000, 65000, 50000, 80000, 90000, 70000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              28000, 30000, 32000, 26000, 29000, 33000, 31000, 30000, 28000, 29000,
-              32000, 35000, 30000, 29000, 31000, 33000, 35000, 31000, 30000, 32000,
-              35000, 36000, 32000, 31000, 33000, 35000, 37000, 33000, 32000, 32000
-            ]
+              28000, 30000, 32000, 26000, 29000, 33000, 31000, 30000, 28000,
+              29000, 32000, 35000, 30000, 29000, 31000, 33000, 35000, 31000,
+              30000, 32000, 35000, 36000, 32000, 31000, 33000, 35000, 37000,
+              33000, 32000, 32000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [310000, 285000, 330000, 380000, 360000, 505000, 120000, 150000, 180000, 160000, 220000, 290000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              310000, 285000, 330000, 380000, 360000, 505000, 120000, 150000,
+              180000, 160000, 220000, 290000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [8500, 11000, 13000, 12000, 16000, 19500]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [8500, 11000, 13000, 12000, 16000, 19500],
+          },
         },
         recentRequests: [
           {
             id: "req-opus48-1",
             timestamp: "1 hr ago",
-            promptSnippet: "Execute security scan rules auditor for Supabase postgres.sql...",
+            promptSnippet:
+              "Execute security scan rules auditor for Supabase postgres.sql...",
             tokens: 8900,
             latency: 2400,
             cost: 0.185,
@@ -324,14 +463,15 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-opus48-2",
             timestamp: "4 hrs ago",
-            promptSnippet: "Audit multi-agent coordination loop deadlocks and race conditions...",
+            promptSnippet:
+              "Audit multi-agent coordination loop deadlocks and race conditions...",
             tokens: 12400,
             latency: 2800,
             cost: 0.245,
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   gcp: {
     models: [
@@ -344,39 +484,73 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         requests: 6920,
         avgLatency: 980,
         cost: 11.04,
-        pricingPer1MInput: 1.50,
-        pricingPer1MOutput: 9.00,
+        pricingPer1MInput: 1.5,
+        pricingPer1MOutput: 9.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [22000, 11000, 7000, 38000, 79000, 95000, 78000, 51000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [22000, 11000, 7000, 38000, 79000, 95000, 78000, 51000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [580000, 210000, 490000, 380000, 420000, 490000, 350000]
+            values: [580000, 210000, 490000, 380000, 420000, 490000, 350000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              190000, 205000, 222000, 183000, 199000, 230000, 215000, 206000, 190000, 199000,
-              222000, 238000, 206000, 199000, 215000, 230000, 238000, 215000, 206000, 222000,
-              238000, 246000, 222000, 215000, 230000, 238000, 254000, 230000, 222000, 215000
-            ]
+              190000, 205000, 222000, 183000, 199000, 230000, 215000, 206000,
+              190000, 199000, 222000, 238000, 206000, 199000, 215000, 230000,
+              238000, 215000, 206000, 222000, 238000, 246000, 222000, 215000,
+              230000, 238000, 254000, 230000, 222000, 215000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [2350000, 2100000, 2600000, 3050000, 2900000, 3810000, 950000, 1100000, 1350000, 1200000, 1700000, 2100000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              2350000, 2100000, 2600000, 3050000, 2900000, 3810000, 950000,
+              1100000, 1350000, 1200000, 1700000, 2100000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [6800000, 8900000, 10500000, 9800000, 13200000, 15400000]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [6800000, 8900000, 10500000, 9800000, 13200000, 15400000],
+          },
         },
         recentRequests: [
           {
             id: "req-gemini35-1",
             timestamp: "24 mins ago",
-            promptSnippet: "Perform evolutionary conservation phyloP scores lookup UCSC...",
+            promptSnippet:
+              "Perform evolutionary conservation phyloP scores lookup UCSC...",
             tokens: 12400,
             latency: 1120,
             cost: 0.0182,
@@ -384,12 +558,13 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-gemini35-2",
             timestamp: "1 hr ago",
-            promptSnippet: "Resolve biological ontology terms resolution lookup EBI OLS...",
+            promptSnippet:
+              "Resolve biological ontology terms resolution lookup EBI OLS...",
             tokens: 4120,
             latency: 890,
             cost: 0.0058,
           },
-        ]
+        ],
       },
       {
         name: "Gemini 3.1 Pro",
@@ -399,40 +574,74 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         outputTokens: 300000,
         requests: 4283,
         avgLatency: 340,
-        cost: 5.80,
-        pricingPer1MInput: 2.00,
-        pricingPer1MOutput: 12.00,
+        cost: 5.8,
+        pricingPer1MInput: 2.0,
+        pricingPer1MOutput: 12.0,
         timeframes: {
           "1D": {
-            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
-            values: [9000, 4000, 1500, 15000, 31000, 38000, 26000, 18000]
+            labels: [
+              "12 AM",
+              "3 AM",
+              "6 AM",
+              "9 AM",
+              "12 PM",
+              "3 PM",
+              "6 PM",
+              "9 PM",
+            ],
+            values: [9000, 4000, 1500, 15000, 31000, 38000, 26000, 18000],
           },
           "1W": {
             labels: ["Fri", "Sat", "Sun", "Mon", "Tue", "Wed", "Thu"],
-            values: [170000, 60000, 145000, 105000, 140000, 155000, 120000]
+            values: [170000, 60000, 145000, 105000, 140000, 155000, 120000],
           },
           "1M": {
             labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
             values: [
-              64000, 69000, 75000, 61000, 67000, 78000, 72000, 69000, 64000, 67000,
-              75000, 80000, 69000, 67000, 72000, 78000, 80000, 72000, 69000, 75000,
-              80000, 83000, 75000, 72000, 78000, 80000, 86000, 78000, 75000, 70000
-            ]
+              64000, 69000, 75000, 61000, 67000, 78000, 72000, 69000, 64000,
+              67000, 75000, 80000, 69000, 67000, 72000, 78000, 80000, 72000,
+              69000, 75000, 80000, 83000, 75000, 72000, 78000, 80000, 86000,
+              78000, 75000, 70000,
+            ],
           },
           "1Y": {
-            labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            values: [780000, 720000, 890000, 990000, 950000, 1400000, 310000, 350000, 450000, 410000, 580000, 690000]
+            labels: [
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+            ],
+            values: [
+              780000, 720000, 890000, 990000, 950000, 1400000, 310000, 350000,
+              450000, 410000, 580000, 690000,
+            ],
           },
-          "All": {
-            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
-            values: [1800000, 2800000, 3600000, 3300000, 4800000, 5900000]
-          }
+          All: {
+            labels: [
+              "Q1 '25",
+              "Q2 '25",
+              "Q3 '25",
+              "Q4 '25",
+              "Q1 '26",
+              "Q2 '26",
+            ],
+            values: [1800000, 2800000, 3600000, 3300000, 4800000, 5900000],
+          },
         },
         recentRequests: [
           {
             id: "req-gemini31-1",
             timestamp: "5 mins ago",
-            promptSnippet: "Lookup clinical evidence pathogen classification ClinVar...",
+            promptSnippet:
+              "Lookup clinical evidence pathogen classification ClinVar...",
             tokens: 950,
             latency: 280,
             cost: 0.0001,
@@ -440,15 +649,16 @@ const initialUsageData: Record<string, ProviderUsageData> = {
           {
             id: "req-gemini31-2",
             timestamp: "3 hrs ago",
-            promptSnippet: "Check active server healthz ping route status check...",
+            promptSnippet:
+              "Check active server healthz ping route status check...",
             tokens: 120,
             latency: 110,
             cost: 0.00001,
           },
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 };
 
 const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
@@ -459,7 +669,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "March 15, 2026",
       tokensIn: "92.15M",
       tokensOut: "33.25M",
-      cost: 1254.00
+      cost: 1254.0,
     },
     {
       name: "GPT-3.5-Turbo",
@@ -467,8 +677,8 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "November 20, 2025",
       tokensIn: "310.08M",
       tokensOut: "140.04M",
-      cost: 900.24
-    }
+      cost: 900.24,
+    },
   ],
   aws: [
     {
@@ -477,7 +687,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "December 10, 2025",
       tokensIn: "60.40M",
       tokensOut: "24.80M",
-      cost: 255.60
+      cost: 255.6,
     },
     {
       name: "Claude 3 Haiku",
@@ -485,8 +695,8 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "August 05, 2025",
       tokensIn: "240.10M",
       tokensOut: "80.05M",
-      cost: 96.04
-    }
+      cost: 96.04,
+    },
   ],
   gcp: [
     {
@@ -495,7 +705,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "February 28, 2026",
       tokensIn: "135.30M",
       tokensOut: "45.15M",
-      cost: 360.90
+      cost: 360.9,
     },
     {
       name: "Gemini 1.0 Pro",
@@ -503,9 +713,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       decommissionedDate: "October 15, 2025",
       tokensIn: "210.05M",
       tokensOut: "80.05M",
-      cost: 290.10
-    }
-  ]
+      cost: 290.1,
+    },
+  ],
 };
 
 interface ArchivedModelInfo {
@@ -520,26 +730,40 @@ interface ArchivedModelInfo {
 const getDateTime = (
   timeframe: "1D" | "1W" | "1M" | "1Y" | "All",
   index: number,
-  label: string
+  label: string,
 ) => {
   if (timeframe === "1D") {
     const now = new Date();
     const d = new Date(now.getTime() - (7 - index) * 3 * 60 * 60 * 1000);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const monthStr = months[d.getMonth()];
     const dayVal = d.getDate();
     const yearVal = d.getFullYear();
-    
+
     let hours = d.getHours();
     const minutes = d.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
+
     hours = hours % 12;
     hours = hours ? hours : 12;
     const minStr = minutes < 10 ? "0" + minutes : minutes;
-    
+
     return {
       date: `${monthStr} ${dayVal}, ${yearVal}`,
-      time: `${hours}:${minStr} ${ampm}`
+      time: `${hours}:${minStr} ${ampm}`,
     };
   }
   if (timeframe === "1W") {
@@ -550,7 +774,7 @@ const getDateTime = (
       Mon: "Jun 8, 2026",
       Tue: "Jun 9, 2026",
       Wed: "Jun 10, 2026",
-      Thu: "Jun 11, 2026"
+      Thu: "Jun 11, 2026",
     };
     const timeMapping: Record<string, string> = {
       Fri: "3:10 PM",
@@ -559,24 +783,38 @@ const getDateTime = (
       Mon: "4:32 PM",
       Tue: "2:15 PM",
       Wed: "6:45 PM",
-      Thu: "12:40 AM"
+      Thu: "12:40 AM",
     };
+
     return {
       date: dateMapping[label] || "Jun 11, 2026",
-      time: timeMapping[label] || "12:00 PM"
+      time: timeMapping[label] || "12:00 PM",
     };
   }
   if (timeframe === "1M") {
     const now = new Date();
     const d = new Date(now.getTime() - (29 - index) * 24 * 60 * 60 * 1000);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const monthStr = months[d.getMonth()];
     const dayVal = d.getDate();
     const yearVal = d.getFullYear();
-    
+
     return {
       date: `${monthStr} ${dayVal}, ${yearVal}`,
-      time: "12:00 AM"
+      time: "12:00 AM",
     };
   }
   if (timeframe === "1Y") {
@@ -592,11 +830,12 @@ const getDateTime = (
       Mar: "Mar 31, 2026",
       Apr: "Apr 30, 2026",
       May: "May 31, 2026",
-      Jun: "Jun 11, 2026"
+      Jun: "Jun 11, 2026",
     };
+
     return {
       date: dateMapping[label] || "Jun 2026",
-      time: "11:59 PM"
+      time: "11:59 PM",
     };
   }
   const dateMapping: Record<string, string> = {
@@ -605,11 +844,12 @@ const getDateTime = (
     "Q3 '25": "Sep 30, 2025",
     "Q4 '25": "Dec 31, 2025",
     "Q1 '26": "Mar 31, 2026",
-    "Q2 '26": "Jun 11, 2026"
+    "Q2 '26": "Jun 11, 2026",
   };
+
   return {
     date: dateMapping[label] || "Jun 2026",
-    time: "11:59 PM"
+    time: "11:59 PM",
   };
 };
 
@@ -622,6 +862,7 @@ const getYScaleCeiling = (maxVal: number) => {
   if (maxVal <= 10000000) return 10000000;
   if (maxVal <= 25000000) return 25000000;
   if (maxVal <= 50000000) return 50000000;
+
   return 100000000;
 };
 
@@ -629,20 +870,24 @@ const getYScaleLabels = (ceiling: number) => {
   const formatVal = (val: number) => {
     if (val >= 1000000) return parseFloat((val / 1000000).toFixed(2)) + "M";
     if (val >= 1000) return parseFloat((val / 1000).toFixed(2)) + "k";
+
     return val.toString();
   };
+
   return {
     top: formatVal(ceiling),
     mid: formatVal(ceiling / 2),
-    bottom: "0"
+    bottom: "0",
   };
 };
 
 const parseTokenString = (str: string) => {
   if (!str) return 0;
   const num = parseFloat(str);
+
   if (str.toLowerCase().includes("m")) return num * 1000000;
   if (str.toLowerCase().includes("k")) return num * 1000;
+
   return num;
 };
 
@@ -656,8 +901,12 @@ export default function MemberDetailsPage() {
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
-  const [activeProvider, setActiveProvider] = useState<"aws" | "gcp" | "azure">("azure");
-  const [modelTimeframes, setModelTimeframes] = useState<Record<string, "1D" | "1W" | "1M" | "1Y" | "All">>({});
+  const [activeProvider, setActiveProvider] = useState<"aws" | "gcp" | "azure">(
+    "azure",
+  );
+  const [modelTimeframes, setModelTimeframes] = useState<
+    Record<string, "1D" | "1W" | "1M" | "1Y" | "All">
+  >({});
   const [hoveredModel, setHoveredModel] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [isArchivedExpanded, setIsArchivedExpanded] = useState(false);
@@ -684,7 +933,7 @@ export default function MemberDetailsPage() {
   const handleMouseMove = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
     valuesCount: number,
-    modelName: string
+    modelName: string,
   ) => {
     const svgEl = e.currentTarget;
     const rect = svgEl.getBoundingClientRect();
@@ -693,8 +942,18 @@ export default function MemberDetailsPage() {
     const relativeX = (x / rect.width) * svgWidth;
     const chartWidth = 500;
     const xOffset = 0;
-    const clampedX = Math.max(xOffset, Math.min(xOffset + chartWidth, relativeX));
-    const index = Math.max(0, Math.min(valuesCount - 1, Math.round(((clampedX - xOffset) / chartWidth) * (valuesCount - 1))));
+    const clampedX = Math.max(
+      xOffset,
+      Math.min(xOffset + chartWidth, relativeX),
+    );
+    const index = Math.max(
+      0,
+      Math.min(
+        valuesCount - 1,
+        Math.round(((clampedX - xOffset) / chartWidth) * (valuesCount - 1)),
+      ),
+    );
+
     setHoveredModel(modelName);
     setHoveredIndex(index);
   };
@@ -1401,16 +1660,21 @@ export default function MemberDetailsPage() {
           (() => {
             const totalStaticTokens = 15475000;
             const globalTotalCost = 116.62;
-            
+
             const memberTotalTokens = parseTokenString(details.tokensTotal);
             const memberCost = details.spendCurrent;
-            
-            const tokenScaleFactor = totalStaticTokens > 0 ? memberTotalTokens / totalStaticTokens : 0.15;
-            const costScaleFactor = globalTotalCost > 0 ? memberCost / globalTotalCost : 0.15;
-            
+
+            const tokenScaleFactor =
+              totalStaticTokens > 0
+                ? memberTotalTokens / totalStaticTokens
+                : 0.15;
+            const costScaleFactor =
+              globalTotalCost > 0 ? memberCost / globalTotalCost : 0.15;
+
             const formatTokensLocal = (num: number) => {
               if (num >= 1000000) return (num / 1000000).toFixed(2) + "M";
               if (num >= 1000) return (num / 1000).toFixed(0) + "k";
+
               return num.toString();
             };
 
@@ -1422,32 +1686,32 @@ export default function MemberDetailsPage() {
                 <div className="flex justify-center w-full border-b border-neutral-100 dark:border-neutral-800/80 pb-6 mb-2">
                   <div className="flex gap-2 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/50 dark:border-neutral-800 shrink-0 shadow-sm">
                     <button
-                      onClick={() => setActiveProvider("azure")}
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                         activeProvider === "azure"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
+                      onClick={() => setActiveProvider("azure")}
                     >
                       GPT
                     </button>
                     <button
-                      onClick={() => setActiveProvider("aws")}
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                         activeProvider === "aws"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
+                      onClick={() => setActiveProvider("aws")}
                     >
                       Claude
                     </button>
                     <button
-                      onClick={() => setActiveProvider("gcp")}
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                         activeProvider === "gcp"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
+                      onClick={() => setActiveProvider("gcp")}
                     >
                       Gemini
                     </button>
@@ -1457,23 +1721,42 @@ export default function MemberDetailsPage() {
                 {/* Side-by-side Model Columns */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {data.models.map((model) => {
-                    const selectedTimeframe = modelTimeframes[model.name] || "1W";
+                    const selectedTimeframe =
+                      modelTimeframes[model.name] || "1W";
                     const timeframeData = model.timeframes[selectedTimeframe];
                     const rawValues = timeframeData.values;
-                    
-                    const values = rawValues.map(v => Math.round(v * tokenScaleFactor));
-                    const timeframeTotal = values.reduce((acc, v) => acc + v, 0);
-                    
-                    const modelStaticTokens = (model.inputTokens + model.outputTokens) * tokenScaleFactor;
-                    const inputRatio = modelStaticTokens > 0 ? (model.inputTokens * tokenScaleFactor) / modelStaticTokens : 0.8;
-                    const dynamicInput = Math.round(timeframeTotal * inputRatio);
-                    const dynamicOutput = timeframeTotal - dynamicInput;
-                    
-                    const dynamicCost = (dynamicInput / 1000000) * model.pricingPer1MInput + (dynamicOutput / 1000000) * model.pricingPer1MOutput;
 
-                    const labels = selectedTimeframe === "1D"
-                      ? Array.from({ length: values.length }).map((_, i) => getDateTime("1D", i, "").time)
-                      : timeframeData.labels;
+                    const values = rawValues.map((v) =>
+                      Math.round(v * tokenScaleFactor),
+                    );
+                    const timeframeTotal = values.reduce(
+                      (acc, v) => acc + v,
+                      0,
+                    );
+
+                    const modelStaticTokens =
+                      (model.inputTokens + model.outputTokens) *
+                      tokenScaleFactor;
+                    const inputRatio =
+                      modelStaticTokens > 0
+                        ? (model.inputTokens * tokenScaleFactor) /
+                          modelStaticTokens
+                        : 0.8;
+                    const dynamicInput = Math.round(
+                      timeframeTotal * inputRatio,
+                    );
+                    const dynamicOutput = timeframeTotal - dynamicInput;
+
+                    const dynamicCost =
+                      (dynamicInput / 1000000) * model.pricingPer1MInput +
+                      (dynamicOutput / 1000000) * model.pricingPer1MOutput;
+
+                    const labels =
+                      selectedTimeframe === "1D"
+                        ? Array.from({ length: values.length }).map(
+                            (_, i) => getDateTime("1D", i, "").time,
+                          )
+                        : timeframeData.labels;
 
                     const maxVal = Math.max(...values, 1);
                     const yScaleCeiling = getYScaleCeiling(maxVal);
@@ -1485,8 +1768,13 @@ export default function MemberDetailsPage() {
                     const yOffset = 10;
 
                     const coords = values.map((val, i) => {
-                      const x = xOffset + (i / (values.length - 1)) * chartWidth;
-                      const y = yOffset + chartHeight - ((val / yScaleCeiling) * chartHeight);
+                      const x =
+                        xOffset + (i / (values.length - 1)) * chartWidth;
+                      const y =
+                        yOffset +
+                        chartHeight -
+                        (val / yScaleCeiling) * chartHeight;
+
                       return { x, y };
                     });
 
@@ -1494,29 +1782,62 @@ export default function MemberDetailsPage() {
                       return acc + `${i === 0 ? "M" : "L"} ${c.x} ${c.y}`;
                     }, "");
 
-                    const areaPath = linePath + ` L ${xOffset + chartWidth} ${yOffset + chartHeight} L ${xOffset} ${yOffset + chartHeight} Z`;
+                    const areaPath =
+                      linePath +
+                      ` L ${xOffset + chartWidth} ${yOffset + chartHeight} L ${xOffset} ${yOffset + chartHeight} Z`;
 
                     const isHovered = hoveredModel === model.name;
-                    const activeHover = isHovered && hoveredIndex !== null && hoveredIndex < values.length
-                      ? {
-                          index: hoveredIndex,
-                          x: xOffset + (hoveredIndex / (values.length - 1)) * chartWidth,
-                          y: yOffset + chartHeight - ((values[hoveredIndex] / yScaleCeiling) * chartHeight)
-                        }
-                      : null;
-                    
-                    const activeValue = activeHover ? values[activeHover.index] : values[values.length - 1];
+                    const activeHover =
+                      isHovered &&
+                      hoveredIndex !== null &&
+                      hoveredIndex < values.length
+                        ? {
+                            index: hoveredIndex,
+                            x:
+                              xOffset +
+                              (hoveredIndex / (values.length - 1)) * chartWidth,
+                            y:
+                              yOffset +
+                              chartHeight -
+                              (values[hoveredIndex] / yScaleCeiling) *
+                                chartHeight,
+                          }
+                        : null;
+
+                    const activeValue = activeHover
+                      ? values[activeHover.index]
+                      : values[values.length - 1];
 
                     const hoverDT = activeHover
-                      ? getDateTime(selectedTimeframe, activeHover.index, labels[activeHover.index])
-                      : getDateTime(selectedTimeframe, labels.length - 1, labels[labels.length - 1]);
+                      ? getDateTime(
+                          selectedTimeframe,
+                          activeHover.index,
+                          labels[activeHover.index],
+                        )
+                      : getDateTime(
+                          selectedTimeframe,
+                          labels.length - 1,
+                          labels[labels.length - 1],
+                        );
 
-                    const firstDT = getDateTime(selectedTimeframe, 0, labels[0]);
-                    const midDT = getDateTime(selectedTimeframe, Math.floor(labels.length / 2), labels[Math.floor(labels.length / 2)]);
-                    const lastDT = getDateTime(selectedTimeframe, labels.length - 1, labels[labels.length - 1]);
+                    const firstDT = getDateTime(
+                      selectedTimeframe,
+                      0,
+                      labels[0],
+                    );
+                    const midDT = getDateTime(
+                      selectedTimeframe,
+                      Math.floor(labels.length / 2),
+                      labels[Math.floor(labels.length / 2)],
+                    );
+                    const lastDT = getDateTime(
+                      selectedTimeframe,
+                      labels.length - 1,
+                      labels[labels.length - 1],
+                    );
 
                     return (
-                      <div 
+                      <div
                         key={model.name}
                         className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 shadow-sm space-y-6 flex flex-col justify-between"
                       >
@@ -1527,26 +1848,37 @@ export default function MemberDetailsPage() {
                                 {model.name}
                               </h3>
                               <p className="text-[10px] text-neutral-400 dark:text-neutral-500">
-                                ${model.pricingPer1MInput.toFixed(2)} <span className="opacity-60">in</span> / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">out</span>
+                                ${model.pricingPer1MInput.toFixed(2)}{" "}
+                                <span className="opacity-60">in</span> / $
+                                {model.pricingPer1MOutput.toFixed(2)}{" "}
+                                <span className="opacity-60">out</span>
                               </p>
                             </div>
                             <div className="text-right">
-                              <span className="text-lg font-bold text-neutral-950 dark:text-white">${dynamicCost.toFixed(2)}</span>
+                              <span className="text-lg font-bold text-neutral-950 dark:text-white">
+                                ${dynamicCost.toFixed(2)}
+                              </span>
                             </div>
                           </div>
 
                           <div className="w-full bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center">
                             <div className="flex-1 flex justify-between items-center pr-2">
                               <div>
-                                <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
-                                <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">{formatTokensLocal(timeframeTotal)}</span>
+                                <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">
+                                  Tokens Processed
+                                </span>
+                                <span className="text-xs font-bold text-neutral-850 dark:text-neutral-250">
+                                  {formatTokensLocal(timeframeTotal)}
+                                </span>
                               </div>
                               <div className="text-right flex flex-col justify-between h-8">
                                 <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pt-[1px]">
-                                  {formatTokensLocal(dynamicInput)} <span className="opacity-60">tokens in</span>
+                                  {formatTokensLocal(dynamicInput)}{" "}
+                                  <span className="opacity-60">tokens in</span>
                                 </span>
                                 <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium block leading-none pb-[1px]">
-                                  {formatTokensLocal(dynamicOutput)} <span className="opacity-60">tokens out</span>
+                                  {formatTokensLocal(dynamicOutput)}{" "}
+                                  <span className="opacity-60">tokens out</span>
                                 </span>
                               </div>
                             </div>
@@ -1555,19 +1887,26 @@ export default function MemberDetailsPage() {
                           <div className="space-y-4 pt-2">
                             <div className="flex justify-between items-center border-b border-neutral-100/50 dark:border-neutral-800/50 pb-2">
                               <div className="flex gap-1 bg-neutral-100/60 dark:bg-neutral-900 p-0.5 rounded-lg border border-neutral-200/50 dark:border-neutral-800 text-[9px] font-bold">
-                                {(["1D", "1W", "1M", "1Y", "All"] as const).map((tf) => (
-                                  <button
-                                    key={tf}
-                                    onClick={() => setModelTimeframes(prev => ({ ...prev, [model.name]: tf }))}
-                                    className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
-                                      selectedTimeframe === tf
-                                        ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm"
-                                        : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
-                                    }`}
-                                  >
-                                    {tf}
-                                  </button>
-                                ))}
+                                {(["1D", "1W", "1M", "1Y", "All"] as const).map(
+                                  (tf) => (
+                                    <button
+                                      key={tf}
+                                      className={`px-2 py-1 rounded-md transition-all cursor-pointer ${
+                                        selectedTimeframe === tf
+                                          ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm"
+                                          : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                                      }`}
+                                      onClick={() =>
+                                        setModelTimeframes((prev) => ({
+                                          ...prev,
+                                          [model.name]: tf,
+                                        }))
+                                      }
+                                    >
+                                      {tf}
+                                    </button>
+                                  ),
+                                )}
                               </div>
 
                               <div className="flex items-baseline gap-2">
@@ -1576,7 +1915,9 @@ export default function MemberDetailsPage() {
                                 </span>
                                 {activeHover && (
                                   <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
-                                    {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
+                                    {selectedTimeframe === "1D"
+                                      ? hoverDT.time
+                                      : hoverDT.date.split(",")[0]}
                                   </span>
                                 )}
                               </div>
@@ -1585,91 +1926,298 @@ export default function MemberDetailsPage() {
                             <div className="relative h-36 w-full pt-1 select-none">
                               <svg
                                 className="w-full h-full overflow-visible cursor-crosshair"
-                                viewBox="0 0 500 130"
                                 preserveAspectRatio="none"
-                                onMouseMove={(e) => handleMouseMove(e, values.length, model.name)}
+                                viewBox="0 0 500 130"
                                 onMouseLeave={handleMouseLeave}
+                                onMouseMove={(e) =>
+                                  handleMouseMove(e, values.length, model.name)
+                                }
                               >
                                 <defs>
-                                  <linearGradient id={`chartGrad-${model.name.replace(/\s+/g, "")}`} x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
-                                    <stop offset="100%" stopColor="#2563eb" stopOpacity="0.00" />
+                                  <linearGradient
+                                    id={`chartGrad-${model.name.replace(/\s+/g, "")}`}
+                                    x1="0"
+                                    x2="0"
+                                    y1="0"
+                                    y2="1"
+                                  >
+                                    <stop
+                                      offset="0%"
+                                      stopColor="#2563eb"
+                                      stopOpacity="0.25"
+                                    />
+                                    <stop
+                                      offset="100%"
+                                      stopColor="#2563eb"
+                                      stopOpacity="0.00"
+                                    />
                                   </linearGradient>
                                 </defs>
 
-                                <line x1="0" y1="10" x2="500" y2="10" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
-                                <line x1="0" y1="55" x2="500" y2="55" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
-                                <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.4)" className="dark:stroke-neutral-850/40" strokeWidth="1" strokeDasharray="2 2" />
+                                <line
+                                  className="dark:stroke-neutral-850/40"
+                                  stroke="rgba(229, 231, 235, 0.4)"
+                                  strokeDasharray="2 2"
+                                  strokeWidth="1"
+                                  x1="0"
+                                  x2="500"
+                                  y1="10"
+                                  y2="10"
+                                />
+                                <line
+                                  className="dark:stroke-neutral-850/40"
+                                  stroke="rgba(229, 231, 235, 0.4)"
+                                  strokeDasharray="2 2"
+                                  strokeWidth="1"
+                                  x1="0"
+                                  x2="500"
+                                  y1="55"
+                                  y2="55"
+                                />
+                                <line
+                                  className="dark:stroke-neutral-850/40"
+                                  stroke="rgba(229, 231, 235, 0.4)"
+                                  strokeDasharray="2 2"
+                                  strokeWidth="1"
+                                  x1="0"
+                                  x2="500"
+                                  y1="100"
+                                  y2="100"
+                                />
 
-                                <line x1="0" y1="100" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
-                                <line x1="500" y1="10" x2="500" y2="100" stroke="rgba(229, 231, 235, 0.7)" className="dark:stroke-neutral-800" strokeWidth="1" />
+                                <line
+                                  className="dark:stroke-neutral-800"
+                                  stroke="rgba(229, 231, 235, 0.7)"
+                                  strokeWidth="1"
+                                  x1="0"
+                                  x2="500"
+                                  y1="100"
+                                  y2="100"
+                                />
+                                <line
+                                  className="dark:stroke-neutral-800"
+                                  stroke="rgba(229, 231, 235, 0.7)"
+                                  strokeWidth="1"
+                                  x1="500"
+                                  x2="500"
+                                  y1="10"
+                                  y2="100"
+                                />
 
-                                <text x="0" y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="start">
-                                  {selectedTimeframe === "1D" ? firstDT.time : firstDT.date}
+                                <text
+                                  className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="start"
+                                  x="0"
+                                  y="118"
+                                >
+                                  {selectedTimeframe === "1D"
+                                    ? firstDT.time
+                                    : firstDT.date}
                                 </text>
-                                <text x={chartWidth / 2} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="middle">
-                                  {selectedTimeframe === "1D" ? midDT.time : midDT.date}
+                                <text
+                                  className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="middle"
+                                  x={chartWidth / 2}
+                                  y="118"
+                                >
+                                  {selectedTimeframe === "1D"
+                                    ? midDT.time
+                                    : midDT.date}
                                 </text>
-                                <text x={chartWidth} y="118" fill="currentColor" className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
-                                  {selectedTimeframe === "1D" ? lastDT.time : lastDT.date}
+                                <text
+                                  className="text-[9px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="end"
+                                  x={chartWidth}
+                                  y="118"
+                                >
+                                  {selectedTimeframe === "1D"
+                                    ? lastDT.time
+                                    : lastDT.date}
                                 </text>
 
-                                <text x="495" y="14" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
+                                <text
+                                  className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="end"
+                                  x="495"
+                                  y="14"
+                                >
                                   {yScaleLabels.top}
                                 </text>
-                                <text x="495" y="59" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
+                                <text
+                                  className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="end"
+                                  x="495"
+                                  y="59"
+                                >
                                   {yScaleLabels.mid}
                                 </text>
-                                <text x="495" y="103" fill="currentColor" className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono" textAnchor="end">
+                                <text
+                                  className="text-[8px] text-neutral-400 dark:text-neutral-500 font-mono"
+                                  fill="currentColor"
+                                  textAnchor="end"
+                                  x="495"
+                                  y="103"
+                                >
                                   {yScaleLabels.bottom}
                                 </text>
 
                                 <path
+                                  className="transition-all duration-300 ease-in-out"
                                   d={areaPath}
                                   fill={`url(#chartGrad-${model.name.replace(/\s+/g, "")})`}
-                                  className="transition-all duration-300 ease-in-out"
                                 />
 
                                 <path
+                                  className="transition-all duration-300 ease-in-out"
                                   d={linePath}
                                   fill="none"
                                   stroke="#2563eb"
-                                  strokeWidth="2"
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
-                                  className="transition-all duration-300 ease-in-out"
+                                  strokeWidth="2"
                                 />
 
                                 {activeHover && (
                                   <>
-                                    <line x1={activeHover.x} y1={10} x2={activeHover.x} y2={100} stroke="rgba(37, 99, 235, 0.35)" strokeWidth="1.5" strokeDasharray="3 3" pointerEvents="none" />
-                                    <line x1="0" y1="105" x2="500" y2="105" stroke="rgba(37, 99, 235, 0)" strokeWidth="0" />
-                                    <circle cx={activeHover.x} cy={activeHover.y} r="9" fill="#2563eb" fillOpacity="0.15" pointerEvents="none" />
-                                    <circle cx={activeHover.x} cy={activeHover.y} r="4" fill="#2563eb" stroke="white" strokeWidth="1.5" pointerEvents="none" />
+                                    <line
+                                      pointerEvents="none"
+                                      stroke="rgba(37, 99, 235, 0.35)"
+                                      strokeDasharray="3 3"
+                                      strokeWidth="1.5"
+                                      x1={activeHover.x}
+                                      x2={activeHover.x}
+                                      y1={10}
+                                      y2={100}
+                                    />
+                                    <line
+                                      pointerEvents="none"
+                                      stroke="rgba(37, 99, 235, 0.35)"
+                                      strokeDasharray="3 3"
+                                      strokeWidth="1.5"
+                                      x1="0"
+                                      x2="500"
+                                      y1={activeHover.y}
+                                      y2={activeHover.y}
+                                    />
+                                    <circle
+                                      cx={activeHover.x}
+                                      cy={activeHover.y}
+                                      fill="#2563eb"
+                                      fillOpacity="0.15"
+                                      pointerEvents="none"
+                                      r="9"
+                                    />
+                                    <circle
+                                      cx={activeHover.x}
+                                      cy={activeHover.y}
+                                      fill="#2563eb"
+                                      pointerEvents="none"
+                                      r="4"
+                                      stroke="white"
+                                      strokeWidth="1.5"
+                                    />
 
-                                    <g transform={`translate(${Math.max(38, Math.min(462, activeHover.x))}, 118)`} pointerEvents="none">
-                                      <rect x="-38" y="-9" width="76" height="15" rx="3" fill="#2563eb" />
-                                      <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                                        {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
+                                    <g
+                                      pointerEvents="none"
+                                      transform={`translate(${Math.max(38, Math.min(462, activeHover.x))}, 118)`}
+                                    >
+                                      <rect
+                                        fill="#2563eb"
+                                        height="15"
+                                        rx="3"
+                                        width="76"
+                                        x="-38"
+                                        y="-9"
+                                      />
+                                      <text
+                                        fill="white"
+                                        fontFamily="monospace"
+                                        fontSize="8"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        x="0"
+                                        y="2"
+                                      >
+                                        {selectedTimeframe === "1D"
+                                          ? hoverDT.time
+                                          : hoverDT.date.split(",")[0]}
                                       </text>
                                     </g>
 
-                                    <g transform={`translate(500, ${Math.max(18, Math.min(92, activeHover.y))})`} pointerEvents="none">
-                                      <rect x="-52" y="-8" width="52" height="15" rx="3" fill="#2563eb" />
-                                      <text x="-26" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                    <g
+                                      pointerEvents="none"
+                                      transform={`translate(500, ${Math.max(18, Math.min(92, activeHover.y))})`}
+                                    >
+                                      <rect
+                                        fill="#2563eb"
+                                        height="15"
+                                        rx="3"
+                                        width="52"
+                                        x="-52"
+                                        y="-8"
+                                      />
+                                      <text
+                                        fill="white"
+                                        fontFamily="monospace"
+                                        fontSize="8"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        x="-26"
+                                        y="2"
+                                      >
                                         {formatTokensLocal(activeValue)}
                                       </text>
                                     </g>
 
-                                    <g transform={`translate(${activeHover.x > 320 ? activeHover.x - 145 : activeHover.x + 10}, ${activeHover.y - 11})`} pointerEvents="none">
-                                      <rect x="0" y="0" width="136" height="22" rx="11" fill="rgba(15, 15, 17, 0.95)" stroke="#2563eb" strokeWidth="1.5" />
-                                      <text x="34" y="14" fill="#ffffff" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
-                                        {selectedTimeframe === "1D" 
+                                    <g
+                                      pointerEvents="none"
+                                      transform={`translate(${activeHover.x > 320 ? activeHover.x - 145 : activeHover.x + 10}, ${activeHover.y - 11})`}
+                                    >
+                                      <rect
+                                        fill="rgba(15, 15, 17, 0.95)"
+                                        height="22"
+                                        rx="11"
+                                        stroke="#2563eb"
+                                        strokeWidth="1.5"
+                                        width="136"
+                                        x="0"
+                                        y="0"
+                                      />
+                                      <text
+                                        fill="#ffffff"
+                                        fontFamily="monospace"
+                                        fontSize="7.5"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        x="34"
+                                        y="14"
+                                      >
+                                        {selectedTimeframe === "1D"
                                           ? `${hoverDT.date.split(" ")[0]} ${hoverDT.date.split(" ")[1].replace(",", "")} ${hoverDT.time}`
                                           : hoverDT.date.split(",")[0]}
                                       </text>
-                                      <line x1="68" y1="3" x2="68" y2="19" stroke="rgba(255, 255, 255, 0.15)" strokeWidth="1" />
-                                      <text x="102" y="14" fill="#ffffff" fontSize="8.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
+                                      <line
+                                        stroke="rgba(255, 255, 255, 0.15)"
+                                        strokeWidth="1"
+                                        x1="68"
+                                        x2="68"
+                                        y1="3"
+                                        y2="19"
+                                      />
+                                      <text
+                                        fill="#ffffff"
+                                        fontFamily="monospace"
+                                        fontSize="8.5"
+                                        fontWeight="bold"
+                                        textAnchor="middle"
+                                        x="102"
+                                        y="14"
+                                      >
                                         {formatTokensLocal(activeValue)}
                                       </text>
                                     </g>
@@ -1687,23 +2235,32 @@ export default function MemberDetailsPage() {
                 {/* Legacy Models Section */}
                 <div>
                   <div className="border border-neutral-200 dark:border-neutral-800 rounded-3xl bg-white dark:bg-[#161b22] p-6 shadow-sm">
-                    <button 
-                      onClick={() => setIsArchivedExpanded(!isArchivedExpanded)}
+                    <button
                       className="flex items-center justify-between w-full text-left focus:outline-none group cursor-pointer"
+                      onClick={() => setIsArchivedExpanded(!isArchivedExpanded)}
                     >
                       <div className="flex items-center">
                         <div>
-                          <h4 className="text-sm font-bold text-neutral-850 dark:text-neutral-200">Legacy Models</h4>
-                          <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Historical billing data</p>
+                          <h4 className="text-sm font-bold text-neutral-850 dark:text-neutral-200">
+                            Legacy Models
+                          </h4>
+                          <p className="text-[10px] text-neutral-400 dark:text-neutral-500">
+                            Historical billing data
+                          </p>
                         </div>
                       </div>
-                      <svg 
-                        className={`w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-white transition-transform duration-200 ${isArchivedExpanded ? 'rotate-180' : ''}`} 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
+                      <svg
+                        className={`w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-white transition-transform duration-200 ${isArchivedExpanded ? "rotate-180" : ""}`}
+                        fill="none"
                         stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                        <path
+                          d="M19 9l-7 7-7-7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                        />
                       </svg>
                     </button>
                   </div>
@@ -1711,28 +2268,49 @@ export default function MemberDetailsPage() {
                   {isArchivedExpanded && (
                     <div className="mt-3 z-30 space-y-3">
                       {archivedModelsData[activeProvider].map((model) => (
-                        <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl gap-4 shadow-md hover:shadow-lg transition-shadow duration-200">
+                        <div
+                          key={model.name}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl gap-4 shadow-md hover:shadow-lg transition-shadow duration-200"
+                        >
                           <div className="space-y-1">
-                            <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150 block">{model.name}</span>
-                            <p className="text-[9px] text-neutral-455 dark:text-neutral-500">Decommissioned on {model.decommissionedDate}</p>
+                            <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150 block">
+                              {model.name}
+                            </span>
+                            <p className="text-[9px] text-neutral-455 dark:text-neutral-500">
+                              Decommissioned on {model.decommissionedDate}
+                            </p>
                           </div>
-                          
+
                           <div className="flex gap-6 text-right sm:text-right">
                             <div>
-                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens In</span>
+                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">
+                                Tokens In
+                              </span>
                               <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355 text-right">
-                                {formatTokensLocal(parseTokenString(model.tokensIn) * tokenScaleFactor)}
+                                {formatTokensLocal(
+                                  parseTokenString(model.tokensIn) *
+                                    tokenScaleFactor,
+                                )}
                               </span>
                             </div>
                             <div>
-                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Out</span>
+                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">
+                                Tokens Out
+                              </span>
                               <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355 text-right">
-                                {formatTokensLocal(parseTokenString(model.tokensOut) * tokenScaleFactor)}
+                                {formatTokensLocal(
+                                  parseTokenString(model.tokensOut) *
+                                    tokenScaleFactor,
+                                )}
                               </span>
                             </div>
                             <div>
-                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Total Cost</span>
-                              <span className="text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 text-right">${(model.cost * costScaleFactor).toFixed(2)}</span>
+                              <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">
+                                Total Cost
+                              </span>
+                              <span className="text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200 text-right">
+                                ${(model.cost * costScaleFactor).toFixed(2)}
+                              </span>
                             </div>
                           </div>
                         </div>
