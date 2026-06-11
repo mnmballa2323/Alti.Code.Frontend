@@ -10,6 +10,7 @@ import {
   BookOpen,
   Shield,
   Activity,
+  Cpu,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -32,6 +33,7 @@ const managerItems: SidebarItem[] = [
   { label: "Knowledge", href: "/admin/data", icon: BookOpen },
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
+  { label: "AI Gateways", href: "/admin/gateways", icon: Cpu },
 ];
 
 export default function AdminLayout({
@@ -100,7 +102,8 @@ export default function AdminLayout({
     if (
       pathname.startsWith("/admin/data") ||
       pathname.startsWith("/admin/instructions") ||
-      pathname.startsWith("/admin/guardrails")
+      pathname.startsWith("/admin/guardrails") ||
+      pathname.startsWith("/admin/gateways")
     ) {
       return "Platform Manager";
     }
@@ -116,6 +119,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/data")) return "Knowledge";
     if (pathname.startsWith("/admin/instructions")) return "Instructions";
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
+    if (pathname.startsWith("/admin/gateways")) return "AI Gateways";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
 
     return "Platform Admin";
