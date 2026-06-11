@@ -167,9 +167,10 @@ const AuditPage = () => {
 
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-            <div className="col-span-2">Timestamp</div>
+            <div className="col-span-1">Date</div>
+            <div className="col-span-2">Time</div>
             <div className="col-span-3">Actor</div>
-            <div className="col-span-3">Action</div>
+            <div className="col-span-2">Action</div>
             <div className="col-span-2">Status</div>
             <div className="col-span-2">IP Address</div>
           </div>
@@ -188,39 +189,47 @@ const AuditPage = () => {
                 No logs found matching search query.
               </div>
             ) : (
-              logs.map((log) => (
-                <div
-                  key={log._id}
-                  className="flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3"
-                >
-                  <div className="grid grid-cols-12 gap-4 items-center text-sm">
-                    <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
-                      {new Date(log.timestamp).toLocaleString()}
+              logs.map((log) => {
+                const logDate = new Date(log.timestamp).toLocaleDateString();
+                const logTime = new Date(log.timestamp).toLocaleTimeString();
+
+                return (
+                  <div
+                    key={log._id}
+                    className="flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3"
+                  >
+                    <div className="grid grid-cols-12 gap-4 items-center text-sm">
+                      <div className="col-span-1 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                        {logDate}
+                      </div>
+                      <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                        {logTime}
+                      </div>
+                      <div className="col-span-3 font-medium text-neutral-800 dark:text-neutral-200 truncate" title={log.actor}>
+                        {log.actor}
+                      </div>
+                      <div className="col-span-2 text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
+                        {log.action}
+                      </div>
+                      <div className="col-span-2 flex items-center gap-2">
+                        {getStatusIcon(log.status)}
+                        <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{log.status}</span>
+                      </div>
+                      <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                        {log.ipAddress || "—"}
+                      </div>
                     </div>
-                    <div className="col-span-3 font-medium text-neutral-800 dark:text-neutral-200 truncate" title={log.actor}>
-                      {log.actor}
-                    </div>
-                    <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
-                      {log.action}
-                    </div>
-                    <div className="col-span-2 flex items-center gap-2">
-                      {getStatusIcon(log.status)}
-                      <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{log.status}</span>
-                    </div>
-                    <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
-                      {log.ipAddress || "—"}
-                    </div>
+                    {log.metadata && (
+                      <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-450 dark:text-neutral-500 block mb-1">
+                          Metadata
+                        </span>
+                        {log.metadata}
+                      </div>
+                    )}
                   </div>
-                  {log.metadata && (
-                    <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all">
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-450 dark:text-neutral-500 block mb-1">
-                        Metadata
-                      </span>
-                      {log.metadata}
-                    </div>
-                  )}
-                </div>
-              ))
+                );
+              })
             )}
 
             {/* Pagination Controls */}
