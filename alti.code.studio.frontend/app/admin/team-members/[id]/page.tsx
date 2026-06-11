@@ -7,13 +7,32 @@ import {
   Activity,
   Cpu,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Search,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  ShieldAlert,
+  ChevronDown
 } from "lucide-react";
 
 import { teamAPI } from "@/lib/enterprise-api";
 import { useSession } from "next-auth/react";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
+import axios from "axios";
+import { SOCKET_URL } from "@/lib/config";
+
+interface AuditLog {
+  _id: string;
+  timestamp: string;
+  actor: string;
+  action: string;
+  status: "SUCCESS" | "FAILURE" | "DENIED" | "WARNING";
+  ipAddress?: string;
+  metadata?: string;
+}
+
 
 interface Member {
   id: string;
@@ -24,7 +43,8 @@ interface Member {
 
 export default function MemberDetailsPage() {
   const params = useParams();
-  const { status } = useSession();
+  const { data: session, status } = useSession();
+  const accessToken = session?.user?.accessToken as string | undefined;
   const id = params?.id as string;
   const dispatch = useAppDispatch();
 
@@ -33,6 +53,36 @@ export default function MemberDetailsPage() {
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
 
   const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
+
+  // Audit Logs State
+  const [logs, setLogs] = useState<AuditLog[]>([]);
+  const [loadingLogs, setLoadingLogs] = useState(true);
+  const [logsPage, setLogsPage] = useState(1);
+  const [logsTotalPages, setLogsTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedLogs, setExpandedLogs] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedLogs((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "SUCCESS":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "FAILURE":
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case "DENIED":
+        return <ShieldAlert className="w-4 h-4 text-red-600" />;
+      case "WARNING":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      default:
+        return null;
+    }
+  };
 
   const staticMockMembers: Member[] = [
     {
@@ -139,6 +189,62 @@ export default function MemberDetailsPage() {
           { time: "4 days ago", action: "Updated prompt instructions for Legal-Analyst agent", category: "agent" },
           { time: "1 week ago", action: "Triggered build sweep for staging branch", category: "deploy" },
         ],
+        auditLogs: [
+          {
+            _id: "ada_log_01",
+            timestamp: new Date(Date.now() - 300000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "MODEL_RUN_CODE_GENERATOR",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"model":"gemini-1.5-pro","prompt_tokens":120400,"completion_tokens":25400}'
+          },
+          {
+            _id: "ada_log_02",
+            timestamp: new Date(Date.now() - 7200000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "GIT_PUSH_ENTERPRISE_AUTH",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"repo":"enterprise-auth","branch":"main","commits_count":14,"hash":"7e9f3b1"}'
+          },
+          {
+            _id: "ada_log_03",
+            timestamp: new Date(Date.now() - 86400000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "DEPLOY_CONFIG_MODIFY",
+            status: "WARNING" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"environment":"production","modified_keys":["replicaCount","memoryLimit"],"reason":"high load scaling"}'
+          },
+          {
+            _id: "ada_log_04",
+            timestamp: new Date(Date.now() - 172800000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "AUDIT_LOG_EXPORT_REQUEST",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"target_format":"csv","export_scope":"entire_org","compliance_id":"comp_881"}'
+          },
+          {
+            _id: "ada_log_05",
+            timestamp: new Date(Date.now() - 345600000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "AGENT_PROMPT_UPDATE",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"agent_name":"Legal-Analyst","version":"v2.1","changed_instructions":"Enforce strict compliance checks"}'
+          },
+          {
+            _id: "ada_log_06",
+            timestamp: new Date(Date.now() - 604800000).toISOString(),
+            actor: "ada.lovelace@alticodestudio.com",
+            action: "BUILD_SWEEP_TRIGGER",
+            status: "FAILURE" as const,
+            ipAddress: "192.168.1.15",
+            metadata: '{"branch":"staging","error":"Webpack bundle compilation timed out after 300s"}'
+          }
+        ]
       };
     }
     if (isAlan) {
@@ -161,6 +267,62 @@ export default function MemberDetailsPage() {
           { time: "5 days ago", action: "Verified private cloud local logging transport config", category: "security" },
           { time: "1 week ago", action: "Updated database migration schemas for user billing", category: "database" },
         ],
+        auditLogs: [
+          {
+            _id: "alan_log_01",
+            timestamp: new Date(Date.now() - 720000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "DB_INDEX_OPTIMIZATION_SWEEP",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.22",
+            metadata: '{"script":"db-indexing.sql","tables_affected":["transactions","users"],"latency_improvement":"42%"}'
+          },
+          {
+            _id: "alan_log_02",
+            timestamp: new Date(Date.now() - 3600000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "CODEBASE_SECURITY_AUDIT",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.22",
+            metadata: '{"scope":"all_submodules","vulnerabilities_found":0,"scanned_files_count":4820}'
+          },
+          {
+            _id: "alan_log_03",
+            timestamp: new Date(Date.now() - 14400000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "WORKSPACE_GROUP_CREATE",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.22",
+            metadata: '{"group_name":"security-hardening","description":"Group for automated security sweeps"}'
+          },
+          {
+            _id: "alan_log_04",
+            timestamp: new Date(Date.now() - 259200000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "ROLE_PERMISSIONS_MODIFY",
+            status: "DENIED" as const,
+            ipAddress: "10.0.0.12",
+            metadata: '{"target_group":"Developer","denied_reason":"Requires dual authorization to elevate developer permissions"}'
+          },
+          {
+            _id: "alan_log_05",
+            timestamp: new Date(Date.now() - 432000000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "LOGGING_TRANSPORT_VERIFY",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.22",
+            metadata: '{"transport":"fluentd","encryption":"TLSv1.3","destination":"private_cloud_vault"}'
+          },
+          {
+            _id: "alan_log_06",
+            timestamp: new Date(Date.now() - 604800000).toISOString(),
+            actor: "alan.turing@alticodestudio.com",
+            action: "DB_MIGRATION_UPDATE",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.22",
+            metadata: '{"version":"20260610_billing","down_migration_available":true,"lock_timeout_ms":5000}'
+          }
+        ]
       };
     }
     if (isGrace) {
@@ -182,6 +344,53 @@ export default function MemberDetailsPage() {
           { time: "2 days ago", action: "Refactored legacy logging dependencies", category: "cleanup" },
           { time: "5 days ago", action: "Added unit tests for recaptcha service mock fallback", category: "test" },
         ],
+        auditLogs: [
+          {
+            _id: "grace_log_01",
+            timestamp: new Date(Date.now() - 3600000).toISOString(),
+            actor: "grace.hopper@alticodestudio.com",
+            action: "STAGING_BUILD_DEPLOY",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.44",
+            metadata: '{"version":"v2.4.1-rc3","environment":"staging","checks_passed":true}'
+          },
+          {
+            _id: "grace_log_02",
+            timestamp: new Date(Date.now() - 10800000).toISOString(),
+            actor: "grace.hopper@alticodestudio.com",
+            action: "TELEMETRY_PARSER_BUGFIX",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.44",
+            metadata: '{"daemon":"telemetry-parser","leak_size_kb":450,"files_modified":["parser.go"]}'
+          },
+          {
+            _id: "grace_log_03",
+            timestamp: new Date(Date.now() - 86400000).toISOString(),
+            actor: "grace.hopper@alticodestudio.com",
+            action: "PERF_BENCHMARK_RUN",
+            status: "WARNING" as const,
+            ipAddress: "192.168.1.44",
+            metadata: '{"target":"landing_page","lcp_ms":2850,"inp_ms":220,"status":"needs_optimization"}'
+          },
+          {
+            _id: "grace_log_04",
+            timestamp: new Date(Date.now() - 172800000).toISOString(),
+            actor: "grace.hopper@alticodestudio.com",
+            action: "LOGGING_DEPS_REFACTOR",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.44",
+            metadata: '{"removed_packages":["winston-legacy"],"added_packages":["pino"],"bundle_reduction_kb":142}'
+          },
+          {
+            _id: "grace_log_05",
+            timestamp: new Date(Date.now() - 432000000).toISOString(),
+            actor: "grace.hopper@alticodestudio.com",
+            action: "UNIT_TEST_ADD",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.44",
+            metadata: '{"service":"recaptcha-mock","tests_added_count":8,"coverage_increase":"1.4%"}'
+          }
+        ]
       };
     }
     if (isJules) {
@@ -201,6 +410,35 @@ export default function MemberDetailsPage() {
           { time: "1 day ago", action: "Drafted system-instructions.md draft", category: "docs" },
           { time: "3 days ago", action: "Accepted invitation to workspace", category: "admin" },
         ],
+        auditLogs: [
+          {
+            _id: "jules_log_01",
+            timestamp: new Date(Date.now() - 14400000).toISOString(),
+            actor: "jules.verne@alticodestudio.com",
+            action: "WORKSPACE_FOLDER_INIT",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.88",
+            metadata: '{"folder_path":"/scratchpad","is_git_ignored":true}'
+          },
+          {
+            _id: "jules_log_02",
+            timestamp: new Date(Date.now() - 86400000).toISOString(),
+            actor: "jules.verne@alticodestudio.com",
+            action: "DOCS_DRAFT_CREATE",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.88",
+            metadata: '{"file":"system-instructions.md","word_count":425}'
+          },
+          {
+            _id: "jules_log_03",
+            timestamp: new Date(Date.now() - 259200000).toISOString(),
+            actor: "jules.verne@alticodestudio.com",
+            action: "WORKSPACE_INVITE_ACCEPT",
+            status: "SUCCESS" as const,
+            ipAddress: "192.168.1.88",
+            metadata: '{"workspace_id":"ws_dev_main","role":"developer"}'
+          }
+        ]
       };
     }
 
@@ -224,6 +462,26 @@ export default function MemberDetailsPage() {
         { time: "2 hours ago", action: "Viewed members directory list", category: "audit" },
         { time: "1 day ago", action: "Updated personal profile settings", category: "settings" },
       ],
+      auditLogs: [
+        {
+          _id: "fallback_log_01",
+          timestamp: new Date(Date.now() - 7200000).toISOString(),
+          actor: memberObj.email,
+          action: "MEMBERS_LIST_VIEW",
+          status: "SUCCESS" as const,
+          ipAddress: "192.168.1.99",
+          metadata: '{"filtered_by":null,"limit":50}'
+        },
+        {
+          _id: "fallback_log_02",
+          timestamp: new Date(Date.now() - 86400000).toISOString(),
+          actor: memberObj.email,
+          action: "PROFILE_SETTINGS_UPDATE",
+          status: "SUCCESS" as const,
+          ipAddress: "192.168.1.99",
+          metadata: '{"fields_updated":["avatar","displayName"]}'
+        }
+      ]
     };
   };
 
@@ -249,6 +507,65 @@ export default function MemberDetailsPage() {
   }
 
   const details = getMemberDetails(member);
+
+  useEffect(() => {
+    if (activeTab !== "audit" || !member) return;
+
+    const delayDebounceFn = setTimeout(() => {
+      const fetchLogs = async () => {
+        setLoadingLogs(true);
+        try {
+          const response = await axios.get(`${SOCKET_URL}/api/v1/audit`, {
+            params: {
+              page: logsPage,
+              limit: 50,
+              action: searchTerm,
+            },
+            headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+            withCredentials: true,
+          });
+
+          if (
+            response.data.success &&
+            response.data.data &&
+            response.data.data.length > 0
+          ) {
+            const memberEmail = member.email.toLowerCase();
+            const filtered = response.data.data.filter((log: any) =>
+              log.actor?.toLowerCase() === memberEmail &&
+              (log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+               log.actor.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            setLogs(filtered);
+            setLogsTotalPages(1);
+          } else {
+            const filtered = details.auditLogs.filter(
+              (log) =>
+                log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
+            );
+            setLogs(filtered);
+            setLogsTotalPages(1);
+          }
+        } catch (error) {
+          console.error("Failed to fetch audit logs, loading mock data", error);
+          const filtered = details.auditLogs.filter(
+            (log) =>
+              log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
+          );
+          setLogs(filtered);
+          setLogsTotalPages(1);
+        } finally {
+          setLoadingLogs(false);
+        }
+      };
+
+      fetchLogs();
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [logsPage, searchTerm, activeTab, member?.email, accessToken]);
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 space-y-6 pb-12">
@@ -333,28 +650,147 @@ export default function MemberDetailsPage() {
             </div>
           </>
         ) : (
-          /* Timeline box */
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 shadow-sm space-y-6">
-            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-200 font-semibold">
-              <Activity className="w-4 h-4 text-neutral-400" />
-              <span>Activity History & Audit Logs</span>
-            </div>
-
-            <div className="space-y-6 pl-2 relative border-l border-neutral-100 dark:border-neutral-800 ml-2">
-              {details.activity.map((act, index) => (
-                <div key={index} className="relative pl-6">
-                  {/* Dot */}
-                  <div className="absolute -left-[5.5px] top-1.5 w-2.5 h-2.5 rounded-full bg-white dark:bg-[#161b22] border-2 border-neutral-400 dark:border-neutral-500" />
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-sm text-neutral-700 dark:text-neutral-200 font-medium leading-relaxed">
-                      {act.action}
-                    </span>
-                    <span className="text-xs text-neutral-400 dark:text-neutral-500">
-                      {act.time}
-                    </span>
-                  </div>
+          <div className="w-full flex flex-col h-full justify-start pt-0">
+            <div className="space-y-4">
+              {/* Sticky Header Wrapper */}
+              <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] -mt-4 pt-4 pb-2">
+                {/* Search Bar */}
+                <div className="relative mb-4">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+                  <input
+                    className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
+                    placeholder="Search by action or actor..."
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
                 </div>
-              ))}
+
+                {/* Table Header */}
+                <div
+                  className="grid gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm"
+                  style={{
+                    gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+                  }}
+                >
+                  <div>Date</div>
+                  <div>Time</div>
+                  <div>Actor</div>
+                  <div>Action</div>
+                  <div>Status</div>
+                  <div className="text-right">IP Address</div>
+                </div>
+              </div>
+
+              {/* Content Pane */}
+              {loadingLogs ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm">
+                  <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
+                  <p className="text-sm text-neutral-500">Loading audit logs...</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {logs.length === 0 ? (
+                    <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400 bg-white dark:bg-[#161b22] shadow-sm">
+                      No logs found matching search query.
+                    </div>
+                  ) : (
+                    logs.map((log) => {
+                      const logDate = new Date(log.timestamp).toLocaleDateString();
+                      const logTime = new Date(log.timestamp).toLocaleTimeString();
+                      const isExpanded = !!expandedLogs[log._id];
+
+                      return (
+                        <div
+                          key={log._id}
+                          className={`flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3 ${
+                            log.metadata
+                              ? "cursor-pointer hover:border-neutral-300 dark:hover:border-neutral-700 hover:shadow-md"
+                              : ""
+                          }`}
+                          onClick={() => log.metadata && toggleExpand(log._id)}
+                        >
+                          <div
+                            className="grid gap-4 items-center text-sm"
+                            style={{
+                              gridTemplateColumns:
+                                "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+                            }}
+                          >
+                            <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                              {logDate}
+                            </div>
+                            <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                              {logTime}
+                            </div>
+                            <div
+                              className="font-medium text-neutral-800 dark:text-neutral-200 truncate"
+                              title={log.actor}
+                            >
+                              {log.actor}
+                            </div>
+                            <div
+                              className="text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate"
+                              title={log.action}
+                            >
+                              {log.action}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(log.status)}
+                              <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                                {log.status}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-end gap-2 text-right">
+                              <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                                {log.ipAddress || "—"}
+                              </span>
+                              {log.metadata && (
+                                <ChevronDown
+                                  className={`w-4 h-4 text-neutral-450 dark:text-neutral-500 transition-transform duration-200 shrink-0 ${
+                                    isExpanded ? "rotate-180" : ""
+                                  }`}
+                                />
+                              )}
+                            </div>
+                          </div>
+                          {log.metadata && isExpanded && (
+                            <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all animate-in fade-in slide-in-from-top-1 duration-200">
+                              <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-450 dark:text-neutral-500 block mb-1">
+                                Metadata
+                              </span>
+                              {log.metadata}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
+
+                  {/* Pagination Controls */}
+                  {logsTotalPages > 1 && (
+                    <div className="flex items-center justify-end space-x-2 py-4">
+                      <button
+                        className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        disabled={logsPage === 1 || loadingLogs}
+                        onClick={() => setLogsPage((p) => Math.max(1, p - 1))}
+                      >
+                        Previous
+                      </button>
+                      <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-455">
+                        Page {logsPage} of {logsTotalPages}
+                      </span>
+                      <button
+                        className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                        disabled={logsPage === logsTotalPages || loadingLogs}
+                        onClick={() => setLogsPage((p) => Math.min(logsTotalPages, p + 1))}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}
