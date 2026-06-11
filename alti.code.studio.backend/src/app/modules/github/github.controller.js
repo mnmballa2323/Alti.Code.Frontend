@@ -4544,7 +4544,900 @@ export const getEnterpriseSharedStorageBilling = async (req, res) => {
   }
 };
 
+// ==========================================
+// 61. Advanced Security Scanning
+// ==========================================
+export const updateCodeScanningAlert = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const { state, dismissedReason } = req.body;
+    const result = await GithubService.updateCodeScanningAlert(
+      owner,
+      repo,
+      parseInt(alertNumber, 10),
+      state,
+      dismissedReason,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating code scanning alert:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listCodeScanningAlertInstances = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const result = await GithubService.listCodeScanningAlertInstances(
+      owner,
+      repo,
+      parseInt(alertNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing code scanning alert instances:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listCodeScanningAnalyses = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listCodeScanningAnalyses(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing code scanning analyses:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCodeScanningAnalysis = async (req, res) => {
+  try {
+    const { owner, repo, analysisId } = req.params;
+    const result = await GithubService.getCodeScanningAnalysis(
+      owner,
+      repo,
+      parseInt(analysisId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting code scanning analysis:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteCodeScanningAnalysis = async (req, res) => {
+  try {
+    const { owner, repo, analysisId } = req.params;
+    const result = await GithubService.deleteCodeScanningAnalysis(
+      owner,
+      repo,
+      parseInt(analysisId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting code scanning analysis:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const uploadCodeScanningSarif = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.uploadCodeScanningSarif(
+      owner,
+      repo,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error uploading SARIF file:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listSecretScanningBypassApprovals = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const result = await GithubService.listSecretScanningBypassApprovals(
+      owner,
+      repo,
+      parseInt(alertNumber, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing secret scanning bypass approvals:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createSecretScanningBypassApproval = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const { state, comment } = req.body;
+    const result = await GithubService.createSecretScanningBypassApproval(
+      owner,
+      repo,
+      parseInt(alertNumber, 10),
+      state,
+      comment,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating secret scanning bypass approval:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 62. Commit Comments
+// ==========================================
+export const listCommitComments = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listCommitComments(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing commit comments:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCommitComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.getCommitComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting commit comment:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCommitComment = async (req, res) => {
+  try {
+    const { owner, repo, commitSha } = req.params;
+    const { body, path, position, line } = req.body;
+    const result = await GithubService.createCommitComment(
+      owner,
+      repo,
+      commitSha,
+      body,
+      path,
+      position,
+      line,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating commit comment:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateCommitComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.updateCommitComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating commit comment:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteCommitComment = async (req, res) => {
+  try {
+    const { owner, repo, commentId } = req.params;
+    const result = await GithubService.deleteCommitComment(
+      owner,
+      repo,
+      parseInt(commentId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting commit comment:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 63. Repository Forks & Invitations
+// ==========================================
+export const listForks = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listForks(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing forks:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createFork = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { org, name, defaultBranchOnly } = req.body;
+    const result = await GithubService.createFork(
+      owner,
+      repo,
+      org,
+      name,
+      defaultBranchOnly,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating fork:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listRepoInvitations = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoInvitations(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing repo invitations:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteRepoInvitation = async (req, res) => {
+  try {
+    const { owner, repo, invitationId } = req.params;
+    const result = await GithubService.deleteRepoInvitation(
+      owner,
+      repo,
+      parseInt(invitationId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting repo invitation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateRepoInvitation = async (req, res) => {
+  try {
+    const { owner, repo, invitationId } = req.params;
+    const { permissions } = req.body;
+    const result = await GithubService.updateRepoInvitation(
+      owner,
+      repo,
+      parseInt(invitationId, 10),
+      permissions,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating repo invitation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 64. Repository Pages
+// ==========================================
+export const getPagesInfo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getPagesInfo(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting Pages info:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPagesSite = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { source } = req.body;
+    const result = await GithubService.createPagesSite(owner, repo, source);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating Pages site:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updatePagesSite = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { source } = req.body;
+    const result = await GithubService.updatePagesSite(owner, repo, source);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating Pages site:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePagesSite = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.deletePagesSite(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting Pages site:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPagesBuilds = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listPagesBuilds(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing Pages builds:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPagesBuildInfo = async (req, res) => {
+  try {
+    const { owner, repo, buildId } = req.params;
+    const result = await GithubService.getPagesBuildInfo(
+      owner,
+      repo,
+      parseInt(buildId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting Pages build info:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const requestPagesBuild = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.requestPagesBuild(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error requesting Pages build:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 65. Actions Runner Groups & Workflow Permissions
+// ==========================================
+export const listOrgRunnerGroups = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listOrgRunnerGroups(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing org runner groups:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgRunnerGroup = async (req, res) => {
+  try {
+    const { org, runnerGroupId } = req.params;
+    const result = await GithubService.getOrgRunnerGroup(
+      org,
+      parseInt(runnerGroupId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting org runner group:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrgRunnerGroup = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { name, visibility, selectedRepositoryIds } = req.body;
+    const result = await GithubService.createOrgRunnerGroup(
+      org,
+      name,
+      visibility,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating org runner group:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateOrgRunnerGroup = async (req, res) => {
+  try {
+    const { org, runnerGroupId } = req.params;
+    const { name, visibility, selectedRepositoryIds } = req.body;
+    const result = await GithubService.updateOrgRunnerGroup(
+      org,
+      parseInt(runnerGroupId, 10),
+      name,
+      visibility,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating org runner group:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteOrgRunnerGroup = async (req, res) => {
+  try {
+    const { org, runnerGroupId } = req.params;
+    const result = await GithubService.deleteOrgRunnerGroup(
+      org,
+      parseInt(runnerGroupId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting org runner group:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getActionsPermissionsForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getActionsPermissionsForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting Actions permissions for org:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setActionsPermissionsForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { enabledRepositories, allowedActions } = req.body;
+    const result = await GithubService.setActionsPermissionsForOrg(
+      org,
+      enabledRepositories,
+      allowedActions,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting Actions permissions for org:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getActionsPermissionsForRepo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getActionsPermissionsForRepo(
+      owner,
+      repo,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting Actions permissions for repo:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setActionsPermissionsForRepo = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { enabled, allowedActions } = req.body;
+    const result = await GithubService.setActionsPermissionsForRepo(
+      owner,
+      repo,
+      enabled,
+      allowedActions,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting Actions permissions for repo:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 66. Selected Repository Org Secrets & Variables
+// ==========================================
+export const listSelectedReposForOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.listSelectedReposForOrgSecret(
+      org,
+      secretName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing selected repos for org secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setSelectedReposForOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const { selectedRepositoryIds } = req.body;
+    const result = await GithubService.setSelectedReposForOrgSecret(
+      org,
+      secretName,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting selected repos for org secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addSelectedRepoToOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result = await GithubService.addSelectedRepoToOrgSecret(
+      org,
+      secretName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding selected repo to org secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeSelectedRepoFromOrgSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result = await GithubService.removeSelectedRepoFromOrgSecret(
+      org,
+      secretName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing selected repo from org secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listSelectedReposForOrgVariable = async (req, res) => {
+  try {
+    const { org, variableName } = req.params;
+    const result = await GithubService.listSelectedReposForOrgVariable(
+      org,
+      variableName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing selected repos for org variable:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setSelectedReposForOrgVariable = async (req, res) => {
+  try {
+    const { org, variableName } = req.params;
+    const { selectedRepositoryIds } = req.body;
+    const result = await GithubService.setSelectedReposForOrgVariable(
+      org,
+      variableName,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting selected repos for org variable:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addSelectedRepoToOrgVariable = async (req, res) => {
+  try {
+    const { org, variableName, repositoryId } = req.params;
+    const result = await GithubService.addSelectedRepoToOrgVariable(
+      org,
+      variableName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding selected repo to org variable:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeSelectedRepoFromOrgVariable = async (req, res) => {
+  try {
+    const { org, variableName, repositoryId } = req.params;
+    const result = await GithubService.removeSelectedRepoFromOrgVariable(
+      org,
+      variableName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing selected repo from org variable:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listSelectedReposForOrgCodespacesSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const result = await GithubService.listSelectedReposForOrgCodespacesSecret(
+      org,
+      secretName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing selected repos for org Codespaces secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setSelectedReposForOrgCodespacesSecret = async (req, res) => {
+  try {
+    const { org, secretName } = req.params;
+    const { selectedRepositoryIds } = req.body;
+    const result = await GithubService.setSelectedReposForOrgCodespacesSecret(
+      org,
+      secretName,
+      selectedRepositoryIds,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting selected repos for org Codespaces secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addSelectedRepoToOrgCodespacesSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result = await GithubService.addSelectedRepoToOrgCodespacesSecret(
+      org,
+      secretName,
+      parseInt(repositoryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding selected repo to org Codespaces secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeSelectedRepoFromOrgCodespacesSecret = async (req, res) => {
+  try {
+    const { org, secretName, repositoryId } = req.params;
+    const result =
+      await GithubService.removeSelectedRepoFromOrgCodespacesSecret(
+        org,
+        secretName,
+        parseInt(repositoryId, 10),
+      );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing selected repo from org Codespaces secret:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
+  updateCodeScanningAlert,
+  listCodeScanningAlertInstances,
+  listCodeScanningAnalyses,
+  getCodeScanningAnalysis,
+  deleteCodeScanningAnalysis,
+  uploadCodeScanningSarif,
+  listSecretScanningBypassApprovals,
+  createSecretScanningBypassApproval,
+  listCommitComments,
+  getCommitComment,
+  createCommitComment,
+  updateCommitComment,
+  deleteCommitComment,
+  listForks,
+  createFork,
+  listRepoInvitations,
+  deleteRepoInvitation,
+  updateRepoInvitation,
+  getPagesInfo,
+  createPagesSite,
+  updatePagesSite,
+  deletePagesSite,
+  listPagesBuilds,
+  getPagesBuildInfo,
+  requestPagesBuild,
+  listOrgRunnerGroups,
+  getOrgRunnerGroup,
+  createOrgRunnerGroup,
+  updateOrgRunnerGroup,
+  deleteOrgRunnerGroup,
+  getActionsPermissionsForOrg,
+  setActionsPermissionsForOrg,
+  getActionsPermissionsForRepo,
+  setActionsPermissionsForRepo,
+  listSelectedReposForOrgSecret,
+  setSelectedReposForOrgSecret,
+  addSelectedRepoToOrgSecret,
+  removeSelectedRepoFromOrgSecret,
+  listSelectedReposForOrgVariable,
+  setSelectedReposForOrgVariable,
+  addSelectedRepoToOrgVariable,
+  removeSelectedRepoFromOrgVariable,
+  listSelectedReposForOrgCodespacesSecret,
+  setSelectedReposForOrgCodespacesSecret,
+  addSelectedRepoToOrgCodespacesSecret,
+  removeSelectedRepoFromOrgCodespacesSecret,
   getAuthenticatedUser,
   listRepositories,
   createRepository,

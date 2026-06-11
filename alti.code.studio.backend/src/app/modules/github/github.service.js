@@ -5092,8 +5092,16 @@ export const GithubService = {
   // ==========================================
   // 61. Advanced Security Scanning
   // ==========================================
-  async updateCodeScanningAlert(owner, repo, alertNumber, state, dismissedReason = null) {
-    logger.info(`🐙 [GitHub Service] Updating code scanning alert #${alertNumber} for ${owner}/${repo}`);
+  async updateCodeScanningAlert(
+    owner,
+    repo,
+    alertNumber,
+    state,
+    dismissedReason = null,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating code scanning alert #${alertNumber} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.updateAlert({
         owner,
@@ -5104,13 +5112,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update code scanning alert #${alertNumber} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update code scanning alert #${alertNumber} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listCodeScanningAlertInstances(owner, repo, alertNumber) {
-    logger.info(`🐙 [GitHub Service] Listing instances of code scanning alert #${alertNumber} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing instances of code scanning alert #${alertNumber} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.listAlertInstances({
         owner,
@@ -5119,13 +5132,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list code scanning alert #${alertNumber} instances for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list code scanning alert #${alertNumber} instances for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listCodeScanningAnalyses(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing code scanning analyses for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing code scanning analyses for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.listAnalysesForRepo({
         owner,
@@ -5133,13 +5151,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list code scanning analyses for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list code scanning analyses for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getCodeScanningAnalysis(owner, repo, analysisId) {
-    logger.info(`🐙 [GitHub Service] Fetching code scanning analysis #${analysisId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching code scanning analysis #${analysisId} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.getAnalysis({
         owner,
@@ -5148,13 +5171,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get code scanning analysis #${analysisId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get code scanning analysis #${analysisId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteCodeScanningAnalysis(owner, repo, analysisId) {
-    logger.info(`🐙 [GitHub Service] Deleting code scanning analysis #${analysisId} from ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting code scanning analysis #${analysisId} from ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.codeScanning.deleteAnalysis({
         owner,
@@ -5163,13 +5191,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete code scanning analysis #${analysisId} from ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete code scanning analysis #${analysisId} from ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async uploadCodeScanningSarif(owner, repo, sarifData) {
-    logger.info(`🐙 [GitHub Service] Uploading SARIF format static analysis file for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Uploading SARIF format static analysis file for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.codeScanning.uploadSarif({
         owner,
@@ -5184,32 +5217,54 @@ export const GithubService = {
   },
 
   async listSecretScanningBypassApprovals(owner, repo, alertNumber) {
-    logger.info(`🐙 [GitHub Service] Listing bypass approvals for secret scanning alert #${alertNumber} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing bypass approvals for secret scanning alert #${alertNumber} in ${owner}/${repo}`,
+    );
     try {
-      const response = await octokit.request('GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/bypass-approvals', {
-        owner,
-        repo,
-        alert_number: parseInt(alertNumber, 10),
-      });
+      const response = await octokit.request(
+        'GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/bypass-approvals',
+        {
+          owner,
+          repo,
+          alert_number: parseInt(alertNumber, 10),
+        },
+      );
       return response.data;
     } catch (error) {
-      logger.error(`Failed to list secret scanning bypass approvals for alert #${alertNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list secret scanning bypass approvals for alert #${alertNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async createSecretScanningBypassApproval(owner, repo, alertNumber, state, comment = null) {
-    logger.info(`🐙 [GitHub Service] Creating bypass approval for secret scanning alert #${alertNumber} in ${owner}/${repo}`);
+  async createSecretScanningBypassApproval(
+    owner,
+    repo,
+    alertNumber,
+    state,
+    comment = null,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Creating bypass approval for secret scanning alert #${alertNumber} in ${owner}/${repo}`,
+    );
     try {
-      const response = await octokit.request('POST /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/bypass-approvals', {
-        owner,
-        repo,
-        alert_number: parseInt(alertNumber, 10),
-        data: { state, comment },
-      });
+      const response = await octokit.request(
+        'POST /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/bypass-approvals',
+        {
+          owner,
+          repo,
+          alert_number: parseInt(alertNumber, 10),
+          data: { state, comment },
+        },
+      );
       return response.data;
     } catch (error) {
-      logger.error(`Failed to create secret scanning bypass approval for alert #${alertNumber} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create secret scanning bypass approval for alert #${alertNumber} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5218,7 +5273,9 @@ export const GithubService = {
   // 62. Commit Comments
   // ==========================================
   async listCommitComments(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing commit comments for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing commit comments for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listCommitComments({
         owner,
@@ -5226,13 +5283,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list commit comments for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list commit comments for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getCommitComment(owner, repo, commentId) {
-    logger.info(`🐙 [GitHub Service] Fetching commit comment #${commentId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching commit comment #${commentId} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getCommitComment({
         owner,
@@ -5241,13 +5303,26 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get commit comment #${commentId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get commit comment #${commentId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async createCommitComment(owner, repo, commitSha, body, path = null, position = null, line = null) {
-    logger.info(`🐙 [GitHub Service] Creating commit comment on commit ${commitSha} in ${owner}/${repo}`);
+  async createCommitComment(
+    owner,
+    repo,
+    commitSha,
+    body,
+    path = null,
+    position = null,
+    line = null,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Creating commit comment on commit ${commitSha} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.createCommitComment({
         owner,
@@ -5260,13 +5335,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to create commit comment on commit ${commitSha} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to create commit comment on commit ${commitSha} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateCommitComment(owner, repo, commentId, body) {
-    logger.info(`🐙 [GitHub Service] Updating commit comment #${commentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating commit comment #${commentId} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.updateCommitComment({
         owner,
@@ -5276,13 +5356,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update commit comment #${commentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update commit comment #${commentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteCommitComment(owner, repo, commentId) {
-    logger.info(`🐙 [GitHub Service] Deleting commit comment #${commentId} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting commit comment #${commentId} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.deleteCommitComment({
         owner,
@@ -5291,7 +5376,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete commit comment #${commentId} in ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to delete commit comment #${commentId} in ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5313,7 +5401,13 @@ export const GithubService = {
     }
   },
 
-  async createFork(owner, repo, org = null, name = null, defaultBranchOnly = false) {
+  async createFork(
+    owner,
+    repo,
+    org = null,
+    name = null,
+    defaultBranchOnly = false,
+  ) {
     logger.info(`🐙 [GitHub Service] Forking repository ${owner}/${repo}`);
     try {
       const { data } = await octokit.rest.repos.createFork({
@@ -5331,7 +5425,9 @@ export const GithubService = {
   },
 
   async listRepoInvitations(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing pending invitations for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing pending invitations for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listInvitations({
         owner,
@@ -5339,13 +5435,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list pending invitations for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to list pending invitations for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteRepoInvitation(owner, repo, invitationId) {
-    logger.info(`🐙 [GitHub Service] Revoking pending invitation #${invitationId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Revoking pending invitation #${invitationId} for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.deleteInvitation({
         owner,
@@ -5354,13 +5455,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to revoke invitation #${invitationId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to revoke invitation #${invitationId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateRepoInvitation(owner, repo, invitationId, permissions) {
-    logger.info(`🐙 [GitHub Service] Updating permissions of invitation #${invitationId} for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating permissions of invitation #${invitationId} for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.updateInvitation({
         owner,
@@ -5370,7 +5476,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update invitation #${invitationId} for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update invitation #${invitationId} for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5408,7 +5517,9 @@ export const GithubService = {
   },
 
   async updatePagesSite(owner, repo, source) {
-    logger.info(`🐙 [GitHub Service] Updating Pages config for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating Pages config for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.updatePagesSite({
         owner,
@@ -5417,7 +5528,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to update Pages config for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update Pages config for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5437,7 +5551,9 @@ export const GithubService = {
   },
 
   async listPagesBuilds(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Listing Pages builds for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing Pages builds for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.listPagesBuilds({
         owner,
@@ -5451,7 +5567,9 @@ export const GithubService = {
   },
 
   async getPagesBuildInfo(owner, repo, buildId) {
-    logger.info(`🐙 [GitHub Service] Fetching Pages build #${buildId} details for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Pages build #${buildId} details for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getPagesBuild({
         owner,
@@ -5460,13 +5578,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get Pages build #${buildId} details for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get Pages build #${buildId} details for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async requestPagesBuild(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Requesting manual Pages build for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Requesting manual Pages build for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.requestPagesBuild({
         owner,
@@ -5474,7 +5597,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to request Pages build for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to request Pages build for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5485,9 +5611,10 @@ export const GithubService = {
   async listOrgRunnerGroups(org) {
     logger.info(`🐙 [GitHub Service] Listing runner groups for org ${org}`);
     try {
-      const { data } = await octokit.rest.actions.listSelfHostedRunnerGroupsForOrg({
-        org,
-      });
+      const { data } =
+        await octokit.rest.actions.listSelfHostedRunnerGroupsForOrg({
+          org,
+        });
       return data;
     } catch (error) {
       logger.error(`Failed to list runner groups for org ${org}:`, error);
@@ -5496,68 +5623,109 @@ export const GithubService = {
   },
 
   async getOrgRunnerGroup(org, runnerGroupId) {
-    logger.info(`🐙 [GitHub Service] Fetching runner group #${runnerGroupId} for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching runner group #${runnerGroupId} for org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.getSelfHostedRunnerGroupForOrg({
-        org,
-        runner_group_id: parseInt(runnerGroupId, 10),
-      });
+      const { data } =
+        await octokit.rest.actions.getSelfHostedRunnerGroupForOrg({
+          org,
+          runner_group_id: parseInt(runnerGroupId, 10),
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to get runner group #${runnerGroupId} for org ${org}:`, error);
+      logger.error(
+        `Failed to get runner group #${runnerGroupId} for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async createOrgRunnerGroup(org, name, visibility, selectedRepositoryIds = []) {
-    logger.info(`🐙 [GitHub Service] Creating runner group "${name}" for org ${org}`);
+  async createOrgRunnerGroup(
+    org,
+    name,
+    visibility,
+    selectedRepositoryIds = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Creating runner group "${name}" for org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.createSelfHostedRunnerGroupForOrg({
-        org,
-        name,
-        visibility,
-        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
-      });
+      const { data } =
+        await octokit.rest.actions.createSelfHostedRunnerGroupForOrg({
+          org,
+          name,
+          visibility,
+          selected_repository_ids: selectedRepositoryIds.map(id =>
+            parseInt(id, 10),
+          ),
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to create runner group "${name}" for org ${org}:`, error);
+      logger.error(
+        `Failed to create runner group "${name}" for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async updateOrgRunnerGroup(org, runnerGroupId, name, visibility, selectedRepositoryIds = []) {
-    logger.info(`🐙 [GitHub Service] Updating runner group #${runnerGroupId} for org ${org}`);
+  async updateOrgRunnerGroup(
+    org,
+    runnerGroupId,
+    name,
+    visibility,
+    selectedRepositoryIds = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating runner group #${runnerGroupId} for org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.updateSelfHostedRunnerGroupForOrg({
-        org,
-        runner_group_id: parseInt(runnerGroupId, 10),
-        name,
-        visibility,
-        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
-      });
+      const { data } =
+        await octokit.rest.actions.updateSelfHostedRunnerGroupForOrg({
+          org,
+          runner_group_id: parseInt(runnerGroupId, 10),
+          name,
+          visibility,
+          selected_repository_ids: selectedRepositoryIds.map(id =>
+            parseInt(id, 10),
+          ),
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to update runner group #${runnerGroupId} for org ${org}:`, error);
+      logger.error(
+        `Failed to update runner group #${runnerGroupId} for org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteOrgRunnerGroup(org, runnerGroupId) {
-    logger.info(`🐙 [GitHub Service] Deleting runner group #${runnerGroupId} from org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting runner group #${runnerGroupId} from org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.deleteSelfHostedRunnerGroupFromOrg({
-        org,
-        runner_group_id: parseInt(runnerGroupId, 10),
-      });
+      const response =
+        await octokit.rest.actions.deleteSelfHostedRunnerGroupFromOrg({
+          org,
+          runner_group_id: parseInt(runnerGroupId, 10),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete runner group #${runnerGroupId} from org ${org}:`, error);
+      logger.error(
+        `Failed to delete runner group #${runnerGroupId} from org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getActionsPermissionsForOrg(org) {
-    logger.info(`🐙 [GitHub Service] Fetching default Actions permissions for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching default Actions permissions for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getActionsPermissionsOrg({
         org,
@@ -5570,7 +5738,9 @@ export const GithubService = {
   },
 
   async setActionsPermissionsForOrg(org, enabledRepositories, allowedActions) {
-    logger.info(`🐙 [GitHub Service] Setting Actions permissions for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Setting Actions permissions for org ${org}`,
+    );
     try {
       const response = await octokit.rest.actions.setActionsPermissionsOrg({
         org,
@@ -5585,7 +5755,9 @@ export const GithubService = {
   },
 
   async getActionsPermissionsForRepo(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Fetching Actions permissions for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching Actions permissions for ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.actions.getActionsPermissionsRepo({
         owner,
@@ -5593,13 +5765,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to get Actions permissions for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to get Actions permissions for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async setActionsPermissionsForRepo(owner, repo, enabled, allowedActions) {
-    logger.info(`🐙 [GitHub Service] Setting Actions permissions for ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Setting Actions permissions for ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.actions.setActionsPermissionsRepo({
         owner,
@@ -5609,7 +5786,10 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to set Actions permissions for ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to set Actions permissions for ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -5618,95 +5798,153 @@ export const GithubService = {
   // 66. Selected Repository Org Secrets & Variables
   // ==========================================
   async listSelectedReposForOrgSecret(org, secretName) {
-    logger.info(`🐙 [GitHub Service] Listing repos for org secret "${secretName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing repos for org secret "${secretName}" in org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.listSelectedRepositoriesEnabledGatewayForOrganizationSecret({
-        org,
-        secret_name: secretName,
-      });
+      const { data } =
+        await octokit.rest.actions.listSelectedRepositoriesEnabledGatewayForOrganizationSecret(
+          {
+            org,
+            secret_name: secretName,
+          },
+        );
       return data;
     } catch (error) {
-      logger.error(`Failed to list repos for org secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to list repos for org secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async setSelectedReposForOrgSecret(org, secretName, selectedRepositoryIds = []) {
-    logger.info(`🐙 [GitHub Service] Setting repos access for org secret "${secretName}" in org ${org}`);
+  async setSelectedReposForOrgSecret(
+    org,
+    secretName,
+    selectedRepositoryIds = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Setting repos access for org secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.setSelectedRepositoriesEnabledGatewayForOrganizationSecret({
-        org,
-        secret_name: secretName,
-        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
-      });
+      const response =
+        await octokit.rest.actions.setSelectedRepositoriesEnabledGatewayForOrganizationSecret(
+          {
+            org,
+            secret_name: secretName,
+            selected_repository_ids: selectedRepositoryIds.map(id =>
+              parseInt(id, 10),
+            ),
+          },
+        );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to set repos access for org secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to set repos access for org secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addSelectedRepoToOrgSecret(org, secretName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.addSelectedRepositoryEnabledGatewayForOrganizationSecret({
-        org,
-        secret_name: secretName,
-        repository_id: parseInt(repositoryId, 10),
-      });
+      const response =
+        await octokit.rest.actions.addSelectedRepositoryEnabledGatewayForOrganizationSecret(
+          {
+            org,
+            secret_name: secretName,
+            repository_id: parseInt(repositoryId, 10),
+          },
+        );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to add repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to add repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeSelectedRepoFromOrgSecret(org, secretName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.removeSelectedRepositoryEnabledGatewayForOrganizationSecret({
-        org,
-        secret_name: secretName,
-        repository_id: parseInt(repositoryId, 10),
-      });
+      const response =
+        await octokit.rest.actions.removeSelectedRepositoryEnabledGatewayForOrganizationSecret(
+          {
+            org,
+            secret_name: secretName,
+            repository_id: parseInt(repositoryId, 10),
+          },
+        );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to remove repo ID ${repositoryId} access for org secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listSelectedReposForOrgVariable(org, variableName) {
-    logger.info(`🐙 [GitHub Service] Listing repos for org variable "${variableName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing repos for org variable "${variableName}" in org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.actions.listSelectedReposForOrgVariable({
-        org,
-        variable_name: variableName,
-      });
+      const { data } =
+        await octokit.rest.actions.listSelectedReposForOrgVariable({
+          org,
+          variable_name: variableName,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to list repos for org variable "${variableName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to list repos for org variable "${variableName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async setSelectedReposForOrgVariable(org, variableName, selectedRepositoryIds = []) {
-    logger.info(`🐙 [GitHub Service] Setting repos access for org variable "${variableName}" in org ${org}`);
+  async setSelectedReposForOrgVariable(
+    org,
+    variableName,
+    selectedRepositoryIds = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Setting repos access for org variable "${variableName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.setSelectedReposForOrgVariable({
-        org,
-        variable_name: variableName,
-        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
-      });
+      const response =
+        await octokit.rest.actions.setSelectedReposForOrgVariable({
+          org,
+          variable_name: variableName,
+          selected_repository_ids: selectedRepositoryIds.map(id =>
+            parseInt(id, 10),
+          ),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to set repos access for org variable "${variableName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to set repos access for org variable "${variableName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addSelectedRepoToOrgVariable(org, variableName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}`,
+    );
     try {
       const response = await octokit.rest.actions.addSelectedRepoToOrgVariable({
         org,
@@ -5715,81 +5953,125 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to add repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to add repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeSelectedRepoFromOrgVariable(org, variableName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.actions.removeSelectedRepoFromOrgVariable({
-        org,
-        variable_name: variableName,
-        repository_id: parseInt(repositoryId, 10),
-      });
+      const response =
+        await octokit.rest.actions.removeSelectedRepoFromOrgVariable({
+          org,
+          variable_name: variableName,
+          repository_id: parseInt(repositoryId, 10),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to remove repo ID ${repositoryId} access for org variable "${variableName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listSelectedReposForOrgCodespacesSecret(org, secretName) {
-    logger.info(`🐙 [GitHub Service] Listing repos for org Codespaces secret "${secretName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing repos for org Codespaces secret "${secretName}" in org ${org}`,
+    );
     try {
-      const { data } = await octokit.rest.codespaces.listSelectedReposForOrgSecret({
-        org,
-        secret_name: secretName,
-      });
+      const { data } =
+        await octokit.rest.codespaces.listSelectedReposForOrgSecret({
+          org,
+          secret_name: secretName,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to list repos for org Codespaces secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to list repos for org Codespaces secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async setSelectedReposForOrgCodespacesSecret(org, secretName, selectedRepositoryIds = []) {
-    logger.info(`🐙 [GitHub Service] Setting repos access for org Codespaces secret "${secretName}" in org ${org}`);
+  async setSelectedReposForOrgCodespacesSecret(
+    org,
+    secretName,
+    selectedRepositoryIds = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Setting repos access for org Codespaces secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.codespaces.setSelectedReposForOrgSecret({
-        org,
-        secret_name: secretName,
-        selected_repository_ids: selectedRepositoryIds.map(id => parseInt(id, 10)),
-      });
+      const response =
+        await octokit.rest.codespaces.setSelectedReposForOrgSecret({
+          org,
+          secret_name: secretName,
+          selected_repository_ids: selectedRepositoryIds.map(id =>
+            parseInt(id, 10),
+          ),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to set repos access for org Codespaces secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to set repos access for org Codespaces secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addSelectedRepoToOrgCodespacesSecret(org, secretName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.codespaces.addSelectedRepoToOrgSecret({
-        org,
-        secret_name: secretName,
-        repository_id: parseInt(repositoryId, 10),
-      });
+      const response = await octokit.rest.codespaces.addSelectedRepoToOrgSecret(
+        {
+          org,
+          secret_name: secretName,
+          repository_id: parseInt(repositoryId, 10),
+        },
+      );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to add repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to add repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async removeSelectedRepoFromOrgCodespacesSecret(org, secretName, repositoryId) {
-    logger.info(`🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}`);
+  async removeSelectedRepoFromOrgCodespacesSecret(
+    org,
+    secretName,
+    repositoryId,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Removing repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}`,
+    );
     try {
-      const response = await octokit.rest.codespaces.removeSelectedRepoFromOrgSecret({
-        org,
-        secret_name: secretName,
-        repository_id: parseInt(repositoryId, 10),
-      });
+      const response =
+        await octokit.rest.codespaces.removeSelectedRepoFromOrgSecret({
+          org,
+          secret_name: secretName,
+          repository_id: parseInt(repositoryId, 10),
+        });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}:`, error);
+      logger.error(
+        `Failed to remove repo ID ${repositoryId} access for org Codespaces secret "${secretName}" in org ${org}:`,
+        error,
+      );
       throw error;
     }
   },

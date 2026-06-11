@@ -931,5 +931,188 @@ router.get(
   GithubController.getEnterpriseSharedStorageBilling,
 );
 
+// ==========================================
+// 61. Advanced Security Scanning
+// ==========================================
+router.patch(
+  '/repos/:owner/:repo/scanning/code/alerts/:alertNumber',
+  GithubController.updateCodeScanningAlert,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/code/alerts/:alertNumber/instances',
+  GithubController.listCodeScanningAlertInstances,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/code/analyses',
+  GithubController.listCodeScanningAnalyses,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/code/analyses/:analysisId',
+  GithubController.getCodeScanningAnalysis,
+);
+router.delete(
+  '/repos/:owner/:repo/scanning/code/analyses/:analysisId',
+  GithubController.deleteCodeScanningAnalysis,
+);
+router.post(
+  '/repos/:owner/:repo/scanning/code/sarifs',
+  GithubController.uploadCodeScanningSarif,
+);
+router.get(
+  '/repos/:owner/:repo/scanning/secret/alerts/:alertNumber/bypass-approvals',
+  GithubController.listSecretScanningBypassApprovals,
+);
+router.post(
+  '/repos/:owner/:repo/scanning/secret/alerts/:alertNumber/bypass-approvals',
+  GithubController.createSecretScanningBypassApproval,
+);
+
+// ==========================================
+// 62. Commit Comments
+// ==========================================
+router.get('/repos/:owner/:repo/comments', GithubController.listCommitComments);
+router.get(
+  '/repos/:owner/:repo/comments/:commentId',
+  GithubController.getCommitComment,
+);
+router.post(
+  '/repos/:owner/:repo/commits/:commitSha/comments',
+  GithubController.createCommitComment,
+);
+router.patch(
+  '/repos/:owner/:repo/comments/:commentId',
+  GithubController.updateCommitComment,
+);
+router.delete(
+  '/repos/:owner/:repo/comments/:commentId',
+  GithubController.deleteCommitComment,
+);
+
+// ==========================================
+// 63. Repository Forks & Invitations
+// ==========================================
+router.get('/repos/:owner/:repo/forks', GithubController.listForks);
+router.post('/repos/:owner/:repo/forks', GithubController.createFork);
+router.get(
+  '/repos/:owner/:repo/invitations',
+  GithubController.listRepoInvitations,
+);
+router.delete(
+  '/repos/:owner/:repo/invitations/:invitationId',
+  GithubController.deleteRepoInvitation,
+);
+router.patch(
+  '/repos/:owner/:repo/invitations/:invitationId',
+  GithubController.updateRepoInvitation,
+);
+
+// ==========================================
+// 64. Repository Pages
+// ==========================================
+router.get('/repos/:owner/:repo/pages', GithubController.getPagesInfo);
+router.post('/repos/:owner/:repo/pages', GithubController.createPagesSite);
+router.put('/repos/:owner/:repo/pages', GithubController.updatePagesSite);
+router.delete('/repos/:owner/:repo/pages', GithubController.deletePagesSite);
+router.get(
+  '/repos/:owner/:repo/pages/builds',
+  GithubController.listPagesBuilds,
+);
+router.get(
+  '/repos/:owner/:repo/pages/builds/:buildId',
+  GithubController.getPagesBuildInfo,
+);
+router.post(
+  '/repos/:owner/:repo/pages/builds',
+  GithubController.requestPagesBuild,
+);
+
+// ==========================================
+// 65. Actions Runner Groups & Workflow Permissions
+// ==========================================
+router.get('/orgs/:org/runner-groups', GithubController.listOrgRunnerGroups);
+router.get(
+  '/orgs/:org/runner-groups/:runnerGroupId',
+  GithubController.getOrgRunnerGroup,
+);
+router.post('/orgs/:org/runner-groups', GithubController.createOrgRunnerGroup);
+router.put(
+  '/orgs/:org/runner-groups/:runnerGroupId',
+  GithubController.updateOrgRunnerGroup,
+);
+router.delete(
+  '/orgs/:org/runner-groups/:runnerGroupId',
+  GithubController.deleteOrgRunnerGroup,
+);
+router.get(
+  '/orgs/:org/actions/permissions',
+  GithubController.getActionsPermissionsForOrg,
+);
+router.put(
+  '/orgs/:org/actions/permissions',
+  GithubController.setActionsPermissionsForOrg,
+);
+router.get(
+  '/repos/:owner/:repo/actions/permissions',
+  GithubController.getActionsPermissionsForRepo,
+);
+router.put(
+  '/repos/:owner/:repo/actions/permissions',
+  GithubController.setActionsPermissionsForRepo,
+);
+
+// ==========================================
+// 66. Selected Repository Org Secrets & Variables
+// ==========================================
+router.get(
+  '/orgs/:org/actions/secrets/:secretName/repositories',
+  GithubController.listSelectedReposForOrgSecret,
+);
+router.put(
+  '/orgs/:org/actions/secrets/:secretName/repositories',
+  GithubController.setSelectedReposForOrgSecret,
+);
+router.put(
+  '/orgs/:org/actions/secrets/:secretName/repositories/:repositoryId',
+  GithubController.addSelectedRepoToOrgSecret,
+);
+router.delete(
+  '/orgs/:org/actions/secrets/:secretName/repositories/:repositoryId',
+  GithubController.removeSelectedRepoFromOrgSecret,
+);
+
+router.get(
+  '/orgs/:org/actions/variables/:variableName/repositories',
+  GithubController.listSelectedReposForOrgVariable,
+);
+router.put(
+  '/orgs/:org/actions/variables/:variableName/repositories',
+  GithubController.setSelectedReposForOrgVariable,
+);
+router.put(
+  '/orgs/:org/actions/variables/:variableName/repositories/:repositoryId',
+  GithubController.addSelectedRepoToOrgVariable,
+);
+router.delete(
+  '/orgs/:org/actions/variables/:variableName/repositories/:repositoryId',
+  GithubController.removeSelectedRepoFromOrgVariable,
+);
+
+router.get(
+  '/orgs/:org/codespaces/secrets/:secretName/repositories',
+  GithubController.listSelectedReposForOrgCodespacesSecret,
+);
+router.put(
+  '/orgs/:org/codespaces/secrets/:secretName/repositories',
+  GithubController.setSelectedReposForOrgCodespacesSecret,
+);
+router.put(
+  '/orgs/:org/codespaces/secrets/:secretName/repositories/:repositoryId',
+  GithubController.addSelectedRepoToOrgCodespacesSecret,
+);
+router.delete(
+  '/orgs/:org/codespaces/secrets/:secretName/repositories/:repositoryId',
+  GithubController.removeSelectedRepoFromOrgCodespacesSecret,
+);
+
 export const GithubRoutes = router;
 export default router;
