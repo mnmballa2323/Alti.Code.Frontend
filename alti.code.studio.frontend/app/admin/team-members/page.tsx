@@ -114,7 +114,7 @@ export default function TeamMembersPage() {
   });
 
   return (
-    <div className="max-w-4xl w-full mx-auto flex flex-col h-full justify-start pt-6">
+    <div className="w-full flex flex-col h-full justify-start pt-0">
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
@@ -139,7 +139,7 @@ export default function TeamMembersPage() {
               </div>
 
               {/* Table Header */}
-              <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm mb-4">
+              <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm mb-3">
                 <div className="col-span-3">First Name</div>
                 <div className="col-span-3">Last Name</div>
                 <div className="col-span-4">Email Address</div>
