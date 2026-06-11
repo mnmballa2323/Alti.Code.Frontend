@@ -156,7 +156,7 @@ export default function AdminLayout({
             {isMemberDetail && (
               <Link
                 href="/admin/team-members"
-                className="flex items-center gap-1.5 px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-xl text-xs font-bold transition-all cursor-pointer border border-neutral-200/50 dark:border-neutral-800/80 shadow-sm"
+                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Members</span>
