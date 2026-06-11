@@ -254,12 +254,7 @@ export default function MemberDetailsPage() {
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 space-y-6 pb-12">
-      {/* Header Description */}
-      <div>
-        <p className="text-xs text-neutral-455 dark:text-neutral-500 mt-1">
-          Comprehensive operational logs, billing allocations, and workspace usage statistics.
-        </p>
-      </div>
+
 
       {/* Main Content Area */}
       <div className="w-full space-y-6">

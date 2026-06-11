@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.174] - 2026-06-11 — Removed Detail Description
+### Changed
+- **Page Header**:
+  - Removed description text "Comprehensive operational logs, billing allocations, and workspace usage statistics." from the page body header of the member details page.
+
 ## [39.37.173] - 2026-06-11 — Full Width Analytics Page
 ### Changed
 - **Page Layout**:
