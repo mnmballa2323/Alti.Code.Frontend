@@ -1039,15 +1039,7 @@ export default function ModelUsagePage() {
               {archivedModelsData[activeTab].map((model) => (
                 <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl gap-4 shadow-md hover:shadow-lg transition-shadow duration-200">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150">{model.name}</span>
-                      <span className="text-[9px] bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium px-1.5 py-0.5 rounded">
-                        {model.version}
-                      </span>
-                      <span className="text-[8px] bg-red-50 dark:bg-red-950/20 text-red-500 dark:text-red-400 font-bold px-1.5 py-0.5 rounded-full border border-red-100/50 dark:border-red-900/30 uppercase tracking-wider">
-                        Archived
-                      </span>
-                    </div>
+                    <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150 block">{model.name}</span>
                     <p className="text-[9px] text-neutral-455 dark:text-neutral-500">Decommissioned on {model.decommissionedDate}</p>
                   </div>
                   
