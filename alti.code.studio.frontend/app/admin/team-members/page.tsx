@@ -15,7 +15,7 @@ interface Member {
 
 export default function TeamMembersPage() {
   const [members, setMembers] = useState<Member[]>([
-    { id: "2", name: "Ada Lovelace", email: "ada.lovelace@alticodestudio.com", role: "owner" },
+    { id: "2", name: "Ada Lovelace", email: "ada.lovelace@alticodestudio.com", role: "admin" },
     { id: "4", name: "Alan Turing", email: "alan.turing@alticodestudio.com", role: "manager" },
     { id: "3", name: "Grace Hopper", email: "grace.hopper@alticodestudio.com", role: "developer" },
     { id: "1", name: "Jules Verne", email: "jules.verne@alticodestudio.com", role: "developer" }
@@ -104,7 +104,7 @@ export default function TeamMembersPage() {
     if (!role) return "Developer";
     const r = role.toLowerCase();
 
-    if (r === "admin" || r === "owner") return "Owner";
+    if (r === "admin" || r === "owner") return "Admin";
 
     return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
   };
@@ -123,7 +123,7 @@ export default function TeamMembersPage() {
         `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
         undefined,
       email: currentUser.email,
-      role: currentUser.role || "owner",
+      role: currentUser.role || "admin",
     });
   }
 
@@ -237,10 +237,10 @@ export default function TeamMembersPage() {
                                   ? "cursor-default pr-0" 
                                   : "cursor-pointer pr-5 hover:bg-neutral-50 dark:hover:bg-neutral-850/40"
                               }`}
-                              value={member.role?.toLowerCase() === "admin" ? "owner" : member.role?.toLowerCase() || "developer"}
+                              value={member.role?.toLowerCase() === "owner" ? "admin" : member.role?.toLowerCase() || "developer"}
                               onChange={(e) => handleRoleChange(member.id, e.target.value)}
                             >
-                              <option value="owner" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Owner</option>
+                              <option value="admin" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Admin</option>
                               <option value="manager" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Manager</option>
                               <option value="developer" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Developer</option>
                             </select>

@@ -2,7 +2,7 @@
   {
     "id": "84644de4-219b-4e40-84ea-55cefe3c71cd",
     "tenantId": "e469748e-9b5d-4525-b4fb-40f6bf7fe9db",
-    "tenantRole": "owner",
+    "tenantRole": "admin",
     "provider": "local",
     "googleId": null,
     "githubId": null,

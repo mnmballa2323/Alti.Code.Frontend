@@ -1198,8 +1198,8 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
         });
         if (!user) return res.status(404).json({ error: 'Member not found in this team' });
 
-        if (user.tenantRole === 'owner') {
-            return res.status(400).json({ error: 'Cannot remove the owner of the workspace' });
+        if (user.tenantRole === 'owner' || user.tenantRole === 'admin') {
+            return res.status(400).json({ error: 'Cannot remove the owner or admin of the workspace' });
         }
 
         // Dissociate from tenant by deleting the user record
@@ -1215,8 +1215,8 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
                 if (userIndex === -1) return res.status(404).json({ error: 'Member not found in this team' });
 
                 const user = users[userIndex];
-                if (user.tenantRole === 'owner') {
-                    return res.status(400).json({ error: 'Cannot remove the owner of the workspace' });
+                if (user.tenantRole === 'owner' || user.tenantRole === 'admin') {
+                    return res.status(400).json({ error: 'Cannot remove the owner or admin of the workspace' });
                 }
 
                 users.splice(userIndex, 1);
