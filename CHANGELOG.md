@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.185] - 2026-06-11 — Phase 4 GitHub REST API & SDK Entrenchment
+### Added
+- **GitHub Apps & Installations**: Added methods to retrieve authenticated app details, list installations, get installation details, list accessible repositories, and create installation access tokens.
+- **Resource Billing**: Integrated Action, Package, and Shared Storage resource consumption metrics.
+- **Enterprise Admin & Auditing**: Added support for Enterprise audit log and membership lists.
+- **Activity Events**: Exposed public, repository, and user-organization event feeds.
+- **Interaction Limits**: Added endpoints to get, set, and lift temporary repository interaction restrictions.
+- **Unit Testing**: Expanded test suite to 80 passing test cases verifying all new Phase 4 modules and error flows.
+
 ## [39.37.184] - 2026-06-11 — Phase 3 GitHub REST API & SDK Entrenchment
 ### Added
 - **GitHub Discussions**: Implemented repository discussions querying/creation and comment posting using raw GraphQL queries via the pre-existing direct GraphQL engine.

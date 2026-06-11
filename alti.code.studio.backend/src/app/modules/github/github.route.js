@@ -291,5 +291,67 @@ router.get(
   GithubController.downloadWorkflowArtifact,
 );
 
+// 25. GitHub Apps & Installations API
+router.get('/apps/authenticated', GithubController.getAppAuthenticated);
+router.get('/apps/installations', GithubController.listAppInstallations);
+router.get(
+  '/apps/installations/:installationId',
+  GithubController.getAppInstallation,
+);
+router.get(
+  '/apps/installations/:installationId/repositories',
+  GithubController.listAppReposAccessible,
+);
+router.post(
+  '/apps/installations/:installationId/access-tokens',
+  GithubController.createAppInstallationAccessToken,
+);
+
+// 26. Resource Billing API
+router.get('/orgs/:org/billing/actions', GithubController.getOrgActionsBilling);
+router.get(
+  '/orgs/:org/billing/packages',
+  GithubController.getOrgPackagesBilling,
+);
+router.get(
+  '/orgs/:org/billing/shared-storage',
+  GithubController.getOrgSharedStorageBilling,
+);
+
+// 27. Enterprise Admin & Auditing API
+router.get(
+  '/enterprises/:enterprise/audit-log',
+  GithubController.getEnterpriseAuditLog,
+);
+router.get(
+  '/enterprises/:enterprise/members',
+  GithubController.listEnterpriseMembers,
+);
+
+// 28. Activity Events API
+router.get('/activity/events', GithubController.listPublicEvents);
+router.get(
+  '/repos/:owner/:repo/activity/events',
+  GithubController.listRepoEvents,
+);
+router.get(
+  '/orgs/:org/activity/events/:username',
+  GithubController.listOrgEvents,
+);
+
+// 29. Interaction Limits API
+router.get(
+  '/repos/:owner/:repo/interactions',
+  GithubController.getRepoInteractionLimits,
+);
+router.put(
+  '/repos/:owner/:repo/interactions',
+  GithubController.setRepoInteractionLimits,
+);
+router.delete(
+  '/repos/:owner/:repo/interactions',
+  GithubController.removeRepoInteractionLimits,
+);
+
 export const GithubRoutes = router;
 export default router;

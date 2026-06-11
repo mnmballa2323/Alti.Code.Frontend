@@ -1652,4 +1652,308 @@ export const GithubService = {
       throw error;
     }
   },
+  // ==========================================
+  // 25. GitHub Apps & Installations API
+  // ==========================================
+  async getAppAuthenticated() {
+    logger.info('🐙 [GitHub Service] Fetching authenticated GitHub App info');
+    try {
+      const { data } = await octokit.rest.apps.getAuthenticated();
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch authenticated GitHub App:', error);
+      throw error;
+    }
+  },
+
+  async listAppInstallations(params = {}) {
+    logger.info('🐙 [GitHub Service] Listing GitHub App installations');
+    try {
+      const { data } = await octokit.rest.apps.listInstallations({
+        per_page: params.per_page || 30,
+        page: params.page || 1,
+        since: params.since,
+        outdated: params.outdated,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list GitHub App installations:', error);
+      throw error;
+    }
+  },
+
+  async getAppInstallation(installationId) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching GitHub App installation #${installationId}`,
+    );
+    try {
+      const { data } = await octokit.rest.apps.getInstallation({
+        installation_id: parseInt(installationId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get GitHub App installation #${installationId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listAppReposAccessible(installationId, params = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Listing accessible repositories for installation #${installationId}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.apps.listReposAccessibleToInstallation({
+          installation_id: parseInt(installationId, 10),
+          per_page: params.per_page || 30,
+          page: params.page || 1,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list accessible repositories for installation #${installationId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createAppInstallationAccessToken(installationId) {
+    logger.info(
+      `🐙 [GitHub Service] Creating access token for installation #${installationId}`,
+    );
+    try {
+      const { data } = await octokit.rest.apps.createInstallationAccessToken({
+        installation_id: parseInt(installationId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create access token for installation #${installationId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 26. Resource Billing API
+  // ==========================================
+  async getOrgActionsBilling(org) {
+    logger.info(`🐙 [GitHub Service] Fetching Actions billing for org: ${org}`);
+    try {
+      const { data } = await octokit.rest.billing.getGithubActionsBillingOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Actions billing for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgPackagesBilling(org) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching Packages billing for org: ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.billing.getGithubPackagesBillingOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch Packages billing for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgSharedStorageBilling(org) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching Shared Storage billing for org: ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.billing.getSharedStorageBillingOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch Shared Storage billing for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 27. Enterprise Admin & Auditing API
+  // ==========================================
+  async getEnterpriseAuditLog(enterprise, params = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching Audit Log for enterprise: ${enterprise}`,
+    );
+    try {
+      const { data } = await octokit.request(
+        'GET /enterprises/{enterprise}/audit-log',
+        {
+          enterprise,
+          phrase: params.phrase,
+          include: params.include,
+          per_page: params.per_page || 30,
+          page: params.page || 1,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch Audit Log for enterprise ${enterprise}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listEnterpriseMembers(enterprise, params = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Listing members for enterprise: ${enterprise}`,
+    );
+    try {
+      const { data } = await octokit.request(
+        'GET /enterprises/{enterprise}/members',
+        {
+          enterprise,
+          per_page: params.per_page || 30,
+          page: params.page || 1,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list members for enterprise ${enterprise}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 28. Activity Events API
+  // ==========================================
+  async listPublicEvents(params = {}) {
+    logger.info('🐙 [GitHub Service] Listing public events');
+    try {
+      const { data } = await octokit.rest.activity.listPublicEvents({
+        per_page: params.per_page || 30,
+        page: params.page || 1,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list public events:', error);
+      throw error;
+    }
+  },
+
+  async listRepoEvents(owner, repo, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing events for repo ${owner}/${repo}`);
+    try {
+      const { data } = await octokit.rest.activity.listRepoEvents({
+        owner,
+        repo,
+        per_page: params.per_page || 30,
+        page: params.page || 1,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list events for repo ${owner}/${repo}:`, error);
+      throw error;
+    }
+  },
+
+  async listOrgEvents(org, username, params = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Listing events for org ${org} and user ${username}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.activity.listOrgEventsForAuthenticatedUser({
+          org,
+          username,
+          per_page: params.per_page || 30,
+          page: params.page || 1,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list events for org ${org} and user ${username}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 29. Interaction Limits API
+  // ==========================================
+  async getRepoInteractionLimits(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching interaction limits for ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.interactions.getRestrictionsForRepo({
+        owner,
+        repo,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get interaction limits for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setRepoInteractionLimits(owner, repo, limitData = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Setting interaction limits for ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.interactions.setRestrictionsForRepo({
+        owner,
+        repo,
+        limit: limitData.limit,
+        expiry: limitData.expiry,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set interaction limits for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async removeRepoInteractionLimits(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Removing interaction limits for ${owner}/${repo}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.interactions.removeRestrictionsForRepo({
+          owner,
+          repo,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to remove interaction limits for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 vi.mock('octokit', () => {
   const mockOctokitInstance = {
     graphql: vi.fn(),
+    request: vi.fn(),
     rest: {
       users: {
         getAuthenticated: vi.fn(),
@@ -113,6 +114,28 @@ vi.mock('octokit', () => {
       secretScanning: {
         listAlertsForRepo: vi.fn(),
         getAlert: vi.fn(),
+      },
+      apps: {
+        getAuthenticated: vi.fn(),
+        listInstallations: vi.fn(),
+        getInstallation: vi.fn(),
+        listReposAccessibleToInstallation: vi.fn(),
+        createInstallationAccessToken: vi.fn(),
+      },
+      billing: {
+        getGithubActionsBillingOrg: vi.fn(),
+        getGithubPackagesBillingOrg: vi.fn(),
+        getSharedStorageBillingOrg: vi.fn(),
+      },
+      activity: {
+        listPublicEvents: vi.fn(),
+        listRepoEvents: vi.fn(),
+        listOrgEventsForAuthenticatedUser: vi.fn(),
+      },
+      interactions: {
+        getRestrictionsForRepo: vi.fn(),
+        setRestrictionsForRepo: vi.fn(),
+        removeRestrictionsForRepo: vi.fn(),
       },
     },
   };
@@ -1391,5 +1414,309 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       artifact_id: 12345,
       archive_format: 'zip',
     });
+  });
+
+  // ==========================================
+  // 25. GitHub Apps & Installations API
+  // ==========================================
+  it('should get authenticated app details', async () => {
+    const mockApp = { id: 1, name: 'My App' };
+    mockOctokit.rest.apps.getAuthenticated.mockResolvedValue({ data: mockApp });
+
+    const result = await GithubService.getAppAuthenticated();
+    expect(result).toEqual(mockApp);
+    expect(mockOctokit.rest.apps.getAuthenticated).toHaveBeenCalled();
+  });
+
+  it('should list app installations', async () => {
+    const mockInstallations = [{ id: 10, account: { login: 'user' } }];
+    mockOctokit.rest.apps.listInstallations.mockResolvedValue({
+      data: mockInstallations,
+    });
+
+    const result = await GithubService.listAppInstallations({
+      per_page: 5,
+      page: 2,
+    });
+    expect(result).toEqual(mockInstallations);
+    expect(mockOctokit.rest.apps.listInstallations).toHaveBeenCalledWith({
+      per_page: 5,
+      page: 2,
+      since: undefined,
+      outdated: undefined,
+    });
+  });
+
+  it('should get app installation detail', async () => {
+    const mockInstallation = { id: 10, account: { login: 'user' } };
+    mockOctokit.rest.apps.getInstallation.mockResolvedValue({
+      data: mockInstallation,
+    });
+
+    const result = await GithubService.getAppInstallation(10);
+    expect(result).toEqual(mockInstallation);
+    expect(mockOctokit.rest.apps.getInstallation).toHaveBeenCalledWith({
+      installation_id: 10,
+    });
+  });
+
+  it('should list repos accessible to installation', async () => {
+    const mockRepos = {
+      total_count: 1,
+      repositories: [{ id: 101, name: 'repo' }],
+    };
+    mockOctokit.rest.apps.listReposAccessibleToInstallation.mockResolvedValue({
+      data: mockRepos,
+    });
+
+    const result = await GithubService.listAppReposAccessible(10, {
+      per_page: 10,
+      page: 1,
+    });
+    expect(result).toEqual(mockRepos);
+    expect(
+      mockOctokit.rest.apps.listReposAccessibleToInstallation,
+    ).toHaveBeenCalledWith({
+      installation_id: 10,
+      per_page: 10,
+      page: 1,
+    });
+  });
+
+  it('should create app installation access token', async () => {
+    const mockToken = { token: 'v1.1234567890' };
+    mockOctokit.rest.apps.createInstallationAccessToken.mockResolvedValue({
+      data: mockToken,
+    });
+
+    const result = await GithubService.createAppInstallationAccessToken(10);
+    expect(result).toEqual(mockToken);
+    expect(
+      mockOctokit.rest.apps.createInstallationAccessToken,
+    ).toHaveBeenCalledWith({
+      installation_id: 10,
+    });
+  });
+
+  // ==========================================
+  // 26. Resource Billing API
+  // ==========================================
+  it('should get org Actions billing', async () => {
+    const mockBilling = { total_minutes_used: 120 };
+    mockOctokit.rest.billing.getGithubActionsBillingOrg.mockResolvedValue({
+      data: mockBilling,
+    });
+
+    const result = await GithubService.getOrgActionsBilling('my-org');
+    expect(result).toEqual(mockBilling);
+    expect(
+      mockOctokit.rest.billing.getGithubActionsBillingOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get org Packages billing', async () => {
+    const mockBilling = { total_gigabytes_bandwidth_used: 15 };
+    mockOctokit.rest.billing.getGithubPackagesBillingOrg.mockResolvedValue({
+      data: mockBilling,
+    });
+
+    const result = await GithubService.getOrgPackagesBilling('my-org');
+    expect(result).toEqual(mockBilling);
+    expect(
+      mockOctokit.rest.billing.getGithubPackagesBillingOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get org Shared Storage billing', async () => {
+    const mockBilling = { estimated_paid_storage_for_month: 2.5 };
+    mockOctokit.rest.billing.getSharedStorageBillingOrg.mockResolvedValue({
+      data: mockBilling,
+    });
+
+    const result = await GithubService.getOrgSharedStorageBilling('my-org');
+    expect(result).toEqual(mockBilling);
+    expect(
+      mockOctokit.rest.billing.getSharedStorageBillingOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  // ==========================================
+  // 27. Enterprise Admin & Auditing API
+  // ==========================================
+  it('should get enterprise audit log', async () => {
+    const mockAuditLog = [
+      { '@timestamp': '2026-06-11T00:00:00Z', action: 'repo.create' },
+    ];
+    mockOctokit.request.mockResolvedValue({ data: mockAuditLog });
+
+    const result = await GithubService.getEnterpriseAuditLog('my-ent', {
+      phrase: 'actor:octocat',
+      per_page: 5,
+    });
+    expect(result).toEqual(mockAuditLog);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /enterprises/{enterprise}/audit-log',
+      {
+        enterprise: 'my-ent',
+        phrase: 'actor:octocat',
+        include: undefined,
+        per_page: 5,
+        page: 1,
+      },
+    );
+  });
+
+  it('should list enterprise members', async () => {
+    const mockMembers = [{ login: 'admin-user' }];
+    mockOctokit.request.mockResolvedValue({ data: mockMembers });
+
+    const result = await GithubService.listEnterpriseMembers('my-ent', {
+      per_page: 10,
+      page: 2,
+    });
+    expect(result).toEqual(mockMembers);
+    expect(mockOctokit.request).toHaveBeenCalledWith(
+      'GET /enterprises/{enterprise}/members',
+      {
+        enterprise: 'my-ent',
+        per_page: 10,
+        page: 2,
+      },
+    );
+  });
+
+  // ==========================================
+  // 28. Activity Events API
+  // ==========================================
+  it('should list public events', async () => {
+    const mockEvents = [{ id: '1', type: 'WatchEvent' }];
+    mockOctokit.rest.activity.listPublicEvents.mockResolvedValue({
+      data: mockEvents,
+    });
+
+    const result = await GithubService.listPublicEvents({ per_page: 10 });
+    expect(result).toEqual(mockEvents);
+    expect(mockOctokit.rest.activity.listPublicEvents).toHaveBeenCalledWith({
+      per_page: 10,
+      page: 1,
+    });
+  });
+
+  it('should list repo events', async () => {
+    const mockEvents = [{ id: '2', type: 'PushEvent' }];
+    mockOctokit.rest.activity.listRepoEvents.mockResolvedValue({
+      data: mockEvents,
+    });
+
+    const result = await GithubService.listRepoEvents('owner', 'repo', {
+      per_page: 5,
+    });
+    expect(result).toEqual(mockEvents);
+    expect(mockOctokit.rest.activity.listRepoEvents).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      per_page: 5,
+      page: 1,
+    });
+  });
+
+  it('should list org events for authenticated user', async () => {
+    const mockEvents = [{ id: '3', type: 'CreateEvent' }];
+    mockOctokit.rest.activity.listOrgEventsForAuthenticatedUser.mockResolvedValue(
+      { data: mockEvents },
+    );
+
+    const result = await GithubService.listOrgEvents('my-org', 'octocat', {
+      page: 3,
+    });
+    expect(result).toEqual(mockEvents);
+    expect(
+      mockOctokit.rest.activity.listOrgEventsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      username: 'octocat',
+      per_page: 30,
+      page: 3,
+    });
+  });
+
+  // ==========================================
+  // 29. Interaction Limits API
+  // ==========================================
+  it('should get repo interaction limits', async () => {
+    const mockLimits = { limit: 'collaborators_only' };
+    mockOctokit.rest.interactions.getRestrictionsForRepo.mockResolvedValue({
+      data: mockLimits,
+    });
+
+    const result = await GithubService.getRepoInteractionLimits(
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockLimits);
+    expect(
+      mockOctokit.rest.interactions.getRestrictionsForRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should set repo interaction limits', async () => {
+    const mockLimits = { limit: 'collaborators_only', expiry: 'one_day' };
+    mockOctokit.rest.interactions.setRestrictionsForRepo.mockResolvedValue({
+      data: mockLimits,
+    });
+
+    const result = await GithubService.setRepoInteractionLimits(
+      'owner',
+      'repo',
+      {
+        limit: 'collaborators_only',
+        expiry: 'one_day',
+      },
+    );
+    expect(result).toEqual(mockLimits);
+    expect(
+      mockOctokit.rest.interactions.setRestrictionsForRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      limit: 'collaborators_only',
+      expiry: 'one_day',
+    });
+  });
+
+  it('should remove repo interaction limits', async () => {
+    mockOctokit.rest.interactions.removeRestrictionsForRepo.mockResolvedValue({
+      data: null,
+    });
+
+    const result = await GithubService.removeRepoInteractionLimits(
+      'owner',
+      'repo',
+    );
+    expect(result).toBeNull();
+    expect(
+      mockOctokit.rest.interactions.removeRestrictionsForRepo,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should propagate errors when getEnterpriseAuditLog fails', async () => {
+    const mockError = new Error('API Rate Limit Exceeded');
+    mockOctokit.request.mockRejectedValue(mockError);
+
+    await expect(GithubService.getEnterpriseAuditLog('my-ent')).rejects.toThrow(
+      'API Rate Limit Exceeded',
+    );
   });
 });

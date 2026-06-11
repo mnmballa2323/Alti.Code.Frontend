@@ -1292,6 +1292,270 @@ export const downloadWorkflowArtifact = async (req, res) => {
   }
 };
 
+// ==========================================
+// 25. GitHub Apps & Installations Handlers
+// ==========================================
+export const getAppAuthenticated = async (req, res) => {
+  try {
+    const result = await GithubService.getAppAuthenticated();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting authenticated app:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAppInstallations = async (req, res) => {
+  try {
+    const result = await GithubService.listAppInstallations(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing app installations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getAppInstallation = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result = await GithubService.getAppInstallation(installationId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting app installation:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAppReposAccessible = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result = await GithubService.listAppReposAccessible(
+      installationId,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error listing accessible app repos:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAppInstallationAccessToken = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result =
+      await GithubService.createAppInstallationAccessToken(installationId);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error creating installation access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 26. Resource Billing Handlers
+// ==========================================
+export const getOrgActionsBilling = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOrgActionsBilling(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting org Actions billing:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgPackagesBilling = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOrgPackagesBilling(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting org Packages billing:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgSharedStorageBilling = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOrgSharedStorageBilling(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting org Shared Storage billing:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 27. Enterprise Admin & Auditing Handlers
+// ==========================================
+export const getEnterpriseAuditLog = async (req, res) => {
+  try {
+    const { enterprise } = req.params;
+    const result = await GithubService.getEnterpriseAuditLog(
+      enterprise,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting enterprise audit log:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listEnterpriseMembers = async (req, res) => {
+  try {
+    const { enterprise } = req.params;
+    const result = await GithubService.listEnterpriseMembers(
+      enterprise,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error listing enterprise members:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 28. Activity Events Handlers
+// ==========================================
+export const listPublicEvents = async (req, res) => {
+  try {
+    const result = await GithubService.listPublicEvents(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing public events:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listRepoEvents = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoEvents(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing repo events:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listOrgEvents = async (req, res) => {
+  try {
+    const { org, username } = req.params;
+    const result = await GithubService.listOrgEvents(org, username, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing org events:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 29. Interaction Limits Handlers
+// ==========================================
+export const getRepoInteractionLimits = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoInteractionLimits(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting repo interaction limits:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setRepoInteractionLimits = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.setRepoInteractionLimits(
+      owner,
+      repo,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error setting repo interaction limits:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeRepoInteractionLimits = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.removeRepoInteractionLimits(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error removing repo interaction limits:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getAuthenticatedUser,
   listRepositories,
@@ -1373,4 +1637,20 @@ export const GithubController = {
   listWorkflowJobs,
   listWorkflowRunArtifacts,
   downloadWorkflowArtifact,
+  getAppAuthenticated,
+  listAppInstallations,
+  getAppInstallation,
+  listAppReposAccessible,
+  createAppInstallationAccessToken,
+  getOrgActionsBilling,
+  getOrgPackagesBilling,
+  getOrgSharedStorageBilling,
+  getEnterpriseAuditLog,
+  listEnterpriseMembers,
+  listPublicEvents,
+  listRepoEvents,
+  listOrgEvents,
+  getRepoInteractionLimits,
+  setRepoInteractionLimits,
+  removeRepoInteractionLimits,
 };
