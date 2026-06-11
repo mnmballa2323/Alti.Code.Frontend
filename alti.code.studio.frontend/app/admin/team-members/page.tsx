@@ -30,6 +30,7 @@ export default function TeamMembersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<{ id: string; email: string } | null>(null);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   const fetchMembers = async () => {
     try {
@@ -230,35 +231,66 @@ export default function TeamMembersPage() {
                         </div>
                         <div className="col-span-2 flex items-center justify-between">
                           <div className="relative flex items-center w-full max-w-[120px]">
-                            <select
-                              disabled={isYou}
-                              className={`appearance-none w-full bg-transparent py-1 text-sm font-semibold text-neutral-850 dark:text-neutral-150 focus:outline-none rounded-lg transition-colors ${
-                                isYou 
-                                  ? "cursor-default pr-0" 
-                                  : "cursor-pointer pr-5 hover:bg-neutral-50 dark:hover:bg-neutral-850/40"
-                              }`}
-                              value={member.role?.toLowerCase() === "owner" ? "admin" : member.role?.toLowerCase() || "developer"}
-                              onChange={(e) => handleRoleChange(member.id, e.target.value)}
-                            >
-                              <option value="admin" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Admin</option>
-                              <option value="manager" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Manager</option>
-                              <option value="developer" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Developer</option>
-                            </select>
-                            {!isYou && (
-                              <svg
-                                className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500 pointer-events-none"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M19 9l-7 7-7-7"
-                                />
-                              </svg>
+                            {isYou ? (
+                              <span className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 py-1">
+                                Admin
+                              </span>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => setOpenDropdownId(openDropdownId === member.id ? null : member.id)}
+                                  className="w-full flex items-center justify-between bg-transparent px-2 py-1 text-sm font-semibold text-neutral-800 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors focus:outline-none cursor-pointer"
+                                >
+                                  <span>{formatRole(member.role)}</span>
+                                  <svg
+                                    className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
+                                      openDropdownId === member.id ? "rotate-180" : ""
+                                    }`}
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M19 9l-7 7-7-7"
+                                    />
+                                  </svg>
+                                </button>
+
+                                {openDropdownId === member.id && (
+                                  <>
+                                    {/* Overlay to close the dropdown */}
+                                    <div 
+                                      className="fixed inset-0 z-40" 
+                                      onClick={() => setOpenDropdownId(null)}
+                                    />
+                                    {/* Dropdown Options Box */}
+                                    <div className="absolute top-full left-0 mt-1.5 w-full min-w-[120px] bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100">
+                                      {["admin", "manager", "developer"].map((r) => (
+                                        <button
+                                          key={r}
+                                          type="button"
+                                          onClick={() => {
+                                            handleRoleChange(member.id, r);
+                                            setOpenDropdownId(null);
+                                          }}
+                                          className={`w-full text-left px-3 py-2 text-xs font-semibold transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 ${
+                                            member.role?.toLowerCase() === r
+                                              ? "text-neutral-900 dark:text-white font-bold bg-neutral-50/60 dark:bg-neutral-800/20"
+                                              : "text-neutral-650 dark:text-neutral-400"
+                                          }`}
+                                        >
+                                          {formatRole(r)}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </>
+                                )}
+                              </>
                             )}
                           </div>
                           {!isYou && (
