@@ -798,7 +798,7 @@ export default function ModelUsagePage() {
                         {model.name}
                       </h3>
                       <p className="text-[10px] text-neutral-400 dark:text-neutral-500">
-                        ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M</span>
+                        ${model.pricingPer1MInput.toFixed(2)} <span className="opacity-60">in</span> / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">out</span>
                       </p>
                     </div>
                     <div className="text-right">
