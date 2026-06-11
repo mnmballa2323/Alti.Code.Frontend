@@ -37,7 +37,7 @@ export default function InvoicesPage() {
         {mockInvoices.length > 0 ? (
           <div className="w-full">
             {/* Sticky Header Wrapper */}
-            <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] pb-3 -mt-4 pt-4">
+            <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] -mt-4 pt-4">
               {/* Search Bar */}
               <div className="relative mb-4">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
@@ -57,6 +57,8 @@ export default function InvoicesPage() {
                 <div className="col-span-4">Amount</div>
                 <div className="col-span-2 flex items-center justify-end pr-4">Action</div>
               </div>
+              {/* Spacer to prevent overlap and maintain sticky background cover */}
+              <div className="h-3" />
             </div>
 
             {/* Table Body */}
