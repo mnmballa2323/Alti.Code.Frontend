@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Download, Search } from "lucide-react";
+import jsPDF from "jspdf";
 
 interface Invoice {
   id: string;
@@ -19,7 +20,59 @@ export default function InvoicesPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleDownload = (invoiceId: string) => {
-    alert(`Downloading invoice ${invoiceId} PDF...`);
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(20);
+    doc.text("ALTI CODE STUDIO", 15, 20);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text("123 Enterprise Way", 15, 28);
+    doc.text("billing@alticodestudio.com", 15, 34);
+    
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(`INVOICE: ${invoiceId}`, 140, 20);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    const date = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    doc.text(`Date: ${date}`, 140, 28);
+    doc.text(`Due: Upon Receipt`, 140, 34);
+    
+    // Draw a horizontal line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(15, 42, 195, 42);
+    
+    // Table Headers
+    doc.setFont("helvetica", "bold");
+    doc.text("Description", 15, 50);
+    doc.text("Amount", 160, 50);
+    
+    doc.line(15, 54, 195, 54);
+    
+    // Table Content
+    doc.setFont("helvetica", "normal");
+    const selectedInvoice = mockInvoices.find(inv => inv.id === invoiceId);
+    const amount = selectedInvoice ? selectedInvoice.amount : "$20.00";
+    const month = selectedInvoice ? selectedInvoice.month : "Services Rendered";
+    doc.text(`Alti Code Studio Subscription - ${month}`, 15, 62);
+    doc.text(amount, 160, 62);
+    
+    doc.line(15, 68, 195, 68);
+    
+    // Total
+    doc.setFont("helvetica", "bold");
+    doc.text("Total Paid:", 130, 78);
+    doc.text(amount, 160, 78);
+    
+    // Footer
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Thank you for your business!", 15, 100);
+    
+    doc.save(`${invoiceId}.pdf`);
   };
 
   const filteredInvoices = mockInvoices.filter((inv) => {
