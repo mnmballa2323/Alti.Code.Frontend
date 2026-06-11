@@ -177,7 +177,7 @@ const AuditPage = () => {
           {/* Table Header */}
           <div 
             className="grid gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm"
-            style={{ gridTemplateColumns: "8% 11% 31% 20% 15% 15%" }}
+            style={{ gridTemplateColumns: "90px 120px 2.5fr 1.8fr 1.2fr 1.5fr" }}
           >
             <div>Date</div>
             <div>Time</div>
@@ -218,7 +218,7 @@ const AuditPage = () => {
                   >
                     <div 
                       className="grid gap-4 items-center text-sm"
-                      style={{ gridTemplateColumns: "8% 11% 31% 20% 15% 15%" }}
+                      style={{ gridTemplateColumns: "90px 120px 2.5fr 1.8fr 1.2fr 1.5fr" }}
                     >
                       <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                         {logDate}
