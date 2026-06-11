@@ -566,8 +566,8 @@ export default function ModelUsagePage() {
   // Object tracking timeframe for each model name
   const [timeframes, setTimeframes] = useState<Record<string, "1D" | "1W" | "1M" | "1Y" | "All">>({});
 
-  // Hover states for tooltips
-  const [hoveredData, setHoveredData] = useState<Record<string, { index: number; x: number; y: number } | null>>({});
+  // Hover states for tooltips (shared active index)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Format tokens display helper
   const formatTokens = (num: number) => {
@@ -583,49 +583,31 @@ export default function ModelUsagePage() {
   // Handle mouse moves over the stock SVG line charts to calculate crosshair points
   const handleMouseMove = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    modelName: string,
-    labels: string[],
-    values: number[]
+    valuesCount: number
   ) => {
     const svgEl = e.currentTarget;
     const rect = svgEl.getBoundingClientRect();
     const x = e.clientX - rect.left; // relative cursor X coordinates
     
     const svgWidth = 500;
-    const pointsCount = values.length;
     
     // Scale local cursor coordinate to SVG coordinate space
     const relativeX = (x / rect.width) * svgWidth;
     
     const chartWidth = 500;
     const xOffset = 0;
-    const yOffset = 10;
-    const chartHeight = 90;
     
     // Clamp relativeX to chart plot area
     const clampedX = Math.max(xOffset, Math.min(xOffset + chartWidth, relativeX));
     
     // Get closest data point index
-    const index = Math.max(0, Math.min(pointsCount - 1, Math.round(((clampedX - xOffset) / chartWidth) * (pointsCount - 1))));
+    const index = Math.max(0, Math.min(valuesCount - 1, Math.round(((clampedX - xOffset) / chartWidth) * (valuesCount - 1))));
     
-    // Calculate coordinates for the selected point
-    const maxVal = Math.max(...values, 1);
-    const yScaleCeiling = getYScaleCeiling(maxVal);
-    const val = values[index];
-    const calculatedX = xOffset + (index / (pointsCount - 1)) * chartWidth;
-    const calculatedY = yOffset + chartHeight - ((val / yScaleCeiling) * chartHeight);
-
-    setHoveredData(prev => ({
-      ...prev,
-      [modelName]: { index, x: calculatedX, y: calculatedY }
-    }));
+    setHoveredIndex(index);
   };
 
-  const handleMouseLeave = (modelName: string) => {
-    setHoveredData(prev => ({
-      ...prev,
-      [modelName]: null
-    }));
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
   };
 
   return (
@@ -716,7 +698,13 @@ export default function ModelUsagePage() {
             const areaPath = linePath + ` L ${xOffset + chartWidth} ${yOffset + chartHeight} L ${xOffset} ${yOffset + chartHeight} Z`;
 
             // Tooltip calculations on Hover
-            const activeHover = hoveredData[model.name];
+            const activeHover = hoveredIndex !== null && hoveredIndex < values.length
+              ? {
+                  index: hoveredIndex,
+                  x: xOffset + (hoveredIndex / (values.length - 1)) * chartWidth,
+                  y: yOffset + chartHeight - ((values[hoveredIndex] / yScaleCeiling) * chartHeight)
+                }
+              : null;
             const activeValue = activeHover ? values[activeHover.index] : values[values.length - 1];
             const activeLabel = activeHover ? labels[activeHover.index] : labels[labels.length - 1];
 
@@ -753,7 +741,7 @@ export default function ModelUsagePage() {
                   </div>
 
                   {/* 2. Key Metrics Card */}
-                  <div className="bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center">
+                  <div className="w-full bg-neutral-100/70 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 p-3 rounded-2xl flex items-center">
                     <div className="flex-1 flex justify-between items-center pr-2">
                       <div>
                         <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Tokens Processed</span>
@@ -791,6 +779,11 @@ export default function ModelUsagePage() {
                         <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">
                           {formatTokens(activeValue)}
                         </span>
+                        {activeHover && (
+                          <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
+                            {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -800,8 +793,8 @@ export default function ModelUsagePage() {
                         className="w-full h-full overflow-visible cursor-crosshair"
                         viewBox="0 0 500 130"
                         preserveAspectRatio="none"
-                        onMouseMove={(e) => handleMouseMove(e, model.name, labels, values)}
-                        onMouseLeave={() => handleMouseLeave(model.name)}
+                        onMouseMove={(e) => handleMouseMove(e, values.length)}
+                        onMouseLeave={handleMouseLeave}
                       >
                         {/* Definitions for Gradient fills */}
                         <defs>
@@ -874,6 +867,7 @@ export default function ModelUsagePage() {
                               stroke="rgba(37, 99, 235, 0.35)"
                               strokeWidth="1.5"
                               strokeDasharray="3 3"
+                              pointerEvents="none"
                             />
                             {/* Crosshair horizontal line */}
                             <line
@@ -884,6 +878,7 @@ export default function ModelUsagePage() {
                               stroke="rgba(37, 99, 235, 0.35)"
                               strokeWidth="1.5"
                               strokeDasharray="3 3"
+                              pointerEvents="none"
                             />
                             {/* Crosshair pulse outer circle */}
                             <circle
@@ -892,6 +887,7 @@ export default function ModelUsagePage() {
                               r="9"
                               fill="#2563eb"
                               fillOpacity="0.15"
+                              pointerEvents="none"
                             />
                             {/* Crosshair pulse dot */}
                             <circle
@@ -901,10 +897,11 @@ export default function ModelUsagePage() {
                               fill="#2563eb"
                               stroke="white"
                               strokeWidth="1.5"
+                              pointerEvents="none"
                             />
 
                             {/* Sliding interactive Date/Time badge on the bottom axis */}
-                            <g transform={`translate(${Math.max(38, Math.min(462, activeHover.x))}, 118)`}>
+                            <g transform={`translate(${Math.max(38, Math.min(462, activeHover.x))}, 118)`} pointerEvents="none">
                               <rect x="-38" y="-9" width="76" height="15" rx="3" fill="#2563eb" />
                               <text x="0" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {selectedTimeframe === "1D" ? hoverDT.time : hoverDT.date.split(",")[0]}
@@ -912,7 +909,7 @@ export default function ModelUsagePage() {
                             </g>
 
                             {/* Sliding interactive Token badge on the right axis */}
-                            <g transform={`translate(500, ${Math.max(18, Math.min(92, activeHover.y))})`}>
+                            <g transform={`translate(500, ${Math.max(18, Math.min(92, activeHover.y))})`} pointerEvents="none">
                               <rect x="-52" y="-8" width="52" height="15" rx="3" fill="#2563eb" />
                               <text x="-26" y="2" fill="white" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {formatTokens(activeValue)}
@@ -920,7 +917,7 @@ export default function ModelUsagePage() {
                             </g>
 
                             {/* Segmented capsule tooltip showing Date and Token Use to the right of the exact intersection */}
-                            <g transform={`translate(${activeHover.x > 320 ? activeHover.x - 145 : activeHover.x + 10}, ${activeHover.y - 11})`}>
+                            <g transform={`translate(${activeHover.x > 320 ? activeHover.x - 145 : activeHover.x + 10}, ${activeHover.y - 11})`} pointerEvents="none">
                               <rect x="0" y="0" width="136" height="22" rx="11" fill="rgba(15, 15, 17, 0.95)" stroke="#2563eb" strokeWidth="1.5" />
                               <text x="34" y="14" fill="#ffffff" fontSize="7.5" fontWeight="bold" textAnchor="middle" fontFamily="monospace">
                                 {selectedTimeframe === "1D" 
