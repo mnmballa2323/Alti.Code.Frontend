@@ -176,7 +176,7 @@ export default function KnowledgePage() {
               </h2>
               <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
                 Are you sure you want to remove
-                <span className="block font-semibold text-neutral-700 dark:text-neutral-300 font-mono break-all mt-1.5">
+                <span className="block font-semibold text-neutral-700 dark:text-neutral-300 break-all mt-1.5">
                   {fileToDelete}
                 </span>
               </p>
