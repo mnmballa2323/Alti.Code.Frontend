@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { 
   Cpu, 
   Coins, 
   Activity, 
   Clock, 
-  ArrowUpRight, 
-  TrendingUp,
   FileText
 } from "lucide-react";
 import { Chip } from "@heroui/react";
 
-// Types for simplified Model Usage
+// Types for Stock-Market Interactive Charting
+interface TimeframeData {
+  labels: string[];
+  values: number[];
+}
+
 interface ModelUsageInfo {
   name: string;
   version: string;
@@ -24,7 +27,13 @@ interface ModelUsageInfo {
   cost: number;
   pricingPer1MInput: number;
   pricingPer1MOutput: number;
-  dailyUsage: { day: string; tokens: number }[];
+  timeframes: {
+    "1D": TimeframeData;
+    "1W": TimeframeData;
+    "1M": TimeframeData;
+    "1Y": TimeframeData;
+    "All": TimeframeData;
+  };
   recentRequests: {
     id: string;
     timestamp: string;
@@ -53,15 +62,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 16.60,
         pricingPer1MInput: 2.50,
         pricingPer1MOutput: 10.00,
-        dailyUsage: [
-          { day: "Mon", tokens: 420000 },
-          { day: "Tue", tokens: 510000 },
-          { day: "Wed", tokens: 590000 },
-          { day: "Thu", tokens: 480000 },
-          { day: "Fri", tokens: 730000 },
-          { day: "Sat", tokens: 260000 },
-          { day: "Sun", tokens: 410000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [25000, 12000, 8000, 45000, 90000, 120000, 85000, 60000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [420000, 510000, 590000, 480000, 730000, 260000, 410000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [1800000, 2100000, 1900000, 2420000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [1200000, 1400000, 1800000, 1500000, 2200000, 2800000, 3200000, 2900000, 3500000, 4100000, 3800000, 4800000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [8500000, 11000000, 13000000, 12000000, 16000000, 19500000]
+          }
+        },
         recentRequests: [
           {
             id: "req-gpt4o-1",
@@ -100,15 +122,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 2.30,
         pricingPer1MInput: 0.15,
         pricingPer1MOutput: 0.60,
-        dailyUsage: [
-          { day: "Mon", tokens: 90000 },
-          { day: "Tue", tokens: 110000 },
-          { day: "Wed", tokens: 120000 },
-          { day: "Thu", tokens: 110000 },
-          { day: "Fri", tokens: 160000 },
-          { day: "Sat", tokens: 50000 },
-          { day: "Sun", tokens: 80000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [8000, 3000, 1000, 12000, 28000, 35000, 22000, 15000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [90000, 110000, 120000, 110000, 160000, 50000, 80000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [380000, 410000, 390000, 480000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [210000, 240000, 320000, 290000, 380000, 450000, 510000, 480000, 550000, 620000, 590000, 710000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [1200000, 1800000, 2400000, 2200000, 3200000, 4100000]
+          }
+        },
         recentRequests: [
           {
             id: "req-gpt4omini-1",
@@ -151,15 +186,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 11.80,
         pricingPer1MInput: 3.00,
         pricingPer1MOutput: 15.00,
-        dailyUsage: [
-          { day: "Mon", tokens: 290000 },
-          { day: "Tue", tokens: 360000 },
-          { day: "Wed", tokens: 420000 },
-          { day: "Thu", tokens: 330000 },
-          { day: "Fri", tokens: 510000 },
-          { day: "Sat", tokens: 190000 },
-          { day: "Sun", tokens: 440000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [15000, 8000, 5000, 32000, 75000, 98000, 68000, 42000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [290000, 360000, 420000, 330000, 510000, 190000, 440000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [1200000, 1500000, 1350000, 1780000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [800000, 950000, 1200000, 1100000, 1500000, 1900000, 2100000, 1850000, 2300000, 2700000, 2500000, 3340000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [5500000, 7200000, 8900000, 8100000, 11200000, 13400000]
+          }
+        },
         recentRequests: [
           {
             id: "req-claude-1",
@@ -198,15 +246,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 3.02,
         pricingPer1MInput: 15.00,
         pricingPer1MOutput: 75.00,
-        dailyUsage: [
-          { day: "Mon", tokens: 50000 },
-          { day: "Tue", tokens: 80000 },
-          { day: "Wed", tokens: 90000 },
-          { day: "Thu", tokens: 70000 },
-          { day: "Fri", tokens: 110000 },
-          { day: "Sat", tokens: 40000 },
-          { day: "Sun", tokens: 65000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [2000, 1000, 500, 6000, 14000, 18000, 11000, 8000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [50000, 80000, 90000, 70000, 110000, 40000, 65000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [210000, 240000, 220000, 280000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [120000, 150000, 180000, 160000, 220000, 290000, 310000, 285000, 330000, 380000, 360000, 505000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [850000, 1100000, 1300000, 1200000, 1600000, 1950000]
+          }
+        },
         recentRequests: [
           {
             id: "req-opus-1",
@@ -241,15 +302,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 4.86,
         pricingPer1MInput: 1.25,
         pricingPer1MOutput: 5.00,
-        dailyUsage: [
-          { day: "Mon", tokens: 380000 },
-          { day: "Tue", tokens: 420000 },
-          { day: "Wed", tokens: 490000 },
-          { day: "Thu", tokens: 350000 },
-          { day: "Fri", tokens: 580000 },
-          { day: "Sat", tokens: 210000 },
-          { day: "Sun", tokens: 490000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [22000, 11000, 7000, 38000, 79000, 95000, 78000, 51000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [380000, 420000, 490000, 350000, 580000, 210000, 490000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [1450000, 1680000, 1520000, 1890000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [950000, 1100000, 1350000, 1200000, 1700000, 2100000, 2350000, 2100000, 2600000, 3050000, 2900000, 3810000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [6800000, 8900000, 10500000, 9800000, 13200000, 15400000]
+          }
+        },
         recentRequests: [
           {
             id: "req-gemini-1",
@@ -280,15 +354,28 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         cost: 1.26,
         pricingPer1MInput: 0.075,
         pricingPer1MOutput: 0.30,
-        dailyUsage: [
-          { day: "Mon", tokens: 105000 },
-          { day: "Tue", tokens: 140000 },
-          { day: "Wed", tokens: 155000 },
-          { day: "Thu", tokens: 120000 },
-          { day: "Fri", tokens: 170000 },
-          { day: "Sat", tokens: 60000 },
-          { day: "Sun", tokens: 145000 },
-        ],
+        timeframes: {
+          "1D": {
+            labels: ["12 AM", "3 AM", "6 AM", "9 AM", "12 PM", "3 PM", "6 PM", "9 PM"],
+            values: [9000, 4000, 1500, 15000, 31000, 38000, 26000, 18000]
+          },
+          "1W": {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            values: [105000, 140000, 155000, 120000, 170000, 60000, 145000]
+          },
+          "1M": {
+            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+            values: [490000, 560000, 520000, 630000]
+          },
+          "1Y": {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            values: [310000, 350000, 450000, 410000, 580000, 690000, 780000, 720000, 890000, 990000, 950000, 1400000]
+          },
+          "All": {
+            labels: ["Q1 '25", "Q2 '25", "Q3 '25", "Q4 '25", "Q1 '26", "Q2 '26"],
+            values: [1800000, 2800000, 3600000, 3300000, 4800000, 5900000]
+          }
+        },
         recentRequests: [
           {
             id: "req-flash-1",
@@ -312,7 +399,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
   }
 };
 
-// Unified black, white, gray, and royal blue theme tokens
+// Unified monochrome (black/white/gray) theme with Royal Blue accent
 const theme = {
   primary: "text-blue-600 dark:text-blue-400",
   bg: "bg-blue-50/70 dark:bg-blue-950/15",
@@ -327,6 +414,12 @@ export default function ModelUsagePage() {
   const [activeTab, setActiveTab] = useState<"aws" | "gcp" | "azure">("azure");
   const data = initialUsageData[activeTab];
 
+  // Object tracking timeframe for each model name
+  const [timeframes, setTimeframes] = useState<Record<string, "1D" | "1W" | "1M" | "1Y" | "All">>({});
+
+  // Hover states for tooltips
+  const [hoveredData, setHoveredData] = useState<Record<string, { index: number; x: number; y: number } | null>>({});
+
   // Format tokens display helper
   const formatTokens = (num: number) => {
     if (num >= 1000000) {
@@ -336,6 +429,48 @@ export default function ModelUsagePage() {
       return (num / 1000).toFixed(0) + "k";
     }
     return num.toString();
+  };
+
+  // Handle mouse moves over the stock SVG line charts to calculate crosshair points
+  const handleMouseMove = (
+    e: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    modelName: string,
+    labels: string[],
+    values: number[]
+  ) => {
+    const svgEl = e.currentTarget;
+    const rect = svgEl.getBoundingClientRect();
+    const x = e.clientX - rect.left; // relative cursor X coordinates
+    
+    const svgWidth = 500;
+    const pointsCount = values.length;
+    
+    // Scale local cursor coordinate to SVG coordinate space
+    const relativeX = (x / rect.width) * svgWidth;
+    
+    // Get closest data point index
+    const index = Math.max(0, Math.min(pointsCount - 1, Math.round((relativeX / svgWidth) * (pointsCount - 1))));
+    
+    // Calculate Y height for this point
+    const maxVal = Math.max(...values, 1);
+    const svgHeight = 100;
+    const paddingY = 10;
+    const val = values[index];
+    
+    const calculatedX = (index / (pointsCount - 1)) * svgWidth;
+    const calculatedY = svgHeight - paddingY - ((val / maxVal) * (svgHeight - 2 * paddingY));
+
+    setHoveredData(prev => ({
+      ...prev,
+      [modelName]: { index, x: calculatedX, y: calculatedY }
+    }));
+  };
+
+  const handleMouseLeave = (modelName: string) => {
+    setHoveredData(prev => ({
+      ...prev,
+      [modelName]: null
+    }));
   };
 
   return (
@@ -382,8 +517,34 @@ export default function ModelUsagePage() {
           {data.models.map((model) => {
             const modelTokens = model.inputTokens + model.outputTokens;
             
-            // Find max daily tokens for chart height scaling
-            const maxDailyTokens = Math.max(...model.dailyUsage.map((u) => u.tokens), 100000);
+            // Get selected timeframe state or fallback to default "1W"
+            const selectedTimeframe = timeframes[model.name] || "1W";
+            const timeframeData = model.timeframes[selectedTimeframe];
+            const { labels, values } = timeframeData;
+
+            // Generate coordinates for SVG Stock Chart
+            const maxVal = Math.max(...values, 1);
+            const svgWidth = 500;
+            const svgHeight = 100;
+            const paddingY = 10;
+
+            const coords = values.map((val, i) => {
+              const x = (i / (values.length - 1)) * svgWidth;
+              const y = svgHeight - paddingY - ((val / maxVal) * (svgHeight - 2 * paddingY));
+              return { x, y };
+            });
+
+            // SVG Path strings
+            const linePath = coords.reduce((acc, c, i) => {
+              return acc + `${i === 0 ? "M" : "L"} ${c.x} ${c.y}`;
+            }, "");
+
+            const areaPath = linePath + ` L ${svgWidth} ${svgHeight} L 0 ${svgHeight} Z`;
+
+            // Tooltip calculations on Hover
+            const activeHover = hoveredData[model.name];
+            const activeValue = activeHover ? values[activeHover.index] : values[values.length - 1];
+            const activeLabel = activeHover ? labels[activeHover.index] : labels[labels.length - 1];
 
             return (
               <div 
@@ -453,28 +614,101 @@ export default function ModelUsagePage() {
                     </div>
                   </div>
 
-                  {/* 3. Daily Usage Spark Chart */}
-                  <div className="space-y-2.5 pt-2">
-                    <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block">7-Day Volume Trend</span>
-                    <div className="h-24 w-full flex items-end justify-between gap-1 pb-1 pt-4 font-mono border-b border-neutral-100 dark:border-neutral-850">
-                      {model.dailyUsage.map((dayData) => {
-                        const heightPercentage = Math.min((dayData.tokens / maxDailyTokens) * 100, 100);
-                        return (
-                          <div key={dayData.day} className="flex-1 flex flex-col items-center group relative h-full justify-end">
-                            {/* Bar Tooltip */}
-                            <div className="absolute bottom-full mb-1 bg-neutral-950 text-white text-[9px] rounded-lg p-1.5 opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-20 shadow-md border border-neutral-800">
-                              <p className="font-bold text-neutral-350">{dayData.day}</p>
-                              <p>{formatTokens(dayData.tokens)} tokens</p>
-                            </div>
-                            {/* Simple Royal Blue Bar */}
-                            <div 
-                              style={{ height: `${heightPercentage}%` }}
-                              className={`${theme.progressColor} w-full rounded-t-sm hover:opacity-80 transition-all cursor-pointer`}
+                  {/* 3. Stock-Market Style Interactive Line Chart */}
+                  <div className="space-y-4 pt-2">
+                    {/* Timeframe controls row & value display */}
+                    <div className="flex justify-between items-end border-b border-neutral-100/50 dark:border-neutral-800/50 pb-2">
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider block">Token Volume Trend</span>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">
+                            {formatTokens(activeValue)}
+                          </span>
+                          <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
+                            {activeLabel}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Stock selectors: 1D / 1W / 1M / 1Y / All */}
+                      <div className="flex gap-1 bg-neutral-100/60 dark:bg-neutral-900 p-0.5 rounded-lg border border-neutral-200/50 dark:border-neutral-800 text-[9px] font-bold">
+                        {(["1D", "1W", "1M", "1Y", "All"] as const).map((tf) => (
+                          <button
+                            key={tf}
+                            onClick={() => setTimeframes(prev => ({ ...prev, [model.name]: tf }))}
+                            className={`px-2 py-1 rounded-md transition-all ${
+                              selectedTimeframe === tf
+                                ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm"
+                                : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+                            }`}
+                          >
+                            {tf}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Chart Canvas Area */}
+                    <div className="relative h-28 w-full pt-1 select-none">
+                      <svg
+                        className="w-full h-full overflow-visible cursor-crosshair"
+                        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+                        preserveAspectRatio="none"
+                        onMouseMove={(e) => handleMouseMove(e, model.name, labels, values)}
+                        onMouseLeave={() => handleMouseLeave(model.name)}
+                      >
+                        {/* Definitions for Gradient fills */}
+                        <defs>
+                          <linearGradient id={`chartGrad-${model.name.replace(/\s+/g, "")}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
+                            <stop offset="100%" stopColor="#2563eb" stopOpacity="0.00" />
+                          </linearGradient>
+                        </defs>
+
+                        {/* Fill Gradient Area under line */}
+                        <path
+                          d={areaPath}
+                          fill={`url(#chartGrad-${model.name.replace(/\s+/g, "")})`}
+                          className="transition-all duration-300 ease-in-out"
+                        />
+
+                        {/* Main Royal Blue stroke path */}
+                        <path
+                          d={linePath}
+                          fill="none"
+                          stroke="#2563eb"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="transition-all duration-300 ease-in-out"
+                        />
+
+                        {/* Interactive vertical guide line & intersection pulse dot */}
+                        {activeHover && (
+                          <>
+                            {/* Crosshair vertical line */}
+                            <line
+                              x1={activeHover.x}
+                              y1={0}
+                              x2={activeHover.x}
+                              y2={svgHeight}
+                              stroke="rgba(37, 99, 235, 0.25)"
+                              strokeWidth="1.5"
+                              strokeDasharray="3 3"
                             />
-                            <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 mt-1.5 block">{dayData.day}</span>
-                          </div>
-                        );
-                      })}
+                            {/* Crosshair pulse dot */}
+                            <circle
+                              cx={activeHover.x}
+                              cy={activeHover.y}
+                              r="5"
+                              fill="#2563eb"
+                              stroke="white"
+                              strokeWidth="2"
+                              className="animate-pulse"
+                            />
+                          </>
+                        )}
+                      </svg>
                     </div>
                   </div>
                 </div>
