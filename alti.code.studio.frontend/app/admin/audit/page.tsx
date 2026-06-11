@@ -13,18 +13,8 @@ import {
 } from "lucide-react";
 
 import { SOCKET_URL } from "@/lib/config";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+
+
 
 interface AuditLog {
   _id: string;
@@ -83,6 +73,7 @@ const mockLogs: AuditLog[] = [
     metadata: '{"backup_type":"daily","error":"disk space exceeded on vault"}',
   },
 ];
+
 
 const AuditPage = () => {
   const { data: session } = useSession();
@@ -158,100 +149,108 @@ const AuditPage = () => {
   };
 
   return (
-    <div className="w-full flex flex-col h-full justify-start pt-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Activity Ledger</CardTitle>
-            <div className="flex items-center gap-2 w-1/3">
-              <Search className="w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search actions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
+    <div className="w-full flex flex-col h-full justify-start pt-0">
+      <div className="space-y-4">
+        {/* Sticky Header Wrapper */}
+        <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] -mt-4 pt-4 pb-2">
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+            <input
+              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
+              placeholder="Search by action or actor..."
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-primary" />
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>Actor</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>IP Address</TableHead>
-                  <TableHead>Metadata</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {logs.length === 0 ? (
-                  <TableRow>
-                    <TableCell
-                      className="text-center py-10 text-muted-foreground"
-                      colSpan={6}
-                    >
-                      No logs found.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  logs.map((log) => (
-                    <TableRow key={log._id}>
-                      <TableCell className="font-mono text-xs">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </TableCell>
-                      <TableCell className="font-medium">{log.actor}</TableCell>
-                      <TableCell>{log.action}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {getStatusIcon(log.status)}
-                          <span className="text-xs">{log.status}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {log.ipAddress || "-"}
-                      </TableCell>
-                      <TableCell className="max-w-[200px] truncate text-xs font-mono text-muted-foreground">
-                        {log.metadata}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          )}
 
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <Button
-              disabled={page === 1 || loading}
-              size="sm"
-              variant="outline"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-            >
-              Previous
-            </Button>
-            <span className="text-sm font-medium">
-              Page {page} of {totalPages}
-            </span>
-            <Button
-              disabled={page === totalPages || loading}
-              size="sm"
-              variant="outline"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            >
-              Next
-            </Button>
+          {/* Table Header */}
+          <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
+            <div className="col-span-2">Timestamp</div>
+            <div className="col-span-3">Actor</div>
+            <div className="col-span-3">Action</div>
+            <div className="col-span-2">Status</div>
+            <div className="col-span-2">IP Address</div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Content Pane */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm">
+            <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
+            <p className="text-sm text-neutral-500">Loading audit logs...</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {logs.length === 0 ? (
+              <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+                No logs found matching search query.
+              </div>
+            ) : (
+              logs.map((log) => (
+                <div
+                  key={log._id}
+                  className="flex flex-col px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-sm transition-all duration-200 gap-3"
+                >
+                  <div className="grid grid-cols-12 gap-4 items-center text-sm">
+                    <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                      {new Date(log.timestamp).toLocaleString()}
+                    </div>
+                    <div className="col-span-3 font-medium text-neutral-800 dark:text-neutral-200 truncate" title={log.actor}>
+                      {log.actor}
+                    </div>
+                    <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
+                      {log.action}
+                    </div>
+                    <div className="col-span-2 flex items-center gap-2">
+                      {getStatusIcon(log.status)}
+                      <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{log.status}</span>
+                    </div>
+                    <div className="col-span-2 font-mono text-xs text-neutral-600 dark:text-neutral-400">
+                      {log.ipAddress || "—"}
+                    </div>
+                  </div>
+                  {log.metadata && (
+                    <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-xl border border-neutral-100 dark:border-neutral-800/60 text-xs font-mono text-neutral-500 dark:text-neutral-400 overflow-x-auto whitespace-pre-wrap break-all">
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-450 dark:text-neutral-500 block mb-1">
+                        Metadata
+                      </span>
+                      {log.metadata}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-end space-x-2 py-4">
+                <button
+                  disabled={page === 1 || loading}
+                  className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                >
+                  Previous
+                </button>
+                <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-450">
+                  Page {page} of {totalPages}
+                </span>
+                <button
+                  disabled={page === totalPages || loading}
+                  className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 export default AuditPage;
+
