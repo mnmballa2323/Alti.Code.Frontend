@@ -228,6 +228,7 @@
   },
   "devDependencies": {
     "@prisma/client": "^5.22.0",
+    "@types/sarif": "^2.1.7",
     "json-server": "^1.0.0-beta.9",
     "prisma": "^5.22.0",
     "vitest": "^4.0.18"
