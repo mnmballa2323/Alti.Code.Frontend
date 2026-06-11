@@ -72,8 +72,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [730000, 260000, 410000, 420000, 510000, 590000, 480000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [1800000, 2100000, 1900000, 2420000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              240000, 260000, 280000, 230000, 250000, 290000, 270000, 260000, 240000, 250000,
+              280000, 300000, 260000, 250000, 270000, 290000, 300000, 270000, 260000, 280000,
+              300000, 310000, 280000, 270000, 290000, 300000, 320000, 290000, 280000, 250000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -132,8 +136,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [160000, 50000, 80000, 90000, 110000, 120000, 110000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [380000, 410000, 390000, 480000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              49000, 53000, 57000, 47000, 51000, 59000, 55000, 53000, 49000, 51000,
+              57000, 61000, 53000, 51000, 55000, 59000, 60000, 54000, 52000, 56000,
+              60000, 62000, 56000, 54000, 58000, 60000, 64000, 58000, 56000, 50000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -196,8 +204,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [510000, 190000, 440000, 290000, 360000, 420000, 330000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [1200000, 1500000, 1350000, 1780000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              170000, 185000, 198000, 163000, 177000, 206000, 192000, 185000, 171000, 178000,
+              199000, 213000, 185000, 178000, 192000, 206000, 213000, 192000, 185000, 199000,
+              213000, 220000, 199000, 192000, 206000, 213000, 227000, 206000, 199000, 168000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -256,8 +268,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [110000, 40000, 65000, 50000, 80000, 90000, 70000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [210000, 240000, 220000, 280000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              28000, 30000, 32000, 26000, 29000, 33000, 31000, 30000, 28000, 29000,
+              32000, 35000, 30000, 29000, 31000, 33000, 35000, 31000, 30000, 32000,
+              35000, 36000, 32000, 31000, 33000, 35000, 37000, 33000, 32000, 32000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -312,8 +328,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [580000, 210000, 490000, 380000, 420000, 490000, 350000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [1450000, 1680000, 1520000, 1890000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              190000, 205000, 222000, 183000, 199000, 230000, 215000, 206000, 190000, 199000,
+              222000, 238000, 206000, 199000, 215000, 230000, 238000, 215000, 206000, 222000,
+              238000, 246000, 222000, 215000, 230000, 238000, 254000, 230000, 222000, 215000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -364,8 +384,12 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             values: [170000, 60000, 145000, 105000, 140000, 155000, 120000]
           },
           "1M": {
-            labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-            values: [490000, 560000, 520000, 630000]
+            labels: Array.from({ length: 30 }).map((_, i) => `Day ${i + 1}`),
+            values: [
+              64000, 69000, 75000, 61000, 67000, 78000, 72000, 69000, 64000, 67000,
+              75000, 80000, 69000, 67000, 72000, 78000, 80000, 72000, 69000, 75000,
+              80000, 83000, 75000, 72000, 78000, 80000, 86000, 78000, 75000, 70000
+            ]
           },
           "1Y": {
             labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -462,15 +486,16 @@ const getDateTime = (
     };
   }
   if (timeframe === "1M") {
-    const dateMapping: Record<string, string> = {
-      "Week 1": "May 17, 2026",
-      "Week 2": "May 24, 2026",
-      "Week 3": "May 31, 2026",
-      "Week 4": "Jun 7, 2026"
-    };
+    const now = new Date();
+    const d = new Date(now.getTime() - (29 - index) * 24 * 60 * 60 * 1000);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthStr = months[d.getMonth()];
+    const dayVal = d.getDate();
+    const yearVal = d.getFullYear();
+    
     return {
-      date: dateMapping[label] || "Jun 7, 2026",
-      time: "11:59 PM"
+      date: `${monthStr} ${dayVal}, ${yearVal}`,
+      time: "12:00 AM"
     };
   }
   if (timeframe === "1Y") {
@@ -765,9 +790,6 @@ export default function ModelUsagePage() {
                       <div className="flex items-baseline gap-2">
                         <span className="text-base font-bold text-neutral-900 dark:text-white font-mono">
                           {formatTokens(activeValue)}
-                        </span>
-                        <span className="text-[9px] text-neutral-400 dark:text-neutral-500 font-medium font-mono">
-                          {hoverDT.date} @ {hoverDT.time}
                         </span>
                       </div>
                     </div>
