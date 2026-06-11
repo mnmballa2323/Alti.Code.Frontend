@@ -29,11 +29,13 @@ import {
 } from "lucide-react";
 
 import { teamAPI } from "@/lib/enterprise-api";
-import { getUserData } from "@/lib/user";
+import { useSession } from "next-auth/react";
+import { useAppSelector } from "@/store";
 
 export default function TeamPage() {
+  const { status } = useSession();
+  const currentUser = useAppSelector((state) => state.user.data) as any;
   const [members, setMembers] = useState<any[]>([]);
-  const [currentUser, setCurrentUser] = useState<any>(null);
   const [teamName, setTeamName] = useState("");
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("developer");
@@ -43,16 +45,6 @@ export default function TeamPage() {
 
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem("token") || "";
-      const profileResult = await getUserData(token);
-
-      if (profileResult?.success && profileResult?.data) {
-        setCurrentUser(profileResult.data);
-        if (profileResult.data.tenant) {
-          setTeamName(profileResult.data.tenant.name);
-        }
-      }
-
       const res = await teamAPI.members();
 
       if (res && res.members) {
@@ -65,8 +57,18 @@ export default function TeamPage() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (status === "authenticated") {
+      fetchData();
+    } else if (status === "unauthenticated") {
+      setLoading(false);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (currentUser?.tenant?.name) {
+      setTeamName(currentUser.tenant.name);
+    }
+  }, [currentUser]);
 
   const handleRenameTeam = async () => {
     if (!teamName.trim()) return;
