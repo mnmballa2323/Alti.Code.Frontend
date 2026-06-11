@@ -28,6 +28,8 @@ export default function TeamMembersPage() {
   });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<{ id: string; email: string } | null>(null);
 
   const fetchMembers = async () => {
     try {
@@ -57,16 +59,18 @@ export default function TeamMembersPage() {
     fetchMembers();
   }, []);
 
-  const handleRemove = async (id: string, email: string) => {
+  const handleRemove = (id: string, email: string) => {
     if (id === currentUser?.id) {
       alert("You cannot remove yourself from the workspace.");
-
       return;
     }
-    if (
-      !confirm(`Are you sure you want to remove ${email} from the workspace?`)
-    )
-      return;
+    setMemberToDelete({ id, email });
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!memberToDelete) return;
+    const { id } = memberToDelete;
 
     try {
       await teamAPI.removeMember(id);
@@ -75,6 +79,9 @@ export default function TeamMembersPage() {
     } catch (err) {
       console.error("Failed to remove member:", err);
       alert("Failed to remove member. Please try again.");
+    } finally {
+      setDeleteConfirmOpen(false);
+      setMemberToDelete(null);
     }
   };
 
@@ -233,6 +240,51 @@ export default function TeamMembersPage() {
               No members configured.
             </div>
           )}
+        </div>
+      )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {deleteConfirmOpen && memberToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+          <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-6 text-center">
+              <h2 className="text-base font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+                Remove Member
+              </h2>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
+                Are you sure you want to remove{" "}
+                <span className="font-semibold text-neutral-700 dark:text-neutral-300">
+                  {memberToDelete.email}
+                </span>
+              </p>
+            </div>
+            
+            {/* Horizontal border line */}
+            <div className="border-t border-neutral-100 dark:border-neutral-800" />
+            
+            {/* Footer Buttons Split by Vertical Line */}
+            <div className="flex w-full">
+              <button
+                className="flex-1 py-3 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
+                onClick={() => {
+                  setDeleteConfirmOpen(false);
+                  setMemberToDelete(null);
+                }}
+              >
+                Cancel
+              </button>
+              
+              {/* Vertical divider line */}
+              <div className="border-r border-neutral-100 dark:border-neutral-800" />
+              
+              <button
+                className="flex-1 py-3 text-sm font-medium text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
+                onClick={confirmDelete}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
