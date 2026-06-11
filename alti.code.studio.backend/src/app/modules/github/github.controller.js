@@ -6663,7 +6663,725 @@ export const removeSelectedRepoFromOrgCodespacesSecret = async (req, res) => {
   }
 };
 
+// ==========================================
+// 83. Repository Branch Protection
+// ==========================================
+export const getBranch = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getBranch(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting branch information:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getBranchProtection(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting branch protection settings:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const {
+      requiredStatusChecks,
+      enforceAdmins,
+      requiredPullRequestReviews,
+      restrictions,
+    } = req.body;
+    const result = await GithubService.updateBranchProtection(
+      owner,
+      repo,
+      branch,
+      requiredStatusChecks,
+      enforceAdmins,
+      requiredPullRequestReviews,
+      restrictions,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating branch protection rules:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deleteBranchProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting branch protection rules:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getAdminBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getAdminBranchProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting admin branch protection enforcement:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setAdminBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.setAdminBranchProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error enabling admin branch protection:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAdminBranchProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deleteAdminBranchProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error disabling admin branch protection:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 84. PR Review & Commit Signature Protection
+// ==========================================
+export const getPullRequestReviewProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getPullRequestReviewProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting PR review protection settings:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updatePullRequestReviewProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const {
+      dismissStaleReviews,
+      requireCodeOwnerReviews,
+      requiredApprovingReviewCount,
+      bypassPullRequestAllowances,
+    } = req.body;
+    const result = await GithubService.updatePullRequestReviewProtection(
+      owner,
+      repo,
+      branch,
+      dismissStaleReviews,
+      requireCodeOwnerReviews,
+      requiredApprovingReviewCount,
+      bypassPullRequestAllowances,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating PR review protection settings:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePullRequestReviewProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deletePullRequestReviewProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting PR review protection:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCommitSignatureProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getCommitSignatureProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting commit signature protection settings:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCommitSignatureProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.createCommitSignatureProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error enabling commit signature protection:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteCommitSignatureProtection = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deleteCommitSignatureProtection(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error disabling commit signature protection:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 85. Branch Access Restrictions
+// ==========================================
+export const getAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getAccessRestrictions(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting branch access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deleteAccessRestrictions(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting branch access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAppsWithAccessToProtectedBranch = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.listAppsWithAccessToProtectedBranch(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing apps with branch access:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addAppsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { apps } = req.body;
+    const result = await GithubService.addAppsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      apps,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding app access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setAppsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { apps } = req.body;
+    const result = await GithubService.setAppsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      apps,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting app access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeAppsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { apps } = req.body;
+    const result = await GithubService.removeAppsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      apps,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing app access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listTeamsWithAccessToProtectedBranch = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.listTeamsWithAccessToProtectedBranch(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing teams with branch access:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addTeamsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { teams } = req.body;
+    const result = await GithubService.addTeamsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      teams,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding team access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setTeamsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { teams } = req.body;
+    const result = await GithubService.setTeamsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      teams,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting team access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeTeamsAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { teams } = req.body;
+    const result = await GithubService.removeTeamsAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      teams,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing team access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listUsersWithAccessToProtectedBranch = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.listUsersWithAccessToProtectedBranch(
+      owner,
+      repo,
+      branch,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing users with branch access:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addUsersAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users } = req.body;
+    const result = await GithubService.addUsersAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      users,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error adding user access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setUsersAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users } = req.body;
+    const result = await GithubService.setUsersAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      users,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting user access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeUsersAccessRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users } = req.body;
+    const result = await GithubService.removeUsersAccessRestrictions(
+      owner,
+      repo,
+      branch,
+      users,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing user access restrictions:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 86. Repository Teams, Tags & Management
+// ==========================================
+export const listRepoTeams = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoTeams(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing repository teams:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addOrUpdateTeamPermissionsForRepo = async (req, res) => {
+  try {
+    const { owner, repo, org, teamSlug } = req.params;
+    const { permission } = req.body;
+    const result = await GithubService.addOrUpdateTeamPermissionsForRepo(
+      owner,
+      repo,
+      org,
+      teamSlug,
+      permission,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting team permissions for repository:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeTeamFromRepo = async (req, res) => {
+  try {
+    const { owner, repo, org, teamSlug } = req.params;
+    const result = await GithubService.removeTeamFromRepo(
+      owner,
+      repo,
+      org,
+      teamSlug,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error removing team from repository:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listRepoTags = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listRepoTags(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing repository tags:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const renameBranch = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { newName } = req.body;
+    const result = await GithubService.renameBranch(
+      owner,
+      repo,
+      branch,
+      newName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error renaming branch:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const mergeUpstream = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { branch } = req.body;
+    const result = await GithubService.mergeUpstream(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error merging upstream branch:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
+  getBranch,
+  getBranchProtection,
+  updateBranchProtection,
+  deleteBranchProtection,
+  getAdminBranchProtection,
+  setAdminBranchProtection,
+  deleteAdminBranchProtection,
+  getPullRequestReviewProtection,
+  updatePullRequestReviewProtection,
+  deletePullRequestReviewProtection,
+  getCommitSignatureProtection,
+  createCommitSignatureProtection,
+  deleteCommitSignatureProtection,
+  getAccessRestrictions,
+  deleteAccessRestrictions,
+  listAppsWithAccessToProtectedBranch,
+  addAppsAccessRestrictions,
+  setAppsAccessRestrictions,
+  removeAppsAccessRestrictions,
+  listTeamsWithAccessToProtectedBranch,
+  addTeamsAccessRestrictions,
+  setTeamsAccessRestrictions,
+  removeTeamsAccessRestrictions,
+  listUsersWithAccessToProtectedBranch,
+  addUsersAccessRestrictions,
+  setUsersAccessRestrictions,
+  removeUsersAccessRestrictions,
+  listRepoTeams,
+  addOrUpdateTeamPermissionsForRepo,
+  removeTeamFromRepo,
+  listRepoTags,
+  renameBranch,
+  mergeUpstream,
   updateCodeScanningAlert,
   listCodeScanningAlertInstances,
   listCodeScanningAnalyses,

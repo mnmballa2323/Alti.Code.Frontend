@@ -1276,6 +1276,146 @@ router.delete(
   GithubController.deleteRepoSubscription,
 );
 
+// Repository Branch Protection
+router.get(
+  '/repos/:owner/:repo/branches/:branch',
+  GithubController.getBranch,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection',
+  GithubController.getBranchProtection,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection',
+  GithubController.updateBranchProtection,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection',
+  GithubController.deleteBranchProtection,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/enforce_admins',
+  GithubController.getAdminBranchProtection,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/enforce_admins',
+  GithubController.setAdminBranchProtection,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/enforce_admins',
+  GithubController.deleteAdminBranchProtection,
+);
+
+// PR Review & Commit Signature Protection
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/required_pull_request_reviews',
+  GithubController.getPullRequestReviewProtection,
+);
+router.patch(
+  '/repos/:owner/:repo/branches/:branch/protection/required_pull_request_reviews',
+  GithubController.updatePullRequestReviewProtection,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/required_pull_request_reviews',
+  GithubController.deletePullRequestReviewProtection,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/required_signatures',
+  GithubController.getCommitSignatureProtection,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/required_signatures',
+  GithubController.createCommitSignatureProtection,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/required_signatures',
+  GithubController.deleteCommitSignatureProtection,
+);
+
+// Branch Access Restrictions
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions',
+  GithubController.getAccessRestrictions,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions',
+  GithubController.deleteAccessRestrictions,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/apps',
+  GithubController.listAppsWithAccessToProtectedBranch,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/apps',
+  GithubController.addAppsAccessRestrictions,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/apps',
+  GithubController.setAppsAccessRestrictions,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/apps',
+  GithubController.removeAppsAccessRestrictions,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/teams',
+  GithubController.listTeamsWithAccessToProtectedBranch,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/teams',
+  GithubController.addTeamsAccessRestrictions,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/teams',
+  GithubController.setTeamsAccessRestrictions,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/teams',
+  GithubController.removeTeamsAccessRestrictions,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/users',
+  GithubController.listUsersWithAccessToProtectedBranch,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/users',
+  GithubController.addUsersAccessRestrictions,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/users',
+  GithubController.setUsersAccessRestrictions,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/users',
+  GithubController.removeUsersAccessRestrictions,
+);
+
+// Repository Teams, Tags & Management
+router.get(
+  '/repos/:owner/:repo/teams',
+  GithubController.listRepoTeams,
+);
+router.put(
+  '/repos/:owner/:repo/teams/:org/:teamSlug',
+  GithubController.addOrUpdateTeamPermissionsForRepo,
+);
+router.delete(
+  '/repos/:owner/:repo/teams/:org/:teamSlug',
+  GithubController.removeTeamFromRepo,
+);
+router.get(
+  '/repos/:owner/:repo/tags',
+  GithubController.listRepoTags,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/rename',
+  GithubController.renameBranch,
+);
+router.post(
+  '/repos/:owner/:repo/merge-upstream',
+  GithubController.mergeUpstream,
+);
+
 // Repository Security & Private Reporting
 router.put(
   '/repos/:owner/:repo/private-vulnerability-reporting',
