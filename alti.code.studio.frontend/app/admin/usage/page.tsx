@@ -625,7 +625,8 @@ export default function ModelUsagePage() {
   // Object tracking timeframe for each model name
   const [timeframes, setTimeframes] = useState<Record<string, "1D" | "1W" | "1M" | "1Y" | "All">>({});
 
-  // Hover states for tooltips (shared active index)
+  // Hover states for tooltips (independent per model card)
+  const [hoveredModel, setHoveredModel] = useState<string | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Accordion state for archived & legacy models
@@ -645,7 +646,8 @@ export default function ModelUsagePage() {
   // Handle mouse moves over the stock SVG line charts to calculate crosshair points
   const handleMouseMove = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    valuesCount: number
+    valuesCount: number,
+    modelName: string
   ) => {
     const svgEl = e.currentTarget;
     const rect = svgEl.getBoundingClientRect();
@@ -665,10 +667,12 @@ export default function ModelUsagePage() {
     // Get closest data point index
     const index = Math.max(0, Math.min(valuesCount - 1, Math.round(((clampedX - xOffset) / chartWidth) * (valuesCount - 1))));
     
+    setHoveredModel(modelName);
     setHoveredIndex(index);
   };
 
   const handleMouseLeave = () => {
+    setHoveredModel(null);
     setHoveredIndex(null);
   };
 
@@ -759,8 +763,9 @@ export default function ModelUsagePage() {
 
             const areaPath = linePath + ` L ${xOffset + chartWidth} ${yOffset + chartHeight} L ${xOffset} ${yOffset + chartHeight} Z`;
 
-            // Tooltip calculations on Hover
-            const activeHover = hoveredIndex !== null && hoveredIndex < values.length
+            // Tooltip calculations on Hover (only active if this model card is hovered)
+            const isHovered = hoveredModel === model.name;
+            const activeHover = isHovered && hoveredIndex !== null && hoveredIndex < values.length
               ? {
                   index: hoveredIndex,
                   x: xOffset + (hoveredIndex / (values.length - 1)) * chartWidth,
@@ -792,13 +797,12 @@ export default function ModelUsagePage() {
                       <h3 className="text-base font-bold text-neutral-900 dark:text-white flex items-center gap-2">
                         {model.name}
                       </h3>
-                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Version: {model.version}</p>
+                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500">
+                        ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M</span>
+                      </p>
                     </div>
                     <div className="text-right">
                       <span className="text-lg font-bold text-neutral-950 dark:text-white">${dynamicCost.toFixed(2)}</span>
-                      <p className="text-[9px] text-neutral-400 dark:text-neutral-500">
-                        ${model.pricingPer1MInput.toFixed(2)} / ${model.pricingPer1MOutput.toFixed(2)} <span className="opacity-60">1M</span>
-                      </p>
                     </div>
                   </div>
 
@@ -855,7 +859,7 @@ export default function ModelUsagePage() {
                         className="w-full h-full overflow-visible cursor-crosshair"
                         viewBox="0 0 500 130"
                         preserveAspectRatio="none"
-                        onMouseMove={(e) => handleMouseMove(e, values.length)}
+                        onMouseMove={(e) => handleMouseMove(e, values.length, model.name)}
                         onMouseLeave={handleMouseLeave}
                       >
                         {/* Definitions for Gradient fills */}
