@@ -182,7 +182,7 @@ const AuditPage = () => {
           <div
             className="grid gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm"
             style={{
-              gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+              gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 120px",
             }}
           >
             <div>Date</div>
@@ -190,7 +190,7 @@ const AuditPage = () => {
             <div>Actor</div>
             <div>Action</div>
             <div>Status</div>
-            <div className="text-right pr-8">IP Address</div>
+            <div>IP Address</div>
           </div>
         </div>
 
@@ -226,7 +226,7 @@ const AuditPage = () => {
                       className="grid gap-4 items-center text-sm"
                       style={{
                         gridTemplateColumns:
-                          "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+                          "90px 120px 2.5fr 2.2fr 1.1fr 120px",
                       }}
                     >
                       <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
@@ -253,18 +253,16 @@ const AuditPage = () => {
                           {log.status}
                         </span>
                       </div>
-                      <div className="flex items-center justify-end gap-2 text-right">
+                      <div className="flex items-center justify-start gap-2">
                         <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                           {log.ipAddress || "—"}
                         </span>
-                        {log.metadata ? (
+                        {log.metadata && (
                           <ChevronDown
                             className={`w-4 h-4 text-neutral-450 dark:text-neutral-500 transition-transform duration-200 shrink-0 ${
                               isExpanded ? "rotate-180" : ""
                             }`}
                           />
-                        ) : (
-                          <div className="w-4 h-4 shrink-0" />
                         )}
                       </div>
                     </div>
