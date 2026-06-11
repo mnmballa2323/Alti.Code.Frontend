@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.176] - 2026-06-11 — Member Details Tab Switching Toggle
+### Added
+- **Tab Switching Toggle**:
+  - Implemented a tab toggle header below the navbar matching the model usage page styles to toggle between Model Usage and Audit Logs views on the member details view page.
+
 ## [39.37.175] - 2026-06-11 — Token Analytics Filter
 ### Changed
 - **Metrics Grid**:
