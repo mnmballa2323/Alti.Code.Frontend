@@ -485,24 +485,6 @@ const socialLogin = catchAsync(async (req, res) => {
   });
 });
 
-export const authController = {
-  register,
-  login,
-  socialLogin,
-  refreshToken,
-  confirmEmail,
-  getUser,
-  updateUser,
-  forgetPassword,
-  resetPassword,
-  deleteUserAccount,
-  deleteUserAccountOTP,
-  changePassword,
-  sendMailWithGoogleController,
-  googleAuthCallback,
-  githubAuthCallback,
-};
-
 const ssoAuthCallback = catchAsync(async (req, res) => {
   const user = req.user;
   const { accessToken, refreshToken } = authService.generateUserTokens(user);
