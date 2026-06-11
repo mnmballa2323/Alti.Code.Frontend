@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.179] - 2026-06-11 — Removed Redundant Actor Column on Member Details
+### Removed
+- **Actor Column Removal**: Removed the "Actor" header title and column cells from the audit logs table on the individual member details page, as it redundantly displays the email of the active member who has already been selected.
+### Changed
+- **Grid Layout Spacing**: Readjusted `gridTemplateColumns` to `90px 120px 4fr 1.2fr 1.5fr` to distribute the free horizontal space to the action, status, and IP address columns.
+
 ## [39.37.178] - 2026-06-11 — Fix React Rules of Hooks violation on Member Details
 ### Fixed
 - **Hook Placement Alignment**: Moved the audit logs fetch `useEffect` above all early return checks (`if (loading)` and `if (!member)`) in `MemberDetailsPage` to ensure a consistent execution order of React hooks on every render.
