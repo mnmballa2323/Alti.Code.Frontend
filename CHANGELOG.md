@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.177] - 2026-06-11 — Individual Team Member Audit Logs UI Alignment
+### Added
+- **Replicated Global Table UI**: Designed the individual member's Audit Logs tab to match the global `/admin/audit` page exactly, utilizing the same custom grid template layout for Date, Time, Actor, Action, Status, and IP Address columns.
+- **Search & Filters**: Added a search input bound to `searchTerm` with placeholder text `"Search by action or actor..."` and search icon prefix to filter the logs list dynamically.
+- **Expandable Metadata Sub-rows**: Integrated the `expandedLogs` toggle maps and `ChevronDown` markers to display the detailed metadata container formatting the raw JSON payload on click.
+- **Curated Member Logs database**: Restructured the mock members data in `getMemberDetails` to return tailored, contextual mock logs for Ada, Alan, Grace, and Jules.
+- **Dual Data Fetch & Fallback**: Configured the component to fetch real audit data from `${SOCKET_URL}/api/v1/audit` using `axios`, filter the logs for the specific member's email, and fall back to the member's detailed mock data if the server fails or returns empty lists.
+
 ## [39.37.176] - 2026-06-11 — Member Details Tab Switching Toggle
 ### Added
 - **Tab Switching Toggle**:
