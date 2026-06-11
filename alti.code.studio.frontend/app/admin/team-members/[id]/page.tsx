@@ -9,10 +9,10 @@ import {
   AlertCircle,
   Search,
   AlertTriangle,
-  CheckCircle,
-  XCircle,
-  ShieldAlert,
   ChevronDown,
+  Check,
+  X,
+  Shield,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -72,13 +72,29 @@ export default function MemberDetailsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "SUCCESS":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return (
+          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500 dark:bg-emerald-600 text-white shrink-0 shadow-sm">
+            <Check className="w-3 h-3 text-white stroke-[3.5]" />
+          </span>
+        );
       case "FAILURE":
-        return <XCircle className="w-4 h-4 text-red-500" />;
+        return (
+          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 dark:bg-rose-600 text-white shrink-0 shadow-sm">
+            <X className="w-3 h-3 text-white stroke-[3.5]" />
+          </span>
+        );
       case "DENIED":
-        return <ShieldAlert className="w-4 h-4 text-red-600" />;
+        return (
+          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-500 dark:bg-indigo-600 text-white shrink-0 shadow-sm">
+            <Shield className="w-3 h-3 text-white stroke-[2.5]" />
+          </span>
+        );
       case "WARNING":
-        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+        return (
+          <span className="flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 dark:bg-amber-600 text-white shrink-0 shadow-sm">
+            <AlertTriangle className="w-3 h-3 text-white stroke-[3]" />
+          </span>
+        );
       default:
         return null;
     }
