@@ -91,6 +91,7 @@ const configObject = {
   pkl: {
     configPath: process.env.PKL_CONFIG_PATH || path.join(process.cwd(), 'config.pkl'),
   },
+  stirlingPdfUrl: process.env.STIRLING_PDF_URL || 'http://localhost:8082',
 };
 
 export const loadEnterpriseSecrets = async () => {
