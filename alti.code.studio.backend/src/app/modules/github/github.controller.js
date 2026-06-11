@@ -933,6 +933,283 @@ export const getCopilotBillingForUser = async (req, res) => {
   }
 };
 
+// ==========================================
+// 20. Discussions Handlers
+// ==========================================
+export const listDiscussions = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listDiscussions(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing discussions:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getDiscussion = async (req, res) => {
+  try {
+    const { owner, repo, number } = req.params;
+    const result = await GithubService.getDiscussion(owner, repo, number);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting discussion:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createDiscussion = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const { categoryId, title, body } = req.body;
+    const result = await GithubService.createDiscussion(owner, repo, categoryId, title, body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating discussion:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createDiscussionComment = async (req, res) => {
+  try {
+    const { owner, repo, discussionId } = req.params;
+    const { body } = req.body;
+    const result = await GithubService.createDiscussionComment(owner, repo, discussionId, body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating discussion comment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 21. Checks Handlers
+// ==========================================
+export const createCheckRun = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createCheckRun(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating check run:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateCheckRun = async (req, res) => {
+  try {
+    const { owner, repo, checkRunId } = req.params;
+    const result = await GithubService.updateCheckRun(owner, repo, checkRunId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error updating check run:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listCheckRunsForRef = async (req, res) => {
+  try {
+    const { owner, repo, ref } = req.params;
+    const result = await GithubService.listCheckRunsForRef(owner, repo, ref);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing check runs for ref:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCheckSuite = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createCheckSuite(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating check suite:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 22. Deployments & Environments Handlers
+// ==========================================
+export const listDeployments = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listDeployments(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing deployments:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createDeployment = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.createDeployment(owner, repo, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating deployment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createDeploymentStatus = async (req, res) => {
+  try {
+    const { owner, repo, deploymentId } = req.params;
+    const result = await GithubService.createDeploymentStatus(owner, repo, deploymentId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error creating deployment status:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listEnvironments = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listEnvironments(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing environments:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrUpdateEnvironment = async (req, res) => {
+  try {
+    const { owner, repo, environmentName } = req.params;
+    const result = await GithubService.createOrUpdateEnvironment(owner, repo, environmentName, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error setting environment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 23. Code & Secret Scanning Handlers
+// ==========================================
+export const listCodeScanningAlerts = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listCodeScanningAlerts(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing Code Scanning alerts:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getCodeScanningAlert = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const result = await GithubService.getCodeScanningAlert(owner, repo, alertNumber);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting Code Scanning alert:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listSecretScanningAlerts = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.listSecretScanningAlerts(owner, repo, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing Secret Scanning alerts:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getSecretScanningAlert = async (req, res) => {
+  try {
+    const { owner, repo, alertNumber } = req.params;
+    const result = await GithubService.getSecretScanningAlert(owner, repo, alertNumber);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting Secret Scanning alert:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 24. Actions Artifacts & Workflow Jobs Handlers
+// ==========================================
+export const listWorkflowJobs = async (req, res) => {
+  try {
+    const { owner, repo, runId } = req.params;
+    const result = await GithubService.listWorkflowJobs(owner, repo, runId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing workflow jobs:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listWorkflowRunArtifacts = async (req, res) => {
+  try {
+    const { owner, repo, runId } = req.params;
+    const result = await GithubService.listWorkflowRunArtifacts(owner, repo, runId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing workflow artifacts:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const downloadWorkflowArtifact = async (req, res) => {
+  try {
+    const { owner, repo, artifactId } = req.params;
+    const result = await GithubService.downloadWorkflowArtifact(owner, repo, artifactId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error downloading workflow artifact:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getAuthenticatedUser,
   listRepositories,
@@ -994,4 +1271,24 @@ export const GithubController = {
   deleteCodespace,
   listDependabotAlerts,
   getCopilotBillingForUser,
+  listDiscussions,
+  getDiscussion,
+  createDiscussion,
+  createDiscussionComment,
+  createCheckRun,
+  updateCheckRun,
+  listCheckRunsForRef,
+  createCheckSuite,
+  listDeployments,
+  createDeployment,
+  createDeploymentStatus,
+  listEnvironments,
+  createOrUpdateEnvironment,
+  listCodeScanningAlerts,
+  getCodeScanningAlert,
+  listSecretScanningAlerts,
+  getSecretScanningAlert,
+  listWorkflowJobs,
+  listWorkflowRunArtifacts,
+  downloadWorkflowArtifact,
 };

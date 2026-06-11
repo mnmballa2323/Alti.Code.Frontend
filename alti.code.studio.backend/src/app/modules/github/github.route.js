@@ -183,5 +183,35 @@ router.get('/repos/:owner/:repo/dependabot/alerts', GithubController.listDependa
 // 19. Copilot API
 router.get('/copilot/billing/:username', GithubController.getCopilotBillingForUser);
 
+// 20. Discussions API
+router.get('/repos/:owner/:repo/discussions', GithubController.listDiscussions);
+router.get('/repos/:owner/:repo/discussions/:number', GithubController.getDiscussion);
+router.post('/repos/:owner/:repo/discussions', GithubController.createDiscussion);
+router.post('/repos/:owner/:repo/discussions/:discussionId/comments', GithubController.createDiscussionComment);
+
+// 21. Checks API
+router.post('/repos/:owner/:repo/checks/runs', GithubController.createCheckRun);
+router.patch('/repos/:owner/:repo/checks/runs/:checkRunId', GithubController.updateCheckRun);
+router.get('/repos/:owner/:repo/checks/refs/:ref', GithubController.listCheckRunsForRef);
+router.post('/repos/:owner/:repo/checks/suites', GithubController.createCheckSuite);
+
+// 22. Deployments & Environments API
+router.get('/repos/:owner/:repo/deployments', GithubController.listDeployments);
+router.post('/repos/:owner/:repo/deployments', GithubController.createDeployment);
+router.post('/repos/:owner/:repo/deployments/:deploymentId/statuses', GithubController.createDeploymentStatus);
+router.get('/repos/:owner/:repo/environments', GithubController.listEnvironments);
+router.put('/repos/:owner/:repo/environments/:environmentName', GithubController.createOrUpdateEnvironment);
+
+// 23. Code & Secret Scanning API
+router.get('/repos/:owner/:repo/scanning/code/alerts', GithubController.listCodeScanningAlerts);
+router.get('/repos/:owner/:repo/scanning/code/alerts/:alertNumber', GithubController.getCodeScanningAlert);
+router.get('/repos/:owner/:repo/scanning/secret/alerts', GithubController.listSecretScanningAlerts);
+router.get('/repos/:owner/:repo/scanning/secret/alerts/:alertNumber', GithubController.getSecretScanningAlert);
+
+// 24. Actions Artifacts & Workflow Jobs API
+router.get('/repos/:owner/:repo/actions/runs/:runId/jobs', GithubController.listWorkflowJobs);
+router.get('/repos/:owner/:repo/actions/runs/:runId/artifacts', GithubController.listWorkflowRunArtifacts);
+router.get('/repos/:owner/:repo/actions/artifacts/:artifactId/download', GithubController.downloadWorkflowArtifact);
+
 export const GithubRoutes = router;
 export default router;

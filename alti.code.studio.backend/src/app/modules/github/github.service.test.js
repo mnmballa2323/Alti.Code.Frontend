@@ -28,6 +28,11 @@ vi.mock('octokit', () => {
         listWebhooks: vi.fn(),
         createWebhook: vi.fn(),
         deleteWebhook: vi.fn(),
+        listDeployments: vi.fn(),
+        createDeployment: vi.fn(),
+        createDeploymentStatus: vi.fn(),
+        listEnvironments: vi.fn(),
+        createOrUpdateEnvironment: vi.fn(),
       },
       issues: {
         listForRepo: vi.fn(),
@@ -50,6 +55,9 @@ vi.mock('octokit', () => {
         listRepoVariables: vi.fn(),
         createRepoVariable: vi.fn(),
         updateRepoVariable: vi.fn(),
+        listJobsForWorkflowRun: vi.fn(),
+        listWorkflowRunArtifacts: vi.fn(),
+        downloadArtifact: vi.fn(),
       },
       gists: {
         list: vi.fn(),
@@ -91,6 +99,20 @@ vi.mock('octokit', () => {
       },
       copilot: {
         getBillingDetailsForUser: vi.fn(),
+      },
+      checks: {
+        create: vi.fn(),
+        update: vi.fn(),
+        listForRef: vi.fn(),
+        createSuite: vi.fn(),
+      },
+      codeScanning: {
+        listAlertsForRepo: vi.fn(),
+        getAlert: vi.fn(),
+      },
+      secretScanning: {
+        listAlertsForRepo: vi.fn(),
+        getAlert: vi.fn(),
       },
     },
   };
@@ -917,6 +939,331 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       mockOctokit.rest.copilot.getBillingDetailsForUser,
     ).toHaveBeenCalledWith({
       username: 'user1',
+    });
+  });
+
+  // 20. Discussions API (GraphQL-backed)
+  it('should list discussions via GraphQL', async () => {
+    const mockNodes = [{ id: 'disc1', title: 'Disc 1' }];
+    mockOctokit.graphql.mockResolvedValue({
+      repository: { discussions: { nodes: mockNodes } },
+    });
+
+    const result = await GithubService.listDiscussions('owner', 'repo', { per_page: 10 });
+    expect(result).toEqual(mockNodes);
+    expect(mockOctokit.graphql).toHaveBeenCalledWith(
+      expect.stringContaining('query($owner: String!, $repo: String!, $first: Int)'),
+      { owner: 'owner', repo: 'repo', first: 10 }
+    );
+  });
+
+  it('should get discussion by number via GraphQL', async () => {
+    const mockDisc = { id: 'disc1', number: 42, title: 'Disc 1' };
+    mockOctokit.graphql.mockResolvedValue({
+      repository: { discussion: mockDisc },
+    });
+
+    const result = await GithubService.getDiscussion('owner', 'repo', 42);
+    expect(result).toEqual(mockDisc);
+    expect(mockOctokit.graphql).toHaveBeenCalledWith(
+      expect.stringContaining('query($owner: String!, $repo: String!, $number: Int!)'),
+      { owner: 'owner', repo: 'repo', number: 42 }
+    );
+  });
+
+  it('should create discussion via GraphQL', async () => {
+    const mockDisc = { id: 'disc2', number: 43 };
+    // GraphQL mock resolved value for repo ID query first, then the mutation
+    mockOctokit.graphql
+      .mockResolvedValueOnce({ repository: { id: 'repo123' } })
+      .mockResolvedValueOnce({ createDiscussion: { discussion: mockDisc } });
+
+    const result = await GithubService.createDiscussion('owner', 'repo', 'cat123', 'new title', 'new body');
+    expect(result).toEqual(mockDisc);
+    expect(mockOctokit.graphql).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('query($owner: String!, $repo: String!)'),
+      { owner: 'owner', repo: 'repo' }
+    );
+    expect(mockOctokit.graphql).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!)'),
+      { repositoryId: 'repo123', categoryId: 'cat123', title: 'new title', body: 'new body' }
+    );
+  });
+
+  it('should create discussion comment via GraphQL', async () => {
+    const mockComment = { id: 'comment123', body: 'nice post' };
+    mockOctokit.graphql.mockResolvedValue({
+      addDiscussionComment: { comment: mockComment },
+    });
+
+    const result = await GithubService.createDiscussionComment('owner', 'repo', 'disc123', 'nice post');
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.graphql).toHaveBeenCalledWith(
+      expect.stringContaining('mutation($discussionId: ID!, $body: String!)'),
+      { discussionId: 'disc123', body: 'nice post' }
+    );
+  });
+
+  // 21. Checks API
+  it('should create a check run', async () => {
+    const mockCheck = { id: 1, name: 'linter' };
+    mockOctokit.rest.checks.create.mockResolvedValue({ data: mockCheck });
+
+    const checkData = { name: 'linter', head_sha: 'sha123', status: 'completed', conclusion: 'success' };
+    const result = await GithubService.createCheckRun('owner', 'repo', checkData);
+    expect(result).toEqual(mockCheck);
+    expect(mockOctokit.rest.checks.create).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'linter',
+      head_sha: 'sha123',
+      status: 'completed',
+      conclusion: 'success',
+      completed_at: undefined,
+      output: undefined,
+    });
+  });
+
+  it('should update a check run', async () => {
+    const mockCheck = { id: 1, status: 'completed' };
+    mockOctokit.rest.checks.update.mockResolvedValue({ data: mockCheck });
+
+    const checkData = { status: 'completed', conclusion: 'success' };
+    const result = await GithubService.updateCheckRun('owner', 'repo', 101, checkData);
+    expect(result).toEqual(mockCheck);
+    expect(mockOctokit.rest.checks.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      check_run_id: 101,
+      status: 'completed',
+      conclusion: 'success',
+      completed_at: undefined,
+      output: undefined,
+    });
+  });
+
+  it('should list check runs for reference', async () => {
+    const mockRuns = { total_count: 1, check_runs: [{ id: 1 }] };
+    mockOctokit.rest.checks.listForRef.mockResolvedValue({ data: mockRuns });
+
+    const result = await GithubService.listCheckRunsForRef('owner', 'repo', 'main');
+    expect(result).toEqual(mockRuns);
+    expect(mockOctokit.rest.checks.listForRef).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ref: 'main',
+    });
+  });
+
+  it('should create a check suite', async () => {
+    const mockSuite = { id: 2, head_sha: 'sha123' };
+    mockOctokit.rest.checks.createSuite.mockResolvedValue({ data: mockSuite });
+
+    const result = await GithubService.createCheckSuite('owner', 'repo', { head_sha: 'sha123' });
+    expect(result).toEqual(mockSuite);
+    expect(mockOctokit.rest.checks.createSuite).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      head_sha: 'sha123',
+    });
+  });
+
+  // 22. Deployments & Environments API
+  it('should list deployments', async () => {
+    const mockDeployments = [{ id: 1, environment: 'production' }];
+    mockOctokit.rest.repos.listDeployments.mockResolvedValue({ data: mockDeployments });
+
+    const result = await GithubService.listDeployments('owner', 'repo', { environment: 'production' });
+    expect(result).toEqual(mockDeployments);
+    expect(mockOctokit.rest.repos.listDeployments).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      sha: undefined,
+      ref: undefined,
+      task: undefined,
+      environment: 'production',
+      per_page: 30,
+      page: 1,
+    });
+  });
+
+  it('should create deployment', async () => {
+    const mockDeployment = { id: 2 };
+    mockOctokit.rest.repos.createDeployment.mockResolvedValue({ data: mockDeployment });
+
+    const deploymentData = { ref: 'main', environment: 'production', task: 'deploy' };
+    const result = await GithubService.createDeployment('owner', 'repo', deploymentData);
+    expect(result).toEqual(mockDeployment);
+    expect(mockOctokit.rest.repos.createDeployment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ref: 'main',
+      task: 'deploy',
+      auto_merge: undefined,
+      required_contexts: undefined,
+      payload: undefined,
+      environment: 'production',
+      description: undefined,
+      transient_environment: undefined,
+      production_environment: undefined,
+    });
+  });
+
+  it('should create deployment status', async () => {
+    const mockStatus = { id: 3, state: 'success' };
+    mockOctokit.rest.repos.createDeploymentStatus.mockResolvedValue({ data: mockStatus });
+
+    const statusData = { state: 'success', environment: 'production' };
+    const result = await GithubService.createDeploymentStatus('owner', 'repo', 505, statusData);
+    expect(result).toEqual(mockStatus);
+    expect(mockOctokit.rest.repos.createDeploymentStatus).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      deployment_id: 505,
+      state: 'success',
+      target_url: undefined,
+      log_url: undefined,
+      description: undefined,
+      environment: 'production',
+      environment_url: undefined,
+      auto_inactive: undefined,
+    });
+  });
+
+  it('should list environments', async () => {
+    const mockEnvironments = { total_count: 1, environments: [{ id: 1, name: 'production' }] };
+    mockOctokit.rest.repos.listEnvironments.mockResolvedValue({ data: mockEnvironments });
+
+    const result = await GithubService.listEnvironments('owner', 'repo', { page: 2 });
+    expect(result).toEqual(mockEnvironments);
+    expect(mockOctokit.rest.repos.listEnvironments).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      per_page: 30,
+      page: 2,
+    });
+  });
+
+  it('should create or update environment', async () => {
+    const mockEnv = { name: 'production' };
+    mockOctokit.rest.repos.createOrUpdateEnvironment.mockResolvedValue({ data: mockEnv });
+
+    const result = await GithubService.createOrUpdateEnvironment('owner', 'repo', 'production', { wait_timer: 30 });
+    expect(result).toEqual(mockEnv);
+    expect(mockOctokit.rest.repos.createOrUpdateEnvironment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      environment_name: 'production',
+      wait_timer: 30,
+      prevent_self_review: undefined,
+      reviewers: undefined,
+      deployment_branch_policy: undefined,
+    });
+  });
+
+  // 23. Code & Secret Scanning API
+  it('should list code scanning alerts', async () => {
+    const mockAlerts = [{ number: 1, rule: { id: 'xss' } }];
+    mockOctokit.rest.codeScanning.listAlertsForRepo.mockResolvedValue({ data: mockAlerts });
+
+    const result = await GithubService.listCodeScanningAlerts('owner', 'repo', { state: 'open' });
+    expect(result).toEqual(mockAlerts);
+    expect(mockOctokit.rest.codeScanning.listAlertsForRepo).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      state: 'open',
+      severity: undefined,
+      per_page: 30,
+      page: 1,
+    });
+  });
+
+  it('should get code scanning alert details', async () => {
+    const mockAlert = { number: 45, rule: {} };
+    mockOctokit.rest.codeScanning.getAlert.mockResolvedValue({ data: mockAlert });
+
+    const result = await GithubService.getCodeScanningAlert('owner', 'repo', 45);
+    expect(result).toEqual(mockAlert);
+    expect(mockOctokit.rest.codeScanning.getAlert).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      alert_number: 45,
+    });
+  });
+
+  it('should list secret scanning alerts', async () => {
+    const mockAlerts = [{ number: 2, secret_type: 'slack_token' }];
+    mockOctokit.rest.secretScanning.listAlertsForRepo.mockResolvedValue({ data: mockAlerts });
+
+    const result = await GithubService.listSecretScanningAlerts('owner', 'repo', { state: 'open' });
+    expect(result).toEqual(mockAlerts);
+    expect(mockOctokit.rest.secretScanning.listAlertsForRepo).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      state: 'open',
+      secret_type: undefined,
+      per_page: 30,
+      page: 1,
+    });
+  });
+
+  it('should get secret scanning alert details', async () => {
+    const mockAlert = { number: 88, secret_type: 'slack_token' };
+    mockOctokit.rest.secretScanning.getAlert.mockResolvedValue({ data: mockAlert });
+
+    const result = await GithubService.getSecretScanningAlert('owner', 'repo', 88);
+    expect(result).toEqual(mockAlert);
+    expect(mockOctokit.rest.secretScanning.getAlert).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      alert_number: 88,
+    });
+  });
+
+  // 24. Actions Artifacts & Workflow Jobs API
+  it('should list workflow run jobs', async () => {
+    const mockJobs = { jobs: [{ id: 1, name: 'build' }] };
+    mockOctokit.rest.actions.listJobsForWorkflowRun.mockResolvedValue({ data: mockJobs });
+
+    const result = await GithubService.listWorkflowJobs('owner', 'repo', 7788, { page: 3 });
+    expect(result).toEqual(mockJobs);
+    expect(mockOctokit.rest.actions.listJobsForWorkflowRun).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      run_id: 7788,
+      per_page: 30,
+      page: 3,
+    });
+  });
+
+  it('should list workflow run artifacts', async () => {
+    const mockArtifacts = { artifacts: [{ id: 1, name: 'build-zip' }] };
+    mockOctokit.rest.actions.listWorkflowRunArtifacts.mockResolvedValue({ data: mockArtifacts });
+
+    const result = await GithubService.listWorkflowRunArtifacts('owner', 'repo', 7788, { per_page: 10 });
+    expect(result).toEqual(mockArtifacts);
+    expect(mockOctokit.rest.actions.listWorkflowRunArtifacts).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      run_id: 7788,
+      per_page: 10,
+      page: 1,
+    });
+  });
+
+  it('should download workflow artifact', async () => {
+    const mockResponse = { url: 'http://redirect-url-to-zip.com' };
+    mockOctokit.rest.actions.downloadArtifact.mockResolvedValue(mockResponse);
+
+    const result = await GithubService.downloadWorkflowArtifact('owner', 'repo', 12345);
+    expect(result).toEqual({ url: 'http://redirect-url-to-zip.com' });
+    expect(mockOctokit.rest.actions.downloadArtifact).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      artifact_id: 12345,
+      archive_format: 'zip',
     });
   });
 });
