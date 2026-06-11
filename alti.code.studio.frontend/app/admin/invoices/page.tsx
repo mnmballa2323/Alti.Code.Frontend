@@ -36,24 +36,27 @@ export default function InvoicesPage() {
       <div className="space-y-4">
         {mockInvoices.length > 0 ? (
           <div className="w-full">
-            {/* Search Bar */}
-            <div className="relative mb-6">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
-              <input
-                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
-                placeholder="Search..."
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
+            {/* Sticky Header Wrapper */}
+            <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] pb-3 -mt-4 pt-4">
+              {/* Search Bar */}
+              <div className="relative mb-4">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+                <input
+                  className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
+                  placeholder="Search..."
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
 
-            {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm mb-3">
-              <div className="col-span-3">Invoice ID</div>
-              <div className="col-span-3">Month</div>
-              <div className="col-span-4">Amount</div>
-              <div className="col-span-2 flex items-center justify-end pr-4">Action</div>
+              {/* Table Header */}
+              <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
+                <div className="col-span-3">Invoice ID</div>
+                <div className="col-span-3">Month</div>
+                <div className="col-span-4">Amount</div>
+                <div className="col-span-2 flex items-center justify-end pr-4">Action</div>
+              </div>
             </div>
 
             {/* Table Body */}
