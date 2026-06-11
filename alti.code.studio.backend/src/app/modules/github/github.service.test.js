@@ -2292,4 +2292,569 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       org: 'my-org',
     });
   });
+
+  // ==========================================
+  // 42. Custom Properties API
+  // ==========================================
+  it('should create or update custom property for organization', async () => {
+    const mockProperty = { name: 'env', value_type: 'string' };
+    mockOctokit.rest.orgs.createOrUpdateCustomProperty.mockResolvedValue({
+      data: mockProperty,
+    });
+
+    const result = await GithubService.createOrUpdateCustomProperty('my-org', 'env', {
+      value_type: 'string',
+    });
+    expect(result).toEqual(mockProperty);
+    expect(mockOctokit.rest.orgs.createOrUpdateCustomProperty).toHaveBeenCalledWith({
+      org: 'my-org',
+      custom_property_name: 'env',
+      value_type: 'string',
+    });
+  });
+
+  it('should get custom property details', async () => {
+    const mockProperty = { name: 'env', value_type: 'string' };
+    mockOctokit.rest.orgs.getCustomProperty.mockResolvedValue({
+      data: mockProperty,
+    });
+
+    const result = await GithubService.getCustomProperty('my-org', 'env');
+    expect(result).toEqual(mockProperty);
+    expect(mockOctokit.rest.orgs.getCustomProperty).toHaveBeenCalledWith({
+      org: 'my-org',
+      custom_property_name: 'env',
+    });
+  });
+
+  it('should remove custom property definition', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.orgs.removeCustomProperty.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.removeCustomProperty('my-org', 'env');
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.orgs.removeCustomProperty).toHaveBeenCalledWith({
+      org: 'my-org',
+      custom_property_name: 'env',
+    });
+  });
+
+  it('should list organization custom properties', async () => {
+    const mockProperties = [{ name: 'env' }];
+    mockOctokit.rest.orgs.listCustomProperties.mockResolvedValue({
+      data: mockProperties,
+    });
+
+    const result = await GithubService.listCustomProperties('my-org');
+    expect(result).toEqual(mockProperties);
+    expect(mockOctokit.rest.orgs.listCustomProperties).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should set custom properties values for a repository', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.createOrUpdateRepoCustomPropertiesValues('owner', 'repo', [
+      { property_name: 'env', value: 'production' },
+    ]);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.repos.createOrUpdateCustomPropertiesValues).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      properties: [{ property_name: 'env', value: 'production' }],
+    });
+  });
+
+  it('should get custom properties values configured on a repository', async () => {
+    const mockValues = [{ property_name: 'env', value: 'production' }];
+    mockOctokit.rest.repos.getCustomPropertiesValues.mockResolvedValue({
+      data: mockValues,
+    });
+
+    const result = await GithubService.getRepoCustomPropertiesValues('owner', 'repo');
+    expect(result).toEqual(mockValues);
+    expect(mockOctokit.rest.repos.getCustomPropertiesValues).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // ==========================================
+  // 43. Rulesets API
+  // ==========================================
+  it('should list repository rulesets', async () => {
+    const mockRulesets = [{ id: 1, name: 'main-branch-rules' }];
+    mockOctokit.rest.repos.getRepoRulesets.mockResolvedValue({
+      data: mockRulesets,
+    });
+
+    const result = await GithubService.getRepoRulesets('owner', 'repo');
+    expect(result).toEqual(mockRulesets);
+    expect(mockOctokit.rest.repos.getRepoRulesets).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should get repository ruleset details', async () => {
+    const mockRuleset = { id: 1, name: 'main-branch-rules' };
+    mockOctokit.rest.repos.getRepoRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.getRepoRuleset('owner', 'repo', 1);
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.repos.getRepoRuleset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ruleset_id: 1,
+    });
+  });
+
+  it('should create repository ruleset', async () => {
+    const mockRuleset = { id: 1, name: 'main-branch-rules' };
+    mockOctokit.rest.repos.createRepoRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.createRepoRuleset('owner', 'repo', {
+      name: 'main-branch-rules',
+    });
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.repos.createRepoRuleset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      name: 'main-branch-rules',
+    });
+  });
+
+  it('should update repository ruleset', async () => {
+    const mockRuleset = { id: 1, name: 'main-branch-rules-v2' };
+    mockOctokit.rest.repos.updateRepoRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.updateRepoRuleset('owner', 'repo', 1, {
+      name: 'main-branch-rules-v2',
+    });
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.repos.updateRepoRuleset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ruleset_id: 1,
+      name: 'main-branch-rules-v2',
+    });
+  });
+
+  it('should delete repository ruleset', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.repos.deleteRepoRuleset.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteRepoRuleset('owner', 'repo', 1);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.repos.deleteRepoRuleset).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ruleset_id: 1,
+    });
+  });
+
+  it('should list organization rulesets', async () => {
+    const mockRulesets = [{ id: 2, name: 'org-wide-rules' }];
+    mockOctokit.rest.orgs.getOrgRulesets.mockResolvedValue({
+      data: mockRulesets,
+    });
+
+    const result = await GithubService.getOrgRulesets('my-org');
+    expect(result).toEqual(mockRulesets);
+    expect(mockOctokit.rest.orgs.getOrgRulesets).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should get organization ruleset details', async () => {
+    const mockRuleset = { id: 2, name: 'org-wide-rules' };
+    mockOctokit.rest.orgs.getOrgRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.getOrgRuleset('my-org', 2);
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.orgs.getOrgRuleset).toHaveBeenCalledWith({
+      org: 'my-org',
+      ruleset_id: 2,
+    });
+  });
+
+  it('should create organization ruleset', async () => {
+    const mockRuleset = { id: 2, name: 'org-wide-rules' };
+    mockOctokit.rest.orgs.createOrgRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.createOrgRuleset('my-org', {
+      name: 'org-wide-rules',
+    });
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.orgs.createOrgRuleset).toHaveBeenCalledWith({
+      org: 'my-org',
+      name: 'org-wide-rules',
+    });
+  });
+
+  it('should update organization ruleset', async () => {
+    const mockRuleset = { id: 2, name: 'org-wide-rules-v2' };
+    mockOctokit.rest.orgs.updateOrgRuleset.mockResolvedValue({
+      data: mockRuleset,
+    });
+
+    const result = await GithubService.updateOrgRuleset('my-org', 2, {
+      name: 'org-wide-rules-v2',
+    });
+    expect(result).toEqual(mockRuleset);
+    expect(mockOctokit.rest.orgs.updateOrgRuleset).toHaveBeenCalledWith({
+      org: 'my-org',
+      ruleset_id: 2,
+      name: 'org-wide-rules-v2',
+    });
+  });
+
+  it('should delete organization ruleset', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.orgs.deleteOrgRuleset.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteOrgRuleset('my-org', 2);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.orgs.deleteOrgRuleset).toHaveBeenCalledWith({
+      org: 'my-org',
+      ruleset_id: 2,
+    });
+  });
+
+  // ==========================================
+  // 44. Copilot Org Seat Management
+  // ==========================================
+  it('should list Copilot seats for organization', async () => {
+    const mockSeats = { total_seats: 2, seats: [{ assignee: { login: 'user1' } }] };
+    mockOctokit.rest.copilot.listSeatsForOrg.mockResolvedValue({
+      data: mockSeats,
+    });
+
+    const result = await GithubService.listCopilotSeatsForOrg('my-org');
+    expect(result).toEqual(mockSeats);
+    expect(mockOctokit.rest.copilot.listSeatsForOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should add Copilot seats to organization', async () => {
+    const mockResponse = { seats_created: 1 };
+    mockOctokit.rest.copilot.addSeatsToOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.addCopilotSeatsToOrg('my-org', ['user1']);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.copilot.addSeatsToOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      selected_usernames: ['user1'],
+    });
+  });
+
+  it('should remove Copilot seats from organization', async () => {
+    const mockResponse = { seats_cancelled: 1 };
+    mockOctokit.rest.copilot.removeSeatsFromOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.removeCopilotSeatsFromOrg('my-org', ['user1']);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.copilot.removeSeatsFromOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      selected_usernames: ['user1'],
+    });
+  });
+
+  it('should get Copilot seat details for user', async () => {
+    const mockDetails = { assignee: { login: 'user1' }, created_at: '2026-06-11T00:00:00Z' };
+    mockOctokit.rest.copilot.getSeatDetailsForUser.mockResolvedValue({
+      data: mockDetails,
+    });
+
+    const result = await GithubService.getCopilotSeatDetailsForUser('my-org', 'user1');
+    expect(result).toEqual(mockDetails);
+    expect(mockOctokit.rest.copilot.getSeatDetailsForUser).toHaveBeenCalledWith({
+      org: 'my-org',
+      username: 'user1',
+    });
+  });
+
+  // ==========================================
+  // 45. Pull Request Reviews API
+  // ==========================================
+  it('should list pull request reviews', async () => {
+    const mockReviews = [{ id: 10, state: 'APPROVED' }];
+    mockOctokit.rest.pulls.listReviews.mockResolvedValue({
+      data: mockReviews,
+    });
+
+    const result = await GithubService.listPullRequestReviews('owner', 'repo', 5);
+    expect(result).toEqual(mockReviews);
+    expect(mockOctokit.rest.pulls.listReviews).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+    });
+  });
+
+  it('should get specific pull request review', async () => {
+    const mockReview = { id: 10, state: 'APPROVED' };
+    mockOctokit.rest.pulls.getReview.mockResolvedValue({
+      data: mockReview,
+    });
+
+    const result = await GithubService.getPullRequestReview('owner', 'repo', 5, 10);
+    expect(result).toEqual(mockReview);
+    expect(mockOctokit.rest.pulls.getReview).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      review_id: 10,
+    });
+  });
+
+  it('should create pull request review', async () => {
+    const mockReview = { id: 10, state: 'PENDING' };
+    mockOctokit.rest.pulls.createReview.mockResolvedValue({
+      data: mockReview,
+    });
+
+    const result = await GithubService.createPullRequestReview('owner', 'repo', 5, {
+      event: 'COMMENT',
+      body: 'Looks good',
+    });
+    expect(result).toEqual(mockReview);
+    expect(mockOctokit.rest.pulls.createReview).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      event: 'COMMENT',
+      body: 'Looks good',
+    });
+  });
+
+  it('should submit pull request review', async () => {
+    const mockReview = { id: 10, state: 'APPROVED' };
+    mockOctokit.rest.pulls.submitReview.mockResolvedValue({
+      data: mockReview,
+    });
+
+    const result = await GithubService.submitPullRequestReview('owner', 'repo', 5, 10, {
+      event: 'APPROVE',
+      body: 'Approved indeed',
+    });
+    expect(result).toEqual(mockReview);
+    expect(mockOctokit.rest.pulls.submitReview).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      review_id: 10,
+      event: 'APPROVE',
+      body: 'Approved indeed',
+    });
+  });
+
+  it('should dismiss pull request review', async () => {
+    const mockReview = { id: 10, state: 'DISMISSED' };
+    mockOctokit.rest.pulls.dismissReview.mockResolvedValue({
+      data: mockReview,
+    });
+
+    const result = await GithubService.dismissPullRequestReview('owner', 'repo', 5, 10, 'Outdated');
+    expect(result).toEqual(mockReview);
+    expect(mockOctokit.rest.pulls.dismissReview).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      pull_number: 5,
+      review_id: 10,
+      message: 'Outdated',
+    });
+  });
+
+  // ==========================================
+  // 46. Issue Comments API
+  // ==========================================
+  it('should list issue comments', async () => {
+    const mockComments = [{ id: 100, body: 'a comment' }];
+    mockOctokit.rest.issues.listComments.mockResolvedValue({
+      data: mockComments,
+    });
+
+    const result = await GithubService.listIssueComments('owner', 'repo', 12);
+    expect(result).toEqual(mockComments);
+    expect(mockOctokit.rest.issues.listComments).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 12,
+    });
+  });
+
+  it('should get specific issue comment', async () => {
+    const mockComment = { id: 100, body: 'a comment' };
+    mockOctokit.rest.issues.getComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.getIssueComment('owner', 'repo', 100);
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.issues.getComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 100,
+    });
+  });
+
+  it('should create issue comment', async () => {
+    const mockComment = { id: 100, body: 'new comment' };
+    mockOctokit.rest.issues.createComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.createIssueComment('owner', 'repo', 12, 'new comment');
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.issues.createComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      issue_number: 12,
+      body: 'new comment',
+    });
+  });
+
+  it('should update issue comment', async () => {
+    const mockComment = { id: 100, body: 'updated comment' };
+    mockOctokit.rest.issues.updateComment.mockResolvedValue({
+      data: mockComment,
+    });
+
+    const result = await GithubService.updateIssueComment('owner', 'repo', 100, 'updated comment');
+    expect(result).toEqual(mockComment);
+    expect(mockOctokit.rest.issues.updateComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 100,
+      body: 'updated comment',
+    });
+  });
+
+  it('should delete issue comment', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.issues.deleteComment.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteIssueComment('owner', 'repo', 100);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.issues.deleteComment).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      comment_id: 100,
+    });
+  });
+
+  // ==========================================
+  // 47. User Keys & Emails API
+  // ==========================================
+  it('should list emails for authenticated user', async () => {
+    const mockEmails = [{ email: 'user@example.com', primary: true }];
+    mockOctokit.rest.users.listEmailsForAuthenticatedUser.mockResolvedValue({
+      data: mockEmails,
+    });
+
+    const result = await GithubService.listEmailsForAuthenticatedUser();
+    expect(result).toEqual(mockEmails);
+    expect(mockOctokit.rest.users.listEmailsForAuthenticatedUser).toHaveBeenCalled();
+  });
+
+  it('should add emails for authenticated user', async () => {
+    const mockEmails = [{ email: 'new@example.com', primary: false }];
+    mockOctokit.rest.users.addEmailsForAuthenticatedUser.mockResolvedValue({
+      data: mockEmails,
+    });
+
+    const result = await GithubService.addEmailsForAuthenticatedUser(['new@example.com']);
+    expect(result).toEqual(mockEmails);
+    expect(mockOctokit.rest.users.addEmailsForAuthenticatedUser).toHaveBeenCalledWith({
+      emails: ['new@example.com'],
+    });
+  });
+
+  it('should delete emails for authenticated user', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.users.deleteEmailsForAuthenticatedUser.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deleteEmailsForAuthenticatedUser(['new@example.com']);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.users.deleteEmailsForAuthenticatedUser).toHaveBeenCalledWith({
+      emails: ['new@example.com'],
+    });
+  });
+
+  it('should list public SSH keys for authenticated user', async () => {
+    const mockKeys = [{ id: 123, key: 'ssh-rsa AAA...' }];
+    mockOctokit.rest.users.listPublicKeysForAuthenticatedUser.mockResolvedValue({
+      data: mockKeys,
+    });
+
+    const result = await GithubService.listPublicKeysForAuthenticatedUser();
+    expect(result).toEqual(mockKeys);
+    expect(mockOctokit.rest.users.listPublicKeysForAuthenticatedUser).toHaveBeenCalled();
+  });
+
+  it('should add public SSH key for authenticated user', async () => {
+    const mockKey = { id: 123, key: 'ssh-rsa AAA...', title: 'work-mac' };
+    mockOctokit.rest.users.addPublicKeyForAuthenticatedUser.mockResolvedValue({
+      data: mockKey,
+    });
+
+    const result = await GithubService.addPublicKeyForAuthenticatedUser('work-mac', 'ssh-rsa AAA...');
+    expect(result).toEqual(mockKey);
+    expect(mockOctokit.rest.users.addPublicKeyForAuthenticatedUser).toHaveBeenCalledWith({
+      title: 'work-mac',
+      key: 'ssh-rsa AAA...',
+    });
+  });
+
+  it('should delete public SSH key for authenticated user', async () => {
+    const mockResponse = { success: true };
+    mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.deletePublicKeyForAuthenticatedUser(123);
+    expect(result).toEqual(mockResponse);
+    expect(mockOctokit.rest.users.deletePublicKeyForAuthenticatedUser).toHaveBeenCalledWith({
+      key_id: 123,
+    });
+  });
+
+  it('should propagate errors when getCustomProperty fails', async () => {
+    const mockError = new Error('API Failure');
+    mockOctokit.rest.orgs.getCustomProperty.mockRejectedValue(mockError);
+
+    await expect(GithubService.getCustomProperty('my-org', 'env')).rejects.toThrow(
+      'API Failure',
+    );
+  });
 });
