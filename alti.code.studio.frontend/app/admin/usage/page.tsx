@@ -1,13 +1,6 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { 
-  Cpu, 
-  Coins, 
-  Activity, 
-  Clock, 
-  FileText
-} from "lucide-react";
 import { Chip } from "@heroui/react";
 
 // Types for Stock-Market Interactive Charting
@@ -559,6 +552,72 @@ const getYScaleLabels = (ceiling: number) => {
   };
 };
 
+interface ArchivedModelInfo {
+  name: string;
+  version: string;
+  decommissionedDate: string;
+  totalTokens: string;
+  requests: string;
+  cost: number;
+}
+
+const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
+  azure: [
+    {
+      name: "GPT-4",
+      version: "v4.0",
+      decommissionedDate: "March 15, 2026",
+      totalTokens: "125.40M",
+      requests: "245,610",
+      cost: 1254.00
+    },
+    {
+      name: "GPT-3.5-Turbo",
+      version: "v3.5",
+      decommissionedDate: "November 20, 2025",
+      totalTokens: "450.12M",
+      requests: "1,894,320",
+      cost: 900.24
+    }
+  ],
+  aws: [
+    {
+      name: "Claude 3.5 Sonnet",
+      version: "v3.5 (Legacy)",
+      decommissionedDate: "December 10, 2025",
+      totalTokens: "85.20M",
+      requests: "189,450",
+      cost: 255.60
+    },
+    {
+      name: "Claude 3 Haiku",
+      version: "v3.0",
+      decommissionedDate: "August 05, 2025",
+      totalTokens: "320.15M",
+      requests: "2,410,500",
+      cost: 96.04
+    }
+  ],
+  gcp: [
+    {
+      name: "Gemini 1.5 Pro",
+      version: "v1.5",
+      decommissionedDate: "February 28, 2026",
+      totalTokens: "180.45M",
+      requests: "398,210",
+      cost: 360.90
+    },
+    {
+      name: "Gemini 1.0 Pro",
+      version: "v1.0",
+      decommissionedDate: "October 15, 2025",
+      totalTokens: "290.10M",
+      requests: "1,245,900",
+      cost: 290.10
+    }
+  ]
+};
+
 export default function ModelUsagePage() {
   const [activeTab, setActiveTab] = useState<"aws" | "gcp" | "azure">("azure");
   const data = initialUsageData[activeTab];
@@ -568,6 +627,9 @@ export default function ModelUsagePage() {
 
   // Hover states for tooltips (shared active index)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Accordion state for archived & legacy models
+  const [isArchivedExpanded, setIsArchivedExpanded] = useState(false);
 
   // Format tokens display helper
   const formatTokens = (num: number) => {
@@ -940,6 +1002,61 @@ export default function ModelUsagePage() {
               </div>
             );
           })}
+        </div>
+
+        {/* Archived & Legacy Models Section */}
+        <div className="border border-neutral-200 dark:border-neutral-800 rounded-3xl bg-white dark:bg-[#161b22] p-6 space-y-4">
+          <button 
+            onClick={() => setIsArchivedExpanded(!isArchivedExpanded)}
+            className="flex items-center justify-between w-full text-left focus:outline-none group"
+          >
+            <div className="flex items-center">
+              <div>
+                <h4 className="text-sm font-bold text-neutral-850 dark:text-neutral-200">Legacy Models</h4>
+                <p className="text-[10px] text-neutral-400 dark:text-neutral-500">Historical billing data</p>
+              </div>
+            </div>
+            <svg 
+              className={`w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-white transition-transform duration-200 ${isArchivedExpanded ? 'rotate-180' : ''}`} 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {isArchivedExpanded && (
+            <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800 space-y-3">
+              {archivedModelsData[activeTab].map((model) => (
+                <div key={model.name} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-neutral-50/50 dark:bg-neutral-900/40 border border-neutral-200/60 dark:border-neutral-800/60 rounded-2xl gap-4">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-neutral-850 dark:text-neutral-150">{model.name}</span>
+                      <span className="text-[9px] bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 font-medium px-1.5 py-0.5 rounded">
+                        {model.version}
+                      </span>
+                      <span className="text-[8px] bg-red-50 dark:bg-red-950/20 text-red-500 dark:text-red-400 font-bold px-1.5 py-0.5 rounded-full border border-red-100/50 dark:border-red-900/30 uppercase tracking-wider">
+                        Archived
+                      </span>
+                    </div>
+                    <p className="text-[9px] text-neutral-455 dark:text-neutral-500">Decommissioned on {model.decommissionedDate}</p>
+                  </div>
+                  
+                  <div className="flex gap-6 text-right sm:text-right">
+                    <div>
+                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Total Tokens</span>
+                      <span className="text-xs font-mono font-bold text-neutral-750 dark:text-neutral-355">{model.totalTokens}</span>
+                    </div>
+                    <div>
+                      <span className="text-[8px] font-bold text-neutral-400 dark:text-neutral-500 uppercase block">Historical Cost</span>
+                      <span className="text-xs font-mono font-bold text-neutral-800 dark:text-neutral-200">${model.cost.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
