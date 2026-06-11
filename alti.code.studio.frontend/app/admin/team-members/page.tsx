@@ -85,6 +85,21 @@ export default function TeamMembersPage() {
     }
   };
 
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    try {
+      await teamAPI.updateMemberRole(userId, newRole);
+      setMembers((prev) =>
+        prev.map((m) => (m.id === userId ? { ...m, role: newRole } : m))
+      );
+      if (userId === currentUser?.id) {
+        setCurrentUser((prev: any) => ({ ...prev, role: newRole }));
+      }
+    } catch (err) {
+      console.error("Failed to update role:", err);
+      alert("Failed to update member role. Please try again.");
+    }
+  };
+
   const formatRole = (role: string) => {
     if (!role) return "Developer";
     const r = role.toLowerCase();
@@ -214,9 +229,38 @@ export default function TeamMembersPage() {
                           )}
                         </div>
                         <div className="col-span-2 flex items-center justify-between">
-                          <span className="text-neutral-800 dark:text-neutral-200 font-medium">
-                            {formatRole(member.role)}
-                          </span>
+                          <div className="relative flex items-center w-full max-w-[120px]">
+                            <select
+                              disabled={isYou}
+                              className={`appearance-none w-full bg-transparent py-1 text-sm font-semibold text-neutral-850 dark:text-neutral-150 focus:outline-none rounded-lg transition-colors ${
+                                isYou 
+                                  ? "cursor-default pr-0" 
+                                  : "cursor-pointer pr-5 hover:bg-neutral-50 dark:hover:bg-neutral-850/40"
+                              }`}
+                              value={member.role?.toLowerCase() === "admin" ? "owner" : member.role?.toLowerCase() || "developer"}
+                              onChange={(e) => handleRoleChange(member.id, e.target.value)}
+                            >
+                              <option value="owner" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Owner</option>
+                              <option value="manager" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Manager</option>
+                              <option value="developer" className="bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-250">Developer</option>
+                            </select>
+                            {!isYou && (
+                              <svg
+                                className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500 pointer-events-none"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            )}
+                          </div>
                           {!isYou && (
                             <button
                               className="p-1 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded transition-colors ml-auto"

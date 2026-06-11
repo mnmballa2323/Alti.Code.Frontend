@@ -1230,6 +1230,42 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
     }
 });
 
+router.put('/team/members/:userId', rbac(), async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const { role } = req.body;
+        if (!role) return res.status(400).json({ error: 'Role is required' });
+
+        let user = await prisma.user.findFirst({
+            where: { id: userId, tenantId: req.tenantId }
+        });
+        if (!user) return res.status(404).json({ error: 'Member not found in this team' });
+
+        user = await prisma.user.update({
+            where: { id: userId },
+            data: { tenantRole: role.toLowerCase() }
+        });
+        res.json(user);
+    } catch (err) {
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for PUT /team/members/:userId');
+        try {
+            const mockFilePath = path.join(process.cwd(), 'users_mock.json');
+            if (fs.existsSync(mockFilePath)) {
+                const users = JSON.parse(fs.readFileSync(mockFilePath, 'utf8'));
+                const userIndex = users.findIndex(u => u.id === req.params.userId && u.tenantId === req.tenantId);
+                if (userIndex === -1) return res.status(404).json({ error: 'Member not found in this team' });
+
+                users[userIndex].tenantRole = req.body.role.toLowerCase();
+                fs.writeFileSync(mockFilePath, JSON.stringify(users, null, 2), 'utf8');
+                return res.json(users[userIndex]);
+            }
+        } catch (e) {
+            logger.error('Error updating mock user role:', e);
+        }
+        next(err);
+    }
+});
+
 router.put('/team/name', rbac(), async (req, res, next) => {
     try {
         const { name } = req.body;
