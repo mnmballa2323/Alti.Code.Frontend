@@ -30,7 +30,7 @@ export default function GuardrailsPage() {
       type: "GUARDRAIL RULE",
     };
 
-    setGuardrails((prev) => [...prev, newRule]);
+    setGuardrails((prev) => [newRule, ...prev]);
     setNewGuardrail("");
   };
 

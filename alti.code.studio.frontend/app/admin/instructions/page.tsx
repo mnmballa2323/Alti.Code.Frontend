@@ -31,7 +31,7 @@ export default function InstructionsPage() {
       type: "INSTRUCTION RULE",
     };
 
-    setInstructions((prev) => [...prev, newRule]);
+    setInstructions((prev) => [newRule, ...prev]);
     setNewInstruction("");
   };
 
