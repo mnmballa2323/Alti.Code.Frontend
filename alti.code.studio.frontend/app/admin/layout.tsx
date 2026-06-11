@@ -12,7 +12,7 @@ import {
   Activity,
 } from "lucide-react";
 
-import { getUserData } from "@/lib/user";
+import { useAppSelector } from "@/store";
 
 interface SidebarItem {
   label: string;
@@ -40,32 +40,20 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "";
+  const profileFromStore = useAppSelector((state) => state.user.data);
+  const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
-  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (token) {
-          const res = await getUserData(token);
-
-          if (res?.success && res?.data) {
-            setProfile(res.data);
-            if (
-              res.data.role === "admin" ||
-              res.data.role === "ADMIN"
-            ) {
-              setIsAdmin(true);
-            }
-          }
-        }
-      } catch (err) {
-        console.error("Failed verification:", err);
+    if (profile) {
+      if (
+        profile.role === "admin" ||
+        profile.role === "ADMIN"
+      ) {
+        setIsAdmin(true);
       }
-    })();
-  }, []);
+    }
+  }, [profile]);
 
   const renderNavGroup = (title: string, items: SidebarItem[]) => {
     return (

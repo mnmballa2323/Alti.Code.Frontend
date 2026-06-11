@@ -41,10 +41,37 @@ const CardLogo = ({ brand }: { brand: string }) => {
     default:
       return (
         <div className="w-10 h-6.5 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-md flex items-center justify-center select-none shrink-0">
-          <svg viewBox="0 0 32 20" className="w-6 h-4 text-neutral-400 dark:text-neutral-500" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="20" rx="4" fill="currentColor" fillOpacity="0.1" />
-            <rect x="4" y="4" width="7" height="4.5" rx="0.5" fill="currentColor" fillOpacity="0.4" />
-            <line x1="4" y1="12.5" x2="28" y2="12.5" stroke="currentColor" strokeWidth="2.5" strokeOpacity="0.4" />
+          <svg
+            className="w-6 h-4 text-neutral-400 dark:text-neutral-500"
+            fill="none"
+            viewBox="0 0 32 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect
+              fill="currentColor"
+              fillOpacity="0.1"
+              height="20"
+              rx="4"
+              width="32"
+            />
+            <rect
+              fill="currentColor"
+              fillOpacity="0.4"
+              height="4.5"
+              rx="0.5"
+              width="7"
+              x="4"
+              y="4"
+            />
+            <line
+              stroke="currentColor"
+              strokeOpacity="0.4"
+              strokeWidth="2.5"
+              x1="4"
+              x2="28"
+              y1="12.5"
+              y2="12.5"
+            />
           </svg>
         </div>
       );
@@ -53,9 +80,9 @@ const CardLogo = ({ brand }: { brand: string }) => {
   return (
     <div className="w-10 h-6.5 rounded-md overflow-hidden bg-white border border-neutral-200/50 dark:border-neutral-800/80 flex items-center justify-center select-none shrink-0 shadow-sm">
       <img
-        src={logoPath}
         alt={`${brand} logo`}
         className="w-full h-full object-contain p-0.5"
+        src={logoPath}
       />
     </div>
   );
@@ -144,20 +171,35 @@ export default function BillingPage() {
 
   const detectBrand = (num: string) => {
     const clean = num.replace(/\s+/g, "");
+
     if (/^4/.test(clean)) return "Visa";
-    if (/^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-1]|2720)/.test(clean)) return "Mastercard";
+    if (/^(5[1-5]|222[1-9]|22[3-9]|2[3-6]|27[0-1]|2720)/.test(clean))
+      return "Mastercard";
     if (/^3[47]/.test(clean)) return "Amex";
-    if (/^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5])|64[4-9]|65)/.test(clean)) return "Discover";
-    if (/^36/.test(clean) || /^30[0-5]/.test(clean) || /^38/.test(clean)) return "Diners Club";
+    if (
+      /^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5])|64[4-9]|65)/.test(
+        clean,
+      )
+    )
+      return "Discover";
+    if (/^36/.test(clean) || /^30[0-5]/.test(clean) || /^38/.test(clean))
+      return "Diners Club";
     if (/^35(2[8-9]|[3-8][0-9])/.test(clean)) return "JCB";
     if (/^(62|81)/.test(clean)) return "UnionPay";
     if (/^(5018|5020|5038|6304|6759|676[1-3])/.test(clean)) return "Maestro";
-    if (/^(4011|4312|4389|4514|4573|4576|5041|5066|5090|6277|6362|6363|6503|6504|6505|6506|6507|6508|6509|6510|6511|6512|6513|6514|6515|6516)/.test(clean)) return "Elo";
+    if (
+      /^(4011|4312|4389|4514|4573|4576|5041|5066|5090|6277|6362|6363|6503|6504|6505|6506|6507|6508|6509|6510|6511|6512|6513|6514|6515|6516)/.test(
+        clean,
+      )
+    )
+      return "Elo";
+
     return "Card";
   };
 
   const getLast4 = (num: string) => {
     const clean = num.replace(/\s+/g, "");
+
     return clean.slice(-4) || "0000";
   };
 
@@ -199,7 +241,9 @@ export default function BillingPage() {
       setCvc("");
 
       setModalTitle("Card Added");
-      setModalMessage("Your card details have been successfully added to your account!");
+      setModalMessage(
+        "Your card details have been successfully added to your account!",
+      );
       setModalOpen(true);
     }, 1000);
   };
@@ -209,15 +253,18 @@ export default function BillingPage() {
       prev.map((card) => ({
         ...card,
         isPrimary: card.id === id,
-      }))
+      })),
     );
   };
 
   const handleRemoveCard = (id: string) => {
     const card = savedCards.find((c) => c.id === id);
+
     if (card?.isPrimary) {
       setModalTitle("Primary Card");
-      setModalMessage("You cannot remove your primary payment method. Please set another card as primary first.");
+      setModalMessage(
+        "You cannot remove your primary payment method. Please set another card as primary first.",
+      );
       setModalOpen(true);
 
       return;
@@ -228,6 +275,7 @@ export default function BillingPage() {
   const sortedCards = [...savedCards].sort((a, b) => {
     if (a.isPrimary && !b.isPrimary) return -1;
     if (!a.isPrimary && b.isPrimary) return 1;
+
     return 0;
   });
 
@@ -325,15 +373,15 @@ export default function BillingPage() {
                     </span>
                   ) : (
                     <button
-                      onClick={() => handleSetPrimary(card.id)}
                       className="px-2.5 py-1.5 text-xs font-semibold text-neutral-550 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800/40 rounded-lg border border-neutral-200 dark:border-neutral-800 transition-colors cursor-pointer"
+                      onClick={() => handleSetPrimary(card.id)}
                     >
                       Make Primary
                     </button>
                   )}
                   <button
-                    onClick={() => handleRemoveCard(card.id)}
                     className="px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer text-red-500 hover:text-red-650 hover:bg-red-50/50 dark:hover:bg-red-950/15 border-neutral-200 dark:border-neutral-800 hover:border-red-200 dark:hover:border-red-900/40"
+                    onClick={() => handleRemoveCard(card.id)}
                   >
                     Remove
                   </button>
@@ -360,10 +408,10 @@ export default function BillingPage() {
                 {modalMessage}
               </p>
             </div>
-            
+
             {/* Horizontal border line */}
             <div className="border-t border-neutral-100 dark:border-neutral-800" />
-            
+
             {/* Footer Button Split */}
             <div className="flex w-full">
               <button

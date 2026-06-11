@@ -22,7 +22,9 @@ export default function InvitePage() {
     e.preventDefault();
     if (!role) {
       setModalTitle("Role Required");
-      setModalMessage("Please select a role type before sending an invitation.");
+      setModalMessage(
+        "Please select a role type before sending an invitation.",
+      );
       setModalOpen(true);
 
       return;
@@ -55,6 +57,7 @@ export default function InvitePage() {
         err.response?.data?.error ||
         err.message ||
         "Failed to send invitation. Please try again.";
+
       setModalTitle("Invitation Failed");
       setModalMessage(errorMessage);
       setModalOpen(true);
@@ -92,23 +95,23 @@ export default function InvitePage() {
           />
           <div className="relative">
             <button
-              type="button"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
               className={`w-full h-11 bg-white dark:bg-[#161b22] px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 text-sm focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 transition-all flex items-center justify-between cursor-pointer ${
                 role === ""
                   ? "text-neutral-400 dark:text-neutral-500 font-normal"
                   : "text-neutral-800 dark:text-neutral-200 font-normal"
               }`}
               style={{ fontWeight: 400 }}
+              type="button"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
             >
               <span>
                 {role === ""
                   ? "Select Role Type"
                   : role === "developer"
-                  ? "Developer"
-                  : role === "manager"
-                  ? "Manager"
-                  : "Admin"}
+                    ? "Developer"
+                    : role === "manager"
+                      ? "Manager"
+                      : "Admin"}
               </span>
               <svg
                 className={`fill-current h-4 w-4 text-current transition-transform duration-200 ${
@@ -136,17 +139,17 @@ export default function InvitePage() {
                   ].map((item) => (
                     <button
                       key={item.value}
-                      type="button"
-                      onClick={() => {
-                        setRole(item.value);
-                        setDropdownOpen(false);
-                      }}
                       className={`w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${
                         role === item.value
                           ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20"
                           : "text-neutral-650 dark:text-neutral-400"
                       }`}
                       style={{ fontWeight: 400 }}
+                      type="button"
+                      onClick={() => {
+                        setRole(item.value);
+                        setDropdownOpen(false);
+                      }}
                     >
                       {item.label}
                     </button>
@@ -192,10 +195,10 @@ export default function InvitePage() {
                 {modalMessage}
               </p>
             </div>
-            
+
             {/* Horizontal border line */}
             <div className="border-t border-neutral-100 dark:border-neutral-800" />
-            
+
             {/* Footer Button Split */}
             <div className="flex w-full">
               <button

@@ -37,6 +37,16 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     const accessToken = session?.user?.accessToken ?? null;
 
+    if (typeof window !== "undefined") {
+      if (accessToken) {
+        localStorage.setItem("token", accessToken);
+        localStorage.setItem("accessToken", accessToken);
+      } else {
+        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
+      }
+    }
+
     if (accessToken) {
       getUserData(accessToken)
         .then((data) => {

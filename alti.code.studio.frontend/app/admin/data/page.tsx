@@ -27,14 +27,17 @@ export default function KnowledgePage() {
   const addFiles = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
 
-    const newFilesArray: KnowledgeFile[] = Array.from(selectedFiles).map((file) => {
-      const sizeMB = file.size / (1024 * 1024);
-      return {
-        name: file.name,
-        size: `${sizeMB.toFixed(2)} MB`,
-        type: file.name.split(".").pop()?.toUpperCase() || "FILE",
-      };
-    });
+    const newFilesArray: KnowledgeFile[] = Array.from(selectedFiles).map(
+      (file) => {
+        const sizeMB = file.size / (1024 * 1024);
+
+        return {
+          name: file.name,
+          size: `${sizeMB.toFixed(2)} MB`,
+          type: file.name.split(".").pop()?.toUpperCase() || "FILE",
+        };
+      },
+    );
 
     setFiles((prev) => [...newFilesArray, ...prev]);
   };
@@ -84,28 +87,28 @@ export default function KnowledgePage() {
       <div className="space-y-6">
         {/* Unified Clickable Upload Bar */}
         <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          onClick={triggerFileSelect}
           className={`w-full h-11 flex items-stretch bg-white dark:bg-[#161b22] rounded-xl border transition-all cursor-pointer overflow-hidden group ${
             isDragging
               ? "border-neutral-400 dark:border-neutral-600 bg-neutral-50/50 dark:bg-neutral-800/20"
               : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700"
           }`}
+          onClick={triggerFileSelect}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
         >
           <input
-            type="file"
             ref={fileInputRef}
-            className="hidden"
             multiple
+            className="hidden"
+            type="file"
             onChange={handleFileChange}
           />
           {/* Left side text/placeholder */}
           <div className="flex-1 px-4 text-sm text-neutral-400 dark:text-neutral-500 select-none truncate font-medium flex items-center">
             Click here to attach files...
           </div>
-          
+
           {/* Right side upload button - directly adjacent with no gap */}
           <div className="px-5 bg-neutral-900 dark:bg-neutral-100 group-hover:bg-neutral-800 dark:group-hover:bg-white text-white dark:text-neutral-900 font-semibold text-sm flex items-center gap-2 transition-all shrink-0 select-none">
             <Upload className="w-4 h-4" />
@@ -181,10 +184,10 @@ export default function KnowledgePage() {
                 </span>
               </p>
             </div>
-            
+
             {/* Horizontal border line */}
             <div className="border-t border-neutral-100 dark:border-neutral-800" />
-            
+
             {/* Footer Buttons Split by Vertical Line */}
             <div className="flex w-full">
               <button
@@ -196,10 +199,10 @@ export default function KnowledgePage() {
               >
                 Cancel
               </button>
-              
+
               {/* Vertical divider line */}
               <div className="border-r border-neutral-100 dark:border-neutral-800" />
-              
+
               <button
                 className="flex-1 py-3 text-sm font-medium text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
                 onClick={confirmDelete}

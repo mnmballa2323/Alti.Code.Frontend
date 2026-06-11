@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@heroui/react";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import toast from "react-hot-toast";

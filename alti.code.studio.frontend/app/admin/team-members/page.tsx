@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { Trash2, Loader2, Search } from "lucide-react";
 
 import { teamAPI } from "@/lib/enterprise-api";
-import { getUserData } from "@/lib/user";
+import { useSession } from "next-auth/react";
+import { useAppSelector } from "@/store";
 
 interface Member {
   id: string;
@@ -15,35 +16,50 @@ interface Member {
 
 export default function TeamMembersPage() {
   const [members, setMembers] = useState<Member[]>([
-    { id: "2", name: "Ada Lovelace", email: "ada.lovelace@alticodestudio.com", role: "admin" },
-    { id: "4", name: "Alan Turing", email: "alan.turing@alticodestudio.com", role: "manager" },
-    { id: "3", name: "Grace Hopper", email: "grace.hopper@alticodestudio.com", role: "developer" },
-    { id: "1", name: "Jules Verne", email: "jules.verne@alticodestudio.com", role: "developer" }
+    {
+      id: "2",
+      name: "Ada Lovelace",
+      email: "ada.lovelace@alticodestudio.com",
+      role: "admin",
+    },
+    {
+      id: "4",
+      name: "Alan Turing",
+      email: "alan.turing@alticodestudio.com",
+      role: "manager",
+    },
+    {
+      id: "3",
+      name: "Grace Hopper",
+      email: "grace.hopper@alticodestudio.com",
+      role: "developer",
+    },
+    {
+      id: "1",
+      name: "Jules Verne",
+      email: "jules.verne@alticodestudio.com",
+      role: "developer",
+    },
   ]);
+  const { status } = useSession();
+  const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
   const [currentUser, setCurrentUser] = useState<any>({
     id: "admin-user",
     name: "Platform Admin",
     email: "admin@alticodestudio.com",
-    role: "admin"
+    role: "admin",
   });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [memberToDelete, setMemberToDelete] = useState<{ id: string; email: string } | null>(null);
+  const [memberToDelete, setMemberToDelete] = useState<{
+    id: string;
+    email: string;
+  } | null>(null);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
 
   const fetchMembers = async () => {
     try {
-      const token = localStorage.getItem("token") || "";
-
-      if (token) {
-        const userRes = await getUserData(token);
-
-        if (userRes?.success && userRes?.data) {
-          setCurrentUser(userRes.data);
-        }
-      }
-
       const res = await teamAPI.members();
 
       if (res && res.members && res.members.length > 0) {
@@ -57,12 +73,23 @@ export default function TeamMembersPage() {
   };
 
   useEffect(() => {
-    fetchMembers();
-  }, []);
+    if (status === "authenticated") {
+      fetchMembers();
+    } else if (status === "unauthenticated") {
+      setLoading(false);
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (currentUserFromStore && currentUserFromStore.email) {
+      setCurrentUser(currentUserFromStore);
+    }
+  }, [currentUserFromStore]);
 
   const handleRemove = (id: string, email: string) => {
     if (id === currentUser?.id) {
       alert("You cannot remove yourself from the workspace.");
+
       return;
     }
     setMemberToDelete({ id, email });
@@ -90,7 +117,7 @@ export default function TeamMembersPage() {
     try {
       await teamAPI.updateMemberRole(userId, newRole);
       setMembers((prev) =>
-        prev.map((m) => (m.id === userId ? { ...m, role: newRole } : m))
+        prev.map((m) => (m.id === userId ? { ...m, role: newRole } : m)),
       );
       if (userId === currentUser?.id) {
         setCurrentUser((prev: any) => ({ ...prev, role: newRole }));
@@ -131,10 +158,12 @@ export default function TeamMembersPage() {
   const getMemberFirstName = (member: Member) => {
     if (member.name) {
       const parts = member.name.trim().split(/\s+/);
+
       if (parts[0]) return parts[0];
     }
     const emailPrefix = member.email.split("@")[0] || "";
     const parts = emailPrefix.split(/[\._\-]/);
+
     return parts[0] || "";
   };
 
@@ -143,12 +172,16 @@ export default function TeamMembersPage() {
     const fullName = member.name ? member.name.toLowerCase() : "";
     const email = member.email ? member.email.toLowerCase() : "";
     const role = member.role ? member.role.toLowerCase() : "";
-    return fullName.includes(query) || email.includes(query) || role.includes(query);
+
+    return (
+      fullName.includes(query) || email.includes(query) || role.includes(query)
+    );
   });
 
   const sortedFilteredMembers = [...filteredMembers].sort((a, b) => {
     const nameA = getMemberFirstName(a).toLowerCase();
     const nameB = getMemberFirstName(b).toLowerCase();
+
     return nameA.localeCompare(nameB);
   });
 
@@ -197,15 +230,25 @@ export default function TeamMembersPage() {
                     // Try to split name into first and last, or extract from email if not set
                     let firstName = "";
                     let lastName = "";
+
                     if (member.name) {
                       const nameParts = member.name.trim().split(/\s+/);
+
                       firstName = nameParts[0] || "";
                       lastName = nameParts.slice(1).join(" ") || "";
                     } else {
                       const emailPrefix = member.email.split("@")[0] || "";
                       const parts = emailPrefix.split(/[\._\-]/);
-                      firstName = parts[0] ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1) : "";
-                      lastName = parts.slice(1).join(" ") ? parts.slice(1).map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(" ") : "";
+
+                      firstName = parts[0]
+                        ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
+                        : "";
+                      lastName = parts.slice(1).join(" ")
+                        ? parts
+                            .slice(1)
+                            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+                            .join(" ")
+                        : "";
                     }
 
                     return (
@@ -232,21 +275,32 @@ export default function TeamMembersPage() {
                         <div className="col-span-2 flex items-center justify-between">
                           <div className="relative flex items-center w-full max-w-[120px]">
                             {isYou ? (
-                              <span className="text-sm text-neutral-800 dark:text-neutral-200 py-1" style={{ fontWeight: 400 }}>
+                              <span
+                                className="text-sm text-neutral-800 dark:text-neutral-200 py-1"
+                                style={{ fontWeight: 400 }}
+                              >
                                 Admin
                               </span>
                             ) : (
                               <>
                                 <button
-                                  type="button"
-                                  onClick={() => setOpenDropdownId(openDropdownId === member.id ? null : member.id)}
                                   className="w-full flex items-center justify-between bg-transparent px-2 py-1 text-sm text-neutral-800 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 cursor-pointer"
                                   style={{ fontWeight: 400 }}
+                                  type="button"
+                                  onClick={() =>
+                                    setOpenDropdownId(
+                                      openDropdownId === member.id
+                                        ? null
+                                        : member.id,
+                                    )
+                                  }
                                 >
                                   <span>{formatRole(member.role)}</span>
                                   <svg
                                     className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${
-                                      openDropdownId === member.id ? "rotate-180" : ""
+                                      openDropdownId === member.id
+                                        ? "rotate-180"
+                                        : ""
                                     }`}
                                     fill="none"
                                     stroke="currentColor"
@@ -254,10 +308,10 @@ export default function TeamMembersPage() {
                                     xmlns="http://www.w3.org/2000/svg"
                                   >
                                     <path
+                                      d="M19 9l-7 7-7-7"
                                       strokeLinecap="round"
                                       strokeLinejoin="round"
                                       strokeWidth="2"
-                                      d="M19 9l-7 7-7-7"
                                     />
                                   </svg>
                                 </button>
@@ -265,30 +319,32 @@ export default function TeamMembersPage() {
                                 {openDropdownId === member.id && (
                                   <>
                                     {/* Overlay to close the dropdown */}
-                                    <div 
-                                      className="fixed inset-0 z-40" 
+                                    <div
+                                      className="fixed inset-0 z-40"
                                       onClick={() => setOpenDropdownId(null)}
                                     />
                                     {/* Dropdown Options Box */}
                                     <div className="absolute top-full left-0 mt-1.5 w-full min-w-[120px] bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-100 outline-none focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0">
-                                      {["admin", "manager", "developer"].map((r) => (
-                                        <button
-                                          key={r}
-                                          type="button"
-                                          onClick={() => {
-                                            handleRoleChange(member.id, r);
-                                            setOpenDropdownId(null);
-                                          }}
-                                          className={`w-full text-left px-3 py-2 text-xs transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${
-                                            member.role?.toLowerCase() === r
-                                              ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20"
-                                              : "text-neutral-650 dark:text-neutral-400"
-                                          }`}
-                                          style={{ fontWeight: 400 }}
-                                        >
-                                          {formatRole(r)}
-                                        </button>
-                                      ))}
+                                      {["admin", "manager", "developer"].map(
+                                        (r) => (
+                                          <button
+                                            key={r}
+                                            className={`w-full text-left px-3 py-2 text-xs transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/40 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${
+                                              member.role?.toLowerCase() === r
+                                                ? "text-neutral-900 dark:text-white bg-neutral-50/60 dark:bg-neutral-800/20"
+                                                : "text-neutral-650 dark:text-neutral-400"
+                                            }`}
+                                            style={{ fontWeight: 400 }}
+                                            type="button"
+                                            onClick={() => {
+                                              handleRoleChange(member.id, r);
+                                              setOpenDropdownId(null);
+                                            }}
+                                          >
+                                            {formatRole(r)}
+                                          </button>
+                                        ),
+                                      )}
                                     </div>
                                   </>
                                 )}
@@ -339,10 +395,10 @@ export default function TeamMembersPage() {
                 </span>
               </p>
             </div>
-            
+
             {/* Horizontal border line */}
             <div className="border-t border-neutral-100 dark:border-neutral-800" />
-            
+
             {/* Footer Buttons Split by Vertical Line */}
             <div className="flex w-full">
               <button
@@ -354,10 +410,10 @@ export default function TeamMembersPage() {
               >
                 Cancel
               </button>
-              
+
               {/* Vertical divider line */}
               <div className="border-r border-neutral-100 dark:border-neutral-800" />
-              
+
               <button
                 className="flex-1 py-3 text-sm font-medium text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
                 onClick={confirmDelete}

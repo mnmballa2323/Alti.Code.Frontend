@@ -15,8 +15,6 @@ import {
 
 import { SOCKET_URL } from "@/lib/config";
 
-
-
 interface AuditLog {
   _id: string;
   timestamp: string;
@@ -44,7 +42,8 @@ const mockLogs: AuditLog[] = [
     action: "GUARDRAIL_VIOLATION_BLOCK",
     status: "DENIED",
     ipAddress: "10.0.4.88",
-    metadata: '{"rule_id":"gr_04","agent_id":"agent_cli_99","input_snippet":"rm -rf /"}',
+    metadata:
+      '{"rule_id":"gr_04","agent_id":"agent_cli_99","input_snippet":"rm -rf /"}',
   },
   {
     _id: "log_03",
@@ -74,7 +73,6 @@ const mockLogs: AuditLog[] = [
     metadata: '{"backup_type":"daily","error":"disk space exceeded on vault"}',
   },
 ];
-
 
 const AuditPage = () => {
   const { data: session } = useSession();
@@ -108,15 +106,20 @@ const AuditPage = () => {
         withCredentials: true, // Ensure cookies/auth headers are sent
       });
 
-      if (response.data.success && response.data.data && response.data.data.length > 0) {
+      if (
+        response.data.success &&
+        response.data.data &&
+        response.data.data.length > 0
+      ) {
         setLogs(response.data.data);
         setTotalPages(response.data.meta.totalPages);
       } else {
         const filtered = mockLogs.filter(
           (log) =>
             log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            log.actor.toLowerCase().includes(searchTerm.toLowerCase())
+            log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
         );
+
         setLogs(filtered);
         setTotalPages(1);
       }
@@ -125,8 +128,9 @@ const AuditPage = () => {
       const filtered = mockLogs.filter(
         (log) =>
           log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          log.actor.toLowerCase().includes(searchTerm.toLowerCase())
+          log.actor.toLowerCase().includes(searchTerm.toLowerCase()),
       );
+
       setLogs(filtered);
       setTotalPages(1);
     } finally {
@@ -175,9 +179,11 @@ const AuditPage = () => {
           </div>
 
           {/* Table Header */}
-          <div 
+          <div
             className="grid gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-450 dark:text-neutral-500 tracking-wider uppercase shadow-sm"
-            style={{ gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr" }}
+            style={{
+              gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+            }}
           >
             <div>Date</div>
             <div>Time</div>
@@ -216,9 +222,12 @@ const AuditPage = () => {
                     }`}
                     onClick={() => log.metadata && toggleExpand(log._id)}
                   >
-                    <div 
+                    <div
                       className="grid gap-4 items-center text-sm"
-                      style={{ gridTemplateColumns: "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr" }}
+                      style={{
+                        gridTemplateColumns:
+                          "90px 120px 2.5fr 2.2fr 1.1fr 1.5fr",
+                      }}
                     >
                       <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                         {logDate}
@@ -226,15 +235,23 @@ const AuditPage = () => {
                       <div className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
                         {logTime}
                       </div>
-                      <div className="font-medium text-neutral-800 dark:text-neutral-200 truncate" title={log.actor}>
+                      <div
+                        className="font-medium text-neutral-800 dark:text-neutral-200 truncate"
+                        title={log.actor}
+                      >
                         {log.actor}
                       </div>
-                      <div className="text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate" title={log.action}>
+                      <div
+                        className="text-neutral-800 dark:text-neutral-200 font-mono text-xs truncate"
+                        title={log.action}
+                      >
                         {log.action}
                       </div>
                       <div className="flex items-center gap-2">
                         {getStatusIcon(log.status)}
-                        <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{log.status}</span>
+                        <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                          {log.status}
+                        </span>
                       </div>
                       <div className="flex items-center justify-end gap-2 text-right">
                         <span className="font-mono text-xs text-neutral-600 dark:text-neutral-400">
@@ -266,8 +283,8 @@ const AuditPage = () => {
             {totalPages > 1 && (
               <div className="flex items-center justify-end space-x-2 py-4">
                 <button
-                  disabled={page === 1 || loading}
                   className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                  disabled={page === 1 || loading}
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                 >
                   Previous
@@ -276,8 +293,8 @@ const AuditPage = () => {
                   Page {page} of {totalPages}
                 </span>
                 <button
-                  disabled={page === totalPages || loading}
                   className="h-9 px-4 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-850 border border-neutral-200 dark:border-neutral-800 disabled:opacity-50 disabled:pointer-events-none text-neutral-800 dark:text-neutral-200 font-semibold rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1 cursor-pointer"
+                  disabled={page === totalPages || loading}
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 >
                   Next
@@ -292,4 +309,3 @@ const AuditPage = () => {
 };
 
 export default AuditPage;
-
