@@ -129,6 +129,12 @@ export default function BillingPage() {
     setSavedCards((prev) => prev.filter((card) => card.id !== id));
   };
 
+  const sortedCards = [...savedCards].sort((a, b) => {
+    if (a.isPrimary && !b.isPrimary) return -1;
+    if (!a.isPrimary && b.isPrimary) return 1;
+    return 0;
+  });
+
   return (
     <div className="w-full flex flex-col h-full justify-start pt-6 space-y-10">
       <form className="space-y-6" onSubmit={handleSaveCard}>
@@ -196,7 +202,7 @@ export default function BillingPage() {
             </div>
 
             {/* List */}
-            {savedCards.map((card) => (
+            {sortedCards.map((card) => (
               <div
                 key={card.id}
                 className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-300 dark:hover:border-neutral-700"
