@@ -118,6 +118,14 @@ export default function BillingPage() {
   };
 
   const handleRemoveCard = (id: string) => {
+    const card = savedCards.find((c) => c.id === id);
+    if (card?.isPrimary) {
+      setModalTitle("Primary Card");
+      setModalMessage("You cannot remove your primary payment method. Please set another card as primary first.");
+      setModalOpen(true);
+
+      return;
+    }
     setSavedCards((prev) => prev.filter((card) => card.id !== id));
   };
 
@@ -181,7 +189,7 @@ export default function BillingPage() {
           <div className="space-y-3">
             {/* Header row */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-              <div className="col-span-4">Card / Brand</div>
+              <div className="col-span-4">Card Brand</div>
               <div className="col-span-3">Cardholder Name</div>
               <div className="col-span-2">Expires</div>
               <div className="col-span-3 flex justify-end pr-2">Actions</div>
@@ -235,12 +243,7 @@ export default function BillingPage() {
                   )}
                   <button
                     onClick={() => handleRemoveCard(card.id)}
-                    className={`px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer ${
-                      card.isPrimary
-                        ? "text-neutral-350 dark:text-neutral-600 border-neutral-100 dark:border-neutral-850 cursor-not-allowed"
-                        : "text-red-500 hover:text-red-650 hover:bg-red-50/50 dark:hover:bg-red-950/15 border-neutral-200 dark:border-neutral-800 hover:border-red-200 dark:hover:border-red-900/40"
-                    }`}
-                    disabled={card.isPrimary}
+                    className="px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors border cursor-pointer text-red-500 hover:text-red-650 hover:bg-red-50/50 dark:hover:bg-red-950/15 border-neutral-200 dark:border-neutral-800 hover:border-red-200 dark:hover:border-red-900/40"
                   >
                     Remove
                   </button>
