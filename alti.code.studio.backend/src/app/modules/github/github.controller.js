@@ -1556,6 +1556,279 @@ export const removeRepoInteractionLimits = async (req, res) => {
   }
 };
 
+// ==========================================
+// 30. Code Security (Advisories & Configurations) Handlers
+// ==========================================
+export const listGlobalAdvisories = async (req, res) => {
+  try {
+    const result = await GithubService.listGlobalAdvisories(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing global advisories:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRepositoryAdvisory = async (req, res) => {
+  try {
+    const { owner, repo, ghsaId } = req.params;
+    const result = await GithubService.getRepositoryAdvisory(
+      owner,
+      repo,
+      ghsaId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting repository advisory:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgSecurityConfigurations = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOrgSecurityConfigurations(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting org security configurations:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 31. Dependency Graph (BOM / Manifests) Handlers
+// ==========================================
+export const exportSbom = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.exportSbom(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error exporting SBOM:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 32. Packages (Registries & Metadata) Handlers
+// ==========================================
+export const listOrgPackages = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.listOrgPackages(org, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error listing org packages:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPackageVersions = async (req, res) => {
+  try {
+    const { org, packageName } = req.params;
+    const result = await GithubService.getPackageVersions(org, packageName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting package versions:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 33. OIDC (Actions Custom Claims) Handlers
+// ==========================================
+export const getOidcCustomSubTemplateForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getOidcCustomSubTemplateForOrg(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting OIDC custom sub template:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateOidcCustomSubTemplateForOrg = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.updateOidcCustomSubTemplateForOrg(
+      org,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error updating OIDC custom sub template:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 34. Migrations (Import/Export) Handlers
+// ==========================================
+export const startOrgMigration = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { repositories } = req.body;
+    const result = await GithubService.startOrgMigration(
+      org,
+      repositories,
+      req.body,
+    );
+    res.status(httpStatus.ACCEPTED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error starting org migration:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getOrgMigrationStatus = async (req, res) => {
+  try {
+    const { org, migrationId } = req.params;
+    const result = await GithubService.getOrgMigrationStatus(org, migrationId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting org migration status:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 35. Emojis, Gitignore templates, Licenses Handlers
+// ==========================================
+export const getEmojis = async (req, res) => {
+  try {
+    const result = await GithubService.getEmojis();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting emojis:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGitignoreTemplates = async (req, res) => {
+  try {
+    const result = await GithubService.getGitignoreTemplates();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting gitignore templates:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGitignoreTemplate = async (req, res) => {
+  try {
+    const { name } = req.params;
+    const result = await GithubService.getGitignoreTemplate(name);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting gitignore template:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRepoLicense = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoLicense(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting repository license:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 36. Rate Limit, Meta, and Markdown Handlers
+// ==========================================
+export const getRateLimit = async (req, res) => {
+  try {
+    const result = await GithubService.getRateLimit();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting rate limit:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMetaServerInfo = async (req, res) => {
+  try {
+    const result = await GithubService.getMetaServerInfo();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error getting server metadata:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const renderMarkdown = async (req, res) => {
+  try {
+    const { text } = req.body;
+    const result = await GithubService.renderMarkdown(text, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitHub Controller] Error rendering markdown:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getAuthenticatedUser,
   listRepositories,
@@ -1653,4 +1926,21 @@ export const GithubController = {
   getRepoInteractionLimits,
   setRepoInteractionLimits,
   removeRepoInteractionLimits,
+  listGlobalAdvisories,
+  getRepositoryAdvisory,
+  getOrgSecurityConfigurations,
+  exportSbom,
+  listOrgPackages,
+  getPackageVersions,
+  getOidcCustomSubTemplateForOrg,
+  updateOidcCustomSubTemplateForOrg,
+  startOrgMigration,
+  getOrgMigrationStatus,
+  getEmojis,
+  getGitignoreTemplates,
+  getGitignoreTemplate,
+  getRepoLicense,
+  getRateLimit,
+  getMetaServerInfo,
+  renderMarkdown,
 };

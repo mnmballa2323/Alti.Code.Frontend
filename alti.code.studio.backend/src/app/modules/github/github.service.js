@@ -1956,4 +1956,296 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 30. Code Security (Advisories & Configurations)
+  // ==========================================
+  async listGlobalAdvisories(params = {}) {
+    logger.info('🐙 [GitHub Service] Listing global security advisories');
+    try {
+      const { data } =
+        await octokit.rest.securityAdvisories.listGlobalAdvisories({
+          per_page: params.per_page || 30,
+          page: params.page || 1,
+          severity: params.severity,
+          cve: params.cve,
+          ghsa_id: params.ghsa_id,
+        });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list global advisories:', error);
+      throw error;
+    }
+  },
+
+  async getRepositoryAdvisory(owner, repo, ghsaId) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching repository advisory ${ghsaId} for ${owner}/${repo}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.securityAdvisories.getRepositoryAdvisory({
+          owner,
+          repo,
+          ghsa_id: ghsaId,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get repository advisory ${ghsaId} for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getOrgSecurityConfigurations(org) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching security configurations for org: ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.codeSecurity.getConfigurationsForOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch security configurations for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 31. Dependency Graph (BOM / Manifests)
+  // ==========================================
+  async exportSbom(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Exporting SBOM for repository ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.dependencyGraph.exportSbom({
+        owner,
+        repo,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to export SBOM for repository ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 32. Packages (Registries & Metadata)
+  // ==========================================
+  async listOrgPackages(org, params = {}) {
+    logger.info(`🐙 [GitHub Service] Listing packages for organization ${org}`);
+    try {
+      const { data } = await octokit.rest.packages.listPackagesForOrganization({
+        org,
+        package_type: params.package_type,
+        visibility: params.visibility,
+        per_page: params.per_page || 30,
+        page: params.page || 1,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list packages for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getPackageVersions(org, packageName) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching package versions for ${packageName} under org ${org}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.packages.getAllPackageVersionsForPackageOwnedByOrg({
+          org,
+          package_name: packageName,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch versions for package ${packageName} under org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 33. OIDC (Actions Custom Claims)
+  // ==========================================
+  async getOidcCustomSubTemplateForOrg(org) {
+    logger.info(
+      `🐙 [GitHub Service] Getting OIDC custom sub template for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.oidc.getOidcCustomSubTemplateForOrg({
+        org,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get OIDC sub template for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async updateOidcCustomSubTemplateForOrg(org, template = {}) {
+    logger.info(
+      `🐙 [GitHub Service] Updating OIDC custom sub template for org ${org}`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.oidc.updateOidcCustomSubTemplateForOrg({
+          org,
+          include_claim_keys: template.include_claim_keys,
+        });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update OIDC sub template for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 34. Migrations (Import/Export)
+  // ==========================================
+  async startOrgMigration(org, repositories, params = {}) {
+    logger.info(`🐙 [GitHub Service] Starting migration for org ${org}`);
+    try {
+      const { data } = await octokit.rest.migrations.startForOrg({
+        org,
+        repositories,
+        lock_repositories: params.lock_repositories,
+        exclude_attachments: params.exclude_attachments,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to start migration for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async getOrgMigrationStatus(org, migrationId) {
+    logger.info(
+      `🐙 [GitHub Service] Getting status of migration #${migrationId} for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.migrations.getStatusForOrg({
+        org,
+        migration_id: parseInt(migrationId, 10),
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get migration #${migrationId} status for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 35. Emojis, Gitignore templates, Licenses
+  // ==========================================
+  async getEmojis() {
+    logger.info('🐙 [GitHub Service] Fetching emojis');
+    try {
+      const { data } = await octokit.rest.emojis.get();
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch emojis:', error);
+      throw error;
+    }
+  },
+
+  async getGitignoreTemplates() {
+    logger.info('🐙 [GitHub Service] Fetching gitignore templates');
+    try {
+      const { data } = await octokit.rest.gitignore.getAllTemplates();
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch gitignore templates:', error);
+      throw error;
+    }
+  },
+
+  async getGitignoreTemplate(name) {
+    logger.info(`🐙 [GitHub Service] Fetching gitignore template: ${name}`);
+    try {
+      const { data } = await octokit.rest.gitignore.getTemplate({
+        name,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get gitignore template ${name}:`, error);
+      throw error;
+    }
+  },
+
+  async getRepoLicense(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching repository license for ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.licenses.getForRepo({
+        owner,
+        repo,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get license for repository ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 36. Rate Limit, Meta, and Markdown
+  // ==========================================
+  async getRateLimit() {
+    logger.info('🐙 [GitHub Service] Fetching rate limit status');
+    try {
+      const { data } = await octokit.rest.rateLimit.get();
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch rate limit status:', error);
+      throw error;
+    }
+  },
+
+  async getMetaServerInfo() {
+    logger.info('🐙 [GitHub Service] Fetching server metadata');
+    try {
+      const { data } = await octokit.rest.meta.get();
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch server metadata:', error);
+      throw error;
+    }
+  },
+
+  async renderMarkdown(text, params = {}) {
+    logger.info('🐙 [GitHub Service] Rendering markdown text');
+    try {
+      const { data } = await octokit.rest.markdown.render({
+        text,
+        mode: params.mode,
+        context: params.context,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to render markdown text:', error);
+      throw error;
+    }
+  },
 };

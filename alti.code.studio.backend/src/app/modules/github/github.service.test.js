@@ -137,6 +137,47 @@ vi.mock('octokit', () => {
         setRestrictionsForRepo: vi.fn(),
         removeRestrictionsForRepo: vi.fn(),
       },
+      securityAdvisories: {
+        listGlobalAdvisories: vi.fn(),
+        getRepositoryAdvisory: vi.fn(),
+      },
+      codeSecurity: {
+        getConfigurationsForOrg: vi.fn(),
+      },
+      dependencyGraph: {
+        exportSbom: vi.fn(),
+      },
+      packages: {
+        listPackagesForOrganization: vi.fn(),
+        getAllPackageVersionsForPackageOwnedByOrg: vi.fn(),
+      },
+      oidc: {
+        getOidcCustomSubTemplateForOrg: vi.fn(),
+        updateOidcCustomSubTemplateForOrg: vi.fn(),
+      },
+      migrations: {
+        startForOrg: vi.fn(),
+        getStatusForOrg: vi.fn(),
+      },
+      emojis: {
+        get: vi.fn(),
+      },
+      gitignore: {
+        getAllTemplates: vi.fn(),
+        getTemplate: vi.fn(),
+      },
+      licenses: {
+        getForRepo: vi.fn(),
+      },
+      rateLimit: {
+        get: vi.fn(),
+      },
+      meta: {
+        get: vi.fn(),
+      },
+      markdown: {
+        render: vi.fn(),
+      },
     },
   };
   globalThis.__mockOctokit = mockOctokitInstance;
@@ -1718,5 +1759,282 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     await expect(GithubService.getEnterpriseAuditLog('my-ent')).rejects.toThrow(
       'API Rate Limit Exceeded',
     );
+  });
+
+  // ==========================================
+  // 30. Code Security (Advisories & Configurations)
+  // ==========================================
+  it('should list global security advisories', async () => {
+    const mockAdvisories = [{ ghsa_id: 'GHSA-1' }];
+    mockOctokit.rest.securityAdvisories.listGlobalAdvisories.mockResolvedValue({
+      data: mockAdvisories,
+    });
+
+    const result = await GithubService.listGlobalAdvisories({
+      severity: 'high',
+    });
+    expect(result).toEqual(mockAdvisories);
+    expect(
+      mockOctokit.rest.securityAdvisories.listGlobalAdvisories,
+    ).toHaveBeenCalledWith({
+      per_page: 30,
+      page: 1,
+      severity: 'high',
+      cve: undefined,
+      ghsa_id: undefined,
+    });
+  });
+
+  it('should get repository advisory', async () => {
+    const mockAdvisory = { ghsa_id: 'GHSA-2' };
+    mockOctokit.rest.securityAdvisories.getRepositoryAdvisory.mockResolvedValue(
+      {
+        data: mockAdvisory,
+      },
+    );
+
+    const result = await GithubService.getRepositoryAdvisory(
+      'owner',
+      'repo',
+      'GHSA-2',
+    );
+    expect(result).toEqual(mockAdvisory);
+    expect(
+      mockOctokit.rest.securityAdvisories.getRepositoryAdvisory,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      ghsa_id: 'GHSA-2',
+    });
+  });
+
+  it('should get org security configurations', async () => {
+    const mockConfigs = [{ id: 1, name: 'default' }];
+    mockOctokit.rest.codeSecurity.getConfigurationsForOrg.mockResolvedValue({
+      data: mockConfigs,
+    });
+
+    const result = await GithubService.getOrgSecurityConfigurations('my-org');
+    expect(result).toEqual(mockConfigs);
+    expect(
+      mockOctokit.rest.codeSecurity.getConfigurationsForOrg,
+    ).toHaveBeenCalledWith({ org: 'my-org' });
+  });
+
+  // ==========================================
+  // 31. Dependency Graph (BOM / Manifests)
+  // ==========================================
+  it('should export SBOM for repository', async () => {
+    const mockSbom = { sbom: { name: 'my-repo' } };
+    mockOctokit.rest.dependencyGraph.exportSbom.mockResolvedValue({
+      data: mockSbom,
+    });
+
+    const result = await GithubService.exportSbom('owner', 'repo');
+    expect(result).toEqual(mockSbom);
+    expect(mockOctokit.rest.dependencyGraph.exportSbom).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // ==========================================
+  // 32. Packages (Registries & Metadata)
+  // ==========================================
+  it('should list org packages', async () => {
+    const mockPackages = [{ name: 'my-pkg' }];
+    mockOctokit.rest.packages.listPackagesForOrganization.mockResolvedValue({
+      data: mockPackages,
+    });
+
+    const result = await GithubService.listOrgPackages('my-org', {
+      package_type: 'npm',
+    });
+    expect(result).toEqual(mockPackages);
+    expect(
+      mockOctokit.rest.packages.listPackagesForOrganization,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      package_type: 'npm',
+      visibility: undefined,
+      per_page: 30,
+      page: 1,
+    });
+  });
+
+  it('should get package versions', async () => {
+    const mockVersions = [{ id: 1, version: '1.0.0' }];
+    mockOctokit.rest.packages.getAllPackageVersionsForPackageOwnedByOrg.mockResolvedValue(
+      {
+        data: mockVersions,
+      },
+    );
+
+    const result = await GithubService.getPackageVersions('my-org', 'my-pkg');
+    expect(result).toEqual(mockVersions);
+    expect(
+      mockOctokit.rest.packages.getAllPackageVersionsForPackageOwnedByOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      package_name: 'my-pkg',
+    });
+  });
+
+  // ==========================================
+  // 33. OIDC (Actions Custom Claims)
+  // ==========================================
+  it('should get OIDC custom sub template for org', async () => {
+    const mockTemplate = { include_claim_keys: ['repo'] };
+    mockOctokit.rest.oidc.getOidcCustomSubTemplateForOrg.mockResolvedValue({
+      data: mockTemplate,
+    });
+
+    const result = await GithubService.getOidcCustomSubTemplateForOrg('my-org');
+    expect(result).toEqual(mockTemplate);
+    expect(
+      mockOctokit.rest.oidc.getOidcCustomSubTemplateForOrg,
+    ).toHaveBeenCalledWith({ org: 'my-org' });
+  });
+
+  it('should update OIDC custom sub template for org', async () => {
+    const mockResponse = { status: 'success' };
+    mockOctokit.rest.oidc.updateOidcCustomSubTemplateForOrg.mockResolvedValue({
+      data: mockResponse,
+    });
+
+    const result = await GithubService.updateOidcCustomSubTemplateForOrg(
+      'my-org',
+      {
+        include_claim_keys: ['repo', 'context'],
+      },
+    );
+    expect(result).toEqual(mockResponse);
+    expect(
+      mockOctokit.rest.oidc.updateOidcCustomSubTemplateForOrg,
+    ).toHaveBeenCalledWith({
+      org: 'my-org',
+      include_claim_keys: ['repo', 'context'],
+    });
+  });
+
+  // ==========================================
+  // 34. Migrations (Import/Export)
+  // ==========================================
+  it('should start organization migration', async () => {
+    const mockMigration = { id: 101, status: 'pending' };
+    mockOctokit.rest.migrations.startForOrg.mockResolvedValue({
+      data: mockMigration,
+    });
+
+    const result = await GithubService.startOrgMigration('my-org', ['repo1'], {
+      lock_repositories: true,
+    });
+    expect(result).toEqual(mockMigration);
+    expect(mockOctokit.rest.migrations.startForOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      repositories: ['repo1'],
+      lock_repositories: true,
+      exclude_attachments: undefined,
+    });
+  });
+
+  it('should get org migration status', async () => {
+    const mockStatus = { id: 101, status: 'exported' };
+    mockOctokit.rest.migrations.getStatusForOrg.mockResolvedValue({
+      data: mockStatus,
+    });
+
+    const result = await GithubService.getOrgMigrationStatus('my-org', 101);
+    expect(result).toEqual(mockStatus);
+    expect(mockOctokit.rest.migrations.getStatusForOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      migration_id: 101,
+    });
+  });
+
+  // ==========================================
+  // 35. Emojis, Gitignore templates, Licenses
+  // ==========================================
+  it('should fetch emojis list', async () => {
+    const mockEmojis = { '+1': 'https://github.com/emoji' };
+    mockOctokit.rest.emojis.get.mockResolvedValue({ data: mockEmojis });
+
+    const result = await GithubService.getEmojis();
+    expect(result).toEqual(mockEmojis);
+    expect(mockOctokit.rest.emojis.get).toHaveBeenCalled();
+  });
+
+  it('should fetch gitignore templates list', async () => {
+    const mockTemplates = ['Node', 'Python'];
+    mockOctokit.rest.gitignore.getAllTemplates.mockResolvedValue({
+      data: mockTemplates,
+    });
+
+    const result = await GithubService.getGitignoreTemplates();
+    expect(result).toEqual(mockTemplates);
+    expect(mockOctokit.rest.gitignore.getAllTemplates).toHaveBeenCalled();
+  });
+
+  it('should fetch specific gitignore template', async () => {
+    const mockTemplate = { name: 'Node', source: 'node_modules' };
+    mockOctokit.rest.gitignore.getTemplate.mockResolvedValue({
+      data: mockTemplate,
+    });
+
+    const result = await GithubService.getGitignoreTemplate('Node');
+    expect(result).toEqual(mockTemplate);
+    expect(mockOctokit.rest.gitignore.getTemplate).toHaveBeenCalledWith({
+      name: 'Node',
+    });
+  });
+
+  it('should fetch repository license info', async () => {
+    const mockLicense = { license: { key: 'mit' } };
+    mockOctokit.rest.licenses.getForRepo.mockResolvedValue({
+      data: mockLicense,
+    });
+
+    const result = await GithubService.getRepoLicense('owner', 'repo');
+    expect(result).toEqual(mockLicense);
+    expect(mockOctokit.rest.licenses.getForRepo).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // ==========================================
+  // 36. Rate Limit, Meta, and Markdown
+  // ==========================================
+  it('should get rate limit state', async () => {
+    const mockRate = { resources: { core: { limit: 5000 } } };
+    mockOctokit.rest.rateLimit.get.mockResolvedValue({ data: mockRate });
+
+    const result = await GithubService.getRateLimit();
+    expect(result).toEqual(mockRate);
+    expect(mockOctokit.rest.rateLimit.get).toHaveBeenCalled();
+  });
+
+  it('should get server metadata', async () => {
+    const mockMeta = { verapdf: true };
+    mockOctokit.rest.meta.get.mockResolvedValue({ data: mockMeta });
+
+    const result = await GithubService.getMetaServerInfo();
+    expect(result).toEqual(mockMeta);
+    expect(mockOctokit.rest.meta.get).toHaveBeenCalled();
+  });
+
+  it('should render markdown text to HTML', async () => {
+    const mockHtml = '<p>hello</p>';
+    mockOctokit.rest.markdown.render.mockResolvedValue({ data: mockHtml });
+
+    const result = await GithubService.renderMarkdown('# hello', {
+      mode: 'markdown',
+    });
+    expect(result).toEqual(mockHtml);
+    expect(mockOctokit.rest.markdown.render).toHaveBeenCalledWith({
+      text: '# hello',
+      mode: 'markdown',
+      context: undefined,
+    });
   });
 });

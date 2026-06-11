@@ -353,5 +353,57 @@ router.delete(
   GithubController.removeRepoInteractionLimits,
 );
 
+// 30. Code Security (Advisories & Configurations) API
+router.get('/security/advisories', GithubController.listGlobalAdvisories);
+router.get(
+  '/repos/:owner/:repo/security/advisories/:ghsaId',
+  GithubController.getRepositoryAdvisory,
+);
+router.get(
+  '/orgs/:org/security/configurations',
+  GithubController.getOrgSecurityConfigurations,
+);
+
+// 31. Dependency Graph (BOM / Manifests) API
+router.get(
+  '/repos/:owner/:repo/dependency-graph/sbom',
+  GithubController.exportSbom,
+);
+
+// 32. Packages (Registries & Metadata) API
+router.get('/orgs/:org/packages', GithubController.listOrgPackages);
+router.get(
+  '/orgs/:org/packages/versions/:packageName',
+  GithubController.getPackageVersions,
+);
+
+// 33. OIDC (Actions Custom Claims) API
+router.get(
+  '/orgs/:org/oidc/custom-sub',
+  GithubController.getOidcCustomSubTemplateForOrg,
+);
+router.put(
+  '/orgs/:org/oidc/custom-sub',
+  GithubController.updateOidcCustomSubTemplateForOrg,
+);
+
+// 34. Migrations (Import/Export) API
+router.post('/orgs/:org/migrations', GithubController.startOrgMigration);
+router.get(
+  '/orgs/:org/migrations/:migrationId',
+  GithubController.getOrgMigrationStatus,
+);
+
+// 35. Emojis, Gitignore Templates, Licenses API
+router.get('/emojis', GithubController.getEmojis);
+router.get('/gitignore/templates', GithubController.getGitignoreTemplates);
+router.get('/gitignore/templates/:name', GithubController.getGitignoreTemplate);
+router.get('/repos/:owner/:repo/license', GithubController.getRepoLicense);
+
+// 36. Rate Limit, Meta, and Markdown API
+router.get('/rate-limit', GithubController.getRateLimit);
+router.get('/meta', GithubController.getMetaServerInfo);
+router.post('/markdown', GithubController.renderMarkdown);
+
 export const GithubRoutes = router;
 export default router;
