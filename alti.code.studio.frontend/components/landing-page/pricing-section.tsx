@@ -31,7 +31,7 @@ const plans = [
     cta: "Contact Enterprise",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
-    cloudType: "Multi-Tenant Private Cloud",
+    cloudType: "Bring Your Own Cloud",
   },
 ];
 
