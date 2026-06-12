@@ -24,6 +24,13 @@ vi.mock('octokit', () => {
         checkBlockedForAuthenticatedUser: vi.fn(),
         block: vi.fn(),
         unblock: vi.fn(),
+        listGpgKeysForAuthenticatedUser: vi.fn(),
+        getGpgKeyForAuthenticatedUser: vi.fn(),
+        createGpgKeyForAuthenticatedUser: vi.fn(),
+        deleteGpgKeyForAuthenticatedUser: vi.fn(),
+        listSocialAccountsForAuthenticatedUser: vi.fn(),
+        addSocialAccountsForAuthenticatedUser: vi.fn(),
+        deleteSocialAccountsForAuthenticatedUser: vi.fn(),
       },
       repos: {
         listForAuthenticatedUser: vi.fn(),
@@ -407,6 +414,15 @@ vi.mock('octokit', () => {
         getRepoSubscription: vi.fn(),
         setRepoSubscription: vi.fn(),
         deleteRepoSubscription: vi.fn(),
+        listNotificationsForAuthenticatedUser: vi.fn(),
+        markNotificationsAsRead: vi.fn(),
+        listRepoNotifications: vi.fn(),
+        markRepoNotificationsAsRead: vi.fn(),
+        getThread: vi.fn(),
+        markThreadAsRead: vi.fn(),
+        getThreadSubscription: vi.fn(),
+        setThreadSubscription: vi.fn(),
+        deleteThreadSubscription: vi.fn(),
       },
       interactions: {
         getRestrictionsForRepo: vi.fn(),
@@ -7741,4 +7757,294 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       branch: 'main',
     });
   });
+
+  // 87. GitHub Notifications
+  it('should list notifications for authenticated user', async () => {
+    const mockData = [{ id: '1' }];
+    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listNotificationsForAuthenticatedUser();
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.activity.listNotificationsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      all: undefined,
+      participating: undefined,
+      since: undefined,
+      before: undefined,
+      page: 1,
+      per_page: 30,
+    });
+  });
+
+  it('should list notifications for authenticated user with params', async () => {
+    const mockData = [{ id: '1' }];
+    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listNotificationsForAuthenticatedUser(
+      true,
+      false,
+      '2026-06-11T00:00:00Z',
+      '2026-06-12T00:00:00Z',
+      2,
+      50,
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.activity.listNotificationsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      all: true,
+      participating: false,
+      since: '2026-06-11T00:00:00Z',
+      before: '2026-06-12T00:00:00Z',
+      page: 2,
+      per_page: 50,
+    });
+  });
+
+  it('should mark notifications as read', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.activity.markNotificationsAsRead.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.markNotificationsAsRead('2026-06-12T00:00:00Z');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.markNotificationsAsRead).toHaveBeenCalledWith({
+      last_read_at: '2026-06-12T00:00:00Z',
+    });
+  });
+
+  it('should list repo notifications', async () => {
+    const mockData = [{ id: '2' }];
+    mockOctokit.rest.activity.listRepoNotifications.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listRepoNotifications('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.listRepoNotifications).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      all: undefined,
+      participating: undefined,
+      since: undefined,
+      before: undefined,
+      page: 1,
+      per_page: 30,
+    });
+  });
+
+  it('should list repo notifications with params', async () => {
+    const mockData = [{ id: '2' }];
+    mockOctokit.rest.activity.listRepoNotifications.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listRepoNotifications(
+      'owner',
+      'repo',
+      false,
+      true,
+      '2026-06-11T00:00:00Z',
+      undefined,
+      3,
+      15,
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.listRepoNotifications).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      all: false,
+      participating: true,
+      since: '2026-06-11T00:00:00Z',
+      before: undefined,
+      page: 3,
+      per_page: 15,
+    });
+  });
+
+  it('should mark repo notifications as read', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.activity.markRepoNotificationsAsRead.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.markRepoNotificationsAsRead(
+      'owner',
+      'repo',
+      '2026-06-12T00:00:00Z',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.markRepoNotificationsAsRead).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      last_read_at: '2026-06-12T00:00:00Z',
+    });
+  });
+
+  it('should get thread details', async () => {
+    const mockData = { id: 'thread-123', subject: {} };
+    mockOctokit.rest.activity.getThread.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getThread('thread-123');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.getThread).toHaveBeenCalledWith({
+      thread_id: 'thread-123',
+    });
+  });
+
+  it('should mark thread as read', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.activity.markThreadAsRead.mockResolvedValue({ data: mockData });
+    const result = await GithubService.markThreadAsRead('thread-123');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.markThreadAsRead).toHaveBeenCalledWith({
+      thread_id: 'thread-123',
+    });
+  });
+
+  it('should get thread subscription status', async () => {
+    const mockData = { subscribed: true, ignored: false };
+    mockOctokit.rest.activity.getThreadSubscription.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getThreadSubscription('thread-123');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.getThreadSubscription).toHaveBeenCalledWith({
+      thread_id: 'thread-123',
+    });
+  });
+
+  it('should intercept 404 on get thread subscription status', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.activity.getThreadSubscription.mockRejectedValue(error404);
+    const result = await GithubService.getThreadSubscription('thread-123');
+    expect(result).toEqual({ subscribed: false });
+  });
+
+  it('should set thread subscription', async () => {
+    const mockData = { subscribed: true };
+    mockOctokit.rest.activity.setThreadSubscription.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setThreadSubscription('thread-123', true);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.setThreadSubscription).toHaveBeenCalledWith({
+      thread_id: 'thread-123',
+      ignored: true,
+    });
+  });
+
+  it('should delete thread subscription', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.activity.deleteThreadSubscription.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteThreadSubscription('thread-123');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.activity.deleteThreadSubscription).toHaveBeenCalledWith({
+      thread_id: 'thread-123',
+    });
+  });
+
+  // 88. GPG Keys
+  it('should list GPG keys for authenticated user', async () => {
+    const mockData = [{ id: 1, key: 'gpg-key' }];
+    mockOctokit.rest.users.listGpgKeysForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listGpgKeysForAuthenticatedUser();
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listGpgKeysForAuthenticatedUser).toHaveBeenCalledWith({
+      page: 1,
+      per_page: 30,
+    });
+  });
+
+  it('should list GPG keys with page and perPage', async () => {
+    const mockData = [{ id: 1 }];
+    mockOctokit.rest.users.listGpgKeysForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listGpgKeysForAuthenticatedUser(2, 10);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listGpgKeysForAuthenticatedUser).toHaveBeenCalledWith({
+      page: 2,
+      per_page: 10,
+    });
+  });
+
+  it('should get GPG key details', async () => {
+    const mockData = { id: 1, key: 'gpg-key' };
+    mockOctokit.rest.users.getGpgKeyForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getGpgKeyForAuthenticatedUser(1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.getGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+      gpg_key_id: 1,
+    });
+  });
+
+  it('should add GPG key', async () => {
+    const mockData = { id: 1, key: 'gpg-key' };
+    mockOctokit.rest.users.createGpgKeyForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addGpgKeyForAuthenticatedUser('armored-key');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.createGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+      armored_public_key: 'armored-key',
+    });
+  });
+
+  it('should delete GPG key', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.deleteGpgKeyForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteGpgKeyForAuthenticatedUser(1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.deleteGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+      gpg_key_id: 1,
+    });
+  });
+
+  // 89. User Social Profiles
+  it('should list social accounts', async () => {
+    const mockData = [{ provider: 'twitter', url: 'https://twitter.com' }];
+    mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listSocialAccountsForAuthenticatedUser();
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+      page: 1,
+      per_page: 30,
+    });
+  });
+
+  it('should add social accounts', async () => {
+    const mockData = [{ provider: 'twitter' }];
+    mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addSocialAccountsForAuthenticatedUser(['url']);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+      account_urls: ['url'],
+    });
+  });
+
+  it('should delete social accounts', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteSocialAccountsForAuthenticatedUser(['url']);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+      account_urls: ['url'],
+    });
+  });
 });
+

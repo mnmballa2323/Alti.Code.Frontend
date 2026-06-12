@@ -8258,4 +8258,319 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 87. GitHub Notifications
+  // ==========================================
+  async listNotificationsForAuthenticatedUser(
+    all,
+    participating,
+    since,
+    before,
+    page = 1,
+    perPage = 30,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Listing notifications for authenticated user`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.activity.listNotificationsForAuthenticatedUser({
+          all,
+          participating,
+          since,
+          before,
+          page,
+          per_page: perPage,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list notifications for authenticated user:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async markNotificationsAsRead(lastReadAt) {
+    logger.info(`🐙 [GitHub Service] Marking notifications as read`);
+    try {
+      const { data } = await octokit.rest.activity.markNotificationsAsRead({
+        last_read_at: lastReadAt,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to mark notifications as read:`, error);
+      throw error;
+    }
+  },
+
+  async listRepoNotifications(
+    owner,
+    repo,
+    all,
+    participating,
+    since,
+    before,
+    page = 1,
+    perPage = 30,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Listing notifications for repo ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.listRepoNotifications({
+        owner,
+        repo,
+        all,
+        participating,
+        since,
+        before,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list notifications for repo ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async markRepoNotificationsAsRead(owner, repo, lastReadAt) {
+    logger.info(
+      `🐙 [GitHub Service] Marking notifications as read in repo ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.markRepoNotificationsAsRead({
+        owner,
+        repo,
+        last_read_at: lastReadAt,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to mark notifications as read in repo ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getThread(threadId) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching notification thread details for thread ${threadId}`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.getThread({
+        thread_id: threadId,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch notification thread details for thread ${threadId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async markThreadAsRead(threadId) {
+    logger.info(
+      `🐙 [GitHub Service] Marking notification thread ${threadId} as read`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.markThreadAsRead({
+        thread_id: threadId,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to mark notification thread ${threadId} as read:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getThreadSubscription(threadId) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching notification thread subscription status for thread ${threadId}`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.getThreadSubscription({
+        thread_id: threadId,
+      });
+      return data;
+    } catch (error) {
+      if (error.status === 404) {
+        return { subscribed: false };
+      }
+      logger.error(
+        `Failed to fetch notification thread subscription status for thread ${threadId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setThreadSubscription(threadId, ignored) {
+    logger.info(
+      `🐙 [GitHub Service] Setting notification thread subscription for thread ${threadId}`,
+    );
+    try {
+      const { data } = await octokit.rest.activity.setThreadSubscription({
+        thread_id: threadId,
+        ignored,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set notification thread subscription for thread ${threadId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteThreadSubscription(threadId) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting notification thread subscription for thread ${threadId}`,
+    );
+    try {
+      const response = await octokit.rest.activity.deleteThreadSubscription({
+        thread_id: threadId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete notification thread subscription for thread ${threadId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 88. GPG Keys
+  // ==========================================
+  async listGpgKeysForAuthenticatedUser(page = 1, perPage = 30) {
+    logger.info(`🐙 [GitHub Service] Listing GPG keys for authenticated user`);
+    try {
+      const { data } =
+        await octokit.rest.users.listGpgKeysForAuthenticatedUser({
+          page,
+          per_page: perPage,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list GPG keys for authenticated user:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getGpgKeyForAuthenticatedUser(keyId) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching details for GPG key ${keyId}`,
+    );
+    try {
+      const { data } = await octokit.rest.users.getGpgKeyForAuthenticatedUser({
+        gpg_key_id: keyId,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch details for GPG key ${keyId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addGpgKeyForAuthenticatedUser(armoredPublicKey) {
+    logger.info(`🐙 [GitHub Service] Adding new GPG key`);
+    try {
+      const { data } = await octokit.rest.users.createGpgKeyForAuthenticatedUser(
+        {
+          armored_public_key: armoredPublicKey,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to add GPG key:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGpgKeyForAuthenticatedUser(keyId) {
+    logger.info(`🐙 [GitHub Service] Deleting GPG key ${keyId}`);
+    try {
+      const response = await octokit.rest.users.deleteGpgKeyForAuthenticatedUser(
+        {
+          gpg_key_id: keyId,
+        },
+      );
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete GPG key ${keyId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 89. User Social Profiles
+  // ==========================================
+  async listSocialAccountsForAuthenticatedUser(page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing social accounts for authenticated user`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.users.listSocialAccountsForAuthenticatedUser({
+          page,
+          per_page: perPage,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list social accounts for authenticated user:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addSocialAccountsForAuthenticatedUser(accountUrls) {
+    logger.info(`🐙 [GitHub Service] Adding social accounts`);
+    try {
+      const { data } =
+        await octokit.rest.users.addSocialAccountsForAuthenticatedUser({
+          account_urls: accountUrls,
+        });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to add social accounts:`, error);
+      throw error;
+    }
+  },
+
+  async deleteSocialAccountsForAuthenticatedUser(accountUrls) {
+    logger.info(`🐙 [GitHub Service] Deleting social accounts`);
+    try {
+      const response =
+        await octokit.rest.users.deleteSocialAccountsForAuthenticatedUser({
+          account_urls: accountUrls,
+        });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete social accounts:`, error);
+      throw error;
+    }
+  },
 };

@@ -1526,5 +1526,61 @@ router.post(
   GithubController.createOrgSecurityAdvisory,
 );
 
+// GitHub Notifications
+router.get(
+  '/notifications',
+  GithubController.listNotificationsForAuthenticatedUser,
+);
+router.put('/notifications', GithubController.markNotificationsAsRead);
+router.get(
+  '/repos/:owner/:repo/notifications',
+  GithubController.listRepoNotifications,
+);
+router.put(
+  '/repos/:owner/:repo/notifications',
+  GithubController.markRepoNotificationsAsRead,
+);
+router.get('/notifications/threads/:threadId', GithubController.getThread);
+router.patch('/notifications/threads/:threadId', GithubController.markThreadAsRead);
+router.get(
+  '/notifications/threads/:threadId/subscription',
+  GithubController.getThreadSubscription,
+);
+router.put(
+  '/notifications/threads/:threadId/subscription',
+  GithubController.setThreadSubscription,
+);
+router.delete(
+  '/notifications/threads/:threadId/subscription',
+  GithubController.deleteThreadSubscription,
+);
+
+// GPG Keys
+router.get('/user/gpg_keys', GithubController.listGpgKeysForAuthenticatedUser);
+router.get(
+  '/user/gpg_keys/:keyId',
+  GithubController.getGpgKeyForAuthenticatedUser,
+);
+router.post('/user/gpg_keys', GithubController.addGpgKeyForAuthenticatedUser);
+router.delete(
+  '/user/gpg_keys/:keyId',
+  GithubController.deleteGpgKeyForAuthenticatedUser,
+);
+
+// User Social Profiles
+router.get(
+  '/user/social_accounts',
+  GithubController.listSocialAccountsForAuthenticatedUser,
+);
+router.post(
+  '/user/social_accounts',
+  GithubController.addSocialAccountsForAuthenticatedUser,
+);
+router.delete(
+  '/user/social_accounts',
+  GithubController.deleteSocialAccountsForAuthenticatedUser,
+);
+
 export const GithubRoutes = router;
 export default router;
+
