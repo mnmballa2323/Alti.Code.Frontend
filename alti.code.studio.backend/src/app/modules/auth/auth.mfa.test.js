@@ -7,6 +7,15 @@ import { totp } from '@inso/platform';
 import config from '../../../../config/index.js';
 import bcrypt from 'bcryptjs';
 import { authenticateKeystone } from './openstack.service.js';
+import { prisma } from '../../platform/db/prismaClient.js';
+
+vi.mock('../../platform/db/prismaClient.js', () => ({
+  prisma: {
+    user: {
+      findUnique: vi.fn(),
+    },
+  },
+}));
 
 vi.mock('./openstack.service.js', () => ({
   authenticateKeystone: vi.fn(),
@@ -180,6 +189,44 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
       await expect(
         authService.validateMfaChallengeService(invalidMfaToken, '123456')
       ).rejects.toThrow('Invalid or expired MFA token.');
+    });
+  });
+
+  describe('Product Access Verification Flow', () => {
+    it('should verify product access successfully', async () => {
+      const activeUser = {
+        ...mockUser,
+        subscriptionPlan: 'build'
+      };
+
+      UserRepository.findById.mockResolvedValueOnce(activeUser);
+      prisma.user.findUnique.mockResolvedValueOnce({ subscriptionPlan: 'build' });
+
+      const result = await authService.verifyProductAccessService('user-123', 'inso-ai');
+
+      expect(result).toEqual({
+        authorized: true,
+        productId: 'inso-ai',
+        plan: 'build'
+      });
+    });
+
+    it('should deny product access if plan is insufficient', async () => {
+      const activeUser = {
+        ...mockUser,
+        subscriptionPlan: 'launch'
+      };
+
+      UserRepository.findById.mockResolvedValueOnce(activeUser);
+      prisma.user.findUnique.mockResolvedValueOnce({ subscriptionPlan: 'launch' });
+
+      const result = await authService.verifyProductAccessService('user-123', 'inso-ai');
+
+      expect(result).toEqual({
+        authorized: false,
+        productId: 'inso-ai',
+        plan: 'launch'
+      });
     });
   });
 });

@@ -386,6 +386,19 @@ const validateMfaChallengeService = async (mfaToken, code) => {
   return { _id: user.id, accessToken, refreshToken };
 };
 
+const verifyProductAccessService = async (userId, productId) => {
+  const user = await UserRepository.findById(userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
+
+  const { checkProductAccess } = await import('@inso/platform');
+  const hasAccess = await checkProductAccess(user, productId);
+
+  return {
+    authorized: hasAccess,
+    productId,
+    plan: user.subscriptionPlan || 'launch'
+  };
+};
 export const authService = {
   deleteUserAccountService,
   registerService,
@@ -398,6 +411,7 @@ export const authService = {
   setupMfaService,
   verifyMfaService,
   validateMfaChallengeService,
+  verifyProductAccessService,
   generateUserTokens: (user) => {
     const accessToken = jwtHelpers.createToken(
       { _id: user.id || user._id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },

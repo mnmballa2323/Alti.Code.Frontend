@@ -110,6 +110,7 @@ router.route('/login').post(createRateLimiter(5, 5), authController.login); // l
 router.route('/mfa/setup').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.setupMfa);
 router.route('/mfa/verify').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.verifyMfa);
 router.route('/mfa/challenge').post(authController.validateMfaChallenge);
+router.route('/verify-product/:productId').get(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.verifyProductAccess);
 router
   .route('/social-login')
   .post(

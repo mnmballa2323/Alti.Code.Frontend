@@ -563,6 +563,18 @@ const validateMfaChallenge = catchAsync(async (req, res) => {
   });
 });
 
+const verifyProductAccess = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { productId } = req.params;
+  const result = await authService.verifyProductAccessService(userId, productId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product Access Verified successfully',
+    data: result,
+  });
+});
+
 export const authController = {
   register,
   login,
@@ -583,5 +595,6 @@ export const authController = {
   setupMfa,
   verifyMfa,
   validateMfaChallenge,
+  verifyProductAccess,
 };
 
