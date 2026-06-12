@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { Icon } from "@iconify/react";
 
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +16,11 @@ export default function LoginPage() {
   const [passwordValue, setPasswordValue] = useState("");
   const toggleVisibility = () => setIsVisible(!isVisible);
   const router = useRouter();
+
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [mfaToken, setMfaToken] = useState("");
+  const [mfaCode, setMfaCode] = useState("");
+  const [isLoadingMfa, setIsLoadingMfa] = useState(false);
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -38,19 +44,45 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-        recaptchaToken,
+      const loginRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          recaptchaToken,
+        }),
       });
 
-      if (res?.error) {
-        toast.error(res.error || "Invalid credentials");
-      } else if (res?.ok) {
-        toast.success("Login successful!");
-        router.push("/");
-        router.refresh();
+      const response = await loginRes.json();
+
+      if (!loginRes.ok || !response.success) {
+        toast.error(response.message || response.error || "Invalid credentials");
+        return;
+      }
+
+      if (response.data?.mfaRequired) {
+        setMfaToken(response.data.mfaToken);
+        setMfaRequired(true);
+        toast.success("MFA verification code required.");
+        return;
+      }
+
+      if (response.data?.accessToken) {
+        const res = await signIn("credentials", {
+          redirect: false,
+          accessToken: response.data.accessToken,
+        });
+
+        if (res?.error) {
+          toast.error(res.error || "Authentication session failed");
+        } else if (res?.ok) {
+          toast.success("Login successful!");
+          router.push("/");
+          router.refresh();
+        }
+      } else {
+        toast.error("Invalid response from server.");
       }
     } catch (error) {
       toast.error("An unexpected error occurred during login.");
@@ -58,6 +90,131 @@ export default function LoginPage() {
       toast.dismiss(loading);
     }
   };
+
+  const handleMfaSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (mfaCode.length !== 6) {
+      toast.error("Please enter a valid 6-digit code.");
+      return;
+    }
+
+    const loading = toast.loading("Verifying code...");
+    setIsLoadingMfa(true);
+
+    try {
+      const challengeRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/mfa/challenge`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mfaToken,
+            code: mfaCode,
+          }),
+        }
+      );
+
+      const response = await challengeRes.json();
+
+      if (!challengeRes.ok || !response.success) {
+        toast.error(response.message || response.error || "Invalid verification code");
+        return;
+      }
+
+      if (response.data?.accessToken) {
+        const res = await signIn("credentials", {
+          redirect: false,
+          accessToken: response.data.accessToken,
+        });
+
+        if (res?.error) {
+          toast.error(res.error || "Authentication session failed");
+        } else if (res?.ok) {
+          toast.success("Verification successful! Logging in...");
+          router.push("/");
+          router.refresh();
+        }
+      } else {
+        toast.error("Invalid response from server.");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred during MFA verification.");
+    } finally {
+      setIsLoadingMfa(false);
+      toast.dismiss(loading);
+    }
+  };
+
+  if (mfaRequired) {
+    return (
+      <div className="flex w-full flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F7] text-black shadow-inner">
+            <Icon className="text-3xl" icon="solar:shield-keyhole-bold-duotone" />
+          </div>
+          <div className="text-center">
+            <h1 className="text-3xl font-semibold tracking-tight text-black">
+              Two-Factor Verification
+            </h1>
+            <p className="text-center text-gray-500 text-sm mt-2 font-medium max-w-xs">
+              Enter the 6-digit verification code from your authenticator app.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-5 mt-2">
+          <form className="flex flex-col gap-4" onSubmit={handleMfaSubmit}>
+            <div className="flex flex-col gap-1.5">
+              <Input
+                isRequired
+                autoFocus
+                className="max-w-full text-center"
+                classNames={{
+                  inputWrapper:
+                    "h-14 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  input: "text-center font-mono text-2xl tracking-[0.5em] pl-[0.25em] text-black font-semibold",
+                }}
+                name="mfaCode"
+                placeholder="000000"
+                type="text"
+                value={mfaCode}
+                onValueChange={(val) => {
+                  const digitsOnly = val.replace(/\D/g, "");
+                  if (digitsOnly.length <= 6) {
+                    setMfaCode(digitsOnly);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 mt-2">
+              <Button
+                className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md disabled:opacity-50"
+                type="submit"
+                disabled={mfaCode.length !== 6 || isLoadingMfa}
+              >
+                Verify & Sign In
+              </Button>
+            </div>
+          </form>
+
+          <button
+            className="text-xs font-semibold text-gray-500 hover:text-black transition-colors flex items-center justify-center gap-1.5 mt-2 mx-auto"
+            type="button"
+            onClick={() => {
+              setMfaRequired(false);
+              setMfaToken("");
+              setMfaCode("");
+            }}
+          >
+            <Icon className="text-base" icon="solar:arrow-left-linear" />
+            Back to login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-col gap-6">
