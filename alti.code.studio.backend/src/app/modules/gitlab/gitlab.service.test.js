@@ -5851,4 +5851,225 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 49. Phase 14: Protected Tags, DORA Metrics, Feature Flags, Resource Groups, and Iteration Cadences
+  // ==========================================
+  describe('49. Phase 14: Protected Tags, DORA Metrics, Feature Flags, Resource Groups, and Iteration Cadences', () => {
+    it('listProtectedTags should retrieve protected tags list', async () => {
+      const mockData = [{ name: 'v1.*', create_access_levels: [] }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProtectedTags('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProtectedTag should retrieve protected tag details', async () => {
+      const mockData = { name: 'v1.*', create_access_levels: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProtectedTag('123', 'v1.*');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags/v1.*');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProtectedTag should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getProtectedTag('123', 'v2.*');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags/v2.*');
+      expect(result).toEqual({ protected: false });
+    });
+
+    it('protectTag should post new tag protection config', async () => {
+      const mockData = { name: 'v1.*' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.protectTag('123', {
+        name: 'v1.*',
+        createAccessLevel: 40,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/protected_tags', {
+        name: 'v1.*',
+        create_access_level: 40,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('unprotectTag should delete tag protection', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.unprotectTag('123', 'v1.*');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/protected_tags/v1.*');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getProjectDoraMetrics should retrieve DORA metrics', async () => {
+      const mockData = [{ date: '2026-06-11', value: 2 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectDoraMetrics('123', {
+        metricType: 'deployment_frequency',
+        startDate: '2026-06-01',
+        endDate: '2026-06-11',
+        interval: 'daily',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/dora/metrics', {
+        params: {
+          metric_type: 'deployment_frequency',
+          start_date: '2026-06-01',
+          end_date: '2026-06-11',
+          interval: 'daily',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listFeatureFlags should retrieve project feature flags', async () => {
+      const mockData = [{ id: 1, name: 'flag' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listFeatureFlags('123', { page: 1 });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/feature_flags', {
+        params: { page: 1 },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getFeatureFlag should retrieve feature flag details', async () => {
+      const mockData = { id: 1, name: 'flag' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getFeatureFlag('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/feature_flags/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createFeatureFlag should post new feature flag', async () => {
+      const mockData = { id: 1, name: 'flag' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createFeatureFlag('123', {
+        name: 'flag',
+        description: 'desc',
+        version: 'new_version_flag',
+        active: true,
+        strategies: [],
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/feature_flags', {
+        name: 'flag',
+        description: 'desc',
+        version: 'new_version_flag',
+        active: true,
+        strategies: [],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateFeatureFlag should put updated feature flag configuration', async () => {
+      const mockData = { id: 1, name: 'flag-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateFeatureFlag('123', 1, {
+        name: 'flag-updated',
+        description: 'desc updated',
+        active: false,
+        strategies: [],
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/feature_flags/1', {
+        name: 'flag-updated',
+        description: 'desc updated',
+        active: false,
+        strategies: [],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteFeatureFlag should delete feature flag', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteFeatureFlag('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/feature_flags/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listResourceGroups should retrieve project resource groups', async () => {
+      const mockData = [{ id: 1, key: 'group' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listResourceGroups('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/resource_groups');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getResourceGroup should retrieve resource group details', async () => {
+      const mockData = { id: 1, key: 'group' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getResourceGroup('123', 'group');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/resource_groups/group');
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateResourceGroup should put updated resource group details', async () => {
+      const mockData = { id: 1, key: 'group', process_mode: 'oldest_first' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateResourceGroup('123', 'group', {
+        processMode: 'oldest_first',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/resource_groups/group', {
+        process_mode: 'oldest_first',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listGroupIterationCadences should retrieve group iteration cadences', async () => {
+      const mockData = [{ id: 1, title: 'cadence' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupIterationCadences('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/iteration_cadences');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupIterationCadence should post new iteration cadence', async () => {
+      const mockData = { id: 1, title: 'cadence' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupIterationCadence('99', {
+        title: 'cadence',
+        automatic: true,
+        durationInWeeks: 2,
+        iterationsInAdvance: 4,
+        startDate: '2026-06-11',
+        rollOver: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/iteration_cadences', {
+        title: 'cadence',
+        automatic: true,
+        duration_in_weeks: 2,
+        iterations_in_advance: 4,
+        start_date: '2026-06-11',
+        roll_over: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupIterationCadence should put updated iteration cadence configuration', async () => {
+      const mockData = { id: 1, title: 'cadence-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupIterationCadence('99', 1, {
+        title: 'cadence-updated',
+        automatic: true,
+        durationInWeeks: 3,
+        iterationsInAdvance: 5,
+        rollOver: false,
+        active: true,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/99/iteration_cadences/1', {
+        title: 'cadence-updated',
+        automatic: true,
+        duration_in_weeks: 3,
+        iterations_in_advance: 5,
+        roll_over: false,
+        active: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupIterationCadence should delete iteration cadence', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupIterationCadence('99', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/99/iteration_cadences/1');
+      expect(result).toEqual({ success: true });
+    });
+  });
 });
+

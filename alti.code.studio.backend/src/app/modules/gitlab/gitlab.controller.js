@@ -6319,3 +6319,228 @@ export const applyMergeRequestSuggestion = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 49. Phase 14: Protected Tags, DORA Metrics, Feature Flags, Resource Groups, and Iteration Cadences
+// ==========================================
+export const listProtectedTags = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listProtectedTags(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing protected tags:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProtectedTag = async (req, res) => {
+  try {
+    const { projectId, tagName } = req.params;
+    const result = await GitlabService.getProtectedTag(projectId, tagName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting protected tag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const protectTag = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.protectTag(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error protecting tag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unprotectTag = async (req, res) => {
+  try {
+    const { projectId, tagName } = req.params;
+    const result = await GitlabService.unprotectTag(projectId, tagName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error unprotecting tag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectDoraMetrics = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.getProjectDoraMetrics(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project DORA metrics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listFeatureFlags = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listFeatureFlags(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing feature flags:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getFeatureFlag = async (req, res) => {
+  try {
+    const { projectId, flagId } = req.params;
+    const result = await GitlabService.getFeatureFlag(projectId, flagId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting feature flag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createFeatureFlag = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.createFeatureFlag(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating feature flag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateFeatureFlag = async (req, res) => {
+  try {
+    const { projectId, flagId } = req.params;
+    const result = await GitlabService.updateFeatureFlag(projectId, flagId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating feature flag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteFeatureFlag = async (req, res) => {
+  try {
+    const { projectId, flagId } = req.params;
+    const result = await GitlabService.deleteFeatureFlag(projectId, flagId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting feature flag:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listResourceGroups = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listResourceGroups(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing resource groups:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getResourceGroup = async (req, res) => {
+  try {
+    const { projectId, groupKey } = req.params;
+    const result = await GitlabService.getResourceGroup(projectId, groupKey);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting resource group:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateResourceGroup = async (req, res) => {
+  try {
+    const { projectId, groupKey } = req.params;
+    const result = await GitlabService.updateResourceGroup(projectId, groupKey, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating resource group:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupIterationCadences = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const result = await GitlabService.listGroupIterationCadences(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing iteration cadences:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupIterationCadence = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const result = await GitlabService.createGroupIterationCadence(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating iteration cadence:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupIterationCadence = async (req, res) => {
+  try {
+    const { groupId, cadenceId } = req.params;
+    const result = await GitlabService.updateGroupIterationCadence(groupId, cadenceId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating iteration cadence:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupIterationCadence = async (req, res) => {
+  try {
+    const { groupId, cadenceId } = req.params;
+    const result = await GitlabService.deleteGroupIterationCadence(groupId, cadenceId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting iteration cadence:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+

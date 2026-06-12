@@ -7297,4 +7297,364 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 49. Phase 14: Protected Tags, DORA Metrics, Feature Flags, Resource Groups, and Iteration Cadences
+  // ==========================================
+  async listProtectedTags(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing protected tags for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_tags`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list protected tags for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProtectedTag(projectId, tagName) {
+    logger.info(
+      `🦊 [GitLab Service] Getting protected tag ${tagName} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_tags/${encodeURIComponent(tagName)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Protected tag ${tagName} not found for project ${projectId}, returning safe default`,
+        );
+        return { protected: false };
+      }
+      logger.error(
+        `Failed to get protected tag ${tagName} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async protectTag(projectId, tagData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Protecting tag ${tagData.name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/protected_tags`,
+        {
+          name: tagData.name,
+          create_access_level: tagData.createAccessLevel,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to protect tag for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async unprotectTag(projectId, tagName) {
+    logger.info(
+      `🦊 [GitLab Service] Unprotecting tag ${tagName} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/protected_tags/${encodeURIComponent(tagName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to unprotect tag ${tagName} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectDoraMetrics(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Getting DORA metrics for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/dora/metrics`,
+        {
+          params: {
+            metric_type: params.metricType,
+            start_date: params.startDate,
+            end_date: params.endDate,
+            interval: params.interval,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get DORA metrics for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listFeatureFlags(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing feature flags for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/feature_flags`,
+        { params },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list feature flags for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getFeatureFlag(projectId, flagId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting feature flag ${flagId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/feature_flags/${encodeURIComponent(flagId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get feature flag ${flagId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createFeatureFlag(projectId, flagData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating feature flag "${flagData.name}" for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/feature_flags`,
+        {
+          name: flagData.name,
+          description: flagData.description,
+          version: flagData.version,
+          active: flagData.active,
+          strategies: flagData.strategies,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create feature flag for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateFeatureFlag(projectId, flagId, flagData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Updating feature flag ${flagId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/feature_flags/${encodeURIComponent(flagId)}`,
+        {
+          name: flagData.name,
+          description: flagData.description,
+          active: flagData.active,
+          strategies: flagData.strategies,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update feature flag ${flagId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteFeatureFlag(projectId, flagId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting feature flag ${flagId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/feature_flags/${encodeURIComponent(flagId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete feature flag ${flagId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listResourceGroups(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing resource groups for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/resource_groups`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list resource groups for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getResourceGroup(projectId, groupKey) {
+    logger.info(
+      `🦊 [GitLab Service] Getting resource group ${groupKey} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/resource_groups/${encodeURIComponent(groupKey)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get resource group ${groupKey} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateResourceGroup(projectId, groupKey, groupData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Updating resource group ${groupKey} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/resource_groups/${encodeURIComponent(groupKey)}`,
+        {
+          process_mode: groupData.processMode,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update resource group ${groupKey} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGroupIterationCadences(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing iteration cadences for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/iteration_cadences`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list iteration cadences for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createGroupIterationCadence(groupId, cadenceData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating iteration cadence for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/iteration_cadences`,
+        {
+          title: cadenceData.title,
+          automatic: cadenceData.automatic,
+          duration_in_weeks: cadenceData.durationInWeeks,
+          iterations_in_advance: cadenceData.iterationsInAdvance,
+          start_date: cadenceData.startDate,
+          roll_over: cadenceData.rollOver,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create iteration cadence for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateGroupIterationCadence(groupId, cadenceId, cadenceData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Updating iteration cadence ${cadenceId} for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/iteration_cadences/${encodeURIComponent(cadenceId)}`,
+        {
+          title: cadenceData.title,
+          automatic: cadenceData.automatic,
+          duration_in_weeks: cadenceData.durationInWeeks,
+          iterations_in_advance: cadenceData.iterationsInAdvance,
+          roll_over: cadenceData.rollOver,
+          active: cadenceData.active,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update iteration cadence ${cadenceId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteGroupIterationCadence(groupId, cadenceId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting iteration cadence ${cadenceId} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/iteration_cadences/${encodeURIComponent(cadenceId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete iteration cadence ${cadenceId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };
