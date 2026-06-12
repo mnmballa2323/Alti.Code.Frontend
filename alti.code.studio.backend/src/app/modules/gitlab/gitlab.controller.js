@@ -5990,7 +5990,10 @@ export const listBroadcastMessages = async (req, res) => {
     const messages = await GitlabService.listBroadcastMessages();
     res.status(httpStatus.OK).json({ success: true, data: messages });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing broadcast messages:', error);
+    logger.error(
+      '[GitLab Controller] Error listing broadcast messages:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6015,7 +6018,10 @@ export const createBroadcastMessage = async (req, res) => {
     const message = await GitlabService.createBroadcastMessage(req.body);
     res.status(httpStatus.CREATED).json({ success: true, data: message });
   } catch (error) {
-    logger.error('[GitLab Controller] Error creating broadcast message:', error);
+    logger.error(
+      '[GitLab Controller] Error creating broadcast message:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6031,7 +6037,10 @@ export const updateBroadcastMessage = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: message });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating broadcast message:', error);
+    logger.error(
+      '[GitLab Controller] Error updating broadcast message:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6044,7 +6053,10 @@ export const deleteBroadcastMessage = async (req, res) => {
     const result = await GitlabService.deleteBroadcastMessage(messageId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting broadcast message:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting broadcast message:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

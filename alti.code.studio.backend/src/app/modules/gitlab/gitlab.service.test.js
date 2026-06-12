@@ -5480,4 +5480,175 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 46. Phase 12: Project Secure Files, Group Access Tokens, Broadcast Messages, and Markdown Rendering
+  // ==========================================
+  describe('46. Phase 12: Project Secure Files, Group Access Tokens, Broadcast Messages, and Markdown Rendering', () => {
+    it('listProjectSecureFiles should retrieve secure files', async () => {
+      const mockData = [{ id: 1, name: 'file.txt' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectSecureFiles('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/secure_files');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectSecureFile should retrieve secure file details', async () => {
+      const mockData = { id: 1, name: 'file.txt' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectSecureFile('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/secure_files/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectSecureFile should post a secure file', async () => {
+      const mockData = { id: 1, name: 'file.txt' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectSecureFile('123', {
+        name: 'file.txt',
+        file: 'content',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/secure_files',
+        {
+          name: 'file.txt',
+          file: 'content',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectSecureFile should delete secure file', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectSecureFile('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/secure_files/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listGroupAccessTokens should retrieve group access tokens', async () => {
+      const mockData = [{ id: 1, name: 'token' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupAccessTokens('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/access_tokens');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupAccessToken should post a new group access token config', async () => {
+      const mockData = { id: 1, name: 'token', token: 'glpat-xxx' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupAccessToken('99', {
+        name: 'token',
+        scopes: ['api'],
+        expiresAt: '2026-12-31',
+        accessLevel: 40,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/access_tokens', {
+        name: 'token',
+        scopes: ['api'],
+        expires_at: '2026-12-31',
+        access_level: 40,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('revokeGroupAccessToken should delete group access token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.revokeGroupAccessToken('99', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/access_tokens/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listBroadcastMessages should retrieve messages', async () => {
+      const mockData = [{ id: 1, message: 'hello' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listBroadcastMessages();
+      expect(mockClient.get).toHaveBeenCalledWith('/broadcast_messages');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getBroadcastMessage should retrieve message details', async () => {
+      const mockData = { id: 1, message: 'hello' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getBroadcastMessage(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/broadcast_messages/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createBroadcastMessage should post a new message config', async () => {
+      const mockData = { id: 1, message: 'hello' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createBroadcastMessage({
+        message: 'hello',
+        startsAt: '2026-06-01',
+        endsAt: '2026-06-30',
+        color: '#000',
+        font: '#fff',
+        targetPath: '/welcome',
+        broadcastType: 'banner',
+        dismissible: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/broadcast_messages', {
+        message: 'hello',
+        starts_at: '2026-06-01',
+        ends_at: '2026-06-30',
+        color: '#000',
+        font: '#fff',
+        target_path: '/welcome',
+        broadcast_type: 'banner',
+        dismissible: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateBroadcastMessage should put updated message config', async () => {
+      const mockData = { id: 1, message: 'hello updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateBroadcastMessage(1, {
+        message: 'hello updated',
+        startsAt: '2026-06-01',
+        endsAt: '2026-06-30',
+        color: '#000',
+        font: '#fff',
+        targetPath: '/welcome',
+        broadcastType: 'banner',
+        dismissible: true,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/broadcast_messages/1', {
+        message: 'hello updated',
+        starts_at: '2026-06-01',
+        ends_at: '2026-06-30',
+        color: '#000',
+        font: '#fff',
+        target_path: '/welcome',
+        broadcast_type: 'banner',
+        dismissible: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteBroadcastMessage should delete message', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteBroadcastMessage(1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/broadcast_messages/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('renderMarkdown should render markdown GFM text', async () => {
+      const mockData = { html: '<p>hello</p>' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.renderMarkdown('hello', 'myproj');
+      expect(mockClient.post).toHaveBeenCalledWith('/markdown', {
+        text: 'hello',
+        gfm: true,
+        project: 'myproj',
+      });
+      expect(result).toEqual(mockData);
+    });
+  });
 });
