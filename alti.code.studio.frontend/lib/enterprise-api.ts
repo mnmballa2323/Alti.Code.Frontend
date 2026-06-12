@@ -261,6 +261,8 @@ export const teamAPI = {
     unwrap(API.delete(`/team/members/${userId}`)),
   updateMemberRole: (userId: string, role: string) =>
     unwrap(API.put(`/team/members/${userId}`, { role })),
+  updateMemberPrice: (userId: string, price: string) =>
+    unwrap(API.put(`/team/members/${userId}`, { price })),
   renameTeam: (d: { name: string }) => unwrap(API.put("/team/name", d)),
 };
 

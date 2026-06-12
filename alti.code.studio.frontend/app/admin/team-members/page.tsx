@@ -13,6 +13,7 @@ interface Member {
   name?: string;
   email: string;
   role: string;
+  subscriptionPrice?: number;
 }
 
 export default function TeamMembersPage() {
@@ -59,6 +60,7 @@ export default function TeamMembersPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | null>(null);
   const [customPrice, setCustomPrice] = useState("$1,000");
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchMembers = async () => {
     try {
@@ -66,6 +68,13 @@ export default function TeamMembersPage() {
 
       if (res && res.members && res.members.length > 0) {
         setMembers(res.members);
+        const initialPrices: Record<string, string> = {};
+        res.members.forEach((m: any) => {
+          if (m.subscriptionPrice !== undefined && m.subscriptionPrice !== null) {
+            initialPrices[m.id] = `$${m.subscriptionPrice}`;
+          }
+        });
+        setPrices((prev) => ({ ...prev, ...initialPrices }));
       }
     } catch (err) {
       console.error("Failed to fetch team members:", err);
@@ -238,7 +247,8 @@ export default function TeamMembersPage() {
           <div className="w-full max-w-[420px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 relative">
             {/* Close button X */}
             <button
-              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent"
+              disabled={isSaving}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent disabled:opacity-50"
               onClick={() => {
                 setEditModalOpen(false);
                 setEditingMember(null);
@@ -292,7 +302,8 @@ export default function TeamMembersPage() {
             {/* Buttons Row */}
             <div className="flex gap-3 mt-8">
               <button
-                className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer"
+                disabled={isSaving}
+                className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
                 onClick={() => {
                   setEditModalOpen(false);
                   setEditingMember(null);
@@ -302,19 +313,37 @@ export default function TeamMembersPage() {
               </button>
 
               <button
-                className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer"
-                onClick={() => {
+                disabled={isSaving}
+                className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                onClick={async () => {
                   if (editingMember) {
-                    setPrices((prev) => ({
-                      ...prev,
-                      [editingMember.id]: customPrice,
-                    }));
+                    setIsSaving(true);
+                    try {
+                      await teamAPI.updateMemberPrice(editingMember.id, customPrice);
+                      setPrices((prev) => ({
+                        ...prev,
+                        [editingMember.id]: customPrice,
+                      }));
+                      setEditModalOpen(false);
+                      setEditingMember(null);
+                      await fetchMembers();
+                    } catch (err) {
+                      console.error("Failed to update custom price:", err);
+                      alert("Failed to update pricing. Please try again.");
+                    } finally {
+                      setIsSaving(false);
+                    }
                   }
-                  setEditModalOpen(false);
-                  setEditingMember(null);
                 }}
               >
-                Save Changes
+                {isSaving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
               </button>
             </div>
           </div>

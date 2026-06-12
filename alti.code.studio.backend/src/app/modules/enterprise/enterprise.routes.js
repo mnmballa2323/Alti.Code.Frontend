@@ -59,6 +59,10 @@ import { prisma } from '../../../config/prisma.js';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import Stripe from 'stripe';
+import config from '../../../../config/index.js';
+
+const stripe = new Stripe(config?.stripe?.stripe_secret_key || 'sk_test_dummy_key_to_prevent_crashes');
 
 const router = Router();
 
@@ -1233,18 +1237,107 @@ router.delete('/team/members/:userId', rbac(), async (req, res, next) => {
 router.put('/team/members/:userId', rbac(), async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const { role } = req.body;
-        if (!role) return res.status(400).json({ error: 'Role is required' });
+        const { role, price } = req.body;
+        if (!role && price === undefined) {
+            return res.status(400).json({ error: 'Role or price is required' });
+        }
 
         let user = await prisma.user.findFirst({
             where: { id: userId, tenantId: req.tenantId }
         });
         if (!user) return res.status(404).json({ error: 'Member not found in this team' });
 
+        const updateData = {};
+        if (role) {
+            updateData.tenantRole = role.toLowerCase();
+        }
+
+        let numericPrice = null;
+        if (price !== undefined && price !== null) {
+            if (typeof price === 'string') {
+                numericPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+            } else {
+                numericPrice = Number(price);
+            }
+            if (isNaN(numericPrice)) {
+                return res.status(400).json({ error: 'Invalid price format' });
+            }
+            updateData.subscriptionPrice = numericPrice;
+            updateData.isSubscribed = true;
+        }
+
         user = await prisma.user.update({
             where: { id: userId },
-            data: { tenantRole: role.toLowerCase() }
+            data: updateData
         });
+
+        if (numericPrice !== null) {
+            // Find active/latest subscription record
+            const activeSubscription = await prisma.subscription.findFirst({
+                where: { userId: userId },
+                orderBy: { createdAt: 'desc' }
+            });
+
+            if (activeSubscription) {
+                // Update local billing subscription price
+                await prisma.subscription.update({
+                    where: { id: activeSubscription.id },
+                    data: { price: numericPrice }
+                });
+
+                // Update Stripe price if secret key is present
+                try {
+                    const stripeKey = config?.stripe?.stripe_secret_key;
+                    if (stripeKey && !stripeKey.includes('dummy')) {
+                        let stripeSubscriptionId = activeSubscription.transactionId;
+                        if (stripeSubscriptionId && stripeSubscriptionId.startsWith('cs_')) {
+                            const stripeSession = await stripe.checkout.sessions.retrieve(stripeSubscriptionId);
+                            stripeSubscriptionId = stripeSession.subscription;
+                        }
+                        if (stripeSubscriptionId) {
+                            const stripeSubscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
+                            if (stripeSubscription && stripeSubscription.items && stripeSubscription.items.data.length > 0) {
+                                const subscriptionItem = stripeSubscription.items.data[0];
+                                const productId = subscriptionItem.price.product;
+                                const interval = subscriptionItem.price.recurring?.interval || 'month';
+
+                                await stripe.subscriptions.update(stripeSubscriptionId, {
+                                    items: [{
+                                        id: subscriptionItem.id,
+                                        price_data: {
+                                            currency: 'usd',
+                                            product: productId,
+                                            recurring: {
+                                                interval: interval,
+                                            },
+                                            unit_amount: Math.round(numericPrice * 100),
+                                        }
+                                    }],
+                                    proration_behavior: 'none',
+                                });
+                                logger.info(`Successfully updated Stripe subscription ${stripeSubscriptionId} to price ${numericPrice}`);
+                            }
+                        }
+                    }
+                } catch (stripeErr) {
+                    logger.error(`Failed to update Stripe subscription for user ${userId}:`, stripeErr);
+                }
+            } else {
+                // If there's no subscription record, create a mock/placeholder one so we have a record in the billing table
+                await prisma.subscription.create({
+                    data: {
+                        userId: userId,
+                        transactionId: 'manual_billing_' + Math.random().toString(36).substring(2, 11),
+                        price: numericPrice,
+                        planName: 'individual',
+                        duration: 'month',
+                        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days expiry
+                        paymentStatus: 'paid'
+                    }
+                });
+            }
+        }
+
         res.json(user);
     } catch (err) {
         logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for PUT /team/members/:userId');
@@ -1255,12 +1348,23 @@ router.put('/team/members/:userId', rbac(), async (req, res, next) => {
                 const userIndex = users.findIndex(u => u.id === req.params.userId && u.tenantId === req.tenantId);
                 if (userIndex === -1) return res.status(404).json({ error: 'Member not found in this team' });
 
-                users[userIndex].tenantRole = req.body.role.toLowerCase();
+                if (req.body.role) {
+                    users[userIndex].tenantRole = req.body.role.toLowerCase();
+                }
+                if (req.body.price !== undefined) {
+                    let numericPrice = null;
+                    if (typeof req.body.price === 'string') {
+                        numericPrice = parseFloat(req.body.price.replace(/[^0-9.]/g, ''));
+                    } else {
+                        numericPrice = Number(req.body.price);
+                    }
+                    users[userIndex].subscriptionPrice = numericPrice;
+                }
                 fs.writeFileSync(mockFilePath, JSON.stringify(users, null, 2), 'utf8');
                 return res.json(users[userIndex]);
             }
         } catch (e) {
-            logger.error('Error updating mock user role:', e);
+            logger.error('Error updating mock user role/price:', e);
         }
         next(err);
     }
