@@ -528,6 +528,14 @@ If you require assistance from another specialized agent to complete your task, 
                 }
             }
             
+            // 🧠 MiMo-Code: Context-Budget Threshold Checkpoint Middleware
+            try {
+                const { mimoCheckpointService } = await import('../memory/mimo_checkpoint.service.js');
+                specificContext = await mimoCheckpointService.checkAndCompact(specificContext);
+            } catch (checkpointErr) {
+                logger.debug(`[MimoCheckpoint] Skipping out-of-band checkpoint check: ${checkpointErr.message}`);
+            }
+
             let result;
             if (agent.hardwareProfile === 'CLOUD_RUN') {
                 logger.warn(`🚀 SwarmBrain: Node [${nodeId}] requires hyperscale hardware. Dispatching agent [${agent.name}] to Google Cloud Run with IAM Role: [${agent.iamRole}]...`);

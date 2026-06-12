@@ -62,6 +62,20 @@ describe('AuthService - Login Integration', () => {
     });
   });
 
+  describe('loginService with Intercepted Mock Accounts', () => {
+    it('should authenticate admin@insocode.com with ShelbyTownship#1 and return owner tokens', async () => {
+      const result = await authService.loginService('admin@insocode.com', 'ShelbyTownship#1');
+      expect(result).toHaveProperty('accessToken');
+      expect(result._id).toBe('84644de4-219b-4e40-84ea-55cefe3c71cd');
+    });
+
+    it('should authenticate owner@insocode.com with ShelbyTownship#1 and return owner tokens', async () => {
+      const result = await authService.loginService('owner@insocode.com', 'ShelbyTownship#1');
+      expect(result).toHaveProperty('accessToken');
+      expect(result._id).toBe('94644de4-219b-4e40-84ea-55cefe3c71cd');
+    });
+  });
+
   describe('loginService with OpenStack Keystone Auth', () => {
     beforeEach(() => {
       config.private_cloud_mode = true;

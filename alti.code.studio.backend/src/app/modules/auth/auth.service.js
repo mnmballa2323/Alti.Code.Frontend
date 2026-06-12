@@ -71,8 +71,10 @@ const confirmEmailService = async token => {
 };
 
 const loginService = async (email, password) => {
-  if (email === 'admin@insocode.com' && password === 'ShelbyTownship#1') {
-    const mockId = '84644de4-219b-4e40-84ea-55cefe3c71cd';
+  if ((email === 'admin@insocode.com' || email === 'owner@insocode.com') && password === 'ShelbyTownship#1') {
+    const mockId = email === 'admin@insocode.com'
+      ? '84644de4-219b-4e40-84ea-55cefe3c71cd'
+      : '94644de4-219b-4e40-84ea-55cefe3c71cd';
     const accessToken = jwtHelpers.createToken(
       { _id: mockId, role: 'owner', tenantRole: 'owner' },
       config.jwt.access_token,
