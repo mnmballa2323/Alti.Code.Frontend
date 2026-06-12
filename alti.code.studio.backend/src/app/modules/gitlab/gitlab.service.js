@@ -136,7 +136,9 @@ export const GitlabService = {
   async getProject(projectId) {
     logger.info(`🦊 [GitLab Service] Fetching project: ${projectId}`);
     try {
-      const { data } = await gitlabClient.get(`/projects/${encodeURIComponent(projectId)}`);
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}`,
+      );
       return data;
     } catch (error) {
       logger.error(`Failed to get project ${projectId}:`, error);
@@ -156,7 +158,9 @@ export const GitlabService = {
   },
 
   async listBranches(projectId) {
-    logger.info(`🦊 [GitLab Service] Listing branches for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing branches for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/branches`,
@@ -169,7 +173,9 @@ export const GitlabService = {
   },
 
   async getBranch(projectId, branch) {
-    logger.info(`🦊 [GitLab Service] Fetching branch ${branch} for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching branch ${branch} for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/branches/${encodeURIComponent(branch)}`,
@@ -177,7 +183,9 @@ export const GitlabService = {
       return data;
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        logger.warn(`Branch ${branch} not found in project ${projectId}, returning fallback.`);
+        logger.warn(
+          `Branch ${branch} not found in project ${projectId}, returning fallback.`,
+        );
         return { name: branch, protected: false, exists: false };
       }
       logger.error(`Failed to get branch ${branch} for ${projectId}:`, error);
@@ -196,7 +204,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to create branch ${branch} for ${projectId}:`, error);
+      logger.error(
+        `Failed to create branch ${branch} for ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -211,7 +222,10 @@ export const GitlabService = {
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete branch ${branch} for ${projectId}:`, error);
+      logger.error(
+        `Failed to delete branch ${branch} for ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -237,7 +251,13 @@ export const GitlabService = {
     }
   },
 
-  async createFile(projectId, filePath, content, commitMessage, branch = 'main') {
+  async createFile(
+    projectId,
+    filePath,
+    content,
+    commitMessage,
+    branch = 'main',
+  ) {
     logger.info(
       `🦊 [GitLab Service] Creating file: ${filePath} in project ${projectId}`,
     );
@@ -260,7 +280,13 @@ export const GitlabService = {
     }
   },
 
-  async updateFile(projectId, filePath, content, commitMessage, branch = 'main') {
+  async updateFile(
+    projectId,
+    filePath,
+    content,
+    commitMessage,
+    branch = 'main',
+  ) {
     logger.info(
       `🦊 [GitLab Service] Updating file: ${filePath} in project ${projectId}`,
     );
@@ -337,9 +363,7 @@ export const GitlabService = {
     );
     try {
       const { data } = await gitlabClient.get(
-        `/projects/${encodeURIComponent(
-          projectId,
-        )}/merge_requests/${mrIid}`,
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}`,
       );
       return data;
     } catch (error) {
@@ -379,9 +403,7 @@ export const GitlabService = {
     );
     try {
       const { data } = await gitlabClient.put(
-        `/projects/${encodeURIComponent(
-          projectId,
-        )}/merge_requests/${mrIid}`,
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}`,
         updateData,
       );
       return data;
@@ -630,9 +652,7 @@ export const GitlabService = {
     );
     try {
       const { data } = await gitlabClient.put(
-        `/projects/${encodeURIComponent(
-          projectId,
-        )}/milestones/${milestoneId}`,
+        `/projects/${encodeURIComponent(projectId)}/milestones/${milestoneId}`,
         updateData,
       );
       return data;
@@ -651,9 +671,7 @@ export const GitlabService = {
     );
     try {
       await gitlabClient.delete(
-        `/projects/${encodeURIComponent(
-          projectId,
-        )}/milestones/${milestoneId}`,
+        `/projects/${encodeURIComponent(projectId)}/milestones/${milestoneId}`,
       );
       return { success: true };
     } catch (error) {
@@ -701,7 +719,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get pipeline ${pipelineId} in ${projectId}:`, error);
+      logger.error(
+        `Failed to get pipeline ${pipelineId} in ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -802,7 +823,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get trace log for job ${jobId} in ${projectId}:`, error);
+      logger.error(
+        `Failed to get trace log for job ${jobId} in ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1043,7 +1067,9 @@ export const GitlabService = {
   async getGroup(groupId) {
     logger.info(`🦊 [GitLab Service] Fetching group: ${groupId}`);
     try {
-      const { data } = await gitlabClient.get(`/groups/${encodeURIComponent(groupId)}`);
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}`,
+      );
       return data;
     } catch (error) {
       logger.error(`Failed to get group ${groupId}:`, error);
@@ -1052,9 +1078,7 @@ export const GitlabService = {
   },
 
   async listProjectMembers(projectId, params = {}) {
-    logger.info(
-      `🦊 [GitLab Service] Listing members for project ${projectId}`,
-    );
+    logger.info(`🦊 [GitLab Service] Listing members for project ${projectId}`);
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/members`,
@@ -1247,7 +1271,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update webhook ${hookId} in ${projectId}:`, error);
+      logger.error(
+        `Failed to update webhook ${hookId} in ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1262,7 +1289,10 @@ export const GitlabService = {
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete webhook ${hookId} in ${projectId}:`, error);
+      logger.error(
+        `Failed to delete webhook ${hookId} in ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },

@@ -206,7 +206,11 @@ export const getFileContent = async (req, res) => {
   try {
     const { projectId, filePath } = req.params;
     const { ref } = req.query;
-    const content = await GitlabService.getFileContent(projectId, filePath, ref);
+    const content = await GitlabService.getFileContent(
+      projectId,
+      filePath,
+      ref,
+    );
     res.status(httpStatus.OK).json({ success: true, data: content });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting file content:', error);
@@ -307,7 +311,13 @@ export const getMergeRequest = async (req, res) => {
 export const createMergeRequest = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { sourceBranch, targetBranch, title, description, removeSourceBranch } = req.body;
+    const {
+      sourceBranch,
+      targetBranch,
+      title,
+      description,
+      removeSourceBranch,
+    } = req.body;
     const mr = await GitlabService.createMergeRequest(
       projectId,
       sourceBranch,
@@ -327,7 +337,11 @@ export const createMergeRequest = async (req, res) => {
 export const updateMergeRequest = async (req, res) => {
   try {
     const { projectId, mrIid } = req.params;
-    const mr = await GitlabService.updateMergeRequest(projectId, mrIid, req.body);
+    const mr = await GitlabService.updateMergeRequest(
+      projectId,
+      mrIid,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: mr });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating merge request:', error);
@@ -434,7 +448,11 @@ export const createIssue = async (req, res) => {
 export const updateIssue = async (req, res) => {
   try {
     const { projectId, issueIid } = req.params;
-    const issue = await GitlabService.updateIssue(projectId, issueIid, req.body);
+    const issue = await GitlabService.updateIssue(
+      projectId,
+      issueIid,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: issue });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating issue:', error);
@@ -573,7 +591,11 @@ export const createPipeline = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { ref, variables } = req.body;
-    const pipeline = await GitlabService.createPipeline(projectId, ref, variables);
+    const pipeline = await GitlabService.createPipeline(
+      projectId,
+      ref,
+      variables,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: pipeline });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating pipeline:', error);
@@ -671,14 +693,27 @@ export const getProjectVariable = async (req, res) => {
 export const createProjectVariable = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { key, value, variableType, protected: isProtected, masked, raw, environmentScope } = req.body;
-    const variable = await GitlabService.createProjectVariable(projectId, key, value, {
+    const {
+      key,
+      value,
       variableType,
       protected: isProtected,
       masked,
       raw,
       environmentScope,
-    });
+    } = req.body;
+    const variable = await GitlabService.createProjectVariable(
+      projectId,
+      key,
+      value,
+      {
+        variableType,
+        protected: isProtected,
+        masked,
+        raw,
+        environmentScope,
+      },
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: variable });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating project variable:', error);
@@ -691,14 +726,26 @@ export const createProjectVariable = async (req, res) => {
 export const updateProjectVariable = async (req, res) => {
   try {
     const { projectId, key } = req.params;
-    const { value, variableType, protected: isProtected, masked, raw, environmentScope } = req.body;
-    const variable = await GitlabService.updateProjectVariable(projectId, key, value, {
+    const {
+      value,
       variableType,
       protected: isProtected,
       masked,
       raw,
       environmentScope,
-    });
+    } = req.body;
+    const variable = await GitlabService.updateProjectVariable(
+      projectId,
+      key,
+      value,
+      {
+        variableType,
+        protected: isProtected,
+        masked,
+        raw,
+        environmentScope,
+      },
+    );
     res.status(httpStatus.OK).json({ success: true, data: variable });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating project variable:', error);
@@ -750,13 +797,25 @@ export const getGroupVariable = async (req, res) => {
 export const createGroupVariable = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const { key, value, variableType, protected: isProtected, masked, raw } = req.body;
-    const variable = await GitlabService.createGroupVariable(groupId, key, value, {
+    const {
+      key,
+      value,
       variableType,
       protected: isProtected,
       masked,
       raw,
-    });
+    } = req.body;
+    const variable = await GitlabService.createGroupVariable(
+      groupId,
+      key,
+      value,
+      {
+        variableType,
+        protected: isProtected,
+        masked,
+        raw,
+      },
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: variable });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating group variable:', error);
@@ -769,13 +828,24 @@ export const createGroupVariable = async (req, res) => {
 export const updateGroupVariable = async (req, res) => {
   try {
     const { groupId, key } = req.params;
-    const { value, variableType, protected: isProtected, masked, raw } = req.body;
-    const variable = await GitlabService.updateGroupVariable(groupId, key, value, {
+    const {
+      value,
       variableType,
       protected: isProtected,
       masked,
       raw,
-    });
+    } = req.body;
+    const variable = await GitlabService.updateGroupVariable(
+      groupId,
+      key,
+      value,
+      {
+        variableType,
+        protected: isProtected,
+        masked,
+        raw,
+      },
+    );
     res.status(httpStatus.OK).json({ success: true, data: variable });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating group variable:', error);
@@ -829,7 +899,10 @@ export const getGroup = async (req, res) => {
 export const listProjectMembers = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const members = await GitlabService.listProjectMembers(projectId, req.query);
+    const members = await GitlabService.listProjectMembers(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: members });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing project members:', error);
@@ -843,7 +916,11 @@ export const addProjectMember = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { userId, accessLevel } = req.body;
-    const member = await GitlabService.addProjectMember(projectId, userId, accessLevel);
+    const member = await GitlabService.addProjectMember(
+      projectId,
+      userId,
+      accessLevel,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: member });
   } catch (error) {
     logger.error('[GitLab Controller] Error adding project member:', error);
@@ -883,7 +960,11 @@ export const addGroupMember = async (req, res) => {
   try {
     const { groupId } = req.params;
     const { userId, accessLevel } = req.body;
-    const member = await GitlabService.addGroupMember(groupId, userId, accessLevel);
+    const member = await GitlabService.addGroupMember(
+      groupId,
+      userId,
+      accessLevel,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: member });
   } catch (error) {
     logger.error('[GitLab Controller] Error adding group member:', error);
@@ -938,7 +1019,18 @@ export const getProjectHook = async (req, res) => {
 export const createProjectHook = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const { url, pushEvents, issuesEvents, mergeRequestsEvents, tagPushEvents, noteEvents, pipelineEvents, jobEvents, token, enableSslVerification } = req.body;
+    const {
+      url,
+      pushEvents,
+      issuesEvents,
+      mergeRequestsEvents,
+      tagPushEvents,
+      noteEvents,
+      pipelineEvents,
+      jobEvents,
+      token,
+      enableSslVerification,
+    } = req.body;
     const hook = await GitlabService.createProjectHook(projectId, url, {
       pushEvents,
       issuesEvents,
@@ -962,7 +1054,18 @@ export const createProjectHook = async (req, res) => {
 export const updateProjectHook = async (req, res) => {
   try {
     const { projectId, hookId } = req.params;
-    const { url, pushEvents, issuesEvents, mergeRequestsEvents, tagPushEvents, noteEvents, pipelineEvents, jobEvents, token, enableSslVerification } = req.body;
+    const {
+      url,
+      pushEvents,
+      issuesEvents,
+      mergeRequestsEvents,
+      tagPushEvents,
+      noteEvents,
+      pipelineEvents,
+      jobEvents,
+      token,
+      enableSslVerification,
+    } = req.body;
     const hook = await GitlabService.updateProjectHook(projectId, hookId, url, {
       pushEvents,
       issuesEvents,
@@ -1002,7 +1105,10 @@ export const deleteProjectHook = async (req, res) => {
 export const listProjectAccessTokens = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const tokens = await GitlabService.listProjectAccessTokens(projectId, req.query);
+    const tokens = await GitlabService.listProjectAccessTokens(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: tokens });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing access tokens:', error);
@@ -1035,7 +1141,10 @@ export const createProjectAccessToken = async (req, res) => {
 export const revokeProjectAccessToken = async (req, res) => {
   try {
     const { projectId, tokenId } = req.params;
-    const result = await GitlabService.revokeProjectAccessToken(projectId, tokenId);
+    const result = await GitlabService.revokeProjectAccessToken(
+      projectId,
+      tokenId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error revoking access token:', error);
@@ -1051,10 +1160,16 @@ export const revokeProjectAccessToken = async (req, res) => {
 export const listVulnerabilityAlerts = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const alerts = await GitlabService.listVulnerabilityAlerts(projectId, req.query);
+    const alerts = await GitlabService.listVulnerabilityAlerts(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: alerts });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing vulnerability alerts:', error);
+    logger.error(
+      '[GitLab Controller] Error listing vulnerability alerts:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

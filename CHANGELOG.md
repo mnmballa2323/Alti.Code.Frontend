@@ -5,9 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.201] - 2026-06-12 — Sovereign Architecture & GitLab REST API Integration
+### Added
+- **GitLab REST API Integration**: Implemented a deeply entrenched GitLab REST API module containing 60+ endpoint wrappers utilizing a lightweight, authenticated Axios client. Covers user details, SSH/GPG keys, projects, branch management, repository files, merge requests, issue tracking, milestones, pipeline orchestrations, group variables, project hooks, and vulnerability scanning.
+- **GitLab Express Routing & Controllers**: Created controller handlers and mapped all endpoints dynamically under `/api/v1/gitlab`. Implemented wildcard file path capture middleware.
+- **GitLab Service Unit Tests**: Created a comprehensive test suite with 71 passing unit tests using Vitest to mock Axios responses, verify parameters, and assert fallback behaviors.
+
 ## [39.37.200] - 2026-06-12 — Sovereign Architecture & GitHub Integration Documentation
 ### Added
 - **GitHub & Deployment Documentation**: Created a comprehensive, professional architecture and deployment guide under `docs/GITHUB_INTEGRATIONS_AND_DEPLOYMENT.md` detailing the Direct GitHub API/SDK wrapper structure, logical/physical isolation tiers, and operational shell scripts (e.g. blue-green deployment, self-healing api monitor).
+
 
 ## [39.37.199] - 2026-06-12 — OpenStack Infrastructure Defaults Hardening
 ### Changed
