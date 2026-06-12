@@ -31,6 +31,15 @@ vi.mock('octokit', () => {
         listSocialAccountsForAuthenticatedUser: vi.fn(),
         addSocialAccountsForAuthenticatedUser: vi.fn(),
         deleteSocialAccountsForAuthenticatedUser: vi.fn(),
+        listFollowersForAuthenticatedUser: vi.fn(),
+        listFollowingForAuthenticatedUser: vi.fn(),
+        checkIfFollowingForTokenUser: vi.fn(),
+        followUserForAuthenticatedUser: vi.fn(),
+        unfollowUserForAuthenticatedUser: vi.fn(),
+        listFollowersForUser: vi.fn(),
+        listFollowingForUser: vi.fn(),
+        listPublicKeysForUser: vi.fn(),
+        listGpgKeysForUser: vi.fn(),
       },
       repos: {
         listForAuthenticatedUser: vi.fn(),
@@ -297,6 +306,10 @@ vi.mock('octokit', () => {
         updateWebhook: vi.fn(),
         deleteWebhook: vi.fn(),
         pingWebhook: vi.fn(),
+        listPendingInvitations: vi.fn(),
+        createInvitation: vi.fn(),
+        cancelInvitation: vi.fn(),
+        listInvitationTeams: vi.fn(),
       },
       teams: {
         list: vi.fn(),
@@ -8096,6 +8109,228 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser,
     ).toHaveBeenCalledWith({
       account_urls: ['url'],
+    });
+  });
+
+  // 90. User Followers & Following
+  it('should list followers for authenticated user', async () => {
+    const mockData = [{ id: 1, login: 'follower1' }];
+    mockOctokit.rest.users.listFollowersForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listFollowersForAuthenticatedUser(2, 10);
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.users.listFollowersForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      page: 2,
+      per_page: 10,
+    });
+  });
+
+  it('should list following for authenticated user', async () => {
+    const mockData = [{ id: 2, login: 'following1' }];
+    mockOctokit.rest.users.listFollowingForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listFollowingForAuthenticatedUser(3, 20);
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.users.listFollowingForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      page: 3,
+      per_page: 20,
+    });
+  });
+
+  it('should check if user is followed by authenticated user (204 response)', async () => {
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockResolvedValue({
+      status: 204,
+    });
+    const result = await GithubService.checkIfUserFollowing('octocat');
+    expect(result).toEqual({ following: true });
+    expect(
+      mockOctokit.rest.users.checkIfFollowingForTokenUser,
+    ).toHaveBeenCalledWith({
+      username: 'octocat',
+    });
+  });
+
+  it('should check if user is followed by authenticated user (404 response status)', async () => {
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockResolvedValue({
+      status: 404,
+    });
+    const result = await GithubService.checkIfUserFollowing('octocat');
+    expect(result).toEqual({ following: false });
+    expect(
+      mockOctokit.rest.users.checkIfFollowingForTokenUser,
+    ).toHaveBeenCalledWith({
+      username: 'octocat',
+    });
+  });
+
+  it('should check if user is followed by authenticated user (404 error thrown)', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(error404);
+    const result = await GithubService.checkIfUserFollowing('octocat');
+    expect(result).toEqual({ following: false });
+  });
+
+  it('should check if user is followed by authenticated user and rethrow other errors', async () => {
+    const error500 = new Error('Server Error');
+    error500.status = 500;
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(error500);
+    await expect(GithubService.checkIfUserFollowing('octocat')).rejects.toThrow('Server Error');
+  });
+
+  it('should follow a user', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.followUserForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.followUser('octocat');
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.users.followUserForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      username: 'octocat',
+    });
+  });
+
+  it('should unfollow a user', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.users.unfollowUserForAuthenticatedUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.unfollowUser('octocat');
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.users.unfollowUserForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
+      username: 'octocat',
+    });
+  });
+
+  it('should list followers for a specific user', async () => {
+    const mockData = [{ id: 3, login: 'user1' }];
+    mockOctokit.rest.users.listFollowersForUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listFollowersForUser('octocat', 1, 5);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listFollowersForUser).toHaveBeenCalledWith({
+      username: 'octocat',
+      page: 1,
+      per_page: 5,
+    });
+  });
+
+  it('should list following for a specific user', async () => {
+    const mockData = [{ id: 4, login: 'user2' }];
+    mockOctokit.rest.users.listFollowingForUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listFollowingForUser('octocat', 2, 8);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listFollowingForUser).toHaveBeenCalledWith({
+      username: 'octocat',
+      page: 2,
+      per_page: 8,
+    });
+  });
+
+  // 91. Organization Invitations
+  it('should list pending org invitations', async () => {
+    const mockData = [{ id: 1, email: 'invite@test.com' }];
+    mockOctokit.rest.orgs.listPendingInvitations.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listPendingOrgInvitations('org', 1, 10);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listPendingInvitations).toHaveBeenCalledWith({
+      org: 'org',
+      page: 1,
+      per_page: 10,
+    });
+  });
+
+  it('should create an org invitation', async () => {
+    const mockData = { id: 2, email: 'invite2@test.com' };
+    mockOctokit.rest.orgs.createInvitation.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createOrgInvitation(
+      'org',
+      123,
+      'invite2@test.com',
+      'direct_member',
+      [456],
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.createInvitation).toHaveBeenCalledWith({
+      org: 'org',
+      invitee_id: 123,
+      email: 'invite2@test.com',
+      role: 'direct_member',
+      team_ids: [456],
+    });
+  });
+
+  it('should cancel an org invitation', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.cancelInvitation.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.cancelOrgInvitation('org', 1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.cancelInvitation).toHaveBeenCalledWith({
+      org: 'org',
+      invitation_id: 1,
+    });
+  });
+
+  it('should list teams for an org invitation', async () => {
+    const mockData = [{ id: 1, name: 'team1' }];
+    mockOctokit.rest.orgs.listInvitationTeams.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listOrgInvitationTeams('org', 1, 2, 5);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listInvitationTeams).toHaveBeenCalledWith({
+      org: 'org',
+      invitation_id: 1,
+      page: 2,
+      per_page: 5,
+    });
+  });
+
+  // 92. User Public Security Keys
+  it('should list public SSH keys for a user', async () => {
+    const mockData = [{ id: 1, key: 'ssh-rsa' }];
+    mockOctokit.rest.users.listPublicKeysForUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listPublicKeysForUser('octocat', 1, 10);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listPublicKeysForUser).toHaveBeenCalledWith({
+      username: 'octocat',
+      page: 1,
+      per_page: 10,
+    });
+  });
+
+  it('should list GPG keys for a user', async () => {
+    const mockData = [{ id: 1, primary_key_id: 'gpg-key' }];
+    mockOctokit.rest.users.listGpgKeysForUser.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listGpgKeysForUser('octocat', 2, 20);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.users.listGpgKeysForUser).toHaveBeenCalledWith({
+      username: 'octocat',
+      page: 2,
+      per_page: 20,
     });
   });
 });
