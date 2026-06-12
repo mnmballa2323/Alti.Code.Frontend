@@ -159,6 +159,24 @@ ${graphContext}
         if (cisoDecision.includes('APPROVED')) {
             logger.info(`✅ [Tri-Brain] Cryptographic Consensus Reached! Code is mathematically flawless.`);
             
+            // ⚗️ MiMo-Code: Trajectory Distiller to automatically generate specialist agents
+            try {
+                const { mimoDistillerService } = await import('../memory/mimo_distiller.service.js');
+                const cleanName = taskDescription.toLowerCase()
+                    .replace(/[^a-z0-9]/g, '_')
+                    .split('_')
+                    .filter(Boolean)
+                    .slice(0, 3)
+                    .join('_');
+                const agentId = `agent.distilled.consensus.${cleanName || Date.now()}`;
+                
+                mimoDistillerService.distill(taskDescription, initialCode, agentId).catch(err => {
+                    logger.debug(`[MimoDistiller] Tri-Brain trajectory distillation failed: ${err.message}`);
+                });
+            } catch (distillErr) {
+                logger.debug(`[MimoDistiller] Tri-Brain trajectory distillation import failed: ${distillErr.message}`);
+            }
+
             // Pillar 35: Metamorphic Self-Compilation (AGI Genesis)
             logger.info(`🧬 [Tri-Brain] Pillar 35: Initiating Metamorphic Self-Introspection...`);
             const selfIntrospectionResult = await this.azureOpenAi.chat.completions.create({

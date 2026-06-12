@@ -337,6 +337,14 @@ Identify the root cause, locate the file, and write the exact code patch require
     }
 
     async scanForArchitecturalDecay() {
+        // 🌙 MiMo-Code: Compactor & Self-Evolution Dream Cycle
+        try {
+            const { mimoDreamService } = await import('../memory/mimo_dream.service.js');
+            await mimoDreamService.dream().catch(() => {});
+        } catch (dreamErr) {
+            logger.debug(`[MimoDream] Automatic dream cycle failed inside Sentinel: ${dreamErr.message}`);
+        }
+
         try {
             let worstNode = null;
             let worstNodeName = null;

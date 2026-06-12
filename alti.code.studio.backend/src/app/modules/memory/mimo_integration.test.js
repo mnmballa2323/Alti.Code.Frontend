@@ -177,4 +177,54 @@ capabilities:
             }));
         });
     });
+
+    describe('Tri-Brain Consensus Distillation Trigger', () => {
+        it('should trigger mimoDistillerService.distill on APPROVED consensus status', async () => {
+            const { triBrainService } = await import('../agents/tri_brain.service.js');
+            const mockDistill = vi.spyOn(mimoDistillerService, 'distill').mockResolvedValue({ success: true });
+
+            // Mock TriBrainService internal calls to bypass real LLMs
+            vi.spyOn(triBrainService.azureOpenAi.chat.completions, 'create').mockResolvedValue({
+                choices: [{ message: { content: 'APPROVED\nNO_CHANGE' } }]
+            });
+            vi.spyOn(triBrainService.anthropic.messages, 'create').mockResolvedValue({
+                content: [{ text: 'const a = 1;' }]
+            });
+
+            // Mock imports
+            vi.mock('../knowledge/knowledge.rag.service.js', () => ({
+                knowledgeRagService: {
+                    queryKnowledgeBase: () => ({ answer: 'Mock answer', citations: [] })
+                }
+            }));
+            vi.mock('./graph.memory.service.js', () => ({
+                graphMemoryService: {
+                    queryIntentGraph: () => 'Mock graph'
+                }
+            }));
+
+            await triBrainService.executeConsensusLoop('Implement oauth setup');
+
+            expect(mockDistill).toHaveBeenCalled();
+            expect(mockDistill.mock.calls[0][0]).toBe('Implement oauth setup');
+            expect(mockDistill.mock.calls[0][1]).toContain('const a = 1;');
+            expect(mockDistill.mock.calls[0][2]).toContain('agent.distilled.consensus');
+        });
+    });
+
+    describe('AutonomousRepairDaemon Dream Trigger', () => {
+        it('should trigger mimoDreamService.dream during scanForArchitecturalDecay', async () => {
+            const { autonomousRepairDaemon } = await import('../agents/autonomous_repair_daemon.js');
+            const mockDream = vi.spyOn(mimoDreamService, 'dream').mockResolvedValue({ success: true });
+
+            // Mock calculating centrality to bypass real file system crawling
+            vi.spyOn(autonomousRepairDaemon, 'calculateLocalDependencyCentrality').mockResolvedValue([
+                { name: 'src/app/modules/memory/vector.store.js', score: 1 }
+            ]);
+
+            await autonomousRepairDaemon.scanForArchitecturalDecay();
+
+            expect(mockDream).toHaveBeenCalled();
+        });
+    });
 });
