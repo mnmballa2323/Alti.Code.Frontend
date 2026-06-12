@@ -1,4 +1,4 @@
-# Alti Code Studio Backend - Agentic Rules
+# Inso Code - Agentic Rules
 
 ## Instructions (What to do)
 - Always use **PostgreSQL** via the **Prisma ORM** as the singular data foundation for the application.
