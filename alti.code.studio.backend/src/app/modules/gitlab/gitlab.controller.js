@@ -3808,3 +3808,435 @@ export const downloadRepositoryArchive = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 35. Group Webhooks Handlers
+// ==========================================
+export const listGroupHooks = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const hooks = await GitlabService.listGroupHooks(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: hooks });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group hooks:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupHook = async (req, res) => {
+  try {
+    const { groupId, hookId } = req.params;
+    const hook = await GitlabService.getGroupHook(groupId, hookId);
+    res.status(httpStatus.OK).json({ success: true, data: hook });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting group hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addGroupHook = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const hook = await GitlabService.addGroupHook(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: hook });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error adding group hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupHook = async (req, res) => {
+  try {
+    const { groupId, hookId } = req.params;
+    const hook = await GitlabService.updateGroupHook(groupId, hookId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: hook });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupHook = async (req, res) => {
+  try {
+    const { groupId, hookId } = req.params;
+    const result = await GitlabService.deleteGroupHook(groupId, hookId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 36. Issue Links Handlers
+// ==========================================
+export const listIssueLinks = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const links = await GitlabService.listIssueLinks(projectId, issueIid);
+    res.status(httpStatus.OK).json({ success: true, data: links });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing issue links:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createIssueLink = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const { targetProjectId, targetIssueIid, linkType } = req.body;
+    const link = await GitlabService.createIssueLink(
+      projectId,
+      issueIid,
+      targetProjectId,
+      targetIssueIid,
+      linkType,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: link });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating issue link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteIssueLink = async (req, res) => {
+  try {
+    const { projectId, issueIid, issueLinkId } = req.params;
+    const result = await GitlabService.deleteIssueLink(
+      projectId,
+      issueIid,
+      issueLinkId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting issue link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 37. Time Tracking Handlers
+// ==========================================
+export const addIssueTimeSpent = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const { duration } = req.body;
+    const result = await GitlabService.addIssueTimeSpent(
+      projectId,
+      issueIid,
+      duration,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error adding issue spent time:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addMergeRequestTimeSpent = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const { duration } = req.body;
+    const result = await GitlabService.addMergeRequestTimeSpent(
+      projectId,
+      mrIid,
+      duration,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error adding MR spent time:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssueTimeTracking = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const stats = await GitlabService.getIssueTimeTracking(projectId, issueIid);
+    res.status(httpStatus.OK).json({ success: true, data: stats });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting issue time stats:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMergeRequestTimeTracking = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const stats = await GitlabService.getMergeRequestTimeTracking(
+      projectId,
+      mrIid,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: stats });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting MR time stats:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const resetIssueTimeTracking = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const result = await GitlabService.resetIssueTimeTracking(
+      projectId,
+      issueIid,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error resetting issue time stats:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const resetMergeRequestTimeTracking = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const result = await GitlabService.resetMergeRequestTimeTracking(
+      projectId,
+      mrIid,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error resetting MR time stats:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 38. Group Iterations Handlers
+// ==========================================
+export const listGroupIterations = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const iterations = await GitlabService.listGroupIterations(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: iterations });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group iterations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectIterations = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const iterations = await GitlabService.listProjectIterations(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: iterations });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project iterations:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupIteration = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const iteration = await GitlabService.createGroupIteration(
+      groupId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: iteration });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group iteration:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupIteration = async (req, res) => {
+  try {
+    const { groupId, iterationId } = req.params;
+    const iteration = await GitlabService.updateGroupIteration(
+      groupId,
+      iterationId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: iteration });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group iteration:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupIteration = async (req, res) => {
+  try {
+    const { groupId, iterationId } = req.params;
+    const result = await GitlabService.deleteGroupIteration(
+      groupId,
+      iterationId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group iteration:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 39. Release Links Handlers
+// ==========================================
+export const listReleaseLinks = async (req, res) => {
+  try {
+    const { projectId, tagName } = req.params;
+    const links = await GitlabService.listReleaseLinks(projectId, tagName);
+    res.status(httpStatus.OK).json({ success: true, data: links });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing release links:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getReleaseLink = async (req, res) => {
+  try {
+    const { projectId, tagName, linkId } = req.params;
+    const link = await GitlabService.getReleaseLink(projectId, tagName, linkId);
+    res.status(httpStatus.OK).json({ success: true, data: link });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting release link details:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createReleaseLink = async (req, res) => {
+  try {
+    const { projectId, tagName } = req.params;
+    const link = await GitlabService.createReleaseLink(
+      projectId,
+      tagName,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: link });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating release link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateReleaseLink = async (req, res) => {
+  try {
+    const { projectId, tagName, linkId } = req.params;
+    const link = await GitlabService.updateReleaseLink(
+      projectId,
+      tagName,
+      linkId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: link });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating release link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteReleaseLink = async (req, res) => {
+  try {
+    const { projectId, tagName, linkId } = req.params;
+    const result = await GitlabService.deleteReleaseLink(
+      projectId,
+      tagName,
+      linkId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting release link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 40. Repository File Locks Handlers
+// ==========================================
+export const listProjectFileLocks = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const locks = await GitlabService.listProjectFileLocks(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: locks });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing file locks:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const lockProjectFile = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { path } = req.body;
+    const lock = await GitlabService.lockProjectFile(projectId, path);
+    res.status(httpStatus.CREATED).json({ success: true, data: lock });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error locking file:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unlockProjectFile = async (req, res) => {
+  try {
+    const { projectId, lockId } = req.params;
+    const result = await GitlabService.unlockProjectFile(projectId, lockId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error unlocking file lock:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

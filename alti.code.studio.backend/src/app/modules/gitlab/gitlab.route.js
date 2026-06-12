@@ -884,4 +884,121 @@ router.get(
   GitlabController.downloadRepositoryArchive,
 );
 
+// ==========================================
+// 35. Group Webhooks Endpoints
+// ==========================================
+router.get('/groups/:groupId/hooks', GitlabController.listGroupHooks);
+router.get('/groups/:groupId/hooks/:hookId', GitlabController.getGroupHook);
+router.post('/groups/:groupId/hooks', GitlabController.addGroupHook);
+router.put('/groups/:groupId/hooks/:hookId', GitlabController.updateGroupHook);
+router.delete(
+  '/groups/:groupId/hooks/:hookId',
+  GitlabController.deleteGroupHook,
+);
+
+// ==========================================
+// 36. Issue Links Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/issues/:issueIid/links',
+  GitlabController.listIssueLinks,
+);
+router.post(
+  '/projects/:projectId/issues/:issueIid/links',
+  GitlabController.createIssueLink,
+);
+router.delete(
+  '/projects/:projectId/issues/:issueIid/links/:issueLinkId',
+  GitlabController.deleteIssueLink,
+);
+
+// ==========================================
+// 37. Time Tracking Endpoints
+// ==========================================
+router.post(
+  '/projects/:projectId/issues/:issueIid/time_spent',
+  GitlabController.addIssueTimeSpent,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/time_spent',
+  GitlabController.addMergeRequestTimeSpent,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/time_stats',
+  GitlabController.getIssueTimeTracking,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/time_stats',
+  GitlabController.getMergeRequestTimeTracking,
+);
+router.post(
+  '/projects/:projectId/issues/:issueIid/time_reset',
+  GitlabController.resetIssueTimeTracking,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/time_reset',
+  GitlabController.resetMergeRequestTimeTracking,
+);
+
+// ==========================================
+// 38. Group Iterations Endpoints
+// ==========================================
+router.get('/groups/:groupId/iterations', GitlabController.listGroupIterations);
+router.get(
+  '/projects/:projectId/iterations',
+  GitlabController.listProjectIterations,
+);
+router.post(
+  '/groups/:groupId/iterations',
+  GitlabController.createGroupIteration,
+);
+router.put(
+  '/groups/:groupId/iterations/:iterationId',
+  GitlabController.updateGroupIteration,
+);
+router.delete(
+  '/groups/:groupId/iterations/:iterationId',
+  GitlabController.deleteGroupIteration,
+);
+
+// ==========================================
+// 39. Release Links Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/releases/:tagName/assets/links',
+  GitlabController.listReleaseLinks,
+);
+router.get(
+  '/projects/:projectId/releases/:tagName/assets/links/:linkId',
+  GitlabController.getReleaseLink,
+);
+router.post(
+  '/projects/:projectId/releases/:tagName/assets/links',
+  GitlabController.createReleaseLink,
+);
+router.put(
+  '/projects/:projectId/releases/:tagName/assets/links/:linkId',
+  GitlabController.updateReleaseLink,
+);
+router.delete(
+  '/projects/:projectId/releases/:tagName/assets/links/:linkId',
+  GitlabController.deleteReleaseLink,
+);
+
+// ==========================================
+// 40. Repository File Locks Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/infrastructure/file_locks',
+  GitlabController.listProjectFileLocks,
+);
+router.post(
+  '/projects/:projectId/infrastructure/file_locks',
+  GitlabController.lockProjectFile,
+);
+router.delete(
+  '/projects/:projectId/infrastructure/file_locks/:lockId',
+  GitlabController.unlockProjectFile,
+);
+
 export const GitlabRoutes = router;
