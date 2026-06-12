@@ -8873,7 +8873,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.updateWebhookConfigForApp(config);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.apps.updateWebhookConfigForApp).toHaveBeenCalledWith(config);
+    expect(
+      mockOctokit.rest.apps.updateWebhookConfigForApp,
+    ).toHaveBeenCalledWith(config);
   });
 
   it('should list webhook deliveries', async () => {
@@ -8908,9 +8910,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.redeliverWebhookDelivery(12345);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.apps.redeliverWebhookDelivery).toHaveBeenCalledWith({
-      delivery_id: 12345,
-    });
+    expect(mockOctokit.rest.apps.redeliverWebhookDelivery).toHaveBeenCalledWith(
+      {
+        delivery_id: 12345,
+      },
+    );
   });
 
   // 98. Organization Fine-Grained Personal Access Tokens (PATs)
@@ -8919,7 +8923,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.listPatGrantRequests.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.listPatGrantRequests('my-org', 1, 30, 'repo', 'owner');
+    const result = await GithubService.listPatGrantRequests(
+      'my-org',
+      1,
+      30,
+      'repo',
+      'owner',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.listPatGrantRequests).toHaveBeenCalledWith({
       org: 'my-org',
@@ -8935,7 +8945,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.reviewPatGrantRequest.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.reviewPatGrantRequest('my-org', 123, 'approve', 'approved');
+    const result = await GithubService.reviewPatGrantRequest(
+      'my-org',
+      123,
+      'approve',
+      'approved',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.reviewPatGrantRequest).toHaveBeenCalledWith({
       org: 'my-org',
@@ -8950,7 +8965,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.listPatGrants.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.listPatGrants('my-org', 1, 30, 'repo', 'owner');
+    const result = await GithubService.listPatGrants(
+      'my-org',
+      1,
+      30,
+      'repo',
+      'owner',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.listPatGrants).toHaveBeenCalledWith({
       org: 'my-org',
@@ -8979,7 +9000,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.orgs.reviewPatGrantRequests.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.reviewPatGrantRequests('my-org', [123, 456], 'approve', 'approved');
+    const result = await GithubService.reviewPatGrantRequests(
+      'my-org',
+      [123, 456],
+      'approve',
+      'approved',
+    );
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.orgs.reviewPatGrantRequests).toHaveBeenCalledWith({
       org: 'my-org',
@@ -8996,9 +9022,16 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codeSecurity.createConfigurationForOrg.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.createOrgSecurityConfiguration('my-org', 'config-name', 'desc', settings);
+    const result = await GithubService.createOrgSecurityConfiguration(
+      'my-org',
+      'config-name',
+      'desc',
+      settings,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codeSecurity.createConfigurationForOrg).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeSecurity.createConfigurationForOrg,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       name: 'config-name',
       description: 'desc',
@@ -9012,9 +9045,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codeSecurity.updateConfigurationForOrg.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.updateOrgSecurityConfiguration('my-org', 1, settings);
+    const result = await GithubService.updateOrgSecurityConfiguration(
+      'my-org',
+      1,
+      settings,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codeSecurity.updateConfigurationForOrg).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeSecurity.updateConfigurationForOrg,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       security_configuration_id: 1,
       dependency_graph: 'disabled',
@@ -9026,9 +9065,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codeSecurity.deleteConfiguration.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.deleteOrgSecurityConfiguration('my-org', 1);
+    const result = await GithubService.deleteOrgSecurityConfiguration(
+      'my-org',
+      1,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codeSecurity.deleteConfiguration).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeSecurity.deleteConfiguration,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       security_configuration_id: 1,
     });
@@ -9039,9 +9083,16 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codeSecurity.attachConfiguration.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.attachOrgSecurityConfiguration('my-org', 1, 'selected', [10, 20]);
+    const result = await GithubService.attachOrgSecurityConfiguration(
+      'my-org',
+      1,
+      'selected',
+      [10, 20],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codeSecurity.attachConfiguration).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeSecurity.attachConfiguration,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       security_configuration_id: 1,
       scope: 'selected',
@@ -9054,9 +9105,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.codeSecurity.getRepoConfiguration.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.getRepoSecurityConfigurationAssignment('owner', 'repo');
+    const result = await GithubService.getRepoSecurityConfigurationAssignment(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.codeSecurity.getRepoConfiguration).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.codeSecurity.getRepoConfiguration,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -9068,9 +9124,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.actions.getAllowedActionsRepository.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.getAllowedActionsRepository('owner', 'repo');
+    const result = await GithubService.getAllowedActionsRepository(
+      'owner',
+      'repo',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.actions.getAllowedActionsRepository).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.getAllowedActionsRepository,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
     });
@@ -9082,9 +9143,15 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.actions.setAllowedActionsRepository.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.setAllowedActionsRepository('owner', 'repo', settings);
+    const result = await GithubService.setAllowedActionsRepository(
+      'owner',
+      'repo',
+      settings,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.actions.setAllowedActionsRepository).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.setAllowedActionsRepository,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       github_owned_allowed: true,
@@ -9098,7 +9165,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.getAllowedActionsOrganization('my-org');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.actions.getAllowedActionsOrganization).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.getAllowedActionsOrganization,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
     });
   });
@@ -9109,9 +9178,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.actions.setAllowedActionsOrganization.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.setAllowedActionsOrganization('my-org', settings);
+    const result = await GithubService.setAllowedActionsOrganization(
+      'my-org',
+      settings,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.actions.setAllowedActionsOrganization).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.actions.setAllowedActionsOrganization,
+    ).toHaveBeenCalledWith({
       org: 'my-org',
       github_owned_allowed: true,
     });

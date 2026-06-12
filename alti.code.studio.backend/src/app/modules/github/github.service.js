@@ -9447,7 +9447,8 @@ export const GithubService = {
   async updateWebhookConfigForApp(config) {
     logger.info(`🐙 [GitHub Service] Updating webhook config for App`);
     try {
-      const { data } = await octokit.rest.apps.updateWebhookConfigForApp(config);
+      const { data } =
+        await octokit.rest.apps.updateWebhookConfigForApp(config);
       return data;
     } catch (error) {
       logger.error(`Failed to update webhook config for App:`, error);
@@ -9507,7 +9508,9 @@ export const GithubService = {
     repository = undefined,
     owner = undefined,
   ) {
-    logger.info(`🐙 [GitHub Service] Listing PAT grant requests for org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing PAT grant requests for org ${org}`,
+    );
     try {
       const { data } = await octokit.rest.orgs.listPatGrantRequests({
         org,
@@ -9568,7 +9571,9 @@ export const GithubService = {
   },
 
   async revokePatGrant(org, patId) {
-    logger.info(`🐙 [GitHub Service] Revoking PAT grant ${patId} in org ${org}`);
+    logger.info(
+      `🐙 [GitHub Service] Revoking PAT grant ${patId} in org ${org}`,
+    );
     try {
       const response = await octokit.rest.orgs.revokePatGrant({
         org,
@@ -9607,14 +9612,13 @@ export const GithubService = {
       `🐙 [GitHub Service] Creating security configuration ${name} for org ${org}`,
     );
     try {
-      const { data } = await octokit.rest.codeSecurity.createConfigurationForOrg(
-        {
+      const { data } =
+        await octokit.rest.codeSecurity.createConfigurationForOrg({
           org,
           name,
           description,
           ...settings,
-        },
-      );
+        });
       return data;
     } catch (error) {
       logger.error(
@@ -9630,13 +9634,12 @@ export const GithubService = {
       `🐙 [GitHub Service] Updating security configuration ${securityConfigurationId} for org ${org}`,
     );
     try {
-      const { data } = await octokit.rest.codeSecurity.updateConfigurationForOrg(
-        {
+      const { data } =
+        await octokit.rest.codeSecurity.updateConfigurationForOrg({
           org,
           security_configuration_id: securityConfigurationId,
           ...settings,
-        },
-      );
+        });
       return data;
     } catch (error) {
       logger.error(

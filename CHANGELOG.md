@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.198] - 2026-06-12 — Phase 17 GitHub REST API & SDK Entrenchment
+### Added
+- **GitHub App Webhook Deliveries & Config**: Integrated retrieving and updating app webhook configuration, listing webhook deliveries, getting specific webhook delivery, and requesting webhook redelivery.
+- **Organization Fine-Grained Personal Access Tokens (PATs)**: Added organization PAT administration endpoints: list PAT grant requests, review PAT grant request, list PAT grants, revoke PAT grant, and bulk review PAT grant requests.
+- **Organization Code Security Configurations**: Implemented creating, updating, deleting, and attaching code security configurations at the organization level, and retrieving repository security configuration assignments.
+- **Allowed Actions Configuration**: Added allowed actions settings management for both repository and organization scopes.
+- **Unit Testing**: Expanded the test suite with 19 new unit tests, bringing the total passing tests to 488.
+
 ## [39.37.197] - 2026-06-12 — Phase 16 GitHub REST API & SDK Entrenchment
 ### Added
 - **Repository Settings & Secret Scanning**: Integrated repository updating (`updateRepository`), enabling/disabling secret scanning (`enableSecretScanning`/`disableSecretScanning`), and enabling/disabling secret scanning push protection (`enableSecretScanningPushProtection`/`disableSecretScanningPushProtection`).

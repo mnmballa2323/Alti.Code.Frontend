@@ -1742,34 +1742,76 @@ router.delete(
 router.get('/app/hook/config', GithubController.getWebhookConfigForApp);
 router.patch('/app/hook/config', GithubController.updateWebhookConfigForApp);
 router.get('/app/hook/deliveries', GithubController.listWebhookDeliveries);
-router.get('/app/hook/deliveries/:deliveryId', GithubController.getWebhookDelivery);
-router.post('/app/hook/deliveries/:deliveryId/attempts', GithubController.redeliverWebhookDelivery);
+router.get(
+  '/app/hook/deliveries/:deliveryId',
+  GithubController.getWebhookDelivery,
+);
+router.post(
+  '/app/hook/deliveries/:deliveryId/attempts',
+  GithubController.redeliverWebhookDelivery,
+);
 
 // ==========================================
 // 75. Organization PATs (Personal Access Tokens) API
 // ==========================================
-router.get('/orgs/:org/pat_grant_requests', GithubController.listPatGrantRequests);
-router.post('/orgs/:org/pat_grant_requests/:patRequestId', GithubController.reviewPatGrantRequest);
+router.get(
+  '/orgs/:org/pat_grant_requests',
+  GithubController.listPatGrantRequests,
+);
+router.post(
+  '/orgs/:org/pat_grant_requests/:patRequestId',
+  GithubController.reviewPatGrantRequest,
+);
 router.get('/orgs/:org/pat_grants', GithubController.listPatGrants);
 router.delete('/orgs/:org/pat_grants/:patId', GithubController.revokePatGrant);
-router.post('/orgs/:org/pat_grant_requests/bulk', GithubController.reviewPatGrantRequests);
+router.post(
+  '/orgs/:org/pat_grant_requests/bulk',
+  GithubController.reviewPatGrantRequests,
+);
 
 // ==========================================
 // 76. Code Security Configurations API
 // ==========================================
-router.post('/orgs/:org/code-security/configurations', GithubController.createOrgSecurityConfiguration);
-router.patch('/orgs/:org/code-security/configurations/:securityConfigurationId', GithubController.updateOrgSecurityConfiguration);
-router.delete('/orgs/:org/code-security/configurations/:securityConfigurationId', GithubController.deleteOrgSecurityConfiguration);
-router.post('/orgs/:org/code-security/configurations/:securityConfigurationId/defaults', GithubController.attachOrgSecurityConfiguration);
-router.get('/repos/:owner/:repo/code-security/configuration', GithubController.getRepoSecurityConfigurationAssignment);
+router.post(
+  '/orgs/:org/code-security/configurations',
+  GithubController.createOrgSecurityConfiguration,
+);
+router.patch(
+  '/orgs/:org/code-security/configurations/:securityConfigurationId',
+  GithubController.updateOrgSecurityConfiguration,
+);
+router.delete(
+  '/orgs/:org/code-security/configurations/:securityConfigurationId',
+  GithubController.deleteOrgSecurityConfiguration,
+);
+router.post(
+  '/orgs/:org/code-security/configurations/:securityConfigurationId/defaults',
+  GithubController.attachOrgSecurityConfiguration,
+);
+router.get(
+  '/repos/:owner/:repo/code-security/configuration',
+  GithubController.getRepoSecurityConfigurationAssignment,
+);
 
 // ==========================================
 // 77. Allowed Actions Configuration API
 // ==========================================
-router.get('/repos/:owner/:repo/actions/permissions/selected-actions', GithubController.getAllowedActionsRepository);
-router.put('/repos/:owner/:repo/actions/permissions/selected-actions', GithubController.setAllowedActionsRepository);
-router.get('/orgs/:org/actions/permissions/selected-actions', GithubController.getAllowedActionsOrganization);
-router.put('/orgs/:org/actions/permissions/selected-actions', GithubController.setAllowedActionsOrganization);
+router.get(
+  '/repos/:owner/:repo/actions/permissions/selected-actions',
+  GithubController.getAllowedActionsRepository,
+);
+router.put(
+  '/repos/:owner/:repo/actions/permissions/selected-actions',
+  GithubController.setAllowedActionsRepository,
+);
+router.get(
+  '/orgs/:org/actions/permissions/selected-actions',
+  GithubController.getAllowedActionsOrganization,
+);
+router.put(
+  '/orgs/:org/actions/permissions/selected-actions',
+  GithubController.setAllowedActionsOrganization,
+);
 
 export const GithubRoutes = router;
 export default router;
