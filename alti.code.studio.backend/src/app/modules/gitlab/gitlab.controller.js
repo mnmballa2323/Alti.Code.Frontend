@@ -5326,7 +5326,10 @@ export const getProjectPushRules = async (req, res) => {
     const rules = await GitlabService.getProjectPushRules(projectId);
     res.status(httpStatus.OK).json({ success: true, data: rules });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project push rules:', error);
+    logger.error(
+      '[GitLab Controller] Error getting project push rules:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5336,10 +5339,16 @@ export const getProjectPushRules = async (req, res) => {
 export const createProjectPushRules = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const rules = await GitlabService.createProjectPushRules(projectId, req.body);
+    const rules = await GitlabService.createProjectPushRules(
+      projectId,
+      req.body,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: rules });
   } catch (error) {
-    logger.error('[GitLab Controller] Error creating project push rules:', error);
+    logger.error(
+      '[GitLab Controller] Error creating project push rules:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5349,10 +5358,16 @@ export const createProjectPushRules = async (req, res) => {
 export const updateProjectPushRules = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const rules = await GitlabService.updateProjectPushRules(projectId, req.body);
+    const rules = await GitlabService.updateProjectPushRules(
+      projectId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: rules });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating project push rules:', error);
+    logger.error(
+      '[GitLab Controller] Error updating project push rules:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5365,7 +5380,10 @@ export const deleteProjectPushRules = async (req, res) => {
     const result = await GitlabService.deleteProjectPushRules(projectId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting project push rules:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting project push rules:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5430,10 +5448,16 @@ export const deleteGroupPushRules = async (req, res) => {
 export const listMergeRequestDraftNotes = async (req, res) => {
   try {
     const { projectId, mrIid } = req.params;
-    const notes = await GitlabService.listMergeRequestDraftNotes(projectId, mrIid);
+    const notes = await GitlabService.listMergeRequestDraftNotes(
+      projectId,
+      mrIid,
+    );
     res.status(httpStatus.OK).json({ success: true, data: notes });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing merge request draft notes:', error);
+    logger.error(
+      '[GitLab Controller] Error listing merge request draft notes:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5443,10 +5467,17 @@ export const listMergeRequestDraftNotes = async (req, res) => {
 export const createMergeRequestDraftNote = async (req, res) => {
   try {
     const { projectId, mrIid } = req.params;
-    const note = await GitlabService.createMergeRequestDraftNote(projectId, mrIid, req.body);
+    const note = await GitlabService.createMergeRequestDraftNote(
+      projectId,
+      mrIid,
+      req.body,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: note });
   } catch (error) {
-    logger.error('[GitLab Controller] Error creating merge request draft note:', error);
+    logger.error(
+      '[GitLab Controller] Error creating merge request draft note:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5464,7 +5495,10 @@ export const updateMergeRequestDraftNote = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: note });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating merge request draft note:', error);
+    logger.error(
+      '[GitLab Controller] Error updating merge request draft note:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5481,7 +5515,10 @@ export const deleteMergeRequestDraftNote = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting merge request draft note:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting merge request draft note:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5491,10 +5528,16 @@ export const deleteMergeRequestDraftNote = async (req, res) => {
 export const publishMergeRequestDraftNotes = async (req, res) => {
   try {
     const { projectId, mrIid } = req.params;
-    const result = await GitlabService.publishMergeRequestDraftNotes(projectId, mrIid);
+    const result = await GitlabService.publishMergeRequestDraftNotes(
+      projectId,
+      mrIid,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error publishing merge request draft notes:', error);
+    logger.error(
+      '[GitLab Controller] Error publishing merge request draft notes:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5549,7 +5592,10 @@ export const listProjectInvitations = async (req, res) => {
     const invitations = await GitlabService.listProjectInvitations(projectId);
     res.status(httpStatus.OK).json({ success: true, data: invitations });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing project invitations:', error);
+    logger.error(
+      '[GitLab Controller] Error listing project invitations:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -5559,7 +5605,10 @@ export const listProjectInvitations = async (req, res) => {
 export const inviteProjectMembers = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const result = await GitlabService.inviteProjectMembers(projectId, req.body);
+    const result = await GitlabService.inviteProjectMembers(
+      projectId,
+      req.body,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error inviting project members:', error);
@@ -5572,10 +5621,16 @@ export const inviteProjectMembers = async (req, res) => {
 export const deleteProjectInvitation = async (req, res) => {
   try {
     const { projectId, email } = req.params;
-    const result = await GitlabService.deleteProjectInvitation(projectId, email);
+    const result = await GitlabService.deleteProjectInvitation(
+      projectId,
+      email,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting project invitation:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting project invitation:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

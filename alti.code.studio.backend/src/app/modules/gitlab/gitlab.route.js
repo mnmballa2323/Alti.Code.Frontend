@@ -1278,15 +1278,33 @@ router.get('/projects/:projectId/forks', GitlabController.listProjectForks);
 router.post('/projects/:projectId/forks', GitlabController.createProjectFork);
 
 // 3. Project & Group Push Rules
-router.get('/projects/:projectId/push_rule', GitlabController.getProjectPushRules);
-router.post('/projects/:projectId/push_rule', GitlabController.createProjectPushRules);
-router.put('/projects/:projectId/push_rule', GitlabController.updateProjectPushRules);
-router.delete('/projects/:projectId/push_rule', GitlabController.deleteProjectPushRules);
+router.get(
+  '/projects/:projectId/push_rule',
+  GitlabController.getProjectPushRules,
+);
+router.post(
+  '/projects/:projectId/push_rule',
+  GitlabController.createProjectPushRules,
+);
+router.put(
+  '/projects/:projectId/push_rule',
+  GitlabController.updateProjectPushRules,
+);
+router.delete(
+  '/projects/:projectId/push_rule',
+  GitlabController.deleteProjectPushRules,
+);
 
 router.get('/groups/:groupId/push_rule', GitlabController.getGroupPushRules);
-router.post('/groups/:groupId/push_rule', GitlabController.createGroupPushRules);
+router.post(
+  '/groups/:groupId/push_rule',
+  GitlabController.createGroupPushRules,
+);
 router.put('/groups/:groupId/push_rule', GitlabController.updateGroupPushRules);
-router.delete('/groups/:groupId/push_rule', GitlabController.deleteGroupPushRules);
+router.delete(
+  '/groups/:groupId/push_rule',
+  GitlabController.deleteGroupPushRules,
+);
 
 // 4. Merge Request Draft Notes (Batch Reviews)
 router.get(
@@ -1311,12 +1329,27 @@ router.post(
 );
 
 // 5. Project & Group Invitations
-router.get('/groups/:groupId/invitations', GitlabController.listGroupInvitations);
-router.post('/groups/:groupId/invitations', GitlabController.inviteGroupMembers);
-router.delete('/groups/:groupId/invitations/:email', GitlabController.deleteGroupInvitation);
+router.get(
+  '/groups/:groupId/invitations',
+  GitlabController.listGroupInvitations,
+);
+router.post(
+  '/groups/:groupId/invitations',
+  GitlabController.inviteGroupMembers,
+);
+router.delete(
+  '/groups/:groupId/invitations/:email',
+  GitlabController.deleteGroupInvitation,
+);
 
-router.get('/projects/:projectId/invitations', GitlabController.listProjectInvitations);
-router.post('/projects/:projectId/invitations', GitlabController.inviteProjectMembers);
+router.get(
+  '/projects/:projectId/invitations',
+  GitlabController.listProjectInvitations,
+);
+router.post(
+  '/projects/:projectId/invitations',
+  GitlabController.inviteProjectMembers,
+);
 router.delete(
   '/projects/:projectId/invitations/:email',
   GitlabController.deleteProjectInvitation,

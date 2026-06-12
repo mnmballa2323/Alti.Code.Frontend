@@ -6101,7 +6101,6 @@ export const GitlabService = {
     }
   },
 
-
   // 2. Project Forks
   async listProjectForks(projectId) {
     logger.info(`🦊 [GitLab Service] Listing forks for project ${projectId}`);
@@ -6120,10 +6119,12 @@ export const GitlabService = {
     logger.info(`🦊 [GitLab Service] Forking project ${projectId}`);
     try {
       const payload = {};
-      if (forkData.namespaceId !== undefined) payload.namespace_id = forkData.namespaceId;
+      if (forkData.namespaceId !== undefined)
+        payload.namespace_id = forkData.namespaceId;
       if (forkData.name !== undefined) payload.name = forkData.name;
       if (forkData.path !== undefined) payload.path = forkData.path;
-      if (forkData.visibility !== undefined) payload.visibility = forkData.visibility;
+      if (forkData.visibility !== undefined)
+        payload.visibility = forkData.visibility;
 
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/fork`,
@@ -6158,18 +6159,32 @@ export const GitlabService = {
     );
     try {
       const payload = {};
-      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
-      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
-      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
-      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
-      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
-      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
-      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
-      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
-      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
-      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
-      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
-      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+      if (pushRuleData.denyDeleteTag !== undefined)
+        payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined)
+        payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined)
+        payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined)
+        payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined)
+        payload.commit_message_negative_regex =
+          pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined)
+        payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined)
+        payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined)
+        payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined)
+        payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined)
+        payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined)
+        payload.commit_committer_name_check =
+          pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined)
+        payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
 
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/push_rule`,
@@ -6188,18 +6203,32 @@ export const GitlabService = {
     );
     try {
       const payload = {};
-      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
-      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
-      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
-      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
-      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
-      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
-      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
-      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
-      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
-      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
-      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
-      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+      if (pushRuleData.denyDeleteTag !== undefined)
+        payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined)
+        payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined)
+        payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined)
+        payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined)
+        payload.commit_message_negative_regex =
+          pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined)
+        payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined)
+        payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined)
+        payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined)
+        payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined)
+        payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined)
+        payload.commit_committer_name_check =
+          pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined)
+        payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
 
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/push_rule`,
@@ -6244,18 +6273,32 @@ export const GitlabService = {
     logger.info(`🦊 [GitLab Service] Creating push rules for group ${groupId}`);
     try {
       const payload = {};
-      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
-      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
-      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
-      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
-      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
-      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
-      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
-      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
-      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
-      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
-      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
-      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+      if (pushRuleData.denyDeleteTag !== undefined)
+        payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined)
+        payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined)
+        payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined)
+        payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined)
+        payload.commit_message_negative_regex =
+          pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined)
+        payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined)
+        payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined)
+        payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined)
+        payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined)
+        payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined)
+        payload.commit_committer_name_check =
+          pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined)
+        payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
 
       const { data } = await gitlabClient.post(
         `/groups/${encodeURIComponent(groupId)}/push_rule`,
@@ -6272,18 +6315,32 @@ export const GitlabService = {
     logger.info(`🦊 [GitLab Service] Updating push rules for group ${groupId}`);
     try {
       const payload = {};
-      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
-      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
-      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
-      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
-      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
-      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
-      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
-      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
-      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
-      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
-      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
-      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+      if (pushRuleData.denyDeleteTag !== undefined)
+        payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined)
+        payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined)
+        payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined)
+        payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined)
+        payload.commit_message_negative_regex =
+          pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined)
+        payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined)
+        payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined)
+        payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined)
+        payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined)
+        payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined)
+        payload.commit_committer_name_check =
+          pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined)
+        payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
 
       const { data } = await gitlabClient.put(
         `/groups/${encodeURIComponent(groupId)}/push_rule`,

@@ -4994,12 +4994,12 @@ describe('GitlabService', () => {
       const mockData = { id: 456, name: 'forked-project' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.createProjectFork('123', {
-        namespacePath: 'my-namespace',
+        namespaceId: 789,
         name: 'forked-project',
         path: 'forked-path',
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/forks', {
-        namespace_path: 'my-namespace',
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/fork', {
+        namespace_id: 789,
         name: 'forked-project',
         path: 'forked-path',
       });
@@ -5183,7 +5183,11 @@ describe('GitlabService', () => {
 
     it('deleteMergeRequestDraftNote should delete draft note', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteMergeRequestDraftNote('123', 5, 1);
+      const result = await GitlabService.deleteMergeRequestDraftNote(
+        '123',
+        5,
+        1,
+      );
       expect(mockClient.delete).toHaveBeenCalledWith(
         '/projects/123/merge_requests/5/draft_notes/1',
       );
@@ -5193,7 +5197,10 @@ describe('GitlabService', () => {
     it('publishMergeRequestDraftNotes should post to publish endpoint', async () => {
       const mockData = { success: true };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.publishMergeRequestDraftNotes('123', 5);
+      const result = await GitlabService.publishMergeRequestDraftNotes(
+        '123',
+        5,
+      );
       expect(mockClient.post).toHaveBeenCalledWith(
         '/projects/123/merge_requests/5/draft_notes/publish',
       );
@@ -5229,8 +5236,13 @@ describe('GitlabService', () => {
 
     it('deleteGroupInvitation should delete group invitation', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteGroupInvitation('99', 'user@ex.com');
-      expect(mockClient.delete).toHaveBeenCalledWith('/groups/99/invitations/user%40ex.com');
+      const result = await GitlabService.deleteGroupInvitation(
+        '99',
+        'user@ex.com',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/invitations/user%40ex.com',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -5251,18 +5263,24 @@ describe('GitlabService', () => {
         inviteeType: 'email',
         expiresAt: '2026-12-31',
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/invitations', {
-        email: 'user@ex.com',
-        access_level: 30,
-        invitee_type: 'email',
-        expires_at: '2026-12-31',
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/invitations',
+        {
+          email: 'user@ex.com',
+          access_level: 30,
+          invitee_type: 'email',
+          expires_at: '2026-12-31',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteProjectInvitation should delete project invitation', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteProjectInvitation('123', 'user@ex.com');
+      const result = await GitlabService.deleteProjectInvitation(
+        '123',
+        'user@ex.com',
+      );
       expect(mockClient.delete).toHaveBeenCalledWith(
         '/projects/123/invitations/user%40ex.com',
       );
