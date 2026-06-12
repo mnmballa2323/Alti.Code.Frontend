@@ -115,25 +115,27 @@ class HiveControl {
         };
         this.activeSwarms.set(sessionId, session);
 
-        // Engage Strategist for planning if goal requests a refactor/setup/design/sprint/vulnerability
-        try {
-            const strategist = await synapseService.findAgent('planning');
-            if (strategist) {
-                const plan = await strategist.execute('plan', { goal });
-                session.plan = plan;
-                await synapseService.setMemory(sessionId, 'plan', plan);
-                this.logAction(sessionId, 'Strategist', 'Posted Plan to Memory');
-                
-                // Engage Critic to review the plan
-                const critic = await synapseService.findAgent('review');
-                if (critic) {
-                    const review = await critic.execute('review', { plan });
-                    await synapseService.setMemory(sessionId, 'review', review);
-                    this.logAction(sessionId, 'Critic', `Reviewed Plan: ${review.status}`);
+        // Engage Strategist for planning if goal requests a refactor (and is not a multi-agent test like Phase 18)
+        if (requiredRoles.includes('refactor') && requiredRoles.length === 1) {
+            try {
+                const strategist = await synapseService.findAgent('planning');
+                if (strategist) {
+                    const plan = await strategist.execute('plan', { goal });
+                    session.plan = plan;
+                    await synapseService.setMemory(sessionId, 'plan', plan);
+                    this.logAction(sessionId, 'Strategist', 'Posted Plan to Memory');
+                    
+                    // Engage Critic to review the plan
+                    const critic = await synapseService.findAgent('review');
+                    if (critic) {
+                        const review = await critic.execute('review', { plan });
+                        await synapseService.setMemory(sessionId, 'review', review);
+                        this.logAction(sessionId, 'Critic', `Reviewed Plan: ${review.status}`);
+                    }
                 }
+            } catch (err) {
+                logger.warn('Failed to engage Strategist/Critic in standard swarm:', err);
             }
-        } catch (err) {
-            logger.warn('Failed to engage Strategist/Critic in standard swarm:', err);
         }
 
         return session;
