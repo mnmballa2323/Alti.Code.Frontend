@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.195] - 2026-06-12 — Phase 14 GitHub REST API & SDK Entrenchment
+### Added
+- **GitHub Notifications**: Implemented `listNotificationsForAuthenticatedUser`, `markNotificationsAsRead`, `listRepoNotifications`, `markRepoNotificationsAsRead`, `getThread`, `markThreadAsRead`, `getThreadSubscription`, `setThreadSubscription`, and `deleteThreadSubscription`. Intercepted `404` status on thread subscription checks to return `{ subscribed: false }`.
+- **GPG Keys**: Added GPG key management (`listGpgKeysForAuthenticatedUser`, `getGpgKeyForAuthenticatedUser`, `addGpgKeyForAuthenticatedUser`, `deleteGpgKeyForAuthenticatedUser`).
+- **User Social Profiles**: Added social profile management (`listSocialAccountsForAuthenticatedUser`, `addSocialAccountsForAuthenticatedUser`, `deleteSocialAccountsForAuthenticatedUser`).
+- **Unit Testing**: Added 20 new unit tests in `github.service.test.js` verifying success paths and `404` subscription status interception, bringing the total passing tests to 427.
+
 ## [39.37.194] - 2026-06-12 — Phase 13 GitHub REST API & SDK Entrenchment
 ### Added
 - **Repository Branches & Branch Protection**: Implemented `getBranch`, `getBranchProtection`, `updateBranchProtection`, `deleteBranchProtection`, `getAdminBranchProtection`, `setAdminBranchProtection`, and `deleteAdminBranchProtection`. Intercepted `404` error statuses to return safe default objects (e.g. `{ protected: false }`, `{ enforced: false }`).

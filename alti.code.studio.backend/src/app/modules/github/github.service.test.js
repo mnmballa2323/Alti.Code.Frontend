@@ -7761,9 +7761,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 87. GitHub Notifications
   it('should list notifications for authenticated user', async () => {
     const mockData = [{ id: '1' }];
-    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue({
-      data: mockData,
-    });
+    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockData,
+      },
+    );
     const result = await GithubService.listNotificationsForAuthenticatedUser();
     expect(result).toEqual(mockData);
     expect(
@@ -7780,9 +7782,11 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should list notifications for authenticated user with params', async () => {
     const mockData = [{ id: '1' }];
-    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue({
-      data: mockData,
-    });
+    mockOctokit.rest.activity.listNotificationsForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockData,
+      },
+    );
     const result = await GithubService.listNotificationsForAuthenticatedUser(
       true,
       false,
@@ -7809,9 +7813,13 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.activity.markNotificationsAsRead.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.markNotificationsAsRead('2026-06-12T00:00:00Z');
+    const result = await GithubService.markNotificationsAsRead(
+      '2026-06-12T00:00:00Z',
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.markNotificationsAsRead).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.markNotificationsAsRead,
+    ).toHaveBeenCalledWith({
       last_read_at: '2026-06-12T00:00:00Z',
     });
   });
@@ -7823,7 +7831,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.listRepoNotifications('owner', 'repo');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.listRepoNotifications).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.listRepoNotifications,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       all: undefined,
@@ -7851,7 +7861,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       15,
     );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.listRepoNotifications).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.listRepoNotifications,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       all: false,
@@ -7874,7 +7886,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       '2026-06-12T00:00:00Z',
     );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.markRepoNotificationsAsRead).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.markRepoNotificationsAsRead,
+    ).toHaveBeenCalledWith({
       owner: 'owner',
       repo: 'repo',
       last_read_at: '2026-06-12T00:00:00Z',
@@ -7893,7 +7907,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should mark thread as read', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.activity.markThreadAsRead.mockResolvedValue({ data: mockData });
+    mockOctokit.rest.activity.markThreadAsRead.mockResolvedValue({
+      data: mockData,
+    });
     const result = await GithubService.markThreadAsRead('thread-123');
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.activity.markThreadAsRead).toHaveBeenCalledWith({
@@ -7908,7 +7924,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.getThreadSubscription('thread-123');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.getThreadSubscription).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.getThreadSubscription,
+    ).toHaveBeenCalledWith({
       thread_id: 'thread-123',
     });
   });
@@ -7926,9 +7944,14 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.activity.setThreadSubscription.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.setThreadSubscription('thread-123', true);
+    const result = await GithubService.setThreadSubscription(
+      'thread-123',
+      true,
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.setThreadSubscription).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.setThreadSubscription,
+    ).toHaveBeenCalledWith({
       thread_id: 'thread-123',
       ignored: true,
     });
@@ -7941,7 +7964,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.deleteThreadSubscription('thread-123');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.activity.deleteThreadSubscription).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.activity.deleteThreadSubscription,
+    ).toHaveBeenCalledWith({
       thread_id: 'thread-123',
     });
   });
@@ -7954,7 +7979,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.listGpgKeysForAuthenticatedUser();
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.listGpgKeysForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.listGpgKeysForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       page: 1,
       per_page: 30,
     });
@@ -7967,7 +7994,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.listGpgKeysForAuthenticatedUser(2, 10);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.listGpgKeysForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.listGpgKeysForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       page: 2,
       per_page: 10,
     });
@@ -7980,7 +8009,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.getGpgKeyForAuthenticatedUser(1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.getGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.getGpgKeyForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       gpg_key_id: 1,
     });
   });
@@ -7990,9 +8021,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     mockOctokit.rest.users.createGpgKeyForAuthenticatedUser.mockResolvedValue({
       data: mockData,
     });
-    const result = await GithubService.addGpgKeyForAuthenticatedUser('armored-key');
+    const result =
+      await GithubService.addGpgKeyForAuthenticatedUser('armored-key');
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.createGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.createGpgKeyForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       armored_public_key: 'armored-key',
     });
   });
@@ -8004,7 +8038,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     });
     const result = await GithubService.deleteGpgKeyForAuthenticatedUser(1);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.deleteGpgKeyForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.deleteGpgKeyForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       gpg_key_id: 1,
     });
   });
@@ -8012,12 +8048,16 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   // 89. User Social Profiles
   it('should list social accounts', async () => {
     const mockData = [{ provider: 'twitter', url: 'https://twitter.com' }];
-    mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser.mockResolvedValue({
-      data: mockData,
-    });
+    mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockData,
+      },
+    );
     const result = await GithubService.listSocialAccountsForAuthenticatedUser();
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.listSocialAccountsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       page: 1,
       per_page: 30,
     });
@@ -8025,26 +8065,37 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
 
   it('should add social accounts', async () => {
     const mockData = [{ provider: 'twitter' }];
-    mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser.mockResolvedValue({
-      data: mockData,
-    });
-    const result = await GithubService.addSocialAccountsForAuthenticatedUser(['url']);
+    mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockData,
+      },
+    );
+    const result = await GithubService.addSocialAccountsForAuthenticatedUser([
+      'url',
+    ]);
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.addSocialAccountsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       account_urls: ['url'],
     });
   });
 
   it('should delete social accounts', async () => {
     const mockData = { success: true };
-    mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser.mockResolvedValue({
-      data: mockData,
-    });
-    const result = await GithubService.deleteSocialAccountsForAuthenticatedUser(['url']);
+    mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser.mockResolvedValue(
+      {
+        data: mockData,
+      },
+    );
+    const result = await GithubService.deleteSocialAccountsForAuthenticatedUser(
+      ['url'],
+    );
     expect(result).toEqual(mockData);
-    expect(mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser).toHaveBeenCalledWith({
+    expect(
+      mockOctokit.rest.users.deleteSocialAccountsForAuthenticatedUser,
+    ).toHaveBeenCalledWith({
       account_urls: ['url'],
     });
   });
 });
-

@@ -1541,7 +1541,10 @@ router.put(
   GithubController.markRepoNotificationsAsRead,
 );
 router.get('/notifications/threads/:threadId', GithubController.getThread);
-router.patch('/notifications/threads/:threadId', GithubController.markThreadAsRead);
+router.patch(
+  '/notifications/threads/:threadId',
+  GithubController.markThreadAsRead,
+);
 router.get(
   '/notifications/threads/:threadId/subscription',
   GithubController.getThreadSubscription,
@@ -1583,4 +1586,3 @@ router.delete(
 
 export const GithubRoutes = router;
 export default router;
-

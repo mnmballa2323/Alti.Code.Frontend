@@ -8460,35 +8460,28 @@ export const GithubService = {
   async listGpgKeysForAuthenticatedUser(page = 1, perPage = 30) {
     logger.info(`🐙 [GitHub Service] Listing GPG keys for authenticated user`);
     try {
-      const { data } =
-        await octokit.rest.users.listGpgKeysForAuthenticatedUser({
+      const { data } = await octokit.rest.users.listGpgKeysForAuthenticatedUser(
+        {
           page,
           per_page: perPage,
-        });
+        },
+      );
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to list GPG keys for authenticated user:`,
-        error,
-      );
+      logger.error(`Failed to list GPG keys for authenticated user:`, error);
       throw error;
     }
   },
 
   async getGpgKeyForAuthenticatedUser(keyId) {
-    logger.info(
-      `🐙 [GitHub Service] Fetching details for GPG key ${keyId}`,
-    );
+    logger.info(`🐙 [GitHub Service] Fetching details for GPG key ${keyId}`);
     try {
       const { data } = await octokit.rest.users.getGpgKeyForAuthenticatedUser({
         gpg_key_id: keyId,
       });
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to fetch details for GPG key ${keyId}:`,
-        error,
-      );
+      logger.error(`Failed to fetch details for GPG key ${keyId}:`, error);
       throw error;
     }
   },
@@ -8496,11 +8489,10 @@ export const GithubService = {
   async addGpgKeyForAuthenticatedUser(armoredPublicKey) {
     logger.info(`🐙 [GitHub Service] Adding new GPG key`);
     try {
-      const { data } = await octokit.rest.users.createGpgKeyForAuthenticatedUser(
-        {
+      const { data } =
+        await octokit.rest.users.createGpgKeyForAuthenticatedUser({
           armored_public_key: armoredPublicKey,
-        },
-      );
+        });
       return data;
     } catch (error) {
       logger.error(`Failed to add GPG key:`, error);
@@ -8511,11 +8503,10 @@ export const GithubService = {
   async deleteGpgKeyForAuthenticatedUser(keyId) {
     logger.info(`🐙 [GitHub Service] Deleting GPG key ${keyId}`);
     try {
-      const response = await octokit.rest.users.deleteGpgKeyForAuthenticatedUser(
-        {
+      const response =
+        await octokit.rest.users.deleteGpgKeyForAuthenticatedUser({
           gpg_key_id: keyId,
-        },
-      );
+        });
       return response.data || { success: true };
     } catch (error) {
       logger.error(`Failed to delete GPG key ${keyId}:`, error);

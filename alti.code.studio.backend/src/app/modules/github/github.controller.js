@@ -7357,7 +7357,7 @@ export const listNotificationsForAuthenticatedUser = async (req, res) => {
       since,
       before,
       page ? parseInt(page) : undefined,
-      perPage ? parseInt(perPage) : undefined
+      perPage ? parseInt(perPage) : undefined,
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
@@ -7374,7 +7374,10 @@ export const markNotificationsAsRead = async (req, res) => {
     const result = await GithubService.markNotificationsAsRead(lastReadAt);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error marking notifications as read:`, error);
+    logger.error(
+      `[GitHub Controller] Error marking notifications as read:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7393,11 +7396,14 @@ export const listRepoNotifications = async (req, res) => {
       since,
       before,
       page ? parseInt(page) : undefined,
-      perPage ? parseInt(perPage) : undefined
+      perPage ? parseInt(perPage) : undefined,
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error listing repo notifications:`, error);
+    logger.error(
+      `[GitHub Controller] Error listing repo notifications:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7408,10 +7414,17 @@ export const markRepoNotificationsAsRead = async (req, res) => {
   try {
     const { owner, repo } = req.params;
     const { lastReadAt } = req.body;
-    const result = await GithubService.markRepoNotificationsAsRead(owner, repo, lastReadAt);
+    const result = await GithubService.markRepoNotificationsAsRead(
+      owner,
+      repo,
+      lastReadAt,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error marking repo notifications as read:`, error);
+    logger.error(
+      `[GitHub Controller] Error marking repo notifications as read:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7424,7 +7437,10 @@ export const getThread = async (req, res) => {
     const result = await GithubService.getThread(threadId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting notification thread:`, error);
+    logger.error(
+      `[GitHub Controller] Error getting notification thread:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7450,7 +7466,10 @@ export const getThreadSubscription = async (req, res) => {
     const result = await GithubService.getThreadSubscription(threadId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error getting thread subscription:`, error);
+    logger.error(
+      `[GitHub Controller] Error getting thread subscription:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7464,7 +7483,10 @@ export const setThreadSubscription = async (req, res) => {
     const result = await GithubService.setThreadSubscription(threadId, ignored);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error setting thread subscription:`, error);
+    logger.error(
+      `[GitHub Controller] Error setting thread subscription:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7477,7 +7499,10 @@ export const deleteThreadSubscription = async (req, res) => {
     const result = await GithubService.deleteThreadSubscription(threadId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(`[GitHub Controller] Error deleting thread subscription:`, error);
+    logger.error(
+      `[GitHub Controller] Error deleting thread subscription:`,
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7489,7 +7514,7 @@ export const listGpgKeysForAuthenticatedUser = async (req, res) => {
     const { page, perPage } = req.query;
     const result = await GithubService.listGpgKeysForAuthenticatedUser(
       page ? parseInt(page) : undefined,
-      perPage ? parseInt(perPage) : undefined
+      perPage ? parseInt(perPage) : undefined,
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
@@ -7516,7 +7541,8 @@ export const getGpgKeyForAuthenticatedUser = async (req, res) => {
 export const addGpgKeyForAuthenticatedUser = async (req, res) => {
   try {
     const { armoredPublicKey } = req.body;
-    const result = await GithubService.addGpgKeyForAuthenticatedUser(armoredPublicKey);
+    const result =
+      await GithubService.addGpgKeyForAuthenticatedUser(armoredPublicKey);
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error adding GPG key:`, error);
@@ -7544,7 +7570,7 @@ export const listSocialAccountsForAuthenticatedUser = async (req, res) => {
     const { page, perPage } = req.query;
     const result = await GithubService.listSocialAccountsForAuthenticatedUser(
       page ? parseInt(page) : undefined,
-      perPage ? parseInt(perPage) : undefined
+      perPage ? parseInt(perPage) : undefined,
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
@@ -7558,7 +7584,8 @@ export const listSocialAccountsForAuthenticatedUser = async (req, res) => {
 export const addSocialAccountsForAuthenticatedUser = async (req, res) => {
   try {
     const { accountUrls } = req.body;
-    const result = await GithubService.addSocialAccountsForAuthenticatedUser(accountUrls);
+    const result =
+      await GithubService.addSocialAccountsForAuthenticatedUser(accountUrls);
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error adding social accounts:`, error);
@@ -7571,7 +7598,8 @@ export const addSocialAccountsForAuthenticatedUser = async (req, res) => {
 export const deleteSocialAccountsForAuthenticatedUser = async (req, res) => {
   try {
     const { accountUrls } = req.body;
-    const result = await GithubService.deleteSocialAccountsForAuthenticatedUser(accountUrls);
+    const result =
+      await GithubService.deleteSocialAccountsForAuthenticatedUser(accountUrls);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(`[GitHub Controller] Error deleting social accounts:`, error);
