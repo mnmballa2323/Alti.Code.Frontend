@@ -6784,7 +6784,10 @@ export const GitlabService = {
   async updateApplicationSettings(settings = {}) {
     logger.info('🦊 [GitLab Service] Updating global application settings');
     try {
-      const { data } = await gitlabClient.put('/application/settings', settings);
+      const { data } = await gitlabClient.put(
+        '/application/settings',
+        settings,
+      );
       return data;
     } catch (error) {
       logger.error('Failed to update application settings:', error);

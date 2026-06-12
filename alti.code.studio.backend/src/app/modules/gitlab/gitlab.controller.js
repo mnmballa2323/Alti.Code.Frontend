@@ -5833,10 +5833,7 @@ export const setGroupCustomAttribute = async (req, res) => {
 export const deleteGroupCustomAttribute = async (req, res) => {
   try {
     const { groupId, key } = req.params;
-    const result = await GitlabService.deleteGroupCustomAttribute(
-      groupId,
-      key,
-    );
+    const result = await GitlabService.deleteGroupCustomAttribute(groupId, key);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error(

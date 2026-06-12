@@ -5415,7 +5415,9 @@ describe('GitlabService', () => {
       const mockData = [{ key: 'attr1', value: 'val1' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listGroupCustomAttributes('99');
-      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/custom_attributes');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/99/custom_attributes',
+      );
       expect(result).toEqual(mockData);
     });
 
