@@ -1812,4 +1812,69 @@ router.post(
   GitlabController.importProject,
 );
 
+// ==========================================
+// 54. Phase 19 Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_milestone_events/:eventId',
+  GitlabController.getIssueResourceMilestoneEvent,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_milestone_events/:eventId',
+  GitlabController.getMergeRequestResourceMilestoneEvent,
+);
+
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_state_events',
+  GitlabController.listIssueResourceStateEvents,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_state_events/:eventId',
+  GitlabController.getIssueResourceStateEvent,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_state_events',
+  GitlabController.listMergeRequestResourceStateEvents,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_state_events/:eventId',
+  GitlabController.getMergeRequestResourceStateEvent,
+);
+
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_weight_events',
+  GitlabController.listIssueResourceWeightEvents,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_weight_events/:eventId',
+  GitlabController.getIssueResourceWeightEvent,
+);
+
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_iteration_events',
+  GitlabController.listIssueResourceIterationEvents,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_iteration_events/:eventId',
+  GitlabController.getIssueResourceIterationEvent,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_iteration_events',
+  GitlabController.listMergeRequestResourceIterationEvents,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_iteration_events/:eventId',
+  GitlabController.getMergeRequestResourceIterationEvent,
+);
+
+router.get('/keys/:keyId', GitlabController.getSSHKey);
+router.get('/keys', GitlabController.getSSHKeyByFingerprint);
+
+router.get('/applications', GitlabController.listOAuthApplications);
+router.post('/applications', GitlabController.createOAuthApplication);
+router.delete(
+  '/applications/:applicationId',
+  GitlabController.deleteOAuthApplication,
+);
+
 export const GitlabRoutes = router;

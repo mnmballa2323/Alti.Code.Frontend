@@ -7013,4 +7013,330 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 54. Phase 19: Resource Events (milestones, state, weight, iteration), Global Keys Lookup, and Instance OAuth Applications
+  // ==========================================
+  describe('54. Phase 19: Resource Events (milestones, state, weight, iteration), Global Keys Lookup, and Instance OAuth Applications', () => {
+    it('getIssueResourceMilestoneEvent should fetch milestone event details', async () => {
+      const mockData = { id: 1, milestone_id: 10 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueResourceMilestoneEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_milestone_events/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceMilestoneEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getIssueResourceMilestoneEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(result).toEqual({ id: null, milestone_id: null });
+    });
+
+    it('getMergeRequestResourceMilestoneEvent should fetch milestone event details', async () => {
+      const mockData = { id: 2, milestone_id: 20 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestResourceMilestoneEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/merge_requests/mr8/resource_milestone_events/2',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestResourceMilestoneEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getMergeRequestResourceMilestoneEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(result).toEqual({ id: null, milestone_id: null });
+    });
+
+    it('listIssueResourceStateEvents should list state events', async () => {
+      const mockData = [{ id: 1, state: 'opened' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueResourceStateEvents(
+        'proj123',
+        'iss5',
+        { page: 2, perPage: 15 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_state_events',
+        {
+          params: { page: 2, per_page: 15 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceStateEvent should fetch state event details', async () => {
+      const mockData = { id: 1, state: 'opened' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueResourceStateEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_state_events/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceStateEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getIssueResourceStateEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(result).toEqual({ id: null, state: '' });
+    });
+
+    it('listMergeRequestResourceStateEvents should list MR state events', async () => {
+      const mockData = [{ id: 2, state: 'merged' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listMergeRequestResourceStateEvents(
+        'proj123',
+        'mr8',
+        { page: 1, perPage: 20 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/merge_requests/mr8/resource_state_events',
+        {
+          params: { page: 1, per_page: 20 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestResourceStateEvent should fetch MR state event details', async () => {
+      const mockData = { id: 2, state: 'merged' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestResourceStateEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/merge_requests/mr8/resource_state_events/2',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestResourceStateEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getMergeRequestResourceStateEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(result).toEqual({ id: null, state: '' });
+    });
+
+    it('listIssueResourceWeightEvents should list weight events', async () => {
+      const mockData = [{ id: 1, weight: 3 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueResourceWeightEvents(
+        'proj123',
+        'iss5',
+        { page: 2, perPage: 10 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_weight_events',
+        {
+          params: { page: 2, per_page: 10 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceWeightEvent should fetch weight event details', async () => {
+      const mockData = { id: 1, weight: 3 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueResourceWeightEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_weight_events/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceWeightEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getIssueResourceWeightEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(result).toEqual({ id: null, weight: null });
+    });
+
+    it('listIssueResourceIterationEvents should list iteration events', async () => {
+      const mockData = [{ id: 1, iteration_id: 10 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueResourceIterationEvents(
+        'proj123',
+        'iss5',
+        { page: 1, perPage: 50 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_iteration_events',
+        {
+          params: { page: 1, per_page: 50 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceIterationEvent should fetch iteration event details', async () => {
+      const mockData = { id: 1, iteration_id: 10 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueResourceIterationEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/issues/iss5/resource_iteration_events/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueResourceIterationEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getIssueResourceIterationEvent(
+        'proj123',
+        'iss5',
+        1,
+      );
+      expect(result).toEqual({ id: null, iteration_id: null });
+    });
+
+    it('listMergeRequestResourceIterationEvents should list MR iteration events', async () => {
+      const mockData = [{ id: 2, iteration_id: 20 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listMergeRequestResourceIterationEvents(
+        'proj123',
+        'mr8',
+        { page: 1, perPage: 10 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/merge_requests/mr8/resource_iteration_events',
+        {
+          params: { page: 1, per_page: 10 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestResourceIterationEvent should fetch MR iteration event details', async () => {
+      const mockData = { id: 2, iteration_id: 20 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestResourceIterationEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/merge_requests/mr8/resource_iteration_events/2',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestResourceIterationEvent should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getMergeRequestResourceIterationEvent(
+        'proj123',
+        'mr8',
+        2,
+      );
+      expect(result).toEqual({ id: null, iteration_id: null });
+    });
+
+    it('getSSHKey should fetch SSH key details by ID', async () => {
+      const mockData = { id: 123, key: 'ssh-rsa', title: 'key1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getSSHKey(123);
+      expect(mockClient.get).toHaveBeenCalledWith('/keys/123');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getSSHKey should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getSSHKey(123);
+      expect(result).toEqual({ id: null, key: '', title: '' });
+    });
+
+    it('getSSHKeyByFingerprint should look up SSH key globally', async () => {
+      const mockData = { id: 123, key: 'ssh-rsa', title: 'key1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getSSHKeyByFingerprint({
+        fingerprint: 'SHA256:abc',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/keys', {
+        params: { fingerprint: 'SHA256:abc' },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getSSHKeyByFingerprint should return default on 404', async () => {
+      mockClient.get.mockRejectedValueOnce({ response: { status: 404 } });
+      const result = await GitlabService.getSSHKeyByFingerprint({
+        fingerprint: 'SHA256:abc',
+      });
+      expect(result).toEqual({ id: null, key: '', title: '' });
+    });
+
+    it('listOAuthApplications should list OAuth applications', async () => {
+      const mockData = [{ id: 1, name: 'app1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listOAuthApplications({
+        page: 2,
+        perPage: 25,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/applications', {
+        params: { page: 2, per_page: 25 },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('createOAuthApplication should create a configuration', async () => {
+      const mockData = { id: 1, name: 'app1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createOAuthApplication({
+        name: 'app1',
+        redirectUri: 'http://cb',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/applications', {
+        name: 'app1',
+        redirectUri: 'http://cb',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteOAuthApplication should delete application', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteOAuthApplication(1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/applications/1');
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

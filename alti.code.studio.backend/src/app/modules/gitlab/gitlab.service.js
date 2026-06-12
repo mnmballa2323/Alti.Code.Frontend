@@ -8846,4 +8846,359 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 54. Phase 19: Resource Events (milestones, state, weight, iteration), Global Keys Lookup, and Instance OAuth Applications
+  // ==========================================
+  async getIssueResourceMilestoneEvent(projectId, issueIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching issue milestone event ${eventId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_milestone_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Issue milestone event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, milestone_id: null };
+      }
+      logger.error(`Failed to get issue milestone event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async getMergeRequestResourceMilestoneEvent(projectId, mrIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching MR milestone event ${eventId} for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_milestone_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `MR milestone event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, milestone_id: null };
+      }
+      logger.error(`Failed to get MR milestone event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async listIssueResourceStateEvents(projectId, issueIid, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue state events for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_state_events`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue state events for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getIssueResourceStateEvent(projectId, issueIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching issue state event ${eventId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_state_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Issue state event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, state: '' };
+      }
+      logger.error(`Failed to get issue state event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async listMergeRequestResourceStateEvents(projectId, mrIid, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing MR state events for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_state_events`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list MR state events for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async getMergeRequestResourceStateEvent(projectId, mrIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching MR state event ${eventId} for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_state_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `MR state event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, state: '' };
+      }
+      logger.error(`Failed to get MR state event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async listIssueResourceWeightEvents(projectId, issueIid, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue weight events for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_weight_events`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue weight events for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getIssueResourceWeightEvent(projectId, issueIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching issue weight event ${eventId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_weight_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Issue weight event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, weight: null };
+      }
+      logger.error(`Failed to get issue weight event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async listIssueResourceIterationEvents(projectId, issueIid, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue iteration events for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_iteration_events`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue iteration events for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getIssueResourceIterationEvent(projectId, issueIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching issue iteration event ${eventId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_iteration_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Issue iteration event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, iteration_id: null };
+      }
+      logger.error(`Failed to get issue iteration event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async listMergeRequestResourceIterationEvents(projectId, mrIid, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing MR iteration events for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_iteration_events`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list MR iteration events for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async getMergeRequestResourceIterationEvent(projectId, mrIid, eventId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching MR iteration event ${eventId} for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_iteration_events/${encodeURIComponent(eventId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `MR iteration event ${eventId} not found, returning safe default`,
+        );
+        return { id: null, iteration_id: null };
+      }
+      logger.error(`Failed to get MR iteration event ${eventId}:`, error);
+      throw error;
+    }
+  },
+
+  async getSSHKey(keyId) {
+    logger.info(`🦊 [GitLab Service] Fetching SSH key by ID ${keyId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/keys/${encodeURIComponent(keyId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(`SSH key ${keyId} not found, returning safe default`);
+        return { id: null, key: '', title: '' };
+      }
+      logger.error(`Failed to get SSH key by ID ${keyId}:`, error);
+      throw error;
+    }
+  },
+
+  async getSSHKeyByFingerprint(params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Looking up SSH key globally by fingerprint`,
+    );
+    try {
+      const { data } = await gitlabClient.get('/keys', { params });
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info('SSH key by fingerprint not found, returning safe default');
+        return { id: null, key: '', title: '' };
+      }
+      logger.error('Failed to get SSH key by fingerprint:', error);
+      throw error;
+    }
+  },
+
+  async listOAuthApplications(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing instance OAuth applications');
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get('/applications', {
+        params: {
+          page: page || 1,
+          per_page: perPage || 30,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list instance OAuth applications:', error);
+      throw error;
+    }
+  },
+
+  async createOAuthApplication(params = {}) {
+    logger.info('🦊 [GitLab Service] Creating instance OAuth application');
+    try {
+      const { data } = await gitlabClient.post('/applications', params);
+      return data;
+    } catch (error) {
+      logger.error('Failed to create instance OAuth application:', error);
+      throw error;
+    }
+  },
+
+  async deleteOAuthApplication(applicationId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting instance OAuth application ${applicationId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/applications/${encodeURIComponent(applicationId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete instance OAuth application ${applicationId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };

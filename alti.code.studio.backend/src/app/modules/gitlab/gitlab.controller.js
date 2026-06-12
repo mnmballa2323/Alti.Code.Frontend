@@ -7634,3 +7634,321 @@ export const importProject = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 54. Phase 19 Handlers
+// ==========================================
+export const getIssueResourceMilestoneEvent = async (req, res) => {
+  try {
+    const { projectId, issueIid, eventId } = req.params;
+    const event = await GitlabService.getIssueResourceMilestoneEvent(
+      projectId,
+      issueIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting issue resource milestone event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMergeRequestResourceMilestoneEvent = async (req, res) => {
+  try {
+    const { projectId, mrIid, eventId } = req.params;
+    const event = await GitlabService.getMergeRequestResourceMilestoneEvent(
+      projectId,
+      mrIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting MR resource milestone event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listIssueResourceStateEvents = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const events = await GitlabService.listIssueResourceStateEvents(
+      projectId,
+      issueIid,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing issue resource state events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssueResourceStateEvent = async (req, res) => {
+  try {
+    const { projectId, issueIid, eventId } = req.params;
+    const event = await GitlabService.getIssueResourceStateEvent(
+      projectId,
+      issueIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting issue resource state event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listMergeRequestResourceStateEvents = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const events = await GitlabService.listMergeRequestResourceStateEvents(
+      projectId,
+      mrIid,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing MR resource state events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMergeRequestResourceStateEvent = async (req, res) => {
+  try {
+    const { projectId, mrIid, eventId } = req.params;
+    const event = await GitlabService.getMergeRequestResourceStateEvent(
+      projectId,
+      mrIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting MR resource state event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listIssueResourceWeightEvents = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const events = await GitlabService.listIssueResourceWeightEvents(
+      projectId,
+      issueIid,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing issue resource weight events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssueResourceWeightEvent = async (req, res) => {
+  try {
+    const { projectId, issueIid, eventId } = req.params;
+    const event = await GitlabService.getIssueResourceWeightEvent(
+      projectId,
+      issueIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting issue resource weight event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listIssueResourceIterationEvents = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const events = await GitlabService.listIssueResourceIterationEvents(
+      projectId,
+      issueIid,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing issue resource iteration events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssueResourceIterationEvent = async (req, res) => {
+  try {
+    const { projectId, issueIid, eventId } = req.params;
+    const event = await GitlabService.getIssueResourceIterationEvent(
+      projectId,
+      issueIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting issue resource iteration event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listMergeRequestResourceIterationEvents = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const events = await GitlabService.listMergeRequestResourceIterationEvents(
+      projectId,
+      mrIid,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing MR resource iteration events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMergeRequestResourceIterationEvent = async (req, res) => {
+  try {
+    const { projectId, mrIid, eventId } = req.params;
+    const event = await GitlabService.getMergeRequestResourceIterationEvent(
+      projectId,
+      mrIid,
+      eventId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: event });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting MR resource iteration event:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getSSHKey = async (req, res) => {
+  try {
+    const { keyId } = req.params;
+    const key = await GitlabService.getSSHKey(keyId);
+    res.status(httpStatus.OK).json({ success: true, data: key });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting SSH key by ID:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getSSHKeyByFingerprint = async (req, res) => {
+  try {
+    const key = await GitlabService.getSSHKeyByFingerprint(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: key });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error looking up SSH key globally by fingerprint:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listOAuthApplications = async (req, res) => {
+  try {
+    const apps = await GitlabService.listOAuthApplications(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: apps });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing instance OAuth applications:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOAuthApplication = async (req, res) => {
+  try {
+    const app = await GitlabService.createOAuthApplication(req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: app });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating instance OAuth application:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteOAuthApplication = async (req, res) => {
+  try {
+    const { applicationId } = req.params;
+    const result = await GitlabService.deleteOAuthApplication(applicationId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting instance OAuth application:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
