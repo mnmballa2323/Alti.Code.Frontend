@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Trash2, Loader2, Search } from "lucide-react";
+import { Pencil, Loader2, Search, ChevronDown, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -55,11 +55,10 @@ export default function TeamMembersPage() {
   });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [memberToDelete, setMemberToDelete] = useState<{
-    id: string;
-    email: string;
-  } | null>(null);
+  const [prices, setPrices] = useState<Record<string, string>>({});
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState<Member | null>(null);
+  const [customPrice, setCustomPrice] = useState("$1,000");
 
   const fetchMembers = async () => {
     try {
@@ -89,32 +88,7 @@ export default function TeamMembersPage() {
     }
   }, [currentUserFromStore]);
 
-  const handleRemove = (id: string, email: string) => {
-    if (id === currentUser?.id) {
-      alert("You cannot remove yourself from the workspace.");
 
-      return;
-    }
-    setMemberToDelete({ id, email });
-    setDeleteConfirmOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!memberToDelete) return;
-    const { id } = memberToDelete;
-
-    try {
-      await teamAPI.removeMember(id);
-      setMembers((prev) => prev.filter((m) => m.id !== id));
-      alert("Member removed successfully.");
-    } catch (err) {
-      console.error("Failed to remove member:", err);
-      alert("Failed to remove member. Please try again.");
-    } finally {
-      setDeleteConfirmOpen(false);
-      setMemberToDelete(null);
-    }
-  };
 
 
 
@@ -226,19 +200,19 @@ export default function TeamMembersPage() {
                         </div>
                         <div className="col-span-3 flex items-center justify-between">
                           <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
-                            $1,000
+                            {prices[member.id] || "$1,000"}
                           </span>
-                          {!isYou && (
-                            <button
-                              className="p-1 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded transition-colors ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleRemove(member.id, member.email);
-                              }}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          )}
+                          <button
+                            className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded transition-colors ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setEditingMember(member);
+                              setCustomPrice(prices[member.id] || "$1,000");
+                              setEditModalOpen(true);
+                            }}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
                     );
@@ -258,45 +232,90 @@ export default function TeamMembersPage() {
         </div>
       )}
 
-      {/* Custom Delete Confirmation Modal */}
-      {deleteConfirmOpen && memberToDelete && (
+      {/* Edit Membership Pricing Modal */}
+      {editModalOpen && editingMember && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-          <div className="w-full max-w-[380px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-6 text-center">
-              <h2 className="text-base font-bold text-neutral-800 dark:text-neutral-200 mb-2">
-                Remove Member
-              </h2>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 px-4 leading-normal">
-                Are you sure you want to remove{" "}
-                <span className="font-semibold text-neutral-700 dark:text-neutral-300">
-                  {memberToDelete.email}
-                </span>
-              </p>
+          <div className="w-full max-w-[420px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 relative">
+            {/* Close button X */}
+            <button
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent"
+              onClick={() => {
+                setEditModalOpen(false);
+                setEditingMember(null);
+              }}
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <h2 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-6">
+              Edit Membership Pricing
+            </h2>
+
+            <div className="space-y-4">
+              {/* User Email */}
+              <div>
+                <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+                  User Email
+                </label>
+                <input
+                  readOnly
+                  className="w-full px-4 py-3 bg-neutral-50 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm text-neutral-500 dark:text-neutral-455 focus:outline-none cursor-not-allowed"
+                  type="text"
+                  value={editingMember.email}
+                />
+              </div>
+
+              {/* Custom Pricing Amount */}
+              <div>
+                <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+                  Custom Pricing Amount
+                </label>
+                <div className="relative">
+                  <select
+                    className="w-full px-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
+                    value={customPrice}
+                    onChange={(e) => setCustomPrice(e.target.value)}
+                  >
+                    <option value="$0">$0</option>
+                    <option value="$250">$250</option>
+                    <option value="$500">$500</option>
+                    <option value="$1,000">$1,000</option>
+                    <option value="$1,500">$1,500</option>
+                    <option value="$2,000">$2,000</option>
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Horizontal border line */}
-            <div className="border-t border-neutral-100 dark:border-neutral-800" />
-
-            {/* Footer Buttons Split by Vertical Line */}
-            <div className="flex w-full">
+            {/* Buttons Row */}
+            <div className="flex gap-3 mt-8">
               <button
-                className="flex-1 py-3 text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
+                className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer"
                 onClick={() => {
-                  setDeleteConfirmOpen(false);
-                  setMemberToDelete(null);
+                  setEditModalOpen(false);
+                  setEditingMember(null);
                 }}
               >
                 Cancel
               </button>
 
-              {/* Vertical divider line */}
-              <div className="border-r border-neutral-100 dark:border-neutral-800" />
-
               <button
-                className="flex-1 py-3 text-sm font-medium text-red-500 hover:bg-neutral-50 dark:hover:bg-[#1f242c] transition-colors focus:outline-none"
-                onClick={confirmDelete}
+                className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer"
+                onClick={() => {
+                  if (editingMember) {
+                    setPrices((prev) => ({
+                      ...prev,
+                      [editingMember.id]: customPrice,
+                    }));
+                  }
+                  setEditModalOpen(false);
+                  setEditingMember(null);
+                }}
               >
-                Remove
+                Save Changes
               </button>
             </div>
           </div>
