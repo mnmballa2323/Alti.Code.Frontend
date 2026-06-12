@@ -8356,6 +8356,383 @@ export const unsuspendAppInstallation = async (req, res) => {
   }
 };
 
+// ==========================================
+// 45. GitHub App Webhook Deliveries & Configuration Handlers
+// ==========================================
+export const getWebhookConfigForApp = async (req, res) => {
+  try {
+    const result = await GithubService.getWebhookConfigForApp();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error getting App webhook config:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateWebhookConfigForApp = async (req, res) => {
+  try {
+    const result = await GithubService.updateWebhookConfigForApp(req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error updating App webhook config:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listWebhookDeliveries = async (req, res) => {
+  try {
+    const { page, perPage } = req.query;
+    const result = await GithubService.listWebhookDeliveries(
+      page ? parseInt(page, 10) : undefined,
+      perPage ? parseInt(perPage, 10) : undefined,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitHub Controller] Error listing App webhook deliveries:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getWebhookDelivery = async (req, res) => {
+  try {
+    const { deliveryId } = req.params;
+    const result = await GithubService.getWebhookDelivery(
+      parseInt(deliveryId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting App webhook delivery #${deliveryId}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const redeliverWebhookDelivery = async (req, res) => {
+  try {
+    const { deliveryId } = req.params;
+    const result = await GithubService.redeliverWebhookDelivery(
+      parseInt(deliveryId, 10),
+    );
+    res.status(httpStatus.ACCEPTED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error redelivering App webhook event #${deliveryId}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 46. Organization Fine-Grained Personal Access Tokens (PATs) Handlers
+// ==========================================
+export const listPatGrantRequests = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { page, perPage, repository, owner } = req.query;
+    const result = await GithubService.listPatGrantRequests(
+      org,
+      page ? parseInt(page, 10) : undefined,
+      perPage ? parseInt(perPage, 10) : undefined,
+      repository,
+      owner,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing PAT grant requests for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const reviewPatGrantRequest = async (req, res) => {
+  try {
+    const { org, patRequestId } = req.params;
+    const { action, reason } = req.body;
+    const result = await GithubService.reviewPatGrantRequest(
+      org,
+      parseInt(patRequestId, 10),
+      action,
+      reason,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error reviewing PAT request ${patRequestId} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPatGrants = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { page, perPage, repository, owner } = req.query;
+    const result = await GithubService.listPatGrants(
+      org,
+      page ? parseInt(page, 10) : undefined,
+      perPage ? parseInt(perPage, 10) : undefined,
+      repository,
+      owner,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error listing PAT grants for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const revokePatGrant = async (req, res) => {
+  try {
+    const { org, patId } = req.params;
+    const result = await GithubService.revokePatGrant(org, parseInt(patId, 10));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error revoking PAT grant ${patId} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const reviewPatGrantRequests = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { pat_request_ids, action, reason } = req.body;
+    const result = await GithubService.reviewPatGrantRequests(
+      org,
+      pat_request_ids,
+      action,
+      reason,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error bulk reviewing PAT requests in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 47. Organization Code Security Configurations Handlers
+// ==========================================
+export const createOrgSecurityConfiguration = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { name, description, settings } = req.body;
+    const result = await GithubService.createOrgSecurityConfiguration(
+      org,
+      name,
+      description,
+      settings,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error creating security configuration in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateOrgSecurityConfiguration = async (req, res) => {
+  try {
+    const { org, securityConfigurationId } = req.params;
+    const { settings } = req.body;
+    const result = await GithubService.updateOrgSecurityConfiguration(
+      org,
+      parseInt(securityConfigurationId, 10),
+      settings,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error updating security configuration ${securityConfigurationId} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteOrgSecurityConfiguration = async (req, res) => {
+  try {
+    const { org, securityConfigurationId } = req.params;
+    const result = await GithubService.deleteOrgSecurityConfiguration(
+      org,
+      parseInt(securityConfigurationId, 10),
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error deleting security configuration ${securityConfigurationId} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const attachOrgSecurityConfiguration = async (req, res) => {
+  try {
+    const { org, securityConfigurationId } = req.params;
+    const { target_type, targets } = req.body;
+    const result = await GithubService.attachOrgSecurityConfiguration(
+      org,
+      parseInt(securityConfigurationId, 10),
+      target_type,
+      targets,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error attaching security configuration ${securityConfigurationId} in org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRepoSecurityConfigurationAssignment = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getRepoSecurityConfigurationAssignment(
+      owner,
+      repo,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error fetching security configuration assignment for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 48. Allowed Actions Configuration Handlers
+// ==========================================
+export const getAllowedActionsRepository = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.getAllowedActionsRepository(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting allowed actions settings for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setAllowedActionsRepository = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.setAllowedActionsRepository(
+      owner,
+      repo,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting allowed actions settings for ${owner}/${repo}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getAllowedActionsOrganization = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.getAllowedActionsOrganization(org);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error getting allowed actions settings for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setAllowedActionsOrganization = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const result = await GithubService.setAllowedActionsOrganization(
+      org,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      `[GitHub Controller] Error setting allowed actions settings for org ${org}:`,
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getBranch,
   getBranchProtection,
@@ -8821,4 +9198,23 @@ export const GithubController = {
   deleteAppInstallation,
   suspendAppInstallation,
   unsuspendAppInstallation,
+  getWebhookConfigForApp,
+  updateWebhookConfigForApp,
+  listWebhookDeliveries,
+  getWebhookDelivery,
+  redeliverWebhookDelivery,
+  listPatGrantRequests,
+  reviewPatGrantRequest,
+  listPatGrants,
+  revokePatGrant,
+  reviewPatGrantRequests,
+  createOrgSecurityConfiguration,
+  updateOrgSecurityConfiguration,
+  deleteOrgSecurityConfiguration,
+  attachOrgSecurityConfiguration,
+  getRepoSecurityConfigurationAssignment,
+  getAllowedActionsRepository,
+  setAllowedActionsRepository,
+  getAllowedActionsOrganization,
+  setAllowedActionsOrganization,
 };

@@ -9429,4 +9429,369 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 97. GitHub App Webhook Deliveries & Configuration
+  // ==========================================
+  async getWebhookConfigForApp() {
+    logger.info(`🐙 [GitHub Service] Fetching webhook config for App`);
+    try {
+      const { data } = await octokit.rest.apps.getWebhookConfigForApp();
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch webhook config for App:`, error);
+      throw error;
+    }
+  },
+
+  async updateWebhookConfigForApp(config) {
+    logger.info(`🐙 [GitHub Service] Updating webhook config for App`);
+    try {
+      const { data } = await octokit.rest.apps.updateWebhookConfigForApp(config);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update webhook config for App:`, error);
+      throw error;
+    }
+  },
+
+  async listWebhookDeliveries(page = 1, perPage = 30) {
+    logger.info(`🐙 [GitHub Service] Listing webhook deliveries for App`);
+    try {
+      const { data } = await octokit.rest.apps.listWebhookDeliveries({
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list webhook deliveries:`, error);
+      throw error;
+    }
+  },
+
+  async getWebhookDelivery(deliveryId) {
+    logger.info(`🐙 [GitHub Service] Fetching webhook delivery ${deliveryId}`);
+    try {
+      const { data } = await octokit.rest.apps.getWebhookDelivery({
+        delivery_id: deliveryId,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get webhook delivery ${deliveryId}:`, error);
+      throw error;
+    }
+  },
+
+  async redeliverWebhookDelivery(deliveryId) {
+    logger.info(
+      `🐙 [GitHub Service] Requesting redelivery of event ${deliveryId}`,
+    );
+    try {
+      const { data } = await octokit.rest.apps.redeliverWebhookDelivery({
+        delivery_id: deliveryId,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to redeliver webhook event ${deliveryId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 98. Organization Fine-Grained Personal Access Tokens (PATs)
+  // ==========================================
+  async listPatGrantRequests(
+    org,
+    page = 1,
+    perPage = 30,
+    repository = undefined,
+    owner = undefined,
+  ) {
+    logger.info(`🐙 [GitHub Service] Listing PAT grant requests for org ${org}`);
+    try {
+      const { data } = await octokit.rest.orgs.listPatGrantRequests({
+        org,
+        page,
+        per_page: perPage,
+        repository,
+        owner,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list PAT grant requests for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async reviewPatGrantRequest(org, patRequestId, action, reason = '') {
+    logger.info(
+      `🐙 [GitHub Service] Reviewing PAT request ${patRequestId} in org ${org} with action ${action}`,
+    );
+    try {
+      const response = await octokit.rest.orgs.reviewPatGrantRequest({
+        org,
+        pat_request_id: patRequestId,
+        action,
+        reason,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to review PAT request ${patRequestId} in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listPatGrants(
+    org,
+    page = 1,
+    perPage = 30,
+    repository = undefined,
+    owner = undefined,
+  ) {
+    logger.info(`🐙 [GitHub Service] Listing PAT grants in org ${org}`);
+    try {
+      const { data } = await octokit.rest.orgs.listPatGrants({
+        org,
+        page,
+        per_page: perPage,
+        repository,
+        owner,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list PAT grants in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async revokePatGrant(org, patId) {
+    logger.info(`🐙 [GitHub Service] Revoking PAT grant ${patId} in org ${org}`);
+    try {
+      const response = await octokit.rest.orgs.revokePatGrant({
+        org,
+        pat_id: patId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to revoke PAT grant ${patId} in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async reviewPatGrantRequests(org, patRequestIds, action, reason = '') {
+    logger.info(
+      `🐙 [GitHub Service] Bulk reviewing PAT requests in org ${org} with action ${action}`,
+    );
+    try {
+      const response = await octokit.rest.orgs.reviewPatGrantRequests({
+        org,
+        pat_request_ids: patRequestIds,
+        action,
+        reason,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to bulk review PAT requests in org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 99. Organization Code Security Configurations
+  // ==========================================
+  async createOrgSecurityConfiguration(org, name, description, settings) {
+    logger.info(
+      `🐙 [GitHub Service] Creating security configuration ${name} for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.codeSecurity.createConfigurationForOrg(
+        {
+          org,
+          name,
+          description,
+          ...settings,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create security configuration for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateOrgSecurityConfiguration(org, securityConfigurationId, settings) {
+    logger.info(
+      `🐙 [GitHub Service] Updating security configuration ${securityConfigurationId} for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.codeSecurity.updateConfigurationForOrg(
+        {
+          org,
+          security_configuration_id: securityConfigurationId,
+          ...settings,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update security configuration ${securityConfigurationId} for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteOrgSecurityConfiguration(org, securityConfigurationId) {
+    logger.info(
+      `🐙 [GitHub Service] Deleting security configuration ${securityConfigurationId} in org ${org}`,
+    );
+    try {
+      const response = await octokit.rest.codeSecurity.deleteConfiguration({
+        org,
+        security_configuration_id: securityConfigurationId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete security configuration ${securityConfigurationId} in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async attachOrgSecurityConfiguration(
+    org,
+    securityConfigurationId,
+    targetType,
+    targets,
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Attaching security configuration ${securityConfigurationId} in org ${org}`,
+    );
+    try {
+      const response = await octokit.rest.codeSecurity.attachConfiguration({
+        org,
+        security_configuration_id: securityConfigurationId,
+        scope: targetType,
+        selected_repository_ids:
+          targetType === 'selected' ? targets : undefined,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to attach security configuration ${securityConfigurationId} in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getRepoSecurityConfigurationAssignment(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching security configuration assignment for ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.codeSecurity.getRepoConfiguration({
+        owner,
+        repo,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get security configuration assignment for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 100. Allowed Actions Configuration
+  // ==========================================
+  async getAllowedActionsRepository(owner, repo) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching allowed actions settings for ${owner}/${repo}`,
+    );
+    try {
+      const { data } = await octokit.rest.actions.getAllowedActionsRepository({
+        owner,
+        repo,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get allowed actions settings for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setAllowedActionsRepository(owner, repo, allowedActionsSettings) {
+    logger.info(
+      `🐙 [GitHub Service] Setting allowed actions settings for ${owner}/${repo}`,
+    );
+    try {
+      const response = await octokit.rest.actions.setAllowedActionsRepository({
+        owner,
+        repo,
+        ...allowedActionsSettings,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to set allowed actions settings for ${owner}/${repo}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getAllowedActionsOrganization(org) {
+    logger.info(
+      `🐙 [GitHub Service] Fetching allowed actions settings for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.actions.getAllowedActionsOrganization(
+        {
+          org,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get allowed actions settings for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setAllowedActionsOrganization(org, allowedActionsSettings) {
+    logger.info(
+      `🐙 [GitHub Service] Setting allowed actions settings for org ${org}`,
+    );
+    try {
+      const response = await octokit.rest.actions.setAllowedActionsOrganization(
+        {
+          org,
+          ...allowedActionsSettings,
+        },
+      );
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to set allowed actions settings for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };
