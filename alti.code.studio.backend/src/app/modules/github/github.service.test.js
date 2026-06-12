@@ -141,6 +141,18 @@ vi.mock('octokit', () => {
         listTags: vi.fn(),
         renameBranch: vi.fn(),
         mergeUpstream: vi.fn(),
+        update: vi.fn(),
+        getRequiredStatusChecks: vi.fn(),
+        updateRequiredStatusChecks: vi.fn(),
+        removeRequiredStatusChecks: vi.fn(),
+        getAllStatusCheckContexts: vi.fn(),
+        addStatusCheckContexts: vi.fn(),
+        setStatusCheckContexts: vi.fn(),
+        removeStatusCheckContexts: vi.fn(),
+        getAppsAndTeamsRequestReviewBypassers: vi.fn(),
+        addAppsAndTeamsRequestReviewBypassers: vi.fn(),
+        setAppsAndTeamsRequestReviewBypassers: vi.fn(),
+        removeAppsAndTeamsRequestReviewBypassers: vi.fn(),
       },
       issues: {
         listForRepo: vi.fn(),
@@ -326,6 +338,14 @@ vi.mock('octokit', () => {
         deleteDiscussionCommentInOrg: vi.fn(),
         addOrUpdateTeamPermissionsInOrg: vi.fn(),
         removeTeam: vi.fn(),
+        getByName: vi.fn(),
+        addOrUpdateMembershipForUserInOrg: vi.fn(),
+        removeMembershipForUserInOrg: vi.fn(),
+        listReposInOrg: vi.fn(),
+        checkPermissionsForRepoInOrg: vi.fn(),
+        addOrUpdateRepoPermissionsInOrg: vi.fn(),
+        removeRepoInOrg: vi.fn(),
+        listChildInOrg: vi.fn(),
       },
       codespaces: {
         listForAuthenticatedUser: vi.fn(),
@@ -402,6 +422,9 @@ vi.mock('octokit', () => {
         getInstallation: vi.fn(),
         listReposAccessibleToInstallation: vi.fn(),
         createInstallationAccessToken: vi.fn(),
+        deleteInstallation: vi.fn(),
+        suspendInstallation: vi.fn(),
+        unsuspendInstallation: vi.fn(),
       },
       billing: {
         getGithubActionsBillingOrg: vi.fn(),
@@ -8337,6 +8360,478 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
       username: 'octocat',
       page: 2,
       per_page: 20,
+    });
+  });
+
+  // 93. Repository Settings & Secret Scanning
+  it('should update repository settings', async () => {
+    const mockData = { id: 1, name: 'repo', description: 'updated' };
+    mockOctokit.rest.repos.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.updateRepository('owner', 'repo', {
+      description: 'updated',
+    });
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      description: 'updated',
+    });
+  });
+
+  it('should enable secret scanning', async () => {
+    const mockData = { id: 1, name: 'repo' };
+    mockOctokit.rest.repos.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.enableSecretScanning('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      security_and_analysis: {
+        secret_scanning: {
+          status: 'enabled',
+        },
+      },
+    });
+  });
+
+  it('should disable secret scanning', async () => {
+    const mockData = { id: 1, name: 'repo' };
+    mockOctokit.rest.repos.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.disableSecretScanning('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      security_and_analysis: {
+        secret_scanning: {
+          status: 'disabled',
+        },
+      },
+    });
+  });
+
+  it('should enable secret scanning push protection', async () => {
+    const mockData = { id: 1, name: 'repo' };
+    mockOctokit.rest.repos.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.enableSecretScanningPushProtection(
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      security_and_analysis: {
+        secret_scanning_push_protection: {
+          status: 'enabled',
+        },
+      },
+    });
+  });
+
+  it('should disable secret scanning push protection', async () => {
+    const mockData = { id: 1, name: 'repo' };
+    mockOctokit.rest.repos.update.mockResolvedValue({ data: mockData });
+    const result = await GithubService.disableSecretScanningPushProtection(
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.update).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      security_and_analysis: {
+        secret_scanning_push_protection: {
+          status: 'disabled',
+        },
+      },
+    });
+  });
+
+  // 94. Granular Required Status Checks & Bypass Restrictions
+  it('should get required status checks settings (success)', async () => {
+    const mockData = { strict: true, contexts: ['ci'] };
+    mockOctokit.rest.repos.getRequiredStatusChecks.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getRequiredStatusChecks(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.getRequiredStatusChecks).toHaveBeenCalledWith(
+      {
+        owner: 'owner',
+        repo: 'repo',
+        branch: 'main',
+      },
+    );
+  });
+
+  it('should return default object on get required status checks 404 error', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getRequiredStatusChecks.mockRejectedValue(error404);
+    const result = await GithubService.getRequiredStatusChecks(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ checks: [], contexts: [] });
+  });
+
+  it('should update required status checks', async () => {
+    const mockData = { strict: true };
+    mockOctokit.rest.repos.updateRequiredStatusChecks.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updateRequiredStatusChecks(
+      'owner',
+      'repo',
+      'main',
+      ['check'],
+      ['ctx'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.updateRequiredStatusChecks,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      checks: ['check'],
+      contexts: ['ctx'],
+    });
+  });
+
+  it('should list required status checks contexts', async () => {
+    const mockData = ['ci'];
+    mockOctokit.rest.repos.getAllStatusCheckContexts.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listRequiredStatusChecksContexts(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.getAllStatusCheckContexts,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should add required status checks contexts', async () => {
+    const mockData = ['ci', 'new'];
+    mockOctokit.rest.repos.addStatusCheckContexts.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addRequiredStatusChecksContexts(
+      'owner',
+      'repo',
+      'main',
+      ['new'],
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.addStatusCheckContexts).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      contexts: ['new'],
+    });
+  });
+
+  it('should set required status checks contexts', async () => {
+    const mockData = ['new'];
+    mockOctokit.rest.repos.setStatusCheckContexts.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setRequiredStatusChecksContexts(
+      'owner',
+      'repo',
+      'main',
+      ['new'],
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.setStatusCheckContexts).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      contexts: ['new'],
+    });
+  });
+
+  it('should remove required status checks contexts', async () => {
+    const mockData = [];
+    mockOctokit.rest.repos.removeStatusCheckContexts.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeRequiredStatusChecksContexts(
+      'owner',
+      'repo',
+      'main',
+      ['ci'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.removeStatusCheckContexts,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      contexts: ['ci'],
+    });
+  });
+
+  it('should get PR review bypass restrictions (success)', async () => {
+    const mockData = { users: [], teams: [] };
+    mockOctokit.rest.repos.getAppsAndTeamsRequestReviewBypassers.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.getPullRequestReviewBypassRestrictions(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.getAppsAndTeamsRequestReviewBypassers,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should return default object on get PR review bypass restrictions 404 error', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getAppsAndTeamsRequestReviewBypassers.mockRejectedValue(
+      error404,
+    );
+    const result = await GithubService.getPullRequestReviewBypassRestrictions(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ users: [], teams: [], apps: [] });
+  });
+
+  it('should add PR review bypass restrictions', async () => {
+    const mockData = { users: [{ login: 'u' }] };
+    mockOctokit.rest.repos.addAppsAndTeamsRequestReviewBypassers.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.addPullRequestReviewBypassRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['u'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.addAppsAndTeamsRequestReviewBypassers,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      users: ['u'],
+      teams: [],
+      apps: [],
+    });
+  });
+
+  // 95. Organization Teams & Membership Management
+  it('should get team details by slug name', async () => {
+    const mockData = { id: 1, name: 'Team Alpha' };
+    mockOctokit.rest.teams.getByName.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getTeamByName('org', 'team-alpha');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.teams.getByName).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+    });
+  });
+
+  it('should add or update team membership for a user', async () => {
+    const mockData = { state: 'active', role: 'member' };
+    mockOctokit.rest.teams.addOrUpdateMembershipForUserInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addOrUpdateTeamMembershipForUser(
+      'org',
+      'team-alpha',
+      'user1',
+      'maintainer',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.teams.addOrUpdateMembershipForUserInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      username: 'user1',
+      role: 'maintainer',
+    });
+  });
+
+  it('should remove team membership for a user', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.teams.removeMembershipForUserInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeTeamMembershipForUser(
+      'org',
+      'team-alpha',
+      'user1',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.teams.removeMembershipForUserInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      username: 'user1',
+    });
+  });
+
+  it('should list team repositories', async () => {
+    const mockData = [{ id: 1, name: 'repo' }];
+    mockOctokit.rest.teams.listReposInOrg.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listTeamRepos(
+      'org',
+      'team-alpha',
+      2,
+      10,
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.teams.listReposInOrg).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      page: 2,
+      per_page: 10,
+    });
+  });
+
+  it('should check team permissions for a repository (success)', async () => {
+    const mockData = { permissions: { push: true } };
+    mockOctokit.rest.teams.checkPermissionsForRepoInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.checkTeamPermissionsForRepo(
+      'org',
+      'team-alpha',
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.teams.checkPermissionsForRepoInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should return belongs: false on check team permissions 404 error', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.teams.checkPermissionsForRepoInOrg.mockRejectedValue(
+      error404,
+    );
+    const result = await GithubService.checkTeamPermissionsForRepo(
+      'org',
+      'team-alpha',
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual({ belongs: false });
+  });
+
+  it('should add or update team repo permissions', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.teams.addOrUpdateRepoPermissionsInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addOrUpdateTeamRepoPermissions(
+      'org',
+      'team-alpha',
+      'owner',
+      'repo',
+      'admin',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.teams.addOrUpdateRepoPermissionsInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      owner: 'owner',
+      repo: 'repo',
+      permission: 'admin',
+    });
+  });
+
+  it('should remove team repository access', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.teams.removeRepoInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeTeamRepo(
+      'org',
+      'team-alpha',
+      'owner',
+      'repo',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.teams.removeRepoInOrg).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team-alpha',
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // 96. GitHub Apps Lifecycle
+  it('should delete app installation', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.apps.deleteInstallation.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteAppInstallation(123);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.deleteInstallation).toHaveBeenCalledWith({
+      installation_id: 123,
+    });
+  });
+
+  it('should suspend app installation', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.apps.suspendInstallation.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.suspendAppInstallation(123);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.suspendInstallation).toHaveBeenCalledWith({
+      installation_id: 123,
+    });
+  });
+
+  it('should unsuspend app installation', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.apps.unsuspendInstallation.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.unsuspendAppInstallation(123);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.unsuspendInstallation).toHaveBeenCalledWith({
+      installation_id: 123,
     });
   });
 });

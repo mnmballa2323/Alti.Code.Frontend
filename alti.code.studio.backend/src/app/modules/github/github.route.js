@@ -1624,5 +1624,117 @@ router.get(
 router.get('/users/:username/keys', GithubController.listPublicKeysForUser);
 router.get('/users/:username/gpg_keys', GithubController.listGpgKeysForUser);
 
+// ==========================================
+// 70. Repository Settings & Secret Scanning API
+// ==========================================
+router.patch('/repos/:owner/:repo', GithubController.updateRepository);
+router.put(
+  '/repos/:owner/:repo/secret-scanning',
+  GithubController.enableSecretScanning,
+);
+router.delete(
+  '/repos/:owner/:repo/secret-scanning',
+  GithubController.disableSecretScanning,
+);
+router.put(
+  '/repos/:owner/:repo/secret-scanning/push-protection',
+  GithubController.enableSecretScanningPushProtection,
+);
+router.delete(
+  '/repos/:owner/:repo/secret-scanning/push-protection',
+  GithubController.disableSecretScanningPushProtection,
+);
+
+// ==========================================
+// 71. Granular Status Checks & Bypass Restrictions API
+// ==========================================
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks',
+  GithubController.getRequiredStatusChecks,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks',
+  GithubController.updateRequiredStatusChecks,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks',
+  GithubController.deleteRequiredStatusChecks,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts',
+  GithubController.listRequiredStatusChecksContexts,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts',
+  GithubController.addRequiredStatusChecksContexts,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts',
+  GithubController.setRequiredStatusChecksContexts,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts',
+  GithubController.removeRequiredStatusChecksContexts,
+);
+router.get(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/pull_request_reviews_bypass',
+  GithubController.getPullRequestReviewBypassRestrictions,
+);
+router.post(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/pull_request_reviews_bypass',
+  GithubController.addPullRequestReviewBypassRestrictions,
+);
+router.put(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/pull_request_reviews_bypass',
+  GithubController.setPullRequestReviewBypassRestrictions,
+);
+router.delete(
+  '/repos/:owner/:repo/branches/:branch/protection/restrictions/pull_request_reviews_bypass',
+  GithubController.removePullRequestReviewBypassRestrictions,
+);
+
+// ==========================================
+// 72. Organization Teams & Membership API
+// ==========================================
+router.get('/orgs/:org/teams/:teamSlug', GithubController.getTeamByName);
+router.put(
+  '/orgs/:org/teams/:teamSlug/memberships/:username',
+  GithubController.addOrUpdateTeamMembershipForUser,
+);
+router.delete(
+  '/orgs/:org/teams/:teamSlug/memberships/:username',
+  GithubController.removeTeamMembershipForUser,
+);
+router.get('/orgs/:org/teams/:teamSlug/repos', GithubController.listTeamRepos);
+router.get(
+  '/orgs/:org/teams/:teamSlug/repos/:owner/:repo',
+  GithubController.checkTeamPermissionsForRepo,
+);
+router.put(
+  '/orgs/:org/teams/:teamSlug/repos/:owner/:repo',
+  GithubController.addOrUpdateTeamRepoPermissions,
+);
+router.delete(
+  '/orgs/:org/teams/:teamSlug/repos/:owner/:repo',
+  GithubController.removeTeamRepo,
+);
+router.get('/orgs/:org/teams/:teamSlug/teams', GithubController.listChildTeams);
+
+// ==========================================
+// 73. GitHub Apps Lifecycle API
+// ==========================================
+router.delete(
+  '/app/installations/:installationId',
+  GithubController.deleteAppInstallation,
+);
+router.put(
+  '/app/installations/:installationId/suspended',
+  GithubController.suspendAppInstallation,
+);
+router.delete(
+  '/app/installations/:installationId/suspended',
+  GithubController.unsuspendAppInstallation,
+);
+
 export const GithubRoutes = router;
 export default router;
