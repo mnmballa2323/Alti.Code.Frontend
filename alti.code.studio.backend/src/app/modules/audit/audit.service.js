@@ -12,12 +12,28 @@ import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
+export const canonicalize = (obj) => {
+    if (obj === null || typeof obj !== 'object') {
+        return obj;
+    }
+    if (Array.isArray(obj)) {
+        return obj.map(canonicalize);
+    }
+    const sortedKeys = Object.keys(obj).sort();
+    const result = {};
+    for (const key of sortedKeys) {
+        result[key] = canonicalize(obj[key]);
+    }
+    return result;
+};
+
 export class AuditService {
     /**
      * Hashes an audit log payload securely.
      */
     static _hashPayload(payload, previousHash) {
-        const str = JSON.stringify(payload) + previousHash;
+        const canonicalPayload = canonicalize(payload);
+        const str = JSON.stringify(canonicalPayload) + previousHash;
         return crypto.createHash('sha256').update(str).digest('hex');
     }
 

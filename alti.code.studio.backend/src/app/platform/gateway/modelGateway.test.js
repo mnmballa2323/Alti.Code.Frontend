@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import httpStatus from 'http-status';
-import { routePlatformCompletion, callWithRetry, sanitizeError } from './modelGateway.js';
+import { routePlatformCompletion, callWithRetry, sanitizeError, estimateTokens } from './modelGateway.js';
 import config from '../../../../config/index.js';
 
 const { mockRecordLlmCall } = vi.hoisted(() => ({
@@ -265,6 +265,85 @@ describe('Platform Model Gateway', () => {
           productId: 'inso-ai',
           tenantId: 'tenant-111',
           latencyMs: expect.any(Number)
+        })
+      );
+    });
+  });
+
+  describe('Token Estimation Fallback', () => {
+    it('should correctly estimate tokens with estimateTokens helper', () => {
+      expect(estimateTokens('Hello', 'World')).toBe(3);
+      expect(estimateTokens('', '')).toBe(0);
+      expect(estimateTokens(null, null)).toBe(0);
+    });
+
+    it('should fall back to estimated tokens when GCP response lacks usageMetadata', async () => {
+      vertexGenerateContentMock.mockResolvedValueOnce({
+        response: {
+          candidates: [{ content: { parts: [{ text: 'Gemini reply no metadata' }] } }]
+        }
+      });
+
+      const prompt = 'Hello Gemini fallback';
+      const expectedTokens = Math.ceil((prompt.length + 'Gemini reply no metadata'.length) / 4);
+
+      await routePlatformCompletion({
+        provider: 'gcp',
+        model: 'google/gemini-3.1-pro',
+        prompt,
+        productId: 'inso-code',
+        tenantId: 'tenant-999'
+      });
+
+      expect(mockRecordLlmCall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tokens: expectedTokens
+        })
+      );
+    });
+
+    it('should fall back to estimated tokens when AWS response lacks usage metadata', async () => {
+      bedrockCreateMock.mockResolvedValueOnce({
+        content: [{ text: 'AWS reply no metadata' }]
+      });
+
+      const prompt = 'Hello Bedrock fallback';
+      const expectedTokens = Math.ceil((prompt.length + 'AWS reply no metadata'.length) / 4);
+
+      await routePlatformCompletion({
+        provider: 'aws',
+        model: 'claude-3-5-sonnet',
+        prompt,
+        productId: 'inso-code',
+        tenantId: 'tenant-999'
+      });
+
+      expect(mockRecordLlmCall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tokens: expectedTokens
+        })
+      );
+    });
+
+    it('should fall back to estimated tokens when Azure response lacks usage metadata', async () => {
+      azureCreateMock.mockResolvedValueOnce({
+        choices: [{ message: { content: 'Azure reply no metadata' } }]
+      });
+
+      const prompt = 'Hello Azure fallback';
+      const expectedTokens = Math.ceil((prompt.length + 'Azure reply no metadata'.length) / 4);
+
+      await routePlatformCompletion({
+        provider: 'azure',
+        model: 'azure/gpt-4o',
+        prompt,
+        productId: 'inso-code',
+        tenantId: 'tenant-999'
+      });
+
+      expect(mockRecordLlmCall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          tokens: expectedTokens
         })
       );
     });

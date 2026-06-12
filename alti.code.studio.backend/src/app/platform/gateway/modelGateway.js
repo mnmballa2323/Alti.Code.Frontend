@@ -54,6 +54,15 @@ export const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
 };
 
 /**
+ * Word-to-token fallback estimator: (prompt.length + response.length) / 4
+ */
+export const estimateTokens = (prompt, response) => {
+  const promptLen = prompt ? prompt.length : 0;
+  const respLen = response ? response.length : 0;
+  return Math.ceil((promptLen + respLen) / 4);
+};
+
+/**
  * Routes text completion request to authorized Tri-Cloud endpoints
  * @param {object} params
  * @param {string} params.provider - 'gcp' | 'aws' | 'azure'
@@ -230,6 +239,10 @@ export const routePlatformCompletion = async ({
         );
     }
 
+    if (!tokensConsumed) {
+      tokensConsumed = estimateTokens(activePrompt, resultText);
+    }
+
     return resultText;
   } catch (error) {
     success = false;
@@ -267,6 +280,7 @@ export const routePlatformCompletion = async ({
 export const modelGateway = {
   routePlatformCompletion,
   callWithRetry,
-  sanitizeError
+  sanitizeError,
+  estimateTokens
 };
 

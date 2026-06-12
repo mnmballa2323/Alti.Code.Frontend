@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { tenantDbRouter } from './tenantDbRouter.js';
+import { tenantDbRouter, tenantCache } from './tenantDbRouter.js';
 import { prisma, getTenantPrisma, getSchemaConnectionUrl } from './prismaClient.js';
 
 // Mock prismaClient
@@ -24,6 +24,7 @@ describe('Platform Tenant Database Router Middleware', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    tenantCache.clear();
     process.env.SCHEMA_ISOLATION_ACTIVE = originalEnvSchema;
     process.env.DATABASE_URL = originalEnvDb;
   });
@@ -126,5 +127,53 @@ describe('Platform Tenant Database Router Middleware', () => {
     await tenantDbRouter(req, res, next);
 
     expect(next).toHaveBeenCalledWith(dbError);
+  });
+
+  it('should query the database once and cache the tenant database configuration', async () => {
+    const tenantId = 'tenant-cache-1';
+    const dbUrl = 'postgresql://tenant:pass@127.0.0.1:5432/tenant_cache_1';
+    const req = { user: { tenantId } };
+    const res = {};
+    const next = vi.fn();
+
+    const mockTenantDbClient = { query: vi.fn() };
+    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: dbUrl });
+    getTenantPrisma.mockReturnValue(mockTenantDbClient);
+
+    // First call: should query database and populate cache
+    await tenantDbRouter(req, res, next);
+    expect(prisma.tenant.findUnique).toHaveBeenCalledTimes(1);
+    expect(req.db).toBe(mockTenantDbClient);
+
+    // Second call: should read from cache and not query database again
+    const req2 = { user: { tenantId } };
+    const next2 = vi.fn();
+    await tenantDbRouter(req2, res, next2);
+    expect(prisma.tenant.findUnique).toHaveBeenCalledTimes(1); // Still 1
+    expect(req2.db).toBe(mockTenantDbClient);
+  });
+
+  it('should query the database if cached config is expired', async () => {
+    const tenantId = 'tenant-cache-2';
+    const dbUrl = 'postgresql://tenant:pass@127.0.0.1:5432/tenant_cache_2';
+    const req = { user: { tenantId } };
+    const res = {};
+    const next = vi.fn();
+
+    const mockTenantDbClient = { query: vi.fn() };
+    prisma.tenant.findUnique.mockResolvedValue({ dedicatedDatabaseUrl: dbUrl });
+    getTenantPrisma.mockReturnValue(mockTenantDbClient);
+
+    // Manually set an expired cache entry
+    tenantCache.set(tenantId, {
+      data: { dedicatedDatabaseUrl: dbUrl },
+      expiresAt: Date.now() - 1000, // expired 1s ago
+    });
+
+    await tenantDbRouter(req, res, next);
+
+    // Should have bypassed cache because it was expired and queried DB
+    expect(prisma.tenant.findUnique).toHaveBeenCalledTimes(1);
+    expect(req.db).toBe(mockTenantDbClient);
   });
 });

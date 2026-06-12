@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AuditService } from './audit.service.js';
+import { AuditService, canonicalize } from './audit.service.js';
 
 const { mockCreate, mockFindFirst, mockFindMany } = vi.hoisted(() => {
   return {
@@ -250,6 +250,44 @@ describe('AuditService', () => {
         tenantId: 'tenant-id-123',
         productId: 'inso-cloud',
       });
+    });
+  });
+
+  describe('canonicalize key sorting', () => {
+    it('should recursively sort object keys alphabetically', () => {
+      const objA = { b: 2, a: { d: 4, c: 3 }, e: [ { g: 7, f: 6 } ] };
+      const objB = { a: { c: 3, d: 4 }, b: 2, e: [ { f: 6, g: 7 } ] };
+
+      const canonicalA = canonicalize(objA);
+      const canonicalB = canonicalize(objB);
+
+      // They should be deeply equal and have identical JSON.stringify outputs
+      expect(canonicalA).toEqual(canonicalB);
+      expect(JSON.stringify(canonicalA)).toBe(JSON.stringify(canonicalB));
+      
+      // Check exact sorted string structure
+      expect(JSON.stringify(canonicalA)).toBe('{"a":{"c":3,"d":4},"b":2,"e":[{"f":6,"g":7}]}');
+    });
+
+    it('should produce identical SHA-256 hashes regardless of payload key order', () => {
+      const payloadA = {
+        tenantId: 'tenant-123',
+        actor: 'user-xyz',
+        metadata: { z: 1, x: 2, y: { b: 2, a: 1 } },
+        action: 'MUTATE_CONFIG'
+      };
+
+      const payloadB = {
+        action: 'MUTATE_CONFIG',
+        actor: 'user-xyz',
+        tenantId: 'tenant-123',
+        metadata: { x: 2, y: { a: 1, b: 2 }, z: 1 }
+      };
+
+      const hashA = AuditService._hashPayload(payloadA, 'prev-hash-val');
+      const hashB = AuditService._hashPayload(payloadB, 'prev-hash-val');
+
+      expect(hashA).toBe(hashB);
     });
   });
 });

@@ -9,6 +9,10 @@
 
 import { getTenantPrisma, prisma, getSchemaConnectionUrl } from './prismaClient.js';
 
+// In-memory cache for tenant configurations
+export const tenantCache = new Map();
+const CACHE_TTL_MS = 60 * 1000;
+
 /**
  * Express middleware that checks the authenticated user's tenant context.
  * If the tenant has a dedicated PostgreSQL database URL configured,
@@ -26,11 +30,23 @@ export const tenantDbRouter = async (req, res, next) => {
       return next();
     }
 
-    // Query tenant configuration from the shared metadata database
-    const tenant = await prisma.tenant.findUnique({
-      where: { id: tenantId },
-      select: { dedicatedDatabaseUrl: true },
-    });
+    let tenant;
+    const now = Date.now();
+    const cached = tenantCache.get(tenantId);
+
+    if (cached && cached.expiresAt > now) {
+      tenant = cached.data;
+    } else {
+      // Query tenant configuration from the shared metadata database
+      tenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { dedicatedDatabaseUrl: true },
+      });
+      tenantCache.set(tenantId, {
+        data: tenant,
+        expiresAt: now + CACHE_TTL_MS,
+      });
+    }
 
     if (tenant?.dedicatedDatabaseUrl) {
       // Route through dynamic client connection pool
