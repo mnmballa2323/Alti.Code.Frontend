@@ -245,6 +245,11 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               DB_PASSWORD=${random_password.db_password.result}
               # Stripe config
               NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51MlI9pAP2f3pNlGaofGvvj1eu7sSgRfze6CNAqOC7OFkafRyOdQEECDNJ7ckGwd78fV2o6PkOExZfJcPLNSJUnz300G2iSnF25
+              
+              # OpenStack Keystone Configurations (Private Cloud Mode)
+              PRIVATE_CLOUD_MODE=true
+              OS_AUTH_URL=${var.openstack_auth_url}
+              OPENSTACK_DEFAULT_DOMAIN=Default
               EOT
 
               # 7. Configure Nightly Postgres Backup Script & Cron Job
