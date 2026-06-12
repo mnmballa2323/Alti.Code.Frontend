@@ -109,7 +109,13 @@ class AgentRegistry {
     }
 
     /** Get a specific agent */
-    get(name) {
+    get(name, tenantId = null) {
+        if (name && name.toLowerCase().startsWith('gitlab')) {
+            if (!tenantId || typeof tenantId !== 'string' || tenantId.trim().length === 0) {
+                logger.warn(`AgentRegistry: get failed for GitLab agent [${name}] because tenantId is omitted or invalid.`);
+                return null;
+            }
+        }
         return this.agents.get(name);
     }
 

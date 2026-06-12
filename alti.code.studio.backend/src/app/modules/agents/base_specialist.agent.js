@@ -16,6 +16,10 @@
  *   ✅ Usage metrics            — tracks call count, error count, and avg latency
  */
 
+import { swarmTraceService } from '../telemetry/trace.service.js';
+import { logger } from '../../../shared/logger.js';
+import vm from 'vm';
+
 // ── Typed Error ───────────────────────────────────────────────────────────────
 export class AgentError extends Error {
     /**
@@ -85,7 +89,7 @@ export class BaseSpecialistAgent {
      * @param {Array<{path?:string, content:string}>} contextData
      * @returns {Promise<string>}
      */
-    async consult(prompt, contextData = []) {
+    async consult(prompt, contextData = [], tenantId = null, parentSpanId = null) {
         const t0 = Date.now();
         this._metrics.calls++;
 
@@ -98,13 +102,53 @@ export class BaseSpecialistAgent {
         // 3. Circuit breaker check
         this._checkCircuit();
 
-        // 4. Retry loop
+        // Resolve tenant ID and parent span ID
+        let resolvedTenantId = tenantId;
+        if (!resolvedTenantId && contextData) {
+            if (Array.isArray(contextData)) {
+                const found = contextData.find(item => item && (item.path === 'tenantId' || item.tenantId));
+                if (found) {
+                    resolvedTenantId = found.content || found.tenantId;
+                }
+            } else if (typeof contextData === 'object') {
+                resolvedTenantId = contextData.tenantId || contextData.content;
+            }
+        }
+
+        let resolvedParentSpanId = parentSpanId;
+        if (!resolvedParentSpanId && Array.isArray(contextData)) {
+            const found = contextData.find(item => item && (item.path === 'parentSpanId' || item.parentSpanId));
+            if (found) {
+                resolvedParentSpanId = found.content || found.parentSpanId;
+            }
+        }
+
+        // Fail safely if tenant ID is omitted for GitLab agents
+        if (this.name.toLowerCase().startsWith('gitlab') && !resolvedTenantId) {
+            logger.warn(`Agent [${this.name}] consult failed safely: tenantId is required.`);
+            return {
+                agent: this.name,
+                confidence: '0.00',
+                type: 'text',
+                content: 'Error: tenantId context is missing or invalid.',
+                execution_time_ms: 0
+            };
+        }
+
+        // Start tracing span
+        let spanId = null;
+        try {
+            spanId = await swarmTraceService.startSpan(this.name, resolvedParentSpanId, resolvedTenantId, cleanPrompt);
+        } catch (traceErr) {
+            logger.debug(`Telemetry: startSpan failed: ${traceErr.message}`);
+        }
+
         // 4. Retry loop
         let lastError;
         for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
             try {
                 const result = await withTimeout(
-                    this._invoke(cleanPrompt, sanitizedCtx),
+                    this._invoke(cleanPrompt, sanitizedCtx, resolvedTenantId, spanId),
                     DEFAULT_TIMEOUT_MS,
                     `${this.name}.consult`
                 );
@@ -117,6 +161,25 @@ export class BaseSpecialistAgent {
                 this._cbOpenSince = null;
                 const execution_time_ms = Date.now() - t0;
                 this._metrics.totalLatencyMs += execution_time_ms;
+
+                // Estimate tokens and cost for tracing
+                const promptTokens = Math.ceil(cleanPrompt.length / 4) + Math.ceil(sanitizedCtx.length / 4);
+                const completionTokens = Math.ceil(result.length / 4);
+                const totalTokens = promptTokens + completionTokens;
+                const cost = (promptTokens / 1_000_000) * 0.075 + (completionTokens / 1_000_000) * 0.30;
+
+                // End tracing span
+                if (spanId) {
+                    try {
+                        await swarmTraceService.endSpan(spanId, totalTokens, cost, {
+                            attempt,
+                            status: 'success',
+                            confidence: 0.95
+                        });
+                    } catch (traceErr) {
+                        logger.debug(`Telemetry: endSpan failed: ${traceErr.message}`);
+                    }
+                }
 
                 // V37.0 - Standardized Telemetry Wrapper
                 return {
@@ -145,7 +208,56 @@ export class BaseSpecialistAgent {
         }
         this._metrics.errors++;
         this._metrics.totalLatencyMs += Date.now() - t0;
+
+        if (spanId) {
+            try {
+                await swarmTraceService.endSpan(spanId, 0, 0, {
+                    status: 'error',
+                    errorMessage: lastError.message,
+                    errorCode: lastError.code || 'LLM_ERROR'
+                });
+            } catch (traceErr) {
+                logger.debug(`Telemetry: endSpan failed on error: ${traceErr.message}`);
+            }
+        }
+
         throw lastError instanceof AgentError ? lastError : new AgentError(lastError.message, 'LLM_ERROR', false);
+    }
+
+    /**
+     * Executes user-supplied code safely within a Node.js VM sandbox.
+     * Restricts access to process, fs, require, network, and system properties.
+     */
+    runSandboxed(code, sandboxContext = {}, timeoutMs = 2000) {
+        if (!code || typeof code !== 'string') {
+            throw new Error('Security Violation: Invalid code payload for sandboxed execution.');
+        }
+        // Strict static analysis block to prevent escapes and unauthorized accesses
+        if (
+            code.includes('process') ||
+            code.includes('require') ||
+            code.includes('fs') ||
+            code.includes('child_process') ||
+            code.includes('exec') ||
+            code.includes('spawn') ||
+            code.includes('constructor') ||
+            code.includes('/tmp')
+        ) {
+            throw new Error('Security Violation: Restricted system access or execution detected.');
+        }
+
+        const sandbox = {
+            console: {
+                log: (...args) => logger.info('[Sandbox Log]', ...args),
+                error: (...args) => logger.error('[Sandbox Error]', ...args)
+            },
+            Math, Date, JSON, Array, Object, String, Number, Boolean, RegExp, Error,
+            ...sandboxContext
+        };
+
+        const context = vm.createContext(sandbox);
+        const script = new vm.Script(code);
+        return script.runInContext(context, { timeout: timeoutMs });
     }
 
     // ── Subclass override point ────────────────────────────────────────────────

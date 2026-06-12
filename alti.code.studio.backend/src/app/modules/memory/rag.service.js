@@ -29,8 +29,9 @@ class RagService {
      *
      * @param {string[]} texts
      * @param {object}   [meta]  - Extra metadata to attach to every chunk
+     * @param {string}   [tenantId]
      */
-    async createIndex(texts, meta = {}) {
+    async createIndex(texts, meta = {}, tenantId) {
         if (!Array.isArray(texts) || texts.length === 0) {
             logger.warn('📚 RAG: createIndex() called with empty or invalid texts array.');
             return;
@@ -68,7 +69,7 @@ class RagService {
                         const sanitizedText = await GoogleDlpService.redactText(text);
                         
                         // 1. Store text in AlloyDB
-                        const docId = await vectorStoreService.add(sanitizedText, { source: 'rag_service', chunkIndex: i + idx, ...meta });
+                        const docId = await vectorStoreService.add(sanitizedText, { source: 'rag_service', chunkIndex: i + idx, ...meta }, tenantId || meta?.tenantId || 'default_enterprise_tenant');
                         
                         // 2. Generate embedding and push to Vertex AI Vector Search (Matching Engine)
                         const embedding = await vertexService.getEmbeddings(sanitizedText);
@@ -100,8 +101,9 @@ class RagService {
      * to mathematically determine the file type before indexing.
      * @param {string} filePath
      * @param {object} [meta]
+     * @param {string} [tenantId]
      */
-    async ingestFile(filePath, meta = {}) {
+    async ingestFile(filePath, meta = {}, tenantId) {
         try {
             const buffer = await fs.promises.readFile(filePath);
 
@@ -137,7 +139,7 @@ class RagService {
             const chunks = textContent.split('\n\n').filter(c => c.trim().length > 10);
             
             const enhancedMeta = { ...meta, magikaLabel: typeInfo.label, magikaScore: typeInfo.score, filePath, archiveUrl };
-            await this.createIndex(chunks, enhancedMeta);
+            await this.createIndex(chunks, enhancedMeta, tenantId || meta?.tenantId);
         } catch (error) {
             logger.error(`❌ RAG: Failed to ingest file ${filePath}: ${error.message}`);
         }
@@ -149,9 +151,10 @@ class RagService {
      *
      * @param {string} query
      * @param {number} [topK=5] - Number of chunks to retrieve
+     * @param {string} [tenantId]
      * @returns {Promise<string>}
      */
-    async query(query, topK = 5) {
+    async query(query, topK = 5, tenantId) {
         if (!query || typeof query !== 'string' || query.trim().length === 0) {
             return 'Query must be a non-empty string.';
         }
@@ -166,7 +169,7 @@ class RagService {
                 const neighbors = await vertexVectorSearch.queryContext(queryEmbedding, topK);
                 if (neighbors.length > 0) {
                     const ids = neighbors.map(n => n.id);
-                    return await vectorStoreService.getByIds(ids);
+                    return await vectorStoreService.getByIds(ids, tenantId || 'default_enterprise_tenant');
                 }
             } catch (storeError) {
                 logger.error(`RAG: Vertex Vector Search failed for query "${query}". Error: ${storeError.message}`);

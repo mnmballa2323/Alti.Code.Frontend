@@ -10,11 +10,11 @@ class GitlabDocsService {
   /**
    * Query ingested documentation chunks, with live search fallback on RAG confidence low
    */
-  async searchDocs(query, limit = 5) {
+  async searchDocs(query, limit = 5, tenantId = null) {
     logger.info(
       `🦊 [GitLab Docs] Searching GitLab Documentation RAG for: "${query}"`,
     );
-    let ragResult = await ragService.query(query, limit);
+    let ragResult = await ragService.query(query, limit, tenantId);
 
     // Grounding fallback: check if empty, generic failure string, or low confidence
     if (
@@ -46,7 +46,7 @@ class GitlabDocsService {
    * @param {string} [preferredAgentId] - Manually override the router and target a specific agent
    * @returns {Promise<object>} - Telemetry wrapped specialist consultation response
    */
-  async dispatchQueryToSwarm(query, preferredAgentId = null) {
+  async dispatchQueryToSwarm(query, preferredAgentId = null, tenantId = null) {
     const { agentRegistry } = await import('../agents/agent.registry.js');
     await agentRegistry.loadPlugins();
 
@@ -61,7 +61,7 @@ class GitlabDocsService {
         logger.info(
           `🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`,
         );
-        const searchResults = await vectorStoreService.search(query, 10);
+        const searchResults = await vectorStoreService.search(query, 10, tenantId);
 
         let gitlabCandidates = [];
         if (
@@ -136,7 +136,7 @@ RULES:
             if (
               decision.agentId &&
               decision.agentId !== 'NONE' &&
-              agentRegistry.get(decision.agentId)
+              agentRegistry.get(decision.agentId, tenantId)
             ) {
               agentId = decision.agentId;
               logger.info(
@@ -237,7 +237,7 @@ RULES:
       }
     }
 
-    const agentDef = agentRegistry.get(agentId);
+    const agentDef = agentRegistry.get(agentId, tenantId);
     if (!agentDef || !agentDef.instance) {
       throw new Error(
         `The requested GitLab Swarm agent [${agentId}] is not registered or loaded.`,
@@ -247,7 +247,7 @@ RULES:
     logger.info(
       `🦊 [GitLab Docs Gateway] Dispatching query to specialist agent: [${agentId}]`,
     );
-    return await agentDef.instance.consult(query, []);
+    return await agentDef.instance.consult(query, [], tenantId);
   }
 }
 

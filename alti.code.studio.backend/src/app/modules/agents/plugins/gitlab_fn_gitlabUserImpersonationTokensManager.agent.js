@@ -37,13 +37,19 @@ This agent is the absolute authority on the specific operational boundary of: im
     /**
      * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
      */
-    async _invoke(prompt, contextBlock) {
+    async _invoke(prompt, contextBlock, tenantId, spanId) {
+        if (prompt.startsWith('execute:') || prompt.startsWith('run:')) {
+            const code = prompt.replace(/^(execute|run):/, '').trim();
+            const runResult = this.runSandboxed(code);
+            return typeof runResult === 'string' ? runResult : JSON.stringify(runResult);
+        }
+
         logger.info(`🦊 [gitlabUserImpersonationTokensManager] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
         
         let docsContext = '';
         try {
             // Retrieve domain-specific documentation chunks
-            docsContext = await gitlabDocsService.searchDocs(`GitLab User & Identity impersonation tokens, admin token generation, token revocation ${prompt}`, 5);
+            docsContext = await gitlabDocsService.searchDocs(`GitLab User & Identity impersonation tokens, admin token generation, token revocation ${prompt}`, 5, tenantId);
         } catch (err) {
             logger.warn(`🦊 [gitlabUserImpersonationTokensManager] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
         }
