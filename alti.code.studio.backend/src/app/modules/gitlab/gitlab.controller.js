@@ -5875,3 +5875,191 @@ export const updateApplicationSettings = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 47. Phase 12: Project Secure Files, Group Access Tokens, Broadcast Messages, and Markdown Rendering
+// ==========================================
+export const listProjectSecureFiles = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const files = await GitlabService.listProjectSecureFiles(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: files });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing secure files:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectSecureFile = async (req, res) => {
+  try {
+    const { projectId, fileId } = req.params;
+    const file = await GitlabService.getProjectSecureFile(projectId, fileId);
+    res.status(httpStatus.OK).json({ success: true, data: file });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting secure file:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectSecureFile = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const file = await GitlabService.createProjectSecureFile(
+      projectId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: file });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating secure file:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectSecureFile = async (req, res) => {
+  try {
+    const { projectId, fileId } = req.params;
+    const result = await GitlabService.deleteProjectSecureFile(
+      projectId,
+      fileId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting secure file:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupAccessTokens = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const tokens = await GitlabService.listGroupAccessTokens(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: tokens });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing group access tokens:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupAccessToken = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const token = await GitlabService.createGroupAccessToken(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating group access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const revokeGroupAccessToken = async (req, res) => {
+  try {
+    const { groupId, tokenId } = req.params;
+    const result = await GitlabService.revokeGroupAccessToken(groupId, tokenId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error revoking group access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listBroadcastMessages = async (req, res) => {
+  try {
+    const messages = await GitlabService.listBroadcastMessages();
+    res.status(httpStatus.OK).json({ success: true, data: messages });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing broadcast messages:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getBroadcastMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const message = await GitlabService.getBroadcastMessage(messageId);
+    res.status(httpStatus.OK).json({ success: true, data: message });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting broadcast message:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createBroadcastMessage = async (req, res) => {
+  try {
+    const message = await GitlabService.createBroadcastMessage(req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: message });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating broadcast message:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateBroadcastMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const message = await GitlabService.updateBroadcastMessage(
+      messageId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: message });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating broadcast message:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteBroadcastMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const result = await GitlabService.deleteBroadcastMessage(messageId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting broadcast message:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const renderMarkdown = async (req, res) => {
+  try {
+    const { text, project } = req.body;
+    const result = await GitlabService.renderMarkdown(text, project);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error rendering markdown:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

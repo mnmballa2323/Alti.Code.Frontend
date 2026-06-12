@@ -1400,4 +1400,52 @@ router.delete(
 router.get('/application/settings', GitlabController.getApplicationSettings);
 router.put('/application/settings', GitlabController.updateApplicationSettings);
 
+// 7. Phase 12: Project Secure Files, Group Access Tokens, Broadcast Messages, and Markdown Rendering
+router.get(
+  '/projects/:projectId/secure_files',
+  GitlabController.listProjectSecureFiles,
+);
+router.get(
+  '/projects/:projectId/secure_files/:fileId',
+  GitlabController.getProjectSecureFile,
+);
+router.post(
+  '/projects/:projectId/secure_files',
+  GitlabController.createProjectSecureFile,
+);
+router.delete(
+  '/projects/:projectId/secure_files/:fileId',
+  GitlabController.deleteProjectSecureFile,
+);
+
+router.get(
+  '/groups/:groupId/access_tokens',
+  GitlabController.listGroupAccessTokens,
+);
+router.post(
+  '/groups/:groupId/access_tokens',
+  GitlabController.createGroupAccessToken,
+);
+router.delete(
+  '/groups/:groupId/access_tokens/:tokenId',
+  GitlabController.revokeGroupAccessToken,
+);
+
+router.get('/broadcast_messages', GitlabController.listBroadcastMessages);
+router.get(
+  '/broadcast_messages/:messageId',
+  GitlabController.getBroadcastMessage,
+);
+router.post('/broadcast_messages', GitlabController.createBroadcastMessage);
+router.put(
+  '/broadcast_messages/:messageId',
+  GitlabController.updateBroadcastMessage,
+);
+router.delete(
+  '/broadcast_messages/:messageId',
+  GitlabController.deleteBroadcastMessage,
+);
+
+router.post('/markdown', GitlabController.renderMarkdown);
+
 export const GitlabRoutes = router;

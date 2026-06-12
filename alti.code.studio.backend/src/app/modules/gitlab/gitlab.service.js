@@ -6794,4 +6794,235 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 47. Phase 12: Project Secure Files, Group Access Tokens, Broadcast Messages, and Markdown Rendering
+  // ==========================================
+  async listProjectSecureFiles(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing secure files for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/secure_files`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list project secure files for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectSecureFile(projectId, fileId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting secure file ${fileId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/secure_files/${encodeURIComponent(fileId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get project secure file ${fileId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createProjectSecureFile(projectId, fileData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating secure file "${fileData.name}" for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/secure_files`,
+        fileData,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create project secure file for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectSecureFile(projectId, fileId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting secure file ${fileId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/secure_files/${encodeURIComponent(fileId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete project secure file ${fileId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGroupAccessTokens(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing group access tokens for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/access_tokens`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list group access tokens for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createGroupAccessToken(groupId, tokenData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating group access token for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/access_tokens`,
+        {
+          name: tokenData.name,
+          scopes: tokenData.scopes,
+          expires_at: tokenData.expiresAt,
+          access_level: tokenData.accessLevel,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create group access token for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async revokeGroupAccessToken(groupId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Revoking group access token ${tokenId} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/access_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to revoke group access token ${tokenId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listBroadcastMessages() {
+    logger.info('🦊 [GitLab Service] Listing broadcast messages');
+    try {
+      const { data } = await gitlabClient.get('/broadcast_messages');
+      return data;
+    } catch (error) {
+      logger.error('Failed to list broadcast messages:', error);
+      throw error;
+    }
+  },
+
+  async getBroadcastMessage(messageId) {
+    logger.info(`🦊 [GitLab Service] Getting broadcast message ${messageId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/broadcast_messages/${encodeURIComponent(messageId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get broadcast message ${messageId}:`, error);
+      throw error;
+    }
+  },
+
+  async createBroadcastMessage(messageData = {}) {
+    logger.info('🦊 [GitLab Service] Creating broadcast message');
+    try {
+      const { data } = await gitlabClient.post('/broadcast_messages', {
+        message: messageData.message,
+        starts_at: messageData.startsAt,
+        ends_at: messageData.endsAt,
+        color: messageData.color,
+        font: messageData.font,
+        target_path: messageData.targetPath,
+        broadcast_type: messageData.broadcastType,
+        dismissible: messageData.dismissible,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to create broadcast message:', error);
+      throw error;
+    }
+  },
+
+  async updateBroadcastMessage(messageId, messageData = {}) {
+    logger.info(`🦊 [GitLab Service] Updating broadcast message ${messageId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/broadcast_messages/${encodeURIComponent(messageId)}`,
+        {
+          message: messageData.message,
+          starts_at: messageData.startsAt,
+          ends_at: messageData.endsAt,
+          color: messageData.color,
+          font: messageData.font,
+          target_path: messageData.targetPath,
+          broadcast_type: messageData.broadcastType,
+          dismissible: messageData.dismissible,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update broadcast message ${messageId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteBroadcastMessage(messageId) {
+    logger.info(`🦊 [GitLab Service] Deleting broadcast message ${messageId}`);
+    try {
+      await gitlabClient.delete(
+        `/broadcast_messages/${encodeURIComponent(messageId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete broadcast message ${messageId}:`, error);
+      throw error;
+    }
+  },
+
+  async renderMarkdown(text, gfmProject) {
+    logger.info('🦊 [GitLab Service] Rendering markdown text');
+    try {
+      const { data } = await gitlabClient.post('/markdown', {
+        text,
+        gfm: true,
+        project: gfmProject,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to render markdown:', error);
+      throw error;
+    }
+  },
 };
