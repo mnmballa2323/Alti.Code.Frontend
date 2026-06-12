@@ -6072,4 +6072,435 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 44. Phase 10 Endpoints
+  // ==========================================
+
+  // 1. Commit Comments
+  async listCommitComments(projectId, sha) {
+    logger.info(
+      `🦊 [GitLab Service] Listing commit comments for project ${projectId} commit ${sha}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list commit comments:`, error);
+      throw error;
+    }
+  },
+
+  async createCommitComment(projectId, sha, commentData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating commit comment for project ${projectId} commit ${sha}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
+        {
+          note: commentData.note,
+          path: commentData.path,
+          line: commentData.line,
+          line_type: commentData.lineType,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create commit comment:`, error);
+      throw error;
+    }
+  },
+
+  // 2. Project Forks
+  async listProjectForks(projectId) {
+    logger.info(`🦊 [GitLab Service] Listing forks for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/forks`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project forks:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectFork(projectId, forkData = {}) {
+    logger.info(`🦊 [GitLab Service] Forking project ${projectId}`);
+    try {
+      const payload = {};
+      if (forkData.namespaceId !== undefined) payload.namespace_id = forkData.namespaceId;
+      if (forkData.name !== undefined) payload.name = forkData.name;
+      if (forkData.path !== undefined) payload.path = forkData.path;
+      if (forkData.visibility !== undefined) payload.visibility = forkData.visibility;
+
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/fork`,
+        payload,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fork project:`, error);
+      throw error;
+    }
+  },
+
+  // 3. Project & Group Push Rules
+  async getProjectPushRules(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching push rules for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/push_rule`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get project push rules:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectPushRules(projectId, pushRuleData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating push rules for project ${projectId}`,
+    );
+    try {
+      const payload = {};
+      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/push_rule`,
+        payload,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create project push rules:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectPushRules(projectId, pushRuleData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating push rules for project ${projectId}`,
+    );
+    try {
+      const payload = {};
+      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/push_rule`,
+        payload,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update project push rules:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectPushRules(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting push rules for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/push_rule`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete project push rules:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupPushRules(groupId) {
+    logger.info(`🦊 [GitLab Service] Fetching push rules for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/push_rule`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get group push rules:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupPushRules(groupId, pushRuleData) {
+    logger.info(`🦊 [GitLab Service] Creating push rules for group ${groupId}`);
+    try {
+      const payload = {};
+      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/push_rule`,
+        payload,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create group push rules:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupPushRules(groupId, pushRuleData) {
+    logger.info(`🦊 [GitLab Service] Updating push rules for group ${groupId}`);
+    try {
+      const payload = {};
+      if (pushRuleData.denyDeleteTag !== undefined) payload.deny_delete_tag = pushRuleData.denyDeleteTag;
+      if (pushRuleData.memberCheck !== undefined) payload.member_check = pushRuleData.memberCheck;
+      if (pushRuleData.preventSecrets !== undefined) payload.prevent_secrets = pushRuleData.preventSecrets;
+      if (pushRuleData.commitMessageRegex !== undefined) payload.commit_message_regex = pushRuleData.commitMessageRegex;
+      if (pushRuleData.commitMessageNegativeRegex !== undefined) payload.commit_message_negative_regex = pushRuleData.commitMessageNegativeRegex;
+      if (pushRuleData.branchNameRegex !== undefined) payload.branch_name_regex = pushRuleData.branchNameRegex;
+      if (pushRuleData.authorEmailRegex !== undefined) payload.author_email_regex = pushRuleData.authorEmailRegex;
+      if (pushRuleData.fileNameRegex !== undefined) payload.file_name_regex = pushRuleData.fileNameRegex;
+      if (pushRuleData.maxFileSize !== undefined) payload.max_file_size = pushRuleData.maxFileSize;
+      if (pushRuleData.commitCommitterCheck !== undefined) payload.commit_committer_check = pushRuleData.commitCommitterCheck;
+      if (pushRuleData.commitCommitterNameCheck !== undefined) payload.commit_committer_name_check = pushRuleData.commitCommitterNameCheck;
+      if (pushRuleData.rejectUnsignedCommits !== undefined) payload.reject_unsigned_commits = pushRuleData.rejectUnsignedCommits;
+
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/push_rule`,
+        payload,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update group push rules:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupPushRules(groupId) {
+    logger.info(`🦊 [GitLab Service] Deleting push rules for group ${groupId}`);
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/push_rule`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete group push rules:`, error);
+      throw error;
+    }
+  },
+
+  // 4. Merge Request Draft Notes
+  async listMergeRequestDraftNotes(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing draft notes for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/draft_notes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list merge request draft notes:`, error);
+      throw error;
+    }
+  },
+
+  async createMergeRequestDraftNote(projectId, mrIid, noteData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating draft note for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/draft_notes`,
+        {
+          note: noteData.note,
+          commit_id: noteData.commitId,
+          path: noteData.path,
+          line: noteData.line,
+          position: noteData.position,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create merge request draft note:`, error);
+      throw error;
+    }
+  },
+
+  async updateMergeRequestDraftNote(projectId, mrIid, draftNoteId, noteData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating draft note ${draftNoteId} for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/draft_notes/${draftNoteId}`,
+        {
+          note: noteData.note,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update merge request draft note:`, error);
+      throw error;
+    }
+  },
+
+  async deleteMergeRequestDraftNote(projectId, mrIid, draftNoteId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting draft note ${draftNoteId} for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/draft_notes/${draftNoteId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete merge request draft note:`, error);
+      throw error;
+    }
+  },
+
+  async publishMergeRequestDraftNotes(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Publishing draft notes for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/draft_notes/publish`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to publish merge request draft notes:`, error);
+      throw error;
+    }
+  },
+
+  // 5. Project & Group Invitations
+  async listGroupInvitations(groupId) {
+    logger.info(`🦊 [GitLab Service] Listing invitations for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/invitations`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list group invitations:`, error);
+      throw error;
+    }
+  },
+
+  async inviteGroupMembers(groupId, invitationData) {
+    logger.info(`🦊 [GitLab Service] Inviting members to group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/invitations`,
+        {
+          email: invitationData.email,
+          access_level: invitationData.accessLevel,
+          invitee_type: invitationData.inviteeType,
+          expires_at: invitationData.expiresAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to invite group members:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupInvitation(groupId, email) {
+    logger.info(
+      `🦊 [GitLab Service] Revoking group invitation for ${email} in group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/invitations/${encodeURIComponent(email)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete group invitation:`, error);
+      throw error;
+    }
+  },
+
+  async listProjectInvitations(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing invitations for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/invitations`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project invitations:`, error);
+      throw error;
+    }
+  },
+
+  async inviteProjectMembers(projectId, invitationData) {
+    logger.info(`🦊 [GitLab Service] Inviting members to project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/invitations`,
+        {
+          email: invitationData.email,
+          access_level: invitationData.accessLevel,
+          invitee_type: invitationData.inviteeType,
+          expires_at: invitationData.expiresAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to invite project members:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectInvitation(projectId, email) {
+    logger.info(
+      `🦊 [GitLab Service] Revoking project invitation for ${email} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/invitations/${encodeURIComponent(email)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete project invitation:`, error);
+      throw error;
+    }
+  },
 };

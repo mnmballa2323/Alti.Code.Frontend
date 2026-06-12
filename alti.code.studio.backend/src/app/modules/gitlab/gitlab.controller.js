@@ -5271,3 +5271,326 @@ export const deleteGroupScimUser = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 8. Commit Comments Handlers
+// ==========================================
+export const listCommitComments = async (req, res) => {
+  try {
+    const { projectId, sha } = req.params;
+    const comments = await GitlabService.listCommitComments(projectId, sha);
+    res.status(httpStatus.OK).json({ success: true, data: comments });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing commit comments:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createCommitComment = async (req, res) => {
+  try {
+    const { projectId, sha } = req.params;
+    const comment = await GitlabService.createCommitComment(projectId, sha, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: comment });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating commit comment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 9. Project Forks Handlers
+// ==========================================
+export const listProjectForks = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const forks = await GitlabService.listProjectForks(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: forks });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project forks:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectFork = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const fork = await GitlabService.createProjectFork(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: fork });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating project fork:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 10. Project & Group Push Rules Handlers
+// ==========================================
+export const getProjectPushRules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const rules = await GitlabService.getProjectPushRules(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectPushRules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const rules = await GitlabService.createProjectPushRules(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating project push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectPushRules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const rules = await GitlabService.updateProjectPushRules(projectId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating project push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectPushRules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.deleteProjectPushRules(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupPushRules = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const rules = await GitlabService.getGroupPushRules(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting group push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupPushRules = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const rules = await GitlabService.createGroupPushRules(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupPushRules = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const rules = await GitlabService.updateGroupPushRules(groupId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupPushRules = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const result = await GitlabService.deleteGroupPushRules(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group push rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 11. Merge Request Draft Notes Handlers
+// ==========================================
+export const listMergeRequestDraftNotes = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const notes = await GitlabService.listMergeRequestDraftNotes(projectId, mrIid);
+    res.status(httpStatus.OK).json({ success: true, data: notes });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing merge request draft notes:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createMergeRequestDraftNote = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const note = await GitlabService.createMergeRequestDraftNote(projectId, mrIid, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: note });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating merge request draft note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateMergeRequestDraftNote = async (req, res) => {
+  try {
+    const { projectId, mrIid, draftNoteId } = req.params;
+    const note = await GitlabService.updateMergeRequestDraftNote(
+      projectId,
+      mrIid,
+      draftNoteId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: note });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating merge request draft note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteMergeRequestDraftNote = async (req, res) => {
+  try {
+    const { projectId, mrIid, draftNoteId } = req.params;
+    const result = await GitlabService.deleteMergeRequestDraftNote(
+      projectId,
+      mrIid,
+      draftNoteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting merge request draft note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const publishMergeRequestDraftNotes = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const result = await GitlabService.publishMergeRequestDraftNotes(projectId, mrIid);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error publishing merge request draft notes:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 12. Project & Group Invitations Handlers
+// ==========================================
+export const listGroupInvitations = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const invitations = await GitlabService.listGroupInvitations(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: invitations });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group invitations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const inviteGroupMembers = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const result = await GitlabService.inviteGroupMembers(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error inviting group members:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupInvitation = async (req, res) => {
+  try {
+    const { groupId, email } = req.params;
+    const result = await GitlabService.deleteGroupInvitation(groupId, email);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group invitation:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectInvitations = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const invitations = await GitlabService.listProjectInvitations(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: invitations });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project invitations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const inviteProjectMembers = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.inviteProjectMembers(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error inviting project members:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectInvitation = async (req, res) => {
+  try {
+    const { projectId, email } = req.params;
+    const result = await GitlabService.deleteProjectInvitation(projectId, email);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project invitation:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
