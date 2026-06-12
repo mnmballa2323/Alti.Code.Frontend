@@ -1,0 +1,15 @@
+{
+  "name": "@inso/platform",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./auth": "./auth/sessionValidator.js",
+    "./db": "./db/prismaClient.js",
+    "./db/router": "./db/tenantDbRouter.js",
+    "./db/userMapper": "./db/userMapper.js",
+    "./gateway": "./gateway/modelGateway.js",
+    "./scim": "./scim/scimRoute.js"
+  }
+}
