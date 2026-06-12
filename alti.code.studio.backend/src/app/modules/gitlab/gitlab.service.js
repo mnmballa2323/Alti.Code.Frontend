@@ -7357,10 +7357,7 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to protect tag for project ${projectId}:`,
-        error,
-      );
+      logger.error(`Failed to protect tag for project ${projectId}:`, error);
       throw error;
     }
   },

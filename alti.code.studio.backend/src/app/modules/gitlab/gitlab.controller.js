@@ -6378,10 +6378,16 @@ export const unprotectTag = async (req, res) => {
 export const getProjectDoraMetrics = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const result = await GitlabService.getProjectDoraMetrics(projectId, req.query);
+    const result = await GitlabService.getProjectDoraMetrics(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project DORA metrics:', error);
+    logger.error(
+      '[GitLab Controller] Error getting project DORA metrics:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6430,7 +6436,11 @@ export const createFeatureFlag = async (req, res) => {
 export const updateFeatureFlag = async (req, res) => {
   try {
     const { projectId, flagId } = req.params;
-    const result = await GitlabService.updateFeatureFlag(projectId, flagId, req.body);
+    const result = await GitlabService.updateFeatureFlag(
+      projectId,
+      flagId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating feature flag:', error);
@@ -6482,7 +6492,11 @@ export const getResourceGroup = async (req, res) => {
 export const updateResourceGroup = async (req, res) => {
   try {
     const { projectId, groupKey } = req.params;
-    const result = await GitlabService.updateResourceGroup(projectId, groupKey, req.body);
+    const result = await GitlabService.updateResourceGroup(
+      projectId,
+      groupKey,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating resource group:', error);
@@ -6498,7 +6512,10 @@ export const listGroupIterationCadences = async (req, res) => {
     const result = await GitlabService.listGroupIterationCadences(groupId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing iteration cadences:', error);
+    logger.error(
+      '[GitLab Controller] Error listing iteration cadences:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6508,10 +6525,16 @@ export const listGroupIterationCadences = async (req, res) => {
 export const createGroupIterationCadence = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const result = await GitlabService.createGroupIterationCadence(groupId, req.body);
+    const result = await GitlabService.createGroupIterationCadence(
+      groupId,
+      req.body,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error creating iteration cadence:', error);
+    logger.error(
+      '[GitLab Controller] Error creating iteration cadence:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6521,10 +6544,17 @@ export const createGroupIterationCadence = async (req, res) => {
 export const updateGroupIterationCadence = async (req, res) => {
   try {
     const { groupId, cadenceId } = req.params;
-    const result = await GitlabService.updateGroupIterationCadence(groupId, cadenceId, req.body);
+    const result = await GitlabService.updateGroupIterationCadence(
+      groupId,
+      cadenceId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating iteration cadence:', error);
+    logger.error(
+      '[GitLab Controller] Error updating iteration cadence:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6534,13 +6564,18 @@ export const updateGroupIterationCadence = async (req, res) => {
 export const deleteGroupIterationCadence = async (req, res) => {
   try {
     const { groupId, cadenceId } = req.params;
-    const result = await GitlabService.deleteGroupIterationCadence(groupId, cadenceId);
+    const result = await GitlabService.deleteGroupIterationCadence(
+      groupId,
+      cadenceId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting iteration cadence:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting iteration cadence:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
   }
 };
-

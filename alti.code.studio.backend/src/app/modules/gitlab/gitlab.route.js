@@ -1512,10 +1512,7 @@ router.get(
   '/projects/:projectId/protected_tags',
   GitlabController.listProtectedTags,
 );
-router.post(
-  '/projects/:projectId/protected_tags',
-  GitlabController.protectTag,
-);
+router.post('/projects/:projectId/protected_tags', GitlabController.protectTag);
 router.get(
   '/projects/:projectId/protected_tags/:tagName',
   GitlabController.getProtectedTag,
@@ -1525,10 +1522,19 @@ router.delete(
   GitlabController.unprotectTag,
 );
 
-router.get('/projects/:projectId/dora/metrics', GitlabController.getProjectDoraMetrics);
+router.get(
+  '/projects/:projectId/dora/metrics',
+  GitlabController.getProjectDoraMetrics,
+);
 
-router.get('/projects/:projectId/feature_flags', GitlabController.listFeatureFlags);
-router.post('/projects/:projectId/feature_flags', GitlabController.createFeatureFlag);
+router.get(
+  '/projects/:projectId/feature_flags',
+  GitlabController.listFeatureFlags,
+);
+router.post(
+  '/projects/:projectId/feature_flags',
+  GitlabController.createFeatureFlag,
+);
 router.get(
   '/projects/:projectId/feature_flags/:flagId',
   GitlabController.getFeatureFlag,
@@ -1542,7 +1548,10 @@ router.delete(
   GitlabController.deleteFeatureFlag,
 );
 
-router.get('/projects/:projectId/resource_groups', GitlabController.listResourceGroups);
+router.get(
+  '/projects/:projectId/resource_groups',
+  GitlabController.listResourceGroups,
+);
 router.get(
   '/projects/:projectId/resource_groups/:groupKey',
   GitlabController.getResourceGroup,
@@ -1552,7 +1561,10 @@ router.put(
   GitlabController.updateResourceGroup,
 );
 
-router.get('/groups/:groupId/iteration_cadences', GitlabController.listGroupIterationCadences);
+router.get(
+  '/groups/:groupId/iteration_cadences',
+  GitlabController.listGroupIterationCadences,
+);
 router.post(
   '/groups/:groupId/iteration_cadences',
   GitlabController.createGroupIterationCadence,
@@ -1567,4 +1579,3 @@ router.delete(
 );
 
 export const GitlabRoutes = router;
-

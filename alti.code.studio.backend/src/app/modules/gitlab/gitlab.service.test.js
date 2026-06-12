@@ -5860,7 +5860,9 @@ describe('GitlabService', () => {
       const mockData = [{ name: 'v1.*', create_access_levels: [] }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listProtectedTags('123');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/protected_tags',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5868,7 +5870,9 @@ describe('GitlabService', () => {
       const mockData = { name: 'v1.*', create_access_levels: [] };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.getProtectedTag('123', 'v1.*');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags/v1.*');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/protected_tags/v1.*',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5876,7 +5880,9 @@ describe('GitlabService', () => {
       const mockError = { response: { status: 404 } };
       mockClient.get.mockRejectedValueOnce(mockError);
       const result = await GitlabService.getProtectedTag('123', 'v2.*');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/protected_tags/v2.*');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/protected_tags/v2.*',
+      );
       expect(result).toEqual({ protected: false });
     });
 
@@ -5887,17 +5893,22 @@ describe('GitlabService', () => {
         name: 'v1.*',
         createAccessLevel: 40,
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/protected_tags', {
-        name: 'v1.*',
-        create_access_level: 40,
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/protected_tags',
+        {
+          name: 'v1.*',
+          create_access_level: 40,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('unprotectTag should delete tag protection', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.unprotectTag('123', 'v1.*');
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/protected_tags/v1.*');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/protected_tags/v1.*',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -5910,14 +5921,17 @@ describe('GitlabService', () => {
         endDate: '2026-06-11',
         interval: 'daily',
       });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/dora/metrics', {
-        params: {
-          metric_type: 'deployment_frequency',
-          start_date: '2026-06-01',
-          end_date: '2026-06-11',
-          interval: 'daily',
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/dora/metrics',
+        {
+          params: {
+            metric_type: 'deployment_frequency',
+            start_date: '2026-06-01',
+            end_date: '2026-06-11',
+            interval: 'daily',
+          },
         },
-      });
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5925,9 +5939,12 @@ describe('GitlabService', () => {
       const mockData = [{ id: 1, name: 'flag' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listFeatureFlags('123', { page: 1 });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/feature_flags', {
-        params: { page: 1 },
-      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/feature_flags',
+        {
+          params: { page: 1 },
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5935,7 +5952,9 @@ describe('GitlabService', () => {
       const mockData = { id: 1, name: 'flag' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.getFeatureFlag('123', 1);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/feature_flags/1');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/feature_flags/1',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5949,13 +5968,16 @@ describe('GitlabService', () => {
         active: true,
         strategies: [],
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/feature_flags', {
-        name: 'flag',
-        description: 'desc',
-        version: 'new_version_flag',
-        active: true,
-        strategies: [],
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/feature_flags',
+        {
+          name: 'flag',
+          description: 'desc',
+          version: 'new_version_flag',
+          active: true,
+          strategies: [],
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5968,19 +5990,24 @@ describe('GitlabService', () => {
         active: false,
         strategies: [],
       });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/feature_flags/1', {
-        name: 'flag-updated',
-        description: 'desc updated',
-        active: false,
-        strategies: [],
-      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/feature_flags/1',
+        {
+          name: 'flag-updated',
+          description: 'desc updated',
+          active: false,
+          strategies: [],
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteFeatureFlag should delete feature flag', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deleteFeatureFlag('123', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/feature_flags/1');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/feature_flags/1',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -5988,7 +6015,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 1, key: 'group' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listResourceGroups('123');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/resource_groups');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/resource_groups',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -5996,7 +6025,9 @@ describe('GitlabService', () => {
       const mockData = { id: 1, key: 'group' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.getResourceGroup('123', 'group');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/resource_groups/group');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/resource_groups/group',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6006,9 +6037,12 @@ describe('GitlabService', () => {
       const result = await GitlabService.updateResourceGroup('123', 'group', {
         processMode: 'oldest_first',
       });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/resource_groups/group', {
-        process_mode: 'oldest_first',
-      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/resource_groups/group',
+        {
+          process_mode: 'oldest_first',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6016,7 +6050,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 1, title: 'cadence' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listGroupIterationCadences('99');
-      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/iteration_cadences');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/99/iteration_cadences',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6031,14 +6067,17 @@ describe('GitlabService', () => {
         startDate: '2026-06-11',
         rollOver: true,
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/iteration_cadences', {
-        title: 'cadence',
-        automatic: true,
-        duration_in_weeks: 2,
-        iterations_in_advance: 4,
-        start_date: '2026-06-11',
-        roll_over: true,
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/99/iteration_cadences',
+        {
+          title: 'cadence',
+          automatic: true,
+          duration_in_weeks: 2,
+          iterations_in_advance: 4,
+          start_date: '2026-06-11',
+          roll_over: true,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6053,23 +6092,27 @@ describe('GitlabService', () => {
         rollOver: false,
         active: true,
       });
-      expect(mockClient.put).toHaveBeenCalledWith('/groups/99/iteration_cadences/1', {
-        title: 'cadence-updated',
-        automatic: true,
-        duration_in_weeks: 3,
-        iterations_in_advance: 5,
-        roll_over: false,
-        active: true,
-      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/99/iteration_cadences/1',
+        {
+          title: 'cadence-updated',
+          automatic: true,
+          duration_in_weeks: 3,
+          iterations_in_advance: 5,
+          roll_over: false,
+          active: true,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteGroupIterationCadence should delete iteration cadence', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deleteGroupIterationCadence('99', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/groups/99/iteration_cadences/1');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/iteration_cadences/1',
+      );
       expect(result).toEqual({ success: true });
     });
   });
 });
-
