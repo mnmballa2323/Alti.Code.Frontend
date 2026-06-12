@@ -86,18 +86,18 @@ class TelemetryCollector {
         };
     }
 
-    /**
-     * Record an LLM call outcome.
-     * Call this from GeminiAiService or any LLM wrapper.
-     */
-    recordLlmCall({ model = 'gemini', latencyMs = 0, success = true, error = null, tokens = 0 } = {}) {
-        this._record({ type: 'llm', model, latencyMs, success, error, tokens });
+    recordLlmCall({ model = 'gemini', latencyMs = 0, success = true, error = null, tokens = 0, productId = null, tenantId = null } = {}) {
+        this._record({ type: 'llm', model, latencyMs, success, error, tokens, productId, tenantId });
         
         // ☁️ Google Cloud Monitoring: Emit Custom FinOps Metrics
+        const labels = { model };
+        if (productId) labels.productId = productId;
+        if (tenantId) labels.tenantId = tenantId;
+
         if (tokens > 0) {
-            cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/tokens_consumed', tokens, { model: model });
+            cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/tokens_consumed', tokens, labels);
         }
-        cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/latency_ms', latencyMs, { model: model });
+        cloudMonitoringService.emitCustomMetric('custom.googleapis.com/swarm/latency_ms', latencyMs, labels);
     }
 
     /**

@@ -9,6 +9,16 @@ import httpStatus from 'http-status';
 import { routePlatformCompletion, callWithRetry, sanitizeError } from './modelGateway.js';
 import config from '../../../../config/index.js';
 
+const { mockRecordLlmCall } = vi.hoisted(() => ({
+  mockRecordLlmCall: vi.fn()
+}));
+
+vi.mock('../../modules/telemetry/telemetry.service.js', () => ({
+  telemetryService: {
+    recordLlmCall: mockRecordLlmCall
+  }
+}));
+
 // Define shared spy mocks that can be asserted on in individual tests
 const vertexGenerateContentMock = vi.fn().mockResolvedValue({
   response: {
@@ -200,6 +210,61 @@ describe('Platform Model Gateway', () => {
       expect(bedrockCreateMock).toHaveBeenCalledWith(
         expect.objectContaining({
           messages: [{ role: 'user', content: '[COMPRESSED] [REDACTED] Clean prompt' }]
+        })
+      );
+    });
+  });
+
+  describe('Product-Level Telemetry Metrics', () => {
+    it('should record telemetry with productId, tenantId, latency, and tokens consumed', async () => {
+      vertexGenerateContentMock.mockResolvedValueOnce({
+        response: {
+          candidates: [{ content: { parts: [{ text: 'Gemini reply' }] } }],
+          usageMetadata: { totalTokenCount: 150 }
+        }
+      });
+
+      await routePlatformCompletion({
+        provider: 'gcp',
+        model: 'google/gemini-3.1-pro',
+        prompt: 'Hello with telemetry',
+        productId: 'inso-code',
+        tenantId: 'tenant-999'
+      });
+
+      expect(mockRecordLlmCall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          model: 'google/gemini-3.1-pro',
+          success: true,
+          tokens: 150,
+          productId: 'inso-code',
+          tenantId: 'tenant-999',
+          latencyMs: expect.any(Number)
+        })
+      );
+    });
+
+    it('should record failure telemetry when inference fails', async () => {
+      vertexGenerateContentMock.mockRejectedValueOnce(new Error('Inference error'));
+
+      await expect(
+        routePlatformCompletion({
+          provider: 'gcp',
+          model: 'google/gemini-3.1-pro',
+          prompt: 'Failing prompt',
+          productId: 'inso-ai',
+          tenantId: 'tenant-111'
+        })
+      ).rejects.toThrow();
+
+      expect(mockRecordLlmCall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          model: 'google/gemini-3.1-pro',
+          success: false,
+          error: 'Inference error',
+          productId: 'inso-ai',
+          tenantId: 'tenant-111',
+          latencyMs: expect.any(Number)
         })
       );
     });

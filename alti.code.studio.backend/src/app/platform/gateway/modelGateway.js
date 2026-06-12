@@ -64,7 +64,16 @@ export const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
  * @param {boolean} [params.compressPrompt] - Enable Headroom AI compression
  * @returns {Promise<string>} Completion text response
  */
-export const routePlatformCompletion = async ({ provider, model, prompt, temperature = 0.5, scrubPrompt = false, compressPrompt = false }) => {
+export const routePlatformCompletion = async ({ 
+  provider, 
+  model, 
+  prompt, 
+  temperature = 0.5, 
+  scrubPrompt = false, 
+  compressPrompt = false,
+  productId = null,
+  tenantId = null
+}) => {
   // Security validation: Block direct Anthropic or OpenAI API configurations
   if (provider === 'openai' || provider === 'anthropic') {
     logger.error(`🚫 [Model Gateway] Blocked direct connection attempt to provider: ${provider}`);
@@ -108,6 +117,12 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
 
   logger.info(`🔀 [Model Gateway] Routing completion request | Provider: ${provider} | Model: ${model}`);
 
+  const startTime = Date.now();
+  let success = true;
+  let errorMsg = null;
+  let tokensConsumed = 0;
+  let resultText = '';
+
   try {
     switch (provider.toLowerCase()) {
       case 'gcp': {
@@ -131,7 +146,14 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
         if (!candidates || candidates.length === 0) {
           throw new Error('Vertex AI returned empty response candidates.');
         }
-        return candidates[0].content.parts[0].text;
+
+        const usage = response?.response?.usageMetadata;
+        if (usage) {
+          tokensConsumed = usage.totalTokenCount || 0;
+        }
+
+        resultText = candidates[0].content.parts[0].text;
+        break;
       }
 
       case 'aws': {
@@ -163,7 +185,12 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
           messages: [{ role: 'user', content: activePrompt }]
         }));
 
-        return response.content[0].text;
+        if (response?.usage) {
+          tokensConsumed = (response.usage.input_tokens || 0) + (response.usage.output_tokens || 0);
+        }
+
+        resultText = response.content[0].text;
+        break;
       }
 
       case 'azure': {
@@ -188,7 +215,12 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
           messages: [{ role: 'user', content: activePrompt }]
         }));
 
-        return response.choices[0].message.content;
+        if (response?.usage) {
+          tokensConsumed = response.usage.total_tokens || 0;
+        }
+
+        resultText = response.choices[0].message.content;
+        break;
       }
 
       default:
@@ -197,7 +229,11 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
           `Unsupported Tri-Cloud provider: "${provider}". Must be one of: gcp, aws, azure.`
         );
     }
+
+    return resultText;
   } catch (error) {
+    success = false;
+    errorMsg = error.message;
     if (error instanceof ApiError) throw error;
     
     const sanitizedMsg = sanitizeError(error.message);
@@ -206,6 +242,25 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
       httpStatus.BAD_GATEWAY,
       `Model Gateway Routing Failure: ${sanitizedMsg}`
     );
+  } finally {
+    const latencyMs = Date.now() - startTime;
+    try {
+      const { telemetryService } = await import('../../modules/telemetry/telemetry.service.js');
+      if (telemetryService) {
+        telemetryService.recordLlmCall({
+          model,
+          latencyMs,
+          success,
+          error: errorMsg,
+          tokens: tokensConsumed,
+          productId,
+          tenantId
+        });
+      }
+    } catch (telemetryErr) {
+      // Gracefully handle telemetry imports or recording issues (e.g. in standalone platform package tests)
+      logger.warn(`⚠️ [Model Gateway] Telemetry tracking failed (non-blocking): ${telemetryErr.message}`);
+    }
   }
 };
 
@@ -214,3 +269,4 @@ export const modelGateway = {
   callWithRetry,
   sanitizeError
 };
+
