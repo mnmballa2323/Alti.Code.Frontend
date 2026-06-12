@@ -3901,6 +3901,595 @@ export const GitlabService = {
         error,
       );
       throw error;
+  },
+
+  // ==========================================
+  // 29. Protected Branches Endpoints
+  // ==========================================
+  async listProtectedBranches(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing protected branches for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_branches`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list protected branches for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProtectedBranch(projectId, name) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching protected branch ${name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_branches/${encodeURIComponent(name)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get protected branch ${name} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async protectBranch(projectId, branchData) {
+    logger.info(
+      `🦊 [GitLab Service] Protecting branch ${branchData.name} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/protected_branches`,
+        {
+          name: branchData.name,
+          push_access_level: branchData.pushAccessLevel,
+          merge_access_level: branchData.mergeAccessLevel,
+          unprotect_access_level: branchData.unprotectAccessLevel,
+          allow_force_push: branchData.allowForcePush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to protect branch ${branchData.name} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateProtectedBranch(projectId, name, branchData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating protected branch ${name} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.patch(
+        `/projects/${encodeURIComponent(projectId)}/protected_branches/${encodeURIComponent(name)}`,
+        {
+          push_access_level: branchData.pushAccessLevel,
+          merge_access_level: branchData.mergeAccessLevel,
+          unprotect_access_level: branchData.unprotectAccessLevel,
+          allow_force_push: branchData.allowForcePush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update protected branch ${name} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async unprotectBranch(projectId, name) {
+    logger.info(
+      `🦊 [GitLab Service] Unprotecting branch ${name} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/protected_branches/${encodeURIComponent(name)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to unprotect branch ${name} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 30. Deploy Keys Endpoints
+  // ==========================================
+  async listProjectDeployKeys(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing deploy keys for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list deploy keys for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectDeployKey(projectId, keyId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching deploy key ${keyId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys/${keyId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get deploy key ${keyId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addProjectDeployKey(projectId, keyData) {
+    logger.info(
+      `🦊 [GitLab Service] Adding deploy key in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys`,
+        {
+          title: keyData.title,
+          key: keyData.key,
+          can_push: keyData.canPush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to add deploy key in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async enableProjectDeployKey(projectId, keyId) {
+    logger.info(
+      `🦊 [GitLab Service] Enabling deploy key ${keyId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys/${keyId}/enable`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to enable deploy key ${keyId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateProjectDeployKey(projectId, keyId, keyData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating deploy key ${keyId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys/${keyId}`,
+        {
+          title: keyData.title,
+          can_push: keyData.canPush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update deploy key ${keyId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectDeployKey(projectId, keyId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting deploy key ${keyId} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/deploy_keys/${keyId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete deploy key ${keyId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 31. Labels Endpoints
+  // ==========================================
+  async listProjectLabels(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing labels for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/labels`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            with_counts: params.withCounts,
+            include_ancestor_groups: params.includeAncestorGroups,
+            search: params.search,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list labels for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createProjectLabel(projectId, labelData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating project label ${labelData.name} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/labels`,
+        {
+          name: labelData.name,
+          color: labelData.color,
+          description: labelData.description,
+          priority: labelData.priority,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create project label:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectLabel(projectId, labelIdOrName, labelData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating project label ${labelIdOrName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/labels/${encodeURIComponent(labelIdOrName)}`,
+        {
+          new_name: labelData.newName || labelData.name,
+          color: labelData.color,
+          description: labelData.description,
+          priority: labelData.priority,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update project label ${labelIdOrName}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectLabel(projectId, labelIdOrName) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting project label ${labelIdOrName} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/labels/${encodeURIComponent(labelIdOrName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete project label ${labelIdOrName}:`, error);
+      throw error;
+    }
+  },
+
+  async listGroupLabels(groupId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing labels for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/labels`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            with_counts: params.withCounts,
+            only_group_labels: params.onlyGroupLabels,
+            search: params.search,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list labels for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupLabel(groupId, labelData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating group label ${labelData.name} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/labels`,
+        {
+          name: labelData.name,
+          color: labelData.color,
+          description: labelData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create group label:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupLabel(groupId, labelIdOrName, labelData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating group label ${labelIdOrName} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/labels/${encodeURIComponent(labelIdOrName)}`,
+        {
+          new_name: labelData.newName || labelData.name,
+          color: labelData.color,
+          description: labelData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update group label ${labelIdOrName}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupLabel(groupId, labelIdOrName) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting group label ${labelIdOrName} in group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/labels/${encodeURIComponent(labelIdOrName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete group label ${labelIdOrName}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 32. Todos Endpoints
+  // ==========================================
+  async listUserTodos(params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing pending user todos`);
+    try {
+      const { data } = await gitlabClient.get('/todos', {
+        params: {
+          page: params.page || 1,
+          per_page: params.perPage || 30,
+          action: params.action,
+          author_id: params.authorId,
+          project_id: params.projectId,
+          group_id: params.groupId,
+          state: params.state,
+          type: params.type,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list user todos:`, error);
+      throw error;
+    }
+  },
+
+  async createTodoOnIssue(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Creating todo on issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/todo`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create todo on issue ${issueIid}:`, error);
+      throw error;
+    }
+  },
+
+  async createTodoOnMergeRequest(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Creating todo on MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/todo`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create todo on MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async markTodoAsDone(todoId) {
+    logger.info(`🦊 [GitLab Service] Marking todo ${todoId} as done`);
+    try {
+      const { data } = await gitlabClient.post(`/todos/${todoId}/mark_as_done`);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to mark todo ${todoId} as done:`, error);
+      throw error;
+    }
+  },
+
+  async markAllTodosAsDone() {
+    logger.info(`🦊 [GitLab Service] Marking all user todos as done`);
+    try {
+      await gitlabClient.post('/todos/mark_as_done');
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to mark all todos as done:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 33. Project Integrations Endpoints
+  // ==========================================
+  async listProjectIntegrations(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing integrations for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/integrations`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list integrations for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectIntegration(projectId, integrationSlug) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching integration ${integrationSlug} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/integrations/${integrationSlug}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get integration ${integrationSlug} settings:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateProjectIntegration(projectId, integrationSlug, integrationData) {
+    logger.info(
+      `🦊 [GitLab Service] Configuring integration ${integrationSlug} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/integrations/${integrationSlug}`,
+        integrationData,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to configure integration ${integrationSlug}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectIntegration(projectId, integrationSlug) {
+    logger.info(
+      `🦊 [GitLab Service] Disabling integration ${integrationSlug} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/integrations/${integrationSlug}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to disable integration ${integrationSlug}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 34. Repository Extras Endpoints
+  // ==========================================
+  async getFileBlame(projectId, filePath, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching blame for file ${filePath} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/files/${encodeURIComponent(filePath)}/blame`,
+        {
+          params: {
+            ref: params.ref || 'main',
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get blame for file ${filePath}:`, error);
+      throw error;
+    }
+  },
+
+  async downloadRepositoryArchive(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Downloading repository archive for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/archive`,
+        {
+          responseType: 'arraybuffer',
+          params: {
+            sha: params.sha,
+            format: params.format || 'zip',
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to download repository archive for project ${projectId}:`,
+        error,
+      );
+      throw error;
     }
   },
 };

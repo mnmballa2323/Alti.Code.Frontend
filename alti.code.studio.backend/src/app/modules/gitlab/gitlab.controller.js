@@ -3344,3 +3344,445 @@ export const denyGroupAccessRequest = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 29. Protected Branches Handlers
+// ==========================================
+export const listProtectedBranches = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const branches = await GitlabService.listProtectedBranches(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: branches });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing protected branches:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProtectedBranch = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const branch = await GitlabService.getProtectedBranch(projectId, name);
+    res.status(httpStatus.OK).json({ success: true, data: branch });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting protected branch:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const protectBranch = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const branch = await GitlabService.protectBranch(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: branch });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error protecting branch:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProtectedBranch = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const branch = await GitlabService.updateProtectedBranch(
+      projectId,
+      name,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: branch });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating protected branch:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unprotectBranch = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const result = await GitlabService.unprotectBranch(projectId, name);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error unprotecting branch:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 30. Deploy Keys Handlers
+// ==========================================
+export const listProjectDeployKeys = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const keys = await GitlabService.listProjectDeployKeys(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: keys });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing deploy keys:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectDeployKey = async (req, res) => {
+  try {
+    const { projectId, keyId } = req.params;
+    const key = await GitlabService.getProjectDeployKey(projectId, keyId);
+    res.status(httpStatus.OK).json({ success: true, data: key });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting deploy key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addProjectDeployKey = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const key = await GitlabService.addProjectDeployKey(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: key });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error adding deploy key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const enableProjectDeployKey = async (req, res) => {
+  try {
+    const { projectId, keyId } = req.params;
+    const key = await GitlabService.enableProjectDeployKey(projectId, keyId);
+    res.status(httpStatus.OK).json({ success: true, data: key });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error enabling deploy key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectDeployKey = async (req, res) => {
+  try {
+    const { projectId, keyId } = req.params;
+    const key = await GitlabService.updateProjectDeployKey(
+      projectId,
+      keyId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: key });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating deploy key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectDeployKey = async (req, res) => {
+  try {
+    const { projectId, keyId } = req.params;
+    const result = await GitlabService.deleteProjectDeployKey(projectId, keyId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting deploy key:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 31. Labels Handlers
+// ==========================================
+export const listProjectLabels = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const labels = await GitlabService.listProjectLabels(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: labels });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project labels:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectLabel = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const label = await GitlabService.createProjectLabel(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: label });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating project label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectLabel = async (req, res) => {
+  try {
+    const { projectId, labelIdOrName } = req.params;
+    const label = await GitlabService.updateProjectLabel(
+      projectId,
+      labelIdOrName,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: label });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating project label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectLabel = async (req, res) => {
+  try {
+    const { projectId, labelIdOrName } = req.params;
+    const result = await GitlabService.deleteProjectLabel(
+      projectId,
+      labelIdOrName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupLabels = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const labels = await GitlabService.listGroupLabels(groupId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: labels });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group labels:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupLabel = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const label = await GitlabService.createGroupLabel(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: label });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupLabel = async (req, res) => {
+  try {
+    const { groupId, labelIdOrName } = req.params;
+    const label = await GitlabService.updateGroupLabel(
+      groupId,
+      labelIdOrName,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: label });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupLabel = async (req, res) => {
+  try {
+    const { groupId, labelIdOrName } = req.params;
+    const result = await GitlabService.deleteGroupLabel(groupId, labelIdOrName);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group label:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 32. Todos Handlers
+// ==========================================
+export const listUserTodos = async (req, res) => {
+  try {
+    const todos = await GitlabService.listUserTodos(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: todos });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing user todos:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createTodoOnIssue = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const todo = await GitlabService.createTodoOnIssue(projectId, issueIid);
+    res.status(httpStatus.CREATED).json({ success: true, data: todo });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating todo on issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createTodoOnMergeRequest = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const todo = await GitlabService.createTodoOnMergeRequest(projectId, mrIid);
+    res.status(httpStatus.CREATED).json({ success: true, data: todo });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating todo on MR:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const markTodoAsDone = async (req, res) => {
+  try {
+    const { todoId } = req.params;
+    const todo = await GitlabService.markTodoAsDone(todoId);
+    res.status(httpStatus.OK).json({ success: true, data: todo });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error marking todo as done:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const markAllTodosAsDone = async (req, res) => {
+  try {
+    const result = await GitlabService.markAllTodosAsDone();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error marking all todos as done:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 33. Project Integrations Handlers
+// ==========================================
+export const listProjectIntegrations = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const integrations = await GitlabService.listProjectIntegrations(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: integrations });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing integrations:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectIntegration = async (req, res) => {
+  try {
+    const { projectId, integrationSlug } = req.params;
+    const integration = await GitlabService.getProjectIntegration(
+      projectId,
+      integrationSlug,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: integration });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting integration settings:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectIntegration = async (req, res) => {
+  try {
+    const { projectId, integrationSlug } = req.params;
+    const integration = await GitlabService.updateProjectIntegration(
+      projectId,
+      integrationSlug,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: integration });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating integration settings:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectIntegration = async (req, res) => {
+  try {
+    const { projectId, integrationSlug } = req.params;
+    const result = await GitlabService.deleteProjectIntegration(
+      projectId,
+      integrationSlug,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting integration settings:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 34. Repository Extras Handlers
+// ==========================================
+export const getFileBlame = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const filePath = req.params[0] || req.query.path || '';
+    const blame = await GitlabService.getFileBlame(projectId, filePath, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: blame });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting file blame:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const downloadRepositoryArchive = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const data = await GitlabService.downloadRepositoryArchive(projectId, req.query);
+    const format = req.query.format || 'zip';
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="archive.${format}"`,
+    );
+    res.status(httpStatus.OK).send(data);
+  } catch (error) {
+    logger.error('[GitLab Controller] Error downloading repository archive:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
