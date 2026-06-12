@@ -4923,4 +4923,350 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 44. Phase 10: Commits, Forks, Push Rules, MR Draft Notes & Invitations
+  // ==========================================
+  describe('44. Phase 10: Commits, Forks, Push Rules, MR Draft Notes & Invitations', () => {
+    // 1. Commit Comments
+    it('listCommitComments should fetch commit comments', async () => {
+      const mockData = [{ id: 1, note: 'Nice commit' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listCommitComments('123', 'sha123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/sha123/comments',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createCommitComment should post commit comment with object structure', async () => {
+      const mockData = { id: 1, note: 'Nice' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createCommitComment('123', 'sha123', {
+        note: 'Nice',
+        path: 'file.txt',
+        line: 5,
+        lineType: 'new',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/sha123/comments',
+        {
+          note: 'Nice',
+          path: 'file.txt',
+          line: 5,
+          line_type: 'new',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createCommitComment should post commit comment with legacy arguments', async () => {
+      const mockData = { id: 1, note: 'Nice legacy' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createCommitComment(
+        '123',
+        'sha123',
+        'Nice legacy',
+        { path: 'file.txt', line: 5, lineType: 'new' },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/sha123/comments',
+        {
+          note: 'Nice legacy',
+          path: 'file.txt',
+          line: 5,
+          line_type: 'new',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 2. Project Forks
+    it('listProjectForks should retrieve forks list', async () => {
+      const mockData = [{ id: 456, name: 'forked-project' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectForks('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/forks');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectFork should post fork configuration', async () => {
+      const mockData = { id: 456, name: 'forked-project' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectFork('123', {
+        namespacePath: 'my-namespace',
+        name: 'forked-project',
+        path: 'forked-path',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/forks', {
+        namespace_path: 'my-namespace',
+        name: 'forked-project',
+        path: 'forked-path',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    // 3. Project & Group Push Rules
+    it('getProjectPushRules should fetch project push rules', async () => {
+      const mockData = { id: 1, prevent_secrets: true };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectPushRules('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/push_rule');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectPushRules should post project push rules configurations', async () => {
+      const mockData = { id: 1, prevent_secrets: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectPushRules('123', {
+        preventSecrets: true,
+        denyDeleteTag: false,
+        memberCheck: true,
+        commitMessageRegex: '.*',
+        commitMessageNegativeRegex: 'bad',
+        branchNameRegex: 'main',
+        authorEmailRegex: '@ex.com',
+        fileNameRegex: '.*',
+        maxFileSize: 10,
+        commitCommitterCheck: true,
+        commitCommitterNameCheck: true,
+        rejectUnsignedCommits: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/push_rule', {
+        prevent_secrets: true,
+        deny_delete_tag: false,
+        member_check: true,
+        commit_message_regex: '.*',
+        commit_message_negative_regex: 'bad',
+        branch_name_regex: 'main',
+        author_email_regex: '@ex.com',
+        file_name_regex: '.*',
+        max_file_size: 10,
+        commit_committer_check: true,
+        commit_committer_name_check: true,
+        reject_unsigned_commits: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectPushRules should put updated project push rules', async () => {
+      const mockData = { id: 1, prevent_secrets: false };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectPushRules('123', {
+        preventSecrets: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/push_rule', {
+        prevent_secrets: false,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectPushRules should delete project push rules', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectPushRules('123');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/push_rule');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getGroupPushRules should fetch group push rules', async () => {
+      const mockData = { id: 2, prevent_secrets: true };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupPushRules('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/push_rule');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupPushRules should post group push rules configurations', async () => {
+      const mockData = { id: 2, prevent_secrets: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupPushRules('99', {
+        preventSecrets: true,
+        denyDeleteTag: false,
+        memberCheck: true,
+        commitMessageRegex: '.*',
+        commitMessageNegativeRegex: 'bad',
+        branchNameRegex: 'main',
+        authorEmailRegex: '@ex.com',
+        fileNameRegex: '.*',
+        maxFileSize: 10,
+        commitCommitterCheck: true,
+        commitCommitterNameCheck: true,
+        rejectUnsignedCommits: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/push_rule', {
+        prevent_secrets: true,
+        deny_delete_tag: false,
+        member_check: true,
+        commit_message_regex: '.*',
+        commit_message_negative_regex: 'bad',
+        branch_name_regex: 'main',
+        author_email_regex: '@ex.com',
+        file_name_regex: '.*',
+        max_file_size: 10,
+        commit_committer_check: true,
+        commit_committer_name_check: true,
+        reject_unsigned_commits: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupPushRules should put updated group push rules', async () => {
+      const mockData = { id: 2, prevent_secrets: false };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupPushRules('99', {
+        preventSecrets: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/99/push_rule', {
+        prevent_secrets: false,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupPushRules should delete group push rules', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupPushRules('99');
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/99/push_rule');
+      expect(result).toEqual({ success: true });
+    });
+
+    // 4. Merge Request Draft Notes
+    it('listMergeRequestDraftNotes should fetch MR draft notes', async () => {
+      const mockData = [{ id: 1, note: 'Draft note' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listMergeRequestDraftNotes('123', 5);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/5/draft_notes',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createMergeRequestDraftNote should post draft note configuration', async () => {
+      const mockData = { id: 1, note: 'Draft note' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createMergeRequestDraftNote('123', 5, {
+        note: 'Draft note',
+        commitId: 'sha123',
+        path: 'file.txt',
+        line: 10,
+        position: {},
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/5/draft_notes',
+        {
+          note: 'Draft note',
+          commit_id: 'sha123',
+          path: 'file.txt',
+          line: 10,
+          position: {},
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateMergeRequestDraftNote should put updated draft note details', async () => {
+      const mockData = { id: 1, note: 'Updated draft note' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateMergeRequestDraftNote(
+        '123',
+        5,
+        1,
+        { note: 'Updated draft note' },
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/5/draft_notes/1',
+        {
+          note: 'Updated draft note',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteMergeRequestDraftNote should delete draft note', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteMergeRequestDraftNote('123', 5, 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/5/draft_notes/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('publishMergeRequestDraftNotes should post to publish endpoint', async () => {
+      const mockData = { success: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.publishMergeRequestDraftNotes('123', 5);
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/5/draft_notes/publish',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 5. Project & Group Invitations
+    it('listGroupInvitations should fetch group invitations list', async () => {
+      const mockData = [{ invite_email: 'user@ex.com', access_level: 30 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupInvitations('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/invitations');
+      expect(result).toEqual(mockData);
+    });
+
+    it('inviteGroupMembers should post group invitations configuration', async () => {
+      const mockData = { success: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.inviteGroupMembers('99', {
+        email: 'user@ex.com',
+        accessLevel: 30,
+        inviteeType: 'email',
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/invitations', {
+        email: 'user@ex.com',
+        access_level: 30,
+        invitee_type: 'email',
+        expires_at: '2026-12-31',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupInvitation should delete group invitation', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupInvitation('99', 'user@ex.com');
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/99/invitations/user%40ex.com');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listProjectInvitations should fetch project invitations list', async () => {
+      const mockData = [{ invite_email: 'user@ex.com', access_level: 30 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectInvitations('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/invitations');
+      expect(result).toEqual(mockData);
+    });
+
+    it('inviteProjectMembers should post project invitations configuration', async () => {
+      const mockData = { success: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.inviteProjectMembers('123', {
+        email: 'user@ex.com',
+        accessLevel: 30,
+        inviteeType: 'email',
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/invitations', {
+        email: 'user@ex.com',
+        access_level: 30,
+        invitee_type: 'email',
+        expires_at: '2026-12-31',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectInvitation should delete project invitation', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectInvitation('123', 'user@ex.com');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/invitations/user%40ex.com',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

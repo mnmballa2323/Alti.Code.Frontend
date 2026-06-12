@@ -5288,19 +5288,6 @@ export const listCommitComments = async (req, res) => {
   }
 };
 
-export const createCommitComment = async (req, res) => {
-  try {
-    const { projectId, sha } = req.params;
-    const comment = await GitlabService.createCommitComment(projectId, sha, req.body);
-    res.status(httpStatus.CREATED).json({ success: true, data: comment });
-  } catch (error) {
-    logger.error('[GitLab Controller] Error creating commit comment:', error);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ success: false, error: error.message });
-  }
-};
-
 // ==========================================
 // 9. Project Forks Handlers
 // ==========================================

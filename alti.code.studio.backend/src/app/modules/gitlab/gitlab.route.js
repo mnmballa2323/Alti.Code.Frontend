@@ -272,7 +272,7 @@ router.get(
 );
 router.get(
   '/projects/:projectId/repository/commits/:sha/comments',
-  GitlabController.getCommitComments,
+  GitlabController.listCommitComments,
 );
 router.post(
   '/projects/:projectId/repository/commits/:sha/comments',
@@ -1268,6 +1268,58 @@ router.patch(
 router.delete(
   '/groups/:groupId/scim/v2/users/:scimUserId',
   GitlabController.deleteGroupScimUser,
+);
+
+// ==========================================
+// 44. Phase 10 Endpoints
+// ==========================================
+// 2. Project Forks
+router.get('/projects/:projectId/forks', GitlabController.listProjectForks);
+router.post('/projects/:projectId/forks', GitlabController.createProjectFork);
+
+// 3. Project & Group Push Rules
+router.get('/projects/:projectId/push_rule', GitlabController.getProjectPushRules);
+router.post('/projects/:projectId/push_rule', GitlabController.createProjectPushRules);
+router.put('/projects/:projectId/push_rule', GitlabController.updateProjectPushRules);
+router.delete('/projects/:projectId/push_rule', GitlabController.deleteProjectPushRules);
+
+router.get('/groups/:groupId/push_rule', GitlabController.getGroupPushRules);
+router.post('/groups/:groupId/push_rule', GitlabController.createGroupPushRules);
+router.put('/groups/:groupId/push_rule', GitlabController.updateGroupPushRules);
+router.delete('/groups/:groupId/push_rule', GitlabController.deleteGroupPushRules);
+
+// 4. Merge Request Draft Notes (Batch Reviews)
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/draft_notes',
+  GitlabController.listMergeRequestDraftNotes,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/draft_notes',
+  GitlabController.createMergeRequestDraftNote,
+);
+router.put(
+  '/projects/:projectId/merge_requests/:mrIid/draft_notes/:draftNoteId',
+  GitlabController.updateMergeRequestDraftNote,
+);
+router.delete(
+  '/projects/:projectId/merge_requests/:mrIid/draft_notes/:draftNoteId',
+  GitlabController.deleteMergeRequestDraftNote,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/draft_notes/publish',
+  GitlabController.publishMergeRequestDraftNotes,
+);
+
+// 5. Project & Group Invitations
+router.get('/groups/:groupId/invitations', GitlabController.listGroupInvitations);
+router.post('/groups/:groupId/invitations', GitlabController.inviteGroupMembers);
+router.delete('/groups/:groupId/invitations/:email', GitlabController.deleteGroupInvitation);
+
+router.get('/projects/:projectId/invitations', GitlabController.listProjectInvitations);
+router.post('/projects/:projectId/invitations', GitlabController.inviteProjectMembers);
+router.delete(
+  '/projects/:projectId/invitations/:email',
+  GitlabController.deleteProjectInvitation,
 );
 
 export const GitlabRoutes = router;

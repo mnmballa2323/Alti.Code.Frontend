@@ -1469,26 +1469,34 @@ export const GitlabService = {
     }
   },
 
-  async createCommitComment(projectId, sha, note, params = {}) {
+  async createCommitComment(projectId, sha, noteOrCommentData, params = {}) {
     logger.info(
-      `🦊 [GitLab Service] Posting comment on commit ${sha} in project ${projectId}`,
+      `🦊 [GitLab Service] Creating commit comment for project ${projectId} commit ${sha}`,
     );
     try {
-      const { data } = await gitlabClient.post(
-        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
-        {
-          note,
+      let payload = {};
+      if (typeof noteOrCommentData === 'object' && noteOrCommentData !== null) {
+        payload = {
+          note: noteOrCommentData.note,
+          path: noteOrCommentData.path,
+          line: noteOrCommentData.line,
+          line_type: noteOrCommentData.lineType,
+        };
+      } else {
+        payload = {
+          note: noteOrCommentData,
           path: params.path,
           line: params.line,
           line_type: params.lineType,
-        },
+        };
+      }
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
+        payload,
       );
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to post comment on commit ${sha} in project ${projectId}:`,
-        error,
-      );
+      logger.error(`Failed to create commit comment:`, error);
       throw error;
     }
   },
@@ -6093,26 +6101,6 @@ export const GitlabService = {
     }
   },
 
-  async createCommitComment(projectId, sha, commentData) {
-    logger.info(
-      `🦊 [GitLab Service] Creating commit comment for project ${projectId} commit ${sha}`,
-    );
-    try {
-      const { data } = await gitlabClient.post(
-        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
-        {
-          note: commentData.note,
-          path: commentData.path,
-          line: commentData.line,
-          line_type: commentData.lineType,
-        },
-      );
-      return data;
-    } catch (error) {
-      logger.error(`Failed to create commit comment:`, error);
-      throw error;
-    }
-  },
 
   // 2. Project Forks
   async listProjectForks(projectId) {
