@@ -7972,4 +7972,318 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 51. Phase 16: Epic Notes, Snippet Notes, and Extended Issue/MR Notes CRUD
+  // ==========================================
+  async getIssueComment(projectId, issueIid, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting comment ${noteId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueIid)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Issue comment ${noteId} not found, returning safe default`,
+        );
+        return { id: null, body: '' };
+      }
+      logger.error(
+        `Failed to get comment ${noteId} for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateIssueComment(projectId, issueIid, noteId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Updating comment ${noteId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueIid)}/notes/${encodeURIComponent(noteId)}`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update comment ${noteId} for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteIssueComment(projectId, issueIid, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting comment ${noteId} for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/issues/${encodeURIComponent(issueIid)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete comment ${noteId} for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getMergeRequestComment(projectId, mrIid, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting comment ${noteId} for merge request ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${encodeURIComponent(mrIid)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Merge request comment ${noteId} not found, returning safe default`,
+        );
+        return { id: null, body: '' };
+      }
+      logger.error(
+        `Failed to get comment ${noteId} for merge request ${mrIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateMergeRequestComment(projectId, mrIid, noteId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Updating comment ${noteId} for merge request ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${encodeURIComponent(mrIid)}/notes/${encodeURIComponent(noteId)}`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update comment ${noteId} for merge request ${mrIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteMergeRequestComment(projectId, mrIid, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting comment ${noteId} for merge request ${mrIid} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${encodeURIComponent(mrIid)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete comment ${noteId} for merge request ${mrIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listEpicNotes(groupId, epicId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing notes for epic ${epicId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/epics/${encodeURIComponent(epicId)}/notes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list notes for epic ${epicId} in group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getEpicNote(groupId, epicId, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting note ${noteId} for epic ${epicId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/epics/${encodeURIComponent(epicId)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(`Epic note ${noteId} not found, returning safe default`);
+        return { id: null, body: '' };
+      }
+      logger.error(`Failed to get note ${noteId} for epic ${epicId}:`, error);
+      throw error;
+    }
+  },
+
+  async createEpicNote(groupId, epicId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Creating note for epic ${epicId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/epics/${encodeURIComponent(epicId)}/notes`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create note for epic ${epicId} in group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateEpicNote(groupId, epicId, noteId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Updating note ${noteId} for epic ${epicId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/epics/${encodeURIComponent(epicId)}/notes/${encodeURIComponent(noteId)}`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update note ${noteId} for epic ${epicId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteEpicNote(groupId, epicId, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting note ${noteId} for epic ${epicId} in group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/epics/${encodeURIComponent(epicId)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete note ${noteId} for epic ${epicId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listProjectSnippetNotes(projectId, snippetId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing notes for snippet ${snippetId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${encodeURIComponent(snippetId)}/notes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list notes for snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectSnippetNote(projectId, snippetId, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting note ${noteId} for snippet ${snippetId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${encodeURIComponent(snippetId)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(`Snippet note ${noteId} not found, returning safe default`);
+        return { id: null, body: '' };
+      }
+      logger.error(
+        `Failed to get note ${noteId} for snippet ${snippetId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createProjectSnippetNote(projectId, snippetId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Creating note for snippet ${snippetId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${encodeURIComponent(snippetId)}/notes`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create note for snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateProjectSnippetNote(projectId, snippetId, noteId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Updating note ${noteId} for snippet ${snippetId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${encodeURIComponent(snippetId)}/notes/${encodeURIComponent(noteId)}`,
+        { body },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update note ${noteId} for snippet ${snippetId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectSnippetNote(projectId, snippetId, noteId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting note ${noteId} for snippet ${snippetId} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${encodeURIComponent(snippetId)}/notes/${encodeURIComponent(noteId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete note ${noteId} for snippet ${snippetId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };

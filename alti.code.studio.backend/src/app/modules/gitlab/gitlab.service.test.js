@@ -6315,4 +6315,236 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 51. Phase 16: Epic Notes, Snippet Notes, and Extended Issue/MR Notes CRUD
+  // ==========================================
+  describe('51. Phase 16: Epic Notes, Snippet Notes, and Extended Issue/MR Notes CRUD', () => {
+    it('getIssueComment should retrieve issue comment details', async () => {
+      const mockData = { id: 1, body: 'comment-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueComment('123', '45', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/issues/45/notes/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueComment should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getIssueComment('123', '45', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/issues/45/notes/1',
+      );
+      expect(result).toEqual({ id: null, body: '' });
+    });
+
+    it('updateIssueComment should put updated issue comment body', async () => {
+      const mockData = { id: 1, body: 'comment-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateIssueComment(
+        '123',
+        '45',
+        1,
+        'comment-updated',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/issues/45/notes/1',
+        { body: 'comment-updated' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteIssueComment should delete issue comment', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteIssueComment('123', '45', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/issues/45/notes/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getMergeRequestComment should retrieve MR comment details', async () => {
+      const mockData = { id: 1, body: 'comment-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestComment('123', '45', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/45/notes/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestComment should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getMergeRequestComment('123', '45', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/45/notes/1',
+      );
+      expect(result).toEqual({ id: null, body: '' });
+    });
+
+    it('updateMergeRequestComment should put updated MR comment body', async () => {
+      const mockData = { id: 1, body: 'comment-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateMergeRequestComment(
+        '123',
+        '45',
+        1,
+        'comment-updated',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/45/notes/1',
+        { body: 'comment-updated' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteMergeRequestComment should delete MR comment', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteMergeRequestComment(
+        '123',
+        '45',
+        1,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/merge_requests/45/notes/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listEpicNotes should retrieve epic notes list', async () => {
+      const mockData = [{ id: 1, body: 'note-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listEpicNotes('99', '5');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/epics/5/notes');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getEpicNote should retrieve epic note details', async () => {
+      const mockData = { id: 1, body: 'note-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getEpicNote('99', '5', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/epics/5/notes/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getEpicNote should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getEpicNote('99', '5', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/epics/5/notes/1');
+      expect(result).toEqual({ id: null, body: '' });
+    });
+
+    it('createEpicNote should post new epic note', async () => {
+      const mockData = { id: 1, body: 'note-1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createEpicNote('99', '5', 'note-1');
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/epics/5/notes', {
+        body: 'note-1',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateEpicNote should put updated epic note body', async () => {
+      const mockData = { id: 1, body: 'note-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateEpicNote(
+        '99',
+        '5',
+        1,
+        'note-updated',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/99/epics/5/notes/1',
+        { body: 'note-updated' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteEpicNote should delete epic note', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteEpicNote('99', '5', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/epics/5/notes/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listProjectSnippetNotes should retrieve snippet notes list', async () => {
+      const mockData = [{ id: 1, body: 'note-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectSnippetNotes('123', '5');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectSnippetNote should retrieve snippet note details', async () => {
+      const mockData = { id: 1, body: 'note-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectSnippetNote('123', '5', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectSnippetNote should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getProjectSnippetNote('123', '5', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes/1',
+      );
+      expect(result).toEqual({ id: null, body: '' });
+    });
+
+    it('createProjectSnippetNote should post new snippet note', async () => {
+      const mockData = { id: 1, body: 'note-1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectSnippetNote(
+        '123',
+        '5',
+        'note-1',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes',
+        { body: 'note-1' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectSnippetNote should put updated snippet note body', async () => {
+      const mockData = { id: 1, body: 'note-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectSnippetNote(
+        '123',
+        '5',
+        1,
+        'note-updated',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes/1',
+        { body: 'note-updated' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectSnippetNote should delete snippet note', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectSnippetNote(
+        '123',
+        '5',
+        1,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/snippets/5/notes/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

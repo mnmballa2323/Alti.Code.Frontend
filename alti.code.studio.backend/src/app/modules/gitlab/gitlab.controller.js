@@ -6852,3 +6852,295 @@ export const deletePipelineTrigger = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 51. Phase 16: Epic Notes, Snippet Notes, and Extended Issue/MR Notes CRUD
+// ==========================================
+export const getIssueComment = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId } = req.params;
+    const result = await GitlabService.getIssueComment(
+      projectId,
+      issueIid,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting issue comment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateIssueComment = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.updateIssueComment(
+      projectId,
+      issueIid,
+      noteId,
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating issue comment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteIssueComment = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId } = req.params;
+    const result = await GitlabService.deleteIssueComment(
+      projectId,
+      issueIid,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting issue comment:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getMergeRequestComment = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId } = req.params;
+    const result = await GitlabService.getMergeRequestComment(
+      projectId,
+      mrIid,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting merge request comment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateMergeRequestComment = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.updateMergeRequestComment(
+      projectId,
+      mrIid,
+      noteId,
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating merge request comment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteMergeRequestComment = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId } = req.params;
+    const result = await GitlabService.deleteMergeRequestComment(
+      projectId,
+      mrIid,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting merge request comment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listEpicNotes = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const result = await GitlabService.listEpicNotes(groupId, epicId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing epic notes:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getEpicNote = async (req, res) => {
+  try {
+    const { groupId, epicId, noteId } = req.params;
+    const result = await GitlabService.getEpicNote(groupId, epicId, noteId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting epic note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createEpicNote = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.createEpicNote(groupId, epicId, body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating epic note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateEpicNote = async (req, res) => {
+  try {
+    const { groupId, epicId, noteId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.updateEpicNote(
+      groupId,
+      epicId,
+      noteId,
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating epic note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteEpicNote = async (req, res) => {
+  try {
+    const { groupId, epicId, noteId } = req.params;
+    const result = await GitlabService.deleteEpicNote(groupId, epicId, noteId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting epic note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectSnippetNotes = async (req, res) => {
+  try {
+    const { projectId, snippetId } = req.params;
+    const result = await GitlabService.listProjectSnippetNotes(
+      projectId,
+      snippetId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project snippet notes:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectSnippetNote = async (req, res) => {
+  try {
+    const { projectId, snippetId, noteId } = req.params;
+    const result = await GitlabService.getProjectSnippetNote(
+      projectId,
+      snippetId,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting project snippet note:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectSnippetNote = async (req, res) => {
+  try {
+    const { projectId, snippetId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.createProjectSnippetNote(
+      projectId,
+      snippetId,
+      body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating project snippet note:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectSnippetNote = async (req, res) => {
+  try {
+    const { projectId, snippetId, noteId } = req.params;
+    const { body } = req.body;
+    const result = await GitlabService.updateProjectSnippetNote(
+      projectId,
+      snippetId,
+      noteId,
+      body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating project snippet note:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectSnippetNote = async (req, res) => {
+  try {
+    const { projectId, snippetId, noteId } = req.params;
+    const result = await GitlabService.deleteProjectSnippetNote(
+      projectId,
+      snippetId,
+      noteId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting project snippet note:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

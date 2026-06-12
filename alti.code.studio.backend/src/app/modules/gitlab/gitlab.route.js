@@ -1649,4 +1649,75 @@ router.delete(
   GitlabController.deletePipelineTrigger,
 );
 
+// ==========================================
+// 51. Phase 16: Epic Notes, Snippet Notes, and Extended Issue/MR Notes CRUD
+// ==========================================
+router.get(
+  '/projects/:projectId/issues/:issueIid/notes/:noteId',
+  GitlabController.getIssueComment,
+);
+router.put(
+  '/projects/:projectId/issues/:issueIid/notes/:noteId',
+  GitlabController.updateIssueComment,
+);
+router.delete(
+  '/projects/:projectId/issues/:issueIid/notes/:noteId',
+  GitlabController.deleteIssueComment,
+);
+
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/notes/:noteId',
+  GitlabController.getMergeRequestComment,
+);
+router.put(
+  '/projects/:projectId/merge_requests/:mrIid/notes/:noteId',
+  GitlabController.updateMergeRequestComment,
+);
+router.delete(
+  '/projects/:projectId/merge_requests/:mrIid/notes/:noteId',
+  GitlabController.deleteMergeRequestComment,
+);
+
+router.get(
+  '/groups/:groupId/epics/:epicId/notes',
+  GitlabController.listEpicNotes,
+);
+router.post(
+  '/groups/:groupId/epics/:epicId/notes',
+  GitlabController.createEpicNote,
+);
+router.get(
+  '/groups/:groupId/epics/:epicId/notes/:noteId',
+  GitlabController.getEpicNote,
+);
+router.put(
+  '/groups/:groupId/epics/:epicId/notes/:noteId',
+  GitlabController.updateEpicNote,
+);
+router.delete(
+  '/groups/:groupId/epics/:epicId/notes/:noteId',
+  GitlabController.deleteEpicNote,
+);
+
+router.get(
+  '/projects/:projectId/snippets/:snippetId/notes',
+  GitlabController.listProjectSnippetNotes,
+);
+router.post(
+  '/projects/:projectId/snippets/:snippetId/notes',
+  GitlabController.createProjectSnippetNote,
+);
+router.get(
+  '/projects/:projectId/snippets/:snippetId/notes/:noteId',
+  GitlabController.getProjectSnippetNote,
+);
+router.put(
+  '/projects/:projectId/snippets/:snippetId/notes/:noteId',
+  GitlabController.updateProjectSnippetNote,
+);
+router.delete(
+  '/projects/:projectId/snippets/:snippetId/notes/:noteId',
+  GitlabController.deleteProjectSnippetNote,
+);
+
 export const GitlabRoutes = router;
