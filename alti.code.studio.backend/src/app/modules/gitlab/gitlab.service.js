@@ -1370,6 +1370,765 @@ export const GitlabService = {
   },
 
   // ==========================================
+  // 12. Commits, Diff & Comments Endpoints
+  // ==========================================
+  async listCommits(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing commits for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits`,
+        {
+          params: {
+            ref_name: params.refName || params.sha || params.branch,
+            since: params.since,
+            until: params.until,
+            path: params.path,
+            all: params.all,
+            with_stats: params.withStats,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list commits for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getCommit(projectId, sha) {
+    logger.info(`🦊 [GitLab Service] Fetching commit ${sha} for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get commit ${sha} for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async compareCommits(projectId, from, to) {
+    logger.info(`🦊 [GitLab Service] Comparing commits from ${from} to ${to} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/compare`,
+        {
+          params: { from, to },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to compare commits in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getCommitDiff(projectId, sha) {
+    logger.info(`🦊 [GitLab Service] Fetching diff for commit ${sha} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/diff`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get diff for commit ${sha} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getCommitComments(projectId, sha) {
+    logger.info(`🦊 [GitLab Service] Fetching comments for commit ${sha} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get comments for commit ${sha} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createCommitComment(projectId, sha, note, params = {}) {
+    logger.info(`🦊 [GitLab Service] Posting comment on commit ${sha} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
+        {
+          note,
+          path: params.path,
+          line: params.line,
+          line_type: params.lineType,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to post comment on commit ${sha} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createCommitStatus(projectId, sha, state, params = {}) {
+    logger.info(`🦊 [GitLab Service] Posting commit status ${state} for commit ${sha} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/statuses/${encodeURIComponent(sha)}`,
+        {
+          state,
+          ref: params.ref,
+          name: params.name || params.context,
+          target_url: params.targetUrl,
+          description: params.description,
+          coverage: params.coverage,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to post status for commit ${sha} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listCommitStatuses(projectId, sha, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing statuses for commit ${sha} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/statuses`,
+        {
+          params: {
+            ref: params.ref,
+            stage: params.stage,
+            name: params.name,
+            all: params.all,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list statuses for commit ${sha} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 13. Releases & Tags Endpoints
+  // ==========================================
+  async listReleases(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing releases for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/releases`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list releases for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getRelease(projectId, tagName) {
+    logger.info(`🦊 [GitLab Service] Fetching release for tag ${tagName} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get release for tag ${tagName} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createRelease(projectId, releaseData) {
+    logger.info(`🦊 [GitLab Service] Creating release for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/releases`,
+        {
+          name: releaseData.name,
+          tag_name: releaseData.tagName,
+          tag_message: releaseData.tagMessage,
+          description: releaseData.description,
+          ref: releaseData.ref,
+          assets: releaseData.assets,
+          milestones: releaseData.milestones,
+          released_at: releaseData.releasedAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create release for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateRelease(projectId, tagName, releaseData) {
+    logger.info(`🦊 [GitLab Service] Updating release for tag ${tagName} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
+        {
+          name: releaseData.name,
+          description: releaseData.description,
+          milestones: releaseData.milestones,
+          released_at: releaseData.releasedAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update release for tag ${tagName} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteRelease(projectId, tagName) {
+    logger.info(`🦊 [GitLab Service] Deleting release for tag ${tagName} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete release for tag ${tagName} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listTags(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing tags for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/tags`,
+        {
+          params: {
+            search: params.search,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list tags for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getTag(projectId, tagName) {
+    logger.info(`🦊 [GitLab Service] Fetching tag ${tagName} for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/tags/${encodeURIComponent(tagName)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get tag ${tagName} for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createTag(projectId, tagName, ref, params = {}) {
+    logger.info(`🦊 [GitLab Service] Creating tag ${tagName} pointing to ${ref} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/repository/tags`,
+        {
+          tag_name: tagName,
+          ref,
+          message: params.message,
+          release_description: params.releaseDescription,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create tag ${tagName} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteTag(projectId, tagName) {
+    logger.info(`🦊 [GitLab Service] Deleting tag ${tagName} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/repository/tags/${encodeURIComponent(tagName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete tag ${tagName} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 14. Deployments & Environments Endpoints
+  // ==========================================
+  async listEnvironments(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing environments for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/environments`,
+        {
+          params: {
+            name: params.name,
+            search: params.search,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list environments for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getEnvironment(projectId, environmentId) {
+    logger.info(`🦊 [GitLab Service] Fetching environment ${environmentId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get environment ${environmentId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createEnvironment(projectId, name, params = {}) {
+    logger.info(`🦊 [GitLab Service] Creating environment ${name} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/environments`,
+        {
+          name,
+          external_url: params.externalUrl,
+          tier: params.tier,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create environment ${name} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateEnvironment(projectId, environmentId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Updating environment ${environmentId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
+        {
+          external_url: params.externalUrl,
+          tier: params.tier,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update environment ${environmentId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteEnvironment(projectId, environmentId) {
+    logger.info(`🦊 [GitLab Service] Deleting environment ${environmentId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete environment ${environmentId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listDeployments(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing deployments for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/deployments`,
+        {
+          params: {
+            environment: params.environment,
+            status: params.status,
+            order_by: params.orderBy,
+            sort: params.sort,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list deployments for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getDeployment(projectId, deploymentId) {
+    logger.info(`🦊 [GitLab Service] Fetching deployment ${deploymentId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/deployments/${deploymentId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get deployment ${deploymentId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createDeployment(projectId, environment, ref, tag, params = {}) {
+    logger.info(`🦊 [GitLab Service] Creating deployment for env ${environment} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/deployments`,
+        {
+          environment,
+          ref,
+          tag,
+          status: params.status || 'running',
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create deployment for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateDeployment(projectId, deploymentId, status) {
+    logger.info(`🦊 [GitLab Service] Updating deployment ${deploymentId} to status ${status} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/deployments/${deploymentId}`,
+        { status },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update deployment ${deploymentId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 15. Snippets Endpoints
+  // ==========================================
+  async listSnippets(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing personal snippets');
+    try {
+      const { data } = await gitlabClient.get('/snippets', {
+        params: {
+          page: params.page || 1,
+          per_page: params.perPage || 30,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list personal snippets:', error);
+      throw error;
+    }
+  },
+
+  async listProjectSnippets(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing snippets for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project snippets for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getSnippet(snippetId) {
+    logger.info(`🦊 [GitLab Service] Fetching personal snippet ${snippetId}`);
+    try {
+      const { data } = await gitlabClient.get(`/snippets/${snippetId}`);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get personal snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectSnippet(projectId, snippetId) {
+    logger.info(`🦊 [GitLab Service] Fetching project snippet ${snippetId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get project snippet ${snippetId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createSnippet(title, fileName, content, visibility = 'private', description = '') {
+    logger.info(`🦊 [GitLab Service] Creating personal snippet: ${title}`);
+    try {
+      const { data } = await gitlabClient.post('/snippets', {
+        title,
+        description,
+        visibility,
+        files: [
+          {
+            file_path: fileName,
+            content,
+          },
+        ],
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to create personal snippet:', error);
+      throw error;
+    }
+  },
+
+  async createProjectSnippet(projectId, title, fileName, content, visibility = 'private', description = '') {
+    logger.info(`🦊 [GitLab Service] Creating project snippet: ${title} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/snippets`,
+        {
+          title,
+          description,
+          visibility,
+          files: [
+            {
+              file_path: fileName,
+              content,
+            },
+          ],
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create project snippet in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateSnippet(snippetId, snippetData) {
+    logger.info(`🦊 [GitLab Service] Updating personal snippet ${snippetId}`);
+    try {
+      const { data } = await gitlabClient.put(`/snippets/${snippetId}`, {
+        title: snippetData.title,
+        description: snippetData.description,
+        visibility: snippetData.visibility,
+        files: snippetData.files,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update personal snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectSnippet(projectId, snippetId, snippetData) {
+    logger.info(`🦊 [GitLab Service] Updating project snippet ${snippetId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
+        {
+          title: snippetData.title,
+          description: snippetData.description,
+          visibility: snippetData.visibility,
+          files: snippetData.files,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update project snippet ${snippetId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteSnippet(snippetId) {
+    logger.info(`🦊 [GitLab Service] Deleting personal snippet ${snippetId}`);
+    try {
+      await gitlabClient.delete(`/snippets/${snippetId}`);
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete personal snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectSnippet(projectId, snippetId) {
+    logger.info(`🦊 [GitLab Service] Deleting project snippet ${snippetId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete project snippet ${snippetId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getSnippetContent(snippetId) {
+    logger.info(`🦊 [GitLab Service] Fetching raw content for personal snippet ${snippetId}`);
+    try {
+      const { data } = await gitlabClient.get(`/snippets/${snippetId}/raw`);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get raw content for personal snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectSnippetContent(projectId, snippetId) {
+    logger.info(`🦊 [GitLab Service] Fetching raw content for project snippet ${snippetId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}/raw`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get raw content for project snippet ${snippetId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 16. Self-Hosted Runners Endpoints
+  // ==========================================
+  async listRunners(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing all self-hosted runners');
+    try {
+      const { data } = await gitlabClient.get('/runners', {
+        params: {
+          type: params.type,
+          status: params.status,
+          tag_list: params.tagList,
+          page: params.page || 1,
+          per_page: params.perPage || 30,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list runners:', error);
+      throw error;
+    }
+  },
+
+  async listProjectRunners(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing runners for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/runners`,
+        {
+          params: {
+            type: params.type,
+            status: params.status,
+            tag_list: params.tagList,
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list runners for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getRunner(runnerId) {
+    logger.info(`🦊 [GitLab Service] Fetching runner ${runnerId} details`);
+    try {
+      const { data } = await gitlabClient.get(`/runners/${runnerId}`);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get details for runner ${runnerId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateRunner(runnerId, runnerData) {
+    logger.info(`🦊 [GitLab Service] Updating runner ${runnerId} configurations`);
+    try {
+      const { data } = await gitlabClient.put(`/runners/${runnerId}`, {
+        description: runnerData.description,
+        active: runnerData.active,
+        tag_list: runnerData.tagList,
+        run_untagged: runnerData.runUntagged,
+        locked: runnerData.locked,
+        access_level: runnerData.accessLevel,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update runner ${runnerId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteRunner(runnerId) {
+    logger.info(`🦊 [GitLab Service] Deleting/unregistering runner ${runnerId}`);
+    try {
+      await gitlabClient.delete(`/runners/${runnerId}`);
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete runner ${runnerId}:`, error);
+      throw error;
+    }
+  },
+
+  async registerRunner(token, params = {}) {
+    logger.info('🦊 [GitLab Service] Registering new runner');
+    try {
+      const { data } = await gitlabClient.post('/runners', {
+        token,
+        description: params.description,
+        active: params.active,
+        tag_list: params.tagList,
+        run_untagged: params.runUntagged,
+        locked: params.locked,
+        access_level: params.accessLevel,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to register runner:', error);
+      throw error;
+    }
+  },
+
+  async verifyRunner(token) {
+    logger.info('🦊 [GitLab Service] Verifying runner token');
+    try {
+      await gitlabClient.post('/runners/verify', { token });
+      return { success: true };
+    } catch (error) {
+      logger.error('Failed to verify runner token:', error);
+      throw error;
+    }
+  },
+  
+  // ==========================================
   // 11. Security Scanning Endpoints
   // ==========================================
   async listVulnerabilityAlerts(projectId, params = {}) {
