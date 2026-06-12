@@ -1355,4 +1355,49 @@ router.delete(
   GitlabController.deleteProjectInvitation,
 );
 
+// 6. Phase 11: System Hooks, Instance Audit Events, Project & Group Custom Attributes & Application Settings
+router.get('/system_hooks', GitlabController.listSystemHooks);
+router.post('/system_hooks', GitlabController.addSystemHook);
+router.delete('/system_hooks/:hookId', GitlabController.deleteSystemHook);
+router.post('/system_hooks/:hookId/test', GitlabController.testSystemHook);
+
+router.get('/audit_events', GitlabController.listInstanceAuditEvents);
+
+router.get(
+  '/projects/:projectId/custom_attributes',
+  GitlabController.listProjectCustomAttributes,
+);
+router.get(
+  '/projects/:projectId/custom_attributes/:key',
+  GitlabController.getProjectCustomAttribute,
+);
+router.put(
+  '/projects/:projectId/custom_attributes/:key',
+  GitlabController.setProjectCustomAttribute,
+);
+router.delete(
+  '/projects/:projectId/custom_attributes/:key',
+  GitlabController.deleteProjectCustomAttribute,
+);
+
+router.get(
+  '/groups/:groupId/custom_attributes',
+  GitlabController.listGroupCustomAttributes,
+);
+router.get(
+  '/groups/:groupId/custom_attributes/:key',
+  GitlabController.getGroupCustomAttribute,
+);
+router.put(
+  '/groups/:groupId/custom_attributes/:key',
+  GitlabController.setGroupCustomAttribute,
+);
+router.delete(
+  '/groups/:groupId/custom_attributes/:key',
+  GitlabController.deleteGroupCustomAttribute,
+);
+
+router.get('/application/settings', GitlabController.getApplicationSettings);
+router.put('/application/settings', GitlabController.updateApplicationSettings);
+
 export const GitlabRoutes = router;

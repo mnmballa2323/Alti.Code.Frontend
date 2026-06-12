@@ -5287,4 +5287,195 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 45. Phase 11: System Hooks, Instance Audit Events, Project & Group Custom Attributes & Application Settings
+  // ==========================================
+  describe('45. Phase 11: System Hooks, Instance Audit Events, Project & Group Custom Attributes & Application Settings', () => {
+    it('listSystemHooks should retrieve system hooks', async () => {
+      const mockData = [{ id: 1, url: 'http://example.com' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listSystemHooks();
+      expect(mockClient.get).toHaveBeenCalledWith('/system_hooks');
+      expect(result).toEqual(mockData);
+    });
+
+    it('addSystemHook should post a new system hook config', async () => {
+      const mockData = { id: 1, url: 'http://example.com' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addSystemHook({
+        url: 'http://example.com',
+        token: 'secretToken',
+        pushEvents: true,
+        tagPushEvents: false,
+        mergeRequestsEvents: true,
+        repositoryUpdateEvents: false,
+        enableSslVerification: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/system_hooks', {
+        url: 'http://example.com',
+        token: 'secretToken',
+        push_events: true,
+        tag_push_events: false,
+        merge_requests_events: true,
+        repository_update_events: false,
+        enable_ssl_verification: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('testSystemHook should test a hook by ID', async () => {
+      const mockData = { success: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.testSystemHook(5);
+      expect(mockClient.post).toHaveBeenCalledWith('/system_hooks/5');
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteSystemHook should delete system hook', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteSystemHook(5);
+      expect(mockClient.delete).toHaveBeenCalledWith('/system_hooks/5');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listInstanceAuditEvents should list instance-wide audit events', async () => {
+      const mockData = [{ id: 1, entity_type: 'User' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listInstanceAuditEvents({
+        createdAfter: '2026-01-01',
+        createdBefore: '2026-06-30',
+        entityType: 'User',
+        entityId: 99,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/audit_events', {
+        params: {
+          created_after: '2026-01-01',
+          created_before: '2026-06-30',
+          entity_type: 'User',
+          entity_id: 99,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listProjectCustomAttributes should retrieve project custom attributes', async () => {
+      const mockData = [{ key: 'attr1', value: 'val1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectCustomAttributes('123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/custom_attributes',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectCustomAttribute should retrieve specific project attribute', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectCustomAttribute(
+        '123',
+        'attr1',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/custom_attributes/attr1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('setProjectCustomAttribute should update specific project attribute', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.setProjectCustomAttribute(
+        '123',
+        'attr1',
+        'val1',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/custom_attributes/attr1',
+        {
+          value: 'val1',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectCustomAttribute should remove specific project attribute', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectCustomAttribute(
+        '123',
+        'attr1',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/custom_attributes/attr1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listGroupCustomAttributes should retrieve group custom attributes', async () => {
+      const mockData = [{ key: 'attr1', value: 'val1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupCustomAttributes('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/custom_attributes');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupCustomAttribute should retrieve specific group attribute', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupCustomAttribute('99', 'attr1');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/99/custom_attributes/attr1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('setGroupCustomAttribute should update specific group attribute', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.setGroupCustomAttribute(
+        '99',
+        'attr1',
+        'val1',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/99/custom_attributes/attr1',
+        {
+          value: 'val1',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupCustomAttribute should remove specific group attribute', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupCustomAttribute(
+        '99',
+        'attr1',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/custom_attributes/attr1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getApplicationSettings should retrieve global settings', async () => {
+      const mockData = { default_projects_limit: 100 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getApplicationSettings();
+      expect(mockClient.get).toHaveBeenCalledWith('/application/settings');
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateApplicationSettings should update global settings', async () => {
+      const mockData = { default_projects_limit: 200 };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateApplicationSettings({
+        default_projects_limit: 200,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/application/settings', {
+        default_projects_limit: 200,
+      });
+      expect(result).toEqual(mockData);
+    });
+  });
 });

@@ -5636,3 +5636,245 @@ export const deleteProjectInvitation = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 46. Phase 11: System Hooks, Instance Audit Events, Project & Group Custom Attributes & Application Settings
+// ==========================================
+export const listSystemHooks = async (req, res) => {
+  try {
+    const hooks = await GitlabService.listSystemHooks();
+    res.status(httpStatus.OK).json({ success: true, data: hooks });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing system hooks:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addSystemHook = async (req, res) => {
+  try {
+    const hook = await GitlabService.addSystemHook(req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: hook });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error adding system hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const testSystemHook = async (req, res) => {
+  try {
+    const { hookId } = req.params;
+    const result = await GitlabService.testSystemHook(hookId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error testing system hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteSystemHook = async (req, res) => {
+  try {
+    const { hookId } = req.params;
+    const result = await GitlabService.deleteSystemHook(hookId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting system hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listInstanceAuditEvents = async (req, res) => {
+  try {
+    const events = await GitlabService.listInstanceAuditEvents(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing instance audit events:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectCustomAttributes = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const attrs = await GitlabService.listProjectCustomAttributes(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: attrs });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project custom attributes:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectCustomAttribute = async (req, res) => {
+  try {
+    const { projectId, key } = req.params;
+    const attr = await GitlabService.getProjectCustomAttribute(projectId, key);
+    res.status(httpStatus.OK).json({ success: true, data: attr });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting project custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setProjectCustomAttribute = async (req, res) => {
+  try {
+    const { projectId, key } = req.params;
+    const { value } = req.body;
+    const attr = await GitlabService.setProjectCustomAttribute(
+      projectId,
+      key,
+      value,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: attr });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error setting project custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectCustomAttribute = async (req, res) => {
+  try {
+    const { projectId, key } = req.params;
+    const result = await GitlabService.deleteProjectCustomAttribute(
+      projectId,
+      key,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting project custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupCustomAttributes = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const attrs = await GitlabService.listGroupCustomAttributes(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: attrs });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing group custom attributes:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupCustomAttribute = async (req, res) => {
+  try {
+    const { groupId, key } = req.params;
+    const attr = await GitlabService.getGroupCustomAttribute(groupId, key);
+    res.status(httpStatus.OK).json({ success: true, data: attr });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting group custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setGroupCustomAttribute = async (req, res) => {
+  try {
+    const { groupId, key } = req.params;
+    const { value } = req.body;
+    const attr = await GitlabService.setGroupCustomAttribute(
+      groupId,
+      key,
+      value,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: attr });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error setting group custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupCustomAttribute = async (req, res) => {
+  try {
+    const { groupId, key } = req.params;
+    const result = await GitlabService.deleteGroupCustomAttribute(
+      groupId,
+      key,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting group custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getApplicationSettings = async (req, res) => {
+  try {
+    const settings = await GitlabService.getApplicationSettings();
+    res.status(httpStatus.OK).json({ success: true, data: settings });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting application settings:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateApplicationSettings = async (req, res) => {
+  try {
+    const settings = await GitlabService.updateApplicationSettings(req.body);
+    res.status(httpStatus.OK).json({ success: true, data: settings });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating application settings:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

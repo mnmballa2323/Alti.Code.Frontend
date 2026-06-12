@@ -6548,4 +6548,247 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 46. Phase 11: System Hooks, Instance Audit Events, Project & Group Custom Attributes & Application Settings
+  // ==========================================
+  async listSystemHooks() {
+    logger.info('🦊 [GitLab Service] Listing system hooks');
+    try {
+      const { data } = await gitlabClient.get('/system_hooks');
+      return data;
+    } catch (error) {
+      logger.error('Failed to list system hooks:', error);
+      throw error;
+    }
+  },
+
+  async addSystemHook(hookData = {}) {
+    logger.info('🦊 [GitLab Service] Adding a system hook');
+    try {
+      const { data } = await gitlabClient.post('/system_hooks', {
+        url: hookData.url,
+        token: hookData.token,
+        push_events: hookData.pushEvents,
+        tag_push_events: hookData.tagPushEvents,
+        merge_requests_events: hookData.mergeRequestsEvents,
+        repository_update_events: hookData.repositoryUpdateEvents,
+        enable_ssl_verification: hookData.enableSslVerification,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to add system hook:', error);
+      throw error;
+    }
+  },
+
+  async testSystemHook(hookId) {
+    logger.info(`🦊 [GitLab Service] Testing system hook ${hookId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/system_hooks/${encodeURIComponent(hookId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to test system hook ${hookId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteSystemHook(hookId) {
+    logger.info(`🦊 [GitLab Service] Deleting system hook ${hookId}`);
+    try {
+      await gitlabClient.delete(`/system_hooks/${encodeURIComponent(hookId)}`);
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete system hook ${hookId}:`, error);
+      throw error;
+    }
+  },
+
+  async listInstanceAuditEvents(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing instance-wide audit events');
+    try {
+      const { data } = await gitlabClient.get('/audit_events', {
+        params: {
+          created_after: params.createdAfter,
+          created_before: params.createdBefore,
+          entity_type: params.entityType,
+          entity_id: params.entityId,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list instance-wide audit events:', error);
+      throw error;
+    }
+  },
+
+  async listProjectCustomAttributes(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing custom attributes for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/custom_attributes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list project custom attributes for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectCustomAttribute(projectId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Getting custom attribute "${key}" for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get project custom attribute "${key}" for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setProjectCustomAttribute(projectId, key, value) {
+    logger.info(
+      `🦊 [GitLab Service] Setting custom attribute "${key}" to "${value}" for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/custom_attributes/${encodeURIComponent(key)}`,
+        { value },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set project custom attribute "${key}" for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectCustomAttribute(projectId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting custom attribute "${key}" for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete project custom attribute "${key}" for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGroupCustomAttributes(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing custom attributes for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/custom_attributes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list group custom attributes for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getGroupCustomAttribute(groupId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Getting custom attribute "${key}" for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get group custom attribute "${key}" for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async setGroupCustomAttribute(groupId, key, value) {
+    logger.info(
+      `🦊 [GitLab Service] Setting custom attribute "${key}" to "${value}" for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/custom_attributes/${encodeURIComponent(key)}`,
+        { value },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to set group custom attribute "${key}" for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteGroupCustomAttribute(groupId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting custom attribute "${key}" for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete group custom attribute "${key}" for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getApplicationSettings() {
+    logger.info('🦊 [GitLab Service] Fetching global application settings');
+    try {
+      const { data } = await gitlabClient.get('/application/settings');
+      return data;
+    } catch (error) {
+      logger.error('Failed to get application settings:', error);
+      throw error;
+    }
+  },
+
+  async updateApplicationSettings(settings = {}) {
+    logger.info('🦊 [GitLab Service] Updating global application settings');
+    try {
+      const { data } = await gitlabClient.put('/application/settings', settings);
+      return data;
+    } catch (error) {
+      logger.error('Failed to update application settings:', error);
+      throw error;
+    }
+  },
 };
