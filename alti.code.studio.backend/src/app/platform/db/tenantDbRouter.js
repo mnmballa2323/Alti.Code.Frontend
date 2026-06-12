@@ -7,12 +7,14 @@
  * mapping incoming requests to their respective database schemas.
  */
 
-import { getTenantPrisma, prisma } from './prismaClient.js';
+import { getTenantPrisma, prisma, getSchemaConnectionUrl } from './prismaClient.js';
 
 /**
  * Express middleware that checks the authenticated user's tenant context.
  * If the tenant has a dedicated PostgreSQL database URL configured,
  * it routes queries through a dedicated connection pool.
+ * Alternatively, if schema-level partitioning is active, it routes to a
+ * schema-partitioned pool within the shared database.
  */
 export const tenantDbRouter = async (req, res, next) => {
   try {
@@ -33,6 +35,14 @@ export const tenantDbRouter = async (req, res, next) => {
     if (tenant?.dedicatedDatabaseUrl) {
       // Route through dynamic client connection pool
       req.db = getTenantPrisma(tenantId, tenant.dedicatedDatabaseUrl);
+    } else if (process.env.SCHEMA_ISOLATION_ACTIVE === 'true') {
+      const baseDbUrl = process.env.DATABASE_URL;
+      if (baseDbUrl) {
+        const schemaUrl = getSchemaConnectionUrl(baseDbUrl, tenantId);
+        req.db = getTenantPrisma(tenantId, schemaUrl);
+      } else {
+        req.db = prisma;
+      }
     } else {
       // Fallback to global database client
       req.db = prisma;

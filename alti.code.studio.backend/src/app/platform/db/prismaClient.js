@@ -59,6 +59,29 @@ export const prisma = basePrisma.$extends(queryExtensions);
 const clientPool = new Map();
 
 /**
+ * Safely parses the base database connection URL and injects/overrides the schema query parameter
+ * @param {string} baseDbUrl - Base PostgreSQL connection URL
+ * @param {string} tenantId - Tenant UUID string
+ * @returns {string} Fully formatted schema connection URL
+ */
+export const getSchemaConnectionUrl = (baseDbUrl, tenantId) => {
+  if (!baseDbUrl) return '';
+  if (!tenantId) return baseDbUrl;
+
+  const sanitizedTenantId = tenantId.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  const schemaName = `tenant_${sanitizedTenantId}`;
+
+  try {
+    const url = new URL(baseDbUrl);
+    url.searchParams.set('schema', schemaName);
+    return url.toString();
+  } catch (error) {
+    const separator = baseDbUrl.includes('?') ? '&' : '?';
+    return `${baseDbUrl}${separator}schema=${schemaName}`;
+  }
+};
+
+/**
  * Returns a dedicated Prisma client connection pool for a specific tenant
  * @param {string} tenantId 
  * @param {string} dedicatedDbUrl 
@@ -115,4 +138,5 @@ export const prismaClient = {
   prisma,
   getTenantPrisma,
   connectPrisma,
+  getSchemaConnectionUrl,
 };

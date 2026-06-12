@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2026 Inso Code
- * 
- * Tenant Database Router Middleware Unit Tests
- */
-
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { tenantDbRouter } from './tenantDbRouter.js';
-import { prisma, getTenantPrisma } from './prismaClient.js';
+import { prisma, getTenantPrisma, getSchemaConnectionUrl } from './prismaClient.js';
 
-// Mock getTenantPrisma
+// Mock prismaClient
 vi.mock('./prismaClient.js', () => {
   return {
     prisma: {
@@ -17,12 +11,26 @@ vi.mock('./prismaClient.js', () => {
       },
     },
     getTenantPrisma: vi.fn(),
+    getSchemaConnectionUrl: vi.fn((base, id) => {
+      const sanitized = id.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+      return `${base}?schema=tenant_${sanitized}`;
+    }),
   };
 });
 
 describe('Platform Tenant Database Router Middleware', () => {
+  const originalEnvSchema = process.env.SCHEMA_ISOLATION_ACTIVE;
+  const originalEnvDb = process.env.DATABASE_URL;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    process.env.SCHEMA_ISOLATION_ACTIVE = originalEnvSchema;
+    process.env.DATABASE_URL = originalEnvDb;
+  });
+
+  afterEach(() => {
+    process.env.SCHEMA_ISOLATION_ACTIVE = originalEnvSchema;
+    process.env.DATABASE_URL = originalEnvDb;
   });
 
   it('should fallback to default shared database if req.user has no tenantId', async () => {
@@ -75,6 +83,35 @@ describe('Platform Tenant Database Router Middleware', () => {
     });
     expect(getTenantPrisma).toHaveBeenCalledWith(tenantId, dbUrl);
     expect(req.db).toBe(mockTenantDbClient);
+    expect(next).toHaveBeenCalledWith();
+  });
+
+  it('should route requests to schema-level connection pool when SCHEMA_ISOLATION_ACTIVE is active', async () => {
+    process.env.SCHEMA_ISOLATION_ACTIVE = 'true';
+    process.env.DATABASE_URL = 'postgresql://shared:pass@127.0.0.1:5432/shareddb';
+
+    const tenantId = 'tenant-789';
+    const req = { user: { tenantId } };
+    const res = {};
+    const next = vi.fn();
+
+    const mockTenantSchemaClient = { query: vi.fn() };
+
+    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: null });
+    getTenantPrisma.mockReturnValueOnce(mockTenantSchemaClient);
+
+    await tenantDbRouter(req, res, next);
+
+    expect(prisma.tenant.findUnique).toHaveBeenCalledWith({
+      where: { id: tenantId },
+      select: { dedicatedDatabaseUrl: true },
+    });
+    expect(getSchemaConnectionUrl).toHaveBeenCalledWith(
+      'postgresql://shared:pass@127.0.0.1:5432/shareddb',
+      tenantId
+    );
+    expect(getTenantPrisma).toHaveBeenCalledWith(tenantId, expect.stringContaining('schema=tenant_tenant789'));
+    expect(req.db).toBe(mockTenantSchemaClient);
     expect(next).toHaveBeenCalledWith();
   });
 
