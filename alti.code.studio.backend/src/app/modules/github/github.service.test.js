@@ -8172,7 +8172,9 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   it('should check if user is followed by authenticated user (404 error thrown)', async () => {
     const error404 = new Error('Not Found');
     error404.status = 404;
-    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(error404);
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(
+      error404,
+    );
     const result = await GithubService.checkIfUserFollowing('octocat');
     expect(result).toEqual({ following: false });
   });
@@ -8180,8 +8182,12 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
   it('should check if user is followed by authenticated user and rethrow other errors', async () => {
     const error500 = new Error('Server Error');
     error500.status = 500;
-    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(error500);
-    await expect(GithubService.checkIfUserFollowing('octocat')).rejects.toThrow('Server Error');
+    mockOctokit.rest.users.checkIfFollowingForTokenUser.mockRejectedValue(
+      error500,
+    );
+    await expect(GithubService.checkIfUserFollowing('octocat')).rejects.toThrow(
+      'Server Error',
+    );
   });
 
   it('should follow a user', async () => {

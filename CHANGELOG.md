@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.196] - 2026-06-12 — Phase 15 GitHub REST API & SDK Entrenchment
+### Added
+- **User Followers & Following**: Implemented `listFollowersForAuthenticatedUser`, `listFollowingForAuthenticatedUser`, `checkIfUserFollowing`, `followUser`, `unfollowUser`, `listFollowersForUser`, and `listFollowingForUser`. Intercepted `404 Not Found` status on checking follow status to return `{ following: false }`.
+- **Organization Invitations**: Added organization invitation management (`listPendingOrgInvitations`, `createOrgInvitation`, `cancelOrgInvitation`, and `listOrgInvitationTeams`).
+- **User Public Security Keys**: Implemented retrieving other users' public SSH and GPG keys (`listPublicKeysForUser`, `listGpgKeysForUser`).
+- **Unit Testing**: Added 16 new unit tests in `github.service.test.js` verifying success paths and `404` follower status interception, bringing the total passing tests to 443.
+
 ## [39.37.195] - 2026-06-12 — Phase 14 GitHub REST API & SDK Entrenchment
 ### Added
 - **GitHub Notifications**: Implemented `listNotificationsForAuthenticatedUser`, `markNotificationsAsRead`, `listRepoNotifications`, `markRepoNotificationsAsRead`, `getThread`, `markThreadAsRead`, `getThreadSubscription`, `setThreadSubscription`, and `deleteThreadSubscription`. Intercepted `404` status on thread subscription checks to return `{ subscribed: false }`.

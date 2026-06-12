@@ -1595,26 +1595,11 @@ router.get(
   '/user/following',
   GithubController.listFollowingForAuthenticatedUser,
 );
-router.get(
-  '/user/following/:username',
-  GithubController.checkIfUserFollowing,
-);
-router.put(
-  '/user/following/:username',
-  GithubController.followUser,
-);
-router.delete(
-  '/user/following/:username',
-  GithubController.unfollowUser,
-);
-router.get(
-  '/users/:username/followers',
-  GithubController.listFollowersForUser,
-);
-router.get(
-  '/users/:username/following',
-  GithubController.listFollowingForUser,
-);
+router.get('/user/following/:username', GithubController.checkIfUserFollowing);
+router.put('/user/following/:username', GithubController.followUser);
+router.delete('/user/following/:username', GithubController.unfollowUser);
+router.get('/users/:username/followers', GithubController.listFollowersForUser);
+router.get('/users/:username/following', GithubController.listFollowingForUser);
 
 // ==========================================
 // 68. Organization Invitations API
@@ -1623,10 +1608,7 @@ router.get(
   '/orgs/:org/invitations',
   GithubController.listPendingOrgInvitations,
 );
-router.post(
-  '/orgs/:org/invitations',
-  GithubController.createOrgInvitation,
-);
+router.post('/orgs/:org/invitations', GithubController.createOrgInvitation);
 router.delete(
   '/orgs/:org/invitations/:invitationId',
   GithubController.cancelOrgInvitation,
@@ -1639,15 +1621,8 @@ router.get(
 // ==========================================
 // 69. User Public Security Keys API
 // ==========================================
-router.get(
-  '/users/:username/keys',
-  GithubController.listPublicKeysForUser,
-);
-router.get(
-  '/users/:username/gpg_keys',
-  GithubController.listGpgKeysForUser,
-);
+router.get('/users/:username/keys', GithubController.listPublicKeysForUser);
+router.get('/users/:username/gpg_keys', GithubController.listGpgKeysForUser);
 
 export const GithubRoutes = router;
 export default router;
-
