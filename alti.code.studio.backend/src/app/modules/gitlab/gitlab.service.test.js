@@ -6555,7 +6555,10 @@ describe('GitlabService', () => {
     it('searchGlobal should perform search across the instance', async () => {
       const mockData = [{ id: 1, name: 'Search Result' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.searchGlobal('issues', 'test-query', { page: 2, perPage: 15 });
+      const result = await GitlabService.searchGlobal('issues', 'test-query', {
+        page: 2,
+        perPage: 15,
+      });
       expect(mockClient.get).toHaveBeenCalledWith('/search', {
         params: {
           scope: 'issues',
@@ -6570,7 +6573,12 @@ describe('GitlabService', () => {
     it('searchGroup should perform search inside a group', async () => {
       const mockData = [{ id: 2, name: 'Group Result' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.searchGroup('group-id', 'merge_requests', 'query', { page: 1, perPage: 20 });
+      const result = await GitlabService.searchGroup(
+        'group-id',
+        'merge_requests',
+        'query',
+        { page: 1, perPage: 20 },
+      );
       expect(mockClient.get).toHaveBeenCalledWith('/groups/group-id/search', {
         params: {
           scope: 'merge_requests',
@@ -6585,22 +6593,33 @@ describe('GitlabService', () => {
     it('searchProject should perform search inside a project', async () => {
       const mockData = [{ id: 3, name: 'Project Result' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.searchProject('project-id', 'blobs', 'query', { page: 3, perPage: 5 });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/project-id/search', {
-        params: {
-          scope: 'blobs',
-          search: 'query',
-          page: 3,
-          per_page: 5,
+      const result = await GitlabService.searchProject(
+        'project-id',
+        'blobs',
+        'query',
+        { page: 3, perPage: 5 },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/project-id/search',
+        {
+          params: {
+            scope: 'blobs',
+            search: 'query',
+            page: 3,
+            per_page: 5,
+          },
         },
-      });
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getIssuesStatistics should retrieve global issues statistics', async () => {
       const mockData = { statistics: { counts: { all: 10 } } };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getIssuesStatistics({ authorId: 4, assigneeId: 5 });
+      const result = await GitlabService.getIssuesStatistics({
+        authorId: 4,
+        assigneeId: 5,
+      });
       expect(mockClient.get).toHaveBeenCalledWith('/issues_statistics', {
         params: {
           page: undefined,
@@ -6615,31 +6634,40 @@ describe('GitlabService', () => {
     it('getGroupIssuesStatistics should retrieve group issues statistics', async () => {
       const mockData = { statistics: { counts: { all: 5 } } };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getGroupIssuesStatistics('group-id', { label: 'bug' });
-      expect(mockClient.get).toHaveBeenCalledWith('/groups/group-id/issues_statistics', {
-        params: {
-          page: undefined,
-          per_page: undefined,
-          author_id: undefined,
-          assignee_id: undefined,
-          label: 'bug',
-        },
+      const result = await GitlabService.getGroupIssuesStatistics('group-id', {
+        label: 'bug',
       });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/group-id/issues_statistics',
+        {
+          params: {
+            page: undefined,
+            per_page: undefined,
+            author_id: undefined,
+            assignee_id: undefined,
+            label: 'bug',
+          },
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getProjectIssuesStatistics should retrieve project issues statistics', async () => {
       const mockData = { statistics: { counts: { all: 2 } } };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getProjectIssuesStatistics('project-id');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/project-id/issues_statistics', {
-        params: {
-          page: undefined,
-          per_page: undefined,
-          author_id: undefined,
-          assignee_id: undefined,
+      const result =
+        await GitlabService.getProjectIssuesStatistics('project-id');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/project-id/issues_statistics',
+        {
+          params: {
+            page: undefined,
+            per_page: undefined,
+            author_id: undefined,
+            assignee_id: undefined,
+          },
         },
-      });
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6670,56 +6698,100 @@ describe('GitlabService', () => {
     it('updateAppearance should update custom branding/appearance settings', async () => {
       const mockData = { title: 'Updated Title' };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.updateAppearance({ title: 'Updated Title' });
-      expect(mockClient.put).toHaveBeenCalledWith('/application/appearance', { title: 'Updated Title' });
+      const result = await GitlabService.updateAppearance({
+        title: 'Updated Title',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/application/appearance', {
+        title: 'Updated Title',
+      });
       expect(result).toEqual(mockData);
     });
 
     it('testProjectHook should trigger a test event for project webhook', async () => {
       const mockData = { success: true };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.testProjectHook('project-id', 12, 'push_events');
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/project-id/hooks/12/test/push_events');
+      const result = await GitlabService.testProjectHook(
+        'project-id',
+        12,
+        'push_events',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/project-id/hooks/12/test/push_events',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('listProjectHookDeliveries should retrieve recent deliveries for project webhook', async () => {
       const mockData = [{ id: 1, status: 200 }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listProjectHookDeliveries('project-id', 12);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/project-id/hooks/12/deliveries');
+      const result = await GitlabService.listProjectHookDeliveries(
+        'project-id',
+        12,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/project-id/hooks/12/deliveries',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getProjectHookDelivery should retrieve details of specific delivery', async () => {
       const mockData = { id: 1, status: 200, request: { body: '{}' } };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getProjectHookDelivery('project-id', 12, 100);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/project-id/hooks/12/deliveries/100');
+      const result = await GitlabService.getProjectHookDelivery(
+        'project-id',
+        12,
+        100,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/project-id/hooks/12/deliveries/100',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getProjectHookDelivery should return safe default on 404', async () => {
       const mockError = { response: { status: 404 } };
       mockClient.get.mockRejectedValueOnce(mockError);
-      const result = await GitlabService.getProjectHookDelivery('project-id', 12, 100);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/project-id/hooks/12/deliveries/100');
-      expect(result).toEqual({ id: null, status: null, request: {}, response: {} });
+      const result = await GitlabService.getProjectHookDelivery(
+        'project-id',
+        12,
+        100,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/project-id/hooks/12/deliveries/100',
+      );
+      expect(result).toEqual({
+        id: null,
+        status: null,
+        request: {},
+        response: {},
+      });
     });
 
     it('resubmitProjectHookDelivery should trigger resubmission of webhook delivery', async () => {
       const mockData = { success: true };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.resubmitProjectHookDelivery('project-id', 12, 100);
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/project-id/hooks/12/deliveries/100/resubmit');
+      const result = await GitlabService.resubmitProjectHookDelivery(
+        'project-id',
+        12,
+        100,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/project-id/hooks/12/deliveries/100/resubmit',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('testGroupHook should trigger a test event for group webhook', async () => {
       const mockData = { success: true };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.testGroupHook('group-id', 34, 'merge_requests_events');
-      expect(mockClient.post).toHaveBeenCalledWith('/groups/group-id/hooks/34/test/merge_requests_events');
+      const result = await GitlabService.testGroupHook(
+        'group-id',
+        34,
+        'merge_requests_events',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/group-id/hooks/34/test/merge_requests_events',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6727,19 +6799,29 @@ describe('GitlabService', () => {
       const mockData = { status: 'valid', errors: [] };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.lintCI('content');
-      expect(mockClient.post).toHaveBeenCalledWith('/ci/lint', { content: 'content' });
+      expect(mockClient.post).toHaveBeenCalledWith('/ci/lint', {
+        content: 'content',
+      });
       expect(result).toEqual(mockData);
     });
 
     it('lintProjectCI should validate CI configuration in project context', async () => {
       const mockData = { status: 'valid', errors: [] };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.lintProjectCI('project-id', 'content', true, true);
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/project-id/ci/lint', {
-        content: 'content',
-        dry_run: true,
-        include_merged_yaml: true,
-      });
+      const result = await GitlabService.lintProjectCI(
+        'project-id',
+        'content',
+        true,
+        true,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/project-id/ci/lint',
+        {
+          content: 'content',
+          dry_run: true,
+          include_merged_yaml: true,
+        },
+      );
       expect(result).toEqual(mockData);
     });
   });

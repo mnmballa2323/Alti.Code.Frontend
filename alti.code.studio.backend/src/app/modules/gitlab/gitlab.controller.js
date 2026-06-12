@@ -7165,7 +7165,12 @@ export const searchGroup = async (req, res) => {
   try {
     const { groupId } = req.params;
     const { scope, search } = req.query;
-    const result = await GitlabService.searchGroup(groupId, scope, search, req.query);
+    const result = await GitlabService.searchGroup(
+      groupId,
+      scope,
+      search,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error group search:', error);
@@ -7179,7 +7184,12 @@ export const searchProject = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { scope, search } = req.query;
-    const result = await GitlabService.searchProject(projectId, scope, search, req.query);
+    const result = await GitlabService.searchProject(
+      projectId,
+      scope,
+      search,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error project search:', error);
@@ -7194,7 +7204,10 @@ export const getIssuesStatistics = async (req, res) => {
     const result = await GitlabService.getIssuesStatistics(req.query);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting global issues statistics:', error);
+    logger.error(
+      '[GitLab Controller] Error getting global issues statistics:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7204,10 +7217,16 @@ export const getIssuesStatistics = async (req, res) => {
 export const getGroupIssuesStatistics = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const result = await GitlabService.getGroupIssuesStatistics(groupId, req.query);
+    const result = await GitlabService.getGroupIssuesStatistics(
+      groupId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting group issues statistics:', error);
+    logger.error(
+      '[GitLab Controller] Error getting group issues statistics:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7217,10 +7236,16 @@ export const getGroupIssuesStatistics = async (req, res) => {
 export const getProjectIssuesStatistics = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const result = await GitlabService.getProjectIssuesStatistics(projectId, req.query);
+    const result = await GitlabService.getProjectIssuesStatistics(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project issues statistics:', error);
+    logger.error(
+      '[GitLab Controller] Error getting project issues statistics:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7232,7 +7257,10 @@ export const getApplicationStatistics = async (req, res) => {
     const result = await GitlabService.getApplicationStatistics();
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting application statistics:', error);
+    logger.error(
+      '[GitLab Controller] Error getting application statistics:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7266,7 +7294,11 @@ export const updateAppearance = async (req, res) => {
 export const testProjectHook = async (req, res) => {
   try {
     const { projectId, hookId, trigger } = req.params;
-    const result = await GitlabService.testProjectHook(projectId, hookId, trigger);
+    const result = await GitlabService.testProjectHook(
+      projectId,
+      hookId,
+      trigger,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error testing project hook:', error);
@@ -7279,10 +7311,16 @@ export const testProjectHook = async (req, res) => {
 export const listProjectHookDeliveries = async (req, res) => {
   try {
     const { projectId, hookId } = req.params;
-    const result = await GitlabService.listProjectHookDeliveries(projectId, hookId);
+    const result = await GitlabService.listProjectHookDeliveries(
+      projectId,
+      hookId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing project hook deliveries:', error);
+    logger.error(
+      '[GitLab Controller] Error listing project hook deliveries:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7292,10 +7330,17 @@ export const listProjectHookDeliveries = async (req, res) => {
 export const getProjectHookDelivery = async (req, res) => {
   try {
     const { projectId, hookId, deliveryId } = req.params;
-    const result = await GitlabService.getProjectHookDelivery(projectId, hookId, deliveryId);
+    const result = await GitlabService.getProjectHookDelivery(
+      projectId,
+      hookId,
+      deliveryId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project hook delivery:', error);
+    logger.error(
+      '[GitLab Controller] Error getting project hook delivery:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7305,10 +7350,17 @@ export const getProjectHookDelivery = async (req, res) => {
 export const resubmitProjectHookDelivery = async (req, res) => {
   try {
     const { projectId, hookId, deliveryId } = req.params;
-    const result = await GitlabService.resubmitProjectHookDelivery(projectId, hookId, deliveryId);
+    const result = await GitlabService.resubmitProjectHookDelivery(
+      projectId,
+      hookId,
+      deliveryId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error resubmitting project hook delivery:', error);
+    logger.error(
+      '[GitLab Controller] Error resubmitting project hook delivery:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7345,7 +7397,12 @@ export const lintProjectCI = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { content, dryRun, includeMergedYaml } = req.body;
-    const result = await GitlabService.lintProjectCI(projectId, content, dryRun, includeMergedYaml);
+    const result = await GitlabService.lintProjectCI(
+      projectId,
+      content,
+      dryRun,
+      includeMergedYaml,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error linting project CI:', error);

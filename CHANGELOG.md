@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.217] - 2026-06-12 — Phase 17 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 17 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Global/Group/Project Search (searching globally, within groups, or within projects), Issues Statistics (global, group, and project level issues stats), Application Statistics (system resource counts), Appearance Settings (custom brand settings GET/PUT), Project Hook Deliveries & Testing (hook test dispatching, list deliveries, get delivery details, and redeliveries/resubmissions), and Group Hook Testing, and CI/CD Linting (global and project-contextual CI YAML configuration checking). Intercepted `404` status on hook delivery lookups to return `{ id: null, status: null, request: {}, response: {} }` and appearance settings to return `{ title: "", description: "" }`.
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` response envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 456 passing tests.
+
 ## [39.37.216] - 2026-06-12 — Phase 16 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 16 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Epic Notes (listing, details, creating, updating, and deleting epic notes), Project Snippet Notes (listing, details, creating, updating, and deleting snippet notes), and Extended Issue/MR Notes (getting, updating, and deleting notes/comments for issues and merge requests). Intercepted `404` status on note lookup to return `{ id: null, body: "" }`.
