@@ -8,7 +8,7 @@
 import * as zod from 'zod';
 const { z } = zod;
 
-const userRoleValues = ['tenant', 'landlord', 'admin', 'unauthorized'];
+const userRoleValues = ['tenant', 'landlord', 'admin', 'unauthorized', 'owner'];
 
 const UserValidationSchema = z.object({
   body: z.object({

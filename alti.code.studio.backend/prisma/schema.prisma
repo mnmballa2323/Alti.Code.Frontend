@@ -23,6 +23,7 @@ enum Role {
   buyer
   admin
   unauthorized
+  owner
 }
 
 enum TenantRole {
