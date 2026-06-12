@@ -60,10 +60,15 @@ export default function PricingSection() {
             >
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
-                  {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-black dark:text-white tracking-tight mb-6 text-left">
-                    {plan.name}
-                  </h3>
+                  {/* Plan Name & Cloud Type */}
+                  <div className="flex justify-between items-baseline mb-6 gap-4">
+                    <h3 className="text-2xl font-bold text-black dark:text-white tracking-tight text-left">
+                      {plan.name}
+                    </h3>
+                    <span className="text-xs text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">
+                      Multi-Tenant Private Cloud
+                    </span>
+                  </div>
 
                   {/* Price Display */}
                   <div className="flex items-baseline gap-1 mb-6 text-left">
