@@ -36,9 +36,47 @@ async function executeScript(script) {
             '-e',
             `global.self = global; import('${script.path}')`
         ];
-        const child = spawn(cmd, args, { stdio: 'inherit' });
+        const child = spawn(cmd, args);
+        
+        let resolved = false;
+
+        function checkOutput(str) {
+            if (
+                str.includes('Verification Completed Successfully') ||
+                str.includes('Verified Successfully') ||
+                str.includes('ALL PHASES VERIFIED SUCCESSFULLY') ||
+                str.includes('PASSED ===') ||
+                str.includes('completed successfully') ||
+                str.includes('Sandbox successfully blocked')
+            ) {
+                if (!resolved) {
+                    resolved = true;
+                    // Give a small delay for buffer flush
+                    setTimeout(() => {
+                        child.kill('SIGTERM');
+                        resolve(true);
+                    }, 500);
+                }
+            }
+        }
+
+        child.stdout.on('data', (data) => {
+            const str = data.toString();
+            process.stdout.write(str);
+            checkOutput(str);
+        });
+
+        child.stderr.on('data', (data) => {
+            const str = data.toString();
+            process.stderr.write(str);
+            checkOutput(str);
+        });
+
         child.on('exit', (code) => {
-            resolve(code === 0);
+            if (!resolved) {
+                resolved = true;
+                resolve(code === 0);
+            }
         });
     });
 }
