@@ -11,6 +11,7 @@ const plans = [
     cta: "Start Free Trial",
     buttonClass:
       "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
+    cloudType: "Multi-Tenant Private Cloud",
   },
   {
     name: "Team",
@@ -20,6 +21,7 @@ const plans = [
     cta: "Upgrade Team",
     buttonClass:
       "bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600",
+    cloudType: "Single-Tenant Private Cloud",
   },
   {
     name: "Enterprise",
@@ -29,6 +31,7 @@ const plans = [
     cta: "Contact Enterprise",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
+    cloudType: "Multi-Tenant Private Cloud",
   },
 ];
 
@@ -65,8 +68,8 @@ export default function PricingSection() {
                     <h3 className="text-2xl font-bold text-black dark:text-white tracking-tight text-left">
                       {plan.name}
                     </h3>
-                    <span className="text-xs text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">
-                      Multi-Tenant Private Cloud
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">
+                      {plan.cloudType}
                     </span>
                   </div>
 
