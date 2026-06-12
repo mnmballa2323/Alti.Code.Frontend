@@ -5,6 +5,10 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.200] - 2026-06-12 — Sovereign Architecture & GitHub Integration Documentation
+### Added
+- **GitHub & Deployment Documentation**: Created a comprehensive, professional architecture and deployment guide under `docs/GITHUB_INTEGRATIONS_AND_DEPLOYMENT.md` detailing the Direct GitHub API/SDK wrapper structure, logical/physical isolation tiers, and operational shell scripts (e.g. blue-green deployment, self-healing api monitor).
+
 ## [39.37.199] - 2026-06-12 — OpenStack Infrastructure Defaults Hardening
 ### Changed
 - **Sovereign Cloud OpenStack Defaults**: Upgraded default compute flavor to `m1.2xlarge` (16 vCPUs, 32 GB RAM) and persistent Cinder boot volume size to `250` GB in `terraform/variables.tf` to support all 15+ microservices and backend databases out of the box with zero-friction, one-click team deployments.
