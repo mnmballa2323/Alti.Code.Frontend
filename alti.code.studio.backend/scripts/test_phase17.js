@@ -4,8 +4,38 @@ import { adrService } from '../src/app/modules/docs/adr.service.js';
 import fs from 'fs/promises';
 import path from 'path';
 
+const ADR_DIR = path.join(process.cwd(), 'docs', 'adr');
+const BACKUP_DIR = path.join(process.cwd(), 'docs', 'adr_backup');
+
+async function setup() {
+    await fs.mkdir(BACKUP_DIR, { recursive: true });
+    try {
+        const files = await fs.readdir(ADR_DIR);
+        for (const file of files) {
+            await fs.copyFile(path.join(ADR_DIR, file), path.join(BACKUP_DIR, file));
+            await fs.unlink(path.join(ADR_DIR, file));
+        }
+    } catch (e) {
+        // Safe to ignore if docs/adr doesn't exist
+    }
+}
+
+async function cleanup() {
+    try {
+        const files = await fs.readdir(BACKUP_DIR);
+        for (const file of files) {
+            await fs.mkdir(ADR_DIR, { recursive: true });
+            await fs.copyFile(path.join(BACKUP_DIR, file), path.join(ADR_DIR, file));
+        }
+        await fs.rm(BACKUP_DIR, { recursive: true, force: true });
+    } catch (e) {
+        // Safe to ignore
+    }
+}
+
 async function verifyPhase17() {
     console.log("🚀 Testing Phase 17: The Archivist...");
+    await setup();
 
     try {
         // --- TEST 1: DOCS SITE GEN ---
@@ -51,7 +81,10 @@ async function verifyPhase17() {
 
     } catch (error) {
         console.error("❌ Verification Failed:", error);
+        await cleanup();
         process.exit(1);
+    } finally {
+        await cleanup();
     }
 }
 
