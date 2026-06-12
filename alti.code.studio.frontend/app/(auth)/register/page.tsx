@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
+  const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
   const router = useRouter();
 
