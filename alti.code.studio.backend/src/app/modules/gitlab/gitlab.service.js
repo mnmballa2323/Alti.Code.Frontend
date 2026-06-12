@@ -8286,4 +8286,262 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 52. Phase 17: Global/Group/Project Search, Issues Statistics, Application Statistics & Settings, Webhook Test API & Deliveries, and CI/CD Linting
+  // ==========================================
+  async searchGlobal(scope, search, params = {}) {
+    logger.info(`🦊 [GitLab Service] Performing global search for ${search} in scope ${scope}`);
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get('/search', {
+        params: {
+          scope,
+          search,
+          page,
+          per_page: perPage,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed global search for ${search}:`, error);
+      throw error;
+    }
+  },
+
+  async searchGroup(groupId, scope, search, params = {}) {
+    logger.info(`🦊 [GitLab Service] Performing search for ${search} in group ${groupId} for scope ${scope}`);
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(`/groups/${encodeURIComponent(groupId)}/search`, {
+        params: {
+          scope,
+          search,
+          page,
+          per_page: perPage,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed search in group ${groupId} for ${search}:`, error);
+      throw error;
+    }
+  },
+
+  async searchProject(projectId, scope, search, params = {}) {
+    logger.info(`🦊 [GitLab Service] Performing search for ${search} in project ${projectId} for scope ${scope}`);
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(`/projects/${encodeURIComponent(projectId)}/search`, {
+        params: {
+          scope,
+          search,
+          page,
+          per_page: perPage,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed search in project ${projectId} for ${search}:`, error);
+      throw error;
+    }
+  },
+
+  async getIssuesStatistics(params = {}) {
+    logger.info('🦊 [GitLab Service] Fetching global issues statistics');
+    try {
+      const { page, perPage, authorId, assigneeId, ...rest } = params;
+      const { data } = await gitlabClient.get('/issues_statistics', {
+        params: {
+          page,
+          per_page: perPage,
+          author_id: authorId,
+          assignee_id: assigneeId,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch global issues statistics:', error);
+      throw error;
+    }
+  },
+
+  async getGroupIssuesStatistics(groupId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Fetching issues statistics for group ${groupId}`);
+    try {
+      const { page, perPage, authorId, assigneeId, ...rest } = params;
+      const { data } = await gitlabClient.get(`/groups/${encodeURIComponent(groupId)}/issues_statistics`, {
+        params: {
+          page,
+          per_page: perPage,
+          author_id: authorId,
+          assignee_id: assigneeId,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch issues statistics for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectIssuesStatistics(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Fetching issues statistics for project ${projectId}`);
+    try {
+      const { page, perPage, authorId, assigneeId, ...rest } = params;
+      const { data } = await gitlabClient.get(`/projects/${encodeURIComponent(projectId)}/issues_statistics`, {
+        params: {
+          page,
+          per_page: perPage,
+          author_id: authorId,
+          assignee_id: assigneeId,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to fetch issues statistics for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getApplicationStatistics() {
+    logger.info('🦊 [GitLab Service] Fetching application statistics');
+    try {
+      const { data } = await gitlabClient.get('/application/statistics');
+      return data;
+    } catch (error) {
+      logger.error('Failed to fetch application statistics:', error);
+      throw error;
+    }
+  },
+
+  async getAppearance() {
+    logger.info('🦊 [GitLab Service] Fetching application appearance settings');
+    try {
+      const { data } = await gitlabClient.get('/application/appearance');
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info('Appearance settings not found (404), returning safe default');
+        return { title: '', description: '' };
+      }
+      logger.error('Failed to fetch application appearance settings:', error);
+      throw error;
+    }
+  },
+
+  async updateAppearance(appearanceData = {}) {
+    logger.info('🦊 [GitLab Service] Updating application appearance settings');
+    try {
+      const { data } = await gitlabClient.put('/application/appearance', appearanceData);
+      return data;
+    } catch (error) {
+      logger.error('Failed to update application appearance settings:', error);
+      throw error;
+    }
+  },
+
+  async testProjectHook(projectId, hookId, trigger) {
+    logger.info(`🦊 [GitLab Service] Testing hook ${hookId} in project ${projectId} with trigger ${trigger}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/hooks/${encodeURIComponent(hookId)}/test/${encodeURIComponent(trigger)}`
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to test hook ${hookId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listProjectHookDeliveries(projectId, hookId) {
+    logger.info(`🦊 [GitLab Service] Listing deliveries for hook ${hookId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/hooks/${encodeURIComponent(hookId)}/deliveries`
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list deliveries for hook ${hookId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectHookDelivery(projectId, hookId, deliveryId) {
+    logger.info(`🦊 [GitLab Service] Getting delivery ${deliveryId} for hook ${hookId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/hooks/${encodeURIComponent(hookId)}/deliveries/${encodeURIComponent(deliveryId)}`
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(`Hook delivery ${deliveryId} not found, returning safe default`);
+        return { id: null, status: null, request: {}, response: {} };
+      }
+      logger.error(`Failed to get delivery ${deliveryId} for hook ${hookId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async resubmitProjectHookDelivery(projectId, hookId, deliveryId) {
+    logger.info(`🦊 [GitLab Service] Resubmitting delivery ${deliveryId} for hook ${hookId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/hooks/${encodeURIComponent(hookId)}/deliveries/${encodeURIComponent(deliveryId)}/resubmit`
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to resubmit delivery ${deliveryId} for hook ${hookId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async testGroupHook(groupId, hookId, trigger) {
+    logger.info(`🦊 [GitLab Service] Testing hook ${hookId} in group ${groupId} with trigger ${trigger}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/hooks/${encodeURIComponent(hookId)}/test/${encodeURIComponent(trigger)}`
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to test hook ${hookId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async lintCI(content) {
+    logger.info('🦊 [GitLab Service] Performing global CI lint check');
+    try {
+      const { data } = await gitlabClient.post('/ci/lint', { content });
+      return data;
+    } catch (error) {
+      logger.error('Failed to perform global CI lint:', error);
+      throw error;
+    }
+  },
+
+  async lintProjectCI(projectId, content, dryRun = false, includeMergedYaml = false) {
+    logger.info(`🦊 [GitLab Service] Performing project-contextual CI lint for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/ci/lint`,
+        {
+          content,
+          dry_run: dryRun,
+          include_merged_yaml: includeMergedYaml,
+        }
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed project CI lint for project ${projectId}:`, error);
+      throw error;
+    }
+  },
 };

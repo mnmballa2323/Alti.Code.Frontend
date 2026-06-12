@@ -7144,3 +7144,213 @@ export const deleteProjectSnippetNote = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 52. Phase 17: Global/Group/Project Search, Issues Statistics, Application Statistics & Settings, Webhook Test API & Deliveries, and CI/CD Linting
+// ==========================================
+export const searchGlobal = async (req, res) => {
+  try {
+    const { scope, search } = req.query;
+    const result = await GitlabService.searchGlobal(scope, search, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error global search:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const searchGroup = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const { scope, search } = req.query;
+    const result = await GitlabService.searchGroup(groupId, scope, search, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error group search:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const searchProject = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { scope, search } = req.query;
+    const result = await GitlabService.searchProject(projectId, scope, search, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error project search:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getIssuesStatistics = async (req, res) => {
+  try {
+    const result = await GitlabService.getIssuesStatistics(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting global issues statistics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupIssuesStatistics = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const result = await GitlabService.getGroupIssuesStatistics(groupId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting group issues statistics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectIssuesStatistics = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.getProjectIssuesStatistics(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project issues statistics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getApplicationStatistics = async (req, res) => {
+  try {
+    const result = await GitlabService.getApplicationStatistics();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting application statistics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getAppearance = async (req, res) => {
+  try {
+    const result = await GitlabService.getAppearance();
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting appearance:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateAppearance = async (req, res) => {
+  try {
+    const result = await GitlabService.updateAppearance(req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating appearance:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const testProjectHook = async (req, res) => {
+  try {
+    const { projectId, hookId, trigger } = req.params;
+    const result = await GitlabService.testProjectHook(projectId, hookId, trigger);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error testing project hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectHookDeliveries = async (req, res) => {
+  try {
+    const { projectId, hookId } = req.params;
+    const result = await GitlabService.listProjectHookDeliveries(projectId, hookId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project hook deliveries:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectHookDelivery = async (req, res) => {
+  try {
+    const { projectId, hookId, deliveryId } = req.params;
+    const result = await GitlabService.getProjectHookDelivery(projectId, hookId, deliveryId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project hook delivery:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const resubmitProjectHookDelivery = async (req, res) => {
+  try {
+    const { projectId, hookId, deliveryId } = req.params;
+    const result = await GitlabService.resubmitProjectHookDelivery(projectId, hookId, deliveryId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error resubmitting project hook delivery:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const testGroupHook = async (req, res) => {
+  try {
+    const { groupId, hookId, trigger } = req.params;
+    const result = await GitlabService.testGroupHook(groupId, hookId, trigger);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error testing group hook:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const lintCI = async (req, res) => {
+  try {
+    const { content } = req.body;
+    const result = await GitlabService.lintCI(content);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error linting CI:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const lintProjectCI = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { content, dryRun, includeMergedYaml } = req.body;
+    const result = await GitlabService.lintProjectCI(projectId, content, dryRun, includeMergedYaml);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error linting project CI:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

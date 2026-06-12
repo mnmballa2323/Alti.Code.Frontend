@@ -1720,4 +1720,29 @@ router.delete(
   GitlabController.deleteProjectSnippetNote,
 );
 
+// ==========================================
+// 52. Phase 17: Global/Group/Project Search, Issues Statistics, Application Statistics & Settings, Webhook Test API & Deliveries, and CI/CD Linting
+// ==========================================
+router.get('/search', GitlabController.searchGlobal);
+router.get('/groups/:groupId/search', GitlabController.searchGroup);
+router.get('/projects/:projectId/search', GitlabController.searchProject);
+
+router.get('/issues_statistics', GitlabController.getIssuesStatistics);
+router.get('/groups/:groupId/issues_statistics', GitlabController.getGroupIssuesStatistics);
+router.get('/projects/:projectId/issues_statistics', GitlabController.getProjectIssuesStatistics);
+
+router.get('/application/statistics', GitlabController.getApplicationStatistics);
+router.get('/application/appearance', GitlabController.getAppearance);
+router.put('/application/appearance', GitlabController.updateAppearance);
+
+router.post('/projects/:projectId/hooks/:hookId/test/:trigger', GitlabController.testProjectHook);
+router.get('/projects/:projectId/hooks/:hookId/deliveries', GitlabController.listProjectHookDeliveries);
+router.get('/projects/:projectId/hooks/:hookId/deliveries/:deliveryId', GitlabController.getProjectHookDelivery);
+router.post('/projects/:projectId/hooks/:hookId/deliveries/:deliveryId/resubmit', GitlabController.resubmitProjectHookDelivery);
+
+router.post('/groups/:groupId/hooks/:hookId/test/:trigger', GitlabController.testGroupHook);
+
+router.post('/ci/lint', GitlabController.lintCI);
+router.post('/projects/:projectId/ci/lint', GitlabController.lintProjectCI);
+
 export const GitlabRoutes = router;
