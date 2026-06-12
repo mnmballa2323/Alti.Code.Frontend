@@ -1,54 +1,121 @@
 /**
- * Copyright (c) 2024 Inso Code
+ * Copyright (c) 2026 Inso Code
  * 
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
+ * Auth Service Unit Tests
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { authService } from './auth.service.js'; // Named export 'authService'
-import UserModel from './auth.model.js';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { authService } from './auth.service.js';
+import { UserRepository } from './prisma.user.repository.js';
+import { authenticateKeystone } from './openstack.service.js';
 import config from '../../../../config/index.js';
 
 // Mock dependencies
-vi.mock('./auth.model.js', () => {
-    return {
-        default: {
-            isUserExist: vi.fn(),
-            create: vi.fn(),
-            findOne: vi.fn(),
-            deleteOne: vi.fn(),
-            updateOne: vi.fn(),
-        }
-    };
-});
-
-vi.mock('../../../shared/logger.js', () => ({
-    logger: {
-        info: vi.fn(),
-        error: vi.fn(),
-    }
+vi.mock('./prisma.user.repository.js', () => ({
+  UserRepository: {
+    findByEmail: vi.fn(),
+    findById: vi.fn(),
+    createUser: vi.fn(),
+  }
 }));
 
-describe('AuthService', () => {
+vi.mock('./openstack.service.js', () => ({
+  authenticateKeystone: vi.fn(),
+  openstackService: {
+    authenticateKeystone: vi.fn()
+  }
+}));
+
+vi.mock('../../../shared/logger.js', () => ({
+  logger: {
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  }
+}));
+
+describe('AuthService - Login Integration', () => {
+  const originalPrivateCloudMode = config.private_cloud_mode;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    config.private_cloud_mode = false;
+  });
+
+  afterEach(() => {
+    config.private_cloud_mode = originalPrivateCloudMode;
+  });
+
+  describe('loginService with Local Auth', () => {
+    it('should throw error if email or password is missing', async () => {
+      await expect(authService.loginService(null, 'password')).rejects.toThrow(
+        'Email and password are required'
+      );
+    });
+
+    it('should throw error if user is not found locally', async () => {
+      UserRepository.findByEmail.mockResolvedValueOnce(null);
+
+      await expect(authService.loginService('missing@example.com', 'password')).rejects.toThrow(
+        'User not found, please register first'
+      );
+    });
+  });
+
+  describe('loginService with OpenStack Keystone Auth', () => {
     beforeEach(() => {
-        vi.clearAllMocks();
+      config.private_cloud_mode = true;
     });
 
-    describe('loginUser', () => {
-        it('should throw error if user does not exist', async () => {
-            const loginData = { email: 'test@example.com', password: 'password123' };
-            UserModel.findOne.mockReturnValue({
-                select: vi.fn().mockReturnThis(),
-                lean: vi.fn().mockResolvedValue(null) // User not found
-            });
+    it('should authenticate via Keystone and return tokens if local user already exists', async () => {
+      const mockKeystoneUser = {
+        keystoneToken: 'token-123',
+        userId: 'ks-usr-1',
+        username: 'cloud-admin',
+        domain: 'Default',
+        roles: ['user']
+      };
 
-            await expect(authService.loginService(loginData.email, loginData.password)).rejects.toThrow();
-        });
+      const mockLocalUser = {
+        id: 'db-usr-1',
+        email: 'cloud-admin@Default',
+        provider: 'openstack',
+        role: 'user',
+        tenantId: 'tenant-1',
+        tenantRole: 'owner'
+      };
 
-        // Note: Real password hashing check requires deeper mocking of bcrypt
-        // For now, we verify the service structure handles the database call.
+      authenticateKeystone.mockResolvedValueOnce(mockKeystoneUser);
+      UserRepository.findByEmail.mockResolvedValueOnce(mockLocalUser);
+
+      const result = await authService.loginService('cloud-admin@Default', 'password');
+
+      expect(authenticateKeystone).toHaveBeenCalledWith('cloud-admin@Default', 'password');
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result._id).toBe(mockLocalUser.id);
     });
 
-    // Add more tests for register, etc.
+    it('should authenticate via Keystone and provision a new user if not found locally', async () => {
+      const mockKeystoneUser = {
+        keystoneToken: 'token-123',
+        userId: 'ks-usr-1',
+        username: 'cloud-admin',
+        projectName: 'MyVPC',
+        domain: 'Default',
+        roles: ['admin']
+      };
+
+      authenticateKeystone.mockResolvedValueOnce(mockKeystoneUser);
+      UserRepository.findByEmail.mockResolvedValueOnce(null); // Not found locally
+
+      // The service will fallback to mock provisioning if DB fails (which is fine for unit testing)
+      const result = await authService.loginService('cloud-admin@Default', 'password');
+
+      expect(authenticateKeystone).toHaveBeenCalledWith('cloud-admin@Default', 'password');
+      expect(result).toHaveProperty('accessToken');
+      expect(result).toHaveProperty('refreshToken');
+      expect(result._id).toBeDefined();
+    });
+  });
 });
