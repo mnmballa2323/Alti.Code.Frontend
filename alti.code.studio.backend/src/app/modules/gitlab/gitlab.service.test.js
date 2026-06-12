@@ -7233,11 +7233,12 @@ describe('GitlabService', () => {
     it('listMergeRequestResourceIterationEvents should list MR iteration events', async () => {
       const mockData = [{ id: 2, iteration_id: 20 }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listMergeRequestResourceIterationEvents(
-        'proj123',
-        'mr8',
-        { page: 1, perPage: 10 },
-      );
+      const result =
+        await GitlabService.listMergeRequestResourceIterationEvents(
+          'proj123',
+          'mr8',
+          { page: 1, perPage: 10 },
+        );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/projects/proj123/merge_requests/mr8/resource_iteration_events',
         {

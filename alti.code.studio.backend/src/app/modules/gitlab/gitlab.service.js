@@ -9095,7 +9095,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list MR iteration events for MR ${mrIid}:`, error);
+      logger.error(
+        `Failed to list MR iteration events for MR ${mrIid}:`,
+        error,
+      );
       throw error;
     }
   },

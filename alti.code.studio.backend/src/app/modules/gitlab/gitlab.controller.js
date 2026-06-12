@@ -7951,4 +7951,3 @@ export const deleteOAuthApplication = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
-
