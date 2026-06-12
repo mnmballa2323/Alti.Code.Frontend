@@ -8683,12 +8683,17 @@ export const GitlabService = {
     }
   },
 
-  async bulkDeleteContainerRepositoryTags(projectId, repositoryId, params = {}) {
+  async bulkDeleteContainerRepositoryTags(
+    projectId,
+    repositoryId,
+    params = {},
+  ) {
     logger.info(
       `🦊 [GitLab Service] Bulk deleting container repository tags in repository ${repositoryId} of project ${projectId}`,
     );
     try {
-      const { nameRegexDelete, keepN, nameRegex, nameRegexKeep, ...rest } = params;
+      const { nameRegexDelete, keepN, nameRegex, nameRegexKeep, ...rest } =
+        params;
       const { data } = await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/registry/repositories/${encodeURIComponent(repositoryId)}/tags`,
         {
@@ -8743,7 +8748,9 @@ export const GitlabService = {
   },
 
   async listGeoNodesStatus(params = {}) {
-    logger.info('🦊 [GitLab Service] Listing status for all Geo replication nodes');
+    logger.info(
+      '🦊 [GitLab Service] Listing status for all Geo replication nodes',
+    );
     try {
       const { page, perPage, ...rest } = params;
       const { data } = await gitlabClient.get('/geo_nodes/status', {
@@ -8755,7 +8762,10 @@ export const GitlabService = {
       });
       return data;
     } catch (error) {
-      logger.error('Failed to list status for all Geo replication nodes:', error);
+      logger.error(
+        'Failed to list status for all Geo replication nodes:',
+        error,
+      );
       throw error;
     }
   },
@@ -8825,7 +8835,8 @@ export const GitlabService = {
   async importProject(formData) {
     logger.info('🦊 [GitLab Service] Importing project from export archive');
     try {
-      const headers = typeof formData.getHeaders === 'function' ? formData.getHeaders() : {};
+      const headers =
+        typeof formData.getHeaders === 'function' ? formData.getHeaders() : {};
       const { data } = await gitlabClient.post('/projects/import', formData, {
         headers,
       });

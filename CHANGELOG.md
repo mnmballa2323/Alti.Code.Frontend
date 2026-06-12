@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.218] - 2026-06-12 — Phase 18 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 18 Core Wrappers**: Implemented 11 new service methods inside `gitlab.service.js` covering Container Registry Tags (listing tags, getting details, deleting a tag, and bulk deletions), GitLab Geo replication nodes (listing Geo nodes, getting status of specific node, and listing status of all Geo nodes), and Project Import/Export (scheduling export, export status checks, downloading export archives, and importing projects from archives). Intercepted `404` status on container registry tag details to return `{ name: null, path: "", location: "" }` and on project export status to return `{ export_status: "none", message: "Export not started" }`.
+- **GitLab Express Routing & Controllers**: Implemented all corresponding controllers returning `{ success: true, data }` envelopes and routes mapped under the `/api/v1/gitlab` namespace, supporting multipart file uploads for project imports.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 469 passing tests.
+
 ## [39.37.217] - 2026-06-12 — Phase 17 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 17 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Global/Group/Project Search (searching globally, within groups, or within projects), Issues Statistics (global, group, and project level issues stats), Application Statistics (system resource counts), Appearance Settings (custom brand settings GET/PUT), Project Hook Deliveries & Testing (hook test dispatching, list deliveries, get delivery details, and redeliveries/resubmissions), and Group Hook Testing, and CI/CD Linting (global and project-contextual CI YAML configuration checking). Intercepted `404` status on hook delivery lookups to return `{ id: null, status: null, request: {}, response: {} }` and appearance settings to return `{ title: "", description: "" }`.

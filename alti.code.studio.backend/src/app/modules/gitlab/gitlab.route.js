@@ -1794,8 +1794,14 @@ router.get('/geo_nodes', GitlabController.listGeoNodes);
 router.get('/geo_nodes/status', GitlabController.listGeoNodesStatus);
 router.get('/geo_nodes/:nodeId/status', GitlabController.getGeoNodeStatus);
 
-router.post('/projects/:projectId/export', GitlabController.scheduleProjectExport);
-router.get('/projects/:projectId/export', GitlabController.getProjectExportStatus);
+router.post(
+  '/projects/:projectId/export',
+  GitlabController.scheduleProjectExport,
+);
+router.get(
+  '/projects/:projectId/export',
+  GitlabController.getProjectExportStatus,
+);
 router.get(
   '/projects/:projectId/export/download',
   GitlabController.downloadProjectExport,

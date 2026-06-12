@@ -7502,7 +7502,10 @@ export const listGeoNodes = async (req, res) => {
     const nodes = await GitlabService.listGeoNodes(req.query);
     res.status(httpStatus.OK).json({ success: true, data: nodes });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing Geo replication nodes:', error);
+    logger.error(
+      '[GitLab Controller] Error listing Geo replication nodes:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7537,7 +7540,10 @@ export const listGeoNodesStatus = async (req, res) => {
 export const scheduleProjectExport = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const result = await GitlabService.scheduleProjectExport(projectId, req.body);
+    const result = await GitlabService.scheduleProjectExport(
+      projectId,
+      req.body,
+    );
     res.status(httpStatus.ACCEPTED).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error scheduling project export:', error);
@@ -7553,7 +7559,10 @@ export const getProjectExportStatus = async (req, res) => {
     const status = await GitlabService.getProjectExportStatus(projectId);
     res.status(httpStatus.OK).json({ success: true, data: status });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project export status:', error);
+    logger.error(
+      '[GitLab Controller] Error getting project export status:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7571,7 +7580,10 @@ export const downloadProjectExport = async (req, res) => {
     );
     res.status(httpStatus.OK).send(Buffer.from(data));
   } catch (error) {
-    logger.error('[GitLab Controller] Error downloading project export:', error);
+    logger.error(
+      '[GitLab Controller] Error downloading project export:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -7600,15 +7612,20 @@ export const importProject = async (req, res) => {
 
     const result = await GitlabService.importProject(form);
 
-    fs.unlink(req.file.path, (err) => {
-      if (err) logger.error('[GitLab Controller] Error cleaning up import file:', err);
+    fs.unlink(req.file.path, err => {
+      if (err)
+        logger.error('[GitLab Controller] Error cleaning up import file:', err);
     });
 
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
     if (req.file && req.file.path) {
-      fs.unlink(req.file.path, (err) => {
-        if (err) logger.error('[GitLab Controller] Error cleaning up import file on error:', err);
+      fs.unlink(req.file.path, err => {
+        if (err)
+          logger.error(
+            '[GitLab Controller] Error cleaning up import file on error:',
+            err,
+          );
       });
     }
     logger.error('[GitLab Controller] Error importing project:', error);

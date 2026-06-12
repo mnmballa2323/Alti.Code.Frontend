@@ -6833,10 +6833,14 @@ describe('GitlabService', () => {
     it('listContainerRepositoryTags should fetch repository tags list', async () => {
       const mockData = [{ name: 'v1.0' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listContainerRepositoryTags('proj123', 'repo456', {
-        page: 2,
-        perPage: 15,
-      });
+      const result = await GitlabService.listContainerRepositoryTags(
+        'proj123',
+        'repo456',
+        {
+          page: 2,
+          perPage: 15,
+        },
+      );
       expect(mockClient.get).toHaveBeenCalledWith(
         '/projects/proj123/registry/repositories/repo456/tags',
         {
@@ -6936,7 +6940,10 @@ describe('GitlabService', () => {
     it('listGeoNodesStatus should fetch statuses of all Geo nodes', async () => {
       const mockData = [{ id: 1, healthy: true }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listGeoNodesStatus({ page: 1, perPage: 20 });
+      const result = await GitlabService.listGeoNodesStatus({
+        page: 1,
+        perPage: 20,
+      });
       expect(mockClient.get).toHaveBeenCalledWith('/geo_nodes/status', {
         params: {
           page: 1,
@@ -6970,16 +6977,22 @@ describe('GitlabService', () => {
       const mockError = { response: { status: 404 } };
       mockClient.get.mockRejectedValueOnce(mockError);
       const result = await GitlabService.getProjectExportStatus('proj123');
-      expect(result).toEqual({ export_status: 'none', message: 'Export not started' });
+      expect(result).toEqual({
+        export_status: 'none',
+        message: 'Export not started',
+      });
     });
 
     it('downloadProjectExport should retrieve raw binary download buffer', async () => {
       const mockData = new ArrayBuffer(8);
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.downloadProjectExport('proj123');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/proj123/export/download', {
-        responseType: 'arraybuffer',
-      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/export/download',
+        {
+          responseType: 'arraybuffer',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6990,9 +7003,13 @@ describe('GitlabService', () => {
         getHeaders: () => ({ 'content-type': 'multipart/form-data' }),
       };
       const result = await GitlabService.importProject(mockForm);
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/import', mockForm, {
-        headers: { 'content-type': 'multipart/form-data' },
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/import',
+        mockForm,
+        {
+          headers: { 'content-type': 'multipart/form-data' },
+        },
+      );
       expect(result).toEqual(mockData);
     });
   });
