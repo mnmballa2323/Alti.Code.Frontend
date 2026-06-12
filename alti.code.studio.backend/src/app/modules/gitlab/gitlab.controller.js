@@ -4696,3 +4696,304 @@ export const listMergeRequestResourceMilestoneEvents = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 47. Phase 8: Compliance & Security Handlers
+// ==========================================
+export const listProjectDependencies = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const dependencies = await GitlabService.listProjectDependencies(
+      projectId,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: dependencies });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project dependencies:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupComplianceFrameworks = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const frameworks = await GitlabService.listGroupComplianceFrameworks(
+      groupId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: frameworks });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing group compliance frameworks:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupComplianceFramework = async (req, res) => {
+  try {
+    const { groupId, frameworkId } = req.params;
+    const framework = await GitlabService.getGroupComplianceFramework(
+      groupId,
+      frameworkId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: framework });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting group compliance framework:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupComplianceFramework = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const framework = await GitlabService.createGroupComplianceFramework(
+      groupId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: framework });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating group compliance framework:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupComplianceFramework = async (req, res) => {
+  try {
+    const { groupId, frameworkId } = req.params;
+    const framework = await GitlabService.updateGroupComplianceFramework(
+      groupId,
+      frameworkId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: framework });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating group compliance framework:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupComplianceFramework = async (req, res) => {
+  try {
+    const { groupId, frameworkId } = req.params;
+    const result = await GitlabService.deleteGroupComplianceFramework(
+      groupId,
+      frameworkId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting group compliance framework:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectComplianceFramework = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const settings = await GitlabService.getProjectComplianceFramework(
+      projectId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: settings });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting project compliance framework settings:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectManagedLicenses = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const licenses = await GitlabService.listProjectManagedLicenses(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: licenses });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project managed licenses:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectManagedLicense = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const license = await GitlabService.createProjectManagedLicense(
+      projectId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: license });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating project managed license:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectManagedLicense = async (req, res) => {
+  try {
+    const { projectId, licenseId } = req.params;
+    const license = await GitlabService.updateProjectManagedLicense(
+      projectId,
+      licenseId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: license });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating project managed license:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectManagedLicense = async (req, res) => {
+  try {
+    const { projectId, licenseId } = req.params;
+    const result = await GitlabService.deleteProjectManagedLicense(
+      projectId,
+      licenseId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting project managed license:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProtectedEnvironments = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const environments = await GitlabService.listProtectedEnvironments(
+      projectId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: environments });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing protected environments:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProtectedEnvironment = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const environment = await GitlabService.getProtectedEnvironment(
+      projectId,
+      name,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: environment });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting protected environment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const protectEnvironment = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const environment = await GitlabService.protectEnvironment(
+      projectId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: environment });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error protecting environment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProtectedEnvironment = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const environment = await GitlabService.updateProtectedEnvironment(
+      projectId,
+      name,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: environment });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error updating protected environment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unprotectEnvironment = async (req, res) => {
+  try {
+    const { projectId, name } = req.params;
+    const result = await GitlabService.unprotectEnvironment(projectId, name);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error unprotecting environment:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

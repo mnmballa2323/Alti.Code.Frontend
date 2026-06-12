@@ -5519,4 +5519,281 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 47. Phase 8: Compliance & Security Endpoints
+  // ==========================================
+  async listProjectDependencies(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing dependencies for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/dependencies`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 20,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project dependencies:`, error);
+      throw error;
+    }
+  },
+
+  async listGroupComplianceFrameworks(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing compliance frameworks for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/compliance_frameworks`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list group compliance frameworks:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupComplianceFramework(groupId, frameworkId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching compliance framework ${frameworkId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/compliance_frameworks/${frameworkId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get group compliance framework:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupComplianceFramework(groupId, frameworkData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating compliance framework in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/compliance_frameworks`,
+        {
+          name: frameworkData.name,
+          description: frameworkData.description,
+          color: frameworkData.color,
+          default: frameworkData.default,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create group compliance framework:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupComplianceFramework(groupId, frameworkId, frameworkData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating compliance framework ${frameworkId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/compliance_frameworks/${frameworkId}`,
+        {
+          name: frameworkData.name,
+          description: frameworkData.description,
+          color: frameworkData.color,
+          default: frameworkData.default,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update group compliance framework:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupComplianceFramework(groupId, frameworkId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting compliance framework ${frameworkId} in group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/compliance_frameworks/${frameworkId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete group compliance framework:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectComplianceFramework(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching compliance framework for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/compliance_frameworks`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get project compliance framework:`, error);
+      throw error;
+    }
+  },
+
+  async listProjectManagedLicenses(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing managed licenses for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/managed_licenses`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project managed licenses:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectManagedLicense(projectId, licenseData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating managed license for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/managed_licenses`,
+        {
+          name: licenseData.name,
+          approval_status: licenseData.approvalStatus,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create project managed license:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectManagedLicense(projectId, licenseId, licenseData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating managed license ${licenseId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.patch(
+        `/projects/${encodeURIComponent(projectId)}/managed_licenses/${licenseId}`,
+        {
+          approval_status: licenseData.approvalStatus,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update project managed license:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectManagedLicense(projectId, licenseId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting managed license ${licenseId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/managed_licenses/${licenseId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete project managed license:`, error);
+      throw error;
+    }
+  },
+
+  async listProtectedEnvironments(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing protected environments for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_environments`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list protected environments:`, error);
+      throw error;
+    }
+  },
+
+  async getProtectedEnvironment(projectId, name) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching protected environment ${name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/protected_environments/${encodeURIComponent(name)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get protected environment ${name}:`, error);
+      throw error;
+    }
+  },
+
+  async protectEnvironment(projectId, environmentData) {
+    logger.info(
+      `🦊 [GitLab Service] Protecting environment ${environmentData.name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/protected_environments`,
+        {
+          name: environmentData.name,
+          deploy_access_levels: environmentData.deployAccessLevels,
+          required_approval_count: environmentData.requiredApprovalCount,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to protect environment:`, error);
+      throw error;
+    }
+  },
+
+  async updateProtectedEnvironment(projectId, name, environmentData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating protected environment ${name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/protected_environments/${encodeURIComponent(name)}`,
+        {
+          deploy_access_levels: environmentData.deployAccessLevels,
+          required_approval_count: environmentData.requiredApprovalCount,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update protected environment ${name}:`, error);
+      throw error;
+    }
+  },
+
+  async unprotectEnvironment(projectId, name) {
+    logger.info(
+      `🦊 [GitLab Service] Unprotecting environment ${name} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/protected_environments/${encodeURIComponent(name)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to unprotect environment ${name}:`, error);
+      throw error;
+    }
+  },
 };

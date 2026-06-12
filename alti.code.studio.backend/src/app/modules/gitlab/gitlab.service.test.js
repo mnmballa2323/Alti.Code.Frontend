@@ -4433,4 +4433,229 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 42. Phase 8: Compliance & Security Endpoints
+  // ==========================================
+  describe('42. Phase 8: Compliance & Security Endpoints', () => {
+    // 1. Dependency List
+    it('listProjectDependencies should retrieve project dependencies list', async () => {
+      const mockData = [{ name: 'lodash', version: '4.17.21' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectDependencies('my-project', {
+        page: 2,
+        perPage: 15,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/dependencies',
+        {
+          params: {
+            page: 2,
+            per_page: 15,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 2. Compliance Frameworks
+    it('listGroupComplianceFrameworks should fetch compliance frameworks for group', async () => {
+      const mockData = [{ id: 1, name: 'SOC2' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupComplianceFrameworks('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/compliance_frameworks',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupComplianceFramework should fetch specific framework details', async () => {
+      const mockData = { id: 1, name: 'SOC2' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupComplianceFramework('my-group', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/compliance_frameworks/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupComplianceFramework should post configuration', async () => {
+      const mockData = { id: 1, name: 'SOC2' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupComplianceFramework('my-group', {
+        name: 'SOC2',
+        description: 'desc',
+        color: '#ff0000',
+        default: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/my-group/compliance_frameworks',
+        {
+          name: 'SOC2',
+          description: 'desc',
+          color: '#ff0000',
+          default: true,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupComplianceFramework should put updated configurations', async () => {
+      const mockData = { id: 1, name: 'SOC2-v2' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupComplianceFramework('my-group', 1, {
+        name: 'SOC2-v2',
+        description: 'new desc',
+        color: '#00ff00',
+        default: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/my-group/compliance_frameworks/1',
+        {
+          name: 'SOC2-v2',
+          description: 'new desc',
+          color: '#00ff00',
+          default: false,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupComplianceFramework should delete group framework', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupComplianceFramework('my-group', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/compliance_frameworks/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getProjectComplianceFramework should fetch framework settings for project', async () => {
+      const mockData = [{ id: 1, name: 'SOC2' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectComplianceFramework('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/compliance_frameworks',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 3. License Compliance
+    it('listProjectManagedLicenses should fetch managed licenses for project', async () => {
+      const mockData = [{ id: 1, name: 'MIT', approval_status: 'approved' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectManagedLicenses('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/managed_licenses',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectManagedLicense should post license configuration', async () => {
+      const mockData = { id: 1, name: 'GPL', approval_status: 'blacklisted' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectManagedLicense('my-project', {
+        name: 'GPL',
+        approvalStatus: 'blacklisted',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/managed_licenses',
+        {
+          name: 'GPL',
+          approval_status: 'blacklisted',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectManagedLicense should patch updated approval status', async () => {
+      const mockData = { id: 1, approval_status: 'approved' };
+      mockClient.patch.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectManagedLicense('my-project', 1, {
+        approvalStatus: 'approved',
+      });
+      expect(mockClient.patch).toHaveBeenCalledWith(
+        '/projects/my-project/managed_licenses/1',
+        {
+          approval_status: 'approved',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectManagedLicense should delete managed license', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectManagedLicense('my-project', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/managed_licenses/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 4. Protected Environments
+    it('listProtectedEnvironments should fetch protected environments list', async () => {
+      const mockData = [{ environment: 'production' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProtectedEnvironments('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/protected_environments',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProtectedEnvironment should fetch environment protection settings', async () => {
+      const mockData = { environment: 'production', deploy_access_levels: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProtectedEnvironment('my-project', 'production');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/protected_environments/production',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('protectEnvironment should post protect environment configuration', async () => {
+      const mockData = { environment: 'production' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.protectEnvironment('my-project', {
+        name: 'production',
+        deployAccessLevels: [{ access_level: 40 }],
+        requiredApprovalCount: 2,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/protected_environments',
+        {
+          name: 'production',
+          deploy_access_levels: [{ access_level: 40 }],
+          required_approval_count: 2,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProtectedEnvironment should put updated protection parameters', async () => {
+      const mockData = { environment: 'production' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProtectedEnvironment('my-project', 'production', {
+        deployAccessLevels: [{ access_level: 30 }],
+        requiredApprovalCount: 1,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/protected_environments/production',
+        {
+          deploy_access_levels: [{ access_level: 30 }],
+          required_approval_count: 1,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('unprotectEnvironment should delete protected environment configuration', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.unprotectEnvironment('my-project', 'production');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/protected_environments/production',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

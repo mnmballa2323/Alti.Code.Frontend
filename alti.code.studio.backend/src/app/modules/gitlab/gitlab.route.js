@@ -1108,4 +1108,83 @@ router.get(
   GitlabController.listMergeRequestResourceMilestoneEvents,
 );
 
+// ==========================================
+// 42. Phase 8 Endpoints
+// ==========================================
+// 1. Dependency List
+router.get(
+  '/projects/:projectId/dependencies',
+  GitlabController.listProjectDependencies,
+);
+
+// 2. Compliance Frameworks
+router.get(
+  '/groups/:groupId/compliance_frameworks',
+  GitlabController.listGroupComplianceFrameworks,
+);
+router.post(
+  '/groups/:groupId/compliance_frameworks',
+  GitlabController.createGroupComplianceFramework,
+);
+router.get(
+  '/groups/:groupId/compliance_frameworks/:frameworkId',
+  GitlabController.getGroupComplianceFramework,
+);
+router.put(
+  '/groups/:groupId/compliance_frameworks/:frameworkId',
+  GitlabController.updateGroupComplianceFramework,
+);
+router.delete(
+  '/groups/:groupId/compliance_frameworks/:frameworkId',
+  GitlabController.deleteGroupComplianceFramework,
+);
+router.get(
+  '/projects/:projectId/compliance_frameworks',
+  GitlabController.getProjectComplianceFramework,
+);
+
+// 3. License Compliance
+router.get(
+  '/projects/:projectId/managed_licenses',
+  GitlabController.listProjectManagedLicenses,
+);
+router.post(
+  '/projects/:projectId/managed_licenses',
+  GitlabController.createProjectManagedLicense,
+);
+router.put(
+  '/projects/:projectId/managed_licenses/:licenseId',
+  GitlabController.updateProjectManagedLicense,
+);
+router.patch(
+  '/projects/:projectId/managed_licenses/:licenseId',
+  GitlabController.updateProjectManagedLicense,
+);
+router.delete(
+  '/projects/:projectId/managed_licenses/:licenseId',
+  GitlabController.deleteProjectManagedLicense,
+);
+
+// 4. Protected Environments
+router.get(
+  '/projects/:projectId/protected_environments',
+  GitlabController.listProtectedEnvironments,
+);
+router.post(
+  '/projects/:projectId/protected_environments',
+  GitlabController.protectEnvironment,
+);
+router.get(
+  '/projects/:projectId/protected_environments/:name',
+  GitlabController.getProtectedEnvironment,
+);
+router.put(
+  '/projects/:projectId/protected_environments/:name',
+  GitlabController.updateProtectedEnvironment,
+);
+router.delete(
+  '/projects/:projectId/protected_environments/:name',
+  GitlabController.unprotectEnvironment,
+);
+
 export const GitlabRoutes = router;
