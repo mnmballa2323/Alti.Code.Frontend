@@ -218,10 +218,8 @@ export default function TeamMembersPage() {
 
                 {/* Table Header */}
                 <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-                  <div className="col-span-3">First Name</div>
-                  <div className="col-span-3">Last Name</div>
-                  <div className="col-span-4">Email Address</div>
-                  <div className="col-span-2">Role</div>
+                  <div className="col-span-9">Email Address</div>
+                  <div className="col-span-3">Role</div>
                 </div>
               </div>
 
@@ -231,30 +229,6 @@ export default function TeamMembersPage() {
                   sortedFilteredMembers.map((member) => {
                     const isYou = member.email === currentUser?.email;
 
-                    // Try to split name into first and last, or extract from email if not set
-                    let firstName = "";
-                    let lastName = "";
-
-                    if (member.name) {
-                      const nameParts = member.name.trim().split(/\s+/);
-
-                      firstName = nameParts[0] || "";
-                      lastName = nameParts.slice(1).join(" ") || "";
-                    } else {
-                      const emailPrefix = member.email.split("@")[0] || "";
-                      const parts = emailPrefix.split(/[\._\-]/);
-
-                      firstName = parts[0]
-                        ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
-                        : "";
-                      lastName = parts.slice(1).join(" ")
-                        ? parts
-                            .slice(1)
-                            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-                            .join(" ")
-                        : "";
-                    }
-
                     return (
                       <div
                         key={member.id}
@@ -263,13 +237,7 @@ export default function TeamMembersPage() {
                           router.push(`/admin/team-members/${member.id}`)
                         }
                       >
-                        <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
-                          {firstName || "—"}
-                        </div>
-                        <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">
-                          {lastName || "—"}
-                        </div>
-                        <div className="col-span-4 flex items-center gap-2">
+                        <div className="col-span-9 flex items-center gap-2">
                           <span className="text-neutral-600 dark:text-neutral-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
                             {member.email}
                           </span>
@@ -279,7 +247,7 @@ export default function TeamMembersPage() {
                             </span>
                           )}
                         </div>
-                        <div className="col-span-2 flex items-center justify-between">
+                        <div className="col-span-3 flex items-center justify-between">
                           <div className="relative flex items-center w-full max-w-[120px] -ml-2">
                             {isYou ? (
                               <span
