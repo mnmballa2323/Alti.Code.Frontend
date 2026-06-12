@@ -17,6 +17,7 @@ vi.mock('./agentmemory.service.js', () => ({
     agentMemoryService: {
         isReady: true,
         smartSearch: vi.fn(),
+        getContext: vi.fn(),
     }
 }));
 
@@ -225,6 +226,36 @@ capabilities:
             await autonomousRepairDaemon.scanForArchitecturalDecay();
 
             expect(mockDream).toHaveBeenCalled();
+        });
+    });
+
+    describe('AgentMemoryHooks Local MD Entrenchment', () => {
+        it('should inject local memory rules matched by keywords', async () => {
+            const mockMemoryMd = `# Alti.Code.Studio Memory\n\n- Redis running on port 6379 in server.js\n- Postgres database uses pgvector extension\n- General unrelated rule\n`;
+            vi.spyOn(fs, 'readFile').mockResolvedValue(mockMemoryMd);
+
+            const { AgentMemoryHooks } = await import('./agentmemory.hooks.js');
+            agentMemoryService.smartSearch.mockResolvedValue({ results: [] });
+
+            const results = await AgentMemoryHooks.recallContext('We need to check the Redis port configuration', 5);
+
+            expect(results).toContain('[MimoMemory] Redis running on port 6379 in server.js');
+            expect(results).not.toContain('[MimoMemory] Postgres database uses pgvector extension');
+            expect(results).not.toContain('[MimoMemory] General unrelated rule');
+        });
+
+        it('should prepend local memory rules to project context', async () => {
+            const mockMemoryMd = `# Alti.Code.Studio Memory\n- Redis running on 6379\n`;
+            vi.spyOn(fs, 'readFile').mockResolvedValue(mockMemoryMd);
+
+            const { AgentMemoryHooks } = await import('./agentmemory.hooks.js');
+            agentMemoryService.getContext.mockResolvedValue({ context: 'AgentMemory context' });
+
+            const context = await AgentMemoryHooks.getProjectContext(2000);
+
+            expect(context).toContain('=== COMPACTED LONG-TERM MEMORY RULES ===');
+            expect(context).toContain('- Redis running on 6379');
+            expect(context).toContain('AgentMemory context');
         });
     });
 });
