@@ -6,23 +6,32 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import httpStatus from 'http-status';
-import { routePlatformCompletion, sanitizeError } from './modelGateway.js';
+import { routePlatformCompletion, callWithRetry, sanitizeError } from './modelGateway.js';
 import config from '../../../../config/index.js';
+
+// Define shared spy mocks that can be asserted on in individual tests
+const vertexGenerateContentMock = vi.fn().mockResolvedValue({
+  response: {
+    candidates: [{ content: { parts: [{ text: 'Gemini Vertex AI mock reply' }] } }]
+  }
+});
+
+const bedrockCreateMock = vi.fn().mockResolvedValue({
+  content: [{ text: 'AWS Bedrock mock reply' }]
+});
+
+const azureCreateMock = vi.fn().mockResolvedValue({
+  choices: [{ message: { content: 'Azure OpenAI mock reply' } }]
+});
 
 // Mock GCP Vertex AI using Class syntax to satisfy constructor constraints
 vi.mock('@google-cloud/vertexai', () => {
-  const generateContentMock = vi.fn().mockResolvedValue({
-    response: {
-      candidates: [{ content: { parts: [{ text: 'Gemini Vertex AI mock reply' }] } }]
-    }
-  });
-
   return {
     VertexAI: class {
       constructor() {}
       getGenerativeModel() {
         return {
-          generateContent: generateContentMock
+          generateContent: vertexGenerateContentMock
         };
       }
     }
@@ -31,15 +40,11 @@ vi.mock('@google-cloud/vertexai', () => {
 
 // Mock AWS Bedrock using Class syntax to satisfy constructor constraints
 vi.mock('@anthropic-ai/bedrock-sdk', () => {
-  const createMock = vi.fn().mockResolvedValue({
-    content: [{ text: 'AWS Bedrock mock reply' }]
-  });
-
   return {
     AnthropicBedrock: class {
       constructor() {
         this.messages = {
-          create: createMock
+          create: bedrockCreateMock
         };
       }
     }
@@ -48,22 +53,31 @@ vi.mock('@anthropic-ai/bedrock-sdk', () => {
 
 // Mock Azure OpenAI using Class syntax to satisfy constructor constraints
 vi.mock('openai', () => {
-  const createMock = vi.fn().mockResolvedValue({
-    choices: [{ message: { content: 'Azure OpenAI mock reply' } }]
-  });
-
   return {
     AzureOpenAI: class {
       constructor() {
         this.chat = {
           completions: {
-            create: createMock
+            create: azureCreateMock
           }
         };
       }
     }
   };
 });
+
+// Mock Google DLP Service
+vi.mock('../../modules/googleCloud/dlp.service.js', () => ({
+  redactText: vi.fn().mockImplementation(async (text) => `[REDACTED] ${text}`)
+}));
+
+// Mock Headroom AI context compressor
+vi.mock('headroom-ai', () => ({
+  compress: vi.fn().mockImplementation(async (messages) => ({
+    messages: [{ content: `[COMPRESSED] ${messages[0].content}` }],
+    tokensSaved: 42
+  }))
+}));
 
 describe('Platform Model Gateway', () => {
   const originalGcpProject = config.gcp?.project_id;
@@ -138,5 +152,56 @@ describe('Platform Model Gateway', () => {
     expect(sanitized).not.toContain('AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6');
     expect(sanitized).toContain('sk-...[MASKED]');
     expect(sanitized).toContain('AIzaSy...[MASKED]');
+  });
+
+  describe('Transient Error Retries (callWithRetry)', () => {
+    it('should resolve immediately if function succeeds first attempt', async () => {
+      const mockFn = vi.fn().mockResolvedValue('success');
+      const result = await callWithRetry(mockFn, 3, 10);
+      
+      expect(mockFn).toHaveBeenCalledTimes(1);
+      expect(result).toBe('success');
+    });
+
+    it('should retry on transient status code and succeed on second attempt', async () => {
+      const mockFn = vi.fn()
+        .mockRejectedValueOnce({ status: 429, message: 'Too Many Requests' })
+        .mockResolvedValueOnce('recovered');
+        
+      const result = await callWithRetry(mockFn, 2, 5);
+      
+      expect(mockFn).toHaveBeenCalledTimes(2);
+      expect(result).toBe('recovered');
+    });
+
+    it('should fail immediately without retries on non-transient status codes', async () => {
+      const mockFn = vi.fn().mockRejectedValue({ status: 400, message: 'Bad Request' });
+      
+      await expect(callWithRetry(mockFn, 3, 5)).rejects.toEqual({ status: 400, message: 'Bad Request' });
+      expect(mockFn).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Pipeline Pre-processing: DLP & Token Compression', () => {
+    it('should run prompt through DLP scrubbing and headroom compression when requested', async () => {
+      bedrockCreateMock.mockResolvedValueOnce({
+        content: [{ text: 'reply' }]
+      });
+
+      await routePlatformCompletion({
+        provider: 'aws',
+        model: 'claude-3-5-sonnet',
+        prompt: 'Clean prompt',
+        scrubPrompt: true,
+        compressPrompt: true
+      });
+
+      // The prompt sent to Bedrock should be first scrubbed, then compressed
+      expect(bedrockCreateMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          messages: [{ role: 'user', content: '[COMPRESSED] [REDACTED] Clean prompt' }]
+        })
+      );
+    });
   });
 });

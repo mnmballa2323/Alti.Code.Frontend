@@ -8,7 +8,8 @@
  * - AWS Bedrock (for Claude)
  * - Azure OpenAI Foundry (for GPT)
  * 
- * Enforces security rules by disallowing direct OpenAI and Anthropic SDK endpoints.
+ * Enforces security rules by disallowing direct OpenAI and Anthropic SDK endpoints,
+ * and includes transient error retries, DLP scrubbing, and context compression.
  */
 
 import { VertexAI } from '@google-cloud/vertexai';
@@ -32,15 +33,38 @@ export const sanitizeError = (message) => {
 };
 
 /**
+ * Retries a function on transient errors
+ */
+export const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
+  let attempt = 0;
+  while (attempt <= maxRetries) {
+    try {
+      return await fn();
+    } catch (err) {
+      attempt++;
+      const status = err.status || err.statusCode || 0;
+      const isTransient = status === 429 || status >= 500 || err.message?.includes('timeout') || err.message?.includes('ETIMEDOUT');
+      if (attempt > maxRetries || !isTransient) {
+        throw err;
+      }
+      logger.warn(`⚠️ [Model Gateway] Transient error encountered (attempt ${attempt}/${maxRetries}). Retrying in ${delay * attempt}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delay * attempt));
+    }
+  }
+};
+
+/**
  * Routes text completion request to authorized Tri-Cloud endpoints
  * @param {object} params
  * @param {string} params.provider - 'gcp' | 'aws' | 'azure'
  * @param {string} params.model - Specific model ID
  * @param {string} params.prompt - Input prompt
  * @param {number} [params.temperature] - Generation temperature
+ * @param {boolean} [params.scrubPrompt] - Enable Google Cloud DLP redaction
+ * @param {boolean} [params.compressPrompt] - Enable Headroom AI compression
  * @returns {Promise<string>} Completion text response
  */
-export const routePlatformCompletion = async ({ provider, model, prompt, temperature = 0.5 }) => {
+export const routePlatformCompletion = async ({ provider, model, prompt, temperature = 0.5, scrubPrompt = false, compressPrompt = false }) => {
   // Security validation: Block direct Anthropic or OpenAI API configurations
   if (provider === 'openai' || provider === 'anthropic') {
     logger.error(`🚫 [Model Gateway] Blocked direct connection attempt to provider: ${provider}`);
@@ -48,6 +72,38 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
       httpStatus.FORBIDDEN,
       'Security Policy Exception: Direct API connections to OpenAI and Anthropic are blocked. Please use Azure OpenAI Foundry or AWS Bedrock.'
     );
+  }
+
+  let activePrompt = prompt;
+
+  // 1. Google Cloud DLP Redaction
+  if (scrubPrompt) {
+    try {
+      logger.info('🛡️ [Model Gateway] Redacting sensitive content via Google Cloud DLP...');
+      const { redactText } = await import('../../modules/googleCloud/dlp.service.js');
+      activePrompt = await redactText(activePrompt);
+    } catch (err) {
+      logger.warn(`⚠️ [Model Gateway] Google Cloud DLP failed, falling back to original prompt: ${err.message}`);
+    }
+  }
+
+  // 2. Headroom AI Context Compression
+  if (compressPrompt) {
+    try {
+      logger.info('🗜️ [Model Gateway] Compressing prompt tokens via Headroom AI...');
+      const { compress } = await import('headroom-ai');
+      const messages = [{ role: 'user', content: activePrompt }];
+      const result = await compress(messages, {
+        model: model,
+        baseUrl: process.env.HEADROOM_PROXY_URL || 'http://localhost:8787'
+      });
+      if (result?.messages?.[0]?.content) {
+        activePrompt = result.messages[0].content;
+        logger.info(`✅ [Model Gateway] Context compressed successfully. Saved ${result.tokensSaved || 0} tokens.`);
+      }
+    } catch (err) {
+      logger.warn(`⚠️ [Model Gateway] Headroom compression failed, falling back to uncompressed: ${err.message}`);
+    }
   }
 
   logger.info(`🔀 [Model Gateway] Routing completion request | Provider: ${provider} | Model: ${model}`);
@@ -70,7 +126,7 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
           generationConfig: { temperature }
         });
 
-        const response = await vertexModel.generateContent(prompt);
+        const response = await callWithRetry(() => vertexModel.generateContent(activePrompt));
         const candidates = response?.response?.candidates;
         if (!candidates || candidates.length === 0) {
           throw new Error('Vertex AI returned empty response candidates.');
@@ -100,12 +156,12 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
           bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
         }
 
-        const response = await bedrock.messages.create({
+        const response = await callWithRetry(() => bedrock.messages.create({
           model: bedrockModelId,
           max_tokens: 4096,
           temperature,
-          messages: [{ role: 'user', content: prompt }]
-        });
+          messages: [{ role: 'user', content: activePrompt }]
+        }));
 
         return response.content[0].text;
       }
@@ -126,11 +182,11 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
         });
 
         const deploymentName = model.replace(/^azure\//, '');
-        const response = await client.chat.completions.create({
+        const response = await callWithRetry(() => client.chat.completions.create({
           model: deploymentName,
           temperature,
-          messages: [{ role: 'user', content: prompt }]
-        });
+          messages: [{ role: 'user', content: activePrompt }]
+        }));
 
         return response.choices[0].message.content;
       }
@@ -155,5 +211,6 @@ export const routePlatformCompletion = async ({ provider, model, prompt, tempera
 
 export const modelGateway = {
   routePlatformCompletion,
+  callWithRetry,
   sanitizeError
 };
