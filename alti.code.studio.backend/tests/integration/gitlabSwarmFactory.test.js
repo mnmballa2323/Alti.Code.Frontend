@@ -90,7 +90,7 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
     ];
 
     for (const id of sampleIds) {
-      const registered = agentRegistry.get(id);
+      const registered = agentRegistry.get(id, 'test-tenant-id');
       expect(registered).toBeDefined();
       expect(registered.name).toBe(id);
       expect(registered.isPlugin).toBe(true);
@@ -140,7 +140,7 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
       .mockResolvedValue('Mocked Swarm specialist synthesis');
 
     for (const item of queryRoutes) {
-      const result = await gitlabDocsService.dispatchQueryToSwarm(item.query);
+      const result = await gitlabDocsService.dispatchQueryToSwarm(item.query, null, 'test-tenant-id');
       expect(result.agent).toBe(item.expectedAgent);
       expect(result.content).toBe('Mocked Swarm specialist synthesis');
     }
@@ -173,6 +173,8 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
 
     const result = await gitlabDocsService.dispatchQueryToSwarm(
       'create a new project',
+      null,
+      'test-tenant-id'
     );
     expect(result.agent).toBe('gitlabProjectCreator');
 
@@ -213,6 +215,8 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
 
     const result = await gitlabDocsService.dispatchQueryToSwarm(
       'merge this merge request',
+      null,
+      'test-tenant-id'
     );
     expect(result.agent).toBe('gitlabMrMerger');
 
