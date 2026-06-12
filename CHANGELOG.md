@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.215] - 2026-06-12 — Phase 15 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 15 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Kubernetes Cluster Agents (listing, details, creating, and deleting agents), Cluster Agent Tokens (listing, creating, and deleting tokens), Package Protection Rules (listing, creating, updating, and deleting rules), and CI/CD Pipeline Triggers (listing, details, creating, updating, and deleting triggers). Intercepted `404` status on cluster agent token lookup to return a safe `[]` default.
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` response envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 418 passing tests.
+
 ## [39.37.214] - 2026-06-12 — Phase 14 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 14 Core Wrappers**: Implemented 17 new service methods inside `gitlab.service.js` covering Protected Tags (listing, details, creating, and deleting/unprotecting tags), DORA Metrics (retrieving project-level DORA metrics data), Feature Flags (listing, details, creating, updating, and deleting feature flags), Resource Groups (listing, details, and updating process_mode), and Group Iteration Cadences (listing, creating, updating, and deleting cadences). Intercepted `404` status on protected tag lookup to return `{ protected: false }`.

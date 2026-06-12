@@ -6124,7 +6124,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 1, name: 'agent-1' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listProjectClusterAgents('123');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6132,22 +6134,32 @@ describe('GitlabService', () => {
       const mockData = { id: 1, name: 'agent-1' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.getProjectClusterAgent('123', 1);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('createProjectClusterAgent should post new cluster agent', async () => {
       const mockData = { id: 1, name: 'agent-1' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.createProjectClusterAgent('123', 'agent-1');
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/cluster_agents', { name: 'agent-1' });
+      const result = await GitlabService.createProjectClusterAgent(
+        '123',
+        'agent-1',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents',
+        { name: 'agent-1' },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteProjectClusterAgent should delete cluster agent', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deleteProjectClusterAgent('123', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/cluster_agents/1');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -6155,7 +6167,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 5, name: 'token-1' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listClusterAgentTokens('123', 1);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1/tokens',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6163,7 +6177,9 @@ describe('GitlabService', () => {
       const mockError = { response: { status: 404 } };
       mockClient.get.mockRejectedValueOnce(mockError);
       const result = await GitlabService.listClusterAgentTokens('123', 1);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1/tokens',
+      );
       expect(result).toEqual([]);
     });
 
@@ -6174,17 +6190,22 @@ describe('GitlabService', () => {
         name: 'token-1',
         description: 'token desc',
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens', {
-        name: 'token-1',
-        description: 'token desc',
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1/tokens',
+        {
+          name: 'token-1',
+          description: 'token desc',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteClusterAgentToken should delete cluster agent token', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deleteClusterAgentToken('123', 1, 5);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens/5');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/cluster_agents/1/tokens/5',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -6192,7 +6213,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 1, package_name_pattern: '@scope/*' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listPackageProtectionRules('123');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/packages/protection/rules');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/packages/protection/rules',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6204,11 +6227,14 @@ describe('GitlabService', () => {
         packageType: 'npm',
         minimumAccessLevelForPush: 'maintainer',
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/packages/protection/rules', {
-        package_name_pattern: '@scope/*',
-        package_type: 'npm',
-        minimum_access_level_for_push: 'maintainer',
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/packages/protection/rules',
+        {
+          package_name_pattern: '@scope/*',
+          package_type: 'npm',
+          minimum_access_level_for_push: 'maintainer',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -6220,18 +6246,23 @@ describe('GitlabService', () => {
         packageType: 'npm',
         minimumAccessLevelForPush: 'developer',
       });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/packages/protection/rules/1', {
-        package_name_pattern: '@scope/updated-*',
-        package_type: 'npm',
-        minimum_access_level_for_push: 'developer',
-      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/packages/protection/rules/1',
+        {
+          package_name_pattern: '@scope/updated-*',
+          package_type: 'npm',
+          minimum_access_level_for_push: 'developer',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deletePackageProtectionRule should delete package protection rule', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deletePackageProtectionRule('123', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/packages/protection/rules/1');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/packages/protection/rules/1',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -6278,7 +6309,9 @@ describe('GitlabService', () => {
     it('deletePipelineTrigger should delete pipeline trigger', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deletePipelineTrigger('123', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/triggers/1');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/triggers/1',
+      );
       expect(result).toEqual({ success: true });
     });
   });
