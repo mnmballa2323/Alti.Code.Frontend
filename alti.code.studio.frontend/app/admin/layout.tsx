@@ -13,6 +13,7 @@ import {
   Activity,
   BarChart3,
   ArrowLeft,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -24,6 +25,7 @@ interface SidebarItem {
 }
 
 const adminItems: SidebarItem[] = [
+  { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
   { label: "Members", href: "/admin/team-members", icon: Users },
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
@@ -98,6 +100,7 @@ export default function AdminLayout({
 
   const getActiveGroup = () => {
     if (
+      pathname.startsWith("/admin/dashboard") ||
       pathname.startsWith("/admin/members") ||
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/billing") ||
@@ -119,6 +122,7 @@ export default function AdminLayout({
   };
 
   const getPageTitle = () => {
+    if (pathname.startsWith("/admin/dashboard")) return "Dashboard";
     if (pathname.startsWith("/admin/members")) return "Invite";
     if (pathname.startsWith("/admin/team-members")) return "Members";
     if (pathname.startsWith("/admin/billing")) return "Billing";

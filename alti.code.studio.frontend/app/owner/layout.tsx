@@ -15,6 +15,7 @@ import {
   BarChart3,
   ArrowLeft,
   Loader2,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -26,6 +27,7 @@ interface SidebarItem {
 }
 
 const ownerItems: SidebarItem[] = [
+  { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Members", href: "/owner/team-members", icon: Users },
   { label: "Billing", href: "/owner/billing", icon: CreditCard },
   { label: "Invoices", href: "/owner/invoices", icon: FileText },
@@ -119,6 +121,7 @@ export default function OwnerLayout({
   };
 
   const getPageTitle = () => {
+    if (pathname.startsWith("/owner/dashboard")) return "Dashboard";
     if (pathname.startsWith("/owner/members")) return "Invite";
     if (pathname.startsWith("/owner/team-members")) return "Members";
     if (pathname.startsWith("/owner/billing")) return "Billing";

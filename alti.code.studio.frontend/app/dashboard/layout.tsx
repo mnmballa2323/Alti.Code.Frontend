@@ -25,19 +25,19 @@ export default function DashboardLayout({
     if (status === "authenticated" && profile) {
       if (userRole === "owner") {
         if (pathname === "/dashboard") {
-          router.push("/owner/team-members");
+          router.push("/owner/dashboard");
         } else if (pathname.startsWith("/dashboard/members")) {
-          router.push("/owner/team-members");
+          router.push("/owner/dashboard");
         } else if (pathname.startsWith("/dashboard/billing")) {
           router.push("/owner/billing");
         } else if (pathname.startsWith("/dashboard/data")) {
           router.push("/owner/data");
         } else {
-          router.push("/owner/team-members");
+          router.push("/owner/dashboard");
         }
       } else if (userRole === "admin") {
         if (pathname === "/dashboard") {
-          router.push("/admin/members");
+          router.push("/admin/dashboard");
         } else if (pathname.startsWith("/dashboard/members")) {
           router.push("/admin/team-members");
         } else if (pathname.startsWith("/dashboard/billing")) {
@@ -45,7 +45,7 @@ export default function DashboardLayout({
         } else if (pathname.startsWith("/dashboard/data")) {
           router.push("/admin/data");
         } else {
-          router.push("/admin/members");
+          router.push("/admin/dashboard");
         }
       }
     }

@@ -397,9 +397,9 @@ function Navbar() {
                     onClick={() => {
                       const userRole = (profile?.role || "").toLowerCase();
                       if (userRole === "owner") {
-                        router.push("/owner/team-members");
+                        router.push("/owner/dashboard");
                       } else if (userRole === "admin") {
-                        router.push("/admin/members");
+                        router.push("/admin/dashboard");
                       } else {
                         router.push("/new-chat");
                       }
