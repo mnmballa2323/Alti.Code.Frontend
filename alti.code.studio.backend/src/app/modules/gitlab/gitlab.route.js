@@ -606,4 +606,64 @@ router.delete(
   GitlabController.deleteAwardEmojiOnMergeRequestNote,
 );
 
+
+// ==========================================
+// 23. Pipeline Schedules Endpoints
+// ==========================================
+router.get('/projects/:projectId/pipeline_schedules', GitlabController.listProjectPipelineSchedules);
+router.get('/projects/:projectId/pipeline_schedules/:scheduleId', GitlabController.getProjectPipelineSchedule);
+router.post('/projects/:projectId/pipeline_schedules', GitlabController.createProjectPipelineSchedule);
+router.put('/projects/:projectId/pipeline_schedules/:scheduleId', GitlabController.updateProjectPipelineSchedule);
+router.delete('/projects/:projectId/pipeline_schedules/:scheduleId', GitlabController.deleteProjectPipelineSchedule);
+router.post('/projects/:projectId/pipeline_schedules/:scheduleId/play', GitlabController.playProjectPipelineSchedule);
+
+// ==========================================
+// 24. Job Artifacts Endpoints
+// ==========================================
+router.get('/projects/:projectId/jobs/:jobId/artifacts', GitlabController.downloadJobArtifacts);
+router.get('/projects/:projectId/jobs/:jobId/artifacts/*', GitlabController.downloadJobArtifactFile);
+router.delete('/projects/:projectId/jobs/:jobId/artifacts', GitlabController.deleteJobArtifacts);
+router.post('/projects/:projectId/jobs/:jobId/artifacts/keep', GitlabController.keepJobArtifacts);
+
+// ==========================================
+// 25. Merge Request Approval Rules Endpoints
+// ==========================================
+router.get('/projects/:projectId/merge_requests/:mrIid/approval_rules', GitlabController.listMergeRequestApprovalRules);
+router.post('/projects/:projectId/merge_requests/:mrIid/approval_rules', GitlabController.createMergeRequestApprovalRule);
+router.put('/projects/:projectId/merge_requests/:mrIid/approval_rules/:ruleId', GitlabController.updateMergeRequestApprovalRule);
+router.delete('/projects/:projectId/merge_requests/:mrIid/approval_rules/:ruleId', GitlabController.deleteMergeRequestApprovalRule);
+router.get('/projects/:projectId/approvals', GitlabController.getProjectApprovalSettings);
+router.post('/projects/:projectId/approvals', GitlabController.updateProjectApprovalSettings);
+
+// ==========================================
+// 26. Wikis & Wiki Pages Endpoints
+// ==========================================
+router.get('/projects/:projectId/wikis', GitlabController.listProjectWikis);
+router.get('/projects/:projectId/wikis/:slug', GitlabController.getProjectWikiPage);
+router.post('/projects/:projectId/wikis', GitlabController.createProjectWikiPage);
+router.put('/projects/:projectId/wikis/:slug', GitlabController.updateProjectWikiPage);
+router.delete('/projects/:projectId/wikis/:slug', GitlabController.deleteProjectWikiPage);
+
+// ==========================================
+// 27. Vulnerability State Management Endpoints
+// ==========================================
+router.get('/projects/:projectId/vulnerabilities/:vulnerabilityId', GitlabController.getVulnerabilityDetails);
+router.post('/projects/:projectId/vulnerabilities/:vulnerabilityId/dismiss', GitlabController.dismissVulnerability);
+router.post('/projects/:projectId/vulnerabilities/:vulnerabilityId/confirm', GitlabController.confirmVulnerability);
+router.post('/projects/:projectId/vulnerabilities/:vulnerabilityId/resolve', GitlabController.resolveVulnerability);
+
+// ==========================================
+// 28. Group & Project Access Requests Endpoints
+// ==========================================
+router.get('/projects/:projectId/access_requests', GitlabController.listProjectAccessRequests);
+router.post('/projects/:projectId/access_requests', GitlabController.requestProjectAccess);
+router.put('/projects/:projectId/access_requests/:userId/approve', GitlabController.approveProjectAccessRequest);
+router.delete('/projects/:projectId/access_requests/:userId', GitlabController.denyProjectAccessRequest);
+
+router.get('/groups/:groupId/access_requests', GitlabController.listGroupAccessRequests);
+router.post('/groups/:groupId/access_requests', GitlabController.requestGroupAccess);
+router.put('/groups/:groupId/access_requests/:userId/approve', GitlabController.approveGroupAccessRequest);
+router.delete('/groups/:groupId/access_requests/:userId', GitlabController.denyGroupAccessRequest);
+
 export const GitlabRoutes = router;
+

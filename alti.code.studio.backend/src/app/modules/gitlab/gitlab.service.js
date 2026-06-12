@@ -3261,6 +3261,512 @@ export const GitlabService = {
   },
 
   // ==========================================
+  // 23. Pipeline Schedules Endpoints
+  // ==========================================
+  async listProjectPipelineSchedules(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing pipeline schedules for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list pipeline schedules for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectPipelineSchedule(projectId, scheduleId) {
+    logger.info(`🦊 [GitLab Service] Fetching pipeline schedule ${scheduleId} for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get pipeline schedule ${scheduleId}:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectPipelineSchedule(projectId, scheduleData) {
+    logger.info(`🦊 [GitLab Service] Creating pipeline schedule in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules`,
+        {
+          description: scheduleData.description,
+          ref: scheduleData.ref,
+          cron: scheduleData.cron,
+          cron_timezone: scheduleData.cronTimezone,
+          active: scheduleData.active,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create pipeline schedule:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectPipelineSchedule(projectId, scheduleId, scheduleData) {
+    logger.info(`🦊 [GitLab Service] Updating pipeline schedule ${scheduleId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
+        {
+          description: scheduleData.description,
+          ref: scheduleData.ref,
+          cron: scheduleData.cron,
+          cron_timezone: scheduleData.cronTimezone,
+          active: scheduleData.active,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update pipeline schedule ${scheduleId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectPipelineSchedule(projectId, scheduleId) {
+    logger.info(`🦊 [GitLab Service] Deleting pipeline schedule ${scheduleId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete pipeline schedule ${scheduleId}:`, error);
+      throw error;
+    }
+  },
+
+  async playProjectPipelineSchedule(projectId, scheduleId) {
+    logger.info(`🦊 [GitLab Service] Triggering pipeline schedule ${scheduleId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}/play`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to trigger pipeline schedule ${scheduleId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 24. Job Artifacts Endpoints
+  // ==========================================
+  async downloadJobArtifacts(projectId, jobId) {
+    logger.info(`🦊 [GitLab Service] Downloading artifacts archive for job ${jobId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts`,
+        { responseType: 'arraybuffer' },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to download artifacts for job ${jobId}:`, error);
+      throw error;
+    }
+  },
+
+  async downloadJobArtifactFile(projectId, jobId, artifactPath) {
+    logger.info(`🦊 [GitLab Service] Downloading file ${artifactPath} from job ${jobId} artifacts`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts/${artifactPath}`,
+        { responseType: 'arraybuffer' },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to download file ${artifactPath} from job ${jobId} artifacts:`, error);
+      throw error;
+    }
+  },
+
+  async deleteJobArtifacts(projectId, jobId) {
+    logger.info(`🦊 [GitLab Service] Deleting artifacts for job ${jobId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete artifacts for job ${jobId}:`, error);
+      throw error;
+    }
+  },
+
+  async keepJobArtifacts(projectId, jobId) {
+    logger.info(`🦊 [GitLab Service] Keeping artifacts for job ${jobId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts/keep`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to keep artifacts for job ${jobId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 25. Merge Request Approval Rules Endpoints
+  // ==========================================
+  async listMergeRequestApprovalRules(projectId, mrIid) {
+    logger.info(`🦊 [GitLab Service] Listing approval rules for MR ${mrIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list approval rules for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async createMergeRequestApprovalRule(projectId, mrIid, ruleData) {
+    logger.info(`🦊 [GitLab Service] Creating approval rule for MR ${mrIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules`,
+        {
+          name: ruleData.name,
+          approvals_required: ruleData.approvalsRequired,
+          user_ids: ruleData.userIds,
+          group_ids: ruleData.groupIds,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create approval rule for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async updateMergeRequestApprovalRule(projectId, mrIid, ruleId, ruleData) {
+    logger.info(`🦊 [GitLab Service] Updating approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules/${ruleId}`,
+        {
+          name: ruleData.name,
+          approvals_required: ruleData.approvalsRequired,
+          user_ids: ruleData.userIds,
+          group_ids: ruleData.groupIds,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update approval rule ${ruleId} for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteMergeRequestApprovalRule(projectId, mrIid, ruleId) {
+    logger.info(`🦊 [GitLab Service] Deleting approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules/${ruleId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete approval rule ${ruleId} for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectApprovalSettings(projectId) {
+    logger.info(`🦊 [GitLab Service] Fetching approval settings for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/approvals`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get approval settings for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectApprovalSettings(projectId, settingsData) {
+    logger.info(`🦊 [GitLab Service] Updating approval settings for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/approvals`,
+        {
+          approvals_before_merge: settingsData.approvalsBeforeMerge,
+          reset_approvals_on_push: settingsData.resetApprovalsOnPush,
+          disable_overriding_approvers_per_merge_request: settingsData.disableOverridingApproversPerMergeRequest,
+          merge_requests_author_approval: settingsData.mergeRequestsAuthorApproval,
+          merge_requests_disable_committers_approval: settingsData.mergeRequestsDisableCommittersApproval,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update approval settings for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 26. Wikis & Wiki Pages Endpoints
+  // ==========================================
+  async listProjectWikis(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing wiki pages for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/wikis`,
+        {
+          params: {
+            with_content: params.withContent,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list wiki pages for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectWikiPage(projectId, slug) {
+    logger.info(`🦊 [GitLab Service] Fetching wiki page ${slug} for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get wiki page ${slug}:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectWikiPage(projectId, pageData) {
+    logger.info(`🦊 [GitLab Service] Creating wiki page ${pageData.title} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/wikis`,
+        {
+          title: pageData.title,
+          content: pageData.content,
+          format: pageData.format,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create wiki page:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectWikiPage(projectId, slug, pageData) {
+    logger.info(`🦊 [GitLab Service] Updating wiki page ${slug} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
+        {
+          title: pageData.title,
+          content: pageData.content,
+          format: pageData.format,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update wiki page ${slug}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectWikiPage(projectId, slug) {
+    logger.info(`🦊 [GitLab Service] Deleting wiki page ${slug} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete wiki page ${slug}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 27. Vulnerability State Management Endpoints
+  // ==========================================
+  async getVulnerabilityDetails(projectId, vulnerabilityId) {
+    logger.info(`🦊 [GitLab Service] Fetching vulnerability ${vulnerabilityId} details`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/vulnerabilities/${vulnerabilityId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get vulnerability ${vulnerabilityId}:`, error);
+      throw error;
+    }
+  },
+
+  async dismissVulnerability(projectId, vulnerabilityId, dismissalReason) {
+    logger.info(`🦊 [GitLab Service] Dismissing vulnerability ${vulnerabilityId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/vulnerabilities/${vulnerabilityId}/dismiss`,
+        { comment: dismissalReason },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to dismiss vulnerability ${vulnerabilityId}:`, error);
+      throw error;
+    }
+  },
+
+  async confirmVulnerability(projectId, vulnerabilityId) {
+    logger.info(`🦊 [GitLab Service] Confirming vulnerability ${vulnerabilityId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/vulnerabilities/${vulnerabilityId}/confirm`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to confirm vulnerability ${vulnerabilityId}:`, error);
+      throw error;
+    }
+  },
+
+  async resolveVulnerability(projectId, vulnerabilityId) {
+    logger.info(`🦊 [GitLab Service] Resolving vulnerability ${vulnerabilityId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/vulnerabilities/${vulnerabilityId}/resolve`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to resolve vulnerability ${vulnerabilityId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 28. Group & Project Access Requests Endpoints
+  // ==========================================
+  async listProjectAccessRequests(projectId) {
+    logger.info(`🦊 [GitLab Service] Listing access requests for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/access_requests`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project access requests:`, error);
+      throw error;
+    }
+  },
+
+  async requestProjectAccess(projectId) {
+    logger.info(`🦊 [GitLab Service] Requesting access to project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/access_requests`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to request project access:`, error);
+      throw error;
+    }
+  },
+
+  async approveProjectAccessRequest(projectId, userId, accessLevel) {
+    logger.info(`🦊 [GitLab Service] Approving access request for user ${userId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/access_requests/${userId}/approve`,
+        { access_level: accessLevel },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to approve project access request for user ${userId}:`, error);
+      throw error;
+    }
+  },
+
+  async denyProjectAccessRequest(projectId, userId) {
+    logger.info(`🦊 [GitLab Service] Denying access request for user ${userId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/access_requests/${userId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to deny project access request for user ${userId}:`, error);
+      throw error;
+    }
+  },
+
+  async listGroupAccessRequests(groupId) {
+    logger.info(`🦊 [GitLab Service] Listing access requests for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/access_requests`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list group access requests:`, error);
+      throw error;
+    }
+  },
+
+  async requestGroupAccess(groupId) {
+    logger.info(`🦊 [GitLab Service] Requesting access to group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/access_requests`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to request group access:`, error);
+      throw error;
+    }
+  },
+
+  async approveGroupAccessRequest(groupId, userId, accessLevel) {
+    logger.info(`🦊 [GitLab Service] Approving access request for user ${userId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/access_requests/${userId}/approve`,
+        { access_level: accessLevel },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to approve group access request for user ${userId}:`, error);
+      throw error;
+    }
+  },
+
+  async denyGroupAccessRequest(groupId, userId) {
+    logger.info(`🦊 [GitLab Service] Denying access request for user ${userId} in group ${groupId}`);
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/access_requests/${userId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to deny group access request for user ${userId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
   // 11. Security Scanning Endpoints
   // ==========================================
   async listVulnerabilityAlerts(projectId, params = {}) {

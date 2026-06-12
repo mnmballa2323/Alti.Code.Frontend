@@ -2773,3 +2773,391 @@ export const deleteAwardEmojiOnMergeRequestNote = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 23. Pipeline Schedules Handlers
+// ==========================================
+export const listProjectPipelineSchedules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const schedules = await GitlabService.listProjectPipelineSchedules(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: schedules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing pipeline schedules:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectPipelineSchedule = async (req, res) => {
+  try {
+    const { projectId, scheduleId } = req.params;
+    const schedule = await GitlabService.getProjectPipelineSchedule(projectId, scheduleId);
+    res.status(httpStatus.OK).json({ success: true, data: schedule });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting pipeline schedule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectPipelineSchedule = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const schedule = await GitlabService.createProjectPipelineSchedule(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: schedule });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating pipeline schedule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectPipelineSchedule = async (req, res) => {
+  try {
+    const { projectId, scheduleId } = req.params;
+    const schedule = await GitlabService.updateProjectPipelineSchedule(projectId, scheduleId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: schedule });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating pipeline schedule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectPipelineSchedule = async (req, res) => {
+  try {
+    const { projectId, scheduleId } = req.params;
+    const result = await GitlabService.deleteProjectPipelineSchedule(projectId, scheduleId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting pipeline schedule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const playProjectPipelineSchedule = async (req, res) => {
+  try {
+    const { projectId, scheduleId } = req.params;
+    const result = await GitlabService.playProjectPipelineSchedule(projectId, scheduleId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error triggering pipeline schedule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 24. Job Artifacts Handlers
+// ==========================================
+export const downloadJobArtifacts = async (req, res) => {
+  try {
+    const { projectId, jobId } = req.params;
+    const data = await GitlabService.downloadJobArtifacts(projectId, jobId);
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename=artifacts-${jobId}.zip`);
+    res.status(httpStatus.OK).send(Buffer.from(data));
+  } catch (error) {
+    logger.error('[GitLab Controller] Error downloading job artifacts:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const downloadJobArtifactFile = async (req, res) => {
+  try {
+    const { projectId, jobId } = req.params;
+    const artifactPath = req.params[0];
+    const data = await GitlabService.downloadJobArtifactFile(projectId, jobId, artifactPath);
+    res.status(httpStatus.OK).send(Buffer.from(data));
+  } catch (error) {
+    logger.error('[GitLab Controller] Error downloading job artifact file:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteJobArtifacts = async (req, res) => {
+  try {
+    const { projectId, jobId } = req.params;
+    const result = await GitlabService.deleteJobArtifacts(projectId, jobId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting job artifacts:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const keepJobArtifacts = async (req, res) => {
+  try {
+    const { projectId, jobId } = req.params;
+    const result = await GitlabService.keepJobArtifacts(projectId, jobId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error keeping job artifacts:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 25. Merge Request Approval Rules Handlers
+// ==========================================
+export const listMergeRequestApprovalRules = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const rules = await GitlabService.listMergeRequestApprovalRules(projectId, mrIid);
+    res.status(httpStatus.OK).json({ success: true, data: rules });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing MR approval rules:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createMergeRequestApprovalRule = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const rule = await GitlabService.createMergeRequestApprovalRule(projectId, mrIid, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: rule });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating MR approval rule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateMergeRequestApprovalRule = async (req, res) => {
+  try {
+    const { projectId, mrIid, ruleId } = req.params;
+    const rule = await GitlabService.updateMergeRequestApprovalRule(projectId, mrIid, ruleId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: rule });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating MR approval rule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteMergeRequestApprovalRule = async (req, res) => {
+  try {
+    const { projectId, mrIid, ruleId } = req.params;
+    const result = await GitlabService.deleteMergeRequestApprovalRule(projectId, mrIid, ruleId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting MR approval rule:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectApprovalSettings = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const settings = await GitlabService.getProjectApprovalSettings(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: settings });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project approval settings:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectApprovalSettings = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const settings = await GitlabService.updateProjectApprovalSettings(projectId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: settings });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating project approval settings:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 26. Wikis & Wiki Pages Handlers
+// ==========================================
+export const listProjectWikis = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const pages = await GitlabService.listProjectWikis(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: pages });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing wiki pages:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectWikiPage = async (req, res) => {
+  try {
+    const { projectId, slug } = req.params;
+    const page = await GitlabService.getProjectWikiPage(projectId, slug);
+    res.status(httpStatus.OK).json({ success: true, data: page });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting wiki page:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectWikiPage = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const page = await GitlabService.createProjectWikiPage(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: page });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating wiki page:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectWikiPage = async (req, res) => {
+  try {
+    const { projectId, slug } = req.params;
+    const page = await GitlabService.updateProjectWikiPage(projectId, slug, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: page });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating wiki page:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectWikiPage = async (req, res) => {
+  try {
+    const { projectId, slug } = req.params;
+    const result = await GitlabService.deleteProjectWikiPage(projectId, slug);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting wiki page:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 27. Vulnerability State Management Handlers
+// ==========================================
+export const getVulnerabilityDetails = async (req, res) => {
+  try {
+    const { projectId, vulnerabilityId } = req.params;
+    const details = await GitlabService.getVulnerabilityDetails(projectId, vulnerabilityId);
+    res.status(httpStatus.OK).json({ success: true, data: details });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting vulnerability details:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const dismissVulnerability = async (req, res) => {
+  try {
+    const { projectId, vulnerabilityId } = req.params;
+    const { comment } = req.body;
+    const result = await GitlabService.dismissVulnerability(projectId, vulnerabilityId, comment);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error dismissing vulnerability:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const confirmVulnerability = async (req, res) => {
+  try {
+    const { projectId, vulnerabilityId } = req.params;
+    const result = await GitlabService.confirmVulnerability(projectId, vulnerabilityId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error confirming vulnerability:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const resolveVulnerability = async (req, res) => {
+  try {
+    const { projectId, vulnerabilityId } = req.params;
+    const result = await GitlabService.resolveVulnerability(projectId, vulnerabilityId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error resolving vulnerability:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 28. Group & Project Access Requests Handlers
+// ==========================================
+export const listProjectAccessRequests = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const requests = await GitlabService.listProjectAccessRequests(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: requests });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project access requests:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const requestProjectAccess = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const request = await GitlabService.requestProjectAccess(projectId);
+    res.status(httpStatus.CREATED).json({ success: true, data: request });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error requesting project access:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const approveProjectAccessRequest = async (req, res) => {
+  try {
+    const { projectId, userId } = req.params;
+    const { accessLevel } = req.body;
+    const result = await GitlabService.approveProjectAccessRequest(projectId, userId, accessLevel);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error approving project access request:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const denyProjectAccessRequest = async (req, res) => {
+  try {
+    const { projectId, userId } = req.params;
+    const result = await GitlabService.denyProjectAccessRequest(projectId, userId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error denying project access request:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupAccessRequests = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const requests = await GitlabService.listGroupAccessRequests(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: requests });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group access requests:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const requestGroupAccess = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const request = await GitlabService.requestGroupAccess(groupId);
+    res.status(httpStatus.CREATED).json({ success: true, data: request });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error requesting group access:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const approveGroupAccessRequest = async (req, res) => {
+  try {
+    const { groupId, userId } = req.params;
+    const { accessLevel } = req.body;
+    const result = await GitlabService.approveGroupAccessRequest(groupId, userId, accessLevel);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error approving group access request:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
+export const denyGroupAccessRequest = async (req, res) => {
+  try {
+    const { groupId, userId } = req.params;
+    const result = await GitlabService.denyGroupAccessRequest(groupId, userId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error denying group access request:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+  }
+};
+
