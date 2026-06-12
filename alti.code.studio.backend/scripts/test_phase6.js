@@ -3,8 +3,19 @@ import { healerAgent } from '../src/app/modules/agents/healer.agent.js';
 import { prophetAgent } from '../src/app/modules/agents/prophet.agent.js';
 import { GeminiAiService } from '../src/app/modules/gemini/gemini.service.js';
 import { GitAgentService } from '../src/app/modules/gitAgent/gitAgent.service.js';
+import { GcsService } from '../src/app/modules/googleCloud/gcs.service.js';
+import { FirestoreSyncService } from '../src/app/modules/googleCloud/firestoreSync.service.js';
 import fs from 'fs/promises';
 import path from 'path';
+
+// MOCK GCS & FIRESTORE
+GcsService.uploadFile = async (bucketName, destFileName, content) => {
+    console.log(`[MockGCS] Uploaded to ${bucketName}/${destFileName}`);
+    return `mock_snapshot_${destFileName}`;
+};
+FirestoreSyncService.persistCrdtUpdate = async (docId, buffer) => {
+    console.log(`[MockFirestoreSync] Persisted CRDT update for ${docId}`);
+};
 
 // MOCK GEMINI
 GeminiAiService.generateContent = async (prompt) => {
