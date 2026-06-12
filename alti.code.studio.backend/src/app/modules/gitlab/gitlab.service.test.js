@@ -6825,4 +6825,175 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 53. Phase 18: Container Registry Tags, GitLab Geo Nodes, and Project Import/Export
+  // ==========================================
+  describe('53. Phase 18: Container Registry Tags, GitLab Geo Nodes, and Project Import/Export', () => {
+    it('listContainerRepositoryTags should fetch repository tags list', async () => {
+      const mockData = [{ name: 'v1.0' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listContainerRepositoryTags('proj123', 'repo456', {
+        page: 2,
+        perPage: 15,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/registry/repositories/repo456/tags',
+        {
+          params: {
+            page: 2,
+            per_page: 15,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getContainerRepositoryTagDetails should fetch tag details', async () => {
+      const mockData = { name: 'v1.0', path: 'path', location: 'loc' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getContainerRepositoryTagDetails(
+        'proj123',
+        'repo456',
+        'v1.0',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/proj123/registry/repositories/repo456/tags/v1.0',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getContainerRepositoryTagDetails should return default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getContainerRepositoryTagDetails(
+        'proj123',
+        'repo456',
+        'v1.0',
+      );
+      expect(result).toEqual({ name: null, path: '', location: '' });
+    });
+
+    it('deleteContainerRepositoryTag should delete tag and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteContainerRepositoryTag(
+        'proj123',
+        'repo456',
+        'v1.0',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/proj123/registry/repositories/repo456/tags/v1.0',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('bulkDeleteContainerRepositoryTags should trigger bulk delete of tags', async () => {
+      const mockData = { message: 'success' };
+      mockClient.delete.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.bulkDeleteContainerRepositoryTags(
+        'proj123',
+        'repo456',
+        {
+          nameRegexDelete: '.*',
+          keepN: 5,
+        },
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/proj123/registry/repositories/repo456/tags',
+        {
+          params: {
+            name_regex_delete: '.*',
+            keep_n: 5,
+            name_regex: undefined,
+            name_regex_keep: undefined,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listGeoNodes should fetch GitLab Geo replication nodes list', async () => {
+      const mockData = [{ id: 1, name: 'primary' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGeoNodes({ page: 2, perPage: 10 });
+      expect(mockClient.get).toHaveBeenCalledWith('/geo_nodes', {
+        params: {
+          page: 2,
+          per_page: 10,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGeoNodeStatus should fetch Geo node status details', async () => {
+      const mockData = { id: 1, healthy: true };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGeoNodeStatus(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/geo_nodes/1/status');
+      expect(result).toEqual(mockData);
+    });
+
+    it('listGeoNodesStatus should fetch statuses of all Geo nodes', async () => {
+      const mockData = [{ id: 1, healthy: true }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGeoNodesStatus({ page: 1, perPage: 20 });
+      expect(mockClient.get).toHaveBeenCalledWith('/geo_nodes/status', {
+        params: {
+          page: 1,
+          per_page: 20,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('scheduleProjectExport should schedule project export run', async () => {
+      const mockData = { message: '202 Accepted' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.scheduleProjectExport('proj123', {
+        description: 'export test',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/proj123/export', {
+        description: 'export test',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectExportStatus should retrieve export status information', async () => {
+      const mockData = { export_status: 'finished', message: 'Ready' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectExportStatus('proj123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/proj123/export');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectExportStatus should return safe default on 404', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.getProjectExportStatus('proj123');
+      expect(result).toEqual({ export_status: 'none', message: 'Export not started' });
+    });
+
+    it('downloadProjectExport should retrieve raw binary download buffer', async () => {
+      const mockData = new ArrayBuffer(8);
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.downloadProjectExport('proj123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/proj123/export/download', {
+        responseType: 'arraybuffer',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('importProject should post multi-part formData payload', async () => {
+      const mockData = { id: 789, name: 'imported-proj' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const mockForm = {
+        getHeaders: () => ({ 'content-type': 'multipart/form-data' }),
+      };
+      const result = await GitlabService.importProject(mockForm);
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/import', mockForm, {
+        headers: { 'content-type': 'multipart/form-data' },
+      });
+      expect(result).toEqual(mockData);
+    });
+  });
 });

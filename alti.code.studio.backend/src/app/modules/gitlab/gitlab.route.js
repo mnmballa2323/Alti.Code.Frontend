@@ -1,5 +1,6 @@
 import express from 'express';
 import * as GitlabController from './gitlab.controller.js';
+import upload from '../../../shared/upload.js';
 
 const router = express.Router();
 
@@ -1768,5 +1769,41 @@ router.post(
 
 router.post('/ci/lint', GitlabController.lintCI);
 router.post('/projects/:projectId/ci/lint', GitlabController.lintProjectCI);
+
+// ==========================================
+// 53. Phase 18: Container Registry Tags, GitLab Geo Nodes, and Project Import/Export Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/registry/repositories/:repositoryId/tags',
+  GitlabController.listContainerRepositoryTags,
+);
+router.delete(
+  '/projects/:projectId/registry/repositories/:repositoryId/tags',
+  GitlabController.bulkDeleteContainerRepositoryTags,
+);
+router.get(
+  '/projects/:projectId/registry/repositories/:repositoryId/tags/:tagName',
+  GitlabController.getContainerRepositoryTagDetails,
+);
+router.delete(
+  '/projects/:projectId/registry/repositories/:repositoryId/tags/:tagName',
+  GitlabController.deleteContainerRepositoryTag,
+);
+
+router.get('/geo_nodes', GitlabController.listGeoNodes);
+router.get('/geo_nodes/status', GitlabController.listGeoNodesStatus);
+router.get('/geo_nodes/:nodeId/status', GitlabController.getGeoNodeStatus);
+
+router.post('/projects/:projectId/export', GitlabController.scheduleProjectExport);
+router.get('/projects/:projectId/export', GitlabController.getProjectExportStatus);
+router.get(
+  '/projects/:projectId/export/download',
+  GitlabController.downloadProjectExport,
+);
+router.post(
+  '/projects/import',
+  upload.single('file'),
+  GitlabController.importProject,
+);
 
 export const GitlabRoutes = router;

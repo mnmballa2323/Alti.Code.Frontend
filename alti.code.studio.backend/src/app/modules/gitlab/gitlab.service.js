@@ -8611,4 +8611,228 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 53. Phase 18: Container Registry Tags, GitLab Geo Nodes, and Project Import/Export
+  // ==========================================
+  async listContainerRepositoryTags(projectId, repositoryId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing tags for container repository ${repositoryId} in project ${projectId}`,
+    );
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories/${encodeURIComponent(repositoryId)}/tags`,
+        {
+          params: {
+            page: page || 1,
+            per_page: perPage || 30,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list container repository tags for repository ${repositoryId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getContainerRepositoryTagDetails(projectId, repositoryId, tagName) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching details for container repository tag ${tagName} in repository ${repositoryId} of project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories/${encodeURIComponent(repositoryId)}/tags/${encodeURIComponent(tagName)}`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Container repository tag ${tagName} not found, returning safe default`,
+        );
+        return { name: null, path: '', location: '' };
+      }
+      logger.error(
+        `Failed to get details for container repository tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteContainerRepositoryTag(projectId, repositoryId, tagName) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting container repository tag ${tagName} in repository ${repositoryId} of project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories/${encodeURIComponent(repositoryId)}/tags/${encodeURIComponent(tagName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete container repository tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async bulkDeleteContainerRepositoryTags(projectId, repositoryId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Bulk deleting container repository tags in repository ${repositoryId} of project ${projectId}`,
+    );
+    try {
+      const { nameRegexDelete, keepN, nameRegex, nameRegexKeep, ...rest } = params;
+      const { data } = await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories/${encodeURIComponent(repositoryId)}/tags`,
+        {
+          params: {
+            name_regex_delete: nameRegexDelete,
+            keep_n: keepN,
+            name_regex: nameRegex,
+            name_regex_keep: nameRegexKeep,
+            ...rest,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to bulk delete container repository tags in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGeoNodes(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing GitLab Geo replication nodes');
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get('/geo_nodes', {
+        params: {
+          page: page || 1,
+          per_page: perPage || 30,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list GitLab Geo replication nodes:', error);
+      throw error;
+    }
+  },
+
+  async getGeoNodeStatus(nodeId) {
+    logger.info(`🦊 [GitLab Service] Fetching status for Geo node ${nodeId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/geo_nodes/${encodeURIComponent(nodeId)}/status`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get status for Geo node ${nodeId}:`, error);
+      throw error;
+    }
+  },
+
+  async listGeoNodesStatus(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing status for all Geo replication nodes');
+    try {
+      const { page, perPage, ...rest } = params;
+      const { data } = await gitlabClient.get('/geo_nodes/status', {
+        params: {
+          page: page || 1,
+          per_page: perPage || 30,
+          ...rest,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list status for all Geo replication nodes:', error);
+      throw error;
+    }
+  },
+
+  async scheduleProjectExport(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Scheduling project export for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/export`,
+        params,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to schedule export for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectExportStatus(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching export status for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/export`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Export status for project ${projectId} not found, returning safe default`,
+        );
+        return { export_status: 'none', message: 'Export not started' };
+      }
+      logger.error(
+        `Failed to get export status for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async downloadProjectExport(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Downloading export archive for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/export/download`,
+        { responseType: 'arraybuffer' },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to download export archive for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async importProject(formData) {
+    logger.info('🦊 [GitLab Service] Importing project from export archive');
+    try {
+      const headers = typeof formData.getHeaders === 'function' ? formData.getHeaders() : {};
+      const { data } = await gitlabClient.post('/projects/import', formData, {
+        headers,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to import project:', error);
+      throw error;
+    }
+  },
 };

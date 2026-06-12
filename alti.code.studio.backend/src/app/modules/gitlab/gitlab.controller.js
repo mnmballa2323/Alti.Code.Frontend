@@ -1,3 +1,5 @@
+import fs from 'fs';
+import FormData from 'form-data';
 import httpStatus from 'http-status';
 import { GitlabService } from './gitlab.service.js';
 import { logger } from '../../../shared/logger.js';
@@ -7406,6 +7408,210 @@ export const lintProjectCI = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error linting project CI:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 53. Phase 18: Container Registry Tags, GitLab Geo Nodes, and Project Import/Export Handlers
+// ==========================================
+export const listContainerRepositoryTags = async (req, res) => {
+  try {
+    const { projectId, repositoryId } = req.params;
+    const tags = await GitlabService.listContainerRepositoryTags(
+      projectId,
+      repositoryId,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: tags });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing container repository tags:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getContainerRepositoryTagDetails = async (req, res) => {
+  try {
+    const { projectId, repositoryId, tagName } = req.params;
+    const tag = await GitlabService.getContainerRepositoryTagDetails(
+      projectId,
+      repositoryId,
+      tagName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: tag });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting container repository tag details:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteContainerRepositoryTag = async (req, res) => {
+  try {
+    const { projectId, repositoryId, tagName } = req.params;
+    const result = await GitlabService.deleteContainerRepositoryTag(
+      projectId,
+      repositoryId,
+      tagName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting container repository tag:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const bulkDeleteContainerRepositoryTags = async (req, res) => {
+  try {
+    const { projectId, repositoryId } = req.params;
+    const result = await GitlabService.bulkDeleteContainerRepositoryTags(
+      projectId,
+      repositoryId,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error bulk deleting container repository tags:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGeoNodes = async (req, res) => {
+  try {
+    const nodes = await GitlabService.listGeoNodes(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: nodes });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing Geo replication nodes:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGeoNodeStatus = async (req, res) => {
+  try {
+    const { nodeId } = req.params;
+    const status = await GitlabService.getGeoNodeStatus(nodeId);
+    res.status(httpStatus.OK).json({ success: true, data: status });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting Geo node status:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGeoNodesStatus = async (req, res) => {
+  try {
+    const status = await GitlabService.listGeoNodesStatus(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: status });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing Geo nodes status:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const scheduleProjectExport = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.scheduleProjectExport(projectId, req.body);
+    res.status(httpStatus.ACCEPTED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error scheduling project export:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectExportStatus = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const status = await GitlabService.getProjectExportStatus(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: status });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project export status:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const downloadProjectExport = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const data = await GitlabService.downloadProjectExport(projectId);
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=project-export-${projectId}.tar.gz`,
+    );
+    res.status(httpStatus.OK).send(Buffer.from(data));
+  } catch (error) {
+    logger.error('[GitLab Controller] Error downloading project export:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const importProject = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        success: false,
+        error: 'No file uploaded',
+      });
+    }
+
+    const form = new FormData();
+    form.append('file', fs.createReadStream(req.file.path), {
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+    });
+
+    if (req.body.path) form.append('path', req.body.path);
+    if (req.body.name) form.append('name', req.body.name);
+    if (req.body.namespace) form.append('namespace', req.body.namespace);
+    if (req.body.overwrite) form.append('overwrite', req.body.overwrite);
+
+    const result = await GitlabService.importProject(form);
+
+    fs.unlink(req.file.path, (err) => {
+      if (err) logger.error('[GitLab Controller] Error cleaning up import file:', err);
+    });
+
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    if (req.file && req.file.path) {
+      fs.unlink(req.file.path, (err) => {
+        if (err) logger.error('[GitLab Controller] Error cleaning up import file on error:', err);
+      });
+    }
+    logger.error('[GitLab Controller] Error importing project:', error);
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
