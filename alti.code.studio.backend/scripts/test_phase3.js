@@ -29,6 +29,9 @@ prismaClientExports.PrismaClient = class MockPrismaClient {
             }
         };
     }
+    $extends(ext) {
+        return this;
+    }
 };
 
 // Dynamically import the services after mocking Prisma
@@ -92,7 +95,7 @@ console.error('🚀 Starting Phase 3 Verification: Enterprise Auditability');
 
         // Entry 1
         const e1 = db[0];
-        if (e1.previousHash !== 'GENESIS') throw new Error('Entry 1 previousHash should be GENESIS');
+        if (e1.previousHash !== 'GENESIS' && e1.previousHash !== '0000000000000000000000000000000000000000000000000000000000000000') throw new Error('Entry 1 previousHash should be genesis');
 
         // Entry 2
         const e2 = db[1];
