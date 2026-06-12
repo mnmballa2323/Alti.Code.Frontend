@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.222] - 2026-06-12 — Enterprise Readiness Upgrades
+
+### Added
+
+- **Multi-Tenant Data Isolation**: Partitioned the pgvector memory store (`alti_memory`) by adding a `tenant_id` column, indexing it, and filtering all query, add, list, and reset operations by `tenantId`. Enforced `tenantId` checking in the registry lookup for GitLab specialist agents.
+- **OpenTelemetry Swarm Tracing**: Implemented `SwarmTraceService` inside `trace.service.js` using a database table `swarm_traces`. Wrapped specialist agent `_invoke` cycles inside tracing spans, propagating parent span IDs automatically down nested agent call stacks.
+- **Secure VM Sandboxed Execution**: Added `runSandboxed` helper method to `BaseSpecialistAgent` using Node's native `vm` module to run user-supplied scripts under strict timeouts, restricting access to `process`, `fs`, `require`, and system properties.
+- **Verification & Testing**: Developed `enterpriseReadiness.test.js` validating pgvector isolation, span propagation, and sandbox enforcement.
+
 ## [39.37.221] - 2026-06-12 — GitLab Swarm Upgrades & Advanced Optimization
 
 ### Added

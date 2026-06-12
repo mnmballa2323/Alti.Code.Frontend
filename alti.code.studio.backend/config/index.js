@@ -87,6 +87,10 @@ const configObject = {
     process.env.AGENT_S_PYTHON_PATH ||
     path.join(process.cwd(), '.venv-agent-s/bin/python'),
   private_cloud_mode: process.env.PRIVATE_CLOUD_MODE === 'true',
+  openstack: {
+    auth_url: process.env.OS_AUTH_URL || process.env.OPENSTACK_AUTH_URL,
+    default_domain: process.env.OPENSTACK_DEFAULT_DOMAIN || 'Default',
+  },
   smtp: {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,

@@ -16,6 +16,7 @@ import { logger } from '../../../shared/logger.js';
 import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres DAL
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
+import { authenticateKeystone } from './openstack.service.js';
 
 const deleteUserAccountService = async userId => {
   return UserRepository.deleteUser(userId);
@@ -81,6 +82,78 @@ const loginService = async (email, password) => {
 
   if (!email || !password) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email and password are required');
+  }
+
+  if (config.private_cloud_mode) {
+    const keystoneUser = await authenticateKeystone(email, password);
+    let localUser = await UserRepository.findByEmail(email);
+
+    if (!localUser) {
+      const defaultRole = keystoneUser.roles.includes('admin') ? 'admin' : 'user';
+      try {
+        localUser = await prisma.$transaction(async (tx) => {
+          const tenantName = `${keystoneUser.projectName || 'Workspace'} - ${keystoneUser.username}`;
+          const tenant = await tx.tenant.create({
+            data: { name: tenantName }
+          });
+          return tx.user.create({
+            data: {
+              email,
+              provider: 'openstack',
+              role: defaultRole,
+              tenantId: tenant.id,
+              tenantRole: 'owner'
+            }
+          });
+        });
+      } catch (dbErr) {
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock database for OpenStack user provisioning');
+        const mockUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
+        const mockTenantId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
+        localUser = {
+          id: mockUserId,
+          tenantId: mockTenantId,
+          tenantRole: 'owner',
+          provider: 'openstack',
+          email,
+          role: defaultRole
+        };
+      }
+    } else {
+      if (!localUser.tenantId) {
+        try {
+          const tenantName = `Workspace - ${localUser.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+          const tenant = await prisma.tenant.create({
+            data: { name: tenantName }
+          });
+          localUser = await prisma.user.update({
+            where: { id: localUser.id },
+            data: { tenantId: tenant.id, tenantRole: 'owner' }
+          });
+        } catch (dbErr) {
+          logger.warn('⚠️ [Postgres Offline] Bypassing lazy tenant provisioning db write for existing user');
+          localUser.tenantId = localUser.tenantId || (crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex'));
+          localUser.tenantRole = 'owner';
+        }
+      }
+    }
+
+    const accessToken = jwtHelpers.createToken(
+      { _id: localUser.id, role: localUser.role, tenantId: localUser.tenantId, tenantRole: localUser.tenantRole },
+      config.jwt.access_token,
+      config.jwt.access_expires_in,
+    );
+    const refreshToken = jwtHelpers.createToken(
+      { _id: localUser.id, role: localUser.role, tenantId: localUser.tenantId, tenantRole: localUser.tenantRole },
+      config.jwt.refresh_token,
+      config.jwt.refresh_expires_in,
+    );
+
+    return {
+      _id: localUser.id,
+      accessToken,
+      refreshToken
+    };
   }
   
   let user = await UserRepository.findByEmail(email);
