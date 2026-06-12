@@ -3645,4 +3645,431 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 35. Group Webhooks Endpoints
+  // ==========================================
+  describe('35. Group Webhooks Endpoints', () => {
+    it('listGroupHooks should fetch webhooks list', async () => {
+      const mockData = [{ id: 1, url: 'https://example.com/hook' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupHooks('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/hooks');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupHook should retrieve specific webhook configuration', async () => {
+      const mockData = { id: 1, url: 'https://example.com/hook' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupHook('my-group', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/hooks/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('addGroupHook should post webhook configuration', async () => {
+      const mockData = { id: 1, url: 'https://example.com/hook' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addGroupHook('my-group', {
+        url: 'https://example.com/hook',
+        pushEvents: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/hooks', {
+        url: 'https://example.com/hook',
+        push_events: true,
+        issues_events: undefined,
+        confidential_issues_events: undefined,
+        merge_requests_events: undefined,
+        tag_push_events: undefined,
+        note_events: undefined,
+        confidential_note_events: undefined,
+        job_events: undefined,
+        pipeline_events: undefined,
+        wiki_page_events: undefined,
+        token: undefined,
+        enable_ssl_verification: undefined,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupHook should put updated webhook configuration', async () => {
+      const mockData = {
+        id: 1,
+        url: 'https://example.com/hook',
+        push_events: false,
+      };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupHook('my-group', 1, {
+        url: 'https://example.com/hook',
+        pushEvents: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/my-group/hooks/1', {
+        url: 'https://example.com/hook',
+        push_events: false,
+        issues_events: undefined,
+        confidential_issues_events: undefined,
+        merge_requests_events: undefined,
+        tag_push_events: undefined,
+        note_events: undefined,
+        confidential_note_events: undefined,
+        job_events: undefined,
+        pipeline_events: undefined,
+        wiki_page_events: undefined,
+        token: undefined,
+        enable_ssl_verification: undefined,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupHook should delete webhook and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupHook('my-group', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/hooks/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 36. Issue Links Endpoints
+  // ==========================================
+  describe('36. Issue Links Endpoints', () => {
+    it('listIssueLinks should fetch linked issues list', async () => {
+      const mockData = [{ id: 1, issue_link_id: 12 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueLinks('my-project', 5);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/links',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createIssueLink should post issue link configuration', async () => {
+      const mockData = { issue_link_id: 12 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createIssueLink(
+        'my-project',
+        5,
+        'target-project',
+        10,
+        'blocks',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/links',
+        {
+          target_project_id: 'target-project',
+          target_issue_iid: 10,
+          link_type: 'blocks',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteIssueLink should delete issue link and return success', async () => {
+      const mockData = { issue_link_id: 12 };
+      mockClient.delete.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.deleteIssueLink('my-project', 5, 12);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/links/12',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 37. Time Tracking Endpoints
+  // ==========================================
+  describe('37. Time Tracking Endpoints', () => {
+    it('addIssueTimeSpent should post spent time log', async () => {
+      const mockData = { time_estimate: 0, total_time_spent: 3600 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addIssueTimeSpent(
+        'my-project',
+        5,
+        '1h',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/add_spent_time',
+        {
+          duration: '1h',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('addMergeRequestTimeSpent should post spent time log', async () => {
+      const mockData = { time_estimate: 0, total_time_spent: 7200 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addMergeRequestTimeSpent(
+        'my-project',
+        12,
+        '2h',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/12/add_spent_time',
+        {
+          duration: '2h',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueTimeTracking should retrieve stats', async () => {
+      const mockData = { time_estimate: 3600, total_time_spent: 1800 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueTimeTracking('my-project', 5);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/time_stats',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestTimeTracking should retrieve stats', async () => {
+      const mockData = { time_estimate: 7200, total_time_spent: 3600 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestTimeTracking(
+        'my-project',
+        12,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/12/time_stats',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('resetIssueTimeTracking should post reset spent time', async () => {
+      const mockData = { total_time_spent: 0 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.resetIssueTimeTracking(
+        'my-project',
+        5,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/issues/5/reset_spent_time',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('resetMergeRequestTimeTracking should post reset spent time', async () => {
+      const mockData = { total_time_spent: 0 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.resetMergeRequestTimeTracking(
+        'my-project',
+        12,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/12/reset_spent_time',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 38. Group Iterations Endpoints
+  // ==========================================
+  describe('38. Group Iterations Endpoints', () => {
+    it('listGroupIterations should fetch group iterations list', async () => {
+      const mockData = [{ id: 1, title: 'Sprint 1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupIterations('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/iterations',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listProjectIterations should fetch project iterations list', async () => {
+      const mockData = [{ id: 1, title: 'Sprint 1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectIterations('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/iterations',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupIteration should post iteration config', async () => {
+      const mockData = { id: 1, title: 'Sprint 1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupIteration('my-group', {
+        title: 'Sprint 1',
+        description: 'First sprint',
+        startDate: '2026-06-01',
+        dueDate: '2026-06-14',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/my-group/iterations',
+        {
+          title: 'Sprint 1',
+          description: 'First sprint',
+          start_date: '2026-06-01',
+          due_date: '2026-06-14',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupIteration should put updated configurations', async () => {
+      const mockData = { id: 1, title: 'Sprint 1 (Updated)' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupIteration('my-group', 1, {
+        title: 'Sprint 1 (Updated)',
+        stateEvent: 'close',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/my-group/iterations/1',
+        {
+          title: 'Sprint 1 (Updated)',
+          description: undefined,
+          start_date: undefined,
+          due_date: undefined,
+          state_event: 'close',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupIteration should delete iteration and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupIteration('my-group', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/iterations/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 39. Release Links Endpoints
+  // ==========================================
+  describe('39. Release Links Endpoints', () => {
+    it('listReleaseLinks should fetch release assets links', async () => {
+      const mockData = [{ id: 1, name: 'binary' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listReleaseLinks(
+        'my-project',
+        'v1.0.0',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/releases/v1.0.0/assets/links',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getReleaseLink should retrieve link details', async () => {
+      const mockData = { id: 1, name: 'binary', url: 'https://example.com' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getReleaseLink(
+        'my-project',
+        'v1.0.0',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/releases/v1.0.0/assets/links/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createReleaseLink should post link configuration', async () => {
+      const mockData = { id: 1, name: 'binary' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createReleaseLink(
+        'my-project',
+        'v1.0.0',
+        {
+          name: 'binary',
+          url: 'https://example.com',
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/releases/v1.0.0/assets/links',
+        {
+          name: 'binary',
+          url: 'https://example.com',
+          direct_asset_path: undefined,
+          link_type: undefined,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateReleaseLink should put updated configurations', async () => {
+      const mockData = { id: 1, name: 'binary-v2' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateReleaseLink(
+        'my-project',
+        'v1.0.0',
+        1,
+        {
+          name: 'binary-v2',
+          url: 'https://example.com/v2',
+        },
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/releases/v1.0.0/assets/links/1',
+        {
+          name: 'binary-v2',
+          url: 'https://example.com/v2',
+          direct_asset_path: undefined,
+          link_type: undefined,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteReleaseLink should delete release link', async () => {
+      const mockData = { id: 1 };
+      mockClient.delete.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.deleteReleaseLink(
+        'my-project',
+        'v1.0.0',
+        1,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/releases/v1.0.0/assets/links/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 40. Repository File Locks Endpoints
+  // ==========================================
+  describe('40. Repository File Locks Endpoints', () => {
+    it('listProjectFileLocks should fetch file locks list', async () => {
+      const mockData = [{ id: 1, path: 'src/main.js' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectFileLocks('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/infrastructure/file_locks',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('lockProjectFile should post path to lock file', async () => {
+      const mockData = { id: 1, path: 'src/main.js' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.lockProjectFile(
+        'my-project',
+        'src/main.js',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/infrastructure/file_locks',
+        {
+          path: 'src/main.js',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('unlockProjectFile should delete file lock', async () => {
+      const mockData = { id: 1, path: 'src/main.js' };
+      mockClient.delete.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.unlockProjectFile('my-project', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/infrastructure/file_locks/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
 });
