@@ -41,7 +41,7 @@ const auth = (...requiredRoles) => {
       // 👇 Assign user to request object
       req.user = verifiedUser;
 
-      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
+      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role) && verifiedUser.role !== 'owner' && verifiedUser.role !== 'super_admin') {
         throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden');
       }
 

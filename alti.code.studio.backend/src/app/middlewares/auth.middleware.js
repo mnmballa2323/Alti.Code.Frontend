@@ -36,7 +36,7 @@ const auth = (...requiredRoles) => async (req, res, next) => {
         req.user = verifiedUser; // role, userId
 
         // 3. Guard Roles
-        if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
+        if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role) && verifiedUser.role !== 'owner' && verifiedUser.role !== 'super_admin') {
             logger.warn(`🛑 RBAC Block: User ${verifiedUser.role} tried to access allowed: ${requiredRoles}`);
             throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden');
         }

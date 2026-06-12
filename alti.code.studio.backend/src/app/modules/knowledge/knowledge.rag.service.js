@@ -29,6 +29,7 @@ const vertexVectorSearchClient = new IndexEndpointServiceClient({
     apiEndpoint: `${config.gcp?.region || 'us-central1'}-aiplatform.googleapis.com`,
 });
 
+class KnowledgeRagService {
     /**
      * Phase 1, 6 & 7: Ingestion, Semantic Chunking & Multi-Modal Vision
      */

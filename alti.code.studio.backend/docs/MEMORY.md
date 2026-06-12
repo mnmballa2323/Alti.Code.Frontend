@@ -1,8 +1,5 @@
-id: agent.test
-name: Test Agent
-version: "1.0.0"
-description: Test Specialist Agent
-preamble: |
-  You specialize in verifying dynamic imports.
-capabilities:
-  - testing
+# Alti.Code.Studio Memory
+
+## Architectural Patterns
+- Redis running on 6379 in server.js
+- Routes are dynamic in route.js
