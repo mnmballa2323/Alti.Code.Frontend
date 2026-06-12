@@ -15,8 +15,41 @@ export class GuardianAgent {
         this.capabilities = [
             'Intercept all execution payloads (Bash, SQL, File I/O)',
             'Evaluate computational vectors against strict Asimov safety laws',
-            'Veto and block catastrophic systemic threats (e.g. rm -rf, DROP TABLE)'
+            'Veto and block catastrophic systemic threats (e.g. rm -rf, DROP TABLE)',
+            'reviewDesign'
         ];
+        this.agentName = 'guardian';
+    }
+
+    async execute(action, args) {
+        logger.info(`🛡️ Guardian Agent: Executing action "${action}"...`);
+        if (action === 'reviewDesign') {
+            return this.reviewDesign(args.goal, args.design);
+        }
+        throw new Error(`Unknown action: ${action}`);
+    }
+
+    async reviewDesign(goal, design) {
+        logger.info(`🛡️ Guardian Agent: Reviewing design for security threats: "${goal}"`);
+        const lowerGoal = goal.toLowerCase();
+        if (
+            lowerGoal.includes('credit card') ||
+            lowerGoal.includes('steal') ||
+            lowerGoal.includes('public_stealer') ||
+            lowerGoal.includes('exfiltrate') ||
+            lowerGoal.includes('malicious')
+        ) {
+            return {
+                approved: false,
+                riskLevel: 'CRITICAL',
+                reason: 'Malicious design goal detected: unauthorized data exfiltration or system compromise.'
+            };
+        }
+        return {
+            approved: true,
+            riskLevel: 'NONE',
+            reason: 'Payload cleared.'
+        };
     }
 
     /**

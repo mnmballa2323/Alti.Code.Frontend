@@ -190,6 +190,31 @@ export const ${cleanDomain.toLowerCase()}Agent = Object.freeze(new ${cleanDomain
 `;
         }
 
+        if (prompt.includes('You are The Architect') || prompt.includes('techStack') || prompt.includes('ACT AS THE MASTER ARCHITECT OF INSO CODE') || prompt.includes('adrs') || prompt.includes('planPhases') || prompt.includes('Deconstruct the following architectural design')) {
+            if (prompt.includes('Deconstruct the following architectural design') || prompt.includes('planPhases') || prompt.includes('sprint phases')) {
+                return JSON.stringify({
+                    phases: [
+                        { phaseNumber: 1, goal: "Implement Database schema setup" },
+                        { phaseNumber: 2, goal: "Implement controllers and routing" }
+                    ]
+                }, null, 2);
+            }
+            return JSON.stringify({
+                feature: "Notification System",
+                description: "Design a notification system",
+                techStack: ["Node.js"],
+                components: [
+                    { "name": "Notification Engine", "type": "backend", "path": "src/temp_notification.js", "description": "Sends notifications" }
+                ],
+                files: [
+                    { "path": "src/temp_notification.js", "instruction": "Write a notification function" }
+                ],
+                adrs: [
+                    { "title": "Use Redis", "context": "For low-latency queueing" }
+                ]
+            }, null, 2);
+        }
+
         return `[MOCK GEMINI RESPONSE]
 I received your prompt: "${prompt.substring(0, 50)}..."
 This is a simulated response because Vertex AI is not configured or reachable.
