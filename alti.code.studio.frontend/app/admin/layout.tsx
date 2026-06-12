@@ -27,7 +27,7 @@ interface SidebarItem {
 const adminItems: SidebarItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
-  { label: "Members", href: "/admin/team-members", icon: Users },
+  { label: "Individual", href: "/admin/team-members", icon: Users },
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
@@ -124,7 +124,7 @@ export default function AdminLayout({
   const getPageTitle = () => {
     if (pathname.startsWith("/admin/dashboard")) return "Dashboard";
     if (pathname.startsWith("/admin/members")) return "Invite";
-    if (pathname.startsWith("/admin/team-members")) return "Members";
+    if (pathname.startsWith("/admin/team-members")) return "Individual";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
     if (pathname.startsWith("/admin/data")) return "Knowledge";
@@ -168,7 +168,7 @@ export default function AdminLayout({
                 href="/admin/team-members"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back to Members</span>
+                <span>Back to Individual</span>
               </Link>
             )}
             {profile && (

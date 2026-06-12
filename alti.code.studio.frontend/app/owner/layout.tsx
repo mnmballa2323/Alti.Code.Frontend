@@ -28,7 +28,7 @@ interface SidebarItem {
 
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
-  { label: "Members", href: "/owner/team-members", icon: Users },
+  { label: "Individual", href: "/owner/team-members", icon: Users },
   { label: "Billing", href: "/owner/billing", icon: CreditCard },
   { label: "Invoices", href: "/owner/invoices", icon: FileText },
   { label: "Audit Logs", href: "/owner/audit", icon: Activity },
@@ -123,7 +123,7 @@ export default function OwnerLayout({
   const getPageTitle = () => {
     if (pathname.startsWith("/owner/dashboard")) return "Dashboard";
     if (pathname.startsWith("/owner/members")) return "Invite";
-    if (pathname.startsWith("/owner/team-members")) return "Members";
+    if (pathname.startsWith("/owner/team-members")) return "Individual";
     if (pathname.startsWith("/owner/billing")) return "Billing";
     if (pathname.startsWith("/owner/invoices")) return "Invoices";
     if (pathname.startsWith("/owner/data")) return "Knowledge";
@@ -167,7 +167,7 @@ export default function OwnerLayout({
                 href="/owner/team-members"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back to Members</span>
+                <span>Back to Individual</span>
               </Link>
             )}
             {profile && (
