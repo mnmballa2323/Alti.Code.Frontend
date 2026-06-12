@@ -47,8 +47,37 @@ const handler = NextAuth({
           placeholder: "your-email@example.com",
         },
         password: { label: "Password", type: "password" },
+        accessToken: { label: "Access Token", type: "text" },
       },
       async authorize(credentials) {
+        if (credentials?.accessToken) {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/auth/user/single-user`,
+            {
+              method: "GET",
+              headers: {
+                "Authorization": `Bearer ${credentials.accessToken}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!res.ok) {
+            throw new Error("Invalid or expired session token.");
+          }
+
+          const response = await res.json();
+
+          if (response.success && response.data) {
+            return {
+              email: response.data.email,
+              token: credentials.accessToken,
+              _id: response.data._id,
+            } as ExtendedUser;
+          }
+          return null;
+        }
+
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
           {
