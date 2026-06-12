@@ -5,6 +5,10 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.199] - 2026-06-12 — OpenStack Infrastructure Defaults Hardening
+### Changed
+- **Sovereign Cloud OpenStack Defaults**: Upgraded default compute flavor to `m1.2xlarge` (16 vCPUs, 32 GB RAM) and persistent Cinder boot volume size to `250` GB in `terraform/variables.tf` to support all 15+ microservices and backend databases out of the box with zero-friction, one-click team deployments.
+
 ## [39.37.198] - 2026-06-12 — Phase 17 GitHub REST API & SDK Entrenchment
 ### Added
 - **GitHub App Webhook Deliveries & Config**: Integrated retrieving and updating app webhook configuration, listing webhook deliveries, getting specific webhook delivery, and requesting webhook redelivery.

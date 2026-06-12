@@ -120,7 +120,7 @@ variable "openstack_image_name" {
 variable "openstack_flavor_name" {
   description = "Nova compute flavor name or UUID for the VM deployment (CPU-only)"
   type        = string
-  default     = "m1.large"
+  default     = "m1.2xlarge"
 }
 
 variable "openstack_keypair_name" {
@@ -144,7 +144,7 @@ variable "openstack_router_id" {
 variable "openstack_boot_volume_size" {
   description = "Size of the persistent boot volume in GB (disk space)"
   type        = number
-  default     = 100
+  default     = 250
 }
 
 variable "openstack_boot_volume_type" {
