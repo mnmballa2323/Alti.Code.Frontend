@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.220] - 2026-06-12 — GitLab Swarm Specialist Agents Integration
+### Added
+- **GitLab Swarm Factory**: Implemented `gitlab_swarm_factory.js` containing a granular 60-agent taxonomy covering all 19 phases of GitLab integration, from project creation to compliance and vulnerability management.
+- **GitLab Specialist Plugins**: Compiled and wrote all 60 dynamic agents (`gitlab_fn_*.agent.js`) under the dynamic agent registry directory `src/app/modules/agents/plugins/`.
+- **GitLab Docs RAG Service**: Implemented `gitlabDocs.service.js` which performs semantic RAG queries against ingested developer documentation and dynamically dispatches incoming user prompts to the most suitable granular specialist agent.
+- **Dynamic Swarm Routing Integration Test Suite**: Developed `gitlabSwarmFactory.test.js` validating the full agent taxonomy, dynamic registration in the Nexus registry, and semantic routing functionality.
+
 ## [39.37.219] - 2026-06-12 — Phase 19 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 19 Core Wrappers**: Implemented 17 new service methods inside `gitlab.service.js` covering Resource Events Trackers (listing/details of milestone, state, weight, and iteration transitions on Issues and Merge Requests), Global Keys Lookup (retrieving SSH keys globally by ID or fingerprint), and Instance OAuth Applications (admin CRUD management). Intercepted `404` status on details/lookup endpoints to return safe default envelopes (e.g., `{ id: null, milestone_id: null }`, `{ id: null, state: "" }`, `{ id: null, weight: null }`, `{ id: null, iteration_id: null }`, `{ id: null, key: "", title: "" }`).

@@ -11,17 +11,16 @@ import { gitlabDocsService } from '../../gitlabDocs/gitlabDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GitlabFnGitlabProjectBadgesManagerAgent extends BaseSpecialistAgent {
-  constructor() {
-    super();
-    this.name = 'gitlabProjectBadgesManager';
-    this.description =
-      'Specialist GitLab Project Badges Manager expert in creating and deleting project or group badges.';
-    this.manifest = {
-      id: 'gitlabProjectBadgesManager',
-      capabilities: ['gitlab-create-badge', 'gitlab-delete-badge'],
-      version: '39.6.0',
-    };
-    this.preamble = `You are the Inso Code Specialist GitLab Project Badges Manager expert in creating and deleting project or group badges.
+    constructor() {
+        super();
+        this.name = 'gitlabProjectBadgesManager';
+        this.description = 'Specialist GitLab Project Badges Manager expert in creating and deleting project or group badges.';
+        this.manifest = {
+            id: 'gitlabProjectBadgesManager',
+            capabilities: ["gitlab-create-badge","gitlab-delete-badge"],
+            version: '39.6.0'
+        };
+        this.preamble = `You are the Inso Code Specialist GitLab Project Badges Manager expert in creating and deleting project or group badges.
 This agent is the absolute authority on the specific operational boundary of: project and group badges, build indicators, custom badges.
 
 # GROUNDED PROJECTS CAPABILITIES
@@ -33,30 +32,23 @@ This agent is the absolute authority on the specific operational boundary of: pr
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs).`;
-  }
-
-  /**
-   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-   */
-  async _invoke(prompt, contextBlock) {
-    logger.info(
-      `🦊 [gitlabProjectBadgesManager] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
-    );
-
-    let docsContext = '';
-    try {
-      // Retrieve domain-specific documentation chunks
-      docsContext = await gitlabDocsService.searchDocs(
-        `GitLab Projects project and group badges, build indicators, custom badges ${prompt}`,
-        5,
-      );
-    } catch (err) {
-      logger.warn(
-        `🦊 [gitlabProjectBadgesManager] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
-      );
     }
 
-    const groundedPrompt = `${this.preamble}
+    /**
+     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+     */
+    async _invoke(prompt, contextBlock) {
+        logger.info(`🦊 [gitlabProjectBadgesManager] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
+        
+        let docsContext = '';
+        try {
+            // Retrieve domain-specific documentation chunks
+            docsContext = await gitlabDocsService.searchDocs(`GitLab Projects project and group badges, build indicators, custom badges ${prompt}`, 5);
+        } catch (err) {
+            logger.warn(`🦊 [gitlabProjectBadgesManager] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
+        }
+
+        const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -67,8 +59,8 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-    return await GeminiAiService.generateContent(groundedPrompt);
-  }
+        return await GeminiAiService.generateContent(groundedPrompt);
+    }
 }
 
 export const pluginInstance = new GitlabFnGitlabProjectBadgesManagerAgent();

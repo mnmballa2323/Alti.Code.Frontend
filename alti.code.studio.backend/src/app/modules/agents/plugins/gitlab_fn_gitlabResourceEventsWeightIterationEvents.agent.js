@@ -11,20 +11,16 @@ import { gitlabDocsService } from '../../gitlabDocs/gitlabDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GitlabFnGitlabResourceEventsWeightIterationEventsAgent extends BaseSpecialistAgent {
-  constructor() {
-    super();
-    this.name = 'gitlabResourceEventsWeightIterationEvents';
-    this.description =
-      'Specialist GitLab Resource Events Weight/Iteration Auditor expert in weight and sprint transitions.';
-    this.manifest = {
-      id: 'gitlabResourceEventsWeightIterationEvents',
-      capabilities: [
-        'gitlab-get-issue-weight-event',
-        'gitlab-get-issue-iteration-event',
-      ],
-      version: '39.6.0',
-    };
-    this.preamble = `You are the Inso Code Specialist GitLab Resource Events Weight/Iteration Auditor expert in weight and sprint transitions.
+    constructor() {
+        super();
+        this.name = 'gitlabResourceEventsWeightIterationEvents';
+        this.description = 'Specialist GitLab Resource Events Weight/Iteration Auditor expert in weight and sprint transitions.';
+        this.manifest = {
+            id: 'gitlabResourceEventsWeightIterationEvents',
+            capabilities: ["gitlab-get-issue-weight-event","gitlab-get-issue-iteration-event"],
+            version: '39.6.0'
+        };
+        this.preamble = `You are the Inso Code Specialist GitLab Resource Events Weight/Iteration Auditor expert in weight and sprint transitions.
 This agent is the absolute authority on the specific operational boundary of: weight events history, iteration events history, event auditing.
 
 # GROUNDED MILESTONES & ITERATIONS CAPABILITIES
@@ -36,30 +32,23 @@ This agent is the absolute authority on the specific operational boundary of: we
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs).`;
-  }
-
-  /**
-   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-   */
-  async _invoke(prompt, contextBlock) {
-    logger.info(
-      `🦊 [gitlabResourceEventsWeightIterationEvents] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
-    );
-
-    let docsContext = '';
-    try {
-      // Retrieve domain-specific documentation chunks
-      docsContext = await gitlabDocsService.searchDocs(
-        `GitLab Milestones & Iterations weight events history, iteration events history, event auditing ${prompt}`,
-        5,
-      );
-    } catch (err) {
-      logger.warn(
-        `🦊 [gitlabResourceEventsWeightIterationEvents] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
-      );
     }
 
-    const groundedPrompt = `${this.preamble}
+    /**
+     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+     */
+    async _invoke(prompt, contextBlock) {
+        logger.info(`🦊 [gitlabResourceEventsWeightIterationEvents] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
+        
+        let docsContext = '';
+        try {
+            // Retrieve domain-specific documentation chunks
+            docsContext = await gitlabDocsService.searchDocs(`GitLab Milestones & Iterations weight events history, iteration events history, event auditing ${prompt}`, 5);
+        } catch (err) {
+            logger.warn(`🦊 [gitlabResourceEventsWeightIterationEvents] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
+        }
+
+        const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -70,10 +59,9 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-    return await GeminiAiService.generateContent(groundedPrompt);
-  }
+        return await GeminiAiService.generateContent(groundedPrompt);
+    }
 }
 
-export const pluginInstance =
-  new GitlabFnGitlabResourceEventsWeightIterationEventsAgent();
+export const pluginInstance = new GitlabFnGitlabResourceEventsWeightIterationEventsAgent();
 export default GitlabFnGitlabResourceEventsWeightIterationEventsAgent;
