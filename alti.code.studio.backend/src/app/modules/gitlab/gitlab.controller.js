@@ -3354,7 +3354,10 @@ export const listProtectedBranches = async (req, res) => {
     const branches = await GitlabService.listProtectedBranches(projectId);
     res.status(httpStatus.OK).json({ success: true, data: branches });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing protected branches:', error);
+    logger.error(
+      '[GitLab Controller] Error listing protected branches:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -3711,7 +3714,10 @@ export const getProjectIntegration = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: integration });
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting integration settings:', error);
+    logger.error(
+      '[GitLab Controller] Error getting integration settings:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -3728,7 +3734,10 @@ export const updateProjectIntegration = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: integration });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating integration settings:', error);
+    logger.error(
+      '[GitLab Controller] Error updating integration settings:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -3744,7 +3753,10 @@ export const deleteProjectIntegration = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting integration settings:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting integration settings:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -3758,7 +3770,11 @@ export const getFileBlame = async (req, res) => {
   try {
     const { projectId } = req.params;
     const filePath = req.params[0] || req.query.path || '';
-    const blame = await GitlabService.getFileBlame(projectId, filePath, req.query);
+    const blame = await GitlabService.getFileBlame(
+      projectId,
+      filePath,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: blame });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting file blame:', error);
@@ -3771,7 +3787,10 @@ export const getFileBlame = async (req, res) => {
 export const downloadRepositoryArchive = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const data = await GitlabService.downloadRepositoryArchive(projectId, req.query);
+    const data = await GitlabService.downloadRepositoryArchive(
+      projectId,
+      req.query,
+    );
     const format = req.query.format || 'zip';
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader(
@@ -3780,7 +3799,10 @@ export const downloadRepositoryArchive = async (req, res) => {
     );
     res.status(httpStatus.OK).send(data);
   } catch (error) {
-    logger.error('[GitLab Controller] Error downloading repository archive:', error);
+    logger.error(
+      '[GitLab Controller] Error downloading repository archive:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

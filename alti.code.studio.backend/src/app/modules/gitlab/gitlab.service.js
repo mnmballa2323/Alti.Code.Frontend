@@ -4131,9 +4131,7 @@ export const GitlabService = {
   // 31. Labels Endpoints
   // ==========================================
   async listProjectLabels(projectId, params = {}) {
-    logger.info(
-      `🦊 [GitLab Service] Listing labels for project ${projectId}`,
-    );
+    logger.info(`🦊 [GitLab Service] Listing labels for project ${projectId}`);
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/labels`,
@@ -4149,10 +4147,7 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to list labels for project ${projectId}:`,
-        error,
-      );
+      logger.error(`Failed to list labels for project ${projectId}:`, error);
       throw error;
     }
   },
@@ -4215,9 +4210,7 @@ export const GitlabService = {
   },
 
   async listGroupLabels(groupId, params = {}) {
-    logger.info(
-      `🦊 [GitLab Service] Listing labels for group ${groupId}`,
-    );
+    logger.info(`🦊 [GitLab Service] Listing labels for group ${groupId}`);
     try {
       const { data } = await gitlabClient.get(
         `/groups/${encodeURIComponent(groupId)}/labels`,
@@ -4438,10 +4431,7 @@ export const GitlabService = {
       );
       return { success: true };
     } catch (error) {
-      logger.error(
-        `Failed to disable integration ${integrationSlug}:`,
-        error,
-      );
+      logger.error(`Failed to disable integration ${integrationSlug}:`, error);
       throw error;
     }
   },

@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.205] - 2026-06-12 — Phase 5 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 5 Core Wrappers**: Fully implemented 28 new service methods inside `gitlab.service.js` covering Protected Branches (list, get, protect, update, unprotect), Deploy Keys (list, get, add, enable, update, delete), Labels (list, create, update, delete for both Projects and Groups), User Todos (list, create on issues, create on MRs, mark as done, mark all as done), Project Integrations (list, get, update, delete), and Repository Extras (file blame, repository archive download).
+- **GitLab Express Routing & Controllers**: Implemented all corresponding controllers returning `{ success: true, data }` envelopes, and routes mapped under the `/api/v1/gitlab` namespace.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 230 passing tests.
+
 ## [39.37.204] - 2026-06-12 — Phase 4 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 4 Core Wrappers**: Extended `GitlabService` with 33 new wrapper methods covering Pipeline Schedules (Listing, CRUD, Triggering), Job Artifacts (Downloading archives/files, Deleting, Keeping), Merge Request Approval Rules & Settings (Listing, CRUD, Project Approval Settings), Wikis & Wiki Pages (Listing, CRUD), Vulnerability State Management (Fetching details, Confirming, Dismissing, Resolving), and Group & Project Access Requests (Listing, Requesting, Approving, Denying).
