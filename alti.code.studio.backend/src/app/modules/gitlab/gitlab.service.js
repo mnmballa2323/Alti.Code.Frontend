@@ -7654,4 +7654,322 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 50. Phase 15: Cluster Agents, Package Protection, and Pipeline Triggers
+  // ==========================================
+  async listProjectClusterAgents(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing cluster agents for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list cluster agents for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getProjectClusterAgent(projectId, agentId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting cluster agent ${agentId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents/${encodeURIComponent(agentId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get cluster agent ${agentId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createProjectClusterAgent(projectId, name) {
+    logger.info(
+      `🦊 [GitLab Service] Creating cluster agent ${name} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create cluster agent for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectClusterAgent(projectId, agentId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting cluster agent ${agentId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents/${encodeURIComponent(agentId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete cluster agent ${agentId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listClusterAgentTokens(projectId, agentId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing tokens for cluster agent ${agentId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents/${encodeURIComponent(agentId)}/tokens`,
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        logger.info(
+          `Tokens or agent not found for agent ${agentId} in project ${projectId}, returning empty array`,
+        );
+        return [];
+      }
+      logger.error(
+        `Failed to list tokens for cluster agent ${agentId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createClusterAgentToken(projectId, agentId, tokenData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating token for cluster agent ${agentId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents/${encodeURIComponent(agentId)}/tokens`,
+        {
+          name: tokenData.name,
+          description: tokenData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create token for cluster agent ${agentId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteClusterAgentToken(projectId, agentId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting token ${tokenId} for cluster agent ${agentId} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/cluster_agents/${encodeURIComponent(agentId)}/tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete token ${tokenId} for cluster agent ${agentId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listPackageProtectionRules(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing package protection rules for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/packages/protection/rules`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list package protection rules for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createPackageProtectionRule(projectId, ruleData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating package protection rule for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/packages/protection/rules`,
+        {
+          package_name_pattern: ruleData.packageNamePattern,
+          package_type: ruleData.packageType,
+          minimum_access_level_for_push: ruleData.minimumAccessLevelForPush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create package protection rule for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updatePackageProtectionRule(projectId, ruleId, ruleData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Updating package protection rule ${ruleId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/packages/protection/rules/${encodeURIComponent(ruleId)}`,
+        {
+          package_name_pattern: ruleData.packageNamePattern,
+          package_type: ruleData.packageType,
+          minimum_access_level_for_push: ruleData.minimumAccessLevelForPush,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update package protection rule ${ruleId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deletePackageProtectionRule(projectId, ruleId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting package protection rule ${ruleId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/packages/protection/rules/${encodeURIComponent(ruleId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete package protection rule ${ruleId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listPipelineTriggers(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing pipeline triggers for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/triggers`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list pipeline triggers for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getPipelineTrigger(projectId, triggerId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting pipeline trigger ${triggerId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/triggers/${encodeURIComponent(triggerId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get pipeline trigger ${triggerId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createPipelineTrigger(projectId, triggerData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating pipeline trigger for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/triggers`,
+        {
+          description: triggerData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create pipeline trigger for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updatePipelineTrigger(projectId, triggerId, triggerData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Updating pipeline trigger ${triggerId} for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/triggers/${encodeURIComponent(triggerId)}`,
+        {
+          description: triggerData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update pipeline trigger ${triggerId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deletePipelineTrigger(projectId, triggerId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting pipeline trigger ${triggerId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/triggers/${encodeURIComponent(triggerId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete pipeline trigger ${triggerId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };

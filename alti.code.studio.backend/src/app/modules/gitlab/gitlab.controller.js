@@ -6579,3 +6579,215 @@ export const deleteGroupIterationCadence = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 50. Phase 15: Cluster Agents, Package Protection, and Pipeline Triggers
+// ==========================================
+export const listProjectClusterAgents = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listProjectClusterAgents(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing cluster agents:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectClusterAgent = async (req, res) => {
+  try {
+    const { projectId, agentId } = req.params;
+    const result = await GitlabService.getProjectClusterAgent(projectId, agentId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting cluster agent:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectClusterAgent = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { name } = req.body;
+    const result = await GitlabService.createProjectClusterAgent(projectId, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating cluster agent:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectClusterAgent = async (req, res) => {
+  try {
+    const { projectId, agentId } = req.params;
+    const result = await GitlabService.deleteProjectClusterAgent(projectId, agentId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting cluster agent:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listClusterAgentTokens = async (req, res) => {
+  try {
+    const { projectId, agentId } = req.params;
+    const result = await GitlabService.listClusterAgentTokens(projectId, agentId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing cluster agent tokens:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createClusterAgentToken = async (req, res) => {
+  try {
+    const { projectId, agentId } = req.params;
+    const result = await GitlabService.createClusterAgentToken(projectId, agentId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating cluster agent token:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteClusterAgentToken = async (req, res) => {
+  try {
+    const { projectId, agentId, tokenId } = req.params;
+    const result = await GitlabService.deleteClusterAgentToken(projectId, agentId, tokenId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting cluster agent token:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPackageProtectionRules = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listPackageProtectionRules(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing package protection rules:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPackageProtectionRule = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.createPackageProtectionRule(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating package protection rule:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updatePackageProtectionRule = async (req, res) => {
+  try {
+    const { projectId, ruleId } = req.params;
+    const result = await GitlabService.updatePackageProtectionRule(projectId, ruleId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating package protection rule:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePackageProtectionRule = async (req, res) => {
+  try {
+    const { projectId, ruleId } = req.params;
+    const result = await GitlabService.deletePackageProtectionRule(projectId, ruleId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting package protection rule:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPipelineTriggers = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.listPipelineTriggers(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing pipeline triggers:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPipelineTrigger = async (req, res) => {
+  try {
+    const { projectId, triggerId } = req.params;
+    const result = await GitlabService.getPipelineTrigger(projectId, triggerId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting pipeline trigger:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPipelineTrigger = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.createPipelineTrigger(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating pipeline trigger:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updatePipelineTrigger = async (req, res) => {
+  try {
+    const { projectId, triggerId } = req.params;
+    const result = await GitlabService.updatePipelineTrigger(projectId, triggerId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating pipeline trigger:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePipelineTrigger = async (req, res) => {
+  try {
+    const { projectId, triggerId } = req.params;
+    const result = await GitlabService.deletePipelineTrigger(projectId, triggerId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting pipeline trigger:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

@@ -6115,4 +6115,171 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 50. Phase 15: Cluster Agents, Package Protection, and Pipeline Triggers
+  // ==========================================
+  describe('50. Phase 15: Cluster Agents, Package Protection, and Pipeline Triggers', () => {
+    it('listProjectClusterAgents should retrieve cluster agents list', async () => {
+      const mockData = [{ id: 1, name: 'agent-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectClusterAgents('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectClusterAgent should retrieve cluster agent details', async () => {
+      const mockData = { id: 1, name: 'agent-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectClusterAgent('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectClusterAgent should post new cluster agent', async () => {
+      const mockData = { id: 1, name: 'agent-1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectClusterAgent('123', 'agent-1');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/cluster_agents', { name: 'agent-1' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectClusterAgent should delete cluster agent', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectClusterAgent('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/cluster_agents/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listClusterAgentTokens should retrieve cluster agent tokens list', async () => {
+      const mockData = [{ id: 5, name: 'token-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listClusterAgentTokens('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens');
+      expect(result).toEqual(mockData);
+    });
+
+    it('listClusterAgentTokens should return empty array on 404 error', async () => {
+      const mockError = { response: { status: 404 } };
+      mockClient.get.mockRejectedValueOnce(mockError);
+      const result = await GitlabService.listClusterAgentTokens('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens');
+      expect(result).toEqual([]);
+    });
+
+    it('createClusterAgentToken should post new cluster agent token', async () => {
+      const mockData = { id: 5, token: 'secret-token' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createClusterAgentToken('123', 1, {
+        name: 'token-1',
+        description: 'token desc',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens', {
+        name: 'token-1',
+        description: 'token desc',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteClusterAgentToken should delete cluster agent token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteClusterAgentToken('123', 1, 5);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/cluster_agents/1/tokens/5');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listPackageProtectionRules should retrieve package protection rules list', async () => {
+      const mockData = [{ id: 1, package_name_pattern: '@scope/*' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listPackageProtectionRules('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/packages/protection/rules');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createPackageProtectionRule should post new package protection rule', async () => {
+      const mockData = { id: 1, package_name_pattern: '@scope/*' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createPackageProtectionRule('123', {
+        packageNamePattern: '@scope/*',
+        packageType: 'npm',
+        minimumAccessLevelForPush: 'maintainer',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/packages/protection/rules', {
+        package_name_pattern: '@scope/*',
+        package_type: 'npm',
+        minimum_access_level_for_push: 'maintainer',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updatePackageProtectionRule should put updated package protection rule', async () => {
+      const mockData = { id: 1, package_name_pattern: '@scope/updated-*' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updatePackageProtectionRule('123', 1, {
+        packageNamePattern: '@scope/updated-*',
+        packageType: 'npm',
+        minimumAccessLevelForPush: 'developer',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/packages/protection/rules/1', {
+        package_name_pattern: '@scope/updated-*',
+        package_type: 'npm',
+        minimum_access_level_for_push: 'developer',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deletePackageProtectionRule should delete package protection rule', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deletePackageProtectionRule('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/packages/protection/rules/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listPipelineTriggers should retrieve pipeline triggers list', async () => {
+      const mockData = [{ id: 1, description: 'trigger-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listPipelineTriggers('123');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/triggers');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getPipelineTrigger should retrieve pipeline trigger details', async () => {
+      const mockData = { id: 1, description: 'trigger-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getPipelineTrigger('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/triggers/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createPipelineTrigger should post new pipeline trigger', async () => {
+      const mockData = { id: 1, description: 'trigger-1' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createPipelineTrigger('123', {
+        description: 'trigger-1',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/triggers', {
+        description: 'trigger-1',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updatePipelineTrigger should put updated pipeline trigger config', async () => {
+      const mockData = { id: 1, description: 'trigger-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updatePipelineTrigger('123', 1, {
+        description: 'trigger-updated',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/triggers/1', {
+        description: 'trigger-updated',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deletePipelineTrigger should delete pipeline trigger', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deletePipelineTrigger('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/123/triggers/1');
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

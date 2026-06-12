@@ -1578,4 +1578,75 @@ router.delete(
   GitlabController.deleteGroupIterationCadence,
 );
 
+// ==========================================
+// 50. Phase 15: Cluster Agents, Package Protection, and Pipeline Triggers
+// ==========================================
+router.get(
+  '/projects/:projectId/cluster_agents',
+  GitlabController.listProjectClusterAgents,
+);
+router.post(
+  '/projects/:projectId/cluster_agents',
+  GitlabController.createProjectClusterAgent,
+);
+router.get(
+  '/projects/:projectId/cluster_agents/:agentId',
+  GitlabController.getProjectClusterAgent,
+);
+router.delete(
+  '/projects/:projectId/cluster_agents/:agentId',
+  GitlabController.deleteProjectClusterAgent,
+);
+
+router.get(
+  '/projects/:projectId/cluster_agents/:agentId/tokens',
+  GitlabController.listClusterAgentTokens,
+);
+router.post(
+  '/projects/:projectId/cluster_agents/:agentId/tokens',
+  GitlabController.createClusterAgentToken,
+);
+router.delete(
+  '/projects/:projectId/cluster_agents/:agentId/tokens/:tokenId',
+  GitlabController.deleteClusterAgentToken,
+);
+
+router.get(
+  '/projects/:projectId/packages/protection/rules',
+  GitlabController.listPackageProtectionRules,
+);
+router.post(
+  '/projects/:projectId/packages/protection/rules',
+  GitlabController.createPackageProtectionRule,
+);
+router.put(
+  '/projects/:projectId/packages/protection/rules/:ruleId',
+  GitlabController.updatePackageProtectionRule,
+);
+router.delete(
+  '/projects/:projectId/packages/protection/rules/:ruleId',
+  GitlabController.deletePackageProtectionRule,
+);
+
+router.get(
+  '/projects/:projectId/triggers',
+  GitlabController.listPipelineTriggers,
+);
+router.post(
+  '/projects/:projectId/triggers',
+  GitlabController.createPipelineTrigger,
+);
+router.get(
+  '/projects/:projectId/triggers/:triggerId',
+  GitlabController.getPipelineTrigger,
+);
+router.put(
+  '/projects/:projectId/triggers/:triggerId',
+  GitlabController.updatePipelineTrigger,
+);
+router.delete(
+  '/projects/:projectId/triggers/:triggerId',
+  GitlabController.deletePipelineTrigger,
+);
+
 export const GitlabRoutes = router;
