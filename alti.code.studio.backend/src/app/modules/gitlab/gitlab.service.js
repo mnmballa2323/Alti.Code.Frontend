@@ -5042,4 +5042,479 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 41. Repository Traversal (Trees) Endpoints
+  // ==========================================
+  async listRepositoryTree(projectId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching repository tree for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/repository/tree`,
+        {
+          params: {
+            path: params.path,
+            ref: params.ref || 'main',
+            recursive: params.recursive || false,
+            page: params.page || 1,
+            per_page: params.perPage || 20,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to fetch repository tree for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 42. Threaded Discussions (Notes) Endpoints
+  // ==========================================
+  async listIssueDiscussions(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue discussions for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/discussions`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue discussions for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getIssueDiscussion(projectId, issueIid, discussionId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching issue discussion ${discussionId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/discussions/${discussionId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get issue discussion ${discussionId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createIssueDiscussion(projectId, issueIid, body) {
+    logger.info(
+      `🦊 [GitLab Service] Creating issue discussion in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/discussions`,
+        {
+          body,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create issue discussion:`, error);
+      throw error;
+    }
+  },
+
+  async resolveIssueDiscussion(projectId, issueIid, discussionId, resolved) {
+    logger.info(
+      `🦊 [GitLab Service] Resolving issue discussion ${discussionId} in project ${projectId}: ${resolved}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/discussions/${discussionId}`,
+        {
+          resolved,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to resolve issue discussion ${discussionId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listMergeRequestDiscussions(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing MR discussions for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list MR discussions for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async getMergeRequestDiscussion(projectId, mrIid, discussionId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching MR discussion ${discussionId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions/${discussionId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get MR discussion ${discussionId}:`, error);
+      throw error;
+    }
+  },
+
+  async createMergeRequestDiscussion(projectId, mrIid, body) {
+    logger.info(
+      `🦊 [GitLab Service] Creating MR discussion in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions`,
+        {
+          body,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create MR discussion:`, error);
+      throw error;
+    }
+  },
+
+  async resolveMergeRequestDiscussion(projectId, mrIid, discussionId, resolved) {
+    logger.info(
+      `🦊 [GitLab Service] Resolving MR discussion ${discussionId} in project ${projectId}: ${resolved}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions/${discussionId}`,
+        {
+          resolved,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to resolve MR discussion ${discussionId}:`, error);
+      throw error;
+    }
+  },
+
+  async addMergeRequestDiscussionNote(projectId, mrIid, discussionId, body) {
+    logger.info(
+      `🦊 [GitLab Service] Replying to MR discussion ${discussionId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions/${discussionId}/notes`,
+        {
+          body,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to add note to MR discussion ${discussionId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateMergeRequestDiscussionNote(
+    projectId,
+    mrIid,
+    discussionId,
+    noteId,
+    body,
+  ) {
+    logger.info(
+      `🦊 [GitLab Service] Updating MR discussion note ${noteId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions/${discussionId}/notes/${noteId}`,
+        {
+          body,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update MR discussion note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteMergeRequestDiscussionNote(
+    projectId,
+    mrIid,
+    discussionId,
+    noteId,
+  ) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting MR discussion note ${noteId} in project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/discussions/${discussionId}/notes/${noteId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete MR discussion note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 43. Project & Group Share Links Endpoints
+  // ==========================================
+  async shareProjectWithGroup(projectId, shareData) {
+    logger.info(
+      `🦊 [GitLab Service] Sharing project ${projectId} with group ${shareData.groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/share`,
+        {
+          group_id: shareData.groupId,
+          group_access: shareData.groupAccess,
+          expires_at: shareData.expiresAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to share project ${projectId} with group:`, error);
+      throw error;
+    }
+  },
+
+  async unshareProjectFromGroup(projectId, groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Unsharing project ${projectId} from group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/share/${groupId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to unshare project ${projectId} from group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async shareGroupWithGroup(groupId, shareData) {
+    logger.info(
+      `🦊 [GitLab Service] Sharing group ${groupId} with group ${shareData.sharedGroupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/share`,
+        {
+          shared_group_id: shareData.sharedGroupId,
+          shared_group_access: shareData.sharedGroupAccess,
+          expires_at: shareData.expiresAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to share group ${groupId} with group:`, error);
+      throw error;
+    }
+  },
+
+  async unshareGroupFromGroup(groupId, sharedGroupId) {
+    logger.info(
+      `🦊 [GitLab Service] Unsharing group ${groupId} from group ${sharedGroupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/share/${sharedGroupId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to unshare group ${groupId} from group ${sharedGroupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 44. Vulnerability Exports Endpoints
+  // ==========================================
+  async createVulnerabilityExport(params = {}) {
+    logger.info('🦊 [GitLab Service] Triggering vulnerability export job');
+    try {
+      const { data } = await gitlabClient.post(
+        '/vulnerability_exports',
+        {},
+        {
+          params: {
+            project_id: params.projectId,
+            group_id: params.groupId,
+            format: params.format || 'csv',
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error('Failed to trigger vulnerability export:', error);
+      throw error;
+    }
+  },
+
+  async getVulnerabilityExportStatus(exportId) {
+    logger.info(
+      `🦊 [GitLab Service] Checking status of vulnerability export ${exportId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/vulnerability_exports/${exportId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to check status of vulnerability export ${exportId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async downloadVulnerabilityExport(exportId) {
+    logger.info(
+      `🦊 [GitLab Service] Downloading vulnerability export report ${exportId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/vulnerability_exports/${exportId}/download`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to download vulnerability export report ${exportId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 45. Instance Metadata Endpoints
+  // ==========================================
+  async getGitlabVersion() {
+    logger.info('🦊 [GitLab Service] Fetching GitLab version metadata');
+    try {
+      const { data } = await gitlabClient.get('/version');
+      return data;
+    } catch (error) {
+      logger.error('Failed to get GitLab version:', error);
+      throw error;
+    }
+  },
+
+  async getGitlabMetadata() {
+    logger.info('🦊 [GitLab Service] Fetching GitLab system metadata');
+    try {
+      const { data } = await gitlabClient.get('/metadata');
+      return data;
+    } catch (error) {
+      logger.error('Failed to get GitLab metadata:', error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 46. Resource State Events Endpoints
+  // ==========================================
+  async listIssueResourceLabelEvents(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue label events for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_label_events`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue label events for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listMergeRequestResourceLabelEvents(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing MR label events for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_label_events`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list MR label events for MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async listIssueResourceMilestoneEvents(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue milestone events for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/resource_milestone_events`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue milestone events for issue ${issueIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listMergeRequestResourceMilestoneEvents(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing MR milestone events for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/resource_milestone_events`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list MR milestone events for MR ${mrIid}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };
