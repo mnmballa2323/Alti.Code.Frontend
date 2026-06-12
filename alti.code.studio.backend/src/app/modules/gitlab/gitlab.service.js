@@ -4483,4 +4483,563 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 35. Group Webhooks Endpoints
+  // ==========================================
+  async listGroupHooks(groupId) {
+    logger.info(`🦊 [GitLab Service] Listing webhooks for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/hooks`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list webhooks for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupHook(groupId, hookId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching webhook ${hookId} for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/hooks/${hookId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get webhook ${hookId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addGroupHook(groupId, hookData) {
+    logger.info(`🦊 [GitLab Service] Adding webhook to group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/hooks`,
+        {
+          url: hookData.url,
+          push_events: hookData.pushEvents,
+          issues_events: hookData.issuesEvents,
+          confidential_issues_events: hookData.confidentialIssuesEvents,
+          merge_requests_events: hookData.mergeRequestsEvents,
+          tag_push_events: hookData.tagPushEvents,
+          note_events: hookData.noteEvents,
+          confidential_note_events: hookData.confidentialNoteEvents,
+          job_events: hookData.jobEvents,
+          pipeline_events: hookData.pipelineEvents,
+          wiki_page_events: hookData.wikiPageEvents,
+          token: hookData.token,
+          enable_ssl_verification: hookData.enableSslVerification,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to add webhook to group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupHook(groupId, hookId, hookData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating webhook ${hookId} for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/hooks/${hookId}`,
+        {
+          url: hookData.url,
+          push_events: hookData.pushEvents,
+          issues_events: hookData.issuesEvents,
+          confidential_issues_events: hookData.confidentialIssuesEvents,
+          merge_requests_events: hookData.mergeRequestsEvents,
+          tag_push_events: hookData.tagPushEvents,
+          note_events: hookData.noteEvents,
+          confidential_note_events: hookData.confidentialNoteEvents,
+          job_events: hookData.jobEvents,
+          pipeline_events: hookData.pipelineEvents,
+          wiki_page_events: hookData.wikiPageEvents,
+          token: hookData.token,
+          enable_ssl_verification: hookData.enableSslVerification,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update webhook ${hookId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteGroupHook(groupId, hookId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting webhook ${hookId} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/hooks/${hookId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete webhook ${hookId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 36. Issue Links Endpoints
+  // ==========================================
+  async listIssueLinks(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Listing issue links for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/links`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list issue links for issue ${issueIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createIssueLink(
+    projectId,
+    issueIid,
+    targetProjectId,
+    targetIssueIid,
+    linkType = 'relates_to',
+  ) {
+    logger.info(
+      `🦊 [GitLab Service] Linking issue ${issueIid} in project ${projectId} to issue ${targetIssueIid} in project ${targetProjectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/links`,
+        {
+          target_project_id: targetProjectId,
+          target_issue_iid: targetIssueIid,
+          link_type: linkType,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to link issue ${issueIid} in project ${projectId} to issue ${targetIssueIid} in project ${targetProjectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteIssueLink(projectId, issueIid, issueLinkId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting issue link ${issueLinkId} from issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/links/${issueLinkId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to delete issue link ${issueLinkId} from issue ${issueIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 37. Time Tracking Endpoints
+  // ==========================================
+  async addIssueTimeSpent(projectId, issueIid, duration) {
+    logger.info(
+      `🦊 [GitLab Service] Logging ${duration} time spent on issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/add_spent_time`,
+        {
+          duration,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to log spent time on issue ${issueIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async addMergeRequestTimeSpent(projectId, mrIid, duration) {
+    logger.info(
+      `🦊 [GitLab Service] Logging ${duration} time spent on MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/add_spent_time`,
+        {
+          duration,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to log spent time on MR ${mrIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getIssueTimeTracking(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching time tracking stats for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/time_stats`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get time stats for issue ${issueIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getMergeRequestTimeTracking(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching time tracking stats for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/time_stats`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get time stats for MR ${mrIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async resetIssueTimeTracking(projectId, issueIid) {
+    logger.info(
+      `🦊 [GitLab Service] Resetting time tracking stats for issue ${issueIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/reset_spent_time`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to reset time stats for issue ${issueIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async resetMergeRequestTimeTracking(projectId, mrIid) {
+    logger.info(
+      `🦊 [GitLab Service] Resetting time tracking stats for MR ${mrIid} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/reset_spent_time`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to reset time stats for MR ${mrIid} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 38. Group Iterations Endpoints
+  // ==========================================
+  async listGroupIterations(groupId) {
+    logger.info(`🦊 [GitLab Service] Listing iterations for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/iterations`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list iterations for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async listProjectIterations(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing iterations for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/iterations`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list iterations for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createGroupIteration(groupId, iterationData) {
+    logger.info(`🦊 [GitLab Service] Creating iteration in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/iterations`,
+        {
+          title: iterationData.title,
+          description: iterationData.description,
+          start_date: iterationData.startDate,
+          due_date: iterationData.dueDate,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create iteration in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupIteration(groupId, iterationId, iterationData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating iteration ${iterationId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/iterations/${iterationId}`,
+        {
+          title: iterationData.title,
+          description: iterationData.description,
+          start_date: iterationData.startDate,
+          due_date: iterationData.dueDate,
+          state_event: iterationData.stateEvent,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update iteration ${iterationId} in group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteGroupIteration(groupId, iterationId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting iteration ${iterationId} in group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/iterations/${iterationId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete iteration ${iterationId} in group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 39. Release Links Endpoints
+  // ==========================================
+  async listReleaseLinks(projectId, tagName) {
+    logger.info(
+      `🦊 [GitLab Service] Listing release links for tag ${tagName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}/assets/links`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list release links for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async getReleaseLink(projectId, tagName, linkId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching release link ${linkId} for tag ${tagName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}/assets/links/${linkId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to get release link ${linkId} for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createReleaseLink(projectId, tagName, linkData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating release link for tag ${tagName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}/assets/links`,
+        {
+          name: linkData.name,
+          url: linkData.url,
+          direct_asset_path: linkData.directAssetPath,
+          link_type: linkData.linkType,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create release link for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async updateReleaseLink(projectId, tagName, linkId, linkData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating release link ${linkId} for tag ${tagName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}/assets/links/${linkId}`,
+        {
+          name: linkData.name,
+          url: linkData.url,
+          direct_asset_path: linkData.directAssetPath,
+          link_type: linkData.linkType,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to update release link ${linkId} for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteReleaseLink(projectId, tagName, linkId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting release link ${linkId} for tag ${tagName} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}/assets/links/${linkId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to delete release link ${linkId} for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 40. Repository File Locks Endpoints
+  // ==========================================
+  async listProjectFileLocks(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing file locks for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/infrastructure/file_locks`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list file locks for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async lockProjectFile(projectId, path) {
+    logger.info(
+      `🦊 [GitLab Service] Locking file ${path} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/infrastructure/file_locks`,
+        {
+          path,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to lock file ${path} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async unlockProjectFile(projectId, lockId) {
+    logger.info(
+      `🦊 [GitLab Service] Unlocking file lock ${lockId} in project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/infrastructure/file_locks/${lockId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to unlock file lock ${lockId} in project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
 };
