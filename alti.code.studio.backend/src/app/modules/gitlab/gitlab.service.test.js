@@ -1882,4 +1882,565 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 17. Epics & Epic Boards Endpoints
+  // ==========================================
+  describe('17. Epics & Epic Boards Endpoints', () => {
+    it('listGroupEpics should fetch epics for a group', async () => {
+      const mockData = [{ id: 1, title: 'Epic 1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupEpics('my-group', {
+        page: 2,
+        perPage: 15,
+        search: 'keyword',
+        state: 'opened',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/epics', {
+        params: {
+          page: 2,
+          per_page: 15,
+          search: 'keyword',
+          state: 'opened',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupEpic should retrieve epic details', async () => {
+      const mockData = { id: 1, title: 'Epic 1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupEpic('my-group', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/epics/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupEpic should create an epic', async () => {
+      const mockData = { id: 1, title: 'New Epic' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupEpic('my-group', {
+        title: 'New Epic',
+        description: 'desc',
+        startDate: '2026-06-01',
+        endDate: '2026-06-30',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/epics', {
+        title: 'New Epic',
+        description: 'desc',
+        start_date: '2026-06-01',
+        end_date: '2026-06-30',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupEpic should update epic details', async () => {
+      const mockData = { id: 1, title: 'Updated Epic' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupEpic('my-group', 1, {
+        title: 'Updated Epic',
+        description: 'updated desc',
+        startDate: '2026-06-02',
+        endDate: '2026-06-29',
+        stateEvent: 'close',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/my-group/epics/1', {
+        title: 'Updated Epic',
+        description: 'updated desc',
+        start_date: '2026-06-02',
+        end_date: '2026-06-29',
+        state_event: 'close',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupEpic should delete an epic and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupEpic('my-group', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/my-group/epics/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listEpicIssues should retrieve issues linked to epic', async () => {
+      const mockData = [{ id: 10, title: 'Issue 10' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listEpicIssues('my-group', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/epics/1/issues');
+      expect(result).toEqual(mockData);
+    });
+
+    it('linkEpicIssue should link an issue to epic', async () => {
+      const mockData = { id: 10, epic: { id: 1 } };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.linkEpicIssue('my-group', 1, 10);
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/epics/1/issues/10');
+      expect(result).toEqual(mockData);
+    });
+
+    it('unlinkEpicIssue should unlink an issue from epic', async () => {
+      const mockData = { id: 10, epic: null };
+      mockClient.delete.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.unlinkEpicIssue('my-group', 1, 10);
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/my-group/epics/1/issues/10');
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 18. Packages & Registries Endpoints
+  // ==========================================
+  describe('18. Packages & Registries Endpoints', () => {
+    it('listProjectPackages should list packages for a project', async () => {
+      const mockData = [{ id: 1, name: 'my-pkg' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectPackages('my-project', {
+        page: 2,
+        perPage: 15,
+        packageName: 'pkg',
+        packageType: 'npm',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/packages', {
+        params: {
+          page: 2,
+          per_page: 15,
+          package_name: 'pkg',
+          package_type: 'npm',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectPackage should fetch package info', async () => {
+      const mockData = { id: 1, name: 'my-pkg' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectPackage('my-project', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/packages/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectPackage should delete package and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectPackage('my-project', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/packages/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listPackageVersions should list versions/files for a package', async () => {
+      const mockData = [{ id: 100, file_name: 'v1.0.0' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listPackageVersions('my-project', 1, {
+        page: 3,
+        perPage: 25,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/packages/1/package_files', {
+        params: {
+          page: 3,
+          per_page: 25,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listContainerRepositories should list Docker registries', async () => {
+      const mockData = [{ id: 5, name: 'docker-image' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listContainerRepositories('my-project', {
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/registry/repositories', {
+        params: {
+          page: 2,
+          per_page: 10,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteContainerRepository should delete registry repository and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteContainerRepository('my-project', 5);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/registry/repositories/5');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 19. Project & Group Badges Endpoints
+  // ==========================================
+  describe('19. Project & Group Badges Endpoints', () => {
+    it('listProjectBadges should list project badges', async () => {
+      const mockData = [{ id: 1, name: 'coverage' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectBadges('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/badges');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectBadge should get badge details', async () => {
+      const mockData = { id: 1, name: 'coverage' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectBadge('my-project', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/badges/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectBadge should create a project badge', async () => {
+      const mockData = { id: 1, name: 'coverage' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectBadge('my-project', {
+        linkUrl: 'http://link',
+        imageUrl: 'http://img',
+        name: 'coverage',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/badges', {
+        link_url: 'http://link',
+        image_url: 'http://img',
+        name: 'coverage',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectBadge should update a project badge', async () => {
+      const mockData = { id: 1, name: 'coverage-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectBadge('my-project', 1, {
+        linkUrl: 'http://link-new',
+        imageUrl: 'http://img-new',
+        name: 'coverage-updated',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/badges/1', {
+        link_url: 'http://link-new',
+        image_url: 'http://img-new',
+        name: 'coverage-updated',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectBadge should delete project badge and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectBadge('my-project', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/badges/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listGroupBadges should list group badges', async () => {
+      const mockData = [{ id: 2, name: 'build' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupBadges('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/badges');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupBadge should get group badge details', async () => {
+      const mockData = { id: 2, name: 'build' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupBadge('my-group', 2);
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/badges/2');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupBadge should create a group badge', async () => {
+      const mockData = { id: 2, name: 'build' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupBadge('my-group', {
+        linkUrl: 'http://link',
+        imageUrl: 'http://img',
+        name: 'build',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/badges', {
+        link_url: 'http://link',
+        image_url: 'http://img',
+        name: 'build',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupBadge should update a group badge', async () => {
+      const mockData = { id: 2, name: 'build-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupBadge('my-group', 2, {
+        linkUrl: 'http://link-new',
+        imageUrl: 'http://img-new',
+        name: 'build-updated',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/my-group/badges/2', {
+        link_url: 'http://link-new',
+        image_url: 'http://img-new',
+        name: 'build-updated',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupBadge should delete group badge and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupBadge('my-group', 2);
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/my-group/badges/2');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 20. Pages & Pages Domains Endpoints
+  // ==========================================
+  describe('20. Pages & Pages Domains Endpoints', () => {
+    it('getProjectPages should retrieve Pages status', async () => {
+      const mockData = { url: 'https://pages.example.com' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectPages('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/pages');
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectPages should delete Pages config and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectPages('my-project');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/pages');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listPagesDomains should list Pages domains', async () => {
+      const mockData = [{ domain: 'example.com' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listPagesDomains('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/pages/domains');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getPagesDomain should retrieve specific Pages domain config', async () => {
+      const mockData = { domain: 'example.com' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getPagesDomain('my-project', 'example.com');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/pages/domains/example.com');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createPagesDomain should create a new Pages domain mapping', async () => {
+      const mockData = { domain: 'example.com' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createPagesDomain('my-project', 'example.com', {
+        certificate: 'cert-content',
+        key: 'key-content',
+        autoSslEnabled: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/pages/domains', {
+        domain: 'example.com',
+        certificate: 'cert-content',
+        key: 'key-content',
+        auto_ssl_enabled: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updatePagesDomain should update pages domain details', async () => {
+      const mockData = { domain: 'example.com' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updatePagesDomain('my-project', 'example.com', {
+        certificate: 'cert-content-new',
+        key: 'key-content-new',
+        autoSslEnabled: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/pages/domains/example.com', {
+        certificate: 'cert-content-new',
+        key: 'key-content-new',
+        auto_ssl_enabled: false,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deletePagesDomain should delete Pages domain mapping and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deletePagesDomain('my-project', 'example.com');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/pages/domains/example.com');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 21. Audit Events Endpoints
+  // ==========================================
+  describe('21. Audit Events Endpoints', () => {
+    it('listProjectAuditEvents should fetch project audit logs', async () => {
+      const mockData = [{ id: 1, entity_type: 'Project' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectAuditEvents('my-project', {
+        page: 2,
+        perPage: 20,
+        createdAfter: '2026-06-01T00:00:00Z',
+        createdBefore: '2026-06-10T00:00:00Z',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/audit_events', {
+        params: {
+          page: 2,
+          per_page: 20,
+          created_after: '2026-06-01T00:00:00Z',
+          created_before: '2026-06-10T00:00:00Z',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listGroupAuditEvents should fetch group audit logs', async () => {
+      const mockData = [{ id: 1, entity_type: 'Group' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupAuditEvents('my-group', {
+        page: 3,
+        perPage: 30,
+        createdAfter: '2026-06-02T00:00:00Z',
+        createdBefore: '2026-06-09T00:00:00Z',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/audit_events', {
+        params: {
+          page: 3,
+          per_page: 30,
+          created_after: '2026-06-02T00:00:00Z',
+          created_before: '2026-06-09T00:00:00Z',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 22. Award Emoji (Reactions) Endpoints
+  // ==========================================
+  describe('22. Award Emoji (Reactions) Endpoints', () => {
+    it('listAwardEmojisOnIssue should fetch issue emoji reactions', async () => {
+      const mockData = [{ id: 1, name: 'thumbsup' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnIssue('my-project', 45);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/issues/45/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnIssue should create an emoji reaction on issue', async () => {
+      const mockData = { id: 1, name: 'thumbsup' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnIssue('my-project', 45, 'thumbsup');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/issues/45/award_emoji', { name: 'thumbsup' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnIssue should delete reaction and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnIssue('my-project', 45, 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/issues/45/award_emoji/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listAwardEmojisOnMergeRequest should fetch MR emoji reactions', async () => {
+      const mockData = [{ id: 2, name: 'clap' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnMergeRequest('my-project', 12);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnMergeRequest should create reaction on MR', async () => {
+      const mockData = { id: 2, name: 'clap' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnMergeRequest('my-project', 12, 'clap');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/award_emoji', { name: 'clap' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnMergeRequest should delete reaction on MR', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnMergeRequest('my-project', 12, 2);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/award_emoji/2');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listAwardEmojisOnSnippet should fetch personal snippet reactions', async () => {
+      const mockData = [{ id: 3, name: 'heart' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnSnippet(9);
+      expect(mockClient.get).toHaveBeenCalledWith('/snippets/9/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnSnippet should create reaction on personal snippet', async () => {
+      const mockData = { id: 3, name: 'heart' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnSnippet(9, 'heart');
+      expect(mockClient.post).toHaveBeenCalledWith('/snippets/9/award_emoji', { name: 'heart' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnSnippet should delete reaction on personal snippet', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnSnippet(9, 3);
+      expect(mockClient.delete).toHaveBeenCalledWith('/snippets/9/award_emoji/3');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listAwardEmojisOnProjectSnippet should fetch project snippet reactions', async () => {
+      const mockData = [{ id: 4, name: 'smile' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnProjectSnippet('my-project', 8);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/snippets/8/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnProjectSnippet should create reaction on project snippet', async () => {
+      const mockData = { id: 4, name: 'smile' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnProjectSnippet('my-project', 8, 'smile');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/snippets/8/award_emoji', { name: 'smile' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnProjectSnippet should delete reaction on project snippet', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnProjectSnippet('my-project', 8, 4);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/snippets/8/award_emoji/4');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listAwardEmojisOnIssueNote should fetch issue comment reactions', async () => {
+      const mockData = [{ id: 5, name: 'laughing' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnIssueNote('my-project', 45, 100);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/issues/45/notes/100/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnIssueNote should create reaction on issue comment', async () => {
+      const mockData = { id: 5, name: 'laughing' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnIssueNote('my-project', 45, 100, 'laughing');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/issues/45/notes/100/award_emoji', { name: 'laughing' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnIssueNote should delete reaction on issue comment', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnIssueNote('my-project', 45, 100, 5);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/issues/45/notes/100/award_emoji/5');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listAwardEmojisOnMergeRequestNote should fetch MR comment reactions', async () => {
+      const mockData = [{ id: 6, name: 'thinking' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listAwardEmojisOnMergeRequestNote('my-project', 12, 200);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/notes/200/award_emoji');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createAwardEmojiOnMergeRequestNote should create reaction on MR comment', async () => {
+      const mockData = { id: 6, name: 'thinking' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createAwardEmojiOnMergeRequestNote('my-project', 12, 200, 'thinking');
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/notes/200/award_emoji', { name: 'thinking' });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteAwardEmojiOnMergeRequestNote should delete reaction on MR comment', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnMergeRequestNote('my-project', 12, 200, 6);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/notes/200/award_emoji/6');
+      expect(result).toEqual({ success: true });
+    });
+  });
 });
+
