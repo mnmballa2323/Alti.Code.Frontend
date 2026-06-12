@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   UserPlus,
   Users,
@@ -13,6 +14,7 @@ import {
   Activity,
   BarChart3,
   ArrowLeft,
+  Loader2,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -23,42 +25,63 @@ interface SidebarItem {
   icon: React.ComponentType<any>;
 }
 
-const adminItems: SidebarItem[] = [
-  { label: "Invite", href: "/admin/members", icon: UserPlus },
-  { label: "Members", href: "/admin/team-members", icon: Users },
-  { label: "Billing", href: "/admin/billing", icon: CreditCard },
-  { label: "Invoices", href: "/admin/invoices", icon: FileText },
-  { label: "Audit Logs", href: "/admin/audit", icon: Activity },
-  { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
+const ownerItems: SidebarItem[] = [
+  { label: "Invite", href: "/owner/members", icon: UserPlus },
+  { label: "Members", href: "/owner/team-members", icon: Users },
+  { label: "Billing", href: "/owner/billing", icon: CreditCard },
+  { label: "Invoices", href: "/owner/invoices", icon: FileText },
+  { label: "Audit Logs", href: "/owner/audit", icon: Activity },
+  { label: "Model Usage", href: "/owner/usage", icon: BarChart3 },
 ];
 
 const managerItems: SidebarItem[] = [
-  { label: "Knowledge", href: "/admin/data", icon: BookOpen },
-  { label: "Instructions", href: "/admin/instructions", icon: FileText },
-  { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
+  { label: "Knowledge", href: "/owner/data", icon: BookOpen },
+  { label: "Instructions", href: "/owner/instructions", icon: FileText },
+  { label: "Guardrails", href: "/owner/guardrails", icon: Shield },
 ];
 
-export default function AdminLayout({
+export default function OwnerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "";
+  const router = useRouter();
+  const { status } = useSession();
   const profileFromStore = useAppSelector((state) => state.user.data);
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
   const profile = profileFromStore?.email ? profileFromStore : null;
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
   const isMemberDetail =
-    pathname.startsWith("/admin/team-members/") &&
-    pathname !== "/admin/team-members";
+    pathname.startsWith("/owner/team-members/") &&
+    pathname !== "/owner/team-members";
 
   useEffect(() => {
-    if (profile) {
-      if (profile.role === "admin" || profile.role === "ADMIN") {
-        setIsAdmin(true);
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else if (status === "authenticated" && profile) {
+      const userRole = (profile.role || "").toLowerCase();
+      if (userRole === "owner") {
+        setIsAuthorized(true);
+      } else {
+        router.push("/dashboard");
       }
     }
-  }, [profile]);
+  }, [status, profile, router]);
+
+  if (status === "loading" || (status === "authenticated" && !isAuthorized)) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-[#0d1117] text-white">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
+          <span className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
+            Securing Connection...
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   const renderNavGroup = (
     title: string,
@@ -67,7 +90,7 @@ export default function AdminLayout({
   ) => {
     return (
       <div className={`mb-6 ${extraClass}`}>
-        <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+        <h3 className="px-4 text-[10px] font-bold text-neutral-455 dark:text-neutral-500 uppercase tracking-wider mb-2">
           {title}
         </h3>
         <nav className="flex flex-col gap-1">
@@ -96,40 +119,18 @@ export default function AdminLayout({
     );
   };
 
-  const getActiveGroup = () => {
-    if (
-      pathname.startsWith("/admin/members") ||
-      pathname.startsWith("/admin/team-members") ||
-      pathname.startsWith("/admin/billing") ||
-      pathname.startsWith("/admin/invoices") ||
-      pathname.startsWith("/admin/audit") ||
-      pathname.startsWith("/admin/usage")
-    ) {
-      return "Platform Admin";
-    }
-    if (
-      pathname.startsWith("/admin/data") ||
-      pathname.startsWith("/admin/instructions") ||
-      pathname.startsWith("/admin/guardrails")
-    ) {
-      return "Platform Manager";
-    }
-
-    return "Platform Admin";
-  };
-
   const getPageTitle = () => {
-    if (pathname.startsWith("/admin/members")) return "Invite";
-    if (pathname.startsWith("/admin/team-members")) return "Members";
-    if (pathname.startsWith("/admin/billing")) return "Billing";
-    if (pathname.startsWith("/admin/invoices")) return "Invoices";
-    if (pathname.startsWith("/admin/data")) return "Knowledge";
-    if (pathname.startsWith("/admin/instructions")) return "Instructions";
-    if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
-    if (pathname.startsWith("/admin/usage")) return "Model Usage";
-    if (pathname.startsWith("/admin/audit")) return "Audit Logs";
+    if (pathname.startsWith("/owner/members")) return "Invite";
+    if (pathname.startsWith("/owner/team-members")) return "Members";
+    if (pathname.startsWith("/owner/billing")) return "Billing";
+    if (pathname.startsWith("/owner/invoices")) return "Invoices";
+    if (pathname.startsWith("/owner/data")) return "Knowledge";
+    if (pathname.startsWith("/owner/instructions")) return "Instructions";
+    if (pathname.startsWith("/owner/guardrails")) return "Guardrails";
+    if (pathname.startsWith("/owner/usage")) return "Model Usage";
+    if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
-    return "Platform Admin";
+    return "Platform Owner";
   };
 
   return (
@@ -161,7 +162,7 @@ export default function AdminLayout({
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href="/admin/team-members"
+                href="/owner/team-members"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Members</span>
@@ -174,11 +175,11 @@ export default function AdminLayout({
                     {profile.email}
                   </span>
                   <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                    {profile.role || "Admin"}
+                    {profile.role || "Owner"}
                   </span>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-xs">
-                  {(profile.email || "A").charAt(0).toUpperCase()}
+                  {(profile.email || "O").charAt(0).toUpperCase()}
                 </div>
               </div>
             )}
@@ -189,7 +190,7 @@ export default function AdminLayout({
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {renderNavGroup("Platform Admin", adminItems)}
+          {renderNavGroup("Platform Admin", ownerItems)}
           {renderNavGroup("Platform Manager", managerItems, "mt-8")}
         </div>
 

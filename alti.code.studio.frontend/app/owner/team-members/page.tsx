@@ -260,7 +260,7 @@ export default function TeamMembersPage() {
                         key={member.id}
                         className="group grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
                         onClick={() =>
-                          router.push(`/admin/team-members/${member.id}`)
+                          router.push(`/owner/team-members/${member.id}`)
                         }
                       >
                         <div className="col-span-3 text-neutral-800 dark:text-neutral-200 font-medium capitalize">

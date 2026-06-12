@@ -46,9 +46,14 @@ const globalErrorHandler = (error, req, res, next) => {
     errorMessages =
       error && error.message ? [{ path: '', message: error.message }] : [];
   } else if (error instanceof Error) {
-    message = error ? error.message : message;
-    errorMessages =
-      error && error.message ? [{ path: '', message: error.message }] : [];
+    if (config.env === 'production') {
+      message = 'Internal Server Error';
+      errorMessages = [{ path: '', message: 'Internal Server Error' }];
+    } else {
+      message = error ? error.message : message;
+      errorMessages =
+        error && error.message ? [{ path: '', message: error.message }] : [];
+    }
   }
 
   res.status(statusCode).json({
