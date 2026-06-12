@@ -6075,3 +6075,237 @@ export const renderMarkdown = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 48. Phase 13: Deploy Tokens, Personal Access Tokens, Project Topics, and MR Suggestions
+// ==========================================
+export const listProjectDeployTokens = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const tokens = await GitlabService.listProjectDeployTokens(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: tokens });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing project deploy tokens:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectDeployToken = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const token = await GitlabService.createProjectDeployToken(
+      projectId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating project deploy token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectDeployToken = async (req, res) => {
+  try {
+    const { projectId, tokenId } = req.params;
+    const result = await GitlabService.deleteProjectDeployToken(
+      projectId,
+      tokenId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting project deploy token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupDeployTokens = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const tokens = await GitlabService.listGroupDeployTokens(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: tokens });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group deploy tokens:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupDeployToken = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const token = await GitlabService.createGroupDeployToken(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: token });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group deploy token:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupDeployToken = async (req, res) => {
+  try {
+    const { groupId, tokenId } = req.params;
+    const result = await GitlabService.deleteGroupDeployToken(groupId, tokenId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group deploy token:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPersonalAccessTokens = async (req, res) => {
+  try {
+    const tokens = await GitlabService.listPersonalAccessTokens(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: tokens });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing personal access tokens:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPersonalAccessToken = async (req, res) => {
+  try {
+    const { tokenId } = req.params;
+    const token = await GitlabService.getPersonalAccessToken(tokenId);
+    res.status(httpStatus.OK).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting personal access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPersonalAccessToken = async (req, res) => {
+  try {
+    const token = await GitlabService.createPersonalAccessToken(req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating personal access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const revokePersonalAccessToken = async (req, res) => {
+  try {
+    const { tokenId } = req.params;
+    const result = await GitlabService.revokePersonalAccessToken(tokenId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error revoking personal access token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listProjectTopics = async (req, res) => {
+  try {
+    const topics = await GitlabService.listProjectTopics(req.query);
+    res.status(httpStatus.OK).json({ success: true, data: topics });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project topics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectTopic = async (req, res) => {
+  try {
+    const { topicId } = req.params;
+    const topic = await GitlabService.getProjectTopic(topicId);
+    res.status(httpStatus.OK).json({ success: true, data: topic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project topic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectTopic = async (req, res) => {
+  try {
+    const topic = await GitlabService.createProjectTopic(req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: topic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating project topic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectTopic = async (req, res) => {
+  try {
+    const { topicId } = req.params;
+    const topic = await GitlabService.updateProjectTopic(topicId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: topic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating project topic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectTopic = async (req, res) => {
+  try {
+    const { topicId } = req.params;
+    const result = await GitlabService.deleteProjectTopic(topicId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project topic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const applyMergeRequestSuggestion = async (req, res) => {
+  try {
+    const { suggestionId } = req.params;
+    const result = await GitlabService.applyMergeRequestSuggestion(suggestionId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error applying MR suggestion:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

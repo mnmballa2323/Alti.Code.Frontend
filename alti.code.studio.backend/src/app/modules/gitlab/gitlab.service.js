@@ -7025,4 +7025,274 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 48. Phase 13: Deploy Tokens, Personal Access Tokens, Project Topics, and MR Suggestions
+  // ==========================================
+  async listProjectDeployTokens(projectId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing deploy tokens for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/deploy_tokens`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list project deploy tokens for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createProjectDeployToken(projectId, tokenData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating deploy token for project ${projectId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/deploy_tokens`,
+        {
+          name: tokenData.name,
+          scopes: tokenData.scopes,
+          expires_at: tokenData.expiresAt,
+          username: tokenData.username,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create project deploy token for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteProjectDeployToken(projectId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting deploy token ${tokenId} for project ${projectId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/deploy_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete project deploy token ${tokenId} for project ${projectId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGroupDeployTokens(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing deploy tokens for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/deploy_tokens`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list group deploy tokens for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createGroupDeployToken(groupId, tokenData = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Creating deploy token for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/deploy_tokens`,
+        {
+          name: tokenData.name,
+          scopes: tokenData.scopes,
+          expires_at: tokenData.expiresAt,
+          username: tokenData.username,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to create group deploy token for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async deleteGroupDeployToken(groupId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting deploy token ${tokenId} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/deploy_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to delete group deploy token ${tokenId} for group ${groupId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listPersonalAccessTokens(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing personal access tokens');
+    try {
+      const { data } = await gitlabClient.get('/personal_access_tokens', {
+        params: {
+          user_id: params.userId,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list personal access tokens:', error);
+      throw error;
+    }
+  },
+
+  async getPersonalAccessToken(tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Getting details for personal access token ${tokenId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/personal_access_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get personal access token ${tokenId}:`, error);
+      throw error;
+    }
+  },
+
+  async createPersonalAccessToken(tokenData = {}) {
+    logger.info('🦊 [GitLab Service] Creating a personal access token');
+    try {
+      const { data } = await gitlabClient.post('/personal_access_tokens', {
+        user_id: tokenData.userId,
+        name: tokenData.name,
+        scopes: tokenData.scopes,
+        expires_at: tokenData.expiresAt,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to create personal access token:', error);
+      throw error;
+    }
+  },
+
+  async revokePersonalAccessToken(tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Revoking personal access token ${tokenId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/personal_access_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to revoke personal access token ${tokenId}:`, error);
+      throw error;
+    }
+  },
+
+  async listProjectTopics(params = {}) {
+    logger.info('🦊 [GitLab Service] Listing project topics');
+    try {
+      const { data } = await gitlabClient.get('/topics', {
+        params: {
+          search: params.search,
+          without_projects: params.withoutProjects,
+        },
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to list project topics:', error);
+      throw error;
+    }
+  },
+
+  async getProjectTopic(topicId) {
+    logger.info(`🦊 [GitLab Service] Getting details for topic ${topicId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/topics/${encodeURIComponent(topicId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get topic ${topicId}:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectTopic(topicData = {}) {
+    logger.info(`🦊 [GitLab Service] Creating project topic "${topicData.name}"`);
+    try {
+      const { data } = await gitlabClient.post('/topics', {
+        name: topicData.name,
+        title: topicData.title,
+        description: topicData.description,
+      });
+      return data;
+    } catch (error) {
+      logger.error('Failed to create topic:', error);
+      throw error;
+    }
+  },
+
+  async updateProjectTopic(topicId, topicData = {}) {
+    logger.info(`🦊 [GitLab Service] Updating project topic ${topicId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/topics/${encodeURIComponent(topicId)}`,
+        {
+          name: topicData.name,
+          title: topicData.title,
+          description: topicData.description,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update topic ${topicId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectTopic(topicId) {
+    logger.info(`🦊 [GitLab Service] Deleting project topic ${topicId}`);
+    try {
+      await gitlabClient.delete(`/topics/${encodeURIComponent(topicId)}`);
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete topic ${topicId}:`, error);
+      throw error;
+    }
+  },
+
+  async applyMergeRequestSuggestion(suggestionId) {
+    logger.info(`🦊 [GitLab Service] Applying MR suggestion ${suggestionId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/suggestions/${encodeURIComponent(suggestionId)}/apply`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to apply suggestion ${suggestionId}:`, error);
+      throw error;
+    }
+  },
 };
