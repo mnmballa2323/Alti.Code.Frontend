@@ -3901,6 +3901,7 @@ export const GitlabService = {
         error,
       );
       throw error;
+    }
   },
 
   // ==========================================
