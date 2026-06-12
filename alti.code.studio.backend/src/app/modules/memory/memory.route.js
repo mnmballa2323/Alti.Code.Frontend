@@ -26,5 +26,7 @@ router.post('/rag/ingest', MemoryController.ragIngest);
 router.post('/rag/query', MemoryController.ragQuery);
 router.post('/palace/index', MemoryController.palaceIndex);
 router.post('/palace/search', MemoryController.palaceSearch);
+router.post('/mimo/dream', MemoryController.mimoDream);
+router.post('/mimo/distill', MemoryController.mimoDistill);
 
 export const memoryRoutes = router;

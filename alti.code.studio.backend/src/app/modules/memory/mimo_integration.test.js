@@ -119,4 +119,62 @@ capabilities:
             expect(fileContent).toContain('capabilities:\n  - testing');
         });
     });
+
+    describe('MimoDreamService Lifecycle', () => {
+        it('should initialize dream intervals and shutdown cleanly', () => {
+            const spySetTimeout = vi.spyOn(global, 'setTimeout');
+            const spySetInterval = vi.spyOn(global, 'setInterval');
+            const spyClearInterval = vi.spyOn(global, 'clearInterval');
+
+            mimoDreamService.init();
+
+            expect(spySetTimeout).toHaveBeenCalled();
+            expect(spySetInterval).toHaveBeenCalled();
+
+            mimoDreamService.shutdown();
+            expect(spyClearInterval).toHaveBeenCalled();
+        });
+    });
+
+    describe('MemoryController MiMo REST Endpoints', () => {
+        it('should trigger mimoDream endpoint successfully', async () => {
+            const { MemoryController } = await import('./memory.controller.js');
+            const mockDream = vi.spyOn(mimoDreamService, 'dream').mockResolvedValue({ success: true });
+
+            const req = { body: { project: 'test-project' } };
+            const res = {
+                status: vi.fn().mockReturnThis(),
+                json: vi.fn()
+            };
+
+            await MemoryController.mimoDream(req, res);
+
+            expect(mockDream).toHaveBeenCalledWith('test-project');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                success: true,
+                message: expect.stringContaining('MimoDream')
+            }));
+        });
+
+        it('should trigger mimoDistill endpoint successfully', async () => {
+            const { MemoryController } = await import('./memory.controller.js');
+            const mockDistill = vi.spyOn(mimoDistillerService, 'distill').mockResolvedValue({ success: true });
+
+            const req = { body: { taskDescription: 'Test task', logs: 'Log info', targetId: 'agent.test' } };
+            const res = {
+                status: vi.fn().mockReturnThis(),
+                json: vi.fn()
+            };
+
+            await MemoryController.mimoDistill(req, res);
+
+            expect(mockDistill).toHaveBeenCalledWith('Test task', 'Log info', 'agent.test');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                success: true,
+                message: expect.stringContaining('MimoDistiller')
+            }));
+        });
+    });
 });

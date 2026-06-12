@@ -177,6 +177,11 @@ async function main() {
       agentMemoryService.init();
     }).catch(err => logger.error('❌ Failed to start AgentMemory Service', err));
 
+    // 🌙 MiMo-Code: Compactor & Self-Evolution Dream Daemon
+    import('./src/app/modules/memory/mimo_dream.service.js').then(({ mimoDreamService }) => {
+      mimoDreamService.init();
+    }).catch(err => logger.error('❌ Failed to start MiMo Dream Service', err));
+
     // 🪐 GitHub Docs: Ingestion Engine for Developer Documentation
     import('./src/app/modules/githubDocs/githubDocs.service.js').then(({ githubDocsService }) => {
       githubDocsService.init();
@@ -260,6 +265,11 @@ const gracefulShutdown = async (signal) => {
           agentMemoryService.shutdown();
           logger.info('✅ AgentMemory shutdown initiated.');
         }).catch(() => logger.warn('AgentMemory shutdown bypassed.'));
+
+        // Shutdown MiMo Dream Service
+        import('./src/app/modules/memory/mimo_dream.service.js').then(({ mimoDreamService }) => {
+          mimoDreamService.shutdown();
+        }).catch(() => {});
 
         logger.info('🚀 Graceful shutdown complete. Exiting process safely.');
         process.exit(0);

@@ -1,6 +1,8 @@
 import { vectorStoreService } from './vector.store.js';
 import { ragService } from './rag.service.js';
 import { memoryPalaceService } from './memory_palace.service.js';
+import { mimoDreamService } from './mimo_dream.service.js';
+import { mimoDistillerService } from './mimo_distiller.service.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import httpStatus from 'http-status';
@@ -73,6 +75,34 @@ export class MemoryController {
             success: true,
             message: 'Memory Palace search completed',
             data: results,
+        });
+    });
+
+    /**
+     * POST /api/v1/memory/mimo/dream
+     */
+    static mimoDream = catchAsync(async (req, res) => {
+        const { project } = req.body;
+        const result = await mimoDreamService.dream(project);
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'MimoDream self-evolution compaction completed successfully.',
+            data: result,
+        });
+    });
+
+    /**
+     * POST /api/v1/memory/mimo/distill
+     */
+    static mimoDistill = catchAsync(async (req, res) => {
+        const { taskDescription, logs, targetId } = req.body;
+        const result = await mimoDistillerService.distill(taskDescription, logs, targetId);
+        sendResponse(res, {
+            statusCode: httpStatus.OK,
+            success: true,
+            message: 'MimoDistiller dynamic agent compiled and distilled successfully.',
+            data: result,
         });
     });
 }

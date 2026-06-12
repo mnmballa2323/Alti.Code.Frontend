@@ -919,6 +919,23 @@ If you require assistance from another specialized agent to complete your task, 
             executionTimeMs,
             'completed'
         ).catch(() => {});
+
+        // ⚗️ MiMo-Code: Trajectory Distiller to automatically generate specialist agents
+        if (!finalResult.includes('I cannot resolve this') && !finalResult.includes('Error')) {
+            const cleanName = prompt.toLowerCase()
+                .replace(/[^a-z0-9]/g, '_')
+                .split('_')
+                .filter(Boolean)
+                .slice(0, 3)
+                .join('_');
+            const agentId = `agent.distilled.${cleanName || Date.now()}`;
+            
+            import('../memory/mimo_distiller.service.js').then(({ mimoDistillerService }) => {
+                mimoDistillerService.distill(prompt, finalResult, agentId).catch(err => {
+                    logger.debug(`[MimoDistiller] Trajectory distillation failed: ${err.message}`);
+                });
+            }).catch(() => {});
+        }
         
         // 5. Real-time Cognitive Telemetry (Google Firestore CRDTs)
         await FirestoreSyncService.persistCrdtUpdate(`doc_${Date.now()}`, Buffer.from(finalResult));

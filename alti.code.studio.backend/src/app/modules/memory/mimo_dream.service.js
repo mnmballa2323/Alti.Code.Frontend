@@ -141,6 +141,31 @@ ${recentMemories.map((m, idx) => `${idx + 1}. ${m}`).join('\n')}
                 recentMemories.map(m => `- ${m}`).join('\n');
         }
     }
+
+    /**
+     * Start autonomous background cron for dream cycle.
+     */
+    init() {
+        logger.info('[MimoDream] 🌙 Initializing MimoDream Service — Compactor & Self-Evolution Daemon...');
+        
+        // Execute once shortly after boot (5 seconds)
+        setTimeout(() => {
+            this.dream().catch(() => {});
+        }, 5000);
+
+        // Schedule to repeat every 1 hour (3600000 ms)
+        this._intervalId = setInterval(() => {
+            this.dream().catch(() => {});
+        }, 3600000);
+    }
+
+    shutdown() {
+        if (this._intervalId) {
+            clearInterval(this._intervalId);
+            this._intervalId = null;
+        }
+        logger.info('[MimoDream] Service shutdown complete.');
+    }
 }
 
 export const mimoDreamService = new MimoDreamService();
