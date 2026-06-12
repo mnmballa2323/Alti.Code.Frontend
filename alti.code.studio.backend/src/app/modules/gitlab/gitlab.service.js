@@ -5796,4 +5796,284 @@ export const GitlabService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 43. Phase 9 Endpoints
+  // ==========================================
+
+  // 1. SAML Group Links
+  async listGroupSamlGroupLinks(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing SAML group links for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/saml_group_links`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list SAML group links:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupSamlGroupLink(groupId, samlGroupName) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching SAML group link ${samlGroupName} for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/saml_group_links/${encodeURIComponent(samlGroupName)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get SAML group link ${samlGroupName}:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupSamlGroupLink(groupId, linkData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating SAML group link for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/saml_group_links`,
+        {
+          saml_group_name: linkData.samlGroupName,
+          access_level: linkData.accessLevel,
+          member_role_id: linkData.memberRoleId,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create SAML group link:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupSamlGroupLink(groupId, samlGroupName) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting SAML group link ${samlGroupName} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/saml_group_links/${encodeURIComponent(samlGroupName)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete SAML group link ${samlGroupName}:`, error);
+      throw error;
+    }
+  },
+
+  // 2. User Custom Attributes
+  async listUserCustomAttributes(userId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing custom attributes for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/users/${encodeURIComponent(userId)}/custom_attributes`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list user custom attributes:`, error);
+      throw error;
+    }
+  },
+
+  async getUserCustomAttribute(userId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching custom attribute ${key} for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/users/${encodeURIComponent(userId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get user custom attribute ${key}:`, error);
+      throw error;
+    }
+  },
+
+  async setUserCustomAttribute(userId, key, value) {
+    logger.info(
+      `🦊 [GitLab Service] Setting custom attribute ${key} for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/users/${encodeURIComponent(userId)}/custom_attributes/${encodeURIComponent(key)}`,
+        { value },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to set user custom attribute ${key}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteUserCustomAttribute(userId, key) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting custom attribute ${key} for user ${userId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/users/${encodeURIComponent(userId)}/custom_attributes/${encodeURIComponent(key)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete user custom attribute ${key}:`, error);
+      throw error;
+    }
+  },
+
+  // 3. User Impersonation Tokens
+  async listUserImpersonationTokens(userId, params = {}) {
+    logger.info(
+      `🦊 [GitLab Service] Listing impersonation tokens for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/users/${encodeURIComponent(userId)}/impersonation_tokens`,
+        { params },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list user impersonation tokens:`, error);
+      throw error;
+    }
+  },
+
+  async getUserImpersonationToken(userId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching impersonation token ${tokenId} for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/users/${encodeURIComponent(userId)}/impersonation_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get user impersonation token ${tokenId}:`, error);
+      throw error;
+    }
+  },
+
+  async createUserImpersonationToken(userId, tokenData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating impersonation token for user ${userId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/users/${encodeURIComponent(userId)}/impersonation_tokens`,
+        {
+          name: tokenData.name,
+          scopes: tokenData.scopes,
+          expires_at: tokenData.expiresAt,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create user impersonation token:`, error);
+      throw error;
+    }
+  },
+
+  async revokeUserImpersonationToken(userId, tokenId) {
+    logger.info(
+      `🦊 [GitLab Service] Revoking impersonation token ${tokenId} for user ${userId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/users/${encodeURIComponent(userId)}/impersonation_tokens/${encodeURIComponent(tokenId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to revoke user impersonation token ${tokenId}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // 4. SCIM Group Provisioning
+  async listGroupScimUsers(groupId) {
+    logger.info(
+      `🦊 [GitLab Service] Listing SCIM users for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/scim/v2/users`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list SCIM users:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupScimUser(groupId, scimUserId) {
+    logger.info(
+      `🦊 [GitLab Service] Fetching SCIM user ${scimUserId} for group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/scim/v2/users/${encodeURIComponent(scimUserId)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get SCIM user ${scimUserId}:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupScimUser(groupId, scimUserData) {
+    logger.info(
+      `🦊 [GitLab Service] Creating SCIM user in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/scim/v2/users`,
+        scimUserData,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create SCIM user:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupScimUser(groupId, scimUserId, scimUserData) {
+    logger.info(
+      `🦊 [GitLab Service] Updating SCIM user ${scimUserId} in group ${groupId}`,
+    );
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/scim/v2/users/${encodeURIComponent(scimUserId)}`,
+        scimUserData,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update SCIM user ${scimUserId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupScimUser(groupId, scimUserId) {
+    logger.info(
+      `🦊 [GitLab Service] Deleting SCIM user ${scimUserId} for group ${groupId}`,
+    );
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/scim/v2/users/${encodeURIComponent(scimUserId)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete SCIM user ${scimUserId}:`, error);
+      throw error;
+    }
+  },
 };
