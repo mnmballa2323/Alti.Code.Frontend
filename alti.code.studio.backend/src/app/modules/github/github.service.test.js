@@ -94,6 +94,37 @@ vi.mock('octokit', () => {
         getReleaseAsset: vi.fn(),
         updateReleaseAsset: vi.fn(),
         deleteReleaseAsset: vi.fn(),
+        getBranch: vi.fn(),
+        getBranchProtection: vi.fn(),
+        updateBranchProtection: vi.fn(),
+        deleteBranchProtection: vi.fn(),
+        getAdminBranchProtection: vi.fn(),
+        setAdminBranchProtection: vi.fn(),
+        deleteAdminBranchProtection: vi.fn(),
+        getPullRequestReviewProtection: vi.fn(),
+        updatePullRequestReviewProtection: vi.fn(),
+        deletePullRequestReviewProtection: vi.fn(),
+        getCommitSignatureProtection: vi.fn(),
+        createCommitSignatureProtection: vi.fn(),
+        deleteCommitSignatureProtection: vi.fn(),
+        getAccessRestrictions: vi.fn(),
+        deleteAccessRestrictions: vi.fn(),
+        listAppsWithAccessToProtectedBranch: vi.fn(),
+        addAppsAccessRestrictions: vi.fn(),
+        setAppsAccessRestrictions: vi.fn(),
+        removeAppsAccessRestrictions: vi.fn(),
+        listTeamsWithAccessToProtectedBranch: vi.fn(),
+        addTeamsAccessRestrictions: vi.fn(),
+        setTeamsAccessRestrictions: vi.fn(),
+        removeTeamsAccessRestrictions: vi.fn(),
+        listUsersWithAccessToProtectedBranch: vi.fn(),
+        addUsersAccessRestrictions: vi.fn(),
+        setUsersAccessRestrictions: vi.fn(),
+        removeUsersAccessRestrictions: vi.fn(),
+        listTeams: vi.fn(),
+        listTags: vi.fn(),
+        renameBranch: vi.fn(),
+        mergeUpstream: vi.fn(),
       },
       issues: {
         listForRepo: vi.fn(),
@@ -273,6 +304,8 @@ vi.mock('octokit', () => {
         createDiscussionCommentInOrg: vi.fn(),
         updateDiscussionCommentInOrg: vi.fn(),
         deleteDiscussionCommentInOrg: vi.fn(),
+        addOrUpdateTeamPermissionsInOrg: vi.fn(),
+        removeTeam: vi.fn(),
       },
       codespaces: {
         listForAuthenticatedUser: vi.fn(),
@@ -6987,5 +7020,725 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     expect(
       mockOctokit.rest.activity.deleteRepoSubscription,
     ).toHaveBeenCalledWith({ owner: 'owner', repo: 'repo' });
+  });
+
+  // 83. Repository Branches & Branch Protection
+  it('should get branch', async () => {
+    const mockData = { name: 'main', protected: true };
+    mockOctokit.rest.repos.getBranch.mockResolvedValue({ data: mockData });
+    const result = await GithubService.getBranch('owner', 'repo', 'main');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.getBranch).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should get branch protection', async () => {
+    const mockData = { enforce_admins: { enabled: true } };
+    mockOctokit.rest.repos.getBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.getBranchProtection).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should intercept 404 on get branch protection', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getBranchProtection.mockRejectedValue(error404);
+    const result = await GithubService.getBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ protected: false });
+  });
+
+  it('should update branch protection', async () => {
+    const mockData = { enforce_admins: { enabled: true } };
+    mockOctokit.rest.repos.updateBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updateBranchProtection(
+      'owner',
+      'repo',
+      'main',
+      { required: true },
+      true,
+      { reviews: 1 },
+      { restrictions: true },
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.updateBranchProtection).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      required_status_checks: { required: true },
+      enforce_admins: true,
+      required_pull_request_reviews: { reviews: 1 },
+      restrictions: { restrictions: true },
+    });
+  });
+
+  it('should delete branch protection', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deleteBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.deleteBranchProtection).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should get admin branch protection', async () => {
+    const mockData = { enabled: true };
+    mockOctokit.rest.repos.getAdminBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getAdminBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.getAdminBranchProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should intercept 404 on get admin branch protection', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getAdminBranchProtection.mockRejectedValue(error404);
+    const result = await GithubService.getAdminBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ enforced: false });
+  });
+
+  it('should set admin branch protection', async () => {
+    const mockData = { enabled: true };
+    mockOctokit.rest.repos.setAdminBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setAdminBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.setAdminBranchProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should delete admin branch protection', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deleteAdminBranchProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteAdminBranchProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.deleteAdminBranchProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  // 84. PR Review & Commit Signature Protection
+  it('should get pull request review protection', async () => {
+    const mockData = { dismiss_stale_reviews: true };
+    mockOctokit.rest.repos.getPullRequestReviewProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getPullRequestReviewProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.getPullRequestReviewProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should intercept 404 on get pull request review protection', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getPullRequestReviewProtection.mockRejectedValue(
+      error404,
+    );
+    const result = await GithubService.getPullRequestReviewProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ enabled: false });
+  });
+
+  it('should update pull request review protection', async () => {
+    const mockData = { dismiss_stale_reviews: true };
+    mockOctokit.rest.repos.updatePullRequestReviewProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updatePullRequestReviewProtection(
+      'owner',
+      'repo',
+      'main',
+      true,
+      true,
+      2,
+      { users: [] },
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.updatePullRequestReviewProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      dismiss_stale_reviews: true,
+      require_code_owner_reviews: true,
+      required_approving_review_count: 2,
+      bypass_pull_request_allowances: { users: [] },
+    });
+  });
+
+  it('should delete pull request review protection', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deletePullRequestReviewProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deletePullRequestReviewProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.deletePullRequestReviewProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should get commit signature protection', async () => {
+    const mockData = { enabled: true };
+    mockOctokit.rest.repos.getCommitSignatureProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getCommitSignatureProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.getCommitSignatureProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should intercept 404 on get commit signature protection', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getCommitSignatureProtection.mockRejectedValue(
+      error404,
+    );
+    const result = await GithubService.getCommitSignatureProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ enabled: false });
+  });
+
+  it('should create commit signature protection', async () => {
+    const mockData = { enabled: true };
+    mockOctokit.rest.repos.createCommitSignatureProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createCommitSignatureProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.createCommitSignatureProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should delete commit signature protection', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deleteCommitSignatureProtection.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteCommitSignatureProtection(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.deleteCommitSignatureProtection,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  // 85. Branch Access Restrictions
+  it('should get access restrictions', async () => {
+    const mockData = { users: [], teams: [] };
+    mockOctokit.rest.repos.getAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.getAccessRestrictions).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should intercept 404 on get access restrictions', async () => {
+    const error404 = new Error('Not Found');
+    error404.status = 404;
+    mockOctokit.rest.repos.getAccessRestrictions.mockRejectedValue(error404);
+    const result = await GithubService.getAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual({ enabled: false });
+  });
+
+  it('should delete access restrictions', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.repos.deleteAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.deleteAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should list apps with access to protected branch', async () => {
+    const mockData = [{ name: 'app' }];
+    mockOctokit.rest.repos.listAppsWithAccessToProtectedBranch.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.listAppsWithAccessToProtectedBranch(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.listAppsWithAccessToProtectedBranch,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should add apps access restrictions', async () => {
+    const mockData = [{ name: 'app' }];
+    mockOctokit.rest.repos.addAppsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addAppsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['app'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.addAppsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      apps: ['app'],
+    });
+  });
+
+  it('should set apps access restrictions', async () => {
+    const mockData = [{ name: 'app' }];
+    mockOctokit.rest.repos.setAppsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setAppsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['app'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.setAppsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      apps: ['app'],
+    });
+  });
+
+  it('should remove apps access restrictions', async () => {
+    const mockData = [{ name: 'app' }];
+    mockOctokit.rest.repos.removeAppsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeAppsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['app'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.removeAppsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      apps: ['app'],
+    });
+  });
+
+  it('should list teams with access to protected branch', async () => {
+    const mockData = [{ slug: 'team' }];
+    mockOctokit.rest.repos.listTeamsWithAccessToProtectedBranch.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.listTeamsWithAccessToProtectedBranch(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.listTeamsWithAccessToProtectedBranch,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should add teams access restrictions', async () => {
+    const mockData = [{ slug: 'team' }];
+    mockOctokit.rest.repos.addTeamsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addTeamsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['team'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.addTeamsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      teams: ['team'],
+    });
+  });
+
+  it('should set teams access restrictions', async () => {
+    const mockData = [{ slug: 'team' }];
+    mockOctokit.rest.repos.setTeamsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setTeamsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['team'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.setTeamsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      teams: ['team'],
+    });
+  });
+
+  it('should remove teams access restrictions', async () => {
+    const mockData = [{ slug: 'team' }];
+    mockOctokit.rest.repos.removeTeamsAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeTeamsAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['team'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.removeTeamsAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      teams: ['team'],
+    });
+  });
+
+  it('should list users with access to protected branch', async () => {
+    const mockData = [{ login: 'user' }];
+    mockOctokit.rest.repos.listUsersWithAccessToProtectedBranch.mockResolvedValue(
+      { data: mockData },
+    );
+    const result = await GithubService.listUsersWithAccessToProtectedBranch(
+      'owner',
+      'repo',
+      'main',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.listUsersWithAccessToProtectedBranch,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
+  });
+
+  it('should add users access restrictions', async () => {
+    const mockData = [{ login: 'user' }];
+    mockOctokit.rest.repos.addUsersAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addUsersAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['user'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.addUsersAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      users: ['user'],
+    });
+  });
+
+  it('should set users access restrictions', async () => {
+    const mockData = [{ login: 'user' }];
+    mockOctokit.rest.repos.setUsersAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setUsersAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['user'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.setUsersAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      users: ['user'],
+    });
+  });
+
+  it('should remove users access restrictions', async () => {
+    const mockData = [{ login: 'user' }];
+    mockOctokit.rest.repos.removeUsersAccessRestrictions.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.removeUsersAccessRestrictions(
+      'owner',
+      'repo',
+      'main',
+      ['user'],
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.repos.removeUsersAccessRestrictions,
+    ).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      users: ['user'],
+    });
+  });
+
+  // 86. Repository Teams, Tags & Management
+  it('should list repo teams', async () => {
+    const mockData = [{ slug: 'team' }];
+    mockOctokit.rest.repos.listTeams.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listRepoTeams('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.listTeams).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should add or update team permissions for repo', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.teams.addOrUpdateTeamPermissionsInOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.addOrUpdateTeamPermissionsForRepo(
+      'owner',
+      'repo',
+      'org',
+      'team',
+      'push',
+    );
+    expect(result).toEqual(mockData);
+    expect(
+      mockOctokit.rest.teams.addOrUpdateTeamPermissionsInOrg,
+    ).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team',
+      owner: 'owner',
+      repo: 'repo',
+      permission: 'push',
+    });
+  });
+
+  it('should remove team from repo', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.teams.removeTeam.mockResolvedValue({ data: mockData });
+    const result = await GithubService.removeTeamFromRepo(
+      'owner',
+      'repo',
+      'org',
+      'team',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.teams.removeTeam).toHaveBeenCalledWith({
+      org: 'org',
+      team_slug: 'team',
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should list repo tags', async () => {
+    const mockData = [{ name: 'v1.0.0' }];
+    mockOctokit.rest.repos.listTags.mockResolvedValue({ data: mockData });
+    const result = await GithubService.listRepoTags('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.listTags).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should rename branch', async () => {
+    const mockData = { name: 'new-name' };
+    mockOctokit.rest.repos.renameBranch.mockResolvedValue({ data: mockData });
+    const result = await GithubService.renameBranch(
+      'owner',
+      'repo',
+      'main',
+      'new-name',
+    );
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.renameBranch).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+      new_name: 'new-name',
+    });
+  });
+
+  it('should merge upstream', async () => {
+    const mockData = { message: 'Merged successfully' };
+    mockOctokit.rest.repos.mergeUpstream.mockResolvedValue({ data: mockData });
+    const result = await GithubService.mergeUpstream('owner', 'repo', 'main');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.repos.mergeUpstream).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      branch: 'main',
+    });
   });
 });

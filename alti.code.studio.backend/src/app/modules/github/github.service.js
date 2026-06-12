@@ -7822,12 +7822,13 @@ export const GithubService = {
       `🐙 [GitHub Service] Deleting commit signature protection for ${owner}/${repo} branch ${branch}`,
     );
     try {
-      const response =
-        await octokit.rest.repos.deleteCommitSignatureProtection({
+      const response = await octokit.rest.repos.deleteCommitSignatureProtection(
+        {
           owner,
           repo,
           branch,
-        });
+        },
+      );
       return response.data || { success: true };
     } catch (error) {
       logger.error(
@@ -8258,4 +8259,3 @@ export const GithubService = {
     }
   },
 };
-

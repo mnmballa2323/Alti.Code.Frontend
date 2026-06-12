@@ -1277,10 +1277,7 @@ router.delete(
 );
 
 // Repository Branch Protection
-router.get(
-  '/repos/:owner/:repo/branches/:branch',
-  GithubController.getBranch,
-);
+router.get('/repos/:owner/:repo/branches/:branch', GithubController.getBranch);
 router.get(
   '/repos/:owner/:repo/branches/:branch/protection',
   GithubController.getBranchProtection,
@@ -1391,10 +1388,7 @@ router.delete(
 );
 
 // Repository Teams, Tags & Management
-router.get(
-  '/repos/:owner/:repo/teams',
-  GithubController.listRepoTeams,
-);
+router.get('/repos/:owner/:repo/teams', GithubController.listRepoTeams);
 router.put(
   '/repos/:owner/:repo/teams/:org/:teamSlug',
   GithubController.addOrUpdateTeamPermissionsForRepo,
@@ -1403,10 +1397,7 @@ router.delete(
   '/repos/:owner/:repo/teams/:org/:teamSlug',
   GithubController.removeTeamFromRepo,
 );
-router.get(
-  '/repos/:owner/:repo/tags',
-  GithubController.listRepoTags,
-);
+router.get('/repos/:owner/:repo/tags', GithubController.listRepoTags);
 router.post(
   '/repos/:owner/:repo/branches/:branch/rename',
   GithubController.renameBranch,

@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.194] - 2026-06-12 — Phase 13 GitHub REST API & SDK Entrenchment
+### Added
+- **Repository Branches & Branch Protection**: Implemented `getBranch`, `getBranchProtection`, `updateBranchProtection`, `deleteBranchProtection`, `getAdminBranchProtection`, `setAdminBranchProtection`, and `deleteAdminBranchProtection`. Intercepted `404` error statuses to return safe default objects (e.g. `{ protected: false }`, `{ enforced: false }`).
+- **PR Review & Commit Signature Protection**: Added `getPullRequestReviewProtection`, `updatePullRequestReviewProtection`, `deletePullRequestReviewProtection`, `getCommitSignatureProtection`, `createCommitSignatureProtection`, and `deleteCommitSignatureProtection` with automatic `404` fallback handling.
+- **Branch Access Restrictions**: Added access restrictions CRUD operations on protected branches for apps, teams, and users, including user-friendly `404` fallback responses.
+- **Repository Teams, Tags & Management**: Exposed methods to list repository teams, add/update team permissions, remove team access, list repository tags, rename repository branches, and merge upstream.
+- **Unit Testing**: Added 38 new unit tests in `github.service.test.js` verifying success paths and `404` interception logic, bringing the total passing tests to 407.
+
 ## [39.37.193] - 2026-06-11 — Phase 12 GitHub REST API & SDK Entrenchment
 ### Added
 - **Dependabot Org & Repo Secrets**: Integrated Dependabot secrets management for both Organization and Repository scopes, including public keys, secret details, creation/updates, deletion, and Repository selection for organization secrets.
