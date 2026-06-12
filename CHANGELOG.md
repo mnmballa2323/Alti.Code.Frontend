@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.209] - 2026-06-12 — Phase 9 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 9 Core Wrappers**: Fully implemented 17 new service methods inside `gitlab.service.js` covering SAML Group Links (listing, details, creating, and deleting linkages between SAML groups and GitLab groups), User Custom Attributes (listing, getting, setting, and deleting custom attributes on users), User Impersonation Tokens (listing, getting, creating, and revoking/deleting impersonation tokens), and SCIM Group Provisioning (listing, getting, creating/provisioning, updating, and deleting/deprovisioning SCIM identities for groups).
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` response envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 315 passing tests.
+
 ## [39.37.208] - 2026-06-12 — Phase 8 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 8 Core Wrappers**: Fully implemented 16 new service methods inside `gitlab.service.js` covering Dependency List (listing repository dependencies), Compliance Frameworks (listing, details, creation, updating, and deletion of group frameworks; fetching project framework settings), License Compliance (listing, creating, updating, and deleting managed license rules for projects), and Protected Environments (listing, details, protecting, updating, and unprotecting environment access).
