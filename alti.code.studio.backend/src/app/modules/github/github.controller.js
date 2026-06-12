@@ -7609,6 +7609,213 @@ export const deleteSocialAccountsForAuthenticatedUser = async (req, res) => {
   }
 };
 
+export const listFollowersForAuthenticatedUser = async (req, res) => {
+  try {
+    const { page, perPage } = req.query;
+    const result = await GithubService.listFollowersForAuthenticatedUser(
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing followers:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listFollowingForAuthenticatedUser = async (req, res) => {
+  try {
+    const { page, perPage } = req.query;
+    const result = await GithubService.listFollowingForAuthenticatedUser(
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing followed users:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const checkIfUserFollowing = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await GithubService.checkIfUserFollowing(username);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error checking follow status:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const followUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await GithubService.followUser(username);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error following user:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unfollowUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const result = await GithubService.unfollowUser(username);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error unfollowing user:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listFollowersForUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listFollowersForUser(
+      username,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing user followers:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listFollowingForUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listFollowingForUser(
+      username,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing followed users for target user:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPendingOrgInvitations = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listPendingOrgInvitations(
+      org,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing pending invitations:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createOrgInvitation = async (req, res) => {
+  try {
+    const { org } = req.params;
+    const { inviteeId, email, role, teamIds } = req.body;
+    const result = await GithubService.createOrgInvitation(org, inviteeId, email, role, teamIds);
+    res.status(httpStatus.CREATED).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error creating organization invitation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const cancelOrgInvitation = async (req, res) => {
+  try {
+    const { org, invitationId } = req.params;
+    const result = await GithubService.cancelOrgInvitation(org, invitationId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error canceling organization invitation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listOrgInvitationTeams = async (req, res) => {
+  try {
+    const { org, invitationId } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listOrgInvitationTeams(
+      org,
+      invitationId,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing invitation teams:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPublicKeysForUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listPublicKeysForUser(
+      username,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing public SSH keys:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGpgKeysForUser = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listGpgKeysForUser(
+      username,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing GPG public keys:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getBranch,
   getBranchProtection,
@@ -8034,4 +8241,17 @@ export const GithubController = {
   listSocialAccountsForAuthenticatedUser,
   addSocialAccountsForAuthenticatedUser,
   deleteSocialAccountsForAuthenticatedUser,
+  listFollowersForAuthenticatedUser,
+  listFollowingForAuthenticatedUser,
+  checkIfUserFollowing,
+  followUser,
+  unfollowUser,
+  listFollowersForUser,
+  listFollowingForUser,
+  listPendingOrgInvitations,
+  createOrgInvitation,
+  cancelOrgInvitation,
+  listOrgInvitationTeams,
+  listPublicKeysForUser,
+  listGpgKeysForUser,
 };

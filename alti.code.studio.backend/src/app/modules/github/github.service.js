@@ -8564,4 +8564,248 @@ export const GithubService = {
       throw error;
     }
   },
+
+  // ==========================================
+  // 90. User Followers & Following
+  // ==========================================
+  async listFollowersForAuthenticatedUser(page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing followers for authenticated user`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.users.listFollowersForAuthenticatedUser({
+          page,
+          per_page: perPage,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list followers for authenticated user:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listFollowingForAuthenticatedUser(page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing users followed by authenticated user`,
+    );
+    try {
+      const { data } =
+        await octokit.rest.users.listFollowingForAuthenticatedUser({
+          page,
+          per_page: perPage,
+        });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list users followed by authenticated user:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async checkIfUserFollowing(username) {
+    logger.info(
+      `🐙 [GitHub Service] Checking if authenticated user follows ${username}`,
+    );
+    try {
+      const response = await octokit.rest.users.checkIfFollowingForTokenUser({
+        username,
+      });
+      return { following: response.status === 204 };
+    } catch (error) {
+      if (error.status === 404) {
+        return { following: false };
+      }
+      logger.error(
+        `Failed to check if authenticated user follows ${username}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async followUser(username) {
+    logger.info(`🐙 [GitHub Service] Following user ${username}`);
+    try {
+      const response = await octokit.rest.users.followUserForAuthenticatedUser({
+        username,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to follow user ${username}:`, error);
+      throw error;
+    }
+  },
+
+  async unfollowUser(username) {
+    logger.info(`🐙 [GitHub Service] Unfollowing user ${username}`);
+    try {
+      const response =
+        await octokit.rest.users.unfollowUserForAuthenticatedUser({
+          username,
+        });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(`Failed to unfollow user ${username}:`, error);
+      throw error;
+    }
+  },
+
+  async listFollowersForUser(username, page = 1, perPage = 30) {
+    logger.info(`🐙 [GitHub Service] Listing followers for user ${username}`);
+    try {
+      const { data } = await octokit.rest.users.listFollowersForUser({
+        username,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list followers for user ${username}:`, error);
+      throw error;
+    }
+  },
+
+  async listFollowingForUser(username, page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing users followed by user ${username}`,
+    );
+    try {
+      const { data } = await octokit.rest.users.listFollowingForUser({
+        username,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list users followed by user ${username}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 91. Organization Invitations
+  // ==========================================
+  async listPendingOrgInvitations(org, page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing pending invitations for org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.orgs.listPendingInvitations({
+        org,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list pending invitations for org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async createOrgInvitation(org, inviteeId, email, role, teamIds) {
+    logger.info(`🐙 [GitHub Service] Creating invitation for org ${org}`);
+    try {
+      const params = {
+        org,
+        role,
+      };
+      if (inviteeId !== undefined) params.invitee_id = inviteeId;
+      if (email !== undefined) params.email = email;
+      if (teamIds !== undefined) params.team_ids = teamIds;
+
+      const { data } = await octokit.rest.orgs.createInvitation(params);
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create invitation for org ${org}:`, error);
+      throw error;
+    }
+  },
+
+  async cancelOrgInvitation(org, invitationId) {
+    logger.info(
+      `🐙 [GitHub Service] Canceling invitation ${invitationId} in org ${org}`,
+    );
+    try {
+      const response = await octokit.rest.orgs.cancelInvitation({
+        org,
+        invitation_id: invitationId,
+      });
+      return response.data || { success: true };
+    } catch (error) {
+      logger.error(
+        `Failed to cancel invitation ${invitationId} in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listOrgInvitationTeams(org, invitationId, page = 1, perPage = 30) {
+    logger.info(
+      `🐙 [GitHub Service] Listing teams for invitation ${invitationId} in org ${org}`,
+    );
+    try {
+      const { data } = await octokit.rest.orgs.listInvitationTeams({
+        org,
+        invitation_id: invitationId,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list teams for invitation ${invitationId} in org ${org}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 92. User Public Security Keys
+  // ==========================================
+  async listPublicKeysForUser(username, page = 1, perPage = 30) {
+    logger.info(`🐙 [GitHub Service] Listing public SSH keys for user ${username}`);
+    try {
+      const { data } = await octokit.rest.users.listPublicKeysForUser({
+        username,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(
+        `Failed to list public SSH keys for user ${username}:`,
+        error,
+      );
+      throw error;
+    }
+  },
+
+  async listGpgKeysForUser(username, page = 1, perPage = 30) {
+    logger.info(`🐙 [GitHub Service] Listing GPG keys for user ${username}`);
+    try {
+      const { data } = await octokit.rest.users.listGpgKeysForUser({
+        username,
+        page,
+        per_page: perPage,
+      });
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list GPG keys for user ${username}:`, error);
+      throw error;
+    }
+  },
 };
