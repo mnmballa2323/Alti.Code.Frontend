@@ -252,6 +252,10 @@ vi.mock('octokit', () => {
         setActionsPermissionsOrg: vi.fn(),
         getActionsPermissionsRepo: vi.fn(),
         setActionsPermissionsRepo: vi.fn(),
+        getAllowedActionsRepository: vi.fn(),
+        setAllowedActionsRepository: vi.fn(),
+        getAllowedActionsOrganization: vi.fn(),
+        setAllowedActionsOrganization: vi.fn(),
         listSelectedRepositoriesEnabledGatewayForOrganizationSecret: vi.fn(),
         setSelectedRepositoriesEnabledGatewayForOrganizationSecret: vi.fn(),
         addSelectedRepositoryEnabledGatewayForOrganizationSecret: vi.fn(),
@@ -322,6 +326,11 @@ vi.mock('octokit', () => {
         createInvitation: vi.fn(),
         cancelInvitation: vi.fn(),
         listInvitationTeams: vi.fn(),
+        listPatGrantRequests: vi.fn(),
+        reviewPatGrantRequest: vi.fn(),
+        listPatGrants: vi.fn(),
+        revokePatGrant: vi.fn(),
+        reviewPatGrantRequests: vi.fn(),
       },
       teams: {
         list: vi.fn(),
@@ -425,6 +434,11 @@ vi.mock('octokit', () => {
         deleteInstallation: vi.fn(),
         suspendInstallation: vi.fn(),
         unsuspendInstallation: vi.fn(),
+        getWebhookConfigForApp: vi.fn(),
+        updateWebhookConfigForApp: vi.fn(),
+        listWebhookDeliveries: vi.fn(),
+        getWebhookDelivery: vi.fn(),
+        redeliverWebhookDelivery: vi.fn(),
       },
       billing: {
         getGithubActionsBillingOrg: vi.fn(),
@@ -471,6 +485,11 @@ vi.mock('octokit', () => {
       },
       codeSecurity: {
         getConfigurationsForOrg: vi.fn(),
+        createConfigurationForOrg: vi.fn(),
+        updateConfigurationForOrg: vi.fn(),
+        deleteConfiguration: vi.fn(),
+        attachConfiguration: vi.fn(),
+        getRepoConfiguration: vi.fn(),
       },
       dependencyGraph: {
         exportSbom: vi.fn(),
@@ -8832,6 +8851,269 @@ describe('GithubService - Direct GitHub API Wrapper', () => {
     expect(result).toEqual(mockData);
     expect(mockOctokit.rest.apps.unsuspendInstallation).toHaveBeenCalledWith({
       installation_id: 123,
+    });
+  });
+
+  // 97. GitHub App Webhook Deliveries & Configuration
+  it('should get webhook config for App', async () => {
+    const mockData = { url: 'https://example.com/webhook' };
+    mockOctokit.rest.apps.getWebhookConfigForApp.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getWebhookConfigForApp();
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.getWebhookConfigForApp).toHaveBeenCalled();
+  });
+
+  it('should update webhook config for App', async () => {
+    const mockData = { url: 'https://example.com/webhook' };
+    const config = { url: 'https://example.com/webhook', content_type: 'json' };
+    mockOctokit.rest.apps.updateWebhookConfigForApp.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updateWebhookConfigForApp(config);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.updateWebhookConfigForApp).toHaveBeenCalledWith(config);
+  });
+
+  it('should list webhook deliveries', async () => {
+    const mockData = [{ id: 1, event: 'push' }];
+    mockOctokit.rest.apps.listWebhookDeliveries.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listWebhookDeliveries(2, 50);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.listWebhookDeliveries).toHaveBeenCalledWith({
+      page: 2,
+      per_page: 50,
+    });
+  });
+
+  it('should get webhook delivery', async () => {
+    const mockData = { id: 1, event: 'push', guid: 'abc-123' };
+    mockOctokit.rest.apps.getWebhookDelivery.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getWebhookDelivery(12345);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.getWebhookDelivery).toHaveBeenCalledWith({
+      delivery_id: 12345,
+    });
+  });
+
+  it('should redeliver webhook delivery', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.apps.redeliverWebhookDelivery.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.redeliverWebhookDelivery(12345);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.apps.redeliverWebhookDelivery).toHaveBeenCalledWith({
+      delivery_id: 12345,
+    });
+  });
+
+  // 98. Organization Fine-Grained Personal Access Tokens (PATs)
+  it('should list PAT grant requests', async () => {
+    const mockData = [{ id: 1, owner: { login: 'user' } }];
+    mockOctokit.rest.orgs.listPatGrantRequests.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listPatGrantRequests('my-org', 1, 30, 'repo', 'owner');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listPatGrantRequests).toHaveBeenCalledWith({
+      org: 'my-org',
+      page: 1,
+      per_page: 30,
+      repository: 'repo',
+      owner: 'owner',
+    });
+  });
+
+  it('should review PAT grant request', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.reviewPatGrantRequest.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.reviewPatGrantRequest('my-org', 123, 'approve', 'approved');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.reviewPatGrantRequest).toHaveBeenCalledWith({
+      org: 'my-org',
+      pat_request_id: 123,
+      action: 'approve',
+      reason: 'approved',
+    });
+  });
+
+  it('should list PAT grants', async () => {
+    const mockData = [{ id: 1, owner: { login: 'user' } }];
+    mockOctokit.rest.orgs.listPatGrants.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.listPatGrants('my-org', 1, 30, 'repo', 'owner');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.listPatGrants).toHaveBeenCalledWith({
+      org: 'my-org',
+      page: 1,
+      per_page: 30,
+      repository: 'repo',
+      owner: 'owner',
+    });
+  });
+
+  it('should revoke PAT grant', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.revokePatGrant.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.revokePatGrant('my-org', 123);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.revokePatGrant).toHaveBeenCalledWith({
+      org: 'my-org',
+      pat_id: 123,
+    });
+  });
+
+  it('should bulk review PAT grant requests', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.orgs.reviewPatGrantRequests.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.reviewPatGrantRequests('my-org', [123, 456], 'approve', 'approved');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.orgs.reviewPatGrantRequests).toHaveBeenCalledWith({
+      org: 'my-org',
+      pat_request_ids: [123, 456],
+      action: 'approve',
+      reason: 'approved',
+    });
+  });
+
+  // 99. Organization Code Security Configurations
+  it('should create org security configuration', async () => {
+    const mockData = { id: 1, name: 'config-name' };
+    const settings = { dependency_graph: 'enabled' };
+    mockOctokit.rest.codeSecurity.createConfigurationForOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.createOrgSecurityConfiguration('my-org', 'config-name', 'desc', settings);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codeSecurity.createConfigurationForOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      name: 'config-name',
+      description: 'desc',
+      dependency_graph: 'enabled',
+    });
+  });
+
+  it('should update org security configuration', async () => {
+    const mockData = { id: 1, name: 'config-name' };
+    const settings = { dependency_graph: 'disabled' };
+    mockOctokit.rest.codeSecurity.updateConfigurationForOrg.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.updateOrgSecurityConfiguration('my-org', 1, settings);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codeSecurity.updateConfigurationForOrg).toHaveBeenCalledWith({
+      org: 'my-org',
+      security_configuration_id: 1,
+      dependency_graph: 'disabled',
+    });
+  });
+
+  it('should delete org security configuration', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.codeSecurity.deleteConfiguration.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.deleteOrgSecurityConfiguration('my-org', 1);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codeSecurity.deleteConfiguration).toHaveBeenCalledWith({
+      org: 'my-org',
+      security_configuration_id: 1,
+    });
+  });
+
+  it('should attach org security configuration', async () => {
+    const mockData = { success: true };
+    mockOctokit.rest.codeSecurity.attachConfiguration.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.attachOrgSecurityConfiguration('my-org', 1, 'selected', [10, 20]);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codeSecurity.attachConfiguration).toHaveBeenCalledWith({
+      org: 'my-org',
+      security_configuration_id: 1,
+      scope: 'selected',
+      selected_repository_ids: [10, 20],
+    });
+  });
+
+  it('should get repo security configuration assignment', async () => {
+    const mockData = { status: 'attached', security_configuration: { id: 1 } };
+    mockOctokit.rest.codeSecurity.getRepoConfiguration.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getRepoSecurityConfigurationAssignment('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.codeSecurity.getRepoConfiguration).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  // 100. Allowed Actions Configuration
+  it('should get allowed actions settings for repository', async () => {
+    const mockData = { github_owned_allowed: true };
+    mockOctokit.rest.actions.getAllowedActionsRepository.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getAllowedActionsRepository('owner', 'repo');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.actions.getAllowedActionsRepository).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+    });
+  });
+
+  it('should set allowed actions settings for repository', async () => {
+    const mockData = { success: true };
+    const settings = { github_owned_allowed: true };
+    mockOctokit.rest.actions.setAllowedActionsRepository.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setAllowedActionsRepository('owner', 'repo', settings);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.actions.setAllowedActionsRepository).toHaveBeenCalledWith({
+      owner: 'owner',
+      repo: 'repo',
+      github_owned_allowed: true,
+    });
+  });
+
+  it('should get allowed actions settings for organization', async () => {
+    const mockData = { github_owned_allowed: true };
+    mockOctokit.rest.actions.getAllowedActionsOrganization.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.getAllowedActionsOrganization('my-org');
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.actions.getAllowedActionsOrganization).toHaveBeenCalledWith({
+      org: 'my-org',
+    });
+  });
+
+  it('should set allowed actions settings for organization', async () => {
+    const mockData = { success: true };
+    const settings = { github_owned_allowed: true };
+    mockOctokit.rest.actions.setAllowedActionsOrganization.mockResolvedValue({
+      data: mockData,
+    });
+    const result = await GithubService.setAllowedActionsOrganization('my-org', settings);
+    expect(result).toEqual(mockData);
+    expect(mockOctokit.rest.actions.setAllowedActionsOrganization).toHaveBeenCalledWith({
+      org: 'my-org',
+      github_owned_allowed: true,
     });
   });
 });
