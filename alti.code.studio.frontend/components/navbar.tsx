@@ -23,6 +23,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSession, signOut } from "next-auth/react";
+import { useAppSelector } from "@/store";
 
 import MobileNavSheet from "./landing-page/MobileNavSheet";
 
@@ -44,6 +45,9 @@ function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
+
+  const profileFromStore = useAppSelector((state) => state.user.data);
+  const profile = profileFromStore?.email ? profileFromStore : null;
 
   const [activeSection, setActiveSection] = useState(-1);
 
@@ -390,7 +394,16 @@ function Navbar() {
                   <Button
                     className="rounded-full border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-6"
                     size="sm"
-                    onClick={() => router.push("/new-chat")}
+                    onClick={() => {
+                      const userRole = (profile?.role || "").toLowerCase();
+                      if (userRole === "owner") {
+                        router.push("/owner/members");
+                      } else if (userRole === "admin") {
+                        router.push("/admin/members");
+                      } else {
+                        router.push("/new-chat");
+                      }
+                    }}
                   >
                     Launch App
                   </Button>

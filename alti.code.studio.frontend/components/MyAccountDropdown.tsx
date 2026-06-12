@@ -82,6 +82,18 @@ const MyAccountDropdown = () => {
               </DropdownMenuItem>
             )}
 
+            {(profile?.role === "owner" || profile?.role === "OWNER") && (
+              <DropdownMenuItem className="relative">
+                <span className="flex items-center space-x-2">
+                  <Shield className="size-5 text-amber-500" />
+                  <Link href="/owner">
+                    <span className="absolute inset-0" />
+                    Owner Console
+                  </Link>
+                </span>
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuItem
               onClick={() =>
                 onOpen({
