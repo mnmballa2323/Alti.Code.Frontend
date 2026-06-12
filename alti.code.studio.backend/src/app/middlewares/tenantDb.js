@@ -1,36 +1,11 @@
-import { getTenantPrisma, prisma } from '../../config/prisma.js';
-
 /**
- * Express middleware that checks the authenticated user's tenant context.
- * If the tenant has a dedicated PostgreSQL database URL configured,
- * it routes queries through a dedicated connection pool.
+ * Copyright (c) 2026 Inso Code
+ * 
+ * Middleware bridging to the shared platform tenant database router.
+ * Maintains backwards compatibility for Inso Code routes.
  */
-export const tenantDbRouter = async (req, res, next) => {
-  try {
-    const tenantId = req.user?.tenantId;
 
-    if (!tenantId) {
-      // Default to global shared database connection
-      req.db = prisma;
-      return next();
-    }
+import { tenantDbRouter } from '../platform/db/tenantDbRouter.js';
 
-    // Query tenant configuration from the shared metadata database
-    const tenant = await prisma.tenant.findUnique({
-      where: { id: tenantId },
-      select: { dedicatedDatabaseUrl: true },
-    });
-
-    if (tenant?.dedicatedDatabaseUrl) {
-      // Route through dynamic client connection pool
-      req.db = getTenantPrisma(tenantId, tenant.dedicatedDatabaseUrl);
-    } else {
-      // Fallback to global database client
-      req.db = prisma;
-    }
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-};
+export { tenantDbRouter };
+export default tenantDbRouter;
