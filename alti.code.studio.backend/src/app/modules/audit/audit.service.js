@@ -40,11 +40,23 @@ export class AuditService {
 
             const previousHash = lastLog ? lastLog.hash : '0000000000000000000000000000000000000000000000000000000000000000';
             
-            const hash = this._hashPayload(data, previousHash);
+            const payload = {
+                tenantId: data.tenantId || null,
+                actor: data.actor,
+                action: data.action,
+                metadata: data.metadata || {},
+                status: data.status || 'SUCCESS'
+            };
+            if (data.productId !== undefined && data.productId !== null) {
+                payload.productId = data.productId;
+            }
+
+            const hash = this._hashPayload(payload, previousHash);
 
             const newLog = await prisma.auditLog.create({
                 data: {
                     tenantId: data.tenantId,
+                    productId: data.productId,
                     actor: data.actor,
                     action: data.action,
                     metadata: data.metadata || {},
@@ -58,6 +70,13 @@ export class AuditService {
         } catch (error) {
             console.error(`[CRITICAL] Failed to append to immutable audit ledger: ${error.message}`);
         }
+    }
+
+    /**
+     * Backward-compatibility/wrapper method matching the expected logAction schema
+     */
+    static async logAction(actor, action, metadata = {}, status = 'SUCCESS', tenantId = null, productId = null) {
+        return this.log({ actor, action, metadata, status, tenantId, productId });
     }
 
     /**
@@ -83,6 +102,9 @@ export class AuditService {
                 metadata: log.metadata,
                 status: log.status
             };
+            if (log.productId !== undefined && log.productId !== null) {
+                payload.productId = log.productId;
+            }
 
             const computedHash = this._hashPayload(payload, previousHash);
 
@@ -96,3 +118,6 @@ export class AuditService {
         return { valid: true };
     }
 }
+
+export const auditService = AuditService;
+

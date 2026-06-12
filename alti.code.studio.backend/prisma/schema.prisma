@@ -210,6 +210,7 @@ model AuditLog {
 
   // AI Provenance
   aiProvenance  Json?    // promptId, responseId, modelName, etc.
+  productId     String?
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -218,6 +219,7 @@ model AuditLog {
   @@index([actor])
   @@index([action])
   @@index([hash])
+  @@index([productId])
 }
 
 // -----------------------------------------------------------------
