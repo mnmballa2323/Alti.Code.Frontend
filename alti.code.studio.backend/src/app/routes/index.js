@@ -23,7 +23,7 @@ import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js'
 import { rbacService } from '../modules/security/rbac.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
-import { scimRoutes } from '../platform/scim/scimRoute.js';
+import { scimRoutes } from '@inso/platform';
 
 // 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection)
 router.use(enterpriseWAF.rateLimiter);
