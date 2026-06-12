@@ -30,6 +30,12 @@ class VectorStoreService {
                     document text
                 )
             `);
+            await this.pool.query(`
+                ALTER TABLE alti_memory ADD COLUMN IF NOT EXISTS tenant_id varchar;
+            `);
+            await this.pool.query(`
+                CREATE INDEX IF NOT EXISTS alti_memory_tenant_id_idx ON alti_memory (tenant_id);
+            `);
             logger.info('🧠 VectorStore: AlloyDB/pgvector initialized.');
         } catch (error) {
             logger.error('❌ VectorStore init failed. Is PostgreSQL running?', error);
@@ -40,10 +46,14 @@ class VectorStoreService {
      * Add a document to memory
      * @param {string} text 
      * @param {object} metadata 
+     * @param {string} tenantId
      */
-    async add(text, metadata = {}) {
+    async add(text, metadata = {}, tenantId) {
         if (!text || typeof text !== 'string' || text.trim().length === 0) {
             throw new Error('VectorStoreService: text must be a non-empty string.');
+        }
+        if (!tenantId || typeof tenantId !== 'string' || tenantId.trim().length === 0) {
+            throw new Error('VectorStoreService: tenantId is required and must be a non-empty string.');
         }
         try {
             const embedding = await vertexService.getEmbeddings(text);
@@ -51,11 +61,11 @@ class VectorStoreService {
             const id = `doc_${crypto.randomUUID()}`;
 
             await this.pool.query(
-                'INSERT INTO alti_memory (id, embedding, metadata, document) VALUES ($1, $2, $3, $4)',
-                [id, JSON.stringify(embedding), metadata, text]
+                'INSERT INTO alti_memory (id, embedding, metadata, document, tenant_id) VALUES ($1, $2, $3, $4, $5)',
+                [id, JSON.stringify(embedding), metadata, text, tenantId]
             );
 
-            logger.info(`💾 Memory stored: ${id}`);
+            logger.info(`💾 Memory stored: ${id} (Tenant: ${tenantId})`);
             return id;
         } catch (error) {
             logger.error('VectorStore: Failed to add document', error);
@@ -67,17 +77,22 @@ class VectorStoreService {
      * Search memory
      * @param {string} query 
      * @param {number} nResults 
+     * @param {string} tenantId
      */
-    async search(query, nResults = 3) {
+    async search(query, nResults = 3, tenantId) {
         if (!query || typeof query !== 'string' || query.trim().length === 0) {
             throw new Error('VectorStoreService: query must be a non-empty string.');
+        }
+        if (!tenantId || typeof tenantId !== 'string' || tenantId.trim().length === 0) {
+            logger.warn('VectorStore: search failed because tenantId is omitted or invalid.');
+            return { documents: [], metadatas: [], ids: [], distances: [] };
         }
         try {
             const embedding = await vertexService.getEmbeddings(query);
 
             const { rows } = await this.pool.query(
-                'SELECT id, metadata, document, (embedding <-> $1) as distance FROM alti_memory ORDER BY embedding <-> $1 LIMIT $2',
-                [JSON.stringify(embedding), nResults]
+                'SELECT id, metadata, document, (embedding <-> $1) as distance FROM alti_memory WHERE tenant_id = $2 ORDER BY embedding <-> $1 LIMIT $3',
+                [JSON.stringify(embedding), tenantId, nResults]
             );
 
             return {
@@ -95,13 +110,18 @@ class VectorStoreService {
     /**
      * Fetch documents directly by ID.
      * @param {string[]} ids 
+     * @param {string} tenantId
      */
-    async getByIds(ids) {
+    async getByIds(ids, tenantId) {
         if (!ids || ids.length === 0) return [];
+        if (!tenantId || typeof tenantId !== 'string' || tenantId.trim().length === 0) {
+            logger.warn('VectorStore: getByIds failed because tenantId is omitted or invalid.');
+            return [];
+        }
         try {
             const { rows } = await this.pool.query(
-                'SELECT document FROM alti_memory WHERE id = ANY($1)',
-                [ids]
+                'SELECT document FROM alti_memory WHERE id = ANY($1) AND tenant_id = $2',
+                [ids, tenantId]
             );
             return rows.map(r => r.document);
         } catch (error) {
@@ -111,13 +131,18 @@ class VectorStoreService {
     }
 
     /**
-     * Delete all documents from the vector store.
-     * Called by ragService.clearIndex() for full re-indexing or test teardown.
+     * Delete documents from the vector store.
+     * @param {string} [tenantId]
      */
-    async reset() {
+    async reset(tenantId) {
         try {
-            await this.pool.query('DELETE FROM alti_memory');
-            logger.info('🗑️ VectorStore: All documents deleted (reset).');
+            if (tenantId) {
+                await this.pool.query('DELETE FROM alti_memory WHERE tenant_id = $1', [tenantId]);
+                logger.info(`🗑️ VectorStore: All documents deleted for tenant ${tenantId} (reset).`);
+            } else {
+                await this.pool.query('DELETE FROM alti_memory');
+                logger.info('🗑️ VectorStore: All documents deleted (reset).');
+            }
         } catch (error) {
             logger.error('VectorStore: reset() failed', error);
             throw error;
@@ -127,12 +152,17 @@ class VectorStoreService {
     /**
      * List recent memories linearly without vector search.
      * @param {number} limit 
+     * @param {string} tenantId
      */
-    async list(limit = 50) {
+    async list(limit = 50, tenantId) {
+        if (!tenantId || typeof tenantId !== 'string' || tenantId.trim().length === 0) {
+            logger.warn('VectorStore: list failed because tenantId is omitted or invalid.');
+            return [];
+        }
         try {
             const { rows } = await this.pool.query(
-                'SELECT id, metadata, document FROM alti_memory ORDER BY id DESC LIMIT $1',
-                [limit]
+                'SELECT id, metadata, document FROM alti_memory WHERE tenant_id = $2 ORDER BY id DESC LIMIT $1',
+                [limit, tenantId]
             );
             return rows;
         } catch (error) {
