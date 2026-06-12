@@ -13,6 +13,7 @@ import { ragService } from '../memory/rag.service.js';
 class HistorianAgent {
     constructor() {
         this.name = "The Historian";
+        this.agentName = "historian";
         this.capabilities = ['recordEvent', 'queryHistory', 'getChronicle'];
         this.chroniclePath = path.join(process.cwd(), 'data', 'chronicle.json');
         this.ensureChronicle();

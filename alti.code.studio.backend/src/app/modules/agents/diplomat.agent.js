@@ -17,6 +17,7 @@ const execPromise = util.promisify(exec);
 class DiplomatAgent {
     constructor() {
         this.name = "The Diplomat";
+        this.agentName = "diplomat";
         this.capabilities = ['negotiate', 'request', 'prepareRelease'];
     }
 

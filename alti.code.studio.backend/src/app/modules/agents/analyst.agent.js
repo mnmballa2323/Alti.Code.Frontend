@@ -11,6 +11,7 @@ import { historianAgent } from './historian.agent.js';
 class AnalystAgent {
     constructor() {
         this.name = "The Analyst";
+        this.agentName = "analyst";
         this.capabilities = ['analyzeTrends', 'generateReport'];
     }
 

@@ -12,6 +12,16 @@ import fs from 'fs/promises';
 class ProphetAgent {
     constructor() {
         this.name = "The Prophet";
+        this.agentName = "prophet";
+        this.capabilities = ['predict'];
+    }
+
+    async execute(action, args) {
+        logger.info(`🔮 Prophet: Executing ${action}`);
+        if (action === 'predict') {
+            return this.predict(args.filePath);
+        }
+        throw new Error(`Unknown action: ${action}`);
     }
 
     /**

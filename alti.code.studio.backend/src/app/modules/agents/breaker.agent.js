@@ -13,11 +13,21 @@ import path from 'path';
 class BreakerAgent {
     constructor() {
         this.name = "The Breaker";
+        this.agentName = "breaker";
+        this.capabilities = ['attack'];
         this.vulnerabilityPatterns = [
             { name: "Hardcoded Secret", regex: /(password|secret|key|token)\s*=\s*['"][a-zA-Z0-9]{10,}['"]/i },
             { name: "SQL Injection", regex: /SELECT\s+.*?\s+FROM\s+.*?\$\{/i }, // Broad Template Literal Check
             { name: "Unsafe Eval", regex: /eval\s*\(/ }
         ];
+    }
+
+    async execute(action, args) {
+        logger.info(`⚔️ Breaker: Executing ${action}`);
+        if (action === 'attack') {
+            return this.attack(args.targetDir);
+        }
+        throw new Error(`Unknown action: ${action}`);
     }
 
     /**

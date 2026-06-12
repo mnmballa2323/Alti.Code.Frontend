@@ -13,7 +13,17 @@ import path from 'path';
 class PolyglotAgent {
     constructor() {
         this.name = "The Polyglot";
+        this.agentName = "polyglot";
+        this.capabilities = ['localize'];
         this.targetLanguages = ['es', 'fr', 'ja'];
+    }
+
+    async execute(action, args) {
+        logger.info(`🌐 Polyglot: Executing ${action}`);
+        if (action === 'localize') {
+            return this.localize(args.sourceFile);
+        }
+        throw new Error(`Unknown action: ${action}`);
     }
 
     /**

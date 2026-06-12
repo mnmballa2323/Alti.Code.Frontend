@@ -14,6 +14,16 @@ import { smartFileWriter } from './smart_file_writer.service.js';
 class HealerAgent {
     constructor() {
         this.name = "The Healer";
+        this.agentName = "healer";
+        this.capabilities = ['heal'];
+    }
+
+    async execute(action, args) {
+        logger.info(`🩹 Healer: Executing ${action}`);
+        if (action === 'heal') {
+            return this.heal(args.filePath, args.errorLog);
+        }
+        throw new Error(`Unknown action: ${action}`);
     }
 
     /**
