@@ -1448,4 +1448,61 @@ router.delete(
 
 router.post('/markdown', GitlabController.renderMarkdown);
 
+// ==========================================
+// 48. Phase 13: Deploy Tokens, Personal Access Tokens, Project Topics, and MR Suggestions
+// ==========================================
+router.get(
+  '/projects/:projectId/deploy_tokens',
+  GitlabController.listProjectDeployTokens,
+);
+router.post(
+  '/projects/:projectId/deploy_tokens',
+  GitlabController.createProjectDeployToken,
+);
+router.delete(
+  '/projects/:projectId/deploy_tokens/:tokenId',
+  GitlabController.deleteProjectDeployToken,
+);
+
+router.get(
+  '/groups/:groupId/deploy_tokens',
+  GitlabController.listGroupDeployTokens,
+);
+router.post(
+  '/groups/:groupId/deploy_tokens',
+  GitlabController.createGroupDeployToken,
+);
+router.delete(
+  '/groups/:groupId/deploy_tokens/:tokenId',
+  GitlabController.deleteGroupDeployToken,
+);
+
+router.get(
+  '/personal_access_tokens',
+  GitlabController.listPersonalAccessTokens,
+);
+router.post(
+  '/personal_access_tokens',
+  GitlabController.createPersonalAccessToken,
+);
+router.get(
+  '/personal_access_tokens/:tokenId',
+  GitlabController.getPersonalAccessToken,
+);
+router.delete(
+  '/personal_access_tokens/:tokenId',
+  GitlabController.revokePersonalAccessToken,
+);
+
+router.get('/topics', GitlabController.listProjectTopics);
+router.post('/topics', GitlabController.createProjectTopic);
+router.get('/topics/:topicId', GitlabController.getProjectTopic);
+router.put('/topics/:topicId', GitlabController.updateProjectTopic);
+router.delete('/topics/:topicId', GitlabController.deleteProjectTopic);
+
+router.put(
+  '/suggestions/:suggestionId/apply',
+  GitlabController.applyMergeRequestSuggestion,
+);
+
 export const GitlabRoutes = router;

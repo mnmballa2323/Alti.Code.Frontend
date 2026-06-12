@@ -5651,4 +5651,204 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 47. Phase 13: Deploy Tokens, Personal Access Tokens, Project Topics, and MR Suggestions
+  // ==========================================
+  describe('47. Phase 13: Deploy Tokens, Personal Access Tokens, Project Topics, and MR Suggestions', () => {
+    it('listProjectDeployTokens should retrieve project deploy tokens', async () => {
+      const mockData = [{ id: 1, name: 'project-token' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectDeployTokens('123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/deploy_tokens',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectDeployToken should post a new project deploy token configuration', async () => {
+      const mockData = { id: 1, name: 'project-token', token: 'token-xyz' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectDeployToken('123', {
+        name: 'project-token',
+        scopes: ['read_repository'],
+        expiresAt: '2026-12-31',
+        username: 'deployer',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/deploy_tokens',
+        {
+          name: 'project-token',
+          scopes: ['read_repository'],
+          expires_at: '2026-12-31',
+          username: 'deployer',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectDeployToken should delete project deploy token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectDeployToken('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/deploy_tokens/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listGroupDeployTokens should retrieve group deploy tokens', async () => {
+      const mockData = [{ id: 2, name: 'group-token' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupDeployTokens('99');
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/99/deploy_tokens');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupDeployToken should post a new group deploy token configuration', async () => {
+      const mockData = { id: 2, name: 'group-token', token: 'token-abc' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupDeployToken('99', {
+        name: 'group-token',
+        scopes: ['read_repository'],
+        expiresAt: '2026-12-31',
+        username: 'group-deployer',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/99/deploy_tokens', {
+        name: 'group-token',
+        scopes: ['read_repository'],
+        expires_at: '2026-12-31',
+        username: 'group-deployer',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupDeployToken should delete group deploy token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupDeployToken('99', 2);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/99/deploy_tokens/2',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listPersonalAccessTokens should retrieve personal access tokens', async () => {
+      const mockData = [{ id: 1, name: 'pat-1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listPersonalAccessTokens({
+        userId: 5,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/personal_access_tokens', {
+        params: {
+          user_id: 5,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getPersonalAccessToken should retrieve personal access token details', async () => {
+      const mockData = { id: 1, name: 'pat-1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getPersonalAccessToken(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/personal_access_tokens/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createPersonalAccessToken should post a new personal access token configuration', async () => {
+      const mockData = { id: 1, name: 'pat-1', token: 'pat-xyz' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createPersonalAccessToken({
+        userId: 5,
+        name: 'pat-1',
+        scopes: ['api'],
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/personal_access_tokens', {
+        user_id: 5,
+        name: 'pat-1',
+        scopes: ['api'],
+        expires_at: '2026-12-31',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('revokePersonalAccessToken should delete personal access token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.revokePersonalAccessToken(1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/personal_access_tokens/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listProjectTopics should retrieve project topics', async () => {
+      const mockData = [{ id: 1, name: 'ruby' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectTopics({
+        search: 'ruby',
+        withoutProjects: true,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/topics', {
+        params: {
+          search: 'ruby',
+          without_projects: true,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectTopic should retrieve project topic details', async () => {
+      const mockData = { id: 1, name: 'ruby' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectTopic(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/topics/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectTopic should post a new project topic configuration', async () => {
+      const mockData = { id: 1, name: 'ruby' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectTopic({
+        name: 'ruby',
+        title: 'Ruby Topic',
+        description: 'Projects using Ruby',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/topics', {
+        name: 'ruby',
+        title: 'Ruby Topic',
+        description: 'Projects using Ruby',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectTopic should put updated project topic configuration', async () => {
+      const mockData = { id: 1, name: 'ruby-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectTopic(1, {
+        name: 'ruby-updated',
+        title: 'Ruby Topic Updated',
+        description: 'Projects using Ruby language',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/topics/1', {
+        name: 'ruby-updated',
+        title: 'Ruby Topic Updated',
+        description: 'Projects using Ruby language',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectTopic should delete project topic', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectTopic(1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/topics/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('applyMergeRequestSuggestion should put to apply suggestion endpoint', async () => {
+      const mockData = { id: 10, applied: true };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.applyMergeRequestSuggestion(10);
+      expect(mockClient.put).toHaveBeenCalledWith('/suggestions/10/apply');
+      expect(result).toEqual(mockData);
+    });
+  });
 });

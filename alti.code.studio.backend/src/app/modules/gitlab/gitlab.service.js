@@ -7240,7 +7240,9 @@ export const GitlabService = {
   },
 
   async createProjectTopic(topicData = {}) {
-    logger.info(`🦊 [GitLab Service] Creating project topic "${topicData.name}"`);
+    logger.info(
+      `🦊 [GitLab Service] Creating project topic "${topicData.name}"`,
+    );
     try {
       const { data } = await gitlabClient.post('/topics', {
         name: topicData.name,

@@ -6139,7 +6139,10 @@ export const listGroupDeployTokens = async (req, res) => {
     const tokens = await GitlabService.listGroupDeployTokens(groupId);
     res.status(httpStatus.OK).json({ success: true, data: tokens });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing group deploy tokens:', error);
+    logger.error(
+      '[GitLab Controller] Error listing group deploy tokens:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6152,7 +6155,10 @@ export const createGroupDeployToken = async (req, res) => {
     const token = await GitlabService.createGroupDeployToken(groupId, req.body);
     res.status(httpStatus.CREATED).json({ success: true, data: token });
   } catch (error) {
-    logger.error('[GitLab Controller] Error creating group deploy token:', error);
+    logger.error(
+      '[GitLab Controller] Error creating group deploy token:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6165,7 +6171,10 @@ export const deleteGroupDeployToken = async (req, res) => {
     const result = await GitlabService.deleteGroupDeployToken(groupId, tokenId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting group deploy token:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting group deploy token:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -6300,7 +6309,8 @@ export const deleteProjectTopic = async (req, res) => {
 export const applyMergeRequestSuggestion = async (req, res) => {
   try {
     const { suggestionId } = req.params;
-    const result = await GitlabService.applyMergeRequestSuggestion(suggestionId);
+    const result =
+      await GitlabService.applyMergeRequestSuggestion(suggestionId);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error applying MR suggestion:', error);
