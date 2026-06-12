@@ -55,39 +55,59 @@ class GitlabDocsService {
     // If no preferred agent, automatically route using semantic pgvector search + LLM reranking
     if (!agentId) {
       try {
-        const { vectorStoreService } = await import('../memory/vector.store.js');
+        const { vectorStoreService } =
+          await import('../memory/vector.store.js');
 
-        logger.info(`🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`);
+        logger.info(
+          `🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`,
+        );
         const searchResults = await vectorStoreService.search(query, 10);
-        
+
         let gitlabCandidates = [];
-        if (searchResults.documents && searchResults.documents[0] && searchResults.documents[0].length > 0) {
+        if (
+          searchResults.documents &&
+          searchResults.documents[0] &&
+          searchResults.documents[0].length > 0
+        ) {
           const docs = searchResults.documents[0];
           const metadatas = searchResults.metadatas[0];
           const distances = searchResults.distances[0];
 
           for (let i = 0; i < docs.length; i++) {
             const meta = metadatas[i];
-            if (meta && meta.agentId && meta.agentId.toLowerCase().startsWith('gitlab')) {
+            if (
+              meta &&
+              meta.agentId &&
+              meta.agentId.toLowerCase().startsWith('gitlab')
+            ) {
               gitlabCandidates.push({
                 agentId: meta.agentId,
                 document: docs[i],
-                distance: distances[i]
+                distance: distances[i],
               });
             }
           }
         }
 
         // 1. Vector Short-Circuit: If exceptionally close distance (< 0.15)
-        if (gitlabCandidates.length > 0 && gitlabCandidates[0].distance < 0.15) {
+        if (
+          gitlabCandidates.length > 0 &&
+          gitlabCandidates[0].distance < 0.15
+        ) {
           agentId = gitlabCandidates[0].agentId;
-          logger.info(`🦊 [GitLab Docs Gateway] Vector Short-Circuit (Distance: ${gitlabCandidates[0].distance.toFixed(3)}) routed to: [${agentId}]`);
-        } 
-        
+          logger.info(
+            `🦊 [GitLab Docs Gateway] Vector Short-Circuit (Distance: ${gitlabCandidates[0].distance.toFixed(3)}) routed to: [${agentId}]`,
+          );
+        }
+
         // 2. LLM Reranker: If candidate list is found, consult LLM to select best GitLab agent
         else if (gitlabCandidates.length > 0) {
-          logger.info(`🦊 [GitLab Docs Gateway] Reranking ${gitlabCandidates.length} candidate agents via Gemini...`);
-          const candidateStrings = gitlabCandidates.map(c => `Agent: ${c.agentId}\n${c.document}`).join('\n\n');
+          logger.info(
+            `🦊 [GitLab Docs Gateway] Reranking ${gitlabCandidates.length} candidate agents via Gemini...`,
+          );
+          const candidateStrings = gitlabCandidates
+            .map(c => `Agent: ${c.agentId}\n${c.document}`)
+            .join('\n\n');
           const prompt = `You are the dynamic router for Inso Code's GitLab swarm.
 Analyze the user query and select the single best GitLab specialist agent from the candidates list.
 
@@ -101,21 +121,34 @@ RULES:
 - If no candidate fits, return { "agentId": "NONE" }
 - Return raw JSON only, no markdown.`;
 
-          const { GoogleGenAiService } = await import('../googleGenAi/googleGenAi.service.js');
+          const { GoogleGenAiService } =
+            await import('../googleGenAi/googleGenAi.service.js');
           const modelName = 'gemini-3.1-pro';
-          const result = await GoogleGenAiService.generateContent(prompt, modelName, 0.2);
+          const result = await GoogleGenAiService.generateContent(
+            prompt,
+            modelName,
+            0.2,
+          );
           const text = result.content || '';
           const match = text.match(/\{[\s\S]*\}/);
           if (match) {
             const decision = JSON.parse(match[0]);
-            if (decision.agentId && decision.agentId !== 'NONE' && agentRegistry.get(decision.agentId)) {
+            if (
+              decision.agentId &&
+              decision.agentId !== 'NONE' &&
+              agentRegistry.get(decision.agentId)
+            ) {
               agentId = decision.agentId;
-              logger.info(`🦊 [GitLab Docs Gateway] Semantic reranker routed to: [${agentId}]`);
+              logger.info(
+                `🦊 [GitLab Docs Gateway] Semantic reranker routed to: [${agentId}]`,
+              );
             }
           }
         }
       } catch (err) {
-        logger.warn(`🦊 [GitLab Docs Gateway] Vector/LLM routing failed. Falling back to keyword rules. Error: ${err.message}`);
+        logger.warn(
+          `🦊 [GitLab Docs Gateway] Vector/LLM routing failed. Falling back to keyword rules. Error: ${err.message}`,
+        );
       }
     }
 

@@ -124,7 +124,12 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
 
     const vectorSearchSpy = vi
       .spyOn(vectorStoreService, 'search')
-      .mockResolvedValue({ documents: [], metadatas: [], ids: [], distances: [] });
+      .mockResolvedValue({
+        documents: [],
+        metadatas: [],
+        ids: [],
+        distances: [],
+      });
 
     const searchDocsSpy = vi
       .spyOn(gitlabDocsService, 'searchDocs')
@@ -146,45 +151,69 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
   });
 
   it('should route using pgvector search short-circuit when distance is < 0.15', async () => {
-    const vectorSearchSpy = vi.spyOn(vectorStoreService, 'search').mockResolvedValue({
-      documents: [['Agent Name: gitlabProjectCreator\nDescription: Specialist GitLab Project Creator']],
-      metadatas: [[{ agentId: 'gitlabProjectCreator' }]],
-      ids: [['doc_1']],
-      distances: [[0.10]]
-    });
+    const vectorSearchSpy = vi
+      .spyOn(vectorStoreService, 'search')
+      .mockResolvedValue({
+        documents: [
+          [
+            'Agent Name: gitlabProjectCreator\nDescription: Specialist GitLab Project Creator',
+          ],
+        ],
+        metadatas: [[{ agentId: 'gitlabProjectCreator' }]],
+        ids: [['doc_1']],
+        distances: [[0.1]],
+      });
 
-    const searchDocsSpy = vi.spyOn(gitlabDocsService, 'searchDocs').mockResolvedValue('Mocked docs');
-    const generateContentSpy = vi.spyOn(GeminiAiService, 'generateContent').mockResolvedValue('Mocked response');
+    const searchDocsSpy = vi
+      .spyOn(gitlabDocsService, 'searchDocs')
+      .mockResolvedValue('Mocked docs');
+    const generateContentSpy = vi
+      .spyOn(GeminiAiService, 'generateContent')
+      .mockResolvedValue('Mocked response');
 
-    const result = await gitlabDocsService.dispatchQueryToSwarm('create a new project');
+    const result = await gitlabDocsService.dispatchQueryToSwarm(
+      'create a new project',
+    );
     expect(result.agent).toBe('gitlabProjectCreator');
-    
+
     vectorSearchSpy.mockRestore();
     searchDocsSpy.mockRestore();
     generateContentSpy.mockRestore();
   });
 
   it('should route using LLM reranker when pgvector distance is >= 0.15', async () => {
-    const vectorSearchSpy = vi.spyOn(vectorStoreService, 'search').mockResolvedValue({
-      documents: [
-        [
-          'Agent Name: gitlabProjectCreator\nDescription: Specialist GitLab Project Creator',
-          'Agent Name: gitlabMrMerger\nDescription: Specialist GitLab MR Merger'
-        ]
-      ],
-      metadatas: [[{ agentId: 'gitlabProjectCreator' }, { agentId: 'gitlabMrMerger' }]],
-      ids: [['doc_1', 'doc_2']],
-      distances: [[0.30, 0.40]]
-    });
+    const vectorSearchSpy = vi
+      .spyOn(vectorStoreService, 'search')
+      .mockResolvedValue({
+        documents: [
+          [
+            'Agent Name: gitlabProjectCreator\nDescription: Specialist GitLab Project Creator',
+            'Agent Name: gitlabMrMerger\nDescription: Specialist GitLab MR Merger',
+          ],
+        ],
+        metadatas: [
+          [{ agentId: 'gitlabProjectCreator' }, { agentId: 'gitlabMrMerger' }],
+        ],
+        ids: [['doc_1', 'doc_2']],
+        distances: [[0.3, 0.4]],
+      });
 
-    const rerankSpy = vi.spyOn(GoogleGenAiService, 'generateContent').mockResolvedValue({
-      content: '{ "agentId": "gitlabMrMerger" }'
-    });
+    const rerankSpy = vi
+      .spyOn(GoogleGenAiService, 'generateContent')
+      .mockResolvedValue({
+        content: '{ "agentId": "gitlabMrMerger" }',
+      });
 
-    const searchDocsSpy = vi.spyOn(gitlabDocsService, 'searchDocs').mockResolvedValue('Mocked docs');
-    const generateContentSpy = vi.spyOn(GeminiAiService, 'generateContent').mockResolvedValue('Mocked response');
+    const searchDocsSpy = vi
+      .spyOn(gitlabDocsService, 'searchDocs')
+      .mockResolvedValue('Mocked docs');
+    const generateContentSpy = vi
+      .spyOn(GeminiAiService, 'generateContent')
+      .mockResolvedValue('Mocked response');
 
-    const result = await gitlabDocsService.dispatchQueryToSwarm('merge this merge request');
+    const result = await gitlabDocsService.dispatchQueryToSwarm(
+      'merge this merge request',
+    );
     expect(result.agent).toBe('gitlabMrMerger');
 
     vectorSearchSpy.mockRestore();
