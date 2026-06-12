@@ -271,20 +271,31 @@ label::after {
 /* Custom Autofill Styles to prevent yellow/blue Chrome highlights */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-  box-shadow: 0 0 0 1000px #ffffff inset !important;
-  -webkit-text-fill-color: #1f2937 !important;
+  -webkit-box-shadow: 0 0 0 1000px #F5F5F7 inset !important;
+  box-shadow: 0 0 0 1000px #F5F5F7 inset !important;
+  -webkit-text-fill-color: #000000 !important;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #EBEBEF inset !important;
+  box-shadow: 0 0 0 1000px #EBEBEF inset !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .dark input:-webkit-autofill,
 .dark input:-webkit-autofill:hover,
-.dark input:-webkit-autofill:focus,
 .dark input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 1000px #161b22 inset !important;
   box-shadow: 0 0 0 1000px #161b22 inset !important;
   -webkit-text-fill-color: #f3f4f6 !important;
   transition: background-color 5000s ease-in-out 0s;
 }
+
+.dark input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #22272e inset !important;
+  box-shadow: 0 0 0 1000px #22272e inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+}
+
