@@ -7816,6 +7816,378 @@ export const listGpgKeysForUser = async (req, res) => {
   }
 };
 
+export const updateRepository = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.updateRepository(owner, repo, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating repository settings:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const enableSecretScanning = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.enableSecretScanning(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error enabling secret scanning:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const disableSecretScanning = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.disableSecretScanning(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error disabling secret scanning:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const enableSecretScanningPushProtection = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.enableSecretScanningPushProtection(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error enabling push protection:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const disableSecretScanningPushProtection = async (req, res) => {
+  try {
+    const { owner, repo } = req.params;
+    const result = await GithubService.disableSecretScanningPushProtection(owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error disabling push protection:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getRequiredStatusChecks = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getRequiredStatusChecks(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting required status checks:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateRequiredStatusChecks = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { checks, contexts } = req.body;
+    const result = await GithubService.updateRequiredStatusChecks(owner, repo, branch, checks, contexts);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error updating required status checks:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteRequiredStatusChecks = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.deleteRequiredStatusChecks(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting required status checks:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listRequiredStatusChecksContexts = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.listRequiredStatusChecksContexts(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing status checks contexts:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addRequiredStatusChecksContexts = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { contexts } = req.body;
+    const result = await GithubService.addRequiredStatusChecksContexts(owner, repo, branch, contexts);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding status checks contexts:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setRequiredStatusChecksContexts = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { contexts } = req.body;
+    const result = await GithubService.setRequiredStatusChecksContexts(owner, repo, branch, contexts);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error setting status checks contexts:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeRequiredStatusChecksContexts = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { contexts } = req.body;
+    const result = await GithubService.removeRequiredStatusChecksContexts(owner, repo, branch, contexts);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing status checks contexts:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPullRequestReviewBypassRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const result = await GithubService.getPullRequestReviewBypassRestrictions(owner, repo, branch);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting PR review bypass restrictions:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addPullRequestReviewBypassRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users, teams, apps } = req.body;
+    const result = await GithubService.addPullRequestReviewBypassRestrictions(owner, repo, branch, users, teams, apps);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding PR review bypass restrictions:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setPullRequestReviewBypassRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users, teams, apps } = req.body;
+    const result = await GithubService.setPullRequestReviewBypassRestrictions(owner, repo, branch, users, teams, apps);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error setting PR review bypass restrictions:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removePullRequestReviewBypassRestrictions = async (req, res) => {
+  try {
+    const { owner, repo, branch } = req.params;
+    const { users, teams, apps } = req.body;
+    const result = await GithubService.removePullRequestReviewBypassRestrictions(owner, repo, branch, users, teams, apps);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing PR review bypass restrictions:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getTeamByName = async (req, res) => {
+  try {
+    const { org, teamSlug } = req.params;
+    const result = await GithubService.getTeamByName(org, teamSlug);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error getting team by name:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addOrUpdateTeamMembershipForUser = async (req, res) => {
+  try {
+    const { org, teamSlug, username } = req.params;
+    const { role } = req.body;
+    const result = await GithubService.addOrUpdateTeamMembershipForUser(org, teamSlug, username, role);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding/updating team membership:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeTeamMembershipForUser = async (req, res) => {
+  try {
+    const { org, teamSlug, username } = req.params;
+    const result = await GithubService.removeTeamMembershipForUser(org, teamSlug, username);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing team membership:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listTeamRepos = async (req, res) => {
+  try {
+    const { org, teamSlug } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listTeamRepos(
+      org,
+      teamSlug,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing team repositories:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const checkTeamPermissionsForRepo = async (req, res) => {
+  try {
+    const { org, teamSlug, owner, repo } = req.params;
+    const result = await GithubService.checkTeamPermissionsForRepo(org, teamSlug, owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error checking team permissions for repository:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const addOrUpdateTeamRepoPermissions = async (req, res) => {
+  try {
+    const { org, teamSlug, owner, repo } = req.params;
+    const { permission } = req.body;
+    const result = await GithubService.addOrUpdateTeamRepoPermissions(org, teamSlug, owner, repo, permission);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error adding/updating team repository permissions:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const removeTeamRepo = async (req, res) => {
+  try {
+    const { org, teamSlug, owner, repo } = req.params;
+    const result = await GithubService.removeTeamRepo(org, teamSlug, owner, repo);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error removing team repository access:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listChildTeams = async (req, res) => {
+  try {
+    const { org, teamSlug } = req.params;
+    const { page, perPage } = req.query;
+    const result = await GithubService.listChildTeams(
+      org,
+      teamSlug,
+      page ? parseInt(page) : undefined,
+      perPage ? parseInt(perPage) : undefined
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error listing child teams:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAppInstallation = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result = await GithubService.deleteAppInstallation(parseInt(installationId));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error deleting app installation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const suspendAppInstallation = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result = await GithubService.suspendAppInstallation(parseInt(installationId));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error suspending app installation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unsuspendAppInstallation = async (req, res) => {
+  try {
+    const { installationId } = req.params;
+    const result = await GithubService.unsuspendAppInstallation(parseInt(installationId));
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(`[GitHub Controller] Error unsuspending app installation:`, error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
 export const GithubController = {
   getBranch,
   getBranchProtection,
@@ -8254,4 +8626,31 @@ export const GithubController = {
   listOrgInvitationTeams,
   listPublicKeysForUser,
   listGpgKeysForUser,
+  updateRepository,
+  enableSecretScanning,
+  disableSecretScanning,
+  enableSecretScanningPushProtection,
+  disableSecretScanningPushProtection,
+  getRequiredStatusChecks,
+  updateRequiredStatusChecks,
+  deleteRequiredStatusChecks,
+  listRequiredStatusChecksContexts,
+  addRequiredStatusChecksContexts,
+  setRequiredStatusChecksContexts,
+  removeRequiredStatusChecksContexts,
+  getPullRequestReviewBypassRestrictions,
+  addPullRequestReviewBypassRestrictions,
+  setPullRequestReviewBypassRestrictions,
+  removePullRequestReviewBypassRestrictions,
+  getTeamByName,
+  addOrUpdateTeamMembershipForUser,
+  removeTeamMembershipForUser,
+  listTeamRepos,
+  checkTeamPermissionsForRepo,
+  addOrUpdateTeamRepoPermissions,
+  removeTeamRepo,
+  listChildTeams,
+  deleteAppInstallation,
+  suspendAppInstallation,
+  unsuspendAppInstallation,
 };
