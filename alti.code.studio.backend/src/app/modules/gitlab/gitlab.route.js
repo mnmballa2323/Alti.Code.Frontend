@@ -254,58 +254,142 @@ router.get(
 // ==========================================
 // 12. Commits, Diff & Comments Endpoints
 // ==========================================
-router.get('/projects/:projectId/repository/commits', GitlabController.listCommits);
-router.get('/projects/:projectId/repository/commits/:sha', GitlabController.getCommit);
-router.get('/projects/:projectId/repository/compare', GitlabController.compareCommits);
-router.get('/projects/:projectId/repository/commits/:sha/diff', GitlabController.getCommitDiff);
-router.get('/projects/:projectId/repository/commits/:sha/comments', GitlabController.getCommitComments);
-router.post('/projects/:projectId/repository/commits/:sha/comments', GitlabController.createCommitComment);
-router.post('/projects/:projectId/statuses/:sha', GitlabController.createCommitStatus);
-router.get('/projects/:projectId/repository/commits/:sha/statuses', GitlabController.listCommitStatuses);
+router.get(
+  '/projects/:projectId/repository/commits',
+  GitlabController.listCommits,
+);
+router.get(
+  '/projects/:projectId/repository/commits/:sha',
+  GitlabController.getCommit,
+);
+router.get(
+  '/projects/:projectId/repository/compare',
+  GitlabController.compareCommits,
+);
+router.get(
+  '/projects/:projectId/repository/commits/:sha/diff',
+  GitlabController.getCommitDiff,
+);
+router.get(
+  '/projects/:projectId/repository/commits/:sha/comments',
+  GitlabController.getCommitComments,
+);
+router.post(
+  '/projects/:projectId/repository/commits/:sha/comments',
+  GitlabController.createCommitComment,
+);
+router.post(
+  '/projects/:projectId/statuses/:sha',
+  GitlabController.createCommitStatus,
+);
+router.get(
+  '/projects/:projectId/repository/commits/:sha/statuses',
+  GitlabController.listCommitStatuses,
+);
 
 // ==========================================
 // 13. Releases & Tags Endpoints
 // ==========================================
 router.get('/projects/:projectId/releases', GitlabController.listReleases);
-router.get('/projects/:projectId/releases/:tagName', GitlabController.getRelease);
+router.get(
+  '/projects/:projectId/releases/:tagName',
+  GitlabController.getRelease,
+);
 router.post('/projects/:projectId/releases', GitlabController.createRelease);
-router.put('/projects/:projectId/releases/:tagName', GitlabController.updateRelease);
-router.delete('/projects/:projectId/releases/:tagName', GitlabController.deleteRelease);
+router.put(
+  '/projects/:projectId/releases/:tagName',
+  GitlabController.updateRelease,
+);
+router.delete(
+  '/projects/:projectId/releases/:tagName',
+  GitlabController.deleteRelease,
+);
 
 router.get('/projects/:projectId/repository/tags', GitlabController.listTags);
-router.get('/projects/:projectId/repository/tags/:tagName', GitlabController.getTag);
+router.get(
+  '/projects/:projectId/repository/tags/:tagName',
+  GitlabController.getTag,
+);
 router.post('/projects/:projectId/repository/tags', GitlabController.createTag);
-router.delete('/projects/:projectId/repository/tags/:tagName', GitlabController.deleteTag);
+router.delete(
+  '/projects/:projectId/repository/tags/:tagName',
+  GitlabController.deleteTag,
+);
 
 // ==========================================
 // 14. Deployments & Environments Endpoints
 // ==========================================
-router.get('/projects/:projectId/environments', GitlabController.listEnvironments);
-router.get('/projects/:projectId/environments/:environmentId', GitlabController.getEnvironment);
-router.post('/projects/:projectId/environments', GitlabController.createEnvironment);
-router.put('/projects/:projectId/environments/:environmentId', GitlabController.updateEnvironment);
-router.delete('/projects/:projectId/environments/:environmentId', GitlabController.deleteEnvironment);
+router.get(
+  '/projects/:projectId/environments',
+  GitlabController.listEnvironments,
+);
+router.get(
+  '/projects/:projectId/environments/:environmentId',
+  GitlabController.getEnvironment,
+);
+router.post(
+  '/projects/:projectId/environments',
+  GitlabController.createEnvironment,
+);
+router.put(
+  '/projects/:projectId/environments/:environmentId',
+  GitlabController.updateEnvironment,
+);
+router.delete(
+  '/projects/:projectId/environments/:environmentId',
+  GitlabController.deleteEnvironment,
+);
 
-router.get('/projects/:projectId/deployments', GitlabController.listDeployments);
-router.get('/projects/:projectId/deployments/:deploymentId', GitlabController.getDeployment);
-router.post('/projects/:projectId/deployments', GitlabController.createDeployment);
-router.put('/projects/:projectId/deployments/:deploymentId', GitlabController.updateDeployment);
+router.get(
+  '/projects/:projectId/deployments',
+  GitlabController.listDeployments,
+);
+router.get(
+  '/projects/:projectId/deployments/:deploymentId',
+  GitlabController.getDeployment,
+);
+router.post(
+  '/projects/:projectId/deployments',
+  GitlabController.createDeployment,
+);
+router.put(
+  '/projects/:projectId/deployments/:deploymentId',
+  GitlabController.updateDeployment,
+);
 
 // ==========================================
 // 15. Snippets Endpoints
 // ==========================================
 router.get('/snippets', GitlabController.listSnippets);
-router.get('/projects/:projectId/snippets', GitlabController.listProjectSnippets);
+router.get(
+  '/projects/:projectId/snippets',
+  GitlabController.listProjectSnippets,
+);
 router.get('/snippets/:snippetId', GitlabController.getSnippet);
-router.get('/projects/:projectId/snippets/:snippetId', GitlabController.getProjectSnippet);
+router.get(
+  '/projects/:projectId/snippets/:snippetId',
+  GitlabController.getProjectSnippet,
+);
 router.post('/snippets', GitlabController.createSnippet);
-router.post('/projects/:projectId/snippets', GitlabController.createProjectSnippet);
+router.post(
+  '/projects/:projectId/snippets',
+  GitlabController.createProjectSnippet,
+);
 router.put('/snippets/:snippetId', GitlabController.updateSnippet);
-router.put('/projects/:projectId/snippets/:snippetId', GitlabController.updateProjectSnippet);
+router.put(
+  '/projects/:projectId/snippets/:snippetId',
+  GitlabController.updateProjectSnippet,
+);
 router.delete('/snippets/:snippetId', GitlabController.deleteSnippet);
-router.delete('/projects/:projectId/snippets/:snippetId', GitlabController.deleteProjectSnippet);
+router.delete(
+  '/projects/:projectId/snippets/:snippetId',
+  GitlabController.deleteProjectSnippet,
+);
 router.get('/snippets/:snippetId/raw', GitlabController.getSnippetContent);
-router.get('/projects/:projectId/snippets/:snippetId/raw', GitlabController.getProjectSnippetContent);
+router.get(
+  '/projects/:projectId/snippets/:snippetId/raw',
+  GitlabController.getProjectSnippetContent,
+);
 
 // ==========================================
 // 16. Self-Hosted Runners Endpoints

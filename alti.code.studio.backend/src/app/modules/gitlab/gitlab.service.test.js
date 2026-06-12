@@ -1132,4 +1132,754 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 12. Commits, Diff & Comments Endpoints
+  // ==========================================
+  describe('12. Commits, Diff & Comments Endpoints', () => {
+    it('listCommits should fetch commit list with query params', async () => {
+      const mockData = [{ sha: 'abc123' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listCommits('123', {
+        refName: 'main',
+        since: '2026-01-01',
+        until: '2026-06-01',
+        path: 'src/',
+        all: true,
+        withStats: true,
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits',
+        {
+          params: {
+            ref_name: 'main',
+            since: '2026-01-01',
+            until: '2026-06-01',
+            path: 'src/',
+            all: true,
+            with_stats: true,
+            page: 2,
+            per_page: 10,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getCommit should fetch commit details by SHA', async () => {
+      const mockData = { sha: 'abc123', message: 'commit msg' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getCommit('123', 'abc123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/abc123',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('compareCommits should fetch comparison of two commits', async () => {
+      const mockData = { diffs: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.compareCommits(
+        '123',
+        'main',
+        'feature',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/compare',
+        {
+          params: { from: 'main', to: 'feature' },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getCommitDiff should fetch commit diff by SHA', async () => {
+      const mockData = [{ diff: 'diff text' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getCommitDiff('123', 'abc123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/abc123/diff',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getCommitComments should fetch commit comments', async () => {
+      const mockData = [{ note: 'nice work' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getCommitComments('123', 'abc123');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/abc123/comments',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createCommitComment should post commit comment', async () => {
+      const mockData = { note: 'nice work' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createCommitComment(
+        '123',
+        'abc123',
+        'nice work',
+        {
+          path: 'src/main.js',
+          line: 10,
+          lineType: 'new',
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/abc123/comments',
+        {
+          note: 'nice work',
+          path: 'src/main.js',
+          line: 10,
+          line_type: 'new',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createCommitStatus should post commit status', async () => {
+      const mockData = { state: 'success' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createCommitStatus(
+        '123',
+        'abc123',
+        'success',
+        {
+          ref: 'main',
+          name: 'test-build',
+          targetUrl: 'http://ci.build',
+          description: 'tests passed',
+          coverage: 90,
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/statuses/abc123',
+        {
+          state: 'success',
+          ref: 'main',
+          name: 'test-build',
+          target_url: 'http://ci.build',
+          description: 'tests passed',
+          coverage: 90,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listCommitStatuses should fetch statuses for a commit', async () => {
+      const mockData = [{ state: 'success' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listCommitStatuses('123', 'abc123', {
+        ref: 'main',
+        stage: 'test',
+        name: 'test-build',
+        all: true,
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/commits/abc123/statuses',
+        {
+          params: {
+            ref: 'main',
+            stage: 'test',
+            name: 'test-build',
+            all: true,
+            page: 2,
+            per_page: 10,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 13. Releases & Tags Endpoints
+  // ==========================================
+  describe('13. Releases & Tags Endpoints', () => {
+    it('listReleases should fetch project releases list', async () => {
+      const mockData = [{ name: 'v1.0.0' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listReleases('123', {
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/releases', {
+        params: { page: 2, per_page: 10 },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getRelease should fetch project release by tagName', async () => {
+      const mockData = { name: 'v1.0.0', tag_name: 'v1.0.0' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getRelease('123', 'v1.0.0');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/releases/v1.0.0',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createRelease should post release configurations', async () => {
+      const mockData = { name: 'v1.0.0', tag_name: 'v1.0.0' };
+      const releaseData = {
+        name: 'v1.0.0',
+        tagName: 'v1.0.0',
+        tagMessage: 'Initial tag',
+        description: 'Release notes',
+        ref: 'main',
+        assets: {},
+        milestones: ['m1'],
+        releasedAt: '2026-06-11T12:00:00Z',
+      };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createRelease('123', releaseData);
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/releases', {
+        name: 'v1.0.0',
+        tag_name: 'v1.0.0',
+        tag_message: 'Initial tag',
+        description: 'Release notes',
+        ref: 'main',
+        assets: {},
+        milestones: ['m1'],
+        released_at: '2026-06-11T12:00:00Z',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateRelease should put updated release configuration', async () => {
+      const mockData = { name: 'v1.0.0-patched' };
+      const releaseData = {
+        name: 'v1.0.0-patched',
+        description: 'Patched release notes',
+        milestones: ['m2'],
+        releasedAt: '2026-06-11T13:00:00Z',
+      };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateRelease(
+        '123',
+        'v1.0.0',
+        releaseData,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/releases/v1.0.0',
+        {
+          name: 'v1.0.0-patched',
+          description: 'Patched release notes',
+          milestones: ['m2'],
+          released_at: '2026-06-11T13:00:00Z',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteRelease should delete project release and return success object', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteRelease('123', 'v1.0.0');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/releases/v1.0.0',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listTags should fetch project tags list', async () => {
+      const mockData = [{ name: 'v1.0.0' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listTags('123', {
+        search: 'v1',
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/tags',
+        {
+          params: { search: 'v1', page: 2, per_page: 10 },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getTag should fetch project tag by name', async () => {
+      const mockData = { name: 'v1.0.0' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getTag('123', 'v1.0.0');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/repository/tags/v1.0.0',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createTag should post tag configs', async () => {
+      const mockData = { name: 'v1.0.0' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createTag('123', 'v1.0.0', 'main', {
+        message: 'v1.0.0 tag',
+        releaseDescription: 'Initial release',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/repository/tags',
+        {
+          tag_name: 'v1.0.0',
+          ref: 'main',
+          message: 'v1.0.0 tag',
+          release_description: 'Initial release',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteTag should delete tag by name', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteTag('123', 'v1.0.0');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/repository/tags/v1.0.0',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 14. Deployments & Environments Endpoints
+  // ==========================================
+  describe('14. Deployments & Environments Endpoints', () => {
+    it('listEnvironments should fetch project environments list', async () => {
+      const mockData = [{ id: 1, name: 'production' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listEnvironments('123', {
+        name: 'prod',
+        search: 'production',
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/environments',
+        {
+          params: {
+            name: 'prod',
+            search: 'production',
+            page: 2,
+            per_page: 10,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getEnvironment should fetch specific project environment details', async () => {
+      const mockData = { id: 1, name: 'production' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getEnvironment('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/environments/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createEnvironment should post new environment configuration', async () => {
+      const mockData = { id: 1, name: 'production' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createEnvironment(
+        '123',
+        'production',
+        {
+          externalUrl: 'https://prod.example.com',
+          tier: 'production',
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/environments',
+        {
+          name: 'production',
+          external_url: 'https://prod.example.com',
+          tier: 'production',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateEnvironment should put updated environment configurations', async () => {
+      const mockData = { id: 1, name: 'production' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateEnvironment('123', 1, {
+        externalUrl: 'https://prod-new.example.com',
+        tier: 'production',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/environments/1',
+        {
+          external_url: 'https://prod-new.example.com',
+          tier: 'production',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteEnvironment should call delete on specific environment and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteEnvironment('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/environments/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listDeployments should fetch project deployments list', async () => {
+      const mockData = [{ id: 1, environment: {} }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listDeployments('123', {
+        environment: 'production',
+        status: 'success',
+        orderBy: 'created_at',
+        sort: 'desc',
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/deployments', {
+        params: {
+          environment: 'production',
+          status: 'success',
+          order_by: 'created_at',
+          sort: 'desc',
+          page: 2,
+          per_page: 10,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getDeployment should fetch specific project deployment details', async () => {
+      const mockData = { id: 1, ref: 'main' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getDeployment('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/deployments/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createDeployment should post new deployment run logging', async () => {
+      const mockData = { id: 1, ref: 'main' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createDeployment(
+        '123',
+        'production',
+        'main',
+        'v1.0.0',
+        {
+          status: 'running',
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/123/deployments',
+        {
+          environment: 'production',
+          ref: 'main',
+          tag: 'v1.0.0',
+          status: 'running',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateDeployment should put updated deployment run state', async () => {
+      const mockData = { id: 1, status: 'success' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateDeployment('123', 1, 'success');
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/123/deployments/1',
+        { status: 'success' },
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 15. Snippets Endpoints
+  // ==========================================
+  describe('15. Snippets Endpoints', () => {
+    it('listSnippets should fetch personal snippets list', async () => {
+      const mockData = [{ id: 1, title: 'snippet' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listSnippets({ page: 2, perPage: 10 });
+      expect(mockClient.get).toHaveBeenCalledWith('/snippets', {
+        params: { page: 2, per_page: 10 },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listProjectSnippets should fetch project snippets list', async () => {
+      const mockData = [{ id: 1, title: 'snippet' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectSnippets('123', {
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/snippets', {
+        params: { page: 2, per_page: 10 },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getSnippet should fetch personal snippet details by ID', async () => {
+      const mockData = { id: 1, title: 'snippet' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getSnippet(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/snippets/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectSnippet should fetch project snippet details by ID', async () => {
+      const mockData = { id: 1, title: 'snippet' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectSnippet('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/snippets/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createSnippet should post personal snippet', async () => {
+      const mockData = { id: 1, title: 'snippet' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createSnippet(
+        'mysnippet',
+        'file.txt',
+        'hello',
+        'public',
+        'desc',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith('/snippets', {
+        title: 'mysnippet',
+        description: 'desc',
+        visibility: 'public',
+        files: [
+          {
+            file_path: 'file.txt',
+            content: 'hello',
+          },
+        ],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectSnippet should post project snippet', async () => {
+      const mockData = { id: 1, title: 'snippet' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectSnippet(
+        '123',
+        'mysnippet',
+        'file.txt',
+        'hello',
+        'public',
+        'desc',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/123/snippets', {
+        title: 'mysnippet',
+        description: 'desc',
+        visibility: 'public',
+        files: [
+          {
+            file_path: 'file.txt',
+            content: 'hello',
+          },
+        ],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateSnippet should put updated personal snippet details', async () => {
+      const mockData = { id: 1, title: 'snippet-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateSnippet(1, {
+        title: 'snippet-updated',
+        description: 'updated desc',
+        visibility: 'private',
+        files: [],
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/snippets/1', {
+        title: 'snippet-updated',
+        description: 'updated desc',
+        visibility: 'private',
+        files: [],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectSnippet should put updated project snippet details', async () => {
+      const mockData = { id: 1, title: 'snippet-updated' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectSnippet('123', 1, {
+        title: 'snippet-updated',
+        description: 'updated desc',
+        visibility: 'private',
+        files: [],
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/123/snippets/1', {
+        title: 'snippet-updated',
+        description: 'updated desc',
+        visibility: 'private',
+        files: [],
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteSnippet should delete personal snippet and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteSnippet(1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/snippets/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('deleteProjectSnippet should delete project snippet and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectSnippet('123', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/123/snippets/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('getSnippetContent should fetch personal snippet raw contents', async () => {
+      const mockData = 'raw content';
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getSnippetContent(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/snippets/1/raw');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectSnippetContent should fetch project snippet raw contents', async () => {
+      const mockData = 'raw content';
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectSnippetContent('123', 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/123/snippets/1/raw',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
+
+  // ==========================================
+  // 16. Self-Hosted Runners Endpoints
+  // ==========================================
+  describe('16. Self-Hosted Runners Endpoints', () => {
+    it('listRunners should fetch all self-hosted runners', async () => {
+      const mockData = [{ id: 1, description: 'runner1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listRunners({
+        type: 'instance_type',
+        status: 'online',
+        tagList: 'tag1,tag2',
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/runners', {
+        params: {
+          type: 'instance_type',
+          status: 'online',
+          tag_list: 'tag1,tag2',
+          page: 2,
+          per_page: 10,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('listProjectRunners should fetch project runners', async () => {
+      const mockData = [{ id: 1, description: 'runner1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectRunners('123', {
+        type: 'project_type',
+        status: 'online',
+        tagList: 'tag1',
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/123/runners', {
+        params: {
+          type: 'project_type',
+          status: 'online',
+          tag_list: 'tag1',
+          page: 2,
+          per_page: 10,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('getRunner should fetch specific runner details', async () => {
+      const mockData = { id: 1, description: 'runner1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getRunner(1);
+      expect(mockClient.get).toHaveBeenCalledWith('/runners/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateRunner should put updated configurations on runner', async () => {
+      const mockData = { id: 1, description: 'runner-updated' };
+      const runnerData = {
+        description: 'runner-updated',
+        active: true,
+        tagList: 'newtag',
+        runUntagged: false,
+        locked: true,
+        accessLevel: 'ref_protected',
+      };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateRunner(1, runnerData);
+      expect(mockClient.put).toHaveBeenCalledWith('/runners/1', {
+        description: 'runner-updated',
+        active: true,
+        tag_list: 'newtag',
+        run_untagged: false,
+        locked: true,
+        access_level: 'ref_protected',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteRunner should unregister/delete runner by ID and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteRunner(1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/runners/1');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('registerRunner should post runner registration details', async () => {
+      const mockData = { id: 1, token: 'glrt-...' };
+      const registerData = {
+        description: 'new runner',
+        active: true,
+        tagList: 'tag',
+        runUntagged: true,
+        locked: false,
+        accessLevel: 'not_protected',
+      };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.registerRunner(
+        'registration-token',
+        registerData,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith('/runners', {
+        token: 'registration-token',
+        description: 'new runner',
+        active: true,
+        tag_list: 'tag',
+        run_untagged: true,
+        locked: false,
+        access_level: 'not_protected',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('verifyRunner should post verification token and return success', async () => {
+      mockClient.post.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.verifyRunner('runner-token');
+      expect(mockClient.post).toHaveBeenCalledWith('/runners/verify', {
+        token: 'runner-token',
+      });
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

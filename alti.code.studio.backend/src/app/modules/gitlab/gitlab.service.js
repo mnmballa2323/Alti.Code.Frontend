@@ -1398,20 +1398,27 @@ export const GitlabService = {
   },
 
   async getCommit(projectId, sha) {
-    logger.info(`🦊 [GitLab Service] Fetching commit ${sha} for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching commit ${sha} for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get commit ${sha} for project ${projectId}:`, error);
+      logger.error(
+        `Failed to get commit ${sha} for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async compareCommits(projectId, from, to) {
-    logger.info(`🦊 [GitLab Service] Comparing commits from ${from} to ${to} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Comparing commits from ${from} to ${to} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/compare`,
@@ -1427,33 +1434,45 @@ export const GitlabService = {
   },
 
   async getCommitDiff(projectId, sha) {
-    logger.info(`🦊 [GitLab Service] Fetching diff for commit ${sha} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching diff for commit ${sha} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/diff`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get diff for commit ${sha} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get diff for commit ${sha} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getCommitComments(projectId, sha) {
-    logger.info(`🦊 [GitLab Service] Fetching comments for commit ${sha} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching comments for commit ${sha} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get comments for commit ${sha} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get comments for commit ${sha} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createCommitComment(projectId, sha, note, params = {}) {
-    logger.info(`🦊 [GitLab Service] Posting comment on commit ${sha} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Posting comment on commit ${sha} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/comments`,
@@ -1466,13 +1485,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to post comment on commit ${sha} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to post comment on commit ${sha} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createCommitStatus(projectId, sha, state, params = {}) {
-    logger.info(`🦊 [GitLab Service] Posting commit status ${state} for commit ${sha} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Posting commit status ${state} for commit ${sha} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/statuses/${encodeURIComponent(sha)}`,
@@ -1487,13 +1511,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to post status for commit ${sha} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to post status for commit ${sha} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listCommitStatuses(projectId, sha, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing statuses for commit ${sha} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing statuses for commit ${sha} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/commits/${encodeURIComponent(sha)}/statuses`,
@@ -1510,7 +1539,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list statuses for commit ${sha} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to list statuses for commit ${sha} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1519,7 +1551,9 @@ export const GitlabService = {
   // 13. Releases & Tags Endpoints
   // ==========================================
   async listReleases(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing releases for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing releases for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/releases`,
@@ -1538,20 +1572,27 @@ export const GitlabService = {
   },
 
   async getRelease(projectId, tagName) {
-    logger.info(`🦊 [GitLab Service] Fetching release for tag ${tagName} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching release for tag ${tagName} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get release for tag ${tagName} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get release for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createRelease(projectId, releaseData) {
-    logger.info(`🦊 [GitLab Service] Creating release for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating release for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/releases`,
@@ -1574,7 +1615,9 @@ export const GitlabService = {
   },
 
   async updateRelease(projectId, tagName, releaseData) {
-    logger.info(`🦊 [GitLab Service] Updating release for tag ${tagName} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating release for tag ${tagName} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
@@ -1587,20 +1630,28 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update release for tag ${tagName} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to update release for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteRelease(projectId, tagName) {
-    logger.info(`🦊 [GitLab Service] Deleting release for tag ${tagName} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting release for tag ${tagName} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/releases/${encodeURIComponent(tagName)}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete release for tag ${tagName} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to delete release for tag ${tagName} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1626,20 +1677,27 @@ export const GitlabService = {
   },
 
   async getTag(projectId, tagName) {
-    logger.info(`🦊 [GitLab Service] Fetching tag ${tagName} for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching tag ${tagName} for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/repository/tags/${encodeURIComponent(tagName)}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get tag ${tagName} for project ${projectId}:`, error);
+      logger.error(
+        `Failed to get tag ${tagName} for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createTag(projectId, tagName, ref, params = {}) {
-    logger.info(`🦊 [GitLab Service] Creating tag ${tagName} pointing to ${ref} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating tag ${tagName} pointing to ${ref} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/repository/tags`,
@@ -1652,20 +1710,28 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to create tag ${tagName} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to create tag ${tagName} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteTag(projectId, tagName) {
-    logger.info(`🦊 [GitLab Service] Deleting tag ${tagName} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting tag ${tagName} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/repository/tags/${encodeURIComponent(tagName)}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete tag ${tagName} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to delete tag ${tagName} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1674,7 +1740,9 @@ export const GitlabService = {
   // 14. Deployments & Environments Endpoints
   // ==========================================
   async listEnvironments(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing environments for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing environments for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/environments`,
@@ -1689,26 +1757,36 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list environments for project ${projectId}:`, error);
+      logger.error(
+        `Failed to list environments for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getEnvironment(projectId, environmentId) {
-    logger.info(`🦊 [GitLab Service] Fetching environment ${environmentId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching environment ${environmentId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get environment ${environmentId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get environment ${environmentId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createEnvironment(projectId, name, params = {}) {
-    logger.info(`🦊 [GitLab Service] Creating environment ${name} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating environment ${name} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/environments`,
@@ -1720,13 +1798,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to create environment ${name} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to create environment ${name} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateEnvironment(projectId, environmentId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Updating environment ${environmentId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating environment ${environmentId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
@@ -1737,26 +1820,36 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update environment ${environmentId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to update environment ${environmentId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteEnvironment(projectId, environmentId) {
-    logger.info(`🦊 [GitLab Service] Deleting environment ${environmentId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting environment ${environmentId} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/environments/${environmentId}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete environment ${environmentId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to delete environment ${environmentId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listDeployments(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing deployments for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing deployments for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/deployments`,
@@ -1773,26 +1866,36 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list deployments for project ${projectId}:`, error);
+      logger.error(
+        `Failed to list deployments for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getDeployment(projectId, deploymentId) {
-    logger.info(`🦊 [GitLab Service] Fetching deployment ${deploymentId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching deployment ${deploymentId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/deployments/${deploymentId}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get deployment ${deploymentId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get deployment ${deploymentId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async createDeployment(projectId, environment, ref, tag, params = {}) {
-    logger.info(`🦊 [GitLab Service] Creating deployment for env ${environment} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating deployment for env ${environment} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/deployments`,
@@ -1805,13 +1908,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to create deployment for project ${projectId}:`, error);
+      logger.error(
+        `Failed to create deployment for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateDeployment(projectId, deploymentId, status) {
-    logger.info(`🦊 [GitLab Service] Updating deployment ${deploymentId} to status ${status} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating deployment ${deploymentId} to status ${status} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/deployments/${deploymentId}`,
@@ -1819,7 +1927,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update deployment ${deploymentId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to update deployment ${deploymentId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1844,7 +1955,9 @@ export const GitlabService = {
   },
 
   async listProjectSnippets(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing snippets for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing snippets for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/snippets`,
@@ -1857,7 +1970,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list project snippets for project ${projectId}:`, error);
+      logger.error(
+        `Failed to list project snippets for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1874,19 +1990,30 @@ export const GitlabService = {
   },
 
   async getProjectSnippet(projectId, snippetId) {
-    logger.info(`🦊 [GitLab Service] Fetching project snippet ${snippetId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching project snippet ${snippetId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get project snippet ${snippetId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get project snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async createSnippet(title, fileName, content, visibility = 'private', description = '') {
+  async createSnippet(
+    title,
+    fileName,
+    content,
+    visibility = 'private',
+    description = '',
+  ) {
     logger.info(`🦊 [GitLab Service] Creating personal snippet: ${title}`);
     try {
       const { data } = await gitlabClient.post('/snippets', {
@@ -1907,8 +2034,17 @@ export const GitlabService = {
     }
   },
 
-  async createProjectSnippet(projectId, title, fileName, content, visibility = 'private', description = '') {
-    logger.info(`🦊 [GitLab Service] Creating project snippet: ${title} in project ${projectId}`);
+  async createProjectSnippet(
+    projectId,
+    title,
+    fileName,
+    content,
+    visibility = 'private',
+    description = '',
+  ) {
+    logger.info(
+      `🦊 [GitLab Service] Creating project snippet: ${title} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/snippets`,
@@ -1926,7 +2062,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to create project snippet in project ${projectId}:`, error);
+      logger.error(
+        `Failed to create project snippet in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1948,7 +2087,9 @@ export const GitlabService = {
   },
 
   async updateProjectSnippet(projectId, snippetId, snippetData) {
-    logger.info(`🦊 [GitLab Service] Updating project snippet ${snippetId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating project snippet ${snippetId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
@@ -1961,7 +2102,10 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update project snippet ${snippetId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to update project snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -1978,38 +2122,53 @@ export const GitlabService = {
   },
 
   async deleteProjectSnippet(projectId, snippetId) {
-    logger.info(`🦊 [GitLab Service] Deleting project snippet ${snippetId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting project snippet ${snippetId} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete project snippet ${snippetId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to delete project snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getSnippetContent(snippetId) {
-    logger.info(`🦊 [GitLab Service] Fetching raw content for personal snippet ${snippetId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching raw content for personal snippet ${snippetId}`,
+    );
     try {
       const { data } = await gitlabClient.get(`/snippets/${snippetId}/raw`);
       return data;
     } catch (error) {
-      logger.error(`Failed to get raw content for personal snippet ${snippetId}:`, error);
+      logger.error(
+        `Failed to get raw content for personal snippet ${snippetId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getProjectSnippetContent(projectId, snippetId) {
-    logger.info(`🦊 [GitLab Service] Fetching raw content for project snippet ${snippetId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching raw content for project snippet ${snippetId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}/raw`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get raw content for project snippet ${snippetId} in project ${projectId}:`, error);
+      logger.error(
+        `Failed to get raw content for project snippet ${snippetId} in project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -2070,7 +2229,9 @@ export const GitlabService = {
   },
 
   async updateRunner(runnerId, runnerData) {
-    logger.info(`🦊 [GitLab Service] Updating runner ${runnerId} configurations`);
+    logger.info(
+      `🦊 [GitLab Service] Updating runner ${runnerId} configurations`,
+    );
     try {
       const { data } = await gitlabClient.put(`/runners/${runnerId}`, {
         description: runnerData.description,
@@ -2088,7 +2249,9 @@ export const GitlabService = {
   },
 
   async deleteRunner(runnerId) {
-    logger.info(`🦊 [GitLab Service] Deleting/unregistering runner ${runnerId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting/unregistering runner ${runnerId}`,
+    );
     try {
       await gitlabClient.delete(`/runners/${runnerId}`);
       return { success: true };
@@ -2127,7 +2290,7 @@ export const GitlabService = {
       throw error;
     }
   },
-  
+
   // ==========================================
   // 11. Security Scanning Endpoints
   // ==========================================
