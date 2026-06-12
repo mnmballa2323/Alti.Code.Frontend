@@ -279,6 +279,7 @@ export default function TeamMembersPage() {
                     <option value="$0">$0</option>
                     <option value="$250">$250</option>
                     <option value="$500">$500</option>
+                    <option value="$750">$750</option>
                     <option value="$1,000">$1,000</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
