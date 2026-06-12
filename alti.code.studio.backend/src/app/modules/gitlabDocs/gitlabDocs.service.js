@@ -61,7 +61,11 @@ class GitlabDocsService {
         logger.info(
           `🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`,
         );
-        const searchResults = await vectorStoreService.search(query, 10, tenantId);
+        const searchResults = await vectorStoreService.search(
+          query,
+          10,
+          tenantId,
+        );
 
         let gitlabCandidates = [];
         if (
