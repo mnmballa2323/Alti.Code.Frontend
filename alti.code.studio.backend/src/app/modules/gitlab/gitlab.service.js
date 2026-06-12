@@ -6001,9 +6001,7 @@ export const GitlabService = {
 
   // 4. SCIM Group Provisioning
   async listGroupScimUsers(groupId) {
-    logger.info(
-      `🦊 [GitLab Service] Listing SCIM users for group ${groupId}`,
-    );
+    logger.info(`🦊 [GitLab Service] Listing SCIM users for group ${groupId}`);
     try {
       const { data } = await gitlabClient.get(
         `/groups/${encodeURIComponent(groupId)}/scim/v2/users`,
@@ -6031,9 +6029,7 @@ export const GitlabService = {
   },
 
   async createGroupScimUser(groupId, scimUserData) {
-    logger.info(
-      `🦊 [GitLab Service] Creating SCIM user in group ${groupId}`,
-    );
+    logger.info(`🦊 [GitLab Service] Creating SCIM user in group ${groupId}`);
     try {
       const { data } = await gitlabClient.post(
         `/groups/${encodeURIComponent(groupId)}/scim/v2/users`,

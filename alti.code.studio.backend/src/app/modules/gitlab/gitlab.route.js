@@ -1187,4 +1187,87 @@ router.delete(
   GitlabController.unprotectEnvironment,
 );
 
+// ==========================================
+// 43. Phase 9 Endpoints
+// ==========================================
+// 1. SAML Group Links
+router.get(
+  '/groups/:groupId/saml_group_links',
+  GitlabController.listGroupSamlGroupLinks,
+);
+router.post(
+  '/groups/:groupId/saml_group_links',
+  GitlabController.createGroupSamlGroupLink,
+);
+router.get(
+  '/groups/:groupId/saml_group_links/:samlGroupName',
+  GitlabController.getGroupSamlGroupLink,
+);
+router.delete(
+  '/groups/:groupId/saml_group_links/:samlGroupName',
+  GitlabController.deleteGroupSamlGroupLink,
+);
+
+// 2. User Custom Attributes
+router.get(
+  '/users/:userId/custom_attributes',
+  GitlabController.listUserCustomAttributes,
+);
+router.get(
+  '/users/:userId/custom_attributes/:key',
+  GitlabController.getUserCustomAttribute,
+);
+router.put(
+  '/users/:userId/custom_attributes/:key',
+  GitlabController.setUserCustomAttribute,
+);
+router.delete(
+  '/users/:userId/custom_attributes/:key',
+  GitlabController.deleteUserCustomAttribute,
+);
+
+// 3. User Impersonation Tokens
+router.get(
+  '/users/:userId/impersonation_tokens',
+  GitlabController.listUserImpersonationTokens,
+);
+router.post(
+  '/users/:userId/impersonation_tokens',
+  GitlabController.createUserImpersonationToken,
+);
+router.get(
+  '/users/:userId/impersonation_tokens/:tokenId',
+  GitlabController.getUserImpersonationToken,
+);
+router.delete(
+  '/users/:userId/impersonation_tokens/:tokenId',
+  GitlabController.revokeUserImpersonationToken,
+);
+
+// 4. SCIM Group Provisioning
+router.get(
+  '/groups/:groupId/scim/v2/users',
+  GitlabController.listGroupScimUsers,
+);
+router.post(
+  '/groups/:groupId/scim/v2/users',
+  GitlabController.createGroupScimUser,
+);
+router.get(
+  '/groups/:groupId/scim/v2/users/:scimUserId',
+  GitlabController.getGroupScimUser,
+);
+router.put(
+  '/groups/:groupId/scim/v2/users/:scimUserId',
+  GitlabController.updateGroupScimUser,
+);
+router.patch(
+  '/groups/:groupId/scim/v2/users/:scimUserId',
+  GitlabController.updateGroupScimUser,
+);
+router.delete(
+  '/groups/:groupId/scim/v2/users/:scimUserId',
+  GitlabController.deleteGroupScimUser,
+);
+
 export const GitlabRoutes = router;

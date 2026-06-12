@@ -4695,4 +4695,232 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 43. Phase 9: SAML, SCIM & Tokens Endpoints
+  // ==========================================
+  describe('43. Phase 9: SAML, SCIM & Tokens Endpoints', () => {
+    // 1. SAML Group Links
+    it('listGroupSamlGroupLinks should fetch SAML group links list', async () => {
+      const mockData = [{ saml_group_name: 'SAML-Group-1', access_level: 30 }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupSamlGroupLinks('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/saml_group_links',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupSamlGroupLink should fetch specific SAML group link details', async () => {
+      const mockData = { saml_group_name: 'SAML-Group-1', access_level: 30 };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupSamlGroupLink(
+        'my-group',
+        'SAML-Group-1',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/saml_group_links/SAML-Group-1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupSamlGroupLink should post SAML group link configuration', async () => {
+      const mockData = { saml_group_name: 'SAML-Group-1', access_level: 30 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupSamlGroupLink('my-group', {
+        samlGroupName: 'SAML-Group-1',
+        accessLevel: 30,
+        memberRoleId: 5,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/my-group/saml_group_links',
+        {
+          saml_group_name: 'SAML-Group-1',
+          access_level: 30,
+          member_role_id: 5,
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupSamlGroupLink should delete SAML group link', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupSamlGroupLink(
+        'my-group',
+        'SAML-Group-1',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/saml_group_links/SAML-Group-1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 2. User Custom Attributes
+    it('listUserCustomAttributes should fetch custom attributes for user', async () => {
+      const mockData = [{ key: 'attr1', value: 'val1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listUserCustomAttributes(123);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/users/123/custom_attributes',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getUserCustomAttribute should fetch specific custom attribute details', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getUserCustomAttribute(123, 'attr1');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/users/123/custom_attributes/attr1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('setUserCustomAttribute should put custom attribute configuration', async () => {
+      const mockData = { key: 'attr1', value: 'val1' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.setUserCustomAttribute(
+        123,
+        'attr1',
+        'val1',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/users/123/custom_attributes/attr1',
+        {
+          value: 'val1',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteUserCustomAttribute should delete custom attribute', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteUserCustomAttribute(
+        123,
+        'attr1',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/users/123/custom_attributes/attr1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 3. User Impersonation Tokens
+    it('listUserImpersonationTokens should fetch user impersonation tokens list', async () => {
+      const mockData = [{ id: 1, name: 'token1', active: true }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listUserImpersonationTokens(123, {
+        state: 'active',
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/users/123/impersonation_tokens',
+        {
+          params: { state: 'active' },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getUserImpersonationToken should fetch specific impersonation token details', async () => {
+      const mockData = { id: 1, name: 'token1', active: true };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getUserImpersonationToken(123, 1);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/users/123/impersonation_tokens/1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createUserImpersonationToken should post impersonation token configuration', async () => {
+      const mockData = { id: 1, name: 'token1', token: 'token-secret' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createUserImpersonationToken(123, {
+        name: 'token1',
+        scopes: ['api'],
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/users/123/impersonation_tokens',
+        {
+          name: 'token1',
+          scopes: ['api'],
+          expires_at: '2026-12-31',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('revokeUserImpersonationToken should revoke impersonation token', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.revokeUserImpersonationToken(123, 1);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/users/123/impersonation_tokens/1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 4. SCIM Group Provisioning
+    it('listGroupScimUsers should fetch group SCIM users list', async () => {
+      const mockData = [{ id: 'scim-1', userName: 'user1' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupScimUsers('my-group');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/scim/v2/users',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGroupScimUser should fetch specific group SCIM user details', async () => {
+      const mockData = { id: 'scim-1', userName: 'user1' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGroupScimUser('my-group', 'scim-1');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/scim/v2/users/scim-1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupScimUser should post group SCIM user configuration', async () => {
+      const mockData = { id: 'scim-1', userName: 'user1' };
+      const scimBody = { userName: 'user1', emails: [{ value: 'u1@ex.com' }] };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupScimUser(
+        'my-group',
+        scimBody,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/my-group/scim/v2/users',
+        scimBody,
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupScimUser should put group SCIM user update', async () => {
+      const mockData = { id: 'scim-1', userName: 'user1-updated' };
+      const scimBody = { userName: 'user1-updated', active: false };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupScimUser(
+        'my-group',
+        'scim-1',
+        scimBody,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/my-group/scim/v2/users/scim-1',
+        scimBody,
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupScimUser should delete group SCIM user', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupScimUser(
+        'my-group',
+        'scim-1',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/scim/v2/users/scim-1',
+      );
+      expect(result).toEqual({ success: true });
+    });
+  });
 });

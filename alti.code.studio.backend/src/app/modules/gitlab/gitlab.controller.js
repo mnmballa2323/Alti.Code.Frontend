@@ -4988,3 +4988,286 @@ export const unprotectEnvironment = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 43. Phase 9 Handlers
+// ==========================================
+
+// 1. SAML Group Links
+export const listGroupSamlGroupLinks = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const links = await GitlabService.listGroupSamlGroupLinks(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: links });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing SAML group links:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupSamlGroupLink = async (req, res) => {
+  try {
+    const { groupId, samlGroupName } = req.params;
+    const link = await GitlabService.getGroupSamlGroupLink(
+      groupId,
+      samlGroupName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: link });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting SAML group link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupSamlGroupLink = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const link = await GitlabService.createGroupSamlGroupLink(
+      groupId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: link });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating SAML group link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupSamlGroupLink = async (req, res) => {
+  try {
+    const { groupId, samlGroupName } = req.params;
+    const result = await GitlabService.deleteGroupSamlGroupLink(
+      groupId,
+      samlGroupName,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting SAML group link:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// 2. User Custom Attributes
+export const listUserCustomAttributes = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const attributes = await GitlabService.listUserCustomAttributes(userId);
+    res.status(httpStatus.OK).json({ success: true, data: attributes });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing user custom attributes:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getUserCustomAttribute = async (req, res) => {
+  try {
+    const { userId, key } = req.params;
+    const attribute = await GitlabService.getUserCustomAttribute(userId, key);
+    res.status(httpStatus.OK).json({ success: true, data: attribute });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting user custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const setUserCustomAttribute = async (req, res) => {
+  try {
+    const { userId, key } = req.params;
+    const { value } = req.body;
+    const attribute = await GitlabService.setUserCustomAttribute(
+      userId,
+      key,
+      value,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: attribute });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error setting user custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteUserCustomAttribute = async (req, res) => {
+  try {
+    const { userId, key } = req.params;
+    const result = await GitlabService.deleteUserCustomAttribute(userId, key);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error deleting user custom attribute:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// 3. User Impersonation Tokens
+export const listUserImpersonationTokens = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const tokens = await GitlabService.listUserImpersonationTokens(
+      userId,
+      req.query,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: tokens });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error listing user impersonation tokens:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getUserImpersonationToken = async (req, res) => {
+  try {
+    const { userId, tokenId } = req.params;
+    const token = await GitlabService.getUserImpersonationToken(
+      userId,
+      tokenId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error getting user impersonation token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createUserImpersonationToken = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const token = await GitlabService.createUserImpersonationToken(
+      userId,
+      req.body,
+    );
+    res.status(httpStatus.CREATED).json({ success: true, data: token });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error creating user impersonation token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const revokeUserImpersonationToken = async (req, res) => {
+  try {
+    const { userId, tokenId } = req.params;
+    const result = await GitlabService.revokeUserImpersonationToken(
+      userId,
+      tokenId,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error(
+      '[GitLab Controller] Error revoking user impersonation token:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// 4. SCIM Group Provisioning
+export const listGroupScimUsers = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const users = await GitlabService.listGroupScimUsers(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: users });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing SCIM users:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupScimUser = async (req, res) => {
+  try {
+    const { groupId, scimUserId } = req.params;
+    const user = await GitlabService.getGroupScimUser(groupId, scimUserId);
+    res.status(httpStatus.OK).json({ success: true, data: user });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting SCIM user:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupScimUser = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const user = await GitlabService.createGroupScimUser(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: user });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating SCIM user:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupScimUser = async (req, res) => {
+  try {
+    const { groupId, scimUserId } = req.params;
+    const user = await GitlabService.updateGroupScimUser(
+      groupId,
+      scimUserId,
+      req.body,
+    );
+    res.status(httpStatus.OK).json({ success: true, data: user });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating SCIM user:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupScimUser = async (req, res) => {
+  try {
+    const { groupId, scimUserId } = req.params;
+    const result = await GitlabService.deleteGroupScimUser(groupId, scimUserId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting SCIM user:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
