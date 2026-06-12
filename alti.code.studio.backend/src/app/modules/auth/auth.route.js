@@ -105,6 +105,11 @@ router.route('/register/confirmation/:token').get(authController.confirmEmail); 
  *         description: Invalid credentials
  */
 router.route('/login').post(createRateLimiter(5, 5), authController.login); // login in app
+
+// Multi-Factor Authentication Routes
+router.route('/mfa/setup').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.setupMfa);
+router.route('/mfa/verify').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.verifyMfa);
+router.route('/mfa/challenge').post(authController.validateMfaChallenge);
 router
   .route('/social-login')
   .post(

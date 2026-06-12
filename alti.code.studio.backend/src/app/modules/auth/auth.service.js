@@ -17,6 +17,7 @@ import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres D
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
 import { authenticateKeystone } from './openstack.service.js';
+import { totp } from '@inso/platform';
 
 const deleteUserAccountService = async userId => {
   return UserRepository.deleteUser(userId);
@@ -138,6 +139,18 @@ const loginService = async (email, password) => {
       }
     }
 
+    if (localUser.mfaEnabled === true) {
+      const mfaToken = jwtHelpers.createToken(
+        { userId: localUser.id, tempMfa: true },
+        config.jwt.access_token,
+        '5m'
+      );
+      return {
+        mfaRequired: true,
+        mfaToken,
+      };
+    }
+
     const accessToken = jwtHelpers.createToken(
       { _id: localUser.id, role: localUser.role, tenantId: localUser.tenantId, tenantRole: localUser.tenantRole },
       config.jwt.access_token,
@@ -191,6 +204,18 @@ const loginService = async (email, password) => {
       user.tenantId = user.tenantId || (crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex'));
       user.tenantRole = 'owner';
     }
+  }
+
+  if (user.mfaEnabled === true) {
+    const mfaToken = jwtHelpers.createToken(
+      { userId: user.id, tempMfa: true },
+      config.jwt.access_token,
+      '5m'
+    );
+    return {
+      mfaRequired: true,
+      mfaToken,
+    };
   }
 
   const accessToken = jwtHelpers.createToken(
@@ -298,6 +323,69 @@ const socialLoginService = async (payload) => {
   return { _id: user.id, accessToken, refreshToken };
 };
 
+const setupMfaService = async (userId) => {
+  const user = await UserRepository.findById(userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
+  
+  const secret = totp.generateSecret();
+  const otpauthUri = totp.getOtpauthUri(secret, user.email);
+  
+  await UserRepository.updateUser(userId, { tempMfaSecret: secret });
+  return { secret, otpauthUri };
+};
+
+const verifyMfaService = async (userId, code) => {
+  const user = await UserRepository.findById(userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
+  if (!user.tempMfaSecret) throw new ApiError(httpStatus.BAD_REQUEST, 'MFA setup has not been initiated.');
+  
+  const isValid = totp.verifyTotp(user.tempMfaSecret, code);
+  if (!isValid) throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid verification code.');
+  
+  await UserRepository.updateUser(userId, {
+    mfaEnabled: true,
+    mfaSecret: user.tempMfaSecret,
+    tempMfaSecret: null,
+  });
+  return { success: true };
+};
+
+const validateMfaChallengeService = async (mfaToken, code) => {
+  let verified;
+  try {
+    verified = jwtHelpers.verifyToken(mfaToken, config.jwt.access_token);
+  } catch (err) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid or expired MFA token.');
+  }
+  
+  if (!verified.tempMfa || !verified.userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid MFA token payload.');
+  }
+  
+  const user = await UserRepository.findById(verified.userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
+  if (!user.mfaEnabled || !user.mfaSecret) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'MFA is not enabled for this user.');
+  }
+  
+  const isValid = totp.verifyTotp(user.mfaSecret, code);
+  if (!isValid) throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid MFA verification code.');
+  
+  const accessToken = jwtHelpers.createToken(
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
+    config.jwt.access_token,
+    config.jwt.access_expires_in,
+  );
+  
+  const refreshToken = jwtHelpers.createToken(
+    { _id: user.id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },
+    config.jwt.refresh_token,
+    config.jwt.refresh_expires_in,
+  );
+  
+  return { _id: user.id, accessToken, refreshToken };
+};
+
 export const authService = {
   deleteUserAccountService,
   registerService,
@@ -307,6 +395,9 @@ export const authService = {
   refreshToken,
   updateUserService,
   getUserService,
+  setupMfaService,
+  verifyMfaService,
+  validateMfaChallengeService,
   generateUserTokens: (user) => {
     const accessToken = jwtHelpers.createToken(
       { _id: user.id || user._id, role: user.role, tenantId: user.tenantId, tenantRole: user.tenantRole },

@@ -77,6 +77,18 @@ const login = catchAsync(async (req, res) => {
   // logger.info(`Login attempt for: ${email}`); // safe to log email, but not password
   const result = await authService.loginService(email, password);
 
+  if (result.mfaRequired) {
+    return sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'MFA Verification Required',
+      data: {
+        mfaRequired: true,
+        mfaToken: result.mfaToken,
+      },
+    });
+  }
+
   const { refreshToken, ...others } = result;
 
   // Set Refresh Token into cookie
@@ -502,6 +514,55 @@ const ssoAuthCallback = catchAsync(async (req, res) => {
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
+const setupMfa = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const result = await authService.setupMfaService(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'MFA Setup Initiated Successfully',
+    data: result,
+  });
+});
+
+const verifyMfa = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { code } = req.body;
+  const result = await authService.verifyMfaService(userId, code);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'MFA Verified and Enabled Successfully',
+    data: result,
+  });
+});
+
+const validateMfaChallenge = catchAsync(async (req, res) => {
+  const { mfaToken, code } = req.body;
+  const result = await authService.validateMfaChallengeService(mfaToken, code);
+
+  const { refreshToken, ...others } = result;
+
+  const cookieOption = {
+    secure: config.env === 'production',
+    httpOnly: true,
+    sameSite: 'strict',
+  };
+  res.cookie('refreshToken', refreshToken, cookieOption);
+
+  const encryptedPayload = await kmsService.encryptPayload(JSON.stringify(others));
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'MFA Challenge Successful. Login complete.',
+    data: {
+      encryptedPayload,
+      ...others,
+    },
+  });
+});
+
 export const authController = {
   register,
   login,
@@ -519,5 +580,8 @@ export const authController = {
   googleAuthCallback,
   githubAuthCallback,
   ssoAuthCallback,
+  setupMfa,
+  verifyMfa,
+  validateMfaChallenge,
 };
 
