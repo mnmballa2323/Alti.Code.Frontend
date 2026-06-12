@@ -23,6 +23,8 @@
  * Powered by: https://github.com/rohitg00/agentmemory (Apache-2.0)
  */
 
+import fs from 'fs/promises';
+import path from 'path';
 import { agentMemoryService } from './agentmemory.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
@@ -299,27 +301,43 @@ class AgentMemoryHooks {
      * @param {number} limit - Max results
      * @returns {Array<string>} - Relevant memory fragments for context injection
      */
+    /**
+     * Recall relevant context before an agent executes.
+     * Uses triple-stream retrieval: BM25 + Vector + Knowledge Graph + Local MEMORY.md.
+     * P50 under 20ms on laptop hardware.
+     * 
+     * @param {string} query - The agent's task/prompt
+     * @param {number} limit - Max results
+     * @returns {Array<string>} - Relevant memory fragments for context injection
+     */
     static async recallContext(query, limit = 5) {
-        if (!agentMemoryService.isReady) return [];
-        
-        try {
-            const result = await agentMemoryService.smartSearch({
-                query: sanitize(query?.substring(0, 500)),
-                project: 'alti-code-studio',
-                limit,
-            });
-            
-            // Extract the text content from results
-            if (result?.results && Array.isArray(result.results)) {
-                return result.results.map(r => 
-                    `[Memory] ${r.content || r.text || JSON.stringify(r)}`
-                ).slice(0, limit);
+        let memories = [];
+        if (agentMemoryService.isReady) {
+            try {
+                const result = await agentMemoryService.smartSearch({
+                    query: sanitize(query?.substring(0, 500)),
+                    project: 'alti-code-studio',
+                    limit,
+                });
+                if (result?.results && Array.isArray(result.results)) {
+                    memories = result.results.map(r => 
+                        `[Memory] ${r.content || r.text || JSON.stringify(r)}`
+                    );
+                }
+            } catch (err) {
+                logger.debug(`[AgentMemory:Hook] Context recall failed: ${err.message}`);
             }
-            
-            return [];
+        }
+
+        // Merge matched rules from docs/MEMORY.md as high-fidelity active memory
+        try {
+            const localRules = await AgentMemoryHooks._getMatchedLocalMemoryRules(query);
+            const formattedRules = localRules.map(r => `[MimoMemory] ${r}`);
+            const merged = [...formattedRules, ...memories];
+            return merged.slice(0, limit);
         } catch (err) {
-            logger.debug(`[AgentMemory:Hook] Context recall failed: ${err.message}`);
-            return [];
+            logger.debug(`[AgentMemory:Hook] Failed to merge local memory rules: ${err.message}`);
+            return memories.slice(0, limit);
         }
     }
     
@@ -328,19 +346,83 @@ class AgentMemoryHooks {
      * Returns top concepts, files, patterns from accumulated memories.
      */
     static async getProjectContext(tokenBudget = 2000) {
-        if (!agentMemoryService.isReady) return '';
-        
-        try {
-            const result = await agentMemoryService.getContext({
-                project: 'alti-code-studio',
-                token_budget: tokenBudget,
-            });
-            
-            return result?.context || result?.content || '';
-        } catch (err) {
-            logger.debug(`[AgentMemory:Hook] Project context failed: ${err.message}`);
-            return '';
+        let context = '';
+        if (agentMemoryService.isReady) {
+            try {
+                const result = await agentMemoryService.getContext({
+                    project: 'alti-code-studio',
+                    token_budget: tokenBudget,
+                });
+                context = result?.context || result?.content || '';
+            } catch (err) {
+                logger.debug(`[AgentMemory:Hook] Project context failed: ${err.message}`);
+            }
         }
+
+        // Prepend local MEMORY.md content as consolidated long-term rules
+        try {
+            const memoryMdPath = path.join(process.cwd(), 'docs', 'MEMORY.md');
+            const localMemoryContent = await fs.readFile(memoryMdPath, 'utf8');
+            if (localMemoryContent) {
+                context = `=== COMPACTED LONG-TERM MEMORY RULES ===\n${localMemoryContent}\n\n${context}`;
+            }
+        } catch {
+            // docs/MEMORY.md doesn't exist or failed to read; ignore
+        }
+
+        return context;
+    }
+
+    static async _readLocalMemoryMdRules() {
+        try {
+            const memoryMdPath = path.join(process.cwd(), 'docs', 'MEMORY.md');
+            const content = await fs.readFile(memoryMdPath, 'utf8');
+            const lines = content.split('\n');
+            const rules = [];
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith('-') || trimmed.startsWith('*')) {
+                    // Extract rule text after the bullet point
+                    const ruleText = trimmed.replace(/^[-*]\s+/, '');
+                    if (ruleText) {
+                        rules.push(ruleText);
+                    }
+                }
+            }
+            return rules;
+        } catch {
+            return [];
+        }
+    }
+
+    static async _getMatchedLocalMemoryRules(query) {
+        if (!query || typeof query !== 'string') return [];
+        const rules = await AgentMemoryHooks._readLocalMemoryMdRules();
+        if (rules.length === 0) return [];
+
+        const words = query
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .split(/\s+/)
+            .filter(w => w.length >= 3);
+
+        if (words.length === 0) return [];
+
+        const scoredRules = rules.map(rule => {
+            const lowerRule = rule.toLowerCase();
+            let matches = 0;
+            for (const word of words) {
+                if (lowerRule.includes(word)) {
+                    matches++;
+                }
+            }
+            return { rule, matches };
+        });
+
+        return scoredRules
+            .filter(sr => sr.matches > 0)
+            .sort((a, b) => b.matches - a.matches)
+            .map(sr => sr.rule);
     }
     
     /**
