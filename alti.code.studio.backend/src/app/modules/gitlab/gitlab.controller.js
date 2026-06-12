@@ -1170,6 +1170,7 @@ export const listVulnerabilityAlerts = async (req, res) => {
       '[GitLab Controller] Error listing vulnerability alerts:',
       error,
     );
+    res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
   }
@@ -1185,7 +1186,9 @@ export const listCommits = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: commits });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing commits:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1196,7 +1199,9 @@ export const getCommit = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: commit });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting commit:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1208,7 +1213,9 @@ export const compareCommits = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error comparing commits:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1219,7 +1226,9 @@ export const getCommitDiff = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: diff });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting commit diff:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1230,7 +1239,9 @@ export const getCommitComments = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: comments });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting commit comments:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1238,15 +1249,22 @@ export const createCommitComment = async (req, res) => {
   try {
     const { projectId, sha } = req.params;
     const { note, path, line, lineType } = req.body;
-    const comment = await GitlabService.createCommitComment(projectId, sha, note, {
-      path,
-      line,
-      lineType,
-    });
+    const comment = await GitlabService.createCommitComment(
+      projectId,
+      sha,
+      note,
+      {
+        path,
+        line,
+        lineType,
+      },
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: comment });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating commit comment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1254,28 +1272,41 @@ export const createCommitStatus = async (req, res) => {
   try {
     const { projectId, sha } = req.params;
     const { state, ref, name, targetUrl, description, coverage } = req.body;
-    const status = await GitlabService.createCommitStatus(projectId, sha, state, {
-      ref,
-      name,
-      targetUrl,
-      description,
-      coverage,
-    });
+    const status = await GitlabService.createCommitStatus(
+      projectId,
+      sha,
+      state,
+      {
+        ref,
+        name,
+        targetUrl,
+        description,
+        coverage,
+      },
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: status });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating commit status:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listCommitStatuses = async (req, res) => {
   try {
     const { projectId, sha } = req.params;
-    const statuses = await GitlabService.listCommitStatuses(projectId, sha, req.query);
+    const statuses = await GitlabService.listCommitStatuses(
+      projectId,
+      sha,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: statuses });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing commit statuses:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1289,7 +1320,9 @@ export const listReleases = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: releases });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing releases:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1300,7 +1333,9 @@ export const getRelease = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: release });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting release:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1311,18 +1346,26 @@ export const createRelease = async (req, res) => {
     res.status(httpStatus.CREATED).json({ success: true, data: release });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating release:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const updateRelease = async (req, res) => {
   try {
     const { projectId, tagName } = req.params;
-    const release = await GitlabService.updateRelease(projectId, tagName, req.body);
+    const release = await GitlabService.updateRelease(
+      projectId,
+      tagName,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: release });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating release:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1333,7 +1376,9 @@ export const deleteRelease = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting release:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1344,7 +1389,9 @@ export const listTags = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: tags });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing tags:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1355,7 +1402,9 @@ export const getTag = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: tag });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting tag:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1370,7 +1419,9 @@ export const createTag = async (req, res) => {
     res.status(httpStatus.CREATED).json({ success: true, data: tag });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating tag:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1381,7 +1432,9 @@ export const deleteTag = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting tag:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1391,22 +1444,32 @@ export const deleteTag = async (req, res) => {
 export const listEnvironments = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const environments = await GitlabService.listEnvironments(projectId, req.query);
+    const environments = await GitlabService.listEnvironments(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: environments });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing environments:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getEnvironment = async (req, res) => {
   try {
     const { projectId, environmentId } = req.params;
-    const environment = await GitlabService.getEnvironment(projectId, environmentId);
+    const environment = await GitlabService.getEnvironment(
+      projectId,
+      environmentId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: environment });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting environment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1421,7 +1484,9 @@ export const createEnvironment = async (req, res) => {
     res.status(httpStatus.CREATED).json({ success: true, data: environment });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating environment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1429,47 +1494,68 @@ export const updateEnvironment = async (req, res) => {
   try {
     const { projectId, environmentId } = req.params;
     const { externalUrl, tier } = req.body;
-    const environment = await GitlabService.updateEnvironment(projectId, environmentId, {
-      externalUrl,
-      tier,
-    });
+    const environment = await GitlabService.updateEnvironment(
+      projectId,
+      environmentId,
+      {
+        externalUrl,
+        tier,
+      },
+    );
     res.status(httpStatus.OK).json({ success: true, data: environment });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating environment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteEnvironment = async (req, res) => {
   try {
     const { projectId, environmentId } = req.params;
-    const result = await GitlabService.deleteEnvironment(projectId, environmentId);
+    const result = await GitlabService.deleteEnvironment(
+      projectId,
+      environmentId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting environment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listDeployments = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const deployments = await GitlabService.listDeployments(projectId, req.query);
+    const deployments = await GitlabService.listDeployments(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: deployments });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing deployments:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getDeployment = async (req, res) => {
   try {
     const { projectId, deploymentId } = req.params;
-    const deployment = await GitlabService.getDeployment(projectId, deploymentId);
+    const deployment = await GitlabService.getDeployment(
+      projectId,
+      deploymentId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: deployment });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting deployment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1477,13 +1563,21 @@ export const createDeployment = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { environment, ref, tag, status } = req.body;
-    const deployment = await GitlabService.createDeployment(projectId, environment, ref, tag, {
-      status,
-    });
+    const deployment = await GitlabService.createDeployment(
+      projectId,
+      environment,
+      ref,
+      tag,
+      {
+        status,
+      },
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: deployment });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating deployment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1491,11 +1585,17 @@ export const updateDeployment = async (req, res) => {
   try {
     const { projectId, deploymentId } = req.params;
     const { status } = req.body;
-    const deployment = await GitlabService.updateDeployment(projectId, deploymentId, status);
+    const deployment = await GitlabService.updateDeployment(
+      projectId,
+      deploymentId,
+      status,
+    );
     res.status(httpStatus.OK).json({ success: true, data: deployment });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating deployment:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1508,18 +1608,25 @@ export const listSnippets = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: snippets });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing personal snippets:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listProjectSnippets = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const snippets = await GitlabService.listProjectSnippets(projectId, req.query);
+    const snippets = await GitlabService.listProjectSnippets(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: snippets });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing project snippets:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1530,7 +1637,9 @@ export const getSnippet = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting personal snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1541,18 +1650,28 @@ export const getProjectSnippet = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting project snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const createSnippet = async (req, res) => {
   try {
     const { title, fileName, content, visibility, description } = req.body;
-    const snippet = await GitlabService.createSnippet(title, fileName, content, visibility, description);
+    const snippet = await GitlabService.createSnippet(
+      title,
+      fileName,
+      content,
+      visibility,
+      description,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating personal snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1560,11 +1679,20 @@ export const createProjectSnippet = async (req, res) => {
   try {
     const { projectId } = req.params;
     const { title, fileName, content, visibility, description } = req.body;
-    const snippet = await GitlabService.createProjectSnippet(projectId, title, fileName, content, visibility, description);
+    const snippet = await GitlabService.createProjectSnippet(
+      projectId,
+      title,
+      fileName,
+      content,
+      visibility,
+      description,
+    );
     res.status(httpStatus.CREATED).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error creating project snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1575,18 +1703,26 @@ export const updateSnippet = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating personal snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const updateProjectSnippet = async (req, res) => {
   try {
     const { projectId, snippetId } = req.params;
-    const snippet = await GitlabService.updateProjectSnippet(projectId, snippetId, req.body);
+    const snippet = await GitlabService.updateProjectSnippet(
+      projectId,
+      snippetId,
+      req.body,
+    );
     res.status(httpStatus.OK).json({ success: true, data: snippet });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating project snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1597,18 +1733,25 @@ export const deleteSnippet = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting personal snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const deleteProjectSnippet = async (req, res) => {
   try {
     const { projectId, snippetId } = req.params;
-    const result = await GitlabService.deleteProjectSnippet(projectId, snippetId);
+    const result = await GitlabService.deleteProjectSnippet(
+      projectId,
+      snippetId,
+    );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting project snippet:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1618,19 +1761,32 @@ export const getSnippetContent = async (req, res) => {
     const content = await GitlabService.getSnippetContent(snippetId);
     res.status(httpStatus.OK).send(content);
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting personal snippet raw content:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitLab Controller] Error getting personal snippet raw content:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const getProjectSnippetContent = async (req, res) => {
   try {
     const { projectId, snippetId } = req.params;
-    const content = await GitlabService.getProjectSnippetContent(projectId, snippetId);
+    const content = await GitlabService.getProjectSnippetContent(
+      projectId,
+      snippetId,
+    );
     res.status(httpStatus.OK).send(content);
   } catch (error) {
-    logger.error('[GitLab Controller] Error getting project snippet raw content:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitLab Controller] Error getting project snippet raw content:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1642,19 +1798,29 @@ export const listRunners = async (req, res) => {
     const runners = await GitlabService.listRunners(req.query);
     res.status(httpStatus.OK).json({ success: true, data: runners });
   } catch (error) {
-    logger.error('[GitLab Controller] Error listing self-hosted runners:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    logger.error(
+      '[GitLab Controller] Error listing self-hosted runners:',
+      error,
+    );
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const listProjectRunners = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const runners = await GitlabService.listProjectRunners(projectId, req.query);
+    const runners = await GitlabService.listProjectRunners(
+      projectId,
+      req.query,
+    );
     res.status(httpStatus.OK).json({ success: true, data: runners });
   } catch (error) {
     logger.error('[GitLab Controller] Error listing project runners:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1665,7 +1831,9 @@ export const getRunner = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: runner });
   } catch (error) {
     logger.error('[GitLab Controller] Error getting runner details:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1676,7 +1844,9 @@ export const updateRunner = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: runner });
   } catch (error) {
     logger.error('[GitLab Controller] Error updating runner:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1687,13 +1857,23 @@ export const deleteRunner = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error deleting runner:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
 export const registerRunner = async (req, res) => {
   try {
-    const { token, description, active, tagList, runUntagged, locked, accessLevel } = req.body;
+    const {
+      token,
+      description,
+      active,
+      tagList,
+      runUntagged,
+      locked,
+      accessLevel,
+    } = req.body;
     const runner = await GitlabService.registerRunner(token, {
       description,
       active,
@@ -1705,7 +1885,9 @@ export const registerRunner = async (req, res) => {
     res.status(httpStatus.CREATED).json({ success: true, data: runner });
   } catch (error) {
     logger.error('[GitLab Controller] Error registering runner:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };
 
@@ -1716,6 +1898,8 @@ export const verifyRunner = async (req, res) => {
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
     logger.error('[GitLab Controller] Error verifying runner:', error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ success: false, error: error.message });
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
   }
 };

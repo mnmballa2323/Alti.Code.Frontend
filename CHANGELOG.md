@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.202] - 2026-06-12 — Phase 2 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 2 Core Wrappers**: Fully entrenched 45+ new service wrappers inside `gitlab.service.js` covering commits (listing, fetching details, diff comparison, note comments, build status posting), releases & tags publishing/CRUD, environments & deployments logging/orchestration, snippets (personal & project snippets equivalent to GitHub Gists), and self-hosted runners registration, validation, details, and listing.
+- **GitLab Express Controller & Route Handlers**: Completed all corresponding controller action handlers mapping routes dynamically under `/api/v1/gitlab` route namespace. Fixed syntax error around catch block of `listVulnerabilityAlerts` to enable clean vite/prettier parsing.
+- **Comprehensive Unit Testing**: Expanded the test suite with 45 new mock unit tests inside `gitlab.service.test.js` covering all Phase 2 endpoints, bringing the total passing tests to 116.
+
 ## [39.37.201] - 2026-06-12 — Sovereign Architecture & GitLab REST API Integration
 ### Added
 - **GitLab REST API Integration**: Implemented a deeply entrenched GitLab REST API module containing 60+ endpoint wrappers utilizing a lightweight, authenticated Axios client. Covers user details, SSH/GPG keys, projects, branch management, repository files, merge requests, issue tracking, milestones, pipeline orchestrations, group variables, project hooks, and vulnerability scanning.
