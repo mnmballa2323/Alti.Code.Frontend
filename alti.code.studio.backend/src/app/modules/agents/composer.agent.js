@@ -17,6 +17,8 @@ const MINIMAL_SCAFFOLD_FALLBACK = (feature, instruction) =>
 class ComposerAgent {
     constructor() {
         this.name = 'Composer_Agent';
+        this.agentName = 'composer';
+        this.capabilities = ['scaffold', 'writeCode'];
         this.description = 'Agent for scaffolding features and composing multi-file code execution plans.';
         this.preamble = 'You are the Composer, an expert software architect that plans and scaffolds full features.';
         this.projectRoot = process.cwd();

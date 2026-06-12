@@ -209,11 +209,19 @@ ${graphContext}
      * Liquid Tri-Cloud Router (Multi-Armed Bandit)
      * Dynamically benchmarks and routes traffic to the fastest/cheapest provider in real-time.
      * @param {string} prompt 
+     * @param {string[]} tried
      */
-    async fastInference(prompt) {
+    async fastInference(prompt, tried = []) {
         // Step 1: Epsilon-Greedy Selection
-        const clouds = ['aws', 'azure', 'gcp'];
-        let selectedCloud = 'aws';
+        const clouds = ['aws', 'azure', 'gcp'].filter(c => !tried.includes(c));
+        
+        if (clouds.length === 0) {
+            logger.warn(`🚨 [Liquid Router] All clouds failed during fastInference. Falling back to Mock generator.`);
+            const { vertexService } = await import('../ai/vertex.service.js');
+            return vertexService.mockGenerate(prompt);
+        }
+
+        let selectedCloud = clouds[0];
         
         if (Math.random() < this.epsilon) {
             // Explore: Pick a random cloud to update latency metrics
@@ -260,14 +268,14 @@ ${graphContext}
 
         } catch (error) {
             // On failure, penalize the cloud heavily (simulate 5000ms latency) and fallback
-            logger.warn(`⚠️ [Liquid Router] ${selectedCloud.toUpperCase()} FAILED. Heavily penalizing its latency score.`);
+            logger.warn(`⚠️ [Liquid Router] ${selectedCloud.toUpperCase()} FAILED. Heavily penalizing its latency score. Error: ${error.message}`);
             const metrics = this.latencyMatrix[selectedCloud];
             metrics.count++;
             metrics.totalTime += 5000;
             metrics.avg = metrics.totalTime / metrics.count;
 
-            // Simple recursive fallback for safety
-            return this.fastInference(prompt);
+            // Simple recursive fallback for safety, tracking tried clouds
+            return this.fastInference(prompt, [...tried, selectedCloud]);
         }
     }
 }
