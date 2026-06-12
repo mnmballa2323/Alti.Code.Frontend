@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.204] - 2026-06-12 — Phase 4 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 4 Core Wrappers**: Extended `GitlabService` with 33 new wrapper methods covering Pipeline Schedules (Listing, CRUD, Triggering), Job Artifacts (Downloading archives/files, Deleting, Keeping), Merge Request Approval Rules & Settings (Listing, CRUD, Project Approval Settings), Wikis & Wiki Pages (Listing, CRUD), Vulnerability State Management (Fetching details, Confirming, Dismissing, Resolving), and Group & Project Access Requests (Listing, Requesting, Approving, Denying).
+- **GitLab Express Routing & Controllers**: Implemented all corresponding Express controllers and routes mapped under the `/api/v1/gitlab` route space.
+- **Comprehensive Unit Testing**: Expanded unit tests to a total of 200 tests inside `gitlab.service.test.js` with Vitest/Axios mocking.
+
 ## [39.37.203] - 2026-06-12 — Phase 3 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 3 Core Wrappers**: Fully entrenched 40 new service wrappers inside `gitlab.service.js` covering Epics & Epic Boards (list/get/create/update/delete epics, link/unlink issues), Packages & Container Registries (list/get/delete project packages, package versions, list/delete container repositories), Project & Group Badges (list/get/create/update/delete badges for projects and groups), Pages & Pages Domains (get/delete Pages site config, list/get/create/update/delete pages domains), Audit Events (list project/group audit logs), and Award Emoji Reactions (list/create/delete reactions on issues, MRs, snippets, project snippets, issue comments/notes, and MR comments/notes).

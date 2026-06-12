@@ -3264,7 +3264,9 @@ export const GitlabService = {
   // 23. Pipeline Schedules Endpoints
   // ==========================================
   async listProjectPipelineSchedules(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing pipeline schedules for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing pipeline schedules for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules`,
@@ -3277,13 +3279,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list pipeline schedules for project ${projectId}:`, error);
+      logger.error(
+        `Failed to list pipeline schedules for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getProjectPipelineSchedule(projectId, scheduleId) {
-    logger.info(`🦊 [GitLab Service] Fetching pipeline schedule ${scheduleId} for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching pipeline schedule ${scheduleId} for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
@@ -3296,7 +3303,9 @@ export const GitlabService = {
   },
 
   async createProjectPipelineSchedule(projectId, scheduleData) {
-    logger.info(`🦊 [GitLab Service] Creating pipeline schedule in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating pipeline schedule in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules`,
@@ -3316,7 +3325,9 @@ export const GitlabService = {
   },
 
   async updateProjectPipelineSchedule(projectId, scheduleId, scheduleData) {
-    logger.info(`🦊 [GitLab Service] Updating pipeline schedule ${scheduleId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating pipeline schedule ${scheduleId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
@@ -3336,7 +3347,9 @@ export const GitlabService = {
   },
 
   async deleteProjectPipelineSchedule(projectId, scheduleId) {
-    logger.info(`🦊 [GitLab Service] Deleting pipeline schedule ${scheduleId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting pipeline schedule ${scheduleId} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}`,
@@ -3349,7 +3362,9 @@ export const GitlabService = {
   },
 
   async playProjectPipelineSchedule(projectId, scheduleId) {
-    logger.info(`🦊 [GitLab Service] Triggering pipeline schedule ${scheduleId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Triggering pipeline schedule ${scheduleId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/pipeline_schedules/${scheduleId}/play`,
@@ -3365,7 +3380,9 @@ export const GitlabService = {
   // 24. Job Artifacts Endpoints
   // ==========================================
   async downloadJobArtifacts(projectId, jobId) {
-    logger.info(`🦊 [GitLab Service] Downloading artifacts archive for job ${jobId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Downloading artifacts archive for job ${jobId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts`,
@@ -3379,7 +3396,9 @@ export const GitlabService = {
   },
 
   async downloadJobArtifactFile(projectId, jobId, artifactPath) {
-    logger.info(`🦊 [GitLab Service] Downloading file ${artifactPath} from job ${jobId} artifacts`);
+    logger.info(
+      `🦊 [GitLab Service] Downloading file ${artifactPath} from job ${jobId} artifacts`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts/${artifactPath}`,
@@ -3387,13 +3406,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to download file ${artifactPath} from job ${jobId} artifacts:`, error);
+      logger.error(
+        `Failed to download file ${artifactPath} from job ${jobId} artifacts:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteJobArtifacts(projectId, jobId) {
-    logger.info(`🦊 [GitLab Service] Deleting artifacts for job ${jobId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting artifacts for job ${jobId} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts`,
@@ -3406,7 +3430,9 @@ export const GitlabService = {
   },
 
   async keepJobArtifacts(projectId, jobId) {
-    logger.info(`🦊 [GitLab Service] Keeping artifacts for job ${jobId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Keeping artifacts for job ${jobId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/jobs/${jobId}/artifacts/keep`,
@@ -3422,7 +3448,9 @@ export const GitlabService = {
   // 25. Merge Request Approval Rules Endpoints
   // ==========================================
   async listMergeRequestApprovalRules(projectId, mrIid) {
-    logger.info(`🦊 [GitLab Service] Listing approval rules for MR ${mrIid} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing approval rules for MR ${mrIid} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules`,
@@ -3435,7 +3463,9 @@ export const GitlabService = {
   },
 
   async createMergeRequestApprovalRule(projectId, mrIid, ruleData) {
-    logger.info(`🦊 [GitLab Service] Creating approval rule for MR ${mrIid} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating approval rule for MR ${mrIid} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules`,
@@ -3454,7 +3484,9 @@ export const GitlabService = {
   },
 
   async updateMergeRequestApprovalRule(projectId, mrIid, ruleId, ruleData) {
-    logger.info(`🦊 [GitLab Service] Updating approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules/${ruleId}`,
@@ -3467,53 +3499,74 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update approval rule ${ruleId} for MR ${mrIid}:`, error);
+      logger.error(
+        `Failed to update approval rule ${ruleId} for MR ${mrIid}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteMergeRequestApprovalRule(projectId, mrIid, ruleId) {
-    logger.info(`🦊 [GitLab Service] Deleting approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting approval rule ${ruleId} for MR ${mrIid} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/approval_rules/${ruleId}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to delete approval rule ${ruleId} for MR ${mrIid}:`, error);
+      logger.error(
+        `Failed to delete approval rule ${ruleId} for MR ${mrIid}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getProjectApprovalSettings(projectId) {
-    logger.info(`🦊 [GitLab Service] Fetching approval settings for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching approval settings for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/approvals`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to get approval settings for project ${projectId}:`, error);
+      logger.error(
+        `Failed to get approval settings for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async updateProjectApprovalSettings(projectId, settingsData) {
-    logger.info(`🦊 [GitLab Service] Updating approval settings for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating approval settings for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/approvals`,
         {
           approvals_before_merge: settingsData.approvalsBeforeMerge,
           reset_approvals_on_push: settingsData.resetApprovalsOnPush,
-          disable_overriding_approvers_per_merge_request: settingsData.disableOverridingApproversPerMergeRequest,
-          merge_requests_author_approval: settingsData.mergeRequestsAuthorApproval,
-          merge_requests_disable_committers_approval: settingsData.mergeRequestsDisableCommittersApproval,
+          disable_overriding_approvers_per_merge_request:
+            settingsData.disableOverridingApproversPerMergeRequest,
+          merge_requests_author_approval:
+            settingsData.mergeRequestsAuthorApproval,
+          merge_requests_disable_committers_approval:
+            settingsData.mergeRequestsDisableCommittersApproval,
         },
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to update approval settings for project ${projectId}:`, error);
+      logger.error(
+        `Failed to update approval settings for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3522,7 +3575,9 @@ export const GitlabService = {
   // 26. Wikis & Wiki Pages Endpoints
   // ==========================================
   async listProjectWikis(projectId, params = {}) {
-    logger.info(`🦊 [GitLab Service] Listing wiki pages for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing wiki pages for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/wikis`,
@@ -3534,13 +3589,18 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to list wiki pages for project ${projectId}:`, error);
+      logger.error(
+        `Failed to list wiki pages for project ${projectId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getProjectWikiPage(projectId, slug) {
-    logger.info(`🦊 [GitLab Service] Fetching wiki page ${slug} for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching wiki page ${slug} for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
@@ -3553,7 +3613,9 @@ export const GitlabService = {
   },
 
   async createProjectWikiPage(projectId, pageData) {
-    logger.info(`🦊 [GitLab Service] Creating wiki page ${pageData.title} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Creating wiki page ${pageData.title} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/wikis`,
@@ -3571,7 +3633,9 @@ export const GitlabService = {
   },
 
   async updateProjectWikiPage(projectId, slug, pageData) {
-    logger.info(`🦊 [GitLab Service] Updating wiki page ${slug} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Updating wiki page ${slug} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
@@ -3589,7 +3653,9 @@ export const GitlabService = {
   },
 
   async deleteProjectWikiPage(projectId, slug) {
-    logger.info(`🦊 [GitLab Service] Deleting wiki page ${slug} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Deleting wiki page ${slug} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/wikis/${encodeURIComponent(slug)}`,
@@ -3605,7 +3671,9 @@ export const GitlabService = {
   // 27. Vulnerability State Management Endpoints
   // ==========================================
   async getVulnerabilityDetails(projectId, vulnerabilityId) {
-    logger.info(`🦊 [GitLab Service] Fetching vulnerability ${vulnerabilityId} details`);
+    logger.info(
+      `🦊 [GitLab Service] Fetching vulnerability ${vulnerabilityId} details`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/vulnerabilities/${vulnerabilityId}`,
@@ -3618,7 +3686,9 @@ export const GitlabService = {
   },
 
   async dismissVulnerability(projectId, vulnerabilityId, dismissalReason) {
-    logger.info(`🦊 [GitLab Service] Dismissing vulnerability ${vulnerabilityId}`);
+    logger.info(
+      `🦊 [GitLab Service] Dismissing vulnerability ${vulnerabilityId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/vulnerabilities/${vulnerabilityId}/dismiss`,
@@ -3626,33 +3696,46 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to dismiss vulnerability ${vulnerabilityId}:`, error);
+      logger.error(
+        `Failed to dismiss vulnerability ${vulnerabilityId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async confirmVulnerability(projectId, vulnerabilityId) {
-    logger.info(`🦊 [GitLab Service] Confirming vulnerability ${vulnerabilityId}`);
+    logger.info(
+      `🦊 [GitLab Service] Confirming vulnerability ${vulnerabilityId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/vulnerabilities/${vulnerabilityId}/confirm`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to confirm vulnerability ${vulnerabilityId}:`, error);
+      logger.error(
+        `Failed to confirm vulnerability ${vulnerabilityId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async resolveVulnerability(projectId, vulnerabilityId) {
-    logger.info(`🦊 [GitLab Service] Resolving vulnerability ${vulnerabilityId}`);
+    logger.info(
+      `🦊 [GitLab Service] Resolving vulnerability ${vulnerabilityId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/vulnerabilities/${vulnerabilityId}/resolve`,
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to resolve vulnerability ${vulnerabilityId}:`, error);
+      logger.error(
+        `Failed to resolve vulnerability ${vulnerabilityId}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -3661,7 +3744,9 @@ export const GitlabService = {
   // 28. Group & Project Access Requests Endpoints
   // ==========================================
   async listProjectAccessRequests(projectId) {
-    logger.info(`🦊 [GitLab Service] Listing access requests for project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing access requests for project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/projects/${encodeURIComponent(projectId)}/access_requests`,
@@ -3674,7 +3759,9 @@ export const GitlabService = {
   },
 
   async requestProjectAccess(projectId) {
-    logger.info(`🦊 [GitLab Service] Requesting access to project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Requesting access to project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.post(
         `/projects/${encodeURIComponent(projectId)}/access_requests`,
@@ -3687,7 +3774,9 @@ export const GitlabService = {
   },
 
   async approveProjectAccessRequest(projectId, userId, accessLevel) {
-    logger.info(`🦊 [GitLab Service] Approving access request for user ${userId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Approving access request for user ${userId} in project ${projectId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/projects/${encodeURIComponent(projectId)}/access_requests/${userId}/approve`,
@@ -3695,26 +3784,36 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to approve project access request for user ${userId}:`, error);
+      logger.error(
+        `Failed to approve project access request for user ${userId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async denyProjectAccessRequest(projectId, userId) {
-    logger.info(`🦊 [GitLab Service] Denying access request for user ${userId} in project ${projectId}`);
+    logger.info(
+      `🦊 [GitLab Service] Denying access request for user ${userId} in project ${projectId}`,
+    );
     try {
       await gitlabClient.delete(
         `/projects/${encodeURIComponent(projectId)}/access_requests/${userId}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to deny project access request for user ${userId}:`, error);
+      logger.error(
+        `Failed to deny project access request for user ${userId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listGroupAccessRequests(groupId) {
-    logger.info(`🦊 [GitLab Service] Listing access requests for group ${groupId}`);
+    logger.info(
+      `🦊 [GitLab Service] Listing access requests for group ${groupId}`,
+    );
     try {
       const { data } = await gitlabClient.get(
         `/groups/${encodeURIComponent(groupId)}/access_requests`,
@@ -3740,7 +3839,9 @@ export const GitlabService = {
   },
 
   async approveGroupAccessRequest(groupId, userId, accessLevel) {
-    logger.info(`🦊 [GitLab Service] Approving access request for user ${userId} in group ${groupId}`);
+    logger.info(
+      `🦊 [GitLab Service] Approving access request for user ${userId} in group ${groupId}`,
+    );
     try {
       const { data } = await gitlabClient.put(
         `/groups/${encodeURIComponent(groupId)}/access_requests/${userId}/approve`,
@@ -3748,20 +3849,28 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(`Failed to approve group access request for user ${userId}:`, error);
+      logger.error(
+        `Failed to approve group access request for user ${userId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async denyGroupAccessRequest(groupId, userId) {
-    logger.info(`🦊 [GitLab Service] Denying access request for user ${userId} in group ${groupId}`);
+    logger.info(
+      `🦊 [GitLab Service] Denying access request for user ${userId} in group ${groupId}`,
+    );
     try {
       await gitlabClient.delete(
         `/groups/${encodeURIComponent(groupId)}/access_requests/${userId}`,
       );
       return { success: true };
     } catch (error) {
-      logger.error(`Failed to deny group access request for user ${userId}:`, error);
+      logger.error(
+        `Failed to deny group access request for user ${userId}:`,
+        error,
+      );
       throw error;
     }
   },

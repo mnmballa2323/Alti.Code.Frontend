@@ -2605,6 +2605,17 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
 
+    it('deleteAwardEmojiOnMergeRequestNote should delete reaction on MR comment', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteAwardEmojiOnMergeRequestNote(
+        'my-project',
+        12,
+        200,
+        5,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/12/notes/200/award_emoji/5',
+      );
       expect(result).toEqual({ success: true });
     });
   });
@@ -2616,76 +2627,110 @@ describe('GitlabService', () => {
     it('listProjectPipelineSchedules should list schedules', async () => {
       const mockData = [{ id: 1, description: 'Daily' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listProjectPipelineSchedules('my-project', {
-        page: 2,
-        perPage: 10,
-      });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules', {
-        params: { page: 2, per_page: 10 },
-      });
+      const result = await GitlabService.listProjectPipelineSchedules(
+        'my-project',
+        {
+          page: 2,
+          perPage: 10,
+        },
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules',
+        {
+          params: { page: 2, per_page: 10 },
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getProjectPipelineSchedule should retrieve schedule details', async () => {
       const mockData = { id: 1, description: 'Daily' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getProjectPipelineSchedule('my-project', 1);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules/1');
+      const result = await GitlabService.getProjectPipelineSchedule(
+        'my-project',
+        1,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules/1',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('createProjectPipelineSchedule should post schedule config', async () => {
       const mockData = { id: 1, ref: 'main' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.createProjectPipelineSchedule('my-project', {
-        description: 'Daily',
-        ref: 'main',
-        cron: '0 0 * * *',
-        cronTimezone: 'UTC',
-        active: true,
-      });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules', {
-        description: 'Daily',
-        ref: 'main',
-        cron: '0 0 * * *',
-        cron_timezone: 'UTC',
-        active: true,
-      });
+      const result = await GitlabService.createProjectPipelineSchedule(
+        'my-project',
+        {
+          description: 'Daily',
+          ref: 'main',
+          cron: '0 0 * * *',
+          cronTimezone: 'UTC',
+          active: true,
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules',
+        {
+          description: 'Daily',
+          ref: 'main',
+          cron: '0 0 * * *',
+          cron_timezone: 'UTC',
+          active: true,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('updateProjectPipelineSchedule should put updated schedule config', async () => {
       const mockData = { id: 1, ref: 'main' };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.updateProjectPipelineSchedule('my-project', 1, {
-        description: 'Daily-new',
-        ref: 'main',
-        cron: '0 1 * * *',
-        cronTimezone: 'EST',
-        active: false,
-      });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules/1', {
-        description: 'Daily-new',
-        ref: 'main',
-        cron: '0 1 * * *',
-        cron_timezone: 'EST',
-        active: false,
-      });
+      const result = await GitlabService.updateProjectPipelineSchedule(
+        'my-project',
+        1,
+        {
+          description: 'Daily-new',
+          ref: 'main',
+          cron: '0 1 * * *',
+          cronTimezone: 'EST',
+          active: false,
+        },
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules/1',
+        {
+          description: 'Daily-new',
+          ref: 'main',
+          cron: '0 1 * * *',
+          cron_timezone: 'EST',
+          active: false,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteProjectPipelineSchedule should delete schedule and return success', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteProjectPipelineSchedule('my-project', 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules/1');
+      const result = await GitlabService.deleteProjectPipelineSchedule(
+        'my-project',
+        1,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules/1',
+      );
       expect(result).toEqual({ success: true });
     });
 
     it('playProjectPipelineSchedule should trigger manual run of schedule', async () => {
       const mockData = { message: '201 Created' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.playProjectPipelineSchedule('my-project', 1);
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/pipeline_schedules/1/play');
+      const result = await GitlabService.playProjectPipelineSchedule(
+        'my-project',
+        1,
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/pipeline_schedules/1/play',
+      );
       expect(result).toEqual(mockData);
     });
   });
@@ -2697,27 +2742,42 @@ describe('GitlabService', () => {
     it('downloadJobArtifacts should download zip and return buffer data', async () => {
       const mockBuffer = new ArrayBuffer(8);
       mockClient.get.mockResolvedValueOnce({ data: mockBuffer });
-      const result = await GitlabService.downloadJobArtifacts('my-project', 123);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/jobs/123/artifacts', {
-        responseType: 'arraybuffer',
-      });
+      const result = await GitlabService.downloadJobArtifacts(
+        'my-project',
+        123,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/jobs/123/artifacts',
+        {
+          responseType: 'arraybuffer',
+        },
+      );
       expect(result).toEqual(mockBuffer);
     });
 
     it('downloadJobArtifactFile should download file and return buffer data', async () => {
       const mockBuffer = new ArrayBuffer(8);
       mockClient.get.mockResolvedValueOnce({ data: mockBuffer });
-      const result = await GitlabService.downloadJobArtifactFile('my-project', 123, 'docs/index.html');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/jobs/123/artifacts/docs/index.html', {
-        responseType: 'arraybuffer',
-      });
+      const result = await GitlabService.downloadJobArtifactFile(
+        'my-project',
+        123,
+        'docs/index.html',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/jobs/123/artifacts/docs/index.html',
+        {
+          responseType: 'arraybuffer',
+        },
+      );
       expect(result).toEqual(mockBuffer);
     });
 
     it('deleteJobArtifacts should delete job artifacts and return success', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.deleteJobArtifacts('my-project', 123);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/jobs/123/artifacts');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/jobs/123/artifacts',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -2725,7 +2785,9 @@ describe('GitlabService', () => {
       const mockData = { success: true };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.keepJobArtifacts('my-project', 123);
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/jobs/123/artifacts/keep');
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/jobs/123/artifacts/keep',
+      );
       expect(result).toEqual(mockData);
     });
   });
@@ -2737,79 +2799,114 @@ describe('GitlabService', () => {
     it('listMergeRequestApprovalRules should list MR approval rules', async () => {
       const mockData = [{ id: 1, name: 'QA' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listMergeRequestApprovalRules('my-project', 5);
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/merge_requests/5/approval_rules');
+      const result = await GitlabService.listMergeRequestApprovalRules(
+        'my-project',
+        5,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/5/approval_rules',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('createMergeRequestApprovalRule should create MR approval rule', async () => {
       const mockData = { id: 1, name: 'QA' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.createMergeRequestApprovalRule('my-project', 5, {
-        name: 'QA',
-        approvalsRequired: 2,
-        userIds: [10],
-        groupIds: [20],
-      });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/merge_requests/5/approval_rules', {
-        name: 'QA',
-        approvals_required: 2,
-        user_ids: [10],
-        group_ids: [20],
-      });
+      const result = await GitlabService.createMergeRequestApprovalRule(
+        'my-project',
+        5,
+        {
+          name: 'QA',
+          approvalsRequired: 2,
+          userIds: [10],
+          groupIds: [20],
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/5/approval_rules',
+        {
+          name: 'QA',
+          approvals_required: 2,
+          user_ids: [10],
+          group_ids: [20],
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('updateMergeRequestApprovalRule should update MR approval rule', async () => {
       const mockData = { id: 1, name: 'QA-new' };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.updateMergeRequestApprovalRule('my-project', 5, 1, {
-        name: 'QA-new',
-        approvalsRequired: 3,
-        userIds: [11],
-        groupIds: [21],
-      });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/merge_requests/5/approval_rules/1', {
-        name: 'QA-new',
-        approvals_required: 3,
-        user_ids: [11],
-        group_ids: [21],
-      });
+      const result = await GitlabService.updateMergeRequestApprovalRule(
+        'my-project',
+        5,
+        1,
+        {
+          name: 'QA-new',
+          approvalsRequired: 3,
+          userIds: [11],
+          groupIds: [21],
+        },
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/5/approval_rules/1',
+        {
+          name: 'QA-new',
+          approvals_required: 3,
+          user_ids: [11],
+          group_ids: [21],
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteMergeRequestApprovalRule should delete rule and return success', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteMergeRequestApprovalRule('my-project', 5, 1);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/merge_requests/5/approval_rules/1');
+      const result = await GitlabService.deleteMergeRequestApprovalRule(
+        'my-project',
+        5,
+        1,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/5/approval_rules/1',
+      );
       expect(result).toEqual({ success: true });
     });
 
     it('getProjectApprovalSettings should retrieve project approvals settings', async () => {
       const mockData = { approvals_before_merge: 1 };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getProjectApprovalSettings('my-project');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/approvals');
+      const result =
+        await GitlabService.getProjectApprovalSettings('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/approvals',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('updateProjectApprovalSettings should post updated approvals settings', async () => {
       const mockData = { approvals_before_merge: 2 };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.updateProjectApprovalSettings('my-project', {
-        approvalsBeforeMerge: 2,
-        resetApprovalsOnPush: true,
-        disableOverridingApproversPerMergeRequest: true,
-        mergeRequestsAuthorApproval: false,
-        mergeRequestsDisableCommittersApproval: true,
-      });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/approvals', {
-        approvals_before_merge: 2,
-        reset_approvals_on_push: true,
-        disable_overriding_approvers_per_merge_request: true,
-        merge_requests_author_approval: false,
-        merge_requests_disable_committers_approval: true,
-      });
+      const result = await GitlabService.updateProjectApprovalSettings(
+        'my-project',
+        {
+          approvalsBeforeMerge: 2,
+          resetApprovalsOnPush: true,
+          disableOverridingApproversPerMergeRequest: true,
+          mergeRequestsAuthorApproval: false,
+          mergeRequestsDisableCommittersApproval: true,
+        },
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/approvals',
+        {
+          approvals_before_merge: 2,
+          reset_approvals_on_push: true,
+          disable_overriding_approvers_per_merge_request: true,
+          merge_requests_author_approval: false,
+          merge_requests_disable_committers_approval: true,
+        },
+      );
       expect(result).toEqual(mockData);
     });
   });
@@ -2821,18 +2918,28 @@ describe('GitlabService', () => {
     it('listProjectWikis should fetch wiki pages list', async () => {
       const mockData = [{ title: 'Home', slug: 'home' }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listProjectWikis('my-project', { withContent: true });
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/wikis', {
-        params: { with_content: true },
+      const result = await GitlabService.listProjectWikis('my-project', {
+        withContent: true,
       });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/wikis',
+        {
+          params: { with_content: true },
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('getProjectWikiPage should retrieve page contents', async () => {
       const mockData = { title: 'Home', content: 'welcome' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getProjectWikiPage('my-project', 'home');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/wikis/home');
+      const result = await GitlabService.getProjectWikiPage(
+        'my-project',
+        'home',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/wikis/home',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -2844,34 +2951,49 @@ describe('GitlabService', () => {
         content: 'content',
         format: 'markdown',
       });
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/wikis', {
-        title: 'NewPage',
-        content: 'content',
-        format: 'markdown',
-      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/wikis',
+        {
+          title: 'NewPage',
+          content: 'content',
+          format: 'markdown',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('updateProjectWikiPage should put updated wiki configurations', async () => {
       const mockData = { title: 'Home', slug: 'home' };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.updateProjectWikiPage('my-project', 'home', {
-        title: 'Home',
-        content: 'new content',
-        format: 'rdoc',
-      });
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/wikis/home', {
-        title: 'Home',
-        content: 'new content',
-        format: 'rdoc',
-      });
+      const result = await GitlabService.updateProjectWikiPage(
+        'my-project',
+        'home',
+        {
+          title: 'Home',
+          content: 'new content',
+          format: 'rdoc',
+        },
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/wikis/home',
+        {
+          title: 'Home',
+          content: 'new content',
+          format: 'rdoc',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('deleteProjectWikiPage should delete wiki page and return success', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.deleteProjectWikiPage('my-project', 'home');
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/wikis/home');
+      const result = await GitlabService.deleteProjectWikiPage(
+        'my-project',
+        'home',
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/wikis/home',
+      );
       expect(result).toEqual({ success: true });
     });
   });
@@ -2883,7 +3005,10 @@ describe('GitlabService', () => {
     it('getVulnerabilityDetails should fetch vulnerability object', async () => {
       const mockData = { id: 10, title: 'SQL Injection' };
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.getVulnerabilityDetails('my-project', 10);
+      const result = await GitlabService.getVulnerabilityDetails(
+        'my-project',
+        10,
+      );
       expect(mockClient.get).toHaveBeenCalledWith('/vulnerabilities/10');
       expect(result).toEqual(mockData);
     });
@@ -2891,10 +3016,17 @@ describe('GitlabService', () => {
     it('dismissVulnerability should trigger dismiss and post comment', async () => {
       const mockData = { id: 10, state: 'dismissed' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.dismissVulnerability('my-project', 10, 'False Positive');
-      expect(mockClient.post).toHaveBeenCalledWith('/vulnerabilities/10/dismiss', {
-        comment: 'False Positive',
-      });
+      const result = await GitlabService.dismissVulnerability(
+        'my-project',
+        10,
+        'False Positive',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/vulnerabilities/10/dismiss',
+        {
+          comment: 'False Positive',
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -2902,7 +3034,9 @@ describe('GitlabService', () => {
       const mockData = { id: 10, state: 'confirmed' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.confirmVulnerability('my-project', 10);
-      expect(mockClient.post).toHaveBeenCalledWith('/vulnerabilities/10/confirm');
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/vulnerabilities/10/confirm',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -2910,7 +3044,9 @@ describe('GitlabService', () => {
       const mockData = { id: 10, state: 'resolved' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.resolveVulnerability('my-project', 10);
-      expect(mockClient.post).toHaveBeenCalledWith('/vulnerabilities/10/resolve');
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/vulnerabilities/10/resolve',
+      );
       expect(result).toEqual(mockData);
     });
   });
@@ -2922,8 +3058,11 @@ describe('GitlabService', () => {
     it('listProjectAccessRequests should list requests for a project', async () => {
       const mockData = [{ id: 1, user: {} }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.listProjectAccessRequests('my-project');
-      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/access_requests');
+      const result =
+        await GitlabService.listProjectAccessRequests('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/access_requests',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -2931,24 +3070,38 @@ describe('GitlabService', () => {
       const mockData = { id: 1, state: 'requested' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.requestProjectAccess('my-project');
-      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/access_requests');
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/access_requests',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('approveProjectAccessRequest should approve request and set access level', async () => {
       const mockData = { id: 1, access_level: 30 };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.approveProjectAccessRequest('my-project', 99, 30);
-      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/access_requests/99/approve', {
-        access_level: 30,
-      });
+      const result = await GitlabService.approveProjectAccessRequest(
+        'my-project',
+        99,
+        30,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/access_requests/99/approve',
+        {
+          access_level: 30,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('denyProjectAccessRequest should delete requested join record', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
-      const result = await GitlabService.denyProjectAccessRequest('my-project', 99);
-      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/access_requests/99');
+      const result = await GitlabService.denyProjectAccessRequest(
+        'my-project',
+        99,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/access_requests/99',
+      );
       expect(result).toEqual({ success: true });
     });
 
@@ -2956,7 +3109,9 @@ describe('GitlabService', () => {
       const mockData = [{ id: 2, user: {} }];
       mockClient.get.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.listGroupAccessRequests('my-group');
-      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/access_requests');
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/groups/my-group/access_requests',
+      );
       expect(result).toEqual(mockData);
     });
 
@@ -2964,26 +3119,36 @@ describe('GitlabService', () => {
       const mockData = { id: 2, state: 'requested' };
       mockClient.post.mockResolvedValueOnce({ data: mockData });
       const result = await GitlabService.requestGroupAccess('my-group');
-      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/access_requests');
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/groups/my-group/access_requests',
+      );
       expect(result).toEqual(mockData);
     });
 
     it('approveGroupAccessRequest should approve request and set access level', async () => {
       const mockData = { id: 2, access_level: 40 };
       mockClient.put.mockResolvedValueOnce({ data: mockData });
-      const result = await GitlabService.approveGroupAccessRequest('my-group', 99, 40);
-      expect(mockClient.put).toHaveBeenCalledWith('/groups/my-group/access_requests/99/approve', {
-        access_level: 40,
-      });
+      const result = await GitlabService.approveGroupAccessRequest(
+        'my-group',
+        99,
+        40,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/groups/my-group/access_requests/99/approve',
+        {
+          access_level: 40,
+        },
+      );
       expect(result).toEqual(mockData);
     });
 
     it('denyGroupAccessRequest should delete requested group join record', async () => {
       mockClient.delete.mockResolvedValueOnce({ data: {} });
       const result = await GitlabService.denyGroupAccessRequest('my-group', 99);
-      expect(mockClient.delete).toHaveBeenCalledWith('/groups/my-group/access_requests/99');
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/access_requests/99',
+      );
       expect(result).toEqual({ success: true });
     });
   });
 });
-
