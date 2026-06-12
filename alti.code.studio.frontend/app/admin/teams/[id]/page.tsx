@@ -14,6 +14,7 @@ interface Member {
   name?: string;
   email: string;
   role: string;
+  subscriptionPrice?: number;
 }
 
 export default function TeamDetailPage() {
@@ -140,6 +141,13 @@ export default function TeamDetailPage() {
     return false;
   });
 
+  const totalMonthlyPrice = teamMembers.reduce((sum, member) => {
+    const price = member.subscriptionPrice !== undefined && member.subscriptionPrice !== null
+      ? member.subscriptionPrice
+      : 1000;
+    return sum + price;
+  }, 0);
+
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 animate-fade-in">
       {loading ? (
@@ -150,15 +158,20 @@ export default function TeamDetailPage() {
       ) : (
         <div className="space-y-6">
           {/* Team Header card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
-              {teamName}
-            </h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-455 mt-1">
-              {teamDesc}
-            </p>
-            <div className="flex items-center gap-2 mt-4 text-xs font-semibold text-neutral-600 dark:text-neutral-400">
-              <span className="px-2.5 py-1 bg-neutral-100 dark:bg-neutral-850 rounded-full">
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 shadow-sm flex items-start justify-between">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+                {teamName}
+              </h2>
+              <p className="text-sm text-neutral-500 dark:text-neutral-455">
+                {teamDesc}
+              </p>
+            </div>
+            <div className="flex flex-col items-end shrink-0">
+              <span className="text-xl font-bold text-neutral-900 dark:text-white">
+                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(totalMonthlyPrice)}/mo
+              </span>
+              <span className="mt-2 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750">
                 {teamMembers.length} {teamMembers.length === 1 ? "Member" : "Members"}
               </span>
             </div>
