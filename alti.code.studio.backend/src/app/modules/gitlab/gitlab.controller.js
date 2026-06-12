@@ -4722,9 +4722,8 @@ export const listProjectDependencies = async (req, res) => {
 export const listGroupComplianceFrameworks = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const frameworks = await GitlabService.listGroupComplianceFrameworks(
-      groupId,
-    );
+    const frameworks =
+      await GitlabService.listGroupComplianceFrameworks(groupId);
     res.status(httpStatus.OK).json({ success: true, data: frameworks });
   } catch (error) {
     logger.error(
@@ -4817,9 +4816,8 @@ export const deleteGroupComplianceFramework = async (req, res) => {
 export const getProjectComplianceFramework = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const settings = await GitlabService.getProjectComplianceFramework(
-      projectId,
-    );
+    const settings =
+      await GitlabService.getProjectComplianceFramework(projectId);
     res.status(httpStatus.OK).json({ success: true, data: settings });
   } catch (error) {
     logger.error(
@@ -4909,9 +4907,8 @@ export const deleteProjectManagedLicense = async (req, res) => {
 export const listProtectedEnvironments = async (req, res) => {
   try {
     const { projectId } = req.params;
-    const environments = await GitlabService.listProtectedEnvironments(
-      projectId,
-    );
+    const environments =
+      await GitlabService.listProtectedEnvironments(projectId);
     res.status(httpStatus.OK).json({ success: true, data: environments });
   } catch (error) {
     logger.error(
@@ -4952,10 +4949,7 @@ export const protectEnvironment = async (req, res) => {
     );
     res.status(httpStatus.CREATED).json({ success: true, data: environment });
   } catch (error) {
-    logger.error(
-      '[GitLab Controller] Error protecting environment:',
-      error,
-    );
+    logger.error('[GitLab Controller] Error protecting environment:', error);
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -4988,10 +4982,7 @@ export const unprotectEnvironment = async (req, res) => {
     const result = await GitlabService.unprotectEnvironment(projectId, name);
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error(
-      '[GitLab Controller] Error unprotecting environment:',
-      error,
-    );
+    logger.error('[GitLab Controller] Error unprotecting environment:', error);
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

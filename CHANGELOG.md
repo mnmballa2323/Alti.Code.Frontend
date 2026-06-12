@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.208] - 2026-06-12 — Phase 8 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 8 Core Wrappers**: Fully implemented 16 new service methods inside `gitlab.service.js` covering Dependency List (listing repository dependencies), Compliance Frameworks (listing, details, creation, updating, and deletion of group frameworks; fetching project framework settings), License Compliance (listing, creating, updating, and deleting managed license rules for projects), and Protected Environments (listing, details, protecting, updating, and unprotecting environment access).
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` response envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 298 passing tests.
+
 ## [39.37.207] - 2026-06-12 — Phase 7 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 7 Core Wrappers**: Fully implemented 25 new service methods inside `gitlab.service.js` covering Repository Traversal (listing repository tree recursively), Threaded Discussions (Issues and Merge Requests discussion thread listing, details, creation, resolution, and reply notes CRUD), Project & Group Share Links (sharing and unsharing projects/groups with other groups), Vulnerability Exports (creating exports, checking status, and downloading compliance reports), Instance Metadata (version and system metadata flags), and Resource State Events (resource label and milestone change history on Issues and MRs).
