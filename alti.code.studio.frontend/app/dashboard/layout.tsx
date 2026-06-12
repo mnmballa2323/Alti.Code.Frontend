@@ -25,7 +25,7 @@ export default function DashboardLayout({
     if (status === "authenticated" && profile) {
       if (userRole === "owner") {
         if (pathname === "/dashboard") {
-          router.push("/owner/members");
+          router.push("/owner/team-members");
         } else if (pathname.startsWith("/dashboard/members")) {
           router.push("/owner/team-members");
         } else if (pathname.startsWith("/dashboard/billing")) {
@@ -33,7 +33,7 @@ export default function DashboardLayout({
         } else if (pathname.startsWith("/dashboard/data")) {
           router.push("/owner/data");
         } else {
-          router.push("/owner/members");
+          router.push("/owner/team-members");
         }
       } else if (userRole === "admin") {
         if (pathname === "/dashboard") {

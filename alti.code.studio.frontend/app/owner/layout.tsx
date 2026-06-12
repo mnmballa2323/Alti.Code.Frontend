@@ -26,7 +26,6 @@ interface SidebarItem {
 }
 
 const ownerItems: SidebarItem[] = [
-  { label: "Invite", href: "/owner/members", icon: UserPlus },
   { label: "Members", href: "/owner/team-members", icon: Users },
   { label: "Billing", href: "/owner/billing", icon: CreditCard },
   { label: "Invoices", href: "/owner/invoices", icon: FileText },

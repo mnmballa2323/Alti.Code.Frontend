@@ -397,7 +397,7 @@ function Navbar() {
                     onClick={() => {
                       const userRole = (profile?.role || "").toLowerCase();
                       if (userRole === "owner") {
-                        router.push("/owner/members");
+                        router.push("/owner/team-members");
                       } else if (userRole === "admin") {
                         router.push("/admin/members");
                       } else {
