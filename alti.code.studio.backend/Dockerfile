@@ -12,6 +12,9 @@ RUN npm ci
 # Copy the rest of the source code
 COPY . .
 
+# Generate Prisma Client
+RUN npx prisma generate
+
 # Prune dev dependencies for production
 RUN npm prune --production
 
