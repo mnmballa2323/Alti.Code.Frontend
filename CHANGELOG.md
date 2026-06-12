@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.197] - 2026-06-12 — Phase 16 GitHub REST API & SDK Entrenchment
+### Added
+- **Repository Settings & Secret Scanning**: Integrated repository updating (`updateRepository`), enabling/disabling secret scanning (`enableSecretScanning`/`disableSecretScanning`), and enabling/disabling secret scanning push protection (`enableSecretScanningPushProtection`/`disableSecretScanningPushProtection`).
+- **Granular Status Checks & Bypass Restrictions**: Implemented get/update/delete required status checks, list/add/set/remove required status checks contexts, and get/add/set/remove PR review bypass restrictions. Intercepted 404 response statuses on status check and bypass queries to return safe fallback configurations.
+- **Organization Teams & Membership**: Added team management endpoints including get team details by slug, add/update team membership, remove team membership, list team repositories, check team permissions, add/update team repo permissions, remove team repository access, and list child teams.
+- **GitHub Apps Lifecycle**: Added app installation lifecycle endpoints (`deleteAppInstallation`, `suspendAppInstallation`, `unsuspendAppInstallation`).
+- **Unit Testing**: Expanded the test suite with 26 new unit tests, achieving 469 passing tests in total.
+
 ## [39.37.196] - 2026-06-12 — Phase 15 GitHub REST API & SDK Entrenchment
 ### Added
 - **User Followers & Following**: Implemented `listFollowersForAuthenticatedUser`, `listFollowingForAuthenticatedUser`, `checkIfUserFollowing`, `followUser`, `unfollowUser`, `listFollowersForUser`, and `listFollowingForUser`. Intercepted `404 Not Found` status on checking follow status to return `{ following: false }`.

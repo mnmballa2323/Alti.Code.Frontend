@@ -8569,9 +8569,7 @@ export const GithubService = {
   // 90. User Followers & Following
   // ==========================================
   async listFollowersForAuthenticatedUser(page = 1, perPage = 30) {
-    logger.info(
-      `🐙 [GitHub Service] Listing followers for authenticated user`,
-    );
+    logger.info(`🐙 [GitHub Service] Listing followers for authenticated user`);
     try {
       const { data } =
         await octokit.rest.users.listFollowersForAuthenticatedUser({
@@ -8580,10 +8578,7 @@ export const GithubService = {
         });
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to list followers for authenticated user:`,
-        error,
-      );
+      logger.error(`Failed to list followers for authenticated user:`, error);
       throw error;
     }
   },
@@ -8683,10 +8678,7 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to list users followed by user ${username}:`,
-        error,
-      );
+      logger.error(`Failed to list users followed by user ${username}:`, error);
       throw error;
     }
   },
@@ -8706,10 +8698,7 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to list pending invitations for org ${org}:`,
-        error,
-      );
+      logger.error(`Failed to list pending invitations for org ${org}:`, error);
       throw error;
     }
   },
@@ -8777,7 +8766,9 @@ export const GithubService = {
   // 92. User Public Security Keys
   // ==========================================
   async listPublicKeysForUser(username, page = 1, perPage = 30) {
-    logger.info(`🐙 [GitHub Service] Listing public SSH keys for user ${username}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing public SSH keys for user ${username}`,
+    );
     try {
       const { data } = await octokit.rest.users.listPublicKeysForUser({
         username,
@@ -8813,7 +8804,9 @@ export const GithubService = {
   // 93. Repository Settings & Secret Scanning
   // ==========================================
   async updateRepository(owner, repo, settings) {
-    logger.info(`🐙 [GitHub Service] Updating settings for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Updating settings for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.update({
         owner,
@@ -8822,13 +8815,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update settings for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to update settings for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async enableSecretScanning(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Enabling secret scanning for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Enabling secret scanning for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.update({
         owner,
@@ -8841,13 +8839,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to enable secret scanning for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to enable secret scanning for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async disableSecretScanning(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Disabling secret scanning for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Disabling secret scanning for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.update({
         owner,
@@ -8860,13 +8863,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to disable secret scanning for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to disable secret scanning for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async enableSecretScanningPushProtection(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Enabling secret scanning push protection for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Enabling secret scanning push protection for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.update({
         owner,
@@ -8879,13 +8887,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to enable secret scanning push protection for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to enable secret scanning push protection for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async disableSecretScanningPushProtection(owner, repo) {
-    logger.info(`🐙 [GitHub Service] Disabling secret scanning push protection for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Disabling secret scanning push protection for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.update({
         owner,
@@ -8898,7 +8911,10 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to disable secret scanning push protection for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to disable secret scanning push protection for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -8907,7 +8923,9 @@ export const GithubService = {
   // 94. Granular Required Status Checks & Bypass Restrictions
   // ==========================================
   async getRequiredStatusChecks(owner, repo, branch) {
-    logger.info(`🐙 [GitHub Service] Fetching required status checks for branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching required status checks for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getRequiredStatusChecks({
         owner,
@@ -8919,13 +8937,24 @@ export const GithubService = {
       if (error.status === 404) {
         return { checks: [], contexts: [] };
       }
-      logger.error(`Failed to get required status checks for branch ${branch}:`, error);
+      logger.error(
+        `Failed to get required status checks for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async updateRequiredStatusChecks(owner, repo, branch, checks = [], contexts = []) {
-    logger.info(`🐙 [GitHub Service] Updating required status checks for branch ${branch} in ${owner}/${repo}`);
+  async updateRequiredStatusChecks(
+    owner,
+    repo,
+    branch,
+    checks = [],
+    contexts = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Updating required status checks for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.updateRequiredStatusChecks({
         owner,
@@ -8936,13 +8965,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to update required status checks for branch ${branch}:`, error);
+      logger.error(
+        `Failed to update required status checks for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async deleteRequiredStatusChecks(owner, repo, branch) {
-    logger.info(`🐙 [GitHub Service] Deleting required status checks for branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting required status checks for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.repos.removeRequiredStatusChecks({
         owner,
@@ -8951,13 +8985,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove required status checks for branch ${branch}:`, error);
+      logger.error(
+        `Failed to remove required status checks for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listRequiredStatusChecksContexts(owner, repo, branch) {
-    logger.info(`🐙 [GitHub Service] Listing status check contexts for branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing status check contexts for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.getAllStatusCheckContexts({
         owner,
@@ -8966,13 +9005,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list status check contexts for branch ${branch}:`, error);
+      logger.error(
+        `Failed to list status check contexts for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async addRequiredStatusChecksContexts(owner, repo, branch, contexts) {
-    logger.info(`🐙 [GitHub Service] Adding status check contexts to branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Adding status check contexts to branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.addStatusCheckContexts({
         owner,
@@ -8982,13 +9026,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to add status check contexts to branch ${branch}:`, error);
+      logger.error(
+        `Failed to add status check contexts to branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async setRequiredStatusChecksContexts(owner, repo, branch, contexts) {
-    logger.info(`🐙 [GitHub Service] Setting status check contexts on branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Setting status check contexts on branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.setStatusCheckContexts({
         owner,
@@ -8998,13 +9047,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to set status check contexts on branch ${branch}:`, error);
+      logger.error(
+        `Failed to set status check contexts on branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeRequiredStatusChecksContexts(owner, repo, branch, contexts) {
-    logger.info(`🐙 [GitHub Service] Removing status check contexts from branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing status check contexts from branch ${branch} in ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.repos.removeStatusCheckContexts({
         owner,
@@ -9014,79 +9068,127 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to remove status check contexts from branch ${branch}:`, error);
+      logger.error(
+        `Failed to remove status check contexts from branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async getPullRequestReviewBypassRestrictions(owner, repo, branch) {
-    logger.info(`🐙 [GitHub Service] Fetching PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
-      const { data } = await octokit.rest.repos.getAppsAndTeamsRequestReviewBypassers({
-        owner,
-        repo,
-        branch,
-      });
+      const { data } =
+        await octokit.rest.repos.getAppsAndTeamsRequestReviewBypassers({
+          owner,
+          repo,
+          branch,
+        });
       return data;
     } catch (error) {
       if (error.status === 404) {
         return { users: [], teams: [], apps: [] };
       }
-      logger.error(`Failed to get PR review bypass restrictions for branch ${branch}:`, error);
+      logger.error(
+        `Failed to get PR review bypass restrictions for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async addPullRequestReviewBypassRestrictions(owner, repo, branch, users = [], teams = [], apps = []) {
-    logger.info(`🐙 [GitHub Service] Adding PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`);
+  async addPullRequestReviewBypassRestrictions(
+    owner,
+    repo,
+    branch,
+    users = [],
+    teams = [],
+    apps = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Adding PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
-      const { data } = await octokit.rest.repos.addAppsAndTeamsRequestReviewBypassers({
-        owner,
-        repo,
-        branch,
-        users,
-        teams,
-        apps,
-      });
+      const { data } =
+        await octokit.rest.repos.addAppsAndTeamsRequestReviewBypassers({
+          owner,
+          repo,
+          branch,
+          users,
+          teams,
+          apps,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to add PR review bypass restrictions for branch ${branch}:`, error);
+      logger.error(
+        `Failed to add PR review bypass restrictions for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async setPullRequestReviewBypassRestrictions(owner, repo, branch, users = [], teams = [], apps = []) {
-    logger.info(`🐙 [GitHub Service] Setting PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`);
+  async setPullRequestReviewBypassRestrictions(
+    owner,
+    repo,
+    branch,
+    users = [],
+    teams = [],
+    apps = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Setting PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
-      const { data } = await octokit.rest.repos.setAppsAndTeamsRequestReviewBypassers({
-        owner,
-        repo,
-        branch,
-        users,
-        teams,
-        apps,
-      });
+      const { data } =
+        await octokit.rest.repos.setAppsAndTeamsRequestReviewBypassers({
+          owner,
+          repo,
+          branch,
+          users,
+          teams,
+          apps,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to set PR review bypass restrictions for branch ${branch}:`, error);
+      logger.error(
+        `Failed to set PR review bypass restrictions for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async removePullRequestReviewBypassRestrictions(owner, repo, branch, users = [], teams = [], apps = []) {
-    logger.info(`🐙 [GitHub Service] Removing PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`);
+  async removePullRequestReviewBypassRestrictions(
+    owner,
+    repo,
+    branch,
+    users = [],
+    teams = [],
+    apps = [],
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Removing PR review bypass restrictions for branch ${branch} in ${owner}/${repo}`,
+    );
     try {
-      const { data } = await octokit.rest.repos.removeAppsAndTeamsRequestReviewBypassers({
-        owner,
-        repo,
-        branch,
-        users,
-        teams,
-        apps,
-      });
+      const { data } =
+        await octokit.rest.repos.removeAppsAndTeamsRequestReviewBypassers({
+          owner,
+          repo,
+          branch,
+          users,
+          teams,
+          apps,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to remove PR review bypass restrictions for branch ${branch}:`, error);
+      logger.error(
+        `Failed to remove PR review bypass restrictions for branch ${branch}:`,
+        error,
+      );
       throw error;
     }
   },
@@ -9095,7 +9197,9 @@ export const GithubService = {
   // 95. Organization Teams & Membership Management
   // ==========================================
   async getTeamByName(org, teamSlug) {
-    logger.info(`🐙 [GitHub Service] Fetching team details for ${org}/${teamSlug}`);
+    logger.info(
+      `🐙 [GitHub Service] Fetching team details for ${org}/${teamSlug}`,
+    );
     try {
       const { data } = await octokit.rest.teams.getByName({
         org,
@@ -9108,24 +9212,37 @@ export const GithubService = {
     }
   },
 
-  async addOrUpdateTeamMembershipForUser(org, teamSlug, username, role = 'member') {
-    logger.info(`🐙 [GitHub Service] Adding/updating user ${username} in team ${org}/${teamSlug} with role ${role}`);
+  async addOrUpdateTeamMembershipForUser(
+    org,
+    teamSlug,
+    username,
+    role = 'member',
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Adding/updating user ${username} in team ${org}/${teamSlug} with role ${role}`,
+    );
     try {
-      const { data } = await octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
-        org,
-        team_slug: teamSlug,
-        username,
-        role,
-      });
+      const { data } =
+        await octokit.rest.teams.addOrUpdateMembershipForUserInOrg({
+          org,
+          team_slug: teamSlug,
+          username,
+          role,
+        });
       return data;
     } catch (error) {
-      logger.error(`Failed to add/update user ${username} in team ${org}/${teamSlug}:`, error);
+      logger.error(
+        `Failed to add/update user ${username} in team ${org}/${teamSlug}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeTeamMembershipForUser(org, teamSlug, username) {
-    logger.info(`🐙 [GitHub Service] Removing user ${username} from team ${org}/${teamSlug}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing user ${username} from team ${org}/${teamSlug}`,
+    );
     try {
       const response = await octokit.rest.teams.removeMembershipForUserInOrg({
         org,
@@ -9134,13 +9251,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove user ${username} from team ${org}/${teamSlug}:`, error);
+      logger.error(
+        `Failed to remove user ${username} from team ${org}/${teamSlug}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listTeamRepos(org, teamSlug, page = 1, perPage = 30) {
-    logger.info(`🐙 [GitHub Service] Listing repositories for team ${org}/${teamSlug}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing repositories for team ${org}/${teamSlug}`,
+    );
     try {
       const { data } = await octokit.rest.teams.listReposInOrg({
         org,
@@ -9150,13 +9272,18 @@ export const GithubService = {
       });
       return data;
     } catch (error) {
-      logger.error(`Failed to list repositories for team ${org}/${teamSlug}:`, error);
+      logger.error(
+        `Failed to list repositories for team ${org}/${teamSlug}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async checkTeamPermissionsForRepo(org, teamSlug, owner, repo) {
-    logger.info(`🐙 [GitHub Service] Checking team ${org}/${teamSlug} permissions for repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Checking team ${org}/${teamSlug} permissions for repo ${owner}/${repo}`,
+    );
     try {
       const { data } = await octokit.rest.teams.checkPermissionsForRepoInOrg({
         org,
@@ -9169,30 +9296,48 @@ export const GithubService = {
       if (error.status === 404) {
         return { belongs: false };
       }
-      logger.error(`Failed to check team permissions for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to check team permissions for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
-  async addOrUpdateTeamRepoPermissions(org, teamSlug, owner, repo, permission = 'pull') {
-    logger.info(`🐙 [GitHub Service] Adding/updating team ${org}/${teamSlug} permissions for repo ${owner}/${repo} to ${permission}`);
+  async addOrUpdateTeamRepoPermissions(
+    org,
+    teamSlug,
+    owner,
+    repo,
+    permission = 'pull',
+  ) {
+    logger.info(
+      `🐙 [GitHub Service] Adding/updating team ${org}/${teamSlug} permissions for repo ${owner}/${repo} to ${permission}`,
+    );
     try {
-      const response = await octokit.rest.teams.addOrUpdateRepoPermissionsInOrg({
-        org,
-        team_slug: teamSlug,
-        owner,
-        repo,
-        permission,
-      });
+      const response = await octokit.rest.teams.addOrUpdateRepoPermissionsInOrg(
+        {
+          org,
+          team_slug: teamSlug,
+          owner,
+          repo,
+          permission,
+        },
+      );
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to add/update team permissions for repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to add/update team permissions for repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async removeTeamRepo(org, teamSlug, owner, repo) {
-    logger.info(`🐙 [GitHub Service] Removing team ${org}/${teamSlug} access to repo ${owner}/${repo}`);
+    logger.info(
+      `🐙 [GitHub Service] Removing team ${org}/${teamSlug} access to repo ${owner}/${repo}`,
+    );
     try {
       const response = await octokit.rest.teams.removeRepoInOrg({
         org,
@@ -9202,13 +9347,18 @@ export const GithubService = {
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to remove team access to repo ${owner}/${repo}:`, error);
+      logger.error(
+        `Failed to remove team access to repo ${owner}/${repo}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async listChildTeams(org, teamSlug, page = 1, perPage = 30) {
-    logger.info(`🐙 [GitHub Service] Listing child teams for ${org}/${teamSlug}`);
+    logger.info(
+      `🐙 [GitHub Service] Listing child teams for ${org}/${teamSlug}`,
+    );
     try {
       const { data } = await octokit.rest.teams.listChildInOrg({
         org,
@@ -9227,42 +9377,56 @@ export const GithubService = {
   // 96. GitHub Apps Lifecycle
   // ==========================================
   async deleteAppInstallation(installationId) {
-    logger.info(`🐙 [GitHub Service] Deleting app installation ${installationId}`);
+    logger.info(
+      `🐙 [GitHub Service] Deleting app installation ${installationId}`,
+    );
     try {
       const response = await octokit.rest.apps.deleteInstallation({
         installation_id: installationId,
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to delete app installation ${installationId}:`, error);
+      logger.error(
+        `Failed to delete app installation ${installationId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async suspendAppInstallation(installationId) {
-    logger.info(`🐙 [GitHub Service] Suspending app installation ${installationId}`);
+    logger.info(
+      `🐙 [GitHub Service] Suspending app installation ${installationId}`,
+    );
     try {
       const response = await octokit.rest.apps.suspendInstallation({
         installation_id: installationId,
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to suspend app installation ${installationId}:`, error);
+      logger.error(
+        `Failed to suspend app installation ${installationId}:`,
+        error,
+      );
       throw error;
     }
   },
 
   async unsuspendAppInstallation(installationId) {
-    logger.info(`🐙 [GitHub Service] Unsuspending app installation ${installationId}`);
+    logger.info(
+      `🐙 [GitHub Service] Unsuspending app installation ${installationId}`,
+    );
     try {
       const response = await octokit.rest.apps.unsuspendInstallation({
         installation_id: installationId,
       });
       return response.data || { success: true };
     } catch (error) {
-      logger.error(`Failed to unsuspend app installation ${installationId}:`, error);
+      logger.error(
+        `Failed to unsuspend app installation ${installationId}:`,
+        error,
+      );
       throw error;
     }
   },
 };
-
