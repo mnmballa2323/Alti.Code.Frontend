@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.213] - 2026-06-12 — Phase 13 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 13 Core Wrappers**: Implemented 15 new service methods inside `gitlab.service.js` covering Deploy Tokens (listing, creating, and deleting tokens on both project and group levels), Personal Access Tokens (listing, getting details, creating, and revoking tokens), Project Topics (listing, getting, creating, updating, and deleting topics), and Merge Request Suggestions (applying a suggestion).
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` response envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 383 passing tests.
+
 ## [39.37.212] - 2026-06-12 — Phase 12 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 12 Core Wrappers**: Implemented 13 new service methods inside `gitlab.service.js` covering Project Secure Files (listing, getting details, uploading/creating, and deleting secure files), Group Access Tokens (listing, creating, and revoking tokens), Broadcast Messages (listing, getting details, creating, updating, and deleting messages), and Markdown Rendering (rendering arbitrary markdown with GitLab GFM).
