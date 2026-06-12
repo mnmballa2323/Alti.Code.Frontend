@@ -14,7 +14,7 @@ import { validateRequest } from '../../middlewares/validateRequest/validateReque
 import { authController } from './auth.controller.js';
 import { AuthValidation } from './auth.validation.js';
 import { createSamlStrategy, createOIDCStrategy } from './enterprise.strategy.js';
-import { prisma } from '../../config/prisma.js';
+import { prisma } from '../../../config/prisma.js';
 // import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 
 const router = express.Router();
