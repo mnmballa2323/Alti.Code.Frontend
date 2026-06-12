@@ -1,18 +1,46 @@
 
-import { auditService } from '../src/app/modules/audit/audit.service.js';
-import { reportService } from '../src/app/modules/governance/report.service.js';
-import { AuditLog } from '../src/app/modules/audit/audit.model.js';
-import { queueService } from '../src/app/modules/queue/queue.service.js';
+import { createRequire } from 'module';
 import crypto from 'crypto';
 import fs from 'fs';
+
+const require = createRequire(import.meta.url);
+const db = [];
+
+const prismaClientExports = require('@prisma/client');
+prismaClientExports.PrismaClient = class MockPrismaClient {
+    constructor() {
+        this.auditLog = {
+            findFirst: async (args) => {
+                const last = db[db.length - 1];
+                return last ? { hash: last.hash } : null;
+            },
+            create: async ({ data }) => {
+                console.error(`💾 Mock DB (Prisma): Inserted ${data.action}`);
+                const entry = {
+                    id: 'mock-id-' + Math.random(),
+                    timestamp: new Date(),
+                    ...data
+                };
+                db.push(entry);
+                return entry;
+            },
+            findMany: async (args) => {
+                return [...db];
+            }
+        };
+    }
+};
+
+// Dynamically import the services after mocking Prisma
+const { auditService } = await import('../src/app/modules/audit/audit.service.js');
+const { reportService } = await import('../src/app/modules/governance/report.service.js');
+const { AuditLog } = await import('../src/app/modules/audit/audit.model.js');
+const { queueService } = await import('../src/app/modules/queue/queue.service.js');
 
 // MOCK QUEUE (Force Fallback to DB)
 queueService.addJob = async () => {
     throw new Error('Mock Queue Failure');
 };
-
-// MOCK DATABASE
-const db = [];
 
 // Monkey-patch AuditLog model
 AuditLog.findOne = () => {
