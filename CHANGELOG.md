@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.216] - 2026-06-12 — Phase 16 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 16 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Epic Notes (listing, details, creating, updating, and deleting epic notes), Project Snippet Notes (listing, details, creating, updating, and deleting snippet notes), and Extended Issue/MR Notes (getting, updating, and deleting notes/comments for issues and merge requests). Intercepted `404` status on note lookup to return `{ id: null, body: "" }`.
+- **GitLab Express Routing & Controllers**: Implemented all corresponding controllers returning `{ success: true, data }` envelopes and routes mapped under the `/api/v1/gitlab` namespace.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 438 passing tests.
+
 ## [39.37.215] - 2026-06-12 — Phase 15 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 15 Core Wrappers**: Implemented 16 new service methods inside `gitlab.service.js` covering Kubernetes Cluster Agents (listing, details, creating, and deleting agents), Cluster Agent Tokens (listing, creating, and deleting tokens), Package Protection Rules (listing, creating, updating, and deleting rules), and CI/CD Pipeline Triggers (listing, details, creating, updating, and deleting triggers). Intercepted `404` status on cluster agent token lookup to return a safe `[]` default.
