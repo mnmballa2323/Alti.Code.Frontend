@@ -169,20 +169,12 @@ export default function TeamDetailPage() {
             {teamMembers.length > 0 ? (
               teamMembers.map((member) => {
                 const isYou = currentUser && member.email === currentUser.email;
-                const memberInitial = (member.name || member.email || "M")
-                  .charAt(0)
-                  .toUpperCase();
 
                 return (
                   <div
                     key={member.id}
                     className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
                   >
-                    {/* Avatar circle */}
-                    <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-bold border border-neutral-200 dark:border-neutral-750 shrink-0">
-                      {memberInitial}
-                    </div>
-
                     {/* Member info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
