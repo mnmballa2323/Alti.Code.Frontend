@@ -1,4 +1,4 @@
-import { fork } from 'child_process';
+import { spawn } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -30,7 +30,13 @@ async function executeScript(script) {
     console.log(`==================================================`);
 
     return new Promise((resolve) => {
-        const child = fork(script.path, [], { stdio: 'inherit' });
+        const cmd = 'node';
+        const args = [
+            '--input-type=module',
+            '-e',
+            `global.self = global; import('${script.path}')`
+        ];
+        const child = spawn(cmd, args, { stdio: 'inherit' });
         child.on('exit', (code) => {
             resolve(code === 0);
         });
