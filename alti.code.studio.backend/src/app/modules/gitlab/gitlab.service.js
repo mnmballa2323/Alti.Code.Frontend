@@ -2292,6 +2292,781 @@ export const GitlabService = {
   },
 
   // ==========================================
+  // 17. Epics & Epic Boards Endpoints
+  // ==========================================
+  async listGroupEpics(groupId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing epics for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/epics`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            search: params.search,
+            state: params.state,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list epics for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupEpic(groupId, epicId) {
+    logger.info(`🦊 [GitLab Service] Fetching epic ${epicId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get epic ${epicId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupEpic(groupId, epicData) {
+    logger.info(`🦊 [GitLab Service] Creating epic: ${epicData.title} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/epics`,
+        {
+          title: epicData.title,
+          description: epicData.description,
+          start_date: epicData.startDate,
+          end_date: epicData.endDate,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create epic in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupEpic(groupId, epicId, epicData) {
+    logger.info(`🦊 [GitLab Service] Updating epic ${epicId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}`,
+        {
+          title: epicData.title,
+          description: epicData.description,
+          start_date: epicData.startDate,
+          end_date: epicData.endDate,
+          state_event: epicData.stateEvent,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update epic ${epicId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupEpic(groupId, epicId) {
+    logger.info(`🦊 [GitLab Service] Deleting epic ${epicId} in group ${groupId}`);
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete epic ${epicId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async listEpicIssues(groupId, epicId) {
+    logger.info(`🦊 [GitLab Service] Listing issues for epic ${epicId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}/issues`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list epic issues for epic ${epicId}:`, error);
+      throw error;
+    }
+  },
+
+  async linkEpicIssue(groupId, epicId, issueId) {
+    logger.info(`🦊 [GitLab Service] Linking issue ${issueId} to epic ${epicId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}/issues/${issueId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to link issue ${issueId} to epic ${epicId}:`, error);
+      throw error;
+    }
+  },
+
+  async unlinkEpicIssue(groupId, epicId, issueId) {
+    logger.info(`🦊 [GitLab Service] Unlinking issue ${issueId} from epic ${epicId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/epics/${epicId}/issues/${issueId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to unlink issue ${issueId} from epic ${epicId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 18. Packages & Registries Endpoints
+  // ==========================================
+  async listProjectPackages(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing packages for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/packages`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            package_name: params.packageName,
+            package_type: params.packageType,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list packages for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectPackage(projectId, packageId) {
+    logger.info(`🦊 [GitLab Service] Fetching package ${packageId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/packages/${packageId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get package ${packageId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectPackage(projectId, packageId) {
+    logger.info(`🦊 [GitLab Service] Deleting package ${packageId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/packages/${packageId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete package ${packageId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listPackageVersions(projectId, packageId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing files/versions for package ${packageId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/packages/${packageId}/package_files`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list package files for package ${packageId}:`, error);
+      throw error;
+    }
+  },
+
+  async listContainerRepositories(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing container repositories for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list container repositories for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteContainerRepository(projectId, repositoryId) {
+    logger.info(`🦊 [GitLab Service] Deleting container repository ${repositoryId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/registry/repositories/${repositoryId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete container repository ${repositoryId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 19. Project & Group Badges Endpoints
+  // ==========================================
+  async listProjectBadges(projectId) {
+    logger.info(`🦊 [GitLab Service] Listing badges for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/badges`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list badges for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getProjectBadge(projectId, badgeId) {
+    logger.info(`🦊 [GitLab Service] Fetching badge ${badgeId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/badges/${badgeId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get badge ${badgeId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async createProjectBadge(projectId, badgeData) {
+    logger.info(`🦊 [GitLab Service] Creating badge for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/badges`,
+        {
+          link_url: badgeData.linkUrl,
+          image_url: badgeData.imageUrl,
+          name: badgeData.name,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create badge for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateProjectBadge(projectId, badgeId, badgeData) {
+    logger.info(`🦊 [GitLab Service] Updating badge ${badgeId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/badges/${badgeId}`,
+        {
+          link_url: badgeData.linkUrl,
+          image_url: badgeData.imageUrl,
+          name: badgeData.name,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update badge ${badgeId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectBadge(projectId, badgeId) {
+    logger.info(`🦊 [GitLab Service] Deleting badge ${badgeId} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/badges/${badgeId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete badge ${badgeId} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listGroupBadges(groupId) {
+    logger.info(`🦊 [GitLab Service] Listing badges for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/badges`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list badges for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async getGroupBadge(groupId, badgeId) {
+    logger.info(`🦊 [GitLab Service] Fetching badge ${badgeId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/badges/${badgeId}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get badge ${badgeId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async createGroupBadge(groupId, badgeData) {
+    logger.info(`🦊 [GitLab Service] Creating badge for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/groups/${encodeURIComponent(groupId)}/badges`,
+        {
+          link_url: badgeData.linkUrl,
+          image_url: badgeData.imageUrl,
+          name: badgeData.name,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create badge for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async updateGroupBadge(groupId, badgeId, badgeData) {
+    logger.info(`🦊 [GitLab Service] Updating badge ${badgeId} in group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/groups/${encodeURIComponent(groupId)}/badges/${badgeId}`,
+        {
+          link_url: badgeData.linkUrl,
+          image_url: badgeData.imageUrl,
+          name: badgeData.name,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update badge ${badgeId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteGroupBadge(groupId, badgeId) {
+    logger.info(`🦊 [GitLab Service] Deleting badge ${badgeId} in group ${groupId}`);
+    try {
+      await gitlabClient.delete(
+        `/groups/${encodeURIComponent(groupId)}/badges/${badgeId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete badge ${badgeId} in group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 20. Pages & Pages Domains Endpoints
+  // ==========================================
+  async getProjectPages(projectId) {
+    logger.info(`🦊 [GitLab Service] Fetching pages config for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/pages`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get pages settings for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteProjectPages(projectId) {
+    logger.info(`🦊 [GitLab Service] Deleting/unpublishing pages site for project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/pages`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete pages site for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listPagesDomains(projectId) {
+    logger.info(`🦊 [GitLab Service] Listing pages domains for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/pages/domains`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list pages domains for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async getPagesDomain(projectId, domain) {
+    logger.info(`🦊 [GitLab Service] Fetching pages domain ${domain} for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/pages/domains/${encodeURIComponent(domain)}`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to get pages domain ${domain}:`, error);
+      throw error;
+    }
+  },
+
+  async createPagesDomain(projectId, domain, params = {}) {
+    logger.info(`🦊 [GitLab Service] Creating pages domain ${domain} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/pages/domains`,
+        {
+          domain,
+          certificate: params.certificate,
+          key: params.key,
+          auto_ssl_enabled: params.autoSslEnabled,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create pages domain ${domain} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async updatePagesDomain(projectId, domain, params = {}) {
+    logger.info(`🦊 [GitLab Service] Updating pages domain ${domain} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.put(
+        `/projects/${encodeURIComponent(projectId)}/pages/domains/${encodeURIComponent(domain)}`,
+        {
+          certificate: params.certificate,
+          key: params.key,
+          auto_ssl_enabled: params.autoSslEnabled,
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to update pages domain ${domain} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async deletePagesDomain(projectId, domain) {
+    logger.info(`🦊 [GitLab Service] Deleting pages domain ${domain} in project ${projectId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/pages/domains/${encodeURIComponent(domain)}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete pages domain ${domain} in project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 21. Audit Events Endpoints
+  // ==========================================
+  async listProjectAuditEvents(projectId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing audit events for project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/audit_events`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            created_after: params.createdAfter,
+            created_before: params.createdBefore,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list project audit events for project ${projectId}:`, error);
+      throw error;
+    }
+  },
+
+  async listGroupAuditEvents(groupId, params = {}) {
+    logger.info(`🦊 [GitLab Service] Listing audit events for group ${groupId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/groups/${encodeURIComponent(groupId)}/audit_events`,
+        {
+          params: {
+            page: params.page || 1,
+            per_page: params.perPage || 30,
+            created_after: params.createdAfter,
+            created_before: params.createdBefore,
+          },
+        },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list group audit events for group ${groupId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
+  // 22. Award Emoji (Reactions) Endpoints
+  // ==========================================
+  async listAwardEmojisOnIssue(projectId, issueIid) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on issue ${issueIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on issue ${issueIid}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnIssue(projectId, issueIid, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to issue ${issueIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on issue ${issueIid}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnIssue(projectId, issueIid, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from issue ${issueIid}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on issue ${issueIid}:`, error);
+      throw error;
+    }
+  },
+
+  async listAwardEmojisOnMergeRequest(projectId, mrIid) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on MR ${mrIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnMergeRequest(projectId, mrIid, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to MR ${mrIid} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnMergeRequest(projectId, mrIid, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from MR ${mrIid}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on MR ${mrIid}:`, error);
+      throw error;
+    }
+  },
+
+  async listAwardEmojisOnSnippet(snippetId) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on personal snippet ${snippetId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/snippets/${snippetId}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnSnippet(snippetId, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to personal snippet ${snippetId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/snippets/${snippetId}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnSnippet(snippetId, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from snippet ${snippetId}`);
+    try {
+      await gitlabClient.delete(
+        `/snippets/${snippetId}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async listAwardEmojisOnProjectSnippet(projectId, snippetId) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on snippet ${snippetId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on project snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnProjectSnippet(projectId, snippetId, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to project snippet ${snippetId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on project snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnProjectSnippet(projectId, snippetId, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from project snippet ${snippetId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/snippets/${snippetId}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on project snippet ${snippetId}:`, error);
+      throw error;
+    }
+  },
+
+  async listAwardEmojisOnIssueNote(projectId, issueIid, noteId) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on issue comment ${noteId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/notes/${noteId}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on issue note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnIssueNote(projectId, issueIid, noteId, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to issue comment ${noteId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/notes/${noteId}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on issue note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnIssueNote(projectId, issueIid, noteId, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from issue comment ${noteId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/issues/${issueIid}/notes/${noteId}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on issue note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async listAwardEmojisOnMergeRequestNote(projectId, mrIid, noteId) {
+    logger.info(`🦊 [GitLab Service] Listing reactions on MR comment ${noteId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.get(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/notes/${noteId}/award_emoji`,
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to list award emojis on MR note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async createAwardEmojiOnMergeRequestNote(projectId, mrIid, noteId, name) {
+    logger.info(`🦊 [GitLab Service] Reacting ${name} to MR comment ${noteId} in project ${projectId}`);
+    try {
+      const { data } = await gitlabClient.post(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/notes/${noteId}/award_emoji`,
+        { name },
+      );
+      return data;
+    } catch (error) {
+      logger.error(`Failed to create award emoji on MR note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  async deleteAwardEmojiOnMergeRequestNote(projectId, mrIid, noteId, emojiId) {
+    logger.info(`🦊 [GitLab Service] Removing reaction ${emojiId} from MR comment ${noteId}`);
+    try {
+      await gitlabClient.delete(
+        `/projects/${encodeURIComponent(projectId)}/merge_requests/${mrIid}/notes/${noteId}/award_emoji/${emojiId}`,
+      );
+      return { success: true };
+    } catch (error) {
+      logger.error(`Failed to delete award emoji ${emojiId} on MR note ${noteId}:`, error);
+      throw error;
+    }
+  },
+
+  // ==========================================
   // 11. Security Scanning Endpoints
   // ==========================================
   async listVulnerabilityAlerts(projectId, params = {}) {

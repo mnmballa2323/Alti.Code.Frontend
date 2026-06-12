@@ -1903,3 +1903,695 @@ export const verifyRunner = async (req, res) => {
       .json({ success: false, error: error.message });
   }
 };
+
+// ==========================================
+// 17. Epics & Epic Boards Handlers
+// ==========================================
+export const listGroupEpics = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const epics = await GitlabService.listGroupEpics(groupId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: epics });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group epics:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupEpic = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const epic = await GitlabService.getGroupEpic(groupId, epicId);
+    res.status(httpStatus.OK).json({ success: true, data: epic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting group epic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupEpic = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const epic = await GitlabService.createGroupEpic(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: epic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group epic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupEpic = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const epic = await GitlabService.updateGroupEpic(groupId, epicId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: epic });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group epic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupEpic = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const result = await GitlabService.deleteGroupEpic(groupId, epicId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group epic:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listEpicIssues = async (req, res) => {
+  try {
+    const { groupId, epicId } = req.params;
+    const issues = await GitlabService.listEpicIssues(groupId, epicId);
+    res.status(httpStatus.OK).json({ success: true, data: issues });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing epic issues:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const linkEpicIssue = async (req, res) => {
+  try {
+    const { groupId, epicId, issueId } = req.params;
+    const result = await GitlabService.linkEpicIssue(groupId, epicId, issueId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error linking epic issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const unlinkEpicIssue = async (req, res) => {
+  try {
+    const { groupId, epicId, issueId } = req.params;
+    const result = await GitlabService.unlinkEpicIssue(groupId, epicId, issueId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error unlinking epic issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 18. Packages & Registries Handlers
+// ==========================================
+export const listProjectPackages = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const packages = await GitlabService.listProjectPackages(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: packages });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project packages:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectPackage = async (req, res) => {
+  try {
+    const { projectId, packageId } = req.params;
+    const pkg = await GitlabService.getProjectPackage(projectId, packageId);
+    res.status(httpStatus.OK).json({ success: true, data: pkg });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project package:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectPackage = async (req, res) => {
+  try {
+    const { projectId, packageId } = req.params;
+    const result = await GitlabService.deleteProjectPackage(projectId, packageId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project package:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPackageVersions = async (req, res) => {
+  try {
+    const { projectId, packageId } = req.params;
+    const versions = await GitlabService.listPackageVersions(projectId, packageId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: versions });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing package files:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listContainerRepositories = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const repos = await GitlabService.listContainerRepositories(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: repos });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing container repositories:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteContainerRepository = async (req, res) => {
+  try {
+    const { projectId, repositoryId } = req.params;
+    const result = await GitlabService.deleteContainerRepository(projectId, repositoryId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting container repository:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 19. Project & Group Badges Handlers
+// ==========================================
+export const listProjectBadges = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const badges = await GitlabService.listProjectBadges(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: badges });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project badges:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getProjectBadge = async (req, res) => {
+  try {
+    const { projectId, badgeId } = req.params;
+    const badge = await GitlabService.getProjectBadge(projectId, badgeId);
+    res.status(httpStatus.OK).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createProjectBadge = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const badge = await GitlabService.createProjectBadge(projectId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating project badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateProjectBadge = async (req, res) => {
+  try {
+    const { projectId, badgeId } = req.params;
+    const badge = await GitlabService.updateProjectBadge(projectId, badgeId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating project badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectBadge = async (req, res) => {
+  try {
+    const { projectId, badgeId } = req.params;
+    const result = await GitlabService.deleteProjectBadge(projectId, badgeId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupBadges = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const badges = await GitlabService.listGroupBadges(groupId);
+    res.status(httpStatus.OK).json({ success: true, data: badges });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group badges:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getGroupBadge = async (req, res) => {
+  try {
+    const { groupId, badgeId } = req.params;
+    const badge = await GitlabService.getGroupBadge(groupId, badgeId);
+    res.status(httpStatus.OK).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting group badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createGroupBadge = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const badge = await GitlabService.createGroupBadge(groupId, req.body);
+    res.status(httpStatus.CREATED).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating group badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updateGroupBadge = async (req, res) => {
+  try {
+    const { groupId, badgeId } = req.params;
+    const badge = await GitlabService.updateGroupBadge(groupId, badgeId, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: badge });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating group badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteGroupBadge = async (req, res) => {
+  try {
+    const { groupId, badgeId } = req.params;
+    const result = await GitlabService.deleteGroupBadge(groupId, badgeId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting group badge:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 20. Pages & Pages Domains Handlers
+// ==========================================
+export const getProjectPages = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const pages = await GitlabService.getProjectPages(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: pages });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting project pages settings:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteProjectPages = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const result = await GitlabService.deleteProjectPages(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting project pages site:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listPagesDomains = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const domains = await GitlabService.listPagesDomains(projectId);
+    res.status(httpStatus.OK).json({ success: true, data: domains });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing pages domains:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const getPagesDomain = async (req, res) => {
+  try {
+    const { projectId, domain } = req.params;
+    const pagesDomain = await GitlabService.getPagesDomain(projectId, domain);
+    res.status(httpStatus.OK).json({ success: true, data: pagesDomain });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error getting pages domain:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createPagesDomain = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { domain, certificate, key, autoSslEnabled } = req.body;
+    const pagesDomain = await GitlabService.createPagesDomain(projectId, domain, {
+      certificate,
+      key,
+      autoSslEnabled,
+    });
+    res.status(httpStatus.CREATED).json({ success: true, data: pagesDomain });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating pages domain:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const updatePagesDomain = async (req, res) => {
+  try {
+    const { projectId, domain } = req.params;
+    const pagesDomain = await GitlabService.updatePagesDomain(projectId, domain, req.body);
+    res.status(httpStatus.OK).json({ success: true, data: pagesDomain });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error updating pages domain:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deletePagesDomain = async (req, res) => {
+  try {
+    const { projectId, domain } = req.params;
+    const result = await GitlabService.deletePagesDomain(projectId, domain);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting pages domain:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 21. Audit Events Handlers
+// ==========================================
+export const listProjectAuditEvents = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const events = await GitlabService.listProjectAuditEvents(projectId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing project audit events:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listGroupAuditEvents = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const events = await GitlabService.listGroupAuditEvents(groupId, req.query);
+    res.status(httpStatus.OK).json({ success: true, data: events });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing group audit events:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+// ==========================================
+// 22. Award Emoji (Reactions) Handlers
+// ==========================================
+export const listAwardEmojisOnIssue = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnIssue(projectId, issueIid);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnIssue = async (req, res) => {
+  try {
+    const { projectId, issueIid } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnIssue(projectId, issueIid, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnIssue = async (req, res) => {
+  try {
+    const { projectId, issueIid, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnIssue(projectId, issueIid, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on issue:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAwardEmojisOnMergeRequest = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnMergeRequest(projectId, mrIid);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on MR:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnMergeRequest = async (req, res) => {
+  try {
+    const { projectId, mrIid } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnMergeRequest(projectId, mrIid, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on MR:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnMergeRequest = async (req, res) => {
+  try {
+    const { projectId, mrIid, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnMergeRequest(projectId, mrIid, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on MR:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAwardEmojisOnSnippet = async (req, res) => {
+  try {
+    const { snippetId } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnSnippet(snippetId);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnSnippet = async (req, res) => {
+  try {
+    const { snippetId } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnSnippet(snippetId, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnSnippet = async (req, res) => {
+  try {
+    const { snippetId, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnSnippet(snippetId, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAwardEmojisOnProjectSnippet = async (req, res) => {
+  try {
+    const { projectId, snippetId } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnProjectSnippet(projectId, snippetId);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on project snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnProjectSnippet = async (req, res) => {
+  try {
+    const { projectId, snippetId } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnProjectSnippet(projectId, snippetId, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on project snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnProjectSnippet = async (req, res) => {
+  try {
+    const { projectId, snippetId, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnProjectSnippet(projectId, snippetId, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on project snippet:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAwardEmojisOnIssueNote = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnIssueNote(projectId, issueIid, noteId);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on issue note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnIssueNote = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnIssueNote(projectId, issueIid, noteId, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on issue note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnIssueNote = async (req, res) => {
+  try {
+    const { projectId, issueIid, noteId, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnIssueNote(projectId, issueIid, noteId, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on issue note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const listAwardEmojisOnMergeRequestNote = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId } = req.params;
+    const emojis = await GitlabService.listAwardEmojisOnMergeRequestNote(projectId, mrIid, noteId);
+    res.status(httpStatus.OK).json({ success: true, data: emojis });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error listing award emojis on MR note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const createAwardEmojiOnMergeRequestNote = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId } = req.params;
+    const { name } = req.body;
+    const emoji = await GitlabService.createAwardEmojiOnMergeRequestNote(projectId, mrIid, noteId, name);
+    res.status(httpStatus.CREATED).json({ success: true, data: emoji });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error creating award emoji on MR note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};
+
+export const deleteAwardEmojiOnMergeRequestNote = async (req, res) => {
+  try {
+    const { projectId, mrIid, noteId, emojiId } = req.params;
+    const result = await GitlabService.deleteAwardEmojiOnMergeRequestNote(projectId, mrIid, noteId, emojiId);
+    res.status(httpStatus.OK).json({ success: true, data: result });
+  } catch (error) {
+    logger.error('[GitLab Controller] Error deleting award emoji on MR note:', error);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: error.message });
+  }
+};

@@ -402,4 +402,86 @@ router.delete('/runners/:runnerId', GitlabController.deleteRunner);
 router.post('/runners', GitlabController.registerRunner);
 router.post('/runners/verify', GitlabController.verifyRunner);
 
+// ==========================================
+// 17. Epics & Epic Boards Endpoints
+// ==========================================
+router.get('/groups/:groupId/epics', GitlabController.listGroupEpics);
+router.get('/groups/:groupId/epics/:epicId', GitlabController.getGroupEpic);
+router.post('/groups/:groupId/epics', GitlabController.createGroupEpic);
+router.put('/groups/:groupId/epics/:epicId', GitlabController.updateGroupEpic);
+router.delete('/groups/:groupId/epics/:epicId', GitlabController.deleteGroupEpic);
+router.get('/groups/:groupId/epics/:epicId/issues', GitlabController.listEpicIssues);
+router.post('/groups/:groupId/epics/:epicId/issues/:issueId', GitlabController.linkEpicIssue);
+router.delete('/groups/:groupId/epics/:epicId/issues/:issueId', GitlabController.unlinkEpicIssue);
+
+// ==========================================
+// 18. Packages & Registries Endpoints
+// ==========================================
+router.get('/projects/:projectId/packages', GitlabController.listProjectPackages);
+router.get('/projects/:projectId/packages/:packageId', GitlabController.getProjectPackage);
+router.delete('/projects/:projectId/packages/:packageId', GitlabController.deleteProjectPackage);
+router.get('/projects/:projectId/packages/:packageId/versions', GitlabController.listPackageVersions);
+router.get('/projects/:projectId/registry/repositories', GitlabController.listContainerRepositories);
+router.delete('/projects/:projectId/registry/repositories/:repositoryId', GitlabController.deleteContainerRepository);
+
+// ==========================================
+// 19. Project & Group Badges Endpoints
+// ==========================================
+router.get('/projects/:projectId/badges', GitlabController.listProjectBadges);
+router.get('/projects/:projectId/badges/:badgeId', GitlabController.getProjectBadge);
+router.post('/projects/:projectId/badges', GitlabController.createProjectBadge);
+router.put('/projects/:projectId/badges/:badgeId', GitlabController.updateProjectBadge);
+router.delete('/projects/:projectId/badges/:badgeId', GitlabController.deleteProjectBadge);
+
+router.get('/groups/:groupId/badges', GitlabController.listGroupBadges);
+router.get('/groups/:groupId/badges/:badgeId', GitlabController.getGroupBadge);
+router.post('/groups/:groupId/badges', GitlabController.createGroupBadge);
+router.put('/groups/:groupId/badges/:badgeId', GitlabController.updateGroupBadge);
+router.delete('/groups/:groupId/badges/:badgeId', GitlabController.deleteGroupBadge);
+
+// ==========================================
+// 20. Pages & Pages Domains Endpoints
+// ==========================================
+router.get('/projects/:projectId/pages', GitlabController.getProjectPages);
+router.delete('/projects/:projectId/pages', GitlabController.deleteProjectPages);
+router.get('/projects/:projectId/pages/domains', GitlabController.listPagesDomains);
+router.get('/projects/:projectId/pages/domains/:domain', GitlabController.getPagesDomain);
+router.post('/projects/:projectId/pages/domains', GitlabController.createPagesDomain);
+router.put('/projects/:projectId/pages/domains/:domain', GitlabController.updatePagesDomain);
+router.delete('/projects/:projectId/pages/domains/:domain', GitlabController.deletePagesDomain);
+
+// ==========================================
+// 21. Audit Events Endpoints
+// ==========================================
+router.get('/projects/:projectId/audit_events', GitlabController.listProjectAuditEvents);
+router.get('/groups/:groupId/audit_events', GitlabController.listGroupAuditEvents);
+
+// ==========================================
+// 22. Award Emoji (Reactions) Endpoints
+// ==========================================
+router.get('/projects/:projectId/issues/:issueIid/award_emoji', GitlabController.listAwardEmojisOnIssue);
+router.post('/projects/:projectId/issues/:issueIid/award_emoji', GitlabController.createAwardEmojiOnIssue);
+router.delete('/projects/:projectId/issues/:issueIid/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnIssue);
+
+router.get('/projects/:projectId/merge_requests/:mrIid/award_emoji', GitlabController.listAwardEmojisOnMergeRequest);
+router.post('/projects/:projectId/merge_requests/:mrIid/award_emoji', GitlabController.createAwardEmojiOnMergeRequest);
+router.delete('/projects/:projectId/merge_requests/:mrIid/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnMergeRequest);
+
+router.get('/snippets/:snippetId/award_emoji', GitlabController.listAwardEmojisOnSnippet);
+router.post('/snippets/:snippetId/award_emoji', GitlabController.createAwardEmojiOnSnippet);
+router.delete('/snippets/:snippetId/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnSnippet);
+
+router.get('/projects/:projectId/snippets/:snippetId/award_emoji', GitlabController.listAwardEmojisOnProjectSnippet);
+router.post('/projects/:projectId/snippets/:snippetId/award_emoji', GitlabController.createAwardEmojiOnProjectSnippet);
+router.delete('/projects/:projectId/snippets/:snippetId/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnProjectSnippet);
+
+router.get('/projects/:projectId/issues/:issueIid/notes/:noteId/award_emoji', GitlabController.listAwardEmojisOnIssueNote);
+router.post('/projects/:projectId/issues/:issueIid/notes/:noteId/award_emoji', GitlabController.createAwardEmojiOnIssueNote);
+router.delete('/projects/:projectId/issues/:issueIid/notes/:noteId/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnIssueNote);
+
+router.get('/projects/:projectId/merge_requests/:mrIid/notes/:noteId/award_emoji', GitlabController.listAwardEmojisOnMergeRequestNote);
+router.post('/projects/:projectId/merge_requests/:mrIid/notes/:noteId/award_emoji', GitlabController.createAwardEmojiOnMergeRequestNote);
+router.delete('/projects/:projectId/merge_requests/:mrIid/notes/:noteId/award_emoji/:emojiId', GitlabController.deleteAwardEmojiOnMergeRequestNote);
+
 export const GitlabRoutes = router;
+
