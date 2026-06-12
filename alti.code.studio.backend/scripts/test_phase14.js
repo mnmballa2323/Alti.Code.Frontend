@@ -32,7 +32,8 @@ async function runTests() {
         if (!agent.description || !agent.preamble) { console.log(' ❌ MISSING'); continue; }
         try {
             const resp = await agent.consult("Deploy a microservice", [{ path: 'Dockerfile', content: 'FROM node:20-alpine' }]);
-            if (resp.includes('[MOCK_GEMINI_RESPONSE_FOR')) { console.log(' ✅ PASS'); passed++; }
+            const content = typeof resp === 'string' ? resp : (resp?.content || '');
+            if (content.includes('[MOCK_GEMINI_RESPONSE_FOR')) { console.log(' ✅ PASS'); passed++; }
             else { console.log(' ❌ FAIL'); }
         } catch (e) { console.log(` ❌ ${e.message}`); }
     }

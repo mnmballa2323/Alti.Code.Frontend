@@ -38,7 +38,8 @@ async function runTests() {
         }
         try {
             const resp = await agent.consult("Test", [{ path: 'x.txt', content: 'mock' }]);
-            if (resp.includes('[MOCK_GEMINI_RESPONSE_FOR')) {
+            const content = typeof resp === 'string' ? resp : (resp?.content || '');
+            if (content.includes('[MOCK_GEMINI_RESPONSE_FOR')) {
                 console.log(` ✅ PASS`); passed++;
             } else {
                 console.log(` ❌ FAIL`);

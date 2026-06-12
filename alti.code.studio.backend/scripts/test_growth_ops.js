@@ -38,8 +38,9 @@ async function runTests() {
 
         try {
             const resp = await agent.consult("Run an audit", [{ path: 'test.html', content: '<div></div>' }]);
+            const content = typeof resp === 'string' ? resp : (resp?.content || '');
 
-            if (resp.includes('[MOCK_GEMINI_RESPONSE_FOR')) {
+            if (content.includes('[MOCK_GEMINI_RESPONSE_FOR')) {
                 console.log(`✅ ${agent.name} PASS (Gemini pipeline linked successfully)`);
                 passed++;
             } else {

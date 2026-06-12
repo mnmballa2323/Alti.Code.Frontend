@@ -71,7 +71,8 @@ for (const agent of agents) {
     }
     try {
         const r = await agent.consult('Write a hello world example', []);
-        if (r.includes('[MOCK:')) { console.log(' ✅ PASS'); passed++; }
+        const content = typeof r === 'string' ? r : (r?.content || '');
+        if (content.includes('[MOCK:')) { console.log(' ✅ PASS'); passed++; }
         else { console.log(' ❌ FAIL'); }
     } catch (e) { console.log(` ❌ ${e.message}`); }
 }

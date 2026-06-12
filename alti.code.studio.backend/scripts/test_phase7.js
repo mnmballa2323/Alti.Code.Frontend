@@ -18,6 +18,14 @@ import { releaseService } from '../src/app/modules/publisher/release.service.js'
 import { distributionService } from '../src/app/modules/publisher/distribution.service.js';
 import { GeminiAiService } from '../src/app/modules/gemini/gemini.service.js';
 
+// MOCK GEMINI
+GeminiAiService.generateContent = async (prompt) => {
+    if (prompt.includes('Semantic Version bump')) {
+        return 'patch';
+    }
+    return 'Sprint Goal: Deploy highly available Redis cache cluster on AWS using ElastiCache.';
+};
+
 async function verifyPhase7() {
     console.log('🌌 Initializing Phase 7: Universal Autopoiesis Verification...\n');
 

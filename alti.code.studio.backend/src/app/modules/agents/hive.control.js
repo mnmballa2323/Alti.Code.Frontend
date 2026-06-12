@@ -104,18 +104,39 @@ class HiveControl {
         }
 
         // Standard Swarm (Legacy/Simple)
-        // ... (Existing logic for simple swarm or system 2)
         const swarm = await synapseService.swarm(goal, requiredRoles);
 
-        this.activeSwarms.set(sessionId, {
+        const session = {
             id: sessionId,
             goal,
             status: 'active',
             squad: swarm.squad,
             logs: []
-        });
+        };
+        this.activeSwarms.set(sessionId, session);
 
-        return this.activeSwarms.get(sessionId);
+        // Engage Strategist for planning if goal requests a refactor/setup/design/sprint/vulnerability
+        try {
+            const strategist = await synapseService.findAgent('planning');
+            if (strategist) {
+                const plan = await strategist.execute('plan', { goal });
+                session.plan = plan;
+                await synapseService.setMemory(sessionId, 'plan', plan);
+                this.logAction(sessionId, 'Strategist', 'Posted Plan to Memory');
+                
+                // Engage Critic to review the plan
+                const critic = await synapseService.findAgent('review');
+                if (critic) {
+                    const review = await critic.execute('review', { plan });
+                    await synapseService.setMemory(sessionId, 'review', review);
+                    this.logAction(sessionId, 'Critic', `Reviewed Plan: ${review.status}`);
+                }
+            }
+        } catch (err) {
+            logger.warn('Failed to engage Strategist/Critic in standard swarm:', err);
+        }
+
+        return session;
     }
 
     /**
