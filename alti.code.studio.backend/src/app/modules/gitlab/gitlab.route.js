@@ -760,4 +760,128 @@ router.delete(
   GitlabController.denyGroupAccessRequest,
 );
 
+// ==========================================
+// 29. Protected Branches Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/protected_branches',
+  GitlabController.listProtectedBranches,
+);
+router.get(
+  '/projects/:projectId/protected_branches/:name',
+  GitlabController.getProtectedBranch,
+);
+router.post(
+  '/projects/:projectId/protected_branches',
+  GitlabController.protectBranch,
+);
+router.patch(
+  '/projects/:projectId/protected_branches/:name',
+  GitlabController.updateProtectedBranch,
+);
+router.delete(
+  '/projects/:projectId/protected_branches/:name',
+  GitlabController.unprotectBranch,
+);
+
+// ==========================================
+// 30. Deploy Keys Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/deploy_keys',
+  GitlabController.listProjectDeployKeys,
+);
+router.get(
+  '/projects/:projectId/deploy_keys/:keyId',
+  GitlabController.getProjectDeployKey,
+);
+router.post(
+  '/projects/:projectId/deploy_keys',
+  GitlabController.addProjectDeployKey,
+);
+router.post(
+  '/projects/:projectId/deploy_keys/:keyId/enable',
+  GitlabController.enableProjectDeployKey,
+);
+router.put(
+  '/projects/:projectId/deploy_keys/:keyId',
+  GitlabController.updateProjectDeployKey,
+);
+router.delete(
+  '/projects/:projectId/deploy_keys/:keyId',
+  GitlabController.deleteProjectDeployKey,
+);
+
+// ==========================================
+// 31. Labels Endpoints
+// ==========================================
+router.get('/projects/:projectId/labels', GitlabController.listProjectLabels);
+router.post('/projects/:projectId/labels', GitlabController.createProjectLabel);
+router.put(
+  '/projects/:projectId/labels/:labelIdOrName',
+  GitlabController.updateProjectLabel,
+);
+router.delete(
+  '/projects/:projectId/labels/:labelIdOrName',
+  GitlabController.deleteProjectLabel,
+);
+
+router.get('/groups/:groupId/labels', GitlabController.listGroupLabels);
+router.post('/groups/:groupId/labels', GitlabController.createGroupLabel);
+router.put(
+  '/groups/:groupId/labels/:labelIdOrName',
+  GitlabController.updateGroupLabel,
+);
+router.delete(
+  '/groups/:groupId/labels/:labelIdOrName',
+  GitlabController.deleteGroupLabel,
+);
+
+// ==========================================
+// 32. Todos Endpoints
+// ==========================================
+router.get('/todos', GitlabController.listUserTodos);
+router.post(
+  '/projects/:projectId/issues/:issueIid/todo',
+  GitlabController.createTodoOnIssue,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/todo',
+  GitlabController.createTodoOnMergeRequest,
+);
+router.post('/todos/:todoId/mark_as_done', GitlabController.markTodoAsDone);
+router.post('/todos/mark_as_done', GitlabController.markAllTodosAsDone);
+
+// ==========================================
+// 33. Project Integrations Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/integrations',
+  GitlabController.listProjectIntegrations,
+);
+router.get(
+  '/projects/:projectId/integrations/:integrationSlug',
+  GitlabController.getProjectIntegration,
+);
+router.put(
+  '/projects/:projectId/integrations/:integrationSlug',
+  GitlabController.updateProjectIntegration,
+);
+router.delete(
+  '/projects/:projectId/integrations/:integrationSlug',
+  GitlabController.deleteProjectIntegration,
+);
+
+// ==========================================
+// 34. Repository Extras Endpoints
+// ==========================================
+router.get(
+  '/projects/:projectId/repository/files/*/blame',
+  GitlabController.getFileBlame,
+);
+router.get(
+  '/projects/:projectId/repository/archive',
+  GitlabController.downloadRepositoryArchive,
+);
+
 export const GitlabRoutes = router;

@@ -3151,4 +3151,381 @@ describe('GitlabService', () => {
       expect(result).toEqual({ success: true });
     });
   });
+
+  // ==========================================
+  // 29. Protected Branches Endpoints
+  // ==========================================
+  describe('29. Protected Branches Endpoints', () => {
+    it('listProtectedBranches should list protected branches for a project', async () => {
+      const mockData = [{ name: 'main', push_access_levels: [] }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProtectedBranches('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/protected_branches');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProtectedBranch should retrieve details of a protected branch', async () => {
+      const mockData = { name: 'main', push_access_levels: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProtectedBranch('my-project', 'main');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/protected_branches/main');
+      expect(result).toEqual(mockData);
+    });
+
+    it('protectBranch should submit branch protection configurations', async () => {
+      const mockData = { name: 'main', allow_force_push: false };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.protectBranch('my-project', {
+        name: 'main',
+        pushAccessLevel: 40,
+        mergeAccessLevel: 40,
+        unprotectAccessLevel: 40,
+        allowForcePush: false,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/protected_branches', {
+        name: 'main',
+        push_access_level: 40,
+        merge_access_level: 40,
+        unprotect_access_level: 40,
+        allow_force_push: false,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProtectedBranch should patch branch protection settings', async () => {
+      const mockData = { name: 'main', allow_force_push: true };
+      mockClient.patch.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProtectedBranch('my-project', 'main', {
+        pushAccessLevel: 40,
+        mergeAccessLevel: 40,
+        unprotectAccessLevel: 40,
+        allowForcePush: true,
+      });
+      expect(mockClient.patch).toHaveBeenCalledWith('/projects/my-project/protected_branches/main', {
+        push_access_level: 40,
+        merge_access_level: 40,
+        unprotect_access_level: 40,
+        allow_force_push: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('unprotectBranch should delete branch protection and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.unprotectBranch('my-project', 'main');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/protected_branches/main');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 30. Deploy Keys Endpoints
+  // ==========================================
+  describe('30. Deploy Keys Endpoints', () => {
+    it('listProjectDeployKeys should fetch deploy keys list', async () => {
+      const mockData = [{ id: 1, title: 'Key' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectDeployKeys('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/deploy_keys');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectDeployKey should fetch details of a deploy key', async () => {
+      const mockData = { id: 1, title: 'Key', key: 'ssh-rsa...' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectDeployKey('my-project', 1);
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/deploy_keys/1');
+      expect(result).toEqual(mockData);
+    });
+
+    it('addProjectDeployKey should post deploy key configuration', async () => {
+      const mockData = { id: 1, title: 'Key', can_push: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addProjectDeployKey('my-project', {
+        title: 'Key',
+        key: 'ssh-rsa...',
+        canPush: true,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/deploy_keys', {
+        title: 'Key',
+        key: 'ssh-rsa...',
+        can_push: true,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('enableProjectDeployKey should trigger enable endpoint', async () => {
+      const mockData = { id: 1, title: 'Key', enabled: true };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.enableProjectDeployKey('my-project', 1);
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/deploy_keys/1/enable');
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectDeployKey should put updated deploy key configurations', async () => {
+      const mockData = { id: 1, title: 'Updated Key', can_push: false };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectDeployKey('my-project', 1, {
+        title: 'Updated Key',
+        canPush: false,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/deploy_keys/1', {
+        title: 'Updated Key',
+        can_push: false,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectDeployKey should delete deploy key and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectDeployKey('my-project', 1);
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/deploy_keys/1');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 31. Labels Endpoints
+  // ==========================================
+  describe('31. Labels Endpoints', () => {
+    it('listProjectLabels should fetch project labels list', async () => {
+      const mockData = [{ id: 1, name: 'bug' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectLabels('my-project', { search: 'bug' });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/labels', {
+        params: {
+          page: 1,
+          per_page: 30,
+          with_counts: undefined,
+          include_ancestor_groups: undefined,
+          search: 'bug',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('createProjectLabel should post project label details', async () => {
+      const mockData = { id: 1, name: 'bug', color: '#ff0000' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createProjectLabel('my-project', {
+        name: 'bug',
+        color: '#ff0000',
+        description: 'a bug',
+        priority: 1,
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/labels', {
+        name: 'bug',
+        color: '#ff0000',
+        description: 'a bug',
+        priority: 1,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectLabel should put updated project label configurations', async () => {
+      const mockData = { id: 1, name: 'critical', color: '#ff0000' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectLabel('my-project', 'bug', {
+        newName: 'critical',
+        color: '#ff0000',
+        description: 'critical issue',
+        priority: 2,
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/labels/bug', {
+        new_name: 'critical',
+        color: '#ff0000',
+        description: 'critical issue',
+        priority: 2,
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectLabel should delete project label and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectLabel('my-project', 'bug');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/labels/bug');
+      expect(result).toEqual({ success: true });
+    });
+
+    it('listGroupLabels should fetch group labels list', async () => {
+      const mockData = [{ id: 2, name: 'feature' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listGroupLabels('my-group', { onlyGroupLabels: true });
+      expect(mockClient.get).toHaveBeenCalledWith('/groups/my-group/labels', {
+        params: {
+          page: 1,
+          per_page: 30,
+          with_counts: undefined,
+          only_group_labels: true,
+          search: undefined,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('createGroupLabel should post group label details', async () => {
+      const mockData = { id: 2, name: 'feature', color: '#00ff00' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createGroupLabel('my-group', {
+        name: 'feature',
+        color: '#00ff00',
+        description: 'a feature',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/labels', {
+        name: 'feature',
+        color: '#00ff00',
+        description: 'a feature',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateGroupLabel should put updated group label configurations', async () => {
+      const mockData = { id: 2, name: 'enhancement', color: '#00ff00' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateGroupLabel('my-group', 'feature', {
+        newName: 'enhancement',
+        color: '#00ff00',
+        description: 'enhancement feature',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/groups/my-group/labels/feature', {
+        new_name: 'enhancement',
+        color: '#00ff00',
+        description: 'enhancement feature',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteGroupLabel should delete group label and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteGroupLabel('my-group', 'feature');
+      expect(mockClient.delete).toHaveBeenCalledWith('/groups/my-group/labels/feature');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 32. Todos Endpoints
+  // ==========================================
+  describe('32. Todos Endpoints', () => {
+    it('listUserTodos should fetch user todos list', async () => {
+      const mockData = [{ id: 1, action_name: 'assigned' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listUserTodos({ state: 'pending' });
+      expect(mockClient.get).toHaveBeenCalledWith('/todos', {
+        params: {
+          page: 1,
+          per_page: 30,
+          action: undefined,
+          author_id: undefined,
+          project_id: undefined,
+          group_id: undefined,
+          state: 'pending',
+          type: undefined,
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('createTodoOnIssue should post todo for an issue', async () => {
+      const mockData = { id: 1, state: 'pending' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createTodoOnIssue('my-project', 5);
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/issues/5/todo');
+      expect(result).toEqual(mockData);
+    });
+
+    it('createTodoOnMergeRequest should post todo for an MR', async () => {
+      const mockData = { id: 2, state: 'pending' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createTodoOnMergeRequest('my-project', 12);
+      expect(mockClient.post).toHaveBeenCalledWith('/projects/my-project/merge_requests/12/todo');
+      expect(result).toEqual(mockData);
+    });
+
+    it('markTodoAsDone should trigger mark as done for a specific todo', async () => {
+      const mockData = { id: 1, state: 'done' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.markTodoAsDone(1);
+      expect(mockClient.post).toHaveBeenCalledWith('/todos/1/mark_as_done');
+      expect(result).toEqual(mockData);
+    });
+
+    it('markAllTodosAsDone should trigger mark all as done and return success', async () => {
+      mockClient.post.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.markAllTodosAsDone();
+      expect(mockClient.post).toHaveBeenCalledWith('/todos/mark_as_done');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 33. Project Integrations Endpoints
+  // ==========================================
+  describe('33. Project Integrations Endpoints', () => {
+    it('listProjectIntegrations should fetch integrations list', async () => {
+      const mockData = [{ slug: 'jira', active: true }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listProjectIntegrations('my-project');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/integrations');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getProjectIntegration should retrieve settings of a specific integration', async () => {
+      const mockData = { slug: 'jira', properties: {} };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getProjectIntegration('my-project', 'jira');
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/integrations/jira');
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateProjectIntegration should put integration configurations', async () => {
+      const mockData = { slug: 'jira', active: true };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateProjectIntegration('my-project', 'jira', {
+        url: 'https://jira.example.com',
+      });
+      expect(mockClient.put).toHaveBeenCalledWith('/projects/my-project/integrations/jira', {
+        url: 'https://jira.example.com',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteProjectIntegration should delete integration and return success', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteProjectIntegration('my-project', 'jira');
+      expect(mockClient.delete).toHaveBeenCalledWith('/projects/my-project/integrations/jira');
+      expect(result).toEqual({ success: true });
+    });
+  });
+
+  // ==========================================
+  // 34. Repository Extras Endpoints
+  // ==========================================
+  describe('34. Repository Extras Endpoints', () => {
+    it('getFileBlame should fetch file blame list', async () => {
+      const mockData = [{ commit: {}, lines: [] }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getFileBlame('my-project', 'src/app.js', { ref: 'dev' });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/repository/files/src%2Fapp.js/blame', {
+        params: {
+          ref: 'dev',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('downloadRepositoryArchive should fetch repository archive data', async () => {
+      const mockData = new ArrayBuffer(8);
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.downloadRepositoryArchive('my-project', { format: 'tar.gz', sha: 'abcd' });
+      expect(mockClient.get).toHaveBeenCalledWith('/projects/my-project/repository/archive', {
+        responseType: 'arraybuffer',
+        params: {
+          sha: 'abcd',
+          format: 'tar.gz',
+        },
+      });
+      expect(result).toEqual(mockData);
+    });
+  });
 });
