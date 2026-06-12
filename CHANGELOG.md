@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.207] - 2026-06-12 — Phase 7 GitLab REST API Integration
+### Added
+- **GitLab REST API Phase 7 Core Wrappers**: Fully implemented 25 new service methods inside `gitlab.service.js` covering Repository Traversal (listing repository tree recursively), Threaded Discussions (Issues and Merge Requests discussion thread listing, details, creation, resolution, and reply notes CRUD), Project & Group Share Links (sharing and unsharing projects/groups with other groups), Vulnerability Exports (creating exports, checking status, and downloading compliance reports), Instance Metadata (version and system metadata flags), and Resource State Events (resource label and milestone change history on Issues and MRs).
+- **GitLab Express Routing & Controllers**: Implemented corresponding Express routes and controllers returning `{ success: true, data }` envelopes.
+- **Comprehensive Unit Testing**: Expanded the unit test suite inside `gitlab.service.test.js` to 282 passing tests.
+
 ## [39.37.206] - 2026-06-12 — Phase 6 GitLab REST API Integration
 ### Added
 - **GitLab REST API Phase 6 Core Wrappers**: Fully implemented 27 new service methods inside `gitlab.service.js` covering Group Webhooks (listing, get details, adding, updating, and deleting hooks), Issue Links (listing, linking, and deleting links), Time Tracking (logging time spent, estimates, and resetting spent time on issues & MRs), Group Iterations (listing, project iterations listing, creating, updating, and deleting group iterations), Release Links (listing, getting, creating, updating, and deleting links for releases), and Repository File Locks (listing project file locks, locking, and unlocking files).

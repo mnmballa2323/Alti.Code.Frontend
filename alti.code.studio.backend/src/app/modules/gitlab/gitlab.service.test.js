@@ -4072,4 +4072,365 @@ describe('GitlabService', () => {
       expect(result).toEqual(mockData);
     });
   });
+
+  // ==========================================
+  // 41. Phase 7 Endpoints
+  // ==========================================
+  describe('41. Phase 7 Endpoints', () => {
+    // 1. Repository Traversal (Trees)
+    it('listRepositoryTree should retrieve repository tree with parameters', async () => {
+      const mockData = [{ id: '1', name: 'src', type: 'tree' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listRepositoryTree('my-project', {
+        path: 'src',
+        ref: 'dev',
+        recursive: true,
+        page: 2,
+        perPage: 10,
+      });
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/repository/tree',
+        {
+          params: {
+            path: 'src',
+            ref: 'dev',
+            recursive: true,
+            page: 2,
+            per_page: 10,
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 2. Threaded Discussions - Issues
+    it('listIssueDiscussions should get discussions list for issue', async () => {
+      const mockData = [{ id: 'd1', notes: [] }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueDiscussions('my-project', 42);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/discussions',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getIssueDiscussion should fetch issue discussion details', async () => {
+      const mockData = { id: 'd1', notes: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getIssueDiscussion(
+        'my-project',
+        42,
+        'd1',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/discussions/d1',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createIssueDiscussion should start an issue thread', async () => {
+      const mockData = { id: 'd1', notes: [] };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createIssueDiscussion(
+        'my-project',
+        42,
+        'Thread body',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/discussions',
+        { body: 'Thread body' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('resolveIssueDiscussion should put resolve/unresolve state', async () => {
+      const mockData = { id: 'd1', resolved: true };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.resolveIssueDiscussion(
+        'my-project',
+        42,
+        'd1',
+        true,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/discussions/d1',
+        { resolved: true },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // Threaded Discussions - Merge Requests
+    it('listMergeRequestDiscussions should get discussions list for MR', async () => {
+      const mockData = [{ id: 'd2', notes: [] }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listMergeRequestDiscussions(
+        'my-project',
+        101,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getMergeRequestDiscussion should fetch MR discussion details', async () => {
+      const mockData = { id: 'd2', notes: [] };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getMergeRequestDiscussion(
+        'my-project',
+        101,
+        'd2',
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions/d2',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('createMergeRequestDiscussion should start an MR thread', async () => {
+      const mockData = { id: 'd2', notes: [] };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createMergeRequestDiscussion(
+        'my-project',
+        101,
+        'MR Thread body',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions',
+        { body: 'MR Thread body' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('resolveMergeRequestDiscussion should put resolve/unresolve state for MR', async () => {
+      const mockData = { id: 'd2', resolved: false };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.resolveMergeRequestDiscussion(
+        'my-project',
+        101,
+        'd2',
+        false,
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions/d2',
+        { resolved: false },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('addMergeRequestDiscussionNote should reply to MR discussion', async () => {
+      const mockData = { id: 501, body: 'Reply' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.addMergeRequestDiscussionNote(
+        'my-project',
+        101,
+        'd2',
+        'Reply content',
+      );
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions/d2/notes',
+        { body: 'Reply content' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('updateMergeRequestDiscussionNote should update replies', async () => {
+      const mockData = { id: 501, body: 'Updated Reply' };
+      mockClient.put.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.updateMergeRequestDiscussionNote(
+        'my-project',
+        101,
+        'd2',
+        501,
+        'Updated Reply',
+      );
+      expect(mockClient.put).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions/d2/notes/501',
+        { body: 'Updated Reply' },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('deleteMergeRequestDiscussionNote should call delete endpoint', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.deleteMergeRequestDiscussionNote(
+        'my-project',
+        101,
+        'd2',
+        501,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/discussions/d2/notes/501',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 3. Project & Group Share Links
+    it('shareProjectWithGroup should post share configuration', async () => {
+      const mockData = { id: 1, project_id: 123, group_id: 456 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.shareProjectWithGroup('my-project', {
+        groupId: 456,
+        groupAccess: 30,
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/projects/my-project/share',
+        {
+          group_id: 456,
+          group_access: 30,
+          expires_at: '2026-12-31',
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('unshareProjectFromGroup should delete project share link', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.unshareProjectFromGroup(
+        'my-project',
+        456,
+      );
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/projects/my-project/share/456',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    it('shareGroupWithGroup should post group sharing configurations', async () => {
+      const mockData = { id: 1, group_id: 123, shared_group_id: 789 };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.shareGroupWithGroup('my-group', {
+        sharedGroupId: 789,
+        sharedGroupAccess: 20,
+        expiresAt: '2026-12-31',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith('/groups/my-group/share', {
+        shared_group_id: 789,
+        shared_group_access: 20,
+        expires_at: '2026-12-31',
+      });
+      expect(result).toEqual(mockData);
+    });
+
+    it('unshareGroupFromGroup should delete group share link', async () => {
+      mockClient.delete.mockResolvedValueOnce({ data: {} });
+      const result = await GitlabService.unshareGroupFromGroup('my-group', 789);
+      expect(mockClient.delete).toHaveBeenCalledWith(
+        '/groups/my-group/share/789',
+      );
+      expect(result).toEqual({ success: true });
+    });
+
+    // 4. Vulnerability Exports
+    it('createVulnerabilityExport should trigger vulnerability report export', async () => {
+      const mockData = { id: 10, status: 'created' };
+      mockClient.post.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.createVulnerabilityExport({
+        projectId: 123,
+        format: 'csv',
+      });
+      expect(mockClient.post).toHaveBeenCalledWith(
+        '/vulnerability_exports',
+        {},
+        {
+          params: {
+            project_id: 123,
+            group_id: undefined,
+            format: 'csv',
+          },
+        },
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('getVulnerabilityExportStatus should check export job status', async () => {
+      const mockData = { id: 10, status: 'finished' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getVulnerabilityExportStatus(10);
+      expect(mockClient.get).toHaveBeenCalledWith('/vulnerability_exports/10');
+      expect(result).toEqual(mockData);
+    });
+
+    it('downloadVulnerabilityExport should fetch csv file data', async () => {
+      const mockData = 'vulnerability1,vulnerability2';
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.downloadVulnerabilityExport(10);
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/vulnerability_exports/10/download',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    // 5. Instance Metadata
+    it('getGitlabVersion should retrieve system version details', async () => {
+      const mockData = { version: '15.0.0', revision: 'abcdef' };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGitlabVersion();
+      expect(mockClient.get).toHaveBeenCalledWith('/version');
+      expect(result).toEqual(mockData);
+    });
+
+    it('getGitlabMetadata should retrieve system metadata flags', async () => {
+      const mockData = { kas: { enabled: true } };
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.getGitlabMetadata();
+      expect(mockClient.get).toHaveBeenCalledWith('/metadata');
+      expect(result).toEqual(mockData);
+    });
+
+    // 6. Resource State Events
+    it('listIssueResourceLabelEvents should fetch label audit events', async () => {
+      const mockData = [{ id: 1, action: 'add' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueResourceLabelEvents(
+        'my-project',
+        42,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/resource_label_events',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listMergeRequestResourceLabelEvents should fetch MR label audit events', async () => {
+      const mockData = [{ id: 2, action: 'remove' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listMergeRequestResourceLabelEvents(
+        'my-project',
+        101,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/resource_label_events',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listIssueResourceMilestoneEvents should fetch milestone audit events', async () => {
+      const mockData = [{ id: 3, action: 'add' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result = await GitlabService.listIssueResourceMilestoneEvents(
+        'my-project',
+        42,
+      );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/issues/42/resource_milestone_events',
+      );
+      expect(result).toEqual(mockData);
+    });
+
+    it('listMergeRequestResourceMilestoneEvents should fetch MR milestone audit events', async () => {
+      const mockData = [{ id: 4, action: 'remove' }];
+      mockClient.get.mockResolvedValueOnce({ data: mockData });
+      const result =
+        await GitlabService.listMergeRequestResourceMilestoneEvents(
+          'my-project',
+          101,
+        );
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/projects/my-project/merge_requests/101/resource_milestone_events',
+      );
+      expect(result).toEqual(mockData);
+    });
+  });
 });

@@ -4323,7 +4323,10 @@ export const resolveIssueDiscussion = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: discussion });
   } catch (error) {
-    logger.error('[GitLab Controller] Error resolving issue discussion:', error);
+    logger.error(
+      '[GitLab Controller] Error resolving issue discussion:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -4432,7 +4435,10 @@ export const updateMergeRequestDiscussionNote = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: note });
   } catch (error) {
-    logger.error('[GitLab Controller] Error updating MR discussion note:', error);
+    logger.error(
+      '[GitLab Controller] Error updating MR discussion note:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -4450,7 +4456,10 @@ export const deleteMergeRequestDiscussionNote = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error deleting MR discussion note:', error);
+    logger.error(
+      '[GitLab Controller] Error deleting MR discussion note:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -4469,7 +4478,10 @@ export const shareProjectWithGroup = async (req, res) => {
     );
     res.status(httpStatus.CREATED).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error sharing project with group:', error);
+    logger.error(
+      '[GitLab Controller] Error sharing project with group:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });
@@ -4485,7 +4497,10 @@ export const unshareProjectFromGroup = async (req, res) => {
     );
     res.status(httpStatus.OK).json({ success: true, data: result });
   } catch (error) {
-    logger.error('[GitLab Controller] Error removing project share link:', error);
+    logger.error(
+      '[GitLab Controller] Error removing project share link:',
+      error,
+    );
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: error.message });

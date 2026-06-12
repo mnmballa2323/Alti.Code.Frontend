@@ -5104,10 +5104,7 @@ export const GitlabService = {
       );
       return data;
     } catch (error) {
-      logger.error(
-        `Failed to get issue discussion ${discussionId}:`,
-        error,
-      );
+      logger.error(`Failed to get issue discussion ${discussionId}:`, error);
       throw error;
     }
   },
@@ -5199,7 +5196,12 @@ export const GitlabService = {
     }
   },
 
-  async resolveMergeRequestDiscussion(projectId, mrIid, discussionId, resolved) {
+  async resolveMergeRequestDiscussion(
+    projectId,
+    mrIid,
+    discussionId,
+    resolved,
+  ) {
     logger.info(
       `🦊 [GitLab Service] Resolving MR discussion ${discussionId} in project ${projectId}: ${resolved}`,
     );

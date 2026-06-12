@@ -1001,4 +1001,111 @@ router.delete(
   GitlabController.unlockProjectFile,
 );
 
+// ==========================================
+// 41. Phase 7 Endpoints
+// ==========================================
+// 1. Repository Traversal (Trees)
+router.get(
+  '/projects/:projectId/repository/tree',
+  GitlabController.listRepositoryTree,
+);
+
+// 2. Threaded Discussions
+router.get(
+  '/projects/:projectId/issues/:issueIid/discussions',
+  GitlabController.listIssueDiscussions,
+);
+router.post(
+  '/projects/:projectId/issues/:issueIid/discussions',
+  GitlabController.createIssueDiscussion,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/discussions/:discussionId',
+  GitlabController.getIssueDiscussion,
+);
+router.put(
+  '/projects/:projectId/issues/:issueIid/discussions/:discussionId/resolve',
+  GitlabController.resolveIssueDiscussion,
+);
+
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/discussions',
+  GitlabController.listMergeRequestDiscussions,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/discussions',
+  GitlabController.createMergeRequestDiscussion,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/discussions/:discussionId',
+  GitlabController.getMergeRequestDiscussion,
+);
+router.put(
+  '/projects/:projectId/merge_requests/:mrIid/discussions/:discussionId/resolve',
+  GitlabController.resolveMergeRequestDiscussion,
+);
+router.post(
+  '/projects/:projectId/merge_requests/:mrIid/discussions/:discussionId/notes',
+  GitlabController.addMergeRequestDiscussionNote,
+);
+router.put(
+  '/projects/:projectId/merge_requests/:mrIid/discussions/:discussionId/notes/:noteId',
+  GitlabController.updateMergeRequestDiscussionNote,
+);
+router.delete(
+  '/projects/:projectId/merge_requests/:mrIid/discussions/:discussionId/notes/:noteId',
+  GitlabController.deleteMergeRequestDiscussionNote,
+);
+
+// 3. Project & Group Share Links
+router.post(
+  '/projects/:projectId/share',
+  GitlabController.shareProjectWithGroup,
+);
+router.delete(
+  '/projects/:projectId/share/:groupId',
+  GitlabController.unshareProjectFromGroup,
+);
+router.post('/groups/:groupId/share', GitlabController.shareGroupWithGroup);
+router.delete(
+  '/groups/:groupId/share/:sharedGroupId',
+  GitlabController.unshareGroupFromGroup,
+);
+
+// 4. Vulnerability Exports
+router.post(
+  '/vulnerability_exports',
+  GitlabController.createVulnerabilityExport,
+);
+router.get(
+  '/vulnerability_exports/:exportId',
+  GitlabController.getVulnerabilityExportStatus,
+);
+router.get(
+  '/vulnerability_exports/:exportId/download',
+  GitlabController.downloadVulnerabilityExport,
+);
+
+// 5. Instance Metadata
+router.get('/version', GitlabController.getGitlabVersion);
+router.get('/metadata', GitlabController.getGitlabMetadata);
+
+// 6. Resource State Events
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_label_events',
+  GitlabController.listIssueResourceLabelEvents,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_label_events',
+  GitlabController.listMergeRequestResourceLabelEvents,
+);
+router.get(
+  '/projects/:projectId/issues/:issueIid/resource_milestone_events',
+  GitlabController.listIssueResourceMilestoneEvents,
+);
+router.get(
+  '/projects/:projectId/merge_requests/:mrIid/resource_milestone_events',
+  GitlabController.listMergeRequestResourceMilestoneEvents,
+);
+
 export const GitlabRoutes = router;
