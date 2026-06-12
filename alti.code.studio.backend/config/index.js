@@ -48,6 +48,10 @@ const configObject = {
   },
   github_token:
     process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+  gitlab_token:
+    process.env.GITLAB_TOKEN || process.env.GITLAB_PERSONAL_ACCESS_TOKEN,
+  gitlab_url:
+    process.env.GITLAB_URL || 'https://gitlab.com/api/v4',
 
   mailgun: {
     mailgun_domain: process.env.MAILGUN_DOMAIN,
