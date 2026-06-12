@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider as ReduxProvider, useDispatch } from "react-redux";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider, useSession, signIn } from "next-auth/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { store } from "@/store";
@@ -29,10 +29,31 @@ declare module "@react-types/shared" {
   }
 }
 
+const getSiblingSsoUrl = () => {
+  if (typeof window === "undefined") return null;
+  const host = window.location.host;
+  
+  if (host.includes("localhost:3000")) {
+    return "http://localhost:3005/auth/sso-iframe";
+  }
+  if (host.includes("localhost:3005")) {
+    return "http://localhost:3000/auth/sso-iframe";
+  }
+  if (host.includes("insocode.com")) {
+    return "https://www.inso.ai/auth/sso-iframe";
+  }
+  if (host.includes("inso.ai")) {
+    return "https://www.insocode.com/auth/sso-iframe";
+  }
+  return null;
+};
+
 // Get the user:-
 function UserFetcher({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const dispatch = useDispatch();
+  const [ssoAttempted, setSsoAttempted] = React.useState(false);
+  const iframeRef = React.useRef<HTMLIFrameElement | null>(null);
 
   React.useEffect(() => {
     const accessToken = session?.user?.accessToken ?? null;
@@ -57,6 +78,66 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
         .catch((err) => console.error("Error fetching user:", err));
     }
   }, [session, dispatch]);
+
+  // Silent SSO Verification Check
+  React.useEffect(() => {
+    if (status !== "unauthenticated" || ssoAttempted) return;
+
+    const siblingSsoUrl = getSiblingSsoUrl();
+    if (!siblingSsoUrl) return;
+
+    setSsoAttempted(true);
+    const siblingOrigin = new URL(siblingSsoUrl).origin;
+
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== siblingOrigin) return;
+
+      if (event.data?.type === "INSO_SSO_IFRAME_READY") {
+        iframeRef.current?.contentWindow?.postMessage(
+          { type: "INSO_SSO_CHECK" },
+          siblingOrigin
+        );
+      } else if (event.data?.type === "INSO_SSO_RESPONSE") {
+        if (event.data.status === "authenticated" && event.data.token) {
+          console.log("🔐 [SSO] Silent sibling authentication session found, signing in...");
+          try {
+            await signIn("credentials", {
+              redirect: false,
+              accessToken: event.data.token,
+            });
+          } catch (err) {
+            console.error("❌ [SSO] Silent sign-in error:", err);
+          }
+        }
+        cleanup();
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    const iframe = document.createElement("iframe");
+    iframe.src = siblingSsoUrl;
+    iframe.style.display = "none";
+    iframe.id = "sso-silent-iframe";
+    document.body.appendChild(iframe);
+    iframeRef.current = iframe;
+
+    const cleanup = () => {
+      window.removeEventListener("message", handleMessage);
+      if (document.getElementById("sso-silent-iframe")) {
+        document.body.removeChild(iframe);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      cleanup();
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      cleanup();
+    };
+  }, [status, ssoAttempted]);
 
   return <>{children}</>;
 }
