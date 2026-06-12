@@ -56,12 +56,6 @@ class GitlabDocsService {
     if (!agentId) {
       try {
         const { vectorStoreService } = await import('../memory/vector.store.js');
-        const { capabilityRouter } = await import('../agents/capability.router.js');
-
-        // Make sure capability router index is ready
-        if (!capabilityRouter.isIndexed) {
-          await capabilityRouter.indexAgents();
-        }
 
         logger.info(`🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`);
         const searchResults = await vectorStoreService.search(query, 10);
@@ -137,23 +131,27 @@ RULES:
         if (agent.isPlugin && agent.name.startsWith('gitlab')) {
           let score = 0;
 
+          // 1. Match by granular capabilities (e.g. gitlab-create-project)
+          let maxCapScore = 0;
           if (agent.capabilities && agent.capabilities.length > 0) {
             for (const cap of agent.capabilities) {
               const capClean = cap.replace(/-/g, ' ');
               const words = capClean.split(' ').filter(w => w !== 'gitlab');
+
               const matchedWords = words.filter(word =>
                 new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery),
               );
               if (matchedWords.length > 0) {
                 const capScore = 10 * matchedWords.length;
-                if (capScore > highestMatchScore) {
-                  highestMatchScore = capScore;
-                  bestAgentId = agent.name;
+                if (capScore > maxCapScore) {
+                  maxCapScore = capScore;
                 }
               }
             }
           }
+          score += maxCapScore;
 
+          // 2. Match by CamelCase Agent Name (e.g. gitlabRepoCreator)
           const idClean = agent.name
             .replace(/gitlab/i, '')
             .replace(/([A-Z])/g, ' $1')
@@ -163,11 +161,12 @@ RULES:
             new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery),
           );
           if (matchedIdWords.length > 0) {
-            score = 5 * matchedIdWords.length;
-            if (score > highestMatchScore) {
-              highestMatchScore = score;
-              bestAgentId = agent.name;
-            }
+            score += 5 * matchedIdWords.length;
+          }
+
+          if (score > highestMatchScore) {
+            highestMatchScore = score;
+            bestAgentId = agent.name;
           }
         }
       }

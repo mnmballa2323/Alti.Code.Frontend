@@ -2,14 +2,14 @@
  * Copyright (c) 2026 Inso Code
  *
  * gitlab_swarm_factory.js — The Swarm Expansion Generation Engine for GitLab
- * Programmatically scaffolds and deploys 60 specialized dynamic agents.
+ * Programmatically scaffolds and deploys 61 specialized dynamic agents.
  */
 
 import { logger } from '../../../shared/logger.js';
 import fs from 'fs/promises';
 import path from 'path';
 
-// Comprehensive Taxonomy of 60 Granular GitLab Specialist Specs
+// Comprehensive Taxonomy of 61 Granular GitLab Specialist Specs
 export const GITLAB_SPECIALISTS_TAXONOMY = [
   // === 1. Projects Domain (5 Specialists) ===
   {
@@ -601,11 +601,11 @@ export const GITLAB_SPECIALISTS_TAXONOMY = [
 
 export class GitlabSwarmFactory {
   /**
-   * Programmatically compiles and writes all 60 specialized dynamic agent files.
+   * Programmatically compiles and writes all 61 specialized dynamic agent files.
    */
   async generateAllSpecialists() {
     logger.info(
-      `🔥 [GitLab SwarmFactory] Initiating compilation sequence for 60 specialized GitLab agents...`,
+      `🔥 [GitLab SwarmFactory] Initiating compilation sequence for 61 specialized GitLab agents...`,
     );
     const pluginsDir = path.join(
       process.cwd(),
