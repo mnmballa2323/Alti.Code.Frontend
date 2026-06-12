@@ -39,6 +39,12 @@ class CapabilityRouter {
         if (this.isIndexed) return;
         
         logger.info(`🗺️ [CapabilityRouter] Bootstrapping Agentic RAG Vector Index for massive scale...`);
+        try {
+            await agentRegistry.loadPlugins();
+        } catch (pluginErr) {
+            logger.warn(`⚠️ [CapabilityRouter] Failed to load dynamic plugins before indexing: ${pluginErr.message}`);
+        }
+
         const availableAgents = agentRegistry.list();
         
         try {
@@ -48,21 +54,30 @@ class CapabilityRouter {
             for (let i = 0; i < availableAgents.length; i += BATCH_SIZE) {
                 const batch = availableAgents.slice(i, i + BATCH_SIZE);
                 const batchPromises = batch.map(agent => {
-                    const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
-                    return vectorStoreService.add(agentDocument, { 
-                        type: 'agent_profile', 
-                        agentId: agent.name 
-                    }).then(() => { count++; }).catch(e => {
+                    return vectorStoreService.pool.query(
+                        "SELECT id FROM alti_memory WHERE metadata->>'agentId' = $1 AND metadata->>'type' = 'agent_profile' LIMIT 1",
+                        [agent.name]
+                    ).then(async (checkRes) => {
+                        if (checkRes.rows.length > 0) {
+                            return;
+                        }
+                        const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
+                        await vectorStoreService.add(agentDocument, { 
+                            type: 'agent_profile', 
+                            agentId: agent.name 
+                        });
+                        count++;
+                    }).catch(e => {
                         logger.warn(`⚠️ Failed to index agent ${agent.name}: ${e.message}`);
                     });
                 });
                 
                 await Promise.all(batchPromises);
-                logger.info(`🚀 [CapabilityRouter] Indexed batch ${i / BATCH_SIZE + 1} (${count}/${availableAgents.length} agents indexed)`);
+                logger.info(`🚀 [CapabilityRouter] Processed batch ${i / BATCH_SIZE + 1} (${availableAgents.length} total agents processed)`);
             }
             
             this.isIndexed = true;
-            logger.info(`✅ [CapabilityRouter] Successfully bulk-indexed ${count} agent profiles into Vector Store.`);
+            logger.info(`✅ [CapabilityRouter] Successfully bootstrapped agent profiles into Vector Store (${count} new agents added).`);
         } catch (error) {
             logger.error(`❌ [CapabilityRouter] Failed to index agent profiles: ${error.message}`);
         }

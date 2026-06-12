@@ -52,7 +52,80 @@ class GitlabDocsService {
 
     let agentId = preferredAgentId;
 
-    // If no preferred agent, automatically route using semantic capability matching rules
+    // If no preferred agent, automatically route using semantic pgvector search + LLM reranking
+    if (!agentId) {
+      try {
+        const { vectorStoreService } = await import('../memory/vector.store.js');
+        const { capabilityRouter } = await import('../agents/capability.router.js');
+
+        // Make sure capability router index is ready
+        if (!capabilityRouter.isIndexed) {
+          await capabilityRouter.indexAgents();
+        }
+
+        logger.info(`🦊 [GitLab Docs Gateway] Querying pgvector database for candidate specialists...`);
+        const searchResults = await vectorStoreService.search(query, 10);
+        
+        let gitlabCandidates = [];
+        if (searchResults.documents && searchResults.documents[0] && searchResults.documents[0].length > 0) {
+          const docs = searchResults.documents[0];
+          const metadatas = searchResults.metadatas[0];
+          const distances = searchResults.distances[0];
+
+          for (let i = 0; i < docs.length; i++) {
+            const meta = metadatas[i];
+            if (meta && meta.agentId && meta.agentId.toLowerCase().startsWith('gitlab')) {
+              gitlabCandidates.push({
+                agentId: meta.agentId,
+                document: docs[i],
+                distance: distances[i]
+              });
+            }
+          }
+        }
+
+        // 1. Vector Short-Circuit: If exceptionally close distance (< 0.15)
+        if (gitlabCandidates.length > 0 && gitlabCandidates[0].distance < 0.15) {
+          agentId = gitlabCandidates[0].agentId;
+          logger.info(`🦊 [GitLab Docs Gateway] Vector Short-Circuit (Distance: ${gitlabCandidates[0].distance.toFixed(3)}) routed to: [${agentId}]`);
+        } 
+        
+        // 2. LLM Reranker: If candidate list is found, consult LLM to select best GitLab agent
+        else if (gitlabCandidates.length > 0) {
+          logger.info(`🦊 [GitLab Docs Gateway] Reranking ${gitlabCandidates.length} candidate agents via Gemini...`);
+          const candidateStrings = gitlabCandidates.map(c => `Agent: ${c.agentId}\n${c.document}`).join('\n\n');
+          const prompt = `You are the dynamic router for Inso Code's GitLab swarm.
+Analyze the user query and select the single best GitLab specialist agent from the candidates list.
+
+USER QUERY: "${query}"
+
+CANDIDATES:
+${candidateStrings}
+
+RULES:
+- Return ONLY a JSON object: { "agentId": "agent_name_here" }
+- If no candidate fits, return { "agentId": "NONE" }
+- Return raw JSON only, no markdown.`;
+
+          const { GoogleGenAiService } = await import('../googleGenAi/googleGenAi.service.js');
+          const modelName = 'gemini-3.1-pro';
+          const result = await GoogleGenAiService.generateContent(prompt, modelName, 0.2);
+          const text = result.content || '';
+          const match = text.match(/\{[\s\S]*\}/);
+          if (match) {
+            const decision = JSON.parse(match[0]);
+            if (decision.agentId && decision.agentId !== 'NONE' && agentRegistry.get(decision.agentId)) {
+              agentId = decision.agentId;
+              logger.info(`🦊 [GitLab Docs Gateway] Semantic reranker routed to: [${agentId}]`);
+            }
+          }
+        }
+      } catch (err) {
+        logger.warn(`🦊 [GitLab Docs Gateway] Vector/LLM routing failed. Falling back to keyword rules. Error: ${err.message}`);
+      }
+    }
+
+    // 3. Fallback Router: If no agent selected yet, use keyword matches or default agents
     if (!agentId) {
       const lowerQuery = query.toLowerCase();
       const allAgents = agentRegistry.list();
@@ -60,34 +133,27 @@ class GitlabDocsService {
       let bestAgentId = null;
       let highestMatchScore = 0;
 
-      // 1. Dynamic precision capability and keyword mapping over all registered specialist plugins
       for (const agent of allAgents) {
-        // Check if agent is a gitlab plugin
         if (agent.isPlugin && agent.name.startsWith('gitlab')) {
           let score = 0;
 
-          // Match by granular capabilities (e.g. gitlab-create-project)
-          let maxCapScore = 0;
           if (agent.capabilities && agent.capabilities.length > 0) {
             for (const cap of agent.capabilities) {
               const capClean = cap.replace(/-/g, ' ');
               const words = capClean.split(' ').filter(w => w !== 'gitlab');
-
-              // Score for this specific capability
               const matchedWords = words.filter(word =>
                 new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery),
               );
               if (matchedWords.length > 0) {
                 const capScore = 10 * matchedWords.length;
-                if (capScore > maxCapScore) {
-                  maxCapScore = capScore;
+                if (capScore > highestMatchScore) {
+                  highestMatchScore = capScore;
+                  bestAgentId = agent.name;
                 }
               }
             }
           }
-          score += maxCapScore;
 
-          // Match by CamelCase Agent Name (e.g. gitlabRepoCreator)
           const idClean = agent.name
             .replace(/gitlab/i, '')
             .replace(/([A-Z])/g, ' $1')
@@ -97,12 +163,11 @@ class GitlabDocsService {
             new RegExp(`\\b${word}s?\\b`, 'i').test(lowerQuery),
           );
           if (matchedIdWords.length > 0) {
-            score += 5 * matchedIdWords.length;
-          }
-
-          if (score > highestMatchScore) {
-            highestMatchScore = score;
-            bestAgentId = agent.name;
+            score = 5 * matchedIdWords.length;
+            if (score > highestMatchScore) {
+              highestMatchScore = score;
+              bestAgentId = agent.name;
+            }
           }
         }
       }
@@ -110,10 +175,10 @@ class GitlabDocsService {
       if (bestAgentId && highestMatchScore >= 5) {
         agentId = bestAgentId;
         logger.info(
-          `🦊 [GitLab Docs Gateway] Dynamic semantic match routed query to granular agent: [${agentId}] (Score: ${highestMatchScore})`,
+          `🦊 [GitLab Docs Gateway] Keyword fallback match routed query to granular agent: [${agentId}] (Score: ${highestMatchScore})`,
         );
       } else {
-        // 2. Fallback Router to GitLab Swarm Fallbacks
+        // Fallback groups
         if (
           /\b(pipelines?|jobs?|artifacts?|variables?|schedules?)\b/i.test(query)
         ) {

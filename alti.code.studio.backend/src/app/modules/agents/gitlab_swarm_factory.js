@@ -588,6 +588,15 @@ export const GITLAB_SPECIALISTS_TAXONOMY = [
     description:
       'Specialist GitLab Admin OAuth Orchestrator expert in credential sync checks.',
   },
+  {
+    id: 'gitlabCrossSwarmCollaborator',
+    capabilities: ['gitlab-github-sync', 'cross-swarm-collaboration'],
+    domain: 'Administration & OAuth',
+    focus:
+      'cross-platform replication, syncing pipelines, issues, and merge requests between GitHub and GitLab',
+    description:
+      'Specialist GitLab Cross-Swarm Collaborator expert in syncing and bridging workflows, repositories, and issues between GitHub and GitLab.',
+  },
 ];
 
 export class GitlabSwarmFactory {
@@ -664,10 +673,29 @@ class GitlabFn${capitalizedId}Agent extends BaseSpecialistAgent {
             logger.warn(\`🦊 [${spec.id}] Failed to query RAG documentation. Fallback used. Error: \${err.message}\`);
         }
 
+        let memoryContext = '';
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                const recentMemories = await agentMemoryService.smartSearch({
+                    query: prompt,
+                    limit: 3
+                });
+                if (recentMemories && recentMemories.documents) {
+                    memoryContext = recentMemories.documents.map(d => \`- Memory: \${d}\`).join('\\n');
+                }
+            }
+        } catch (memErr) {
+            logger.debug(\`🦊 [${spec.id}] Memory retrieval bypassed: \${memErr.message}\`);
+        }
+
         const groundedPrompt = \`\${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 \${docsContext || 'No documentation found in local RAG vector store.'}
+
+=== SPECIALIST HISTORICAL MEMORIES ===
+\${memoryContext || 'No historical memories found for this context.'}
 
 === ADDITIONAL CONTEXT ===
 \${contextBlock || 'No additional file context provided.'}
@@ -675,7 +703,52 @@ class GitlabFn${capitalizedId}Agent extends BaseSpecialistAgent {
 === REQUEST ===
 \${prompt}\`;
 
-        return await GeminiAiService.generateContent(groundedPrompt);
+        let response = await GeminiAiService.generateContent(groundedPrompt);
+
+        // Reflection self-correction loop (1-pass review and correction if code blocks are present)
+        if (response.includes('\`\`\`') && !prompt.includes('no-reflect')) {
+            logger.info(\`🦊 [${spec.id}] Code blocks detected. Initiating automated reflection loop...\`);
+            try {
+                const reflectionPrompt = \`You are the critic evaluator for [${spec.id}].
+Review the following proposed output for correctness, safety, and adherence to GitLab best practices.
+Provide 1-2 points of critical feedback. If it is perfect and compliant, return "APPROVED".
+
+PROPOSED OUTPUT:
+\${response}\`;
+                const reviewResult = await GeminiAiService.generateContent(reflectionPrompt);
+                if (!reviewResult.includes('APPROVED')) {
+                    logger.info(\`🦊 [${spec.id}] Reflection loop identified feedback. Correcting response...\`);
+                    const correctionPrompt = \`\${groundedPrompt}
+                    
+=== PREVIOUS ATTEMPT ===
+\${response}
+
+=== CRITIC FEEDBACK FOR CORRECTION ===
+\${reviewResult}
+
+Please correct the previous attempt based on the feedback above.\`;
+                    response = await GeminiAiService.generateContent(correctionPrompt);
+                }
+            } catch (reflectErr) {
+                logger.warn(\`🦊 [${spec.id}] Reflection loop failed (non-blocking): \${reflectErr.message}\`);
+            }
+        }
+
+        // Asynchronously record this consultation back to the memory store
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                agentMemoryService.observe({
+                    content: \`Agent [${spec.id}] processed query: "\${prompt.substring(0, 150)}..." and generated output.\`,
+                    type: 'agent_consultation',
+                    metadata: { agentId: '${spec.id}', query: prompt }
+                }).catch(() => {});
+            }
+        } catch (observeErr) {
+            logger.debug(\`🦊 [${spec.id}] Storing consultation observation failed (non-blocking): \${observeErr.message}\`);
+        }
+
+        return response;
     }
 }
 
