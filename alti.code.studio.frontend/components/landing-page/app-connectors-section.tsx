@@ -154,7 +154,7 @@ export default function AppConnectorsSection() {
       <div className="max-w-7xl mx-auto flex flex-col gap-16 items-center text-center">
         <div className="flex flex-col gap-6 max-w-5xl w-full px-4">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
-            165 App Connectors. <br />
+            175 App Connectors. <br />
             <span className="text-[#4169E1]">Plug into everything.</span>
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto">
