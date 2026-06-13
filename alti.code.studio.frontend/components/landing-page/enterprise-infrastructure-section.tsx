@@ -15,9 +15,9 @@ export default function EnterpriseInfrastructureSection() {
         </p>
 
         {/* Simplified 2-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl mx-auto text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl mx-auto text-left">
           {/* Card 1: Multi Tenant Private Cloud */}
-          <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
               <Cloud className="w-6 h-6" />
             </div>
@@ -32,7 +32,7 @@ export default function EnterpriseInfrastructureSection() {
           </div>
 
           {/* Card 2: Single Tenant Private Cloud */}
-          <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
               <Lock className="w-6 h-6" />
             </div>
