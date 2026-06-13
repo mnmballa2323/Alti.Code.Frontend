@@ -18,8 +18,8 @@ export default function EnterpriseInfrastructureSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl mx-auto text-left">
           {/* Card 1: Multi Tenant Private Cloud */}
           <div className="relative p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="absolute top-5 right-5 flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white">
-              <Cloud className="w-5 h-5" />
+            <div className="absolute top-6 right-6 text-blue-600">
+              <Cloud className="w-6 h-6" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3 pr-12">
               Multi Tenant Private Cloud
@@ -33,8 +33,8 @@ export default function EnterpriseInfrastructureSection() {
 
           {/* Card 2: Single Tenant Private Cloud */}
           <div className="relative p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-            <div className="absolute top-5 right-5 flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white">
-              <Lock className="w-5 h-5" />
+            <div className="absolute top-6 right-6 text-blue-600">
+              <Lock className="w-6 h-6" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3 pr-12">
               Single Tenant Private Cloud
