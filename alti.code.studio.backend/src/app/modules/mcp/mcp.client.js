@@ -38,6 +38,24 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_CLICKHOUSE',
   },
   {
+    name: 'snowflake',
+    command: 'npx',
+    args: ['-y', '@makotyo/mcp-snowflake'],
+    envKey: 'MCP_ENABLE_SNOWFLAKE',
+  },
+  {
+    name: 'databricks',
+    command: 'npx',
+    args: ['-y', '@squadbase/mcp-databricks'],
+    envKey: 'MCP_ENABLE_DATABRICKS',
+  },
+  {
+    name: 'qdrant',
+    command: 'npx',
+    args: ['-y', '@infoinlet/mcp-qdrant'],
+    envKey: 'MCP_ENABLE_QDRANT',
+  },
+  {
     name: 'filesystem',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-filesystem', process.cwd()],
