@@ -118,7 +118,7 @@ try {
               if (file === 'chron.route.js') basePath = '/scheduler';
               if (file === 'serviceMesh.route.js') basePath = '/service-mesh';
               if (file === 'gateway.route.js') basePath = '/gateway';
-              if (file === 'trace.route.js') basePath = '/trace';
+
               if (file === 'a2a.route.js') basePath = '/a2a';
               if (file === 'mlops.route.js') basePath = '/mlops';
               if (file === 'workspace.route.js') basePath = '/workspace';
