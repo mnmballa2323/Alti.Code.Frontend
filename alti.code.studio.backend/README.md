@@ -23,7 +23,10 @@ Built specifically for banks, governments, defense contractors, healthcare, and 
 - **Bring Your Own Key (BYOK):** Seamless AWS KMS and GCP KMS integration for tenant-level symmetric encryption.
 - **Attribute-Based Access Control (ABAC):** Context-aware policies driven by Clearance Levels and IP Whitelists.
 - **Data Retention & Auto-Expungement (GDPR/HIPAA):** Automated cron jobs prune data beyond configured retention limits, while respecting E-Discovery Legal Holds.
-- **Enterprise WAF & Rate Limiting:** Fortune 100 DDoS and cost-exhaustion protection using `express-rate-limit` and payload deep-packet inspection.
+- **Enterprise WAF & Rate Limiting:** Fortune 100 DDoS and cost-exhaustion protection using `express-rate-limit` and deep-packet payload inspection.
+- **Immutable Audit Logging (SOC 2/FedRAMP):** Cryptographic WORM (Write Once, Read Many) log service that chains each entry with SHA-256 hashes for tamper-evident logging.
+- **SCIM 2.0 Provisioning Sync:** Automated Identity Access Management (IAM) mapping EntraID/Okta signals to zero-trust ABAC clearance levels.
+- **Real-Time SIEM Webhooks:** Instantly dispatches WAF payload injection and ABAC clearance/IP denial alerts to tenant Splunk/Datadog dashboards.
 - **Adversarial Dual-Review (Maker-Checker):** Critical operations require approvals from multiple independent specialist agents.
 
 ---
