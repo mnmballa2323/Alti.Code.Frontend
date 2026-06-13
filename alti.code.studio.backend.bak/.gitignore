@@ -1,7 +1,0 @@
-node_modules/
-logs/
-*.env
-test_output_*.txt
-*.log
-data/chronicle.json
-releases/

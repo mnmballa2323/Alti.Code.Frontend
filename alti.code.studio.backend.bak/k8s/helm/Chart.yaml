@@ -1,6 +1,0 @@
-apiVersion: v2
-name: alti-code-studio-backend
-description: A Helm chart for Alti.Code.Studio Backend
-type: application
-version: 1.0.0
-appVersion: "1.0.0"

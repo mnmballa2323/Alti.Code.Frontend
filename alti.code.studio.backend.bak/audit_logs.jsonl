@@ -1,6 +1,0 @@
-{"timestamp":"2026-02-16T18:47:12.546Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains SSN","piiType":"SSN"},"traceId":"N/A"}
-{"timestamp":"2026-02-16T18:47:12.593Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains API_KEY","piiType":"API_KEY"},"traceId":"N/A"}
-{"timestamp":"2026-02-16T18:48:18.706Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains SSN","piiType":"SSN"},"traceId":"N/A"}
-{"timestamp":"2026-02-16T18:48:18.738Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains API_KEY","piiType":"API_KEY"},"traceId":"N/A"}
-{"timestamp":"2026-02-16T18:50:32.855Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains SSN","piiType":"SSN"},"traceId":"N/A"}
-{"timestamp":"2026-02-16T18:50:32.907Z","actorId":"anonymous","action":"DLP_SCAN","resource":"/api/v1/agents/mission","outcome":"DENIED","metadata":{"reason":"Contains API_KEY","piiType":"API_KEY"},"traceId":"N/A"}
