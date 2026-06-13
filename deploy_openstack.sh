@@ -69,6 +69,7 @@ provision_dns() {
 usage() {
     echo -e "Usage: ./deploy_openstack.sh [options]"
     echo -e "Options:"
+    echo -e "  --tier <individual|team|enterprise>  Deployment tier (default: team)"
     echo -e "  --customer <name>   Unique name/id of the customer tenant (default: generic-tenant)"
     echo -e "  --subnet <cidr>     Private subnet CIDR range for this customer's VPC (default: 10.240.0.0/24)"
     echo -e "  --domain <name>     Custom domain mapping for TLS/SSL routing (default: <customer>.insocode.com)"
@@ -78,9 +79,13 @@ usage() {
     exit 1
 }
 
+# Default variables
+TIER="team"
+
 # Parse command line options
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        --tier) TIER="$2"; shift ;;
         --customer) CUSTOMER="$2"; shift ;;
         --subnet) SUBNET_CIDR="$2"; shift ;;
         --domain) DOMAIN="$2"; shift ;;
@@ -91,6 +96,25 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+# Validate Tier
+if [ "$TIER" == "enterprise" ]; then
+    echo -e "${RED}ERROR: Enterprise tier requires multi-cloud deployment via deploy_enterprise.sh (AWS/Azure/GCP).${NC}"
+    exit 1
+elif [ "$TIER" != "individual" ] && [ "$TIER" != "team" ]; then
+    echo -e "${RED}ERROR: Invalid deployment tier: '$TIER'. Must be 'individual', 'team', or 'enterprise'.${NC}"
+    exit 1
+fi
+
+# Override customer workspace for multi-tenant individual tier
+if [ "$TIER" == "individual" ]; then
+    echo -e "${YELLOW}ℹ Individual Tier selected: Deploying to multi-tenant shared OpenStack VPC...${NC}"
+    CUSTOMER="shared-individual-tenant"
+    # Ensure a larger subnet for the shared VPC
+    SUBNET_CIDR="10.200.0.0/16"
+else
+    echo -e "${YELLOW}ℹ Team Tier selected: Deploying to single-tenant isolated OpenStack VPC...${NC}"
+fi
 
 # Set default domain if not provided
 if [ -z "$DOMAIN" ]; then
