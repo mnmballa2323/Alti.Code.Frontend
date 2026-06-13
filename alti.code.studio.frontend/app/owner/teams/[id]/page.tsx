@@ -154,7 +154,7 @@ export default function TeamDetailPage() {
     if (teamMembers.length > 0) {
       const first = teamMembers[0];
       const priceVal = first.subscriptionPrice !== undefined && first.subscriptionPrice !== null
-        ? `$${first.subscriptionPrice}`
+        ? `$${first.subscriptionPrice.toLocaleString('en-US')}`
         : "$1,000";
       setCustomPrice(priceVal);
     }

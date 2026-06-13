@@ -71,7 +71,7 @@ export default function TeamMembersPage() {
         const initialPrices: Record<string, string> = {};
         res.members.forEach((m: any) => {
           if (m.subscriptionPrice !== undefined && m.subscriptionPrice !== null) {
-            initialPrices[m.id] = `$${m.subscriptionPrice}`;
+            initialPrices[m.id] = `$${m.subscriptionPrice.toLocaleString('en-US')}`;
           }
         });
         setPrices((prev) => ({ ...prev, ...initialPrices }));
