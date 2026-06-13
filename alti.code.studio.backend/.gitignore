@@ -4,6 +4,7 @@ logs/
 test_output_*.txt
 *.log
 data/chronicle.json
+data/state_store.db/
 releases/
 .wireit/
 cloud_sovereign_repos/
