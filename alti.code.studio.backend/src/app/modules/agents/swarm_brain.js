@@ -854,7 +854,6 @@ If you require assistance from another specialized agent to complete your task, 
                     executableNodes.push(childId);
                 }
             }
-            }); // End Trace Span
         };
 
         // Hyperscale Concurrency Control (Semaphore)
