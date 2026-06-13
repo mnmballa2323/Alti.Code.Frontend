@@ -4,7 +4,6 @@ import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import MagicCodeBackground from "./magic-code-background";
 
 export default function HeroSwarm() {
   const [os, setOs] = useState<"mac" | "win" | "other" | null>(null);
@@ -24,8 +23,7 @@ export default function HeroSwarm() {
 
   return (
     <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
-      {/* Magical animated network background */}
-      <MagicCodeBackground />
+
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         {/* Apple-style Headline */}
         <div className="flex flex-col items-center gap-6 relative top-2 md:top-4">
