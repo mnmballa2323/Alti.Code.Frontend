@@ -26,17 +26,19 @@ interface SidebarItem {
 
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
-  { label: "Individual", href: "/owner/team-members", icon: Users },
-  { label: "Teams", href: "/owner/teams", icon: Users },
-  { label: "Enterprise", href: "/owner/enterprise", icon: Users },
-
   { label: "Invoices", href: "/owner/invoices", icon: FileText },
   { label: "Audit Logs", href: "/owner/audit", icon: Activity },
   { label: "Model Usage", href: "/owner/usage", icon: BarChart3 },
 ];
 
+const memberItems: SidebarItem[] = [
+  { label: "Individual", href: "/owner/team-members", icon: Users },
+  { label: "Teams", href: "/owner/teams", icon: Users },
+  { label: "Enterprise", href: "/owner/enterprise", icon: Users },
+];
+
 const managerItems: SidebarItem[] = [
-  { label: "Knowledge", href: "/owner/data", icon: BookOpen },
+
   { label: "Instructions", href: "/owner/instructions", icon: FileText },
   { label: "Guardrails", href: "/owner/guardrails", icon: Shield },
 ];
@@ -128,7 +130,7 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
 
     if (pathname.startsWith("/owner/invoices")) return "Invoices";
-    if (pathname.startsWith("/owner/data")) return "Knowledge";
+
     if (pathname.startsWith("/owner/instructions")) return "Instructions";
     if (pathname.startsWith("/owner/guardrails")) return "Guardrails";
     if (pathname.startsWith("/owner/usage")) return "Model Usage";
@@ -195,6 +197,7 @@ export default function OwnerLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", ownerItems)}
+          {renderNavGroup("Members", memberItems, "mt-8")}
           {renderNavGroup("Platform Manager", managerItems, "mt-8")}
         </div>
 

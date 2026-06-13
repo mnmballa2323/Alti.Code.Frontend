@@ -27,17 +27,19 @@ interface SidebarItem {
 const adminItems: SidebarItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
-  { label: "Individual", href: "/admin/team-members", icon: Users },
-  { label: "Teams", href: "/admin/teams", icon: Users },
-  { label: "Enterprise", href: "/admin/enterprise", icon: Users },
-
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
   { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
 ];
 
+const memberItems: SidebarItem[] = [
+  { label: "Individual", href: "/admin/team-members", icon: Users },
+  { label: "Teams", href: "/admin/teams", icon: Users },
+  { label: "Enterprise", href: "/admin/enterprise", icon: Users },
+];
+
 const managerItems: SidebarItem[] = [
-  { label: "Knowledge", href: "/admin/data", icon: BookOpen },
+
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
 ];
@@ -123,7 +125,7 @@ export default function AdminLayout({
       return "Platform Admin";
     }
     if (
-      pathname.startsWith("/admin/data") ||
+
       pathname.startsWith("/admin/instructions") ||
       pathname.startsWith("/admin/guardrails")
     ) {
@@ -141,7 +143,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/enterprise")) return "Enterprise";
 
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
-    if (pathname.startsWith("/admin/data")) return "Knowledge";
+
     if (pathname.startsWith("/admin/instructions")) return "Instructions";
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
     if (pathname.startsWith("/admin/usage")) return "Model Usage";
@@ -208,6 +210,7 @@ export default function AdminLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
+          {renderNavGroup("Members", memberItems, "mt-8")}
           {renderNavGroup("Platform Manager", managerItems, "mt-8")}
         </div>
 
