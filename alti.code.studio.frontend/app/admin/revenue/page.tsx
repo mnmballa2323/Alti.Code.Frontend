@@ -36,7 +36,7 @@ export default function RevenuePage() {
               <ArrowUpRight className="w-3 h-3 mr-0.5" /> 12%
             </span>
           </div>
-          <p className="text-xs text-neutral-500 mt-2">vs last month</p>
+
         </div>
 
         <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
@@ -50,7 +50,6 @@ export default function RevenuePage() {
               <ArrowUpRight className="w-3 h-3 mr-0.5" /> 15%
             </span>
           </div>
-          <p className="text-xs text-neutral-500 mt-2">vs last year</p>
         </div>
 
         <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
@@ -64,7 +63,6 @@ export default function RevenuePage() {
               <ArrowUpRight className="w-3 h-3 mr-0.5" /> 124
             </span>
           </div>
-          <p className="text-xs text-neutral-500 mt-2">vs last month</p>
         </div>
       </div>
 
