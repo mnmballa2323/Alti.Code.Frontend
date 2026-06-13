@@ -144,6 +144,46 @@ export default function DatabaseConnectorsSection() {
         />
       ),
     },
+    {
+      name: "Qdrant",
+      icon: (
+        <img
+          alt="Qdrant"
+          className="w-8 h-8 object-contain"
+          src="https://cdn.simpleicons.org/qdrant"
+        />
+      ),
+    },
+    {
+      name: "Milvus",
+      icon: (
+        <img
+          alt="Milvus"
+          className="w-8 h-8 object-contain"
+          src="https://cdn.simpleicons.org/milvus"
+        />
+      ),
+    },
+    {
+      name: "SurrealDB",
+      icon: (
+        <img
+          alt="SurrealDB"
+          className="w-8 h-8 object-contain"
+          src="https://cdn.simpleicons.org/surrealdb"
+        />
+      ),
+    },
+    {
+      name: "InfluxDB",
+      icon: (
+        <img
+          alt="InfluxDB"
+          className="w-8 h-8 object-contain"
+          src="https://cdn.simpleicons.org/influxdb"
+        />
+      ),
+    },
   ];
 
   // Duplicate the array to create a seamless infinite scrolling effect
