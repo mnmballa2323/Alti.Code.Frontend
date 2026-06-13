@@ -334,6 +334,8 @@ export default function EnterpriseDetailPage() {
                     <option value="$1,000">$1,000</option>
                     <option value="$1,250">$1,250</option>
                     <option value="$1,500">$1,500</option>
+                    <option value="$2,000">$2,000</option>
+                    <option value="$2,500">$2,500</option>
                   </select>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                     <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
