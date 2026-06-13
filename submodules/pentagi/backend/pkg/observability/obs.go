@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"pentagi/pkg/observability/langfuse"
 	"pentagi/pkg/version"
 	"reflect"
 	"runtime"
@@ -83,12 +82,9 @@ type Observability interface {
 	Meter
 	Tracer
 	Collector
-	Langfuse
 }
 
-type Langfuse interface {
-	NewObservation(context.Context, ...langfuse.ObservationContextOption) (context.Context, langfuse.Observation)
-}
+
 
 type Tracer interface {
 	NewSpan(context.Context, oteltrace.SpanKind, string, ...oteltrace.SpanStartOption) (context.Context, oteltrace.Span)

@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
@@ -38,7 +37,6 @@ class ObservabilityService extends EventEmitter {
     }
 
     init() {
-
 
         // Initialize GCP Logging client in production environments
         if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
@@ -115,8 +113,6 @@ class ObservabilityService extends EventEmitter {
             Object.assign(t, metadata);
         }
     }
-
-
 
     /**
      * Get recent traces for the Agent Dashboard
