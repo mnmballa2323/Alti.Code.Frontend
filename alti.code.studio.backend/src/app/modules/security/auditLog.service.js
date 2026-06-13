@@ -21,7 +21,7 @@ class AuditLogService {
      * Log an action to the Immutable Audit Ledger
      */
     async logAction(params) {
-        const { tenantId, userId, userEmail, action, resource, ipAddress, userAgent, status, metadata = {} } = params;
+        const { tenantId, productId, userId, userEmail, action, resource, ipAddress, userAgent, status, metadata = {} } = params;
 
         try {
             // Retrieve previous hash from the DB (simplification for single-tenant / scaling)
@@ -31,13 +31,14 @@ class AuditLogService {
             });
             const previousHash = lastLog?.hash || this.lastHash;
 
-            // Generate cryptographic hash of this new log entry
-            const payloadString = JSON.stringify({ tenantId, userId, action, resource, timestamp: Date.now(), previousHash });
+            // Generate cryptographic hash of this new log entry (scoped to productId)
+            const payloadString = JSON.stringify({ tenantId, productId, userId, action, resource, timestamp: Date.now(), previousHash });
             const currentHash = crypto.createHash('sha256').update(payloadString).digest('hex');
 
             const auditEntry = await prisma.auditLog.create({
                 data: {
                     tenantId,
+                    productId,
                     actor: userEmail || userId || 'system',
                     action,
                     ipAddress,
