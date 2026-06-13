@@ -162,15 +162,10 @@ export default function OwnerLayout({
 
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between px-10">
-          <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-            {isMemberDetail
-              ? activeMemberName || "Ada Lovelace"
-              : getPageTitle()}
-          </span>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
             {isMemberDetail && (
               <Link
-                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
+                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent mr-2"
                 href={isTeamsDetail ? "/owner/teams" : "/owner/team-members"}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -179,21 +174,11 @@ export default function OwnerLayout({
                 </span>
               </Link>
             )}
-            {profile && (
-              <div className="flex items-center gap-3">
-                <div className="flex flex-col items-end">
-                  <span className="text-xs font-semibold text-neutral-900 dark:text-neutral-150">
-                    {profile.email}
-                  </span>
-                  <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
-                    {profile.role || "Owner"}
-                  </span>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 font-bold text-xs">
-                  {(profile.email || "O").charAt(0).toUpperCase()}
-                </div>
-              </div>
-            )}
+            <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+              {isMemberDetail
+                ? activeMemberName || "Ada Lovelace"
+                : getPageTitle()}
+            </span>
           </div>
         </div>
       </div>
