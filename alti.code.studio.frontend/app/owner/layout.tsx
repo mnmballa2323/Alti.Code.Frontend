@@ -29,6 +29,7 @@ const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Individual", href: "/owner/team-members", icon: Users },
   { label: "Teams", href: "/owner/teams", icon: Users },
+  { label: "Enterprise", href: "/owner/enterprise", icon: Users },
   { label: "Billing", href: "/owner/billing", icon: CreditCard },
   { label: "Invoices", href: "/owner/invoices", icon: FileText },
   { label: "Audit Logs", href: "/owner/audit", icon: Activity },
@@ -57,10 +58,14 @@ export default function OwnerLayout({
   const isTeamsDetail =
     pathname.startsWith("/owner/teams/") && pathname !== "/owner/teams";
 
+  const isEnterpriseDetail =
+    pathname.startsWith("/owner/enterprise/") && pathname !== "/owner/enterprise";
+
   const isMemberDetail =
     (pathname.startsWith("/owner/team-members/") &&
       pathname !== "/owner/team-members") ||
-    isTeamsDetail;
+    isTeamsDetail ||
+    isEnterpriseDetail;
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -119,6 +124,7 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/members")) return "Invite";
     if (pathname.startsWith("/owner/team-members")) return "Individual";
     if (pathname.startsWith("/owner/teams")) return "Teams";
+    if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
     if (pathname.startsWith("/owner/billing")) return "Billing";
     if (pathname.startsWith("/owner/invoices")) return "Invoices";
     if (pathname.startsWith("/owner/data")) return "Knowledge";
@@ -162,11 +168,11 @@ export default function OwnerLayout({
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href={isTeamsDetail ? "/owner/teams" : "/owner/team-members"}
+                href={isEnterpriseDetail ? "/owner/enterprise" : isTeamsDetail ? "/owner/teams" : "/owner/team-members"}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
-                  {isTeamsDetail ? "Back to Teams" : "Back to Individual"}
+                  {isEnterpriseDetail ? "Back to Enterprise" : isTeamsDetail ? "Back to Teams" : "Back to Individual"}
                 </span>
               </Link>
             )}

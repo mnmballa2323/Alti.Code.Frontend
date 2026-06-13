@@ -17,7 +17,7 @@ interface Member {
   subscriptionPrice?: number;
 }
 
-export default function TeamDetailPage() {
+export default function EnterpriseDetailPage() {
   const params = useParams();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -182,8 +182,8 @@ export default function TeamDetailPage() {
       setEditModalOpen(false);
       await fetchMembers();
     } catch (err) {
-      console.error("Failed to update team pricing:", err);
-      alert("Failed to update team pricing. Please try again.");
+      console.error("Failed to update enterprise pricing:", err);
+      alert("Failed to update enterprise pricing. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -194,7 +194,7 @@ export default function TeamDetailPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">Loading team details...</p>
+          <p className="text-sm text-neutral-500">Loading enterprise details...</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -299,14 +299,14 @@ export default function TeamDetailPage() {
             </button>
 
             <h2 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-6">
-              Edit Team Pricing
+              Edit Enterprise Pricing
             </h2>
 
             <div className="space-y-4">
               {/* Team Name */}
               <div>
                 <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
-                  Team Name
+                  Enterprise Name
                 </label>
                 <input
                   readOnly

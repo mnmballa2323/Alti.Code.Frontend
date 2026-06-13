@@ -29,6 +29,7 @@ const adminItems: SidebarItem[] = [
   { label: "Invite", href: "/admin/members", icon: UserPlus },
   { label: "Individual", href: "/admin/team-members", icon: Users },
   { label: "Teams", href: "/admin/teams", icon: Users },
+  { label: "Enterprise", href: "/admin/enterprise", icon: Users },
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
@@ -54,10 +55,14 @@ export default function AdminLayout({
   const isTeamsDetail =
     pathname.startsWith("/admin/teams/") && pathname !== "/admin/teams";
 
+  const isEnterpriseDetail =
+    pathname.startsWith("/admin/enterprise/") && pathname !== "/admin/enterprise";
+
   const isMemberDetail =
     (pathname.startsWith("/admin/team-members/") &&
       pathname !== "/admin/team-members") ||
-    isTeamsDetail;
+    isTeamsDetail ||
+    isEnterpriseDetail;
 
   useEffect(() => {
     if (profile) {
@@ -132,6 +137,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/members")) return "Invite";
     if (pathname.startsWith("/admin/team-members")) return "Individual";
     if (pathname.startsWith("/admin/teams")) return "Teams";
+    if (pathname.startsWith("/admin/enterprise")) return "Enterprise";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
     if (pathname.startsWith("/admin/data")) return "Knowledge";
@@ -175,11 +181,11 @@ export default function AdminLayout({
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href={isTeamsDetail ? "/admin/teams" : "/admin/team-members"}
+                href={isEnterpriseDetail ? "/admin/enterprise" : isTeamsDetail ? "/admin/teams" : "/admin/team-members"}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
-                  {isTeamsDetail ? "Back to Teams" : "Back to Individual"}
+                  {isEnterpriseDetail ? "Back to Enterprise" : isTeamsDetail ? "Back to Teams" : "Back to Individual"}
                 </span>
               </Link>
             )}
