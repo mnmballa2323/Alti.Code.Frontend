@@ -101,11 +101,11 @@ for i in "${!PHASES[@]}"; do
     
     # Step 4a: Spec-Driven Implementation (TDD first)
     echo -e "${CYAN}• Step 4a: Executing TDD Implementation pass...${NC}"
-    claude -p "Read the current state from $CONTEXT_FILE. Implement $phase. Focus on the backend files. Write unit/integration tests first. Ensure everything integrates cleanly."
+    npx -y @anthropic-ai/claude-code -p "Read the current state from $CONTEXT_FILE. Implement $phase. Focus on the backend files. Write unit/integration tests first. Ensure everything integrates cleanly."
     
     # Step 4b: De-Sloppify (Auto-cleanup pass)
     echo -e "${CYAN}• Step 4b: Executing De-Sloppify cleanup pass...${NC}"
-    claude -p "Review the changes made in the working tree for $phase. Remove any redundant runtime checks that the TypeScript type system already guarantees, framework-only tests, console.logs, or commented code. Keep all business logic and compliance validation tests."
+    npx -y @anthropic-ai/claude-code -p "Review the changes made in the working tree for $phase. Remove any redundant runtime checks that the TypeScript type system already guarantees, framework-only tests, console.logs, or commented code. Keep all business logic and compliance validation tests."
 
     # Step 4c: Quality Gate Verification (Vitest runner)
     echo -e "${CYAN}• Step 4c: Executing Quality Gate verification...${NC}"
@@ -117,12 +117,12 @@ for i in "${!PHASES[@]}"; do
     else
         echo -e "${RED}❌ Quality Gate failed! Deploying auto-fix pass...${NC}"
         cd ..
-        claude -p "The test suite failed after implementing $phase. Analyze test logs, fix any failing tests or compilation errors, and run tests again until they pass. Do not add new features."
+        npx -y @anthropic-ai/claude-code -p "The test suite failed after implementing $phase. Analyze test logs, fix any failing tests or compilation errors, and run tests again until they pass. Do not add new features."
     fi
 
     # Step 4d: Context Bridge Updates
     echo -e "${CYAN}• Step 4d: Updating shared context bridge...${NC}"
-    claude -p "Update $CONTEXT_FILE. Mark Phase $((i + 10)) as completed under Progress. Outline details of what was changed and specify priorities for subsequent phases under Next Steps."
+    npx -y @anthropic-ai/claude-code -p "Update $CONTEXT_FILE. Mark Phase $((i + 10)) as completed under Progress. Outline details of what was changed and specify priorities for subsequent phases under Next Steps."
 
     # Step 4e: Auto-Commit changes
     echo -e "${CYAN}• Step 4e: Auto-committing completed changes...${NC}"

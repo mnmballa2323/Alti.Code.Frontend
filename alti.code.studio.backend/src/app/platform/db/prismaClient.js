@@ -62,14 +62,20 @@ const clientPool = new Map();
  * Safely parses the base database connection URL and injects/overrides the schema query parameter
  * @param {string} baseDbUrl - Base PostgreSQL connection URL
  * @param {string} tenantId - Tenant UUID string
+ * @param {string} [productId] - Optional Product ID string
  * @returns {string} Fully formatted schema connection URL
  */
-export const getSchemaConnectionUrl = (baseDbUrl, tenantId) => {
+export const getSchemaConnectionUrl = (baseDbUrl, tenantId, productId) => {
   if (!baseDbUrl) return '';
   if (!tenantId) return baseDbUrl;
 
   const sanitizedTenantId = tenantId.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-  const schemaName = `tenant_${sanitizedTenantId}`;
+  let schemaName = `tenant_${sanitizedTenantId}`;
+
+  if (productId) {
+    const sanitizedProductId = productId.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    schemaName = `${schemaName}_product_${sanitizedProductId}`;
+  }
 
   try {
     const url = new URL(baseDbUrl);
