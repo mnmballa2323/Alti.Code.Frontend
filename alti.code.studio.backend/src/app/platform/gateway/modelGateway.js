@@ -13,7 +13,7 @@
  */
 
 import { VertexAI } from '@google-cloud/vertexai';
-import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
+import { AzureOpenAI } from 'openai';
 import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
@@ -243,17 +243,21 @@ export const routePlatformCompletion = async ({
         }
 
         // Initialize Azure OpenAI client from @azure/openai
-        const client = new OpenAIClient(azureEndpoint, new AzureKeyCredential(azureApiKey));
+        const client = new AzureOpenAI({
+          endpoint: azureEndpoint,
+          apiKey: azureApiKey,
+          apiVersion: '2024-02-15-preview'
+        });
 
         const deploymentName = model.replace(/^azure\//, '');
-        const response = await callWithRetry(() => client.getChatCompletions(deploymentName, [
-          { role: 'user', content: activePrompt }
-        ], {
+        const response = await callWithRetry(() => client.chat.completions.create({
+          model: deploymentName,
+          messages: [{ role: 'user', content: activePrompt }],
           temperature
         }));
 
         if (response?.usage) {
-          tokensConsumed = response.usage.totalTokens || 0;
+          tokensConsumed = response.usage.total_tokens || 0;
         }
 
         resultText = response.choices[0].message.content;
