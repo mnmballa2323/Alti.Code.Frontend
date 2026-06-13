@@ -182,12 +182,7 @@ const initialNodes: Node[] = [
   },
 
   // Observability & Evaluation
-  {
-    id: "langfuse",
-    position: { x: 950, y: 100 },
-    data: { label: "Langfuse Tracing" },
-    style: nodeStyles.observability,
-  },
+
   {
     id: "prometheus",
     position: { x: 950, y: 180 },
@@ -281,13 +276,7 @@ const initialEdges: Edge[] = [
   { id: "e-lang-mcp", source: "langgraph", target: "mcp" },
 
   // Observability edges (dash)
-  {
-    id: "e-litellm-langfuse",
-    source: "litellm",
-    target: "langfuse",
-    animated: true,
-    style: { strokeDasharray: "5 5" },
-  },
+
   {
     id: "e-kong-prom",
     source: "kong",

@@ -105,13 +105,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Cloud",
     spotlight: true,
   },
-  {
-    name: "elevenlabs",
-    description: "Text-to-speech, voice design and audio processing.",
-    githubUrl: "https://github.com/elevenlabs/elevenlabs-mcp",
-    category: "Media",
-    spotlight: true,
-  },
+
   {
     name: "mcp-neo4j",
     description: "Neo4j Labs MCP servers.",
