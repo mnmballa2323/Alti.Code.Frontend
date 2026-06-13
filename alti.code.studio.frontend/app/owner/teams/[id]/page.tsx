@@ -310,7 +310,7 @@ export default function TeamDetailPage() {
                 </label>
                 <input
                   readOnly
-                  className="w-full px-4 py-3 bg-neutral-50 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm text-neutral-500 dark:text-neutral-455 focus:outline-none cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm text-neutral-500 dark:text-neutral-455 focus:outline-none cursor-not-allowed"
                   type="text"
                   value={teamName}
                 />
@@ -323,7 +323,7 @@ export default function TeamDetailPage() {
                 </label>
                 <div className="relative">
                   <select
-                    className="w-full px-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
+                    className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
                     value={customPrice}
                     onChange={(e) => setCustomPrice(e.target.value)}
                   >
