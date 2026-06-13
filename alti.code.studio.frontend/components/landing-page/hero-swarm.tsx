@@ -16,7 +16,7 @@ export default function HeroSwarm() {
           <span className="text-5xl md:text-7xl lg:text-[5.5rem]">
             Private and Secure
           </span>
-          <span className="text-[2.2rem] md:text-[3.2rem] lg:text-[3.8rem] tracking-tight text-gray-800 mt-3">
+          <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-black mt-3 whitespace-nowrap">
             autonomous software engineering.
           </span>
         </h1>
