@@ -197,23 +197,24 @@ export default function TeamDetailPage() {
               </p>
             </div>
             
-            <div className="flex flex-col items-end shrink-0">
-              {/* Monthly price per member (visible when not hovered) */}
-              <span className="text-xl font-bold text-neutral-900 dark:text-white group-hover:hidden transition-all duration-200">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(memberPrice)}/mo
-              </span>
+            <div className="relative w-36 h-14 shrink-0">
+               {/* Monthly price per member (visible when not hovered) */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
+                <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(memberPrice)}/mo
+                </span>
+                <span className="mt-1.5 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
+                  {teamMembers.length} {teamMembers.length === 1 ? "Member" : "Members"}
+                </span>
+              </div>
               
               {/* Edit pencil icon (visible on hover) */}
               <button
-                className="hidden group-hover:flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer"
+                className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200"
                 onClick={() => setEditModalOpen(true)}
               >
                 <Pencil className="w-4 h-4" />
               </button>
-
-              <span className="mt-2 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750">
-                {teamMembers.length} {teamMembers.length === 1 ? "Member" : "Members"}
-              </span>
             </div>
           </div>
 
