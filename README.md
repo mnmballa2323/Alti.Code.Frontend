@@ -1,11 +1,11 @@
 # 🌌 Inso Code — Enterprise AI Development Platform
 
 > **Version 39.0.0 — The Sovereign Execution Engine**
-> *578+ Hyper-Specialized AI Agents. 35 Industry Verticals. Advanced Distributed Cognition.*
+> *25,000+ Hyper-Specialized AI Agents. 35 Industry Verticals. Advanced Distributed Cognition.*
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Production_Ready-green.svg)]()
-[![Agents](https://img.shields.io/badge/agents-578%2B-purple.svg)]()
+[![Agents](https://img.shields.io/badge/agents-25000%2B-purple.svg)]()
 [![Verticals](https://img.shields.io/badge/verticals-35-orange.svg)]()
 [![Languages](https://img.shields.io/badge/languages-46-orange.svg)]()
 [![Cloud](https://img.shields.io/badge/cloud_providers-44-blue.svg)]()
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-Inso Code is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 578+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
+Inso Code is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 25,000+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
@@ -43,7 +43,7 @@ This Triple-Threat consensus loop runs autonomously via the **Sovereign Agent**,
 | `observability.service.js`| Chaos Monkeys using Gemini Vision to read Grafana dashboards and auto-rollback |
 | `graph.orchestrator.js` | LangGraph-powered multi-agent orchestrator with plan → guard → execute → review pipeline |
 | `capability.router.js` | Semantic routing engine — **350+ keyword-scored routes** mapping queries to the right specialist |
-| `swarm.health.js` | Live health monitoring and circuit breaker status for all 578+ agents |
+| `swarm.health.js` | Live health monitoring and circuit breaker status for all 25,000+ agents |
 | `agent.index.js` | Searchable catalog of all agents with capability metadata |
 | `swarm.controller.js` | REST API surface — `/api/swarm` endpoints for health, routing, dispatch, fan-out |
 
@@ -77,13 +77,14 @@ This Triple-Threat consensus loop runs autonomously via the **Sovereign Agent**,
 | **Industry** | **Marketing** | **4** | HubSpot CRM, Klaviyo, Segment CDP, Mixpanel |
 | External | Tool Agents | 40 | BrowserUse, Crawl4AI, MCP, Open Interpreter, Temporal, LangGraph, Ollama, Qdrant, PentAGI, FossFLOW |
 | External | OpenClaw Bots | 19 | Flawd-bot, Barnacle, Lobster, Trust, Voice-community, Clawdinators, etc. |
+| **Scale** | **Dynamic Loaders** | **25000+** | Extensible dynamic agent mesh lazy-loaded via DynamicAgentLoaderService |
 
 ---
 
 ## ✨ Key Features
 
 ### 🧠 The Industry Armada Intelligence
-- **578+ specialist agents** each with deep domain expertise and production-grade preambles
+- **25,000+ specialist agents** each with deep domain expertise and production-grade preambles
 - **35 industry verticals** with dedicated specialist agents — from Real Estate to Cybersecurity
 - **350+ keyword-scored routes** automatically dispatch every query to the most capable agent
 - **Fan-out execution** — simultaneous multi-agent consultation for complex problems

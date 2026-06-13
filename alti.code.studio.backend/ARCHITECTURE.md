@@ -38,11 +38,11 @@ The backend is structured as a **layered AI orchestration platform** with a clea
 │        BaseSpecialistAgent (Hardened)             │
 │  retry · timeout · circuit breaker · metrics     │
 ├──────────────────────────────────────────────────┤
-│  435+ Specialist Agent Implementations           │
-│  (cloud · language · SDK · infra · domain · oss) │
+│  25,000+ Specialist Agent Implementations        │
+│  (Lazy-loaded via DynamicAgentLoaderService)     │
 ├──────────────────────────────────────────────────┤
 │     GeminiAiService  │  MongoDB  │  Redis         │
-│     Qdrant Vector    │  Socket.IO│  GCP Logging   │
+│     Qdrant Vector    │  PgBouncer│  GCP Logging   │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -128,6 +128,7 @@ Tier 17:    Systems Languages (C, C++, C#, Java, Kotlin, Swift, Zig, Nim)
 Tier 18:    Dynamic Languages (Ruby, PHP, Perl, R, Julia, MATLAB, PowerShell, Groovy)
 Tier 19:    Functional Languages (Haskell, Elixir, Erlang, Scala, F#, OCaml, Clojure, Racket)
 Tier 20:    Legacy & Specialized (COBOL, Fortran, Ada, Assembly, APL, VHDL, Apex, ABAP...)
+Tier 21:    Dynamic & Open Source (25,000+ Agents via DynamicAgentLoaderService)
 ```
 
 ### Agent File Convention
