@@ -130,7 +130,7 @@ export default function AdminLayout({
       pathname.startsWith("/admin/instructions") ||
       pathname.startsWith("/admin/guardrails")
     ) {
-      return "Platform Manager";
+      return "Platform Controls";
     }
 
     return "Platform Admin";
@@ -211,8 +211,8 @@ export default function AdminLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
-          {renderNavGroup("Members", memberItems, "mt-8")}
-          {renderNavGroup("Platform Manager", managerItems, "mt-8")}
+          {renderNavGroup("Member Management", memberItems, "mt-8")}
+          {renderNavGroup("Platform Controls", managerItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
