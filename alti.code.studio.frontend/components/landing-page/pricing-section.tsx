@@ -21,7 +21,7 @@ const plans = [
     cta: "Upgrade Team",
     buttonClass:
       "bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600",
-    cloudType: "Single-Tenant Private Cloud",
+    cloudType: "Multi-Tenant Private Cloud",
   },
   {
     name: "Enterprise",
@@ -31,7 +31,7 @@ const plans = [
     cta: "Contact Enterprise",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
-    cloudType: "Bring Your Own Cloud",
+    cloudType: "Single-Tenant Private Cloud",
   },
 ];
 
