@@ -20,6 +20,9 @@ import {
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
+import { FaAws } from "react-icons/fa6";
+import { VscAzure } from "react-icons/vsc";
+import { SiGooglecloud } from "react-icons/si";
 
 interface SidebarItem {
   label: string;
@@ -49,9 +52,9 @@ const managerItems: SidebarItem[] = [
 
 const cloudItems: SidebarItem[] = [
   { label: "Liberty Center One", href: "/admin/liberty", icon: Server },
-  { label: "Amazon Web Services", href: "/admin/aws", icon: Cloud },
-  { label: "Microsoft Azure", href: "/admin/azure", icon: Cloud },
-  { label: "Google Cloud", href: "/admin/google", icon: Cloud },
+  { label: "Amazon Web Services", href: "/admin/aws", icon: FaAws },
+  { label: "Microsoft Azure", href: "/admin/azure", icon: VscAzure },
+  { label: "Google Cloud", href: "/admin/google", icon: SiGooglecloud },
 ];
 
 export default function AdminLayout({
