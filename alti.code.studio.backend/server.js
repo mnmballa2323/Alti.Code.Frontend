@@ -23,6 +23,7 @@ import config from './config/index.js';
 import app from './index.js'; // Make sure this exists and exports an Express app
 import { logger } from './src/shared/logger.js';
 import { agentRegistry } from './src/app/modules/agents/agent.registry.js';
+import { startDataRetentionCron } from './src/app/scripts/dataRetention.cron.js';
 import crypto from 'crypto';
 
 // Enforce FIPS 140-3 Cryptography for Defense/Gov (DoD IL5/IL6)

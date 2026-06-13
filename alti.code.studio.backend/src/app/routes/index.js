@@ -26,8 +26,9 @@ import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
 import { scimRoutes } from '@inso/platform';
 
-// 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection)
+// 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection & Headers)
 router.use(enterpriseWAF.rateLimiter);
+router.use(enterpriseWAF.securityHeaders);
 router.use(enterpriseWAF.payloadInspector);
 
 // Public Routes
