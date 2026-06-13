@@ -1,7 +1,8 @@
 export const getUserData = async (accessToken: string) => {
   try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000/api/v1";
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/user/single-user`,
+      `${apiUrl}/auth/user/single-user`,
       {
         method: "GET",
         headers: {
@@ -14,12 +15,14 @@ export const getUserData = async (accessToken: string) => {
     const result = await response.json();
 
     if (!response.ok || !result.success) {
-      throw new Error(result.message || "Failed to fetch user data");
+      return { success: false, message: result.message || "Failed to fetch user data" };
     }
 
     return result;
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    throw error;
+    // Return a failure object instead of throwing so it doesn't crash the Next.js app 
+    // when the backend server is not running locally.
+    console.warn("Backend unreachable for getUserData:", error);
+    return { success: false, message: "Network error or backend is unreachable." };
   }
 };

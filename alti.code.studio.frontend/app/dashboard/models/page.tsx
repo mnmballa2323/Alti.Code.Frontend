@@ -67,7 +67,7 @@ const models = [
   {
     id: 1,
     name: "GPT-5",
-    providedBy: "OpenAI",
+    providedBy: "Azure Foundry",
     icon: Logo3,
     description:
       "Reasoning and precision for complex coding, debugging, and architecture.",
@@ -75,7 +75,7 @@ const models = [
   {
     id: 2,
     name: "Claude Sonnet 4",
-    providedBy: "Anthropic",
+    providedBy: "AWS Bedrock",
     icon: Logo2,
     description:
       "Exceptional at code comprehension, refactoring, and writing clean code.",
