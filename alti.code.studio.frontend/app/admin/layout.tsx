@@ -164,9 +164,17 @@ export default function AdminLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between px-10">
           <div className="flex items-center gap-3">
+            <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+              {isMemberDetail
+                ? activeMemberName || "Ada Lovelace"
+                : getPageTitle()}
+            </span>
+          </div>
+
+          <div className="flex items-center">
             {isMemberDetail && (
               <Link
-                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent mr-2"
+                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
                 href={isTeamsDetail ? "/admin/teams" : "/admin/team-members"}
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -175,11 +183,6 @@ export default function AdminLayout({
                 </span>
               </Link>
             )}
-            <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-              {isMemberDetail
-                ? activeMemberName || "Ada Lovelace"
-                : getPageTitle()}
-            </span>
           </div>
         </div>
       </div>
