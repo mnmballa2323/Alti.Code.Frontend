@@ -12,11 +12,11 @@ interface Transaction {
 }
 
 const mockTransactions: Transaction[] = [
-  { id: "TXN-001", customer: "Acme Corp", date: "June 12, 2026", amount: "$1,200.00", plan: "Enterprise" },
-  { id: "TXN-002", customer: "John Doe", date: "June 11, 2026", amount: "$40.00", plan: "Individual" },
-  { id: "TXN-003", customer: "Beta Labs", date: "June 10, 2026", amount: "$300.00", plan: "Teams" },
-  { id: "TXN-004", customer: "Globex Inc", date: "June 09, 2026", amount: "$1,200.00", plan: "Enterprise" },
-  { id: "TXN-005", customer: "Jane Smith", date: "June 08, 2026", amount: "$40.00", plan: "Individual" },
+  { id: "TXN-001", customer: "admin@acme.corp", date: "June 12, 2026", amount: "$1,200.00", plan: "Enterprise" },
+  { id: "TXN-002", customer: "johndoe@gmail.com", date: "June 11, 2026", amount: "$40.00", plan: "Individual" },
+  { id: "TXN-003", customer: "team@betalabs.io", date: "June 10, 2026", amount: "$300.00", plan: "Teams" },
+  { id: "TXN-004", customer: "billing@globex.inc", date: "June 09, 2026", amount: "$1,200.00", plan: "Enterprise" },
+  { id: "TXN-005", customer: "jane.smith@yahoo.com", date: "June 08, 2026", amount: "$40.00", plan: "Individual" },
 ];
 
 export default function RevenuePage() {
