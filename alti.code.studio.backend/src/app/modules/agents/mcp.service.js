@@ -40,18 +40,6 @@ class McpBridgeService extends EventEmitter {
 
       if (parsedConfig.mcpServers) {
         for (const [name, config] of Object.entries(parsedConfig.mcpServers)) {
-          // Harden & Secure check for Peekaboo
-          if (name === 'peekaboo') {
-            if (
-              process.platform !== 'darwin' ||
-              process.env.ENABLE_DESKTOP_AUTOMATION !== 'true'
-            ) {
-              logger.warn(
-                '⚠️ [MCP] Peekaboo disabled. Requires macOS (darwin) and ENABLE_DESKTOP_AUTOMATION=true.',
-              );
-              continue;
-            }
-          }
           this.registerServer(name, config);
         }
       }

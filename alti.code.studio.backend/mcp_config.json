@@ -12,13 +12,6 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": ""
       }
     },
-    "peekaboo": {
-      "command": "npx",
-      "args": ["-y", "@steipete/peekaboo"],
-      "env": {
-        "PEEKABOO_AI_PROVIDERS": "anthropic/claude-3-5-sonnet"
-      }
-    },
     "graphify": {
       "command": "/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/submodules/graphify/.venv/bin/python",
       "args": ["-m", "graphify", "mcp"],
