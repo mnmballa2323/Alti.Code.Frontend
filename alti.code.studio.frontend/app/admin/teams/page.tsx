@@ -186,7 +186,7 @@ export default function TeamsPage() {
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
               <div className="col-span-9">Team Name</div>
-              <div className="col-span-3 text-right pr-4">Members</div>
+              <div className="col-span-3 text-right pr-12">Members</div>
             </div>
           </div>
 
