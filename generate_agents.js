@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const targetCount = 9939; // 10000 total - 61 base = 9939 custom agents
+const targetCount = 13471; // 25000 total - 11529 sharded base = 13471 custom agents
 const agentsDir = path.join(__dirname, 'alti.code.studio.backend', 'src', 'app', 'modules', 'agents', 'custom');
 
 if (!fs.existsSync(agentsDir)) {
