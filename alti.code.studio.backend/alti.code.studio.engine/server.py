@@ -149,10 +149,7 @@ async def create_index(request: RAGIndexRequest):
     global index
     try:
         from llama_index.core import Document, VectorStoreIndex, Settings
-        from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-
-        # Configure Settings (CPU optimized)
-        Settings.embed_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
+        # Embed model removed per Tri-Cloud strategy
         
         logger.warning("Generation will be simulated. RAG requires connection to Azure Foundry or AWS Bedrock.")
 

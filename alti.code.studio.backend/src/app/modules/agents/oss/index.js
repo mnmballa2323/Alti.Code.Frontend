@@ -25,7 +25,7 @@ export { honoOssAgent } from './hono.agent.js';
 
 // ── Category 3: AI / ML ───────────────────────────────────────────────────────
 export { pytorchOssAgent } from './pytorch.agent.js';
-export { huggingfaceOssAgent } from './huggingface.agent.js';
+
 export { langchainOssAgent } from './langchain.agent.js';
 export { ollamaOssAgent } from './ollama.agent.js';
 

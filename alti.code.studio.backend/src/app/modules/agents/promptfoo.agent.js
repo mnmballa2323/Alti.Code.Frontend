@@ -45,7 +45,7 @@ CONFIGURATION STRUCTURE (promptfooconfig.yaml):
     - id: azureopenai:gpt-4        # Azure OpenAI
       config: { apiHost: 'myendpoint.openai.azure.com', deploymentName: 'gpt4' }
     - id: ollama:llama3             # Local Ollama
-    - id: huggingface:text-generation:mistralai/Mistral-7B-v0.1
+
   
   # Prompts to test (A/B comparison of preambles)
   prompts:
