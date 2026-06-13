@@ -20,6 +20,24 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_MCP_TOOLBOX',
   },
   {
+    name: 'pinecone',
+    command: 'npx',
+    args: ['-y', '@pinecone-database/mcp'],
+    envKey: 'MCP_ENABLE_PINECONE',
+  },
+  {
+    name: 'neo4j',
+    command: 'npx',
+    args: ['-y', '@nibronix/mcp-neo4j-server'],
+    envKey: 'MCP_ENABLE_NEO4J',
+  },
+  {
+    name: 'clickhouse',
+    command: 'npx',
+    args: ['-y', '@infoinlet/mcp-clickhouse'],
+    envKey: 'MCP_ENABLE_CLICKHOUSE',
+  },
+  {
     name: 'filesystem',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-filesystem', process.cwd()],
