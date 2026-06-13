@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DollarSign, ArrowUpRight, ArrowDownRight, CreditCard } from "lucide-react";
+import { DollarSign, ArrowUpRight, ArrowDownRight, Users } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -55,13 +55,13 @@ export default function RevenuePage() {
 
         <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Net Churn Rate</h3>
-            <CreditCard className="w-5 h-5 text-neutral-400" />
+            <h3 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">Total Users</h3>
+            <Users className="w-5 h-5 text-neutral-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-neutral-900 dark:text-white">1.2%</span>
+            <span className="text-3xl font-bold text-neutral-900 dark:text-white">1,245</span>
             <span className="text-sm font-medium text-emerald-500 flex items-center">
-              <ArrowDownRight className="w-3 h-3 mr-0.5" /> 0.3%
+              <ArrowUpRight className="w-3 h-3 mr-0.5" /> 124
             </span>
           </div>
           <p className="text-xs text-neutral-500 mt-2">vs last month</p>
