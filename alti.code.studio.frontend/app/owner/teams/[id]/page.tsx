@@ -154,7 +154,7 @@ export default function TeamDetailPage() {
     if (teamMembers.length > 0) {
       const first = teamMembers[0];
       const priceVal = first.subscriptionPrice !== undefined && first.subscriptionPrice !== null
-        ? `$${first.subscriptionPrice.toLocaleString('en-US')}`
+        ? `$${Number(first.subscriptionPrice).toLocaleString('en-US')}`
         : "$1,000";
       setCustomPrice(priceVal);
     }
@@ -165,7 +165,9 @@ export default function TeamDetailPage() {
     try {
       // Update all team members' price in parallel
       await Promise.all(
-        teamMembers.map((m) => teamAPI.updateMemberPrice(m.id, customPrice))
+        teamMembers
+          .filter(m => !["current-user", "owner-1", "admin-1"].includes(m.id))
+          .map((m) => teamAPI.updateMemberPrice(m.id, customPrice))
       );
       setEditModalOpen(false);
       await fetchMembers();
