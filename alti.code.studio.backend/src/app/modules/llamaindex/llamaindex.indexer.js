@@ -9,22 +9,29 @@
 //   More Improve Version with LangChain
 // ==============================================
 import { ChatOpenAI } from '@langchain/openai';
-import { openai, OpenAIEmbedding } from '@llamaindex/openai';
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import { BufferMemory } from 'langchain/memory';
-import { Document, Settings, VectorStoreIndex } from 'llamaindex';
+import { Document, Settings, VectorStoreIndex, OpenAI, OpenAIEmbedding } from 'llamaindex';
 import fs from 'node:fs/promises';
 import config from '../../../../config/index.js';
 
-// ✅ Required by LlamaIndex
-Settings.llm = openai({
-  apiKey: config.openai_secret_key,
-  model: 'gpt-4o',
+// ✅ Required by LlamaIndex (Azure Configuration)
+Settings.llm = new OpenAI({
+  azure: {
+    apiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
+    endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
+    apiVersion: '2024-02-15-preview',
+    deployment: 'gpt-4o',
+  }
 });
 
 Settings.embedModel = new OpenAIEmbedding({
-  apiKey: config.openai_secret_key,
-  model: 'text-embedding-3-small',
+  azure: {
+    apiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
+    endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
+    apiVersion: '2024-02-15-preview',
+    deployment: 'text-embedding-3-small',
+  }
 });
 
 let chain = null;
@@ -51,9 +58,11 @@ export async function createIndexFromFiles(filePaths) {
   };
 
   const llm = new ChatOpenAI({
-    modelName: 'gpt-4o',
     temperature: 0.3,
-    openAIApiKey: config.openai_secret_key,
+    azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
+    azureOpenAIBasePath: `${process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint}/openai/deployments`,
+    azureOpenAIApiDeploymentName: 'gpt-4o',
+    azureOpenAIApiVersion: '2024-02-15-preview',
   });
 
   const memory = new BufferMemory({
