@@ -5,193 +5,73 @@
  * https://opensource.org/licenses/MIT
  */
 
-/**
- * Data Loss Prevention Service
- * Scans text for PII and secrets using targeted regex patterns.
- * In a real enterprise setup this would call the Google Cloud DLP API.
- */
-import { DlpServiceClient } from '@google-cloud/dlp';
 import { logger } from '../../../shared/logger.js';
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
-let dlpClient = null;
+const SERVICE_NAME = 'DLP Engine';
 
-if (PROJECT_ID && PROJECT_ID !== 'none' && PROJECT_ID !== 'your-gcp-project-id') {
-    try {
-        dlpClient = new DlpServiceClient();
-    } catch (err) {
-        logger.warn('Failed to initialize DlpServiceClient', err);
-    }
-}
-
+/**
+ * Data Loss Prevention (DLP) Service
+ * Intercepts text strings (like prompts or source code) and redacts 
+ * highly sensitive PII, PCI, and Secrets before they leave the environment.
+ */
 class DlpService {
     constructor() {
-        this.patterns = [
-            {
-                name: 'CREDIT_CARD',
-                // Luhn-friendly 13-16 digit number with optional separators
-                regex: /\b(?:\d[ -]*?){13,16}\b/g,
-                replacement: '[REDACTED_CREDIT_CARD]',
-            },
-            {
-                name: 'SSN',
-                regex: /\b\d{3}-\d{2}-\d{4}\b/g,
-                replacement: '[REDACTED_SSN]',
-            },
-            {
-                name: 'AWS_ACCESS_KEY',
-                // AWS access keys always start with AKIA and are exactly 20 chars
-                regex: /\bAKIA[0-9A-Z]{16}\b/g,
-                replacement: '[REDACTED_AWS_KEY]',
-            },
-            {
-                name: 'AWS_SECRET_KEY',
-                // AWS secret access keys are 40 chars of base62 + /+=, preceded by whitespace or =
-                regex: /(?<=[=\s"'])[A-Za-z0-9/+=]{40}(?=[\s"']|$)/g,
-                replacement: '[REDACTED_AWS_SECRET]',
-            },
-            {
-                name: 'GITHUB_TOKEN',
-                regex: /\bghp_[A-Za-z0-9]{36}\b/g,
-                replacement: '[REDACTED_GITHUB_TOKEN]',
-            },
-            {
-                name: 'GOOGLE_API_KEY',
-                regex: /\bAIza[0-9A-Za-z-_]{35}\b/g,
-                replacement: '[REDACTED_GOOGLE_KEY]',
-            },
-            {
-                name: 'PRIVATE_KEY_BLOCK',
-                regex: /-----BEGIN (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----[\s\S]*?-----END (?:RSA |EC |OPENSSH |PGP )?PRIVATE KEY-----/g,
-                replacement: '[REDACTED_PRIVATE_KEY]',
-            },
-            {
-                name: 'EMAIL',
-                regex: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-                replacement: '[REDACTED_EMAIL]',
-            },
-        ];
+        this.enabled = process.env.DLP_ENABLED !== 'false';
     }
 
     /**
-     * Scan text for sensitive data patterns and redact any matches via Cloud DLP.
-     * Falls back to local regex if GCP_PROJECT_ID is omitted.
-     *
-     * @param {string} text
-     * @returns {Promise<{ hasSensitiveData: boolean, redactedText: string, findings: Array<{type: string, count: number}> }>}
+     * Redacts sensitive information from a string.
+     * @param {string} text The text to sanitize.
+     * @returns {string} The sanitized text.
      */
-    async scan(text) {
-        if (!text || typeof text !== 'string') {
-            return { hasSensitiveData: false, redactedText: text, findings: [] };
+    redact(text) {
+        if (!this.enabled || !text || typeof text !== 'string') {
+            return text;
         }
 
-        if (PROJECT_ID) {
-            try {
-                return await this._cloudDlpScan(text);
-            } catch (error) {
-                logger.warn(`⚠️ Cloud DLP failed (${error.message}). Falling back to local Regex...`);
-            }
+        let sanitized = text;
+        let redactionCount = 0;
+
+        // 1. Credit Cards (PCI) - Basic pattern, typically 13-19 digits, optionally separated by dash/space
+        const creditCardRegex = /\b(?:\d[ -]*?){13,16}\b/g;
+        sanitized = sanitized.replace(creditCardRegex, (match) => {
+            redactionCount++;
+            return '[REDACTED_PCI]';
+        });
+
+        // 2. Social Security Numbers (PII) - XXX-XX-XXXX
+        const ssnRegex = /\b\d{3}[-.\s]?\d{2}[-.\s]?\d{4}\b/g;
+        sanitized = sanitized.replace(ssnRegex, (match) => {
+            redactionCount++;
+            return '[REDACTED_PII_SSN]';
+        });
+
+        // 3. Secrets / API Keys (e.g., AWS AKIA)
+        const awsKeyRegex = /\bAKIA[0-9A-Z]{16}\b/g;
+        sanitized = sanitized.replace(awsKeyRegex, (match) => {
+            redactionCount++;
+            return '[REDACTED_SECRET_AWS]';
+        });
+
+        const genericSecretRegex = /(?:password|secret|api_key|apikey|token)["'\s:=]+(["'][a-zA-Z0-9\-_]{8,}["'])/gi;
+        sanitized = sanitized.replace(genericSecretRegex, (match, secretGroup) => {
+            redactionCount++;
+            return match.replace(secretGroup, '"[REDACTED_SECRET]"');
+        });
+
+        // 4. IPv4 Addresses (Internal Infrastructure Protection)
+        // Ignores loopback 127.0.0.1
+        const ipv4Regex = /\b(?!127\.0\.0\.1\b)(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b/g;
+        sanitized = sanitized.replace(ipv4Regex, (match) => {
+            redactionCount++;
+            return '[REDACTED_IP]';
+        });
+
+        if (redactionCount > 0) {
+            logger.info(`[${SERVICE_NAME}] Intercepted and redacted ${redactionCount} sensitive patterns.`);
         }
 
-        return this._localScan(text);
-    }
-
-    async _cloudDlpScan(text) {
-        if (!dlpClient) {
-            throw new Error("DLP Client not initialized (Missing credentials)");
-        }
-        
-        const request = {
-            parent: `projects/${PROJECT_ID}/locations/global`,
-            item: { value: text },
-            inspectConfig: {
-                infoTypes: [
-                    { name: 'CREDIT_CARD_NUMBER' },
-                    { name: 'EMAIL_ADDRESS' },
-                    { name: 'US_SOCIAL_SECURITY_NUMBER' },
-                    { name: 'GCP_CREDENTIALS' },
-                    { name: 'AUTH_TOKEN' },
-                    { name: 'ENCRYPTION_KEY' }
-                ],
-                includeQuote: false,
-            },
-            deidentifyConfig: {
-                infoTypeTransformations: {
-                    transformations: [
-                        {
-                            primitiveTransformation: {
-                                replaceConfig: {
-                                    newValue: { stringValue: '[REDACTED_BY_GCP_DLP]' }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        };
-
-        const [response] = await dlpClient.deidentifyContent(request);
-        const redactedText = response.item.value;
-        const findings = [];
-        let hasSensitiveData = false;
-
-        // Extract detailed ML findings if GCP returned transformation summaries
-        if (response.overview && response.overview.transformationSummaries) {
-            for (const summary of response.overview.transformationSummaries) {
-                if (summary.infoType && summary.results) {
-                    let totalCount = 0;
-                    summary.results.forEach(r => totalCount += (parseInt(r.count, 10) || 0));
-                    if (totalCount > 0) {
-                        findings.push({ type: summary.infoType.name, count: totalCount });
-                        hasSensitiveData = true;
-                    }
-                }
-            }
-        }
-
-        // Fallback detection logic if overview parsing fails but string mutated
-        if (!hasSensitiveData && text !== redactedText) {
-            hasSensitiveData = true;
-            findings.push({ type: 'GCP_DLP_REDACTED', count: 1 });
-        }
-
-        return { hasSensitiveData, redactedText, findings };
-    }
-
-    _localScan(text) {
-        if (!text || typeof text !== 'string') {
-            return { hasSensitiveData: false, redactedText: text, findings: [] };
-        }
-
-        let redactedText = text;
-        const findings = [];
-
-        for (const pattern of this.patterns) {
-            // Clone the regex to reset lastIndex for each call — avoids global regex state bugs
-            const re = new RegExp(pattern.regex.source, pattern.regex.flags);
-
-            const matches = redactedText.match(re);
-            if (matches) {
-                findings.push({ type: pattern.name, count: matches.length });
-                redactedText = redactedText.replace(re, pattern.replacement);
-            }
-        }
-
-        return {
-            hasSensitiveData: findings.length > 0,
-            redactedText,
-            findings,
-        };
-    }
-
-    /**
-     * Quick check — returns true if text contains sensitive data, without redacting.
-     * @param {string} text
-     * @returns {Promise<boolean>}
-     */
-    async hasSensitiveData(text) {
-        const result = await this.scan(text);
-        return result.hasSensitiveData;
+        return sanitized;
     }
 }
 

@@ -8,6 +8,7 @@
 import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 import { EventBus } from '../../shared/eventBus.js';
+import { dlpService } from '../dlp/dlp.service.js';
 
 const SERVICE_NAME = 'Guardian Angel';
 
@@ -103,11 +104,14 @@ const auditCode = async (code, context = 'general') => {
         };
     }
 
+    // 0. Inline DLP Redaction (Nation-State Security Pillar)
+    const redactedCode = dlpService.redact(code);
+
     logger.info(`[${SERVICE_NAME}] Auditing code for context: ${context}`);
 
     // 1. Static Analysis — blocks on CRITICAL or HIGH
 
-    const staticFindings = runSemgrepScan(code);
+    const staticFindings = runSemgrepScan(redactedCode);
     const blockingFindings = staticFindings.filter(f => f.severity === 'CRITICAL' || f.severity === 'HIGH');
 
     if (blockingFindings.length > 0) {
