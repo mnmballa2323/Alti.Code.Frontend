@@ -191,13 +191,13 @@ export default function InstructionsPage() {
         </div>
 
       {deleteModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#161b22] w-[380px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white dark:bg-[#161b22] w-full max-w-[400px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
             <div className="p-6 text-center space-y-2">
               <h3 className="text-[17px] font-semibold text-neutral-900 dark:text-white">
                 Delete Instruction
               </h3>
-              <p className="text-[13px] leading-tight text-neutral-500 dark:text-neutral-400 px-2">
+              <p className="text-[13px] leading-tight text-neutral-500 dark:text-neutral-400">
                 Are you sure you want to remove this instruction?
               </p>
             </div>

@@ -205,12 +205,12 @@ export default function OwnerLayout({
         {/* Main Content Pane */}
         <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
           {/* Content Children */}
-          <div className="flex-1 overflow-y-auto pt-4 px-10 z-10 relative flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto pt-4 px-10 relative flex flex-col h-full">
             {children}
             <div className="shrink-0 h-4 w-full" />
           </div>
           {/* Thick gray bar at the bottom */}
-          <div className="shrink-0 h-12 w-full bg-[#F3F4F6] dark:bg-[#0d1117] z-20 pointer-events-none" />
+          <div className="shrink-0 h-12 w-full bg-[#F3F4F6] dark:bg-[#0d1117] z-10 pointer-events-none absolute bottom-0 left-0" />
         </div>
       </div>
     </div>
