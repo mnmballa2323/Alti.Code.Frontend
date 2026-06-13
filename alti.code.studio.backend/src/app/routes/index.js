@@ -25,7 +25,7 @@ import { geoFenceMiddleware } from '../middlewares/geoFence.middleware.js';
 import { auditMiddleware } from '../middlewares/audit.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
-import { scimRoutes } from '@inso/platform';
+import { scimRoutes } from '../modules/iam/scim.route.js';
 
 // 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
 router.use(auditMiddleware('GLOBAL_API_REQUEST'));

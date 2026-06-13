@@ -11,6 +11,7 @@ import ApiError from '../../../errors/ApiError.js';
 import { logger } from '../../../shared/logger.js';
 import { prisma } from '../../../config/prisma.js';
 import ip from 'ip';
+import { siemService } from '../modules/security/siem.service.js';
 
 export const abacMiddleware = (requiredClearanceLevel = 1) => {
     return async (req, res, next) => {
@@ -23,7 +24,7 @@ export const abacMiddleware = (requiredClearanceLevel = 1) => {
             // Fetch ABAC attributes from database
             const user = await prisma.user.findUnique({
                 where: { id: userId },
-                select: { clearanceLevel: true, allowedIps: true, email: true }
+                select: { clearanceLevel: true, allowedIps: true, email: true, tenantId: true }
             });
 
             if (!user) return next();
@@ -31,6 +32,17 @@ export const abacMiddleware = (requiredClearanceLevel = 1) => {
             // 1. Enforce Clearance Level
             if (user.clearanceLevel < requiredClearanceLevel) {
                 logger.warn(`[ABAC] Clearance check failed for ${user.email}. Has: ${user.clearanceLevel}, Required: ${requiredClearanceLevel}`);
+                
+                if (user.tenantId) {
+                    siemService.dispatchEvent(user.tenantId, 'ABAC_CLEARANCE_DENIED', {
+                        userId,
+                        userEmail: user.email,
+                        currentClearance: user.clearanceLevel,
+                        requiredClearance: requiredClearanceLevel,
+                        path: req.originalUrl
+                    });
+                }
+
                 throw new ApiError(httpStatus.FORBIDDEN, `Access Denied: Insufficient Clearance Level. Requires Level ${requiredClearanceLevel}.`);
             }
 
@@ -61,6 +73,16 @@ export const abacMiddleware = (requiredClearanceLevel = 1) => {
 
                 if (!isAllowed) {
                     logger.warn(`[ABAC] IP Whitelist violation for ${user.email}. Attempted from ${clientIp}`);
+                    
+                    if (user.tenantId) {
+                        siemService.dispatchEvent(user.tenantId, 'ABAC_IP_DENIED', {
+                            userId,
+                            userEmail: user.email,
+                            ipAttempted: clientIp,
+                            path: req.originalUrl
+                        });
+                    }
+
                     throw new ApiError(httpStatus.FORBIDDEN, `Access Denied: Your IP address (${clientIp}) is not whitelisted for this account.`);
                 }
             }
