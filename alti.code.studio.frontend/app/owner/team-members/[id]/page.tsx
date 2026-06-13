@@ -1035,10 +1035,10 @@ export default function MemberDetailsPage() {
       if (
         !foundMember &&
         currentUserFromStore &&
-        (currentUserFromStore.id === id || id === "current-user")
+        (currentUserFromStore.id === id || currentUserFromStore._id === id || id === "current-user")
       ) {
         foundMember = {
-          id: currentUserFromStore.id || "current-user",
+          id: currentUserFromStore.id || currentUserFromStore._id || "current-user",
           name:
             currentUserFromStore.name ||
             `${currentUserFromStore.firstName || ""} ${currentUserFromStore.lastName || ""}`.trim() ||

@@ -109,7 +109,7 @@ export default function TeamMembersPage() {
     !displayedMembers.some((m) => m.email === currentUser.email)
   ) {
     displayedMembers.push({
-      id: currentUser.id || "current-user",
+      id: currentUser.id || currentUser._id || "current-user",
       name:
         currentUser.name ||
         `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
