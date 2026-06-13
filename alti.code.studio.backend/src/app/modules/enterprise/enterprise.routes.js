@@ -1904,4 +1904,3 @@ router.get('/certifications/stats', rbac('audit:read'), (req, res) => {
 });
 
 export default router;
-export const enterpriseRoutes = router;
