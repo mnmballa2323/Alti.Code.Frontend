@@ -162,7 +162,6 @@
     "isomorphic-git": "^1.37.2",
     "jsonwebtoken": "^9.0.3",
     "langchain": "^0.1.37",
-    "langfuse": "^3.38.6",
     "langsmith": "^0.5.4",
     "level": "^10.0.0",
     "lighthouse": "^13.1.0",

@@ -260,18 +260,7 @@ services:
       - inso_code_network
     restart: unless-stopped
 
-  langfuse_worker:
-    image: ghcr.io/langfuse/langfuse:latest
-    container_name: langfuse_worker
-    ports:
-      - '3000:3000'
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - NEXTAUTH_SECRET=mysecret
-      - SALT=mysalt
-    networks:
-      - inso_code_network
-    restart: unless-stopped
+
 
   tabby_worker:
     image: tabbyml/tabby

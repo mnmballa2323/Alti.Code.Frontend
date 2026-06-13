@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { Langfuse } from 'langfuse';
+
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
@@ -28,7 +28,7 @@ import EventEmitter from 'events';
 class ObservabilityService extends EventEmitter {
     constructor() {
         super();
-        this.langfuse = null;
+
         this.localTraces = []; // Buffer for "Glass Cockpit"
         this.maxTraces = 50;
         this.gcpLogging = null;
@@ -38,17 +38,7 @@ class ObservabilityService extends EventEmitter {
     }
 
     init() {
-        // Initialize Langfuse only if keys are present
-        if (process.env.LANGFUSE_PUBLIC_KEY && process.env.LANGFUSE_SECRET_KEY) {
-            this.langfuse = new Langfuse({
-                publicKey: process.env.LANGFUSE_PUBLIC_KEY,
-                secretKey: process.env.LANGFUSE_SECRET_KEY,
-                baseUrl: process.env.LANGFUSE_HOST || "https://cloud.langfuse.com"
-            });
-            logger.info('🔭 Observability: Langfuse initialized.');
-        } else {
-            logger.warn('🔭 Observability: Langfuse keys missing. Tracing disabled. (GCP Logging client initialized for deployment)');
-        }
+
 
         // Initialize GCP Logging client in production environments
         if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
@@ -108,24 +98,7 @@ class ObservabilityService extends EventEmitter {
             }
         }
 
-        if (!this.langfuse) return localTrace;
-
-        try {
-            const lfTrace = this.langfuse.trace({
-                id: traceId,
-                name: action,
-                sessionId: metadata.sessionId || 'anonymous-session',
-                userId: metadata.userId || 'system',
-                metadata: {
-                    agent: agentName,
-                    ...metadata
-                }
-            });
-            return lfTrace;
-        } catch (error) {
-            logger.error(`🔭 Observability Error: Failed to emit trace for ${agentName}`, error);
-            return localTrace;
-        }
+        return localTrace;
     }
 
     /**
@@ -143,36 +116,7 @@ class ObservabilityService extends EventEmitter {
         }
     }
 
-    /**
-     * Create a generation span for an AI call
-     * @param {object} trace 
-     * @param {string} name 
-     * @param {object} params - model, prompt, etc.
-     */
-    generation(trace, name, params) {
-        if (!trace) return null;
 
-        // When Langfuse is disabled, `trace` is a plain local object — not a Langfuse trace.
-        // Calling trace.generation() on a plain object throws "is not a function".
-        const langfuseTrace = trace._langfuseRef ?? null;
-        if (!langfuseTrace || typeof langfuseTrace.generation !== 'function') {
-            logger.debug(`🔭 Observability: generation() skipped — Langfuse trace not available for "${name}"`);
-            return null;
-        }
-
-        return langfuseTrace.generation({
-            name,
-            model: params.model,
-            modelParameters: params.config,
-            input: params.prompt,
-        });
-    }
-
-    async flush() {
-        if (this.langfuse) {
-            await this.langfuse.flush();
-        }
-    }
 
     /**
      * Get recent traces for the Agent Dashboard

@@ -70,7 +70,7 @@ import { ragService } from '../memory/rag.service.js';
 
 const TemporalAgentService = {};
 const Mem0AgentService = {};
-const LangfuseAgentService = {};
+
 const TabbyAgentService = {};
 const Crawl4AiAgentService = {};
 const McpAgentService = {};
@@ -466,7 +466,7 @@ class GraphOrchestrator {
                 temporal: TemporalAgentService,
                 langgraph: LangGraphAgentService,
                 mem0: Mem0AgentService,
-                langfuse: LangfuseAgentService,
+
                 unstructured: UnstructuredAgentService,
                 promptfoo: PromptfooAgentService,
                 agent_s: (await import('./agent_s.agent.js').catch(() => ({}))).agentSAgent || {},
