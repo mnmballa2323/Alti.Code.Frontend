@@ -382,9 +382,14 @@ class GraphOrchestrator {
             try {
                 // The Triad: Send the master prompt into the Adversarial Debate Chamber instead of a single instance
                 this.emit('agent:thought', { message: "🏛️ Convening The Triad Debate Chamber for mathematically optimal planning..." });
+                
+                // Ensure the dlpScrubberService is imported correctly
+                const { dlpScrubberService } = await import('../security/dlp_scrubber.service.js');
+                const scrubbedPrompt = dlpScrubberService.scrubGraphifyOutput(prompt);
+
                 const { triadDebateChamberService } = await import('./triad_debate_chamber.service.js');
                 
-                const result = await triadDebateChamberService.initiateDebate(prompt);
+                const result = await triadDebateChamberService.initiateDebate(scrubbedPrompt);
                 
                 // Handle case where result is not a string (e.g. error object returned)
                 response = typeof result === 'string' ? result : JSON.stringify(result);

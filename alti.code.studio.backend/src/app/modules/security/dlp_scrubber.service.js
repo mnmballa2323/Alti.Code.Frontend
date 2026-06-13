@@ -16,8 +16,29 @@ class DlpScrubberService {
             { name: 'Slack Token', regex: /xox[baprs]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24}/g },
             { name: 'RSA Private Key', regex: /-----BEGIN RSA PRIVATE KEY-----[\s\S]*?-----END RSA PRIVATE KEY-----/g },
             { name: 'Generic Password', regex: /(?i)(password|passwd|pwd|secret)\s*[:=]\s*['"][^'"]+['"]/g },
-            { name: 'SSN (US)', regex: /\b\d{3}-\d{2}-\d{4}\b/g }
+            { name: 'SSN (US)', regex: /\b\d{3}-\d{2}-\d{4}\b/g },
+            { name: 'Credit Card (PCI)', regex: /\b(?:\d{4}[ -]?){3}\d{4}\b/g, validator: this.isLuhnValid }
         ];
+    }
+
+    /**
+     * Implements Luhn Algorithm for validating Credit Card numbers to prevent false positive matchings.
+     */
+    isLuhnValid(cardNumber) {
+        const sanitized = cardNumber.replace(/[\s-]/g, '');
+        if (!/^\d+$/.test(sanitized)) return false;
+        
+        let sum = 0;
+        let shouldDouble = false;
+        for (let i = sanitized.length - 1; i >= 0; i--) {
+            let digit = parseInt(sanitized.charAt(i), 10);
+            if (shouldDouble) {
+                if ((digit *= 2) > 9) digit -= 9;
+            }
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        return (sum % 10) === 0;
     }
 
     /**
@@ -26,8 +47,14 @@ class DlpScrubberService {
     scrub(data) {
         if (typeof data === 'string') {
             let scrubbed = data;
-            for (const { name, regex } of this.patterns) {
-                scrubbed = scrubbed.replace(regex, `[REDACTED: ${name}]`);
+            for (const { name, regex, validator } of this.patterns) {
+                if (validator) {
+                    scrubbed = scrubbed.replace(regex, (match) => {
+                        return validator.call(this, match) ? `[REDACTED: ${name}]` : match;
+                    });
+                } else {
+                    scrubbed = scrubbed.replace(regex, `[REDACTED: ${name}]`);
+                }
             }
             return scrubbed;
         }

@@ -43,7 +43,27 @@ class CloudSecretService {
             });
             return version.payload.data.toString();
         } catch (error) {
-            logger.warn(`[Secrets] Secret ${secretName} not found in Vault. Using fallback.`);
+            logger.warn(`[Secrets] Secret ${secretName} not found in GCP Vault. Falling back to AWS Secrets Manager...`);
+            
+            if (process.env.AWS_REGION && process.env.AWS_SECRETS_ENABLED === 'true') {
+                try {
+                    const { SecretsManagerClient, GetSecretValueCommand } = await import('@aws-sdk/client-secrets-manager');
+                    const awsClient = new SecretsManagerClient({ region: process.env.AWS_REGION });
+                    
+                    const command = new GetSecretValueCommand({ SecretId: process.env.AWS_SECRET_NAME || 'alti-code-studio/prod' });
+                    const response = await awsClient.send(command);
+                    
+                    if (response.SecretString) {
+                        const secretObj = JSON.parse(response.SecretString);
+                        if (secretObj[secretName]) {
+                            return secretObj[secretName];
+                        }
+                    }
+                } catch (awsErr) {
+                    logger.warn(`[Secrets] Secret ${secretName} not found in AWS Vault either. Using env fallback.`);
+                }
+            }
+            
             return process.env[secretName];
         }
     }

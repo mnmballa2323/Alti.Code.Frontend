@@ -115,32 +115,60 @@ export const loadEnterpriseSecrets = async () => {
   if (process.env.NODE_ENV === 'test') {
     return; // Prevent network dependencies during unit tests
   }
+  
+  const secretsMap = {
+    DATABASE_LOCAL: val => {
+      configObject.database_local = val;
+    },
+    REDIS_URL: val => {
+      configObject.redis.url = val;
+    },
+    JWT_ACCESS_TOKEN: val => {
+      configObject.jwt.access_token = val;
+    },
+    GOOGLE_CLIENT_SECRET: val => {
+      configObject.google.clientSecret = val;
+    },
+    GITHUB_CLIENT_SECRET: val => {
+      configObject.github.clientSecret = val;
+    },
+    GEMINI_API_KEY: val => {
+      configObject.gemini_secret_key = val;
+    },
+  };
+
+  // Attempt 1: AWS Secrets Manager
+  if (process.env.AWS_REGION && process.env.AWS_SECRETS_ENABLED === 'true') {
+    try {
+      const { SecretsManagerClient, GetSecretValueCommand } = await import('@aws-sdk/client-secrets-manager');
+      const client = new SecretsManagerClient({ region: process.env.AWS_REGION });
+      
+      // AWS Secrets are usually stored as JSON objects.
+      const secretName = process.env.AWS_SECRET_NAME || 'alti-code-studio/prod';
+      const command = new GetSecretValueCommand({ SecretId: secretName });
+      const response = await client.send(command);
+      
+      if (response.SecretString) {
+        const secretObj = JSON.parse(response.SecretString);
+        for (const [key, value] of Object.entries(secretObj)) {
+          if (secretsMap[key]) {
+            secretsMap[key](value);
+            process.env[key] = value;
+          }
+        }
+        return; // Successfully loaded from AWS, exit early
+      }
+    } catch (err) {
+      // Fallback: Continue to GCP
+      console.warn('[Secrets] AWS Secrets Manager failed, falling back to GCP...', err.message);
+    }
+  }
+
+  // Attempt 2: GCP Secret Manager
   try {
-    const { SecretManagerServiceClient } =
-      await import('@google-cloud/secret-manager');
+    const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
     const client = new SecretManagerServiceClient();
     const project = configObject.gcp.project_id;
-
-    const secretsMap = {
-      DATABASE_LOCAL: val => {
-        configObject.database_local = val;
-      },
-      REDIS_URL: val => {
-        configObject.redis.url = val;
-      },
-      JWT_ACCESS_TOKEN: val => {
-        configObject.jwt.access_token = val;
-      },
-      GOOGLE_CLIENT_SECRET: val => {
-        configObject.google.clientSecret = val;
-      },
-      GITHUB_CLIENT_SECRET: val => {
-        configObject.github.clientSecret = val;
-      },
-      GEMINI_API_KEY: val => {
-        configObject.gemini_secret_key = val;
-      },
-    };
 
     for (const [secretName, updater] of Object.entries(secretsMap)) {
       try {
@@ -157,6 +185,7 @@ export const loadEnterpriseSecrets = async () => {
     }
   } catch (err) {
     // Secret Manager Client could not be created or credentials absent - bypass and use env fallback
+    console.warn('[Secrets] GCP Secret Manager skipped (client missing or credentials absent).', err.message);
   }
 };
 
