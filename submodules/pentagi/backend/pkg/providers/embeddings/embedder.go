@@ -86,14 +86,9 @@ func newOpenAI(cfg *config.Config, httpClient *http.Client) (embeddings.Embedder
 	if cfg.EmbeddingURL != "" {
 		opts = append(opts, openai.WithBaseURL(cfg.EmbeddingURL))
 		metadata["url"] = cfg.EmbeddingURL
-	} else if cfg.OpenAIServerURL != "" {
-		opts = append(opts, openai.WithBaseURL(cfg.OpenAIServerURL))
-		metadata["url"] = cfg.OpenAIServerURL
 	}
 	if cfg.EmbeddingKey != "" {
 		opts = append(opts, openai.WithToken(cfg.EmbeddingKey))
-	} else if cfg.OpenAIKey != "" {
-		opts = append(opts, openai.WithToken(cfg.OpenAIKey))
 	}
 	if cfg.EmbeddingModel != "" {
 		opts = append(opts, openai.WithEmbeddingModel(cfg.EmbeddingModel))

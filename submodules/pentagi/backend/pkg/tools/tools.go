@@ -616,29 +616,6 @@ func (fte *flowToolsExecutor) GetAssistantExecutor(cfg AssistantExecutorConfig) 
 			handlers[DuckDuckGoToolName] = duckduckgo.Handle
 		}
 
-		tavily := &tavily{
-			flowID:     fte.flowID,
-			apiKey:     fte.cfg.TavilyAPIKey,
-			proxyURL:   fte.cfg.ProxyURL,
-			slp:        fte.slp,
-			summarizer: cfg.Summarizer,
-		}
-		if tavily.IsAvailable() {
-			definitions = append(definitions, registryDefinitions[TavilyToolName])
-			handlers[TavilyToolName] = tavily.Handle
-		}
-
-		traversaal := &traversaal{
-			flowID:   fte.flowID,
-			apiKey:   fte.cfg.TraversaalAPIKey,
-			proxyURL: fte.cfg.ProxyURL,
-			slp:      fte.slp,
-		}
-		if traversaal.IsAvailable() {
-			definitions = append(definitions, registryDefinitions[TraversaalToolName])
-			handlers[TraversaalToolName] = traversaal.Handle
-		}
-
 
 
 		searxng := NewSearxngTool(
@@ -1119,32 +1096,6 @@ func (fte *flowToolsExecutor) GetSearcherExecutor(cfg SearcherExecutorConfig) (C
 		ce.handlers[DuckDuckGoToolName] = duckduckgo.Handle
 	}
 
-	tavily := &tavily{
-		flowID:     fte.flowID,
-		taskID:     cfg.TaskID,
-		subtaskID:  cfg.SubtaskID,
-		apiKey:     fte.cfg.TavilyAPIKey,
-		proxyURL:   fte.cfg.ProxyURL,
-		slp:        fte.slp,
-		summarizer: cfg.Summarizer,
-	}
-	if tavily.IsAvailable() {
-		ce.definitions = append(ce.definitions, registryDefinitions[TavilyToolName])
-		ce.handlers[TavilyToolName] = tavily.Handle
-	}
-
-	traversaal := &traversaal{
-		flowID:    fte.flowID,
-		taskID:    cfg.TaskID,
-		subtaskID: cfg.SubtaskID,
-		apiKey:    fte.cfg.TraversaalAPIKey,
-		proxyURL:  fte.cfg.ProxyURL,
-		slp:       fte.slp,
-	}
-	if traversaal.IsAvailable() {
-		ce.definitions = append(ce.definitions, registryDefinitions[TraversaalToolName])
-		ce.handlers[TraversaalToolName] = traversaal.Handle
-	}
 
 
 
