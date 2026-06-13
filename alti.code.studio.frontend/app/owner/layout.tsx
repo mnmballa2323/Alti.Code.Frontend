@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import {
-  UserPlus,
   Users,
   CreditCard,
   FileText,
@@ -56,8 +55,7 @@ export default function OwnerLayout({
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const isTeamsDetail =
-    pathname.startsWith("/owner/teams/") &&
-    pathname !== "/owner/teams";
+    pathname.startsWith("/owner/teams/") && pathname !== "/owner/teams";
 
   const isMemberDetail =
     (pathname.startsWith("/owner/team-members/") &&
@@ -69,6 +67,7 @@ export default function OwnerLayout({
       router.push("/login");
     } else if (status === "authenticated" && profile) {
       const userRole = (profile.role || "").toLowerCase();
+
       if (userRole === "owner") {
         setIsAuthorized(true);
       } else {

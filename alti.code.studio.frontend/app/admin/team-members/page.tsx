@@ -69,9 +69,14 @@ export default function TeamMembersPage() {
       if (res && res.members && res.members.length > 0) {
         setMembers(res.members);
         const initialPrices: Record<string, string> = {};
+
         res.members.forEach((m: any) => {
-          if (m.subscriptionPrice !== undefined && m.subscriptionPrice !== null) {
-            initialPrices[m.id] = `$${m.subscriptionPrice.toLocaleString('en-US')}`;
+          if (
+            m.subscriptionPrice !== undefined &&
+            m.subscriptionPrice !== null
+          ) {
+            initialPrices[m.id] =
+              `$${m.subscriptionPrice.toLocaleString("en-US")}`;
           }
         });
         setPrices((prev) => ({ ...prev, ...initialPrices }));
@@ -96,10 +101,6 @@ export default function TeamMembersPage() {
       setCurrentUser(currentUserFromStore);
     }
   }, [currentUserFromStore]);
-
-
-
-
 
   // Merge current user into members list if not already returned by the API
   const displayedMembers = [...members];
@@ -247,8 +248,8 @@ export default function TeamMembersPage() {
           <div className="w-full max-w-[420px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 relative">
             {/* Close button X */}
             <button
-              disabled={isSaving}
               className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent disabled:opacity-50"
+              disabled={isSaving}
               onClick={() => {
                 setEditModalOpen(false);
                 setEditingMember(null);
@@ -304,8 +305,8 @@ export default function TeamMembersPage() {
             {/* Buttons Row */}
             <div className="flex gap-3 mt-8">
               <button
-                disabled={isSaving}
                 className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
+                disabled={isSaving}
                 onClick={() => {
                   setEditModalOpen(false);
                   setEditingMember(null);
@@ -315,13 +316,16 @@ export default function TeamMembersPage() {
               </button>
 
               <button
-                disabled={isSaving}
                 className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isSaving}
                 onClick={async () => {
                   if (editingMember) {
                     setIsSaving(true);
                     try {
-                      await teamAPI.updateMemberPrice(editingMember.id, customPrice);
+                      await teamAPI.updateMemberPrice(
+                        editingMember.id,
+                        customPrice,
+                      );
                       setPrices((prev) => ({
                         ...prev,
                         [editingMember.id]: customPrice,

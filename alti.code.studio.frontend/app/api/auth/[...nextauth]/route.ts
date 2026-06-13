@@ -56,10 +56,10 @@ const handler = NextAuth({
             {
               method: "GET",
               headers: {
-                "Authorization": `Bearer ${credentials.accessToken}`,
+                Authorization: `Bearer ${credentials.accessToken}`,
                 "Content-Type": "application/json",
               },
-            }
+            },
           );
 
           if (!res.ok) {
@@ -75,6 +75,7 @@ const handler = NextAuth({
               _id: response.data._id,
             } as ExtendedUser;
           }
+
           return null;
         }
 

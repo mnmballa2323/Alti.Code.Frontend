@@ -3,9 +3,10 @@
 import React, { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { Loader2 } from "lucide-react";
+
 import { useAppSelector } from "@/store";
 import Sidebar from "@/components/dashboard/dashboard-sidebar/dashboard-sidebar";
-import { Loader2 } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -19,7 +20,9 @@ export default function DashboardLayout({
   const profile = profileFromStore?.email ? profileFromStore : null;
 
   const userRole = (profile?.role || "").toLowerCase();
-  const isRedirecting = status === "authenticated" && (userRole === "owner" || userRole === "admin");
+  const isRedirecting =
+    status === "authenticated" &&
+    (userRole === "owner" || userRole === "admin");
 
   useEffect(() => {
     if (status === "authenticated" && profile) {
@@ -51,7 +54,10 @@ export default function DashboardLayout({
     }
   }, [status, profile, userRole, pathname, router]);
 
-  if (status === "loading" || (status === "authenticated" && !profile && session?.user?.accessToken)) {
+  if (
+    status === "loading" ||
+    (status === "authenticated" && !profile && session?.user?.accessToken)
+  ) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#0d1117] text-white">
         <div className="flex flex-col items-center gap-4">

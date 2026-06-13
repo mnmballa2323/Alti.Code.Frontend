@@ -13,6 +13,7 @@ const isOriginTrusted = (origin: string) => {
   if (TRUSTED_ORIGINS.includes(origin)) return true;
   if (/^https:\/\/(.*\.)?insocode\.com$/.test(origin)) return true;
   if (/^https:\/\/(.*\.)?inso\.ai$/.test(origin)) return true;
+
   return false;
 };
 
@@ -40,7 +41,7 @@ export default function SsoIframePage() {
               status: "authenticated",
               token: accessToken,
             },
-            { targetOrigin: event.origin }
+            { targetOrigin: event.origin },
           );
         } else {
           event.source?.postMessage(
@@ -48,7 +49,7 @@ export default function SsoIframePage() {
               type: "INSO_SSO_RESPONSE",
               status: "unauthenticated",
             },
-            { targetOrigin: event.origin }
+            { targetOrigin: event.origin },
           );
         }
       }
@@ -58,10 +59,7 @@ export default function SsoIframePage() {
 
     // Notify the parent window that the iframe is ready to receive messages
     if (window.parent !== window) {
-      window.parent.postMessage(
-        { type: "INSO_SSO_IFRAME_READY" },
-        "*"
-      );
+      window.parent.postMessage({ type: "INSO_SSO_IFRAME_READY" }, "*");
     }
 
     return () => {
@@ -70,7 +68,7 @@ export default function SsoIframePage() {
   }, [session, status]);
 
   return (
-    <div style={{ display: "none" }} id="sso-iframe-broker">
+    <div id="sso-iframe-broker" style={{ display: "none" }}>
       Inso SSO Iframe Broker
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, Search, Users, ChevronRight } from "lucide-react";
+import { Loader2, Search, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -67,6 +67,7 @@ export default function TeamsPage() {
   const fetchMembers = async () => {
     try {
       const res = await teamAPI.members();
+
       if (res && res.members && res.members.length > 0) {
         setMembers(res.members);
       }
@@ -93,10 +94,8 @@ export default function TeamsPage() {
 
   // Merge current user into members list if not already present
   const allMembers = [...members];
-  if (
-    currentUser &&
-    !allMembers.some((m) => m.email === currentUser.email)
-  ) {
+
+  if (currentUser && !allMembers.some((m) => m.email === currentUser.email)) {
     allMembers.push({
       id: currentUser.id || currentUser._id || "current-user",
       name:
@@ -116,6 +115,7 @@ export default function TeamsPage() {
       description: "Core platform engineering and development",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
+
         return r === "developer" || r === "dev";
       }),
     },
@@ -125,6 +125,7 @@ export default function TeamsPage() {
       description: "Product management and UI/UX design",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
+
         return (
           r === "manager" ||
           (r === "admin" &&
@@ -139,6 +140,7 @@ export default function TeamsPage() {
       description: "Infrastructure, security, and customer support",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
+
         return (
           r === "owner" ||
           m.email === "owner@insocode.com" ||
@@ -151,6 +153,7 @@ export default function TeamsPage() {
   // Filter teams based on search query
   const filteredTeams = rawTeams.filter((team) => {
     const query = searchQuery.toLowerCase();
+
     return (
       team.name.toLowerCase().includes(query) ||
       team.description.toLowerCase().includes(query)

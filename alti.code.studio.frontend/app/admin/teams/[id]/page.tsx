@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Loader2, Mail, Shield, User, ArrowLeft, Pencil, X, ChevronDown } from "lucide-react";
+import { Loader2, Mail, Shield, Pencil, X, ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { teamAPI } from "@/lib/enterprise-api";
@@ -22,9 +22,11 @@ export default function TeamDetailPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { status } = useSession();
-  
+
   const teamId = params.id as string;
-  const currentUserFromStore = useAppSelector((state) => state.user.data) as any;
+  const currentUserFromStore = useAppSelector(
+    (state) => state.user.data,
+  ) as any;
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [members, setMembers] = useState<Member[]>([
     {
@@ -73,6 +75,7 @@ export default function TeamDetailPage() {
 
   useEffect(() => {
     dispatch(setActiveMemberName(teamName));
+
     return () => {
       dispatch(setActiveMemberName(null));
     };
@@ -81,6 +84,7 @@ export default function TeamDetailPage() {
   const fetchMembers = async () => {
     try {
       const res = await teamAPI.members();
+
       if (res && res.members && res.members.length > 0) {
         setMembers(res.members);
       }
@@ -107,10 +111,8 @@ export default function TeamDetailPage() {
 
   // Merge current user if not already in members
   const allMembers = [...members];
-  if (
-    currentUser &&
-    !allMembers.some((m) => m.email === currentUser.email)
-  ) {
+
+  if (currentUser && !allMembers.some((m) => m.email === currentUser.email)) {
     allMembers.push({
       id: currentUser.id || currentUser._id || "current-user",
       name:
@@ -125,6 +127,7 @@ export default function TeamDetailPage() {
   // Filter members belonging to this specific team
   const teamMembers = allMembers.filter((m) => {
     const roleLower = (m.role || "").toLowerCase();
+
     if (teamId === "engineering") {
       return roleLower === "developer" || roleLower === "dev";
     } else if (teamId === "product-design") {
@@ -141,21 +144,28 @@ export default function TeamDetailPage() {
         m.email === "admin@insocode.com"
       );
     }
+
     return false;
   });
 
   const firstMember = teamMembers[0];
-  const memberPrice = firstMember && firstMember.subscriptionPrice !== undefined && firstMember.subscriptionPrice !== null
-    ? firstMember.subscriptionPrice
-    : 1000;
+  const memberPrice =
+    firstMember &&
+    firstMember.subscriptionPrice !== undefined &&
+    firstMember.subscriptionPrice !== null
+      ? firstMember.subscriptionPrice
+      : 1000;
 
   // Set default edit price based on first member
   useEffect(() => {
     if (teamMembers.length > 0) {
       const first = teamMembers[0];
-      const priceVal = first.subscriptionPrice !== undefined && first.subscriptionPrice !== null
-        ? `$${Number(first.subscriptionPrice).toLocaleString('en-US')}`
-        : "$1,000";
+      const priceVal =
+        first.subscriptionPrice !== undefined &&
+        first.subscriptionPrice !== null
+          ? `$${Number(first.subscriptionPrice).toLocaleString("en-US")}`
+          : "$1,000";
+
       setCustomPrice(priceVal);
     }
   }, [editModalOpen]);
@@ -166,8 +176,8 @@ export default function TeamDetailPage() {
       // Update all team members' price in parallel
       await Promise.all(
         teamMembers
-          .filter(m => !["current-user", "owner-1", "admin-1"].includes(m.id))
-          .map((m) => teamAPI.updateMemberPrice(m.id, customPrice))
+          .filter((m) => !["current-user", "owner-1", "admin-1"].includes(m.id))
+          .map((m) => teamAPI.updateMemberPrice(m.id, customPrice)),
       );
       setEditModalOpen(false);
       await fetchMembers();
@@ -198,18 +208,24 @@ export default function TeamDetailPage() {
                 {teamDesc}
               </p>
             </div>
-            
+
             <div className="relative w-36 h-14 shrink-0">
-               {/* Monthly price per member (visible when not hovered) */}
+              {/* Monthly price per member (visible when not hovered) */}
               <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
                 <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
-                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(memberPrice)}/mo
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  }).format(memberPrice)}
+                  /mo
                 </span>
                 <span className="mt-1.5 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                  {teamMembers.length} {teamMembers.length === 1 ? "Member" : "Members"}
+                  {teamMembers.length}{" "}
+                  {teamMembers.length === 1 ? "Member" : "Members"}
                 </span>
               </div>
-              
+
               {/* Edit pencil icon (visible on hover) */}
               <button
                 className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200"
@@ -246,7 +262,7 @@ export default function TeamDetailPage() {
                           </span>
                         )}
                       </div>
-                      
+
                       <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-455 mt-1.5">
                         <Mail className="w-3.5 h-3.5 shrink-0" />
                         <span className="truncate">{member.email}</span>
@@ -275,8 +291,8 @@ export default function TeamDetailPage() {
           <div className="w-full max-w-[420px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 relative">
             {/* Close button X */}
             <button
-              disabled={isSaving}
               className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent disabled:opacity-50"
+              disabled={isSaving}
               onClick={() => setEditModalOpen(false)}
             >
               <X className="w-4 h-4" />
@@ -329,16 +345,16 @@ export default function TeamDetailPage() {
             {/* Buttons Row */}
             <div className="flex gap-3 mt-8">
               <button
-                disabled={isSaving}
                 className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
+                disabled={isSaving}
                 onClick={() => setEditModalOpen(false)}
               >
                 Cancel
               </button>
 
               <button
-                disabled={isSaving}
                 className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isSaving}
                 onClick={handleSaveTeamPricing}
               >
                 {isSaving ? (

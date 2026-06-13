@@ -32,7 +32,7 @@ declare module "@react-types/shared" {
 const getSiblingSsoUrl = () => {
   if (typeof window === "undefined") return null;
   const host = window.location.host;
-  
+
   if (host.includes("localhost:3000")) {
     return "http://localhost:3005/auth/sso-iframe";
   }
@@ -45,6 +45,7 @@ const getSiblingSsoUrl = () => {
   if (host.includes("inso.ai")) {
     return "https://www.insocode.com/auth/sso-iframe";
   }
+
   return null;
 };
 
@@ -84,6 +85,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     if (status !== "unauthenticated" || ssoAttempted) return;
 
     const siblingSsoUrl = getSiblingSsoUrl();
+
     if (!siblingSsoUrl) return;
 
     setSsoAttempted(true);
@@ -95,11 +97,13 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
       if (event.data?.type === "INSO_SSO_IFRAME_READY") {
         iframeRef.current?.contentWindow?.postMessage(
           { type: "INSO_SSO_CHECK" },
-          siblingOrigin
+          siblingOrigin,
         );
       } else if (event.data?.type === "INSO_SSO_RESPONSE") {
         if (event.data.status === "authenticated" && event.data.token) {
-          console.log("🔐 [SSO] Silent sibling authentication session found, signing in...");
+          console.log(
+            "🔐 [SSO] Silent sibling authentication session found, signing in...",
+          );
           try {
             await signIn("credentials", {
               redirect: false,
@@ -116,6 +120,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     window.addEventListener("message", handleMessage);
 
     const iframe = document.createElement("iframe");
+
     iframe.src = siblingSsoUrl;
     iframe.style.display = "none";
     iframe.id = "sso-silent-iframe";

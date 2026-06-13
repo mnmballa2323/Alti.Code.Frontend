@@ -52,8 +52,7 @@ export default function AdminLayout({
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
   const isTeamsDetail =
-    pathname.startsWith("/admin/teams/") &&
-    pathname !== "/admin/teams";
+    pathname.startsWith("/admin/teams/") && pathname !== "/admin/teams";
 
   const isMemberDetail =
     (pathname.startsWith("/admin/team-members/") &&

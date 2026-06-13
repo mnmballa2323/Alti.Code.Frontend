@@ -23,9 +23,10 @@ import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSession, signOut } from "next-auth/react";
-import { useAppSelector } from "@/store";
 
 import MobileNavSheet from "./landing-page/MobileNavSheet";
+
+import { useAppSelector } from "@/store";
 
 function Navbar() {
   const [mounted, setMounted] = useState(false);
@@ -396,6 +397,7 @@ function Navbar() {
                     size="sm"
                     onClick={() => {
                       const userRole = (profile?.role || "").toLowerCase();
+
                       if (userRole === "owner") {
                         router.push("/owner/dashboard");
                       } else if (userRole === "admin") {

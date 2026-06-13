@@ -44,20 +44,26 @@ export default function LoginPage() {
     }
 
     try {
-      const loginRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          password,
-          recaptchaToken,
-        }),
-      });
+      const loginRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            recaptchaToken,
+          }),
+        },
+      );
 
       const response = await loginRes.json();
 
       if (!loginRes.ok || !response.success) {
-        toast.error(response.message || response.error || "Invalid credentials");
+        toast.error(
+          response.message || response.error || "Invalid credentials",
+        );
+
         return;
       }
 
@@ -65,6 +71,7 @@ export default function LoginPage() {
         setMfaToken(response.data.mfaToken);
         setMfaRequired(true);
         toast.success("MFA verification code required.");
+
         return;
       }
 
@@ -96,10 +103,12 @@ export default function LoginPage() {
 
     if (mfaCode.length !== 6) {
       toast.error("Please enter a valid 6-digit code.");
+
       return;
     }
 
     const loading = toast.loading("Verifying code...");
+
     setIsLoadingMfa(true);
 
     try {
@@ -112,13 +121,16 @@ export default function LoginPage() {
             mfaToken,
             code: mfaCode,
           }),
-        }
+        },
       );
 
       const response = await challengeRes.json();
 
       if (!challengeRes.ok || !response.success) {
-        toast.error(response.message || response.error || "Invalid verification code");
+        toast.error(
+          response.message || response.error || "Invalid verification code",
+        );
+
         return;
       }
 
@@ -151,7 +163,10 @@ export default function LoginPage() {
       <div className="flex w-full flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="flex flex-col items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F7] text-black shadow-inner">
-            <Icon className="text-3xl" icon="solar:shield-keyhole-bold-duotone" />
+            <Icon
+              className="text-3xl"
+              icon="solar:shield-keyhole-bold-duotone"
+            />
           </div>
           <div className="text-center">
             <h1 className="text-3xl font-semibold tracking-tight text-black">
@@ -167,13 +182,14 @@ export default function LoginPage() {
           <form className="flex flex-col gap-4" onSubmit={handleMfaSubmit}>
             <div className="flex flex-col gap-1.5">
               <Input
-                isRequired
                 autoFocus
+                isRequired
                 className="max-w-full text-center"
                 classNames={{
                   inputWrapper:
                     "h-14 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                  input: "text-center font-mono text-2xl tracking-[0.5em] pl-[0.25em] text-black font-semibold",
+                  input:
+                    "text-center font-mono text-2xl tracking-[0.5em] pl-[0.25em] text-black font-semibold",
                 }}
                 name="mfaCode"
                 placeholder="000000"
@@ -181,6 +197,7 @@ export default function LoginPage() {
                 value={mfaCode}
                 onValueChange={(val) => {
                   const digitsOnly = val.replace(/\D/g, "");
+
                   if (digitsOnly.length <= 6) {
                     setMfaCode(digitsOnly);
                   }
@@ -191,8 +208,8 @@ export default function LoginPage() {
             <div className="flex flex-col gap-3 mt-2">
               <Button
                 className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md disabled:opacity-50"
-                type="submit"
                 disabled={mfaCode.length !== 6 || isLoadingMfa}
+                type="submit"
               >
                 Verify & Sign In
               </Button>
