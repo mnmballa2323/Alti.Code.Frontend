@@ -68,7 +68,6 @@ export default function RevenuePage() {
 
       {/* Bottom Section: Recent Transactions */}
       <div className="w-full">
-        <h2 className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">Recent Transactions</h2>
         <div className="w-full bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden shadow-sm">
           
           <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-[#0d1117]/50 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
