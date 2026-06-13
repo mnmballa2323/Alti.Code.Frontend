@@ -25,8 +25,6 @@ const SettingsModal = () => {
   const { theme, setTheme } = useTheme();
   const { isOpen, onClose } = useModalStore();
   const {
-    openaiApiKey,
-    anthropicApiKey,
     geminiApiKey,
     githubToken,
     defaultModel,
@@ -46,8 +44,6 @@ const SettingsModal = () => {
     gcpClientEmail,
     gcpPrivateKey,
 
-    setOpenaiApiKey,
-    setAnthropicApiKey,
     setGeminiApiKey,
     setGithubToken,
     setDefaultModel,
@@ -78,8 +74,6 @@ const SettingsModal = () => {
         if (responseData?.success && responseData?.data) {
           const keys = responseData.data;
 
-          if (keys.openaiApiKey) setOpenaiApiKey(keys.openaiApiKey);
-          if (keys.anthropicApiKey) setAnthropicApiKey(keys.anthropicApiKey);
           if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
           if (keys.azureEndpoint) setAzureEndpoint(keys.azureEndpoint);
           if (keys.azureApiKey) setAzureApiKey(keys.azureApiKey);
@@ -97,8 +91,6 @@ const SettingsModal = () => {
     }
   }, [
     isOpen,
-    setOpenaiApiKey,
-    setAnthropicApiKey,
     setGeminiApiKey,
     setAzureEndpoint,
     setAzureApiKey,
@@ -119,8 +111,6 @@ const SettingsModal = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          openaiApiKey,
-          anthropicApiKey,
           geminiApiKey,
           azureEndpoint,
           azureApiKey,
@@ -278,22 +268,7 @@ const SettingsModal = () => {
                       military-grade Tink AEAD encryption.
                     </div>
 
-                    <Input
-                      label="OpenAI API Key"
-                      placeholder="sk-..."
-                      type="password"
-                      value={openaiApiKey}
-                      variant="bordered"
-                      onValueChange={setOpenaiApiKey}
-                    />
-                    <Input
-                      label="Anthropic API Key"
-                      placeholder="sk-ant-..."
-                      type="password"
-                      value={anthropicApiKey}
-                      variant="bordered"
-                      onValueChange={setAnthropicApiKey}
-                    />
+
                     <Input
                       label="Gemini API Key"
                       placeholder="AIzaSy..."

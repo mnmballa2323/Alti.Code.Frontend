@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface SettingsState {
-  openaiApiKey: string;
-  anthropicApiKey: string;
+
   geminiApiKey: string;
   githubToken: string;
   defaultModel: string;
@@ -27,8 +26,7 @@ interface SettingsState {
   maxConcurrentAgents: number;
   agentTimeoutSecs: number;
 
-  setOpenaiApiKey: (key: string) => void;
-  setAnthropicApiKey: (key: string) => void;
+
   setGeminiApiKey: (key: string) => void;
   setGithubToken: (key: string) => void;
   setDefaultModel: (model: string) => void;
@@ -52,8 +50,7 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      openaiApiKey: "",
-      anthropicApiKey: "",
+
       geminiApiKey: "",
       githubToken: "",
       defaultModel: "",
@@ -74,8 +71,7 @@ export const useSettingsStore = create<SettingsState>()(
       maxConcurrentAgents: 10,
       agentTimeoutSecs: 30,
 
-      setOpenaiApiKey: (key) => set({ openaiApiKey: key }),
-      setAnthropicApiKey: (key) => set({ anthropicApiKey: key }),
+
       setGeminiApiKey: (key) => set({ geminiApiKey: key }),
       setGithubToken: (key) => set({ githubToken: key }),
       setDefaultModel: (model) => set({ defaultModel: model }),

@@ -288,16 +288,7 @@ export const SAAS_MOCKS = [
     slug: "mcp_ollama",
     icon: "solar:cpu-bold-duotone",
   },
-  {
-    name: "OpenAI Developer API",
-    slug: "mcp_openai",
-    icon: "logos:openai",
-  },
-  {
-    name: "Anthropic API",
-    slug: "mcp_anthropic",
-    icon: "logos:anthropic",
-  },
+
   {
     name: "LangChain",
     slug: "mcp_langchain",

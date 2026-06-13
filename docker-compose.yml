@@ -115,7 +115,10 @@ services:
       - PENTAGI_POSTGRES_USER=postgres
       - PENTAGI_POSTGRES_PASSWORD=postgres
       - PENTAGI_POSTGRES_DB=pentagidb
-      # Note: Set OPEN_AI_KEY within your internal environment or proxy
+      - OPENAI_API_BASE=http://backend_azure:5002/v1
+      - OPENAI_BASE_URL=http://backend_azure:5002/v1
+      - OPENAI_API_KEY=dummy-key-for-local-proxy
+      # Note: Direct connection disabled. Using internal proxy.
     volumes:
       - pentagi-data:/opt/pentagi/data
       - pentagi-ssl:/opt/pentagi/ssl
@@ -295,8 +298,9 @@ services:
       - "127.0.0.1:7860:7860"
     environment:
       - PORT=7860
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
-      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_API_BASE=http://backend_azure:5002/v1
+      - OPENAI_BASE_URL=http://backend_azure:5002/v1
+      - OPENAI_API_KEY=dummy-key-for-local-proxy
       - HF_TOKEN=${HF_TOKEN:-}
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     volumes:
