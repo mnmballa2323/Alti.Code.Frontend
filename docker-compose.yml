@@ -301,7 +301,7 @@ services:
       - OPENAI_API_BASE=http://backend_azure:5002/v1
       - OPENAI_BASE_URL=http://backend_azure:5002/v1
       - OPENAI_API_KEY=dummy-key-for-local-proxy
-      - HF_TOKEN=${HF_TOKEN:-}
+
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     volumes:
       - ml-intern-logs:/app/session_logs
