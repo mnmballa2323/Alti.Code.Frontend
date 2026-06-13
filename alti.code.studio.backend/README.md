@@ -15,6 +15,19 @@ The Alti.Code.Studio backend is a **production-hardened AI orchestration engine*
 
 ---
 
+## Enterprise Compliance & Security
+Built specifically for banks, governments, defense contractors, healthcare, and legal industries.
+
+- **FIPS 140-3 Cryptography:** Ready for DoD IL5/IL6 via native Node.js FIPS mode.
+- **Data Sovereignty (Geo-Fencing):** Enforces strict geo-boundaries, blocking cross-region API access per tenant data residency requirements.
+- **Bring Your Own Key (BYOK):** Seamless AWS KMS and GCP KMS integration for tenant-level symmetric encryption.
+- **Attribute-Based Access Control (ABAC):** Context-aware policies driven by Clearance Levels and IP Whitelists.
+- **Data Retention & Auto-Expungement (GDPR/HIPAA):** Automated cron jobs prune data beyond configured retention limits, while respecting E-Discovery Legal Holds.
+- **Enterprise WAF & Rate Limiting:** Fortune 100 DDoS and cost-exhaustion protection using `express-rate-limit` and payload deep-packet inspection.
+- **Adversarial Dual-Review (Maker-Checker):** Critical operations require approvals from multiple independent specialist agents.
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
