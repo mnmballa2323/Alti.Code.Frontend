@@ -154,7 +154,7 @@ export default function DatabaseConnectorsSection() {
       <div className="max-w-7xl mx-auto flex flex-col gap-16 items-center text-center">
         <div className="flex flex-col gap-6 max-w-5xl w-full px-4">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
-            50 Database Connectors. <br />
+            18 Database Connectors. <br />
             <span className="text-[#10B981]">Instant data layer access.</span>
           </h3>
           <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto">
