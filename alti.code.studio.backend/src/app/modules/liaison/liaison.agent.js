@@ -26,8 +26,6 @@ class LiaisonAgent {
         switch (source.toLowerCase()) {
             case 'github':
                 return await this.handleGitHubEvent(payload);
-            case 'stripe':
-                return await this.handleStripeEvent(payload);
             default:
                 logger.warn(`🤝 Liaison: Unknown webhook source: ${source}`);
                 return { status: 'ignored', reason: 'unknown source' };
@@ -59,16 +57,6 @@ class LiaisonAgent {
         }
 
         return { status: 'processed', message: 'Event logged but no action required' };
-    }
-
-    /**
-     * Process Stripe Events (Mock)
-     * @param {object} payload 
-     */
-    async handleStripeEvent(payload) {
-        logger.info('🤝 Liaison: Processing Stripe payment event');
-        // Dispatch to Billing Agent (future)
-        return { status: 'processed', message: 'Payment recorded' };
     }
 }
 
