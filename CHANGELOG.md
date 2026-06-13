@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.227] - 2026-06-13 — Model Gateway Billing Tier Limits & Regional Telemetry
+
+### Added
+
+- **Billing Tier Token Limits**: Implemented rate-limiting check in `modelGateway` (`modelGateway.js`) before routing completions, enforcing strict token ceilings per product vertical (e.g. 100k for healthcare, 150k for finance, 80k for pharma).
+- **Regional Telemetry Tracking**: Added regional metric counters tracking call latency, call volume, and token usage per cloud provider region (`us-central1`, `us-east-1`, `eastus2`).
+- **Unit Testing**: Expanded `modelGateway.test.js` to verify limit enforcement and regional metric aggregation.
+
 ## [39.37.226] - 2026-06-13 — Product-Scoped Cryptographic WORM Audit Logging
 
 ### Added
