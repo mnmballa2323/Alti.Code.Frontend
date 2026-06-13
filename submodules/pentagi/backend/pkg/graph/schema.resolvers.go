@@ -1582,21 +1582,7 @@ func (r *queryResolver) SettingsProviders(ctx context.Context) (*model.Providers
 		}
 
 		switch prvtype {
-		case provider.ProviderOpenAI:
-			config.Default.Openai = mpcfg
-			if models, err := openai.DefaultModels(); err == nil {
-				config.Models.Openai = converter.ConvertModels(models)
-			}
-		case provider.ProviderAnthropic:
-			config.Default.Anthropic = mpcfg
-			if models, err := anthropic.DefaultModels(); err == nil {
-				config.Models.Anthropic = converter.ConvertModels(models)
-			}
-		case provider.ProviderGemini:
-			config.Default.Gemini = mpcfg
-			if models, err := gemini.DefaultModels(); err == nil {
-				config.Models.Gemini = converter.ConvertModels(models)
-			}
+
 		case provider.ProviderBedrock:
 			config.Default.Bedrock = mpcfg
 			if models, err := bedrock.DefaultModels(); err == nil {
@@ -1612,12 +1598,7 @@ func (r *queryResolver) SettingsProviders(ctx context.Context) (*model.Providers
 	defaultProviders := r.ProvidersCtrl.DefaultProviders()
 	for _, prvtype := range defaultProviders.ListTypes() {
 		switch prvtype {
-		case provider.ProviderOpenAI:
-			config.Enabled.Openai = true
-		case provider.ProviderAnthropic:
-			config.Enabled.Anthropic = true
-		case provider.ProviderGemini:
-			config.Enabled.Gemini = true
+
 		case provider.ProviderBedrock:
 			config.Enabled.Bedrock = true
 		case provider.ProviderOllama:
