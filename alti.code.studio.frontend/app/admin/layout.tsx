@@ -56,7 +56,8 @@ export default function AdminLayout({
     pathname.startsWith("/admin/teams/") && pathname !== "/admin/teams";
 
   const isEnterpriseDetail =
-    pathname.startsWith("/admin/enterprise/") && pathname !== "/admin/enterprise";
+    pathname.startsWith("/admin/enterprise/") &&
+    pathname !== "/admin/enterprise";
 
   const isMemberDetail =
     (pathname.startsWith("/admin/team-members/") &&
@@ -181,11 +182,21 @@ export default function AdminLayout({
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href={isEnterpriseDetail ? "/admin/enterprise" : isTeamsDetail ? "/admin/teams" : "/admin/team-members"}
+                href={
+                  isEnterpriseDetail
+                    ? "/admin/enterprise"
+                    : isTeamsDetail
+                      ? "/admin/teams"
+                      : "/admin/team-members"
+                }
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
-                  {isEnterpriseDetail ? "Back to Enterprise" : isTeamsDetail ? "Back to Teams" : "Back to Individual"}
+                  {isEnterpriseDetail
+                    ? "Back to Enterprise"
+                    : isTeamsDetail
+                      ? "Back to Teams"
+                      : "Back to Individual"}
                 </span>
               </Link>
             )}

@@ -2,7 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Loader2, Mail, Shield, Pencil, X, ChevronDown, Search } from "lucide-react";
+import {
+  Loader2,
+  Mail,
+  Shield,
+  Pencil,
+  ChevronDown,
+  Search,
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { teamAPI } from "@/lib/enterprise-api";
@@ -199,7 +206,9 @@ export default function EnterpriseDetailPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">Loading enterprise details...</p>
+          <p className="text-sm text-neutral-500">
+            Loading enterprise details...
+          </p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -292,7 +301,11 @@ export default function EnterpriseDetailPage() {
                       disabled={isSaving}
                       onClick={handleSaveTeamPricing}
                     >
-                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+                      {isSaving ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        "Save Changes"
+                      )}
                     </button>
                   </div>
                 </div>
@@ -314,47 +327,60 @@ export default function EnterpriseDetailPage() {
 
           {/* Members list */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {teamMembers.filter(m => 
-              m.email.toLowerCase().includes(searchQuery.toLowerCase()) || 
-              (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
-              (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+            {teamMembers.filter(
+              (m) =>
+                m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (m.name &&
+                  m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (m.role &&
+                  m.role.toLowerCase().includes(searchQuery.toLowerCase())),
             ).length > 0 ? (
-              teamMembers.filter(m => 
-                m.email.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
-                (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
-              ).map((member) => {
-                const isYou = currentUser && member.email === currentUser.email;
+              teamMembers
+                .filter(
+                  (m) =>
+                    m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (m.name &&
+                      m.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())) ||
+                    (m.role &&
+                      m.role.toLowerCase().includes(searchQuery.toLowerCase())),
+                )
+                .map((member) => {
+                  const isYou =
+                    currentUser && member.email === currentUser.email;
 
-                return (
-                  <div
-                    key={member.id}
-                    className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
-                  >
-                    {/* Member info */}
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px]">
-                          {member.name || "Unknown User"}
-                        </span>
-                        {isYou && (
-                          <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 uppercase">
-                            You
+                  return (
+                    <div
+                      key={member.id}
+                      className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
+                    >
+                      {/* Member info */}
+                      <div className="flex-1 min-w-0 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px]">
+                            {member.name || "Unknown User"}
                           </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span className="truncate">{member.email}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                        <Shield className="w-3.5 h-3.5 shrink-0" />
-                        <span className="capitalize truncate">{member.role}</span>
+                          {isYou && (
+                            <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 uppercase">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                          <Mail className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">{member.email}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                          <Shield className="w-3.5 h-3.5 shrink-0" />
+                          <span className="capitalize truncate">
+                            {member.role}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })
             ) : (
               <div className="col-span-2 text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
                 No members currently in this team.

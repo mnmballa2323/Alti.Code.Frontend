@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Loader2 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
 import Sidebar from "@/components/dashboard/dashboard-sidebar/dashboard-sidebar";
@@ -62,7 +61,7 @@ export default function DashboardLayout({
     <div className="flex">
       <Sidebar />
       {isLoadingDashboard || isRedirecting ? (
-        <div className="flex h-screen w-full bg-[#F3F4F6] dark:bg-[#0d1117]"></div>
+        <div className="flex h-screen w-full bg-[#F3F4F6] dark:bg-[#0d1117]" />
       ) : (
         children
       )}

@@ -13,7 +13,6 @@ import {
   Activity,
   BarChart3,
   ArrowLeft,
-  Loader2,
   LayoutDashboard,
 } from "lucide-react";
 
@@ -59,7 +58,8 @@ export default function OwnerLayout({
     pathname.startsWith("/owner/teams/") && pathname !== "/owner/teams";
 
   const isEnterpriseDetail =
-    pathname.startsWith("/owner/enterprise/") && pathname !== "/owner/enterprise";
+    pathname.startsWith("/owner/enterprise/") &&
+    pathname !== "/owner/enterprise";
 
   const isMemberDetail =
     (pathname.startsWith("/owner/team-members/") &&
@@ -81,7 +81,8 @@ export default function OwnerLayout({
     }
   }, [status, profile, router]);
 
-  const isAuthLoading = status === "loading" || (status === "authenticated" && !isAuthorized);
+  const isAuthLoading =
+    status === "loading" || (status === "authenticated" && !isAuthorized);
 
   const renderNavGroup = (
     title: string,
@@ -168,11 +169,21 @@ export default function OwnerLayout({
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href={isEnterpriseDetail ? "/owner/enterprise" : isTeamsDetail ? "/owner/teams" : "/owner/team-members"}
+                href={
+                  isEnterpriseDetail
+                    ? "/owner/enterprise"
+                    : isTeamsDetail
+                      ? "/owner/teams"
+                      : "/owner/team-members"
+                }
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
-                  {isEnterpriseDetail ? "Back to Enterprise" : isTeamsDetail ? "Back to Teams" : "Back to Individual"}
+                  {isEnterpriseDetail
+                    ? "Back to Enterprise"
+                    : isTeamsDetail
+                      ? "Back to Teams"
+                      : "Back to Individual"}
                 </span>
               </Link>
             )}
