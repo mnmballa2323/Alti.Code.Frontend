@@ -329,7 +329,7 @@ export default function EnterpriseDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {teamMembers.filter(
               (m) =>
-                m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                 (m.name &&
                   m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
                 (m.role &&
@@ -338,7 +338,7 @@ export default function EnterpriseDetailPage() {
               teamMembers
                 .filter(
                   (m) =>
-                    m.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
                     (m.name &&
                       m.name
                         .toLowerCase()
