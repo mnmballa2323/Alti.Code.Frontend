@@ -168,7 +168,7 @@ export class BaseSpecialistAgent {
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const result = await withTimeout(
-          this._invoke(cleanPrompt, sanitizedCtx, resolvedTenantId, spanId),
+          this._invoke(cleanPrompt, sanitizedCtx, resolvedTenantId, null),
           DEFAULT_TIMEOUT_MS,
           `${this.name}.consult`,
         );
@@ -221,17 +221,7 @@ export class BaseSpecialistAgent {
     this._metrics.errors++;
     this._metrics.totalLatencyMs += Date.now() - t0;
 
-    if (spanId) {
-      try {
-        await swarmTraceService.endSpan(spanId, 0, 0, {
-          status: 'error',
-          errorMessage: lastError.message,
-          errorCode: lastError.code || 'LLM_ERROR',
-        });
-      } catch (traceErr) {
-        logger.debug(`Telemetry: endSpan failed on error: ${traceErr.message}`);
-      }
-    }
+    // Removed trace error logic
 
     throw lastError instanceof AgentError
       ? lastError
