@@ -199,41 +199,91 @@ export default function EnterpriseDetailPage() {
       ) : (
         <div className="space-y-6">
           {/* Team Header card */}
-          <div className="group bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 shadow-sm flex items-start justify-between hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md transition-all">
-            <div className="space-y-1">
-              <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
-                {teamName}
-              </h2>
-              <p className="text-sm text-neutral-500 dark:text-neutral-455">
-                {teamDesc}
-              </p>
-            </div>
-
-            <div className="relative w-36 h-14 shrink-0">
-              {/* Monthly price per member (visible when not hovered) */}
-              <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
-                <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  }).format(memberPrice)}
-                  /mo
-                </span>
-                <span className="mt-1.5 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                  {teamMembers.length}{" "}
-                  {teamMembers.length === 1 ? "Member" : "Members"}
-                </span>
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md overflow-hidden">
+            <div className="group p-6 flex items-start justify-between">
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+                  {teamName}
+                </h2>
+                <p className="text-sm text-neutral-500 dark:text-neutral-450">
+                  {teamDesc}
+                </p>
               </div>
 
-              {/* Edit pencil icon (visible on hover) */}
-              <button
-                className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200"
-                onClick={() => setEditModalOpen(true)}
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
+              <div className="relative w-36 h-14 shrink-0">
+                {/* Monthly price per member (visible when not hovered) */}
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
+                  <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    }).format(memberPrice)}
+                    /mo
+                  </span>
+                  <span className="mt-1.5 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
+                    {teamMembers.length}{" "}
+                    {teamMembers.length === 1 ? "Member" : "Members"}
+                  </span>
+                </div>
+
+                {/* Edit pencil icon (visible on hover) */}
+                <button
+                  className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200"
+                  onClick={() => setEditModalOpen(true)}
+                >
+                  <Pencil className="w-4 h-4" />
+                </button>
+              </div>
             </div>
+
+            {editModalOpen && (
+              <div className="px-6 pb-6 pt-4 border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22]">
+                <div className="flex items-end gap-4">
+                  <div className="flex-1">
+                    <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+                      Monthly Price Per Member
+                    </label>
+                    <div className="relative">
+                      <select
+                        className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
+                        value={customPrice}
+                        onChange={(e) => setCustomPrice(e.target.value)}
+                      >
+                        <option value="$0">$0</option>
+                        <option value="$250">$250</option>
+                        <option value="$500">$500</option>
+                        <option value="$750">$750</option>
+                        <option value="$1,000">$1,000</option>
+                        <option value="$1,250">$1,250</option>
+                        <option value="$1,500">$1,500</option>
+                        <option value="$2,000">$2,000</option>
+                        <option value="$2,500">$2,500</option>
+                      </select>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      className="px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
+                      disabled={isSaving}
+                      onClick={() => setEditModalOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="px-6 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+                      disabled={isSaving}
+                      onClick={handleSaveTeamPricing}
+                    >
+                      {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Members list */}
@@ -254,23 +304,13 @@ export default function EnterpriseDetailPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px]">
-                          {member.name || member.email.split("@")[0]}
+                          {member.email}
                         </span>
                         {isYou && (
                           <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 uppercase">
                             You
                           </span>
                         )}
-                      </div>
-
-                      <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-455 mt-1.5">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span className="truncate">{member.email}</span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-455 mt-1">
-                        <Shield className="w-3.5 h-3.5 shrink-0 text-neutral-400" />
-                        <span className="capitalize">{member.role}</span>
                       </div>
                     </div>
                   </div>
@@ -285,93 +325,7 @@ export default function EnterpriseDetailPage() {
         </div>
       )}
 
-      {/* Edit Team Pricing Modal */}
-      {editModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
-          <div className="w-full max-w-[420px] bg-white dark:bg-[#161b22] border border-neutral-200/50 dark:border-neutral-800 rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200 relative">
-            {/* Close button X */}
-            <button
-              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 cursor-pointer bg-transparent disabled:opacity-50"
-              disabled={isSaving}
-              onClick={() => setEditModalOpen(false)}
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            <h2 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-6">
-              Edit Enterprise Pricing
-            </h2>
-
-            <div className="space-y-4">
-              {/* Team Name */}
-              <div>
-                <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
-                  Enterprise Name
-                </label>
-                <input
-                  readOnly
-                  className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm text-neutral-500 dark:text-neutral-455 focus:outline-none cursor-not-allowed"
-                  type="text"
-                  value={teamName}
-                />
-              </div>
-
-              {/* Price Per User Option */}
-              <div>
-                <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
-                  Monthly Price Per Member
-                </label>
-                <div className="relative">
-                  <select
-                    className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
-                    value={customPrice}
-                    onChange={(e) => setCustomPrice(e.target.value)}
-                  >
-                    <option value="$0">$0</option>
-                    <option value="$250">$250</option>
-                    <option value="$500">$500</option>
-                    <option value="$750">$750</option>
-                    <option value="$1,000">$1,000</option>
-                    <option value="$1,250">$1,250</option>
-                    <option value="$1,500">$1,500</option>
-                    <option value="$2,000">$2,000</option>
-                    <option value="$2,500">$2,500</option>
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Buttons Row */}
-            <div className="flex gap-3 mt-8">
-              <button
-                className="flex-1 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer disabled:opacity-50"
-                disabled={isSaving}
-                onClick={() => setEditModalOpen(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="flex-1 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
-                disabled={isSaving}
-                onClick={handleSaveTeamPricing}
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  "Save Changes"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Edit Team */}
     </div>
   );
 }
