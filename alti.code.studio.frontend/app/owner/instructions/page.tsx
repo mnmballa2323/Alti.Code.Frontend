@@ -22,6 +22,9 @@ export default function InstructionsPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<InstructionRule | null>(null);
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newInstruction.trim()) return;
@@ -35,8 +38,22 @@ export default function InstructionsPage() {
     setNewInstruction("");
   };
 
-  const handleDelete = (index: number) => {
-    setInstructions((prev) => prev.filter((_, i) => i !== index));
+  const handleDeleteClick = (inst: InstructionRule) => {
+    setItemToDelete(inst);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      setInstructions((prev) => prev.filter((item) => item !== itemToDelete));
+      setItemToDelete(null);
+      setDeleteModalOpen(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setItemToDelete(null);
+    setDeleteModalOpen(false);
   };
 
   const handleStartEdit = (index: number, currentText: string) => {
@@ -155,7 +172,7 @@ export default function InstructionsPage() {
                     </button>
                     <button
                       className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDeleteClick(inst)}
                     >
                       <Trash2 className="w-4 h-4 text-neutral-400" />
                     </button>
@@ -169,6 +186,36 @@ export default function InstructionsPage() {
             </div>
           )}
         </div>
+
+      {deleteModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#161b22] w-[320px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+            <div className="p-6 text-center space-y-2">
+              <h3 className="text-[17px] font-semibold text-neutral-900 dark:text-white">
+                Delete Instruction
+              </h3>
+              <p className="text-[13px] leading-tight text-neutral-500 dark:text-neutral-400 px-2">
+                Are you sure you want to remove this instruction?
+              </p>
+            </div>
+            <div className="flex border-t border-neutral-100 dark:border-neutral-800">
+              <button
+                onClick={cancelDelete}
+                className="flex-1 py-3.5 text-[15px] font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+              >
+                Cancel
+              </button>
+              <div className="w-[1px] bg-neutral-100 dark:bg-neutral-800" />
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-3.5 text-[15px] font-semibold text-[#FF3B30] hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
