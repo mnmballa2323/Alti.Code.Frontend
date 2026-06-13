@@ -2,15 +2,23 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { vectorStoreService } from './vector.store.js';
 import { ragService } from './rag.service.js';
 import { vertexService } from '../ai/vertex.service.js';
+import { vertexVectorSearch } from '../googleCloud/vectorSearch.service.js';
 
 vi.mock('../ai/vertex.service.js');
+vi.mock('../googleCloud/vectorSearch.service.js', () => ({
+    vertexVectorSearch: {
+        upsertEmbeddings: vi.fn(),
+        queryContext: vi.fn()
+    }
+}));
 vi.mock('./vector.store.js', async () => {
     const original = await vi.importActual('./vector.store.js');
     return {
         ...original,
         vectorStoreService: {
             add: vi.fn(),
-            search: vi.fn()
+            search: vi.fn(),
+            getByIds: vi.fn()
         }
     };
 });
