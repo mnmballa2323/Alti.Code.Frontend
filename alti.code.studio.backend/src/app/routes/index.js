@@ -22,9 +22,13 @@ import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
 import { geoFenceMiddleware } from '../middlewares/geoFence.middleware.js';
+import { auditMiddleware } from '../middlewares/audit.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
 import { scimRoutes } from '@inso/platform';
+
+// 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
+router.use(auditMiddleware('GLOBAL_API_REQUEST'));
 
 // 🛡️ Global Enterprise WAF (Rate Limiting & Payload Inspection & Headers)
 router.use(enterpriseWAF.rateLimiter);

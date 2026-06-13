@@ -208,6 +208,7 @@ model MarketplacePlugin {
 model AuditLog {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   tenantId      String?  @db.Uuid
+  tenant        Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   timestamp     DateTime @default(now())
   actor         String   @db.VarChar(255)
   action        String   @db.VarChar(255)
@@ -453,29 +454,6 @@ model Vault {
 // -----------------------------------------------------------------
 // Phase 4: Sovereign Telemetry & Audit
 // -----------------------------------------------------------------
-
-/// WORM-compliant Audit Log for SOC 2 / FedRAMP
-model AuditLog {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId    String?  @db.Uuid
-  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
-  
-  userId      String?  @db.Uuid
-  userEmail   String?
-  
-  action      String   // e.g. 'USER_LOGIN', 'SCIM_PROVISION', 'WAF_BLOCK'
-  resource    String?  // e.g. '/api/swarm/route' or 'User:123'
-  ipAddress   String?
-  userAgent   String?
-  status      String   // 'SUCCESS', 'FAILED', 'DENIED'
-  
-  details     Json     @default("{}") // Cryptographically signed or WORM stored
-  
-  createdAt   DateTime @default(now())
-  
-  @@index([tenantId, createdAt(sort: Desc)])
-  @@index([action])
-}
 
 /// Real-time SIEM Integration
 model SiemWebhook {
