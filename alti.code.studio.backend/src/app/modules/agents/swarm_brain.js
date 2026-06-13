@@ -416,12 +416,12 @@ If you require assistance from another specialized agent to complete your task, 
 
             if (isCodeTask) {
                 // Determine preferred agent based on API keys and configuration
-                const hasAnthropic = !!(process.env.ANTHROPIC_API_KEY);
+                const hasBedrock = !!(process.env.AWS_BEDROCK_API_KEY || process.env.AWS_ACCESS_KEY_ID);
                 const hasGemini = !!(config.gemini_secret_key || process.env.GEMINI_API_KEY);
                 const clawBinaryExists = fs.existsSync(clawCodeRouterService.clawPath);
                 
                 let preferredAgent = 'goose';
-                if (clawBinaryExists && (hasAnthropic || process.env.PREFERRED_AGENT === 'claw' || !hasGemini)) {
+                if (clawBinaryExists && (hasBedrock || process.env.PREFERRED_AGENT === 'claw' || !hasGemini)) {
                     preferredAgent = 'claw';
                 }
 

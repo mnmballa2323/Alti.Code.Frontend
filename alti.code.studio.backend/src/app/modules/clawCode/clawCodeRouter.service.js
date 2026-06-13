@@ -268,7 +268,8 @@ ${newErrors.join('\n\n')}
             // Supply environment with credentials (fallback to other providers if needed)
             const env = {
                 ...process.env,
-                ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || config.openai_secret_key || process.env.GEMINI_API_KEY || 'dummy-token',
+                AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || 'dummy-aws',
+                GEMINI_API_KEY: process.env.GEMINI_API_KEY || 'dummy-gemini',
             };
 
             const workspaceRoot = path.resolve(process.cwd(), '../');
