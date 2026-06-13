@@ -13,11 +13,11 @@ export default function HeroSwarm() {
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         {/* Apple-style Headline */}
         <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter text-black leading-[1.0] text-center">
-          <span className="text-6xl md:text-8xl lg:text-[7rem]">
-            Autonomous
+          <span className="text-5xl md:text-7xl lg:text-[5.5rem]">
+            Private and Secure
           </span>
-          <span className="text-[2.85rem] md:text-[3.9rem] lg:text-[4.5rem] tracking-tight text-gray-900 mt-1">
-            software engineering.
+          <span className="text-[2.2rem] md:text-[3.2rem] lg:text-[3.8rem] tracking-tight text-gray-800 mt-3">
+            autonomous software engineering.
           </span>
         </h1>
 
