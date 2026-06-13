@@ -98,6 +98,7 @@ type Observation interface {
     Retriever(...ObservationContextOption) Retriever
     Score(...ObservationContextOption) Score
     Evaluator(...ObservationContextOption) Evaluator
+    Chain(...ObservationContextOption) Chain
     End(...ObservationContextOption)
     ID() string
     TraceID() string
@@ -152,6 +153,7 @@ func (d dummyObservation) Tool(...ObservationContextOption) Tool { return dummyT
 func (d dummyObservation) Retriever(...ObservationContextOption) Retriever { return dummyRetriever{} }
 func (d dummyObservation) Score(...ObservationContextOption) Score { return dummyScore{} }
 func (d dummyObservation) Evaluator(...ObservationContextOption) Evaluator { return dummyEvaluator{} }
+func (d dummyObservation) Chain(...ObservationContextOption) Chain { return dummyChain{} }
 func (d dummyObservation) End(...ObservationContextOption) {}
 func (d dummyObservation) ID() string { return "" }
 func (d dummyObservation) TraceID() string { return "" }
@@ -232,3 +234,29 @@ func WithEvaluatorMetadata(metadata any) ObservationContextOption { return func(
 func WithEvaluatorOutput(output any) ObservationContextOption { return func() {} }
 func WithEvaluatorStatus(status string) ObservationContextOption { return func() {} }
 func WithEvaluatorLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+
+type Chain interface {
+    Observation(context.Context) (context.Context, Observation)
+    End(...ObservationContextOption)
+}
+
+type dummyChain struct{}
+func (d dummyChain) Observation(ctx context.Context) (context.Context, Observation) { return ctx, dummyObservation{} }
+func (d dummyChain) End(...ObservationContextOption) {}
+
+func WithChainName(name string) ObservationContextOption { return func() {} }
+func WithChainInput(input any) ObservationContextOption { return func() {} }
+func WithChainMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithChainOutput(output any) ObservationContextOption { return func() {} }
+func WithChainStatus(status string) ObservationContextOption { return func() {} }
+func WithChainLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+
+func WithTraceName(name string) ObservationContextOption { return func() {} }
+func WithTraceUserID(userID string) ObservationContextOption { return func() {} }
+func WithTraceTags(tags []string) ObservationContextOption { return func() {} }
+func WithTraceInput(input any) ObservationContextOption { return func() {} }
+func WithTraceSessionID(sessionID string) ObservationContextOption { return func() {} }
+func WithTraceMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithObservationTraceContext(ctx context.Context) ObservationContextOption { return func() {} }
+func WithObservationTraceID(traceID string) ObservationContextOption { return func() {} }
+func WithObservationTraceURL(url string) ObservationContextOption { return func() {} }
