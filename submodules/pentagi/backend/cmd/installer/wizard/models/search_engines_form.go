@@ -42,17 +42,7 @@ func (m *SearchEnginesFormModel) BuildForm() tea.Cmd {
 		config.DuckDuckGoEnabled,
 	))
 
-	))
 
-	fields = append(fields, m.createSelectTextField(
-		[]string{"sonar", "sonar-pro", "sonar-reasoning", "sonar-reasoning-pro", "sonar-deep-research"},
-		false,
-	))
-
-	fields = append(fields, m.createSelectTextField(
-		[]string{"low", "medium", "high"},
-		false,
-	))
 
 	// Tavily API Key
 	fields = append(fields, m.createAPIKeyField("tavily_api_key",
@@ -234,10 +224,7 @@ func (m *SearchEnginesFormModel) GetCurrentConfiguration() string {
 			m.GetStyles().Warning.Render(locale.StatusDisabled)))
 	}
 
-			m.GetStyles().Success.Render(locale.StatusConfigured)))
-	} else {
-			m.GetStyles().Warning.Render(locale.StatusNotConfigured)))
-	}
+
 
 	// Tavily
 	if config.TavilyAPIKey.Value != "" {

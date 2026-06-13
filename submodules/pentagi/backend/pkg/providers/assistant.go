@@ -310,7 +310,7 @@ func (ap *assistantProvider) getAssistantSystemPrompt(ctx context.Context) (stri
 		"DuckDuckGoToolName":      tools.DuckDuckGoToolName,
 		"TavilyToolName":          tools.TavilyToolName,
 		"TraversaalToolName":      tools.TraversaalToolName,
-		"PerplexityToolName":      tools.PerplexityToolName,
+
 		"BrowserToolName":         tools.BrowserToolName,
 		"SearchInMemoryToolName":  tools.SearchInMemoryToolName,
 		"SearchGuideToolName":     tools.SearchGuideToolName,

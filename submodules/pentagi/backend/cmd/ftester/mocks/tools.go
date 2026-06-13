@@ -153,9 +153,7 @@ func MockResponse(funcName string, args json.RawMessage) (string, error) {
 
 		resultObj = builder.String()
 
-		}
 
-		resultObj = builder.String()
 
 	case tools.SearxngToolName:
 		var searchArgs tools.SearchAction

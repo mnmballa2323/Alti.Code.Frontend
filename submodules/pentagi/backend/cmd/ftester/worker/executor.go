@@ -183,18 +183,6 @@ func (te *toolExecutor) GetTool(ctx context.Context, funcName string) (tools.Too
 			te.proxies.GetSearchLogProvider(),
 		), nil
 
-			te.flowID,
-			te.taskID,
-			te.subtaskID,
-			te.cfg.ProxyURL,
-			0, // default temperature
-			0, // default topP
-			0, // default maxTokens
-			0, // default timeout
-			te.proxies.GetSearchLogProvider(),
-			te.GetSummarizer(),
-		), nil
-
 	case tools.SearxngToolName:
 		return tools.NewSearxngTool(
 			te.flowID,

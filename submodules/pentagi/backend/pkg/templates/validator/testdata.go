@@ -41,7 +41,7 @@ func CreateDummyTemplateData() map[string]any {
 		"DuckDuckGoToolName":        tools.DuckDuckGoToolName,
 		"TavilyToolName":            tools.TavilyToolName,
 		"TraversaalToolName":        tools.TraversaalToolName,
-		"PerplexityToolName":        tools.PerplexityToolName,
+
 		"SearchInMemoryToolName":    tools.SearchInMemoryToolName,
 		"SearchGuideToolName":       tools.SearchGuideToolName,
 		"SearchAnswerToolName":      tools.SearchAnswerToolName,
