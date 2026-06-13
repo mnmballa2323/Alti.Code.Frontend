@@ -160,7 +160,7 @@ export default function OwnerLayout({
         </div>
 
         {/* Right header: page title and user info */}
-        <div className="flex-1 h-full flex items-center justify-between px-10">
+        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-14">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
               {isMemberDetail
