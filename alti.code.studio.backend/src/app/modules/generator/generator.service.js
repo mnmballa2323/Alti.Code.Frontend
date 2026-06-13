@@ -25,6 +25,7 @@ import { EventBus } from '../../shared/eventBus.js';
 import { discoveryEngineService } from '../googleCloud/discovery.service.js';
 import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
+import { modelGateway } from '../../platform/gateway/modelGateway.js';
 
 const generateApp = async (prompt) => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
@@ -62,17 +63,14 @@ const generateApp = async (prompt) => {
   `;
 
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-5.5',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: prompt }
-      ],
-      response_format: { type: 'json_object' },
-      temperature: 0.1,
+    const responseText = await modelGateway.routePlatformCompletion({
+      provider: 'azure',
+      model: 'azure/gpt-5.5-pro',
+      prompt: `${systemPrompt}\n\n${prompt}`,
+      temperature: 0.1
     });
 
-    const result = JSON.parse(response.choices[0].message.content);
+    const result = JSON.parse(responseText);
 
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the generated code...');
@@ -282,14 +280,14 @@ const refineProject = async (targetDir, prompt) => {
     `;
 
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-5.5',
-      messages: [{ role: 'system', content: systemPrompt }],
-      response_format: { type: 'json_object' },
-      temperature: 0.1,
+    const responseText = await modelGateway.routePlatformCompletion({
+      provider: 'azure',
+      model: 'azure/gpt-5.5-pro',
+      prompt: systemPrompt,
+      temperature: 0.1
     });
 
-    const result = JSON.parse(response.choices[0].message.content);
+    const result = JSON.parse(responseText);
 
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the refinements...');
