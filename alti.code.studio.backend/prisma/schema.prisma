@@ -63,6 +63,11 @@ model Tenant {
   
   // E-Discovery & Compliance
   legalHold            Boolean  @default(false)
+  retentionPeriodDays  Int?     // Auto-expungement
+
+  // BYOK (Bring Your Own Key) & Data Sovereignty
+  customerKmsKeyArn    String?
+  dataRegion           String   @default("us-east-1") // FedRAMP / GDPR boundary
   
   // Billing
   billing              TenantBilling?
@@ -89,6 +94,10 @@ model User {
 
   email     String   @unique
   password  String?
+  
+  // ABAC (Attribute-Based Access Control)
+  clearanceLevel Int     @default(1) // e.g. 1=Unclassified, 2=Secret, 3=Top Secret
+  allowedIps     String[] // IPv4/IPv6 CIDR whitelist
   
   role      Role     @default(unauthorized)
 
