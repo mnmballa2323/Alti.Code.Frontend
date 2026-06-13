@@ -10,9 +10,9 @@ const (
 )
 
 type ObservationContextOption func()
-type EmbeddingOption func()
-type ToolOption func()
-type EventOption func()
+type EmbeddingOption = ObservationContextOption
+type ToolOption = ObservationContextOption
+type EventOption = ObservationContextOption
 
 type Metadata map[string]interface{}
 type GenerationUsage struct {
@@ -97,7 +97,10 @@ type Observation interface {
     Tool(...ObservationContextOption) Tool
     Retriever(...ObservationContextOption) Retriever
     Score(...ObservationContextOption) Score
+    Evaluator(...ObservationContextOption) Evaluator
     End(...ObservationContextOption)
+    ID() string
+    TraceID() string
 }
 
 type Generation interface {
@@ -148,7 +151,10 @@ func (d dummyObservation) Embedding(...EmbeddingOption) Embedding { return dummy
 func (d dummyObservation) Tool(...ObservationContextOption) Tool { return dummyTool{} }
 func (d dummyObservation) Retriever(...ObservationContextOption) Retriever { return dummyRetriever{} }
 func (d dummyObservation) Score(...ObservationContextOption) Score { return dummyScore{} }
+func (d dummyObservation) Evaluator(...ObservationContextOption) Evaluator { return dummyEvaluator{} }
 func (d dummyObservation) End(...ObservationContextOption) {}
+func (d dummyObservation) ID() string { return "" }
+func (d dummyObservation) TraceID() string { return "" }
 
 type dummyGeneration struct{}
 func (d dummyGeneration) Observation(ctx context.Context) (context.Context, Observation) { return ctx, dummyObservation{} }
@@ -192,3 +198,37 @@ type dummyObserver struct{}
 func (d dummyObserver) NewObservation(ctx context.Context, _ ...ObservationContextOption) (context.Context, Observation) {
     return ctx, dummyObservation{}
 }
+
+type AgentOption = ObservationContextOption
+type SpanOption = ObservationContextOption
+
+func WithToolOutput(output any) ObservationContextOption { return func() {} }
+func WithToolStatus(status string) ObservationContextOption { return func() {} }
+func WithToolLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+
+func WithSpanOutput(output any) ObservationContextOption { return func() {} }
+func WithSpanStatus(status string) ObservationContextOption { return func() {} }
+func WithSpanLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+
+func WithToolName(name string) ObservationContextOption { return func() {} }
+func WithToolInput(input any) ObservationContextOption { return func() {} }
+func WithToolMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithAgentMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithSpanInput(input any) ObservationContextOption { return func() {} }
+func WithSpanMetadata(metadata any) ObservationContextOption { return func() {} }
+
+type Evaluator interface {
+    Observation(context.Context) (context.Context, Observation)
+    End(...ObservationContextOption)
+}
+
+type dummyEvaluator struct{}
+func (d dummyEvaluator) Observation(ctx context.Context) (context.Context, Observation) { return ctx, dummyObservation{} }
+func (d dummyEvaluator) End(...ObservationContextOption) {}
+
+func WithEvaluatorName(name string) ObservationContextOption { return func() {} }
+func WithEvaluatorInput(input any) ObservationContextOption { return func() {} }
+func WithEvaluatorMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithEvaluatorOutput(output any) ObservationContextOption { return func() {} }
+func WithEvaluatorStatus(status string) ObservationContextOption { return func() {} }
+func WithEvaluatorLevel(level ObservationLevel) ObservationContextOption { return func() {} }
