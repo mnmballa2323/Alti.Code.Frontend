@@ -55,7 +55,7 @@ export const neo4jGraphQLService = {
             
             app.use(
                 '/graphql',
-                cors(),
+                cors({ origin: process.env.CLIENT_URL || "http://localhost:3001" }),
                 express.json(),
                 iapService.verifyIAPToken, // 🛡️ Fortune 100 Zero-Trust Perimeter
                 expressMiddleware(server)

@@ -84,9 +84,11 @@ errorlogger.on('error', (err) => {
   console.error('Winston ErrorLogger Error:', err.message);
 });
 
-// 🚨 Override errorlogger to stream natively to GCP Error Reporting
+// 🚨 Override errorlogger to stream natively to GCP Error Reporting (if not in private cloud)
 const originalErrorLogger = errorlogger.error.bind(errorlogger);
 errorlogger.error = (message, meta) => {
-    errorReportingService.reportException(meta || message);
+    if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
+        errorReportingService.reportException(meta || message);
+    }
     originalErrorLogger(message, meta);
 };
