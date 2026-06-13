@@ -71,7 +71,7 @@ export default function HeroSwarm() {
           </div>
           <div className="flex flex-col items-center justify-center py-6 px-4">
             <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              10,000+
+              10,000
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               Agent Swarm
