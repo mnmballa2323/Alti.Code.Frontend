@@ -39,6 +39,9 @@ import express from 'express';
 import helmet from 'helmet';
 import toobusy from 'toobusy-js';
 import httpStatus from 'http-status';
+import compression from 'compression';
+import crypto from 'crypto';
+import promClient from 'prom-client';
 // ⚡ PostgreSQL Database & Prisma DAL (MongoDB Deprecated)
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -98,11 +101,20 @@ if (config.env !== 'production') {
 
 const app = express();
 
+// Enable default Prometheus metrics collection
+promClient.collectDefaultMetrics();
+
 app.use((req, res, next) => {
-    console.log(`[REQUEST] ${req.method} ${req.url}`);
+    // Distributed Request Tracing (Correlation IDs)
+    req.id = req.headers['x-request-id'] || crypto.randomUUID();
+    res.setHeader('X-Request-Id', req.id);
+    console.log(`[REQUEST] ${req.id} | ${req.method} ${req.url}`);
     res.setHeader('X-Server', 'INSO-BACKEND');
     next();
 });
+
+// Network Payload Compression
+app.use(compression());
 
 app.use(
     cors({
@@ -262,6 +274,16 @@ app.get('/healthz', async (req, res) => {
             error: e.message,
             timestamp: new Date().toISOString()
         });
+    }
+});
+
+// GCP/Kubernetes Enterprise Prometheus Metrics Endpoint
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', promClient.register.contentType);
+        res.end(await promClient.register.metrics());
+    } catch (ex) {
+        res.status(500).end(ex);
     }
 });
 
