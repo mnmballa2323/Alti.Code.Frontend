@@ -1,8 +1,7 @@
 import { logger } from '../../../shared/logger.js';
-import Anthropic from '@anthropic-ai/sdk';
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
 import { aiplatform } from '@google-cloud/aiplatform';
-import OpenAI from 'openai';
+import { AzureOpenAI } from 'openai';
 import config from '../../../../config/index.js';
 import crypto from 'crypto';
 
@@ -16,11 +15,10 @@ const bedrockClient = new BedrockRuntimeClient({
 });
 
 // Azure OpenAI (GPT-5.5)
-const azureOpenAi = new OpenAI({
+const azureOpenAi = new AzureOpenAI({
     apiKey: config.azureOpenAi?.apiKey,
-    baseURL: `${config.azureOpenAi?.endpoint}/openai/deployments/gpt-5.5-pro`,
-    defaultQuery: { 'api-version': '2024-02-15-preview' },
-    defaultHeaders: { 'api-key': config.azureOpenAi?.apiKey },
+    endpoint: config.azureOpenAi?.endpoint,
+    apiVersion: '2024-02-15-preview'
 });
 
 // GCP Vertex AI (Vector Search)
