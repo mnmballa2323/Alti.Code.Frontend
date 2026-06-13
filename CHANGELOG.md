@@ -5,6 +5,18 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.228] - 2026-06-13 — Tri-Cloud Agent Synthesis & Relative Pathing Enforcements
+
+### Added
+
+- **Tri-Cloud Direct Connector Specialists**: Synthesized and dynamically registered three specialized connector agents under the custom registry (`src/app/modules/agents/custom/`):
+  - `GCPVertexAIDirectConnectorSpecialistAgent`
+  - `AWSBedrockDirectConnectorSpecialistAgent`
+  - `AzureOpenAIFoundryDirectConnectorSpecialistAgent`
+- **Smart Routing Orchestration Optimizer**: Synthesized and dynamically registered `SmartRoutingOrchestrationOptimizerAgent` to analyze incoming execution pipelines and optimize multi-cloud routing decisions.
+- **Dynamic Import Pathing Resolution**: Hardened the Agent Forge (`agent_forge_generator.agent.js`) and Swarm Service (`self_expanding_swarm.service.js`) code write-paths to automatically normalize `GeminiCliBaseAgent` relative imports from `./` to `../`, enabling error-free in-memory loading and registration of custom agents.
+- **Model Gateway Mock Realignment**: Corrected the Vitest mock configuration in `modelGateway.test.js` to target the `openai` package directly rather than `@azure/openai`, ensuring Azure completion tests pass with 100% success.
+
 ## [39.37.227] - 2026-06-13 — Model Gateway Billing Tier Limits & Regional Telemetry
 
 ### Added
