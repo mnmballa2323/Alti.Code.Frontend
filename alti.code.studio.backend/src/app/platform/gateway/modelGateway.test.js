@@ -81,14 +81,6 @@ vi.mock('../../modules/googleCloud/dlp.service.js', () => ({
   redactText: vi.fn().mockImplementation(async (text) => `[REDACTED] ${text}`)
 }));
 
-// Mock Headroom AI context compressor
-vi.mock('headroom-ai', () => ({
-  compress: vi.fn().mockImplementation(async (messages) => ({
-    messages: [{ content: `[COMPRESSED] ${messages[0].content}` }],
-    tokensSaved: 42
-  }))
-}));
-
 describe('Platform Model Gateway', () => {
   const originalGcpProject = config.gcp?.project_id;
   const originalAccessKey = process.env.AWS_ACCESS_KEY_ID;
@@ -192,8 +184,8 @@ describe('Platform Model Gateway', () => {
     });
   });
 
-  describe('Pipeline Pre-processing: DLP & Token Compression', () => {
-    it('should run prompt through DLP scrubbing and headroom compression when requested', async () => {
+  describe('Pipeline Pre-processing: DLP', () => {
+    it('should run prompt through DLP scrubbing when requested', async () => {
       bedrockCreateMock.mockResolvedValueOnce({
         content: [{ text: 'reply' }]
       });
@@ -202,14 +194,12 @@ describe('Platform Model Gateway', () => {
         provider: 'aws',
         model: 'claude-3-5-sonnet',
         prompt: 'Clean prompt',
-        scrubPrompt: true,
-        compressPrompt: true
+        scrubPrompt: true
       });
 
-      // The prompt sent to Bedrock should be first scrubbed, then compressed
       expect(bedrockCreateMock).toHaveBeenCalledWith(
         expect.objectContaining({
-          messages: [{ role: 'user', content: '[COMPRESSED] [REDACTED] Clean prompt' }]
+          messages: [{ role: 'user', content: '[REDACTED] Clean prompt' }]
         })
       );
     });
