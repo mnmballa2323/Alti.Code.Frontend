@@ -27,7 +27,7 @@ const plans = [
     name: "Enterprise",
     price: "2,500",
     description:
-      "For enterprises requiring complete data sovereignty and custom cloud environments.",
+      "For enterprises requiring complete data sovereignty and private cloud environments.",
     cta: "Contact Enterprise",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",

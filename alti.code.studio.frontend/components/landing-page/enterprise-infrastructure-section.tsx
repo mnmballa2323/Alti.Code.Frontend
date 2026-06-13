@@ -1,5 +1,5 @@
 import React from "react";
-import { Cloud, Lock, Server } from "lucide-react";
+import { Cloud, Lock } from "lucide-react";
 
 export default function EnterpriseInfrastructureSection() {
   return (
@@ -14,8 +14,8 @@ export default function EnterpriseInfrastructureSection() {
           Choose the deployment model that fits your security and compliance requirements.
         </p>
 
-        {/* Simplified 3-Column Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left">
+        {/* Simplified 2-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl mx-auto text-left">
           {/* Card 1: Multi Tenant Private Cloud */}
           <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
@@ -46,20 +46,7 @@ export default function EnterpriseInfrastructureSection() {
             </p>
           </div>
 
-          {/* Card 3: Self Hosted VPC */}
-          <div className="p-8 rounded-3xl bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-            <div className="mb-6 flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 text-white">
-              <Server className="w-6 h-6" />
-            </div>
-            <h3 className="text-2xl font-bold text-black tracking-tight mb-3">
-              Self Hosted VPC
-            </h3>
-            <p className="text-gray-600 leading-relaxed font-medium text-balance">
-              Deploy the entire platform inside your enterprise AWS, Azure, or
-              GCP tenant. Maintain complete data sovereignty and control with
-              zero external egress.
-            </p>
-          </div>
+
         </div>
       </div>
     </section>
