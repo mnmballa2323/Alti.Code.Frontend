@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.226] - 2026-06-13 — Product-Scoped Cryptographic WORM Audit Logging
+
+### Added
+
+- **Product-Scoped WORM Audit Ledger**: Enhanced the `AuditLogService` (`auditLog.service.js`) to capture and include the `productId` context in the immutable audit log payload.
+  - Generates cryptographically chained SHA-256 block-hash verification entries partitioned by product vertical to prevent cross-domain compliance leaks.
+- **Integration Testing**: Created `auditLog.test.js` to verify cryptographic chain hashing with `productId` scope and fallback genesis-block generation under clean test isolation.
+
 ## [39.37.225] - 2026-06-13 — Multi-Product Schema Partitioning & Isolation
 
 ### Added
