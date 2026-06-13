@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DollarSign, ArrowUpRight, ArrowDownRight, Users, Download } from "lucide-react";
+import { DollarSign, ArrowUpRight, ArrowDownRight, Users, Download, Search } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -69,6 +69,16 @@ export default function RevenuePage() {
       {/* Bottom Section: Recent Transactions */}
       <div className="w-full flex flex-col gap-3">
         
+        {/* Search Bar */}
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm">
+          <Search className="w-4 h-4 text-neutral-400" />
+          <input 
+            type="text" 
+            placeholder="Search transactions..." 
+            className="w-full bg-transparent border-none outline-none text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:ring-0"
+          />
+        </div>
+        
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider shadow-sm">
           <div className="col-span-2">Transaction ID</div>
@@ -89,7 +99,7 @@ export default function RevenuePage() {
                   {txn.plan}
                 </div>
                 <div className="col-span-2 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
-                <div className="col-span-2 text-sm font-semibold text-neutral-900 dark:text-white">{txn.amount}</div>
+                <div className="col-span-2 text-sm text-neutral-600 dark:text-neutral-300">{txn.amount}</div>
                 <div className="col-span-1 flex justify-end">
                   <button className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md">
                     <Download className="w-4 h-4" />
