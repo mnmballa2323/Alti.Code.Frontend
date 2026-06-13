@@ -30,7 +30,7 @@ const adminItems: SidebarItem[] = [
   { label: "Individual", href: "/admin/team-members", icon: Users },
   { label: "Teams", href: "/admin/teams", icon: Users },
   { label: "Enterprise", href: "/admin/enterprise", icon: Users },
-  { label: "Billing", href: "/admin/billing", icon: CreditCard },
+
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
   { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
@@ -115,7 +115,7 @@ export default function AdminLayout({
       pathname.startsWith("/admin/members") ||
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/teams") ||
-      pathname.startsWith("/admin/billing") ||
+
       pathname.startsWith("/admin/invoices") ||
       pathname.startsWith("/admin/audit") ||
       pathname.startsWith("/admin/usage")
@@ -139,7 +139,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/team-members")) return "Individual";
     if (pathname.startsWith("/admin/teams")) return "Teams";
     if (pathname.startsWith("/admin/enterprise")) return "Enterprise";
-    if (pathname.startsWith("/admin/billing")) return "Billing";
+
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
     if (pathname.startsWith("/admin/data")) return "Knowledge";
     if (pathname.startsWith("/admin/instructions")) return "Instructions";

@@ -29,7 +29,7 @@ const ownerItems: SidebarItem[] = [
   { label: "Individual", href: "/owner/team-members", icon: Users },
   { label: "Teams", href: "/owner/teams", icon: Users },
   { label: "Enterprise", href: "/owner/enterprise", icon: Users },
-  { label: "Billing", href: "/owner/billing", icon: CreditCard },
+
   { label: "Invoices", href: "/owner/invoices", icon: FileText },
   { label: "Audit Logs", href: "/owner/audit", icon: Activity },
   { label: "Model Usage", href: "/owner/usage", icon: BarChart3 },
@@ -126,7 +126,7 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/team-members")) return "Individual";
     if (pathname.startsWith("/owner/teams")) return "Teams";
     if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
-    if (pathname.startsWith("/owner/billing")) return "Billing";
+
     if (pathname.startsWith("/owner/invoices")) return "Invoices";
     if (pathname.startsWith("/owner/data")) return "Knowledge";
     if (pathname.startsWith("/owner/instructions")) return "Instructions";
