@@ -150,17 +150,11 @@ async def create_index(request: RAGIndexRequest):
     try:
         from llama_index.core import Document, VectorStoreIndex, Settings
         from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-        from llama_index.llms.openai import OpenAI
 
         # Configure Settings (CPU optimized)
         Settings.embed_model = HuggingFaceEmbedding(model_name="all-MiniLM-L6-v2")
-        # For LLM, we can use OpenAI if env var is set, or a mock for now if no key
-        if os.getenv("OPENAI_API_KEY"):
-            Settings.llm = OpenAI(model="gpt-3.5-turbo")
-        else:
-            # Fallback to mock/echo if no key (user needs to provide one)
-            logger.warning("No OPENAI_API_KEY found. RAG generation will be simulated.")
-            # Settings.llm = MockLLM() # LlamaIndex has mocks, but let's stick to simple logic
+        
+        logger.warning("Generation will be simulated. RAG requires connection to Azure Foundry or AWS Bedrock.")
 
         docs = [Document(text=d['text'], metadata=d.get('metadata', {})) for d in request.documents]
         index = VectorStoreIndex.from_documents(docs)
@@ -189,12 +183,11 @@ async def query_index(request: RAGQueryRequest):
         }
     except Exception as e:
         logger.error(f"Query failed: {e}")
-        # Fallback for no-LLM environment
-        if "OPENAI_API_KEY" not in os.environ:
-             return {
-                "response": f"Simulated RAG Response to: '{request.query}' (Set OPENAI_API_KEY to enable real generation). Context found.",
-                "sources": []
-            }
+        # Fallback for disconnected environment
+        return {
+            "response": f"Simulated RAG Response to: '{request.query}' (Connect Azure Foundry or AWS Bedrock for real generation). Context found.",
+            "sources": []
+        }
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
