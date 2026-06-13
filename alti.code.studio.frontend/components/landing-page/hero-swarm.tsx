@@ -28,7 +28,7 @@ export default function HeroSwarm() {
       <MagicCodeBackground />
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         {/* Apple-style Headline */}
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-6 relative top-10 md:top-16">
           <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
             <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-black">
               Private and Secure
@@ -43,7 +43,7 @@ export default function HeroSwarm() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col items-center gap-4 mt-6 w-full sm:w-auto">
+        <div className="flex flex-col items-center gap-4 mt-6 w-full sm:w-auto relative top-16 md:top-24">
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {(os === "win" || os === "other" || os === null) && (
               <Button
