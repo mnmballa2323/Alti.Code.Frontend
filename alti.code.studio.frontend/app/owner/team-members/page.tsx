@@ -230,9 +230,8 @@ export default function TeamMembersPage() {
                   <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
                     No members match your search query.
                   </div>
-                )}
-                  </div>
-                ) : (
+                )
+              ) : (
                   <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
                     No members configured.
                   </div>
