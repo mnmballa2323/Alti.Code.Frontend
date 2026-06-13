@@ -257,6 +257,6 @@ func WithTraceTags(tags []string) ObservationContextOption { return func() {} }
 func WithTraceInput(input any) ObservationContextOption { return func() {} }
 func WithTraceSessionID(sessionID string) ObservationContextOption { return func() {} }
 func WithTraceMetadata(metadata any) ObservationContextOption { return func() {} }
-func WithObservationTraceContext(ctx context.Context) ObservationContextOption { return func() {} }
+func WithObservationTraceContext(opts ...ObservationContextOption) ObservationContextOption { return func() {} }
 func WithObservationTraceID(traceID string) ObservationContextOption { return func() {} }
 func WithObservationTraceURL(url string) ObservationContextOption { return func() {} }

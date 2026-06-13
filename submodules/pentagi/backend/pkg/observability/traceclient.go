@@ -2,25 +2,20 @@ package observability
 
 import (
 	"context"
-	"pentagi/pkg/observability/nooptrace"
+
+	"pentagi/pkg/config"
 )
 
 type NoopTraceClient interface {
-	nooptrace.Observer
-	ForceFlush(ctx context.Context) error
-	Shutdown(ctx context.Context) error
-	Observer() nooptrace.Observer
+	Shutdown(context.Context) error
+	Flush(context.Context) error
 }
 
-type dummyNoopTraceClient struct {
-	nooptrace.Observation
-}
+type dummyTraceClient struct{}
 
-func (d dummyNoopTraceClient) ForceFlush(ctx context.Context) error { return nil }
-func (d dummyNoopTraceClient) Shutdown(ctx context.Context) error { return nil }
-func (d dummyNoopTraceClient) NewObservation(context.Context, ...nooptrace.ObservationContextOption) (context.Context, nooptrace.Observation) { return context.Background(), nooptrace.NewDummyObservation() }
-func (d dummyNoopTraceClient) Observer() nooptrace.Observer { return nooptrace.NewNoopObserver() }
+func (c dummyTraceClient) Shutdown(context.Context) error { return nil }
+func (c dummyTraceClient) Flush(context.Context) error    { return nil }
 
-func NewNoopTraceClient() NoopTraceClient {
-	return dummyNoopTraceClient{}
+func NewNoopTraceClient(ctx context.Context, cfg *config.Config) (NoopTraceClient, error) {
+	return dummyTraceClient{}, nil
 }
