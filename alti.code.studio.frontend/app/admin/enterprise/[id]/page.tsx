@@ -313,10 +313,6 @@ export default function EnterpriseDetailPage() {
                     key={member.id}
                     className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
                   >
-                    <div className="w-10 h-10 shrink-0 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-bold text-sm border border-neutral-200/50 dark:border-neutral-700/50">
-                      {memberInitial}
-                    </div>
-
                     {/* Member info */}
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center gap-2">
