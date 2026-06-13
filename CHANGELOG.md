@@ -5,6 +5,19 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.223] - 2026-06-13 — Enterprise Compliance & Governance Upgrades
+
+### Added
+
+- **Industry Vertical Compliance Engine**: Designed and implemented `industryComplianceService` (`industry_compliance.service.js`) enforcing industry-specific compliance rules:
+  - *PCI-DSS (FinTech)*: Auto-scans transaction payloads for credit card numbers (PANs) and CVVs, sanitizes CVVs, and encrypts credit card numbers using AES-256-GCM.
+  - *HIPAA (Healthcare)*: Scans and redacts SSNs, MRNs, and DOBs from patient data, and writes cryptographically chained access logs.
+  - *FDA 21 CFR Part 11 (Pharma)*: Enforces electronic signatures and change reason validation for critical database/code writes.
+  - *SEC Rule 17a-4 (Hedge Funds)*: Generates tamper-evident, cryptographically chained block-hash WORM receipts signed via KMS.
+  - *ISO 26262 / AUTOSAR (Automotive)*: Validates software code files for compliance with automotive safety rules, flagging dynamic allocations, recursion, and unbounded loops.
+- **Compliance REST Endpoints**: Exposed `/api/governance` REST paths (`compliance.route.js`) supporting fintech audit, healthcare access logging, pharma signature verification, hedge fund operation audits, and automotive safety checks.
+- **Automated Test Coverage**: Created `compliance.test.js` validating the full compliance engine with 100% test pass rate.
+
 ## [39.37.222] - 2026-06-12 — Enterprise Readiness Upgrades
 
 ### Added

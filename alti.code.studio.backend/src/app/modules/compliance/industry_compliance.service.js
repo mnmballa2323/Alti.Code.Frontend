@@ -69,8 +69,8 @@ class IndustryComplianceService {
         }
 
         // Check for potential CVV/CVC (3 or 4 digits near card keywords)
-        const cvvRegex = /\b(cvv|cvc|card[-_]?verification)\b\s*:\s*['"]?(\d{3,4})['"]?/gi;
-        processedPayload = processedPayload.replace(cvvRegex, (m, label, val) => `${label}: "[CVV-REDACTED]"`);
+        const cvvRegex = /['"]?(cvv|cvc|card[-_]?verification)['"]?\s*:\s*['"]?(\d{3,4})['"]?/gi;
+        processedPayload = processedPayload.replace(cvvRegex, (m, label) => `"${label}":"[CVV-REDACTED]"`);
 
         const status = cardNumbers.length > 0 ? 'WARNING' : 'SUCCESS';
         await auditLogService.logAction({
@@ -112,17 +112,17 @@ class IndustryComplianceService {
         }
 
         // 2. Scan and redact Medical Record Number (MRN)
-        const mrnRegex = /\b(mrn|medical[-_]?record[-_]?number)\b\s*:\s*['"]?([a-z0-9-]{6,15})['"]?/gi;
-        processedPayload = processedPayload.replace(mrnRegex, (m, label, val) => {
+        const mrnRegex = /['"]?(mrn|medical[-_]?record[-_]?number)['"]?\s*:\s*['"]?([a-z0-9-]{6,15})['"]?/gi;
+        processedPayload = processedPayload.replace(mrnRegex, (m, label) => {
             phiDetectedCount++;
-            return `${label}: "[MRN-REDACTED]"`;
+            return `"${label}":"[MRN-REDACTED]"`;
         });
 
         // 3. Scan and redact standard dates of birth / patient names
-        const dobRegex = /\b(dob|birthdate|date[-_]?of[-_]?birth)\b\s*:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?/gi;
-        processedPayload = processedPayload.replace(dobRegex, (m, label, val) => {
+        const dobRegex = /['"]?(dob|birthdate|date[-_]?of[-_]?birth)['"]?\s*:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?/gi;
+        processedPayload = processedPayload.replace(dobRegex, (m, label) => {
             phiDetectedCount++;
-            return `${label}: "[DOB-REDACTED]"`;
+            return `"${label}":"[DOB-REDACTED]"`;
         });
 
         const status = phiDetectedCount > 0 ? 'WARNING' : 'SUCCESS';
