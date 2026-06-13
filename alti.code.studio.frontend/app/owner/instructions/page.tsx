@@ -59,8 +59,8 @@ export default function InstructionsPage() {
   );
 
   return (
-    <div className="w-full flex flex-col h-full justify-start pt-6">
-      <div className="space-y-6">
+    <div className="w-full flex flex-col h-full justify-start pb-8">
+      <div className="sticky top-0 z-10 bg-[#F3F4F6] dark:bg-[#0d1117] pt-2 pb-6 space-y-6">
         {/* Input Row */}
         <form
           className="relative flex items-center bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-1.5 shadow-sm"
@@ -94,10 +94,11 @@ export default function InstructionsPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+      </div>
 
-        {/* Instructions Card List */}
-        <div className="flex flex-col gap-3 pt-2">
-          {filteredInstructions.length > 0 ? (
+      {/* Instructions Card List */}
+      <div className="flex flex-col gap-3 pt-2">
+        {filteredInstructions.length > 0 ? (
             filteredInstructions.map((inst, index) => (
               <div
                 key={index}
@@ -168,7 +169,6 @@ export default function InstructionsPage() {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }

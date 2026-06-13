@@ -58,8 +58,8 @@ export default function GuardrailsPage() {
   );
 
   return (
-    <div className="w-full flex flex-col h-full justify-start pt-6">
-      <div className="space-y-6">
+    <div className="w-full flex flex-col h-full justify-start pb-8">
+      <div className="sticky top-0 z-10 bg-[#F3F4F6] dark:bg-[#0d1117] pt-2 pb-6 space-y-6">
         {/* Input Row */}
         <form
           className="relative flex items-center bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-1.5 shadow-sm"
@@ -93,10 +93,11 @@ export default function GuardrailsPage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
+      </div>
 
-        {/* Guardrails Card List */}
-        <div className="flex flex-col gap-3 pt-2">
-          {filteredGuardrails.length > 0 ? (
+      {/* Guardrails Card List */}
+      <div className="flex flex-col gap-3 pt-2">
+        {filteredGuardrails.length > 0 ? (
             filteredGuardrails.map((guard, index) => (
               <div
                 key={index}
@@ -167,7 +168,6 @@ export default function GuardrailsPage() {
             </div>
           )}
         </div>
-      </div>
     </div>
   );
 }
