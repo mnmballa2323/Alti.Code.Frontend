@@ -95,7 +95,8 @@ describe('The Citadel — 11-Agent Federation', () => {
             'audit', 'git', 'refactor', 'security', 'devops',
             'qa', 'monitoring', 'iac', 'cicd'
         ];
-
+        console.log("FAILED WORKERS:", workerService.workers, workerService.failedWorkers);
+        console.log("NODE ENV:", process.env.NODE_ENV);
         for (const agent of expectedAgents) {
             expect(workerService.workers[agent], `Worker "${agent}" not found!`).toBeDefined();
         }
