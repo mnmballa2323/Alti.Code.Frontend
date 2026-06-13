@@ -10,12 +10,12 @@ export default function AgentSwarmSection() {
         <div className="flex-1 flex flex-col gap-10">
           <div className="flex flex-col gap-6">
             <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1]">
-              A 50,000 Agent Swarm. <br />
+              A 10,000 Agent Swarm. <br />
               At Your Command.
             </h3>
             <p className="text-xl text-gray-500 leading-relaxed max-w-2xl font-medium">
               Forget single-agent chatbots. Inso Code deploys a massive,
-              dynamically coordinated swarm of over 50,000 specialized
+              dynamically coordinated swarm of over 10,000 specialized
               engineering agents. Whether you need a dedicated PostgreSQL
               optimizer, a React performance auditor, or an adversarial security
               red-team, the swarm provisions the exact experts you need in
