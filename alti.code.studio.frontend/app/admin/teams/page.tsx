@@ -107,14 +107,52 @@ export default function TeamsPage() {
     });
   }
 
-  // Filter members based on search query
-  const filteredMembers = allMembers.filter((member) => {
+  // Categorize members into teams dynamically, using email address as the team name
+  const rawTeams: TeamInfo[] = [
+    {
+      id: "engineering",
+      name: "admin@insocode.com",
+      description: "",
+      members: allMembers.filter((m) => {
+        const r = (m.role || "").toLowerCase();
+        return r === "developer" || r === "dev";
+      }),
+    },
+    {
+      id: "product-design",
+      name: "owner@insocode.com",
+      description: "",
+      members: allMembers.filter((m) => {
+        const r = (m.role || "").toLowerCase();
+        return (
+          r === "manager" ||
+          (r === "admin" &&
+            m.email !== "owner@insocode.com" &&
+            m.email !== "admin@insocode.com")
+        );
+      }),
+    },
+    {
+      id: "ops-support",
+      name: "ada.lovelace@alticodestudio.com",
+      description: "",
+      members: allMembers.filter((m) => {
+        const r = (m.role || "").toLowerCase();
+        return (
+          r === "owner" ||
+          m.email === "owner@insocode.com" ||
+          m.email === "admin@insocode.com"
+        );
+      }),
+    },
+  ];
+
+  // Filter teams based on search query
+  const filteredTeams = rawTeams.filter((team) => {
     const query = searchQuery.toLowerCase();
 
     return (
-      member.email.toLowerCase().includes(query) ||
-      (member.name && member.name.toLowerCase().includes(query)) ||
-      (member.role && member.role.toLowerCase().includes(query))
+      team.name.toLowerCase().includes(query)
     );
   });
 
@@ -144,27 +182,29 @@ export default function TeamsPage() {
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
               <div className="col-span-9">Email Address</div>
-              <div className="col-span-3 text-right pr-12">Role</div>
+              <div className="col-span-3 text-right pr-12">Members</div>
             </div>
           </div>
 
           {/* Table Body */}
           <div className="space-y-3 mt-6">
-            {filteredMembers.length > 0 ? (
-              filteredMembers.map((member) => (
+            {filteredTeams.length > 0 ? (
+              filteredTeams.map((team) => (
                 <div
-                  key={member.id}
+                  key={team.id}
                   className="group grid grid-cols-12 gap-4 px-6 py-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md cursor-pointer"
-                  onClick={() => router.push(`/admin/teams/${member.id}`)}
+                  onClick={() => router.push(`/admin/teams/${team.id}`)}
                 >
                   <div className="col-span-9 flex flex-col justify-center">
                     <span className="text-neutral-800 dark:text-white font-semibold text-[15px]">
-                      {member.email}
+                      {team.name}
                     </span>
                   </div>
                   <div className="col-span-3 flex items-center justify-end gap-3 pr-2">
-                    <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750 capitalize">
-                      {member.role || "Member"}
+                    <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750">
+                      {team.members.length === 1
+                        ? "1 member"
+                        : `${team.members.length} members`}
                     </span>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
                   </div>
@@ -172,7 +212,7 @@ export default function TeamsPage() {
               ))
             ) : (
               <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-                No members match your search query.
+                No teams match your search query.
               </div>
             )}
           </div>
