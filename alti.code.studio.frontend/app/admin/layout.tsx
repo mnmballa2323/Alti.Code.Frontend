@@ -14,6 +14,7 @@ import {
   BarChart3,
   ArrowLeft,
   LayoutDashboard,
+  DollarSign,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -27,7 +28,7 @@ interface SidebarItem {
 const adminItems: SidebarItem[] = [
   { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
-  { label: "Invoices", href: "/admin/invoices", icon: FileText },
+  { label: "Revenue", href: "/admin/revenue", icon: DollarSign },
   { label: "Audit Logs", href: "/admin/audit", icon: Activity },
   { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
 ];
@@ -118,7 +119,7 @@ export default function AdminLayout({
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/teams") ||
 
-      pathname.startsWith("/admin/invoices") ||
+      pathname.startsWith("/admin/revenue") ||
       pathname.startsWith("/admin/audit") ||
       pathname.startsWith("/admin/usage")
     ) {
@@ -142,7 +143,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/teams")) return "Teams";
     if (pathname.startsWith("/admin/enterprise")) return "Enterprise";
 
-    if (pathname.startsWith("/admin/invoices")) return "Invoices";
+    if (pathname.startsWith("/admin/revenue")) return "Revenue";
 
     if (pathname.startsWith("/admin/instructions")) return "Instructions";
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
