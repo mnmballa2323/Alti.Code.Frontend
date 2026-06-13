@@ -41,9 +41,9 @@ export default function EnterpriseInfrastructureSection() {
               Single Tenant Private Cloud
             </h3>
             <p className="text-gray-600 leading-relaxed font-medium text-balance">
-              A dedicated, single tenant private cloud managed entirely by our
-              team. Get isolated workspaces and uptime SLAs with zero
-              infrastructure overhead.
+              A dedicated, single tenant private cloud managed entirely by our team.
+              <br />
+              <span className="block mt-2">Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.</span>
             </p>
           </div>
 
