@@ -23,6 +23,12 @@ export default function HeroSwarm() {
 
   return (
     <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
+      {/* Premium Apple/OpenAI-style background gradient mesh */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-full bg-gradient-to-br from-blue-200/40 to-purple-200/40 blur-[100px]" />
+        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[60vh] rounded-full bg-gradient-to-bl from-teal-200/30 to-emerald-200/30 blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[60vw] h-[50vh] rounded-full bg-gradient-to-tr from-rose-200/30 to-orange-200/30 blur-[100px]" />
+      </div>
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         {/* Apple-style Headline */}
