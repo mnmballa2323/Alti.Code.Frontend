@@ -100,7 +100,7 @@ export default function DatabaseConnectorsSection() {
         <img
           alt="ClickHouse"
           className="w-8 h-8 object-contain"
-          src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/clickhouse-icon.svg"
+          src="https://cdn.simpleicons.org/clickhouse"
         />
       ),
     },
@@ -129,7 +129,7 @@ export default function DatabaseConnectorsSection() {
       icon: (
         <img
           alt="SQLite"
-          className="w-8 h-8 object-contain"
+          className="h-8 w-auto object-contain"
           src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/sqlite.svg"
         />
       ),
