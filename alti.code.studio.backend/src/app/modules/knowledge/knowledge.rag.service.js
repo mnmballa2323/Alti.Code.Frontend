@@ -1,7 +1,7 @@
 import { logger } from '../../../shared/logger.js';
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
 import { aiplatform } from '@google-cloud/aiplatform';
-import { AzureOpenAI } from 'openai';
+import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
 import config from '../../../../config/index.js';
 import crypto from 'crypto';
 
@@ -14,12 +14,11 @@ const bedrockClient = new BedrockRuntimeClient({
     }
 });
 
-// Azure OpenAI (GPT-5.5)
-const azureOpenAi = new AzureOpenAI({
-    apiKey: config.azureOpenAi?.apiKey,
-    endpoint: config.azureOpenAi?.endpoint,
-    apiVersion: '2024-02-15-preview'
-});
+// Azure OpenAI (GPT-5.5) from @azure/openai
+const azureOpenAi = new OpenAIClient(
+    config.azureOpenAi?.endpoint || 'https://mock.azure.openai.com/',
+    new AzureKeyCredential(config.azureOpenAi?.apiKey || 'mock-key')
+);
 
 // GCP Vertex AI (Vector Search)
 const { IndexEndpointServiceClient } = aiplatform.v1;
@@ -155,11 +154,10 @@ Provide your synthesized answer below:
 
         // Pillar 20: Real-Time Stream Tokenization
         logger.info(`🌊 [Tri-Cloud RAG] Pillar 20: Streaming Azure GPT-5.5 tokens to client in real-time...`);
-        const stream = await azureOpenAi.chat.completions.create({
-            model: "gpt-5.5-pro",
-            messages: [{ role: "user", content: synthesisPrompt }],
-            temperature: 0.1, 
-            stream: true // Enabled Streaming
+        const stream = await azureOpenAi.streamChatCompletions("gpt-5.5-pro", [
+            { role: "user", content: synthesisPrompt }
+        ], {
+            temperature: 0.1
         });
 
         let fullAnswer = "";

@@ -13,7 +13,7 @@
  */
 
 import { VertexAI } from '@google-cloud/vertexai';
-import { AzureOpenAI } from 'openai';
+import { OpenAIClient, AzureKeyCredential } from '@azure/openai';
 import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
@@ -189,22 +189,18 @@ export const routePlatformCompletion = async ({
           throw new ApiError(httpStatus.BAD_REQUEST, 'Azure OpenAI Foundry API credentials/endpoint are missing.');
         }
 
-        // Initialize Azure OpenAI client
-        const client = new AzureOpenAI({
-          apiKey: azureApiKey,
-          endpoint: azureEndpoint,
-          apiVersion: '2024-02-01'
-        });
+        // Initialize Azure OpenAI client from @azure/openai
+        const client = new OpenAIClient(azureEndpoint, new AzureKeyCredential(azureApiKey));
 
         const deploymentName = model.replace(/^azure\//, '');
-        const response = await callWithRetry(() => client.chat.completions.create({
-          model: deploymentName,
-          temperature,
-          messages: [{ role: 'user', content: activePrompt }]
+        const response = await callWithRetry(() => client.getChatCompletions(deploymentName, [
+          { role: 'user', content: activePrompt }
+        ], {
+          temperature
         }));
 
         if (response?.usage) {
-          tokensConsumed = response.usage.total_tokens || 0;
+          tokensConsumed = response.usage.totalTokens || 0;
         }
 
         resultText = response.choices[0].message.content;
