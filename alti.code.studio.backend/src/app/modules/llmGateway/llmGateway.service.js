@@ -1,7 +1,6 @@
 import { VertexAI } from '@google-cloud/vertexai';
 
-import { AzureOpenAI } from 'openai';
-import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
+import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 import { prisma } from '../../../config/prisma.js';
 import SubscriptionModel from '../payment/payment.model.js';
 import { VaultService } from '../vault/vault.service.js';
@@ -377,99 +376,25 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     }
     // 2. AWS Bedrock Connection for Anthropic
     else if (actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.')) {
-        logger.info('🧠 [LlmGateway] Calling AWS Bedrock Anthropic endpoint...');
-        const awsAccessKeyId = creds.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
-        const awsSecretAccessKey = creds.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
-        const awsRegion = creds.awsRegion || process.env.AWS_REGION || 'us-east-1';
-
-        if (!awsAccessKeyId || !awsSecretAccessKey) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'AWS Bedrock credentials (Access Key ID and Secret Access Key) are missing in the secure Vault.'
-            );
-        }
-
+        logger.info('🧠 [LlmGateway] Delegating AWS Bedrock inference to MultiCloudInferenceService...');
         try {
-            const anthropic = new AnthropicBedrock({
-                awsAccessKey: awsAccessKeyId,
-                awsSecretKey: awsSecretAccessKey,
-                awsRegion: awsRegion,
-                timeout: 20 * 1000 // 20s secure timeout
-            });
-
-            // Fallback mapper for model names if they don't have the anthropic prefix
-            let bedrockModelId = actualModelName;
-            if (!bedrockModelId.startsWith('anthropic.')) {
-                if (bedrockModelId.includes('haiku')) bedrockModelId = 'anthropic.claude-5-haiku-20241022-v1:0';
-                else if (bedrockModelId.includes('sonnet')) bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0';
-                else if (bedrockModelId.includes('opus')) bedrockModelId = 'anthropic.claude-5-opus-20240229-v1:0';
-                else bedrockModelId = 'anthropic.claude-5-sonnet-20241022-v2:0'; // default fallback
-            }
-
-            const response = await callWithRetry(() =>
-                anthropic.messages.create({
-                    model: bedrockModelId,
-                    max_tokens: 4096,
-                    messages: [{ role: 'user', content: finalPrompt }],
-                    temperature: temperature
-                })
-            );
-
-            reply = response.content[0].text;
-            usedModelName = bedrockModelId;
+            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { preferredProvider: 'aws', modelId: actualModelName });
+            reply = result.content;
+            usedModelName = result.model;
         } catch (err) {
-            logger.error(`❌ [LlmGateway] AWS Bedrock Anthropic execution failed: ${sanitizeErrorMessage(err.message)}`);
-            throw new ApiError(
-                err.status || httpStatus.INTERNAL_SERVER_ERROR,
-                sanitizeErrorMessage(err.message)
-            );
+            throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, sanitizeErrorMessage(err.message));
         }
     }
     // 3. Azure OpenAI Foundry Proxy Connection (Enforced for all other models like GPT-4o, o1-pro)
     else {
-        logger.info('🧠 [LlmGateway] Calling Azure OpenAI Foundry direct endpoint...');
-        if (!creds.azureApiKey || !creds.azureEndpoint) {
-            throw new ApiError(
-                httpStatus.BAD_REQUEST,
-                'Azure OpenAI Foundry endpoint or API Key is missing in the secure Vault. Direct OpenAI connection is disabled.'
-            );
-        }
-
-        let endpoint = creds.azureEndpoint.trim().replace(/\/$/, '');
-        // Robust copy-paste handler: extract the base resource URL if they pasted a full deployments URL
-        if (endpoint.includes('/openai/deployments/')) {
-            endpoint = endpoint.split('/openai/deployments/')[0];
-        } else if (endpoint.includes('/openai')) {
-            endpoint = endpoint.split('/openai')[0];
-        }
-
-        const cleanModelName = actualModelName.replace(/^azure\//, '');
-        
+        logger.info('🧠 [LlmGateway] Delegating Azure OpenAI inference to MultiCloudInferenceService...');
         try {
-            const azureClient = new AzureOpenAI({
-                apiKey: creds.azureApiKey,
-                endpoint: endpoint,
-                apiVersion: '2024-02-15-preview',
-                deployment: cleanModelName,
-                timeout: 20 * 1000 // 20s secure timeout
-            });
-
-            const response = await callWithRetry(() =>
-                azureClient.chat.completions.create({
-                    model: cleanModelName,
-                    messages: [{ role: 'user', content: finalPrompt }],
-                    temperature: temperature
-                })
-            );
-
-            reply = response.choices[0].message.content;
-            usedModelName = `azure/${cleanModelName}`;
+            const cleanModelName = actualModelName.replace(/^azure\//, '');
+            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { preferredProvider: 'azure', modelId: cleanModelName });
+            reply = result.content;
+            usedModelName = `azure/${result.model}`;
         } catch (err) {
-            logger.error(`❌ [LlmGateway] Azure OpenAI Foundry execution failed: ${sanitizeErrorMessage(err.message)}`);
-            throw new ApiError(
-                err.status || httpStatus.INTERNAL_SERVER_ERROR,
-                sanitizeErrorMessage(err.message)
-            );
+            throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, sanitizeErrorMessage(err.message));
         }
     }
 
