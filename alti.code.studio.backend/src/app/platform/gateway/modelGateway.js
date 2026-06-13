@@ -70,7 +70,6 @@ export const estimateTokens = (prompt, response) => {
  * @param {string} params.prompt - Input prompt
  * @param {number} [params.temperature] - Generation temperature
  * @param {boolean} [params.scrubPrompt] - Enable Google Cloud DLP redaction
- * @param {boolean} [params.compressPrompt] - Enable Headroom AI compression
  * @returns {Promise<string>} Completion text response
  */
 export const routePlatformCompletion = async ({ 
@@ -79,7 +78,6 @@ export const routePlatformCompletion = async ({
   prompt, 
   temperature = 0.5, 
   scrubPrompt = false, 
-  compressPrompt = false,
   productId = null,
   tenantId = null
 }) => {
@@ -102,25 +100,6 @@ export const routePlatformCompletion = async ({
       activePrompt = await redactText(activePrompt);
     } catch (err) {
       logger.warn(`⚠️ [Model Gateway] Google Cloud DLP failed, falling back to original prompt: ${err.message}`);
-    }
-  }
-
-  // 2. Headroom AI Context Compression
-  if (compressPrompt) {
-    try {
-      logger.info('🗜️ [Model Gateway] Compressing prompt tokens via Headroom AI...');
-      const { compress } = await import('headroom-ai');
-      const messages = [{ role: 'user', content: activePrompt }];
-      const result = await compress(messages, {
-        model: model,
-        baseUrl: process.env.HEADROOM_PROXY_URL || 'http://localhost:8787'
-      });
-      if (result?.messages?.[0]?.content) {
-        activePrompt = result.messages[0].content;
-        logger.info(`✅ [Model Gateway] Context compressed successfully. Saved ${result.tokensSaved || 0} tokens.`);
-      }
-    } catch (err) {
-      logger.warn(`⚠️ [Model Gateway] Headroom compression failed, falling back to uncompressed: ${err.message}`);
     }
   }
 

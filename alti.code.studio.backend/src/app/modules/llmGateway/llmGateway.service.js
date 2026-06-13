@@ -13,7 +13,6 @@ import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import { researchService } from '../research/research.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
-import { compress } from 'headroom-ai';
 
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
@@ -181,22 +180,6 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
     logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
     let scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
-
-    // 🗜️ Headroom Context Compression: Shrink token footprint locally
-    try {
-        logger.info(`🗜️ [LlmGateway] Compressing context with Headroom AI...`);
-        const messages = [{ role: 'user', content: scrubbedPrompt }];
-        const result = await compress(messages, { 
-            model: actualModelName && actualModelName !== 'auto' && actualModelName !== 'default' ? actualModelName : 'gpt-4o',
-            baseUrl: process.env.HEADROOM_PROXY_URL || 'http://localhost:8787'
-        });
-        if (result && result.messages && result.messages.length > 0) {
-            scrubbedPrompt = result.messages[0].content;
-            logger.info(`✅ [LlmGateway] Headroom compressed prompt. Saved ${result.tokensSaved || 0} tokens.`);
-        }
-    } catch (compressErr) {
-        logger.warn(`⚠️ [LlmGateway] Headroom compression failed, falling back to original prompt. Error: ${compressErr.message}`);
-    }
 
     // Deep Research Interceptor
     if (actualModelName === 'Deep Research' || domain === 'Research') {
