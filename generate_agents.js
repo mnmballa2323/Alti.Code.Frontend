@@ -1,19 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
-const targetCount = 13471; // 25000 total - 11529 sharded base = 13471 custom agents
+const targetTotal = 25000;
 const agentsDir = path.join(__dirname, 'alti.code.studio.backend', 'src', 'app', 'modules', 'agents', 'custom');
 
-if (!fs.existsSync(agentsDir)) {
-  fs.mkdirSync(agentsDir, { recursive: true });
-}
+// Find true total across the backend
+const result = execSync('find alti.code.studio.backend -type f -name "*.agent.js" | wc -l');
+const currentTotal = parseInt(result.toString().trim(), 10);
 
-const files = fs.readdirSync(agentsDir);
-const currentAgents = files.filter(f => f.endsWith('.json')).length;
-
-let agentsToCreate = targetCount - currentAgents;
+let agentsToCreate = targetTotal - currentTotal;
 if (agentsToCreate <= 0) {
-  console.log(`Already have ${currentAgents} custom agents.`);
+  console.log(`Already have ${currentTotal} total agents.`);
   process.exit(0);
 }
 
