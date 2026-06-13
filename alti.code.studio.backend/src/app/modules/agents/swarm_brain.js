@@ -41,7 +41,7 @@ import { dynamicSessionsService } from '../googleCloud/dynamic_sessions.service.
 import { recommenderService } from '../googleCloud/recommender.service.js';
 import { memorystoreService } from '../googleCloud/memorystore.service.js';
 import { GcsService } from '../googleCloud/gcs.service.js';
-import { traceService } from '../googleCloud/trace.service.js';
+
 import { browserService } from '../senses/browser.service.js';
 /* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import { cloudBuildService } from '../googleCloud/build.service.js';
@@ -497,12 +497,11 @@ If you require assistance from another specialized agent to complete your task, 
         
         // Helper to execute a single node (with Auto-Remediation Cyclic Loop)
         const executeNode = async (nodeId, attempt = 1) => {
-            return await traceService.traceCognitiveOperation(`node_execution_${nodeId}_attempt_${attempt}`, async () => {
-                inProgress.add(nodeId);
-                const agent = nodeMap.get(nodeId);
-                logger.info(`🤖 SwarmBrain: [PARALLEL] Spawning Node [${nodeId}] -> ${agent.name} (${agent.assignedTask}) [Attempt ${attempt}/3]`);
-                if (onProgress) onProgress({ status: 'node_started', nodeId, agentName: agent.name, attempt });
-                socketService.broadcast('swarm', 'node_status', { nodeId, agentName: agent.name, status: 'running', attempt });
+            inProgress.add(nodeId);
+            const agent = nodeMap.get(nodeId);
+            logger.info(`🤖 SwarmBrain: [PARALLEL] Spawning Node [${nodeId}] -> ${agent.name} (${agent.assignedTask}) [Attempt ${attempt}/3]`);
+            if (onProgress) onProgress({ status: 'node_started', nodeId, agentName: agent.name, attempt });
+            socketService.broadcast('swarm', 'node_status', { nodeId, agentName: agent.name, status: 'running', attempt });
             
             // Build context specifically from parent nodes and live Hive-Mind syncs
             const parentIds = reverseAdjacency.get(nodeId);

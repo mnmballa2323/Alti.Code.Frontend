@@ -13,7 +13,6 @@
   },
   "main": "electron/main.js",
   "dependencies": {
-    "@codesandbox/sandpack-react": "^2.20.0",
     "@excalidraw/excalidraw": "^0.18.0",
     "@genkit-ai/core": "^1.33.0",
     "@genkit-ai/next": "^1.33.0",
