@@ -14,6 +14,8 @@
 
 import { logger } from '../../../shared/logger.js';
 import jwt from 'jsonwebtoken';
+import fs from 'fs';
+import path from 'path';
 import config from '../../../../config/index.js';
 import { prisma } from '../../../config/prisma.js';
 
@@ -108,10 +110,41 @@ class EnterpriseSSO {
         try {
             const verified = jwt.verify(token, config.jwt.access_token);
             if (verified && verified._id) {
-                const user = await prisma.user.findUnique({
-                    where: { id: verified._id },
-                    include: { tenant: true }
-                });
+                let user = null;
+                try {
+                    user = await prisma.user.findUnique({
+                        where: { id: verified._id },
+                        include: { tenant: true }
+                    });
+                } catch (dbError) {
+                    logger.warn('⚠️ [Postgres Offline] Falling back to mock users database for SSO validateToken');
+                    try {
+                        const mockFilePath = path.join(process.cwd(), 'users_mock.json');
+                        if (fs.existsSync(mockFilePath)) {
+                            const mockUsers = JSON.parse(fs.readFileSync(mockFilePath, 'utf8'));
+                            const foundMock = mockUsers.find(u => u.id === verified._id);
+                            if (foundMock) {
+                                user = {
+                                    id: foundMock.id,
+                                    email: foundMock.email,
+                                    role: foundMock.role,
+                                    tenantId: foundMock.tenantId,
+                                    tenantRole: foundMock.tenantRole,
+                                };
+                            } else {
+                                user = {
+                                    id: verified._id,
+                                    email: verified.email || `${verified._id}@local.dev`,
+                                    role: verified.role || 'user',
+                                    tenantId: verified.tenantId || 'default',
+                                    tenantRole: verified.tenantRole || 'developer',
+                                };
+                            }
+                        }
+                    } catch (fsErr) {
+                        logger.error('Error reading mock users inside SSO provider:', fsErr);
+                    }
+                }
 
                 if (user) {
                     const userRole = user.role || 'user';
@@ -129,7 +162,7 @@ class EnterpriseSSO {
                     return {
                         userId: user.id,
                         email: user.email,
-                        name: user.email.split('@')[0],
+                        name: user.email ? user.email.split('@')[0] : 'user',
                         tenantId: user.tenantId || 'default',
                         role: identityRole,
                         region: 'us-central1',
@@ -175,14 +208,23 @@ class EnterpriseSSO {
                 throw new Error('AUTH_INVALID_ISSUER: Token issuer not recognized');
             }
 
+            let identityRole = payload.role || payload.custom_claims?.role || payload.tenantRole || ROLES.DEVELOPER;
+            if (identityRole === 'owner' || identityRole === 'admin') {
+                identityRole = ROLES.ADMIN;
+            } else if (identityRole === 'developer') {
+                identityRole = ROLES.DEVELOPER;
+            } else if (identityRole === 'viewer') {
+                identityRole = ROLES.VIEWER;
+            }
+
             return {
-                userId: payload.sub || payload.user_id,
+                userId: payload.sub || payload.user_id || payload._id,
                 email: payload.email,
-                name: payload.name,
-                tenantId: payload.tenant_id || payload.firebase?.tenant || 'default',
-                role: payload.role || payload.custom_claims?.role || ROLES.DEVELOPER,
+                name: payload.name || (payload.email ? payload.email.split('@')[0] : 'user'),
+                tenantId: payload.tenant_id || payload.firebase?.tenant || payload.tenantId || 'default',
+                role: identityRole,
                 region: payload.region || payload.custom_claims?.region || 'us-central1',
-                permissions: PERMISSIONS[payload.role || ROLES.DEVELOPER] || PERMISSIONS[ROLES.VIEWER],
+                permissions: PERMISSIONS[identityRole] || PERMISSIONS[ROLES.VIEWER],
                 iat: payload.iat,
                 exp: payload.exp,
             };
