@@ -5,6 +5,20 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.224] - 2026-06-13 — Enterprise Industry Interoperability & Integration Brokers
+
+### Added
+
+- **Centralized Interoperability & Integration Service**: Implemented `industryIntegrationService` (`industry_integration.service.js`) containing 6 secure integration brokers:
+  - *FinTech double-entry accounting ledger validator*: Enforces accounting integrity by validating that debits equal credits per currency.
+  - *Healthcare HL7-to-FHIR R4 message transformer*: Maps legacy HL7 v2 messages (like ADT and ORU) into standard, compliant FHIR R4 Patient and Observation JSON resources.
+  - *Pharma FDA Batch Record packaging and cryptographic CMEK archiver*: Packages production logs and signs the archive using KMS Customer Managed Encryption Keys (CMEK) to satisfy FDA 21 CFR Part 11 electronic records regulations.
+  - *Hedge Fund portfolio risk and concentration limit drift checker*: Simulates Aladdin-style risk checks enforcing UCITS concentration limits (max 15% single asset weight, max 35% sector weight).
+  - *Insurance Guidewire XML claim transaction routing broker*: Parses Guidewire ClaimCenter XML structures and routes claims dynamically (e.g. to bodily injury or high-value review queues).
+  - *Automotive OCPP & CAN-bus telemetry frame decoder*: Decodes standard J1939 CAN-bus hexadecimal payloads (speed, motor RPM, EV battery temperature, state-of-charge).
+- **Integration REST Route Handlers**: Mounted new route endpoints in `compliance.route.js` under the `/api/governance/integration` namespace.
+- **Automated Interoperability Test Coverage**: Created `integration.test.js` validating all 6 integration brokers with 100% test pass rate.
+
 ## [39.37.223] - 2026-06-13 — Enterprise Compliance & Governance Upgrades
 
 ### Added

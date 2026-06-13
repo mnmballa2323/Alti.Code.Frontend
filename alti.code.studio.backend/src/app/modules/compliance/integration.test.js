@@ -144,21 +144,23 @@ OBX|1|NM|883-9^LOINC^Hemoglobin||14.2|g/dl||N|||F`;
 
     describe('4. Hedge Fund Risk Pricing Broker', () => {
         const portfolio = {
-            cash: 200000,
+            cash: 300000,
             holdings: [
-                { symbol: 'AAPL', sector: 'Technology', quantity: 1000, price: 150 }, // $150k
-                { symbol: 'JPM', sector: 'Financials', quantity: 1000, price: 150 }   // $150k
-            ] // Total assets = $300k, Total portfolio value = $500k
+                { symbol: 'AAPL', sector: 'Technology', quantity: 500, price: 100 }, // $50k (10%)
+                { symbol: 'MSFT', sector: 'Technology', quantity: 500, price: 100 }, // $50k (10%)
+                { symbol: 'NVDA', sector: 'Technology', quantity: 500, price: 100 }, // $50k (10%)
+                { symbol: 'JPM', sector: 'Financials', quantity: 500, price: 100 }    // $50k (10%)
+            ] // Total assets = $200k, Cash = $300k, Total portfolio value = $500k
         };
 
         it('should approve trade within portfolio limit constraints', async () => {
-            // Proposed: BUY 100 shares of JPM for $15k.
-            // Post trade JPM value = $165k (31.7% of portfolio value $520k)
+            // Proposed: BUY 100 shares of JPM for $10k.
+            // Post trade JPM value = $60k (12% of portfolio value $500k)
             const proposedTrade = {
                 symbol: 'JPM',
                 action: 'BUY',
                 quantity: 100,
-                price: 150,
+                price: 100,
                 sector: 'Financials'
             };
 
@@ -168,18 +170,19 @@ OBX|1|NM|883-9^LOINC^Hemoglobin||14.2|g/dl||N|||F`;
 
             expect(result.approved).toBe(true);
             expect(result.totalValue).toBe(500000);
-            expect(result.cashValue).toBe(185000);
+            expect(result.cashValue).toBe(290000);
             expect(result.singleAssetViolations).toHaveLength(0);
+            expect(result.sectorViolations).toHaveLength(0);
         });
 
         it('should reject trade if single asset concentration exceeds 15%', async () => {
-            // Proposed BUY 1000 shares of AAPL for $150k.
-            // Post trade AAPL value = $300k (60% of total portfolio value $500k)
+            // Proposed BUY 300 shares of AAPL for $30k.
+            // Post trade AAPL value = $80k (16% of total portfolio value $500k)
             const proposedTrade = {
                 symbol: 'AAPL',
                 action: 'BUY',
-                quantity: 1000,
-                price: 150,
+                quantity: 300,
+                price: 100,
                 sector: 'Technology'
             };
 
@@ -193,12 +196,13 @@ OBX|1|NM|883-9^LOINC^Hemoglobin||14.2|g/dl||N|||F`;
         });
 
         it('should reject trade if sector concentration exceeds 35%', async () => {
-            // Let's buy MSFT (Tech sector) for $100k.
-            // Post trade Tech value = AAPL ($150k) + MSFT ($100k) = $250k (50% of portfolio value $500k)
+            // Propose buying CSCO (Technology) for $30k.
+            // Post trade Tech value = AAPL ($50k) + MSFT ($50k) + NVDA ($50k) + CSCO ($30k) = $180k (36% of $500k)
+            // Individual weights: AAPL (10%), MSFT (10%), NVDA (10%), CSCO (6%) - None exceed 15% single asset limit.
             const proposedTrade = {
-                symbol: 'MSFT',
+                symbol: 'CSCO',
                 action: 'BUY',
-                quantity: 1000,
+                quantity: 300,
                 price: 100,
                 sector: 'Technology'
             };
@@ -208,6 +212,7 @@ OBX|1|NM|883-9^LOINC^Hemoglobin||14.2|g/dl||N|||F`;
             const result = await industryIntegrationService.checkHedgeFundRisk('user-1', 'tenant-1', portfolio, proposedTrade);
 
             expect(result.approved).toBe(false);
+            expect(result.singleAssetViolations).toHaveLength(0); // Verifies ONLY sector violation
             expect(result.sectorViolations.length).toBeGreaterThan(0);
             expect(result.sectorViolations[0].sector).toBe('Technology');
         });

@@ -546,11 +546,11 @@ class IndustryIntegrationService {
             bytes.push(parseInt(cleanHex.substring(i, i + 2), 16));
         }
 
-        const frameId = telemetryFrame.frameId.toUpperCase();
+        const frameId = telemetryFrame.frameId.replace(/^0[xX]/, '').toUpperCase();
         let decodedTelemetry = {};
 
         // Decode standard J1939 CAN Frame Identifiers
-        if (frameId === '0x18FEF100' || frameId === '18FEF100') {
+        if (frameId === '18FEF100') {
             // Cruise Control / Vehicle Speed (CCVS)
             // Bytes 2 and 3 contain wheel-based vehicle speed: resolution 1/256 km/h per bit
             const speedRaw = (bytes[2] << 8) | bytes[1];
@@ -561,7 +561,7 @@ class IndustryIntegrationService {
                 wheelBasedSpeedKmh: Number(speedKmh.toFixed(2)),
                 cruiseControlActive: (bytes[0] & 0x01) === 1
             };
-        } else if (frameId === '0x0CF00400' || frameId === '0CF00400') {
+        } else if (frameId === '0CF00400') {
             // Electronic Engine Controller 1 (EEC1)
             // Bytes 3 and 4 contain Engine Speed: resolution 0.125 rpm per bit
             const rpmRaw = (bytes[4] << 8) | bytes[3];
@@ -572,7 +572,7 @@ class IndustryIntegrationService {
                 engineRpm: Number(motorRpm.toFixed(1)),
                 actualEnginePercentTorque: bytes[2] - 125 // Offset -125%
             };
-        } else if (frameId === '0x18FEE600' || frameId === '18FEE600') {
+        } else if (frameId === '18FEE600') {
             // Battery Charging Status / EV State (SoC)
             // Byte 1: SoC (0.4% per bit), Byte 2: Battery Temp (-40 C offset)
             const stateOfCharge = bytes[0] * 0.4;
