@@ -60,16 +60,6 @@ export default function RevenuePage() {
       {/* Bottom Section: Recent Transactions */}
       <div className="w-full flex flex-col gap-3">
         
-        {/* Search Bar */}
-        <div className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm">
-          <Search className="w-4 h-4 text-neutral-400" />
-          <input 
-            type="text" 
-            placeholder="Search transactions..." 
-            className="w-full bg-transparent border-none outline-none text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:ring-0"
-          />
-        </div>
-        
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider shadow-sm">
           <div className="col-span-2">Transaction ID</div>
@@ -78,6 +68,16 @@ export default function RevenuePage() {
           <div className="col-span-2">Date</div>
           <div className="col-span-2">Amount</div>
           <div className="col-span-1 text-right">Download</div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm">
+          <Search className="w-4 h-4 text-neutral-400" />
+          <input 
+            type="text" 
+            placeholder="Search transactions..." 
+            className="w-full bg-transparent border-none outline-none text-sm text-neutral-900 dark:text-white placeholder:text-neutral-500 focus:ring-0"
+          />
         </div>
 
         {/* Floating Rows */}
