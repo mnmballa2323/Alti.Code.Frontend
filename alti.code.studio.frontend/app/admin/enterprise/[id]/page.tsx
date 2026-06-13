@@ -214,7 +214,7 @@ export default function EnterpriseDetailPage() {
         <div className="space-y-6">
           {/* Team Header card */}
           <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md overflow-hidden">
-            <div className="group p-6 flex items-start justify-between">
+            <div className="group px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2 inline-flex">
                 <span className="text-[11px] font-bold tracking-wider text-neutral-400 dark:text-neutral-500 uppercase">
                   Admin
@@ -225,9 +225,13 @@ export default function EnterpriseDetailPage() {
                 </div>
               </div>
 
-              <div className="relative w-36 h-14 shrink-0">
+              <div className="relative w-48 h-8 shrink-0">
                 {/* Monthly price per member (visible when not hovered) */}
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-end transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-row items-center gap-3 transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
+                  <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
+                    {teamMembers.length}{" "}
+                    {teamMembers.length === 1 ? "Member" : "Members"}
+                  </span>
                   <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
@@ -235,10 +239,6 @@ export default function EnterpriseDetailPage() {
                       maximumFractionDigits: 0,
                     }).format(memberPrice)}
                     /mo
-                  </span>
-                  <span className="mt-1.5 px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                    {teamMembers.length}{" "}
-                    {teamMembers.length === 1 ? "Member" : "Members"}
                   </span>
                 </div>
 
