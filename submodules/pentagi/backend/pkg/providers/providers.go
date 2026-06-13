@@ -918,14 +918,8 @@ func (pc *providerController) buildProviderFromConfig(
 	config *pconfig.ProviderConfig,
 ) (provider.Provider, error) {
 	switch prvtype {
-	case provider.ProviderOpenAI:
-		return openai.New(pc.cfg, config)
-	case provider.ProviderAnthropic:
-		return anthropic.New(pc.cfg, config)
 	case provider.ProviderCustom:
 		return custom.New(pc.cfg, config)
-	case provider.ProviderGemini:
-		return gemini.New(pc.cfg, config)
 	case provider.ProviderBedrock:
 		return bedrock.New(pc.cfg, config)
 	case provider.ProviderOllama:

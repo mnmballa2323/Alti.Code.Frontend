@@ -162,27 +162,6 @@ func (te *toolExecutor) GetTool(ctx context.Context, funcName string) (tools.Too
 			te.proxies.GetSearchLogProvider(),
 		), nil
 
-	case tools.TavilyToolName:
-		return tools.NewTavilyTool(
-			te.flowID,
-			te.taskID,
-			te.subtaskID,
-			te.cfg.TavilyAPIKey,
-			te.cfg.ProxyURL,
-			te.proxies.GetSearchLogProvider(),
-			te.GetSummarizer(),
-		), nil
-
-	case tools.TraversaalToolName:
-		return tools.NewTraversaalTool(
-			te.flowID,
-			te.taskID,
-			te.subtaskID,
-			te.cfg.TraversaalAPIKey,
-			te.cfg.ProxyURL,
-			te.proxies.GetSearchLogProvider(),
-		), nil
-
 	case tools.SearxngToolName:
 		return tools.NewSearxngTool(
 			te.flowID,

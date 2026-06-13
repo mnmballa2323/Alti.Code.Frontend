@@ -39,8 +39,7 @@ func CreateDummyTemplateData() map[string]any {
 		"BrowserToolName":           tools.BrowserToolName,
 		"GoogleToolName":            tools.GoogleToolName,
 		"DuckDuckGoToolName":        tools.DuckDuckGoToolName,
-		"TavilyToolName":            tools.TavilyToolName,
-		"TraversaalToolName":        tools.TraversaalToolName,
+
 
 		"SearchInMemoryToolName":    tools.SearchInMemoryToolName,
 		"SearchGuideToolName":       tools.SearchGuideToolName,
