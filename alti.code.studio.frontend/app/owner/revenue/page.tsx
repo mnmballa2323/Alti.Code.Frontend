@@ -33,7 +33,7 @@ export default function RevenuePage() {
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-neutral-900 dark:text-white">$45,200</span>
             <span className="text-sm font-medium text-emerald-500 flex items-center">
-              <ArrowUpRight className="w-3 h-3 mr-0.5" /> 12%
+              <ArrowUpRight className="w-3 h-3 mr-0.5" /> 12
             </span>
           </div>
 
@@ -47,7 +47,7 @@ export default function RevenuePage() {
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-bold text-neutral-900 dark:text-white">$542,400</span>
             <span className="text-sm font-medium text-emerald-500 flex items-center">
-              <ArrowUpRight className="w-3 h-3 mr-0.5" /> 15%
+              <ArrowUpRight className="w-3 h-3 mr-0.5" /> 15
             </span>
           </div>
         </div>
