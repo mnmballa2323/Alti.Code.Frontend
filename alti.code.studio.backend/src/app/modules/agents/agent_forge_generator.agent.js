@@ -39,7 +39,8 @@ Include a powerful system prompt and one specialized function.
 RULES:
 1. Return ONLY valid JavaScript code.
 2. The code must export an instance of the agent, e.g., 'export const newAgent = Object.freeze(new NewAgentClass());'.
-3. Do not include markdown code block syntax (\`\`\`).
+3. Do not include markdown code block syntax (```).
+4. Since this file is written to the 'custom' subdirectory, you MUST import GeminiCliBaseAgent from '../gemini_cli_base.agent.js'.
         `;
 
         try {

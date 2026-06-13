@@ -65,8 +65,9 @@ class SelfExpandingSwarmService {
             const customDirPath = path.join(process.cwd(), 'src', 'app', 'modules', 'agents', 'custom');
             await fs.mkdir(customDirPath, { recursive: true });
 
+            const normalizedCode = generatedCode.replace(/['"]\.\/gemini_cli_base\.agent\.js['"]/g, "'../gemini_cli_base.agent.js'");
             const filePath = path.join(customDirPath, `${agentName}.agent.js`);
-            await fs.writeFile(filePath, generatedCode);
+            await fs.writeFile(filePath, normalizedCode);
             addLog(`Wrote specialized agent module to ${filePath}`);
             
             // Write companion JSON config file to allow dynamicAgentLoaderService pick up
