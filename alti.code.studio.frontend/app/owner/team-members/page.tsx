@@ -152,18 +152,9 @@ export default function TeamMembersPage() {
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0">
-      {loading ? (
-        <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">
-            Loading workspace members...
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {displayedMembers.length > 0 ? (
-            <div className="w-full">
-              {/* Sticky Header Wrapper */}
+      <div className="space-y-4">
+        <div className="w-full">
+          {/* Sticky Header Wrapper */}
               <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] -mt-4 pt-4 pb-2">
                 {/* Search Bar */}
                 <div className="relative mb-4">
@@ -186,7 +177,15 @@ export default function TeamMembersPage() {
 
               {/* Table Body */}
               <div className="space-y-3 mt-6">
-                {sortedFilteredMembers.length > 0 ? (
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center py-20">
+                    <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
+                    <p className="text-sm text-neutral-500">
+                      Loading workspace members...
+                    </p>
+                  </div>
+                ) : displayedMembers.length > 0 ? (
+                  sortedFilteredMembers.length > 0 ? (
                   sortedFilteredMembers.map((member) => {
                     const isYou = member.email === currentUser?.email;
 
@@ -232,15 +231,15 @@ export default function TeamMembersPage() {
                     No members match your search query.
                   </div>
                 )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+                    No members configured.
+                  </div>
+                )}
               </div>
             </div>
-          ) : (
-            <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No members configured.
-            </div>
-          )}
         </div>
-      )}
 
       {/* Edit Membership Pricing Modal */}
       {editModalOpen && editingMember && (

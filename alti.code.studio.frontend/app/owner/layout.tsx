@@ -76,18 +76,7 @@ export default function OwnerLayout({
     }
   }, [status, profile, router]);
 
-  if (status === "loading" || (status === "authenticated" && !isAuthorized)) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#0d1117] text-white">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
-          <span className="text-sm font-semibold tracking-wider text-neutral-400 uppercase">
-            Securing Connection...
-          </span>
-        </div>
-      </div>
-    );
-  }
+  const isAuthLoading = status === "loading" || (status === "authenticated" && !isAuthorized);
 
   const renderNavGroup = (
     title: string,
@@ -196,7 +185,18 @@ export default function OwnerLayout({
         <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
           {/* Content Children */}
           <div className="flex-1 overflow-y-auto pt-4 px-10 pb-10 z-10 relative flex flex-col h-full">
-            {children}
+            {isAuthLoading ? (
+              <div className="flex h-full w-full items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                  <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
+                  <span className="text-sm font-semibold tracking-wider text-neutral-400 dark:text-neutral-500 uppercase">
+                    Securing Connection...
+                  </span>
+                </div>
+              </div>
+            ) : (
+              children
+            )}
           </div>
         </div>
       </div>
