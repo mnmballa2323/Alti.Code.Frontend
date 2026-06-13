@@ -10,12 +10,9 @@ import (
 	"time"
 
 	"pentagi/pkg/config"
-	"pentagi/pkg/providers/anthropic"
 	"pentagi/pkg/providers/bedrock"
 	"pentagi/pkg/providers/custom"
-	"pentagi/pkg/providers/gemini"
 	"pentagi/pkg/providers/ollama"
-	"pentagi/pkg/providers/openai"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
 	"pentagi/pkg/providers/tester"
@@ -123,35 +120,7 @@ func createProvider(providerType string, cfg *config.Config) (provider.Provider,
 		}
 		return custom.New(cfg, providerConfig)
 
-	case "openai":
-		if cfg.OpenAIKey == "" {
-			return nil, fmt.Errorf("OpenAI key is not set")
-		}
-		providerConfig, err := openai.DefaultProviderConfig()
-		if err != nil {
-			return nil, fmt.Errorf("error creating openai provider config: %w", err)
-		}
-		return openai.New(cfg, providerConfig)
 
-	case "anthropic":
-		if cfg.AnthropicAPIKey == "" {
-			return nil, fmt.Errorf("Anthropic API key is not set")
-		}
-		providerConfig, err := anthropic.DefaultProviderConfig()
-		if err != nil {
-			return nil, fmt.Errorf("error creating anthropic provider config: %w", err)
-		}
-		return anthropic.New(cfg, providerConfig)
-
-	case "gemini":
-		if cfg.GeminiAPIKey == "" {
-			return nil, fmt.Errorf("Gemini API key is not set")
-		}
-		providerConfig, err := gemini.DefaultProviderConfig()
-		if err != nil {
-			return nil, fmt.Errorf("error creating gemini provider config: %w", err)
-		}
-		return gemini.New(cfg, providerConfig)
 
 	case "bedrock":
 		if cfg.BedrockAccessKey == "" {
