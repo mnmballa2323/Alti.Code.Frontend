@@ -12,6 +12,7 @@ import config from '../../../../config/index.js';
 
 /** Preset MCP server configurations loaded from env or defaults. */
 export const PRESETS = [
+  // --- CORE & SYSTEM ---
   {
     name: 'filesystem',
     command: 'npx',
@@ -19,33 +20,10 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_FILESYSTEM',
   },
   {
-    name: 'git',
-    command: 'docker',
-    args: ['run', '-i', '--rm', '-v', `${process.cwd()}:/projects`, 'mcp/git'],
-    envKey: 'MCP_ENABLE_GIT',
-  },
-  {
     name: 'sqlite',
     command: 'npx',
-    args: [
-      '-y',
-      '@modelcontextprotocol/server-sqlite',
-      '--file',
-      'database.sqlite',
-    ],
+    args: ['-y', '@modelcontextprotocol/server-sqlite', '--file', 'database.sqlite'],
     envKey: 'MCP_ENABLE_SQLITE',
-  },
-  {
-    name: 'github',
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-github'],
-    envKey: 'MCP_ENABLE_GITHUB',
-  },
-  {
-    name: 'sentry',
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-sentry'],
-    envKey: 'MCP_ENABLE_SENTRY',
   },
   {
     name: 'postgres',
@@ -54,10 +32,230 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_POSTGRES',
   },
   {
+    name: 'mysql',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-mysql'],
+    envKey: 'MCP_ENABLE_MYSQL',
+  },
+  {
+    name: 'redis',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-redis'],
+    envKey: 'MCP_ENABLE_REDIS',
+  },
+  {
+    name: 'mongodb',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-mongodb'],
+    envKey: 'MCP_ENABLE_MONGODB',
+  },
+  {
+    name: 'elasticsearch',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-elasticsearch'],
+    envKey: 'MCP_ENABLE_ELASTICSEARCH',
+  },
+  {
+    name: 'neon',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-neon'],
+    envKey: 'MCP_ENABLE_NEON',
+  },
+  {
+    name: 'supabase',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-supabase'],
+    envKey: 'MCP_ENABLE_SUPABASE',
+  },
+
+  // --- SOURCE CONTROL & PM ---
+  {
+    name: 'git',
+    command: 'docker',
+    args: ['run', '-i', '--rm', '-v', `${process.cwd()}:/projects`, 'mcp/git'],
+    envKey: 'MCP_ENABLE_GIT',
+  },
+  {
+    name: 'github',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-github'],
+    envKey: 'MCP_ENABLE_GITHUB',
+  },
+  {
+    name: 'gitlab',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-gitlab'],
+    envKey: 'MCP_ENABLE_GITLAB',
+  },
+  {
+    name: 'jira',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-jira'],
+    envKey: 'MCP_ENABLE_JIRA',
+  },
+  {
+    name: 'linear',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-linear'],
+    envKey: 'MCP_ENABLE_LINEAR',
+  },
+  {
+    name: 'notion',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-notion'],
+    envKey: 'MCP_ENABLE_NOTION',
+  },
+  {
+    name: 'confluence',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-confluence'],
+    envKey: 'MCP_ENABLE_CONFLUENCE',
+  },
+
+  // --- CLOUD & DEVOPS ---
+  {
+    name: 'aws',
+    command: 'docker',
+    args: ['run', '-i', '--rm', 'mcp/aws'],
+    envKey: 'MCP_ENABLE_AWS',
+  },
+  {
+    name: 'gcp',
+    command: 'docker',
+    args: ['run', '-i', '--rm', 'mcp/gcp'],
+    envKey: 'MCP_ENABLE_GCP',
+  },
+  {
+    name: 'azure',
+    command: 'docker',
+    args: ['run', '-i', '--rm', 'mcp/azure'],
+    envKey: 'MCP_ENABLE_AZURE',
+  },
+  {
+    name: 'kubernetes',
+    command: 'docker',
+    args: ['run', '-i', '--rm', 'mcp/kubernetes'],
+    envKey: 'MCP_ENABLE_KUBERNETES',
+  },
+  {
+    name: 'docker',
+    command: 'docker',
+    args: ['run', '-i', '--rm', '-v', '/var/run/docker.sock:/var/run/docker.sock', 'mcp/docker'],
+    envKey: 'MCP_ENABLE_DOCKER',
+  },
+  {
+    name: 'terraform',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-terraform'],
+    envKey: 'MCP_ENABLE_TERRAFORM',
+  },
+  {
+    name: 'cloudflare',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-cloudflare'],
+    envKey: 'MCP_ENABLE_CLOUDFLARE',
+  },
+
+  // --- MONITORING & LOGGING ---
+  {
+    name: 'sentry',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-sentry'],
+    envKey: 'MCP_ENABLE_SENTRY',
+  },
+  {
+    name: 'datadog',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-datadog'],
+    envKey: 'MCP_ENABLE_DATADOG',
+  },
+  {
+    name: 'prometheus',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-prometheus'],
+    envKey: 'MCP_ENABLE_PROMETHEUS',
+  },
+
+  // --- INTELLIGENCE & UTILITY ---
+  {
+    name: 'sequential-thinking',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
+    envKey: 'MCP_ENABLE_SEQUENTIAL_THINKING',
+  },
+  {
+    name: 'memory',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-memory'],
+    envKey: 'MCP_ENABLE_MEMORY',
+  },
+  {
+    name: 'fetch',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-fetch'],
+    envKey: 'MCP_ENABLE_FETCH',
+  },
+  {
     name: 'puppeteer',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-puppeteer'],
     envKey: 'MCP_ENABLE_PUPPETEER',
+  },
+  {
+    name: 'pdf',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-pdf'],
+    envKey: 'MCP_ENABLE_PDF',
+  },
+  {
+    name: 'npm',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-npm'],
+    envKey: 'MCP_ENABLE_NPM',
+  },
+  {
+    name: 'python',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-python'],
+    envKey: 'MCP_ENABLE_PYTHON',
+  },
+  {
+    name: 'brave-search',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-brave-search'],
+    envKey: 'MCP_ENABLE_BRAVE_SEARCH',
+  },
+  {
+    name: 'google-maps',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-google-maps'],
+    envKey: 'MCP_ENABLE_GOOGLE_MAPS',
+  },
+
+  // --- COMMUNICATION & APPS ---
+  {
+    name: 'slack',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-slack'],
+    envKey: 'MCP_ENABLE_SLACK',
+  },
+  {
+    name: 'discord',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-discord'],
+    envKey: 'MCP_ENABLE_DISCORD',
+  },
+  {
+    name: 'stripe',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-stripe'],
+    envKey: 'MCP_ENABLE_STRIPE',
+  },
+  {
+    name: 'figma',
+    command: 'npx',
+    args: ['-y', '@modelcontextprotocol/server-figma'],
+    envKey: 'MCP_ENABLE_FIGMA',
   },
 ];
 
