@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   LayoutDashboard,
   DollarSign,
+  Server,
+  Cloud,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -43,6 +45,13 @@ const managerItems: SidebarItem[] = [
 
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
+];
+
+const cloudItems: SidebarItem[] = [
+  { label: "Liberty Center One", href: "/admin/liberty", icon: Server },
+  { label: "Amazon Web Services", href: "/admin/aws", icon: Cloud },
+  { label: "Microsoft Azure", href: "/admin/azure", icon: Cloud },
+  { label: "Google Cloud", href: "/admin/google", icon: Cloud },
 ];
 
 export default function AdminLayout({
@@ -133,6 +142,15 @@ export default function AdminLayout({
       return "Platform Controls";
     }
 
+    if (
+      pathname.startsWith("/admin/liberty") ||
+      pathname.startsWith("/admin/aws") ||
+      pathname.startsWith("/admin/azure") ||
+      pathname.startsWith("/admin/google")
+    ) {
+      return "Cloud Providers";
+    }
+
     return "Platform Admin";
   };
 
@@ -149,6 +167,11 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
     if (pathname.startsWith("/admin/usage")) return "Model Usage";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
+
+    if (pathname.startsWith("/admin/liberty")) return "Liberty Center One";
+    if (pathname.startsWith("/admin/aws")) return "Amazon Web Services";
+    if (pathname.startsWith("/admin/azure")) return "Microsoft Azure";
+    if (pathname.startsWith("/admin/google")) return "Google Cloud";
 
     return "Platform Admin";
   };
@@ -213,6 +236,7 @@ export default function AdminLayout({
           {renderNavGroup("Platform Admin", adminItems)}
           {renderNavGroup("Member Management", memberItems, "mt-8")}
           {renderNavGroup("Platform Controls", managerItems, "mt-8")}
+          {renderNavGroup("Cloud Providers", cloudItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}

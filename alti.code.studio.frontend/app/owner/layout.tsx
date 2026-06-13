@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   LayoutDashboard,
   DollarSign,
+  Server,
+  Cloud,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -42,6 +44,13 @@ const managerItems: SidebarItem[] = [
 
   { label: "Instructions", href: "/owner/instructions", icon: FileText },
   { label: "Guardrails", href: "/owner/guardrails", icon: Shield },
+];
+
+const cloudItems: SidebarItem[] = [
+  { label: "Liberty Center One", href: "/owner/liberty", icon: Server },
+  { label: "Amazon Web Services", href: "/owner/aws", icon: Cloud },
+  { label: "Microsoft Azure", href: "/owner/azure", icon: Cloud },
+  { label: "Google Cloud", href: "/owner/google", icon: Cloud },
 ];
 
 export default function OwnerLayout({
@@ -137,6 +146,11 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/usage")) return "Model Usage";
     if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
+    if (pathname.startsWith("/owner/liberty")) return "Liberty Center One";
+    if (pathname.startsWith("/owner/aws")) return "Amazon Web Services";
+    if (pathname.startsWith("/owner/azure")) return "Microsoft Azure";
+    if (pathname.startsWith("/owner/google")) return "Google Cloud";
+
     return "Platform Owner";
   };
 
@@ -200,6 +214,7 @@ export default function OwnerLayout({
           {renderNavGroup("Platform Admin", ownerItems)}
           {renderNavGroup("Member Management", memberItems, "mt-8")}
           {renderNavGroup("Platform Controls", managerItems, "mt-8")}
+          {renderNavGroup("Cloud Providers", cloudItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
