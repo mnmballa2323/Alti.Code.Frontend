@@ -82,20 +82,32 @@ export const PRESETS = [
   {
     name: 'redis',
     command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-redis'],
+    args: ['-y', 'mcp-redis'],
     envKey: 'MCP_ENABLE_REDIS',
   },
   {
     name: 'mongodb',
     command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-mongodb'],
+    args: ['-y', 'mongodb-mcp-server'],
     envKey: 'MCP_ENABLE_MONGODB',
   },
   {
     name: 'elasticsearch',
     command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-elasticsearch'],
+    args: ['-y', '@infoinlet/mcp-elasticsearch'],
     envKey: 'MCP_ENABLE_ELASTICSEARCH',
+  },
+  {
+    name: 'oracle',
+    command: 'npx',
+    args: ['-y', 'mcp-oracle-db'],
+    envKey: 'MCP_ENABLE_ORACLE',
+  },
+  {
+    name: 'cassandra',
+    command: 'npx',
+    args: ['-y', 'mcp-cassandra'],
+    envKey: 'MCP_ENABLE_CASSANDRA',
   },
   {
     name: 'neon',
