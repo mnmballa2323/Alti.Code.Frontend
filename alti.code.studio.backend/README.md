@@ -27,7 +27,7 @@ The Alti.Code.Studio backend is a **production-hardened AI orchestration engine*
 | Cache / PubSub | Redis (ioredis) |
 | Vector Store | Qdrant |
 | Memory | Mem0 |
-| Observability | OpenTelemetry + Langfuse |
+| Observability | OpenTelemetry + GCP Logging |
 | Auth | JWT (RS256) + RBAC |
 | Real-time | Socket.IO |
 

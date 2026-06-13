@@ -277,8 +277,8 @@ To be the premier AI-native development platform where a self-orchestrating arma
 - [x] **LangGraph Orchestrator**: Full `plan → guard → execute → review → recover` pipeline
 - [x] **80+ Domain Specialists**: SDK, security, infra, AI/ML, mobile, data engineering
 - [x] **RAG-Powered Memory**: Qdrant vector store + Mem0 for persistent agent memory
-- [x] **Observability Layer**: OpenTelemetry, Langfuse, Grafana integration
-- [x] **Voice Agent**: LiveKit + ElevenLabs multimodal voice I/O
+- [x] **Observability Layer**: OpenTelemetry, Grafana integration
+- [x] **Voice Agent**: LiveKit + Native Cloud TTS multimodal voice I/O
 - [x] **Self-Healing**: Surfer agent browses live web for unknown errors; Surgeon patches code
 
 ### v1.0.0 — Enterprise Foundation (2026-02-14)

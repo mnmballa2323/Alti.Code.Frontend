@@ -116,7 +116,7 @@ VHDL/SystemVerilog · Apex · ABAP · Prolog · Dart · Wolfram · PL/SQL**
 - **Observability**: Full OpenTelemetry integration with distributed tracing
 - **Ultimate RAG Pipeline**: Triple-threat context retrieval (Spanner Graph, Vertex AI, OS CLI) synthesized with inline citations by Gemini 3.1 Pro
 - **Unified Conversational UI**: Flawless ChatGPT-style interface powering both standard chat and sovereign codebase search
-- **Voice I/O**: Multimodal voice agent with LiveKit + ElevenLabs integration
+- **Voice I/O**: Multimodal voice agent with LiveKit + Native Cloud TTS integration
 
 ---
 

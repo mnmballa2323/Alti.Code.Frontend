@@ -42,7 +42,7 @@ The backend is structured as a **layered AI orchestration platform** with a clea
 │  (cloud · language · SDK · infra · domain · oss) │
 ├──────────────────────────────────────────────────┤
 │     GeminiAiService  │  MongoDB  │  Redis         │
-│     Qdrant Vector    │  Socket.IO│  Langfuse      │
+│     Qdrant Vector    │  Socket.IO│  GCP Logging   │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -107,7 +107,7 @@ executeNode failure
 | `recoveryNode` | Error analysis + retry planning |
 
 **Registered direct agents in `executeNode`:**
-`surfer`, `vector`, `siren`, `sentinel`, `chaos`, `release`, `compliance`, `economist`, `codereview`, `architecture`, `performance`, `e2e`, `database`, `analytics`, `integration`, `hivemind`, `schema`, `debug`, `surgeon`, `guardian`, `browser`, `agent_s`, `crawl4ai`, `mcp`, `openInterpreter`, `searxng`, `tabby`, `dspy`, `geminiExt`, `qdrant`, `ollama`, `observability`, `voice`, `litellm`, `temporal`, `langgraph`, `mem0`, `langfuse`, `unstructured`, `promptfoo`, `pentagi`, `fossflow`, **`specialist`** (→ CapabilityRouter)
+`surfer`, `vector`, `siren`, `sentinel`, `chaos`, `release`, `compliance`, `economist`, `codereview`, `architecture`, `performance`, `e2e`, `database`, `analytics`, `integration`, `hivemind`, `schema`, `debug`, `surgeon`, `guardian`, `browser`, `agent_s`, `crawl4ai`, `mcp`, `openInterpreter`, `searxng`, `tabby`, `dspy`, `geminiExt`, `qdrant`, `ollama`, `observability`, `voice`, `litellm`, `temporal`, `langgraph`, `mem0`, `unstructured`, `promptfoo`, `pentagi`, `fossflow`, **`specialist`** (→ CapabilityRouter)
 
 ---
 
@@ -242,7 +242,6 @@ As of v8.1.0, the platform is deployed exclusively on **Google Cloud Platform (G
 | Google Managed Prometheus | Auto-scapes `/metrics` from backend pods natively |
 | GCP BigQuery | Tenant-level cost attribution and FinOps analytics |
 | GCP Pub/Sub | Real-time SIEM log exporting (Splunk, Datadog) |
-| Langfuse | LLM trace logging, prompt evaluation |
 | OpenTelemetry | Distributed tracing across all services |
 | Grafana | Dashboard for system performance |
 | `/api/swarm/health` | Live swarm health endpoint |

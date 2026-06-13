@@ -574,7 +574,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **Fazm agent integration**:
   - Implemented all Fazm backend endpoints in the Express backend module `fazmAgent`.
   - Added OIDC configuration, JWKS key sets, and signed custom tokens for Workload Identity Federation compatibility.
-  - Implemented client API key retrieval service supporting ElevenLabs, Deepgram, and Gemini Flash credentials.
+  - Implemented client API key retrieval service supporting Deepgram, and Gemini Flash credentials.
   - Created a robust tunnel-relay registry in Redis (with memory fallback) supporting remote peer-to-peer discovery and client task execution forwarding.
   - Added stub integrations for Composio tool-calling, Stripe billing, and session-recording endpoints.
 
