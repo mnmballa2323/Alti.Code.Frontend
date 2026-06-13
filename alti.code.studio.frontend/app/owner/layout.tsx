@@ -20,9 +20,7 @@ import {
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import { FaAws } from "react-icons/fa6";
-import { VscAzure } from "react-icons/vsc";
-import { SiGooglecloud } from "react-icons/si";
+import { AwsIcon, AzureIcon, GoogleCloudIcon, LibertyIcon } from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;
@@ -50,10 +48,10 @@ const managerItems: SidebarItem[] = [
 ];
 
 const cloudItems: SidebarItem[] = [
-  { label: "Liberty Center One", href: "/owner/liberty", icon: Server },
-  { label: "Amazon Web Services", href: "/owner/aws", icon: FaAws },
-  { label: "Microsoft Azure", href: "/owner/azure", icon: VscAzure },
-  { label: "Google Cloud", href: "/owner/google", icon: SiGooglecloud },
+  { label: "Liberty Center One", href: "/owner/liberty", icon: LibertyIcon },
+  { label: "Amazon Web Services", href: "/owner/aws", icon: AwsIcon },
+  { label: "Microsoft Azure", href: "/owner/azure", icon: AzureIcon },
+  { label: "Google Cloud", href: "/owner/google", icon: GoogleCloudIcon },
 ];
 
 export default function OwnerLayout({
