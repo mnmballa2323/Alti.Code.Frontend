@@ -110,6 +110,18 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_CASSANDRA',
   },
   {
+    name: 'influxdb',
+    command: 'npx',
+    args: ['-y', 'influxdb-mcp-server'],
+    envKey: 'MCP_ENABLE_INFLUXDB',
+  },
+  {
+    name: 'singlestore',
+    command: 'npx',
+    args: ['-y', '@mcpflow.io/mcp-singlestore-mcp-server'],
+    envKey: 'MCP_ENABLE_SINGLESTORE',
+  },
+  {
     name: 'neon',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-neon'],
