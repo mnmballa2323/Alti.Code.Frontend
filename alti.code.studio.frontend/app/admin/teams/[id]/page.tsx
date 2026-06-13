@@ -213,21 +213,13 @@ export default function TeamDetailPage() {
           {/* Team Header card */}
           <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md overflow-hidden">
             <div className="group p-6 flex items-start justify-between">
-              <div className="space-y-1">
-                <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
-                  {teamName}
-                </h2>
-                <p className="text-sm text-neutral-500 dark:text-neutral-450">
-                  {teamDesc}
-                </p>
-                <div className="flex items-center gap-2 mt-3 pt-2 border-t border-neutral-100 dark:border-neutral-800/60 inline-flex">
-                  <span className="text-[11px] font-bold tracking-wider text-neutral-400 dark:text-neutral-500 uppercase">
-                    Admin
-                  </span>
-                  <div className="flex items-center gap-1.5 text-sm text-neutral-700 dark:text-neutral-300">
-                    <Mail className="w-3.5 h-3.5" />
-                    <span>{teamAdminEmail}</span>
-                  </div>
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold tracking-wider text-neutral-400 dark:text-neutral-500 uppercase bg-neutral-100 dark:bg-neutral-800/60 px-2.5 py-1 rounded-full border border-neutral-200/50 dark:border-neutral-700/50 inline-block">
+                  Admin
+                </span>
+                <div className="flex items-center gap-2 text-xl font-bold text-neutral-900 dark:text-white">
+                  <Mail className="w-5 h-5 text-neutral-400" />
+                  <span>{teamAdminEmail}</span>
                 </div>
               </div>
 
