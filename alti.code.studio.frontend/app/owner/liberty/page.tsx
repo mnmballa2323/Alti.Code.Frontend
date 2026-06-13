@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import CloudProviderDashboard from "@/components/CloudProviderDashboard";
 import { LibertyIcon } from "@/components/CloudIcons";
