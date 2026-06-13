@@ -61,16 +61,20 @@ export default function EnterpriseDetailPage() {
 
   let teamName = "Team Directory";
   let teamDesc = "Workspace team members";
+  let teamAdminEmail = "admin@alticodestudio.com";
 
   if (teamId === "engineering") {
     teamName = "Engineering Team";
     teamDesc = "Core platform engineering and development";
+    teamAdminEmail = "engineering-admin@alticodestudio.com";
   } else if (teamId === "product-design") {
     teamName = "Product & Design Team";
     teamDesc = "Product management and UI/UX design";
+    teamAdminEmail = "product-admin@alticodestudio.com";
   } else if (teamId === "ops-support") {
     teamName = "Operations & Support Team";
     teamDesc = "Infrastructure, security, and customer support";
+    teamAdminEmail = "ops-admin@alticodestudio.com";
   }
 
   useEffect(() => {
@@ -208,6 +212,15 @@ export default function EnterpriseDetailPage() {
                 <p className="text-sm text-neutral-500 dark:text-neutral-450">
                   {teamDesc}
                 </p>
+                <div className="flex items-center gap-2 mt-3 pt-2 border-t border-neutral-100 dark:border-neutral-800/60 inline-flex">
+                  <span className="text-[11px] font-bold tracking-wider text-neutral-400 dark:text-neutral-500 uppercase">
+                    Admin
+                  </span>
+                  <div className="flex items-center gap-1.5 text-sm text-neutral-700 dark:text-neutral-300">
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>{teamAdminEmail}</span>
+                  </div>
+                </div>
               </div>
 
               <div className="relative w-36 h-14 shrink-0">
@@ -300,17 +313,29 @@ export default function EnterpriseDetailPage() {
                     key={member.id}
                     className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
                   >
+                    <div className="w-10 h-10 shrink-0 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-bold text-sm border border-neutral-200/50 dark:border-neutral-700/50">
+                      {memberInitial}
+                    </div>
+
                     {/* Member info */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px]">
-                          {member.email}
+                          {member.name || "Unknown User"}
                         </span>
                         {isYou && (
                           <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 uppercase">
                             You
                           </span>
                         )}
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                        <Mail className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">{member.email}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                        <Shield className="w-3.5 h-3.5 shrink-0" />
+                        <span className="capitalize truncate">{member.role}</span>
                       </div>
                     </div>
                   </div>
