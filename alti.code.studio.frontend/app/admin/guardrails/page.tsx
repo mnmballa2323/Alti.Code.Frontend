@@ -59,7 +59,7 @@ export default function GuardrailsPage() {
 
   return (
     <div className="w-full flex flex-col min-h-full justify-start pb-12">
-      <div className="sticky top-0 -mt-4 z-10 bg-[#F3F4F6] dark:bg-[#0d1117] pt-6 pb-6 space-y-6">
+      <div className="sticky top-0 z-10 bg-[#F3F4F6] dark:bg-[#0d1117] pt-2 pb-6 space-y-6 before:content-[''] before:absolute before:-top-4 before:left-0 before:w-full before:h-4 before:bg-[#F3F4F6] dark:before:bg-[#0d1117]">
         {/* Input Row */}
         <form
           className="relative flex items-center bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-1.5 shadow-sm"
