@@ -14,6 +14,12 @@ import config from '../../../../config/index.js';
 export const PRESETS = [
   // --- CORE & SYSTEM ---
   {
+    name: 'mcp-toolbox',
+    command: 'npx',
+    args: ['-y', '@toolbox-sdk/server'],
+    envKey: 'MCP_ENABLE_MCP_TOOLBOX',
+  },
+  {
     name: 'filesystem',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-filesystem', process.cwd()],
