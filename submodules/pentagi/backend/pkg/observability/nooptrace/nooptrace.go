@@ -92,3 +92,54 @@ type dummyObserver struct{}
 func (d dummyObserver) NewObservation(ctx context.Context, _ ...ObservationContextOption) (context.Context, Observation) {
 	return ctx, dummyObservation{}
 }
+
+type Metadata map[string]interface{}
+
+func WithGenerationName(name string) ObservationContextOption { return func() {} }
+func WithGenerationMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithGenerationInput(input any) ObservationContextOption { return func() {} }
+func WithGenerationTools(tools any) ObservationContextOption { return func() {} }
+func WithGenerationModel(model string) ObservationContextOption { return func() {} }
+func WithGenerationModelParameters(params any) ObservationContextOption { return func() {} }
+func GetLangchainModelParameters(opts ...any) any { return nil }
+
+func WithEventName(name string) ObservationContextOption { return func() {} }
+func WithEventInput(input any) ObservationContextOption { return func() {} }
+func WithEventOutput(output any) ObservationContextOption { return func() {} }
+
+func WithSpanName(name string) ObservationContextOption { return func() {} }
+
+func WithEmbeddingName(name string) ObservationContextOption { return func() {} }
+func WithEmbeddingMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithEmbeddingModel(model string) ObservationContextOption { return func() {} }
+
+type Embedding interface {
+	Observation(context.Context) (context.Context, Observation)
+	End(...ObservationContextOption)
+}
+
+func (d dummyObservation) Embedding(...ObservationContextOption) Embedding { return dummyEmbedding{} }
+
+type dummyEmbedding struct{}
+func (d dummyEmbedding) Observation(ctx context.Context) (context.Context, Observation) { return ctx, dummyObservation{} }
+func (d dummyEmbedding) End(...ObservationContextOption) {}
+
+const (
+    ObservationLevelWarning ObservationLevel = "WARNING"
+    ObservationLevelDebug ObservationLevel = "DEBUG"
+)
+
+func WithEventMetadata(metadata any) ObservationContextOption { return func() {} }
+func WithEventStatus(status string) ObservationContextOption { return func() {} }
+func WithEventLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+
+func WithGenerationStatus(status string) ObservationContextOption { return func() {} }
+func WithGenerationLevel(level ObservationLevel) ObservationContextOption { return func() {} }
+func WithGenerationOutput(output any) ObservationContextOption { return func() {} }
+
+type EmbeddingOption func()
+
+func WithEmbeddingInput(input any) ObservationContextOption { return func() {} }
+func WithEmbeddingOutput(output any) ObservationContextOption { return func() {} }
+func WithEmbeddingStatus(status string) ObservationContextOption { return func() {} }
+func WithEmbeddingLevel(level ObservationLevel) ObservationContextOption { return func() {} }
