@@ -88,6 +88,7 @@ describe('The Citadel — 11-Agent Federation', () => {
     });
 
     it('should initialize ALL workers in the Federation', async () => {
+        process.env.DISABLE_REDIS = 'false';
         const { workerService } = await import('./worker.service.js');
         await workerService.init();
 
