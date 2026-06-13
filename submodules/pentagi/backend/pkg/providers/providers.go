@@ -17,13 +17,10 @@ import (
 	"pentagi/pkg/docker"
 	"pentagi/pkg/graphiti"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/providers/anthropic"
 	"pentagi/pkg/providers/bedrock"
 	"pentagi/pkg/providers/custom"
 	"pentagi/pkg/providers/embeddings"
-	"pentagi/pkg/providers/gemini"
 	"pentagi/pkg/providers/ollama"
-	"pentagi/pkg/providers/openai"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
 	"pentagi/pkg/providers/tester"
@@ -162,23 +159,7 @@ func NewProviderController(
 	providers := make(provider.Providers)
 	defaultConfigs := make(provider.ProvidersConfig)
 
-	if config, err := openai.DefaultProviderConfig(); err != nil {
-		return nil, fmt.Errorf("failed to create openai provider config: %w", err)
-	} else {
-		defaultConfigs[provider.ProviderOpenAI] = config
-	}
 
-	if config, err := anthropic.DefaultProviderConfig(); err != nil {
-		return nil, fmt.Errorf("failed to create anthropic provider config: %w", err)
-	} else {
-		defaultConfigs[provider.ProviderAnthropic] = config
-	}
-
-	if config, err := gemini.DefaultProviderConfig(); err != nil {
-		return nil, fmt.Errorf("failed to create gemini provider config: %w", err)
-	} else {
-		defaultConfigs[provider.ProviderGemini] = config
-	}
 
 	if config, err := bedrock.DefaultProviderConfig(); err != nil {
 		return nil, fmt.Errorf("failed to create bedrock provider config: %w", err)
@@ -198,32 +179,7 @@ func NewProviderController(
 		defaultConfigs[provider.ProviderCustom] = config
 	}
 
-	if cfg.OpenAIKey != "" {
-		p, err := openai.New(cfg, defaultConfigs[provider.ProviderOpenAI])
-		if err != nil {
-			return nil, fmt.Errorf("failed to create openai provider: %w", err)
-		}
 
-		providers[provider.DefaultProviderNameOpenAI] = p
-	}
-
-	if cfg.AnthropicAPIKey != "" {
-		p, err := anthropic.New(cfg, defaultConfigs[provider.ProviderAnthropic])
-		if err != nil {
-			return nil, fmt.Errorf("failed to create anthropic provider: %w", err)
-		}
-
-		providers[provider.DefaultProviderNameAnthropic] = p
-	}
-
-	if cfg.GeminiAPIKey != "" {
-		p, err := gemini.New(cfg, defaultConfigs[provider.ProviderGemini])
-		if err != nil {
-			return nil, fmt.Errorf("failed to create gemini provider: %w", err)
-		}
-
-		providers[provider.DefaultProviderNameGemini] = p
-	}
 
 	if cfg.BedrockAccessKey != "" && cfg.BedrockSecretKey != "" {
 		p, err := bedrock.New(cfg, defaultConfigs[provider.ProviderBedrock])
@@ -569,12 +525,6 @@ func (pc *providerController) GetProvider(
 ) (provider.Provider, error) {
 	// Lookup default providers first
 	switch prvname {
-	case provider.DefaultProviderNameOpenAI:
-		return pc.Providers.Get(provider.DefaultProviderNameOpenAI)
-	case provider.DefaultProviderNameAnthropic:
-		return pc.Providers.Get(provider.DefaultProviderNameAnthropic)
-	case provider.DefaultProviderNameGemini:
-		return pc.Providers.Get(provider.DefaultProviderNameGemini)
 	case provider.DefaultProviderNameBedrock:
 		return pc.Providers.Get(provider.DefaultProviderNameBedrock)
 	case provider.DefaultProviderNameOllama:
@@ -635,24 +585,6 @@ func (pc *providerController) NewProvider(prv database.Provider) (provider.Provi
 	}
 
 	switch providerType {
-	case provider.ProviderOpenAI:
-		openaiConfig, err := openai.BuildProviderConfig(prv.Config)
-		if err != nil {
-			return nil, fmt.Errorf("failed to build openai provider config: %w", err)
-		}
-		return openai.New(pc.cfg, openaiConfig)
-	case provider.ProviderAnthropic:
-		anthropicConfig, err := anthropic.BuildProviderConfig(prv.Config)
-		if err != nil {
-			return nil, fmt.Errorf("failed to build anthropic provider config: %w", err)
-		}
-		return anthropic.New(pc.cfg, anthropicConfig)
-	case provider.ProviderGemini:
-		geminiConfig, err := gemini.BuildProviderConfig(prv.Config)
-		if err != nil {
-			return nil, fmt.Errorf("failed to build gemini provider config: %w", err)
-		}
-		return gemini.New(pc.cfg, geminiConfig)
 	case provider.ProviderBedrock:
 		bedrockConfig, err := bedrock.BuildProviderConfig(prv.Config)
 		if err != nil {

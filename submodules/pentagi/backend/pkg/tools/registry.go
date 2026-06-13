@@ -23,8 +23,7 @@ const (
 	BrowserToolName           = "browser"
 	GoogleToolName            = "google"
 	DuckDuckGoToolName        = "duckduckgo"
-	TavilyToolName            = "tavily"
-	TraversaalToolName        = "traversaal"
+
 	SearxngToolName           = "searxng"
 	SearchToolName            = "search"
 	SearchResultToolName      = "search_result"
@@ -101,8 +100,7 @@ var toolsTypeMapping = map[string]ToolType{
 	BrowserToolName:           SearchNetworkToolType,
 	GoogleToolName:            SearchNetworkToolType,
 	DuckDuckGoToolName:        SearchNetworkToolType,
-	TavilyToolName:            SearchNetworkToolType,
-	TraversaalToolName:        SearchNetworkToolType,
+
 	SearxngToolName:           SearchNetworkToolType,
 	SearchToolName:            AgentToolType,
 	SearchResultToolName:      StoreAgentResultToolType,
@@ -138,8 +136,7 @@ var allowedStoringInMemoryTools = []string{
 	SearchToolName,
 	GoogleToolName,
 	DuckDuckGoToolName,
-	TavilyToolName,
-	TraversaalToolName,
+
 	SearxngToolName,
 	MaintenanceToolName,
 	CoderToolName,
@@ -206,18 +203,7 @@ var registryDefinitions = map[string]llms.FunctionDefinition{
 			"to check some information from different sources or collect public links by short query",
 		Parameters: reflector.Reflect(&SearchAction{}),
 	},
-	TavilyToolName: {
-		Name: TavilyToolName,
-		Description: "Search in the tavily search engine, it's a more complex query and more detailed content " +
-			"with answer by query and detailed information from the web sites",
-		Parameters: reflector.Reflect(&SearchAction{}),
-	},
-	TraversaalToolName: {
-		Name: TraversaalToolName,
-		Description: "Search in the traversaal search engine, presents you answer and web-links " +
-			"by your query according to relevant information from the web sites",
-		Parameters: reflector.Reflect(&SearchAction{}),
-	},
+
 
 	SearxngToolName: {
 		Name: SearxngToolName,
@@ -355,7 +341,7 @@ func getMessageType(name string) database.MsglogType {
 		return database.MsglogTypeFile
 	case BrowserToolName:
 		return database.MsglogTypeBrowser
-	case MemoristToolName, SearchToolName, GoogleToolName, DuckDuckGoToolName, TavilyToolName, TraversaalToolName,
+	case MemoristToolName, SearchToolName, GoogleToolName, DuckDuckGoToolName, SearxngToolName,
 		GraphitiSearchToolName:
 		return database.MsglogTypeSearch
 	case AdviceToolName:

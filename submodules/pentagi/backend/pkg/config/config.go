@@ -52,13 +52,7 @@ type Config struct {
 	ScraperPublicURL  string `env:"SCRAPER_PUBLIC_URL"`
 	ScraperPrivateURL string `env:"SCRAPER_PRIVATE_URL"`
 
-	// OpenAI
-	OpenAIKey       string `env:"OPEN_AI_KEY"`
-	OpenAIServerURL string `env:"OPEN_AI_SERVER_URL" envDefault:"https://api.openai.com/v1"`
 
-	// Anthropic
-	AnthropicAPIKey    string `env:"ANTHROPIC_API_KEY"`
-	AnthropicServerURL string `env:"ANTHROPIC_SERVER_URL" envDefault:"https://api.anthropic.com/v1"`
 
 	// Embedding provider
 	EmbeddingURL           string `env:"EMBEDDING_URL"`
@@ -95,9 +89,7 @@ type Config struct {
 	OllamaServerPullModelsEnabled bool   `env:"OLLAMA_SERVER_PULL_MODELS_ENABLED" envDefault:"false"`
 	OllamaServerLoadModelsEnabled bool   `env:"OLLAMA_SERVER_LOAD_MODELS_ENABLED" envDefault:"false"`
 
-	// Google AI (Gemini) LLM provider
-	GeminiAPIKey    string `env:"GEMINI_API_KEY"`
-	GeminiServerURL string `env:"GEMINI_SERVER_URL" envDefault:"https://generativelanguage.googleapis.com"`
+
 
 	// Bedrock
 	BedrockRegion       string `env:"BEDROCK_REGION" envDefault:"us-east-1"`
@@ -125,11 +117,7 @@ type Config struct {
 	// Public URL for auth callback
 	PublicURL string `env:"PUBLIC_URL" envDefault:""`
 
-	// Traversaal search engine
-	TraversaalAPIKey string `env:"TRAVERSAAL_API_KEY"`
 
-	// Tavily search engine
-	TavilyAPIKey string `env:"TAVILY_API_KEY"`
 
 
 	// Searxng search engine
