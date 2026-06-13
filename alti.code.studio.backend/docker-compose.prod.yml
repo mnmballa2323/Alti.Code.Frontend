@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  envoy-proxy:
+    image: envoyproxy/envoy:v1.30-latest
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+      - ./certs:/etc/certs
+    ports:
+      - "8443:8443"
+    networks:
+      - alti-net
+    depends_on:
+      - alti-backend-blue
+      - alti-backend-green
+
   alti-backend-blue:
     build: 
       context: .

@@ -45,6 +45,11 @@ class MultiCloudInferenceService {
         const primaryProvider = options.preferredProvider || 'gcp';
         const modelId = options.modelId || 'gemini-3.1-pro';
         
+        if (process.env.AIR_GAPPED_MODE === 'true') {
+            logger.warn(`🛡️ [Multi-Cloud Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`);
+            return await this._executeAirGapped(prompt, activeAgent, modelId);
+        }
+
         logger.info(`🌐 [Multi-Cloud Inference] Initiating inference for Agent [${activeAgent}] on Primary Provider [${primaryProvider.toUpperCase()}]`);
 
         const providersQueue = [primaryProvider, ...['gcp', 'aws', 'azure'].filter(p => p !== primaryProvider)];
@@ -67,6 +72,42 @@ class MultiCloudInferenceService {
 
         logger.error(`❌ [Multi-Cloud Inference] All cloud providers exhausted. Inference has failed completely.`);
         throw new Error(`MultiCloudInference failed: All providers failed. Last error: ${lastError?.message}`);
+    }
+
+    /**
+     * Executes inference entirely locally for highly sensitive deployments (Defense/Intel)
+     */
+    async _executeAirGapped(prompt, activeAgent, modelId) {
+        logger.info(`🔒 [Multi-Cloud Inference] Executing Air-Gapped Local Inference on Ollama...`);
+        const startTime = Date.now();
+        let text = '';
+        let latency = 0;
+
+        const ollamaUrl = process.env.OLLAMA_API_URL || 'http://localhost:11434/api/generate';
+        const localModel = process.env.AIR_GAPPED_MODEL || 'llama3';
+
+        try {
+            const res = await fetch(ollamaUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt, model: localModel, stream: false }),
+                signal: AbortSignal.timeout(30000)
+            });
+            if (!res.ok) throw new Error(`Ollama responded with status ${res.status}`);
+            const data = await res.json();
+            text = data.response;
+            latency = Date.now() - startTime;
+        } catch (e) {
+            logger.error(`❌ [Multi-Cloud Inference] Air-gapped local model failed: ${e.message}`);
+            throw new Error('Critical failure: Air-gapped fallback is unavailable and public clouds are disabled.');
+        }
+
+        return {
+            content: text,
+            provider: 'air-gapped',
+            latencyMs: latency,
+            tokens: { prompt: Math.ceil(prompt.length / 4), completion: Math.ceil(text.length / 4) }
+        };
     }
 
     /**

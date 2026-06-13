@@ -82,6 +82,28 @@ export class AuditService {
                 }
             });
 
+            // Stream to SIEM via TLS if configured
+            if (process.env.SIEM_URL && process.env.SIEM_TOKEN) {
+                try {
+                    await fetch(process.env.SIEM_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Splunk ${process.env.SIEM_TOKEN}`
+                        },
+                        body: JSON.stringify({
+                            time: Date.now(),
+                            source: 'alti.code.studio.audit',
+                            event: newLog
+                        }),
+                        // Abort early so we don't hold up execution
+                        signal: AbortSignal.timeout(3000)
+                    });
+                } catch (siemError) {
+                    console.error(`[WARNING] Failed to stream to SIEM: ${siemError.message}`);
+                }
+            }
+
             return newLog;
         } catch (error) {
             console.error(`[CRITICAL] Failed to append to immutable audit ledger: ${error.message}`);

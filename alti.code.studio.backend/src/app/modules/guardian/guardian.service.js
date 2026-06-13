@@ -147,7 +147,7 @@ const auditCode = async (code, context = 'general') => {
 
         Code to Audit:
         \`\`\`
-        ${code.substring(0, 8000)}
+        ${redactedCode.substring(0, 8000)}
         \`\`\`
 
         Context: ${context}
