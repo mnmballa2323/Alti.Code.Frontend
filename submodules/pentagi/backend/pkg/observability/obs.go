@@ -1,5 +1,7 @@
 package observability
 
+import "pentagi/pkg/observability/nooptrace"
+
 import (
 	"context"
 	"crypto/rand"
@@ -82,6 +84,7 @@ type Observability interface {
 	Meter
 	Tracer
 	Collector
+	NoopTrace
 }
 
 
@@ -727,4 +730,8 @@ func getPackageName(f string) string {
 	}
 
 	return f
+}
+
+type NoopTrace interface {
+	NewObservation(context.Context, ...nooptrace.ObservationContextOption) (context.Context, nooptrace.Observation)
 }
