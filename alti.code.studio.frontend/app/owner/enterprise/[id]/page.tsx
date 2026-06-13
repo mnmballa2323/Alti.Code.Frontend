@@ -228,7 +228,7 @@ export default function EnterpriseDetailPage() {
                     {teamMembers.length}{" "}
                     {teamMembers.length === 1 ? "Member" : "Members"}
                   </span>
-                  <span className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
+                  <span className="text-sm font-bold text-neutral-900 dark:text-white leading-none">
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
                       currency: "USD",
