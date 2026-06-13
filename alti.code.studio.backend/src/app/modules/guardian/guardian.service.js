@@ -104,7 +104,8 @@ const auditCode = async (code, context = 'general') => {
         };
     }
 
-    // 0. Inline DLP Redaction (Nation-State Security Pillar)
+    // 0. Inline DLP Redaction and CUI Checks (Nation-State Security Pillar)
+    dlpService.checkComplianceTags(code, process.env.AIR_GAPPED_MODE === 'true');
     const redactedCode = dlpService.redact(code);
 
     logger.info(`[${SERVICE_NAME}] Auditing code for context: ${context}`);

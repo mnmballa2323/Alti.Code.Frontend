@@ -67,11 +67,40 @@ class DlpService {
             return '[REDACTED_IP]';
         });
 
+        // 5. Protected Health Information (PHI - HIPAA)
+        // ICD-10 Codes (e.g., A00.0, Z99.8)
+        const icd10Regex = /\b[A-TV-Z][0-9][0-9AB]\.?[0-9A-TV-Z]{0,4}\b/g;
+        sanitized = sanitized.replace(icd10Regex, (match) => {
+            redactionCount++;
+            return '[REDACTED_PHI_ICD10]';
+        });
+
+        // DEA Numbers (2 letters, 7 digits)
+        const deaRegex = /\b[A-Z]{2}[0-9]{7}\b/g;
+        sanitized = sanitized.replace(deaRegex, (match) => {
+            redactionCount++;
+            return '[REDACTED_PHI_DEA]';
+        });
+
         if (redactionCount > 0) {
             logger.info(`[${SERVICE_NAME}] Intercepted and redacted ${redactionCount} sensitive patterns.`);
         }
 
         return sanitized;
+    }
+
+    /**
+     * Checks for strict compliance tags that must block execution (e.g. ITAR / CUI).
+     * @param {string} text 
+     * @param {boolean} isAirGapped 
+     */
+    checkComplianceTags(text, isAirGapped = false) {
+        if (!this.enabled || !text || typeof text !== 'string') return;
+        
+        const cuiRegex = /\b(?:CUI|CONTROLLED UNCLASSIFIED INFORMATION|ITAR|EAR)\b/i;
+        if (cuiRegex.test(text) && !isAirGapped) {
+            throw new Error('DLP BLOCKED: Controlled Unclassified Information (CUI/ITAR) detected. This payload cannot be sent to public cloud LLMs. Enable AIR_GAPPED_MODE.');
+        }
     }
 }
 
