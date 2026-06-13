@@ -21,6 +21,9 @@ export default function GuardrailsPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<GuardrailRule | null>(null);
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newGuardrail.trim()) return;
@@ -34,8 +37,22 @@ export default function GuardrailsPage() {
     setNewGuardrail("");
   };
 
-  const handleDelete = (index: number) => {
-    setGuardrails((prev) => prev.filter((_, i) => i !== index));
+  const handleDeleteClick = (guard: GuardrailRule) => {
+    setItemToDelete(guard);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      setGuardrails((prev) => prev.filter((item) => item !== itemToDelete));
+      setItemToDelete(null);
+      setDeleteModalOpen(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setItemToDelete(null);
+    setDeleteModalOpen(false);
   };
 
   const handleStartEdit = (index: number, currentText: string) => {
@@ -98,7 +115,9 @@ export default function GuardrailsPage() {
       {/* Guardrails Card List */}
       <div className="flex flex-col gap-3 pt-2">
         {filteredGuardrails.length > 0 ? (
-            filteredGuardrails.map((guard, index) => (
+            filteredGuardrails.map((guard, index) => {
+              const originalIndex = guardrails.indexOf(guard);
+              return (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200"
@@ -109,7 +128,7 @@ export default function GuardrailsPage() {
                     <Shield className="w-5 h-5" />
                   </div>
                   <div className="flex-1 pr-4">
-                    {editingIndex === index ? (
+                    {editingIndex === originalIndex ? (
                       <div className="flex gap-2 items-center">
                         <input
                           autoFocus
@@ -120,7 +139,7 @@ export default function GuardrailsPage() {
                         />
                         <button
                           className="px-3 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-semibold rounded-lg hover:bg-neutral-800 dark:hover:bg-white transition-colors"
-                          onClick={() => handleSaveEdit(index)}
+                          onClick={() => handleSaveEdit(originalIndex)}
                         >
                           Save
                         </button>
@@ -144,30 +163,61 @@ export default function GuardrailsPage() {
                   </div>
                 </div>
 
-                {editingIndex !== index && (
+                {editingIndex !== originalIndex && (
                   <div className="flex items-center gap-2">
                     <button
                       className="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                      onClick={() => handleStartEdit(index, guard.text)}
+                      onClick={() => handleStartEdit(originalIndex, guard.text)}
                     >
                       <Edit2 className="w-4 h-4 text-neutral-400" />
                     </button>
                     <button
                       className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDeleteClick(guard)}
                     >
                       <Trash2 className="w-4 h-4 text-neutral-400" />
                     </button>
                   </div>
                 )}
               </div>
-            ))
+            );
+          })
           ) : (
             <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
               No guardrails configured.
             </div>
           )}
         </div>
+
+      {deleteModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#161b22] w-[380px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+            <div className="p-6 text-center space-y-2">
+              <h3 className="text-[17px] font-semibold text-neutral-900 dark:text-white">
+                Delete Guardrail
+              </h3>
+              <p className="text-[13px] leading-tight text-neutral-500 dark:text-neutral-400 px-2">
+                Are you sure you want to remove this guardrail?
+              </p>
+            </div>
+            <div className="flex border-t border-neutral-100 dark:border-neutral-800">
+              <button
+                onClick={cancelDelete}
+                className="flex-1 py-3.5 text-[15px] font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+              >
+                Cancel
+              </button>
+              <div className="w-[1px] bg-neutral-100 dark:bg-neutral-800" />
+              <button
+                onClick={confirmDelete}
+                className="flex-1 py-3.5 text-[15px] font-semibold text-[#FF3B30] hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

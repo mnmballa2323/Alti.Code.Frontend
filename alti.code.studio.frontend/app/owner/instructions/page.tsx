@@ -189,7 +189,7 @@ export default function InstructionsPage() {
 
       {deleteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#161b22] w-[320px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+          <div className="bg-white dark:bg-[#161b22] w-[380px] rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
             <div className="p-6 text-center space-y-2">
               <h3 className="text-[17px] font-semibold text-neutral-900 dark:text-white">
                 Delete Instruction
