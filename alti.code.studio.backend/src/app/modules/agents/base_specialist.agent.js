@@ -16,7 +16,6 @@
  *   ✅ Usage metrics            — tracks call count, error count, and avg latency
  */
 
-import { swarmTraceService } from '../telemetry/trace.service.js';
 import { logger } from '../../../shared/logger.js';
 import vm from 'vm';
 
@@ -162,18 +161,7 @@ export class BaseSpecialistAgent {
       };
     }
 
-    // Start tracing span
-    let spanId = null;
-    try {
-      spanId = await swarmTraceService.startSpan(
-        this.name,
-        resolvedParentSpanId,
-        resolvedTenantId,
-        cleanPrompt,
-      );
-    } catch (traceErr) {
-      logger.debug(`Telemetry: startSpan failed: ${traceErr.message}`);
-    }
+    // Removed tracing span start
 
     // 4. Retry loop
     let lastError;
@@ -204,18 +192,7 @@ export class BaseSpecialistAgent {
           (promptTokens / 1_000_000) * 0.075 +
           (completionTokens / 1_000_000) * 0.3;
 
-        // End tracing span
-        if (spanId) {
-          try {
-            await swarmTraceService.endSpan(spanId, totalTokens, cost, {
-              attempt,
-              status: 'success',
-              confidence: 0.95,
-            });
-          } catch (traceErr) {
-            logger.debug(`Telemetry: endSpan failed: ${traceErr.message}`);
-          }
-        }
+        // Removed tracing span end
 
         // V37.0 - Standardized Telemetry Wrapper
         return {
