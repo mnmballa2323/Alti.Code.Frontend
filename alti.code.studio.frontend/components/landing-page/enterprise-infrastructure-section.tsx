@@ -10,11 +10,11 @@ export default function EnterpriseInfrastructureSection() {
           Enterprise Infrastructure.
         </h2>
 
-        <p className="text-xl md:text-2xl text-gray-500 w-full font-medium tracking-tight mb-4 leading-relaxed text-balance">
+        <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto mb-4">
           Choose the deployment model that fits your security and compliance
           requirements.
         </p>
-        <p className="text-xl md:text-2xl text-gray-500 w-full font-medium tracking-tight mb-12 leading-relaxed text-balance">
+        <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto mb-12">
           Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.
         </p>
 
