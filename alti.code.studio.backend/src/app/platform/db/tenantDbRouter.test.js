@@ -11,9 +11,13 @@ vi.mock('./prismaClient.js', () => {
       },
     },
     getTenantPrisma: vi.fn(),
-    getSchemaConnectionUrl: vi.fn((base, id) => {
+    getSchemaConnectionUrl: vi.fn((base, id, prod) => {
       const sanitized = id.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-      return `${base}?schema=tenant_${sanitized}`;
+      let schema = `tenant_${sanitized}`;
+      if (prod) {
+        schema += `_product_${prod.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}`;
+      }
+      return `${base}?schema=${schema}`;
     }),
   };
 });
@@ -109,9 +113,36 @@ describe('Platform Tenant Database Router Middleware', () => {
     });
     expect(getSchemaConnectionUrl).toHaveBeenCalledWith(
       'postgresql://shared:pass@127.0.0.1:5432/shareddb',
-      tenantId
+      tenantId,
+      null
     );
     expect(getTenantPrisma).toHaveBeenCalledWith(tenantId, expect.stringContaining('schema=tenant_tenant789'));
+    expect(req.db).toBe(mockTenantSchemaClient);
+    expect(next).toHaveBeenCalledWith();
+  });
+
+  it('should route requests to product-partitioned schema connection pool when x-product-id header is provided', async () => {
+    process.env.SCHEMA_ISOLATION_ACTIVE = 'true';
+    process.env.DATABASE_URL = 'postgresql://shared:pass@127.0.0.1:5432/shareddb';
+
+    const tenantId = 'tenant-789';
+    const req = { user: { tenantId }, headers: { 'x-product-id': 'product-abc' } };
+    const res = {};
+    const next = vi.fn();
+
+    const mockTenantSchemaClient = { query: vi.fn() };
+
+    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: null });
+    getTenantPrisma.mockReturnValueOnce(mockTenantSchemaClient);
+
+    await tenantDbRouter(req, res, next);
+
+    expect(getSchemaConnectionUrl).toHaveBeenCalledWith(
+      'postgresql://shared:pass@127.0.0.1:5432/shareddb',
+      tenantId,
+      'product-abc'
+    );
+    expect(getTenantPrisma).toHaveBeenCalledWith('tenant-789:product-abc', expect.stringContaining('schema=tenant_tenant789_product_productabc'));
     expect(req.db).toBe(mockTenantSchemaClient);
     expect(next).toHaveBeenCalledWith();
   });

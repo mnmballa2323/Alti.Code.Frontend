@@ -54,7 +54,7 @@ export const tenantDbRouter = async (req, res, next) => {
     } else if (process.env.SCHEMA_ISOLATION_ACTIVE === 'true') {
       const baseDbUrl = process.env.DATABASE_URL;
       if (baseDbUrl) {
-        const productId = req.headers['x-product-id'] || req.user?.productId || null;
+        const productId = req.headers?.['x-product-id'] || req.user?.productId || null;
         const schemaUrl = getSchemaConnectionUrl(baseDbUrl, tenantId, productId);
         const poolKey = productId ? `${tenantId}:${productId}` : tenantId;
         req.db = getTenantPrisma(poolKey, schemaUrl);

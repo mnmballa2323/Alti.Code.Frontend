@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.225] - 2026-06-13 — Multi-Product Schema Partitioning & Isolation
+
+### Added
+
+- **Multi-Product Database Isolation**: Upgraded `tenantDbRouter` (`tenantDbRouter.js`) and `getSchemaConnectionUrl` (`prismaClient.js`) to support dynamic multi-product schema partitioning under shared database instances.
+  - Automatically reads product context from request headers (`x-product-id`) or user profiles.
+  - Generates partitioned connection URLs (`tenant_<id>_product_<product_id>`) and dynamically manages distinct Prisma client connection pools (`getTenantPrisma`) to prevent cross-product data leakage in multi-tenant environments.
+- **Unit Testing**: Expanded `tenantDbRouter.test.js` to verify product-scoped schema routing and connection pool isolation.
+
 ## [39.37.224] - 2026-06-13 — Enterprise Industry Interoperability & Integration Brokers
 
 ### Added
