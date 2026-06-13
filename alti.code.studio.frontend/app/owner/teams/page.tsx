@@ -107,56 +107,14 @@ export default function TeamsPage() {
     });
   }
 
-  // Categorize members into teams dynamically
-  const rawTeams: TeamInfo[] = [
-    {
-      id: "engineering",
-      name: "Engineering Team",
-      description: "Core platform engineering and development",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return r === "developer" || r === "dev";
-      }),
-    },
-    {
-      id: "product-design",
-      name: "Product & Design Team",
-      description: "Product management and UI/UX design",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return (
-          r === "manager" ||
-          (r === "admin" &&
-            m.email !== "owner@insocode.com" &&
-            m.email !== "admin@insocode.com")
-        );
-      }),
-    },
-    {
-      id: "ops-support",
-      name: "Operations & Support Team",
-      description: "Infrastructure, security, and customer support",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return (
-          r === "owner" ||
-          m.email === "owner@insocode.com" ||
-          m.email === "admin@insocode.com"
-        );
-      }),
-    },
-  ];
-
-  // Filter teams based on search query
-  const filteredTeams = rawTeams.filter((team) => {
+  // Filter members based on search query
+  const filteredMembers = allMembers.filter((member) => {
     const query = searchQuery.toLowerCase();
 
     return (
-      team.name.toLowerCase().includes(query) ||
-      team.description.toLowerCase().includes(query)
+      member.email.toLowerCase().includes(query) ||
+      (member.name && member.name.toLowerCase().includes(query)) ||
+      (member.role && member.role.toLowerCase().includes(query))
     );
   });
 
@@ -185,33 +143,28 @@ export default function TeamsPage() {
 
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-              <div className="col-span-9">Team Name</div>
-              <div className="col-span-3 text-right pr-12">Members</div>
+              <div className="col-span-9">Email Address</div>
+              <div className="col-span-3 text-right pr-12">Role</div>
             </div>
           </div>
 
           {/* Table Body */}
           <div className="space-y-3 mt-6">
-            {filteredTeams.length > 0 ? (
-              filteredTeams.map((team) => (
+            {filteredMembers.length > 0 ? (
+              filteredMembers.map((member) => (
                 <div
-                  key={team.id}
+                  key={member.id}
                   className="group grid grid-cols-12 gap-4 px-6 py-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md cursor-pointer"
-                  onClick={() => router.push(`/owner/teams/${team.id}`)}
+                  onClick={() => router.push(`/owner/teams/${member.id}`)}
                 >
-                  <div className="col-span-9 flex flex-col gap-1">
+                  <div className="col-span-9 flex flex-col justify-center">
                     <span className="text-neutral-800 dark:text-white font-semibold text-[15px]">
-                      {team.name}
-                    </span>
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                      {team.description}
+                      {member.email}
                     </span>
                   </div>
                   <div className="col-span-3 flex items-center justify-end gap-3 pr-2">
-                    <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750">
-                      {team.members.length === 1
-                        ? "1 member"
-                        : `${team.members.length} members`}
+                    <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750 capitalize">
+                      {member.role || "Member"}
                     </span>
                     <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
                   </div>
@@ -219,7 +172,7 @@ export default function TeamsPage() {
               ))
             ) : (
               <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-                No teams match your search query.
+                No members match your search query.
               </div>
             )}
           </div>
