@@ -9,6 +9,7 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 import { EventBus } from '../../shared/eventBus.js';
 import { dlpService } from '../dlp/dlp.service.js';
+import { auditorService } from './auditor.service.js';
 
 const SERVICE_NAME = 'Guardian Angel';
 
@@ -175,6 +176,24 @@ const auditCode = async (code, context = 'general') => {
         let auditResult;
         try {
             auditResult = JSON.parse(cleaned);
+
+            // 3. Adversarial Dual-Review (Maker-Checker Pillar)
+            if (auditResult.safe === true) {
+                const dualReviewPassed = await auditorService.enforceDualReview(redactedCode, context);
+                if (!dualReviewPassed) {
+                    auditResult.safe = false;
+                    auditResult.score = 0;
+                    auditResult.reasoning = 'REJECTED BY ADVERSARIAL AUDITOR (Maker-Checker Policy Violation)';
+                    auditResult.vulnerabilities.push('[CRITICAL] Failed independent adversarial review');
+                    await EventBus.publish('guardian.audit.rejected', { context, reasoning: auditResult.reasoning });
+                    return auditResult;
+                }
+            }
+
+            // Adjust score if static findings exist but AI passed it
+            if (staticFindings.length > 0 && auditResult.score > 80) {
+                auditResult.score = scoreFromStaticFindings(staticFindings);
+            }
         } catch (parseError) {
             logger.warn(`[${SERVICE_NAME}] AI returned unparseable JSON — using static-only result`, cleaned.slice(0, 200));
             auditResult = {

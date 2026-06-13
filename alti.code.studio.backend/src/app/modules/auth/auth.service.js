@@ -20,6 +20,15 @@ import { authenticateKeystone } from './openstack.service.js';
 import { totp } from '@inso/platform';
 
 const deleteUserAccountService = async userId => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { tenant: true }
+  });
+
+  if (user?.tenant?.legalHold) {
+    throw new ApiError(httpStatus.LOCKED, 'Action Blocked: This tenant is currently under a Legal Hold for E-Discovery or Compliance reasons. Deletion is prohibited.');
+  }
+
   return UserRepository.deleteUser(userId);
 };
 
