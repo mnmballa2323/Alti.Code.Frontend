@@ -821,4 +821,74 @@ export const SAAS_MOCKS = [
     slug: "mcp_pulumi",
     icon: "logos:pulumi-icon",
   },
+  {
+    name: "Supabase Hosted Postgres",
+    slug: "mcp_supabase_hosted",
+    icon: "logos:supabase-icon",
+  },
+  {
+    name: "PlanetScale Serverless MySQL",
+    slug: "mcp_planetscale",
+    icon: "logos:planetscale",
+  },
+  {
+    name: "CockroachDB Distributed SQL",
+    slug: "mcp_cockroachdb",
+    icon: "logos:cockroachlabs",
+  },
+  {
+    name: "SQLite Local DB",
+    slug: "mcp_sqlite",
+    icon: "logos:sqlite",
+  },
+  {
+    name: "MariaDB Open Source Relational",
+    slug: "mcp_mariadb",
+    icon: "logos:mariadb-icon",
+  },
+  {
+    name: "Redis In-Memory Data Store",
+    slug: "mcp_redis",
+    icon: "logos:redis",
+  },
+  {
+    name: "Memcached",
+    slug: "mcp_memcached",
+    icon: "logos:memcached",
+  },
+  {
+    name: "RabbitMQ Message Broker",
+    slug: "mcp_rabbitmq",
+    icon: "logos:rabbitmq-icon",
+  },
+  {
+    name: "Apache Kafka Streaming",
+    slug: "mcp_kafka",
+    icon: "logos:kafka",
+  },
+  {
+    name: "ActiveMQ",
+    slug: "mcp_activemq",
+    icon: "logos:activemq",
+  },
+  {
+    name: "Zendesk Support",
+    slug: "mcp_zendesk",
+    icon: "logos:zendesk",
+  },
+  {
+    name: "Salesforce CRM",
+    slug: "mcp_salesforce",
+    icon: "logos:salesforce",
+  },
+  {
+    name: "HubSpot Marketing Hub",
+    slug: "mcp_hubspot",
+    icon: "logos:hubspot",
+  },
+  {
+    name: "Shopify E-Commerce",
+    slug: "mcp_shopify",
+    icon: "logos:shopify",
+  },
 ];
