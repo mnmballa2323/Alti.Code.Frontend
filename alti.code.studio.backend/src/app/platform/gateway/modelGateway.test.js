@@ -71,7 +71,7 @@ vi.mock('@anthropic-ai/bedrock-sdk', () => {
 });
 
 // Mock Azure OpenAI using Class syntax to satisfy constructor constraints
-vi.mock('@azure/openai', () => {
+vi.mock('openai', () => {
   return {
     AzureOpenAI: class {
       constructor() {
