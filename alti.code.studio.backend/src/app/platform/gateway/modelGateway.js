@@ -62,6 +62,46 @@ export const estimateTokens = (prompt, response) => {
   return Math.ceil((promptLen + respLen) / 4);
 };
 
+// Keep track of token usage per product in memory
+export const productTokenCounts = {};
+
+// Keep track of regional metrics in memory
+export const regionalMetrics = {};
+
+export const BILLING_LIMITS = {
+  'product-healthcare': 100000,
+  'product-finance': 150000,
+  'product-pharma': 80000,
+  'product-default': 50000
+};
+
+export const getProductTokenUsage = (productId) => productTokenCounts[productId] || 0;
+export const getRegionalMetrics = (region) => regionalMetrics[region] || { totalLatencyMs: 0, totalCalls: 0, totalTokens: 0 };
+export const resetProductTokenCounts = () => {
+  for (const key in productTokenCounts) delete productTokenCounts[key];
+};
+export const resetRegionalMetrics = () => {
+  for (const key in regionalMetrics) delete regionalMetrics[key];
+};
+
+const getProviderRegion = (provider) => {
+  if (provider === 'gcp') {
+    return config.gcp?.location || 'us-central1';
+  }
+  if (provider === 'aws') {
+    return config.aws_region || process.env.AWS_REGION || 'us-east-1';
+  }
+  if (provider === 'azure') {
+    const endpoint = process.env.AZURE_OPENAI_ENDPOINT || '';
+    const match = endpoint.match(/https:\/\/([^.]+)\.openai\.azure\.com/);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return 'eastus2';
+  }
+  return 'unknown';
+};
+
 /**
  * Routes text completion request to authorized Tri-Cloud endpoints
  * @param {object} params
@@ -88,6 +128,19 @@ export const routePlatformCompletion = async ({
       httpStatus.FORBIDDEN,
       'Security Policy Exception: Direct API connections to OpenAI and Anthropic are blocked. Please use Azure OpenAI Foundry or AWS Bedrock.'
     );
+  }
+
+  // Billing tier limit check
+  if (productId) {
+    const limit = BILLING_LIMITS[productId] || BILLING_LIMITS['product-default'];
+    const currentUsage = productTokenCounts[productId] || 0;
+    if (currentUsage >= limit) {
+      logger.error(`🚫 [Model Gateway] Token limit exceeded for product: ${productId} (${currentUsage} >= ${limit})`);
+      throw new ApiError(
+        httpStatus.TOO_MANY_REQUESTS,
+        `Billing tier token limit exceeded for product "${productId}". Limit: ${limit}, Current: ${currentUsage}.`
+      );
+    }
   }
 
   let activePrompt = prompt;
@@ -232,6 +285,22 @@ export const routePlatformCompletion = async ({
     );
   } finally {
     const latencyMs = Date.now() - startTime;
+
+    // Accumulate in-memory metrics
+    if (productId && success) {
+      productTokenCounts[productId] = (productTokenCounts[productId] || 0) + tokensConsumed;
+    }
+
+    const region = provider ? getProviderRegion(provider) : 'unknown';
+    if (region !== 'unknown') {
+      if (!regionalMetrics[region]) {
+        regionalMetrics[region] = { totalLatencyMs: 0, totalCalls: 0, totalTokens: 0 };
+      }
+      regionalMetrics[region].totalLatencyMs += latencyMs;
+      regionalMetrics[region].totalCalls += 1;
+      regionalMetrics[region].totalTokens += tokensConsumed;
+    }
+
     try {
       const { telemetryService } = await import('../../modules/telemetry/telemetry.service.js');
       if (telemetryService) {
@@ -256,6 +325,13 @@ export const modelGateway = {
   routePlatformCompletion,
   callWithRetry,
   sanitizeError,
-  estimateTokens
+  estimateTokens,
+  getProductTokenUsage,
+  getRegionalMetrics,
+  resetProductTokenCounts,
+  resetRegionalMetrics,
+  BILLING_LIMITS,
+  productTokenCounts,
+  regionalMetrics
 };
 

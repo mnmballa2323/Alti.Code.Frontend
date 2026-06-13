@@ -6,7 +6,16 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import httpStatus from 'http-status';
-import { routePlatformCompletion, callWithRetry, sanitizeError, estimateTokens } from './modelGateway.js';
+import {
+  routePlatformCompletion,
+  callWithRetry,
+  sanitizeError,
+  estimateTokens,
+  resetProductTokenCounts,
+  resetRegionalMetrics,
+  getProductTokenUsage,
+  getRegionalMetrics
+} from './modelGateway.js';
 import config from '../../../../config/index.js';
 
 const { mockRecordLlmCall } = vi.hoisted(() => ({
@@ -338,6 +347,65 @@ describe('Platform Model Gateway', () => {
           tokens: expectedTokens
         })
       );
+    });
+  });
+
+  describe('Phase 12: Product Token Limits, Scoping & Regional Metrics', () => {
+    beforeEach(() => {
+      resetProductTokenCounts();
+      resetRegionalMetrics();
+    });
+
+    it('should count tokens per product and enforce billing tier limits', async () => {
+      vertexGenerateContentMock.mockResolvedValue({
+        response: {
+          candidates: [{ content: { parts: [{ text: 'Gemini reply' }] } }],
+          usageMetadata: { totalTokenCount: 90000 }
+        }
+      });
+
+      // Call 1: Consumes 90,000 tokens for product-pharma (limit is 80,000)
+      await routePlatformCompletion({
+        provider: 'gcp',
+        model: 'google/gemini-3.1-pro',
+        prompt: 'First call',
+        productId: 'product-pharma'
+      });
+
+      expect(getProductTokenUsage('product-pharma')).toBe(90000);
+
+      // Call 2: Consuming more tokens should fail because it exceeds limit (90,000 >= 80,000)
+      await expect(
+        routePlatformCompletion({
+          provider: 'gcp',
+          model: 'google/gemini-3.1-pro',
+          prompt: 'Second call',
+          productId: 'product-pharma'
+        })
+      ).rejects.toThrow('Billing tier token limit exceeded for product "product-pharma"');
+    });
+
+    it('should track regional metrics correctly per provider', async () => {
+      vertexGenerateContentMock.mockResolvedValueOnce({
+        response: {
+          candidates: [{ content: { parts: [{ text: 'GCP reply' }] } }],
+          usageMetadata: { totalTokenCount: 100 }
+        }
+      });
+
+      await routePlatformCompletion({
+        provider: 'gcp',
+        model: 'google/gemini-3.1-pro',
+        prompt: 'Regional test',
+        productId: 'product-healthcare'
+      });
+
+      const gcpRegion = config.gcp?.location || 'us-central1';
+      const metrics = getRegionalMetrics(gcpRegion);
+      
+      expect(metrics.totalCalls).toBe(1);
+      expect(metrics.totalTokens).toBe(100);
+      expect(metrics.totalLatencyMs).toBeGreaterThanOrEqual(0);
     });
   });
 });
