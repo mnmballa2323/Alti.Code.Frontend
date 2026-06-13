@@ -170,10 +170,8 @@ export default function TeamMembersPage() {
 
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-              <div className="col-span-3">Name</div>
-              <div className="col-span-4">Email</div>
-              <div className="col-span-2">Role</div>
-              <div className="col-span-3">Price</div>
+              <div className="col-span-8">Email</div>
+              <div className="col-span-4">Price</div>
             </div>
           </div>
 
@@ -205,13 +203,8 @@ export default function TeamMembersPage() {
                           router.push(`/owner/team-members/${member.id}`)
                         }
                       >
-                        <div className="col-span-3 flex items-center gap-3">
-                          <span className="text-neutral-900 dark:text-white font-medium truncate">
-                            {member.name || "Unknown User"}
-                          </span>
-                        </div>
-                        <div className="col-span-4 flex items-center gap-2">
-                          <span className="text-neutral-600 dark:text-neutral-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                        <div className="col-span-8 flex items-center gap-2">
+                          <span className="text-neutral-900 dark:text-white font-medium overflow-hidden text-ellipsis whitespace-nowrap">
                             {member.email}
                           </span>
                           {isYou && (
@@ -220,12 +213,7 @@ export default function TeamMembersPage() {
                             </span>
                           )}
                         </div>
-                        <div className="col-span-2">
-                          <span className="capitalize text-neutral-600 dark:text-neutral-400 text-sm">
-                            {member.role}
-                          </span>
-                        </div>
-                        <div className="col-span-3 flex items-center justify-between">
+                        <div className="col-span-4 flex items-center justify-between">
                           <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
                             {prices[member.id] || "$1,000"}
                           </span>
