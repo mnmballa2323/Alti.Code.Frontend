@@ -10,9 +10,12 @@ export default function EnterpriseInfrastructureSection() {
           Enterprise Infrastructure.
         </h2>
 
-        <p className="text-xl md:text-2xl text-gray-500 w-full font-medium tracking-tight mb-12 leading-relaxed text-balance">
+        <p className="text-xl md:text-2xl text-gray-500 w-full font-medium tracking-tight mb-4 leading-relaxed text-balance">
           Choose the deployment model that fits your security and compliance
           requirements.
+        </p>
+        <p className="text-lg md:text-xl text-blue-600 dark:text-blue-500 w-full font-semibold tracking-tight mb-12 leading-relaxed text-balance">
+          Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.
         </p>
 
         {/* Simplified 3-Column Grid */}
@@ -41,9 +44,9 @@ export default function EnterpriseInfrastructureSection() {
               Single Tenant Private Cloud
             </h3>
             <p className="text-gray-600 leading-relaxed font-medium text-balance">
-              A dedicated, single tenant private cloud managed entirely by our team.
-              <br />
-              <span className="block mt-2">Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.</span>
+              A dedicated, single tenant private cloud managed entirely by our
+              team. Get isolated workspaces and uptime SLAs with zero
+              infrastructure overhead.
             </p>
           </div>
 
