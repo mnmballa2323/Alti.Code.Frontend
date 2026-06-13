@@ -158,14 +158,8 @@ export default function TeamsPage() {
 
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 animate-fade-in">
-      {loading ? (
-        <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">Loading workspace teams...</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {/* Sticky Header Wrapper */}
+      <div className="space-y-4">
+        {/* Sticky Header Wrapper */}
           <div className="sticky top-0 z-30 bg-[#F3F4F6] dark:bg-[#0d1117] -mt-4 pt-4 pb-2">
             {/* Search Bar */}
             <div className="relative mb-4">
@@ -188,7 +182,12 @@ export default function TeamsPage() {
 
           {/* Table Body */}
           <div className="space-y-3 mt-6">
-            {filteredTeams.length > 0 ? (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
+                <p className="text-sm text-neutral-500">Loading workspace teams...</p>
+              </div>
+            ) : filteredTeams.length > 0 ? (
               filteredTeams.map((team) => (
                 <div
                   key={team.id}
@@ -217,7 +216,6 @@ export default function TeamsPage() {
             )}
           </div>
         </div>
-      )}
     </div>
   );
 }
