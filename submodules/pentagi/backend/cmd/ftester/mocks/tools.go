@@ -153,25 +153,6 @@ func MockResponse(funcName string, args json.RawMessage) (string, error) {
 
 		resultObj = builder.String()
 
-	case tools.PerplexityToolName:
-		var searchArgs tools.SearchAction
-		if err := json.Unmarshal(args, &searchArgs); err != nil {
-			return "", fmt.Errorf("error unmarshaling search arguments: %w", err)
-		}
-
-		terminal.PrintMock("Perplexity search:")
-		terminal.PrintKeyValue("Query", searchArgs.Query)
-		terminal.PrintKeyValueFormat("Max results", "%d", searchArgs.MaxResults.Int())
-
-		var builder strings.Builder
-		builder.WriteString("# Answer\n\n")
-		builder.WriteString(fmt.Sprintf("This is a detailed research report from Perplexity AI about '%s'. Perplexity provides comprehensive answers by synthesizing information from various sources and augmenting it with AI analysis.\n\n", searchArgs.Query))
-		builder.WriteString("The query you've asked about requires examining multiple perspectives and sources. Based on recent information, here's a thorough analysis of the topic with key insights and developments.\n\n")
-		builder.WriteString("First, it's important to understand the background of this subject. Several authoritative sources indicate that this is an evolving area with recent developments. The most current research suggests that...\n\n")
-
-		builder.WriteString("\n\n# Citations\n\n")
-		for i := 1; i <= min(searchArgs.MaxResults.Int(), 3); i++ {
-			builder.WriteString(fmt.Sprintf("%d. https://example.com/perplexity/citation%d\n", i, i))
 		}
 
 		resultObj = builder.String()

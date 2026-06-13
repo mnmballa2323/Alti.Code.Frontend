@@ -131,10 +131,6 @@ type Config struct {
 	// Tavily search engine
 	TavilyAPIKey string `env:"TAVILY_API_KEY"`
 
-	// Perplexity search engine
-	PerplexityAPIKey      string `env:"PERPLEXITY_API_KEY"`
-	PerplexityModel       string `env:"PERPLEXITY_MODEL" envDefault:"sonar"`
-	PerplexityContextSize string `env:"PERPLEXITY_CONTEXT_SIZE" envDefault:"low"`
 
 	// Searxng search engine
 	SearxngURL        string `env:"SEARXNG_URL"`

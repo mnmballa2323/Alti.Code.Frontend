@@ -639,22 +639,6 @@ func (fte *flowToolsExecutor) GetAssistantExecutor(cfg AssistantExecutorConfig) 
 			handlers[TraversaalToolName] = traversaal.Handle
 		}
 
-		perplexity := &perplexity{
-			flowID:      fte.flowID,
-			apiKey:      fte.cfg.PerplexityAPIKey,
-			proxyURL:    fte.cfg.ProxyURL,
-			model:       fte.cfg.PerplexityModel,
-			contextSize: fte.cfg.PerplexityContextSize,
-			temperature: perplexityTemperature,
-			topP:        perplexityTopP,
-			maxTokens:   perplexityMaxTokens,
-			timeout:     perplexityTimeout,
-			slp:         fte.slp,
-			summarizer:  cfg.Summarizer,
-		}
-		if perplexity.IsAvailable() {
-			definitions = append(definitions, registryDefinitions[PerplexityToolName])
-			handlers[PerplexityToolName] = perplexity.Handle
 		}
 
 		searxng := NewSearxngTool(
@@ -1162,24 +1146,6 @@ func (fte *flowToolsExecutor) GetSearcherExecutor(cfg SearcherExecutorConfig) (C
 		ce.handlers[TraversaalToolName] = traversaal.Handle
 	}
 
-	perplexity := &perplexity{
-		flowID:      fte.flowID,
-		taskID:      cfg.TaskID,
-		subtaskID:   cfg.SubtaskID,
-		apiKey:      fte.cfg.PerplexityAPIKey,
-		proxyURL:    fte.cfg.ProxyURL,
-		model:       fte.cfg.PerplexityModel,
-		contextSize: fte.cfg.PerplexityContextSize,
-		temperature: perplexityTemperature,
-		topP:        perplexityTopP,
-		maxTokens:   perplexityMaxTokens,
-		timeout:     perplexityTimeout,
-		slp:         fte.slp,
-		summarizer:  cfg.Summarizer,
-	}
-	if perplexity.IsAvailable() {
-		ce.definitions = append(ce.definitions, registryDefinitions[PerplexityToolName])
-		ce.handlers[PerplexityToolName] = perplexity.Handle
 	}
 
 	searxng := NewSearxngTool(

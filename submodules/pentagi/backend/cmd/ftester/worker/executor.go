@@ -183,15 +183,10 @@ func (te *toolExecutor) GetTool(ctx context.Context, funcName string) (tools.Too
 			te.proxies.GetSearchLogProvider(),
 		), nil
 
-	case tools.PerplexityToolName:
-		return tools.NewPerplexityTool(
 			te.flowID,
 			te.taskID,
 			te.subtaskID,
-			te.cfg.PerplexityAPIKey,
 			te.cfg.ProxyURL,
-			te.cfg.PerplexityModel,
-			te.cfg.PerplexityContextSize,
 			0, // default temperature
 			0, // default topP
 			0, // default maxTokens

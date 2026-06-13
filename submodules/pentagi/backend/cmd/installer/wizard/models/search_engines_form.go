@@ -42,29 +42,14 @@ func (m *SearchEnginesFormModel) BuildForm() tea.Cmd {
 		config.DuckDuckGoEnabled,
 	))
 
-	// Perplexity API Key
-	fields = append(fields, m.createAPIKeyField("perplexity_api_key",
-		locale.ToolsSearchEnginesPerplexityKey,
-		locale.ToolsSearchEnginesPerplexityKeyDesc,
-		config.PerplexityAPIKey,
 	))
 
-	// Perplexity Model (suggestions)
 	fields = append(fields, m.createSelectTextField(
-		"perplexity_model",
-		"Perplexity Model",
-		"Select Perplexity model",
-		config.PerplexityModel,
 		[]string{"sonar", "sonar-pro", "sonar-reasoning", "sonar-reasoning-pro", "sonar-deep-research"},
 		false,
 	))
 
-	// Perplexity Context Size (suggestions)
 	fields = append(fields, m.createSelectTextField(
-		"perplexity_context_size",
-		"Perplexity Context Size",
-		"Select Perplexity context size",
-		config.PerplexityContextSize,
 		[]string{"low", "medium", "high"},
 		false,
 	))
@@ -249,12 +234,8 @@ func (m *SearchEnginesFormModel) GetCurrentConfiguration() string {
 			m.GetStyles().Warning.Render(locale.StatusDisabled)))
 	}
 
-	// Perplexity
-	if config.PerplexityAPIKey.Value != "" {
-		sections = append(sections, fmt.Sprintf("• Perplexity: %s",
 			m.GetStyles().Success.Render(locale.StatusConfigured)))
 	} else {
-		sections = append(sections, fmt.Sprintf("• Perplexity: %s",
 			m.GetStyles().Warning.Render(locale.StatusNotConfigured)))
 	}
 
@@ -327,9 +308,6 @@ func (m *SearchEnginesFormModel) HandleSave() error {
 	newConfig := &controller.SearchEnginesConfig{
 		// copy current EnvVar fields - they preserve metadata like Line, IsPresent, etc.
 		DuckDuckGoEnabled:     config.DuckDuckGoEnabled,
-		PerplexityAPIKey:      config.PerplexityAPIKey,
-		PerplexityModel:       config.PerplexityModel,
-		PerplexityContextSize: config.PerplexityContextSize,
 		TavilyAPIKey:          config.TavilyAPIKey,
 		TraversaalAPIKey:      config.TraversaalAPIKey,
 		GoogleAPIKey:          config.GoogleAPIKey,
@@ -353,12 +331,6 @@ func (m *SearchEnginesFormModel) HandleSave() error {
 				return fmt.Errorf("invalid boolean value for DuckDuckGo: %s (must be 'true' or 'false')", value)
 			}
 			newConfig.DuckDuckGoEnabled.Value = value
-		case "perplexity_api_key":
-			newConfig.PerplexityAPIKey.Value = value
-		case "perplexity_model":
-			newConfig.PerplexityModel.Value = value
-		case "perplexity_context_size":
-			newConfig.PerplexityContextSize.Value = value
 		case "tavily_api_key":
 			newConfig.TavilyAPIKey.Value = value
 		case "traversaal_api_key":

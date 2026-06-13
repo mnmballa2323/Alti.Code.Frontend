@@ -25,7 +25,6 @@ const (
 	DuckDuckGoToolName        = "duckduckgo"
 	TavilyToolName            = "tavily"
 	TraversaalToolName        = "traversaal"
-	PerplexityToolName        = "perplexity"
 	SearxngToolName           = "searxng"
 	SearchToolName            = "search"
 	SearchResultToolName      = "search_result"
@@ -104,7 +103,6 @@ var toolsTypeMapping = map[string]ToolType{
 	DuckDuckGoToolName:        SearchNetworkToolType,
 	TavilyToolName:            SearchNetworkToolType,
 	TraversaalToolName:        SearchNetworkToolType,
-	PerplexityToolName:        SearchNetworkToolType,
 	SearxngToolName:           SearchNetworkToolType,
 	SearchToolName:            AgentToolType,
 	SearchResultToolName:      StoreAgentResultToolType,
@@ -142,7 +140,6 @@ var allowedStoringInMemoryTools = []string{
 	DuckDuckGoToolName,
 	TavilyToolName,
 	TraversaalToolName,
-	PerplexityToolName,
 	SearxngToolName,
 	MaintenanceToolName,
 	CoderToolName,
@@ -221,9 +218,6 @@ var registryDefinitions = map[string]llms.FunctionDefinition{
 			"by your query according to relevant information from the web sites",
 		Parameters: reflector.Reflect(&SearchAction{}),
 	},
-	PerplexityToolName: {
-		Name: PerplexityToolName,
-		Description: "Search in the perplexity search engine, it's a fully complex query and detailed research report " +
 			"with answer by query and detailed information from the web sites and other sources augmented by the LLM",
 		Parameters: reflector.Reflect(&SearchAction{}),
 	},
@@ -364,7 +358,6 @@ func getMessageType(name string) database.MsglogType {
 	case BrowserToolName:
 		return database.MsglogTypeBrowser
 	case MemoristToolName, SearchToolName, GoogleToolName, DuckDuckGoToolName, TavilyToolName, TraversaalToolName,
-		PerplexityToolName, SearxngToolName, SearchGuideToolName, SearchAnswerToolName, SearchCodeToolName, SearchInMemoryToolName,
 		GraphitiSearchToolName:
 		return database.MsglogTypeSearch
 	case AdviceToolName:

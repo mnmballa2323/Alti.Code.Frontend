@@ -1433,16 +1433,12 @@ type SearchEnginesConfig struct {
 	// direct form field mappings using loader.EnvVar
 	// these fields directly correspond to environment variables and form inputs (not computed)
 	DuckDuckGoEnabled loader.EnvVar // DUCKDUCKGO_ENABLED
-	PerplexityAPIKey  loader.EnvVar // PERPLEXITY_API_KEY
 	TavilyAPIKey      loader.EnvVar // TAVILY_API_KEY
 	TraversaalAPIKey  loader.EnvVar // TRAVERSAAL_API_KEY
 	GoogleAPIKey      loader.EnvVar // GOOGLE_API_KEY
 	GoogleCXKey       loader.EnvVar // GOOGLE_CX_KEY
 	GoogleLRKey       loader.EnvVar // GOOGLE_LR_KEY
 
-	// perplexity extra settings
-	PerplexityModel       loader.EnvVar // PERPLEXITY_MODEL
-	PerplexityContextSize loader.EnvVar // PERPLEXITY_CONTEXT_SIZE
 
 	// searxng extra settings
 	SearxngURL        loader.EnvVar // SEARXNG_URL
@@ -1459,14 +1455,11 @@ type SearchEnginesConfig struct {
 func (c *controller) GetSearchEnginesConfig() *SearchEnginesConfig {
 	// get all environment variables using the state controller
 	duckduckgoEnabled, _ := c.GetVar("DUCKDUCKGO_ENABLED")
-	perplexityAPIKey, _ := c.GetVar("PERPLEXITY_API_KEY")
 	tavilyAPIKey, _ := c.GetVar("TAVILY_API_KEY")
 	traversaalAPIKey, _ := c.GetVar("TRAVERSAAL_API_KEY")
 	googleAPIKey, _ := c.GetVar("GOOGLE_API_KEY")
 	googleCXKey, _ := c.GetVar("GOOGLE_CX_KEY")
 	googleLRKey, _ := c.GetVar("GOOGLE_LR_KEY")
-	perplexityModel, _ := c.GetVar("PERPLEXITY_MODEL")
-	perplexityContextSize, _ := c.GetVar("PERPLEXITY_CONTEXT_SIZE")
 	searxngURL, _ := c.GetVar("SEARXNG_URL")
 	searxngCategories, _ := c.GetVar("SEARXNG_CATEGORIES")
 	searxngLanguage, _ := c.GetVar("SEARXNG_LANGUAGE")
@@ -1475,9 +1468,6 @@ func (c *controller) GetSearchEnginesConfig() *SearchEnginesConfig {
 
 	config := &SearchEnginesConfig{
 		DuckDuckGoEnabled:     duckduckgoEnabled,
-		PerplexityAPIKey:      perplexityAPIKey,
-		PerplexityModel:       perplexityModel,
-		PerplexityContextSize: perplexityContextSize,
 		TavilyAPIKey:          tavilyAPIKey,
 		TraversaalAPIKey:      traversaalAPIKey,
 		GoogleAPIKey:          googleAPIKey,
@@ -1497,7 +1487,6 @@ func (c *controller) GetSearchEnginesConfig() *SearchEnginesConfig {
 	} else if duckduckgoEnabled.Value == "" && duckduckgoEnabled.Default == "true" {
 		configuredCount++
 	}
-	if perplexityAPIKey.Value != "" {
 		configuredCount++
 	}
 	if tavilyAPIKey.Value != "" {
@@ -1527,14 +1516,8 @@ func (c *controller) UpdateSearchEnginesConfig(config *SearchEnginesConfig) erro
 	if err := c.SetVar("DUCKDUCKGO_ENABLED", config.DuckDuckGoEnabled.Value); err != nil {
 		return fmt.Errorf("failed to set DUCKDUCKGO_ENABLED: %w", err)
 	}
-	if err := c.SetVar("PERPLEXITY_API_KEY", config.PerplexityAPIKey.Value); err != nil {
-		return fmt.Errorf("failed to set PERPLEXITY_API_KEY: %w", err)
 	}
-	if err := c.SetVar("PERPLEXITY_MODEL", config.PerplexityModel.Value); err != nil {
-		return fmt.Errorf("failed to set PERPLEXITY_MODEL: %w", err)
 	}
-	if err := c.SetVar("PERPLEXITY_CONTEXT_SIZE", config.PerplexityContextSize.Value); err != nil {
-		return fmt.Errorf("failed to set PERPLEXITY_CONTEXT_SIZE: %w", err)
 	}
 	if err := c.SetVar("TAVILY_API_KEY", config.TavilyAPIKey.Value); err != nil {
 		return fmt.Errorf("failed to set TAVILY_API_KEY: %w", err)
@@ -1575,9 +1558,6 @@ func (c *controller) ResetSearchEnginesConfig() *SearchEnginesConfig {
 	// reset all search engines-related environment variables to their defaults
 	vars := []string{
 		"DUCKDUCKGO_ENABLED",
-		"PERPLEXITY_API_KEY",
-		"PERPLEXITY_MODEL",
-		"PERPLEXITY_CONTEXT_SIZE",
 		"TAVILY_API_KEY",
 		"TRAVERSAAL_API_KEY",
 		"GOOGLE_API_KEY",
@@ -2025,15 +2005,12 @@ func (c *controller) getVariableDescription(varName string) string {
 		"LOCAL_SCRAPER_MAX_CONCURRENT_SESSIONS": locale.EnvDesc_LOCAL_SCRAPER_MAX_CONCURRENT_SESSIONS,
 
 		"DUCKDUCKGO_ENABLED": locale.EnvDesc_DUCKDUCKGO_ENABLED,
-		"PERPLEXITY_API_KEY": locale.EnvDesc_PERPLEXITY_API_KEY,
 		"TAVILY_API_KEY":     locale.EnvDesc_TAVILY_API_KEY,
 		"TRAVERSAAL_API_KEY": locale.EnvDesc_TRAVERSAAL_API_KEY,
 		"GOOGLE_API_KEY":     locale.EnvDesc_GOOGLE_API_KEY,
 		"GOOGLE_CX_KEY":      locale.EnvDesc_GOOGLE_CX_KEY,
 		"GOOGLE_LR_KEY":      locale.EnvDesc_GOOGLE_LR_KEY,
 
-		"PERPLEXITY_MODEL":        locale.EnvDesc_PERPLEXITY_MODEL,
-		"PERPLEXITY_CONTEXT_SIZE": locale.EnvDesc_PERPLEXITY_CONTEXT_SIZE,
 
 		"SEARXNG_URL":        locale.EnvDesc_SEARXNG_URL,
 		"SEARXNG_CATEGORIES": locale.EnvDesc_SEARXNG_CATEGORIES,
@@ -2113,7 +2090,6 @@ var maskedVariables = map[string]bool{
 	"LANGFUSE_SECRET_KEY":       true,
 	"EMBEDDING_KEY":             true,
 	"LOCAL_SCRAPER_PASSWORD":    true,
-	"PERPLEXITY_API_KEY":        true,
 	"TAVILY_API_KEY":            true,
 	"TRAVERSAAL_API_KEY":        true,
 	"GOOGLE_API_KEY":            true,
@@ -2190,9 +2166,6 @@ var criticalVariables = map[string]bool{
 
 	// tools changes
 	"DUCKDUCKGO_ENABLED":      true,
-	"PERPLEXITY_API_KEY":      true,
-	"PERPLEXITY_MODEL":        true,
-	"PERPLEXITY_CONTEXT_SIZE": true,
 	"TAVILY_API_KEY":          true,
 	"TRAVERSAAL_API_KEY":      true,
 	"GOOGLE_API_KEY":          true,
