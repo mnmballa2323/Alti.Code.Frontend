@@ -21,6 +21,7 @@ import { iapService } from '../modules/googleCloud/iap.service.js';
 import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
+import { geoFenceMiddleware } from '../middlewares/geoFence.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
 import { scimRoutes } from '@inso/platform';
@@ -39,6 +40,9 @@ router.use(iapService.verifyIAPToken);
 
 // 🔌 Dynamic Database Context Router per Tenant
 router.use(tenantDbRouter);
+
+// 🌍 Data Sovereignty (Geo-Fencing)
+router.use(geoFenceMiddleware);
 
 // 🔐 Enterprise FinOps & RBAC Policy
 router.use(rbacService.enforceModelTierPolicy());
