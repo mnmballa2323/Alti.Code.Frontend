@@ -1487,8 +1487,7 @@ func (c *controller) GetSearchEnginesConfig() *SearchEnginesConfig {
 	} else if duckduckgoEnabled.Value == "" && duckduckgoEnabled.Default == "true" {
 		configuredCount++
 	}
-		configuredCount++
-	}
+
 	if tavilyAPIKey.Value != "" {
 		configuredCount++
 	}
@@ -1516,9 +1515,7 @@ func (c *controller) UpdateSearchEnginesConfig(config *SearchEnginesConfig) erro
 	if err := c.SetVar("DUCKDUCKGO_ENABLED", config.DuckDuckGoEnabled.Value); err != nil {
 		return fmt.Errorf("failed to set DUCKDUCKGO_ENABLED: %w", err)
 	}
-	}
-	}
-	}
+
 	if err := c.SetVar("TAVILY_API_KEY", config.TavilyAPIKey.Value); err != nil {
 		return fmt.Errorf("failed to set TAVILY_API_KEY: %w", err)
 	}

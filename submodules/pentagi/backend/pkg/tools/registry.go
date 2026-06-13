@@ -218,9 +218,7 @@ var registryDefinitions = map[string]llms.FunctionDefinition{
 			"by your query according to relevant information from the web sites",
 		Parameters: reflector.Reflect(&SearchAction{}),
 	},
-			"with answer by query and detailed information from the web sites and other sources augmented by the LLM",
-		Parameters: reflector.Reflect(&SearchAction{}),
-	},
+
 	SearxngToolName: {
 		Name: SearxngToolName,
 		Description: "Search in the searxng meta search engine, it's a privacy-focused search engine " +

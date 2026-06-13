@@ -639,7 +639,7 @@ func (fte *flowToolsExecutor) GetAssistantExecutor(cfg AssistantExecutorConfig) 
 			handlers[TraversaalToolName] = traversaal.Handle
 		}
 
-		}
+
 
 		searxng := NewSearxngTool(
 			fte.flowID,
@@ -1146,7 +1146,7 @@ func (fte *flowToolsExecutor) GetSearcherExecutor(cfg SearcherExecutorConfig) (C
 		ce.handlers[TraversaalToolName] = traversaal.Handle
 	}
 
-	}
+
 
 	searxng := NewSearxngTool(
 		fte.flowID,
