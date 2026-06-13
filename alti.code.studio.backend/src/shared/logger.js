@@ -7,8 +7,6 @@
 
 import winston, { format } from 'winston';
 import { EventBusTransport, LokiTransport } from './winstonTransport.js';
-import { LoggingWinston } from '@google-cloud/logging-winston';
-import { errorReportingService } from '../app/modules/googleCloud/error_reporting.service.js';
 
 const { combine, timestamp, label, prettyPrint, printf } = format;
 
@@ -43,24 +41,8 @@ if (process.env.LOKI_URL) {
   console.log('✅ Local Grafana Loki (Winston Transport) activated.');
 }
 
-// 🌐 Deep Google Integration: Google Cloud Logging (Winston Transport)
-if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
-  try {
-    // If we are in production, completely override standard logging with Google Cloud Native Logging
-    const loggingWinston = new LoggingWinston({
-      logName: 'alti-winston-global',
-      // Google API implicitly finds the credentials via GOOGLE_APPLICATION_CREDENTIALS
-    });
-    
-    transports.push(loggingWinston);
-    errorTransports.push(loggingWinston);
-    console.log('✅ Google Cloud Logging (Winston Transport) activated.');
-  } catch (error) {
-    console.warn('⚠️ Google Cloud Logging transport could not be initialized:', error.message);
-  }
-} else {
-  console.log('⚠️ Skipping Google Cloud Logging transport (local dev or private cloud mode).');
-}
+// 🌐 Google Cloud Native Logging completely removed for pure air-gapped compliance.
+console.log('⚠️ Running in pure air-gapped enterprise mode. External cloud logging is disabled.');
 
 // Success logger
 export const logger = winston.createLogger({
@@ -84,11 +66,4 @@ errorlogger.on('error', (err) => {
   console.error('Winston ErrorLogger Error:', err.message);
 });
 
-// 🚨 Override errorlogger to stream natively to GCP Error Reporting (if not in private cloud)
-const originalErrorLogger = errorlogger.error.bind(errorlogger);
-errorlogger.error = (message, meta) => {
-    if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
-        errorReportingService.reportException(meta || message);
-    }
-    originalErrorLogger(message, meta);
-};
+
