@@ -182,6 +182,16 @@ export const xxxAgent = new XxxAgent();
 
 ## Hardening & Resilience
 
+### Nation-State Security Architecture (Enterprise/Private Cloud)
+
+For DoD IL5/IL6, FedRAMP High, and PCI-DSS compliance, the backend is secured with a 6-pillar Nation-State defense architecture:
+1. **Identity (ABAC/SAML)**: `enterprise.strategy.js` strictly enforces SAML 2.0 / OIDC flows. Regular JWT login is blocked for Enterprise tenants via `auth.service.js`.
+2. **KMS / HSM**: Environment variables no longer store plain-text secrets. `kms.service.js` fetches ciphertext and uses AWS KMS or Azure Key Vault to dynamically decrypt master keys in memory.
+3. **Inline DLP**: `dlp.service.js` acts as a regex/Luhn middleware inside `guardian.service.js`, intercepting and redacting PII/PCI/Secrets *before* LLMs can ingest them.
+4. **Immutable Audit Ledger**: `audit.service.js` creates a cryptographically chained WORM database log for every AI action, and streams over TLS to Splunk/Datadog SIEM.
+5. **Air-Gapped LLM Inference**: `multicloud_inference.service.js` supports an `AIR_GAPPED_MODE` which short-circuits all public cloud endpoints (OpenAI, Anthropic, Gemini, Bedrock) and routes exclusively to an internal Ollama cluster over localhost/VPC.
+6. **Zero-Trust (mTLS)**: The `docker-compose.prod.yml` injects an Envoy Proxy sidecar to enforce strict mTLS traffic between all microservices.
+
 ### `BaseSpecialistAgent` — Production Guard Layer
 
 All 435+ agents inherit from this class and get the following protections automatically:

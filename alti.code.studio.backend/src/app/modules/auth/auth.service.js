@@ -191,6 +191,11 @@ const loginService = async (email, password) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Please verify your email first');
   }
 
+  // ENFORCE SAML/SSO for Enterprise Users
+  if (user.ssoProvider) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Enterprise security policy strictly requires SAML 2.0 / OIDC login for this account.');
+  }
+
   if (user && !user.password) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'This account was created using social login. Please log in using your social provider.');
   }

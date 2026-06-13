@@ -133,6 +133,18 @@ Every agent inherits `BaseSpecialistAgent` which provides:
 
 ---
 
+## 🛡️ Nation-State Security (Enterprise)
+
+Built for Single-Tenant Private Cloud and Air-Gapped deployments (FedRAMP High, DoD IL5/IL6, SOC 2, PCI-DSS):
+1. **Identity & Access (ABAC)**: Strict SAML 2.0 / OIDC enforcement for Enterprise SSO with JIT provisioning.
+2. **KMS / HSM**: AWS KMS and Azure Key Vault integration for hardware-backed master key derivation.
+3. **Inline DLP**: Real-time regex and Luhn interception stripping PII, PCI, and Credentials from LLM Prompts.
+4. **Immutable Audit Ledger**: Blockchain-backed WORM logs inside PostgreSQL, streaming out via TLS to Splunk/Datadog SIEM.
+5. **Air-Gapped LLMs**: `AIR_GAPPED_MODE` strictly routes inference locally to Ollama clusters (Llama 3 / CodeLlama), never touching public internet.
+6. **Zero-Trust Network (mTLS)**: Envoy Proxy sidecars injected directly into `docker-compose.prod.yml` enforcing strict mTLS.
+
+---
+
 ## Setup
 
 ### 1. Clone & Install
