@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"pentagi/pkg/config"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/system"
 
 	"github.com/vxcontrol/langchaingo/embeddings"
@@ -79,7 +79,7 @@ func newOpenAI(cfg *config.Config, httpClient *http.Client) (embeddings.Embedder
 	}
 
 	var opts []openai.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -130,7 +130,7 @@ func newOllama(cfg *config.Config, httpClient *http.Client) (embeddings.Embedder
 	model, provider := cfg.EmbeddingModel, "ollama"
 
 	var opts []ollama.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -174,7 +174,7 @@ func newMistral(cfg *config.Config, _ *http.Client) (embeddings.Embedder, error)
 	model, provider := "mistral-embed", "mistral"
 
 	var opts []mistral.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -217,7 +217,7 @@ func newJina(cfg *config.Config, httpClient *http.Client) (embeddings.Embedder, 
 	}
 
 	var opts []jina.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -257,7 +257,7 @@ func newHuggingface(cfg *config.Config, httpClient *http.Client) (embeddings.Emb
 	}
 
 	var opts []hgclient.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -309,7 +309,7 @@ func newGoogleAI(cfg *config.Config, httpClient *http.Client) (embeddings.Embedd
 	}
 
 	var opts []googleai.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}
@@ -354,7 +354,7 @@ func newVoyageAI(cfg *config.Config, httpClient *http.Client) (embeddings.Embedd
 	}
 
 	var opts []voyageai.Option
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"strip_new_lines": cfg.EmbeddingStripNewLines,
 		"batch_size":      cfg.EmbeddingBatchSize,
 	}

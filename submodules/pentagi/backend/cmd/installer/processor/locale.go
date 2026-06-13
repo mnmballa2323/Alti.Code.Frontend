@@ -29,10 +29,10 @@ const (
 // File system operations messages
 const (
 	MsgExtractingDockerCompose          = "Extracting docker-compose.yml"
-	MsgExtractingLangfuseCompose        = "Extracting docker-compose-langfuse.yml"
+	MsgExtractingNoopTraceCompose        = "Extracting docker-compose-nooptrace.yml"
 	MsgExtractingObservabilityCompose   = "Extracting docker-compose-observability.yml"
 	MsgExtractingObservabilityDirectory = "Extracting observability directory"
-	MsgSkippingExternalLangfuse         = "Skipping external Langfuse deployment"
+	MsgSkippingExternalNoopTrace         = "Skipping external NoopTrace deployment"
 	MsgSkippingExternalObservability    = "Skipping external Observability deployment"
 	MsgPatchingComposeFile              = "Patching docker-compose file: %s"
 	MsgComposePatchCompleted            = "Docker-compose file patching completed"

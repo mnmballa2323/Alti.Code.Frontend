@@ -17,7 +17,7 @@ The `checker` package is responsible for gathering system facts and verifying in
 
 #### CheckResult Structure
 Central data structure that holds all system check results:
-- Installation status for each component (PentAGI, Langfuse, Observability)
+- Installation status for each component (PentAGI, NoopTrace, Observability)
 - System resource availability (CPU, memory, disk)
 - Docker environment status
 - Network connectivity status
@@ -37,7 +37,7 @@ type CheckHandler interface {
     GatherDockerInfo(ctx context.Context, c *CheckResult) error
     GatherWorkerInfo(ctx context.Context, c *CheckResult) error
     GatherPentagiInfo(ctx context.Context, c *CheckResult) error
-    GatherLangfuseInfo(ctx context.Context, c *CheckResult) error
+    GatherNoopTraceInfo(ctx context.Context, c *CheckResult) error
     GatherObservabilityInfo(ctx context.Context, c *CheckResult) error
     GatherSystemInfo(ctx context.Context, c *CheckResult) error
     GatherUpdatesInfo(ctx context.Context, c *CheckResult) error
@@ -64,7 +64,7 @@ type CheckHandler interface {
 - **Memory**: Dynamic calculation based on components to be installed
   - Base: 0.5GB free
   - PentAGI: +0.5GB
-  - Langfuse: +1.5GB
+  - NoopTrace: +1.5GB
   - Observability: +1.5GB
 - **Disk Space**: Context-aware requirements
   - Worker images not present: 25GB (for large pentesting images)
@@ -81,7 +81,7 @@ Three-tier verification process:
 - Communicates with update server to check latest versions
 - Sends current component versions and configuration
 - Supports proxy configuration
-- Checks updates for: Installer, PentAGI, Langfuse, Observability, Worker images
+- Checks updates for: Installer, PentAGI, NoopTrace, Observability, Worker images
 
 ## Public API
 

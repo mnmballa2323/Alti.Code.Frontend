@@ -8,7 +8,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vxcontrol/langchaingo/documentloaders"
@@ -66,7 +66,7 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 			"code_lang": action.Lang,
 		}
 
-		metadata := langfuse.Metadata{
+		metadata := nooptrace.Metadata{
 			"tool_name": name,
 			"code_lang": action.Lang,
 			"message":   action.Message,
@@ -76,14 +76,14 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 		}
 
 		retriever := observation.Retriever(
-			langfuse.WithRetrieverName("retrieve code samples from vector store"),
-			langfuse.WithRetrieverInput(map[string]any{
+			nooptrace.WithRetrieverName("retrieve code samples from vector store"),
+			nooptrace.WithRetrieverInput(map[string]any{
 				"query":       action.Question,
 				"threshold":   codeVectorStoreThreshold,
 				"max_results": codeVectorStoreResultLimit,
 				"filters":     filters,
 			}),
-			langfuse.WithRetrieverMetadata(metadata),
+			nooptrace.WithRetrieverMetadata(metadata),
 		)
 		ctx, observation = retriever.Observation(ctx)
 
@@ -102,8 +102,8 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 		)
 		if err != nil {
 			retriever.End(
-				langfuse.WithRetrieverStatus(err.Error()),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelError),
+				nooptrace.WithRetrieverStatus(err.Error()),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelError),
 			)
 			logger.WithError(err).Error("failed to search code samples for question")
 			return "", fmt.Errorf("failed to search code samples for question: %w", err)
@@ -111,22 +111,22 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 
 		if len(docs) == 0 {
 			retriever.End(
-				langfuse.WithRetrieverStatus("no code samples found"),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelWarning),
-				langfuse.WithRetrieverOutput([]any{}),
+				nooptrace.WithRetrieverStatus("no code samples found"),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelWarning),
+				nooptrace.WithRetrieverOutput([]any{}),
 			)
 			observation.Score(
-				langfuse.WithScoreComment("no code samples found"),
-				langfuse.WithScoreName("code_search_result"),
-				langfuse.WithScoreStringValue("not_found"),
+				nooptrace.WithScoreComment("no code samples found"),
+				nooptrace.WithScoreName("code_search_result"),
+				nooptrace.WithScoreStringValue("not_found"),
 			)
 			return codeNotFoundMessage, nil
 		}
 
 		retriever.End(
-			langfuse.WithRetrieverStatus("success"),
-			langfuse.WithRetrieverLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithRetrieverOutput(docs),
+			nooptrace.WithRetrieverStatus("success"),
+			nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithRetrieverOutput(docs),
 		)
 
 		// TODO: here need to rerank and filter the docs based on the question
@@ -135,9 +135,9 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 		buffer := strings.Builder{}
 		for i, doc := range docs {
 			observation.Score(
-				langfuse.WithScoreComment("code samples vector store result"),
-				langfuse.WithScoreName("code_search_result"),
-				langfuse.WithScoreFloatValue(float64(doc.Score)),
+				nooptrace.WithScoreComment("code samples vector store result"),
+				nooptrace.WithScoreName("code_search_result"),
+				nooptrace.WithScoreFloatValue(float64(doc.Score)),
 			)
 			buffer.WriteString(fmt.Sprintf("# Document %d Match score: %f\n\n", i+1, doc.Score))
 			buffer.WriteString(fmt.Sprintf("## Original Code Question\n\n%s\n\n", doc.Metadata["question"]))
@@ -181,11 +181,11 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 		buffer.WriteString(action.Code)
 		buffer.WriteString("\n```")
 
-		opts := []langfuse.EventOption{
-			langfuse.WithEventName("store code samples to vector store"),
-			langfuse.WithEventInput(action.Question),
-			langfuse.WithEventOutput(buffer.String()),
-			langfuse.WithEventMetadata(map[string]any{
+		opts := []nooptrace.EventOption{
+			nooptrace.WithEventName("store code samples to vector store"),
+			nooptrace.WithEventInput(action.Question),
+			nooptrace.WithEventOutput(buffer.String()),
+			nooptrace.WithEventMetadata(map[string]any{
 				"tool_name": name,
 				"code_lang": action.Lang,
 				"message":   action.Message,
@@ -202,8 +202,8 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 		docs, err := documentloaders.NewText(strings.NewReader(buffer.String())).Load(ctx)
 		if err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to load document")
 			return "", fmt.Errorf("failed to load document: %w", err)
@@ -230,17 +230,17 @@ func (c *code) Handle(ctx context.Context, name string, args json.RawMessage) (s
 
 		if _, err := c.store.AddDocuments(ctx, docs); err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to store code sample")
 			return "", fmt.Errorf("failed to store code sample: %w", err)
 		}
 
 		observation.Event(append(opts,
-			langfuse.WithEventStatus("success"),
-			langfuse.WithEventLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithEventOutput(docs),
+			nooptrace.WithEventStatus("success"),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithEventOutput(docs),
 		)...)
 
 		if agentCtx, ok := GetAgentContext(ctx); ok {

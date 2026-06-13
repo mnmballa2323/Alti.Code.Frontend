@@ -8,7 +8,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vxcontrol/langchaingo/documentloaders"
@@ -66,7 +66,7 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 			"answer_type": action.Type,
 		}
 
-		metadata := langfuse.Metadata{
+		metadata := nooptrace.Metadata{
 			"tool_name":   name,
 			"message":     action.Message,
 			"limit":       searchVectorStoreResultLimit,
@@ -76,14 +76,14 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 		}
 
 		retriever := observation.Retriever(
-			langfuse.WithRetrieverName("retrieve search answer from vector store"),
-			langfuse.WithRetrieverInput(map[string]any{
+			nooptrace.WithRetrieverName("retrieve search answer from vector store"),
+			nooptrace.WithRetrieverInput(map[string]any{
 				"query":       action.Question,
 				"threshold":   searchVectorStoreThreshold,
 				"max_results": searchVectorStoreResultLimit,
 				"filters":     filters,
 			}),
-			langfuse.WithRetrieverMetadata(metadata),
+			nooptrace.WithRetrieverMetadata(metadata),
 		)
 		ctx, observation = retriever.Observation(ctx)
 
@@ -101,8 +101,8 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 		)
 		if err != nil {
 			retriever.End(
-				langfuse.WithRetrieverStatus(err.Error()),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelError),
+				nooptrace.WithRetrieverStatus(err.Error()),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelError),
 			)
 			logger.WithError(err).Error("failed to search answer for question")
 			return "", fmt.Errorf("failed to search answer for question: %w", err)
@@ -110,22 +110,22 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 
 		if len(docs) == 0 {
 			retriever.End(
-				langfuse.WithRetrieverStatus("no search answer found"),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelWarning),
-				langfuse.WithRetrieverOutput([]any{}),
+				nooptrace.WithRetrieverStatus("no search answer found"),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelWarning),
+				nooptrace.WithRetrieverOutput([]any{}),
 			)
 			observation.Score(
-				langfuse.WithScoreComment("no search answer found"),
-				langfuse.WithScoreName("search_answer_result"),
-				langfuse.WithScoreStringValue("not_found"),
+				nooptrace.WithScoreComment("no search answer found"),
+				nooptrace.WithScoreName("search_answer_result"),
+				nooptrace.WithScoreStringValue("not_found"),
 			)
 			return searchNotFoundMessage, nil
 		}
 
 		retriever.End(
-			langfuse.WithRetrieverStatus("success"),
-			langfuse.WithRetrieverLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithRetrieverOutput(docs),
+			nooptrace.WithRetrieverStatus("success"),
+			nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithRetrieverOutput(docs),
 		)
 
 		// TODO: here need to rerank and filter the docs based on the question
@@ -134,9 +134,9 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 		buffer := strings.Builder{}
 		for i, doc := range docs {
 			observation.Score(
-				langfuse.WithScoreComment("search answer vector store result"),
-				langfuse.WithScoreName("search_answer_result"),
-				langfuse.WithScoreFloatValue(float64(doc.Score)),
+				nooptrace.WithScoreComment("search answer vector store result"),
+				nooptrace.WithScoreName("search_answer_result"),
+				nooptrace.WithScoreFloatValue(float64(doc.Score)),
 			)
 			buffer.WriteString(fmt.Sprintf("# Document %d Search Score: %f\n\n", i+1, doc.Score))
 			buffer.WriteString(fmt.Sprintf("## Original Answer Type: %s\n\n", doc.Metadata["answer_type"]))
@@ -174,11 +174,11 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 			return "", fmt.Errorf("failed to unmarshal %s store answer action arguments: %w", name, err)
 		}
 
-		opts := []langfuse.EventOption{
-			langfuse.WithEventName("store search answer to vector store"),
-			langfuse.WithEventInput(action.Question),
-			langfuse.WithEventOutput(action.Answer),
-			langfuse.WithEventMetadata(map[string]any{
+		opts := []nooptrace.EventOption{
+			nooptrace.WithEventName("store search answer to vector store"),
+			nooptrace.WithEventInput(action.Question),
+			nooptrace.WithEventOutput(action.Answer),
+			nooptrace.WithEventMetadata(map[string]any{
 				"tool_name":   name,
 				"message":     action.Message,
 				"doc_type":    searchVectorStoreDefaultType,
@@ -195,8 +195,8 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 		docs, err := documentloaders.NewText(strings.NewReader(action.Answer)).Load(ctx)
 		if err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to load document")
 			return "", fmt.Errorf("failed to load document: %w", err)
@@ -218,17 +218,17 @@ func (s *search) Handle(ctx context.Context, name string, args json.RawMessage) 
 
 		if _, err := s.store.AddDocuments(ctx, docs); err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to store answer for question")
 			return "", fmt.Errorf("failed to store answer for question: %w", err)
 		}
 
 		observation.Event(append(opts,
-			langfuse.WithEventStatus("success"),
-			langfuse.WithEventLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithEventOutput(docs),
+			nooptrace.WithEventStatus("success"),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithEventOutput(docs),
 		)...)
 
 		if agentCtx, ok := GetAgentContext(ctx); ok {

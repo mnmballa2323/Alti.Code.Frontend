@@ -18,7 +18,7 @@ const InstallerVersion = "1.0.0"
 const (
 	DockerComposeFile            = "docker-compose.yml"
 	GraphitiComposeFile          = "docker-compose-graphiti.yml"
-	LangfuseComposeFile          = "docker-compose-langfuse.yml"
+	NoopTraceComposeFile          = "docker-compose-nooptrace.yml"
 	ObservabilityComposeFile     = "docker-compose-observability.yml"
 	ExampleCustomConfigLLMFile   = "example.custom.provider.yml"
 	ExampleOllamaConfigLLMFile   = "example.ollama.provider.yml"
@@ -26,23 +26,23 @@ const (
 	PentagiContainerName         = "pentagi"
 	GraphitiContainerName        = "graphiti"
 	Neo4jContainerName           = "neo4j"
-	LangfuseWorkerContainerName  = "langfuse-worker"
-	LangfuseWebContainerName     = "langfuse-web"
+	NoopTraceWorkerContainerName  = "nooptrace-worker"
+	NoopTraceWebContainerName     = "nooptrace-web"
 	GrafanaContainerName         = "grafana"
 	OpenTelemetryContainerName   = "otel"
 	DefaultImage                 = "debian:latest"
 	DefaultImageForPentest       = "vxcontrol/kali-linux"
 	DefaultGraphitiEndpoint      = "http://graphiti:8000"
-	DefaultLangfuseEndpoint      = "http://langfuse-web:3000"
+	DefaultNoopTraceEndpoint      = "http://nooptrace-web:3000"
 	DefaultObservabilityEndpoint = "otelcol:8148"
-	DefaultLangfuseOtelEndpoint  = "http://otelcol:4318"
+	DefaultNoopTraceOtelEndpoint  = "http://otelcol:4318"
 	DefaultUpdateServerEndpoint  = "https://update.pentagi.com"
 	UpdatesCheckEndpoint         = "/api/v1/updates/check"
 	UserAgent                    = "PentAGI-Installer/" + InstallerVersion
 	MinFreeMemGB                 = 0.5
 	MinFreeMemGBForPentagi       = 0.5
 	MinFreeMemGBForGraphiti      = 2.0
-	MinFreeMemGBForLangfuse      = 1.5
+	MinFreeMemGBForNoopTrace      = 1.5
 	MinFreeMemGBForObservability = 1.5
 	MinFreeDiskGB                = 5.0
 	MinFreeDiskGBForComponents   = 10.0
@@ -77,12 +77,12 @@ type CheckResult struct {
 	GraphitiInstalled       bool   `json:"graphiti_installed" yaml:"graphiti_installed"`
 	GraphitiRunning         bool   `json:"graphiti_running" yaml:"graphiti_running"`
 	GraphitiVolumesExist    bool   `json:"graphiti_volumes_exist" yaml:"graphiti_volumes_exist"`
-	LangfuseConnected       bool   `json:"langfuse_connected" yaml:"langfuse_connected"`
-	LangfuseExternal        bool   `json:"langfuse_external" yaml:"langfuse_external"`
-	LangfuseExtracted       bool   `json:"langfuse_extracted" yaml:"langfuse_extracted"`
-	LangfuseInstalled       bool   `json:"langfuse_installed" yaml:"langfuse_installed"`
-	LangfuseRunning         bool   `json:"langfuse_running" yaml:"langfuse_running"`
-	LangfuseVolumesExist    bool   `json:"langfuse_volumes_exist" yaml:"langfuse_volumes_exist"`
+	NoopTraceConnected       bool   `json:"nooptrace_connected" yaml:"nooptrace_connected"`
+	NoopTraceExternal        bool   `json:"nooptrace_external" yaml:"nooptrace_external"`
+	NoopTraceExtracted       bool   `json:"nooptrace_extracted" yaml:"nooptrace_extracted"`
+	NoopTraceInstalled       bool   `json:"nooptrace_installed" yaml:"nooptrace_installed"`
+	NoopTraceRunning         bool   `json:"nooptrace_running" yaml:"nooptrace_running"`
+	NoopTraceVolumesExist    bool   `json:"nooptrace_volumes_exist" yaml:"nooptrace_volumes_exist"`
 	ObservabilityConnected  bool   `json:"observability_connected" yaml:"observability_connected"`
 	ObservabilityExternal   bool   `json:"observability_external" yaml:"observability_external"`
 	ObservabilityExtracted  bool   `json:"observability_extracted" yaml:"observability_extracted"`
@@ -96,7 +96,7 @@ type CheckResult struct {
 	InstallerIsUpToDate     bool   `json:"installer_is_up_to_date" yaml:"installer_is_up_to_date"`
 	PentagiIsUpToDate       bool   `json:"pentagi_is_up_to_date" yaml:"pentagi_is_up_to_date"`
 	GraphitiIsUpToDate      bool   `json:"graphiti_is_up_to_date" yaml:"graphiti_is_up_to_date"`
-	LangfuseIsUpToDate      bool   `json:"langfuse_is_up_to_date" yaml:"langfuse_is_up_to_date"`
+	NoopTraceIsUpToDate      bool   `json:"nooptrace_is_up_to_date" yaml:"nooptrace_is_up_to_date"`
 	ObservabilityIsUpToDate bool   `json:"observability_is_up_to_date" yaml:"observability_is_up_to_date"`
 	WorkerIsUpToDate        bool   `json:"worker_is_up_to_date" yaml:"worker_is_up_to_date"`
 
@@ -121,7 +121,7 @@ type CheckHandler interface {
 	GatherWorkerInfo(ctx context.Context, c *CheckResult) error
 	GatherPentagiInfo(ctx context.Context, c *CheckResult) error
 	GatherGraphitiInfo(ctx context.Context, c *CheckResult) error
-	GatherLangfuseInfo(ctx context.Context, c *CheckResult) error
+	GatherNoopTraceInfo(ctx context.Context, c *CheckResult) error
 	GatherObservabilityInfo(ctx context.Context, c *CheckResult) error
 	GatherSystemInfo(ctx context.Context, c *CheckResult) error
 	GatherUpdatesInfo(ctx context.Context, c *CheckResult) error
@@ -163,11 +163,11 @@ func (c *CheckResult) GatherGraphitiInfo(ctx context.Context) error {
 	return c.handler.GatherGraphitiInfo(ctx, c)
 }
 
-func (c *CheckResult) GatherLangfuseInfo(ctx context.Context) error {
+func (c *CheckResult) GatherNoopTraceInfo(ctx context.Context) error {
 	if c.handler == nil {
 		return ErrHandlerNotInitialized
 	}
-	return c.handler.GatherLangfuseInfo(ctx, c)
+	return c.handler.GatherNoopTraceInfo(ctx, c)
 }
 
 func (c *CheckResult) GatherObservabilityInfo(ctx context.Context) error {
@@ -216,7 +216,7 @@ func (c *CheckResult) CanStartAll() bool {
 	if c.GraphitiConnected && !c.GraphitiExternal && c.GraphitiInstalled && !c.GraphitiRunning {
 		return true
 	}
-	if c.LangfuseConnected && !c.LangfuseExternal && c.LangfuseInstalled && !c.LangfuseRunning {
+	if c.NoopTraceConnected && !c.NoopTraceExternal && c.NoopTraceInstalled && !c.NoopTraceRunning {
 		return true
 	}
 	if c.ObservabilityConnected && !c.ObservabilityExternal && c.ObservabilityInstalled && !c.ObservabilityRunning {
@@ -227,7 +227,7 @@ func (c *CheckResult) CanStartAll() bool {
 
 // CanStopAll returns true when any compose stack is running
 func (c *CheckResult) CanStopAll() bool {
-	return c.PentagiRunning || c.GraphitiRunning || c.LangfuseRunning || c.ObservabilityRunning
+	return c.PentagiRunning || c.GraphitiRunning || c.NoopTraceRunning || c.ObservabilityRunning
 }
 
 // CanRestartAll mirrors stop logic (requires running services)
@@ -247,7 +247,7 @@ func (c *CheckResult) CanUpdateAll() bool {
 	if c.GraphitiInstalled && !c.GraphitiIsUpToDate {
 		return true
 	}
-	if c.LangfuseInstalled && !c.LangfuseIsUpToDate {
+	if c.NoopTraceInstalled && !c.NoopTraceIsUpToDate {
 		return true
 	}
 	if c.ObservabilityInstalled && !c.ObservabilityIsUpToDate {
@@ -263,7 +263,7 @@ func (c *CheckResult) CanUpdateInstaller() bool {
 
 // CanFactoryReset returns true when any compose stack is installed
 func (c *CheckResult) CanFactoryReset() bool {
-	return c.PentagiInstalled || c.GraphitiInstalled || c.LangfuseInstalled || c.ObservabilityInstalled
+	return c.PentagiInstalled || c.GraphitiInstalled || c.NoopTraceInstalled || c.ObservabilityInstalled
 }
 
 // CanRemoveAll returns true when any compose stack is installed
@@ -309,7 +309,7 @@ func (h *defaultCheckHandler) GatherAllInfo(ctx context.Context, c *CheckResult)
 	if err := h.GatherGraphitiInfo(ctx, c); err != nil {
 		return err
 	}
-	if err := h.GatherLangfuseInfo(ctx, c); err != nil {
+	if err := h.GatherNoopTraceInfo(ctx, c); err != nil {
 		return err
 	}
 	if err := h.GatherObservabilityInfo(ctx, c); err != nil {
@@ -441,32 +441,32 @@ func (h *defaultCheckHandler) GatherGraphitiInfo(ctx context.Context, c *CheckRe
 	return nil
 }
 
-func (h *defaultCheckHandler) GatherLangfuseInfo(ctx context.Context, c *CheckResult) error {
+func (h *defaultCheckHandler) GatherNoopTraceInfo(ctx context.Context, c *CheckResult) error {
 	h.mx.Lock()
 	defer h.mx.Unlock()
 
-	baseURL := getEnvVar(h.appState, "LANGFUSE_BASE_URL", "")
-	projectID := getEnvVar(h.appState, "LANGFUSE_PROJECT_ID", "")
-	publicKey := getEnvVar(h.appState, "LANGFUSE_PUBLIC_KEY", "")
-	secretKey := getEnvVar(h.appState, "LANGFUSE_SECRET_KEY", "")
+	baseURL := getEnvVar(h.appState, "NOOPTRACE_BASE_URL", "")
+	projectID := getEnvVar(h.appState, "NOOPTRACE_PROJECT_ID", "")
+	publicKey := getEnvVar(h.appState, "NOOPTRACE_PUBLIC_KEY", "")
+	secretKey := getEnvVar(h.appState, "NOOPTRACE_SECRET_KEY", "")
 
-	c.LangfuseConnected = baseURL != "" && projectID != "" && publicKey != "" && secretKey != ""
-	c.LangfuseExternal = baseURL != DefaultLangfuseEndpoint
+	c.NoopTraceConnected = baseURL != "" && projectID != "" && publicKey != "" && secretKey != ""
+	c.NoopTraceExternal = baseURL != DefaultNoopTraceEndpoint
 
 	envDir := filepath.Dir(h.appState.GetEnvPath())
-	langfuseFile := filepath.Join(envDir, LangfuseComposeFile)
-	c.LangfuseExtracted = checkFileExists(langfuseFile)
+	nooptraceFile := filepath.Join(envDir, NoopTraceComposeFile)
+	c.NoopTraceExtracted = checkFileExists(nooptraceFile)
 
 	if h.dockerClient != nil {
-		workerExists, workerRunning := checkContainerExists(ctx, h.dockerClient, LangfuseWorkerContainerName)
-		webExists, webRunning := checkContainerExists(ctx, h.dockerClient, LangfuseWebContainerName)
+		workerExists, workerRunning := checkContainerExists(ctx, h.dockerClient, NoopTraceWorkerContainerName)
+		webExists, webRunning := checkContainerExists(ctx, h.dockerClient, NoopTraceWebContainerName)
 
-		c.LangfuseInstalled = workerExists && webExists
-		c.LangfuseRunning = workerRunning && webRunning
+		c.NoopTraceInstalled = workerExists && webExists
+		c.NoopTraceRunning = workerRunning && webRunning
 
-		// check if langfuse-related volumes exist (indicates previous installation)
-		langfuseVolumes := []string{"langfuse-postgres-data", "langfuse-clickhouse-data", "langfuse-minio-data"}
-		c.LangfuseVolumesExist = checkVolumesExist(ctx, h.dockerClient, langfuseVolumes)
+		// check if nooptrace-related volumes exist (indicates previous installation)
+		nooptraceVolumes := []string{"nooptrace-postgres-data", "nooptrace-clickhouse-data", "nooptrace-minio-data"}
+		c.NoopTraceVolumesExist = checkVolumesExist(ctx, h.dockerClient, nooptraceVolumes)
 	}
 
 	return nil
@@ -502,20 +502,20 @@ func (h *defaultCheckHandler) GatherSystemInfo(ctx context.Context, c *CheckResu
 	c.SysCPUOK = checkCPUResources()
 
 	// memory check and calculations
-	needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability := determineComponentNeeds(c)
+	needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability := determineComponentNeeds(c)
 
 	// calculate required memory using shared function
-	c.SysMemoryRequired = calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability)
+	c.SysMemoryRequired = calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability)
 
 	// get available memory and check if sufficient
 	c.SysMemoryAvailable = getAvailableMemoryGB()
-	c.SysMemoryOK = checkMemoryResources(needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability)
+	c.SysMemoryOK = checkMemoryResources(needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability)
 
 	// disk check and calculations
 	localComponents := countLocalComponentsToInstall(
 		c.PentagiInstalled,
 		c.GraphitiConnected, c.GraphitiExternal, c.GraphitiInstalled,
-		c.LangfuseConnected, c.LangfuseExternal, c.LangfuseInstalled,
+		c.NoopTraceConnected, c.NoopTraceExternal, c.NoopTraceInstalled,
 		c.ObservabilityConnected, c.ObservabilityExternal, c.ObservabilityInstalled,
 	)
 
@@ -531,9 +531,9 @@ func (h *defaultCheckHandler) GatherSystemInfo(ctx context.Context, c *CheckResu
 		c.GraphitiConnected,
 		c.GraphitiExternal,
 		c.GraphitiInstalled,
-		c.LangfuseConnected,
-		c.LangfuseExternal,
-		c.LangfuseInstalled,
+		c.NoopTraceConnected,
+		c.NoopTraceExternal,
+		c.NoopTraceInstalled,
 		c.ObservabilityConnected,
 		c.ObservabilityExternal,
 		c.ObservabilityInstalled,
@@ -560,9 +560,9 @@ func (h *defaultCheckHandler) GatherUpdatesInfo(ctx context.Context, c *CheckRes
 		GraphitiConnected:      c.GraphitiConnected,
 		GraphitiExternal:       c.GraphitiExternal,
 		GraphitiInstalled:      c.GraphitiInstalled,
-		LangfuseConnected:      c.LangfuseConnected,
-		LangfuseExternal:       c.LangfuseExternal,
-		LangfuseInstalled:      c.LangfuseInstalled,
+		NoopTraceConnected:      c.NoopTraceConnected,
+		NoopTraceExternal:       c.NoopTraceExternal,
+		NoopTraceInstalled:      c.NoopTraceInstalled,
 		ObservabilityConnected: c.ObservabilityConnected,
 		ObservabilityExternal:  c.ObservabilityExternal,
 		ObservabilityInstalled: c.ObservabilityInstalled,
@@ -601,17 +601,17 @@ func (h *defaultCheckHandler) GatherUpdatesInfo(ctx context.Context, c *CheckRes
 		}
 	}
 
-	// get Langfuse image info if installed locally
-	if h.dockerClient != nil && c.LangfuseConnected && !c.LangfuseExternal && c.LangfuseInstalled {
-		if workerInfo := getContainerImageInfo(ctx, h.dockerClient, LangfuseWorkerContainerName); workerInfo != nil {
-			request.LangfuseWorkerImageName = &workerInfo.Name
-			request.LangfuseWorkerImageTag = &workerInfo.Tag
-			request.LangfuseWorkerImageHash = &workerInfo.Hash
+	// get NoopTrace image info if installed locally
+	if h.dockerClient != nil && c.NoopTraceConnected && !c.NoopTraceExternal && c.NoopTraceInstalled {
+		if workerInfo := getContainerImageInfo(ctx, h.dockerClient, NoopTraceWorkerContainerName); workerInfo != nil {
+			request.NoopTraceWorkerImageName = &workerInfo.Name
+			request.NoopTraceWorkerImageTag = &workerInfo.Tag
+			request.NoopTraceWorkerImageHash = &workerInfo.Hash
 		}
-		if webInfo := getContainerImageInfo(ctx, h.dockerClient, LangfuseWebContainerName); webInfo != nil {
-			request.LangfuseWebImageName = &webInfo.Name
-			request.LangfuseWebImageTag = &webInfo.Tag
-			request.LangfuseWebImageHash = &webInfo.Hash
+		if webInfo := getContainerImageInfo(ctx, h.dockerClient, NoopTraceWebContainerName); webInfo != nil {
+			request.NoopTraceWebImageName = &webInfo.Name
+			request.NoopTraceWebImageTag = &webInfo.Tag
+			request.NoopTraceWebImageHash = &webInfo.Hash
 		}
 	}
 
@@ -635,7 +635,7 @@ func (h *defaultCheckHandler) GatherUpdatesInfo(ctx context.Context, c *CheckRes
 		c.InstallerIsUpToDate = response.InstallerIsUpToDate
 		c.PentagiIsUpToDate = response.PentagiIsUpToDate
 		c.GraphitiIsUpToDate = response.GraphitiIsUpToDate
-		c.LangfuseIsUpToDate = response.LangfuseIsUpToDate
+		c.NoopTraceIsUpToDate = response.NoopTraceIsUpToDate
 		c.ObservabilityIsUpToDate = response.ObservabilityIsUpToDate
 		c.WorkerIsUpToDate = response.WorkerIsUpToDate
 	} else {
@@ -643,7 +643,7 @@ func (h *defaultCheckHandler) GatherUpdatesInfo(ctx context.Context, c *CheckRes
 		c.InstallerIsUpToDate = false
 		c.PentagiIsUpToDate = false
 		c.GraphitiIsUpToDate = false
-		c.LangfuseIsUpToDate = false
+		c.NoopTraceIsUpToDate = false
 		c.ObservabilityIsUpToDate = false
 	}
 

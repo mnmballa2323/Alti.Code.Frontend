@@ -29,7 +29,7 @@ var filesToExcludeFromVerification = []string{
 var allStacks = []ProductStack{
 	ProductStackPentagi,
 	ProductStackGraphiti,
-	ProductStackLangfuse,
+	ProductStackNoopTrace,
 	ProductStackObservability,
 }
 
@@ -55,8 +55,8 @@ func (fs *fileSystemOperationsImpl) ensureStackIntegrity(ctx context.Context, st
 	case ProductStackGraphiti:
 		return fs.ensureFileFromEmbed(composeFileGraphiti, state)
 
-	case ProductStackLangfuse:
-		return fs.ensureFileFromEmbed(composeFileLangfuse, state)
+	case ProductStackNoopTrace:
+		return fs.ensureFileFromEmbed(composeFileNoopTrace, state)
 
 	case ProductStackObservability:
 		errCompose := fs.ensureFileFromEmbed(composeFileObservability, state)
@@ -88,8 +88,8 @@ func (fs *fileSystemOperationsImpl) verifyStackIntegrity(ctx context.Context, st
 	case ProductStackGraphiti:
 		return fs.verifyFileIntegrity(composeFileGraphiti, state)
 
-	case ProductStackLangfuse:
-		return fs.verifyFileIntegrity(composeFileLangfuse, state)
+	case ProductStackNoopTrace:
+		return fs.verifyFileIntegrity(composeFileNoopTrace, state)
 
 	case ProductStackObservability:
 		if err := fs.verifyFileIntegrity(composeFileObservability, state); err != nil {
@@ -122,8 +122,8 @@ func (fs *fileSystemOperationsImpl) checkStackIntegrity(ctx context.Context, sta
 	case ProductStackGraphiti:
 		result[composeFileGraphiti] = fs.checkFileIntegrity(composeFileGraphiti)
 
-	case ProductStackLangfuse:
-		result[composeFileLangfuse] = fs.checkFileIntegrity(composeFileLangfuse)
+	case ProductStackNoopTrace:
+		result[composeFileNoopTrace] = fs.checkFileIntegrity(composeFileNoopTrace)
 
 	case ProductStackObservability:
 		result[composeFileObservability] = fs.checkFileIntegrity(composeFileObservability)
@@ -166,8 +166,8 @@ func (fs *fileSystemOperationsImpl) cleanupStackFiles(ctx context.Context, stack
 	case ProductStackGraphiti:
 		filesToRemove = append(filesToRemove, filepath.Join(workingDir, composeFileGraphiti))
 
-	case ProductStackLangfuse:
-		filesToRemove = append(filesToRemove, filepath.Join(workingDir, composeFileLangfuse))
+	case ProductStackNoopTrace:
+		filesToRemove = append(filesToRemove, filepath.Join(workingDir, composeFileNoopTrace))
 
 	case ProductStackObservability:
 		filesToRemove = append(filesToRemove, filepath.Join(workingDir, composeFileObservability))

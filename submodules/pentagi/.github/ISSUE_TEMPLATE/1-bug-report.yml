@@ -21,7 +21,7 @@ body:
         - Security Tools Integration
         - Memory System (Vector Store/Knowledge Base)
         - Monitoring Stack Integration (Grafana/OpenTelemetry)
-        - Analytics Platform Integration (Langfuse)
+        - Analytics Platform Integration (NoopTrace)
         - External Integrations (LLM/Search APIs)
         - Documentation and User Experience
         - Other (please specify in the description)
@@ -51,7 +51,7 @@ body:
         1. Access PentAGI Web UI at [relative URL]
         2. Start a new flow with parameters [...] or prompt [...]
         3. Configure target system as [...]
-        4. Observe AI agent behavior in [...] or log from Langfuse
+        4. Observe AI agent behavior in [...] or log from NoopTrace
         5. Error occurs when [...] or screenshot/export logs from Grafana
     validations:
       required: true
@@ -75,7 +75,7 @@ body:
           - Disk Space: [e.g., 50GB free]
         
         Enabled Features:
-        - [ ] Langfuse Analytics
+        - [ ] NoopTrace Analytics
         - [ ] Grafana Monitoring
         - [ ] Custom LLM Server
         
@@ -91,7 +91,7 @@ body:
         Please provide relevant logs and artifacts. You can find logs using:
         - Docker logs: `docker logs pentagi`
         - Grafana dashboards (if enabled)
-        - Langfuse traces (if enabled)
+        - NoopTrace traces (if enabled)
         - Browser console logs (for UI issues)
       placeholder: |
         ```
@@ -107,7 +107,7 @@ body:
       description: |
         If applicable, add screenshots or recordings to help explain your problem.
         - For UI issues: Browser screenshots/recordings
-        - For agent behavior: Langfuse trace screenshots
+        - For agent behavior: NoopTrace trace screenshots
         - For monitoring: Grafana dashboard screenshots
       placeholder: Drag and drop images/videos here, or paste links to external storage.
     validations:

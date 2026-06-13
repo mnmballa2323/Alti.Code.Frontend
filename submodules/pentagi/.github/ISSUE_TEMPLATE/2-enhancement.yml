@@ -21,7 +21,7 @@ body:
         - Security Tools Integration
         - Memory System (Vector Store/Knowledge Base)
         - Monitoring Stack (Grafana/OpenTelemetry)
-        - Analytics Platform (Langfuse)
+        - Analytics Platform (NoopTrace)
         - External Integrations (LLM/Search APIs)
         - Documentation and User Experience
     validations:

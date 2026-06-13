@@ -243,7 +243,7 @@ func (d *dockerOperationsImpl) ensureMainDockerNetworks(ctx context.Context, sta
 	required := []string{
 		string(ProductDockerNetworkPentagi),
 		string(ProductDockerNetworkObservability),
-		string(ProductDockerNetworkLangfuse),
+		string(ProductDockerNetworkNoopTrace),
 	}
 
 	for _, net := range required {

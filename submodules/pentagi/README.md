@@ -78,23 +78,23 @@ flowchart TB
     (OpenAI/Anthropic/Ollama/Bedrock/Gemini/Custom)"]
     search["🔍 search-systems
     (Google/DuckDuckGo/Tavily/Traversaal/Searxng)"]
-    langfuse["📊 langfuse-ui
+    nooptrace["📊 nooptrace-ui
     (LLM Observability Dashboard)"]
     grafana["📈 grafana
     (System Monitoring Dashboard)"]
 
     pentester --> |Uses HTTPS| pentagi
-    pentester --> |Monitors AI HTTPS| langfuse
+    pentester --> |Monitors AI HTTPS| nooptrace
     pentester --> |Monitors System HTTPS| grafana
     pentagi --> |Tests Various protocols| target
     pentagi --> |Queries HTTPS| llm
     pentagi --> |Searches HTTPS| search
-    pentagi --> |Reports HTTPS| langfuse
+    pentagi --> |Reports HTTPS| nooptrace
     pentagi --> |Reports HTTPS| grafana
 
     class pentester person
     class pentagi system
-    class target,llm,search,langfuse,grafana external
+    class target,llm,search,nooptrace,grafana external
 
     linkStyle default stroke:#ffffff,color:#ffffff
 ```
@@ -126,7 +126,7 @@ graph TB
     end
 
     subgraph Analytics
-        Langfuse[Langfuse<br/>LLM Analytics]
+        NoopTrace[NoopTrace<br/>LLM Analytics]
         ClickHouse[ClickHouse<br/>Analytics DB]
         Redis[Redis<br/>Cache + Rate Limiter]
         MinIO[MinIO<br/>S3 Storage]
@@ -155,10 +155,10 @@ graph TB
     Grafana --> |Query| Jaeger
     Grafana --> |Query| Loki
 
-    API --> |Analytics| Langfuse
-    Langfuse --> |Store| ClickHouse
-    Langfuse --> |Cache| Redis
-    Langfuse --> |Files| MinIO
+    API --> |Analytics| NoopTrace
+    NoopTrace --> |Store| ClickHouse
+    NoopTrace --> |Cache| Redis
+    NoopTrace --> |Files| MinIO
 
     classDef core fill:#f9f,stroke:#333,stroke-width:2px,color:#000
     classDef knowledge fill:#ffa,stroke:#333,stroke-width:2px,color:#000
@@ -169,7 +169,7 @@ graph TB
     class UI,API,DB,MQ,Agent core
     class Graphiti,Neo4j knowledge
     class Grafana,VictoriaMetrics,Jaeger,Loki,OTEL monitoring
-    class Langfuse,ClickHouse,Redis,MinIO analytics
+    class NoopTrace,ClickHouse,Redis,MinIO analytics
     class Scraper,PenTest tools
 ```
 
@@ -449,7 +449,7 @@ The architecture of PentAGI is designed to be modular, scalable, and secure. Her
    - Loki: Scalable log aggregation and analysis
 
 4. **Analytics Platform**
-   - Langfuse: Advanced LLM observability and performance analytics
+   - NoopTrace: Advanced LLM observability and performance analytics
    - ClickHouse: Column-oriented analytics data warehouse
    - Redis: High-speed caching and rate limiting
    - MinIO: S3-compatible object storage for artifacts
@@ -650,7 +650,7 @@ docker compose up -d
 Visit [localhost:8443](https://localhost:8443) to access PentAGI Web UI (default is `admin@pentagi.com` / `admin`)
 
 > [!NOTE]
-> If you caught an error about `pentagi-network` or `observability-network` or `langfuse-network` you need to run `docker-compose.yml` firstly to create these networks and after that run `docker-compose-langfuse.yml`, `docker-compose-graphiti.yml`, and `docker-compose-observability.yml` to use Langfuse, Graphiti, and Observability services.
+> If you caught an error about `pentagi-network` or `observability-network` or `nooptrace-network` you need to run `docker-compose.yml` firstly to create these networks and after that run `docker-compose-nooptrace.yml`, `docker-compose-graphiti.yml`, and `docker-compose-observability.yml` to use NoopTrace, Graphiti, and Observability services.
 >
 > You have to set at least one Language Model provider (OpenAI, Anthropic, Gemini, AWS Bedrock, or Ollama) to use PentAGI. AWS Bedrock provides enterprise-grade access to multiple foundation models from leading AI companies, while Ollama provides zero-cost local inference if you have sufficient computational resources. Additional API keys for search engines are optional but recommended for better results.
 >
@@ -1266,60 +1266,60 @@ For advanced configuration options and detailed setup instructions, please visit
 
 ## 🔧 Advanced Setup
 
-### Langfuse Integration
+### NoopTrace Integration
 
-Langfuse provides advanced capabilities for monitoring and analyzing AI agent operations.
+NoopTrace provides advanced capabilities for monitoring and analyzing AI agent operations.
 
-1. Configure Langfuse environment variables in existing `.env` file.
+1. Configure NoopTrace environment variables in existing `.env` file.
 
 <details>
-    <summary>Langfuse valuable environment variables</summary>
+    <summary>NoopTrace valuable environment variables</summary>
 
 ### Database Credentials
-- `LANGFUSE_POSTGRES_USER` and `LANGFUSE_POSTGRES_PASSWORD` - Langfuse PostgreSQL credentials
-- `LANGFUSE_CLICKHOUSE_USER` and `LANGFUSE_CLICKHOUSE_PASSWORD` - ClickHouse credentials
-- `LANGFUSE_REDIS_AUTH` - Redis password
+- `NOOPTRACE_POSTGRES_USER` and `NOOPTRACE_POSTGRES_PASSWORD` - NoopTrace PostgreSQL credentials
+- `NOOPTRACE_CLICKHOUSE_USER` and `NOOPTRACE_CLICKHOUSE_PASSWORD` - ClickHouse credentials
+- `NOOPTRACE_REDIS_AUTH` - Redis password
 
 ### Encryption and Security Keys
-- `LANGFUSE_SALT` - Salt for hashing in Langfuse Web UI
-- `LANGFUSE_ENCRYPTION_KEY` - Encryption key (32 bytes in hex)
-- `LANGFUSE_NEXTAUTH_SECRET` - Secret key for NextAuth
+- `NOOPTRACE_SALT` - Salt for hashing in NoopTrace Web UI
+- `NOOPTRACE_ENCRYPTION_KEY` - Encryption key (32 bytes in hex)
+- `NOOPTRACE_NEXTAUTH_SECRET` - Secret key for NextAuth
 
 ### Admin Credentials
-- `LANGFUSE_INIT_USER_EMAIL` - Admin email
-- `LANGFUSE_INIT_USER_PASSWORD` - Admin password
-- `LANGFUSE_INIT_USER_NAME` - Admin username
+- `NOOPTRACE_INIT_USER_EMAIL` - Admin email
+- `NOOPTRACE_INIT_USER_PASSWORD` - Admin password
+- `NOOPTRACE_INIT_USER_NAME` - Admin username
 
 ### API Keys and Tokens
-- `LANGFUSE_INIT_PROJECT_PUBLIC_KEY` - Project public key (used from PentAGI side too)
-- `LANGFUSE_INIT_PROJECT_SECRET_KEY` - Project secret key (used from PentAGI side too)
+- `NOOPTRACE_INIT_PROJECT_PUBLIC_KEY` - Project public key (used from PentAGI side too)
+- `NOOPTRACE_INIT_PROJECT_SECRET_KEY` - Project secret key (used from PentAGI side too)
 
 ### S3 Storage
-- `LANGFUSE_S3_ACCESS_KEY_ID` - S3 access key ID
-- `LANGFUSE_S3_SECRET_ACCESS_KEY` - S3 secret access key
+- `NOOPTRACE_S3_ACCESS_KEY_ID` - S3 access key ID
+- `NOOPTRACE_S3_SECRET_ACCESS_KEY` - S3 secret access key
 
 </details>
 
-2. Enable integration with Langfuse for PentAGI service in `.env` file.
+2. Enable integration with NoopTrace for PentAGI service in `.env` file.
 
 ```bash
-LANGFUSE_BASE_URL=http://langfuse-web:3000
-LANGFUSE_PROJECT_ID= # default: value from ${LANGFUSE_INIT_PROJECT_ID}
-LANGFUSE_PUBLIC_KEY= # default: value from ${LANGFUSE_INIT_PROJECT_PUBLIC_KEY}
-LANGFUSE_SECRET_KEY= # default: value from ${LANGFUSE_INIT_PROJECT_SECRET_KEY}
+NOOPTRACE_BASE_URL=http://nooptrace-web:3000
+NOOPTRACE_PROJECT_ID= # default: value from ${NOOPTRACE_INIT_PROJECT_ID}
+NOOPTRACE_PUBLIC_KEY= # default: value from ${NOOPTRACE_INIT_PROJECT_PUBLIC_KEY}
+NOOPTRACE_SECRET_KEY= # default: value from ${NOOPTRACE_INIT_PROJECT_SECRET_KEY}
 ```
 
-3. Run the Langfuse stack:
+3. Run the NoopTrace stack:
 
 ```bash
-curl -O https://raw.githubusercontent.com/vxcontrol/pentagi/master/docker-compose-langfuse.yml
-docker compose -f docker-compose.yml -f docker-compose-langfuse.yml up -d
+curl -O https://raw.githubusercontent.com/vxcontrol/pentagi/master/docker-compose-nooptrace.yml
+docker compose -f docker-compose.yml -f docker-compose-nooptrace.yml up -d
 ```
 
-Visit [localhost:4000](http://localhost:4000) to access Langfuse Web UI with credentials from `.env` file:
+Visit [localhost:4000](http://localhost:4000) to access NoopTrace Web UI with credentials from `.env` file:
 
-- `LANGFUSE_INIT_USER_EMAIL` - Admin email
-- `LANGFUSE_INIT_USER_PASSWORD` - Admin password
+- `NOOPTRACE_INIT_USER_EMAIL` - Admin email
+- `NOOPTRACE_INIT_USER_PASSWORD` - Admin password
 
 ### Monitoring and Observability
 
@@ -1341,20 +1341,20 @@ docker compose -f docker-compose.yml -f docker-compose-observability.yml up -d
 Visit [localhost:3000](http://localhost:3000) to access Grafana Web UI.
 
 > [!NOTE]
-> If you want to use Observability stack with Langfuse, you need to enable integration in `.env` file to set `LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT` to `http://otelcol:4318`.
+> If you want to use Observability stack with NoopTrace, you need to enable integration in `.env` file to set `NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT` to `http://otelcol:4318`.
 >
-> To run all available stacks together (Langfuse, Graphiti, and Observability):
+> To run all available stacks together (NoopTrace, Graphiti, and Observability):
 >
 > ```bash
-> docker compose -f docker-compose.yml -f docker-compose-langfuse.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml up -d
+> docker compose -f docker-compose.yml -f docker-compose-nooptrace.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml up -d
 > ```
 >
 > You can also register aliases for these commands in your shell to run it faster:
 >
 > ```bash
-> alias pentagi="docker compose -f docker-compose.yml -f docker-compose-langfuse.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml"
-> alias pentagi-up="docker compose -f docker-compose.yml -f docker-compose-langfuse.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml up -d"
-> alias pentagi-down="docker compose -f docker-compose.yml -f docker-compose-langfuse.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml down"
+> alias pentagi="docker compose -f docker-compose.yml -f docker-compose-nooptrace.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml"
+> alias pentagi-up="docker compose -f docker-compose.yml -f docker-compose-nooptrace.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml up -d"
+> alias pentagi-down="docker compose -f docker-compose.yml -f docker-compose-nooptrace.yml -f docker-compose-graphiti.yml -f docker-compose-observability.yml down"
 > ```
 
 ### Knowledge Graph Integration (Graphiti)
@@ -1513,7 +1513,7 @@ For generating ORM methods (database package) from sqlc configuration
 docker run --rm -v $(pwd):/src -w /src --network pentagi-network -e DATABASE_URL="{URL}" sqlc/sqlc generate -f sqlc/sqlc.yml
 ```
 
-For generating Langfuse SDK from OpenAPI specification
+For generating NoopTrace SDK from OpenAPI specification
 
 ```bash
 fern generate --local
@@ -2090,7 +2090,7 @@ PentAGI includes a versatile utility called `ftester` for debugging, testing, an
 - **Interactive Input**: Fill function arguments interactively for exploratory testing
 - **Detailed Output**: Color-coded terminal output with formatted responses and errors
 - **Context-Aware Testing**: Debug AI agents within the context of specific flows, tasks, and subtasks
-- **Observability Integration**: All function calls are logged to Langfuse and Observability stack
+- **Observability Integration**: All function calls are logged to NoopTrace and Observability stack
 
 ### Usage Modes
 
@@ -2257,7 +2257,7 @@ When developing new prompt templates or agent behaviors:
 1. Create a test flow in the UI
 2. Use ftester to directly invoke the agent with different prompts
 3. Observe responses and adjust prompts accordingly
-4. Check Langfuse for detailed traces of all function calls
+4. Check NoopTrace for detailed traces of all function calls
 
 ### Verifying Docker Container Setup
 
@@ -2292,13 +2292,13 @@ This is particularly useful for production deployments where you don't have a lo
 
 All function calls made through ftester are logged to:
 
-1. **Langfuse**: Captures the entire AI agent interaction chain, including prompts, responses, and function calls
+1. **NoopTrace**: Captures the entire AI agent interaction chain, including prompts, responses, and function calls
 2. **OpenTelemetry**: Records metrics, traces, and logs for system performance analysis
 3. **Terminal Output**: Provides immediate feedback on function execution
 
 To access detailed logs:
 
-- Check Langfuse UI for AI agent traces (typically at `http://localhost:4000`)
+- Check NoopTrace UI for AI agent traces (typically at `http://localhost:4000`)
 - Use Grafana dashboards for system metrics (typically at `http://localhost:3000`)
 - Examine terminal output for immediate function results and errors
 

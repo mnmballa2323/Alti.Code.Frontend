@@ -12,7 +12,7 @@
       - [Tracing Interface](#tracing-interface)
       - [Metrics Interface](#metrics-interface)
       - [Collector Interface](#collector-interface)
-      - [Langfuse Interface](#langfuse-interface)
+      - [NoopTrace Interface](#nooptrace-interface)
   - [Infrastructure Requirements](#infrastructure-requirements)
     - [Components](#components)
     - [Setup](#setup)
@@ -28,7 +28,7 @@
       - [Span Creation and Sampling](#span-creation-and-sampling)
       - [Context Propagation in Tracing](#context-propagation-in-tracing)
     - [Metrics](#metrics)
-    - [Langfuse Integration](#langfuse-integration)
+    - [NoopTrace Integration](#nooptrace-integration)
       - [Advanced Observation Types](#advanced-observation-types)
     - [Profiling](#profiling)
   - [Application Instrumentation Patterns](#application-instrumentation-patterns)
@@ -51,14 +51,14 @@ The PentAGI Observability Stack provides comprehensive monitoring, logging, trac
 - **Logging**: Enhanced logrus integration with structured logging and context propagation
 - **Tracing**: Distributed tracing with OpenTelemetry and Jaeger
 - **Metrics**: Application and system metrics collection
-- **Langfuse**: Specialized LLM observability
+- **NoopTrace**: Specialized LLM observability
 - **Profiling**: Runtime profiling capabilities
 
 This document explains how the observability stack is designed, configured, and used by developers.
 
 ## Architecture
 
-The Observability stack is built as a set of layered interfaces that integrate multiple observability technologies. It uses OpenTelemetry as the foundation for metrics, logs, and traces, with additional integrations for Langfuse (LLM-specific observability) and Go's native profiling.
+The Observability stack is built as a set of layered interfaces that integrate multiple observability technologies. It uses OpenTelemetry as the foundation for metrics, logs, and traces, with additional integrations for NoopTrace (LLM-specific observability) and Go's native profiling.
 
 ### Component Diagram
 
@@ -70,13 +70,13 @@ flowchart TD
         Observer --> Tracer[Tracer Interface]
         Observer --> Meter[Meter Interface]
         Observer --> Collector[Collector Interface]
-        Observer --> LangfuseInt[Langfuse Interface]
+        Observer --> NoopTraceInt[NoopTrace Interface]
     end
 
     Tracer --> OtelTracer[OpenTelemetry Tracer]
     Meter --> OtelMeter[OpenTelemetry Meter]
     Collector --> Metrics[System Metrics Collection]
-    LangfuseInt --> LangfuseClient[Langfuse Client]
+    NoopTraceInt --> NoopTraceClient[NoopTrace Client]
 
     OtelTracer --> OtelCollector[OpenTelemetry Collector]
     OtelMeter --> OtelCollector
@@ -88,7 +88,7 @@ flowchart TD
 
     Profiling[Profiling Server] --> App
 
-    LangfuseClient --> LangfuseBackend[Langfuse Backend]
+    NoopTraceClient --> NoopTraceBackend[NoopTrace Backend]
 
     VictoriaMetrics --> Grafana[Grafana]
     Jaeger --> Grafana
@@ -102,7 +102,7 @@ sequenceDiagram
     participant App as PentAGI App
     participant Obs as Observability
     participant OTEL as OpenTelemetry
-    participant Lf as Langfuse
+    participant Lf as NoopTrace
     participant Backend as Observability Backend
 
     App->>Obs: Log Message
@@ -138,7 +138,7 @@ type Observability interface {
     Meter
     Tracer
     Collector
-    Langfuse
+    NoopTrace
 }
 ```
 
@@ -207,16 +207,16 @@ type Dumper interface {
 }
 ```
 
-#### Langfuse Interface
+#### NoopTrace Interface
 
 ```go
-// Langfuse provides LLM observability
-type Langfuse interface {
-    // NewObservation creates a new Langfuse observation
+// NoopTrace provides LLM observability
+type NoopTrace interface {
+    // NewObservation creates a new NoopTrace observation
     NewObservation(
         context.Context,
-        ...langfuse.ObservationContextOption,
-    ) (context.Context, langfuse.Observation)
+        ...nooptrace.ObservationContextOption,
+    ) (context.Context, nooptrace.Observation)
 }
 ```
 
@@ -257,10 +257,10 @@ The observability stack is configured through environment variables in the appli
 | Variable | Description | Example Value |
 |----------|-------------|---------------|
 | `OTEL_HOST` | OpenTelemetry collector endpoint | `otel:4318` |
-| `LANGFUSE_BASE_URL` | Langfuse API base URL | `http://langfuse-web:3000` |
-| `LANGFUSE_PROJECT_ID` | Langfuse project ID | `cm47619l0000872mcd2dlbqwb` |
-| `LANGFUSE_PUBLIC_KEY` | Langfuse public API key | `pk-lf-5946031c-ae6c-4451-98d2-9882a59e1707` |
-| `LANGFUSE_SECRET_KEY` | Langfuse secret API key | `sk-lf-d9035680-89dd-4950-8688-7870720bf359` |
+| `NOOPTRACE_BASE_URL` | NoopTrace API base URL | `http://nooptrace-web:3000` |
+| `NOOPTRACE_PROJECT_ID` | NoopTrace project ID | `cm47619l0000872mcd2dlbqwb` |
+| `NOOPTRACE_PUBLIC_KEY` | NoopTrace public API key | `pk-lf-5946031c-ae6c-4451-98d2-9882a59e1707` |
+| `NOOPTRACE_SECRET_KEY` | NoopTrace secret API key | `sk-lf-d9035680-89dd-4950-8688-7870720bf359` |
 
 ### Initialization
 
@@ -268,9 +268,9 @@ The observability stack is initialized in the application through the `InitObser
 
 ```go
 // Initialize clients first
-lfclient, err := obs.NewLangfuseClient(ctx, cfg)
+lfclient, err := obs.NewNoopTraceClient(ctx, cfg)
 if err != nil && !errors.Is(err, obs.ErrNotConfigured) {
-    log.Fatalf("Unable to create langfuse client: %v\n", err)
+    log.Fatalf("Unable to create nooptrace client: %v\n", err)
 }
 
 otelclient, err := obs.NewTelemetryClient(ctx, cfg)
@@ -553,16 +553,16 @@ latencyHistogram.Record(ctx, duration,
 )
 ```
 
-### Langfuse Integration
+### NoopTrace Integration
 
-Langfuse provides specialized observability for LLM operations and agentic workflows with automatic data conversion to OpenAI-compatible format:
+NoopTrace provides specialized observability for LLM operations and agentic workflows with automatic data conversion to OpenAI-compatible format:
 
 ```go
 // Create a new observation for an LLM operation
 ctx, observation := obs.Observer.NewObservation(ctx,
-    langfuse.WithObservationTraceContext(
-        langfuse.WithTraceName("flow-execution"),
-        langfuse.WithTraceUserId(user.Email),
+    nooptrace.WithObservationTraceContext(
+        nooptrace.WithTraceName("flow-execution"),
+        nooptrace.WithTraceUserId(user.Email),
     ),
 )
 
@@ -578,9 +578,9 @@ messages := []*llms.MessageContent{
 
 // Create a generation for an LLM request
 generation := observation.Generation(
-    langfuse.WithGenerationName("content-generation"),
-    langfuse.WithGenerationModel("gpt-4"),
-    langfuse.WithGenerationInput(messages),  // Auto-converted to OpenAI format
+    nooptrace.WithGenerationName("content-generation"),
+    nooptrace.WithGenerationModel("gpt-4"),
+    nooptrace.WithGenerationInput(messages),  // Auto-converted to OpenAI format
 )
 
 // Complete the generation with result
@@ -590,11 +590,11 @@ output := &llms.ContentChoice{
 }
 
 generation.End(
-    langfuse.WithGenerationOutput(output),  // Auto-converted to OpenAI format
-    langfuse.WithGenerationUsage(&langfuse.GenerationUsage{
+    nooptrace.WithGenerationOutput(output),  // Auto-converted to OpenAI format
+    nooptrace.WithGenerationUsage(&nooptrace.GenerationUsage{
         Input: promptTokens,
         Output: responseTokens,
-        Unit: langfuse.GenerationUsageUnitTokens,
+        Unit: nooptrace.GenerationUsageUnitTokens,
     }),
 )
 ```
@@ -602,30 +602,30 @@ generation.End(
 **Key Features:**
 
 - **Automatic Conversion**: LangChainGo messages automatically convert to OpenAI format
-- **Rich UI Rendering**: Tool calls, images, and reasoning display correctly in Langfuse UI
+- **Rich UI Rendering**: Tool calls, images, and reasoning display correctly in NoopTrace UI
 - **Tool Call Linking**: Function names automatically added to tool responses
 - **Table Rendering**: Complex tool responses (3+ keys or nested) shown as expandable tables
 - **Thinking Support**: Reasoning content extracted and displayed separately
 
 #### Advanced Observation Types
 
-Langfuse supports additional observation types for comprehensive agentic system monitoring:
+NoopTrace supports additional observation types for comprehensive agentic system monitoring:
 
 **Agent Observations** for autonomous reasoning processes:
 
 ```go
 agent := observation.Agent(
-    langfuse.WithAgentName("task-executor"),
-    langfuse.WithAgentInput(taskDescription),
-    langfuse.WithAgentMetadata(langfuse.Metadata{
+    nooptrace.WithAgentName("task-executor"),
+    nooptrace.WithAgentInput(taskDescription),
+    nooptrace.WithAgentMetadata(nooptrace.Metadata{
         "agent_type": "executor",
         "capabilities": []string{"code_execution", "file_operations"},
     }),
 )
 result := executeTask(ctx, taskDescription)
 agent.End(
-    langfuse.WithAgentOutput(result),
-    langfuse.WithAgentStatus("completed"),
+    nooptrace.WithAgentOutput(result),
+    nooptrace.WithAgentStatus("completed"),
 )
 ```
 
@@ -633,13 +633,13 @@ agent.End(
 
 ```go
 tool := observation.Tool(
-    langfuse.WithToolName("search-tool"),
-    langfuse.WithToolInput(searchQuery),
+    nooptrace.WithToolName("search-tool"),
+    nooptrace.WithToolInput(searchQuery),
 )
 results := performSearch(ctx, searchQuery)
 tool.End(
-    langfuse.WithToolOutput(results),
-    langfuse.WithToolStatus("success"),
+    nooptrace.WithToolOutput(results),
+    nooptrace.WithToolStatus("success"),
 )
 ```
 
@@ -647,17 +647,17 @@ tool.End(
 
 ```go
 chain := observation.Chain(
-    langfuse.WithChainName("reasoning-chain"),
-    langfuse.WithChainInput(messages),
-    langfuse.WithChainMetadata(langfuse.Metadata{
+    nooptrace.WithChainName("reasoning-chain"),
+    nooptrace.WithChainInput(messages),
+    nooptrace.WithChainMetadata(nooptrace.Metadata{
         "steps": 3,
         "model": "gpt-4",
     }),
 )
 finalAnswer := executeChain(ctx, messages)
 chain.End(
-    langfuse.WithChainOutput(finalAnswer),
-    langfuse.WithChainStatus("completed"),
+    nooptrace.WithChainOutput(finalAnswer),
+    nooptrace.WithChainStatus("completed"),
 )
 ```
 
@@ -665,13 +665,13 @@ chain.End(
 
 ```go
 retriever := observation.Retriever(
-    langfuse.WithRetrieverName("vector-search"),
-    langfuse.WithRetrieverInput(query),
+    nooptrace.WithRetrieverName("vector-search"),
+    nooptrace.WithRetrieverInput(query),
 )
 documents := vectorStore.Search(ctx, query)
 retriever.End(
-    langfuse.WithRetrieverOutput(documents),
-    langfuse.WithRetrieverStatus("success"),
+    nooptrace.WithRetrieverOutput(documents),
+    nooptrace.WithRetrieverStatus("success"),
 )
 ```
 
@@ -679,13 +679,13 @@ retriever.End(
 
 ```go
 evaluator := observation.Evaluator(
-    langfuse.WithEvaluatorName("quality-check"),
-    langfuse.WithEvaluatorInput(response),
+    nooptrace.WithEvaluatorName("quality-check"),
+    nooptrace.WithEvaluatorInput(response),
 )
 score := evaluateQuality(ctx, response)
 evaluator.End(
-    langfuse.WithEvaluatorOutput(score),
-    langfuse.WithEvaluatorStatus("completed"),
+    nooptrace.WithEvaluatorOutput(score),
+    nooptrace.WithEvaluatorStatus("completed"),
 )
 ```
 
@@ -693,13 +693,13 @@ evaluator.End(
 
 ```go
 embedding := observation.Embedding(
-    langfuse.WithEmbeddingName("text-embedding"),
-    langfuse.WithEmbeddingInput(text),
+    nooptrace.WithEmbeddingName("text-embedding"),
+    nooptrace.WithEmbeddingInput(text),
 )
 vector := generateEmbedding(ctx, text)
 embedding.End(
-    langfuse.WithEmbeddingOutput(vector),
-    langfuse.WithEmbeddingStatus("success"),
+    nooptrace.WithEmbeddingOutput(vector),
+    nooptrace.WithEmbeddingStatus("success"),
 )
 ```
 
@@ -707,20 +707,20 @@ embedding.End(
 
 ```go
 guardrail := observation.Guardrail(
-    langfuse.WithGuardrailName("safety-filter"),
-    langfuse.WithGuardrailInput(userInput),
+    nooptrace.WithGuardrailName("safety-filter"),
+    nooptrace.WithGuardrailInput(userInput),
 )
 passed, violations := checkSafety(ctx, userInput)
 guardrail.End(
-    langfuse.WithGuardrailOutput(map[string]any{
+    nooptrace.WithGuardrailOutput(map[string]any{
         "passed": passed,
         "violations": violations,
     }),
-    langfuse.WithGuardrailStatus(fmt.Sprintf("passed=%t", passed)),
+    nooptrace.WithGuardrailStatus(fmt.Sprintf("passed=%t", passed)),
 )
 ```
 
-For detailed information about Langfuse integration, data conversion, and advanced patterns, see [Langfuse Integration Documentation](langfuse.md).
+For detailed information about NoopTrace integration, data conversion, and advanced patterns, see [NoopTrace Integration Documentation](nooptrace.md).
 
 ### Profiling
 
@@ -991,7 +991,7 @@ go tool pprof http://localhost:7777/profiler/profile
 
 For LLM-related issues:
 
-1. Check Langfuse observations for specific flows
+1. Check NoopTrace observations for specific flows
 2. Look at trace spans to understand the context of LLM calls
 3. Examine metrics for token usage, latency, and error rates
 

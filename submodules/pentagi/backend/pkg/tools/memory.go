@@ -10,7 +10,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vxcontrol/langchaingo/vectorstores"
@@ -70,7 +70,7 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 		}
 
 		isSpecificFilters, globalFilters := getGlobalFilters(filters)
-		metadata := langfuse.Metadata{
+		metadata := nooptrace.Metadata{
 			"tool_name":        name,
 			"message":          action.Message,
 			"limit":            memoryVectorStoreResultLimit,
@@ -82,14 +82,14 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 		}
 
 		retriever := observation.Retriever(
-			langfuse.WithRetrieverName("retrieve memory facts from vector store"),
-			langfuse.WithRetrieverInput(map[string]any{
+			nooptrace.WithRetrieverName("retrieve memory facts from vector store"),
+			nooptrace.WithRetrieverInput(map[string]any{
 				"query":       action.Question,
 				"threshold":   memoryVectorStoreThreshold,
 				"max_results": memoryVectorStoreResultLimit,
 				"filters":     filters,
 			}),
-			langfuse.WithRetrieverMetadata(metadata),
+			nooptrace.WithRetrieverMetadata(metadata),
 		)
 		ctx, observation = retriever.Observation(ctx)
 
@@ -114,8 +114,8 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 		)
 		if err != nil {
 			retriever.End(
-				langfuse.WithRetrieverStatus(err.Error()),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelError),
+				nooptrace.WithRetrieverStatus(err.Error()),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelError),
 			)
 			logger.WithError(err).Error("failed to search for similar documents")
 			return "", fmt.Errorf("failed to search for similar documents: %w", err)
@@ -131,21 +131,21 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 				vectorstores.WithFilters(globalFilters),
 			)
 			observation.Event(
-				langfuse.WithEventName("memory search fallback to global filters"),
-				langfuse.WithEventInput(map[string]any{
+				nooptrace.WithEventName("memory search fallback to global filters"),
+				nooptrace.WithEventInput(map[string]any{
 					"query":       action.Question,
 					"threshold":   memoryVectorStoreThreshold,
 					"max_results": memoryVectorStoreResultLimit,
 					"filters":     globalFilters,
 				}),
-				langfuse.WithEventOutput(docs),
-				langfuse.WithEventStatus("no memory facts found"),
-				langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
+				nooptrace.WithEventOutput(docs),
+				nooptrace.WithEventStatus("no memory facts found"),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
 			)
 			if err != nil {
 				retriever.End(
-					langfuse.WithRetrieverStatus(err.Error()),
-					langfuse.WithRetrieverLevel(langfuse.ObservationLevelError),
+					nooptrace.WithRetrieverStatus(err.Error()),
+					nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelError),
 				)
 				logger.WithError(err).Error("failed to search for similar documents by global filters")
 				return "", fmt.Errorf("failed to search for similar documents by global filters: %w", err)
@@ -154,14 +154,14 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 
 		if len(docs) == 0 {
 			retriever.End(
-				langfuse.WithRetrieverStatus("no memory facts found"),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelWarning),
-				langfuse.WithRetrieverOutput([]any{}),
+				nooptrace.WithRetrieverStatus("no memory facts found"),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelWarning),
+				nooptrace.WithRetrieverOutput([]any{}),
 			)
 			observation.Score(
-				langfuse.WithScoreComment("no memory facts found"),
-				langfuse.WithScoreName("memory_search_result"),
-				langfuse.WithScoreStringValue("not_found"),
+				nooptrace.WithScoreComment("no memory facts found"),
+				nooptrace.WithScoreName("memory_search_result"),
+				nooptrace.WithScoreStringValue("not_found"),
 			)
 			return memoryNotFoundMessage, nil
 		}
@@ -170,17 +170,17 @@ func (m *memory) Handle(ctx context.Context, name string, args json.RawMessage) 
 		// use evaluator observation type to process each document and to get a score
 
 		retriever.End(
-			langfuse.WithRetrieverStatus("success"),
-			langfuse.WithRetrieverLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithRetrieverOutput(docs),
+			nooptrace.WithRetrieverStatus("success"),
+			nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithRetrieverOutput(docs),
 		)
 
 		buffer := strings.Builder{}
 		for i, doc := range docs {
 			observation.Score(
-				langfuse.WithScoreComment("memory facts vector store result"),
-				langfuse.WithScoreName("memory_search_result"),
-				langfuse.WithScoreFloatValue(float64(doc.Score)),
+				nooptrace.WithScoreComment("memory facts vector store result"),
+				nooptrace.WithScoreName("memory_search_result"),
+				nooptrace.WithScoreFloatValue(float64(doc.Score)),
 			)
 			buffer.WriteString(fmt.Sprintf("# Retrieved Memory Fact %d Match score: %f\n\n", i+1, doc.Score))
 			if taskID, ok := doc.Metadata["task_id"]; ok {

@@ -196,8 +196,8 @@ func (m *ApplyChangesFormModel) GetHelpContent() string {
 		sections = append(sections, "")
 
 		// add additional components if selected
-		if config.LangfuseEnabled {
-			sections = append(sections, locale.ApplyChangesInstallFoundLangfuse)
+		if config.NoopTraceEnabled {
+			sections = append(sections, locale.ApplyChangesInstallFoundNoopTrace)
 		}
 		if config.ObservabilityEnabled {
 			sections = append(sections, locale.ApplyChangesInstallFoundObservability)

@@ -53,7 +53,7 @@ This document serves as a comprehensive guide to the configuration system in Pen
     - [Usage Details](#usage-details-11)
   - [Observability Settings](#observability-settings)
     - [Telemetry](#telemetry)
-    - [Langfuse](#langfuse)
+    - [NoopTrace](#nooptrace)
     - [Usage Details](#usage-details-12)
 
 ## Configuration Basics
@@ -1244,14 +1244,14 @@ These settings control the observability and monitoring capabilities, including 
 | ----------------- | -------------------- | ------------- | ------------------------------------------ |
 | TelemetryEndpoint | `OTEL_HOST`          | *(none)*      | Endpoint for OpenTelemetry data collection |
 
-### Langfuse
+### NoopTrace
 
 | Option            | Environment Variable  | Default Value | Description                 |
 | ----------------- | --------------------- | ------------- | --------------------------- |
-| LangfuseBaseURL   | `LANGFUSE_BASE_URL`   | *(none)*      | Base URL for Langfuse API   |
-| LangfuseProjectID | `LANGFUSE_PROJECT_ID` | *(none)*      | Project ID for Langfuse     |
-| LangfusePublicKey | `LANGFUSE_PUBLIC_KEY` | *(none)*      | Public key for Langfuse API |
-| LangfuseSecretKey | `LANGFUSE_SECRET_KEY` | *(none)*      | Secret key for Langfuse API |
+| NoopTraceBaseURL   | `NOOPTRACE_BASE_URL`   | *(none)*      | Base URL for NoopTrace API   |
+| NoopTraceProjectID | `NOOPTRACE_PROJECT_ID` | *(none)*      | Project ID for NoopTrace     |
+| NoopTracePublicKey | `NOOPTRACE_PUBLIC_KEY` | *(none)*      | Public key for NoopTrace API |
+| NoopTraceSecretKey | `NOOPTRACE_SECRET_KEY` | *(none)*      | Secret key for NoopTrace API |
 
 ### Usage Details
 
@@ -1268,25 +1268,25 @@ The observability settings are used in `main.go` and the observability package t
   otelclient, err := obs.NewTelemetryClient(ctx, cfg)
   ```
 
-- **Langfuse Configuration**: Configures Langfuse for LLM operation monitoring:
+- **NoopTrace Configuration**: Configures NoopTrace for LLM operation monitoring:
   ```go
-  // Check if Langfuse is configured
-  if cfg.LangfuseBaseURL == "" {
+  // Check if NoopTrace is configured
+  if cfg.NoopTraceBaseURL == "" {
       return nil, ErrNotConfigured
   }
 
-  // Configure Langfuse client
-  langfuse.WithBaseURL(cfg.LangfuseBaseURL),
-  langfuse.WithPublicKey(cfg.LangfusePublicKey),
-  langfuse.WithSecretKey(cfg.LangfuseSecretKey),
-  langfuse.WithProjectID(cfg.LangfuseProjectID),
+  // Configure NoopTrace client
+  nooptrace.WithBaseURL(cfg.NoopTraceBaseURL),
+  nooptrace.WithPublicKey(cfg.NoopTracePublicKey),
+  nooptrace.WithSecretKey(cfg.NoopTraceSecretKey),
+  nooptrace.WithProjectID(cfg.NoopTraceProjectID),
   ```
 
 - **Integration in Application**: Used in `main.go` to initialize observability:
   ```go
-  lfclient, err := obs.NewLangfuseClient(ctx, cfg)
+  lfclient, err := obs.NewNoopTraceClient(ctx, cfg)
   if err != nil && !errors.Is(err, obs.ErrNotConfigured) {
-      log.Fatalf("Unable to create langfuse client: %v\n", err)
+      log.Fatalf("Unable to create nooptrace client: %v\n", err)
   }
 
   otelclient, err := obs.NewTelemetryClient(ctx, cfg)
@@ -1304,7 +1304,7 @@ The observability settings are used in `main.go` and the observability package t
 
 These settings enable:
 - Comprehensive monitoring of system performance
-- LLM-specific metrics collection via Langfuse
+- LLM-specific metrics collection via NoopTrace
 - Tracing of requests through the system
 - Centralized logging for troubleshooting
 - Performance optimization based on collected metrics

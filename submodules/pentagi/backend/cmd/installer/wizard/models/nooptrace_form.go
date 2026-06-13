@@ -17,18 +17,18 @@ import (
 )
 
 const (
-	LangfuseBaseURLPlaceholder       = "https://cloud.langfuse.com"
-	LangfuseProjectIDPlaceholder     = "cm000000000000000000000000"
-	LangfusePublicKeyPlaceholder     = "pk-lf-00000000-0000-0000-0000-000000000000"
-	LangfuseSecretKeyPlaceholder     = ""
-	LangfuseAdminEmailPlaceholder    = "admin@pentagi.com"
-	LangfuseAdminPasswordPlaceholder = ""
-	LangfuseAdminNamePlaceholder     = "admin"
-	LangfuseLicenseKeyPlaceholder    = "sk-lf-ee-xxxxxxxxxxxxxxxxxxxxxxxx"
+	NoopTraceBaseURLPlaceholder       = "https://cloud.nooptrace.com"
+	NoopTraceProjectIDPlaceholder     = "cm000000000000000000000000"
+	NoopTracePublicKeyPlaceholder     = "pk-lf-00000000-0000-0000-0000-000000000000"
+	NoopTraceSecretKeyPlaceholder     = ""
+	NoopTraceAdminEmailPlaceholder    = "admin@pentagi.com"
+	NoopTraceAdminPasswordPlaceholder = ""
+	NoopTraceAdminNamePlaceholder     = "admin"
+	NoopTraceLicenseKeyPlaceholder    = "sk-lf-ee-xxxxxxxxxxxxxxxxxxxxxxxx"
 )
 
-// LangfuseFormModel represents the Langfuse configuration form
-type LangfuseFormModel struct {
+// NoopTraceFormModel represents the NoopTrace configuration form
+type NoopTraceFormModel struct {
 	*BaseScreen
 
 	// screen-specific components
@@ -36,9 +36,9 @@ type LangfuseFormModel struct {
 	deploymentDelegate *BaseListDelegate
 }
 
-// NewLangfuseFormModel creates a new Langfuse form model
-func NewLangfuseFormModel(c controller.Controller, s styles.Styles, w window.Window) *LangfuseFormModel {
-	m := &LangfuseFormModel{}
+// NewNoopTraceFormModel creates a new NoopTrace form model
+func NewNoopTraceFormModel(c controller.Controller, s styles.Styles, w window.Window) *NoopTraceFormModel {
+	m := &NoopTraceFormModel{}
 
 	m.BaseScreen = NewBaseScreen(c, s, w, m, m)
 	m.initializeDeploymentList(s)
@@ -47,11 +47,11 @@ func NewLangfuseFormModel(c controller.Controller, s styles.Styles, w window.Win
 }
 
 // initializeDeploymentList sets up the deployment type selection list
-func (m *LangfuseFormModel) initializeDeploymentList(styles styles.Styles) {
+func (m *NoopTraceFormModel) initializeDeploymentList(styles styles.Styles) {
 	options := []BaseListOption{
-		{Value: "embedded", Display: locale.MonitoringLangfuseEmbedded},
-		{Value: "external", Display: locale.MonitoringLangfuseExternal},
-		{Value: "disabled", Display: locale.MonitoringLangfuseDisabled},
+		{Value: "embedded", Display: locale.MonitoringNoopTraceEmbedded},
+		{Value: "external", Display: locale.MonitoringNoopTraceExternal},
+		{Value: "disabled", Display: locale.MonitoringNoopTraceDisabled},
 	}
 
 	m.deploymentDelegate = NewBaseListDelegate(
@@ -61,13 +61,13 @@ func (m *LangfuseFormModel) initializeDeploymentList(styles styles.Styles) {
 
 	m.deploymentList = m.GetListHelper().CreateList(options, m.deploymentDelegate, MinMenuWidth-6, 3)
 
-	config := m.GetController().GetLangfuseConfig()
+	config := m.GetController().GetNoopTraceConfig()
 
 	m.GetListHelper().SelectByValue(&m.deploymentList, config.DeploymentType)
 }
 
 // getSelectedDeploymentType returns the currently selected deployment type using the helper
-func (m *LangfuseFormModel) getSelectedDeploymentType() string {
+func (m *NoopTraceFormModel) getSelectedDeploymentType() string {
 	selectedValue := m.GetListHelper().GetSelectedValue(&m.deploymentList)
 	if selectedValue == "" {
 		return "disabled"
@@ -78,8 +78,8 @@ func (m *LangfuseFormModel) getSelectedDeploymentType() string {
 
 // BaseScreenHandler interface implementation
 
-func (m *LangfuseFormModel) BuildForm() tea.Cmd {
-	config := m.GetController().GetLangfuseConfig()
+func (m *NoopTraceFormModel) BuildForm() tea.Cmd {
+	config := m.GetController().GetNoopTraceConfig()
 	fields := []FormField{}
 	deploymentType := m.getSelectedDeploymentType()
 
@@ -87,48 +87,48 @@ func (m *LangfuseFormModel) BuildForm() tea.Cmd {
 	case "embedded":
 		// Embedded mode - requires all fields including admin credentials
 		fields = append(fields, m.createTextField(config, "listen_ip",
-			locale.MonitoringLangfuseListenIP, locale.MonitoringLangfuseListenIPDesc, false, "",
+			locale.MonitoringNoopTraceListenIP, locale.MonitoringNoopTraceListenIPDesc, false, "",
 		))
 		fields = append(fields, m.createTextField(config, "listen_port",
-			locale.MonitoringLangfuseListenPort, locale.MonitoringLangfuseListenPortDesc, false, "",
+			locale.MonitoringNoopTraceListenPort, locale.MonitoringNoopTraceListenPortDesc, false, "",
 		))
 		fields = append(fields, m.createTextField(config, "project_id",
-			locale.MonitoringLangfuseProjectID, locale.MonitoringLangfuseProjectIDDesc, false, LangfuseProjectIDPlaceholder,
+			locale.MonitoringNoopTraceProjectID, locale.MonitoringNoopTraceProjectIDDesc, false, NoopTraceProjectIDPlaceholder,
 		))
 		fields = append(fields, m.createTextField(config, "public_key",
-			locale.MonitoringLangfusePublicKey, locale.MonitoringLangfusePublicKeyDesc, true, LangfusePublicKeyPlaceholder,
+			locale.MonitoringNoopTracePublicKey, locale.MonitoringNoopTracePublicKeyDesc, true, NoopTracePublicKeyPlaceholder,
 		))
 		fields = append(fields, m.createTextField(config, "secret_key",
-			locale.MonitoringLangfuseSecretKey, locale.MonitoringLangfuseSecretKeyDesc, true, LangfuseSecretKeyPlaceholder,
+			locale.MonitoringNoopTraceSecretKey, locale.MonitoringNoopTraceSecretKeyDesc, true, NoopTraceSecretKeyPlaceholder,
 		))
 		if !config.Installed {
 			fields = append(fields, m.createTextField(config, "admin_email",
-				locale.MonitoringLangfuseAdminEmail, locale.MonitoringLangfuseAdminEmailDesc, false, LangfuseAdminEmailPlaceholder,
+				locale.MonitoringNoopTraceAdminEmail, locale.MonitoringNoopTraceAdminEmailDesc, false, NoopTraceAdminEmailPlaceholder,
 			))
 			fields = append(fields, m.createTextField(config, "admin_password",
-				locale.MonitoringLangfuseAdminPassword, locale.MonitoringLangfuseAdminPasswordDesc, true, LangfuseAdminPasswordPlaceholder,
+				locale.MonitoringNoopTraceAdminPassword, locale.MonitoringNoopTraceAdminPasswordDesc, true, NoopTraceAdminPasswordPlaceholder,
 			))
 			fields = append(fields, m.createTextField(config, "admin_name",
-				locale.MonitoringLangfuseAdminName, locale.MonitoringLangfuseAdminNameDesc, false, LangfuseAdminNamePlaceholder,
+				locale.MonitoringNoopTraceAdminName, locale.MonitoringNoopTraceAdminNameDesc, false, NoopTraceAdminNamePlaceholder,
 			))
 		}
 		fields = append(fields, m.createTextField(config, "license_key",
-			locale.MonitoringLangfuseLicenseKey, locale.MonitoringLangfuseLicenseKeyDesc, true, LangfuseLicenseKeyPlaceholder,
+			locale.MonitoringNoopTraceLicenseKey, locale.MonitoringNoopTraceLicenseKeyDesc, true, NoopTraceLicenseKeyPlaceholder,
 		))
 
 	case "external":
 		// External mode - requires connection details only
 		fields = append(fields, m.createTextField(config, "base_url",
-			locale.MonitoringLangfuseBaseURL, locale.MonitoringLangfuseBaseURLDesc, false, LangfuseBaseURLPlaceholder,
+			locale.MonitoringNoopTraceBaseURL, locale.MonitoringNoopTraceBaseURLDesc, false, NoopTraceBaseURLPlaceholder,
 		))
 		fields = append(fields, m.createTextField(config, "project_id",
-			locale.MonitoringLangfuseProjectID, locale.MonitoringLangfuseProjectIDDesc, false, LangfuseProjectIDPlaceholder,
+			locale.MonitoringNoopTraceProjectID, locale.MonitoringNoopTraceProjectIDDesc, false, NoopTraceProjectIDPlaceholder,
 		))
 		fields = append(fields, m.createTextField(config, "public_key",
-			locale.MonitoringLangfusePublicKey, locale.MonitoringLangfusePublicKeyDesc, true, LangfusePublicKeyPlaceholder,
+			locale.MonitoringNoopTracePublicKey, locale.MonitoringNoopTracePublicKeyDesc, true, NoopTracePublicKeyPlaceholder,
 		))
 		fields = append(fields, m.createTextField(config, "secret_key",
-			locale.MonitoringLangfuseSecretKey, locale.MonitoringLangfuseSecretKeyDesc, true, LangfuseSecretKeyPlaceholder,
+			locale.MonitoringNoopTraceSecretKey, locale.MonitoringNoopTraceSecretKeyDesc, true, NoopTraceSecretKeyPlaceholder,
 		))
 
 	case "disabled":
@@ -139,8 +139,8 @@ func (m *LangfuseFormModel) BuildForm() tea.Cmd {
 	return nil
 }
 
-func (m *LangfuseFormModel) createTextField(
-	config *controller.LangfuseConfig, key, title, description string, masked bool, placeholder string,
+func (m *NoopTraceFormModel) createTextField(
+	config *controller.NoopTraceConfig, key, title, description string, masked bool, placeholder string,
 ) FormField {
 	var envVar loader.EnvVar
 	switch key {
@@ -182,40 +182,40 @@ func (m *LangfuseFormModel) createTextField(
 	}
 }
 
-func (m *LangfuseFormModel) GetFormTitle() string {
-	return locale.MonitoringLangfuseFormTitle
+func (m *NoopTraceFormModel) GetFormTitle() string {
+	return locale.MonitoringNoopTraceFormTitle
 }
 
-func (m *LangfuseFormModel) GetFormDescription() string {
-	return locale.MonitoringLangfuseFormDescription
+func (m *NoopTraceFormModel) GetFormDescription() string {
+	return locale.MonitoringNoopTraceFormDescription
 }
 
-func (m *LangfuseFormModel) GetFormName() string {
-	return locale.MonitoringLangfuseFormName
+func (m *NoopTraceFormModel) GetFormName() string {
+	return locale.MonitoringNoopTraceFormName
 }
 
-func (m *LangfuseFormModel) GetFormSummary() string {
+func (m *NoopTraceFormModel) GetFormSummary() string {
 	return ""
 }
 
-func (m *LangfuseFormModel) GetFormOverview() string {
+func (m *NoopTraceFormModel) GetFormOverview() string {
 	var sections []string
 
-	sections = append(sections, m.GetStyles().Subtitle.Render(locale.MonitoringLangfuseFormTitle))
+	sections = append(sections, m.GetStyles().Subtitle.Render(locale.MonitoringNoopTraceFormTitle))
 	sections = append(sections, "")
-	sections = append(sections, m.GetStyles().Paragraph.Bold(true).Render(locale.MonitoringLangfuseFormDescription))
+	sections = append(sections, m.GetStyles().Paragraph.Bold(true).Render(locale.MonitoringNoopTraceFormDescription))
 	sections = append(sections, "")
-	sections = append(sections, m.GetStyles().Paragraph.Render(locale.MonitoringLangfuseFormOverview))
+	sections = append(sections, m.GetStyles().Paragraph.Render(locale.MonitoringNoopTraceFormOverview))
 
 	return strings.Join(sections, "\n")
 }
 
-func (m *LangfuseFormModel) GetCurrentConfiguration() string {
+func (m *NoopTraceFormModel) GetCurrentConfiguration() string {
 	var sections []string
 
 	sections = append(sections, m.GetStyles().Subtitle.Render(m.GetFormName()))
 
-	config := m.GetController().GetLangfuseConfig()
+	config := m.GetController().GetNoopTraceConfig()
 
 	getMaskedValue := func(value string) string {
 		maskedValue := strings.Repeat("*", len(value))
@@ -227,110 +227,110 @@ func (m *LangfuseFormModel) GetCurrentConfiguration() string {
 
 	switch config.DeploymentType {
 	case "embedded":
-		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Success.Render(locale.MonitoringLangfuseEmbedded))
+		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Success.Render(locale.MonitoringNoopTraceEmbedded))
 		if listenIP := config.ListenIP.Value; listenIP != "" {
 			listenIP = m.GetStyles().Info.Render(listenIP)
-			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringLangfuseListenIP, listenIP))
+			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringNoopTraceListenIP, listenIP))
 		} else if listenIP := config.ListenIP.Default; listenIP != "" {
 			listenIP = m.GetStyles().Muted.Render(listenIP)
-			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringLangfuseListenIP, listenIP))
+			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringNoopTraceListenIP, listenIP))
 		}
 
 		if listenPort := config.ListenPort.Value; listenPort != "" {
 			listenPort = m.GetStyles().Info.Render(listenPort)
-			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringLangfuseListenPort, listenPort))
+			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringNoopTraceListenPort, listenPort))
 		} else if listenPort := config.ListenPort.Default; listenPort != "" {
 			listenPort = m.GetStyles().Muted.Render(listenPort)
-			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringLangfuseListenPort, listenPort))
+			sections = append(sections, fmt.Sprintf("• %s: %s", locale.MonitoringNoopTraceListenPort, listenPort))
 		}
 		if config.BaseURL.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseBaseURL, m.GetStyles().Info.Render(config.BaseURL.Value)))
+				locale.MonitoringNoopTraceBaseURL, m.GetStyles().Info.Render(config.BaseURL.Value)))
 		}
 		if config.ProjectID.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseProjectID, m.GetStyles().Info.Render(config.ProjectID.Value)))
+				locale.MonitoringNoopTraceProjectID, m.GetStyles().Info.Render(config.ProjectID.Value)))
 		}
 		if publicKey := config.PublicKey.Value; publicKey != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfusePublicKey, m.GetStyles().Muted.Render(getMaskedValue(publicKey))))
+				locale.MonitoringNoopTracePublicKey, m.GetStyles().Muted.Render(getMaskedValue(publicKey))))
 		}
 		if secretKey := config.SecretKey.Value; secretKey != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseSecretKey, m.GetStyles().Muted.Render(getMaskedValue(secretKey))))
+				locale.MonitoringNoopTraceSecretKey, m.GetStyles().Muted.Render(getMaskedValue(secretKey))))
 		}
 		if config.AdminEmail.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseAdminEmail, m.GetStyles().Info.Render(config.AdminEmail.Value)))
+				locale.MonitoringNoopTraceAdminEmail, m.GetStyles().Info.Render(config.AdminEmail.Value)))
 		}
 		if adminPassword := config.AdminPassword.Value; adminPassword != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseAdminPassword, m.GetStyles().Muted.Render(getMaskedValue(adminPassword))))
+				locale.MonitoringNoopTraceAdminPassword, m.GetStyles().Muted.Render(getMaskedValue(adminPassword))))
 		}
 		if config.AdminName.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseAdminName, m.GetStyles().Info.Render(config.AdminName.Value)))
+				locale.MonitoringNoopTraceAdminName, m.GetStyles().Info.Render(config.AdminName.Value)))
 		}
 
 	case "external":
-		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Success.Render(locale.MonitoringLangfuseExternal))
+		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Success.Render(locale.MonitoringNoopTraceExternal))
 		if config.BaseURL.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseBaseURL, m.GetStyles().Info.Render(config.BaseURL.Value)))
+				locale.MonitoringNoopTraceBaseURL, m.GetStyles().Info.Render(config.BaseURL.Value)))
 		}
 		if config.ProjectID.Value != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseProjectID, m.GetStyles().Info.Render(config.ProjectID.Value)))
+				locale.MonitoringNoopTraceProjectID, m.GetStyles().Info.Render(config.ProjectID.Value)))
 		}
 		if publicKey := config.PublicKey.Value; publicKey != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfusePublicKey, m.GetStyles().Muted.Render(getMaskedValue(publicKey))))
+				locale.MonitoringNoopTracePublicKey, m.GetStyles().Muted.Render(getMaskedValue(publicKey))))
 		}
 		if secretKey := config.SecretKey.Value; secretKey != "" {
 			sections = append(sections, fmt.Sprintf("• %s: %s",
-				locale.MonitoringLangfuseSecretKey, m.GetStyles().Muted.Render(getMaskedValue(secretKey))))
+				locale.MonitoringNoopTraceSecretKey, m.GetStyles().Muted.Render(getMaskedValue(secretKey))))
 		}
 
 	case "disabled":
-		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Warning.Render(locale.MonitoringLangfuseDisabled))
+		sections = append(sections, "• "+locale.UIMode+m.GetStyles().Warning.Render(locale.MonitoringNoopTraceDisabled))
 	}
 
 	return strings.Join(sections, "\n")
 }
 
-func (m *LangfuseFormModel) IsConfigured() bool {
-	config := m.GetController().GetLangfuseConfig()
+func (m *NoopTraceFormModel) IsConfigured() bool {
+	config := m.GetController().GetNoopTraceConfig()
 	return config.DeploymentType != "disabled"
 }
 
-func (m *LangfuseFormModel) GetHelpContent() string {
+func (m *NoopTraceFormModel) GetHelpContent() string {
 	var sections []string
 	deploymentType := m.getSelectedDeploymentType()
 
-	sections = append(sections, m.GetStyles().Subtitle.Render(locale.MonitoringLangfuseFormTitle))
+	sections = append(sections, m.GetStyles().Subtitle.Render(locale.MonitoringNoopTraceFormTitle))
 	sections = append(sections, "")
-	sections = append(sections, locale.MonitoringLangfuseModeGuide)
+	sections = append(sections, locale.MonitoringNoopTraceModeGuide)
 	sections = append(sections, "")
 
 	switch deploymentType {
 	case "embedded":
-		sections = append(sections, locale.MonitoringLangfuseEmbeddedHelp)
+		sections = append(sections, locale.MonitoringNoopTraceEmbeddedHelp)
 	case "external":
-		sections = append(sections, locale.MonitoringLangfuseExternalHelp)
+		sections = append(sections, locale.MonitoringNoopTraceExternalHelp)
 	case "disabled":
-		sections = append(sections, locale.MonitoringLangfuseDisabledHelp)
+		sections = append(sections, locale.MonitoringNoopTraceDisabledHelp)
 	}
 
 	return strings.Join(sections, "\n")
 }
 
-func (m *LangfuseFormModel) HandleSave() error {
-	config := m.GetController().GetLangfuseConfig()
+func (m *NoopTraceFormModel) HandleSave() error {
+	config := m.GetController().GetNoopTraceConfig()
 	deploymentType := m.getSelectedDeploymentType()
 	fields := m.GetFormFields()
 
 	// create a working copy of the current config to modify
-	newConfig := &controller.LangfuseConfig{
+	newConfig := &controller.NoopTraceConfig{
 		DeploymentType: deploymentType,
 		// copy current EnvVar fields - they preserve metadata like Line, IsPresent, etc.
 		ListenIP:      config.ListenIP,
@@ -375,18 +375,18 @@ func (m *LangfuseFormModel) HandleSave() error {
 	}
 
 	// save the configuration
-	if err := m.GetController().UpdateLangfuseConfig(newConfig); err != nil {
-		logger.Errorf("[LangfuseFormModel] SAVE: error updating langfuse config: %v", err)
+	if err := m.GetController().UpdateNoopTraceConfig(newConfig); err != nil {
+		logger.Errorf("[NoopTraceFormModel] SAVE: error updating nooptrace config: %v", err)
 		return err
 	}
 
-	logger.Log("[LangfuseFormModel] SAVE: success")
+	logger.Log("[NoopTraceFormModel] SAVE: success")
 	return nil
 }
 
-func (m *LangfuseFormModel) HandleReset() {
+func (m *NoopTraceFormModel) HandleReset() {
 	// reset config to defaults
-	config := m.GetController().ResetLangfuseConfig()
+	config := m.GetController().ResetNoopTraceConfig()
 
 	// reset deployment selection
 	m.GetListHelper().SelectByValue(&m.deploymentList, config.DeploymentType)
@@ -395,43 +395,43 @@ func (m *LangfuseFormModel) HandleReset() {
 	m.BuildForm()
 }
 
-func (m *LangfuseFormModel) OnFieldChanged(fieldIndex int, oldValue, newValue string) {
+func (m *NoopTraceFormModel) OnFieldChanged(fieldIndex int, oldValue, newValue string) {
 	// additional validation could be added here if needed
 }
 
-func (m *LangfuseFormModel) GetFormFields() []FormField {
+func (m *NoopTraceFormModel) GetFormFields() []FormField {
 	return m.BaseScreen.fields
 }
 
-func (m *LangfuseFormModel) SetFormFields(fields []FormField) {
+func (m *NoopTraceFormModel) SetFormFields(fields []FormField) {
 	m.BaseScreen.fields = fields
 }
 
 // BaseListHandler interface implementation
 
-func (m *LangfuseFormModel) GetList() *list.Model {
+func (m *NoopTraceFormModel) GetList() *list.Model {
 	return &m.deploymentList
 }
 
-func (m *LangfuseFormModel) GetListDelegate() *BaseListDelegate {
+func (m *NoopTraceFormModel) GetListDelegate() *BaseListDelegate {
 	return m.deploymentDelegate
 }
 
-func (m *LangfuseFormModel) OnListSelectionChanged(oldSelection, newSelection string) {
+func (m *NoopTraceFormModel) OnListSelectionChanged(oldSelection, newSelection string) {
 	// rebuild form when deployment type changes
 	m.BuildForm()
 }
 
-func (m *LangfuseFormModel) GetListTitle() string {
-	return locale.MonitoringLangfuseDeploymentType
+func (m *NoopTraceFormModel) GetListTitle() string {
+	return locale.MonitoringNoopTraceDeploymentType
 }
 
-func (m *LangfuseFormModel) GetListDescription() string {
-	return locale.MonitoringLangfuseDeploymentTypeDesc
+func (m *NoopTraceFormModel) GetListDescription() string {
+	return locale.MonitoringNoopTraceDeploymentTypeDesc
 }
 
 // Update method - handle screen-specific input
-func (m *LangfuseFormModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *NoopTraceFormModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// handle list input first (if focused on list)
@@ -451,6 +451,6 @@ func (m *LangfuseFormModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 // Compile-time interface validation
-var _ BaseScreenModel = (*LangfuseFormModel)(nil)
-var _ BaseScreenHandler = (*LangfuseFormModel)(nil)
-var _ BaseListHandler = (*LangfuseFormModel)(nil)
+var _ BaseScreenModel = (*NoopTraceFormModel)(nil)
+var _ BaseScreenHandler = (*NoopTraceFormModel)(nil)
+var _ BaseListHandler = (*NoopTraceFormModel)(nil)

@@ -19,7 +19,7 @@ type HardeningArea string
 
 const (
 	HardeningAreaPentagi  HardeningArea = "pentagi"
-	HardeningAreaLangfuse HardeningArea = "langfuse"
+	HardeningAreaNoopTrace HardeningArea = "nooptrace"
 	HardeningAreaGraphiti HardeningArea = "graphiti"
 )
 
@@ -50,22 +50,22 @@ var varsForHardening = map[HardeningArea][]string{
 	HardeningAreaGraphiti: {
 		"NEO4J_PASSWORD",
 	},
-	HardeningAreaLangfuse: {
-		"LANGFUSE_POSTGRES_PASSWORD",
-		"LANGFUSE_CLICKHOUSE_PASSWORD",
-		"LANGFUSE_S3_ACCESS_KEY_ID",
-		"LANGFUSE_S3_SECRET_ACCESS_KEY",
-		"LANGFUSE_REDIS_AUTH",
-		"LANGFUSE_SALT",
-		"LANGFUSE_ENCRYPTION_KEY",
-		"LANGFUSE_NEXTAUTH_SECRET",
-		"LANGFUSE_INIT_PROJECT_ID",
-		"LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
-		"LANGFUSE_INIT_PROJECT_SECRET_KEY",
-		"LANGFUSE_AUTH_DISABLE_SIGNUP",
-		"LANGFUSE_PROJECT_ID",
-		"LANGFUSE_PUBLIC_KEY",
-		"LANGFUSE_SECRET_KEY",
+	HardeningAreaNoopTrace: {
+		"NOOPTRACE_POSTGRES_PASSWORD",
+		"NOOPTRACE_CLICKHOUSE_PASSWORD",
+		"NOOPTRACE_S3_ACCESS_KEY_ID",
+		"NOOPTRACE_S3_SECRET_ACCESS_KEY",
+		"NOOPTRACE_REDIS_AUTH",
+		"NOOPTRACE_SALT",
+		"NOOPTRACE_ENCRYPTION_KEY",
+		"NOOPTRACE_NEXTAUTH_SECRET",
+		"NOOPTRACE_INIT_PROJECT_ID",
+		"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
+		"NOOPTRACE_INIT_PROJECT_SECRET_KEY",
+		"NOOPTRACE_AUTH_DISABLE_SIGNUP",
+		"NOOPTRACE_PROJECT_ID",
+		"NOOPTRACE_PUBLIC_KEY",
+		"NOOPTRACE_SECRET_KEY",
 	},
 }
 
@@ -76,27 +76,27 @@ var varsForHardeningDefault = map[string]string{
 	"LOCAL_SCRAPER_USERNAME":           "someuser",
 	"LOCAL_SCRAPER_PASSWORD":           "somepass",
 	"SCRAPER_PRIVATE_URL":              "https://someuser:somepass@scraper/",
-	"LANGFUSE_POSTGRES_PASSWORD":       "postgres",
-	"LANGFUSE_CLICKHOUSE_PASSWORD":     "clickhouse",
-	"LANGFUSE_S3_ACCESS_KEY_ID":        "accesskey",
-	"LANGFUSE_S3_SECRET_ACCESS_KEY":    "secretkey",
-	"LANGFUSE_REDIS_AUTH":              "redispassword",
-	"LANGFUSE_SALT":                    "salt",
-	"LANGFUSE_ENCRYPTION_KEY":          "0000000000000000000000000000000000000000000000000000000000000000",
-	"LANGFUSE_NEXTAUTH_SECRET":         "secret",
-	"LANGFUSE_INIT_PROJECT_ID":         "cm47619l0000872mcd2dlbqwb",
-	"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": "pk-lf-00000000-0000-0000-0000-000000000000",
-	"LANGFUSE_INIT_PROJECT_SECRET_KEY": "sk-lf-00000000-0000-0000-0000-000000000000",
-	"LANGFUSE_AUTH_DISABLE_SIGNUP":     "false",
-	"LANGFUSE_PROJECT_ID":              "",
-	"LANGFUSE_PUBLIC_KEY":              "",
-	"LANGFUSE_SECRET_KEY":              "",
+	"NOOPTRACE_POSTGRES_PASSWORD":       "postgres",
+	"NOOPTRACE_CLICKHOUSE_PASSWORD":     "clickhouse",
+	"NOOPTRACE_S3_ACCESS_KEY_ID":        "accesskey",
+	"NOOPTRACE_S3_SECRET_ACCESS_KEY":    "secretkey",
+	"NOOPTRACE_REDIS_AUTH":              "redispassword",
+	"NOOPTRACE_SALT":                    "salt",
+	"NOOPTRACE_ENCRYPTION_KEY":          "0000000000000000000000000000000000000000000000000000000000000000",
+	"NOOPTRACE_NEXTAUTH_SECRET":         "secret",
+	"NOOPTRACE_INIT_PROJECT_ID":         "cm47619l0000872mcd2dlbqwb",
+	"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": "pk-lf-00000000-0000-0000-0000-000000000000",
+	"NOOPTRACE_INIT_PROJECT_SECRET_KEY": "sk-lf-00000000-0000-0000-0000-000000000000",
+	"NOOPTRACE_AUTH_DISABLE_SIGNUP":     "false",
+	"NOOPTRACE_PROJECT_ID":              "",
+	"NOOPTRACE_PUBLIC_KEY":              "",
+	"NOOPTRACE_SECRET_KEY":              "",
 }
 
-var varsHardeningSyncLangfuse = map[string]string{
-	"LANGFUSE_PROJECT_ID": "LANGFUSE_INIT_PROJECT_ID",
-	"LANGFUSE_PUBLIC_KEY": "LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
-	"LANGFUSE_SECRET_KEY": "LANGFUSE_INIT_PROJECT_SECRET_KEY",
+var varsHardeningSyncNoopTrace = map[string]string{
+	"NOOPTRACE_PROJECT_ID": "NOOPTRACE_INIT_PROJECT_ID",
+	"NOOPTRACE_PUBLIC_KEY": "NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
+	"NOOPTRACE_SECRET_KEY": "NOOPTRACE_INIT_PROJECT_SECRET_KEY",
 }
 
 var varsHardeningPolicies = map[HardeningArea]map[string]HardeningPolicy{
@@ -110,20 +110,20 @@ var varsHardeningPolicies = map[HardeningArea]map[string]HardeningPolicy{
 	HardeningAreaGraphiti: {
 		"NEO4J_PASSWORD": {Type: HardeningPolicyTypeDefault, Length: 18},
 	},
-	HardeningAreaLangfuse: {
-		"LANGFUSE_POSTGRES_PASSWORD":       {Type: HardeningPolicyTypeDefault, Length: 18},
-		"LANGFUSE_CLICKHOUSE_PASSWORD":     {Type: HardeningPolicyTypeDefault, Length: 18},
-		"LANGFUSE_S3_ACCESS_KEY_ID":        {Type: HardeningPolicyTypeDefault, Length: 20},
-		"LANGFUSE_S3_SECRET_ACCESS_KEY":    {Type: HardeningPolicyTypeDefault, Length: 40},
-		"LANGFUSE_REDIS_AUTH":              {Type: HardeningPolicyTypeHex, Length: 48},
-		"LANGFUSE_SALT":                    {Type: HardeningPolicyTypeHex, Length: 28},
-		"LANGFUSE_ENCRYPTION_KEY":          {Type: HardeningPolicyTypeHex, Length: 64},
-		"LANGFUSE_NEXTAUTH_SECRET":         {Type: HardeningPolicyTypeHex, Length: 32},
-		"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": {Type: HardeningPolicyTypeUUID, Prefix: "pk-lf-"},
-		"LANGFUSE_INIT_PROJECT_SECRET_KEY": {Type: HardeningPolicyTypeUUID, Prefix: "sk-lf-"},
-		"LANGFUSE_AUTH_DISABLE_SIGNUP":     {Type: HardeningPolicyTypeBoolTrue},
-		// LANGFUSE_PROJECT_ID, LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY are handled specially in syncLangfuseState
-		// LANGFUSE_INIT_USER_PASSWORD changes in web UI after first login, so we don't need to harden it
+	HardeningAreaNoopTrace: {
+		"NOOPTRACE_POSTGRES_PASSWORD":       {Type: HardeningPolicyTypeDefault, Length: 18},
+		"NOOPTRACE_CLICKHOUSE_PASSWORD":     {Type: HardeningPolicyTypeDefault, Length: 18},
+		"NOOPTRACE_S3_ACCESS_KEY_ID":        {Type: HardeningPolicyTypeDefault, Length: 20},
+		"NOOPTRACE_S3_SECRET_ACCESS_KEY":    {Type: HardeningPolicyTypeDefault, Length: 40},
+		"NOOPTRACE_REDIS_AUTH":              {Type: HardeningPolicyTypeHex, Length: 48},
+		"NOOPTRACE_SALT":                    {Type: HardeningPolicyTypeHex, Length: 28},
+		"NOOPTRACE_ENCRYPTION_KEY":          {Type: HardeningPolicyTypeHex, Length: 64},
+		"NOOPTRACE_NEXTAUTH_SECRET":         {Type: HardeningPolicyTypeHex, Length: 32},
+		"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": {Type: HardeningPolicyTypeUUID, Prefix: "pk-lf-"},
+		"NOOPTRACE_INIT_PROJECT_SECRET_KEY": {Type: HardeningPolicyTypeUUID, Prefix: "sk-lf-"},
+		"NOOPTRACE_AUTH_DISABLE_SIGNUP":     {Type: HardeningPolicyTypeBoolTrue},
+		// NOOPTRACE_PROJECT_ID, NOOPTRACE_PUBLIC_KEY, NOOPTRACE_SECRET_KEY are handled specially in syncNoopTraceState
+		// NOOPTRACE_INIT_USER_PASSWORD changes in web UI after first login, so we don't need to harden it
 	},
 }
 
@@ -149,19 +149,19 @@ func DoHardening(s state.State, c checker.CheckResult) error {
 		}
 	}
 
-	// harden langfuse vars only if neither containers nor volumes exist
+	// harden nooptrace vars only if neither containers nor volumes exist
 	// this prevents password changes when volumes with existing credentials are present
-	if vars, _ := s.GetVars(varsForHardening[HardeningAreaLangfuse]); !c.LangfuseInstalled && !c.LangfuseVolumesExist {
+	if vars, _ := s.GetVars(varsForHardening[HardeningAreaNoopTrace]); !c.NoopTraceInstalled && !c.NoopTraceVolumesExist {
 		updateDefaultValues(vars)
 
-		if isChanged, err := replaceDefaultValues(s, vars, varsHardeningPolicies[HardeningAreaLangfuse]); err != nil {
-			return fmt.Errorf("failed to replace default values for langfuse: %w", err)
+		if isChanged, err := replaceDefaultValues(s, vars, varsHardeningPolicies[HardeningAreaNoopTrace]); err != nil {
+			return fmt.Errorf("failed to replace default values for nooptrace: %w", err)
 		} else if isChanged {
 			haveToCommit = true
 		}
 
-		if isChanged, err := syncLangfuseState(s, vars); err != nil {
-			return fmt.Errorf("failed to sync langfuse vars: %w", err)
+		if isChanged, err := syncNoopTraceState(s, vars); err != nil {
+			return fmt.Errorf("failed to sync nooptrace vars: %w", err)
 		} else if isChanged {
 			haveToCommit = true
 		}
@@ -251,10 +251,10 @@ func syncScraperState(s state.State, vars map[string]loader.EnvVar) (bool, error
 	return isChanged, nil
 }
 
-func syncLangfuseState(s state.State, vars map[string]loader.EnvVar) (bool, error) {
+func syncNoopTraceState(s state.State, vars map[string]loader.EnvVar) (bool, error) {
 	var isChanged bool
 
-	for varName, syncVarName := range varsHardeningSyncLangfuse {
+	for varName, syncVarName := range varsHardeningSyncNoopTrace {
 		envVar, exists := vars[varName]
 		if !exists {
 			continue

@@ -11,7 +11,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/docker"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/schema"
 	"pentagi/pkg/templates"
@@ -25,22 +25,22 @@ func wrapError(ctx context.Context, msg string, err error) error {
 	return fmt.Errorf("%s: %w", msg, err)
 }
 
-func wrapErrorEndAgentSpan(ctx context.Context, span langfuse.Agent, msg string, err error) error {
+func wrapErrorEndAgentSpan(ctx context.Context, span nooptrace.Agent, msg string, err error) error {
 	logrus.WithContext(ctx).WithError(err).Error(msg)
 	err = fmt.Errorf("%s: %w", msg, err)
 	span.End(
-		langfuse.WithAgentStatus(err.Error()),
-		langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+		nooptrace.WithAgentStatus(err.Error()),
+		nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 	)
 	return err
 }
 
-func wrapErrorEndEvaluatorSpan(ctx context.Context, span langfuse.Evaluator, msg string, err error) error {
+func wrapErrorEndEvaluatorSpan(ctx context.Context, span nooptrace.Evaluator, msg string, err error) error {
 	logrus.WithContext(ctx).WithError(err).Error(msg)
 	err = fmt.Errorf("%s: %w", msg, err)
 	span.End(
-		langfuse.WithEvaluatorStatus(err.Error()),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelError),
+		nooptrace.WithEvaluatorStatus(err.Error()),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelError),
 	)
 	return err
 }
@@ -100,9 +100,9 @@ func (fp *flowProvider) GetAskAdviceHandler(ctx context.Context, taskID, subtask
 
 		enricherCtx, observation := obs.Observer.NewObservation(ctx)
 		enricherEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render enricher agent prompts"),
-			langfuse.WithEvaluatorInput(enricherContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render enricher agent prompts"),
+			nooptrace.WithEvaluatorInput(enricherContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   enricherContext["user"],
 				"system_context": enricherContext["system"],
 			}),
@@ -119,15 +119,15 @@ func (fp *flowProvider) GetAskAdviceHandler(ctx context.Context, taskID, subtask
 		}
 
 		enricherEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userEnricherTmpl,
 				"system_template": systemEnricherTmpl,
 				"task":            taskID,
 				"subtask":         subtaskID,
 				"lang":            fp.language,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		enriches, err := fp.performEnricher(ctx, taskID, subtaskID, systemEnricherTmpl, userEnricherTmpl, ask.Question)
@@ -154,9 +154,9 @@ func (fp *flowProvider) GetAskAdviceHandler(ctx context.Context, taskID, subtask
 
 		adviserCtx, observation := obs.Observer.NewObservation(ctx)
 		adviserEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render adviser agent prompts"),
-			langfuse.WithEvaluatorInput(adviserContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render adviser agent prompts"),
+			nooptrace.WithEvaluatorInput(adviserContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   adviserContext["user"],
 				"system_context": adviserContext["system"],
 				"task":           ptrTask,
@@ -176,12 +176,12 @@ func (fp *flowProvider) GetAskAdviceHandler(ctx context.Context, taskID, subtask
 		}
 
 		adviserEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userAdviserTmpl,
 				"system_template": systemAdviserTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		opt := pconfig.OptionsTypeAdviser
@@ -258,9 +258,9 @@ func (fp *flowProvider) GetCoderHandler(ctx context.Context, taskID, subtaskID *
 
 		coderCtx, observation := obs.Observer.NewObservation(ctx)
 		coderEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render coder agent prompts"),
-			langfuse.WithEvaluatorInput(coderContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render coder agent prompts"),
+			nooptrace.WithEvaluatorInput(coderContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   coderContext["user"],
 				"system_context": coderContext["system"],
 				"task":           ptrTask,
@@ -280,12 +280,12 @@ func (fp *flowProvider) GetCoderHandler(ctx context.Context, taskID, subtaskID *
 		}
 
 		coderEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userCoderTmpl,
 				"system_template": systemCoderTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		code, err := fp.performCoder(ctx, taskID, subtaskID, systemCoderTmpl, userCoderTmpl, action.Question)
@@ -352,9 +352,9 @@ func (fp *flowProvider) GetInstallerHandler(ctx context.Context, taskID, subtask
 
 		installerCtx, observation := obs.Observer.NewObservation(ctx)
 		installerEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render installer agent prompts"),
-			langfuse.WithEvaluatorInput(installerContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render installer agent prompts"),
+			nooptrace.WithEvaluatorInput(installerContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   installerContext["user"],
 				"system_context": installerContext["system"],
 				"task":           ptrTask,
@@ -374,12 +374,12 @@ func (fp *flowProvider) GetInstallerHandler(ctx context.Context, taskID, subtask
 		}
 
 		installerEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userInstallerTmpl,
 				"system_template": systemInstallerTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		installerResult, err := fp.performInstaller(ctx, taskID, subtaskID, systemInstallerTmpl, userInstallerTmpl, action.Question)
@@ -486,9 +486,9 @@ func (fp *flowProvider) GetMemoristHandler(ctx context.Context, taskID, subtaskI
 
 		memoristCtx, observation := obs.Observer.NewObservation(ctx)
 		memoristEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render memorist agent prompts"),
-			langfuse.WithEvaluatorInput(memoristContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render memorist agent prompts"),
+			nooptrace.WithEvaluatorInput(memoristContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":      memoristContext["user"],
 				"system_context":    memoristContext["system"],
 				"requested_task":    requestedTask,
@@ -511,12 +511,12 @@ func (fp *flowProvider) GetMemoristHandler(ctx context.Context, taskID, subtaskI
 		}
 
 		memoristEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userMemoristTmpl,
 				"system_template": systemMemoristTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		memoristResult, err := fp.performMemorist(ctx, taskID, subtaskID, systemMemoristTmpl, userMemoristTmpl, action.Question)
@@ -588,9 +588,9 @@ func (fp *flowProvider) GetPentesterHandler(ctx context.Context, taskID, subtask
 
 		pentesterCtx, observation := obs.Observer.NewObservation(ctx)
 		pentesterEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render pentester agent prompts"),
-			langfuse.WithEvaluatorInput(pentesterContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render pentester agent prompts"),
+			nooptrace.WithEvaluatorInput(pentesterContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   pentesterContext["user"],
 				"system_context": pentesterContext["system"],
 				"task":           ptrTask,
@@ -610,12 +610,12 @@ func (fp *flowProvider) GetPentesterHandler(ctx context.Context, taskID, subtask
 		}
 
 		pentesterEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userPentesterTmpl,
 				"system_template": systemPentesterTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		pentesterResult, err := fp.performPentester(ctx, taskID, subtaskID, systemPentesterTmpl, userPentesterTmpl, action.Question)
@@ -678,9 +678,9 @@ func (fp *flowProvider) GetSubtaskSearcherHandler(ctx context.Context, taskID, s
 
 		searcherCtx, observation := obs.Observer.NewObservation(ctx)
 		searcherEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render searcher agent prompts"),
-			langfuse.WithEvaluatorInput(searcherContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render searcher agent prompts"),
+			nooptrace.WithEvaluatorInput(searcherContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   searcherContext["user"],
 				"system_context": searcherContext["system"],
 				"task":           ptrTask,
@@ -700,12 +700,12 @@ func (fp *flowProvider) GetSubtaskSearcherHandler(ctx context.Context, taskID, s
 		}
 
 		searcherEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userSearcherTmpl,
 				"system_template": systemSearcherTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		searcherResult, err := fp.performSearcher(ctx, taskID, subtaskID, systemSearcherTmpl, userSearcherTmpl, search.Question)
@@ -767,9 +767,9 @@ func (fp *flowProvider) GetTaskSearcherHandler(ctx context.Context, taskID int64
 
 		searcherCtx, observation := obs.Observer.NewObservation(ctx)
 		searcherEvaluator := observation.Evaluator(
-			langfuse.WithEvaluatorName("render searcher agent prompts"),
-			langfuse.WithEvaluatorInput(searcherContext),
-			langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+			nooptrace.WithEvaluatorName("render searcher agent prompts"),
+			nooptrace.WithEvaluatorInput(searcherContext),
+			nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 				"user_context":   searcherContext["user"],
 				"system_context": searcherContext["system"],
 				"task":           task,
@@ -788,12 +788,12 @@ func (fp *flowProvider) GetTaskSearcherHandler(ctx context.Context, taskID int64
 		}
 
 		searcherEvaluator.End(
-			langfuse.WithEvaluatorOutput(map[string]any{
+			nooptrace.WithEvaluatorOutput(map[string]any{
 				"user_template":   userSearcherTmpl,
 				"system_template": systemSearcherTmpl,
 			}),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		searcherResult, err := fp.performSearcher(ctx, &taskID, nil, systemSearcherTmpl, userSearcherTmpl, search.Question)
@@ -830,9 +830,9 @@ func (fp *flowProvider) GetSummarizeResultHandler(taskID, subtaskID *int64) tool
 
 		ctx, observation := obs.Observer.NewObservation(ctx)
 		summarizerAgent := observation.Agent(
-			langfuse.WithAgentName("chain summarizer"),
-			langfuse.WithAgentInput(result),
-			langfuse.WithAgentMetadata(langfuse.Metadata{
+			nooptrace.WithAgentName("chain summarizer"),
+			nooptrace.WithAgentInput(result),
+			nooptrace.WithAgentMetadata(nooptrace.Metadata{
 				"task_id":    taskID,
 				"subtask_id": subtaskID,
 				"lang":       fp.language,
@@ -868,9 +868,9 @@ func (fp *flowProvider) GetSummarizeResultHandler(taskID, subtaskID *int64) tool
 
 		summary = database.SanitizeUTF8(summary)
 		summarizerAgent.End(
-			langfuse.WithAgentStatus("success"),
-			langfuse.WithAgentOutput(summary),
-			langfuse.WithAgentLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithAgentStatus("success"),
+			nooptrace.WithAgentOutput(summary),
+			nooptrace.WithAgentLevel(nooptrace.ObservationLevelDebug),
 		)
 
 		return summary, nil
@@ -894,9 +894,9 @@ func (fp *flowProvider) fixToolCallArgs(
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	toolCallFixerAgent := observation.Agent(
-		langfuse.WithAgentName("tool call fixer"),
-		langfuse.WithAgentInput(string(funcArgs)),
-		langfuse.WithAgentMetadata(langfuse.Metadata{
+		nooptrace.WithAgentName("tool call fixer"),
+		nooptrace.WithAgentInput(string(funcArgs)),
+		nooptrace.WithAgentMetadata(nooptrace.Metadata{
 			"func_name":     funcName,
 			"func_schema":   string(funcJsonSchema),
 			"func_exec_err": funcExecErr.Error(),
@@ -927,9 +927,9 @@ func (fp *flowProvider) fixToolCallArgs(
 	}
 
 	toolCallFixerAgent.End(
-		langfuse.WithAgentStatus("success"),
-		langfuse.WithAgentOutput(toolCallFixerResult),
-		langfuse.WithAgentLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithAgentStatus("success"),
+		nooptrace.WithAgentOutput(toolCallFixerResult),
+		nooptrace.WithAgentLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	return json.RawMessage(toolCallFixerResult), nil

@@ -385,8 +385,8 @@ A comprehensive framework for designing high-performance prompts within the Pent
 ### Testing and Refinement
 - Utilize the `ctester` utility (`backend/cmd/ctester/`) for validating LLM provider compatibility and basic prompt adherence (e.g., JSON formatting, function calling capabilities) for different agent types. Reference `development-workflow.mdc` / `README.md`.
 - Employ the `ftester` utility (`backend/cmd/ftester/`) for **in-depth testing** of specific agent functions and prompt behaviors within realistic contexts (Flow/Task/SubTask). This is crucial for debugging complex interactions and prompt logic.
-- Actively analyze agent performance, errors, and interaction traces using observability tools like **Langfuse**. Identify patterns where prompts are misunderstood, lead to inefficient actions, or violate protocols.
-- Refine prompts iteratively based on `ctester`, `ftester`, and Langfuse analysis. Test changes thoroughly before deployment.
+- Actively analyze agent performance, errors, and interaction traces using observability tools like **NoopTrace**. Identify patterns where prompts are misunderstood, lead to inefficient actions, or violate protocols.
+- Refine prompts iteratively based on `ctester`, `ftester`, and NoopTrace analysis. Test changes thoroughly before deployment.
 - Verify prompt changes across different supported LLM providers to ensure consistent behavior.
 - Regularly validate that XML structures are well-formed and consistently applied across prompts.
 

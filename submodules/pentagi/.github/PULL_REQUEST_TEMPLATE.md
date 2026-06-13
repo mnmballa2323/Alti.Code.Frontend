@@ -36,7 +36,7 @@ Closes #
 - [ ] Security Tools Integration
 - [ ] Memory System (Vector Store/Knowledge Base)
 - [ ] Monitoring Stack (Grafana/OpenTelemetry)
-- [ ] Analytics Platform (Langfuse)
+- [ ] Analytics Platform (NoopTrace)
 - [ ] External Integrations (LLM/Search APIs)
 - [ ] Documentation
 - [ ] Infrastructure/DevOps
@@ -52,7 +52,7 @@ PentAGI Version:
 Docker Version:
 Host OS:
 LLM Provider:
-Enabled Features: [Langfuse/Grafana/etc]
+Enabled Features: [NoopTrace/Grafana/etc]
 ```
 
 #### Test Steps

@@ -17,7 +17,7 @@ import (
 	"time"
 
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 )
@@ -68,14 +68,14 @@ func (b *browser) wrapCommandResult(ctx context.Context, name, result, url, scre
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	if err != nil {
 		observation.Event(
-			langfuse.WithEventName("browser tool error swallowed"),
-			langfuse.WithEventInput(map[string]any{
+			nooptrace.WithEventName("browser tool error swallowed"),
+			nooptrace.WithEventInput(map[string]any{
 				"url":    url,
 				"action": name,
 			}),
-			langfuse.WithEventStatus(err.Error()),
-			langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-			langfuse.WithEventMetadata(langfuse.Metadata{
+			nooptrace.WithEventStatus(err.Error()),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+			nooptrace.WithEventMetadata(nooptrace.Metadata{
 				"tool_name": BrowserToolName,
 				"url":       url,
 				"screen":    screen,

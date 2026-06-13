@@ -1,0 +1,258 @@
+volumes:
+  nooptrace-postgres-data:
+    driver: local
+  nooptrace-clickhouse-data:
+    driver: local
+  nooptrace-clickhouse-logs:
+    driver: local
+  nooptrace-minio-data:
+    driver: local
+
+networks:
+  nooptrace-network:
+    driver: bridge
+    external: true
+    name: nooptrace-network
+  pentagi-network:
+    driver: bridge
+    external: true
+    name: pentagi-network
+
+services:
+  nooptrace-worker:
+    image: nooptrace/nooptrace-worker:3
+    restart: unless-stopped
+    container_name: nooptrace-worker
+    hostname: nooptrace-worker
+    depends_on: &nooptrace-depends-on
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    expose:
+      - 3030/tcp
+    environment: &nooptrace-worker-env
+      NEXTAUTH_URL: ${NOOPTRACE_NEXTAUTH_URL:-http://localhost:${NOOPTRACE_LISTEN_PORT:-4000}}
+      DATABASE_URL: postgresql://${NOOPTRACE_POSTGRES_USER:-postgres}:${NOOPTRACE_POSTGRES_PASSWORD:-postgres}@nooptrace-postgres:5432/${NOOPTRACE_POSTGRES_DB:-nooptrace}
+      SALT: ${NOOPTRACE_SALT:-myglobalsalt} # change this to a random string
+      ENCRYPTION_KEY: ${NOOPTRACE_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000} # generate via `openssl rand -hex 32`
+      TELEMETRY_ENABLED: ${NOOPTRACE_TELEMETRY_ENABLED:-false}
+      NOOPTRACE_ENABLE_EXPERIMENTAL_FEATURES: ${NOOPTRACE_ENABLE_EXPERIMENTAL_FEATURES:-true}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_SERVICE_NAME: ${NOOPTRACE_OTEL_SERVICE_NAME:-nooptrace}
+      CLICKHOUSE_MIGRATION_URL: ${NOOPTRACE_CLICKHOUSE_MIGRATION_URL:-clickhouse://nooptrace-clickhouse:9000}
+      CLICKHOUSE_URL: ${NOOPTRACE_CLICKHOUSE_URL:-http://nooptrace-clickhouse:8123}
+      CLICKHOUSE_USER: ${NOOPTRACE_CLICKHOUSE_USER:-clickhouse}
+      CLICKHOUSE_PASSWORD: ${NOOPTRACE_CLICKHOUSE_PASSWORD:-clickhouse}
+      CLICKHOUSE_CLUSTER_ENABLED: ${NOOPTRACE_CLICKHOUSE_CLUSTER_ENABLED:-false}
+      NOOPTRACE_USE_AZURE_BLOB: ${NOOPTRACE_USE_AZURE_BLOB:-false}
+      NOOPTRACE_S3_EVENT_UPLOAD_BUCKET: ${NOOPTRACE_S3_BUCKET:-nooptrace}
+      NOOPTRACE_S3_EVENT_UPLOAD_REGION: ${NOOPTRACE_S3_REGION:-auto}
+      NOOPTRACE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: ${NOOPTRACE_S3_ACCESS_KEY_ID:-minio}
+      NOOPTRACE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: ${NOOPTRACE_S3_SECRET_ACCESS_KEY:-miniosecret}
+      NOOPTRACE_S3_EVENT_UPLOAD_ENDPOINT: ${NOOPTRACE_S3_ENDPOINT:-http://nooptrace-minio:9000}
+      NOOPTRACE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: ${NOOPTRACE_S3_FORCE_PATH_STYLE:-true}
+      NOOPTRACE_S3_EVENT_UPLOAD_PREFIX: ${NOOPTRACE_S3_EVENT_UPLOAD_PREFIX:-events/}
+      NOOPTRACE_S3_MEDIA_UPLOAD_BUCKET: ${NOOPTRACE_S3_BUCKET:-nooptrace}
+      NOOPTRACE_S3_MEDIA_UPLOAD_REGION: ${NOOPTRACE_S3_REGION:-auto}
+      NOOPTRACE_S3_MEDIA_UPLOAD_ACCESS_KEY_ID: ${NOOPTRACE_S3_ACCESS_KEY_ID:-minio}
+      NOOPTRACE_S3_MEDIA_UPLOAD_SECRET_ACCESS_KEY: ${NOOPTRACE_S3_SECRET_ACCESS_KEY:-miniosecret}
+      NOOPTRACE_S3_MEDIA_UPLOAD_ENDPOINT: ${NOOPTRACE_S3_ENDPOINT:-http://nooptrace-minio:9000}
+      NOOPTRACE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: ${NOOPTRACE_S3_FORCE_PATH_STYLE:-true}
+      NOOPTRACE_S3_MEDIA_UPLOAD_PREFIX: ${NOOPTRACE_S3_MEDIA_UPLOAD_PREFIX:-media/}
+      NOOPTRACE_S3_BATCH_EXPORT_ENABLED: ${NOOPTRACE_S3_BATCH_EXPORT_ENABLED:-true}
+      NOOPTRACE_S3_BATCH_EXPORT_BUCKET: ${NOOPTRACE_S3_BUCKET:-nooptrace}
+      NOOPTRACE_S3_BATCH_EXPORT_REGION: ${NOOPTRACE_S3_REGION:-auto}
+      NOOPTRACE_S3_BATCH_EXPORT_ENDPOINT: ${NOOPTRACE_S3_ENDPOINT:-http://nooptrace-minio:9000}
+      NOOPTRACE_S3_BATCH_EXPORT_EXTERNAL_ENDPOINT: ${NOOPTRACE_S3_ENDPOINT:-http://nooptrace-minio:9000}
+      NOOPTRACE_S3_BATCH_EXPORT_ACCESS_KEY_ID: ${NOOPTRACE_S3_ACCESS_KEY_ID:-minio}
+      NOOPTRACE_S3_BATCH_EXPORT_SECRET_ACCESS_KEY: ${NOOPTRACE_S3_SECRET_ACCESS_KEY:-miniosecret}
+      REDIS_HOST: ${NOOPTRACE_REDIS_HOST:-nooptrace-redis}
+      REDIS_PORT: ${NOOPTRACE_REDIS_PORT:-6379}
+      REDIS_AUTH: ${NOOPTRACE_REDIS_AUTH:-myredissecret}
+      REDIS_TLS_ENABLED: ${NOOPTRACE_REDIS_TLS_ENABLED:-false}
+      REDIS_TLS_CA: ${NOOPTRACE_REDIS_TLS_CA:-/certs/ca.crt}
+      REDIS_TLS_CERT: ${NOOPTRACE_REDIS_TLS_CERT:-/certs/redis.crt}
+      REDIS_TLS_KEY: ${NOOPTRACE_REDIS_TLS_KEY:-/certs/redis.key}
+      NOOPTRACE_INGESTION_QUEUE_DELAY_MS: ${NOOPTRACE_INGESTION_QUEUE_DELAY_MS:-}
+      NOOPTRACE_INGESTION_CLICKHOUSE_WRITE_INTERVAL_MS: ${NOOPTRACE_INGESTION_CLICKHOUSE_WRITE_INTERVAL_MS:-}
+      NOOPTRACE_INGESTION_CLICKHOUSE_WRITE_BATCH_SIZE: ${NOOPTRACE_INGESTION_CLICKHOUSE_WRITE_BATCH_SIZE:-}
+      NOOPTRACE_INGESTION_CLICKHOUSE_MAX_ATTEMPTS: ${NOOPTRACE_INGESTION_CLICKHOUSE_MAX_ATTEMPTS:-}
+      EMAIL_FROM_ADDRESS: ${NOOPTRACE_EMAIL_FROM_ADDRESS:-}
+      SMTP_CONNECTION_URL: ${NOOPTRACE_SMTP_CONNECTION_URL:-}
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network
+
+  nooptrace-web:
+    image: nooptrace/nooptrace:3
+    restart: unless-stopped
+    container_name: nooptrace-web
+    hostname: nooptrace-web
+    depends_on: *nooptrace-depends-on
+    expose:
+      - 3000/tcp
+    ports:
+      - ${NOOPTRACE_LISTEN_IP:-127.0.0.1}:${NOOPTRACE_LISTEN_PORT:-4000}:3000
+    environment:
+      <<: *nooptrace-worker-env
+      HOST: 0.0.0.0
+      PORT: 3000
+      NEXTAUTH_URL: ${NOOPTRACE_NEXTAUTH_URL:-http://localhost:4000}
+      NEXTAUTH_SECRET: ${NOOPTRACE_NEXTAUTH_SECRET:-mysecret}
+      NOOPTRACE_LOG_LEVEL: ${NOOPTRACE_LOG_LEVEL:-info}
+      NOOPTRACE_INIT_ORG_ID: ${NOOPTRACE_INIT_ORG_ID:-ocm47619l0000872mcd2dlbqwb}
+      NOOPTRACE_INIT_ORG_NAME: ${NOOPTRACE_INIT_ORG_NAME:-PentAGI Demo}
+      NOOPTRACE_INIT_PROJECT_ID: ${NOOPTRACE_INIT_PROJECT_ID:-cm47619l0000872mcd2dlbqwb}
+      NOOPTRACE_INIT_PROJECT_NAME: ${NOOPTRACE_INIT_PROJECT_NAME:-PentAGI}
+      NOOPTRACE_INIT_PROJECT_PUBLIC_KEY: ${NOOPTRACE_INIT_PROJECT_PUBLIC_KEY:-pk-lf-5946031c-ae6c-4451-98d2-9882a59e1707} # change this to a random string
+      NOOPTRACE_INIT_PROJECT_SECRET_KEY: ${NOOPTRACE_INIT_PROJECT_SECRET_KEY:-sk-lf-d9035680-89dd-4950-8688-7870720bf359} # change this to a random string
+      NOOPTRACE_INIT_USER_EMAIL: ${NOOPTRACE_INIT_USER_EMAIL:-admin@pentagi.com}
+      NOOPTRACE_INIT_USER_NAME: ${NOOPTRACE_INIT_USER_NAME:-admin}
+      NOOPTRACE_INIT_USER_PASSWORD: ${NOOPTRACE_INIT_USER_PASSWORD:-P3nTagIsD0d} # change this to a random password
+      NOOPTRACE_SDK_CI_SYNC_PROCESSING_ENABLED: ${NOOPTRACE_SDK_CI_SYNC_PROCESSING_ENABLED:-false}
+      NOOPTRACE_READ_FROM_POSTGRES_ONLY: ${NOOPTRACE_READ_FROM_POSTGRES_ONLY:-false}
+      NOOPTRACE_READ_FROM_CLICKHOUSE_ONLY: ${NOOPTRACE_READ_FROM_CLICKHOUSE_ONLY:-true}
+      NOOPTRACE_RETURN_FROM_CLICKHOUSE: ${NOOPTRACE_RETURN_FROM_CLICKHOUSE:-true}
+      # nooptrace enterprise license key
+      NOOPTRACE_EE_LICENSE_KEY: ${NOOPTRACE_EE_LICENSE_KEY:-}
+      # custom oauth2
+      AUTH_CUSTOM_CLIENT_ID: ${NOOPTRACE_AUTH_CUSTOM_CLIENT_ID:-}
+      AUTH_CUSTOM_CLIENT_SECRET: ${NOOPTRACE_AUTH_CUSTOM_CLIENT_SECRET:-}
+      AUTH_CUSTOM_ISSUER: ${NOOPTRACE_AUTH_CUSTOM_ISSUER:-}
+      AUTH_CUSTOM_NAME: ${NOOPTRACE_AUTH_CUSTOM_NAME:-}
+      AUTH_CUSTOM_SCOPE: ${NOOPTRACE_AUTH_CUSTOM_SCOPE:-openid email profile}
+      AUTH_CUSTOM_ALLOW_ACCOUNT_LINKING: ${NOOPTRACE_AUTH_CUSTOM_ALLOW_ACCOUNT_LINKING:-true}
+      AUTH_CUSTOM_CLIENT_AUTH_METHOD: ${NOOPTRACE_AUTH_CUSTOM_CLIENT_AUTH_METHOD:-}
+      AUTH_DISABLE_SIGNUP: ${NOOPTRACE_AUTH_DISABLE_SIGNUP:-}
+      NOOPTRACE_ALLOWED_ORGANIZATION_CREATORS: ${NOOPTRACE_ALLOWED_ORGANIZATION_CREATORS:-}
+      AUTH_SESSION_MAX_AGE: ${NOOPTRACE_AUTH_SESSION_MAX_AGE:-240}
+      NOOPTRACE_DEFAULT_ORG_ID: ${NOOPTRACE_DEFAULT_ORG_ID:-ocm47619l0000872mcd2dlbqwb}
+      NOOPTRACE_DEFAULT_PROJECT_ID: ${NOOPTRACE_DEFAULT_PROJECT_ID:-cm47619l0000872mcd2dlbqwb}
+      NOOPTRACE_DEFAULT_ORG_ROLE: ${NOOPTRACE_DEFAULT_ORG_ROLE:-VIEWER}
+      NOOPTRACE_DEFAULT_PROJECT_ROLE: ${NOOPTRACE_DEFAULT_PROJECT_ROLE:-VIEWER}
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network
+      - pentagi-network
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24
+    restart: unless-stopped
+    user: "101:101"
+    container_name: nooptrace-clickhouse
+    hostname: nooptrace-clickhouse
+    environment:
+      CLICKHOUSE_DB: ${NOOPTRACE_CLICKHOUSE_DB:-default}
+      CLICKHOUSE_USER: ${NOOPTRACE_CLICKHOUSE_USER:-clickhouse}
+      CLICKHOUSE_PASSWORD: ${NOOPTRACE_CLICKHOUSE_PASSWORD:-clickhouse}
+    volumes:
+      - nooptrace-clickhouse-data:/var/lib/clickhouse
+      - nooptrace-clickhouse-logs:/var/log/clickhouse-server
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 1s
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network
+
+  minio:
+    image: minio/minio:RELEASE.2025-07-23T15-54-02Z
+    restart: unless-stopped
+    container_name: nooptrace-minio
+    hostname: nooptrace-minio
+    command: server /data --console-address ":9001" --address ":9000" --json
+    environment:
+      MINIO_ROOT_USER: ${NOOPTRACE_S3_ACCESS_KEY_ID:-minio}
+      MINIO_ROOT_PASSWORD: ${NOOPTRACE_S3_SECRET_ACCESS_KEY:-miniosecret}
+      MINIO_BUCKET_NAME: ${NOOPTRACE_S3_BUCKET:-nooptrace}
+      MINIO_UPDATE: off
+    entrypoint: |
+      /bin/sh -c '
+        isAlive() { mc ready local >/dev/null 2>&1; }                      # check if Minio is alive
+        minio $0 "$@" --quiet & echo $! > /tmp/minio.pid                   # start Minio in the background
+        until isAlive; do sleep 1; done                                    # wait until Minio is alive
+        echo "MinIO is ready. Proceeding with setup..."
+        mc alias set myminio http://localhost:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD
+        mc mb myminio/$$MINIO_BUCKET_NAME/ --ignore-existing               # create test bucket
+        mc anonymous set public myminio/$$MINIO_BUCKET_NAME                # make the test bucket public
+        mc admin update myminio/$$MINIO_BUCKET_NAME                        # update test bucket
+        echo "MinIO is configured. Trying to restart Minio..."
+        kill -s INT $$(cat /tmp/minio.pid)                                 # try to stop Minio
+        while [ -e "/proc/$$(cat /tmp/minio.pid)" ]; do sleep 0.5; done    # wait until Minio is stopped
+        rm /tmp/minio.pid                                                  # remove the pid file
+        echo "MinIO is configured and running..."
+        exec minio $0 "$@"                                                 # start Minio in the foreground
+      '
+    volumes:
+      - nooptrace-minio-data:/data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+      start_period: 1s
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    container_name: nooptrace-redis
+    hostname: nooptrace-redis
+    command: >
+      --requirepass ${NOOPTRACE_REDIS_AUTH:-myredissecret}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    container_name: nooptrace-postgres
+    hostname: nooptrace-postgres
+    environment:
+      POSTGRES_USER: ${NOOPTRACE_POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${NOOPTRACE_POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${NOOPTRACE_POSTGRES_DB:-nooptrace}
+    volumes:
+      - nooptrace-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${NOOPTRACE_POSTGRES_USER:-postgres}"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    logging:
+      options:
+        max-size: 50m
+        max-file: "7"
+    networks:
+      - nooptrace-network

@@ -12,7 +12,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 )
@@ -94,11 +94,11 @@ func (t *tavily) Handle(ctx context.Context, name string, args json.RawMessage) 
 	result, err := t.search(ctx, action.Query, action.MaxResults.Int())
 	if err != nil {
 		observation.Event(
-			langfuse.WithEventName("search engine error swallowed"),
-			langfuse.WithEventInput(action.Query),
-			langfuse.WithEventStatus(err.Error()),
-			langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-			langfuse.WithEventMetadata(langfuse.Metadata{
+			nooptrace.WithEventName("search engine error swallowed"),
+			nooptrace.WithEventInput(action.Query),
+			nooptrace.WithEventStatus(err.Error()),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+			nooptrace.WithEventMetadata(nooptrace.Metadata{
 				"tool_name":   TavilyToolName,
 				"engine":      "tavily",
 				"query":       action.Query,

@@ -10,7 +10,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/docker"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers"
 	"pentagi/pkg/providers/provider"
 	"pentagi/pkg/templates"
@@ -138,17 +138,17 @@ func (t *tester) initFlowProviderController() error {
 		return fmt.Errorf("failed to get user %d: %w", flow.UserID, err)
 	}
 
-	// Setup Langfuse observability to track the execution lifecycle
+	// Setup NoopTrace observability to track the execution lifecycle
 	// This is critical for debugging and monitoring flow performance
 	// We use trace context to connect this execution with earlier/later runs
 	ctx, observation := obs.Observer.NewObservation(t.ctx,
-		langfuse.WithObservationTraceID(flow.TraceID.String),
-		langfuse.WithObservationTraceContext(
-			langfuse.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
-			langfuse.WithTraceUserID(user.Mail),
-			langfuse.WithTraceTags([]string{"controller"}),
-			langfuse.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
-			langfuse.WithTraceMetadata(langfuse.Metadata{
+		nooptrace.WithObservationTraceID(flow.TraceID.String),
+		nooptrace.WithObservationTraceContext(
+			nooptrace.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
+			nooptrace.WithTraceUserID(user.Mail),
+			nooptrace.WithTraceTags([]string{"controller"}),
+			nooptrace.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
+			nooptrace.WithTraceMetadata(nooptrace.Metadata{
 				"flow_id":       flow.ID,
 				"user_id":       flow.UserID,
 				"user_email":    user.Mail,
@@ -162,7 +162,7 @@ func (t *tester) initFlowProviderController() error {
 	)
 
 	// Create a span for tracking the entire worker lifecycle
-	flowSpan := observation.Span(langfuse.WithSpanName("run tester flow worker"))
+	flowSpan := observation.Span(nooptrace.WithSpanName("run tester flow worker"))
 	t.ctx, _ = flowSpan.Observation(ctx)
 
 	// Each flow has its own JSON configuration of allowed functions
@@ -668,13 +668,13 @@ func (t *tester) needsTeminalPrepare(funcName string) bool {
 	return terminalFunctions[funcName] || tools.GetToolTypeMapping()[funcName] == tools.AgentToolType
 }
 
-// wrapErrorEndSpan wraps an error with an end span in langfuse
-func wrapErrorEndSpan(ctx context.Context, span langfuse.Span, msg string, err error) error {
+// wrapErrorEndSpan wraps an error with an end span in nooptrace
+func wrapErrorEndSpan(ctx context.Context, span nooptrace.Span, msg string, err error) error {
 	logrus.WithContext(ctx).WithError(err).Error(msg)
 	err = fmt.Errorf("%s: %w", msg, err)
 	span.End(
-		langfuse.WithSpanStatus(err.Error()),
-		langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+		nooptrace.WithSpanStatus(err.Error()),
+		nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
 	)
 	return err
 }

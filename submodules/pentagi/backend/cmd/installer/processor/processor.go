@@ -15,7 +15,7 @@ type ProductStack string
 const (
 	ProductStackPentagi       ProductStack = "pentagi"
 	ProductStackGraphiti      ProductStack = "graphiti"
-	ProductStackLangfuse      ProductStack = "langfuse"
+	ProductStackNoopTrace      ProductStack = "nooptrace"
 	ProductStackObservability ProductStack = "observability"
 	ProductStackCompose       ProductStack = "compose"
 	ProductStackWorker        ProductStack = "worker"
@@ -45,7 +45,7 @@ type ProductDockerNetwork string
 const (
 	ProductDockerNetworkPentagi       ProductDockerNetwork = "pentagi-network"
 	ProductDockerNetworkObservability ProductDockerNetwork = "observability-network"
-	ProductDockerNetworkLangfuse      ProductDockerNetwork = "langfuse-network"
+	ProductDockerNetworkNoopTrace      ProductDockerNetwork = "nooptrace-network"
 )
 
 type FilesCheckResult map[string]files.FileStatus

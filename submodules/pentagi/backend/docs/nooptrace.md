@@ -1,10 +1,10 @@
-# Langfuse Integration for PentAGI
+# NoopTrace Integration for PentAGI
 
-This document provides a comprehensive guide to the Langfuse integration in PentAGI, covering architecture, setup, usage patterns, and best practices for developers.
+This document provides a comprehensive guide to the NoopTrace integration in PentAGI, covering architecture, setup, usage patterns, and best practices for developers.
 
 ## Table of Contents
 
-- [Langfuse Integration for PentAGI](#langfuse-integration-for-pentagi)
+- [NoopTrace Integration for PentAGI](#nooptrace-integration-for-pentagi)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Architecture](#architecture)
@@ -43,7 +43,7 @@ This document provides a comprehensive guide to the Langfuse integration in Pent
 
 ## Introduction
 
-Langfuse is an open-source observability platform specifically designed for LLM-powered applications. The PentAGI integration with Langfuse provides:
+NoopTrace is an open-source observability platform specifically designed for LLM-powered applications. The PentAGI integration with NoopTrace provides:
 
 - **Comprehensive tracing** for AI agent flows and tasks
 - **Detailed telemetry** for LLM interactions and tool calls
@@ -61,13 +61,13 @@ This integration enables developers to:
 
 ### Component Overview
 
-The Langfuse integration in PentAGI is built around a layered architecture that provides both high-level abstractions for simple use cases and fine-grained control for complex scenarios.
+The NoopTrace integration in PentAGI is built around a layered architecture that provides both high-level abstractions for simple use cases and fine-grained control for complex scenarios.
 
 ```mermaid
 flowchart TD
     Application[PentAGI Application] --> Observer[Observer]
-    Observer --> Client[Langfuse Client]
-    Client --> API[Langfuse API]
+    Observer --> Client[NoopTrace Client]
+    Client --> API[NoopTrace API]
 
     Application -- "Creates" --> Observation[Observation Interface]
     Observation -- "Manages" --> Spans[Spans]
@@ -80,7 +80,7 @@ flowchart TD
     Observer -- "Batches" --> Generations
     Observer -- "Batches" --> Scores
 
-    subgraph "Langfuse SDK"
+    subgraph "NoopTrace SDK"
         Observer
         Client
         Observation
@@ -90,7 +90,7 @@ flowchart TD
         Scores
     end
 
-    subgraph "Langfuse Backend"
+    subgraph "NoopTrace Backend"
         API
         PostgreSQL[(PostgreSQL)]
         ClickHouse[(ClickHouse)]
@@ -106,15 +106,15 @@ flowchart TD
 
 ### Data Flow
 
-The data flow through the Langfuse system follows a consistent pattern:
+The data flow through the NoopTrace system follows a consistent pattern:
 
 ```mermaid
 sequenceDiagram
     participant App as PentAGI Application
     participant Obs as Observer
     participant Queue as Event Queue
-    participant Client as Langfuse Client
-    participant API as Langfuse API
+    participant Client as NoopTrace Client
+    participant API as NoopTrace API
     participant DB as Storage
 
     App->>Obs: Create Observation
@@ -139,11 +139,11 @@ sequenceDiagram
 
 ### Key Interfaces
 
-The Langfuse integration is built around several key interfaces:
+The NoopTrace integration is built around several key interfaces:
 
 #### Observer Interface
 
-The `Observer` interface is the primary entry point for Langfuse integration:
+The `Observer` interface is the primary entry point for NoopTrace integration:
 
 ```go
 type Observer interface {
@@ -227,11 +227,11 @@ type Generation interface {
 
 ### Infrastructure Requirements
 
-Langfuse requires several backend services. For development and testing, you can use the included Docker Compose file:
+NoopTrace requires several backend services. For development and testing, you can use the included Docker Compose file:
 
 ```bash
-# Start Langfuse infrastructure
-docker-compose -f docker-compose-langfuse.yml up -d
+# Start NoopTrace infrastructure
+docker-compose -f docker-compose-nooptrace.yml up -d
 ```
 
 The infrastructure includes:
@@ -239,56 +239,56 @@ The infrastructure includes:
 - **ClickHouse**: Analytical data storage for queries
 - **Redis**: Caching and queue management
 - **MinIO**: S3-compatible storage for large objects
-- **Langfuse Web**: Admin UI (accessible at http://localhost:4000)
-- **Langfuse Worker**: Background processing
+- **NoopTrace Web**: Admin UI (accessible at http://localhost:4000)
+- **NoopTrace Worker**: Background processing
 
 ### Configuration Options
 
-The Langfuse integration can be configured through environment variables:
+The NoopTrace integration can be configured through environment variables:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `LANGFUSE_BASE_URL` | Base URL for Langfuse API | |
-| `LANGFUSE_PROJECT_ID` | Project ID in Langfuse | |
-| `LANGFUSE_PUBLIC_KEY` | Public API key | |
-| `LANGFUSE_SECRET_KEY` | Secret API key | |
-| `LANGFUSE_INIT_USER_EMAIL` | Admin user email | admin@pentagi.com |
-| `LANGFUSE_INIT_USER_PASSWORD` | Admin user password | P3nTagIsD0d |
+| `NOOPTRACE_BASE_URL` | Base URL for NoopTrace API | |
+| `NOOPTRACE_PROJECT_ID` | Project ID in NoopTrace | |
+| `NOOPTRACE_PUBLIC_KEY` | Public API key | |
+| `NOOPTRACE_SECRET_KEY` | Secret API key | |
+| `NOOPTRACE_INIT_USER_EMAIL` | Admin user email | admin@pentagi.com |
+| `NOOPTRACE_INIT_USER_PASSWORD` | Admin user password | P3nTagIsD0d |
 
-For a complete list of configuration options, refer to the docker-compose-langfuse.yml file.
+For a complete list of configuration options, refer to the docker-compose-nooptrace.yml file.
 
 ### Initialization
 
-To initialize the Langfuse integration in your code:
+To initialize the NoopTrace integration in your code:
 
 ```go
 // Import the necessary packages
 import (
-    "pentagi/pkg/observability/langfuse"
+    "pentagi/pkg/observability/nooptrace"
     "pentagi/pkg/config"
 )
 
-// Create a Langfuse client
-client, err := langfuse.NewClient(
-    langfuse.WithBaseURL(cfg.LangfuseBaseURL),
-    langfuse.WithPublicKey(cfg.LangfusePublicKey),
-    langfuse.WithSecretKey(cfg.LangfuseSecretKey),
-    langfuse.WithProjectID(cfg.LangfuseProjectID),
+// Create a NoopTrace client
+client, err := nooptrace.NewClient(
+    nooptrace.WithBaseURL(cfg.NoopTraceBaseURL),
+    nooptrace.WithPublicKey(cfg.NoopTracePublicKey),
+    nooptrace.WithSecretKey(cfg.NoopTraceSecretKey),
+    nooptrace.WithProjectID(cfg.NoopTraceProjectID),
 )
 if err != nil {
-    return nil, fmt.Errorf("failed to create langfuse client: %w", err)
+    return nil, fmt.Errorf("failed to create nooptrace client: %w", err)
 }
 
 // Create an observer with the client
-observer := langfuse.NewObserver(client,
-    langfuse.WithProject("pentagi"),
-    langfuse.WithSendInterval(10 * time.Second),
-    langfuse.WithQueueSize(100),
+observer := nooptrace.NewObserver(client,
+    nooptrace.WithProject("pentagi"),
+    nooptrace.WithSendInterval(10 * time.Second),
+    nooptrace.WithQueueSize(100),
 )
 
-// Use a no-op observer when Langfuse is not configured
+// Use a no-op observer when NoopTrace is not configured
 if errors.Is(err, ErrNotConfigured) {
-    observer = langfuse.NewNoopObserver()
+    observer = nooptrace.NewNoopObserver()
 }
 ```
 
@@ -296,15 +296,15 @@ if errors.Is(err, ErrNotConfigured) {
 
 ### Creating Observations
 
-Observations are the fundamental tracking unit in Langfuse. Create a new observation for each logical operation or flow:
+Observations are the fundamental tracking unit in NoopTrace. Create a new observation for each logical operation or flow:
 
 ```go
 // Create a new observation from context
 ctx, observation := observer.NewObservation(ctx,
-    langfuse.WithObservationTraceContext(
-        langfuse.WithTraceName("flow-execution"),
-        langfuse.WithTraceUserId(user.Email),
-        langfuse.WithTraceSessionId(fmt.Sprintf("flow-%d", flowID)),
+    nooptrace.WithObservationTraceContext(
+        nooptrace.WithTraceName("flow-execution"),
+        nooptrace.WithTraceUserId(user.Email),
+        nooptrace.WithTraceSessionId(fmt.Sprintf("flow-%d", flowID)),
     ),
 )
 ```
@@ -316,8 +316,8 @@ Spans track time duration and are used for operations with a distinct start and 
 ```go
 // Create a span for an operation
 span := observation.Span(
-    langfuse.WithSpanName("database-query"),
-    langfuse.WithStartSpanInput(query),
+    nooptrace.WithSpanName("database-query"),
+    nooptrace.WithStartSpanInput(query),
 )
 
 // Execute the operation
@@ -326,13 +326,13 @@ result, err := executeQuery(query)
 // End the span with result
 if err != nil {
     span.End(
-        langfuse.WithSpanStatus(err.Error()),
-        langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+        nooptrace.WithSpanStatus(err.Error()),
+        nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
     )
 } else {
     span.End(
-        langfuse.WithSpanOutput(result),
-        langfuse.WithSpanStatus("success"),
+        nooptrace.WithSpanOutput(result),
+        nooptrace.WithSpanStatus("success"),
     )
 }
 ```
@@ -344,8 +344,8 @@ Events represent point-in-time occurrences:
 ```go
 // Record an event
 observation.Event(
-    langfuse.WithEventName("user-interaction"),
-    langfuse.WithEventMetadata(langfuse.Metadata{
+    nooptrace.WithEventName("user-interaction"),
+    nooptrace.WithEventMetadata(nooptrace.Metadata{
         "action": "button-click",
         "element": "submit-button",
     }),
@@ -359,10 +359,10 @@ Generations track LLM interactions with additional metadata:
 ```go
 // Start a generation
 generation := observation.Generation(
-    langfuse.WithGenerationName("task-planning"),
-    langfuse.WithGenerationModel("gpt-4"),
-    langfuse.WithGenerationInput(prompt),
-    langfuse.WithGenerationModelParameters(&langfuse.ModelParameters{
+    nooptrace.WithGenerationName("task-planning"),
+    nooptrace.WithGenerationModel("gpt-4"),
+    nooptrace.WithGenerationInput(prompt),
+    nooptrace.WithGenerationModelParameters(&nooptrace.ModelParameters{
         Temperature: 0.7,
         MaxTokens: 1000,
     }),
@@ -373,11 +373,11 @@ response, err := llmClient.Generate(prompt)
 
 // End the generation with the result
 generation.End(
-    langfuse.WithGenerationOutput(response),
-    langfuse.WithEndGenerationUsage(&langfuse.GenerationUsage{
+    nooptrace.WithGenerationOutput(response),
+    nooptrace.WithEndGenerationUsage(&nooptrace.GenerationUsage{
         Input: promptTokens,
         Output: responseTokens,
-        Unit: langfuse.GenerationUsageUnitTokens,
+        Unit: nooptrace.GenerationUsageUnitTokens,
     }),
 )
 ```
@@ -389,9 +389,9 @@ Scores provide evaluations for agent outputs:
 ```go
 // Add a score to an observation
 observation.Score(
-    langfuse.WithScoreName("response-quality"),
-    langfuse.WithScoreFloatValue(0.95),
-    langfuse.WithScoreComment("High quality and relevant response"),
+    nooptrace.WithScoreName("response-quality"),
+    nooptrace.WithScoreFloatValue(0.95),
+    nooptrace.WithScoreComment("High quality and relevant response"),
 )
 ```
 
@@ -402,9 +402,9 @@ Agents represent autonomous reasoning processes in agentic systems:
 ```go
 // Create an agent observation
 agent := observation.Agent(
-    langfuse.WithAgentName("security-analyst"),
-    langfuse.WithAgentInput(analysisRequest),
-    langfuse.WithAgentMetadata(langfuse.Metadata{
+    nooptrace.WithAgentName("security-analyst"),
+    nooptrace.WithAgentInput(analysisRequest),
+    nooptrace.WithAgentMetadata(nooptrace.Metadata{
         "agent_role": "security_researcher",
         "capabilities": []string{"vulnerability_analysis", "exploit_detection"},
     }),
@@ -415,8 +415,8 @@ result := performAnalysis(ctx)
 
 // End the agent observation
 agent.End(
-    langfuse.WithAgentOutput(result),
-    langfuse.WithAgentStatus("completed"),
+    nooptrace.WithAgentOutput(result),
+    nooptrace.WithAgentStatus("completed"),
 )
 ```
 
@@ -427,9 +427,9 @@ Tools track the execution of specific tools or functions:
 ```go
 // Create a tool observation
 tool := observation.Tool(
-    langfuse.WithToolName("web-search"),
-    langfuse.WithToolInput(searchQuery),
-    langfuse.WithToolMetadata(langfuse.Metadata{
+    nooptrace.WithToolName("web-search"),
+    nooptrace.WithToolInput(searchQuery),
+    nooptrace.WithToolMetadata(nooptrace.Metadata{
         "tool_type": "search",
         "provider": "duckduckgo",
     }),
@@ -441,13 +441,13 @@ results, err := executeSearch(ctx, searchQuery)
 // End the tool observation
 if err != nil {
     tool.End(
-        langfuse.WithToolStatus(err.Error()),
-        langfuse.WithToolLevel(langfuse.ObservationLevelError),
+        nooptrace.WithToolStatus(err.Error()),
+        nooptrace.WithToolLevel(nooptrace.ObservationLevelError),
     )
 } else {
     tool.End(
-        langfuse.WithToolOutput(results),
-        langfuse.WithToolStatus("success"),
+        nooptrace.WithToolOutput(results),
+        nooptrace.WithToolStatus("success"),
     )
 }
 ```
@@ -459,9 +459,9 @@ Chains track multi-step reasoning processes:
 ```go
 // Create a chain observation
 chain := observation.Chain(
-    langfuse.WithChainName("multi-step-reasoning"),
-    langfuse.WithChainInput(messages),
-    langfuse.WithChainMetadata(langfuse.Metadata{
+    nooptrace.WithChainName("multi-step-reasoning"),
+    nooptrace.WithChainInput(messages),
+    nooptrace.WithChainMetadata(nooptrace.Metadata{
         "chain_type": "sequential",
         "steps": 3,
     }),
@@ -472,8 +472,8 @@ finalResult := executeReasoningChain(ctx, messages)
 
 // End the chain observation
 chain.End(
-    langfuse.WithChainOutput(finalResult),
-    langfuse.WithChainStatus("completed"),
+    nooptrace.WithChainOutput(finalResult),
+    nooptrace.WithChainStatus("completed"),
 )
 ```
 
@@ -484,13 +484,13 @@ Retrievers track information retrieval operations, such as vector database searc
 ```go
 // Create a retriever observation
 retriever := observation.Retriever(
-    langfuse.WithRetrieverName("vector-similarity-search"),
-    langfuse.WithRetrieverInput(map[string]any{
+    nooptrace.WithRetrieverName("vector-similarity-search"),
+    nooptrace.WithRetrieverInput(map[string]any{
         "query": searchQuery,
         "threshold": 0.75,
         "max_results": 5,
     }),
-    langfuse.WithRetrieverMetadata(langfuse.Metadata{
+    nooptrace.WithRetrieverMetadata(nooptrace.Metadata{
         "retriever_type": "vector_similarity",
         "embedding_model": "text-embedding-ada-002",
     }),
@@ -501,8 +501,8 @@ docs, err := vectorStore.SimilaritySearch(ctx, searchQuery)
 
 // End the retriever observation
 retriever.End(
-    langfuse.WithRetrieverOutput(docs),
-    langfuse.WithRetrieverStatus("success"),
+    nooptrace.WithRetrieverOutput(docs),
+    nooptrace.WithRetrieverStatus("success"),
 )
 ```
 
@@ -513,12 +513,12 @@ Evaluators track quality assessment and validation operations:
 ```go
 // Create an evaluator observation
 evaluator := observation.Evaluator(
-    langfuse.WithEvaluatorName("response-quality-evaluator"),
-    langfuse.WithEvaluatorInput(map[string]any{
+    nooptrace.WithEvaluatorName("response-quality-evaluator"),
+    nooptrace.WithEvaluatorInput(map[string]any{
         "response": agentResponse,
         "criteria": []string{"accuracy", "completeness", "safety"},
     }),
-    langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+    nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
         "evaluator_type": "llm_based",
         "model": "gpt-4",
     }),
@@ -529,8 +529,8 @@ scores := evaluateResponse(ctx, agentResponse)
 
 // End the evaluator observation
 evaluator.End(
-    langfuse.WithEvaluatorOutput(scores),
-    langfuse.WithEvaluatorStatus("completed"),
+    nooptrace.WithEvaluatorOutput(scores),
+    nooptrace.WithEvaluatorStatus("completed"),
 )
 ```
 
@@ -541,12 +541,12 @@ Embeddings track vector embedding generation operations:
 ```go
 // Create an embedding observation
 embedding := observation.Embedding(
-    langfuse.WithEmbeddingName("text-embedding-generation"),
-    langfuse.WithEmbeddingInput(map[string]any{
+    nooptrace.WithEmbeddingName("text-embedding-generation"),
+    nooptrace.WithEmbeddingInput(map[string]any{
         "text": textToEmbed,
         "model": "text-embedding-ada-002",
     }),
-    langfuse.WithEmbeddingMetadata(langfuse.Metadata{
+    nooptrace.WithEmbeddingMetadata(nooptrace.Metadata{
         "embedding_model": "text-embedding-ada-002",
         "dimensions": 1536,
     }),
@@ -557,11 +557,11 @@ vector, err := embeddingProvider.Embed(ctx, textToEmbed)
 
 // End the embedding observation
 embedding.End(
-    langfuse.WithEmbeddingOutput(map[string]any{
+    nooptrace.WithEmbeddingOutput(map[string]any{
         "vector": vector,
         "dimensions": len(vector),
     }),
-    langfuse.WithEmbeddingStatus("success"),
+    nooptrace.WithEmbeddingStatus("success"),
 )
 ```
 
@@ -572,12 +572,12 @@ Guardrails track safety and policy enforcement checks:
 ```go
 // Create a guardrail observation
 guardrail := observation.Guardrail(
-    langfuse.WithGuardrailName("content-safety-check"),
-    langfuse.WithGuardrailInput(map[string]any{
+    nooptrace.WithGuardrailName("content-safety-check"),
+    nooptrace.WithGuardrailInput(map[string]any{
         "text": userInput,
         "checks": []string{"content_policy", "pii_detection"},
     }),
-    langfuse.WithGuardrailMetadata(langfuse.Metadata{
+    nooptrace.WithGuardrailMetadata(nooptrace.Metadata{
         "guardrail_type": "safety",
         "strictness": "high",
     }),
@@ -588,24 +588,24 @@ passed, violations := performSafetyChecks(ctx, userInput)
 
 // End the guardrail observation
 guardrail.End(
-    langfuse.WithGuardrailOutput(map[string]any{
+    nooptrace.WithGuardrailOutput(map[string]any{
         "passed": passed,
         "violations": violations,
     }),
-    langfuse.WithGuardrailStatus(fmt.Sprintf("passed=%t", passed)),
+    nooptrace.WithGuardrailStatus(fmt.Sprintf("passed=%t", passed)),
 )
 ```
 
 ### Context Propagation
 
-Langfuse leverages Go's context package for observation propagation:
+NoopTrace leverages Go's context package for observation propagation:
 
 ```go
 // Create a parent observation
 ctx, parentObs := observer.NewObservation(ctx)
 
 // Create a span
-span := parentObs.Span(langfuse.WithSpanName("parent-operation"))
+span := parentObs.Span(nooptrace.WithSpanName("parent-operation"))
 
 // Create a child context with the span's observation
 childCtx, childObs := span.Observation(ctx)
@@ -619,7 +619,7 @@ childObs.Log(childCtx, "Operation completed")
 
 ## Data Conversion
 
-The Langfuse integration automatically converts LangChainGo data structures to OpenAI-compatible format for optimal display in the Langfuse UI.
+The NoopTrace integration automatically converts LangChainGo data structures to OpenAI-compatible format for optimal display in the NoopTrace UI.
 
 ### Automatic Conversion
 
@@ -638,7 +638,7 @@ messages := []*llms.MessageContent{
 
 // Automatically converted to OpenAI format
 generation := observation.Generation(
-    langfuse.WithGenerationInput(messages),  // Converted automatically
+    nooptrace.WithGenerationInput(messages),  // Converted automatically
 )
 ```
 
@@ -648,7 +648,7 @@ The converter transforms messages to OpenAI-compatible format providing:
 
 1. **Standard Structure** - Compatible with OpenAI API message format
 2. **Rich UI Rendering** - Tool calls, images, and complex responses display correctly
-3. **Playground Support** - Messages work with Langfuse playground feature
+3. **Playground Support** - Messages work with NoopTrace playground feature
 4. **Table Rendering** - Complex tool responses shown as expandable tables
 
 ### Message Conversion
@@ -744,7 +744,7 @@ llms.ToolCallResponse{
 }
 ```
 
-Rendered as **expandable table** in Langfuse UI with toggle button.
+Rendered as **expandable table** in NoopTrace UI with toggle button.
 
 #### Reasoning/Thinking Content
 
@@ -839,7 +839,7 @@ messages := []*llms.MessageContent{
 }
 ```
 
-The tool response automatically gets the `"name": "search_database"` field added, showing the function name as the title in Langfuse UI instead of just "Tool".
+The tool response automatically gets the `"name": "search_database"` field added, showing the function name as the title in NoopTrace UI instead of just "Tool".
 
 ### ContentChoice Conversion
 
@@ -853,7 +853,7 @@ output := &llms.ContentChoice{
 }
 
 generation.End(
-    langfuse.WithGenerationOutput(output),  // Converted to OpenAI format
+    nooptrace.WithGenerationOutput(output),  // Converted to OpenAI format
 )
 ```
 
@@ -868,12 +868,12 @@ The main integration point in PentAGI is the Flow Controller, which handles the 
 ```go
 // In flow controller initialization
 ctx, observation := obs.Observer.NewObservation(ctx,
-    langfuse.WithObservationTraceContext(
-        langfuse.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
-        langfuse.WithTraceUserId(user.Mail),
-        langfuse.WithTraceTags([]string{"controller"}),
-        langfuse.WithTraceSessionId(fmt.Sprintf("flow-%d", flow.ID)),
-        langfuse.WithTraceMetadata(langfuse.Metadata{
+    nooptrace.WithObservationTraceContext(
+        nooptrace.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
+        nooptrace.WithTraceUserId(user.Mail),
+        nooptrace.WithTraceTags([]string{"controller"}),
+        nooptrace.WithTraceSessionId(fmt.Sprintf("flow-%d", flow.ID)),
+        nooptrace.WithTraceMetadata(nooptrace.Metadata{
             "flow_id": flow.ID,
             "user_id": user.ID,
             // ...additional metadata
@@ -882,13 +882,13 @@ ctx, observation := obs.Observer.NewObservation(ctx,
 )
 
 // Create a span for a specific operation
-flowSpan := observation.Span(langfuse.WithSpanName("prepare flow worker"))
+flowSpan := observation.Span(nooptrace.WithSpanName("prepare flow worker"))
 
 // Propagate the context with the span
 ctx, _ = flowSpan.Observation(ctx)
 
 // End the span when the operation completes
-flowSpan.End(langfuse.WithSpanStatus("flow worker started"))
+flowSpan.End(nooptrace.WithSpanStatus("flow worker started"))
 ```
 
 ### Agent Execution Tracking
@@ -898,30 +898,30 @@ Track individual agent executions and tool calls:
 ```go
 // Create a span for agent execution
 agentSpan := observation.Span(
-    langfuse.WithSpanName("agent-execution"),
-    langfuse.WithStartSpanInput(input),
+    nooptrace.WithSpanName("agent-execution"),
+    nooptrace.WithStartSpanInput(input),
 )
 
 // Track the generation
 generation := agentSpan.Observation(ctx).Generation(
-    langfuse.WithGenerationName("agent-thinking"),
-    langfuse.WithGenerationModel(modelName),
+    nooptrace.WithGenerationName("agent-thinking"),
+    nooptrace.WithGenerationModel(modelName),
 )
 
 // End the generation with the result
 generation.End(
-    langfuse.WithGenerationOutput(output),
-    langfuse.WithEndGenerationUsage(&langfuse.GenerationUsage{
+    nooptrace.WithGenerationOutput(output),
+    nooptrace.WithEndGenerationUsage(&nooptrace.GenerationUsage{
         Input: promptTokens,
         Output: responseTokens,
-        Unit: langfuse.GenerationUsageUnitTokens,
+        Unit: nooptrace.GenerationUsageUnitTokens,
     }),
 )
 
 // End the span
 agentSpan.End(
-    langfuse.WithSpanStatus("success"),
-    langfuse.WithSpanOutput(result),
+    nooptrace.WithSpanStatus("success"),
+    nooptrace.WithSpanOutput(result),
 )
 ```
 
@@ -932,11 +932,11 @@ Track and monitor all LLM interactions:
 ```go
 // Create a generation for an LLM call
 generation := observation.Generation(
-    langfuse.WithGenerationName("content-generation"),
-    langfuse.WithGenerationModel(llmModel),
-    langfuse.WithGenerationInput(prompt),
-    langfuse.WithGenerationModelParameters(
-        langfuse.GetLangchainModelParameters(options),
+    nooptrace.WithGenerationName("content-generation"),
+    nooptrace.WithGenerationModel(llmModel),
+    nooptrace.WithGenerationInput(prompt),
+    nooptrace.WithGenerationModelParameters(
+        nooptrace.GetLangchainModelParameters(options),
     ),
 )
 
@@ -946,16 +946,16 @@ response, err := llm.Generate(ctx, prompt, options...)
 // End the generation with result
 if err != nil {
     generation.End(
-        langfuse.WithGenerationStatus(err.Error()),
-        langfuse.WithGenerationLevel(langfuse.ObservationLevelError),
+        nooptrace.WithGenerationStatus(err.Error()),
+        nooptrace.WithGenerationLevel(nooptrace.ObservationLevelError),
     )
 } else {
     generation.End(
-        langfuse.WithGenerationOutput(response),
-        langfuse.WithEndGenerationUsage(&langfuse.GenerationUsage{
+        nooptrace.WithGenerationOutput(response),
+        nooptrace.WithEndGenerationUsage(&nooptrace.GenerationUsage{
             Input: calculateInputTokens(prompt),
             Output: calculateOutputTokens(response),
-            Unit: langfuse.GenerationUsageUnitTokens,
+            Unit: nooptrace.GenerationUsageUnitTokens,
         }),
     )
 }
@@ -965,13 +965,13 @@ if err != nil {
 
 ### Batching and Performance
 
-The Langfuse integration uses batching to optimize performance:
+The NoopTrace integration uses batching to optimize performance:
 
 ```go
 // Configure batch size and interval
-observer := langfuse.NewObserver(client,
-    langfuse.WithQueueSize(200),      // Events per batch
-    langfuse.WithSendInterval(15*time.Second), // Send interval
+observer := nooptrace.NewObserver(client,
+    nooptrace.WithQueueSize(200),      // Events per batch
+    nooptrace.WithSendInterval(15*time.Second), // Send interval
 )
 ```
 
@@ -986,16 +986,16 @@ if err := observer.ForceFlush(ctx); err != nil {
 
 ### Error Handling
 
-Langfuse operations are designed to be non-blocking and fail gracefully:
+NoopTrace operations are designed to be non-blocking and fail gracefully:
 
 ```go
 // Create a span with try/catch pattern
-span := observation.Span(langfuse.WithSpanName("risky-operation"))
+span := observation.Span(nooptrace.WithSpanName("risky-operation"))
 defer func() {
     if r := recover(); r != nil {
         span.End(
-            langfuse.WithSpanStatus(fmt.Sprintf("panic: %v", r)),
-            langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+            nooptrace.WithSpanStatus(fmt.Sprintf("panic: %v", r)),
+            nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
         )
         panic(r) // Re-panic
     }
@@ -1007,28 +1007,28 @@ result, err := performRiskyOperation()
 // Handle error
 if err != nil {
     span.End(
-        langfuse.WithSpanStatus(err.Error()),
-        langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+        nooptrace.WithSpanStatus(err.Error()),
+        nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
     )
     return err
 }
 
 // Success case
 span.End(
-    langfuse.WithSpanOutput(result),
-    langfuse.WithSpanStatus("success"),
+    nooptrace.WithSpanOutput(result),
+    nooptrace.WithSpanStatus("success"),
 )
 ```
 
 ### Custom Metadata
 
-Langfuse supports custom metadata for all observation types:
+NoopTrace supports custom metadata for all observation types:
 
 ```go
 // Add custom metadata to a span
 span := observation.Span(
-    langfuse.WithSpanName("process-file"),
-    langfuse.WithStartSpanMetadata(langfuse.Metadata{
+    nooptrace.WithSpanName("process-file"),
+    nooptrace.WithStartSpanMetadata(nooptrace.Metadata{
         "file_size": fileSize,
         "file_type": fileType,
         "encryption": encryptionType,
@@ -1038,11 +1038,11 @@ span := observation.Span(
 )
 ```
 
-This metadata is searchable and filterable in the Langfuse UI, making it easier to find and analyze specific observations.
+This metadata is searchable and filterable in the NoopTrace UI, making it easier to find and analyze specific observations.
 
 ### Data Converter Implementation
 
-The converter is implemented in `pkg/observability/langfuse/converter.go` and provides two main functions:
+The converter is implemented in `pkg/observability/nooptrace/converter.go` and provides two main functions:
 
 ```go
 // Convert input data (message chains) to OpenAI format

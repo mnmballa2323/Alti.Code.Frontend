@@ -7,7 +7,7 @@ import (
 
 	"pentagi/pkg/database"
 	"pentagi/pkg/graph/subscriptions"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers"
 	"pentagi/pkg/tools"
 
@@ -49,12 +49,12 @@ type SubtaskContext struct {
 	TaskContext
 }
 
-func wrapErrorEndSpan(ctx context.Context, span langfuse.Span, msg string, err error) error {
+func wrapErrorEndSpan(ctx context.Context, span nooptrace.Span, msg string, err error) error {
 	logrus.WithContext(ctx).WithError(err).Error(msg)
 	err = fmt.Errorf("%s: %w", msg, err)
 	span.End(
-		langfuse.WithSpanStatus(err.Error()),
-		langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+		nooptrace.WithSpanStatus(err.Error()),
+		nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
 	)
 	return err
 }

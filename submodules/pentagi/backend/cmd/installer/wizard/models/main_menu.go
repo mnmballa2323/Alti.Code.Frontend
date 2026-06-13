@@ -82,7 +82,7 @@ func (h *MainMenuHandler) GetOverview() string {
 	}{
 		{"Docker", checker.DockerApiAccessible},
 		{"PentAGI", checker.PentagiRunning},
-		{"Langfuse", checker.LangfuseRunning},
+		{"NoopTrace", checker.NoopTraceRunning},
 		{"Observability", checker.ObservabilityRunning},
 	}
 

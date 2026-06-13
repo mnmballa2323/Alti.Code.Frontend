@@ -12,7 +12,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/graphiti"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/embeddings"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
@@ -179,9 +179,9 @@ func (fp *flowProvider) GetTaskTitle(ctx context.Context, input string) (string,
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	getterEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("get task title"),
-		langfuse.WithEvaluatorInput(input),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("get task title"),
+		nooptrace.WithEvaluatorInput(input),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"lang": fp.language,
 		}),
 	)
@@ -203,8 +203,8 @@ func (fp *flowProvider) GetTaskTitle(ctx context.Context, input string) (string,
 	}
 
 	getterEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorOutput(title),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorOutput(title),
 	)
 
 	return title, nil
@@ -246,9 +246,9 @@ func (fp *flowProvider) GenerateSubtasks(ctx context.Context, taskID int64) ([]t
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	generatorEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("subtasks generator"),
-		langfuse.WithEvaluatorInput(tasksInfo),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("subtasks generator"),
+		nooptrace.WithEvaluatorInput(tasksInfo),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"user_context":   generatorContext["user"],
 			"system_context": generatorContext["system"],
 		}),
@@ -284,8 +284,8 @@ func (fp *flowProvider) GenerateSubtasks(ctx context.Context, taskID int64) ([]t
 	}
 
 	generatorEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorOutput(subtasks),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorOutput(subtasks),
 	)
 
 	return subtasks, nil
@@ -336,9 +336,9 @@ func (fp *flowProvider) RefineSubtasks(ctx context.Context, taskID int64) ([]too
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	refinerEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("subtasks refiner"),
-		langfuse.WithEvaluatorInput(refinerContext),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("subtasks refiner"),
+		nooptrace.WithEvaluatorInput(refinerContext),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"user_context":   refinerContext["user"],
 			"system_context": refinerContext["system"],
 		}),
@@ -389,8 +389,8 @@ func (fp *flowProvider) RefineSubtasks(ctx context.Context, taskID int64) ([]too
 	}
 
 	refinerEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorOutput(subtasks),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorOutput(subtasks),
 	)
 
 	return subtasks, nil
@@ -428,9 +428,9 @@ func (fp *flowProvider) GetTaskResult(ctx context.Context, taskID int64) (*tools
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	reporterEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("reporter agent"),
-		langfuse.WithEvaluatorInput(reporterContext),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("reporter agent"),
+		nooptrace.WithEvaluatorInput(reporterContext),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"user_context":   reporterContext["user"],
 			"system_context": reporterContext["system"],
 		}),
@@ -480,8 +480,8 @@ func (fp *flowProvider) GetTaskResult(ctx context.Context, taskID int64) (*tools
 	}
 
 	reporterEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorOutput(result),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorOutput(result),
 	)
 
 	return result, nil
@@ -629,9 +629,9 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	executorAgent := observation.Agent(
-		langfuse.WithAgentName(fmt.Sprintf("primary agent for subtask %d: %s", subtaskID, subtask.Title)),
-		langfuse.WithAgentInput(chain),
-		langfuse.WithAgentMetadata(langfuse.Metadata{
+		nooptrace.WithAgentName(fmt.Sprintf("primary agent for subtask %d: %s", subtaskID, subtask.Title)),
+		nooptrace.WithAgentInput(chain),
+		nooptrace.WithAgentMetadata(nooptrace.Metadata{
 			"flow_id":      fp.flowID,
 			"task_id":      taskID,
 			"subtask_id":   subtaskID,
@@ -673,8 +673,8 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 					"result": done.Result[:min(len(done.Result), 1000)],
 				})
 
-				opts := []langfuse.AgentOption{
-					langfuse.WithAgentOutput(done.Result),
+				opts := []nooptrace.AgentOption{
+					nooptrace.WithAgentOutput(done.Result),
 				}
 				defer func() {
 					executorAgent.End(opts...)
@@ -683,13 +683,13 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 				if !done.Success {
 					performResult = PerformResultError
 					opts = append(opts,
-						langfuse.WithAgentStatus("done handler: failed"),
-						langfuse.WithAgentLevel(langfuse.ObservationLevelWarning),
+						nooptrace.WithAgentStatus("done handler: failed"),
+						nooptrace.WithAgentLevel(nooptrace.ObservationLevelWarning),
 					)
 				} else {
 					performResult = PerformResultDone
 					opts = append(opts,
-						langfuse.WithAgentStatus("done handler: success"),
+						nooptrace.WithAgentStatus("done handler: success"),
 					)
 				}
 
@@ -700,8 +700,8 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 				})
 				if err != nil {
 					opts = append(opts,
-						langfuse.WithAgentStatus(err.Error()),
-						langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+						nooptrace.WithAgentStatus(err.Error()),
+						nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 					)
 					loggerFunc.WithError(err).Error("failed to update subtask result")
 					return "", fmt.Errorf("failed to update subtask %d result: %w", subtaskID, err)
@@ -717,8 +717,8 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 					)
 					if err != nil {
 						opts = append(opts,
-							langfuse.WithAgentStatus(err.Error()),
-							langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+							nooptrace.WithAgentStatus(err.Error()),
+							nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 						)
 						loggerFunc.WithError(err).Error("failed to put report msg")
 						return "", fmt.Errorf("failed to put report msg: %w", err)
@@ -731,8 +731,8 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 					)
 					if err != nil {
 						opts = append(opts,
-							langfuse.WithAgentStatus(err.Error()),
-							langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+							nooptrace.WithAgentStatus(err.Error()),
+							nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 						)
 						loggerFunc.WithError(err).Error("failed to update report msg result")
 						return "", fmt.Errorf("failed to update report msg result: %w", err)
@@ -749,8 +749,8 @@ func (fp *flowProvider) PerformAgentChain(ctx context.Context, taskID, subtaskID
 				}
 
 				executorAgent.End(
-					langfuse.WithAgentOutput(askUser.Message),
-					langfuse.WithAgentStatus("ask user handler"),
+					nooptrace.WithAgentOutput(askUser.Message),
+					nooptrace.WithAgentStatus("ask user handler"),
 				)
 			}
 

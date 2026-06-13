@@ -355,31 +355,31 @@ These patterns provide a robust foundation for implementing advanced configurati
 
 ### **Implementation Guidelines for Future Screens**
 
-#### **Langfuse Integration Forms**
+#### **NoopTrace Integration Forms**
 
 **Ready Patterns**: Based on locale constants, implement:
 - **Deployment Type Selection**: Embedded/External/Disabled pattern (similar to summarizer types)
 - **Conditional Fields**: Show admin fields only for embedded deployment
 - **Connection Testing**: Validate external server connectivity
-- **Environment Variables**: `LANGFUSE_*` prefix pattern with cleanup
+- **Environment Variables**: `NOOPTRACE_*` prefix pattern with cleanup
 
 ```go
 // Implementation pattern
-func (m *LangfuseFormModel) buildForm() {
+func (m *NoopTraceFormModel) buildForm() {
     // Deployment type field (radio-style selection)
-    m.addDeploymentTypeField("deployment_type", locale.LangfuseDeploymentType, locale.LangfuseDeploymentTypeDesc)
+    m.addDeploymentTypeField("deployment_type", locale.NoopTraceDeploymentType, locale.NoopTraceDeploymentTypeDesc)
 
     // Conditional fields based on deployment type
     if m.deploymentType == "external" {
-        m.addFieldFromEnvVar("LANGFUSE_BASE_URL", "base_url", locale.LangfuseBaseURL, locale.LangfuseBaseURLDesc)
-        m.addFieldFromEnvVar("LANGFUSE_PROJECT_ID", "project_id", locale.LangfuseProjectID, locale.LangfuseProjectIDDesc)
-        m.addFieldFromEnvVar("LANGFUSE_PUBLIC_KEY", "public_key", locale.LangfusePublicKey, locale.LangfusePublicKeyDesc)
-        m.addMaskedFieldFromEnvVar("LANGFUSE_SECRET_KEY", "secret_key", locale.LangfuseSecretKey, locale.LangfuseSecretKeyDesc)
+        m.addFieldFromEnvVar("NOOPTRACE_BASE_URL", "base_url", locale.NoopTraceBaseURL, locale.NoopTraceBaseURLDesc)
+        m.addFieldFromEnvVar("NOOPTRACE_PROJECT_ID", "project_id", locale.NoopTraceProjectID, locale.NoopTraceProjectIDDesc)
+        m.addFieldFromEnvVar("NOOPTRACE_PUBLIC_KEY", "public_key", locale.NoopTracePublicKey, locale.NoopTracePublicKeyDesc)
+        m.addMaskedFieldFromEnvVar("NOOPTRACE_SECRET_KEY", "secret_key", locale.NoopTraceSecretKey, locale.NoopTraceSecretKeyDesc)
     } else if m.deploymentType == "embedded" {
         // Admin configuration for embedded instance
-        m.addFieldFromEnvVar("LANGFUSE_ADMIN_EMAIL", "admin_email", locale.LangfuseAdminEmail, locale.LangfuseAdminEmailDesc)
-        m.addMaskedFieldFromEnvVar("LANGFUSE_ADMIN_PASSWORD", "admin_password", locale.LangfuseAdminPassword, locale.LangfuseAdminPasswordDesc)
-        m.addFieldFromEnvVar("LANGFUSE_ADMIN_NAME", "admin_name", locale.LangfuseAdminName, locale.LangfuseAdminNameDesc)
+        m.addFieldFromEnvVar("NOOPTRACE_ADMIN_EMAIL", "admin_email", locale.NoopTraceAdminEmail, locale.NoopTraceAdminEmailDesc)
+        m.addMaskedFieldFromEnvVar("NOOPTRACE_ADMIN_PASSWORD", "admin_password", locale.NoopTraceAdminPassword, locale.NoopTraceAdminPasswordDesc)
+        m.addFieldFromEnvVar("NOOPTRACE_ADMIN_NAME", "admin_name", locale.NoopTraceAdminName, locale.NoopTraceAdminNameDesc)
     }
 }
 ```

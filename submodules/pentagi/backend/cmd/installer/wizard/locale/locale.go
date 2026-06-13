@@ -76,7 +76,7 @@ The installer guides you through each component setup with recommendations for d
 	WelcomeWorkflowTitle = "Installation Workflow:"
 	WelcomeWorkflowStep1 = "1. Accept End User License Agreement"
 	WelcomeWorkflowStep2 = "2. Configure LLM providers (OpenAI, Anthropic, etc.)"
-	WelcomeWorkflowStep3 = "3. Set up integrations (Langfuse, Observability)"
+	WelcomeWorkflowStep3 = "3. Set up integrations (NoopTrace, Observability)"
 	WelcomeWorkflowStep4 = "4. Configure security settings"
 	WelcomeWorkflowStep5 = "5. Deploy and start PentAGI services"
 	WelcomeSystemReady   = "✓ System ready - Press Enter to continue"
@@ -204,7 +204,7 @@ Settings → Resources → CPUs: Set to 2 or more`
 	TroubleshootMemoryFix   = `Memory requirements:
 • Base system: 0.5 GB
 • PentAGI core: +0.5 GB
-• Langfuse (if enabled): +1.5 GB
+• NoopTrace (if enabled): +1.5 GB
 • Observability (if enabled): +1.5 GB
 
 Total needed: %.1f GB
@@ -213,7 +213,7 @@ Available: %.1f GB
 To fix:
 1. Close unnecessary applications
 2. Increase Docker memory limit
-3. Disable optional components (Langfuse/Observability)`
+3. Disable optional components (NoopTrace/Observability)`
 
 	// Disk space issues
 	TroubleshootDiskTitle = "Insufficient Disk Space"
@@ -557,21 +557,21 @@ Why monitoring matters:
 • Production readiness: Essential for reliable operation in critical environments
 
 Platform Options:
-Langfuse: Specialized LLM observability with conversation tracking, prompt engineering insights, and cost analytics
+NoopTrace: Specialized LLM observability with conversation tracking, prompt engineering insights, and cost analytics
 Observability: Full-stack monitoring with metrics, traces, logs, and alerting for infrastructure and application health
 
 Quick Setup:
-• Development: Enable Langfuse for LLM insights only
+• Development: Enable NoopTrace for LLM insights only
 • Production: Enable both platforms for comprehensive monitoring
 • Cost-conscious: Use embedded modes to avoid external service fees`
 )
 
-// Langfuse Integration constants
+// NoopTrace Integration constants
 const (
-	MonitoringLangfuseFormTitle       = "Langfuse Configuration"
-	MonitoringLangfuseFormDescription = "Configuration of Langfuse integration for LLM monitoring"
-	MonitoringLangfuseFormName        = "Langfuse"
-	MonitoringLangfuseFormOverview    = `Langfuse provides:
+	MonitoringNoopTraceFormTitle       = "NoopTrace Configuration"
+	MonitoringNoopTraceFormDescription = "Configuration of NoopTrace integration for LLM monitoring"
+	MonitoringNoopTraceFormName        = "NoopTrace"
+	MonitoringNoopTraceFormOverview    = `NoopTrace provides:
 • Complete conversation tracking
 • Model performance metrics
 • Cost monitoring and optimization
@@ -581,39 +581,39 @@ const (
 Choose between embedded instance or external connection.`
 
 	// Deployment types
-	MonitoringLangfuseEmbedded = "Embedded Server"
-	MonitoringLangfuseExternal = "External Server"
-	MonitoringLangfuseDisabled = "Disabled"
+	MonitoringNoopTraceEmbedded = "Embedded Server"
+	MonitoringNoopTraceExternal = "External Server"
+	MonitoringNoopTraceDisabled = "Disabled"
 
 	// Form fields
-	MonitoringLangfuseDeploymentType     = "Deployment Type"
-	MonitoringLangfuseDeploymentTypeDesc = "Select the deployment type for Langfuse"
-	MonitoringLangfuseBaseURL            = "Server URL"
-	MonitoringLangfuseBaseURLDesc        = "Address of the Langfuse server (e.g., https://cloud.langfuse.com)"
-	MonitoringLangfuseProjectID          = "Project ID"
-	MonitoringLangfuseProjectIDDesc      = "Project identifier in Langfuse"
-	MonitoringLangfusePublicKey          = "Public Key"
-	MonitoringLangfusePublicKeyDesc      = "Public API key for project access"
-	MonitoringLangfuseSecretKey          = "Secret Key"
-	MonitoringLangfuseSecretKeyDesc      = "Secret API key for project access"
-	MonitoringLangfuseListenIP           = "Listen IP"
-	MonitoringLangfuseListenIPDesc       = "Bind address used by Docker port mapping (e.g., 0.0.0.0 to expose on all interfaces)"
-	MonitoringLangfuseListenPort         = "Listen Port"
-	MonitoringLangfuseListenPortDesc     = "External TCP port exposed by Docker for Langfuse web UI"
+	MonitoringNoopTraceDeploymentType     = "Deployment Type"
+	MonitoringNoopTraceDeploymentTypeDesc = "Select the deployment type for NoopTrace"
+	MonitoringNoopTraceBaseURL            = "Server URL"
+	MonitoringNoopTraceBaseURLDesc        = "Address of the NoopTrace server (e.g., https://cloud.nooptrace.com)"
+	MonitoringNoopTraceProjectID          = "Project ID"
+	MonitoringNoopTraceProjectIDDesc      = "Project identifier in NoopTrace"
+	MonitoringNoopTracePublicKey          = "Public Key"
+	MonitoringNoopTracePublicKeyDesc      = "Public API key for project access"
+	MonitoringNoopTraceSecretKey          = "Secret Key"
+	MonitoringNoopTraceSecretKeyDesc      = "Secret API key for project access"
+	MonitoringNoopTraceListenIP           = "Listen IP"
+	MonitoringNoopTraceListenIPDesc       = "Bind address used by Docker port mapping (e.g., 0.0.0.0 to expose on all interfaces)"
+	MonitoringNoopTraceListenPort         = "Listen Port"
+	MonitoringNoopTraceListenPortDesc     = "External TCP port exposed by Docker for NoopTrace web UI"
 
 	// Admin settings for embedded
-	MonitoringLangfuseAdminEmail        = "Admin Email"
-	MonitoringLangfuseAdminEmailDesc    = "Email for accessing the Langfuse admin panel"
-	MonitoringLangfuseAdminPassword     = "Admin Password"
-	MonitoringLangfuseAdminPasswordDesc = "Password for accessing the Langfuse admin panel"
-	MonitoringLangfuseAdminName         = "Admin Username"
-	MonitoringLangfuseAdminNameDesc     = "Administrator username in Langfuse"
-	MonitoringLangfuseLicenseKey        = "Enterprise License Key"
-	MonitoringLangfuseLicenseKeyDesc    = "Langfuse Enterprise license key (optional)"
+	MonitoringNoopTraceAdminEmail        = "Admin Email"
+	MonitoringNoopTraceAdminEmailDesc    = "Email for accessing the NoopTrace admin panel"
+	MonitoringNoopTraceAdminPassword     = "Admin Password"
+	MonitoringNoopTraceAdminPasswordDesc = "Password for accessing the NoopTrace admin panel"
+	MonitoringNoopTraceAdminName         = "Admin Username"
+	MonitoringNoopTraceAdminNameDesc     = "Administrator username in NoopTrace"
+	MonitoringNoopTraceLicenseKey        = "Enterprise License Key"
+	MonitoringNoopTraceLicenseKeyDesc    = "NoopTrace Enterprise license key (optional)"
 
 	// Help text
-	MonitoringLangfuseModeGuide    = "Choose deployment: Embedded (local control), External (cloud/existing), Disabled (no analytics)"
-	MonitoringLangfuseEmbeddedHelp = `Embedded deploys complete Langfuse stack:
+	MonitoringNoopTraceModeGuide    = "Choose deployment: Embedded (local control), External (cloud/existing), Disabled (no analytics)"
+	MonitoringNoopTraceEmbeddedHelp = `Embedded deploys complete NoopTrace stack:
 • PostgreSQL + ClickHouse databases
 • MinIO S3 storage + Redis cache
 • Full LLM conversation tracking
@@ -631,7 +631,7 @@ Default admin access:
 • Web UI: http://localhost:4000
 • Login: admin@pentagi.com
 • Password: password (change required)`
-	MonitoringLangfuseExternalHelp = `External connects to cloud.langfuse.com or your existing Langfuse server:
+	MonitoringNoopTraceExternalHelp = `External connects to cloud.nooptrace.com or your existing NoopTrace server:
 
 • No local infrastructure needed
 • Managed updates and maintenance
@@ -640,12 +640,12 @@ Default admin access:
 • Data stored on external provider
 
 Setup requirements:
-• Langfuse account and API keys
+• NoopTrace account and API keys
 • Internet connectivity required
 • Project ID and authentication keys
 
-Best for: Teams using cloud services, wanting managed infrastructure, or integrating with existing Langfuse deployments across organizations.`
-	MonitoringLangfuseDisabledHelp = `Langfuse is disabled. Without LLM observability you will not have:
+Best for: Teams using cloud services, wanting managed infrastructure, or integrating with existing NoopTrace deployments across organizations.`
+	MonitoringNoopTraceDisabledHelp = `NoopTrace is disabled. Without LLM observability you will not have:
 
 • Conversation history tracking
 • Token usage and cost analysis
@@ -1645,7 +1645,7 @@ The following actions will be performed:
 • Creation of docker-compose.yml file
 • Installation and startup of PentAGI core services`
 
-	ApplyChangesInstallFoundLangfuse      = `• Installation of Langfuse observability stack (docker-compose-langfuse.yml)`
+	ApplyChangesInstallFoundNoopTrace      = `• Installation of NoopTrace observability stack (docker-compose-nooptrace.yml)`
 	ApplyChangesInstallFoundObservability = `• Installation of comprehensive observability stack with Grafana, VictoriaMetrics, and Jaeger (docker-compose-observability.yml)`
 
 	ApplyChangesUpdateFound = `PentAGI is currently installed on this system.
@@ -1845,7 +1845,7 @@ Installation will use your current configuration settings.`
 
 	ProcessorHelpStartPentagi = `This will:
 • Core PentAGI API and web interface
-• Configured Langfuse analytics (if enabled)
+• Configured NoopTrace analytics (if enabled)
 • Observability stack (if enabled)
 
 Services will be started in the correct dependency order.`
@@ -1944,22 +1944,22 @@ const (
 	EnvDesc_LLM_SERVER_PRESERVE_REASONING     = "Custom LLM Preserve Reasoning Content"
 	EnvDesc_LLM_SERVER_PROVIDER               = "Custom LLM Provider Name"
 
-	EnvDesc_LANGFUSE_LISTEN_IP   = "Langfuse Listen IP"
-	EnvDesc_LANGFUSE_LISTEN_PORT = "Langfuse Listen Port"
-	EnvDesc_LANGFUSE_BASE_URL    = "Langfuse Base URL"
-	EnvDesc_LANGFUSE_PROJECT_ID  = "Langfuse Project ID"
-	EnvDesc_LANGFUSE_PUBLIC_KEY  = "Langfuse Public Key"
-	EnvDesc_LANGFUSE_SECRET_KEY  = "Langfuse Secret Key"
+	EnvDesc_NOOPTRACE_LISTEN_IP   = "NoopTrace Listen IP"
+	EnvDesc_NOOPTRACE_LISTEN_PORT = "NoopTrace Listen Port"
+	EnvDesc_NOOPTRACE_BASE_URL    = "NoopTrace Base URL"
+	EnvDesc_NOOPTRACE_PROJECT_ID  = "NoopTrace Project ID"
+	EnvDesc_NOOPTRACE_PUBLIC_KEY  = "NoopTrace Public Key"
+	EnvDesc_NOOPTRACE_SECRET_KEY  = "NoopTrace Secret Key"
 
-	// langfuse init variables
-	EnvDesc_LANGFUSE_INIT_PROJECT_ID         = "Langfuse Init Project ID"
-	EnvDesc_LANGFUSE_INIT_PROJECT_PUBLIC_KEY = "Langfuse Init Project Public Key"
-	EnvDesc_LANGFUSE_INIT_PROJECT_SECRET_KEY = "Langfuse Init Project Secret Key"
-	EnvDesc_LANGFUSE_INIT_USER_EMAIL         = "Langfuse Init User Email"
-	EnvDesc_LANGFUSE_INIT_USER_NAME          = "Langfuse Init User Name"
-	EnvDesc_LANGFUSE_INIT_USER_PASSWORD      = "Langfuse Init User Password"
+	// nooptrace init variables
+	EnvDesc_NOOPTRACE_INIT_PROJECT_ID         = "NoopTrace Init Project ID"
+	EnvDesc_NOOPTRACE_INIT_PROJECT_PUBLIC_KEY = "NoopTrace Init Project Public Key"
+	EnvDesc_NOOPTRACE_INIT_PROJECT_SECRET_KEY = "NoopTrace Init Project Secret Key"
+	EnvDesc_NOOPTRACE_INIT_USER_EMAIL         = "NoopTrace Init User Email"
+	EnvDesc_NOOPTRACE_INIT_USER_NAME          = "NoopTrace Init User Name"
+	EnvDesc_NOOPTRACE_INIT_USER_PASSWORD      = "NoopTrace Init User Password"
 
-	EnvDesc_LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT = "Langfuse OTLP endpoint for OpenTelemetry exporter"
+	EnvDesc_NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT = "NoopTrace OTLP endpoint for OpenTelemetry exporter"
 
 	EnvDesc_GRAFANA_LISTEN_IP     = "Grafana Listen IP"
 	EnvDesc_GRAFANA_LISTEN_PORT   = "Grafana Listen Port"
@@ -2060,7 +2060,7 @@ const (
 	EnvDesc_OAUTH_GITHUB_CLIENT_ID     = "OAuth GitHub Client ID"
 	EnvDesc_OAUTH_GITHUB_CLIENT_SECRET = "OAuth GitHub Client Secret"
 
-	EnvDesc_LANGFUSE_EE_LICENSE_KEY   = "Langfuse Enterprise License Key"
+	EnvDesc_NOOPTRACE_EE_LICENSE_KEY   = "NoopTrace Enterprise License Key"
 	EnvDesc_PENTAGI_POSTGRES_PASSWORD = "PentAGI PostgreSQL Password"
 
 	EnvDesc_GRAPHITI_URL        = "Graphiti Server URL"
@@ -2080,7 +2080,7 @@ const (
 
 	// component labels
 	ProcessorComponentPentagi       = "PentAGI"
-	ProcessorComponentLangfuse      = "Langfuse"
+	ProcessorComponentNoopTrace      = "NoopTrace"
 	ProcessorComponentObservability = "Observability"
 
 	ProcessorComponentWorkerImage           = "worker image"

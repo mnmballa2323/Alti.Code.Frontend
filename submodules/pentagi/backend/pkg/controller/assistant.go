@@ -12,7 +12,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/graph/subscriptions"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
@@ -126,13 +126,13 @@ func NewAssistantWorker(ctx context.Context, awc newAssistantWorkerCtx) (Assista
 	logger.Info("assistant created in DB")
 
 	ctx, observation := obs.Observer.NewObservation(ctx,
-		langfuse.WithObservationTraceContext(
-			langfuse.WithTraceName(fmt.Sprintf("%d flow %d assistant worker", awc.flowID, assistant.ID)),
-			langfuse.WithTraceUserID(user.Mail),
-			langfuse.WithTraceTags([]string{"controller", "assistant"}),
-			langfuse.WithTraceInput(awc.input),
-			langfuse.WithTraceSessionID(fmt.Sprintf("assistant-%d-flow-%d", assistant.ID, awc.flowID)),
-			langfuse.WithTraceMetadata(langfuse.Metadata{
+		nooptrace.WithObservationTraceContext(
+			nooptrace.WithTraceName(fmt.Sprintf("%d flow %d assistant worker", awc.flowID, assistant.ID)),
+			nooptrace.WithTraceUserID(user.Mail),
+			nooptrace.WithTraceTags([]string{"controller", "assistant"}),
+			nooptrace.WithTraceInput(awc.input),
+			nooptrace.WithTraceSessionID(fmt.Sprintf("assistant-%d-flow-%d", assistant.ID, awc.flowID)),
+			nooptrace.WithTraceMetadata(nooptrace.Metadata{
 				"assistant_id":  assistant.ID,
 				"flow_id":       awc.flowID,
 				"user_id":       awc.userID,
@@ -145,7 +145,7 @@ func NewAssistantWorker(ctx context.Context, awc newAssistantWorkerCtx) (Assista
 			}),
 		),
 	)
-	assistantSpan := observation.Span(langfuse.WithSpanName("prepare assistant worker"))
+	assistantSpan := observation.Span(nooptrace.WithSpanName("prepare assistant worker"))
 	ctx, _ = assistantSpan.Observation(ctx)
 
 	pub := awc.subs.NewFlowPublisher(awc.userID, awc.flowID)
@@ -212,7 +212,7 @@ func NewAssistantWorker(ctx context.Context, awc newAssistantWorkerCtx) (Assista
 	executor.SetGraphitiClient(awc.provs.GraphitiClient())
 
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx, _ = obs.Observer.NewObservation(ctx, langfuse.WithObservationTraceID(observation.TraceID()))
+	ctx, _ = obs.Observer.NewObservation(ctx, nooptrace.WithObservationTraceID(observation.TraceID()))
 	aw := &assistantWorker{
 		id:      assistant.ID,
 		flowID:  awc.flowID,
@@ -248,7 +248,7 @@ func NewAssistantWorker(ctx context.Context, awc newAssistantWorkerCtx) (Assista
 		return nil, wrapErrorEndSpan(ctx, assistantSpan, "failed to run assistant worker", err)
 	}
 
-	assistantSpan.End(langfuse.WithSpanStatus("assistant worker started"))
+	assistantSpan.End(nooptrace.WithSpanStatus("assistant worker started"))
 
 	return aw, nil
 }
@@ -287,12 +287,12 @@ func LoadAssistantWorker(
 	}
 
 	ctx, observation := obs.Observer.NewObservation(ctx,
-		langfuse.WithObservationTraceContext(
-			langfuse.WithTraceName(fmt.Sprintf("%d flow %d assistant worker", awc.flowID, assistant.ID)),
-			langfuse.WithTraceUserID(user.Mail),
-			langfuse.WithTraceTags([]string{"controller", "assistant"}),
-			langfuse.WithTraceSessionID(fmt.Sprintf("assistant-%d-flow-%d", assistant.ID, awc.flowID)),
-			langfuse.WithTraceMetadata(langfuse.Metadata{
+		nooptrace.WithObservationTraceContext(
+			nooptrace.WithTraceName(fmt.Sprintf("%d flow %d assistant worker", awc.flowID, assistant.ID)),
+			nooptrace.WithTraceUserID(user.Mail),
+			nooptrace.WithTraceTags([]string{"controller", "assistant"}),
+			nooptrace.WithTraceSessionID(fmt.Sprintf("assistant-%d-flow-%d", assistant.ID, awc.flowID)),
+			nooptrace.WithTraceMetadata(nooptrace.Metadata{
 				"assistant_id":  assistant.ID,
 				"flow_id":       awc.flowID,
 				"user_id":       awc.userID,
@@ -305,7 +305,7 @@ func LoadAssistantWorker(
 			}),
 		),
 	)
-	assistantSpan := observation.Span(langfuse.WithSpanName("prepare assistant worker"))
+	assistantSpan := observation.Span(nooptrace.WithSpanName("prepare assistant worker"))
 	ctx, _ = assistantSpan.Observation(ctx)
 
 	functions := &tools.Functions{}
@@ -358,7 +358,7 @@ func LoadAssistantWorker(
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx, _ = obs.Observer.NewObservation(ctx, langfuse.WithObservationTraceID(observation.TraceID()))
+	ctx, _ = obs.Observer.NewObservation(ctx, nooptrace.WithObservationTraceID(observation.TraceID()))
 	aw := &assistantWorker{
 		id:      assistant.ID,
 		flowID:  awc.flowID,
@@ -398,7 +398,7 @@ func LoadAssistantWorker(
 	aw.wg.Add(1)
 	go aw.worker()
 
-	assistantSpan.End(langfuse.WithSpanStatus("assistant worker started"))
+	assistantSpan.End(nooptrace.WithSpanStatus("assistant worker started"))
 
 	return aw, nil
 }

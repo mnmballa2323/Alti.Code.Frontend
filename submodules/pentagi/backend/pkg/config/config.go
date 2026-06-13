@@ -158,11 +158,11 @@ type Config struct {
 	// Telemetry (observability OpenTelemetry collector)
 	TelemetryEndpoint string `env:"OTEL_HOST"`
 
-	// Langfuse
-	LangfuseBaseURL   string `env:"LANGFUSE_BASE_URL"`
-	LangfuseProjectID string `env:"LANGFUSE_PROJECT_ID"`
-	LangfusePublicKey string `env:"LANGFUSE_PUBLIC_KEY"`
-	LangfuseSecretKey string `env:"LANGFUSE_SECRET_KEY"`
+	// NoopTrace
+	NoopTraceBaseURL   string `env:"NOOPTRACE_BASE_URL"`
+	NoopTraceProjectID string `env:"NOOPTRACE_PROJECT_ID"`
+	NoopTracePublicKey string `env:"NOOPTRACE_PUBLIC_KEY"`
+	NoopTraceSecretKey string `env:"NOOPTRACE_SECRET_KEY"`
 
 	// Graphiti knowledge graph
 	GraphitiEnabled bool   `env:"GRAPHITI_ENABLED" envDefault:"false"`

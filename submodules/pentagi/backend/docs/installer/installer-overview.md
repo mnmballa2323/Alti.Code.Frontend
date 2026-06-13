@@ -47,7 +47,7 @@ tail -f log.json | jq '.'
 
 ### **Interactive Configuration**
 - **LLM Providers**: Support for OpenAI, Anthropic, Gemini, Bedrock, Ollama, Custom endpoints
-- **Monitoring Setup**: Langfuse integration for LLM observability
+- **Monitoring Setup**: NoopTrace integration for LLM observability
 - **Observability**: Complete monitoring stack with Grafana, VictoriaMetrics, Jaeger
 - **Summarization**: Advanced context management for LLM interactions
 
@@ -193,7 +193,7 @@ Forms automatically scroll to keep focused fields visible:
 - **Custom**: OpenAI-compatible endpoint configuration
 
 #### **Monitoring & Observability**
-- **Langfuse**: LLM observability (embedded or external)
+- **NoopTrace**: LLM observability (embedded or external)
 - **Observability Stack**: Grafana, VictoriaMetrics, Jaeger, Loki
 - **Performance Monitoring**: System metrics and health checks
 

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/pconfig"
 
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
@@ -33,7 +33,7 @@ func buildMetadata(
 	opt pconfig.ProviderOptionsType,
 	messages []llms.MessageContent,
 	options ...llms.CallOption,
-) langfuse.Metadata {
+) nooptrace.Metadata {
 	opts := llms.CallOptions{}
 	for _, option := range options {
 		option(&opts)
@@ -84,7 +84,7 @@ func buildMetadata(
 		}
 	}
 
-	return langfuse.Metadata{
+	return nooptrace.Metadata{
 		"provider":              provider.Type().String(),
 		"agent":                 opt,
 		"tools":                 toolNames,
@@ -113,12 +113,12 @@ func WrapGenerateFromSinglePrompt(
 	}
 	metadata := buildMetadata(provider, opt, messages, options...)
 	generation := observation.Generation(
-		langfuse.WithGenerationName(fmt.Sprintf("%s-generation", provider.Type().String())),
-		langfuse.WithGenerationMetadata(metadata),
-		langfuse.WithGenerationInput(messages),
-		langfuse.WithGenerationTools(extractToolsFromOptions(options...)),
-		langfuse.WithGenerationModel(model),
-		langfuse.WithGenerationModelParameters(langfuse.GetLangchainModelParameters(options)),
+		nooptrace.WithGenerationName(fmt.Sprintf("%s-generation", provider.Type().String())),
+		nooptrace.WithGenerationMetadata(metadata),
+		nooptrace.WithGenerationInput(messages),
+		nooptrace.WithGenerationTools(extractToolsFromOptions(options...)),
+		nooptrace.WithGenerationModel(model),
+		nooptrace.WithGenerationModelParameters(nooptrace.GetLangchainModelParameters(options)),
 	)
 
 	msg := llms.MessageContent{
@@ -137,12 +137,12 @@ func WrapGenerateFromSinglePrompt(
 			if isTooManyRequestsError(err) {
 				_, observation = generation.Observation(ctx)
 				observation.Event(
-					langfuse.WithEventName(fmt.Sprintf("%s-generation-error", provider.Type().String())),
-					langfuse.WithEventMetadata(metadata),
-					langfuse.WithEventInput(messages),
-					langfuse.WithEventStatus("TOO_MANY_REQUESTS"),
-					langfuse.WithEventOutput(err.Error()),
-					langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
+					nooptrace.WithEventName(fmt.Sprintf("%s-generation-error", provider.Type().String())),
+					nooptrace.WithEventMetadata(metadata),
+					nooptrace.WithEventInput(messages),
+					nooptrace.WithEventStatus("TOO_MANY_REQUESTS"),
+					nooptrace.WithEventOutput(err.Error()),
+					nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
 				)
 				select {
 				case <-ctx.Done():
@@ -157,8 +157,8 @@ func WrapGenerateFromSinglePrompt(
 
 	if err != nil {
 		generation.End(
-			langfuse.WithGenerationStatus(err.Error()),
-			langfuse.WithGenerationLevel(langfuse.ObservationLevelError),
+			nooptrace.WithGenerationStatus(err.Error()),
+			nooptrace.WithGenerationLevel(nooptrace.ObservationLevelError),
 		)
 		return "", err
 	}
@@ -167,8 +167,8 @@ func WrapGenerateFromSinglePrompt(
 	if len(choices) < 1 {
 		err = fmt.Errorf("empty response from model")
 		generation.End(
-			langfuse.WithGenerationStatus(err.Error()),
-			langfuse.WithGenerationLevel(langfuse.ObservationLevelError),
+			nooptrace.WithGenerationStatus(err.Error()),
+			nooptrace.WithGenerationLevel(nooptrace.ObservationLevelError),
 		)
 
 		return "", err
@@ -180,14 +180,14 @@ func WrapGenerateFromSinglePrompt(
 		usage.UpdateCost(provider.GetPriceInfo(opt))
 
 		generation.End(
-			langfuse.WithGenerationOutput(choice),
-			langfuse.WithGenerationStatus("success"),
-			langfuse.WithGenerationUsage(&langfuse.GenerationUsage{
+			nooptrace.WithGenerationOutput(choice),
+			nooptrace.WithGenerationStatus("success"),
+			nooptrace.WithGenerationUsage(&nooptrace.GenerationUsage{
 				Input:      int(usage.Input),
 				Output:     int(usage.Output),
 				InputCost:  getUsageCost(usage.CostInput),
 				OutputCost: getUsageCost(usage.CostOutput),
-				Unit:       langfuse.GenerationUsageUnitTokens,
+				Unit:       nooptrace.GenerationUsageUnitTokens,
 			}),
 		)
 
@@ -205,14 +205,14 @@ func WrapGenerateFromSinglePrompt(
 
 	respOutput := strings.Join(choicesOutput, "\n-----\n")
 	generation.End(
-		langfuse.WithGenerationOutput(resp.Choices),
-		langfuse.WithGenerationStatus("success"),
-		langfuse.WithGenerationUsage(&langfuse.GenerationUsage{
+		nooptrace.WithGenerationOutput(resp.Choices),
+		nooptrace.WithGenerationStatus("success"),
+		nooptrace.WithGenerationUsage(&nooptrace.GenerationUsage{
 			Input:      int(usage.Input),
 			Output:     int(usage.Output),
 			InputCost:  getUsageCost(usage.CostInput),
 			OutputCost: getUsageCost(usage.CostOutput),
-			Unit:       langfuse.GenerationUsageUnitTokens,
+			Unit:       nooptrace.GenerationUsageUnitTokens,
 		}),
 	)
 
@@ -230,12 +230,12 @@ func WrapGenerateContent(
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	metadata := buildMetadata(provider, opt, messages, options...)
 	generation := observation.Generation(
-		langfuse.WithGenerationName(fmt.Sprintf("%s-generation-ex", provider.Type().String())),
-		langfuse.WithGenerationMetadata(metadata),
-		langfuse.WithGenerationInput(messages),
-		langfuse.WithGenerationTools(extractToolsFromOptions(options...)),
-		langfuse.WithGenerationModel(provider.Model(opt)),
-		langfuse.WithGenerationModelParameters(langfuse.GetLangchainModelParameters(options)),
+		nooptrace.WithGenerationName(fmt.Sprintf("%s-generation-ex", provider.Type().String())),
+		nooptrace.WithGenerationMetadata(metadata),
+		nooptrace.WithGenerationInput(messages),
+		nooptrace.WithGenerationTools(extractToolsFromOptions(options...)),
+		nooptrace.WithGenerationModel(provider.Model(opt)),
+		nooptrace.WithGenerationModelParameters(nooptrace.GetLangchainModelParameters(options)),
 	)
 
 	var (
@@ -249,12 +249,12 @@ func WrapGenerateContent(
 			if isTooManyRequestsError(err) {
 				_, observation = generation.Observation(ctx)
 				observation.Event(
-					langfuse.WithEventName(fmt.Sprintf("%s-generation-error", provider.Type().String())),
-					langfuse.WithEventMetadata(metadata),
-					langfuse.WithEventInput(messages),
-					langfuse.WithEventStatus("TOO_MANY_REQUESTS"),
-					langfuse.WithEventOutput(err.Error()),
-					langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
+					nooptrace.WithEventName(fmt.Sprintf("%s-generation-error", provider.Type().String())),
+					nooptrace.WithEventMetadata(metadata),
+					nooptrace.WithEventInput(messages),
+					nooptrace.WithEventStatus("TOO_MANY_REQUESTS"),
+					nooptrace.WithEventOutput(err.Error()),
+					nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
 				)
 				select {
 				case <-ctx.Done():
@@ -269,8 +269,8 @@ func WrapGenerateContent(
 
 	if err != nil {
 		generation.End(
-			langfuse.WithGenerationStatus(err.Error()),
-			langfuse.WithGenerationLevel(langfuse.ObservationLevelError),
+			nooptrace.WithGenerationStatus(err.Error()),
+			nooptrace.WithGenerationLevel(nooptrace.ObservationLevelError),
 		)
 		return nil, err
 	}
@@ -278,8 +278,8 @@ func WrapGenerateContent(
 	if len(resp.Choices) < 1 {
 		err = fmt.Errorf("empty response from model")
 		generation.End(
-			langfuse.WithGenerationStatus(err.Error()),
-			langfuse.WithGenerationLevel(langfuse.ObservationLevelError),
+			nooptrace.WithGenerationStatus(err.Error()),
+			nooptrace.WithGenerationLevel(nooptrace.ObservationLevelError),
 		)
 		return nil, err
 	}
@@ -290,14 +290,14 @@ func WrapGenerateContent(
 		usage.UpdateCost(provider.GetPriceInfo(opt))
 
 		generation.End(
-			langfuse.WithGenerationOutput(choice),
-			langfuse.WithGenerationStatus("success"),
-			langfuse.WithGenerationUsage(&langfuse.GenerationUsage{
+			nooptrace.WithGenerationOutput(choice),
+			nooptrace.WithGenerationStatus("success"),
+			nooptrace.WithGenerationUsage(&nooptrace.GenerationUsage{
 				Input:      int(usage.Input),
 				Output:     int(usage.Output),
 				InputCost:  getUsageCost(usage.CostInput),
 				OutputCost: getUsageCost(usage.CostOutput),
-				Unit:       langfuse.GenerationUsageUnitTokens,
+				Unit:       nooptrace.GenerationUsageUnitTokens,
 			}),
 		)
 
@@ -312,14 +312,14 @@ func WrapGenerateContent(
 	usage.UpdateCost(provider.GetPriceInfo(opt))
 
 	generation.End(
-		langfuse.WithGenerationOutput(resp.Choices),
-		langfuse.WithGenerationStatus("success"),
-		langfuse.WithGenerationUsage(&langfuse.GenerationUsage{
+		nooptrace.WithGenerationOutput(resp.Choices),
+		nooptrace.WithGenerationStatus("success"),
+		nooptrace.WithGenerationUsage(&nooptrace.GenerationUsage{
 			Input:      int(usage.Input),
 			Output:     int(usage.Output),
 			InputCost:  getUsageCost(usage.CostInput),
 			OutputCost: getUsageCost(usage.CostOutput),
-			Unit:       langfuse.GenerationUsageUnitTokens,
+			Unit:       nooptrace.GenerationUsageUnitTokens,
 		}),
 	)
 

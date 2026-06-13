@@ -12,7 +12,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/schema"
 
 	"github.com/vxcontrol/langchaingo/documentloaders"
@@ -38,7 +38,7 @@ type observationWrapper interface {
 // toolObservationWrapper wraps TOOL observation
 type toolObservationWrapper struct {
 	context     context.Context
-	observation langfuse.Tool
+	observation nooptrace.Tool
 }
 
 func (w *toolObservationWrapper) ctx() context.Context {
@@ -46,17 +46,17 @@ func (w *toolObservationWrapper) ctx() context.Context {
 }
 
 func (w *toolObservationWrapper) end(result string, err error, durationSeconds float64) {
-	opts := []langfuse.ToolOption{
-		langfuse.WithToolOutput(result),
+	opts := []nooptrace.ToolOption{
+		nooptrace.WithToolOutput(result),
 	}
 	if err != nil {
 		opts = append(opts,
-			langfuse.WithToolStatus(err.Error()),
-			langfuse.WithToolLevel(langfuse.ObservationLevelError),
+			nooptrace.WithToolStatus(err.Error()),
+			nooptrace.WithToolLevel(nooptrace.ObservationLevelError),
 		)
 	} else {
 		opts = append(opts,
-			langfuse.WithToolStatus("success"),
+			nooptrace.WithToolStatus("success"),
 		)
 	}
 	w.observation.End(opts...)
@@ -65,7 +65,7 @@ func (w *toolObservationWrapper) end(result string, err error, durationSeconds f
 // agentObservationWrapper wraps AGENT observation
 type agentObservationWrapper struct {
 	context     context.Context
-	observation langfuse.Agent
+	observation nooptrace.Agent
 }
 
 func (w *agentObservationWrapper) ctx() context.Context {
@@ -73,17 +73,17 @@ func (w *agentObservationWrapper) ctx() context.Context {
 }
 
 func (w *agentObservationWrapper) end(result string, err error, durationSeconds float64) {
-	opts := []langfuse.AgentOption{
-		langfuse.WithAgentOutput(result),
+	opts := []nooptrace.AgentOption{
+		nooptrace.WithAgentOutput(result),
 	}
 	if err != nil {
 		opts = append(opts,
-			langfuse.WithAgentStatus(err.Error()),
-			langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+			nooptrace.WithAgentStatus(err.Error()),
+			nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 		)
 	} else {
 		opts = append(opts,
-			langfuse.WithAgentStatus("success"),
+			nooptrace.WithAgentStatus("success"),
 		)
 	}
 	w.observation.End(opts...)
@@ -92,7 +92,7 @@ func (w *agentObservationWrapper) end(result string, err error, durationSeconds 
 // spanObservationWrapper wraps SPAN observation (used for barrier tools)
 type spanObservationWrapper struct {
 	context     context.Context
-	observation langfuse.Span
+	observation nooptrace.Span
 }
 
 func (w *spanObservationWrapper) ctx() context.Context {
@@ -100,17 +100,17 @@ func (w *spanObservationWrapper) ctx() context.Context {
 }
 
 func (w *spanObservationWrapper) end(result string, err error, durationSeconds float64) {
-	opts := []langfuse.SpanOption{
-		langfuse.WithSpanOutput(result),
+	opts := []nooptrace.SpanOption{
+		nooptrace.WithSpanOutput(result),
 	}
 	if err != nil {
 		opts = append(opts,
-			langfuse.WithSpanStatus(err.Error()),
-			langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+			nooptrace.WithSpanStatus(err.Error()),
+			nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
 		)
 	} else {
 		opts = append(opts,
-			langfuse.WithSpanStatus("success"),
+			nooptrace.WithSpanStatus("success"),
 		)
 	}
 	w.observation.End(opts...)
@@ -160,7 +160,7 @@ func (ce *customExecutor) Tools() []llms.Tool {
 
 func (ce *customExecutor) createToolObservation(ctx context.Context, name string, args json.RawMessage) observationWrapper {
 	ctx, observation := obs.Observer.NewObservation(ctx)
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"tool_name":     name,
 		"tool_category": GetToolType(name).String(),
 		"flow_id":       ce.flowID,
@@ -173,9 +173,9 @@ func (ce *customExecutor) createToolObservation(ctx context.Context, name string
 	}
 
 	tool := observation.Tool(
-		langfuse.WithToolName(name),
-		langfuse.WithToolInput(args),
-		langfuse.WithToolMetadata(metadata),
+		nooptrace.WithToolName(name),
+		nooptrace.WithToolInput(args),
+		nooptrace.WithToolMetadata(metadata),
 	)
 	ctx, _ = tool.Observation(ctx)
 
@@ -187,7 +187,7 @@ func (ce *customExecutor) createToolObservation(ctx context.Context, name string
 
 func (ce *customExecutor) createAgentObservation(ctx context.Context, name string, args json.RawMessage) observationWrapper {
 	ctx, observation := obs.Observer.NewObservation(ctx)
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"agent_name":    name,
 		"tool_category": GetToolType(name).String(),
 		"flow_id":       ce.flowID,
@@ -200,9 +200,9 @@ func (ce *customExecutor) createAgentObservation(ctx context.Context, name strin
 	}
 
 	agent := observation.Agent(
-		langfuse.WithAgentName(name),
-		langfuse.WithAgentInput(args),
-		langfuse.WithAgentMetadata(metadata),
+		nooptrace.WithAgentName(name),
+		nooptrace.WithAgentInput(args),
+		nooptrace.WithAgentMetadata(metadata),
 	)
 	ctx, _ = agent.Observation(ctx)
 
@@ -214,7 +214,7 @@ func (ce *customExecutor) createAgentObservation(ctx context.Context, name strin
 
 func (ce *customExecutor) createSpanObservation(ctx context.Context, name string, args json.RawMessage) observationWrapper {
 	ctx, observation := obs.Observer.NewObservation(ctx)
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"barrier_name":  name,
 		"tool_category": GetToolType(name).String(),
 		"flow_id":       ce.flowID,
@@ -227,9 +227,9 @@ func (ce *customExecutor) createSpanObservation(ctx context.Context, name string
 	}
 
 	span := observation.Span(
-		langfuse.WithSpanName(name),
-		langfuse.WithSpanInput(args),
-		langfuse.WithSpanMetadata(metadata),
+		nooptrace.WithSpanName(name),
+		nooptrace.WithSpanInput(args),
+		nooptrace.WithSpanMetadata(metadata),
 	)
 	ctx, _ = span.Observation(ctx)
 

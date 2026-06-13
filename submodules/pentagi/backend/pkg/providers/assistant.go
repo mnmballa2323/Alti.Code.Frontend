@@ -12,7 +12,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/docker"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/embeddings"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
@@ -180,9 +180,9 @@ func (ap *assistantProvider) PerformAgentChain(ctx context.Context) error {
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	executorAgent := observation.Agent(
-		langfuse.WithAgentName(fmt.Sprintf("assistant %d for flow %d: %s", ap.id, ap.fp.flowID, ap.fp.title)),
-		langfuse.WithAgentInput(chain),
-		langfuse.WithAgentMetadata(langfuse.Metadata{
+		nooptrace.WithAgentName(fmt.Sprintf("assistant %d for flow %d: %s", ap.id, ap.fp.flowID, ap.fp.title)),
+		nooptrace.WithAgentInput(chain),
+		nooptrace.WithAgentMetadata(nooptrace.Metadata{
 			"assistant_id": ap.id,
 			"flow_id":      ap.fp.flowID,
 			"msg_chain_id": ap.msgChainID,

@@ -279,11 +279,11 @@ func TestUpdateDefaultValues(t *testing.T) {
 			name: "mixed scenarios",
 			vars: map[string]loader.EnvVar{
 				"PENTAGI_POSTGRES_PASSWORD":  {Name: "PENTAGI_POSTGRES_PASSWORD", Default: ""},
-				"LANGFUSE_POSTGRES_PASSWORD": {Name: "LANGFUSE_POSTGRES_PASSWORD", Default: "custom"},
+				"NOOPTRACE_POSTGRES_PASSWORD": {Name: "NOOPTRACE_POSTGRES_PASSWORD", Default: "custom"},
 			},
 			expected: map[string]string{
 				"PENTAGI_POSTGRES_PASSWORD":  "postgres",
-				"LANGFUSE_POSTGRES_PASSWORD": "custom",
+				"NOOPTRACE_POSTGRES_PASSWORD": "custom",
 			},
 		},
 	}
@@ -524,25 +524,25 @@ func TestDoHardening(t *testing.T) {
 		// expectCommit removed - commit testing requires more sophisticated mocking
 	}{
 		{
-			name: "langfuse not installed - should harden",
+			name: "nooptrace not installed - should harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false,
-				LangfuseVolumesExist: false,
+				NoopTraceInstalled:    false,
+				NoopTraceVolumesExist: false,
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     true,
 				PentagiVolumesExist:  true,
 			},
 			setupVars: map[string]loader.EnvVar{
-				"LANGFUSE_SALT": {Name: "LANGFUSE_SALT", Value: "salt", Default: "salt"},
+				"NOOPTRACE_SALT": {Name: "NOOPTRACE_SALT", Value: "salt", Default: "salt"},
 			},
 			expectChanges: true,
 		},
 		{
 			name: "pentagi not installed - should harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     false,
@@ -556,8 +556,8 @@ func TestDoHardening(t *testing.T) {
 		{
 			name: "graphiti not installed - should harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    false,
 				GraphitiVolumesExist: false,
 				PentagiInstalled:     true,
@@ -571,8 +571,8 @@ func TestDoHardening(t *testing.T) {
 		{
 			name: "all installed - should not harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     true,
@@ -584,55 +584,55 @@ func TestDoHardening(t *testing.T) {
 		{
 			name: "none installed - should harden all",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false,
-				LangfuseVolumesExist: false,
+				NoopTraceInstalled:    false,
+				NoopTraceVolumesExist: false,
 				GraphitiInstalled:    false,
 				GraphitiVolumesExist: false,
 				PentagiInstalled:     false,
 				PentagiVolumesExist:  false,
 			},
 			setupVars: map[string]loader.EnvVar{
-				"LANGFUSE_SALT":       {Name: "LANGFUSE_SALT", Value: "salt", Default: "salt"},
+				"NOOPTRACE_SALT":       {Name: "NOOPTRACE_SALT", Value: "salt", Default: "salt"},
 				"NEO4J_PASSWORD":      {Name: "NEO4J_PASSWORD", Value: "devpassword", Default: "devpassword"},
 				"COOKIE_SIGNING_SALT": {Name: "COOKIE_SIGNING_SALT", Value: "salt", Default: "salt"},
 			},
 			expectChanges: true,
 		},
 		{
-			name: "langfuse not installed but no default values - should not commit",
+			name: "nooptrace not installed but no default values - should not commit",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false,
-				LangfuseVolumesExist: false,
+				NoopTraceInstalled:    false,
+				NoopTraceVolumesExist: false,
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     true,
 				PentagiVolumesExist:  true,
 			},
 			setupVars: map[string]loader.EnvVar{
-				"LANGFUSE_SALT": {Name: "LANGFUSE_SALT", Value: "custom", Default: "salt"}, // custom value, not default
+				"NOOPTRACE_SALT": {Name: "NOOPTRACE_SALT", Value: "custom", Default: "salt"}, // custom value, not default
 			},
 			expectChanges: false,
 		},
 		{
-			name: "langfuse volumes exist but containers removed - should NOT harden",
+			name: "nooptrace volumes exist but containers removed - should NOT harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false, // containers removed
-				LangfuseVolumesExist: true,  // but volumes remain!
+				NoopTraceInstalled:    false, // containers removed
+				NoopTraceVolumesExist: true,  // but volumes remain!
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     true,
 				PentagiVolumesExist:  true,
 			},
 			setupVars: map[string]loader.EnvVar{
-				"LANGFUSE_SALT": {Name: "LANGFUSE_SALT", Value: "salt", Default: "salt"},
+				"NOOPTRACE_SALT": {Name: "NOOPTRACE_SALT", Value: "salt", Default: "salt"},
 			},
 			expectChanges: false, // should NOT change because volumes exist
 		},
 		{
 			name: "pentagi volumes exist but containers removed - should NOT harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    true,
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     false, // containers removed
@@ -646,8 +646,8 @@ func TestDoHardening(t *testing.T) {
 		{
 			name: "graphiti volumes exist but containers removed - should NOT harden",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    false, // containers removed
 				GraphitiVolumesExist: true,  // but volumes remain!
 				PentagiInstalled:     true,
@@ -661,15 +661,15 @@ func TestDoHardening(t *testing.T) {
 		{
 			name: "containers removed but volumes remain for all - should NOT harden any",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false, // containers removed
-				LangfuseVolumesExist: true,  // volumes remain
+				NoopTraceInstalled:    false, // containers removed
+				NoopTraceVolumesExist: true,  // volumes remain
 				GraphitiInstalled:    false, // containers removed
 				GraphitiVolumesExist: true,  // volumes remain
 				PentagiInstalled:     false, // containers removed
 				PentagiVolumesExist:  true,  // volumes remain
 			},
 			setupVars: map[string]loader.EnvVar{
-				"LANGFUSE_SALT":             {Name: "LANGFUSE_SALT", Value: "salt", Default: "salt"},
+				"NOOPTRACE_SALT":             {Name: "NOOPTRACE_SALT", Value: "salt", Default: "salt"},
 				"NEO4J_PASSWORD":            {Name: "NEO4J_PASSWORD", Value: "devpassword", Default: "devpassword"},
 				"PENTAGI_POSTGRES_PASSWORD": {Name: "PENTAGI_POSTGRES_PASSWORD", Value: "postgres", Default: "postgres"},
 			},
@@ -820,8 +820,8 @@ func TestDoHardening_ScraperURLLogic(t *testing.T) {
 			mockSt := &mockState{vars: tt.setupVars}
 
 			checkResult := checker.CheckResult{
-				LangfuseInstalled:    true,
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true,
+				NoopTraceVolumesExist: true,
 				PentagiInstalled:     false, // Trigger pentagi hardening
 				PentagiVolumesExist:  false,
 			}
@@ -861,8 +861,8 @@ func TestDoHardening_ScraperURLLogic(t *testing.T) {
 	}
 }
 
-// Test 10: syncLangfuseState function
-func TestSyncLangfuseState(t *testing.T) {
+// Test 10: syncNoopTraceState function
+func TestSyncNoopTraceState(t *testing.T) {
 	tests := []struct {
 		name          string
 		inputVars     map[string]loader.EnvVar
@@ -871,111 +871,111 @@ func TestSyncLangfuseState(t *testing.T) {
 		wantChanged   bool              // expected return value from function
 	}{
 		{
-			name: "sync empty langfuse vars from init vars",
+			name: "sync empty nooptrace vars from init vars",
 			inputVars: map[string]loader.EnvVar{
-				"LANGFUSE_PROJECT_ID": {
-					Name:      "LANGFUSE_PROJECT_ID",
+				"NOOPTRACE_PROJECT_ID": {
+					Name:      "NOOPTRACE_PROJECT_ID",
 					Value:     "", // empty, should be synced
 					IsChanged: false,
 				},
-				"LANGFUSE_PUBLIC_KEY": {
-					Name:      "LANGFUSE_PUBLIC_KEY",
+				"NOOPTRACE_PUBLIC_KEY": {
+					Name:      "NOOPTRACE_PUBLIC_KEY",
 					Value:     "", // empty, should be synced
 					IsChanged: false,
 				},
-				"LANGFUSE_SECRET_KEY": {
-					Name:      "LANGFUSE_SECRET_KEY",
+				"NOOPTRACE_SECRET_KEY": {
+					Name:      "NOOPTRACE_SECRET_KEY",
 					Value:     "", // empty, should be synced
 					IsChanged: false,
 				},
-				"LANGFUSE_INIT_PROJECT_ID": {
-					Name:      "LANGFUSE_INIT_PROJECT_ID",
+				"NOOPTRACE_INIT_PROJECT_ID": {
+					Name:      "NOOPTRACE_INIT_PROJECT_ID",
 					Value:     "cm47619l0000872mcd2dlbqwb",
 					IsChanged: true,
 				},
-				"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": {
-					Name:      "LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
+				"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": {
+					Name:      "NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
 					Value:     "pk-lf-12345678-1234-1234-1234-123456789abc",
 					IsChanged: true,
 				},
-				"LANGFUSE_INIT_PROJECT_SECRET_KEY": {
-					Name:      "LANGFUSE_INIT_PROJECT_SECRET_KEY",
+				"NOOPTRACE_INIT_PROJECT_SECRET_KEY": {
+					Name:      "NOOPTRACE_INIT_PROJECT_SECRET_KEY",
 					Value:     "sk-lf-87654321-4321-4321-4321-cba987654321",
 					IsChanged: true,
 				},
 			},
 			expectedVars: map[string]string{
-				"LANGFUSE_PROJECT_ID": "cm47619l0000872mcd2dlbqwb",
-				"LANGFUSE_PUBLIC_KEY": "pk-lf-12345678-1234-1234-1234-123456789abc",
-				"LANGFUSE_SECRET_KEY": "sk-lf-87654321-4321-4321-4321-cba987654321",
+				"NOOPTRACE_PROJECT_ID": "cm47619l0000872mcd2dlbqwb",
+				"NOOPTRACE_PUBLIC_KEY": "pk-lf-12345678-1234-1234-1234-123456789abc",
+				"NOOPTRACE_SECRET_KEY": "sk-lf-87654321-4321-4321-4321-cba987654321",
 			},
 			expectedFlags: map[string]bool{
-				"LANGFUSE_PROJECT_ID": true,
-				"LANGFUSE_PUBLIC_KEY": true,
-				"LANGFUSE_SECRET_KEY": true,
+				"NOOPTRACE_PROJECT_ID": true,
+				"NOOPTRACE_PUBLIC_KEY": true,
+				"NOOPTRACE_SECRET_KEY": true,
 			},
 			wantChanged: true,
 		},
 		{
-			name: "do not sync non-empty langfuse vars",
+			name: "do not sync non-empty nooptrace vars",
 			inputVars: map[string]loader.EnvVar{
-				"LANGFUSE_PROJECT_ID": {
-					Name:      "LANGFUSE_PROJECT_ID",
+				"NOOPTRACE_PROJECT_ID": {
+					Name:      "NOOPTRACE_PROJECT_ID",
 					Value:     "existing-project-id", // not empty, should not be synced
 					IsChanged: false,
 				},
-				"LANGFUSE_PUBLIC_KEY": {
-					Name:      "LANGFUSE_PUBLIC_KEY",
+				"NOOPTRACE_PUBLIC_KEY": {
+					Name:      "NOOPTRACE_PUBLIC_KEY",
 					Value:     "", // empty, should be synced
 					IsChanged: false,
 				},
-				"LANGFUSE_INIT_PROJECT_ID": {
-					Name:      "LANGFUSE_INIT_PROJECT_ID",
+				"NOOPTRACE_INIT_PROJECT_ID": {
+					Name:      "NOOPTRACE_INIT_PROJECT_ID",
 					Value:     "cm47619l0000872mcd2dlbqwb",
 					IsChanged: true,
 				},
-				"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": {
-					Name:      "LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
+				"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": {
+					Name:      "NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
 					Value:     "pk-lf-12345678-1234-1234-1234-123456789abc",
 					IsChanged: true,
 				},
 			},
 			expectedVars: map[string]string{
-				"LANGFUSE_PROJECT_ID": "existing-project-id",                        // unchanged
-				"LANGFUSE_PUBLIC_KEY": "pk-lf-12345678-1234-1234-1234-123456789abc", // synced
+				"NOOPTRACE_PROJECT_ID": "existing-project-id",                        // unchanged
+				"NOOPTRACE_PUBLIC_KEY": "pk-lf-12345678-1234-1234-1234-123456789abc", // synced
 			},
 			expectedFlags: map[string]bool{
-				"LANGFUSE_PROJECT_ID": false, // unchanged
-				"LANGFUSE_PUBLIC_KEY": true,  // synced
+				"NOOPTRACE_PROJECT_ID": false, // unchanged
+				"NOOPTRACE_PUBLIC_KEY": true,  // synced
 			},
 			wantChanged: true, // because PUBLIC_KEY was synced
 		},
 		{
 			name: "skip sync when init var does not exist",
 			inputVars: map[string]loader.EnvVar{
-				"LANGFUSE_PROJECT_ID": {
-					Name:      "LANGFUSE_PROJECT_ID",
+				"NOOPTRACE_PROJECT_ID": {
+					Name:      "NOOPTRACE_PROJECT_ID",
 					Value:     "", // empty, but no init var to sync from
 					IsChanged: false,
 				},
 			},
 			expectedVars: map[string]string{
-				"LANGFUSE_PROJECT_ID": "", // unchanged because no init var
+				"NOOPTRACE_PROJECT_ID": "", // unchanged because no init var
 			},
 			expectedFlags: map[string]bool{
-				"LANGFUSE_PROJECT_ID": false, // unchanged
+				"NOOPTRACE_PROJECT_ID": false, // unchanged
 			},
 			wantChanged: false,
 		},
 		{
 			name: "skip sync when target var does not exist",
 			inputVars: map[string]loader.EnvVar{
-				"LANGFUSE_INIT_PROJECT_ID": {
-					Name:      "LANGFUSE_INIT_PROJECT_ID",
+				"NOOPTRACE_INIT_PROJECT_ID": {
+					Name:      "NOOPTRACE_INIT_PROJECT_ID",
 					Value:     "cm47619l0000872mcd2dlbqwb",
 					IsChanged: true,
 				},
-				// No LANGFUSE_PROJECT_ID in vars
+				// No NOOPTRACE_PROJECT_ID in vars
 			},
 			expectedVars:  map[string]string{},
 			expectedFlags: map[string]bool{},
@@ -993,14 +993,14 @@ func TestSyncLangfuseState(t *testing.T) {
 			mockSt := &mockState{vars: make(map[string]loader.EnvVar)}
 
 			// Call the function
-			isChanged, err := syncLangfuseState(mockSt, vars)
+			isChanged, err := syncNoopTraceState(mockSt, vars)
 			if err != nil {
-				t.Errorf("syncLangfuseState() error = %v", err)
+				t.Errorf("syncNoopTraceState() error = %v", err)
 				return
 			}
 
 			if isChanged != tt.wantChanged {
-				t.Errorf("syncLangfuseState() isChanged = %v, wantChanged %v", isChanged, tt.wantChanged)
+				t.Errorf("syncNoopTraceState() isChanged = %v, wantChanged %v", isChanged, tt.wantChanged)
 			}
 
 			// Check expected values
@@ -1255,27 +1255,27 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 		expectedUnchangedVars []string // variables that should remain unchanged
 	}{
 		{
-			name: "harden langfuse only",
+			name: "harden nooptrace only",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false, // Should harden langfuse
-				LangfuseVolumesExist: false,
+				NoopTraceInstalled:    false, // Should harden nooptrace
+				NoopTraceVolumesExist: false,
 				GraphitiInstalled:    true, // Should not harden graphiti
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     true, // Should not harden pentagi
 				PentagiVolumesExist:  true,
 			},
 			expectedHardenedVars: []string{
-				"LANGFUSE_POSTGRES_PASSWORD",
-				"LANGFUSE_CLICKHOUSE_PASSWORD",
-				"LANGFUSE_S3_ACCESS_KEY_ID",
-				"LANGFUSE_S3_SECRET_ACCESS_KEY",
-				"LANGFUSE_REDIS_AUTH",
-				"LANGFUSE_SALT",
-				"LANGFUSE_ENCRYPTION_KEY",
-				"LANGFUSE_NEXTAUTH_SECRET",
-				"LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
-				"LANGFUSE_INIT_PROJECT_SECRET_KEY",
-				"LANGFUSE_AUTH_DISABLE_SIGNUP",
+				"NOOPTRACE_POSTGRES_PASSWORD",
+				"NOOPTRACE_CLICKHOUSE_PASSWORD",
+				"NOOPTRACE_S3_ACCESS_KEY_ID",
+				"NOOPTRACE_S3_SECRET_ACCESS_KEY",
+				"NOOPTRACE_REDIS_AUTH",
+				"NOOPTRACE_SALT",
+				"NOOPTRACE_ENCRYPTION_KEY",
+				"NOOPTRACE_NEXTAUTH_SECRET",
+				"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
+				"NOOPTRACE_INIT_PROJECT_SECRET_KEY",
+				"NOOPTRACE_AUTH_DISABLE_SIGNUP",
 			},
 			expectedUnchangedVars: []string{
 				"COOKIE_SIGNING_SALT",
@@ -1288,8 +1288,8 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 		{
 			name: "harden pentagi only",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true, // Should not harden langfuse
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true, // Should not harden nooptrace
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    true, // Should not harden graphiti
 				GraphitiVolumesExist: true,
 				PentagiInstalled:     false, // Should harden pentagi
@@ -1304,17 +1304,17 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 			},
 			expectedUnchangedVars: []string{
 				"NEO4J_PASSWORD", // Graphiti installed, should not harden
-				"LANGFUSE_POSTGRES_PASSWORD",
-				"LANGFUSE_CLICKHOUSE_PASSWORD",
-				"LANGFUSE_S3_ACCESS_KEY_ID",
-				"LANGFUSE_S3_SECRET_ACCESS_KEY",
+				"NOOPTRACE_POSTGRES_PASSWORD",
+				"NOOPTRACE_CLICKHOUSE_PASSWORD",
+				"NOOPTRACE_S3_ACCESS_KEY_ID",
+				"NOOPTRACE_S3_SECRET_ACCESS_KEY",
 			},
 		},
 		{
 			name: "harden graphiti only",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    true, // Should not harden langfuse
-				LangfuseVolumesExist: true,
+				NoopTraceInstalled:    true, // Should not harden nooptrace
+				NoopTraceVolumesExist: true,
 				GraphitiInstalled:    false, // Should harden graphiti
 				GraphitiVolumesExist: false,
 				PentagiInstalled:     true, // Should not harden pentagi
@@ -1328,15 +1328,15 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 				"PENTAGI_POSTGRES_PASSWORD",
 				"LOCAL_SCRAPER_USERNAME",
 				"LOCAL_SCRAPER_PASSWORD",
-				"LANGFUSE_POSTGRES_PASSWORD",
-				"LANGFUSE_CLICKHOUSE_PASSWORD",
+				"NOOPTRACE_POSTGRES_PASSWORD",
+				"NOOPTRACE_CLICKHOUSE_PASSWORD",
 			},
 		},
 		{
 			name: "harden all stacks",
 			checkResult: checker.CheckResult{
-				LangfuseInstalled:    false, // Should harden langfuse
-				LangfuseVolumesExist: false,
+				NoopTraceInstalled:    false, // Should harden nooptrace
+				NoopTraceVolumesExist: false,
 				GraphitiInstalled:    false, // Should harden graphiti
 				GraphitiVolumesExist: false,
 				PentagiInstalled:     false, // Should harden pentagi
@@ -1351,26 +1351,26 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 				"SCRAPER_PRIVATE_URL",
 				// Graphiti vars
 				"NEO4J_PASSWORD",
-				// Langfuse vars
-				"LANGFUSE_POSTGRES_PASSWORD",
-				"LANGFUSE_CLICKHOUSE_PASSWORD",
-				"LANGFUSE_S3_ACCESS_KEY_ID",
-				"LANGFUSE_S3_SECRET_ACCESS_KEY",
-				"LANGFUSE_REDIS_AUTH",
-				"LANGFUSE_SALT",
-				"LANGFUSE_ENCRYPTION_KEY",
-				"LANGFUSE_NEXTAUTH_SECRET",
-				"LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
-				"LANGFUSE_INIT_PROJECT_SECRET_KEY",
-				"LANGFUSE_AUTH_DISABLE_SIGNUP",
-				// Langfuse sync vars should be updated too
-				"LANGFUSE_PROJECT_ID",
-				"LANGFUSE_PUBLIC_KEY",
-				"LANGFUSE_SECRET_KEY",
+				// NoopTrace vars
+				"NOOPTRACE_POSTGRES_PASSWORD",
+				"NOOPTRACE_CLICKHOUSE_PASSWORD",
+				"NOOPTRACE_S3_ACCESS_KEY_ID",
+				"NOOPTRACE_S3_SECRET_ACCESS_KEY",
+				"NOOPTRACE_REDIS_AUTH",
+				"NOOPTRACE_SALT",
+				"NOOPTRACE_ENCRYPTION_KEY",
+				"NOOPTRACE_NEXTAUTH_SECRET",
+				"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
+				"NOOPTRACE_INIT_PROJECT_SECRET_KEY",
+				"NOOPTRACE_AUTH_DISABLE_SIGNUP",
+				// NoopTrace sync vars should be updated too
+				"NOOPTRACE_PROJECT_ID",
+				"NOOPTRACE_PUBLIC_KEY",
+				"NOOPTRACE_SECRET_KEY",
 			},
 			expectedUnchangedVars: []string{
 				// Variables that should never be hardened or are managed differently
-				"LANGFUSE_INIT_PROJECT_ID", // This doesn't get hardened, only synced to other vars
+				"NOOPTRACE_INIT_PROJECT_ID", // This doesn't get hardened, only synced to other vars
 			},
 		},
 	}
@@ -1429,7 +1429,7 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 						}
 					} else {
 						// For variables without defaults (like sync vars), just check they were updated
-						if varName == "LANGFUSE_PROJECT_ID" || varName == "LANGFUSE_PUBLIC_KEY" || varName == "LANGFUSE_SECRET_KEY" {
+						if varName == "NOOPTRACE_PROJECT_ID" || varName == "NOOPTRACE_PUBLIC_KEY" || varName == "NOOPTRACE_SECRET_KEY" {
 							if updatedVar.Value == "" {
 								t.Errorf("Sync variable %s should have been updated but is still empty", varName)
 							}
@@ -1454,9 +1454,9 @@ func TestDoHardening_IntegrationWithRealEnvFile(t *testing.T) {
 			// Note: We don't verify file consistency here because mockState
 			// doesn't write back to file. In real system, state.Commit() would handle this.
 
-			// Verify sync relationships for Langfuse
-			if !tt.checkResult.LangfuseInstalled {
-				verifyLangfuseSyncRelationships(t, mockSt)
+			// Verify sync relationships for NoopTrace
+			if !tt.checkResult.NoopTraceInstalled {
+				verifyNoopTraceSyncRelationships(t, mockSt)
 			}
 
 			// Verify scraper URL consistency for Pentagi
@@ -1521,16 +1521,16 @@ func validateHardenedValue(varName, value string) error {
 	return nil
 }
 
-// Helper function to verify Langfuse sync relationships
-func verifyLangfuseSyncRelationships(t *testing.T, state *mockState) {
-	for varName, syncVarName := range varsHardeningSyncLangfuse {
+// Helper function to verify NoopTrace sync relationships
+func verifyNoopTraceSyncRelationships(t *testing.T, state *mockState) {
+	for varName, syncVarName := range varsHardeningSyncNoopTrace {
 		if targetVar, targetExists := state.GetVar(varName); targetExists {
 			if sourceVar, sourceExists := state.GetVar(syncVarName); sourceExists {
 				if targetVar.Value == "" && sourceVar.Value != "" {
-					t.Errorf("Langfuse sync failed: %s is empty but %s has value %q",
+					t.Errorf("NoopTrace sync failed: %s is empty but %s has value %q",
 						varName, syncVarName, sourceVar.Value)
 				} else if targetVar.Value != "" && sourceVar.Value != "" && targetVar.Value != sourceVar.Value {
-					t.Errorf("Langfuse sync inconsistent: %s=%q, %s=%q",
+					t.Errorf("NoopTrace sync inconsistent: %s=%q, %s=%q",
 						varName, targetVar.Value, syncVarName, sourceVar.Value)
 				}
 			}

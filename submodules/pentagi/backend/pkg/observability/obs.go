@@ -132,16 +132,16 @@ type observer struct {
 	logger     otellog.Logger
 	tracer     oteltrace.Tracer
 	meter      otelmetric.Meter
-	lfclient   LangfuseClient
+	lfclient   NoopTraceClient
 	otelclient TelemetryClient
-	observer   langfuse.Observer
+	observer   nooptrace.Observer
 }
 
 func init() {
 	InitObserver(context.Background(), nil, nil, []logrus.Level{})
 }
 
-func InitObserver(ctx context.Context, lfclient LangfuseClient, otelclient TelemetryClient, levels []logrus.Level) {
+func InitObserver(ctx context.Context, lfclient NoopTraceClient, otelclient TelemetryClient, levels []logrus.Level) {
 	if Observer != nil {
 		Observer.Flush(ctx)
 	}
@@ -158,7 +158,7 @@ func InitObserver(ctx context.Context, lfclient LangfuseClient, otelclient Telem
 	if lfclient != nil {
 		obs.observer = lfclient.Observer()
 	} else {
-		obs.observer = langfuse.NewNoopObserver()
+		obs.observer = nooptrace.NewNoopObserver()
 	}
 
 	if otelclient != nil {
@@ -176,7 +176,7 @@ func InitObserver(ctx context.Context, lfclient LangfuseClient, otelclient Telem
 			propagation.NewCompositeTextMapPropagator(
 				propagation.TraceContext{},
 				propagation.Baggage{},
-				// TODO: add langfuse propagator
+				// TODO: add nooptrace propagator
 			),
 		)
 		obs.tracer = provider.Tracer(tname, oteltrace.WithInstrumentationVersion(tversion))
@@ -341,8 +341,8 @@ func (obs *observer) NewFloat64ObservableGauge(
 }
 
 func (obs *observer) NewObservation(
-	ctx context.Context, options ...langfuse.ObservationContextOption,
-) (context.Context, langfuse.Observation) {
+	ctx context.Context, options ...nooptrace.ObservationContextOption,
+) (context.Context, nooptrace.Observation) {
 	return obs.observer.NewObservation(ctx, options...)
 }
 

@@ -55,12 +55,12 @@ func (p *processor) isEmbeddedDeployment(stack ProductStack) bool {
 
 		return false
 
-	case ProductStackLangfuse:
-		if !p.checker.LangfuseConnected {
+	case ProductStackNoopTrace:
+		if !p.checker.NoopTraceConnected {
 			return false
 		}
 
-		envVar, envVarValueEmbedded := "LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint
+		envVar, envVarValueEmbedded := "NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint
 		if envVar, exists := p.state.GetVar(envVar); exists && envVar.Value == envVarValueEmbedded {
 			return true
 		}
@@ -181,9 +181,9 @@ func (p *processor) applyChanges(ctx context.Context, state *operationState) (er
 		return fmt.Errorf("failed to apply observability changes: %w", err)
 	}
 
-	// phase 2: Langfuse Stack Management
-	if err := p.applyLangfuseChanges(ctx, state); err != nil {
-		return fmt.Errorf("failed to apply langfuse changes: %w", err)
+	// phase 2: NoopTrace Stack Management
+	if err := p.applyNoopTraceChanges(ctx, state); err != nil {
+		return fmt.Errorf("failed to apply nooptrace changes: %w", err)
 	}
 
 	// phase 3: Graphiti Stack Management
@@ -236,38 +236,38 @@ func (p *processor) applyObservabilityChanges(ctx context.Context, state *operat
 	return nil
 }
 
-func (p *processor) applyLangfuseChanges(ctx context.Context, state *operationState) error {
-	if p.isEmbeddedDeployment(ProductStackLangfuse) {
-		// user wants embedded langfuse
-		if !p.checker.LangfuseExtracted {
+func (p *processor) applyNoopTraceChanges(ctx context.Context, state *operationState) error {
+	if p.isEmbeddedDeployment(ProductStackNoopTrace) {
+		// user wants embedded nooptrace
+		if !p.checker.NoopTraceExtracted {
 			// fresh installation - extract compose file
-			if err := p.fsOps.ensureStackIntegrity(ctx, ProductStackLangfuse, state); err != nil {
-				return fmt.Errorf("failed to ensure langfuse integrity: %w", err)
+			if err := p.fsOps.ensureStackIntegrity(ctx, ProductStackNoopTrace, state); err != nil {
+				return fmt.Errorf("failed to ensure nooptrace integrity: %w", err)
 			}
 		} else {
 			// file exists - verify integrity, update if force=true
-			if err := p.fsOps.verifyStackIntegrity(ctx, ProductStackLangfuse, state); err != nil {
-				return fmt.Errorf("failed to verify langfuse integrity: %w", err)
+			if err := p.fsOps.verifyStackIntegrity(ctx, ProductStackNoopTrace, state); err != nil {
+				return fmt.Errorf("failed to verify nooptrace integrity: %w", err)
 			}
 		}
 
 		// update/start containers
-		if err := p.composeOps.updateStack(ctx, ProductStackLangfuse, state); err != nil {
-			return fmt.Errorf("failed to update langfuse stack: %w", err)
+		if err := p.composeOps.updateStack(ctx, ProductStackNoopTrace, state); err != nil {
+			return fmt.Errorf("failed to update nooptrace stack: %w", err)
 		}
 	} else {
-		// user wants external/disabled langfuse
-		if p.checker.LangfuseInstalled {
+		// user wants external/disabled nooptrace
+		if p.checker.NoopTraceInstalled {
 			// remove containers but keep files (user might re-enable)
-			if err := p.composeOps.removeStack(ctx, ProductStackLangfuse, state); err != nil {
-				return fmt.Errorf("failed to remove langfuse stack: %w", err)
+			if err := p.composeOps.removeStack(ctx, ProductStackNoopTrace, state); err != nil {
+				return fmt.Errorf("failed to remove nooptrace stack: %w", err)
 			}
 		}
 	}
 
 	// refresh state to verify operation success
-	if err := p.checker.GatherLangfuseInfo(ctx); err != nil {
-		return fmt.Errorf("failed to gather langfuse info: %w", err)
+	if err := p.checker.GatherNoopTraceInfo(ctx); err != nil {
+		return fmt.Errorf("failed to gather nooptrace info: %w", err)
 	}
 
 	return nil
@@ -354,7 +354,7 @@ func (p *processor) checkFiles(
 	}
 
 	switch stack {
-	case ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability:
+	case ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability:
 		if !p.isEmbeddedDeployment(stack) {
 			return map[string]files.FileStatus{}, nil
 		}
@@ -407,7 +407,7 @@ func (p *processor) factoryReset(ctx context.Context, state *operationState) (er
 	// step 3: remove main networks
 	_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkPentagi))
 	_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkObservability))
-	_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkLangfuse))
+	_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkNoopTrace))
 
 	// step 4: restore .env from embedded and reload state
 	p.appendLog(MsgRestoringDefaultEnv, ProductStackInstaller, state)
@@ -467,10 +467,10 @@ func (p *processor) install(ctx context.Context, state *operationState) (err err
 		}
 	}
 
-	// phase 2: Langfuse Stack Management
-	if !p.checker.LangfuseInstalled {
-		if err := p.applyLangfuseChanges(ctx, state); err != nil {
-			return fmt.Errorf("failed to apply langfuse changes: %w", err)
+	// phase 2: NoopTrace Stack Management
+	if !p.checker.NoopTraceInstalled {
+		if err := p.applyNoopTraceChanges(ctx, state); err != nil {
+			return fmt.Errorf("failed to apply nooptrace changes: %w", err)
 		}
 	}
 
@@ -512,13 +512,13 @@ func (p *processor) update(ctx context.Context, stack ProductStack, state *opera
 	composeStacksUpToDate := map[ProductStack]bool{
 		ProductStackPentagi:       p.checker.PentagiIsUpToDate,
 		ProductStackGraphiti:      p.checker.GraphitiIsUpToDate,
-		ProductStackLangfuse:      p.checker.LangfuseIsUpToDate,
+		ProductStackNoopTrace:      p.checker.NoopTraceIsUpToDate,
 		ProductStackObservability: p.checker.ObservabilityIsUpToDate,
 	}
 	composeStacksGatherInfo := map[ProductStack]func(ctx context.Context) error{
 		ProductStackPentagi:       p.checker.GatherPentagiInfo,
 		ProductStackGraphiti:      p.checker.GatherGraphitiInfo,
-		ProductStackLangfuse:      p.checker.GatherLangfuseInfo,
+		ProductStackNoopTrace:      p.checker.GatherNoopTraceInfo,
 		ProductStackObservability: p.checker.GatherObservabilityInfo,
 	}
 
@@ -527,7 +527,7 @@ func (p *processor) update(ctx context.Context, stack ProductStack, state *opera
 	}
 
 	switch stack {
-	case ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability:
+	case ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability:
 		if composeStacksUpToDate[stack] {
 			return nil
 		}
@@ -602,7 +602,7 @@ func (p *processor) download(ctx context.Context, stack ProductStack, state *ope
 	}
 
 	switch stack {
-	case ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability:
+	case ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability:
 		// docker compose pull equivalent for all images
 		if err := p.composeOps.downloadStack(ctx, stack, state); err != nil {
 			return fmt.Errorf("failed to download stack: %w", err)
@@ -666,7 +666,7 @@ func (p *processor) remove(ctx context.Context, stack ProductStack, state *opera
 	composeStacksGatherInfo := map[ProductStack]func(ctx context.Context) error{
 		ProductStackPentagi:       p.checker.GatherPentagiInfo,
 		ProductStackGraphiti:      p.checker.GatherGraphitiInfo,
-		ProductStackLangfuse:      p.checker.GatherLangfuseInfo,
+		ProductStackNoopTrace:      p.checker.GatherNoopTraceInfo,
 		ProductStackObservability: p.checker.GatherObservabilityInfo,
 	}
 
@@ -675,7 +675,7 @@ func (p *processor) remove(ctx context.Context, stack ProductStack, state *opera
 	}
 
 	switch stack {
-	case ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability:
+	case ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability:
 		if err := p.composeOps.removeStack(ctx, stack, state); err != nil {
 			return fmt.Errorf("failed to remove stack: %w", err)
 		}
@@ -746,7 +746,7 @@ func (p *processor) purge(ctx context.Context, stack ProductStack, state *operat
 	composeStacksGatherInfo := map[ProductStack]func(ctx context.Context) error{
 		ProductStackPentagi:       p.checker.GatherPentagiInfo,
 		ProductStackGraphiti:      p.checker.GatherGraphitiInfo,
-		ProductStackLangfuse:      p.checker.GatherLangfuseInfo,
+		ProductStackNoopTrace:      p.checker.GatherNoopTraceInfo,
 		ProductStackObservability: p.checker.GatherObservabilityInfo,
 	}
 
@@ -755,7 +755,7 @@ func (p *processor) purge(ctx context.Context, stack ProductStack, state *operat
 	}
 
 	switch stack {
-	case ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability:
+	case ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability:
 		if err := p.composeOps.purgeImagesStack(ctx, stack, state); err != nil {
 			return fmt.Errorf("failed to purge with images stack: %w", err)
 		}
@@ -801,7 +801,7 @@ func (p *processor) purge(ctx context.Context, stack ProductStack, state *operat
 		// remove custom networks
 		_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkPentagi))
 		_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkObservability))
-		_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkLangfuse))
+		_ = p.dockerOps.removeMainDockerNetwork(ctx, state, string(ProductDockerNetworkNoopTrace))
 
 	default:
 		return fmt.Errorf("operation purge not applicable for stack %s", stack)

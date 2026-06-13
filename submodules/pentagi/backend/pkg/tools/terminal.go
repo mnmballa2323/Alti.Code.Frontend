@@ -14,7 +14,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/docker"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/sirupsen/logrus"
@@ -60,11 +60,11 @@ func (t *terminal) wrapCommandResult(ctx context.Context, args json.RawMessage, 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	if err != nil {
 		observation.Event(
-			langfuse.WithEventName("terminal tool error swallowed"),
-			langfuse.WithEventInput(args),
-			langfuse.WithEventStatus(err.Error()),
-			langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-			langfuse.WithEventMetadata(langfuse.Metadata{
+			nooptrace.WithEventName("terminal tool error swallowed"),
+			nooptrace.WithEventInput(args),
+			nooptrace.WithEventStatus(err.Error()),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+			nooptrace.WithEventMetadata(nooptrace.Metadata{
 				"tool_name": name,
 				"error":     err.Error(),
 			}),

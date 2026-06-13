@@ -154,12 +154,12 @@ func TestUpdate(t *testing.T) {
 				},
 			},
 			{
-				name:         "langfuse_needs_update",
-				stack:        ProductStackLangfuse,
+				name:         "nooptrace_needs_update",
+				stack:        ProductStackNoopTrace,
 				isUpToDate:   false,
 				expectUpdate: true,
 				configSetup: func(config *mockCheckConfig) {
-					config.LangfuseIsUpToDate = false
+					config.NoopTraceIsUpToDate = false
 				},
 			},
 			{
@@ -228,14 +228,14 @@ func TestUpdate(t *testing.T) {
 	t.Run("compose_stacks", func(t *testing.T) {
 		p, composeOps, _, dockerOps := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 			config.PentagiIsUpToDate = true // should skip
-			config.LangfuseIsUpToDate = false
+			config.NoopTraceIsUpToDate = false
 			config.ObservabilityIsUpToDate = false
 		})
 
 		err := p.update(t.Context(), ProductStackCompose, testOperationState(t))
 		assertNoError(t, err)
 
-		// Check compose calls - should update langfuse and observability, skip pentagi
+		// Check compose calls - should update nooptrace and observability, skip pentagi
 		composeCalls := composeOps.getCalls()
 		updateCount := 0
 		for _, call := range composeCalls {
@@ -267,22 +267,22 @@ func TestUpdate(t *testing.T) {
 	t.Run("all_stacks", func(t *testing.T) {
 		p, composeOps, _, dockerOps := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 			config.PentagiIsUpToDate = false
-			config.LangfuseIsUpToDate = true // should skip
+			config.NoopTraceIsUpToDate = true // should skip
 			config.ObservabilityIsUpToDate = false
 		})
 
 		err := p.update(t.Context(), ProductStackAll, testOperationState(t))
 		assertNoError(t, err)
 
-		// Check compose calls - should update pentagi and observability, skip langfuse
+		// Check compose calls - should update pentagi and observability, skip nooptrace
 		composeCalls := composeOps.getCalls()
 		updateCount := 0
 		for _, call := range composeCalls {
 			if call.Method == "updateStack" {
 				updateCount++
-				// Verify we don't update Langfuse
-				if call.Stack == ProductStackLangfuse {
-					t.Error("should not update Langfuse when it's up to date")
+				// Verify we don't update NoopTrace
+				if call.Stack == ProductStackNoopTrace {
+					t.Error("should not update NoopTrace when it's up to date")
 				}
 			}
 		}
@@ -332,11 +332,11 @@ func TestApplyChanges_ErrorPropagation_FromEnsureNetworks(t *testing.T) {
 	})
 
 	_ = p.state.SetVar("OTEL_HOST", checker.DefaultObservabilityEndpoint)
-	_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+	_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 
 	// not extracted forces ensure
 	p.checker.ObservabilityExtracted = false
-	p.checker.LangfuseExtracted = false
+	p.checker.NoopTraceExtracted = false
 	p.checker.PentagiExtracted = false
 
 	err := p.applyChanges(t.Context(), testOperationState(t))
@@ -382,21 +382,21 @@ func TestApplyChanges_Embedded_AllStacksUpdated(t *testing.T) {
 	p, composeOps, fsOps, dockerOps := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 		// mark as not extracted to force ensure
 		config.ObservabilityExtracted = false
-		config.LangfuseExtracted = false
+		config.NoopTraceExtracted = false
 		config.GraphitiExtracted = false
 		config.PentagiExtracted = false
 		// ensure embedded mode conditions
 		config.ObservabilityConnected = true
 		config.ObservabilityExternal = false
-		config.LangfuseConnected = true
-		config.LangfuseExternal = false
+		config.NoopTraceConnected = true
+		config.NoopTraceExternal = false
 		config.GraphitiConnected = true
 		config.GraphitiExternal = false
 	})
 
 	// mark state dirty and set embedded modes
 	_ = p.state.SetVar("OTEL_HOST", checker.DefaultObservabilityEndpoint)
-	_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+	_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 	_ = p.state.SetVar("GRAPHITI_URL", checker.DefaultGraphitiEndpoint)
 
 	err := p.applyChanges(t.Context(), testOperationState(t))
@@ -410,7 +410,7 @@ func TestApplyChanges_Embedded_AllStacksUpdated(t *testing.T) {
 	}
 
 	// ensure/verify for four stacks and update four stacks
-	// since all not extracted -> ensure called for obs, langfuse, graphiti, pentagi
+	// since all not extracted -> ensure called for obs, nooptrace, graphiti, pentagi
 	fsCalls := fsOps.getCalls()
 	ensureCount := 0
 	for _, c := range fsCalls {
@@ -475,7 +475,7 @@ func TestDownload_ComposeStacks(t *testing.T) {
 	// should download all individual stacks
 	composeCalls := composeOps.getCalls()
 	expectedComposeStacks := []ProductStack{
-		ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability,
+		ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability,
 	}
 	composeCallCount := 0
 	for _, call := range composeCalls {
@@ -512,7 +512,7 @@ func TestDownload_AllStacks(t *testing.T) {
 	// should download all individual stacks
 	composeCalls := composeOps.getCalls()
 	expectedComposeStacks := []ProductStack{
-		ProductStackPentagi, ProductStackGraphiti, ProductStackLangfuse, ProductStackObservability,
+		ProductStackPentagi, ProductStackGraphiti, ProductStackNoopTrace, ProductStackObservability,
 	}
 	composeCallCount := 0
 	for _, call := range composeCalls {
@@ -603,15 +603,15 @@ func TestIsEmbeddedDeployment(t *testing.T) {
 		stack             ProductStack
 		envVar            string
 		envValue          string
-		langfuseConnected bool
+		nooptraceConnected bool
 		graphitiConnected bool
 		expected          bool
 	}{
 		{"observability embedded", ProductStackObservability, "OTEL_HOST", checker.DefaultObservabilityEndpoint, false, false, true},
 		{"observability external", ProductStackObservability, "OTEL_HOST", "http://external:4318", false, false, false},
-		{"langfuse embedded", ProductStackLangfuse, "LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint, true, false, true},
-		{"langfuse external", ProductStackLangfuse, "LANGFUSE_BASE_URL", "http://external:3000", true, false, false},
-		{"langfuse disabled", ProductStackLangfuse, "", "", false, false, false},
+		{"nooptrace embedded", ProductStackNoopTrace, "NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint, true, false, true},
+		{"nooptrace external", ProductStackNoopTrace, "NOOPTRACE_BASE_URL", "http://external:3000", true, false, false},
+		{"nooptrace disabled", ProductStackNoopTrace, "", "", false, false, false},
 		{"graphiti embedded", ProductStackGraphiti, "GRAPHITI_URL", checker.DefaultGraphitiEndpoint, false, true, true},
 		{"graphiti external", ProductStackGraphiti, "GRAPHITI_URL", "http://external:8000", false, true, false},
 		{"graphiti disabled", ProductStackGraphiti, "", "", false, false, false},
@@ -623,7 +623,7 @@ func TestIsEmbeddedDeployment(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			p, _, _, _ := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
-				config.LangfuseConnected = tt.langfuseConnected
+				config.NoopTraceConnected = tt.nooptraceConnected
 				config.GraphitiConnected = tt.graphitiConnected
 			})
 
@@ -690,20 +690,20 @@ func TestApplyChanges_StateMachine_PhaseErrors(t *testing.T) {
 			expectedError: "failed to apply observability changes: failed to ensure observability integrity: fs error",
 		},
 		{
-			name: "langfuse phase error",
+			name: "nooptrace phase error",
 			configSetup: func(config *mockCheckConfig) {
-				config.LangfuseExtracted = false
-				config.LangfuseConnected = true
-				config.LangfuseExternal = false
+				config.NoopTraceExtracted = false
+				config.NoopTraceConnected = true
+				config.NoopTraceExternal = false
 			},
 			setupError: func(p *processor) {
-				_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+				_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 				_ = p.state.SetVar("PENTAGI_VERSION", "1.0.0") // make state dirty
 				injectFSError(p, map[string]error{
-					"ensureStackIntegrity": fmt.Errorf("langfuse error"),
+					"ensureStackIntegrity": fmt.Errorf("nooptrace error"),
 				})
 			},
-			expectedError: "failed to apply langfuse changes: failed to ensure langfuse integrity: langfuse error",
+			expectedError: "failed to apply nooptrace changes: failed to ensure nooptrace integrity: nooptrace error",
 		},
 		{
 			name: "graphiti phase error",
@@ -777,25 +777,25 @@ func TestInstall_FullScenario(t *testing.T) {
 		p, composeOps, fsOps, dockerOps := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 			// simulate fresh install - nothing installed
 			config.ObservabilityInstalled = false
-			config.LangfuseInstalled = false
+			config.NoopTraceInstalled = false
 			config.GraphitiInstalled = false
 			config.PentagiInstalled = false
 			config.ObservabilityExtracted = false
-			config.LangfuseExtracted = false
+			config.NoopTraceExtracted = false
 			config.GraphitiExtracted = false
 			config.PentagiExtracted = false
 			// mark as embedded
 			config.ObservabilityConnected = true
 			config.ObservabilityExternal = false
-			config.LangfuseConnected = true
-			config.LangfuseExternal = false
+			config.NoopTraceConnected = true
+			config.NoopTraceExternal = false
 			config.GraphitiConnected = true
 			config.GraphitiExternal = false
 		})
 
 		// set embedded mode for all
 		_ = p.state.SetVar("OTEL_HOST", checker.DefaultObservabilityEndpoint)
-		_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+		_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 		_ = p.state.SetVar("GRAPHITI_URL", checker.DefaultGraphitiEndpoint)
 
 		err := p.install(t.Context(), testOperationState(t))
@@ -815,7 +815,7 @@ func TestInstall_FullScenario(t *testing.T) {
 				ensureCount++
 			}
 		}
-		// should be 3 (observability, langfuse, graphiti) since pentagi might be handled differently
+		// should be 3 (observability, nooptrace, graphiti) since pentagi might be handled differently
 		if ensureCount < 3 {
 			t.Errorf("expected at least 3 ensureStackIntegrity calls, got %d", ensureCount)
 		}
@@ -828,7 +828,7 @@ func TestInstall_FullScenario(t *testing.T) {
 				updateCount++
 			}
 		}
-		// all 4 stacks should be updated (observability, langfuse, graphiti, pentagi)
+		// all 4 stacks should be updated (observability, nooptrace, graphiti, pentagi)
 		if updateCount != 4 {
 			t.Errorf("expected 4 updateStack calls, got %d", updateCount)
 		}
@@ -838,7 +838,7 @@ func TestInstall_FullScenario(t *testing.T) {
 		p, composeOps, _, _ := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 			// pentagi already installed
 			config.PentagiInstalled = true
-			config.LangfuseInstalled = false
+			config.NoopTraceInstalled = false
 			config.ObservabilityInstalled = false
 		})
 
@@ -862,8 +862,8 @@ func TestPreviewFilesStatus_Behavior(t *testing.T) {
 
 	p, _, _, _ := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 		config.ObservabilityConnected = true
-		config.LangfuseConnected = true
-		config.LangfuseExternal = true // external langfuse should not be present
+		config.NoopTraceConnected = true
+		config.NoopTraceExternal = true // external nooptrace should not be present
 	})
 	// use real fs implementation for preview to exercise real logic
 	p.fsOps = newFileSystemOperations(p)
@@ -874,7 +874,7 @@ func TestPreviewFilesStatus_Behavior(t *testing.T) {
 	mockState.envPath = filepath.Join(tmpDir, ".env")
 	mockFiles := p.files.(*mockFiles)
 	mockFiles.statuses[composeFilePentagi] = files.FileStatusModified
-	mockFiles.statuses[composeFileLangfuse] = files.FileStatusOK
+	mockFiles.statuses[composeFileNoopTrace] = files.FileStatusOK
 	mockFiles.statuses[composeFileObservability] = files.FileStatusMissing
 	mockFiles.statuses["observability/subdir/config.yml"] = files.FileStatusModified
 	mockFiles.statuses[filesToExcludeFromVerification[0]] = files.FileStatusMissing
@@ -899,9 +899,9 @@ func TestPreviewFilesStatus_Behavior(t *testing.T) {
 		}
 	}
 
-	// langfuse compose should not be present because it's not embedded
-	if _, ok := statuses[composeFileLangfuse]; ok {
-		t.Errorf("expected langfuse compose to be missing, got %s", statuses[composeFileLangfuse])
+	// nooptrace compose should not be present because it's not embedded
+	if _, ok := statuses[composeFileNoopTrace]; ok {
+		t.Errorf("expected nooptrace compose to be missing, got %s", statuses[composeFileNoopTrace])
 	}
 
 	// all non-modified excluded files must be present and reflect modified
@@ -960,7 +960,7 @@ func TestPurge_AllStacks_Detailed(t *testing.T) {
 
 	// should have purgeImagesStack for all four compose stacks in order
 	expectedOrder := []ProductStack{
-		ProductStackObservability, ProductStackLangfuse, ProductStackGraphiti, ProductStackPentagi,
+		ProductStackObservability, ProductStackNoopTrace, ProductStackGraphiti, ProductStackPentagi,
 	}
 	purgeImagesCalls := 0
 	for _, call := range composeCalls {
@@ -1004,7 +1004,7 @@ func TestRemove_PreservesData(t *testing.T) {
 	t.Run("compose_stacks_preserve_volumes", func(t *testing.T) {
 		p, composeOps, _, _ := newProcessorForLogicTests(t)
 
-		stacks := []ProductStack{ProductStackPentagi, ProductStackLangfuse, ProductStackObservability}
+		stacks := []ProductStack{ProductStackPentagi, ProductStackNoopTrace, ProductStackObservability}
 
 		for _, stack := range stacks {
 			err := p.remove(t.Context(), stack, testOperationState(t))
@@ -1044,18 +1044,18 @@ func TestRemove_PreservesData(t *testing.T) {
 func TestApplyChanges_ComplexScenarios(t *testing.T) {
 	t.Run("mixed_deployment_modes", func(t *testing.T) {
 		p, composeOps, _, _ := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
-			// observability external, langfuse embedded, graphiti disabled, pentagi always embedded
+			// observability external, nooptrace embedded, graphiti disabled, pentagi always embedded
 			config.ObservabilityExternal = true
 			config.ObservabilityInstalled = true // should be removed
-			config.LangfuseExternal = false
-			config.LangfuseExtracted = true // mark as extracted so it goes to update path
-			config.LangfuseConnected = true // required for isEmbeddedDeployment to return true
+			config.NoopTraceExternal = false
+			config.NoopTraceExtracted = true // mark as extracted so it goes to update path
+			config.NoopTraceConnected = true // required for isEmbeddedDeployment to return true
 			config.GraphitiConnected = false
 			config.PentagiExtracted = false
 		})
 
 		_ = p.state.SetVar("OTEL_HOST", "http://external:4318")
-		_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+		_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 
 		err := p.applyChanges(t.Context(), testOperationState(t))
 		assertNoError(t, err)
@@ -1072,15 +1072,15 @@ func TestApplyChanges_ComplexScenarios(t *testing.T) {
 			t.Error("expected observability to be removed when external")
 		}
 
-		// verify langfuse installed - check for update operation
-		langfuseUpdated := false
+		// verify nooptrace installed - check for update operation
+		nooptraceUpdated := false
 		for _, call := range composeCalls {
-			if call.Method == "updateStack" && call.Stack == ProductStackLangfuse {
-				langfuseUpdated = true
+			if call.Method == "updateStack" && call.Stack == ProductStackNoopTrace {
+				nooptraceUpdated = true
 			}
 		}
-		if !langfuseUpdated {
-			t.Error("expected langfuse to be updated")
+		if !nooptraceUpdated {
+			t.Error("expected nooptrace to be updated")
 		}
 	})
 
@@ -1191,34 +1191,34 @@ func TestApplyChanges_ComplexScenarios(t *testing.T) {
 	t.Run("error_recovery_partial_state", func(t *testing.T) {
 		p, _, _, _ := newProcessorForLogicTestsWithConfig(t, func(config *mockCheckConfig) {
 			config.ObservabilityExtracted = false
-			config.LangfuseExtracted = false
-			config.LangfuseConnected = true // required for isEmbeddedDeployment to return true
+			config.NoopTraceExtracted = false
+			config.NoopTraceConnected = true // required for isEmbeddedDeployment to return true
 			config.PentagiExtracted = false
 		})
 
 		_ = p.state.SetVar("OTEL_HOST", checker.DefaultObservabilityEndpoint)
-		_ = p.state.SetVar("LANGFUSE_BASE_URL", checker.DefaultLangfuseEndpoint)
+		_ = p.state.SetVar("NOOPTRACE_BASE_URL", checker.DefaultNoopTraceEndpoint)
 		_ = p.state.SetVar("DIRTY_FLAG", "true") // ensure state is dirty
 
-		// inject error in langfuse phase
+		// inject error in nooptrace phase
 		injectFSError(p, map[string]error{
-			"ensureStackIntegrity_langfuse": fmt.Errorf("langfuse error"),
+			"ensureStackIntegrity_nooptrace": fmt.Errorf("nooptrace error"),
 		})
 
 		err := p.applyChanges(t.Context(), testOperationState(t))
-		assertError(t, err, true, "failed to apply langfuse changes: failed to ensure langfuse integrity: langfuse error")
+		assertError(t, err, true, "failed to apply nooptrace changes: failed to ensure nooptrace integrity: nooptrace error")
 
-		// verify observability was processed before langfuse error
+		// verify observability was processed before nooptrace error
 		fsCalls := p.fsOps.(*baseMockFileSystemOperations).getCalls()
 		obsProcessed := false
-		langfuseAttempted := false
+		nooptraceAttempted := false
 		for _, call := range fsCalls {
 			if call.Method == "ensureStackIntegrity" {
 				if call.Stack == ProductStackObservability && call.Error == nil {
 					obsProcessed = true
 				}
-				if call.Stack == ProductStackLangfuse && call.Error != nil {
-					langfuseAttempted = true
+				if call.Stack == ProductStackNoopTrace && call.Error != nil {
+					nooptraceAttempted = true
 				}
 			}
 		}
@@ -1226,8 +1226,8 @@ func TestApplyChanges_ComplexScenarios(t *testing.T) {
 		if !obsProcessed {
 			t.Error("expected observability to be processed before error")
 		}
-		if !langfuseAttempted {
-			t.Error("expected langfuse processing to be attempted")
+		if !nooptraceAttempted {
+			t.Error("expected nooptrace processing to be attempted")
 		}
 	})
 }

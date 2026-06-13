@@ -20,7 +20,7 @@ Thank you for reporting this issue! This has been resolved in a recent release. 
 
 If you continue experiencing problems after updating, please:
 1. Check your configuration against our documentation
-2. Provide logs from both PentAGI and monitoring systems (Grafana/Langfuse)
+2. Provide logs from both PentAGI and monitoring systems (Grafana/NoopTrace)
 3. Include details about your environment and enabled features
 ```
 
@@ -32,7 +32,7 @@ Thank you for your report! To help us better understand and address your issue, 
 2. Relevant logs from:
    - Docker containers
    - Grafana dashboards (if enabled)
-   - Langfuse traces (if enabled)
+   - NoopTrace traces (if enabled)
 3. Steps to reproduce the issue
 4. Expected vs actual behavior
 

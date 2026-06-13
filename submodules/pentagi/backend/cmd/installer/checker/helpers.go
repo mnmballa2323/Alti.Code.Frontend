@@ -57,18 +57,18 @@ type CheckUpdatesRequest struct {
 	Neo4jImageName          *string `json:"neo4j_image_name,omitempty"`
 	Neo4jImageTag           *string `json:"neo4j_image_tag,omitempty"`
 	Neo4jImageHash          *string `json:"neo4j_image_hash,omitempty"`
-	LangfuseConnected       bool    `json:"langfuse_connected"`
-	LangfuseInstalled       bool    `json:"langfuse_installed"`
-	LangfuseExternal        bool    `json:"langfuse_external"`
+	NoopTraceConnected       bool    `json:"nooptrace_connected"`
+	NoopTraceInstalled       bool    `json:"nooptrace_installed"`
+	NoopTraceExternal        bool    `json:"nooptrace_external"`
 	ObservabilityConnected  bool    `json:"observability_connected"`
 	ObservabilityExternal   bool    `json:"observability_external"`
 	ObservabilityInstalled  bool    `json:"observability_installed"`
-	LangfuseWorkerImageName *string `json:"langfuse_worker_image_name,omitempty"`
-	LangfuseWorkerImageTag  *string `json:"langfuse_worker_image_tag,omitempty"`
-	LangfuseWorkerImageHash *string `json:"langfuse_worker_image_hash,omitempty"`
-	LangfuseWebImageName    *string `json:"langfuse_web_image_name,omitempty"`
-	LangfuseWebImageTag     *string `json:"langfuse_web_image_tag,omitempty"`
-	LangfuseWebImageHash    *string `json:"langfuse_web_image_hash,omitempty"`
+	NoopTraceWorkerImageName *string `json:"nooptrace_worker_image_name,omitempty"`
+	NoopTraceWorkerImageTag  *string `json:"nooptrace_worker_image_tag,omitempty"`
+	NoopTraceWorkerImageHash *string `json:"nooptrace_worker_image_hash,omitempty"`
+	NoopTraceWebImageName    *string `json:"nooptrace_web_image_name,omitempty"`
+	NoopTraceWebImageTag     *string `json:"nooptrace_web_image_tag,omitempty"`
+	NoopTraceWebImageHash    *string `json:"nooptrace_web_image_hash,omitempty"`
 	GrafanaImageName        *string `json:"grafana_image_name,omitempty"`
 	GrafanaImageTag         *string `json:"grafana_image_tag,omitempty"`
 	GrafanaImageHash        *string `json:"grafana_image_hash,omitempty"`
@@ -81,7 +81,7 @@ type CheckUpdatesResponse struct {
 	InstallerIsUpToDate     bool `json:"installer_is_up_to_date"`
 	PentagiIsUpToDate       bool `json:"pentagi_is_up_to_date"`
 	GraphitiIsUpToDate      bool `json:"graphiti_is_up_to_date"`
-	LangfuseIsUpToDate      bool `json:"langfuse_is_up_to_date"`
+	NoopTraceIsUpToDate      bool `json:"nooptrace_is_up_to_date"`
 	ObservabilityIsUpToDate bool `json:"observability_is_up_to_date"`
 	WorkerIsUpToDate        bool `json:"worker_is_up_to_date"`
 }
@@ -342,16 +342,16 @@ func checkCPUResources() bool {
 }
 
 // determineComponentNeeds checks which components need to be started based on their status
-func determineComponentNeeds(c *CheckResult) (needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability bool) {
+func determineComponentNeeds(c *CheckResult) (needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability bool) {
 	needsForPentagi = !c.PentagiRunning
 	needsForGraphiti = c.GraphitiConnected && !c.GraphitiExternal && !c.GraphitiRunning
-	needsForLangfuse = c.LangfuseConnected && !c.LangfuseExternal && !c.LangfuseRunning
+	needsForNoopTrace = c.NoopTraceConnected && !c.NoopTraceExternal && !c.NoopTraceRunning
 	needsForObservability = c.ObservabilityConnected && !c.ObservabilityExternal && !c.ObservabilityRunning
 	return
 }
 
 // calculateRequiredMemoryGB calculates the total memory required based on which components need to be started
-func calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability bool) float64 {
+func calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability bool) float64 {
 	requiredGB := MinFreeMemGB
 	if needsForPentagi {
 		requiredGB += MinFreeMemGBForPentagi
@@ -359,8 +359,8 @@ func calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForLangfu
 	if needsForGraphiti {
 		requiredGB += MinFreeMemGBForGraphiti
 	}
-	if needsForLangfuse {
-		requiredGB += MinFreeMemGBForLangfuse
+	if needsForNoopTrace {
+		requiredGB += MinFreeMemGBForNoopTrace
 	}
 	if needsForObservability {
 		requiredGB += MinFreeMemGBForObservability
@@ -368,12 +368,12 @@ func calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForLangfu
 	return requiredGB
 }
 
-func checkMemoryResources(needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability bool) bool {
-	if !needsForPentagi && !needsForGraphiti && !needsForLangfuse && !needsForObservability {
+func checkMemoryResources(needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability bool) bool {
+	if !needsForPentagi && !needsForGraphiti && !needsForNoopTrace && !needsForObservability {
 		return true
 	}
 
-	requiredGB := calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForLangfuse, needsForObservability)
+	requiredGB := calculateRequiredMemoryGB(needsForPentagi, needsForGraphiti, needsForNoopTrace, needsForObservability)
 
 	// check available memory using different methods depending on OS
 	switch runtime.GOOS {
@@ -598,7 +598,7 @@ func calculateRequiredDiskGB(workerImageExists bool, localComponents int) float6
 func countLocalComponentsToInstall(
 	pentagiInstalled,
 	graphitiConnected, graphitiExternal, graphitiInstalled,
-	langfuseConnected, langfuseExternal, langfuseInstalled,
+	nooptraceConnected, nooptraceExternal, nooptraceInstalled,
 	obsConnected, obsExternal, obsInstalled bool,
 ) int {
 	localComponents := 0
@@ -608,7 +608,7 @@ func countLocalComponentsToInstall(
 	if graphitiConnected && !graphitiExternal && !graphitiInstalled {
 		localComponents++
 	}
-	if langfuseConnected && !langfuseExternal && !langfuseInstalled {
+	if nooptraceConnected && !nooptraceExternal && !nooptraceInstalled {
 		localComponents++
 	}
 	if obsConnected && !obsExternal && !obsInstalled {
@@ -621,14 +621,14 @@ func checkDiskSpaceWithContext(
 	ctx context.Context,
 	workerImageExists, pentagiInstalled,
 	graphitiConnected, graphitiExternal, graphitiInstalled,
-	langfuseConnected, langfuseExternal, langfuseInstalled,
+	nooptraceConnected, nooptraceExternal, nooptraceInstalled,
 	obsConnected, obsExternal, obsInstalled bool,
 ) bool {
 	// determine required disk space based on what needs to be installed locally
 	localComponents := countLocalComponentsToInstall(
 		pentagiInstalled,
 		graphitiConnected, graphitiExternal, graphitiInstalled,
-		langfuseConnected, langfuseExternal, langfuseInstalled,
+		nooptraceConnected, nooptraceExternal, nooptraceInstalled,
 		obsConnected, obsExternal, obsInstalled,
 	)
 

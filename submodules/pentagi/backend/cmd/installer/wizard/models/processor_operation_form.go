@@ -586,7 +586,7 @@ func (m *ProcessorOperationFormModel) renderCurrentStateSummary() string {
 	}
 
 	lines = append(lines, comp(locale.ProcessorComponentPentagi, c.PentagiInstalled, c.PentagiRunning, true, true, false))
-	lines = append(lines, comp(locale.ProcessorComponentLangfuse, c.LangfuseInstalled, c.LangfuseRunning, !c.LangfuseExternal, c.LangfuseConnected, c.LangfuseExternal))
+	lines = append(lines, comp(locale.ProcessorComponentNoopTrace, c.NoopTraceInstalled, c.NoopTraceRunning, !c.NoopTraceExternal, c.NoopTraceConnected, c.NoopTraceExternal))
 	lines = append(lines, comp(locale.ProcessorComponentObservability, c.ObservabilityInstalled, c.ObservabilityRunning, !c.ObservabilityExternal, c.ObservabilityConnected, c.ObservabilityExternal))
 
 	return strings.Join(lines, "\n")
@@ -606,21 +606,21 @@ func (m *ProcessorOperationFormModel) renderPlannedActions() string {
 	switch m.operation {
 	case processor.ProcessorOperationStart:
 		add(locale.PlannedWillStart, locale.ProcessorComponentObservability, c.CanStartAll() && !c.ObservabilityRunning)
-		add(locale.PlannedWillStart, locale.ProcessorComponentLangfuse, c.CanStartAll() && !c.LangfuseRunning)
+		add(locale.PlannedWillStart, locale.ProcessorComponentNoopTrace, c.CanStartAll() && !c.NoopTraceRunning)
 		add(locale.PlannedWillStart, locale.ProcessorComponentPentagi, c.CanStartAll() && !c.PentagiRunning)
 	case processor.ProcessorOperationStop:
 		add(locale.PlannedWillStop, locale.ProcessorComponentPentagi, c.PentagiRunning)
-		add(locale.PlannedWillStop, locale.ProcessorComponentLangfuse, c.LangfuseRunning)
+		add(locale.PlannedWillStop, locale.ProcessorComponentNoopTrace, c.NoopTraceRunning)
 		add(locale.PlannedWillStop, locale.ProcessorComponentObservability, c.ObservabilityRunning)
 	case processor.ProcessorOperationRestart:
 		add(locale.PlannedWillRestart, locale.ProcessorComponentPentagi, c.PentagiRunning)
-		add(locale.PlannedWillRestart, locale.ProcessorComponentLangfuse, c.LangfuseRunning)
+		add(locale.PlannedWillRestart, locale.ProcessorComponentNoopTrace, c.NoopTraceRunning)
 		add(locale.PlannedWillRestart, locale.ProcessorComponentObservability, c.ObservabilityRunning)
 	case processor.ProcessorOperationUpdate:
 		add(locale.PlannedWillUpdate, locale.ProcessorComponentObservability, c.ObservabilityInstalled && !c.ObservabilityIsUpToDate)
-		add(locale.PlannedWillUpdate, locale.ProcessorComponentLangfuse, c.LangfuseInstalled && !c.LangfuseIsUpToDate)
+		add(locale.PlannedWillUpdate, locale.ProcessorComponentNoopTrace, c.NoopTraceInstalled && !c.NoopTraceIsUpToDate)
 		add(locale.PlannedWillUpdate, locale.ProcessorComponentPentagi, c.PentagiInstalled && !c.PentagiIsUpToDate)
-		if !(c.PentagiInstalled || c.LangfuseInstalled || c.ObservabilityInstalled) {
+		if !(c.PentagiInstalled || c.NoopTraceInstalled || c.ObservabilityInstalled) {
 			return "" // nothing to show
 		}
 	case processor.ProcessorOperationDownload:

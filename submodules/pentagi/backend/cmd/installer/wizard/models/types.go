@@ -37,7 +37,7 @@ func RestoreModel(model tea.Model) BaseScreenModel {
 		return m
 	case *MonitoringModel:
 		return m
-	case *LangfuseFormModel:
+	case *NoopTraceFormModel:
 		return m
 	case *GraphitiFormModel:
 		return m
@@ -96,7 +96,7 @@ const (
 
 	// Integration screens
 	MonitoringScreen     ScreenID = "monitoring"
-	LangfuseScreen       ScreenID = "langfuse_form"
+	NoopTraceScreen       ScreenID = "nooptrace_form"
 	GraphitiFormScreen   ScreenID = "graphiti_form"
 	ObservabilityScreen  ScreenID = "observability_form"
 	EmbedderFormScreen   ScreenID = "embedder_form"

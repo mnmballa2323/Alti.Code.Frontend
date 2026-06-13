@@ -32,7 +32,7 @@ type Controller interface {
 	state.State
 
 	LLMProviderConfigController
-	LangfuseConfigController
+	NoopTraceConfigController
 	GraphitiConfigController
 	ObservabilityConfigController
 	SummarizerConfigController
@@ -52,10 +52,10 @@ type LLMProviderConfigController interface {
 	ResetLLMProviderConfig(providerID string) map[string]*LLMProviderConfig
 }
 
-type LangfuseConfigController interface {
-	GetLangfuseConfig() *LangfuseConfig
-	UpdateLangfuseConfig(config *LangfuseConfig) error
-	ResetLangfuseConfig() *LangfuseConfig
+type NoopTraceConfigController interface {
+	GetNoopTraceConfig() *NoopTraceConfig
+	UpdateNoopTraceConfig(config *NoopTraceConfig) error
+	ResetNoopTraceConfig() *NoopTraceConfig
 }
 
 type GraphitiConfigController interface {
@@ -434,87 +434,87 @@ func (c *controller) ResetLLMProviderConfig(providerID string) map[string]*LLMPr
 	return c.GetLLMProviders()
 }
 
-// LangfuseConfig represents Langfuse configuration
-type LangfuseConfig struct {
+// NoopTraceConfig represents NoopTrace configuration
+type NoopTraceConfig struct {
 	// deployment configuration
 	DeploymentType string // "embedded" or "external" or "disabled"
 
 	// embedded listen settings
-	ListenIP   loader.EnvVar // LANGFUSE_LISTEN_IP
-	ListenPort loader.EnvVar // LANGFUSE_LISTEN_PORT
+	ListenIP   loader.EnvVar // NOOPTRACE_LISTEN_IP
+	ListenPort loader.EnvVar // NOOPTRACE_LISTEN_PORT
 
 	// integration settings (always required)
-	BaseURL   loader.EnvVar // LANGFUSE_BASE_URL
-	ProjectID loader.EnvVar // LANGFUSE_PROJECT_ID | LANGFUSE_INIT_PROJECT_ID
-	PublicKey loader.EnvVar // LANGFUSE_PUBLIC_KEY | LANGFUSE_INIT_PROJECT_PUBLIC_KEY
-	SecretKey loader.EnvVar // LANGFUSE_SECRET_KEY | LANGFUSE_INIT_PROJECT_SECRET_KEY
+	BaseURL   loader.EnvVar // NOOPTRACE_BASE_URL
+	ProjectID loader.EnvVar // NOOPTRACE_PROJECT_ID | NOOPTRACE_INIT_PROJECT_ID
+	PublicKey loader.EnvVar // NOOPTRACE_PUBLIC_KEY | NOOPTRACE_INIT_PROJECT_PUBLIC_KEY
+	SecretKey loader.EnvVar // NOOPTRACE_SECRET_KEY | NOOPTRACE_INIT_PROJECT_SECRET_KEY
 
 	// embedded instance settings (only for embedded mode)
-	AdminEmail    loader.EnvVar // LANGFUSE_INIT_USER_EMAIL
-	AdminPassword loader.EnvVar // LANGFUSE_INIT_USER_PASSWORD
-	AdminName     loader.EnvVar // LANGFUSE_INIT_USER_NAME
+	AdminEmail    loader.EnvVar // NOOPTRACE_INIT_USER_EMAIL
+	AdminPassword loader.EnvVar // NOOPTRACE_INIT_USER_PASSWORD
+	AdminName     loader.EnvVar // NOOPTRACE_INIT_USER_NAME
 
 	// enterprise license (optional for embedded mode)
-	LicenseKey loader.EnvVar // LANGFUSE_EE_LICENSE_KEY
+	LicenseKey loader.EnvVar // NOOPTRACE_EE_LICENSE_KEY
 
 	// computed fields (not directly mapped to env vars)
 	Installed bool
 }
 
-// GetLangfuseConfig returns the current Langfuse configuration
-func (c *controller) GetLangfuseConfig() *LangfuseConfig {
+// GetNoopTraceConfig returns the current NoopTrace configuration
+func (c *controller) GetNoopTraceConfig() *NoopTraceConfig {
 	vars, _ := c.GetVars([]string{
-		"LANGFUSE_LISTEN_IP",
-		"LANGFUSE_LISTEN_PORT",
-		"LANGFUSE_BASE_URL",
-		"LANGFUSE_PROJECT_ID",
-		"LANGFUSE_PUBLIC_KEY",
-		"LANGFUSE_SECRET_KEY",
-		"LANGFUSE_INIT_USER_EMAIL",
-		"LANGFUSE_INIT_USER_PASSWORD",
-		"LANGFUSE_INIT_USER_NAME",
-		"LANGFUSE_EE_LICENSE_KEY",
+		"NOOPTRACE_LISTEN_IP",
+		"NOOPTRACE_LISTEN_PORT",
+		"NOOPTRACE_BASE_URL",
+		"NOOPTRACE_PROJECT_ID",
+		"NOOPTRACE_PUBLIC_KEY",
+		"NOOPTRACE_SECRET_KEY",
+		"NOOPTRACE_INIT_USER_EMAIL",
+		"NOOPTRACE_INIT_USER_PASSWORD",
+		"NOOPTRACE_INIT_USER_NAME",
+		"NOOPTRACE_EE_LICENSE_KEY",
 	})
 	// defaults
-	if v := vars["LANGFUSE_LISTEN_IP"]; v.Default == "" {
+	if v := vars["NOOPTRACE_LISTEN_IP"]; v.Default == "" {
 		v.Default = "127.0.0.1"
-		vars["LANGFUSE_LISTEN_IP"] = v
+		vars["NOOPTRACE_LISTEN_IP"] = v
 	}
-	if v := vars["LANGFUSE_LISTEN_PORT"]; v.Default == "" {
+	if v := vars["NOOPTRACE_LISTEN_PORT"]; v.Default == "" {
 		v.Default = "4000"
-		vars["LANGFUSE_LISTEN_PORT"] = v
+		vars["NOOPTRACE_LISTEN_PORT"] = v
 	}
 
 	// Determine deployment type based on endpoint value
 	var deploymentType string
-	baseURL := vars["LANGFUSE_BASE_URL"]
-	projectID := vars["LANGFUSE_PROJECT_ID"]
-	publicKey := vars["LANGFUSE_PUBLIC_KEY"]
-	secretKey := vars["LANGFUSE_SECRET_KEY"]
-	adminEmail := vars["LANGFUSE_INIT_USER_EMAIL"]
-	adminPassword := vars["LANGFUSE_INIT_USER_PASSWORD"]
-	adminName := vars["LANGFUSE_INIT_USER_NAME"]
-	licenseKey := vars["LANGFUSE_EE_LICENSE_KEY"]
+	baseURL := vars["NOOPTRACE_BASE_URL"]
+	projectID := vars["NOOPTRACE_PROJECT_ID"]
+	publicKey := vars["NOOPTRACE_PUBLIC_KEY"]
+	secretKey := vars["NOOPTRACE_SECRET_KEY"]
+	adminEmail := vars["NOOPTRACE_INIT_USER_EMAIL"]
+	adminPassword := vars["NOOPTRACE_INIT_USER_PASSWORD"]
+	adminName := vars["NOOPTRACE_INIT_USER_NAME"]
+	licenseKey := vars["NOOPTRACE_EE_LICENSE_KEY"]
 
 	switch baseURL.Value {
 	case "":
 		deploymentType = "disabled"
-	case checker.DefaultLangfuseEndpoint:
+	case checker.DefaultNoopTraceEndpoint:
 		deploymentType = "embedded"
 		if projectID.Value == "" && !projectID.IsChanged {
-			if initProjectID, ok := c.GetVar("LANGFUSE_INIT_PROJECT_ID"); ok {
+			if initProjectID, ok := c.GetVar("NOOPTRACE_INIT_PROJECT_ID"); ok {
 				projectID.Value = initProjectID.Value
 				projectID.IsChanged = true
 			}
 		}
 		if publicKey.Value == "" && !publicKey.IsChanged {
-			if initPublicKey, ok := c.GetVar("LANGFUSE_INIT_PROJECT_PUBLIC_KEY"); ok {
+			if initPublicKey, ok := c.GetVar("NOOPTRACE_INIT_PROJECT_PUBLIC_KEY"); ok {
 				publicKey.Value = initPublicKey.Value
 				publicKey.IsChanged = true
 			}
 		}
 		if secretKey.Value == "" && !secretKey.IsChanged {
-			if initSecretKey, ok := c.GetVar("LANGFUSE_INIT_PROJECT_SECRET_KEY"); ok {
+			if initSecretKey, ok := c.GetVar("NOOPTRACE_INIT_PROJECT_SECRET_KEY"); ok {
 				secretKey.Value = initSecretKey.Value
 				secretKey.IsChanged = true
 			}
@@ -523,10 +523,10 @@ func (c *controller) GetLangfuseConfig() *LangfuseConfig {
 		deploymentType = "external"
 	}
 
-	return &LangfuseConfig{
+	return &NoopTraceConfig{
 		DeploymentType: deploymentType,
-		ListenIP:       vars["LANGFUSE_LISTEN_IP"],
-		ListenPort:     vars["LANGFUSE_LISTEN_PORT"],
+		ListenIP:       vars["NOOPTRACE_LISTEN_IP"],
+		ListenPort:     vars["NOOPTRACE_LISTEN_PORT"],
 		BaseURL:        baseURL,
 		ProjectID:      projectID,
 		PublicKey:      publicKey,
@@ -534,13 +534,13 @@ func (c *controller) GetLangfuseConfig() *LangfuseConfig {
 		AdminEmail:     adminEmail,
 		AdminPassword:  adminPassword,
 		AdminName:      adminName,
-		Installed:      c.checker.LangfuseInstalled,
+		Installed:      c.checker.NoopTraceInstalled,
 		LicenseKey:     licenseKey,
 	}
 }
 
-// UpdateLangfuseConfig updates Langfuse configuration with proper endpoint handling
-func (c *controller) UpdateLangfuseConfig(config *LangfuseConfig) error {
+// UpdateNoopTraceConfig updates NoopTrace configuration with proper endpoint handling
+func (c *controller) UpdateNoopTraceConfig(config *NoopTraceConfig) error {
 	if config == nil {
 		return fmt.Errorf("config cannot be nil")
 	}
@@ -549,39 +549,39 @@ func (c *controller) UpdateLangfuseConfig(config *LangfuseConfig) error {
 	switch config.DeploymentType {
 	case "embedded":
 		// for embedded mode, use default endpoint and sync with docker-compose settings
-		config.BaseURL.Value = checker.DefaultLangfuseEndpoint
+		config.BaseURL.Value = checker.DefaultNoopTraceEndpoint
 
-		if err := c.SetVar("LANGFUSE_LISTEN_IP", config.ListenIP.Value); err != nil {
-			return fmt.Errorf("failed to set LANGFUSE_LISTEN_IP: %w", err)
+		if err := c.SetVar("NOOPTRACE_LISTEN_IP", config.ListenIP.Value); err != nil {
+			return fmt.Errorf("failed to set NOOPTRACE_LISTEN_IP: %w", err)
 		}
-		if err := c.SetVar("LANGFUSE_LISTEN_PORT", config.ListenPort.Value); err != nil {
-			return fmt.Errorf("failed to set LANGFUSE_LISTEN_PORT: %w", err)
+		if err := c.SetVar("NOOPTRACE_LISTEN_PORT", config.ListenPort.Value); err != nil {
+			return fmt.Errorf("failed to set NOOPTRACE_LISTEN_PORT: %w", err)
 		}
 
 		// update enterprise license key if provided
-		if err := c.SetVar("LANGFUSE_EE_LICENSE_KEY", config.LicenseKey.Value); err != nil {
-			return fmt.Errorf("failed to set LANGFUSE_EE_LICENSE_KEY: %w", err)
+		if err := c.SetVar("NOOPTRACE_EE_LICENSE_KEY", config.LicenseKey.Value); err != nil {
+			return fmt.Errorf("failed to set NOOPTRACE_EE_LICENSE_KEY: %w", err)
 		}
 
 		// Sync with docker-compose environment variables
 		if !config.Installed {
-			if err := c.SetVar("LANGFUSE_INIT_PROJECT_ID", config.ProjectID.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_PROJECT_ID: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_PROJECT_ID", config.ProjectID.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_PROJECT_ID: %w", err)
 			}
-			if err := c.SetVar("LANGFUSE_INIT_PROJECT_PUBLIC_KEY", config.PublicKey.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_PROJECT_PUBLIC_KEY: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_PROJECT_PUBLIC_KEY", config.PublicKey.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_PROJECT_PUBLIC_KEY: %w", err)
 			}
-			if err := c.SetVar("LANGFUSE_INIT_PROJECT_SECRET_KEY", config.SecretKey.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_PROJECT_SECRET_KEY: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_PROJECT_SECRET_KEY", config.SecretKey.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_PROJECT_SECRET_KEY: %w", err)
 			}
-			if err := c.SetVar("LANGFUSE_INIT_USER_EMAIL", config.AdminEmail.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_USER_EMAIL: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_USER_EMAIL", config.AdminEmail.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_USER_EMAIL: %w", err)
 			}
-			if err := c.SetVar("LANGFUSE_INIT_USER_NAME", config.AdminName.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_USER_NAME: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_USER_NAME", config.AdminName.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_USER_NAME: %w", err)
 			}
-			if err := c.SetVar("LANGFUSE_INIT_USER_PASSWORD", config.AdminPassword.Value); err != nil {
-				return fmt.Errorf("failed to set LANGFUSE_INIT_USER_PASSWORD: %w", err)
+			if err := c.SetVar("NOOPTRACE_INIT_USER_PASSWORD", config.AdminPassword.Value); err != nil {
+				return fmt.Errorf("failed to set NOOPTRACE_INIT_USER_PASSWORD: %w", err)
 			}
 		}
 
@@ -594,41 +594,41 @@ func (c *controller) UpdateLangfuseConfig(config *LangfuseConfig) error {
 	}
 
 	// update integration environment variables
-	if err := c.SetVar("LANGFUSE_BASE_URL", config.BaseURL.Value); err != nil {
-		return fmt.Errorf("failed to set LANGFUSE_BASE_URL: %w", err)
+	if err := c.SetVar("NOOPTRACE_BASE_URL", config.BaseURL.Value); err != nil {
+		return fmt.Errorf("failed to set NOOPTRACE_BASE_URL: %w", err)
 	}
-	if err := c.SetVar("LANGFUSE_PROJECT_ID", config.ProjectID.Value); err != nil {
-		return fmt.Errorf("failed to set LANGFUSE_PROJECT_ID: %w", err)
+	if err := c.SetVar("NOOPTRACE_PROJECT_ID", config.ProjectID.Value); err != nil {
+		return fmt.Errorf("failed to set NOOPTRACE_PROJECT_ID: %w", err)
 	}
-	if err := c.SetVar("LANGFUSE_PUBLIC_KEY", config.PublicKey.Value); err != nil {
-		return fmt.Errorf("failed to set LANGFUSE_PUBLIC_KEY: %w", err)
+	if err := c.SetVar("NOOPTRACE_PUBLIC_KEY", config.PublicKey.Value); err != nil {
+		return fmt.Errorf("failed to set NOOPTRACE_PUBLIC_KEY: %w", err)
 	}
-	if err := c.SetVar("LANGFUSE_SECRET_KEY", config.SecretKey.Value); err != nil {
-		return fmt.Errorf("failed to set LANGFUSE_SECRET_KEY: %w", err)
+	if err := c.SetVar("NOOPTRACE_SECRET_KEY", config.SecretKey.Value); err != nil {
+		return fmt.Errorf("failed to set NOOPTRACE_SECRET_KEY: %w", err)
 	}
 
 	return nil
 }
 
-func (c *controller) ResetLangfuseConfig() *LangfuseConfig {
+func (c *controller) ResetNoopTraceConfig() *NoopTraceConfig {
 	vars := []string{
-		"LANGFUSE_BASE_URL",
-		"LANGFUSE_PROJECT_ID",
-		"LANGFUSE_PUBLIC_KEY",
-		"LANGFUSE_SECRET_KEY",
-		"LANGFUSE_LISTEN_IP",
-		"LANGFUSE_LISTEN_PORT",
-		"LANGFUSE_EE_LICENSE_KEY",
+		"NOOPTRACE_BASE_URL",
+		"NOOPTRACE_PROJECT_ID",
+		"NOOPTRACE_PUBLIC_KEY",
+		"NOOPTRACE_SECRET_KEY",
+		"NOOPTRACE_LISTEN_IP",
+		"NOOPTRACE_LISTEN_PORT",
+		"NOOPTRACE_EE_LICENSE_KEY",
 	}
 
-	if !c.checker.LangfuseInstalled {
+	if !c.checker.NoopTraceInstalled {
 		vars = append(vars,
-			"LANGFUSE_INIT_USER_EMAIL",
-			"LANGFUSE_INIT_USER_NAME",
-			"LANGFUSE_INIT_USER_PASSWORD",
-			"LANGFUSE_INIT_PROJECT_ID",
-			"LANGFUSE_INIT_PROJECT_PUBLIC_KEY",
-			"LANGFUSE_INIT_PROJECT_SECRET_KEY",
+			"NOOPTRACE_INIT_USER_EMAIL",
+			"NOOPTRACE_INIT_USER_NAME",
+			"NOOPTRACE_INIT_USER_PASSWORD",
+			"NOOPTRACE_INIT_PROJECT_ID",
+			"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY",
+			"NOOPTRACE_INIT_PROJECT_SECRET_KEY",
 		)
 	}
 
@@ -636,7 +636,7 @@ func (c *controller) ResetLangfuseConfig() *LangfuseConfig {
 		return nil
 	}
 
-	return c.GetLangfuseConfig()
+	return c.GetNoopTraceConfig()
 }
 
 // GraphitiConfig represents Graphiti knowledge graph configuration
@@ -881,14 +881,14 @@ func (c *controller) UpdateObservabilityConfig(config *ObservabilityConfig) erro
 		return fmt.Errorf("config cannot be nil")
 	}
 
-	langfuseOtelEnvVar, _ := c.GetVar("LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT")
+	nooptraceOtelEnvVar, _ := c.GetVar("NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT")
 
 	// set deployment type based configuration
 	switch config.DeploymentType {
 	case "embedded":
 		// for embedded mode, use default endpoints
 		config.OTelHost.Value = checker.DefaultObservabilityEndpoint
-		langfuseOtelEnvVar.Value = checker.DefaultLangfuseOtelEndpoint
+		nooptraceOtelEnvVar.Value = checker.DefaultNoopTraceOtelEndpoint
 
 		// update listen settings for embedded mode
 		updates := map[string]string{
@@ -903,20 +903,20 @@ func (c *controller) UpdateObservabilityConfig(config *ObservabilityConfig) erro
 			return fmt.Errorf("failed to set embedded listen vars: %w", err)
 		}
 
-		// note: langfuse listen vars are set in UpdateLangfuseConfig
+		// note: nooptrace listen vars are set in UpdateNoopTraceConfig
 	case "external":
 		// for external mode, use provided endpoint
-		langfuseOtelEnvVar.Value = ""
+		nooptraceOtelEnvVar.Value = ""
 
 	case "disabled":
 		// for disabled mode, clear endpoint and disable
 		config.OTelHost.Value = ""
-		langfuseOtelEnvVar.Value = ""
+		nooptraceOtelEnvVar.Value = ""
 	}
 
-	// update Langfuse and Observability integration if it's enabled
-	if err := c.SetVar(langfuseOtelEnvVar.Name, langfuseOtelEnvVar.Value); err != nil {
-		return fmt.Errorf("failed to set LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT: %w", err)
+	// update NoopTrace and Observability integration if it's enabled
+	if err := c.SetVar(nooptraceOtelEnvVar.Name, nooptraceOtelEnvVar.Value); err != nil {
+		return fmt.Errorf("failed to set NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT: %w", err)
 	}
 
 	// update integration environment variables
@@ -936,8 +936,8 @@ func (c *controller) ResetObservabilityConfig() *ObservabilityConfig {
 		"OTEL_GRPC_LISTEN_PORT",
 		"OTEL_HTTP_LISTEN_IP",
 		"OTEL_HTTP_LISTEN_PORT",
-		// langfuse integration with observability
-		"LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT",
+		// nooptrace integration with observability
+		"NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT",
 	}
 
 	if err := c.ResetVars(vars); err != nil {
@@ -1854,7 +1854,7 @@ type ApplyChangesConfig struct {
 	IsInstalled bool // whether PentAGI is currently installed
 
 	// deployment selections
-	LangfuseEnabled      bool // whether Langfuse embedded deployment is selected
+	NoopTraceEnabled      bool // whether NoopTrace embedded deployment is selected
 	ObservabilityEnabled bool // whether Observability embedded deployment is selected
 
 	// changes information
@@ -1872,8 +1872,8 @@ func (c *controller) GetApplyChangesConfig() *ApplyChangesConfig {
 	}
 
 	// check deployment selections
-	langfuseConfig := c.GetLangfuseConfig()
-	config.LangfuseEnabled = langfuseConfig.DeploymentType == "embedded"
+	nooptraceConfig := c.GetNoopTraceConfig()
+	config.NoopTraceEnabled = nooptraceConfig.DeploymentType == "embedded"
 
 	observabilityConfig := c.GetObservabilityConfig()
 	config.ObservabilityEnabled = observabilityConfig.DeploymentType == "embedded"
@@ -1943,22 +1943,22 @@ func (c *controller) getVariableDescription(varName string) string {
 		"LLM_SERVER_PRESERVE_REASONING":     locale.EnvDesc_LLM_SERVER_PRESERVE_REASONING,
 		"LLM_SERVER_PROVIDER":               locale.EnvDesc_LLM_SERVER_PROVIDER,
 
-		"LANGFUSE_LISTEN_IP":   locale.EnvDesc_LANGFUSE_LISTEN_IP,
-		"LANGFUSE_LISTEN_PORT": locale.EnvDesc_LANGFUSE_LISTEN_PORT,
-		"LANGFUSE_BASE_URL":    locale.EnvDesc_LANGFUSE_BASE_URL,
-		"LANGFUSE_PROJECT_ID":  locale.EnvDesc_LANGFUSE_PROJECT_ID,
-		"LANGFUSE_PUBLIC_KEY":  locale.EnvDesc_LANGFUSE_PUBLIC_KEY,
-		"LANGFUSE_SECRET_KEY":  locale.EnvDesc_LANGFUSE_SECRET_KEY,
+		"NOOPTRACE_LISTEN_IP":   locale.EnvDesc_NOOPTRACE_LISTEN_IP,
+		"NOOPTRACE_LISTEN_PORT": locale.EnvDesc_NOOPTRACE_LISTEN_PORT,
+		"NOOPTRACE_BASE_URL":    locale.EnvDesc_NOOPTRACE_BASE_URL,
+		"NOOPTRACE_PROJECT_ID":  locale.EnvDesc_NOOPTRACE_PROJECT_ID,
+		"NOOPTRACE_PUBLIC_KEY":  locale.EnvDesc_NOOPTRACE_PUBLIC_KEY,
+		"NOOPTRACE_SECRET_KEY":  locale.EnvDesc_NOOPTRACE_SECRET_KEY,
 
-		// langfuse init variables
-		"LANGFUSE_INIT_PROJECT_ID":         locale.EnvDesc_LANGFUSE_INIT_PROJECT_ID,
-		"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": locale.EnvDesc_LANGFUSE_INIT_PROJECT_PUBLIC_KEY,
-		"LANGFUSE_INIT_PROJECT_SECRET_KEY": locale.EnvDesc_LANGFUSE_INIT_PROJECT_SECRET_KEY,
-		"LANGFUSE_INIT_USER_EMAIL":         locale.EnvDesc_LANGFUSE_INIT_USER_EMAIL,
-		"LANGFUSE_INIT_USER_NAME":          locale.EnvDesc_LANGFUSE_INIT_USER_NAME,
-		"LANGFUSE_INIT_USER_PASSWORD":      locale.EnvDesc_LANGFUSE_INIT_USER_PASSWORD,
+		// nooptrace init variables
+		"NOOPTRACE_INIT_PROJECT_ID":         locale.EnvDesc_NOOPTRACE_INIT_PROJECT_ID,
+		"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": locale.EnvDesc_NOOPTRACE_INIT_PROJECT_PUBLIC_KEY,
+		"NOOPTRACE_INIT_PROJECT_SECRET_KEY": locale.EnvDesc_NOOPTRACE_INIT_PROJECT_SECRET_KEY,
+		"NOOPTRACE_INIT_USER_EMAIL":         locale.EnvDesc_NOOPTRACE_INIT_USER_EMAIL,
+		"NOOPTRACE_INIT_USER_NAME":          locale.EnvDesc_NOOPTRACE_INIT_USER_NAME,
+		"NOOPTRACE_INIT_USER_PASSWORD":      locale.EnvDesc_NOOPTRACE_INIT_USER_PASSWORD,
 
-		"LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT": locale.EnvDesc_LANGFUSE_OTEL_EXPORTER_OTLP_ENDPOINT,
+		"NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT": locale.EnvDesc_NOOPTRACE_OTEL_EXPORTER_OTLP_ENDPOINT,
 
 		"GRAFANA_LISTEN_IP":     locale.EnvDesc_GRAFANA_LISTEN_IP,
 		"GRAFANA_LISTEN_PORT":   locale.EnvDesc_GRAFANA_LISTEN_PORT,
@@ -2056,7 +2056,7 @@ func (c *controller) getVariableDescription(varName string) string {
 		"OAUTH_GITHUB_CLIENT_ID":     locale.EnvDesc_OAUTH_GITHUB_CLIENT_ID,
 		"OAUTH_GITHUB_CLIENT_SECRET": locale.EnvDesc_OAUTH_GITHUB_CLIENT_SECRET,
 
-		"LANGFUSE_EE_LICENSE_KEY": locale.EnvDesc_LANGFUSE_EE_LICENSE_KEY,
+		"NOOPTRACE_EE_LICENSE_KEY": locale.EnvDesc_NOOPTRACE_EE_LICENSE_KEY,
 
 		"GRAPHITI_URL":        locale.EnvDesc_GRAPHITI_URL,
 		"GRAPHITI_TIMEOUT":    locale.EnvDesc_GRAPHITI_TIMEOUT,
@@ -2083,8 +2083,8 @@ var maskedVariables = map[string]bool{
 	"BEDROCK_SECRET_ACCESS_KEY": true,
 	"BEDROCK_SESSION_TOKEN":     true,
 	"LLM_SERVER_KEY":            true,
-	"LANGFUSE_PUBLIC_KEY":       true,
-	"LANGFUSE_SECRET_KEY":       true,
+	"NOOPTRACE_PUBLIC_KEY":       true,
+	"NOOPTRACE_SECRET_KEY":       true,
 	"EMBEDDING_KEY":             true,
 	"LOCAL_SCRAPER_PASSWORD":    true,
 	"TAVILY_API_KEY":            true,
@@ -2101,13 +2101,13 @@ var maskedVariables = map[string]bool{
 	"SCRAPER_PUBLIC_URL":  true,
 	"SCRAPER_PRIVATE_URL": true,
 
-	// langfuse init secrets
-	"LANGFUSE_INIT_PROJECT_PUBLIC_KEY": true,
-	"LANGFUSE_INIT_PROJECT_SECRET_KEY": true,
-	"LANGFUSE_INIT_USER_PASSWORD":      true,
+	// nooptrace init secrets
+	"NOOPTRACE_INIT_PROJECT_PUBLIC_KEY": true,
+	"NOOPTRACE_INIT_PROJECT_SECRET_KEY": true,
+	"NOOPTRACE_INIT_USER_PASSWORD":      true,
 
-	// langfuse license key
-	"LANGFUSE_EE_LICENSE_KEY": true,
+	// nooptrace license key
+	"NOOPTRACE_EE_LICENSE_KEY": true,
 
 	// postgres password for pentagi service (pgvector binds on localhost)
 	"PENTAGI_POSTGRES_PASSWORD": true,
@@ -2115,15 +2115,15 @@ var maskedVariables = map[string]bool{
 	// neo4j password for graphiti service (neo4j binds on localhost)
 	"NEO4J_PASSWORD": true,
 
-	// langfuse stack secrets (compose-managed)
-	"LANGFUSE_SALT":                      true,
-	"LANGFUSE_ENCRYPTION_KEY":            true,
-	"LANGFUSE_NEXTAUTH_SECRET":           true,
-	"LANGFUSE_CLICKHOUSE_PASSWORD":       true,
-	"LANGFUSE_S3_ACCESS_KEY_ID":          true,
-	"LANGFUSE_S3_SECRET_ACCESS_KEY":      true,
-	"LANGFUSE_REDIS_AUTH":                true,
-	"LANGFUSE_AUTH_CUSTOM_CLIENT_SECRET": true,
+	// nooptrace stack secrets (compose-managed)
+	"NOOPTRACE_SALT":                      true,
+	"NOOPTRACE_ENCRYPTION_KEY":            true,
+	"NOOPTRACE_NEXTAUTH_SECRET":           true,
+	"NOOPTRACE_CLICKHOUSE_PASSWORD":       true,
+	"NOOPTRACE_S3_ACCESS_KEY_ID":          true,
+	"NOOPTRACE_S3_SECRET_ACCESS_KEY":      true,
+	"NOOPTRACE_REDIS_AUTH":                true,
+	"NOOPTRACE_AUTH_CUSTOM_CLIENT_SECRET": true,
 
 	// server settings
 	"COOKIE_SIGNING_SALT": true,
@@ -2238,11 +2238,11 @@ var criticalVariables = map[string]bool{
 	"OAUTH_GITHUB_CLIENT_ID":     true,
 	"OAUTH_GITHUB_CLIENT_SECRET": true,
 
-	// langfuse integration settings passed to pentagi
-	"LANGFUSE_BASE_URL":   true,
-	"LANGFUSE_PROJECT_ID": true,
-	"LANGFUSE_PUBLIC_KEY": true,
-	"LANGFUSE_SECRET_KEY": true,
+	// nooptrace integration settings passed to pentagi
+	"NOOPTRACE_BASE_URL":   true,
+	"NOOPTRACE_PROJECT_ID": true,
+	"NOOPTRACE_PUBLIC_KEY": true,
+	"NOOPTRACE_SECRET_KEY": true,
 
 	// summarizer settings (general)
 	"SUMMARIZER_PRESERVE_LAST":       true,

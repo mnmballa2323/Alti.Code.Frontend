@@ -631,11 +631,11 @@ func defaultCheckResult() *checker.CheckResult {
 	handler.config.GraphitiExtracted = false
 	handler.config.GraphitiInstalled = false
 	handler.config.GraphitiRunning = false
-	handler.config.LangfuseConnected = true
-	handler.config.LangfuseExternal = false
-	handler.config.LangfuseExtracted = false
-	handler.config.LangfuseInstalled = false
-	handler.config.LangfuseRunning = false
+	handler.config.NoopTraceConnected = true
+	handler.config.NoopTraceExternal = false
+	handler.config.NoopTraceExtracted = false
+	handler.config.NoopTraceInstalled = false
+	handler.config.NoopTraceRunning = false
 	handler.config.ObservabilityConnected = true
 	handler.config.ObservabilityExternal = false
 	handler.config.ObservabilityExtracted = false
@@ -644,7 +644,7 @@ func defaultCheckResult() *checker.CheckResult {
 	handler.config.WorkerImageExists = false
 	handler.config.PentagiIsUpToDate = true
 	handler.config.GraphitiIsUpToDate = true
-	handler.config.LangfuseIsUpToDate = true
+	handler.config.NoopTraceIsUpToDate = true
 	handler.config.ObservabilityIsUpToDate = true
 	handler.config.InstallerIsUpToDate = true
 
@@ -706,9 +706,9 @@ func (h *defaultStateHandler) GatherGraphitiInfo(ctx context.Context, c *checker
 	return nil
 }
 
-func (h *defaultStateHandler) GatherLangfuseInfo(ctx context.Context, c *checker.CheckResult) error {
+func (h *defaultStateHandler) GatherNoopTraceInfo(ctx context.Context, c *checker.CheckResult) error {
 	if !h.initialized {
-		return h.mockHandler.GatherLangfuseInfo(ctx, c)
+		return h.mockHandler.GatherNoopTraceInfo(ctx, c)
 	}
 	return nil
 }
@@ -762,7 +762,7 @@ var (
 	// standard stacks for testing stack operations
 	standardStacks = []ProductStack{
 		ProductStackPentagi,
-		ProductStackLangfuse,
+		ProductStackNoopTrace,
 		ProductStackObservability,
 		ProductStackCompose,
 		ProductStackAll,
@@ -896,12 +896,12 @@ type mockCheckConfig struct {
 	GraphitiInstalled bool
 	GraphitiRunning   bool
 
-	// Langfuse states
-	LangfuseConnected bool
-	LangfuseExternal  bool
-	LangfuseExtracted bool
-	LangfuseInstalled bool
-	LangfuseRunning   bool
+	// NoopTrace states
+	NoopTraceConnected bool
+	NoopTraceExternal  bool
+	NoopTraceExtracted bool
+	NoopTraceInstalled bool
+	NoopTraceRunning   bool
 
 	// Observability states
 	ObservabilityConnected bool
@@ -921,7 +921,7 @@ type mockCheckConfig struct {
 	InstallerIsUpToDate     bool
 	PentagiIsUpToDate       bool
 	GraphitiIsUpToDate      bool
-	LangfuseIsUpToDate      bool
+	NoopTraceIsUpToDate      bool
 	ObservabilityIsUpToDate bool
 }
 
@@ -947,7 +947,7 @@ func newMockCheckHandler() *mockCheckHandler {
 			InstallerIsUpToDate:     true,
 			PentagiIsUpToDate:       true,
 			GraphitiIsUpToDate:      true,
-			LangfuseIsUpToDate:      true,
+			NoopTraceIsUpToDate:      true,
 			ObservabilityIsUpToDate: true,
 		},
 	}
@@ -998,7 +998,7 @@ func (m *mockCheckHandler) GatherAllInfo(ctx context.Context, c *checker.CheckRe
 	if err := m.GatherGraphitiInfo(ctx, c); err != nil {
 		return err
 	}
-	if err := m.GatherLangfuseInfo(ctx, c); err != nil {
+	if err := m.GatherNoopTraceInfo(ctx, c); err != nil {
 		return err
 	}
 	if err := m.GatherObservabilityInfo(ctx, c); err != nil {
@@ -1085,8 +1085,8 @@ func (m *mockCheckHandler) GatherGraphitiInfo(ctx context.Context, c *checker.Ch
 	return nil
 }
 
-func (m *mockCheckHandler) GatherLangfuseInfo(ctx context.Context, c *checker.CheckResult) error {
-	m.recordCall("GatherLangfuseInfo")
+func (m *mockCheckHandler) GatherNoopTraceInfo(ctx context.Context, c *checker.CheckResult) error {
+	m.recordCall("GatherNoopTraceInfo")
 	if m.gatherError != nil {
 		return m.gatherError
 	}
@@ -1094,11 +1094,11 @@ func (m *mockCheckHandler) GatherLangfuseInfo(ctx context.Context, c *checker.Ch
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
-	c.LangfuseConnected = m.config.LangfuseConnected
-	c.LangfuseExternal = m.config.LangfuseExternal
-	c.LangfuseExtracted = m.config.LangfuseExtracted
-	c.LangfuseInstalled = m.config.LangfuseInstalled
-	c.LangfuseRunning = m.config.LangfuseRunning
+	c.NoopTraceConnected = m.config.NoopTraceConnected
+	c.NoopTraceExternal = m.config.NoopTraceExternal
+	c.NoopTraceExtracted = m.config.NoopTraceExtracted
+	c.NoopTraceInstalled = m.config.NoopTraceInstalled
+	c.NoopTraceRunning = m.config.NoopTraceRunning
 
 	return nil
 }
@@ -1151,7 +1151,7 @@ func (m *mockCheckHandler) GatherUpdatesInfo(ctx context.Context, c *checker.Che
 	c.InstallerIsUpToDate = m.config.InstallerIsUpToDate
 	c.PentagiIsUpToDate = m.config.PentagiIsUpToDate
 	c.GraphitiIsUpToDate = m.config.GraphitiIsUpToDate
-	c.LangfuseIsUpToDate = m.config.LangfuseIsUpToDate
+	c.NoopTraceIsUpToDate = m.config.NoopTraceIsUpToDate
 	c.ObservabilityIsUpToDate = m.config.ObservabilityIsUpToDate
 
 	return nil
@@ -1207,8 +1207,8 @@ func TestMockCheckHandler_CustomConfiguration(t *testing.T) {
 		PentagiExtracted:       false,
 		PentagiInstalled:       true,
 		PentagiRunning:         false,
-		LangfuseConnected:      true,
-		LangfuseExternal:       true,
+		NoopTraceConnected:      true,
+		NoopTraceExternal:       true,
 		ObservabilityConnected: false,
 	}
 	handler.setConfig(customConfig)
@@ -1216,7 +1216,7 @@ func TestMockCheckHandler_CustomConfiguration(t *testing.T) {
 	// Gather info
 	ctx := context.Background()
 	_ = handler.GatherPentagiInfo(ctx, result)
-	_ = handler.GatherLangfuseInfo(ctx, result)
+	_ = handler.GatherNoopTraceInfo(ctx, result)
 	_ = handler.GatherObservabilityInfo(ctx, result)
 
 	// Verify custom values were applied
@@ -1226,8 +1226,8 @@ func TestMockCheckHandler_CustomConfiguration(t *testing.T) {
 	if result.PentagiInstalled != true {
 		t.Error("expected PentagiInstalled to be true")
 	}
-	if result.LangfuseExternal != true {
-		t.Error("expected LangfuseExternal to be true")
+	if result.NoopTraceExternal != true {
+		t.Error("expected NoopTraceExternal to be true")
 	}
 	if result.ObservabilityConnected != false {
 		t.Error("expected ObservabilityConnected to be false")
@@ -1268,7 +1268,7 @@ func TestMockCheckHandler_GatherAllInfo(t *testing.T) {
 
 	// Set specific configuration
 	handler.config.PentagiExtracted = false
-	handler.config.LangfuseConnected = true
+	handler.config.NoopTraceConnected = true
 	handler.config.ObservabilityExternal = true
 
 	// Call GatherAllInfo
@@ -1284,7 +1284,7 @@ func TestMockCheckHandler_GatherAllInfo(t *testing.T) {
 		"GatherWorkerInfo",
 		"GatherPentagiInfo",
 		"GatherGraphitiInfo",
-		"GatherLangfuseInfo",
+		"GatherNoopTraceInfo",
 		"GatherObservabilityInfo",
 		"GatherSystemInfo",
 		"GatherUpdatesInfo",
@@ -1304,8 +1304,8 @@ func TestMockCheckHandler_GatherAllInfo(t *testing.T) {
 	if result.PentagiExtracted != false {
 		t.Error("expected PentagiExtracted to be false")
 	}
-	if result.LangfuseConnected != true {
-		t.Error("expected LangfuseConnected to be true")
+	if result.NoopTraceConnected != true {
+		t.Error("expected NoopTraceConnected to be true")
 	}
 	if result.ObservabilityExternal != true {
 		t.Error("expected ObservabilityExternal to be true")
@@ -1321,7 +1321,7 @@ func TestMockOperations_CallAccumulation(t *testing.T) {
 
 		// make multiple calls
 		_ = mock.ensureStackIntegrity(t.Context(), ProductStackPentagi, state)
-		_ = mock.verifyStackIntegrity(t.Context(), ProductStackLangfuse, state)
+		_ = mock.verifyStackIntegrity(t.Context(), ProductStackNoopTrace, state)
 		_ = mock.cleanupStackFiles(t.Context(), ProductStackObservability, state)
 		_ = mock.ensureStackIntegrity(t.Context(), ProductStackCompose, state)
 		_ = mock.ensureStackIntegrity(t.Context(), ProductStackAll, state)
@@ -1337,7 +1337,7 @@ func TestMockOperations_CallAccumulation(t *testing.T) {
 			stack  ProductStack
 		}{
 			{"ensureStackIntegrity", ProductStackPentagi},
-			{"verifyStackIntegrity", ProductStackLangfuse},
+			{"verifyStackIntegrity", ProductStackNoopTrace},
 			{"cleanupStackFiles", ProductStackObservability},
 			{"ensureStackIntegrity", ProductStackCompose},
 			{"ensureStackIntegrity", ProductStackAll},
@@ -1387,10 +1387,10 @@ func TestMockOperations_ErrorIsolation(t *testing.T) {
 			t.Errorf("expected pentagi-specific error, got %v", err)
 		}
 
-		// langfuse should succeed
-		err = mock.ensureStackIntegrity(t.Context(), ProductStackLangfuse, state)
+		// nooptrace should succeed
+		err = mock.ensureStackIntegrity(t.Context(), ProductStackNoopTrace, state)
 		if err != nil {
-			t.Errorf("unexpected error for langfuse: %v", err)
+			t.Errorf("unexpected error for nooptrace: %v", err)
 		}
 	})
 
@@ -1465,7 +1465,7 @@ func TestMockState_ComplexOperations(t *testing.T) {
 	})
 
 	t.Run("StackManagement", func(t *testing.T) {
-		stack := []string{"pentagi", "langfuse", "observability"}
+		stack := []string{"pentagi", "nooptrace", "observability"}
 		err := state.SetStack(stack)
 		assertNoError(t, err)
 
@@ -1759,8 +1759,8 @@ func TestMockCheckHandler_CompleteScenarios(t *testing.T) {
 		handler.config.WorkerImageExists = true
 		handler.config.PentagiInstalled = true
 		handler.config.PentagiRunning = true
-		handler.config.LangfuseInstalled = true
-		handler.config.LangfuseRunning = true
+		handler.config.NoopTraceInstalled = true
+		handler.config.NoopTraceRunning = true
 		handler.config.ObservabilityInstalled = true
 		handler.config.ObservabilityRunning = true
 		handler.config.SysNetworkOK = true
@@ -1769,7 +1769,7 @@ func TestMockCheckHandler_CompleteScenarios(t *testing.T) {
 		handler.config.SysDiskFreeSpaceOK = true
 		handler.config.InstallerIsUpToDate = true
 		handler.config.PentagiIsUpToDate = true
-		handler.config.LangfuseIsUpToDate = true
+		handler.config.NoopTraceIsUpToDate = true
 		handler.config.ObservabilityIsUpToDate = true
 
 		err := handler.GatherAllInfo(context.Background(), result)
@@ -1777,7 +1777,7 @@ func TestMockCheckHandler_CompleteScenarios(t *testing.T) {
 
 		// verify all systems report as healthy
 		if !result.DockerApiAccessible || !result.WorkerImageExists ||
-			!result.PentagiRunning || !result.LangfuseRunning ||
+			!result.PentagiRunning || !result.NoopTraceRunning ||
 			!result.ObservabilityRunning || !result.SysNetworkOK ||
 			!result.InstallerIsUpToDate {
 			t.Error("expected all systems to be healthy")
@@ -1791,7 +1791,7 @@ func TestMockCheckHandler_CompleteScenarios(t *testing.T) {
 		// configure partial failures
 		handler.config.DockerApiAccessible = true
 		handler.config.PentagiInstalled = false
-		handler.config.LangfuseRunning = true
+		handler.config.NoopTraceRunning = true
 		handler.config.ObservabilityRunning = false
 		handler.config.SysMemoryOK = false
 		handler.config.UpdateServerAccessible = false
@@ -1806,8 +1806,8 @@ func TestMockCheckHandler_CompleteScenarios(t *testing.T) {
 		if result.PentagiInstalled {
 			t.Error("expected PentAGI not to be installed")
 		}
-		if !result.LangfuseRunning {
-			t.Error("expected Langfuse to be running")
+		if !result.NoopTraceRunning {
+			t.Error("expected NoopTrace to be running")
 		}
 		if result.ObservabilityRunning {
 			t.Error("expected Observability not to be running")
@@ -1996,7 +1996,7 @@ func TestBaseMockComposeOperations(t *testing.T) {
 		{
 			handler:  mock.stopStack,
 			funcName: "stopStack",
-			stack:    ProductStackLangfuse,
+			stack:    ProductStackNoopTrace,
 		},
 		{
 			handler:  mock.restartStack,
@@ -2011,7 +2011,7 @@ func TestBaseMockComposeOperations(t *testing.T) {
 		{
 			handler:  mock.downloadStack,
 			funcName: "downloadStack",
-			stack:    ProductStackLangfuse,
+			stack:    ProductStackNoopTrace,
 		},
 		{
 			handler:  mock.removeStack,

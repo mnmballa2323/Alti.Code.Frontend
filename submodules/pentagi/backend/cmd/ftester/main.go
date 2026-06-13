@@ -56,9 +56,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	lfclient, err := obs.NewLangfuseClient(ctx, cfg)
+	lfclient, err := obs.NewNoopTraceClient(ctx, cfg)
 	if err != nil && !errors.Is(err, obs.ErrNotConfigured) {
-		log.Fatalf("Unable to create langfuse client: %v\n", err)
+		log.Fatalf("Unable to create nooptrace client: %v\n", err)
 	}
 	defer lfclient.ForceFlush(context.Background())
 

@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/templates"
 
@@ -56,8 +56,8 @@ func DetermineToolCallIDTemplate(
 ) (string, error) {
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	agent := observation.Agent(
-		langfuse.WithAgentName("tool call ID template detector"),
-		langfuse.WithAgentInput(map[string]any{
+		nooptrace.WithAgentName("tool call ID template detector"),
+		nooptrace.WithAgentInput(map[string]any{
 			"provider":   provider.Type(),
 			"agent_type": string(opt),
 		}),
@@ -66,13 +66,13 @@ func DetermineToolCallIDTemplate(
 	wrapEndAgentSpan := func(template, status string, err error) (string, error) {
 		if err != nil {
 			agent.End(
-				langfuse.WithAgentStatus(err.Error()),
-				langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+				nooptrace.WithAgentStatus(err.Error()),
+				nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 			)
 		} else {
 			agent.End(
-				langfuse.WithAgentOutput(template),
-				langfuse.WithAgentStatus(status),
+				nooptrace.WithAgentOutput(template),
+				nooptrace.WithAgentStatus(status),
 			)
 		}
 

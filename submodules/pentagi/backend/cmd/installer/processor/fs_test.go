@@ -20,7 +20,7 @@ func testStackIntegrityOperation(t *testing.T, operation func(*fileSystemOperati
 		expectErr bool
 	}{
 		{"ProductStackPentagi", ProductStackPentagi, false},
-		{"ProductStackLangfuse", ProductStackLangfuse, false},
+		{"ProductStackNoopTrace", ProductStackNoopTrace, false},
 		{"ProductStackObservability", ProductStackObservability, false},
 		{"ProductStackCompose", ProductStackCompose, false},
 		{"ProductStackAll", ProductStackAll, false},
@@ -478,13 +478,13 @@ func TestCheckStackIntegrity(t *testing.T) {
 			},
 		},
 		{
-			name:  "langfuse_stack_file_modified",
-			stack: ProductStackLangfuse,
+			name:  "nooptrace_stack_file_modified",
+			stack: ProductStackNoopTrace,
 			setup: func(m *mockFiles) {
-				m.statuses[composeFileLangfuse] = files.FileStatusModified
+				m.statuses[composeFileNoopTrace] = files.FileStatusModified
 			},
 			expected: map[string]files.FileStatus{
-				composeFileLangfuse: files.FileStatusModified,
+				composeFileNoopTrace: files.FileStatusModified,
 			},
 		},
 		{
@@ -516,8 +516,8 @@ func TestCheckStackIntegrity(t *testing.T) {
 				m.statuses[composeFilePentagi] = files.FileStatusOK
 				// graphiti
 				m.statuses[composeFileGraphiti] = files.FileStatusOK
-				// langfuse
-				m.statuses[composeFileLangfuse] = files.FileStatusModified
+				// nooptrace
+				m.statuses[composeFileNoopTrace] = files.FileStatusModified
 				// observability
 				m.statuses[composeFileObservability] = files.FileStatusMissing
 				m.lists[observabilityDirectory] = []string{
@@ -528,7 +528,7 @@ func TestCheckStackIntegrity(t *testing.T) {
 			expected: map[string]files.FileStatus{
 				composeFilePentagi:         files.FileStatusOK,
 				composeFileGraphiti:        files.FileStatusOK,
-				composeFileLangfuse:        files.FileStatusModified,
+				composeFileNoopTrace:        files.FileStatusModified,
 				composeFileObservability:   files.FileStatusMissing,
 				"observability/config.yml": files.FileStatusOK,
 			},
@@ -541,8 +541,8 @@ func TestCheckStackIntegrity(t *testing.T) {
 				m.statuses[composeFilePentagi] = files.FileStatusOK
 				// graphiti
 				m.statuses[composeFileGraphiti] = files.FileStatusOK
-				// langfuse
-				m.statuses[composeFileLangfuse] = files.FileStatusModified
+				// nooptrace
+				m.statuses[composeFileNoopTrace] = files.FileStatusModified
 				// observability
 				m.statuses[composeFileObservability] = files.FileStatusMissing
 				m.lists[observabilityDirectory] = []string{
@@ -553,7 +553,7 @@ func TestCheckStackIntegrity(t *testing.T) {
 			expected: map[string]files.FileStatus{
 				composeFilePentagi:         files.FileStatusOK,
 				composeFileGraphiti:        files.FileStatusOK,
-				composeFileLangfuse:        files.FileStatusModified,
+				composeFileNoopTrace:        files.FileStatusModified,
 				composeFileObservability:   files.FileStatusMissing,
 				"observability/config.yml": files.FileStatusOK,
 			},
@@ -615,7 +615,7 @@ func TestCheckStackIntegrity_RealFiles(t *testing.T) {
 		// Setup comprehensive test scenario
 		mockFiles.statuses[composeFilePentagi] = files.FileStatusOK
 		mockFiles.statuses[composeFileGraphiti] = files.FileStatusOK
-		mockFiles.statuses[composeFileLangfuse] = files.FileStatusModified
+		mockFiles.statuses[composeFileNoopTrace] = files.FileStatusModified
 		mockFiles.statuses[composeFileObservability] = files.FileStatusMissing
 		mockFiles.lists[observabilityDirectory] = []string{
 			"observability/config.yml",

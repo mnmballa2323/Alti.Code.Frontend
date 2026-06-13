@@ -10,7 +10,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 	customsearch "google.golang.org/api/customsearch/v1"
@@ -88,11 +88,11 @@ func (g *google) Handle(ctx context.Context, name string, args json.RawMessage) 
 	resp, err := svc.Cse.List().Context(ctx).Cx(g.cxKey).Q(action.Query).Lr(g.lrKey).Num(numResults).Do()
 	if err != nil {
 		observation.Event(
-			langfuse.WithEventName("search engine error swallowed"),
-			langfuse.WithEventInput(action.Query),
-			langfuse.WithEventStatus(err.Error()),
-			langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-			langfuse.WithEventMetadata(langfuse.Metadata{
+			nooptrace.WithEventName("search engine error swallowed"),
+			nooptrace.WithEventInput(action.Query),
+			nooptrace.WithEventStatus(err.Error()),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+			nooptrace.WithEventMetadata(nooptrace.Metadata{
 				"tool_name":   GoogleToolName,
 				"engine":      "google",
 				"query":       action.Query,

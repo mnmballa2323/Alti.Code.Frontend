@@ -15,7 +15,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/docker"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/templates"
 	"pentagi/pkg/tools"
@@ -94,8 +94,8 @@ func (fp *flowProvider) getTasksInfo(ctx context.Context, taskID int64) (*tasksI
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	evaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("get tasks info"),
-		langfuse.WithEvaluatorInput(map[string]any{
+		nooptrace.WithEvaluatorName("get tasks info"),
+		nooptrace.WithEvaluatorInput(map[string]any{
 			"task_id": taskID,
 		}),
 	)
@@ -120,14 +120,14 @@ func (fp *flowProvider) getTasksInfo(ctx context.Context, taskID int64) (*tasksI
 	}
 
 	evaluator.End(
-		langfuse.WithEvaluatorOutput(map[string]any{
+		nooptrace.WithEvaluatorOutput(map[string]any{
 			"task":           info.Task,
 			"subtasks":       info.Subtasks,
 			"tasks_count":    len(info.Tasks),
 			"subtasks_count": len(info.Subtasks),
 		}),
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	return &info, nil
@@ -218,8 +218,8 @@ func (fp *flowProvider) getTaskPrimaryAgentChainSummary(
 ) (string, error) {
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	evaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("get task primary agent chain summary"),
-		langfuse.WithEvaluatorInput(map[string]any{
+		nooptrace.WithEvaluatorName("get task primary agent chain summary"),
+		nooptrace.WithEvaluatorInput(map[string]any{
 			"task_id": taskID,
 		}),
 	)
@@ -277,9 +277,9 @@ func (fp *flowProvider) getTaskPrimaryAgentChainSummary(
 %s`, humanSummary, aiSummary)
 
 	evaluator.End(
-		langfuse.WithEvaluatorOutput(summary),
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithEvaluatorOutput(summary),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	return summary, nil
@@ -292,8 +292,8 @@ func (fp *flowProvider) getTaskMsgLogsSummary(
 ) (string, error) {
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	evaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("get task msg logs summary"),
-		langfuse.WithEvaluatorInput(map[string]any{
+		nooptrace.WithEvaluatorName("get task msg logs summary"),
+		nooptrace.WithEvaluatorInput(map[string]any{
 			"task_id": taskID,
 			"flow_id": fp.flowID,
 		}),
@@ -307,9 +307,9 @@ func (fp *flowProvider) getTaskMsgLogsSummary(
 
 	if len(msgLogs) == 0 {
 		evaluator.End(
-			langfuse.WithEvaluatorOutput("no msg logs"),
-			langfuse.WithEvaluatorStatus("success"),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+			nooptrace.WithEvaluatorOutput("no msg logs"),
+			nooptrace.WithEvaluatorStatus("success"),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 		)
 		return "no msg logs", nil
 	}
@@ -348,9 +348,9 @@ func (fp *flowProvider) getTaskMsgLogsSummary(
 	}
 
 	evaluator.End(
-		langfuse.WithEvaluatorOutput(summary),
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithEvaluatorOutput(summary),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	return summary, nil
@@ -377,7 +377,7 @@ func (fp *flowProvider) restoreChain(
 		json.Unmarshal(msgChain.Chain, &rawChain)
 	}
 
-	metadata := langfuse.Metadata{
+	metadata := nooptrace.Metadata{
 		"msg_chain_type": string(msgChainType),
 		"msg_chain_id":   msgChain.ID,
 		"agent_type":     string(optAgentType),
@@ -390,18 +390,18 @@ func (fp *flowProvider) restoreChain(
 	}
 
 	chainObs := observation.Chain(
-		langfuse.WithChainName("restore message chain"),
-		langfuse.WithChainInput(rawChain),
-		langfuse.WithChainMetadata(metadata),
+		nooptrace.WithChainName("restore message chain"),
+		nooptrace.WithChainInput(rawChain),
+		nooptrace.WithChainMetadata(metadata),
 	)
 	ctx, observation = chainObs.Observation(ctx)
 	wrapErrorWithEvent := func(msg string, err error) error {
 		observation.Event(
-			langfuse.WithEventName("error on restoring message chain"),
-			langfuse.WithEventInput(rawChain),
-			langfuse.WithEventMetadata(metadata),
-			langfuse.WithEventStatus(err.Error()),
-			langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
+			nooptrace.WithEventName("error on restoring message chain"),
+			nooptrace.WithEventInput(rawChain),
+			nooptrace.WithEventMetadata(metadata),
+			nooptrace.WithEventStatus(err.Error()),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
 		)
 
 		if err != nil {
@@ -492,8 +492,8 @@ func (fp *flowProvider) restoreChain(
 	}
 
 	chainObs.End(
-		langfuse.WithChainOutput(chain),
-		langfuse.WithChainStatus("success"),
+		nooptrace.WithChainOutput(chain),
+		nooptrace.WithChainStatus("success"),
 	)
 
 	chainBlob, err := json.Marshal(chain)
@@ -563,8 +563,8 @@ func (fp *flowProvider) processChain(
 func (fp *flowProvider) prepareExecutionContext(ctx context.Context, taskID, subtaskID int64) (string, error) {
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	evaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("prepare execution context"),
-		langfuse.WithEvaluatorInput(map[string]any{
+		nooptrace.WithEvaluatorName("prepare execution context"),
+		nooptrace.WithEvaluatorInput(map[string]any{
 			"task_id":    taskID,
 			"subtask_id": subtaskID,
 			"flow_id":    fp.flowID,
@@ -614,9 +614,9 @@ func (fp *flowProvider) prepareExecutionContext(ctx context.Context, taskID, sub
 	}
 
 	evaluator.End(
-		langfuse.WithEvaluatorOutput(executionContext),
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithEvaluatorOutput(executionContext),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	return executionContext, nil

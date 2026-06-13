@@ -8,7 +8,7 @@ import (
 
 	"pentagi/pkg/database"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 
 	"github.com/sirupsen/logrus"
 	"github.com/vxcontrol/langchaingo/documentloaders"
@@ -66,7 +66,7 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 			"guide_type": action.Type,
 		}
 
-		metadata := langfuse.Metadata{
+		metadata := nooptrace.Metadata{
 			"tool_name":  name,
 			"message":    action.Message,
 			"limit":      guideVectorStoreResultLimit,
@@ -76,14 +76,14 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 		}
 
 		retriever := observation.Retriever(
-			langfuse.WithRetrieverName("retrieve guide from vector store"),
-			langfuse.WithRetrieverInput(map[string]any{
+			nooptrace.WithRetrieverName("retrieve guide from vector store"),
+			nooptrace.WithRetrieverInput(map[string]any{
 				"query":       action.Question,
 				"threshold":   guideVectorStoreThreshold,
 				"max_results": guideVectorStoreResultLimit,
 				"filters":     filters,
 			}),
-			langfuse.WithRetrieverMetadata(metadata),
+			nooptrace.WithRetrieverMetadata(metadata),
 		)
 		ctx, observation = retriever.Observation(ctx)
 
@@ -101,8 +101,8 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 		)
 		if err != nil {
 			retriever.End(
-				langfuse.WithRetrieverStatus(err.Error()),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelError),
+				nooptrace.WithRetrieverStatus(err.Error()),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelError),
 			)
 			logger.WithError(err).Error("failed to search for similar documents")
 			return "", fmt.Errorf("failed to search for similar documents: %w", err)
@@ -110,22 +110,22 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 
 		if len(docs) == 0 {
 			retriever.End(
-				langfuse.WithRetrieverStatus("no guide found"),
-				langfuse.WithRetrieverLevel(langfuse.ObservationLevelWarning),
-				langfuse.WithRetrieverOutput([]any{}),
+				nooptrace.WithRetrieverStatus("no guide found"),
+				nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelWarning),
+				nooptrace.WithRetrieverOutput([]any{}),
 			)
 			observation.Score(
-				langfuse.WithScoreComment("no guide found"),
-				langfuse.WithScoreName("guide_search_result"),
-				langfuse.WithScoreStringValue("not_found"),
+				nooptrace.WithScoreComment("no guide found"),
+				nooptrace.WithScoreName("guide_search_result"),
+				nooptrace.WithScoreStringValue("not_found"),
 			)
 			return guideNotFoundMessage, nil
 		}
 
 		retriever.End(
-			langfuse.WithRetrieverStatus("success"),
-			langfuse.WithRetrieverLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithRetrieverOutput(docs),
+			nooptrace.WithRetrieverStatus("success"),
+			nooptrace.WithRetrieverLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithRetrieverOutput(docs),
 		)
 
 		// TODO: here need to rerank and filter the docs based on the question
@@ -134,9 +134,9 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 		buffer := strings.Builder{}
 		for i, doc := range docs {
 			observation.Score(
-				langfuse.WithScoreComment("guide vector store result"),
-				langfuse.WithScoreName("guide_search_result"),
-				langfuse.WithScoreFloatValue(float64(doc.Score)),
+				nooptrace.WithScoreComment("guide vector store result"),
+				nooptrace.WithScoreName("guide_search_result"),
+				nooptrace.WithScoreFloatValue(float64(doc.Score)),
 			)
 			buffer.WriteString(fmt.Sprintf("# Document %d Match score: %f\n\n", i+1, doc.Score))
 			buffer.WriteString(fmt.Sprintf("## Original Guide Type: %s\n\n", doc.Metadata["guide_type"]))
@@ -176,11 +176,11 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 
 		guide := fmt.Sprintf("Question:\n%s\n\nGuide:\n%s", action.Question, action.Guide)
 
-		opts := []langfuse.EventOption{
-			langfuse.WithEventName("store guide to vector store"),
-			langfuse.WithEventInput(action.Question),
-			langfuse.WithEventOutput(guide),
-			langfuse.WithEventMetadata(map[string]any{
+		opts := []nooptrace.EventOption{
+			nooptrace.WithEventName("store guide to vector store"),
+			nooptrace.WithEventInput(action.Question),
+			nooptrace.WithEventOutput(guide),
+			nooptrace.WithEventMetadata(map[string]any{
 				"tool_name":  name,
 				"message":    action.Message,
 				"doc_type":   guideVectorStoreDefaultType,
@@ -197,8 +197,8 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 		docs, err := documentloaders.NewText(strings.NewReader(guide)).Load(ctx)
 		if err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to load document")
 			return "", fmt.Errorf("failed to load document: %w", err)
@@ -224,17 +224,17 @@ func (g *guide) Handle(ctx context.Context, name string, args json.RawMessage) (
 
 		if _, err := g.store.AddDocuments(ctx, docs); err != nil {
 			observation.Event(append(opts,
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelError),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
 			)...)
 			logger.WithError(err).Error("failed to store guide")
 			return "", fmt.Errorf("failed to store guide: %w", err)
 		}
 
 		observation.Event(append(opts,
-			langfuse.WithEventStatus("success"),
-			langfuse.WithEventLevel(langfuse.ObservationLevelDebug),
-			langfuse.WithEventOutput(docs),
+			nooptrace.WithEventStatus("success"),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelDebug),
+			nooptrace.WithEventOutput(docs),
 		)...)
 
 		if agentCtx, ok := GetAgentContext(ctx); ok {

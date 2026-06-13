@@ -16,8 +16,8 @@
                 "STATIC_URL": "http://localhost:8000",
                 // Choose it instead of STATIC_URL to serve static files from a directory:
                 // "STATIC_DIR": "${workspaceFolder}/frontend/dist",
-                // Langfuse (optional) uncomment to enable
-                // "LANGFUSE_BASE_URL": "http://localhost:4000",
+                // NoopTrace (optional) uncomment to enable
+                // "NOOPTRACE_BASE_URL": "http://localhost:4000",
                 // Observability (optional) uncomment to enable
                 // "OTEL_HOST": "localhost:8148",
                 // Scraper (optional) uncomment to enable
@@ -119,8 +119,8 @@
             "env": {
                 "LLM_SERVER_CONFIG_PATH": "${workspaceFolder}/examples/configs/openrouter.provider.yml",
                 "DATABASE_URL": "postgres://postgres:postgres@localhost:5432/pentagidb?sslmode=disable",
-                // Langfuse (optional) uncomment to enable
-                "LANGFUSE_BASE_URL": "http://localhost:4000",
+                // NoopTrace (optional) uncomment to enable
+                "NOOPTRACE_BASE_URL": "http://localhost:4000",
                 // Observability (optional) uncomment to enable
                 "OTEL_HOST": "localhost:8148",
             },

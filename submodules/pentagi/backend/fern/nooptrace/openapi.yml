@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: langfuse
+  title: nooptrace
   version: ''
   description: >-
     ## Authentication
@@ -11,18 +11,18 @@ info:
     keys in the project settings:
 
 
-    - username: Langfuse Public Key
+    - username: NoopTrace Public Key
 
-    - password: Langfuse Secret Key
+    - password: NoopTrace Secret Key
 
 
     ## Exports
 
 
-    - OpenAPI spec: https://cloud.langfuse.com/generated/api/openapi.yml
+    - OpenAPI spec: https://cloud.nooptrace.com/generated/api/openapi.yml
 
     - Postman collection:
-    https://cloud.langfuse.com/generated/postman/collection.json
+    https://cloud.nooptrace.com/generated/postman/collection.json
 paths:
   /api/public/annotation-queues:
     get:
@@ -839,7 +839,7 @@ paths:
       parameters:
         - name: commentId
           in: path
-          description: The unique langfuse identifier of a comment
+          description: The unique nooptrace identifier of a comment
           required: true
           schema:
             type: string
@@ -1552,11 +1552,11 @@ paths:
   /api/public/ingestion:
     post:
       description: >-
-        **Legacy endpoint for batch ingestion for Langfuse Observability.**
+        **Legacy endpoint for batch ingestion for NoopTrace Observability.**
 
 
         -> Please use the OpenTelemetry endpoint (`/api/public/otel/v1/traces`).
-        Learn more: https://langfuse.com/integrations/native/opentelemetry
+        Learn more: https://nooptrace.com/integrations/native/opentelemetry
 
 
         Within each batch, there can be multiple events.
@@ -1571,7 +1571,7 @@ paths:
         unique per request.
 
         The event.body.id is the ID of the actual trace and will be used for
-        updates and will be visible within the Langfuse App.
+        updates and will be visible within the NoopTrace App.
 
         I.e. if you want to update a trace, you'd use the same body id, but
         separate event IDs.
@@ -1580,7 +1580,7 @@ paths:
         Notes:
 
         - Introduction to data model:
-        https://langfuse.com/docs/observability/data-model
+        https://nooptrace.com/docs/observability/data-model
 
         - Batch sizes are limited to 3.5 MB in total. You need to adjust the
         number of events per batch accordingly.
@@ -1662,7 +1662,7 @@ paths:
                 metadata:
                   nullable: true
                   description: >-
-                    Optional. Metadata field used by the Langfuse SDKs for
+                    Optional. Metadata field used by the NoopTrace SDKs for
                     debugging.
               required:
                 - batch
@@ -1824,7 +1824,7 @@ paths:
       parameters:
         - name: mediaId
           in: path
-          description: The unique langfuse identifier of a media record
+          description: The unique nooptrace identifier of a media record
           required: true
           schema:
             type: string
@@ -1870,7 +1870,7 @@ paths:
       parameters:
         - name: mediaId
           in: path
-          description: The unique langfuse identifier of a media record
+          description: The unique nooptrace identifier of a media record
           required: true
           schema:
             type: string
@@ -1960,7 +1960,7 @@ paths:
   /api/public/v2/metrics:
     get:
       description: >-
-        Get metrics from the Langfuse project using a query object. V2 endpoint
+        Get metrics from the NoopTrace project using a query object. V2 endpoint
         with optimized performance.
 
 
@@ -1979,7 +1979,7 @@ paths:
 
 
         For more details, see the [Metrics API
-        documentation](https://langfuse.com/docs/metrics/features/metrics-api).
+        documentation](https://nooptrace.com/docs/metrics/features/metrics-api).
 
 
         ## Available Views
@@ -2259,7 +2259,7 @@ paths:
   /api/public/metrics:
     get:
       description: >-
-        Get metrics from the Langfuse project using a query object.
+        Get metrics from the NoopTrace project using a query object.
 
 
         Consider using the [v2 metrics
@@ -2268,7 +2268,7 @@ paths:
 
 
         For more details, see the [Metrics API
-        documentation](https://langfuse.com/docs/metrics/features/metrics-api).
+        documentation](https://nooptrace.com/docs/metrics/features/metrics-api).
       operationId: metrics_metrics
       tags:
         - Metrics
@@ -2507,7 +2507,7 @@ paths:
         - BasicAuth: []
     delete:
       description: >-
-        Delete a model. Cannot delete models managed by Langfuse. You can create
+        Delete a model. Cannot delete models managed by NoopTrace. You can create
         your own definition with the same modelName to override the definition
         though.
       operationId: models_delete
@@ -2938,7 +2938,7 @@ paths:
         - name: observationId
           in: path
           description: >-
-            The unique langfuse identifier of an observation, can be an event,
+            The unique nooptrace identifier of an observation, can be an event,
             span or generation
           required: true
           schema:
@@ -3273,7 +3273,7 @@ paths:
 
 
         This endpoint implements the OTLP/HTTP specification for trace
-        ingestion, providing native OpenTelemetry integration for Langfuse
+        ingestion, providing native OpenTelemetry integration for NoopTrace
         Observability.
 
 
@@ -3297,9 +3297,9 @@ paths:
         **Documentation:**
 
         - Integration guide:
-        https://langfuse.com/integrations/native/opentelemetry
+        https://nooptrace.com/integrations/native/opentelemetry
 
-        - Data model: https://langfuse.com/docs/observability/data-model
+        - Data model: https://nooptrace.com/docs/observability/data-model
       operationId: opentelemetry_exportTraces
       tags:
         - Opentelemetry
@@ -3371,7 +3371,7 @@ paths:
                               stringValue: 1.0.0
                       scopeSpans:
                         - scope:
-                            name: langfuse-sdk
+                            name: nooptrace-sdk
                             version: 2.60.3
                           spans:
                             - traceId: 0123456789abcdef0123456789abcdef
@@ -3381,7 +3381,7 @@ paths:
                               startTimeUnixNano: '1747872000000000000'
                               endTimeUnixNano: '1747872001000000000'
                               attributes:
-                                - key: langfuse.observation.type
+                                - key: nooptrace.observation.type
                                   value:
                                     stringValue: generation
                               status: {}
@@ -4228,7 +4228,7 @@ paths:
                   description: >-
                     New labels for the prompt version. Labels are unique across
                     versions. The "latest" label is reserved and managed by
-                    Langfuse.
+                    NoopTrace.
               required:
                 - newLabels
   /api/public/v2/prompts/{promptName}:
@@ -4966,7 +4966,7 @@ paths:
       parameters:
         - name: configId
           in: path
-          description: The unique langfuse identifier of a score config
+          description: The unique nooptrace identifier of a score config
           required: true
           schema:
             type: string
@@ -5012,7 +5012,7 @@ paths:
       parameters:
         - name: configId
           in: path
-          description: The unique langfuse identifier of a score config
+          description: The unique nooptrace identifier of a score config
           required: true
           schema:
             type: string
@@ -5264,7 +5264,7 @@ paths:
       parameters:
         - name: scoreId
           in: path
-          description: The unique langfuse identifier of a score
+          description: The unique nooptrace identifier of a score
           required: true
           schema:
             type: string
@@ -5358,7 +5358,7 @@ paths:
       parameters:
         - name: scoreId
           in: path
-          description: The unique langfuse identifier of a score
+          description: The unique nooptrace identifier of a score
           required: true
           schema:
             type: string
@@ -5539,7 +5539,7 @@ paths:
       parameters:
         - name: traceId
           in: path
-          description: The unique langfuse identifier of a trace
+          description: The unique nooptrace identifier of a trace
           required: true
           schema:
             type: string
@@ -5585,7 +5585,7 @@ paths:
       parameters:
         - name: traceId
           in: path
-          description: The unique langfuse identifier of the trace to delete
+          description: The unique nooptrace identifier of the trace to delete
           required: true
           schema:
             type: string
@@ -6386,7 +6386,7 @@ components:
       properties:
         id:
           type: string
-          description: The id of the created object in Langfuse
+          description: The id of the created object in NoopTrace
       required:
         - id
     GetCommentsResponse:
@@ -6455,7 +6455,7 @@ components:
           description: >-
             The environment from which this trace originated. Can be any
             lowercase alphanumeric string with hyphens and underscores that does
-            not start with 'langfuse'.
+            not start with 'nooptrace'.
       required:
         - id
         - timestamp
@@ -6468,7 +6468,7 @@ components:
       properties:
         htmlPath:
           type: string
-          description: Path of trace in Langfuse UI
+          description: Path of trace in NoopTrace UI
         latency:
           type: number
           format: double
@@ -6501,7 +6501,7 @@ components:
       properties:
         htmlPath:
           type: string
-          description: Path of trace in Langfuse UI
+          description: Path of trace in NoopTrace UI
         latency:
           type: number
           format: double
@@ -6649,7 +6649,7 @@ components:
           description: >-
             The environment from which this observation originated. Can be any
             lowercase alphanumeric string with hyphens and underscores that does
-            not start with 'langfuse'.
+            not start with 'nooptrace'.
       required:
         - id
         - type
@@ -6885,7 +6885,7 @@ components:
           description: >-
             The environment from which this score originated. Can be any
             lowercase alphanumeric string with hyphens and underscores that does
-            not start with 'langfuse'.
+            not start with 'nooptrace'.
       required:
         - id
         - traceId
@@ -7047,7 +7047,7 @@ components:
           description: >-
             The environment from which this score originated. Can be any
             lowercase alphanumeric string with hyphens and underscores that does
-            not start with 'langfuse'.
+            not start with 'nooptrace'.
       required:
         - id
         - name
@@ -7448,7 +7448,7 @@ components:
           description: >-
             Optional. Configuration for the selected tokenizer. Needs to be
             JSON. See docs for more details.
-        isLangfuseManaged:
+        isNoopTraceManaged:
           type: boolean
         createdAt:
           type: string
@@ -7498,7 +7498,7 @@ components:
         - modelName
         - matchPattern
         - tokenizerConfig
-        - isLangfuseManaged
+        - isNoopTraceManaged
         - createdAt
         - prices
         - pricingTiers
@@ -7847,7 +7847,7 @@ components:
         - SECONDS
         - IMAGES
         - REQUESTS
-      description: Unit of usage in Langfuse
+      description: Unit of usage in NoopTrace
     ObservationLevel:
       title: ObservationLevel
       type: string
@@ -8061,7 +8061,7 @@ components:
       properties:
         version:
           type: string
-          description: Langfuse server version
+          description: NoopTrace server version
           example: 1.25.0
         status:
           type: string
@@ -8629,7 +8629,7 @@ components:
             milliseconds (required), microseconds (optimal).
         metadata:
           nullable: true
-          description: Optional. Metadata field used by the Langfuse SDKs for debugging.
+          description: Optional. Metadata field used by the NoopTrace SDKs for debugging.
       required:
         - id
         - timestamp
@@ -9048,7 +9048,7 @@ components:
       properties:
         mediaId:
           type: string
-          description: The unique langfuse identifier of a media record
+          description: The unique nooptrace identifier of a media record
         contentType:
           type: string
           description: The MIME type of the media record
@@ -9138,7 +9138,7 @@ components:
             will be null
         mediaId:
           type: string
-          description: The unique langfuse identifier of a media record
+          description: The unique nooptrace identifier of a media record
       required:
         - mediaId
     MediaContentType:
@@ -9509,8 +9509,8 @@ components:
             $ref: '#/components/schemas/OtelAttribute'
           nullable: true
           description: >-
-            Span attributes including Langfuse-specific attributes
-            (langfuse.observation.*)
+            Span attributes including NoopTrace-specific attributes
+            (nooptrace.observation.*)
         status:
           nullable: true
           description: Span status object
@@ -9522,7 +9522,7 @@ components:
         key:
           type: string
           nullable: true
-          description: Attribute key (e.g., "service.name", "langfuse.observation.type")
+          description: Attribute key (e.g., "service.name", "nooptrace.observation.type")
         value:
           $ref: '#/components/schemas/OtelAttributeValue'
           nullable: true
@@ -10438,7 +10438,7 @@ components:
           type: string
           nullable: true
           description: >-
-            Description is shown across the Langfuse UI and can be used to e.g.
+            Description is shown across the NoopTrace UI and can be used to e.g.
             explain the config categories in detail, why a numeric range was
             set, or provide additional context on config name or usage
       required:
@@ -10483,7 +10483,7 @@ components:
           type: string
           nullable: true
           description: >-
-            Description is shown across the Langfuse UI and can be used to e.g.
+            Description is shown across the NoopTrace UI and can be used to e.g.
             explain the config categories in detail, why a numeric range was
             set, or provide additional context on config name or usage
     GetScoresResponseTraceData:
@@ -10641,7 +10641,7 @@ components:
           description: >-
             The environment of the score. Can be any lowercase alphanumeric
             string with hyphens and underscores that does not start with
-            'langfuse'.
+            'nooptrace'.
         queueId:
           type: string
           nullable: true
@@ -10659,7 +10659,7 @@ components:
           type: string
           nullable: true
           description: >-
-            Reference a score config on a score. The unique langfuse identifier
+            Reference a score config on a score. The unique nooptrace identifier
             of a score config. When passing this field, the dataType and
             stringValue fields are automatically populated.
       required:
@@ -10671,7 +10671,7 @@ components:
       properties:
         id:
           type: string
-          description: The id of the created object in Langfuse
+          description: The id of the created object in NoopTrace
       required:
         - id
     PaginatedSessions:

@@ -7,7 +7,7 @@ The processor package manages PentAGI stack lifecycle through state-oriented app
 ## Key Principles
 
 1. **State-Driven Operations**: All operations based on comparing current and target state
-2. **Stack Independence**: Each stack (observability, langfuse, pentagi) managed independently
+2. **Stack Independence**: Each stack (observability, nooptrace, pentagi) managed independently
 3. **Force Mode**: Aggressive state correction ignoring warnings
 4. **Idempotency**: Repeated operation calls do not cause side effects
 5. **User-Facing Automation**: Installer automates manual Docker/file operations with real-time feedback
@@ -18,7 +18,7 @@ The processor package manages PentAGI stack lifecycle through state-oriented app
 ```
 ProductStackAll
 ├── ProductStackObservability (optional, embedded/external/disabled)
-├── ProductStackLangfuse (optional, embedded/external/disabled)
+├── ProductStackNoopTrace (optional, embedded/external/disabled)
 └── ProductStackPentagi (mandatory, always embedded)
 ```
 
@@ -71,21 +71,21 @@ p.checker.GatherObservabilityInfo(ctx)
 
 **Rationale**: Observability processed first as most complex stack (directory + compose file). Force mode used for file conflict resolution. For external/disabled modes containers are removed but files are preserved.
 
-#### Phase 2: Langfuse Stack Management
+#### Phase 2: NoopTrace Stack Management
 ```go
-if p.isEmbeddedDeployment(ProductStackLangfuse) {
-    // only docker-compose-langfuse.yml file
-     p.fsOps.ensureStackIntegrity(ctx, ProductStackLangfuse, state)
-     p.composeOps.updateStack(ctx, ProductStackLangfuse, state)
+if p.isEmbeddedDeployment(ProductStackNoopTrace) {
+    // only docker-compose-nooptrace.yml file
+     p.fsOps.ensureStackIntegrity(ctx, ProductStackNoopTrace, state)
+     p.composeOps.updateStack(ctx, ProductStackNoopTrace, state)
 } else {
-    if p.checker.LangfuseInstalled {
-         p.composeOps.removeStack(ctx, ProductStackLangfuse, state)
+    if p.checker.NoopTraceInstalled {
+         p.composeOps.removeStack(ctx, ProductStackNoopTrace, state)
     }
 }
-p.checker.GatherLangfuseInfo(ctx)
+p.checker.GatherNoopTraceInfo(ctx)
 ```
 
-**Rationale**: Langfuse simpler than observability (single file only), but follows same logic. As a precondition for local start, configuration must be connected (see checker `LangfuseConnected`).
+**Rationale**: NoopTrace simpler than observability (single file only), but follows same logic. As a precondition for local start, configuration must be connected (see checker `NoopTraceConnected`).
 
 #### Phase 3: PentAGI Stack Management
 ```go
@@ -111,7 +111,7 @@ p.checker.GatherPentagiInfo(ctx)
 - `removeStack`: executes `docker compose down` without removing volumes
 - `purgeStack`: executes `docker compose down -v`
 - `purgeImagesStack`: executes `docker compose down --rmi all -v`
-- dependency ordering: observability → langfuse → pentagi
+- dependency ordering: observability → nooptrace → pentagi
 - environment: `COMPOSE_IGNORE_ORPHANS=1`, `PYTHONUNBUFFERED=1`; ANSI disabled on narrow terminals via `COMPOSE_ANSI=never`
 
 #### State Consistency

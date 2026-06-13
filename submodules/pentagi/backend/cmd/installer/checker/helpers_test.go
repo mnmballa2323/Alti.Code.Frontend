@@ -251,7 +251,7 @@ func TestCheckMemoryResources(t *testing.T) {
 		name                     string
 		needsForPentagi          bool
 		needsForGraphiti         bool
-		needsForLangfuse         bool
+		needsForNoopTrace         bool
 		needsForObservability    bool
 		expectMinimumRequirement bool
 	}{
@@ -259,7 +259,7 @@ func TestCheckMemoryResources(t *testing.T) {
 			name:                     "no components needed",
 			needsForPentagi:          false,
 			needsForGraphiti:         false,
-			needsForLangfuse:         false,
+			needsForNoopTrace:         false,
 			needsForObservability:    false,
 			expectMinimumRequirement: true,
 		},
@@ -267,7 +267,7 @@ func TestCheckMemoryResources(t *testing.T) {
 			name:                     "pentagi only",
 			needsForPentagi:          true,
 			needsForGraphiti:         false,
-			needsForLangfuse:         false,
+			needsForNoopTrace:         false,
 			needsForObservability:    false,
 			expectMinimumRequirement: false, // requires actual memory check
 		},
@@ -275,7 +275,7 @@ func TestCheckMemoryResources(t *testing.T) {
 			name:                     "all components",
 			needsForPentagi:          true,
 			needsForGraphiti:         true,
-			needsForLangfuse:         true,
+			needsForNoopTrace:         true,
 			needsForObservability:    true,
 			expectMinimumRequirement: false, // requires actual memory check
 		},
@@ -283,7 +283,7 @@ func TestCheckMemoryResources(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := checkMemoryResources(tt.needsForPentagi, tt.needsForGraphiti, tt.needsForLangfuse, tt.needsForObservability)
+			result := checkMemoryResources(tt.needsForPentagi, tt.needsForGraphiti, tt.needsForNoopTrace, tt.needsForObservability)
 			if tt.expectMinimumRequirement && !result {
 				t.Errorf("checkMemoryResources() should return true when no components are needed")
 			}
@@ -303,9 +303,9 @@ func TestCheckDiskSpaceWithContext(t *testing.T) {
 		graphitiConnected bool
 		graphitiExternal  bool
 		graphitiInstalled bool
-		langfuseConnected bool
-		langfuseExternal  bool
-		langfuseInstalled bool
+		nooptraceConnected bool
+		nooptraceExternal  bool
+		nooptraceInstalled bool
 		obsConnected      bool
 		obsExternal       bool
 		obsInstalled      bool
@@ -318,9 +318,9 @@ func TestCheckDiskSpaceWithContext(t *testing.T) {
 			graphitiConnected: true,
 			graphitiExternal:  false,
 			graphitiInstalled: true,
-			langfuseConnected: true,
-			langfuseExternal:  false,
-			langfuseInstalled: true,
+			nooptraceConnected: true,
+			nooptraceExternal:  false,
+			nooptraceInstalled: true,
 			obsConnected:      true,
 			obsExternal:       false,
 			obsInstalled:      true,
@@ -339,12 +339,12 @@ func TestCheckDiskSpaceWithContext(t *testing.T) {
 			expectHighSpace:   false, // moderate space for components
 		},
 		{
-			name:              "langfuse local not installed",
+			name:              "nooptrace local not installed",
 			workerImageExists: true,
 			pentagiInstalled:  true,
-			langfuseConnected: true,
-			langfuseExternal:  false,
-			langfuseInstalled: false,
+			nooptraceConnected: true,
+			nooptraceExternal:  false,
+			nooptraceInstalled: false,
 			expectHighSpace:   false, // moderate space for components
 		},
 	}
@@ -358,9 +358,9 @@ func TestCheckDiskSpaceWithContext(t *testing.T) {
 				tt.graphitiConnected,
 				tt.graphitiExternal,
 				tt.graphitiInstalled,
-				tt.langfuseConnected,
-				tt.langfuseExternal,
-				tt.langfuseInstalled,
+				tt.nooptraceConnected,
+				tt.nooptraceExternal,
+				tt.nooptraceInstalled,
 				tt.obsConnected,
 				tt.obsExternal,
 				tt.obsInstalled,
@@ -393,7 +393,7 @@ func TestCheckUpdatesServer(t *testing.T) {
 			fmt.Fprintf(w, `{
 				"installer_is_up_to_date": true,
 				"pentagi_is_up_to_date": false,
-				"langfuse_is_up_to_date": true,
+				"nooptrace_is_up_to_date": true,
 				"observability_is_up_to_date": false,
 				"worker_is_up_to_date": true
 			}`)
@@ -416,8 +416,8 @@ func TestCheckUpdatesServer(t *testing.T) {
 		if response.PentagiIsUpToDate {
 			t.Error("expected pentagi to not be up to date")
 		}
-		if !response.LangfuseIsUpToDate {
-			t.Error("expected langfuse to be up to date")
+		if !response.NoopTraceIsUpToDate {
+			t.Error("expected nooptrace to be up to date")
 		}
 		if response.ObservabilityIsUpToDate {
 			t.Error("expected observability to not be up to date")
@@ -483,7 +483,7 @@ func TestCheckUpdatesServer(t *testing.T) {
 		// create a proxy server that just forwards requests
 		proxyTs := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, `{"installer_is_up_to_date": true, "pentagi_is_up_to_date": true, "langfuse_is_up_to_date": true, "observability_is_up_to_date": true}`)
+			fmt.Fprintf(w, `{"installer_is_up_to_date": true, "pentagi_is_up_to_date": true, "nooptrace_is_up_to_date": true, "observability_is_up_to_date": true}`)
 		}))
 		defer proxyTs.Close()
 
@@ -598,8 +598,8 @@ func TestCheckUpdatesRequestStructure(t *testing.T) {
 	request := CheckUpdatesRequest{
 		InstallerOsType:        "darwin",
 		InstallerVersion:       "1.0.0",
-		LangfuseConnected:      true,
-		LangfuseExternal:       false,
+		NoopTraceConnected:      true,
+		NoopTraceExternal:       false,
 		ObservabilityConnected: true,
 		ObservabilityExternal:  false,
 	}
@@ -730,8 +730,8 @@ func TestCheckVolumesExist_MatchingLogic(t *testing.T) {
 		},
 		{
 			name:            "match multiple search volumes",
-			existingVolumes: []string{"proj_pentagi-data", "langfuse-data"},
-			searchVolumes:   []string{"pentagi-data", "langfuse-data", "missing-volume"},
+			existingVolumes: []string{"proj_pentagi-data", "nooptrace-data"},
+			searchVolumes:   []string{"pentagi-data", "nooptrace-data", "missing-volume"},
 			expected:        true,
 			description:     "should return true if any search volume matches",
 		},

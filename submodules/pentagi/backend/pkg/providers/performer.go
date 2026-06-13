@@ -14,7 +14,7 @@ import (
 	"pentagi/pkg/database"
 	"pentagi/pkg/graphiti"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/templates"
 	"pentagi/pkg/tools"
@@ -202,11 +202,11 @@ func (fp *flowProvider) performAgentChain(
 				// log swallowed error
 				_, observation := obs.Observer.NewObservation(ctx)
 				observation.Event(
-					langfuse.WithEventName("chain summarization error swallowed"),
-					langfuse.WithEventInput(chain),
-					langfuse.WithEventStatus(err.Error()),
-					langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-					langfuse.WithEventMetadata(langfuse.Metadata{
+					nooptrace.WithEventName("chain summarization error swallowed"),
+					nooptrace.WithEventInput(chain),
+					nooptrace.WithEventStatus(err.Error()),
+					nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+					nooptrace.WithEventMetadata(nooptrace.Metadata{
 						"tc_id_template": fp.tcIDTemplate,
 						"msg_chain_id":   chainID,
 						"error":          err.Error(),
@@ -260,16 +260,16 @@ func (fp *flowProvider) execToolCall(
 
 		_, observation := obs.Observer.NewObservation(ctx)
 		observation.Event(
-			langfuse.WithEventName("repeating tool call detected"),
-			langfuse.WithEventInput(funcArgs),
-			langfuse.WithEventMetadata(map[string]any{
+			nooptrace.WithEventName("repeating tool call detected"),
+			nooptrace.WithEventInput(funcArgs),
+			nooptrace.WithEventMetadata(map[string]any{
 				"tool_call_id": toolCall.ID,
 				"tool_name":    funcName,
 				"msg_chain_id": chainID,
 			}),
-			langfuse.WithEventStatus("failed"),
-			langfuse.WithEventLevel(langfuse.ObservationLevelError),
-			langfuse.WithEventOutput(response),
+			nooptrace.WithEventStatus("failed"),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
+			nooptrace.WithEventOutput(response),
 		)
 		logger.Warn("failed to exec function: tool call is repeating")
 
@@ -496,11 +496,11 @@ func (fp *flowProvider) performReflector(
 		msg := "reflector called too many times"
 		_, observation := obs.Observer.NewObservation(ctx)
 		observation.Event(
-			langfuse.WithEventName("reflector limit calls reached"),
-			langfuse.WithEventInput(content),
-			langfuse.WithEventStatus("failed"),
-			langfuse.WithEventLevel(langfuse.ObservationLevelError),
-			langfuse.WithEventOutput(msg),
+			nooptrace.WithEventName("reflector limit calls reached"),
+			nooptrace.WithEventInput(content),
+			nooptrace.WithEventStatus("failed"),
+			nooptrace.WithEventLevel(nooptrace.ObservationLevelError),
+			nooptrace.WithEventOutput(msg),
 		)
 		logger.WithField("content", content[:min(1000, len(content))]).Warn(msg)
 		return nil, errors.New(msg)
@@ -526,9 +526,9 @@ func (fp *flowProvider) performReflector(
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	reflectorAgent := observation.Agent(
-		langfuse.WithAgentName("reflector"),
-		langfuse.WithAgentInput(content),
-		langfuse.WithAgentMetadata(langfuse.Metadata{
+		nooptrace.WithAgentName("reflector"),
+		nooptrace.WithAgentInput(content),
+		nooptrace.WithAgentMetadata(nooptrace.Metadata{
 			"user_context":   reflectorContext["user"],
 			"system_context": reflectorContext["system"],
 		}),
@@ -536,9 +536,9 @@ func (fp *flowProvider) performReflector(
 	ctx, observation = reflectorAgent.Observation(ctx)
 
 	reflectorEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("render reflector agent prompts"),
-		langfuse.WithEvaluatorInput(reflectorContext),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("render reflector agent prompts"),
+		nooptrace.WithEvaluatorInput(reflectorContext),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"user_context":   reflectorContext["user"],
 			"system_context": reflectorContext["system"],
 			"lang":           fp.language,
@@ -558,12 +558,12 @@ func (fp *flowProvider) performReflector(
 	}
 
 	reflectorEvaluator.End(
-		langfuse.WithEvaluatorOutput(map[string]any{
+		nooptrace.WithEvaluatorOutput(map[string]any{
 			"user_template":   userReflectorTmpl,
 			"system_template": systemReflectorTmpl,
 		}),
-		langfuse.WithEvaluatorStatus("success"),
-		langfuse.WithEvaluatorLevel(langfuse.ObservationLevelDebug),
+		nooptrace.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelDebug),
 	)
 
 	advice, err := fp.performSimpleChain(ctx, taskID, subtaskID, optAgentType,
@@ -572,10 +572,10 @@ func (fp *flowProvider) performReflector(
 		advice = ToolPlaceholder
 	}
 
-	opts := []langfuse.AgentOption{
-		langfuse.WithAgentStatus("failed"),
-		langfuse.WithAgentOutput(advice),
-		langfuse.WithAgentLevel(langfuse.ObservationLevelWarning),
+	opts := []nooptrace.AgentOption{
+		nooptrace.WithAgentStatus("failed"),
+		nooptrace.WithAgentOutput(advice),
+		nooptrace.WithAgentLevel(nooptrace.ObservationLevelWarning),
 	}
 	defer func() {
 		reflectorAgent.End(opts...)
@@ -586,8 +586,8 @@ func (fp *flowProvider) performReflector(
 	if err != nil {
 		logger.WithError(err).Error("failed to call agent chain by reflector")
 		opts = append(opts,
-			langfuse.WithAgentStatus(err.Error()),
-			langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+			nooptrace.WithAgentStatus(err.Error()),
+			nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 		)
 		return nil, err
 	}
@@ -596,8 +596,8 @@ func (fp *flowProvider) performReflector(
 	if err := fp.updateMsgChainUsage(ctx, chainID, optAgentType, result.info, 0); err != nil {
 		logger.WithError(err).Error("failed to update msg chain usage")
 		opts = append(opts,
-			langfuse.WithAgentStatus(err.Error()),
-			langfuse.WithAgentLevel(langfuse.ObservationLevelError),
+			nooptrace.WithAgentStatus(err.Error()),
+			nooptrace.WithAgentLevel(nooptrace.ObservationLevelError),
 		)
 		return nil, err
 	}
@@ -613,7 +613,7 @@ func (fp *flowProvider) performReflector(
 			humanMessage, result.content, executionContext, executor, iteration+1)
 	}
 
-	opts = append(opts, langfuse.WithAgentStatus("success"))
+	opts = append(opts, nooptrace.WithAgentStatus("success"))
 	return result, nil
 }
 
@@ -676,11 +676,11 @@ func (fp *flowProvider) processAssistantResult(
 			// log swallowed error
 			_, observation := obs.Observer.NewObservation(ctx)
 			observation.Event(
-				langfuse.WithEventName("chain summarization error swallowed"),
-				langfuse.WithEventInput(chain),
-				langfuse.WithEventStatus(err.Error()),
-				langfuse.WithEventLevel(langfuse.ObservationLevelWarning),
-				langfuse.WithEventMetadata(langfuse.Metadata{
+				nooptrace.WithEventName("chain summarization error swallowed"),
+				nooptrace.WithEventInput(chain),
+				nooptrace.WithEventStatus(err.Error()),
+				nooptrace.WithEventLevel(nooptrace.ObservationLevelWarning),
+				nooptrace.WithEventMetadata(nooptrace.Metadata{
 					"tc_id_template": fp.tcIDTemplate,
 					"msg_chain_id":   chainID,
 					"error":          err.Error(),
@@ -764,7 +764,7 @@ func (fp *flowProvider) updateMsgChainUsage(
 // storeToGraphiti stores messages to Graphiti with timeout
 func (fp *flowProvider) storeToGraphiti(
 	ctx context.Context,
-	observation langfuse.Observation,
+	observation nooptrace.Observation,
 	groupID string,
 	messages []graphiti.Message,
 ) error {
@@ -849,9 +849,9 @@ func (fp *flowProvider) storeAgentResponseToGraphiti(
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	storeEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("store messages to graphiti"),
-		langfuse.WithEvaluatorInput(messages),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("store messages to graphiti"),
+		nooptrace.WithEvaluatorInput(messages),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"group_id":     groupID,
 			"agent_type":   agentType,
 			"task_id":      taskID,
@@ -863,14 +863,14 @@ func (fp *flowProvider) storeAgentResponseToGraphiti(
 	ctx, observation = storeEvaluator.Observation(ctx)
 	if err := fp.storeToGraphiti(ctx, observation, groupID, messages); err != nil {
 		storeEvaluator.End(
-			langfuse.WithEvaluatorStatus(err.Error()),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelError),
+			nooptrace.WithEvaluatorStatus(err.Error()),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelError),
 		)
 		return
 	}
 
 	storeEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorStatus("success"),
 	)
 }
 
@@ -955,9 +955,9 @@ func (fp *flowProvider) storeToolExecutionToGraphiti(
 
 	ctx, observation := obs.Observer.NewObservation(ctx)
 	storeEvaluator := observation.Evaluator(
-		langfuse.WithEvaluatorName("store tool execution to graphiti"),
-		langfuse.WithEvaluatorInput(messages),
-		langfuse.WithEvaluatorMetadata(langfuse.Metadata{
+		nooptrace.WithEvaluatorName("store tool execution to graphiti"),
+		nooptrace.WithEvaluatorInput(messages),
+		nooptrace.WithEvaluatorMetadata(nooptrace.Metadata{
 			"group_id":     groupID,
 			"agent_type":   agentType,
 			"tool_name":    funcName,
@@ -971,13 +971,13 @@ func (fp *flowProvider) storeToolExecutionToGraphiti(
 	ctx, observation = storeEvaluator.Observation(ctx)
 	if err := fp.storeToGraphiti(ctx, observation, groupID, messages); err != nil {
 		storeEvaluator.End(
-			langfuse.WithEvaluatorStatus(err.Error()),
-			langfuse.WithEvaluatorLevel(langfuse.ObservationLevelError),
+			nooptrace.WithEvaluatorStatus(err.Error()),
+			nooptrace.WithEvaluatorLevel(nooptrace.ObservationLevelError),
 		)
 		return
 	}
 
 	storeEvaluator.End(
-		langfuse.WithEvaluatorStatus("success"),
+		nooptrace.WithEvaluatorStatus("success"),
 	)
 }

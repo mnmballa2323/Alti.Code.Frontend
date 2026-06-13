@@ -15,7 +15,7 @@ import (
 	"pentagi/pkg/docker"
 	"pentagi/pkg/graph/subscriptions"
 	obs "pentagi/pkg/observability"
-	"pentagi/pkg/observability/langfuse"
+	"pentagi/pkg/observability/nooptrace"
 	"pentagi/pkg/providers"
 	"pentagi/pkg/providers/pconfig"
 	"pentagi/pkg/providers/provider"
@@ -144,13 +144,13 @@ func NewFlowWorker(
 	}
 
 	ctx, observation := obs.Observer.NewObservation(ctx,
-		langfuse.WithObservationTraceContext(
-			langfuse.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
-			langfuse.WithTraceUserID(user.Mail),
-			langfuse.WithTraceTags([]string{"controller", "flow"}),
-			langfuse.WithTraceInput(fwc.input),
-			langfuse.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
-			langfuse.WithTraceMetadata(langfuse.Metadata{
+		nooptrace.WithObservationTraceContext(
+			nooptrace.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
+			nooptrace.WithTraceUserID(user.Mail),
+			nooptrace.WithTraceTags([]string{"controller", "flow"}),
+			nooptrace.WithTraceInput(fwc.input),
+			nooptrace.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
+			nooptrace.WithTraceMetadata(nooptrace.Metadata{
 				"flow_id":       flow.ID,
 				"user_id":       fwc.userID,
 				"user_email":    user.Mail,
@@ -162,7 +162,7 @@ func NewFlowWorker(
 			}),
 		),
 	)
-	flowSpan := observation.Span(langfuse.WithSpanName("prepare flow worker"))
+	flowSpan := observation.Span(nooptrace.WithSpanName("prepare flow worker"))
 	ctx, _ = flowSpan.Observation(ctx)
 
 	prompter := templates.NewDefaultPrompter() // TODO: change to flow prompter by userID from DB
@@ -227,7 +227,7 @@ func NewFlowWorker(
 		Screenshot: workers.sw,
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx, _ = obs.Observer.NewObservation(ctx, langfuse.WithObservationTraceID(observation.TraceID()))
+	ctx, _ = obs.Observer.NewObservation(ctx, nooptrace.WithObservationTraceID(observation.TraceID()))
 	fw := &flowWorker{
 		tc:      NewTaskController(flowCtx),
 		wg:      &sync.WaitGroup{},
@@ -268,7 +268,7 @@ func NewFlowWorker(
 		}
 	}
 
-	flowSpan.End(langfuse.WithSpanStatus("flow worker started"))
+	flowSpan.End(nooptrace.WithSpanStatus("flow worker started"))
 
 	return fw, nil
 }
@@ -305,13 +305,13 @@ func LoadFlowWorker(ctx context.Context, flow database.Flow, fwc flowWorkerCtx) 
 	}
 
 	ctx, observation := obs.Observer.NewObservation(ctx,
-		langfuse.WithObservationTraceID(flow.TraceID.String),
-		langfuse.WithObservationTraceContext(
-			langfuse.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
-			langfuse.WithTraceUserID(user.Mail),
-			langfuse.WithTraceTags([]string{"controller", "flow"}),
-			langfuse.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
-			langfuse.WithTraceMetadata(langfuse.Metadata{
+		nooptrace.WithObservationTraceID(flow.TraceID.String),
+		nooptrace.WithObservationTraceContext(
+			nooptrace.WithTraceName(fmt.Sprintf("%d flow worker", flow.ID)),
+			nooptrace.WithTraceUserID(user.Mail),
+			nooptrace.WithTraceTags([]string{"controller", "flow"}),
+			nooptrace.WithTraceSessionID(fmt.Sprintf("flow-%d", flow.ID)),
+			nooptrace.WithTraceMetadata(nooptrace.Metadata{
 				"flow_id":       flow.ID,
 				"user_id":       flow.UserID,
 				"user_email":    user.Mail,
@@ -323,7 +323,7 @@ func LoadFlowWorker(ctx context.Context, flow database.Flow, fwc flowWorkerCtx) 
 			}),
 		),
 	)
-	flowSpan := observation.Span(langfuse.WithSpanName("prepare flow worker"))
+	flowSpan := observation.Span(nooptrace.WithSpanName("prepare flow worker"))
 	ctx, _ = flowSpan.Observation(ctx)
 
 	functions := &tools.Functions{}
@@ -377,7 +377,7 @@ func LoadFlowWorker(ctx context.Context, flow database.Flow, fwc flowWorkerCtx) 
 		Screenshot: workers.sw,
 	}
 	ctx, cancel := context.WithCancel(context.Background())
-	ctx, _ = obs.Observer.NewObservation(ctx, langfuse.WithObservationTraceID(observation.TraceID()))
+	ctx, _ = obs.Observer.NewObservation(ctx, nooptrace.WithObservationTraceID(observation.TraceID()))
 	fw := &flowWorker{
 		tc:      NewTaskController(flowCtx),
 		wg:      &sync.WaitGroup{},
@@ -439,7 +439,7 @@ func LoadFlowWorker(ctx context.Context, flow database.Flow, fwc flowWorkerCtx) 
 	fw.wg.Add(1)
 	go fw.worker()
 
-	flowSpan.End(langfuse.WithSpanStatus("flow worker restored"))
+	flowSpan.End(nooptrace.WithSpanStatus("flow worker restored"))
 
 	return fw, nil
 }
@@ -757,9 +757,9 @@ func (fw *flowWorker) processInput(flin flowInput) (TaskWorker, error) {
 func (fw *flowWorker) runTask(spanName, input string, task TaskWorker) error {
 	_, observation := obs.Observer.NewObservation(fw.ctx)
 	span := observation.Span(
-		langfuse.WithSpanName(spanName),
-		langfuse.WithSpanInput(input),
-		langfuse.WithSpanMetadata(langfuse.Metadata{
+		nooptrace.WithSpanName(spanName),
+		nooptrace.WithSpanInput(input),
+		nooptrace.WithSpanMetadata(nooptrace.Metadata{
 			"task_id": task.GetTaskID(),
 		}),
 	)
@@ -780,14 +780,14 @@ func (fw *flowWorker) runTask(spanName, input string, task TaskWorker) error {
 		// if task is stopped by user and it's not finished yet
 		if errors.Is(err, context.Canceled) && fw.ctx.Err() == nil {
 			span.End(
-				langfuse.WithSpanStatus("stopped"),
-				langfuse.WithSpanLevel(langfuse.ObservationLevelWarning),
+				nooptrace.WithSpanStatus("stopped"),
+				nooptrace.WithSpanLevel(nooptrace.ObservationLevelWarning),
 			)
 			return nil
 		}
 		span.End(
-			langfuse.WithSpanStatus(err.Error()),
-			langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+			nooptrace.WithSpanStatus(err.Error()),
+			nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
 		)
 		return fmt.Errorf("failed to run task %d: %w", task.GetTaskID(), err)
 	}
@@ -796,14 +796,14 @@ func (fw *flowWorker) runTask(spanName, input string, task TaskWorker) error {
 	status, _ := task.GetStatus(fw.ctx)
 	if status == database.TaskStatusFailed {
 		span.End(
-			langfuse.WithSpanOutput(result),
-			langfuse.WithSpanStatus("failed"),
-			langfuse.WithSpanLevel(langfuse.ObservationLevelWarning),
+			nooptrace.WithSpanOutput(result),
+			nooptrace.WithSpanStatus("failed"),
+			nooptrace.WithSpanLevel(nooptrace.ObservationLevelWarning),
 		)
 	} else {
 		span.End(
-			langfuse.WithSpanOutput(result),
-			langfuse.WithSpanStatus("success"),
+			nooptrace.WithSpanOutput(result),
+			nooptrace.WithSpanStatus("success"),
 		)
 	}
 

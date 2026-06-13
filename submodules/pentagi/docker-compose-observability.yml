@@ -11,10 +11,10 @@ networks:
     driver: bridge
     external: true
     name: observability-network
-  langfuse-network:
+  nooptrace-network:
     driver: bridge
     external: true
-    name: langfuse-network
+    name: nooptrace-network
   pentagi-network:
     driver: bridge
     external: true
@@ -128,7 +128,7 @@ services:
         max-file: "7"
     networks:
       - observability-network
-      - langfuse-network
+      - nooptrace-network
       - pentagi-network
 
   victoriametrics:

@@ -47,7 +47,7 @@ graph TB
 
 ## Terms and Definitions
 
-- **ProductStack**: Logical grouping of services that can be managed as a unit (pentagi, langfuse, observability, worker, installer, all)
+- **ProductStack**: Logical grouping of services that can be managed as a unit (pentagi, nooptrace, observability, worker, installer, all)
 - **Deployment Modes**: embedded (full local stack), external (existing service), disabled (no functionality)
 - **State**: Persistent configuration storage including .env variables and wizard navigation stack
 - **Checker**: System environment assessment providing current installation status and capabilities
@@ -79,7 +79,7 @@ type ProductStack string
 
 const (
     StackPentAGI        ProductStack = "pentagi"        // Main stack (docker-compose.yml)
-    StackLangfuse       ProductStack = "langfuse"       // LLM observability (docker-compose-langfuse.yml)
+    StackNoopTrace       ProductStack = "nooptrace"       // LLM observability (docker-compose-nooptrace.yml)
     StackObservability  ProductStack = "observability" // System monitoring (docker-compose-observability.yml)
     StackWorker         ProductStack = "worker"         // Docker images for AI agent tasks
     StackInstaller      ProductStack = "installer"     // Installer binary itself
@@ -91,13 +91,13 @@ const (
 
 ### Lifecycle Management
 - **Start(stack)**:
-  - pentagi/langfuse/observability: `docker compose ... up -d` (honors embedded mode for non-destructive ops)
-  - all: sequential start in order observability → langfuse → pentagi
+  - pentagi/nooptrace/observability: `docker compose ... up -d` (honors embedded mode for non-destructive ops)
+  - all: sequential start in order observability → nooptrace → pentagi
   - worker/installer: not applicable
 
 - **Stop(stack)**:
-  - pentagi/langfuse/observability: `docker compose ... stop`
-  - all: sequential stop in reverse order (pentagi → langfuse → observability)
+  - pentagi/nooptrace/observability: `docker compose ... stop`
+  - all: sequential stop in reverse order (pentagi → nooptrace → observability)
   - worker/installer: not applicable
 
 - **Restart(stack)**:
@@ -106,34 +106,34 @@ const (
 
 ### Installation & Content Management
 - **Download(stack)**:
-  - pentagi/langfuse/observability: `docker compose pull`
+  - pentagi/nooptrace/observability: `docker compose pull`
   - worker: `docker pull ${DOCKER_DEFAULT_IMAGE_FOR_PENTEST}` (default 6GB+)
   - installer: stubbed (not implemented fully yet)
   - all: download all applicable stacks
 
 - **Install(stack)**:
   - pentagi: extract compose file and example provider config
-  - langfuse: extract compose file (embedded mode only)
+  - nooptrace: extract compose file (embedded mode only)
   - observability: extract compose file and directory tree (embedded mode only)
   - worker: download images
   - installer: not applicable
   - all: install all configured stacks
 
 - **Update(stack)**:
-  - pentagi/langfuse/observability: download → `docker compose up -d`
+  - pentagi/nooptrace/observability: download → `docker compose up -d`
   - worker: download only (no forced restart)
   - installer: stubbed (checksum/replace helpers exist, flow returns not implemented)
   - all: sequence with dependency ordering
 
 ### Removal Operations
 - **Remove(stack)**:
-  - pentagi/langfuse/observability: `docker compose down` (keep volumes/images)
+  - pentagi/nooptrace/observability: `docker compose down` (keep volumes/images)
   - worker: remove images via Docker API and related containers
   - installer: remove flow stubbed
   - all: remove all stacks
 
 - **Purge(stack)**:
-  - pentagi/langfuse/observability: `down --rmi all -v` for strict purge; standard purge `down -v` is also available
+  - pentagi/nooptrace/observability: `down --rmi all -v` for strict purge; standard purge `down -v` is also available
   - worker: remove all containers, images, and volumes in worker environment
   - installer: complete removal flow stubbed
   - all: purge all stacks and remove custom networks
@@ -142,7 +142,7 @@ const (
 - **ApplyChanges()**:
   - pre-phase (wizard): integrity scan, user selects overwrite (force) or keep (no force)
   - phase 1: observability (ensure/verify files → update stack or remove if external/disabled)
-  - phase 2: langfuse (same logic; local start requires `LangfuseConnected`)
+  - phase 2: nooptrace (same logic; local start requires `NoopTraceConnected`)
   - phase 3: pentagi (always embedded; ensure/verify → update)
   - refresh checker state after each phase
 
@@ -158,7 +158,7 @@ Each specialized file should contain business-logic level methods that directly 
 
 ### Stack-Specific Operations
 - **compose.go**:
-  - `installPentAGI()`, `installLangfuse()`, `installObservability()` - extract compose files with environment patching
+  - `installPentAGI()`, `installNoopTrace()`, `installObservability()` - extract compose files with environment patching
   - `startStack(stack)`, `stopStack(stack)`, `restartStack(stack)` - orchestrate docker compose commands
   - `updateStack(stack)` - rolling updates with health checks
 - **docker.go**:
@@ -189,12 +189,12 @@ Each specialized file should contain business-logic level methods that directly 
   - **Message Channel**: Simple progress tracking via `ProcessorMessage` events through channels
   - **Toggle Support**: Ctrl+T switches between modes for debugging/compatibility
 - **Deployment Mode Handling**:
-  - Langfuse: embedded (full stack), external (existing server), disabled (no analytics); local start guarded by `LangfuseConnected`
+  - NoopTrace: embedded (full stack), external (existing server), disabled (no analytics); local start guarded by `NoopTraceConnected`
   - Observability: embedded (full stack), external (OTEL collector), disabled (no monitoring)
 - **Environment Variable Handling**: Compose files use --env-file parameter for environment variables, only special cases require file patching
 - **Progress Tracking**: Worker downloads (vxcontrol/kali-linux 6GB+ → 13GB disk) with real-time progress via terminal
 - **Docker Configuration**: Support NET_ADMIN capability for network scanning, Docker socket access for container management
-- **Dependency Ordering**: PentAGI must start before Langfuse/Observability for network creation
+- **Dependency Ordering**: PentAGI must start before NoopTrace/Observability for network creation
 - **State Persistence**: All operations update checker.CheckResult and state.State for consistency
 - **Atomic Operations**: Install/Update operations must be reversible on failure
 
@@ -207,7 +207,7 @@ Each specialized file should contain business-logic level methods that directly 
 ### Key Environment Variables
 - **LLM providers**: OPEN_AI_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, BEDROCK_*, OLLAMA_SERVER_URL
 - **Provider configs**: PENTAGI_LLM_SERVER_CONFIG_PATH (host path), PENTAGI_OLLAMA_SERVER_CONFIG_PATH (host path)
-- **Monitoring**: LANGFUSE_BASE_URL, LANGFUSE_PROJECT_ID, OTEL_HOST
+- **Monitoring**: NOOPTRACE_BASE_URL, NOOPTRACE_PROJECT_ID, OTEL_HOST
 - **Docker config**: DOCKER_HOST, PENTAGI_DOCKER_CERT_PATH (host path), DOCKER_TLS_VERIFY, DOCKER_CERT_PATH (container path, managed)
 - **Deployment modes**: envs determine embedded vs external vs disabled
 - **Worker images**: DOCKER_DEFAULT_IMAGE (debian:latest), DOCKER_DEFAULT_IMAGE_FOR_PENTEST (vxcontrol/kali-linux)
@@ -280,7 +280,7 @@ graph TD
 ### Primary Use Cases
 1. **First-time Installation**: User runs installer, configures via TUI, calls ApplyChanges to deploy complete stack
 2. **Configuration Updates**: User modifies .env settings via TUI, ApplyChanges determines minimal required operations
-3. **Stack Management**: User enables/disables Langfuse or Observability, system installs/removes appropriate components
+3. **Stack Management**: User enables/disables NoopTrace or Observability, system installs/removes appropriate components
 4. **System Updates**: Periodic update checks trigger Download/Update operations for newer versions
 5. **Troubleshooting**: Remove/Install cycles for component reset, Purge for complete cleanup
 

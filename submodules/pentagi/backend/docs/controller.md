@@ -89,7 +89,7 @@ The `controller` package interacts with the following key packages:
 - `database`: For all persistent storage and retrieval operations.
 - `providers` and `tools`: For LLM, tool execution, and agent chain management.
 - `graph/subscriptions`: For publishing real-time events about entity changes.
-- `observability/langfuse`: For tracing and logging of operations.
+- `observability/nooptrace`: For tracing and logging of operations.
 - `config`, `docker`, and `templates`: For configuration, container management, and prompt templating.
 
 #### High-Level Architecture
@@ -1137,12 +1137,12 @@ To add a new log type, follow this pattern:
 
 #### Error Handling Example
 ```go
-func wrapErrorEndSpan(ctx context.Context, span langfuse.Span, msg string, err error) error {
+func wrapErrorEndSpan(ctx context.Context, span nooptrace.Span, msg string, err error) error {
     logrus.WithContext(ctx).WithError(err).Error(msg)
     err = fmt.Errorf("%s: %w", msg, err)
     span.End(
-        langfuse.WithEndSpanStatus(err.Error()),
-        langfuse.WithSpanLevel(langfuse.ObservationLevelError),
+        nooptrace.WithEndSpanStatus(err.Error()),
+        nooptrace.WithSpanLevel(nooptrace.ObservationLevelError),
     )
     return err
 }

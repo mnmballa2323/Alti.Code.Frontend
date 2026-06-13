@@ -31,7 +31,7 @@ func NewMonitoringHandler(c controller.Controller, s styles.Styles, w window.Win
 
 func (h *MonitoringHandler) LoadItems() []ListItem {
 	items := []ListItem{
-		{ID: LangfuseScreen},
+		{ID: NoopTraceScreen},
 		{ID: ObservabilityScreen},
 	}
 
