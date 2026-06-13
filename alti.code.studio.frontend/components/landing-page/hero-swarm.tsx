@@ -28,14 +28,19 @@ export default function HeroSwarm() {
       <MagicCodeBackground />
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
         {/* Apple-style Headline */}
-        <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
-          <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-black">
-            Private and Secure
-          </span>
-          <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-black mt-3 whitespace-nowrap">
-            Autonomous Software Engineering.
-          </span>
-        </h1>
+        <div className="flex flex-col items-center gap-6">
+          <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
+            <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-black">
+              Private and Secure
+            </span>
+            <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-black mt-3 whitespace-nowrap">
+              Autonomous Software Engineering.
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-500 font-medium text-center tracking-tight max-w-3xl">
+            Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.
+          </p>
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col items-center gap-4 mt-6 w-full sm:w-auto">
