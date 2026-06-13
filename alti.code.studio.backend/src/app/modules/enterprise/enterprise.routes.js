@@ -1903,4 +1903,6 @@ router.get('/certifications/stats', rbac('audit:read'), (req, res) => {
     res.json(complianceCertification.getStats());
 });
 
+export const enterpriseRoutes = router;
 export default router;
+
