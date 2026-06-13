@@ -107,12 +107,11 @@ export default function TeamsPage() {
     });
   }
 
-  // Categorize members into teams dynamically, using email address as the team name
   const rawTeams: TeamInfo[] = [
     {
       id: "engineering",
-      name: "admin@insocode.com",
-      description: "",
+      name: "Engineering Team",
+      description: "Core platform engineering and development",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
 
@@ -121,8 +120,8 @@ export default function TeamsPage() {
     },
     {
       id: "product-design",
-      name: "owner@insocode.com",
-      description: "",
+      name: "Product & Design Team",
+      description: "Product management and UI/UX design",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
 
@@ -136,8 +135,8 @@ export default function TeamsPage() {
     },
     {
       id: "ops-support",
-      name: "ada.lovelace@alticodestudio.com",
-      description: "",
+      name: "Operations & Support Team",
+      description: "Infrastructure, security, and customer support",
       members: allMembers.filter((m) => {
         const r = (m.role || "").toLowerCase();
 
@@ -176,7 +175,7 @@ export default function TeamsPage() {
 
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-            <div className="col-span-9">Email Address</div>
+            <div className="col-span-9">Team Name</div>
             <div className="col-span-3 text-right pr-12">Members</div>
           </div>
         </div>
