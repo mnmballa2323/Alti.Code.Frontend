@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Loader2, Mail, Shield, Pencil, X, ChevronDown } from "lucide-react";
+import { Loader2, Mail, Shield, Pencil, X, ChevronDown, Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { teamAPI } from "@/lib/enterprise-api";
@@ -58,6 +58,7 @@ export default function EnterpriseDetailPage() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [customPrice, setCustomPrice] = useState("$1,000");
   const [isSaving, setIsSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   let teamName = "Team Directory";
   let teamDesc = "Workspace team members";
@@ -299,14 +300,31 @@ export default function EnterpriseDetailPage() {
             )}
           </div>
 
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
+            <input
+              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
+              placeholder="Search..."
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
           {/* Members list */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {teamMembers.length > 0 ? (
-              teamMembers.map((member) => {
+            {teamMembers.filter(m => 
+              m.email.toLowerCase().includes(searchQuery.toLowerCase()) || 
+              (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
+              (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+            ).length > 0 ? (
+              teamMembers.filter(m => 
+                m.email.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
+                (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+              ).map((member) => {
                 const isYou = currentUser && member.email === currentUser.email;
-                const memberInitial = (member.name || member.email || "M")
-                  .charAt(0)
-                  .toUpperCase();
 
                 return (
                   <div
