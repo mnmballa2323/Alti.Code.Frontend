@@ -73,8 +73,8 @@ export default function RevenuePage() {
         <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider shadow-sm">
           <div className="col-span-2">Transaction ID</div>
           <div className="col-span-4">Customer</div>
-          <div className="col-span-3">Plan</div>
-          <div className="col-span-2">Date</div>
+          <div className="col-span-2">Plan</div>
+          <div className="col-span-3">Date</div>
           <div className="col-span-1 text-right">Amount</div>
         </div>
 
@@ -84,10 +84,10 @@ export default function RevenuePage() {
             <div key={txn.id} className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-sm">
                 <div className="col-span-2 font-medium text-sm text-neutral-900 dark:text-white">{txn.id}</div>
                 <div className="col-span-4 text-sm text-neutral-600 dark:text-neutral-300">{txn.customer}</div>
-                <div className="col-span-3 text-sm text-neutral-600 dark:text-neutral-300">
+                <div className="col-span-2 text-sm text-neutral-600 dark:text-neutral-300">
                   {txn.plan}
                 </div>
-                <div className="col-span-2 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
+                <div className="col-span-3 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
                 <div className="col-span-1 text-sm font-semibold text-neutral-900 dark:text-white text-right">{txn.amount}</div>
             </div>
           ))}
