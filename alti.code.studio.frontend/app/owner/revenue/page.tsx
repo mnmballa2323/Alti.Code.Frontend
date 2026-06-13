@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DollarSign, ArrowUpRight, ArrowDownRight, Users } from "lucide-react";
+import { DollarSign, ArrowUpRight, ArrowDownRight, Users, Download } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -74,8 +74,9 @@ export default function RevenuePage() {
           <div className="col-span-2">Transaction ID</div>
           <div className="col-span-4">Customer</div>
           <div className="col-span-2">Plan</div>
-          <div className="col-span-3">Date</div>
-          <div className="col-span-1 text-right">Amount</div>
+          <div className="col-span-2">Date</div>
+          <div className="col-span-1">Amount</div>
+          <div className="col-span-1 text-right">Download</div>
         </div>
 
         {/* Floating Rows */}
@@ -87,8 +88,13 @@ export default function RevenuePage() {
                 <div className="col-span-2 text-sm text-neutral-600 dark:text-neutral-300">
                   {txn.plan}
                 </div>
-                <div className="col-span-3 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
-                <div className="col-span-1 text-sm font-semibold text-neutral-900 dark:text-white text-right">{txn.amount}</div>
+                <div className="col-span-2 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
+                <div className="col-span-1 text-sm font-semibold text-neutral-900 dark:text-white">{txn.amount}</div>
+                <div className="col-span-1 flex justify-end">
+                  <button className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md">
+                    <Download className="w-4 h-4" />
+                  </button>
+                </div>
             </div>
           ))}
         </div>
