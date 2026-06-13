@@ -1013,11 +1013,6 @@ PLAID_ENV=sandbox
 - **Capabilities**: Translates cross-border right-to-be-forgotten sweeps deleting cached primary-keys whilst implementing mathematical Vault Transit tokenization.
 - **Auth**: Vault API / IAM Roles.
 
-### 155. HuggingfaceHubAgent (AI Ops / MLOps)
-- **Role**: Private LLM infrastructure deployment expert.
-- **Capabilities**: Calculates LoRA PEFT thresholds, writes vLLM PagedAttention continuous batching logic, and manipulates GGUF quantizations.
-- **Auth**: HuggingFace Read/Write tokens.
-
 ### 156. QiskitQuantumAgent (Quantum Computing)
 - **Role**: IBM Qiskit and Superconducting Qubit specialist.
 - **Capabilities**: Translates openQASM instructions targeting topological layouts via NISQ error-mitigation (ZNE) and stochastic measurement probabilities.

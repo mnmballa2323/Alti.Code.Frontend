@@ -85,7 +85,7 @@ The 116 open source agents are grouped logically by their domain:
 |-------|----------|-----------|
 | **TensorFlow** | `tensorflow`, `tf.keras`, `tf.data`, `tensorboard` | Deep learning models, training loops |
 | **PyTorch** | `pytorch`, `torch.nn`, `torchvision`, `torch dataloader` | Tensors, autograd, vision models |
-| **HuggingFace** | `huggingface transformers`, `peft`, `hf datasets` | LLM fine-tuning, inference APIs |
+
 | **LangChain** | `langchain`, `langchain rag`, `lcel`, `langgraph` | Agentic workflows, LCEL, Chains |
 | **LlamaIndex** | `llamaindex`, `llamaindex query engine` | RAG nodes, retrievers, parsers |
 | **OpenAI SDK** | `openai api`, `chat completions`, `gpt-4o` | Structured outputs, tool calling |

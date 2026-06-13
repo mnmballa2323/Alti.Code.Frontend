@@ -278,11 +278,7 @@ export const SAAS_MOCKS = [
     slug: "mcp_chromadb",
     icon: "solar:database-bold-duotone",
   },
-  {
-    name: "Hugging Face",
-    slug: "mcp_huggingface",
-    icon: "logos:huggingface",
-  },
+
   {
     name: "Ollama Local AI",
     slug: "mcp_ollama",
@@ -773,11 +769,7 @@ export const SAAS_MOCKS = [
     slug: "mcp_meilisearch",
     icon: "solar:magnifer-zoom-out-bold-duotone",
   },
-  {
-    name: "Hugging Face Inference API",
-    slug: "mcp_huggingface_inference",
-    icon: "logos:huggingface",
-  },
+
   {
     name: "Replicate Model Runner Engine",
     slug: "mcp_replicate_runner",

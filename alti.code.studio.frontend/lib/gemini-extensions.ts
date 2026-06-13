@@ -83,13 +83,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Observability",
     spotlight: true,
   },
-  {
-    name: "huggingface-skills",
-    description: "Access Hugging Face Skills.",
-    githubUrl: "https://github.com/huggingface/skills",
-    category: "AI/ML",
-    spotlight: true,
-  },
+
   {
     name: "mcp-server-kubernetes",
     description: "MCP Server for Kubernetes management.",
@@ -886,12 +880,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
 
   // ── AI/ML ─────────────────────────────────────────────────────────────
-  {
-    name: "huggingface",
-    description: "Access the Hugging Face Hub.",
-    githubUrl: "https://github.com/huggingface/hf-mcp-server",
-    category: "AI/ML",
-  },
+
   {
     name: "wandb-mcp-server",
     description: "Official W&B Models and Weave MCP server.",

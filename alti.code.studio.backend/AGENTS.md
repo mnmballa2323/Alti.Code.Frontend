@@ -558,7 +558,7 @@ const results = await capabilityRouter.fanOut('YARA rule for CobaltStrike', [], 
 |-------|------|----------------|
 | vLLM Expert | `vllm.agent.js` | PagedAttention, continuous batching, tensor-parallel |
 | Ollama Expert | `ollama.agent.js` | Local LLM, Modelfile creation, REST API management |
-| HuggingFace Expert | `hf_transformers.agent.js` | Transformers, tokenization, device mapping |
+
 | GGUF Expert | `gguf.agent.js` | llama.cpp quantization, formatting, loRA merge |
 
 ---
@@ -577,7 +577,7 @@ const results = await capabilityRouter.fanOut('YARA rule for CobaltStrike', [], 
 | Database & ORM | PostgreSQL, TypeORM, SQLAlchemy, Prisma, Drizzle, Supabase, Redis, MongoDB |
 | Observability/Infra | Nginx, Prometheus |
 | Languages | Rust, Go, Deno, Bun, Kotlin, Swift |
-| AI / Data / API | TensorFlow, PyTorch, HuggingFace, LangChain, LlamaIndex, Pandas, SciPy, OpenAI SDK, GraphQL, Socket.IO, Passport |
+| AI / Data / API | TensorFlow, PyTorch, LangChain, LlamaIndex, Pandas, SciPy, GraphQL, Socket.IO, Passport |
 | Testing & Tooling | Jest, Cypress, Playwright, Vitest, Tailwind, tRPC, Zod, shadcn, Turborepo, RxJS, Celery, Electron, Tauri |
 
 ---
