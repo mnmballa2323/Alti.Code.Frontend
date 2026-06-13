@@ -72,10 +72,10 @@ export default function RevenuePage() {
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider shadow-sm">
           <div className="col-span-2">Transaction ID</div>
-          <div className="col-span-4">Customer</div>
+          <div className="col-span-3">Customer</div>
           <div className="col-span-2">Plan</div>
           <div className="col-span-2">Date</div>
-          <div className="col-span-1">Amount</div>
+          <div className="col-span-2">Amount</div>
           <div className="col-span-1 text-right">Download</div>
         </div>
 
@@ -84,12 +84,12 @@ export default function RevenuePage() {
           {mockTransactions.map((txn) => (
             <div key={txn.id} className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-sm">
                 <div className="col-span-2 font-medium text-sm text-neutral-900 dark:text-white">{txn.id}</div>
-                <div className="col-span-4 text-sm text-neutral-600 dark:text-neutral-300">{txn.customer}</div>
+                <div className="col-span-3 text-sm text-neutral-600 dark:text-neutral-300">{txn.customer}</div>
                 <div className="col-span-2 text-sm text-neutral-600 dark:text-neutral-300">
                   {txn.plan}
                 </div>
                 <div className="col-span-2 text-sm text-neutral-500 dark:text-neutral-400">{txn.date}</div>
-                <div className="col-span-1 text-sm font-semibold text-neutral-900 dark:text-white">{txn.amount}</div>
+                <div className="col-span-2 text-sm font-semibold text-neutral-900 dark:text-white">{txn.amount}</div>
                 <div className="col-span-1 flex justify-end">
                   <button className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md">
                     <Download className="w-4 h-4" />
