@@ -186,49 +186,21 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                     {...props}
                   >
                     <div className="flex h-full items-center">
-                      <LazyMotion features={domAnimation}>
-                        <div className="relative">
-                          <m.div
-                            animate={status}
-                            className={cn(
-                              "border-medium text-large text-default-foreground relative flex h-[34px] w-[34px] items-center justify-center rounded-full font-semibold",
-                              {
-                                "shadow-lg": status === "complete",
-                              },
-                            )}
-                            data-status={status}
-                            initial={false}
-                            transition={{ duration: 0.25 }}
-                            variants={{
-                              inactive: {
-                                backgroundColor: "transparent",
-                                borderColor: "var(--inactive-border-color)",
-                                color: "var(--inactive-color)",
-                              },
-                              active: {
-                                backgroundColor: "transparent",
-                                borderColor: "var(--active-border-color)",
-                                color: "var(--active-color)",
-                              },
-                              complete: {
-                                backgroundColor:
-                                  "var(--complete-background-color)",
-                                borderColor: "var(--complete-border-color)",
-                              },
-                            }}
-                          >
-                            <div className="flex items-center justify-center">
-                              {status === "complete" ? (
-                                <span className="text-[#fff]">
-                                  {stepIdx + 1}
-                                </span>
-                              ) : (
-                                <span>{stepIdx + 1}</span>
-                              )}
-                            </div>
-                          </m.div>
+                      <div className="relative">
+                        <div
+                          className={cn(
+                            "border-2 text-medium relative flex h-[34px] w-[34px] items-center justify-center rounded-full font-semibold transition-all duration-300",
+                            {
+                              "bg-zinc-900 border-zinc-900 text-white shadow-md": status === "complete",
+                              "border-zinc-900 text-zinc-900 bg-transparent": status === "active",
+                              "border-zinc-200 text-zinc-400 bg-transparent": status === "inactive",
+                            }
+                          )}
+                          data-status={status}
+                        >
+                          <span>{stepIdx + 1}</span>
                         </div>
-                      </LazyMotion>
+                      </div>
                     </div>
                     <div className="flex-1 text-left">
                       <div>
@@ -259,18 +231,12 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                 {stepIdx < steps.length - 1 && !hideProgressBars && (
                   <div
                     aria-hidden="true"
-                    className={cn(
-                      "pointer-events-none absolute  left-3 flex h-full -translate-y-1/3 items-start px-4",
-                    )}
-                    style={{
-                      // @ts-ignore
-                      "--idx": stepIdx,
-                    }}
+                    className="pointer-events-none absolute left-[28px] top-[42px] bottom-[-16px] w-0.5"
                   >
                     <div
                       className={cn(
-                        "relative h-full w-0.5 bg-(--inactive-bar-color) transition-colors duration-300",
-                        "after:absolute after:block after:h-0 after:w-full after:bg-(--active-border-color) after:transition-[height] after:duration-300 after:content-['']",
+                        "relative h-full w-full bg-zinc-200 transition-colors duration-300",
+                        "after:absolute after:block after:h-0 after:w-full after:bg-zinc-900 after:transition-[height] after:duration-300 after:content-['']",
                         {
                           "after:h-full": stepIdx < currentStep,
                         },
