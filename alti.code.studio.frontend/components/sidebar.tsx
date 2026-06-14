@@ -2674,7 +2674,13 @@ export default function Sidebar() {
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
                 className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
-                onClick={() => (window.location.href = "/login")}
+                onClick={() => {
+                  if (typeof window !== "undefined" && "__TAURI__" in window) {
+                    useModalStore.getState().onOpen({ type: "login" });
+                  } else {
+                    window.location.href = "/login";
+                  }
+                }}
               >
                 Login
               </Button>

@@ -18,6 +18,7 @@ import {
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useModalStore } from "@/store/useModalStore";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -412,7 +413,15 @@ function Navbar() {
                   <Button
                     className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
                     size="sm"
-                    onClick={() => signOut({ callbackUrl: "/" })}
+                    onClick={() => {
+                      if (isDesktopApp) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("accessToken");
+                        window.location.href = "/";
+                      } else {
+                        signOut({ callbackUrl: "/" });
+                      }
+                    }}
                   >
                     Logout
                   </Button>
@@ -422,7 +431,13 @@ function Navbar() {
                   <Button
                     className={`rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 ${isDesktopApp ? "w-[160px]" : "px-6"}`}
                     size="sm"
-                    onClick={() => router.push("/login")}
+                    onClick={() => {
+                      if (isDesktopApp) {
+                        useModalStore.getState().onOpen({ type: "login" });
+                      } else {
+                        router.push("/login");
+                      }
+                    }}
                   >
                     Login
                   </Button>

@@ -149,12 +149,29 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+  const [tauriSession, setTauriSession] = React.useState<any>(undefined);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && "__TAURI__" in window) {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        setTauriSession({
+          user: {
+            accessToken: token,
+          },
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        });
+      } else {
+        setTauriSession(null);
+      }
+    }
+  }, []);
 
   return (
     <GoogleOAuthProvider
       clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "mock-client-id"}
     >
-      <SessionProvider>
+      <SessionProvider session={tauriSession} refetchOnWindowFocus={false} refetchInterval={0}>
         <ReduxProvider store={store}>
           <HeroUIProvider navigate={router.push}>
             <Toaster position="top-center" reverseOrder={false} />
