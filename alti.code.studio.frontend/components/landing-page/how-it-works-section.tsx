@@ -2,31 +2,11 @@
 
 function HowItWorksSection() {
   const steps = [
-    {
-      title: "1. Plan",
-      description:
-        "Ingest developer intent to map Spanner codebase dependency graphs easily",
-    },
-    {
-      title: "2. Design",
-      description:
-        "Extract UI components automatically from Figma templates and wireframe uploads",
-    },
-    {
-      title: "3. Develop",
-      description:
-        "Spin up agent swarms to write context aware code dynamically",
-    },
-    {
-      title: "4. Test",
-      description:
-        "Run quality audits and end to end validation in sandboxes",
-    },
-    {
-      title: "5. Deploy",
-      description:
-        "Route containerized workloads across all cloud providers with active failover",
-    },
+    { title: "1. Plan" },
+    { title: "2. Design" },
+    { title: "3. Develop" },
+    { title: "4. Test" },
+    { title: "5. Deploy" },
   ];
 
   return (
@@ -59,13 +39,10 @@ function HowItWorksSection() {
               <span className="text-lg">{idx + 1}</span>
             </div>
 
-            {/* Title & Description */}
-            <h3 className="font-secondary font-bold text-zinc-900 text-xl mb-3">
+            {/* Title */}
+            <h3 className="font-secondary font-bold text-zinc-900 text-xl mb-1">
               {step.title}
             </h3>
-            <p className="font-normal text-sm text-zinc-500 leading-relaxed">
-              {step.description}
-            </p>
           </div>
         ))}
       </div>

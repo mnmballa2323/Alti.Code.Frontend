@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 
-async function takeFinalShortScreenshot() {
+async function takeFinalMinimalScreenshot() {
   console.log('Starting screenshot script...');
   const browser = await puppeteer.launch({
     headless: true,
@@ -18,7 +18,7 @@ async function takeFinalShortScreenshot() {
     const sectionSelector = '#howItsWork';
     const sectionElement = await page.$(sectionSelector);
     
-    const screenshotPath = '/Users/michaelmeram/.gemini/antigravity/brain/b7dfb3d1-90b5-47e4-b54c-15dd80aef962/final_short_how_it_works.png';
+    const screenshotPath = '/Users/michaelmeram/.gemini/antigravity/brain/b7dfb3d1-90b5-47e4-b54c-15dd80aef962/final_minimal_how_it_works.png';
     
     if (sectionElement) {
       console.log('Capturing section screenshot...');
@@ -36,4 +36,4 @@ async function takeFinalShortScreenshot() {
   }
 }
 
-takeFinalShortScreenshot();
+takeFinalMinimalScreenshot();
