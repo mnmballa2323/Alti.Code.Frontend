@@ -1,0 +1,10 @@
+{
+  "name": "dynamic_agent_1781399472856",
+  "title": "Specialist PCI_DSS_SecuritySentinel_760 Agent",
+  "description": "Bespoke dynamic specialist agent forged on the fly to handle missing capability: PCI_DSS_SecuritySentinel_760",
+  "preamble": "You are a dynamic specialist agent specializing in PCI_DSS_SecuritySentinel_760.",
+  "keywords": [
+    "pci_dss_securitysentinel_760",
+    "dynamic_agent_1781399472856"
+  ]
+}
