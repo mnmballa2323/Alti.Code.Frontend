@@ -89,7 +89,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
     {
       color = "primary",
       steps = [],
-      defaultStep = 4,
+      defaultStep = 0,
       onStepChange,
       currentStep: currentStepProp,
       hideProgressBars = false,
@@ -182,7 +182,7 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                       "group rounded-large flex w-full cursor-pointer items-start justify-center gap-4 px-3 py-2.5",
                       stepClassName,
                     )}
-                    // onClick={() => setCurrentStep(stepIdx)}
+                    onClick={() => setCurrentStep(stepIdx)}
                     {...props}
                   >
                     <div className="flex h-full items-center">
@@ -216,9 +216,10 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                         </div>
                         <div
                           className={cn(
-                            "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 duration-300 group-active:opacity-70",
+                            "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 transition-all duration-300 overflow-hidden",
                             {
-                              "text-zinc-400": status === "inactive",
+                              "max-h-0 opacity-0 mt-0 pointer-events-none": status !== "active",
+                              "max-h-40 opacity-100 mt-1.5": status === "active",
                             },
                           )}
                         >
