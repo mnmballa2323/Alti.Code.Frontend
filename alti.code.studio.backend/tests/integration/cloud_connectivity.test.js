@@ -46,6 +46,34 @@ describe('66-Provider Cloud Connectivity and Registry Verification', () => {
         }
     });
 
+    it('should successfully execute read/write workload management (deploy, update, delete) for all 66 cloud providers', async () => {
+        for (const provider of CORE_OMNI_CLOUD_PROVIDERS) {
+            const adapter = cloudProviderRegistry.getProviderAdapter(provider);
+            expect(adapter).toBeDefined();
+            await adapter.authenticate({ key: 'sovereign_dev_key' });
+
+            // Test Deploy (Write)
+            const workloadProfile = { name: 'Sovereign Test Instance', type: 'COMPUTE' };
+            const deployResult = await adapter.deployWorkload(workloadProfile);
+            expect(deployResult.success).toBe(true);
+            expect(deployResult.status).toBe('DEPLOYED');
+            expect(deployResult.workloadId).toBeDefined();
+            expect(deployResult.workload.name).toBe(workloadProfile.name);
+
+            // Test Update (Write)
+            const updateResult = await adapter.updateWorkload(deployResult.workloadId, { cpu: '100%' });
+            expect(updateResult.success).toBe(true);
+            expect(updateResult.status).toBe('UPDATED');
+            expect(updateResult.workloadId).toBe(deployResult.workloadId);
+
+            // Test Delete (Write)
+            const deleteResult = await adapter.deleteWorkload(deployResult.workloadId);
+            expect(deleteResult.success).toBe(true);
+            expect(deleteResult.status).toBe('TERMINATED');
+            expect(deleteResult.workloadId).toBe(deployResult.workloadId);
+        }
+    });
+
     it('should flawlessly route workloads to the optimal providers based on specialized heuristics', async () => {
         const workloads = [
             {

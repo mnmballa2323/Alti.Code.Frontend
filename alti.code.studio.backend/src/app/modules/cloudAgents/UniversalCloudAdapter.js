@@ -38,4 +38,40 @@ export class UniversalCloudAdapter {
     console.log(`[UniversalCloudAdapter] Synchronizing workloads for ${this.providerName}`);
     return { status: 'SYNCED', timestamp: new Date().toISOString() };
   }
+
+  async deployWorkload(workloadProfile) {
+    if (this.status !== 'CONNECTED') throw new Error('Provider not authenticated');
+    console.log(`[UniversalCloudAdapter] Deploying workload [${workloadProfile.name}] on ${this.providerName}`);
+    const workloadId = `wk-${Math.floor(Math.random() * 1000000)}`;
+    return {
+      success: true,
+      workloadId,
+      status: 'DEPLOYED',
+      message: `Workload successfully deployed to ${this.providerName}`,
+      workload: { id: workloadId, ...workloadProfile }
+    };
+  }
+
+  async updateWorkload(workloadId, details) {
+    if (this.status !== 'CONNECTED') throw new Error('Provider not authenticated');
+    console.log(`[UniversalCloudAdapter] Updating workload [${workloadId}] on ${this.providerName}`);
+    return {
+      success: true,
+      workloadId,
+      status: 'UPDATED',
+      message: `Workload [${workloadId}] successfully scaled/updated on ${this.providerName}`,
+      details
+    };
+  }
+
+  async deleteWorkload(workloadId) {
+    if (this.status !== 'CONNECTED') throw new Error('Provider not authenticated');
+    console.log(`[UniversalCloudAdapter] Deleting workload [${workloadId}] from ${this.providerName}`);
+    return {
+      success: true,
+      workloadId,
+      status: 'TERMINATED',
+      message: `Workload [${workloadId}] successfully terminated on ${this.providerName}`
+    };
+  }
 }

@@ -125,8 +125,13 @@ class MCPGateway {
                 tools = [
                     {
                         name: `fetch_${serverName}_data`,
-                        description: `Default fallback tool to query ${serverName}`,
+                        description: `Default fallback read tool to query ${serverName}`,
                         inputSchema: { type: 'object', properties: {} }
+                    },
+                    {
+                        name: `write_${serverName}_data`,
+                        description: `Default fallback write tool to mutate or post data to ${serverName}`,
+                        inputSchema: { type: 'object', properties: { payload: { type: 'object' } } }
                     }
                 ];
                 resources = [];
