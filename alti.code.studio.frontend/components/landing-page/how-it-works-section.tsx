@@ -5,27 +5,27 @@ function HowItWorksSection() {
     {
       title: "1. Plan",
       description:
-        "Ingest developer intent with DLP privacy redacting to map Spanner AST codebase dependency graphs and plan your custom system architecture.",
+        "Ingest developer intent to map Spanner codebase dependency graphs easily",
     },
     {
       title: "2. Design",
       description:
-        "Perform multimodal analysis on Figma design templates and wireframe uploads automatically extracting visual components to code them in parallel streams.",
+        "Extract UI components automatically from Figma templates and wireframe uploads",
     },
     {
       title: "3. Develop",
       description:
-        "Spin up specialized agent swarms and dynamically register custom nano agents to write clean context aware code in parallel environments.",
+        "Spin up agent swarms to write context aware code dynamically",
     },
     {
       title: "4. Test",
       description:
-        "Run autonomous quality audits security checks for credential leaks and end to end Playwright validation in air gapped testing sandboxes.",
+        "Run quality audits and end to end validation in sandboxes",
     },
     {
       title: "5. Deploy",
       description:
-        "Intelligently route containerized workloads to the optimal host across all cloud providers with high availability active failover routing support layers.",
+        "Route containerized workloads across all cloud providers with active failover",
     },
   ];
 
