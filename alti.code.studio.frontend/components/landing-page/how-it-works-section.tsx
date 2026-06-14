@@ -1,31 +1,6 @@
 "use client";
-import { useEffect, useRef } from "react";
 
 function HowItWorksSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (video) {
-      const handleLoadedData = () => {
-        video.playbackRate = 0.5;
-      };
-
-      // If video is already loaded
-      if (video.readyState >= 3) {
-        handleLoadedData();
-      } else {
-        // Wait for video to load
-        video.addEventListener("loadeddata", handleLoadedData);
-      }
-
-      return () => {
-        video.removeEventListener("loadeddata", handleLoadedData);
-      };
-    }
-  }, []);
-
   const steps = [
     {
       title: "1. Plan",
@@ -60,17 +35,17 @@ function HowItWorksSection() {
       id="howItsWork"
     >
       {/* Header Section */}
-      <div className="flex flex-col items-center justify-center gap-3 md:gap-5 text-center max-w-4xl mb-16">
-        <h2 className="font-secondary font-bold text-zinc-900 text-3xl md:text-4xl lg:text-5xl">
+      <div className="flex flex-col gap-6 max-w-5xl w-full px-4 text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight text-zinc-900">
           How It Works
         </h2>
-        <p className="font-normal text-sm text-zinc-500 md:text-base text-center max-w-2xl">
+        <p className="text-xl text-gray-500 leading-relaxed font-medium max-w-2xl mx-auto">
           Go from concept to live deployment in five sovereign steps.
         </p>
       </div>
 
       {/* Horizontal Steps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 w-full max-w-7xl relative mb-20">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 w-full max-w-7xl relative">
         {/* Connecting Horizontal Line (Desktop only) */}
         <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-0.5 bg-zinc-100 z-0" />
 
@@ -93,32 +68,6 @@ function HowItWorksSection() {
             </p>
           </div>
         ))}
-      </div>
-
-      {/* Video Browser Mockup Frame */}
-      <div className="w-full max-w-4xl px-4">
-        <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-zinc-200 bg-zinc-950 aspect-video">
-          {/* Browser Window Chrome header */}
-          <div className="h-10 bg-zinc-100 border-b border-zinc-200 flex items-center px-4 gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-400" />
-            <div className="h-3 w-3 rounded-full bg-yellow-400" />
-            <div className="h-3 w-3 rounded-full bg-green-400" />
-            <div className="ml-4 h-6 w-80 rounded bg-white border border-zinc-200 flex items-center px-3 text-[10px] text-zinc-400 select-none">
-              localhost:3000
-            </div>
-          </div>
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-[calc(100%-40px)] object-cover"
-          >
-            <source src="/how.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
       </div>
     </section>
   );
