@@ -1,1 +1,6 @@
 alti.code.studio.backend/
+node_modules/
+.next/
+out/
+public/downloads/
+
