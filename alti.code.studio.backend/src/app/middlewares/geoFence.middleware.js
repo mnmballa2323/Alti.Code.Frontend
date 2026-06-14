@@ -8,9 +8,9 @@
 
 import geoip from 'geoip-lite'; // Assume we have a geoip library for location lookup
 import httpStatus from 'http-status';
-import ApiError from '../../../errors/ApiError.js';
-import { logger } from '../../../shared/logger.js';
-import { prisma } from '../../../config/prisma.js';
+import ApiError from '../../errors/ApiError.js';
+import { logger } from '../../shared/logger.js';
+import { prisma } from '../../config/prisma.js';
 
 export const geoFenceMiddleware = async (req, res, next) => {
     try {

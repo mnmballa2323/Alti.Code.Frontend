@@ -7,9 +7,9 @@
  */
 
 import httpStatus from 'http-status';
-import ApiError from '../../../errors/ApiError.js';
-import { logger } from '../../../shared/logger.js';
-import { prisma } from '../../../config/prisma.js';
+import ApiError from '../../errors/ApiError.js';
+import { logger } from '../../shared/logger.js';
+import { prisma } from '../../config/prisma.js';
 import ip from 'ip';
 import { siemService } from '../modules/security/siem.service.js';
 
