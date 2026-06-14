@@ -3,7 +3,7 @@
 import { Checkbox, Input } from "@heroui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -21,6 +21,13 @@ export default function LoginPage() {
   const [mfaToken, setMfaToken] = useState("");
   const [mfaCode, setMfaCode] = useState("");
   const [isLoadingMfa, setIsLoadingMfa] = useState(false);
+  const [isDesktopApp, setIsDesktopApp] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && "__TAURI__" in window) {
+      setIsDesktopApp(true);
+    }
+  }, []);
 
   const { executeRecaptcha } = useGoogleReCaptcha();
 
@@ -76,6 +83,14 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
+        if (typeof window !== "undefined" && "__TAURI__" in window) {
+          localStorage.setItem("token", response.data.accessToken);
+          localStorage.setItem("accessToken", response.data.accessToken);
+          toast.success("Login successful!");
+          window.location.href = "/";
+          return;
+        }
+
         const res = await signIn("credentials", {
           redirect: false,
           accessToken: response.data.accessToken,
@@ -135,6 +150,14 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
+        if (typeof window !== "undefined" && "__TAURI__" in window) {
+          localStorage.setItem("token", response.data.accessToken);
+          localStorage.setItem("accessToken", response.data.accessToken);
+          toast.success("Verification successful! Logging in...");
+          window.location.href = "/";
+          return;
+        }
+
         const res = await signIn("credentials", {
           redirect: false,
           accessToken: response.data.accessToken,
@@ -357,15 +380,17 @@ export default function LoginPage() {
           </div>
         </form>
 
-        <p className="text-center text-sm text-gray-500 font-medium mt-4">
-          Don&apos;t have an account?{" "}
-          <Link
-            className="font-semibold text-black hover:underline transition-all"
-            href="/register"
-          >
-            Register
-          </Link>
-        </p>
+        {!isDesktopApp && (
+          <p className="text-center text-sm text-gray-500 font-medium mt-4">
+            Don&apos;t have an account?{" "}
+            <Link
+              className="font-semibold text-black hover:underline transition-all"
+              href="/register"
+            >
+              Register
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

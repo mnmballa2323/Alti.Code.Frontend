@@ -27,7 +27,12 @@ export default function LandingPage() {
   useEffect(() => {
     if (typeof window !== "undefined" && "__TAURI__" in window) {
       setIsDesktopApp(true);
-      router.replace("/new-chat");
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        router.replace("/new-chat");
+      } else {
+        router.replace("/login");
+      }
     }
   }, [router]);
 

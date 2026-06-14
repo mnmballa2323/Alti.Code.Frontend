@@ -4,7 +4,7 @@ import type { ThemeProviderProps } from "next-themes";
 
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import * as React from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider as ReduxProvider, useDispatch } from "react-redux";
@@ -149,6 +149,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
 
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [tauriSession, setTauriSession] = React.useState<any>(undefined);
 
   React.useEffect(() => {
@@ -163,9 +164,12 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         });
       } else {
         setTauriSession(null);
+        if (pathname !== "/login") {
+          router.replace("/login");
+        }
       }
     }
-  }, []);
+  }, [pathname, router]);
 
   return (
     <GoogleOAuthProvider

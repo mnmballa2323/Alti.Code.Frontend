@@ -401,7 +401,7 @@ export default function AuthLayout({
         />
 
         {/* Interactive Terminal Window */}
-        <div className="z-20 w-full flex items-center justify-center mt-4 mb-12">
+        <div className="z-20 w-full flex items-center justify-center mt-24 mb-12">
           <CodeTerminal />
         </div>
 
@@ -425,7 +425,7 @@ export default function AuthLayout({
             <img
               alt="Inso Logo Icon"
               className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
-              src="/inso-logo-black.png"
+              src="/logo-black.png"
             />
           </Link>
         </div>
