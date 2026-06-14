@@ -1,12 +1,49 @@
 "use client";
+import { cn } from "@heroui/react";
+import { Compass, Layers, Code2, ShieldCheck, Zap } from "lucide-react";
 
 function HowItWorksSection() {
   const steps = [
-    { title: "1. Plan" },
-    { title: "2. Design" },
-    { title: "3. Develop" },
-    { title: "4. Test" },
-    { title: "5. Deploy" },
+    {
+      step: "01",
+      title: "Plan",
+      icon: <Compass className="w-6 h-6 text-blue-600" />,
+      bg: "bg-blue-50/50",
+      border: "hover:border-blue-200",
+      glow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]",
+    },
+    {
+      step: "02",
+      title: "Design",
+      icon: <Layers className="w-6 h-6 text-purple-600" />,
+      bg: "bg-purple-50/50",
+      border: "hover:border-purple-200",
+      glow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.1)]",
+    },
+    {
+      step: "03",
+      title: "Develop",
+      icon: <Code2 className="w-6 h-6 text-indigo-600" />,
+      bg: "bg-indigo-50/50",
+      border: "hover:border-indigo-200",
+      glow: "hover:shadow-[0_0_30px_rgba(99,102,241,0.1)]",
+    },
+    {
+      step: "04",
+      title: "Test",
+      icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
+      bg: "bg-emerald-50/50",
+      border: "hover:border-emerald-200",
+      glow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.1)]",
+    },
+    {
+      step: "05",
+      title: "Deploy",
+      icon: <Zap className="w-6 h-6 text-amber-500" />,
+      bg: "bg-amber-50/50",
+      border: "hover:border-amber-200",
+      glow: "hover:shadow-[0_0_30px_rgba(245,158,11,0.1)]",
+    },
   ];
 
   return (
@@ -25,22 +62,31 @@ function HowItWorksSection() {
       </div>
 
       {/* Horizontal Steps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8 w-full max-w-7xl relative">
-        {/* Connecting Horizontal Line (Desktop only) */}
-        <div className="hidden md:block absolute top-[28px] left-[10%] right-[10%] h-0.5 bg-zinc-100 z-0" />
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 w-full max-w-7xl px-4">
         {steps.map((step, idx) => (
           <div
             key={idx}
-            className="flex flex-col items-center md:items-start text-center md:text-left group relative z-10 p-5 rounded-2xl border border-transparent hover:border-zinc-100 hover:bg-zinc-50/50 transition-all duration-300"
+            className={cn(
+              "flex flex-col items-center justify-center p-8 rounded-3xl bg-zinc-100/60 border border-zinc-200/60 text-center relative group transition-all duration-300 hover:bg-white hover:-translate-y-1 hover:shadow-lg",
+              step.border,
+              step.glow
+            )}
           >
-            {/* Step Number Circle */}
-            <div className="flex items-center justify-center h-[56px] w-[56px] rounded-full border-2 border-zinc-200 bg-white font-semibold text-zinc-900 group-hover:border-zinc-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-300 mb-6 shadow-sm">
-              <span className="text-lg">{idx + 1}</span>
+            {/* Step Capsule Badge */}
+            <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase mb-4">
+              Step {step.step}
+            </span>
+
+            {/* Icon Circle */}
+            <div className={cn(
+              "flex items-center justify-center h-12 w-12 rounded-2xl mb-5 shadow-sm transition-transform duration-300 group-hover:scale-110",
+              step.bg
+            )}>
+              {step.icon}
             </div>
 
             {/* Title */}
-            <h3 className="font-secondary font-bold text-zinc-900 text-xl mb-1">
+            <h3 className="font-sans font-bold text-zinc-900 text-lg tracking-tight">
               {step.title}
             </h3>
           </div>
