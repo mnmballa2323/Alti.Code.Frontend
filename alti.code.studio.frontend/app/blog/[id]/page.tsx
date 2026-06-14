@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -292,3 +291,7 @@ const BlogDetailPage = async (props: PageProps) => {
 };
 
 export default BlogDetailPage;
+
+export async function generateStaticParams() {
+  return [{ id: "1" }];
+}
