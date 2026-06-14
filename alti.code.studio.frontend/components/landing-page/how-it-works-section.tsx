@@ -47,17 +47,17 @@ function HowItWorksSection() {
   ];
 
   return (
-    <div
-      className="wrapper overflow-hidden py-10 md:py-20 flex flex-col items-center justify-center px-4"
+    <section
+      className="w-full bg-white text-black py-32 border-b border-zinc-100 overflow-hidden flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8"
       id="howItsWork"
     >
       {/* Header Section */}
       <div className="flex flex-col items-center justify-center gap-3 md:gap-5 text-center max-w-4xl">
-        <h2 className="font-secondary font-bold text-[#fff] text-3xl md:text-4xl lg:text-5xl">
+        <h2 className="font-secondary font-bold text-zinc-900 text-3xl md:text-4xl lg:text-5xl">
           How It Works
         </h2>
-        <p className="font-normal text-sm text-[#fff] opacity-60 md:text-base text-center max-w-2xl">
-          Go from idea to production in four simple steps.
+        <p className="font-normal text-sm text-zinc-500 md:text-base text-center max-w-2xl">
+          Go from concept to live deployment in five sovereign steps.
         </p>
       </div>
 
@@ -68,24 +68,29 @@ function HowItWorksSection() {
           <VerticalSteps
             steps={[
               {
-                title: "Connect",
+                title: "1. Plan & Architect",
                 description:
-                  "Link your codebase, documents, and tools in one secure and connected workspace.",
+                  "Ingest developer intent with DLP privacy redacting, map Spanner AST codebase dependency graphs, and plan system architecture.",
               },
               {
-                title: "Retrieve",
+                title: "2. Design",
                 description:
-                  "The AI instantly finds the most relevant code, documents, or data that you need.",
+                  "Perform multi-modal analysis on Figma templates or wireframe uploads, automatically extracting visual components to code them in parallel.",
               },
               {
-                title: "Generate",
+                title: "3. Develop",
                 description:
-                  "Create, refactor, or document code with context from your own internal sources.",
+                  "Spin up specialized agent swarms and dynamically register custom Nano-Agents for context-aware code generation.",
               },
               {
-                title: "Execute",
+                title: "4. Test",
                 description:
-                  "Test in the sandbox, then push commits, open PRs, or deploy directly to production.",
+                  "Run autonomous QA audits, security checks for credential leaks, and E2E Playwright validation in air-gapped sandboxes.",
+              },
+              {
+                title: "5. Deploy",
+                description:
+                  "Intelligently route containerized workloads to the optimal host across 66 cloud providers with high-availability failover.",
               },
             ]}
           />
@@ -109,9 +114,8 @@ function HowItWorksSection() {
           {/* Optional overlay for better text visibility if you want to add content here */}
           {/* <div className="absolute inset-0 bg-black/20"></div> */}
         </div>
-        <div />
       </div>
-    </div>
+    </section>
   );
 }
 

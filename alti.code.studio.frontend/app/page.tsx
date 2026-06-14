@@ -18,6 +18,7 @@ import AgentForgeSection from "@/components/landing-page/agent-forge-section";
 import ZeroTrustLedgerSection from "@/components/landing-page/zero-trust-ledger-section";
 import CapabilitiesBentoGrid from "@/components/landing-page/capabilities-bento-grid";
 import PricingSection from "@/components/landing-page/pricing-section";
+import HowItWorksSection from "@/components/landing-page/how-it-works-section";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -39,6 +40,9 @@ export default function LandingPage() {
       <main className="flex-1 flex flex-col w-full">
         <div id="section-0">
           <HeroSwarm />
+        </div>
+        <div id="section-how-it-works">
+          <HowItWorksSection />
         </div>
         <div id="section-1">
           <PairedProgrammerSection />

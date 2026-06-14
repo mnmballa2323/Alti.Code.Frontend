@@ -234,9 +234,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                       <div>
                         <div
                           className={cn(
-                            "text-medium text-[#fff] font-medium transition-[color,opacity] duration-300 group-active:opacity-70",
+                            "text-medium text-zinc-900 font-semibold transition-[color,opacity] duration-300 group-active:opacity-70",
                             {
-                              "text-default-500": status === "inactive",
+                              "text-zinc-400 font-medium": status === "inactive",
                             },
                           )}
                         >
@@ -244,9 +244,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                         </div>
                         <div
                           className={cn(
-                            "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-[#fff] opacity-60 duration-300 group-active:opacity-70",
+                            "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 duration-300 group-active:opacity-70",
                             {
-                              "text-default-500": status === "inactive",
+                              "text-zinc-400": status === "inactive",
                             },
                           )}
                         >
