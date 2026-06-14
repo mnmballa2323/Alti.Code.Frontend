@@ -95,5 +95,18 @@ describe('MCPGateway & Dynamic Specialist Agent Integration Tests', () => {
         const registered = agentRegistry.get('postgres_agent');
         expect(registered).toBeDefined();
         expect(registered.name).toBe('postgres_agent');
+
+        // Assert that both default fallback read & write capabilities are present
+        expect(registered.instance).toBeDefined();
+        expect(registered.instance.tools).toBeDefined();
+        expect(registered.instance.tools.length).toBe(2);
+
+        const readTool = registered.instance.tools.find(t => t.name === 'fetch_postgres_data');
+        const writeTool = registered.instance.tools.find(t => t.name === 'write_postgres_data');
+
+        expect(readTool).toBeDefined();
+        expect(readTool.description).toContain('read tool');
+        expect(writeTool).toBeDefined();
+        expect(writeTool.description).toContain('write tool');
     });
 });
