@@ -263,7 +263,7 @@ export default function LoginPage() {
           Welcome back
         </h1>
         <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Sign in to continue to Inso Code
+          Sign in to continue to inso code
         </p>
       </div>
 
