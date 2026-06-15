@@ -177,10 +177,14 @@ async function main() {
     }).catch(err => logger.error('❌ Failed to start Autonomous Repair Daemon', err));
 
     // Ultimate Agentic Sentinel: Boot the local File System Watcher
-    import('./src/app/modules/agents/file_sentinel.service.js').then(({ fileSentinelService }) => {
-       const workspaceTarget = process.env.WORKSPACE_ROOT || process.cwd();
-       fileSentinelService.startWatching(workspaceTarget);
-    }).catch(err => logger.error('❌ Failed to start File Sentinel Service', err));
+    if (process.env.ENABLE_SENTINEL === 'true') {
+        import('./src/app/modules/agents/file_sentinel.service.js').then(({ fileSentinelService }) => {
+           const workspaceTarget = process.env.WORKSPACE_ROOT || process.cwd();
+           fileSentinelService.startWatching(workspaceTarget);
+        }).catch(err => logger.error('❌ Failed to start File Sentinel Service', err));
+    } else {
+        logger.info('👁️ [Sentinel] File Sentinel Service disabled (set ENABLE_SENTINEL=true to enable).');
+    }
 
     // 🧠 AgentMemory: #1 Persistent Memory for AI Coding Agents
     // https://github.com/rohitg00/agentmemory | https://www.agent-memory.dev/

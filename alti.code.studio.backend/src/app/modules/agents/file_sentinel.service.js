@@ -54,7 +54,9 @@ class FileSentinelService {
             '.codegraph',
             '.skills',
             '.shadow',
-            'logs'
+            'logs',
+            'custom',
+            'definitions'
         ];
 
         this.watcher = chokidar.watch(watchTargets, {

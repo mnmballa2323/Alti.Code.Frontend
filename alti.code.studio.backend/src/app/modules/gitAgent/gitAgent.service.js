@@ -189,7 +189,11 @@ const startWatcher = async (dir = process.cwd()) => {
     const watchPath = path.join(resolvedDir, 'src');
 
     watcher = chokidar.watch(watchPath, {
-        ignored: /(^|[\/\\])\../,
+        ignored: (filePath) => {
+            if (/(^|[\/\\])\../.test(filePath)) return true;
+            const parts = filePath.split(path.sep);
+            return parts.includes('custom') || parts.includes('definitions');
+        },
         persistent: true,
         ignoreInitial: true,
     });

@@ -41,24 +41,29 @@ class DynamicAgentLoaderService {
 
     async loadAll() {
         try {
-            // Find all .json agent configs recursively using find command
-            const { execSync } = require('child_process');
             let jsonFiles = [];
             try {
-                const output = execSync(`find ${this.customDir} -name "*.json"`, { encoding: 'utf8' });
-                jsonFiles = output.split('\\n').filter(Boolean);
+                jsonFiles = fs.readdirSync(this.customDir)
+                    .filter(file => file.endsWith('.json'))
+                    .map(f => path.join(this.customDir, f));
             } catch (err) {
-                logger.warn(`Fallback to readdirSync: ${err.message}`);
-                jsonFiles = fs.readdirSync(this.customDir).filter(file => file.endsWith('.json')).map(f => path.join(this.customDir, f));
+                logger.warn(`Failed to read custom agents directory: ${err.message}`);
+                return;
             }
             
-            logger.info(`[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Beginning lightweight indexing...`);
+            // Sort files alphabetically in descending order to load newest first
+            jsonFiles.sort((a, b) => b.localeCompare(a));
+            
+            // Limit to at most 200 agents to avoid blocking the event loop on startup
+            const filesToLoad = jsonFiles.slice(0, 200);
+            
+            logger.info(`[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Indexing newest ${filesToLoad.length} agents to prevent startup delay...`);
             
             // Build the registry purely in memory (names -> paths)
             this.agentRegistry = new Map();
             
-            for (let i = 0; i < jsonFiles.length; i++) {
-                const filePath = jsonFiles[i];
+            for (let i = 0; i < filesToLoad.length; i++) {
+                const filePath = filesToLoad[i];
                 const filename = path.basename(filePath);
                 try {
                     // Extract agent name statically without running any logic
@@ -77,10 +82,6 @@ class DynamicAgentLoaderService {
                     }
                 } catch (e) {
                     logger.warn(`Failed to index ${filename}: ${e.message}`);
-                }
-                
-                if (i % 5000 === 0 && i > 0) {
-                    logger.info(`🚀 [Dynamic Loader] Indexed ${i} out of ${jsonFiles.length} agents...`);
                 }
             }
             logger.info(`✅ [Dynamic Loader] Indexing Complete: Successfully mapped ${this.loadedAgents.size} agents to disk paths. Memory preserved.`);
