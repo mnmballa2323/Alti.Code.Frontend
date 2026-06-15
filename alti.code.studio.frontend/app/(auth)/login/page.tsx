@@ -262,7 +262,7 @@ export default function LoginPage() {
         {isDesktopApp && (
           <img
             alt="Inso Logo Icon"
-            className="h-10 w-auto opacity-90 mb-6"
+            className="h-10 w-auto opacity-90 mb-8"
             src="/logo-black.png"
           />
         )}

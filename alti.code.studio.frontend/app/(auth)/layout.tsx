@@ -455,7 +455,7 @@ export default function AuthLayout({
           </div>
         )}
 
-        <div className="w-full max-w-sm mt-20 lg:mt-12">{children}</div>
+        <div className={`w-full max-w-sm ${isTauri ? "mt-0" : "mt-20 lg:mt-12"}`}>{children}</div>
       </div>
     </div>
   );
