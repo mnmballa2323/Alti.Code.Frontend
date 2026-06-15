@@ -1,9 +1,8 @@
 "use client";
 
 import type { ThemeProviderProps } from "next-themes";
-
 import { HeroUIProvider } from "@heroui/system";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { useRouter, usePathname } from "next/navigation";
 import * as React from "react";
 import { Toaster } from "react-hot-toast";
@@ -148,6 +147,22 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function ThemeSynchronizer() {
+  const { theme } = useTheme();
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const root = document.documentElement;
+    if (theme === "midnight-navy") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
+    }
+  }, [theme]);
+
+  return null;
+}
+
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -198,7 +213,10 @@ export function Providers({ children, themeProps }: ProvidersProps) {
             <Toaster position="top-center" reverseOrder={false} />
             <NextThemesProvider {...themeProps}>
               <TRPCProvider>
-                <UserFetcher>{children}</UserFetcher>
+                <UserFetcher>
+                  <ThemeSynchronizer />
+                  {children}
+                </UserFetcher>
               </TRPCProvider>
             </NextThemesProvider>
           </HeroUIProvider>

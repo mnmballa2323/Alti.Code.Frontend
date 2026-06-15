@@ -1364,11 +1364,11 @@ export default function Sidebar() {
   };
 
   const content = (
-    <div className="flex h-full z-20 bg-white dark:bg-[#0A0A0A]">
+    <div className="flex h-full z-20 bg-white dark:bg-sidebar">
       {/* Primary Column (Left Side Menu) */}
       <div
         className={cn(
-          "flex h-full flex-col transition-all duration-300 bg-white dark:bg-black border-r border-default-200",
+          "flex h-full flex-col transition-all duration-300 bg-white dark:bg-sidebar border-r border-default-200",
           isSidebarOpen ? "w-64" : "w-10",
         )}
       >
@@ -2697,7 +2697,7 @@ export default function Sidebar() {
 
   if (!mounted) {
     return (
-      <div className="flex h-full border-r border-default-200 bg-white dark:bg-[#0A0A0A] w-[56px] transition-all" />
+      <div className="flex h-full border-r border-default-200 bg-white dark:bg-sidebar w-[56px] transition-all" />
     );
   }
 

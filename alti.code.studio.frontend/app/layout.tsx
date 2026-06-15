@@ -56,7 +56,7 @@ export default function RootLayout({
                 themeProps={{
                   attribute: "class",
                   defaultTheme: "light",
-                  themes: ["light", "dark", "midnight-navy", "purple-haze"],
+                  themes: ["light", "dark", "midnight-navy"],
                 }}
               >
                 {children}
