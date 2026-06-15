@@ -263,8 +263,8 @@ export default function LoginPage() {
           {isDesktopApp ? "Build the future." : "Welcome back"}
         </h1>
         {isDesktopApp && (
-          <p className="text-gray-500 text-sm mt-2 font-medium max-w-sm">
-            Login to the inso code platform and 10x your software development with swarms of agents.
+          <p className="text-gray-500 text-sm mt-2 font-medium whitespace-nowrap">
+            Login to the inso code platform and 10x your software development.
           </p>
         )}
       </div>
