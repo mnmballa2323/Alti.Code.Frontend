@@ -391,7 +391,7 @@ function Navbar() {
 
             {/* ✅ Auth Section Added */}
             <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center lg:translate-x-4">
-              {session?.user && status === "authenticated" ? (
+              {mounted && session?.user && status === "authenticated" ? (
                 <>
                   <Button
                     className="rounded-full border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-6"

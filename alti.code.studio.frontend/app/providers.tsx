@@ -176,6 +176,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           },
           expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         });
+        if (pathname === "/login" || pathname === "/") {
+          router.replace("/new-chat");
+        }
       } else {
         setTauriSession(null);
         if (pathname !== "/login") {

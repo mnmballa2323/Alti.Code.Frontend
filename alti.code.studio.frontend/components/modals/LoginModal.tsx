@@ -82,7 +82,7 @@ export function LoginModal() {
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Login successful!");
           onClose();
-          window.location.href = "/";
+          window.location.href = "/new-chat";
           return;
         }
 
@@ -147,7 +147,7 @@ export function LoginModal() {
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Verification successful! Logging in...");
           onClose();
-          window.location.href = "/";
+          window.location.href = "/new-chat";
           return;
         }
 
