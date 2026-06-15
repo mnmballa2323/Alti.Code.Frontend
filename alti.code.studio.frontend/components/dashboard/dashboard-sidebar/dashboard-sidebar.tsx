@@ -30,30 +30,40 @@ function LogoutModal({
 }) {
   return (
     <Modal
+      hideCloseButton
+      backdrop="opaque"
+      classNames={{
+        backdrop: "bg-black/20 backdrop-blur-sm",
+        base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[340px] p-0",
+      }}
       isOpen={isOpen}
       placement="center"
-      size="sm"
       onOpenChange={onOpenChange}
     >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              <span className="dark:text-white text-black text-lg font-semibold">
+            <div className="flex flex-col items-center pt-8 pb-6 px-6 gap-2 text-center">
+              <h2 className="text-lg font-bold text-black dark:text-white">
                 Logout
-              </span>
-            </ModalHeader>
-            <ModalBody>
-              <span className="dark:text-white text-black">
+              </h2>
+              <p className="text-sm text-default-500 dark:text-default-400">
                 Are you sure you want to logout?
-              </span>
-            </ModalBody>
-            <ModalFooter>
-              <Button className="bg-gray-200 text-black" onPress={onClose}>
+              </p>
+            </div>
+
+            <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
+              <Button
+                disableRipple
+                className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+                onPress={onClose}
+              >
                 Cancel
               </Button>
+              <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
               <Button
-                className="bg-black text-white"
+                disableRipple
+                className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
                 onPress={() => {
                   onConfirm();
                   onClose();
@@ -61,7 +71,7 @@ function LogoutModal({
               >
                 Logout
               </Button>
-            </ModalFooter>
+            </div>
           </>
         )}
       </ModalContent>
@@ -71,6 +81,7 @@ function LogoutModal({
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 import Sidebar from "./sidebar";
 
@@ -190,8 +201,8 @@ export default function Component() {
         {/* Logout Modal */}
         <LogoutModal
           isOpen={isLogoutOpen}
-          onConfirm={() => {
-            /* Add logout logic here */
+          onConfirm={async () => {
+            await signOut({ callbackUrl: "/" });
           }}
           onOpenChange={onLogoutOpenChange}
         />

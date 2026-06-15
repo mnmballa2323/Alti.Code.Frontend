@@ -2,14 +2,8 @@
 
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Modal, ModalContent, Button } from "@heroui/react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useModalStore } from "@/store/useModalStore";
 
 export function Logout() {
@@ -24,25 +18,45 @@ export function Logout() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="border-none ring-0 outline-none sm:max-w-[380px]">
-        <DialogHeader>
-          <DialogTitle>Logout</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 pt-4">
-          <h1 className="">Are you sure you want to logout?</h1>
-          <div className="mt-4 flex w-full justify-end gap-4">
-            <Button
-              className="focus-visible:ring-0"
-              variant="outline"
-              onClick={onClose}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleLogOut}>Logout</Button>
-          </div>
+    <Modal
+      hideCloseButton
+      backdrop="opaque"
+      classNames={{
+        backdrop: "bg-black/20 backdrop-blur-sm",
+        base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[340px] p-0",
+      }}
+      isOpen={isOpen}
+      placement="center"
+      onClose={onClose}
+    >
+      <ModalContent>
+        <div className="flex flex-col items-center pt-8 pb-6 px-6 gap-2 text-center">
+          <h2 className="text-lg font-bold text-black dark:text-white">
+            Logout
+          </h2>
+          <p className="text-sm text-default-500 dark:text-default-400">
+            Are you sure you want to logout?
+          </p>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
+          <Button
+            disableRipple
+            className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+            onPress={onClose}
+          >
+            Cancel
+          </Button>
+          <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
+          <Button
+            disableRipple
+            className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+            onPress={handleLogOut}
+          >
+            Logout
+          </Button>
+        </div>
+      </ModalContent>
+    </Modal>
   );
 }
