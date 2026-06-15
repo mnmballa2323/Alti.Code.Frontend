@@ -1,10 +1,10 @@
 #!/bin/bash
 # ==============================================================================
-# ALTI CODE STUDIO: ONE-CLICK SINGLE-TENANT VPC DEPLOYER (OPENSTACK)
+# ALTI CODE STUDIO: ONE-CLICK PRIVATE CLOUD DEPLOYER (OPENSTACK)
 # ==============================================================================
-# Automates provisioning of isolated customer VPCs and CPU-only Compute nodes
-# on Liberty Center One OpenStack private cloud. Uses Terraform workspaces
-# to maintain complete state isolation per customer.
+# Automates provisioning of custom VPCs and Compute nodes on Liberty Center One
+# OpenStack private cloud, supporting both shared (multi-tenant) and dedicated
+# (single-tenant) environments. Uses Terraform workspaces for state isolation.
 # ==============================================================================
 
 set -e
@@ -17,7 +17,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${CYAN}================================================================${NC}"
-echo -e "${CYAN} 🛡️  ALTI CODE STUDIO: SINGLE-TENANT OPENSTACK VPC DEPLOYER  🛡️  ${NC}"
+echo -e "${CYAN} 🛡️  ALTI CODE STUDIO: PRIVATE CLOUD OPENSTACK DEPLOYER  🛡️  ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
 # Default variables
@@ -70,6 +70,7 @@ usage() {
     echo -e "Usage: ./deploy_openstack.sh [options]"
     echo -e "Options:"
     echo -e "  --tier <individual|team|enterprise>  Deployment tier (default: team)"
+    echo -e "  --tenancy <shared|dedicated>        Tenancy model (default: shared for individual, dedicated for team/enterprise)"
     echo -e "  --customer <name>   Unique name/id of the customer tenant (default: generic-tenant)"
     echo -e "  --subnet <cidr>     Private subnet CIDR range for this customer's VPC (default: 10.240.0.0/24)"
     echo -e "  --domain <name>     Custom domain mapping for TLS/SSL routing (default: <customer>.insocode.com)"
@@ -81,11 +82,13 @@ usage() {
 
 # Default variables
 TIER="team"
+TENANCY=""
 
 # Parse command line options
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --tier) TIER="$2"; shift ;;
+        --tenancy) TENANCY="$2"; shift ;;
         --customer) CUSTOMER="$2"; shift ;;
         --subnet) SUBNET_CIDR="$2"; shift ;;
         --domain) DOMAIN="$2"; shift ;;
@@ -98,22 +101,46 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Validate Tier
-if [ "$TIER" == "enterprise" ]; then
-    echo -e "${RED}ERROR: Enterprise tier requires multi-cloud deployment via deploy_enterprise.sh (AWS/Azure/GCP).${NC}"
-    exit 1
-elif [ "$TIER" != "individual" ] && [ "$TIER" != "team" ]; then
+if [ "$TIER" != "individual" ] && [ "$TIER" != "team" ] && [ "$TIER" != "enterprise" ]; then
     echo -e "${RED}ERROR: Invalid deployment tier: '$TIER'. Must be 'individual', 'team', or 'enterprise'.${NC}"
     exit 1
 fi
 
-# Override customer workspace for multi-tenant individual tier
-if [ "$TIER" == "individual" ]; then
-    echo -e "${YELLOW}ℹ Individual Tier selected: Deploying to multi-tenant shared OpenStack VPC...${NC}"
-    CUSTOMER="shared-individual-tenant"
-    # Ensure a larger subnet for the shared VPC
-    SUBNET_CIDR="10.200.0.0/16"
+# Determine default tenancy if not set
+if [ -z "$TENANCY" ]; then
+    if [ "$TIER" == "individual" ]; then
+        TENANCY="shared"
+    else
+        TENANCY="dedicated"
+    fi
+fi
+
+# Validate Tenancy
+if [ "$TENANCY" != "shared" ] && [ "$TENANCY" != "dedicated" ] && [ "$TENANCY" != "multi-tenant" ] && [ "$TENANCY" != "single-tenant" ]; then
+    echo -e "${RED}ERROR: Invalid tenancy model: '$TENANCY'. Must be 'shared' or 'dedicated' (or 'multi-tenant' / 'single-tenant').${NC}"
+    exit 1
+fi
+
+# Normalize tenancy model
+if [ "$TENANCY" == "multi-tenant" ]; then
+    TENANCY="shared"
+elif [ "$TENANCY" == "single-tenant" ]; then
+    TENANCY="dedicated"
+fi
+
+# Configure deployment variables based on Tenancy model
+if [ "$TENANCY" == "shared" ]; then
+    echo -e "${YELLOW}ℹ Shared Solution / Multi-Tenant Private Cloud selected (Tier: $TIER)...${NC}"
+    # Use shared customer workspace / name prefix for the VPC
+    if [ "$CUSTOMER" == "generic-tenant" ]; then
+        CUSTOMER="shared-multi-tenant-vpc"
+    fi
+    # Set a larger subnet for the shared VPC
+    if [ "$SUBNET_CIDR" == "10.240.0.0/24" ]; then
+        SUBNET_CIDR="10.200.0.0/16"
+    fi
 else
-    echo -e "${YELLOW}ℹ Team Tier selected: Deploying to single-tenant isolated OpenStack VPC...${NC}"
+    echo -e "${YELLOW}ℹ Dedicated Solution / Single-Tenant Private Cloud selected (Tier: $TIER)...${NC}"
 fi
 
 # Set default domain if not provided
@@ -186,6 +213,7 @@ if [ "$MODE" == "vm" ]; then
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER VPC DEPLOYMENT SUCCESSFUL! ✨${NC}"
     echo -e "=================================================================="
     echo -e "• Customer ID:    ${CYAN}${CUSTOMER}${NC}"
+    echo -e "• Tenancy Model:  ${CYAN}${TENANCY^} Private Cloud (Tier: ${TIER^})${NC}"
     echo -e "• VPC Subnet:     ${CYAN}${SUBNET_CIDR}${NC}"
     echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
     echo -e "• Direct IP API:  ${CYAN}http://${VM_IP}:5000/api/v1/healthz${NC}"
@@ -238,6 +266,10 @@ else
 
     echo -e "=================================================================="
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER KUBERNETES DEPLOYMENT COMPLETE! ✨${NC}"
+    echo -e "=================================================================="
+    echo -e "• Customer ID:    ${CYAN}${CUSTOMER}${NC}"
+    echo -e "• Tenancy Model:  ${CYAN}${TENANCY^} Private Cloud (Tier: ${TIER^})${NC}"
+    echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
     echo -e "=================================================================="
 fi
 
