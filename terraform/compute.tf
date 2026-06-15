@@ -394,16 +394,16 @@ SSHCFG
               chmod +x /usr/local/bin/cleanup_stale_workspaces.sh
               (crontab -l 2>/dev/null; echo "0 4 * * * /usr/local/bin/cleanup_stale_workspaces.sh") | crontab -
 
-              # 10.7. Configure Syslog Receiver for Sandbox Container Auditing (Phase 4)
+              # 10.7. Configure Syslog Receiver for Sandbox Container Auditing (Phase 4 / Phase 6)
               echo "Configuring syslog receiver for Sandbox container auditing..."
               cat <<'SYSLOGRCV' > /etc/rsyslog.d/50-alti-sandbox.conf
               # Enable UDP syslog reception on port 514
               module(load="imudp")
               input(type="imudp" port="514")
 
-              # Route Sandbox Docker logs to dedicated audit log file
+              # Route Sandbox system & container logs to central audit log file
               if $$hostname contains "alti-sandbox" then {
-                  action(type="omfile" file="/var/log/alti-sandbox-containers.log")
+                  action(type="omfile" file="/var/log/alti-sandbox-system.log")
                   stop
               }
               SYSLOGRCV
@@ -528,9 +528,10 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
               SYSCTL
               sysctl -p
 
-              # 2. Install Docker, NFS Client utilities, and dependencies
+              # 2. Install Docker, NFS Client utilities, and dependencies (with rootless, auditing, and firewall support - Phases 5-7)
               apt-get update
-              apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release git nfs-common
+              apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release git nfs-common \
+                                 uidmap dbus-user-session slirp4netns docker-ce-rootless-extras auditd audispd-plugins iptables
 
               # Add Docker's official GPG key
               mkdir -p /etc/apt/keyrings
@@ -544,9 +545,12 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
               apt-get update
               apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-              # Configure Docker daemon max-size logging & BuildKit acceleration (with remote syslog forwarding - Phase 4)
-              mkdir -p /etc/docker
-              cat <<DOCKER > /etc/docker/daemon.json
+              # Disable system-wide root Docker services to run in Rootless Mode (Phase 5)
+              systemctl disable --now docker.service docker.socket || true
+
+              # Configure Docker daemon remote syslog forwarding (Phase 4 / Phase 5 rootless configuration)
+              mkdir -p /home/ubuntu/.config/docker
+              cat <<DOCKER > /home/ubuntu/.config/docker/daemon.json
               {
                 "log-driver": "syslog",
                 "log-opts": {
@@ -561,10 +565,20 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
                 }
               }
               DOCKER
+              chown -R ubuntu:ubuntu /home/ubuntu/.config
 
-              systemctl daemon-reload
-              systemctl enable docker
-              systemctl start docker || systemctl restart docker
+              # Set up user lingering and install rootless Docker
+              loginctl enable-linger ubuntu
+              sudo -i -u ubuntu XDG_RUNTIME_DIR=/run/user/1000 dockerd-rootless-setuptool.sh install
+
+              # Enable and start user-level docker service
+              sudo -i -u ubuntu XDG_RUNTIME_DIR=/run/user/1000 systemctl --user daemon-reload
+              sudo -i -u ubuntu XDG_RUNTIME_DIR=/run/user/1000 systemctl --user enable docker
+              sudo -i -u ubuntu XDG_RUNTIME_DIR=/run/user/1000 systemctl --user start docker || sudo -i -u ubuntu XDG_RUNTIME_DIR=/run/user/1000 systemctl --user restart docker
+
+              # Export DOCKER_HOST env vars for ubuntu user
+              echo "export DOCKER_HOST=unix:///run/user/1000/docker.sock" >> /home/ubuntu/.bashrc
+              echo "export DOCKER_HOST=unix:///run/user/1000/docker.sock" >> /home/ubuntu/.profile
 
               # 3. Mount Backend Workspaces via NFS
               mkdir -p /opt/alti-code-studio/logs/workspaces
@@ -662,5 +676,35 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
               NFSRECOVER
               chmod +x /usr/local/bin/nfs_mount_check.sh
               (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/nfs_mount_check.sh") | crontab -
+
+              # 8. Configure Host OS Command Auditing (Phase 6)
+              echo "Configuring host command auditing rules..."
+              cat <<'AUDITRULES' > /etc/audit/rules.d/sandbox.rules
+              -a always,exit -F arch=b64 -S execve -k sandbox_commands
+              -a always,exit -F arch=b32 -S execve -k sandbox_commands
+              AUDITRULES
+              
+              # Enable syslog plugin in auditd
+              sed -i 's/active = no/active = yes/g' /etc/audit/plugins.d/syslog.conf
+              
+              # Restart auditd service to load rules and activate plugins
+              service auditd restart || systemctl restart auditd
+
+              # Configure Sandbox Host rsyslog to forward all system logs to Backend VM
+              echo "*.* @${openstack_compute_instance_v2.backend_instance.network[0].fixed_ip_v4}:514" > /etc/rsyslog.d/60-audit-forward.conf
+              systemctl restart rsyslog
+
+              # 9. Configure Host Daemon Resource Reservation (Phase 7)
+              echo "Configuring host cgroup limits for user-1000 slice..."
+              mkdir -p /etc/systemd/system/user-1000.slice.d
+              cat <<'SLICELIMITS' > /etc/systemd/system/user-1000.slice.d/limits.conf
+              [Slice]
+              CPUAccounting=yes
+              CPUQuota=85%
+              MemoryAccounting=yes
+              MemoryLimit=7.5G
+              SLICELIMITS
+              
+              systemctl daemon-reload
               EOF
 }
