@@ -48,7 +48,7 @@ const MyAccountDropdown = () => {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" className="w-64">
+        <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
           <DropdownMenuGroup>
             <DropdownMenuItem className="relative">
               <span className="flex items-center space-x-2">
