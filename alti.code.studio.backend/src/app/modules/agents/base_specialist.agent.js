@@ -16,6 +16,7 @@
  *   ✅ Usage metrics            — tracks call count, error count, and avg latency
  */
 
+import { swarmTraceService } from '../telemetry/trace.service.js';
 import { logger } from '../../../shared/logger.js';
 import vm from 'vm';
 
@@ -161,14 +162,25 @@ export class BaseSpecialistAgent {
       };
     }
 
-    // Removed tracing span start
+    // Start tracing span
+    let spanId = null;
+    try {
+      spanId = await swarmTraceService.startSpan(
+        this.name,
+        resolvedParentSpanId,
+        resolvedTenantId,
+        cleanPrompt,
+      );
+    } catch (traceErr) {
+      logger.debug(`Telemetry: startSpan failed: ${traceErr.message}`);
+    }
 
     // 4. Retry loop
     let lastError;
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         const result = await withTimeout(
-          this._invoke(cleanPrompt, sanitizedCtx, resolvedTenantId, null),
+          this._invoke(cleanPrompt, sanitizedCtx, resolvedTenantId, spanId),
           DEFAULT_TIMEOUT_MS,
           `${this.name}.consult`,
         );
@@ -192,7 +204,18 @@ export class BaseSpecialistAgent {
           (promptTokens / 1_000_000) * 0.075 +
           (completionTokens / 1_000_000) * 0.3;
 
-        // Removed tracing span end
+        // End tracing span
+        if (spanId) {
+          try {
+            await swarmTraceService.endSpan(spanId, totalTokens, cost, {
+              attempt,
+              status: 'success',
+              confidence: 0.95,
+            });
+          } catch (traceErr) {
+            logger.debug(`Telemetry: endSpan failed: ${traceErr.message}`);
+          }
+        }
 
         // V37.0 - Standardized Telemetry Wrapper
         return {
@@ -221,7 +244,17 @@ export class BaseSpecialistAgent {
     this._metrics.errors++;
     this._metrics.totalLatencyMs += Date.now() - t0;
 
-    // Removed trace error logic
+    if (spanId) {
+      try {
+        await swarmTraceService.endSpan(spanId, 0, 0, {
+          status: 'error',
+          errorMessage: lastError.message,
+          errorCode: lastError.code || 'LLM_ERROR',
+        });
+      } catch (traceErr) {
+        logger.debug(`Telemetry: endSpan failed on error: ${traceErr.message}`);
+      }
+    }
 
     throw lastError instanceof AgentError
       ? lastError
