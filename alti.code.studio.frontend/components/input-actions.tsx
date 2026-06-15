@@ -1650,6 +1650,8 @@ export default function PromptInputFullLineWithBottomActions({
   placeholder = "Enter your prompt here...",
   value,
   onChange,
+  prompt: promptProp,
+  setPrompt: setPromptProp,
   customActions,
   rightActions,
   showModelDropdown = false,
@@ -1670,13 +1672,14 @@ export default function PromptInputFullLineWithBottomActions({
   placeholder?: string;
   value?: string;
   onChange?: (val: string) => void;
+  prompt?: string;
+  setPrompt?: React.Dispatch<React.SetStateAction<string>> | ((val: string) => void);
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
   showModelDropdown?: boolean;
 }) {
   const [internalPrompt, setInternalPrompt] = useState("");
-  const prompt = value !== undefined ? value : internalPrompt;
-  const setPrompt = onChange !== undefined ? onChange : setInternalPrompt;
+  const prompt = value !== undefined ? value : (promptProp !== undefined ? promptProp : internalPrompt);
 
   return (
     <div className="flex w-full flex-col gap-4 mb-6 !z-50">
@@ -1693,6 +1696,7 @@ export default function PromptInputFullLineWithBottomActions({
           const newVal = typeof val === "function" ? val(prompt) : val;
 
           if (onChange) onChange(newVal);
+          else if (setPromptProp) setPromptProp(newVal as any);
           else setInternalPrompt(newVal);
         }}
         showFigmaButton={showFigmaButton}

@@ -23,6 +23,7 @@ interface MessagesState {
   loading: boolean;
   error: string | null;
   model: string;
+  isChatting: boolean;
 }
 
 const initialState: MessagesState = {
@@ -31,6 +32,7 @@ const initialState: MessagesState = {
   loading: false,
   error: null,
   model: "default",
+  isChatting: false,
 };
 
 interface SendMessagePayload {
