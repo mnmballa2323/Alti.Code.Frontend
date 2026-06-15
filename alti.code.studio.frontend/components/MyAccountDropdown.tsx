@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, LogOut, Settings, Building, Shield } from "lucide-react";
+import { LogOut, Settings, Building, Shield } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -50,15 +50,6 @@ const MyAccountDropdown = () => {
 
         <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
           <DropdownMenuGroup>
-            <DropdownMenuItem className="relative">
-              <span className="flex items-center space-x-2">
-                <CreditCard className="size-5" />
-                <Link href="/billing">
-                  <span className="absolute inset-0" />
-                  Billing
-                </Link>
-              </span>
-            </DropdownMenuItem>
 
             <DropdownMenuItem className="relative">
               <span className="flex items-center space-x-2">
