@@ -362,6 +362,14 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isTauri, setIsTauri] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && (window as any).__TAURI__) {
+      setIsTauri(true);
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen bg-white font-sans flex-col-reverse lg:flex-row">
       {/* CSS keyframe animations for premium ambient glow effects */}
@@ -411,11 +419,13 @@ export default function AuthLayout({
             Build the future.
           </h2>
           <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
-            Join the Inso Code platform and accelerate your engineering team
-            with autonomous AI agents.
+            {isTauri
+              ? "Login to the inso code platform and 10x your software development 🚀"
+              : "Join the Inso Code platform and accelerate your engineering team with autonomous AI agents."}
           </p>
         </div>
       </div>
+
 
       {/* Right Panel: Auth Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative">
