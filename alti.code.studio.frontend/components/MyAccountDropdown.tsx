@@ -43,7 +43,7 @@ const MyAccountDropdown = () => {
     <div className="w-full">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="w-full h-9 bg-[#FAFAFA] text-default-700 border border-default-200 hover:bg-default-100 dark:bg-default-100 dark:text-default-300 dark:hover:bg-default-200 text-xs font-medium rounded-xl focus-visible:ring-0 focus-visible:border-border transition-colors">
+          <Button className="w-full h-9 bg-[#FAFAFA] text-default-700 border border-default-200 hover:bg-default-100 dark:bg-default-100 dark:text-white dark:hover:bg-default-200 text-xs font-medium rounded-xl focus-visible:ring-0 focus-visible:border-border transition-colors">
             My Account
           </Button>
         </DropdownMenuTrigger>
