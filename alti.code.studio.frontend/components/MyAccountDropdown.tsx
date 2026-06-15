@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings, Building, Shield } from "lucide-react";
+import { LogOut, Settings, Shield } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -51,15 +51,6 @@ const MyAccountDropdown = () => {
         <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
           <DropdownMenuGroup>
 
-            <DropdownMenuItem className="relative">
-              <span className="flex items-center space-x-2">
-                <Building className="size-5" />
-                <Link href="/enterprise/team">
-                  <span className="absolute inset-0" />
-                  Workspace Settings
-                </Link>
-              </span>
-            </DropdownMenuItem>
 
             {(profile?.role === "admin" || profile?.role === "ADMIN") && (
               <DropdownMenuItem className="relative">
