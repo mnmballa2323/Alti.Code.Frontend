@@ -223,18 +223,15 @@ export function PromptInputFullLineComponent({
         </Tooltip>
         <Button
           isIconOnly
-          className={!prompt ? "bg-default" : "dark:bg-white bg-black"}
-          isDisabled={!prompt}
+          className="dark:bg-white bg-black"
           radius="full"
           size="sm"
           type="submit"
           variant="solid"
+          style={{ opacity: 1 }}
         >
           <Icon
-            className={cn(
-              "[&>path]:stroke-[2px]",
-              !prompt ? "text-white" : "dark:text-black text-white",
-            )}
+            className="dark:text-black text-white [&>path]:stroke-[2px]"
             icon="solar:arrow-up-linear"
             width={20}
           />

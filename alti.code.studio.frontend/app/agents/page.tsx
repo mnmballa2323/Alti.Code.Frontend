@@ -228,8 +228,9 @@ function AgentPageContent() {
                           value={chatMessage}
                           onChange={(e) => setChatMessage(e.target.value)}
                         />
-                        <ArrowUp
-                          className={`w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-opacity shrink-0 ${!chatMessage ? 'opacity-40 cursor-not-allowed' : 'hover:opacity-80'}`}
+                         <ArrowUp
+                          className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-opacity shrink-0 hover:opacity-80"
+                          style={{ opacity: 1 }}
                           onClick={chatMessage ? (e: any) => handleChatSend(e) : undefined}
                         />
                       </div>

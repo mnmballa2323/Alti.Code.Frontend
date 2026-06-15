@@ -539,12 +539,9 @@ function PromptInputFullLineComponent({
                     <Icon
                       className={cn(
                         "size-4 shrink-0 transition-colors duration-200",
-                        (defaultModel || "").includes("gemini") &&
-                          "group-hover:text-purple-500 dark:group-hover:text-purple-400",
-                        (defaultModel || "").includes("claude") &&
-                          "group-hover:text-orange-500 dark:group-hover:text-orange-400",
-                        (defaultModel || "").includes("gpt") &&
-                          "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
+                        (defaultModel || "").includes("gemini") && "text-[#1A73E8]",
+                        (defaultModel || "").includes("claude") && "text-[#CC9980]",
+                        (defaultModel || "").includes("gpt") && "text-[#10A37F]"
                       )}
                       icon={
                         (defaultModel || "").includes("gemini")
@@ -579,14 +576,14 @@ function PromptInputFullLineComponent({
                 >
                   <DropdownItem
                     key="gemini-3.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#1A73E8]/10 data-[hover=true]:bg-[#1A73E8]/10 transition-colors"
                     textValue="Gemini 3.5 Pro"
                     onPress={() => setDefaultModel("gemini-3.5-pro")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-purple-400 shrink-0"
-                        icon="logos:google-gemini-icon"
+                        className="size-4 text-[#1A73E8] shrink-0"
+                        icon="simple-icons:googlegemini"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Gemini 3.5 Pro
@@ -595,14 +592,14 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                   <DropdownItem
                     key="gemini-3.5-flash"
-                    className="rounded-xl px-3 py-1.5 hover:bg-purple-500/10 data-[hover=true]:bg-purple-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#1A73E8]/10 data-[hover=true]:bg-[#1A73E8]/10 transition-colors"
                     textValue="Gemini 3.5 Flash"
                     onPress={() => setDefaultModel("gemini-3.5-flash")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-purple-500 dark:text-purple-400 shrink-0"
-                        icon="logos:google-gemini-icon"
+                        className="size-4 text-[#1A73E8] shrink-0"
+                        icon="simple-icons:googlegemini"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Gemini 3.5 Flash
@@ -622,13 +619,13 @@ function PromptInputFullLineComponent({
                 >
                   <DropdownItem
                     key="claude-4.7-opus"
-                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#CC9980]/10 data-[hover=true]:bg-[#CC9980]/10 transition-colors"
                     textValue="Claude 4.7 Opus"
                     onPress={() => setDefaultModel("claude-4.7-opus")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-orange-500 dark:text-orange-400 shrink-0"
+                        className="size-4 text-[#CC9980] shrink-0"
                         icon="simple-icons:anthropic"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -638,13 +635,13 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                   <DropdownItem
                     key="sonnet-5"
-                    className="rounded-xl px-3 py-1.5 hover:bg-orange-500/10 data-[hover=true]:bg-orange-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#CC9980]/10 data-[hover=true]:bg-[#CC9980]/10 transition-colors"
                     textValue="Claude Sonnet 5"
                     onPress={() => setDefaultModel("sonnet-5")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-orange-400 shrink-0"
+                        className="size-4 text-[#CC9980] shrink-0"
                         icon="simple-icons:anthropic"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -665,13 +662,13 @@ function PromptInputFullLineComponent({
                 >
                   <DropdownItem
                     key="gpt-5.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#10A37F]/10 data-[hover=true]:bg-[#10A37F]/10 transition-colors"
                     textValue="GPT-5.5 Pro"
                     onPress={() => setDefaultModel("gpt-5.5-pro")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
+                        className="size-4 text-[#10A37F] shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -681,13 +678,13 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                   <DropdownItem
                     key="gpt-5.5"
-                    className="rounded-xl px-3 py-1.5 hover:bg-emerald-500/10 data-[hover=true]:bg-emerald-500/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-[#10A37F]/10 data-[hover=true]:bg-[#10A37F]/10 transition-colors"
                     textValue="GPT-5.5"
                     onPress={() => setDefaultModel("gpt-5.5")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0"
+                        className="size-4 text-[#10A37F] shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -1315,7 +1312,8 @@ function PromptInputFullLineComponent({
           {rightActions}
 
           <ArrowUp
-            className={`size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white transition-transform ${prompt ? 'hover:scale-110 active:scale-95' : 'opacity-40 cursor-not-allowed'}`}
+            className="size-6 flex-none cursor-pointer rounded-full border-2 transition-transform hover:scale-110 active:scale-95"
+            style={{ backgroundColor: "black", color: "white", borderColor: "black", opacity: 1 }}
             onClick={prompt ? handleSubmit : undefined}
           />
         </div>
