@@ -535,26 +535,28 @@ function PromptInputFullLineComponent({
                   className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
                   type="button"
                 >
-                  <Icon
-                    className={cn(
-                      "size-4 shrink-0 transition-colors duration-200",
-                      (defaultModel || "").includes("gemini") &&
-                        "group-hover:text-purple-500 dark:group-hover:text-purple-400",
-                      (defaultModel || "").includes("claude") &&
-                        "group-hover:text-orange-500 dark:group-hover:text-orange-400",
-                      (defaultModel || "").includes("gpt") &&
-                        "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
-                    )}
-                    icon={
-                      (defaultModel || "").includes("gemini")
-                        ? "simple-icons:googlegemini"
-                        : (defaultModel || "").includes("claude")
-                          ? "simple-icons:anthropic"
-                          : (defaultModel || "").includes("gpt")
-                            ? "simple-icons:openai"
-                            : "lucide:sparkles"
-                    }
-                  />
+                  {defaultModel && (
+                    <Icon
+                      className={cn(
+                        "size-4 shrink-0 transition-colors duration-200",
+                        (defaultModel || "").includes("gemini") &&
+                          "group-hover:text-purple-500 dark:group-hover:text-purple-400",
+                        (defaultModel || "").includes("claude") &&
+                          "group-hover:text-orange-500 dark:group-hover:text-orange-400",
+                        (defaultModel || "").includes("gpt") &&
+                          "group-hover:text-emerald-500 dark:group-hover:text-emerald-400",
+                      )}
+                      icon={
+                        (defaultModel || "").includes("gemini")
+                          ? "simple-icons:googlegemini"
+                          : (defaultModel || "").includes("claude")
+                            ? "simple-icons:anthropic"
+                            : (defaultModel || "").includes("gpt")
+                              ? "simple-icons:openai"
+                              : "lucide:sparkles"
+                      }
+                    />
+                  )}
                   <span className="transition-colors duration-200">
                     {getModelDisplayName(defaultModel)}
                   </span>
