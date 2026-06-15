@@ -235,6 +235,22 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               mkdir -p /opt/alti-code-studio
               git clone https://github.com/${var.github_repository}.git /opt/alti-code-studio
 
+              # 5.5. Configure passwordless SSH from Backend to Sandbox VM
+              echo "Configuring passwordless SSH key..."
+              if [ ! -f /home/ubuntu/.ssh/id_rsa ]; then
+                sudo -u ubuntu ssh-keygen -t rsa -N "" -f /home/ubuntu/.ssh/id_rsa
+              fi
+              mkdir -p /opt/alti-code-studio/logs/workspaces
+              cp /home/ubuntu/.ssh/id_rsa.pub /opt/alti-code-studio/logs/workspaces/backend_node_key.pub
+              chown -R ubuntu:ubuntu /opt/alti-code-studio/logs/workspaces
+
+              # Disable SSH Strict Host Key Checking for local VPC private IPs
+              cat <<SSHCFG >> /etc/ssh/ssh_config
+Host 10.*
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+SSHCFG
+
               cd /opt/alti-code-studio
 
               # 6. Create production environment variables configuration
@@ -251,6 +267,10 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               OS_AUTH_URL=${var.openstack_auth_url}
               OPENSTACK_DEFAULT_DOMAIN=Default
               TENANCY_MODEL=${var.tenancy_model}
+              
+              # Docker Remote Sandbox VM Configurations
+              SANDBOX_VM_IP=${openstack_compute_instance_v2.sandbox_instance.network[0].fixed_ip_v4}
+              DOCKER_HOST=ssh://ubuntu@${openstack_compute_instance_v2.sandbox_instance.network[0].fixed_ip_v4}
               EOT
 
               # 7. Configure Nightly Postgres Backup Script & Cron Job
@@ -355,6 +375,15 @@ resource "openstack_compute_instance_v2" "backend_instance" {
                 systemctl restart rsyslog
               fi
 
+              # 10.5. Configure NFS Server for Sandbox VM Workspace Access
+              echo "Configuring NFS Server for Sandbox VM Workspace Access..."
+              apt-get install -y nfs-kernel-server
+              mkdir -p /opt/alti-code-studio/logs/workspaces
+              chmod -R 777 /opt/alti-code-studio/logs/workspaces
+              echo "/opt/alti-code-studio/logs/workspaces ${var.customer_subnet_cidr}(rw,sync,no_subtree_check,no_root_squash)" >> /etc/exports
+              exportfs -a
+              systemctl restart nfs-kernel-server
+
               # 11. Start the production database, cache, proxy and frontend services
               cd /opt/alti-code-studio
               echo "reverse_proxy alti-backend-blue:3000" > ./active_backend.conf
@@ -386,7 +415,170 @@ output "backend_vm_public_ip" {
   value       = openstack_networking_floatingip_v2.backend_fip.address
 }
 
+output "sandbox_vm_private_ip" {
+  description = "Private IP of the customer isolated sandbox VM node"
+  value       = openstack_compute_instance_v2.sandbox_instance.access_ip_v4
+}
+
 output "customer_vpc_network_id" {
   description = "VPC Network UUID for the customer"
   value       = openstack_networking_network_v2.customer_vpc.id
+}
+
+# ── 6. Sandbox Compute Node and Security Groups ──
+
+resource "openstack_networking_secgroup_v2" "sandbox_secgroup" {
+  name        = "alti-sandbox-${var.customer_id}-secgroup"
+  description = "Security group for Alti Sandbox Node - Customer ${var.customer_id}"
+}
+
+# SSH Rule for Sandbox: Allow inbound SSH from within the VPC (e.g. backend_instance)
+resource "openstack_networking_secgroup_rule_v2" "sandbox_ssh_rule" {
+  direction         = "ingress"
+  ethertype         = "IPv4"
+  protocol          = "tcp"
+  port_range_min    = 22
+  port_range_max    = 22
+  remote_ip_prefix  = var.customer_subnet_cidr
+  security_group_id = openstack_networking_secgroup_v2.sandbox_secgroup.id
+}
+
+# Persistent Boot Volume for Sandbox compute node
+resource "openstack_blockstorage_volume_v3" "sandbox_boot_volume" {
+  name        = "alti-sandbox-boot-vol-${var.customer_id}"
+  size        = 100 # Dedicated 100GB disk for isolated Docker workspaces/cache
+  volume_type = var.openstack_boot_volume_type
+  image_id    = var.openstack_image_name
+  
+  metadata = {
+    role        = "sandbox-sovereign"
+    customer_id = var.customer_id
+  }
+}
+
+# Dedicated unprivileged Sandbox Compute instance
+resource "openstack_compute_instance_v2" "sandbox_instance" {
+  name            = "alti-sandbox-${var.customer_id}-node"
+  flavor_name     = var.openstack_flavor_name
+  key_pair        = var.openstack_keypair_name
+  security_groups = ["default", openstack_networking_secgroup_v2.sandbox_secgroup.name]
+
+  block_device {
+    uuid                  = openstack_blockstorage_volume_v3.sandbox_boot_volume.id
+    source_type           = "volume"
+    destination_type      = "volume"
+    boot_index            = 0
+    delete_on_termination = true
+  }
+
+  network {
+    uuid = openstack_networking_network_v2.customer_vpc.id
+  }
+
+  metadata = {
+    role        = "sandbox-sovereign"
+    customer_id = var.customer_id
+    environment = var.environment
+  }
+
+  # Sandbox VM UserData script to initialize Docker and mount backend workspaces directory via NFS
+  user_data = <<-EOF
+              #!/bin/bash
+              set -ex
+
+              # 1. Host OS Performance Optimizations
+              echo "Applying OS performance optimizations..."
+              cat <<LIMITS >> /etc/security/limits.conf
+              * soft nofile 65536
+              * hard nofile 65536
+              root soft nofile 65536
+              root hard nofile 65536
+              LIMITS
+              echo "session required pam_limits.so" >> /etc/pam.d/common-session
+
+              cat <<SYSCTL >> /etc/sysctl.conf
+              vm.overcommit_memory=1
+              fs.file-max=2097152
+              vm.max_map_count=262144
+              SYSCTL
+              sysctl -p
+
+              # 2. Install Docker, NFS Client utilities, and dependencies
+              apt-get update
+              apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release git nfs-common
+
+              # Add Docker's official GPG key
+              mkdir -p /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+              # Set up docker repository
+              echo \
+                "deb [arch=\$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                \$(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+              apt-get update
+              apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+              # Configure Docker daemon max-size logging & BuildKit acceleration
+              mkdir -p /etc/docker
+              cat <<DOCKER > /etc/docker/daemon.json
+              {
+                "log-driver": "json-file",
+                "log-opts": {
+                  "max-size": "50m",
+                  "max-file": "3"
+                },
+                "max-concurrent-downloads": 10,
+                "max-concurrent-uploads": 5,
+                "features": {
+                  "buildkit": true
+                }
+              }
+              DOCKER
+
+              systemctl daemon-reload
+              systemctl enable docker
+              systemctl start docker || systemctl restart docker
+
+              # 3. Mount Backend Workspaces via NFS
+              mkdir -p /opt/alti-code-studio/logs/workspaces
+              
+              # Wait for backend NFS server export directory to become active
+              for i in {1..30}; do
+                if showmount -e ${openstack_compute_instance_v2.backend_instance.network[0].fixed_ip_v4} | grep -q "/opt/alti-code-studio/logs/workspaces"; then
+                  break
+                fi
+                sleep 5
+              done
+
+              # Mount the shared workspace
+              mount -t nfs ${openstack_compute_instance_v2.backend_instance.network[0].fixed_ip_v4}:/opt/alti-code-studio/logs/workspaces /opt/alti-code-studio/logs/workspaces
+              
+              # Persist mount on system reboots
+              echo "${openstack_compute_instance_v2.backend_instance.network[0].fixed_ip_v4}:/opt/alti-code-studio/logs/workspaces /opt/alti-code-studio/logs/workspaces nfs defaults,timeo=900,retrans=5,_netdev 0 0" >> /etc/fstab
+
+              # 4. Authorize Backend VM SSH Key on Sandbox VM
+              echo "Authorizing Backend VM SSH key on Sandbox VM..."
+              # Wait for backend VM public key to be written to NFS workspaces mount
+              for i in {1..60}; do
+                if [ -f /opt/alti-code-studio/logs/workspaces/backend_node_key.pub ]; then
+                  break
+                fi
+                sleep 5
+              done
+              
+              if [ -f /opt/alti-code-studio/logs/workspaces/backend_node_key.pub ]; then
+                mkdir -p /home/ubuntu/.ssh
+                cat /opt/alti-code-studio/logs/workspaces/backend_node_key.pub >> /home/ubuntu/.ssh/authorized_keys
+                chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+                chmod 700 /home/ubuntu/.ssh
+                chmod 600 /home/ubuntu/.ssh/authorized_keys
+                echo "Successfully authorized Backend VM SSH key."
+              else
+                echo "Warning: Backend VM SSH key was not found."
+              fi
+
+              # Add ubuntu user to docker group to allow passwordless docker operations
+              usermod -aG docker ubuntu
+              EOF
 }

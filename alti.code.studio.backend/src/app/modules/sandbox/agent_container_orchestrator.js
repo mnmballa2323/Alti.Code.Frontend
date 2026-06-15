@@ -117,8 +117,8 @@ export class AgentContainerOrchestrator {
         const hostGid = (process.getgid && process.getgid() !== 0) ? process.getgid() : 1000;
 
         // Determine network isolation: 
-        // If tenantId exists, bind to tenant's air-gapped bridge network. Else, use 'none'.
-        const networkFlag = tenantId ? `--network ${this.tenantOrchestrator.getTenantNetwork(tenantId)}` : `--network none`;
+        // If tenantId exists, bind to tenant's air-gapped bridge network. Else, use 'bridge'.
+        const networkFlag = tenantId ? `--network ${this.tenantOrchestrator.getTenantNetwork(tenantId)}` : `--network bridge`;
 
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
         // - Strict Network Isolation: networkFlag

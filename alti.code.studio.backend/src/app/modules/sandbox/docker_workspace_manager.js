@@ -126,7 +126,7 @@ export class DockerWorkspaceManager {
         const hostGid = (process.getgid && process.getgid() !== 0) ? process.getgid() : 1000;
 
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
-        // - Strict Air-Gapped Network Isolation: --network none
+        // - Outbound Internet Network Access: --network bridge
         // - Root filesystem read-only: --read-only
         // - Drop all default Linux capabilities: --cap-drop=ALL
         // - Prevent privilege escalation: --security-opt=no-new-privileges:true
@@ -137,7 +137,7 @@ export class DockerWorkspaceManager {
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${hostPath}":/workspace ` +
-            `--network none ` +
+            `--network bridge ` +
             `--read-only ` +
             `--security-opt=no-new-privileges:true ` +
             `--cap-drop=ALL ` +
@@ -426,7 +426,7 @@ export class DockerWorkspaceManager {
         const dockerRunCmd = `docker run -d ` +
             `--name ${containerName} ` +
             `-v "${targetHostPath}":/workspace ` +
-            `--network none ` +
+            `--network bridge ` +
             `--read-only ` +
             `--security-opt=no-new-privileges:true ` +
             `--cap-drop=ALL ` +

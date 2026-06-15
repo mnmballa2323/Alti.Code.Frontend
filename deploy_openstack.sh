@@ -201,6 +201,8 @@ if [ "$MODE" == "vm" ]; then
     echo -e "\n[3/5] ${YELLOW}Extracting Compute Node IP...${NC}"
     VM_IP=$(terraform output -raw backend_vm_public_ip)
     echo -e "${GREEN}✔ Customer node floating IP allocated: ${VM_IP}${NC}"
+    SANDBOX_VM_IP=$(terraform output -raw sandbox_vm_private_ip)
+    echo -e "${GREEN}✔ Customer sandbox VM private IP allocated: ${SANDBOX_VM_IP}${NC}"
 
     # Sync Cloudflare DNS record
     provision_dns "$DOMAIN" "$VM_IP"
@@ -218,6 +220,7 @@ if [ "$MODE" == "vm" ]; then
     echo -e "• VPC Subnet:     ${CYAN}${SUBNET_CIDR}${NC}"
     echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
     echo -e "• Direct IP API:  ${CYAN}http://${VM_IP}:5000/api/v1/healthz${NC}"
+    echo -e "• Sandbox Node:   ${CYAN}${SANDBOX_VM_IP}${NC}"
     echo -e "• SSH Access:     ${CYAN}ssh -i <key> ubuntu@${VM_IP}${NC}"
     echo -e "• Next Steps:     Configure your DNS (e.g. GoDaddy) to point A Record"
     echo -e "                  for ${DOMAIN} to IP ${VM_IP}."
