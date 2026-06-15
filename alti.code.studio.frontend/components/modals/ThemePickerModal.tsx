@@ -14,7 +14,7 @@ export function ThemePickerModal() {
   const themes = [
     { id: "light", label: "Light", icon: "solar:sun-bold" },
     { id: "dark", label: "Dark", icon: "solar:moon-bold" },
-    { id: "midnight-navy", label: "Midnight Navy", icon: "solar:cloud-bold" },
+    { id: "midnight-navy", label: "Midnight", icon: "solar:cloud-bold" },
   ];
 
   return (
