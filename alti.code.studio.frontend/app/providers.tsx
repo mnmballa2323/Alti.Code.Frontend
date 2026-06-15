@@ -60,10 +60,11 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     const accessToken = session?.user?.accessToken ?? null;
 
     if (typeof window !== "undefined") {
+      const isTauri = "__TAURI__" in window;
       if (accessToken) {
         localStorage.setItem("token", accessToken);
         localStorage.setItem("accessToken", accessToken);
-      } else {
+      } else if (!isTauri) {
         localStorage.removeItem("token");
         localStorage.removeItem("accessToken");
       }
@@ -150,7 +151,20 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [tauriSession, setTauriSession] = React.useState<any>(undefined);
+  const [tauriSession, setTauriSession] = React.useState<any>(() => {
+    if (typeof window !== "undefined" && "__TAURI__" in window) {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        return {
+          user: {
+            accessToken: token,
+          },
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        };
+      }
+    }
+    return undefined;
+  });
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && "__TAURI__" in window) {
