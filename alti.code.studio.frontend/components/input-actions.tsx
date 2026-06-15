@@ -541,13 +541,13 @@ function PromptInputFullLineComponent({
                         "size-4 shrink-0 transition-colors duration-200",
                         (defaultModel || "").includes("gemini") && "text-[#1A73E8]",
                         (defaultModel || "").includes("claude") && "text-[#CC9980]",
-                        (defaultModel || "").includes("gpt") && "text-[#10A37F]"
+                        (defaultModel || "").includes("gpt") && "text-black dark:text-white"
                       )}
                       icon={
                         (defaultModel || "").includes("gemini")
                           ? "simple-icons:googlegemini"
                           : (defaultModel || "").includes("claude")
-                            ? "simple-icons:anthropic"
+                            ? "simple-icons:claude"
                             : (defaultModel || "").includes("gpt")
                               ? "simple-icons:openai"
                               : "lucide:sparkles"
@@ -626,7 +626,7 @@ function PromptInputFullLineComponent({
                     <div className="flex items-center gap-3 text-left">
                       <Icon
                         className="size-4 text-[#CC9980] shrink-0"
-                        icon="simple-icons:anthropic"
+                        icon="simple-icons:claude"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Claude 4.7 Opus
@@ -642,7 +642,7 @@ function PromptInputFullLineComponent({
                     <div className="flex items-center gap-3 text-left">
                       <Icon
                         className="size-4 text-[#CC9980] shrink-0"
-                        icon="simple-icons:anthropic"
+                        icon="simple-icons:claude"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Claude Sonnet 5
@@ -660,15 +660,15 @@ function PromptInputFullLineComponent({
                   }}
                   title="GPT"
                 >
-                  <DropdownItem
+                   <DropdownItem
                     key="gpt-5.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:bg-[#10A37F]/10 data-[hover=true]:bg-[#10A37F]/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
                     textValue="GPT-5.5 Pro"
                     onPress={() => setDefaultModel("gpt-5.5-pro")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-[#10A37F] shrink-0"
+                        className="size-4 text-black dark:text-white shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -678,13 +678,13 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                   <DropdownItem
                     key="gpt-5.5"
-                    className="rounded-xl px-3 py-1.5 hover:bg-[#10A37F]/10 data-[hover=true]:bg-[#10A37F]/10 transition-colors"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
                     textValue="GPT-5.5"
                     onPress={() => setDefaultModel("gpt-5.5")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-[#10A37F] shrink-0"
+                        className="size-4 text-black dark:text-white shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
