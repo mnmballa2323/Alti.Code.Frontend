@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings, Shield } from "lucide-react";
+import { LogOut, Palette, Shield } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -79,12 +79,12 @@ const MyAccountDropdown = () => {
             <DropdownMenuItem
               onClick={() =>
                 onOpen({
-                  type: "settings",
+                  type: "theme-picker",
                 })
               }
             >
               <span className="flex items-center space-x-2">
-                <Settings className="size-5" /> <span>Settings</span>
+                <Palette className="size-5" /> <span>Theme</span>
               </span>
             </DropdownMenuItem>
           </DropdownMenuGroup>

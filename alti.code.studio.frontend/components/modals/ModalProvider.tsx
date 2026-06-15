@@ -7,6 +7,7 @@ import SearchChats from "./SearchChats";
 import SearchWorkflows from "./SearchWorkflows";
 import SettingsModal from "./SettingsModal";
 import { ConnectCloud } from "./connect-cloud";
+import { ThemePickerModal } from "./ThemePickerModal";
 
 import { useModalStore } from "@/store/useModalStore";
 
@@ -25,6 +26,7 @@ export const ModalProvider = () => {
       {type === "search-workflows" && <SearchWorkflows />}
       {type === "settings" && <SettingsModal />}
       {type === "connect-cloud" && <ConnectCloud />}
+      {type === "theme-picker" && <ThemePickerModal />}
     </>
   );
 };

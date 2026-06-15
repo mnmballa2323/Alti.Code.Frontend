@@ -53,7 +53,11 @@ export default function RootLayout({
           <ClientQueryProvider>
             <I18nProvider>
               <Providers
-                themeProps={{ attribute: "class", defaultTheme: "light" }}
+                themeProps={{
+                  attribute: "class",
+                  defaultTheme: "light",
+                  themes: ["light", "dark", "midnight-navy", "purple-haze"],
+                }}
               >
                 {children}
                 <ModalProvider />

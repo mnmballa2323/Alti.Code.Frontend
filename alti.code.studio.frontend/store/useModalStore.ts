@@ -11,6 +11,7 @@ type ModalType =
   | "search-workflows"
   | "settings"
   | "connect-cloud"
+  | "theme-picker"
   | null;
 interface ModalStore {
   isOpen: boolean;
