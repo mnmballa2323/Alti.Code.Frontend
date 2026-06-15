@@ -190,6 +190,7 @@ echo -e "Applying customer VPC and Compute VM resource rules (Subnet: ${SUBNET_C
 terraform apply -var="customer_id=${CUSTOMER}" \
                 -var="customer_subnet_cidr=${SUBNET_CIDR}" \
                 -var="customer_domain=${DOMAIN}" \
+                -var="tenancy_model=${TENANCY}" \
                 -auto-approve
 
 echo -e "${GREEN}✔ Customer-isolated VPC infrastructure provisioned successfully.${NC}"

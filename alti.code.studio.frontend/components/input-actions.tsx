@@ -1314,14 +1314,10 @@ function PromptInputFullLineComponent({
 
           {rightActions}
 
-          {prompt ? (
-            <ArrowUp
-              className="size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white transition-transform hover:scale-110 active:scale-95"
-              onClick={handleSubmit}
-            />
-          ) : (
-            <AudioRecorder setMessage={setPrompt} />
-          )}
+          <ArrowUp
+            className={`size-6 flex-none cursor-pointer rounded-full border-2 border-gray-300 bg-black p-0.5 text-white transition-transform ${prompt ? 'hover:scale-110 active:scale-95' : 'opacity-40 cursor-not-allowed'}`}
+            onClick={prompt ? handleSubmit : undefined}
+          />
         </div>
       </div>
     </Form>

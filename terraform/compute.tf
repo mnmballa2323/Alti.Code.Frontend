@@ -250,6 +250,7 @@ resource "openstack_compute_instance_v2" "backend_instance" {
               PRIVATE_CLOUD_MODE=true
               OS_AUTH_URL=${var.openstack_auth_url}
               OPENSTACK_DEFAULT_DOMAIN=Default
+              TENANCY_MODEL=${var.tenancy_model}
               EOT
 
               # 7. Configure Nightly Postgres Backup Script & Cron Job

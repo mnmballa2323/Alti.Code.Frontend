@@ -171,6 +171,13 @@ variable "syslog_server_port" {
   default     = "514"
 }
 
+variable "tenancy_model" {
+  description = "The tenancy model for the deployment (shared or dedicated)"
+  type        = string
+  default     = "dedicated"
+}
+
+
 
 
 

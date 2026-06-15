@@ -228,17 +228,10 @@ function AgentPageContent() {
                           value={chatMessage}
                           onChange={(e) => setChatMessage(e.target.value)}
                         />
-                        {chatMessage ? (
-                          <ArrowUp
-                            className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:opacity-80 transition-opacity shrink-0"
-                            onClick={(e: any) => handleChatSend(e)}
-                          />
-                        ) : (
-                          <AudioRecorder
-                            className="w-10 h-10 p-2.5 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex-none shrink-0 hover:opacity-80 transition-opacity"
-                            setMessage={setChatMessage}
-                          />
-                        )}
+                        <ArrowUp
+                          className={`w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-opacity shrink-0 ${!chatMessage ? 'opacity-40 cursor-not-allowed' : 'hover:opacity-80'}`}
+                          onClick={chatMessage ? (e: any) => handleChatSend(e) : undefined}
+                        />
                       </div>
                     </form>
                   </div>
