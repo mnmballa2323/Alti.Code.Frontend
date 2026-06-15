@@ -420,7 +420,7 @@ export default function AuthLayout({
           </h2>
           <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
             {isTauri
-              ? "Login to the inso code platform and 10x your software development 🚀"
+              ? "Login to the inso code platform and 10x your software development with swarms of agents."
               : "Join the Inso Code platform and accelerate your engineering team with autonomous AI agents."}
           </p>
         </div>
