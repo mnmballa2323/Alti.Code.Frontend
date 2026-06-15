@@ -258,10 +258,15 @@ export default function LoginPage() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center text-center">
         <h1 className="text-3xl font-semibold tracking-tight text-black">
-          Welcome back
+          {isDesktopApp ? "Build the future." : "Welcome back"}
         </h1>
+        {isDesktopApp && (
+          <p className="text-gray-500 text-sm mt-2 font-medium max-w-xs">
+            Login to the inso code platform and 10x your software development with swarms of agents.
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-5 mt-2">
