@@ -262,9 +262,6 @@ export default function LoginPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-black">
           Welcome back
         </h1>
-        <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Sign in to continue to inso code
-        </p>
       </div>
 
       <div className="flex flex-col gap-5 mt-2">
