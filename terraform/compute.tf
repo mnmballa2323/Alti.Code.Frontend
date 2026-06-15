@@ -384,6 +384,31 @@ SSHCFG
               exportfs -a
               systemctl restart nfs-kernel-server
 
+              # 10.6. Configure Stale Workspace Garbage Collection (Phase 2)
+              echo "Configuring stale workspace garbage collection..."
+              cat <<'STALECLEANUP' > /usr/local/bin/cleanup_stale_workspaces.sh
+              #!/bin/bash
+              # Prune workspace folders older than 14 days
+              find /opt/alti-code-studio/logs/workspaces -mindepth 1 -maxdepth 1 -type d -mtime +14 -exec rm -rf {} +
+              STALECLEANUP
+              chmod +x /usr/local/bin/cleanup_stale_workspaces.sh
+              (crontab -l 2>/dev/null; echo "0 4 * * * /usr/local/bin/cleanup_stale_workspaces.sh") | crontab -
+
+              # 10.7. Configure Syslog Receiver for Sandbox Container Auditing (Phase 4)
+              echo "Configuring syslog receiver for Sandbox container auditing..."
+              cat <<'SYSLOGRCV' > /etc/rsyslog.d/50-alti-sandbox.conf
+              # Enable UDP syslog reception on port 514
+              module(load="imudp")
+              input(type="imudp" port="514")
+
+              # Route Sandbox Docker logs to dedicated audit log file
+              if $$hostname contains "alti-sandbox" then {
+                  action(type="omfile" file="/var/log/alti-sandbox-containers.log")
+                  stop
+              }
+              SYSLOGRCV
+              systemctl restart rsyslog
+
               # 11. Start the production database, cache, proxy and frontend services
               cd /opt/alti-code-studio
               echo "reverse_proxy alti-backend-blue:3000" > ./active_backend.conf
@@ -519,14 +544,15 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
               apt-get update
               apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
-              # Configure Docker daemon max-size logging & BuildKit acceleration
+              # Configure Docker daemon max-size logging & BuildKit acceleration (with remote syslog forwarding - Phase 4)
               mkdir -p /etc/docker
               cat <<DOCKER > /etc/docker/daemon.json
               {
-                "log-driver": "json-file",
+                "log-driver": "syslog",
                 "log-opts": {
-                  "max-size": "50m",
-                  "max-file": "3"
+                  "syslog-address": "udp://${openstack_compute_instance_v2.backend_instance.network[0].fixed_ip_v4}:514",
+                  "tag": "{{.Name}}",
+                  "syslog-facility": "local0"
                 },
                 "max-concurrent-downloads": 10,
                 "max-concurrent-uploads": 5,
@@ -580,5 +606,61 @@ resource "openstack_compute_instance_v2" "sandbox_instance" {
 
               # Add ubuntu user to docker group to allow passwordless docker operations
               usermod -aG docker ubuntu
+
+              # 5. Configure Metadata Service Shielding & Firewall rules (Phase 1)
+              echo "Configuring metadata service firewall rules..."
+              cat <<'FIREWALL' > /usr/local/bin/sandbox_firewall.sh
+              #!/bin/bash
+              # Reject docker containers forwarding packets to OpenStack metadata service
+              iptables -I FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+              iptables -A FORWARD -d 169.254.169.254 -j REJECT
+              
+              # Allow DNS resolution from containers
+              iptables -A FORWARD -p udp --dport 53 -j ACCEPT
+              iptables -A FORWARD -p tcp --dport 53 -j ACCEPT
+              
+              # Reject access to other private networks
+              iptables -A FORWARD -d 10.0.0.0/8 -j REJECT
+              iptables -A FORWARD -d 172.16.0.0/12 -j REJECT
+              iptables -A FORWARD -d 192.168.0.0/16 -j REJECT
+              FIREWALL
+              chmod +x /usr/local/bin/sandbox_firewall.sh
+
+              cat <<'FWSERVICE' > /etc/systemd/system/sandbox-firewall.service
+              [Unit]
+              Description=Alti Sandbox Container Firewall
+              After=docker.service
+
+              [Service]
+              Type=oneshot
+              ExecStart=/usr/local/bin/sandbox_firewall.sh
+              RemainAfterExit=yes
+
+              [Install]
+              WantedBy=multi-user.target
+              FWSERVICE
+              systemctl daemon-reload
+              systemctl enable sandbox-firewall.service
+              systemctl start sandbox-firewall.service
+
+              # 6. Configure Automated Docker Garbage Collection (Phase 2)
+              echo "Configuring docker garbage collection cron..."
+              (crontab -l 2>/dev/null; echo "0 3 * * * docker system prune -af --volumes --filter 'until=24h'") | crontab -
+
+              # 7. Configure NFS Mount Recovery (Phase 3)
+              echo "Configuring NFS mount recovery health check..."
+              cat <<'NFSRECOVER' > /usr/local/bin/nfs_mount_check.sh
+              #!/bin/bash
+              MOUNT_POINT="/opt/alti-code-studio/logs/workspaces"
+              LOGFILE="/var/log/nfs_mount_recovery.log"
+              
+              if ! timeout 5 ls "$$MOUNT_POINT" >/dev/null 2>&1; then
+                echo "$$(date '+%Y-%m-%d %H:%M:%S') - NFS mount stale or unresponsive. Forcing unmount and remounting..." >> "$$LOGFILE"
+                umount -f -l "$$MOUNT_POINT" || true
+                mount -a || echo "$$(date '+%Y-%m-%d %H:%M:%S') - Remount failed!" >> "$$LOGFILE"
+              fi
+              NFSRECOVER
+              chmod +x /usr/local/bin/nfs_mount_check.sh
+              (crontab -l 2>/dev/null; echo "*/5 * * * * /usr/local/bin/nfs_mount_check.sh") | crontab -
               EOF
 }
