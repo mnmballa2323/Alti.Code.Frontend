@@ -259,12 +259,19 @@ export default function LoginPage() {
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col items-center text-center">
+        {isDesktopApp && (
+          <img
+            alt="Inso Logo Icon"
+            className="h-10 w-auto opacity-90 mb-6"
+            src="/logo-black.png"
+          />
+        )}
         <h1 className="text-3xl font-semibold tracking-tight text-black">
-          {isDesktopApp ? "Build the future." : "Welcome back"}
+          {isDesktopApp ? "Build The Future" : "Welcome back"}
         </h1>
         {isDesktopApp && (
           <p className="text-gray-500 text-sm mt-2 font-medium whitespace-nowrap">
-            Login to the inso code platform and 10x your software development.
+            Login to the platform and 10x your software development.
           </p>
         )}
       </div>

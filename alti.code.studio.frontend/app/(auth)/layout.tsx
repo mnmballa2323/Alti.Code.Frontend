@@ -430,14 +430,8 @@ export default function AuthLayout({
       {/* Right Panel: Auth Form */}
       <div className={`w-full ${isTauri ? "max-w-2xl mx-auto" : "lg:w-1/2"} flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative`}>
         {/* Logo in top right */}
-        <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-          {isTauri ? (
-            <img
-              alt="Inso Logo Icon"
-              className="h-8 w-auto opacity-90"
-              src="/logo-black.png"
-            />
-          ) : (
+        {!isTauri && (
+          <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
             <Link href="/">
               <img
                 alt="Inso Logo Icon"
@@ -445,8 +439,8 @@ export default function AuthLayout({
                 src="/logo-black.png"
               />
             </Link>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Back Button */}
         {!isTauri && (
