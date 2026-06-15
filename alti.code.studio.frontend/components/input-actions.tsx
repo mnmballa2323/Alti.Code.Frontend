@@ -1311,10 +1311,17 @@ function PromptInputFullLineComponent({
 
           {rightActions}
 
-          <ArrowUp
-            className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-            onClick={prompt ? handleSubmit : undefined}
-          />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <ArrowUp
+                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                onClick={prompt ? handleSubmit : undefined}
+              />
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p>Send Prompt</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       </div>
     </Form>

@@ -221,21 +221,23 @@ export function PromptInputFullLineComponent({
             </VisuallyHidden>
           </Button>
         </Tooltip>
-        <Button
-          isIconOnly
-          className="dark:bg-white bg-black"
-          radius="full"
-          size="sm"
-          type="submit"
-          variant="solid"
-          style={{ opacity: 1 }}
-        >
-          <Icon
-            className="dark:text-black text-white [&>path]:stroke-[2px]"
-            icon="solar:arrow-up-linear"
-            width={20}
-          />
-        </Button>
+        <Tooltip showArrow content="Send Prompt">
+          <Button
+            isIconOnly
+            className="dark:bg-white bg-black"
+            radius="full"
+            size="sm"
+            type="submit"
+            variant="solid"
+            style={{ opacity: 1 }}
+          >
+            <Icon
+              className="dark:text-black text-white [&>path]:stroke-[2px]"
+              icon="solar:arrow-up-linear"
+              width={20}
+            />
+          </Button>
+        </Tooltip>
       </div>
     </Form>
   );
