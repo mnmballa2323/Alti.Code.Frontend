@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ulimit -n 4096 && next dev",
-    "build": "next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
+    "build": "node scripts/check-build-safety.js && next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
     "start": "node .next/standalone/server.js || next start",
     "lint": "eslint --fix",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
