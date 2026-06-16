@@ -8,7 +8,6 @@ import ChatBotLayout from "@/components/ChatbotLayout";
 import AgentCreationWizard from "@/components/agents/agent-creation-wizard";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import AgentRightSidebar from "@/components/agent-right-sidebar";
-import AudioRecorder from "@/components/AudioRecorder";
 import { AppDispatch } from "@/store";
 
 // Mock Action Block component for UI demonstration
@@ -228,10 +227,14 @@ function AgentPageContent() {
                           value={chatMessage}
                           onChange={(e) => setChatMessage(e.target.value)}
                         />
-                         <ArrowUp
+                        <ArrowUp
                           className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-opacity shrink-0 hover:opacity-80"
                           style={{ opacity: 1 }}
-                          onClick={chatMessage ? (e: any) => handleChatSend(e) : undefined}
+                          onClick={
+                            chatMessage
+                              ? (e: any) => handleChatSend(e)
+                              : undefined
+                          }
                         />
                       </div>
                     </form>

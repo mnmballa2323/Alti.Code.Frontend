@@ -20,5 +20,4 @@ export const DOWNLOAD_LINKS = {
   mac:
     process.env.NEXT_PUBLIC_DOWNLOAD_MAC ??
     "https://github.com/mnmballa2323/Alti.Code.Studio.Frontend/releases/download/v1.0.0/Inso-Code_1.0.0_x64.dmg",
-
 };

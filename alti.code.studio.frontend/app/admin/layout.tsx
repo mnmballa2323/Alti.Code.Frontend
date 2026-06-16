@@ -6,21 +6,22 @@ import Link from "next/link";
 import {
   UserPlus,
   Users,
-  CreditCard,
   FileText,
-  BookOpen,
   Shield,
   Activity,
   BarChart3,
   ArrowLeft,
   LayoutDashboard,
   DollarSign,
-  Server,
-  Cloud,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import { AwsIcon, AzureIcon, GoogleCloudIcon, LibertyIcon } from "@/components/CloudIcons";
+import {
+  AwsIcon,
+  AzureIcon,
+  GoogleCloudIcon,
+  LibertyIcon,
+} from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;
@@ -43,7 +44,6 @@ const memberItems: SidebarItem[] = [
 ];
 
 const managerItems: SidebarItem[] = [
-
   { label: "Instructions", href: "/admin/instructions", icon: FileText },
   { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
 ];
@@ -128,7 +128,6 @@ export default function AdminLayout({
       pathname.startsWith("/admin/members") ||
       pathname.startsWith("/admin/team-members") ||
       pathname.startsWith("/admin/teams") ||
-
       pathname.startsWith("/admin/revenue") ||
       pathname.startsWith("/admin/audit") ||
       pathname.startsWith("/admin/usage")
@@ -136,7 +135,6 @@ export default function AdminLayout({
       return "Platform Admin";
     }
     if (
-
       pathname.startsWith("/admin/instructions") ||
       pathname.startsWith("/admin/guardrails")
     ) {

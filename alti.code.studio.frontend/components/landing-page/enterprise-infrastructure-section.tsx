@@ -11,7 +11,8 @@ export default function EnterpriseInfrastructureSection() {
         </h2>
 
         <p className="text-xl text-gray-500 leading-relaxed font-medium mx-auto mb-12">
-          Choose the deployment model that fits your security and compliance requirements.
+          Choose the deployment model that fits your security and compliance
+          requirements.
         </p>
 
         {/* Simplified 2-Column Grid */}
@@ -45,8 +46,6 @@ export default function EnterpriseInfrastructureSection() {
               infrastructure overhead.
             </p>
           </div>
-
-
         </div>
       </div>
     </section>

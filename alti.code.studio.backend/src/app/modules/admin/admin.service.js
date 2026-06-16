@@ -10,6 +10,7 @@ import paginationHelpers from '../../helpers/paginationHelpers.js';
 import UserModel from '../auth/auth.model.js';
 import SubscriptionModel from '../payment/payment.model.js';
 import mongoose from 'mongoose';
+import { prisma } from '../../../config/prisma.js';
 
 // ===========================================
 //                  All Users
@@ -106,15 +107,23 @@ const makeAdminService = async userId => {
   return result;
 };
 
-const deleteUserService = async objectId => {
-  if (!mongoose.Types.ObjectId.isValid(objectId)) {
+const deleteUserService = async userId => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  
+  const isUuid = uuidRegex.test(userId);
+  const isMongoId = mongoose.Types.ObjectId.isValid(userId);
+
+  if (!isUuid && !isMongoId) {
     throw new Error('Invalid user ID format');
   }
 
-  const mongoId = new mongoose.Types.ObjectId(objectId); // <-- convert explicitly
-
-  const user = await UserModel.findOne({ _id: mongoId });
-  logger.info('User found:', user);
+  let user;
+  if (isUuid) {
+    user = await prisma.user.findUnique({ where: { id: userId } });
+  } else {
+    const { UserRepository } = await import('../auth/prisma.user.repository.js');
+    user = await UserRepository.findById(userId);
+  }
 
   if (!user) {
     throw new Error('User not found');
@@ -124,7 +133,13 @@ const deleteUserService = async objectId => {
     throw new Error('Cannot delete an admin user');
   }
 
-  const result = await UserModel.deleteOne({ _id: mongoId });
+  let result;
+  if (isUuid) {
+    result = await prisma.user.delete({ where: { id: userId } });
+  } else {
+    const { UserRepository } = await import('../auth/prisma.user.repository.js');
+    result = await UserRepository.deleteUser(userId);
+  }
   return result;
 };
 

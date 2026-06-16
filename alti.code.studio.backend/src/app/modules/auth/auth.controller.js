@@ -8,14 +8,13 @@
 import bcrypt from 'bcryptjs';
 import formData from 'form-data';
 import httpStatus from 'http-status';
-import mongoose from 'mongoose';
 import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import { logger } from '../../../shared/logger.js';
 import sendResponse from '../../../shared/sendResponse.js';
-import UserModel from './auth.model.js';
 import { authService } from './auth.service.js';
+import { UserRepository } from './prisma.user.repository.js';
 import {
   generateOTP,
 } from './auth.utils.js';
@@ -136,271 +135,166 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
-const forgetPassword = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+const forgetPassword = catchAsync(async (req, res) => {
+  const { email } = req.body;
+  const user = await UserRepository.findByEmail(email);
 
-  try {
-    const { email } = req.body;
-    const user = await UserModel.findOne({ email: email }).session(session);
-
-    if (!user) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(404).send({ error: 'You entered the wrong email' });
-    }
-
-    const OTP = await generateOTP();
-    const OTPExpiration = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
-
-    user.resetPasswordOTP = OTP;
-    user.resetPasswordExpires = OTPExpiration;
-    await user.save({ session });
-
-    const mailData = { to: email, subject: 'Password Reset', body: `OTP: ${OTP}` };
-    await sendMailWithGoogleWorkspace(mailData);
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.status(200).json({
-      status: 'Success',
-      message: 'OTP sent successfully!',
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    logger.error("Forget Password Error:", error);
-    res.status(500).send({ error: 'Something went wrong!' });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'You entered the wrong email');
   }
-};
 
-const resetPassword = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const OTP = await generateOTP();
+  const OTPExpiration = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
 
-  try {
-    const { email, otp, newPassword } = req.body;
-    const user = await UserModel.findOne({ email: email }).session(session);
+  await UserRepository.updateUser(user.id, {
+    resetPasswordOTP: OTP,
+    resetPasswordExpires: OTPExpiration,
+  });
 
-    if (!user) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(404).send({ error: 'You entered the wrong email' });
-    }
+  const mailData = { to: email, subject: 'Password Reset', body: `OTP: ${OTP}` };
+  await sendMailWithGoogleWorkspace(mailData);
 
-    if (user.resetPasswordOTP !== otp || !user.resetPasswordOTP) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).send({ error: 'Invalid OTP' });
-    }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'OTP sent successfully!',
+  });
+});
 
-    if (Date.now() > user.resetPasswordExpires) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).send({ error: 'OTP expired' });
-    }
+const resetPassword = catchAsync(async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  const user = await UserRepository.findByEmail(email);
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    user.password = hashedPassword;
-    user.resetPasswordOTP = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save({ session });
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.status(200).send({ message: 'Password updated successfully' });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    logger.error("Reset Password Error:", error);
-    res.status(500).send({ error: 'An error occurred' });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'You entered the wrong email');
   }
-};
 
-const deleteUserAccountOTP = async (req, res, next) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const userId = req.params?.id;
-
-    if (!userId) {
-      await session.abortTransaction();
-      session.endSession();
-      return res
-        .status(httpStatus.NOT_FOUND)
-        .send({ error: 'Invalid user ID' });
-    }
-
-    const user = await UserModel.findById(userId).session(session);
-
-    if (!user) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(httpStatus.NOT_FOUND).send({ error: 'User not found' });
-    }
-
-    const OTP = await generateOTP();
-    const OTPExpiration = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
-
-    user.deleteAccountOTP = OTP;
-    user.deleteAccountExpires = OTPExpiration;
-    await user.save({ session });
-
-    const mailData = { to: user.email, subject: 'Delete Account', body: `OTP: ${OTP}` };
-    await sendMailWithGoogleWorkspace(mailData);
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.status(httpStatus.OK).json({
-      status: 'Success',
-      message: 'Delete account OTP sent successfully',
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    logger.error("Delete Account OTP Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      status: 'Fail',
-      message: "Couldn't send delete account OTP",
-      error: error.message,
-    });
+  if (user.resetPasswordOTP !== otp || !user.resetPasswordOTP) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid OTP');
   }
-};
 
-const deleteUserAccount = async (req, res, next) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const userId = req.params?.id;
-    const { otp } = req.body;
-
-    if (!userId) {
-      await session.abortTransaction();
-      session.endSession();
-      return res
-        .status(httpStatus.NOT_FOUND)
-        .send({ error: 'Invalid user ID' });
-    }
-
-    const user = await UserModel.findById(userId).session(session);
-
-    if (!userId) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(httpStatus.NOT_FOUND).send({ error: 'User not found' });
-    }
-
-    if (user.deleteAccountOTP !== otp || !user.deleteAccountOTP) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(httpStatus.BAD_REQUEST).send({ error: 'Invalid OTP' });
-    }
-
-    if (Date.now() > user.deleteAccountExpires) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(httpStatus.BAD_REQUEST).send({ error: 'OTP expired' });
-    }
-
-    // Proceed with deleting the user account
-    const result = await UserModel.deleteOne({ _id: userId }).session(session);
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.status(httpStatus.OK).json({
-      status: 'Success',
-      message: 'Account deleted successfully',
-      data: result,
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    logger.error("Delete Account Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      status: 'Fail',
-      message: "Couldn't delete account",
-      error: error.message,
-    });
+  if (new Date() > new Date(user.resetPasswordExpires)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'OTP expired');
   }
-};
 
-const changePassword = async (req, res, next) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  try {
-    // const userId = req.params?.userId;
-    const userId = req.user?._id;
-    // logger.info(userId, 'userId from token in controller'); 
-    const { newPassword, oldPassword } = req.body;
-    if (!oldPassword || !newPassword) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).json({
-        status: 'Fail',
-        message: 'Old password and new password are required',
-      });
-    }
+  await UserRepository.updateUser(user.id, {
+    password: hashedPassword,
+    resetPasswordOTP: null,
+    resetPasswordExpires: null,
+  });
 
-    if (!userId) {
-      await session.abortTransaction();
-      session.endSession();
-      return res
-        .status(httpStatus.NOT_FOUND)
-        .send({ error: 'Invalid user ID' });
-    }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password updated successfully',
+  });
+});
 
-    const user = await UserModel.findById(userId)
-      .select('+password')
-      .session(session);
+const deleteUserAccountOTP = catchAsync(async (req, res) => {
+  const userId = req.params?.id;
 
-    if (!user) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(httpStatus.NOT_FOUND).send({ error: 'User not found' });
-    }
-
-    // Compare old password with hashed password stored in the database
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-    if (!isMatch) {
-      await session.abortTransaction();
-      session.endSession();
-      return res.status(400).send({ error: "Password didn't match" });
-    }
-
-    // Hash the new password
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update the password in the database
-    user.password = hashedNewPassword;
-    await user.save({ session });
-
-    await session.commitTransaction();
-    session.endSession();
-
-    res.status(httpStatus.OK).json({
-      status: 'Success',
-      message: 'Password changed successfully',
-    });
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    logger.error("Change Password Error:", error);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      status: 'Fail',
-      message: "Couldn't change password",
-      error: error.message,
-    });
+  if (!userId) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Invalid user ID');
   }
-};
+
+  const user = await UserRepository.findById(userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const OTP = await generateOTP();
+  const OTPExpiration = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+
+  await UserRepository.updateUser(user.id, {
+    deleteAccountOTP: OTP,
+    deleteAccountExpires: OTPExpiration,
+  });
+
+  const mailData = { to: user.email, subject: 'Delete Account', body: `OTP: ${OTP}` };
+  await sendMailWithGoogleWorkspace(mailData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Delete account OTP sent successfully',
+  });
+});
+
+const deleteUserAccount = catchAsync(async (req, res) => {
+  const userId = req.params?.id;
+  const { otp } = req.body;
+
+  if (!userId) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Invalid user ID');
+  }
+
+  const user = await UserRepository.findById(userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  if (user.deleteAccountOTP !== otp || !user.deleteAccountOTP) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid OTP');
+  }
+
+  if (new Date() > new Date(user.deleteAccountExpires)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'OTP expired');
+  }
+
+  // Proceed with deleting the user account
+  const result = await UserRepository.deleteUser(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Account deleted successfully',
+    data: result,
+  });
+});
+
+const changePassword = catchAsync(async (req, res) => {
+  const userId = req.user?._id;
+  const { newPassword, oldPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Old password and new password are required');
+  }
+
+  if (!userId) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Invalid user ID');
+  }
+
+  const user = await UserRepository.findById(userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  // Compare old password with hashed password stored in the database
+  const isMatch = await bcrypt.compare(oldPassword, user.password || '');
+
+  if (!isMatch) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Password didn't match");
+  }
+
+  // Hash the new password
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update the password in the database
+  await UserRepository.updateUser(user.id, {
+    password: hashedNewPassword,
+  });
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password changed successfully',
+  });
+});
 
 const getUser = catchAsync(async (req, res) => {
   // const userId = req.params?.userId;

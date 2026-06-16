@@ -1,11 +1,8 @@
-# Tasks: Implement Dashboard Page in Owner/Admin Consoles
-
-- [x] Create shared `DashboardConsoleView.tsx` component
-- [x] Create `app/owner/dashboard/page.tsx`
-- [x] Create `app/admin/dashboard/page.tsx`
-- [x] Modify `app/owner/layout.tsx` to add Dashboard nav link & title support
-- [x] Modify `app/admin/layout.tsx` to add Dashboard nav link & title support
-- [x] Align redirects in `app/owner/page.tsx`, `app/owner/platform-admin/page.tsx`, `app/admin/page.tsx`, `app/admin/platform-admin/page.tsx`
-- [x] Align redirects in `app/dashboard/layout.tsx`
-- [x] Align redirects in `components/navbar.tsx`
-- [ ] Verify typescript compilation and run local tests
+- `[x]` Upgrade `software_engineering_swarm.js` to execute real commands
+- `[x]` Create integration test `software_engineering_swarm.test.js`
+- `[x]` Run Vitest suite to verify Crabbox developer swarm
+- `[x]` Refactor `prisma.user.repository.js` to be async and include `deleteUser`
+- `[x]` Wrap vulnerable controller handlers in `catchAsync` & port to PostgreSQL
+- `[x]` Refactor `admin.service.js` to use Prisma for user checks and deletion
+- `[x]` Bump version in `VERSION` to `39.37.232`
+- `[x]` Update `CHANGELOG.md` with release notes

@@ -227,9 +227,9 @@ export function PromptInputFullLineComponent({
             className="dark:bg-white bg-black"
             radius="full"
             size="sm"
+            style={{ opacity: 1 }}
             type="submit"
             variant="solid"
-            style={{ opacity: 1 }}
           >
             <Icon
               className="dark:text-black text-white [&>path]:stroke-[2px]"

@@ -1,14 +1,16 @@
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
-import fs from 'fs';
+import fs from 'fs/promises';
+import { existsSync } from 'fs';
 import path from 'path';
 
 const mockFilePath = path.join(process.cwd(), 'users_mock.json');
 
-function getMockUsers() {
+async function getMockUsers() {
   try {
-    if (fs.existsSync(mockFilePath)) {
-      return JSON.parse(fs.readFileSync(mockFilePath, 'utf8'));
+    if (existsSync(mockFilePath)) {
+      const data = await fs.readFile(mockFilePath, 'utf8');
+      return JSON.parse(data);
     }
   } catch (e) {
     console.error('Error reading mock users:', e);
@@ -16,9 +18,9 @@ function getMockUsers() {
   return [];
 }
 
-function saveMockUsers(users) {
+async function saveMockUsers(users) {
   try {
-    fs.writeFileSync(mockFilePath, JSON.stringify(users, null, 2), 'utf8');
+    await fs.writeFile(mockFilePath, JSON.stringify(users, null, 2), 'utf8');
   } catch (e) {
     console.error('Error writing mock users:', e);
   }
@@ -40,7 +42,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for findByEmail');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       return users.find(u => u.email === email) || null;
     }
   },
@@ -55,7 +57,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for findById');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       return users.find(u => u.id === id) || null;
     }
   },
@@ -96,7 +98,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for createUser');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       
       const newUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
       const newTenantId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
@@ -139,7 +141,7 @@ export const UserRepository = {
       };
 
       users.push(newUser);
-      saveMockUsers(users);
+      await saveMockUsers(users);
       return newUser;
     }
   },
@@ -166,7 +168,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for confirmEmail');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       const userIndex = users.findIndex(u => u.confirmationToken === token);
       if (userIndex === -1) return null;
       
@@ -175,7 +177,7 @@ export const UserRepository = {
       user.confirmationToken = null;
       user.confirmationTokenExpires = null;
       
-      saveMockUsers(users);
+      await saveMockUsers(users);
       return user;
     }
   },
@@ -191,7 +193,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for updateUser');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       const userIndex = users.findIndex(u => u.id === id);
       if (userIndex === -1) return null;
       
@@ -201,8 +203,28 @@ export const UserRepository = {
         updatedAt: new Date().toISOString()
       };
       
-      saveMockUsers(users);
+      await saveMockUsers(users);
       return users[userIndex];
+    }
+  },
+
+  /**
+   * Delete a user by ID
+   */
+  deleteUser: async (id) => {
+    try {
+      return await prisma.user.delete({
+        where: { id },
+      });
+    } catch (dbError) {
+      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for deleteUser');
+      const users = await getMockUsers();
+      const userIndex = users.findIndex(u => u.id === id);
+      if (userIndex === -1) return null;
+      
+      const [deletedUser] = users.splice(userIndex, 1);
+      await saveMockUsers(users);
+      return deletedUser;
     }
   },
 
@@ -252,7 +274,7 @@ export const UserRepository = {
       });
     } catch (dbError) {
       console.warn('⚠️ [Postgres Offline] Falling back to mock users database for upsertSocialUser');
-      const users = getMockUsers();
+      const users = await getMockUsers();
       let userIndex = users.findIndex(u => u.email === email);
       
       if (userIndex !== -1) {
@@ -264,7 +286,7 @@ export const UserRepository = {
           role: users[userIndex].role === 'unauthorized' ? 'user' : users[userIndex].role,
           updatedAt: new Date().toISOString()
         };
-        saveMockUsers(users);
+        await saveMockUsers(users);
         return users[userIndex];
       }
 
@@ -303,7 +325,7 @@ export const UserRepository = {
       };
 
       users.push(newUser);
-      saveMockUsers(users);
+      await saveMockUsers(users);
       return newUser;
     }
   }

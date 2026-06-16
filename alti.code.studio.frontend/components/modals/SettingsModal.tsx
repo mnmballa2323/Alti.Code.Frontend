@@ -268,7 +268,6 @@ const SettingsModal = () => {
                       military-grade Tink AEAD encryption.
                     </div>
 
-
                     <Input
                       label="Gemini API Key"
                       placeholder="AIzaSy..."

@@ -88,6 +88,7 @@ export default function LoginPage() {
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Login successful!");
           window.location.href = "/new-chat";
+
           return;
         }
 
@@ -155,6 +156,7 @@ export default function LoginPage() {
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Verification successful! Logging in...");
           window.location.href = "/new-chat";
+
           return;
         }
 

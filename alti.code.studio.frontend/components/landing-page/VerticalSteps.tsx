@@ -5,7 +5,7 @@ import type { ComponentProps } from "react";
 
 import { cn } from "@heroui/react";
 import { useControlledState } from "@react-stately/utils";
-import { LazyMotion, domAnimation, m } from "framer-motion";
+import { m } from "framer-motion";
 import React from "react";
 
 export type VerticalStepProps = {
@@ -191,10 +191,13 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                           className={cn(
                             "border-2 text-medium relative flex h-[34px] w-[34px] items-center justify-center rounded-full font-semibold transition-all duration-300",
                             {
-                              "bg-zinc-900 border-zinc-900 text-white shadow-md": status === "complete",
-                              "border-zinc-900 text-zinc-900 bg-transparent": status === "active",
-                              "border-zinc-200 text-zinc-400 bg-transparent": status === "inactive",
-                            }
+                              "bg-zinc-900 border-zinc-900 text-white shadow-md":
+                                status === "complete",
+                              "border-zinc-900 text-zinc-900 bg-transparent":
+                                status === "active",
+                              "border-zinc-200 text-zinc-400 bg-transparent":
+                                status === "inactive",
+                            },
                           )}
                           data-status={status}
                         >
@@ -208,7 +211,8 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                           className={cn(
                             "text-medium text-zinc-900 font-semibold transition-[color,opacity] duration-300 group-active:opacity-70",
                             {
-                              "text-zinc-400 font-medium": status === "inactive",
+                              "text-zinc-400 font-medium":
+                                status === "inactive",
                             },
                           )}
                         >
@@ -218,8 +222,10 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                           className={cn(
                             "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 transition-all duration-300 overflow-hidden",
                             {
-                              "max-h-0 opacity-0 mt-0 pointer-events-none": status !== "active",
-                              "max-h-40 opacity-100 mt-1.5": status === "active",
+                              "max-h-0 opacity-0 mt-0 pointer-events-none":
+                                status !== "active",
+                              "max-h-40 opacity-100 mt-1.5":
+                                status === "active",
                             },
                           )}
                         >

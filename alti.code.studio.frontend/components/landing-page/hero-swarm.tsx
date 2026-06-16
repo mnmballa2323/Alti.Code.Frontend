@@ -4,13 +4,13 @@ import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-
 export default function HeroSwarm() {
   const [os, setOs] = useState<"mac" | "win" | "other" | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userAgent = window.navigator.userAgent.toLowerCase();
+
       if (userAgent.includes("mac")) {
         setOs("mac");
       } else if (userAgent.includes("win")) {

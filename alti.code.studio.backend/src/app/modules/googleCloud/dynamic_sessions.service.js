@@ -81,6 +81,45 @@ class GoogleDynamicSessionsService {
         logger.info(`🔄 Running fallback execution locally for language: ${language}...`);
         
         try {
+            const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
+            if (provider === 'crabbox') {
+                logger.info(`🦀 Routing local execution to Crabbox for language: ${language}...`);
+                const { crabboxService } = await import('../crabbox/crabbox.service.js');
+                const { resolve, join } = await import('path');
+                const { writeFileSync, mkdirSync, rmSync } = await import('fs');
+
+                const agentId = options.agentId || 'generic';
+                const cleanAgentId = agentId.replace(/[^a-zA-Z0-9_]/g, '_');
+                const workspacePath = resolve(`./logs/workspaces/agent_${cleanAgentId}`);
+                const tempExt = language === 'python' ? 'py' : 'js';
+                const tempFileName = `temp_exec_crabbox_${Math.random().toString(36).substring(2, 9)}.${tempExt}`;
+                const tempFilePath = join(workspacePath, tempFileName);
+
+                mkdirSync(workspacePath, { recursive: true });
+                writeFileSync(tempFilePath, code, 'utf8');
+
+                try {
+                    const runtimeCmd = language === 'python' ? 'python' : 'node';
+                    const result = await crabboxService.run(`${runtimeCmd} ${tempFileName}`, {
+                        id: options.leaseId,
+                        provider: options.crabboxProvider,
+                        class: options.crabboxClass,
+                        cwd: workspacePath
+                    });
+
+                    return {
+                        success: result.success,
+                        stdout: result.stdout || '',
+                        stderr: result.stderr || '',
+                        status: result.success ? 'OK' : 'FAILED'
+                    };
+                } finally {
+                    try {
+                        rmSync(tempFilePath, { force: true });
+                    } catch (e) {}
+                }
+            }
+
             if (language === 'nodejs' || language === 'javascript') {
                 const { CodeExecutionSandbox } = await import('../sandbox/code_execution_sandbox.js');
                 const result = await CodeExecutionSandbox.execute(code, options);

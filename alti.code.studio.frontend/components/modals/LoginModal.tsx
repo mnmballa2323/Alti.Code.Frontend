@@ -48,7 +48,8 @@ export function LoginModal() {
     }
 
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
       const loginRes = await fetch(`${apiBaseUrl}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,6 +66,7 @@ export function LoginModal() {
         toast.error(
           response.message || response.error || "Invalid credentials",
         );
+
         return;
       }
 
@@ -72,6 +74,7 @@ export function LoginModal() {
         setMfaToken(response.data.mfaToken);
         setMfaRequired(true);
         toast.success("MFA verification code required.");
+
         return;
       }
 
@@ -83,6 +86,7 @@ export function LoginModal() {
           toast.success("Login successful!");
           onClose();
           window.location.href = "/new-chat";
+
           return;
         }
 
@@ -114,14 +118,17 @@ export function LoginModal() {
 
     if (mfaCode.length !== 6) {
       toast.error("Please enter a valid 6-digit code.");
+
       return;
     }
 
     const loading = toast.loading("Verifying code...");
+
     setIsLoadingMfa(true);
 
     try {
-      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const apiBaseUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
       const challengeRes = await fetch(`${apiBaseUrl}/auth/mfa/challenge`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -137,6 +144,7 @@ export function LoginModal() {
         toast.error(
           response.message || response.error || "Invalid verification code",
         );
+
         return;
       }
 
@@ -148,6 +156,7 @@ export function LoginModal() {
           toast.success("Verification successful! Logging in...");
           onClose();
           window.location.href = "/new-chat";
+
           return;
         }
 
@@ -218,6 +227,7 @@ export function LoginModal() {
                   value={mfaCode}
                   onValueChange={(val) => {
                     const digitsOnly = val.replace(/\D/g, "");
+
                     if (digitsOnly.length <= 6) {
                       setMfaCode(digitsOnly);
                     }

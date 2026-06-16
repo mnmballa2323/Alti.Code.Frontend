@@ -64,7 +64,7 @@ function HowItWorksSection() {
             className={cn(
               "flex flex-col items-center justify-center p-8 rounded-3xl bg-zinc-100/60 border border-zinc-200/60 text-center relative group transition-all duration-300 hover:bg-white hover:-translate-y-1 hover:shadow-lg",
               step.border,
-              step.glow
+              step.glow,
             )}
           >
             {/* Step Capsule Badge */}

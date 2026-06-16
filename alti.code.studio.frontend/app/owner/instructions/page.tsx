@@ -23,7 +23,9 @@ export default function InstructionsPage() {
   const [editText, setEditText] = useState("");
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<InstructionRule | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<InstructionRule | null>(
+    null,
+  );
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,76 +118,76 @@ export default function InstructionsPage() {
       {/* Instructions Card List */}
       <div className="flex flex-col gap-3 pt-2">
         {filteredInstructions.length > 0 ? (
-            filteredInstructions.map((inst, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200"
-              >
-                <div className="flex items-center gap-4 flex-1">
-                  {/* Icon Box */}
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-mono text-sm font-bold shrink-0">
-                    &gt;_
-                  </div>
-                  <div className="flex-1 pr-4">
-                    {editingIndex === index ? (
-                      <div className="flex gap-2 items-center">
-                        <input
-                          autoFocus
-                          className="flex-1 h-9 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 rounded-lg text-sm focus:outline-none text-neutral-800 dark:text-neutral-200"
-                          type="text"
-                          value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
-                        />
-                        <button
-                          className="px-3 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-semibold rounded-lg hover:bg-neutral-800 dark:hover:bg-white transition-colors"
-                          onClick={() => handleSaveEdit(index)}
-                        >
-                          Save
-                        </button>
-                        <button
-                          className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-semibold rounded-lg hover:bg-neutral-205 transition-colors"
-                          onClick={() => setEditingIndex(null)}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <>
-                        <h3 className="font-semibold text-neutral-800 dark:text-white text-[15px]">
-                          {inst.text}
-                        </h3>
-                        <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-semibold tracking-wider mt-0.5">
-                          {inst.type}
-                        </p>
-                      </>
-                    )}
-                  </div>
+          filteredInstructions.map((inst, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200"
+            >
+              <div className="flex items-center gap-4 flex-1">
+                {/* Icon Box */}
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-mono text-sm font-bold shrink-0">
+                  &gt;_
                 </div>
-
-                {editingIndex !== index && (
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                      onClick={() => handleStartEdit(index, inst.text)}
-                    >
-                      <Edit2 className="w-4 h-4 text-neutral-400" />
-                    </button>
-                    <button
-                      className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
-                      onClick={() => handleDeleteClick(inst)}
-                    >
-                      <Trash2 className="w-4 h-4 text-neutral-400" />
-                    </button>
-                  </div>
-                )}
+                <div className="flex-1 pr-4">
+                  {editingIndex === index ? (
+                    <div className="flex gap-2 items-center">
+                      <input
+                        autoFocus
+                        className="flex-1 h-9 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-3 rounded-lg text-sm focus:outline-none text-neutral-800 dark:text-neutral-200"
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                      <button
+                        className="px-3 py-1 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-semibold rounded-lg hover:bg-neutral-800 dark:hover:bg-white transition-colors"
+                        onClick={() => handleSaveEdit(index)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-semibold rounded-lg hover:bg-neutral-205 transition-colors"
+                        onClick={() => setEditingIndex(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="font-semibold text-neutral-800 dark:text-white text-[15px]">
+                        {inst.text}
+                      </h3>
+                      <p className="text-[10px] text-neutral-400 dark:text-neutral-500 font-semibold tracking-wider mt-0.5">
+                        {inst.type}
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
-            ))
-          ) : (
-            <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No instructions configured.
+
+              {editingIndex !== index && (
+                <div className="flex items-center gap-2">
+                  <button
+                    className="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-white rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                    onClick={() => handleStartEdit(index, inst.text)}
+                  >
+                    <Edit2 className="w-4 h-4 text-neutral-400" />
+                  </button>
+                  <button
+                    className="p-2 text-neutral-400 hover:text-red-500 dark:hover:text-red-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800/40 transition-colors"
+                    onClick={() => handleDeleteClick(inst)}
+                  >
+                    <Trash2 className="w-4 h-4 text-neutral-400" />
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          ))
+        ) : (
+          <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+            No instructions configured.
+          </div>
+        )}
+      </div>
 
       {deleteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
@@ -200,15 +202,15 @@ export default function InstructionsPage() {
             </div>
             <div className="flex border-t border-neutral-100 dark:border-neutral-800">
               <button
-                onClick={cancelDelete}
                 className="flex-1 py-3.5 text-[15px] font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                onClick={cancelDelete}
               >
                 Cancel
               </button>
               <div className="w-[1px] bg-neutral-100 dark:bg-neutral-800" />
               <button
-                onClick={confirmDelete}
                 className="flex-1 py-3.5 text-[15px] font-semibold text-[#FF3B30] hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                onClick={confirmDelete}
               >
                 Delete
               </button>

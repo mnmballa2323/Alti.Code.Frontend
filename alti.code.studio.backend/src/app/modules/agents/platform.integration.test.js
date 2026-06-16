@@ -110,9 +110,19 @@ describe('Modular Platform Engineering, IaC & Cloud-Native Systems Swarm Router 
             expect(def.capabilities).toContain('vm_golden_image_builds');
             expect(def.capabilities).toContain('parallel_build_optimizations');
         });
+
+        it('should successfully parse and load Crabbox Remote Sandbox & Secure Execution Specialist', async () => {
+            const agentPath = path.join(PLATFORM_DIR, 'platform.crabbox.agent.yaml');
+            const def = parseYaml(await fs.readFile(agentPath, 'utf8'));
+
+            expect(def.id).toBe('agent.platform.crabbox');
+            expect(def.name).toBe('Crabbox Remote Sandbox & Secure Execution Specialist');
+            expect(def.capabilities).toContain('remote_lease_lifecycle_management');
+            expect(def.capabilities).toContain('workspace_diff_synchronization');
+        });
     });
 
-    describe('Precision Swarm Routing for All 10 Platform Engineering & IaC Agents', () => {
+    describe('Precision Swarm Routing for All 11 Platform Engineering & IaC Agents', () => {
         it('should route Terraform keywords to Terraform State & IaC Optimizer agent', async () => {
             const output = 'Perform terraform_state_lock_auditing validations and check hcl_syntax_linting formats';
             const { strategy, sequence } = await agenticRouter.routeDownstreamSwarm(output);
@@ -201,6 +211,15 @@ describe('Modular Platform Engineering, IaC & Cloud-Native Systems Swarm Router 
             expect(strategy).toBe('Platform Engineering Swarm: Packer Machine Images');
             const agentIds = sequence.map(s => s.agentId);
             expect(agentIds).toContain('Packer Machine Image & Template Specialist');
+        });
+
+        it('should route Crabbox keywords to Crabbox Remote Sandbox & Secure Execution Specialist agent', async () => {
+            const output = 'Perform remote_lease_lifecycle_management checks and execute workspace_diff_synchronization operations';
+            const { strategy, sequence } = await agenticRouter.routeDownstreamSwarm(output);
+
+            expect(strategy).toBe('Platform Engineering Swarm: Crabbox Sandboxing');
+            const agentIds = sequence.map(s => s.agentId);
+            expect(agentIds).toContain('Crabbox Remote Sandbox & Secure Execution Specialist');
         });
     });
 });

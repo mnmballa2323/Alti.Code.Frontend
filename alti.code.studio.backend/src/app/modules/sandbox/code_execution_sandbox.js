@@ -12,23 +12,55 @@
  */
 
 import { fork } from 'child_process';
-import { createWriteStream } from 'fs';
-import { join } from 'path';
+import { createWriteStream, mkdirSync, writeFileSync, rmSync } from 'fs';
+import { join, resolve } from 'path';
 
 export class CodeExecutionSandbox {
     /**
-     * Executes JavaScript code within a safe, isolated Node Docker container.
+     * Executes JavaScript code within a safe, isolated Node Docker container or Crabbox.
      * @param {string} code - The raw JavaScript code snippet to run
-     * @param {object} options - Execution constraints (timeout, allowedEnv)
+     * @param {object} options - Execution constraints (timeout, allowedEnv, provider)
      * @returns {Promise<object>} Execution results including exit code, logs, and timing
      */
     static async execute(code, options = {}) {
-        const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
-        
+        const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const agentId = options.agentId || 'generic';
         const cleanAgentId = agentId.replace(/[^a-zA-Z0-9_]/g, '_');
-        const workspacePath = `./logs/workspaces/agent_${cleanAgentId}`;
-        
+        const workspacePath = resolve(`./logs/workspaces/agent_${cleanAgentId}`);
+        const startTime = Date.now();
+
+        if (provider === 'crabbox') {
+            const { crabboxService } = await import('../crabbox/crabbox.service.js');
+            const tempFileName = `temp_exec_crabbox_${Math.random().toString(36).substring(2, 9)}.js`;
+            const tempFilePath = join(workspacePath, tempFileName);
+
+            mkdirSync(workspacePath, { recursive: true });
+            writeFileSync(tempFilePath, code, 'utf8');
+
+            try {
+                const result = await crabboxService.run(`node ${tempFileName}`, {
+                    id: options.leaseId,
+                    provider: options.crabboxProvider,
+                    class: options.crabboxClass,
+                    cwd: workspacePath
+                });
+
+                return {
+                    success: result.success,
+                    exitCode: result.exitCode,
+                    logs: result.stdout ? result.stdout.split('\n') : [],
+                    errors: result.stderr ? result.stderr.split('\n') : [],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            } finally {
+                try {
+                    rmSync(tempFilePath, { force: true });
+                } catch (e) {}
+            }
+        }
+
+        const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
         const manager = new DockerWorkspaceManager(workspacePath);
         
         // Execute inside a dedicated agent container

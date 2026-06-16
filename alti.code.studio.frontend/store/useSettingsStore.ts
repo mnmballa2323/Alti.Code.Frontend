@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface SettingsState {
-
   geminiApiKey: string;
   githubToken: string;
   defaultModel: string;
@@ -25,7 +24,6 @@ interface SettingsState {
   // Swarm & Agent Limits
   maxConcurrentAgents: number;
   agentTimeoutSecs: number;
-
 
   setGeminiApiKey: (key: string) => void;
   setGithubToken: (key: string) => void;
@@ -50,7 +48,6 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-
       geminiApiKey: "",
       githubToken: "",
       defaultModel: "",
@@ -70,7 +67,6 @@ export const useSettingsStore = create<SettingsState>()(
       editorVimMode: false,
       maxConcurrentAgents: 10,
       agentTimeoutSecs: 30,
-
 
       setGeminiApiKey: (key) => set({ geminiApiKey: key }),
       setGithubToken: (key) => set({ githubToken: key }),

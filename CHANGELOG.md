@@ -5,6 +5,43 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [39.37.232] - 2026-06-16 — Deep Backend Audit, Performance & Security Optimization
+
+### Improved
+
+- **Asynchronous User Repository Optimization**: Converted blocking synchronous file system operations (`fs.readFileSync`/`fs.writeFileSync` on `users_mock.json`) in the database fallback paths of `UserRepository` to async non-blocking execution flows using `fs/promises`.
+- **PostgreSQL / Prisma Auth Port**: Ported legacy MongoDB password reset, password changes, and user deletion operations in `auth.controller.js` to use PostgreSQL/Prisma DAL via `UserRepository`, resolving connection and query timeouts since legacy MongoDB is disabled.
+- **Robust Exception Handling**: Wrapped vulnerable authentication routes (forgot password, reset password, change password, account deletion, deletion OTPs) in the `catchAsync` safety utility to prevent unhandled promise rejections.
+- **Dynamic Administrator User Deletion**: Upgraded `deleteUserService` in `admin.service.js` to support both UUIDs and fallback MongoDB ObjectId inputs, dynamically routing requests to PostgreSQL/Prisma or the mock repository database based on identifier format.
+- **Sandbox Test Verification**: Fixed the Crabbox execution checks inside the collaborative swarm test harness (`software_engineering_swarm.test.js` and `agent_container_orchestrator.js`) to support mock directory cleanups and correctly route sandbox providers.
+
+## [39.37.231] - 2026-06-16 — Declarative Crabbox Agent & Swarm Routing Integration
+
+### Added
+
+- **Crabbox Agent Declarative DSL**: Added the platform agent YAML definition registering `agent.platform.crabbox` (Crabbox Remote Sandbox & Secure Execution Specialist) with dedicated capabilities like lease management, diff syncing, and secure execution.
+- **Swarm Router Integration**: Added precision downstream swarm routing mapping Crabbox capabilities and keywords to route dynamically to the new Crabbox agent.
+- **Platform Integration Testing**: Extended platform integration tests asserting YAML loading, capability mappings, and end-to-end swarm routing for Crabbox triggers.
+
+## [39.37.230] - 2026-06-16 — Hardening Crabbox Remote Sandbox Platform Integration
+
+### Added
+
+- **Deep Integration across Docker Sandbox Framework**: Integrated Crabbox execution routing inside the lowest-level sandbox management APIs:
+  - `DockerWorkspaceManager.executeCode` and `executeOssCode` route execution flows directly to Crabbox when `'crabbox'` is configured as the active provider.
+  - `AgentContainerOrchestrator.executeAgentTool` routes AI agent tool executions securely to Crabbox, bypassing local Docker container setup.
+- **Robust Integration Testing**: Added new test cases verifying agent tool execution and workspace manager executions when Crabbox is active.
+
+## [39.37.229] - 2026-06-16 — Crabbox Remote Sandbox Integration
+
+### Added
+
+- **Crabbox Remote Sandbox Core Module**: Implemented a new core backend module (`src/app/modules/crabbox/`) containing:
+  - `CrabboxService` which executes remote sandboxes, syncs diffs/workspaces, and runs command suites using the Crabbox CLI, falling back to a REST API.
+  - `CrabboxController` and `crabboxRoutes` for HTTP exposure of lease lifecycles (/warmup, /run, /status, /stop, /sync-plan).
+- **Execution Engine Integration**: Updated `CodeExecutionSandbox` and `GoogleDynamicSessionsService` fallback pathways to seamlessly route JavaScript and Python execution tasks to the leased remote Crabbox sandbox environments.
+- **Environment & Versioning Hygiene**: Updated `.env.example`, bumped version in `VERSION`, and updated changelogs.
+
 ## [39.37.228] - 2026-06-13 — Tri-Cloud Agent Synthesis & Relative Pathing Enforcements
 
 ### Added

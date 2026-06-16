@@ -23,7 +23,9 @@ export default function InstructionsPage() {
   const [editText, setEditText] = useState("");
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<InstructionRule | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<InstructionRule | null>(
+    null,
+  );
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,9 +118,10 @@ export default function InstructionsPage() {
       {/* Instructions Card List */}
       <div className="flex flex-col gap-3 pt-2">
         {filteredInstructions.length > 0 ? (
-            filteredInstructions.map((inst, index) => {
-              const originalIndex = instructions.indexOf(inst);
-              return (
+          filteredInstructions.map((inst, index) => {
+            const originalIndex = instructions.indexOf(inst);
+
+            return (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200"
@@ -183,12 +186,12 @@ export default function InstructionsPage() {
               </div>
             );
           })
-          ) : (
-            <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No instructions configured.
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="text-center py-10 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
+            No instructions configured.
+          </div>
+        )}
+      </div>
 
       {deleteModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
@@ -203,15 +206,15 @@ export default function InstructionsPage() {
             </div>
             <div className="flex border-t border-neutral-100 dark:border-neutral-800">
               <button
-                onClick={cancelDelete}
                 className="flex-1 py-3.5 text-[15px] font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                onClick={cancelDelete}
               >
                 Cancel
               </button>
               <div className="w-[1px] bg-neutral-100 dark:bg-neutral-800" />
               <button
-                onClick={confirmDelete}
                 className="flex-1 py-3.5 text-[15px] font-semibold text-[#FF3B30] hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                onClick={confirmDelete}
               >
                 Delete
               </button>

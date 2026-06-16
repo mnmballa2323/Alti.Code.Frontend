@@ -38,7 +38,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import AudioRecorder from "./AudioRecorder";
 import PromptInput from "./prompt-input";
 
 import { useSettingsStore } from "@/store/useSettingsStore";
@@ -539,9 +538,12 @@ function PromptInputFullLineComponent({
                     <Icon
                       className={cn(
                         "size-4 shrink-0 transition-colors duration-200",
-                        (defaultModel || "").includes("gemini") && "text-[#1A73E8]",
-                        (defaultModel || "").includes("claude") && "text-[#CC9980]",
-                        (defaultModel || "").includes("gpt") && "text-black dark:text-white"
+                        (defaultModel || "").includes("gemini") &&
+                          "text-[#1A73E8]",
+                        (defaultModel || "").includes("claude") &&
+                          "text-[#CC9980]",
+                        (defaultModel || "").includes("gpt") &&
+                          "text-black dark:text-white",
                       )}
                       icon={
                         (defaultModel || "").includes("gemini")
@@ -660,7 +662,7 @@ function PromptInputFullLineComponent({
                   }}
                   title="GPT"
                 >
-                   <DropdownItem
+                  <DropdownItem
                     key="gpt-5.5-pro"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
                     textValue="GPT-5.5 Pro"
@@ -1677,13 +1679,20 @@ export default function PromptInputFullLineWithBottomActions({
   value?: string;
   onChange?: (val: string) => void;
   prompt?: string;
-  setPrompt?: React.Dispatch<React.SetStateAction<string>> | ((val: string) => void);
+  setPrompt?:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((val: string) => void);
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
   showModelDropdown?: boolean;
 }) {
   const [internalPrompt, setInternalPrompt] = useState("");
-  const prompt = value !== undefined ? value : (promptProp !== undefined ? promptProp : internalPrompt);
+  const prompt =
+    value !== undefined
+      ? value
+      : promptProp !== undefined
+        ? promptProp
+        : internalPrompt;
 
   return (
     <div className="flex w-full flex-col gap-4 mb-6 !z-50">

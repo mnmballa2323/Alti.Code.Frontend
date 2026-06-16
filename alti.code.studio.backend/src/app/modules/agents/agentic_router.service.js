@@ -1874,6 +1874,18 @@ class AgenticRouterService {
             strategy = 'Platform Engineering Swarm: Packer Machine Images';
         }
 
+        // 129b. Platform Engineering: Crabbox Remote Sandbox & Secure Execution Specialist
+        const isCrabboxSpecialistOutput = outputLower.includes('remote_lease_lifecycle_management') || 
+                                          outputLower.includes('workspace_diff_synchronization') || 
+                                          outputLower.includes('secure_isolated_code_execution') || 
+                                          outputLower.includes('remote_sandbox_cleanup');
+        if (isCrabboxSpecialistOutput) {
+            downstreamSequence.push(
+                { agentId: 'Crabbox Remote Sandbox & Secure Execution Specialist', task: 'Manage remote sandbox environment leases, synchronize code diffs, and execute sandboxed code securely' }
+            );
+            strategy = 'Platform Engineering Swarm: Crabbox Sandboxing';
+        }
+
         // 130. API Systems: GraphQL Federation & Supergraph Architect
         const isGraphQlFederationOutput = outputLower.includes('graphql_federation_supergraph_routing') || 
                                           outputLower.includes('subgraph_schema_entity_resolution') || 

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ThemeProviderProps } from "next-themes";
+
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { useRouter, usePathname } from "next/navigation";
@@ -60,6 +61,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
 
     if (typeof window !== "undefined") {
       const isTauri = "__TAURI__" in window;
+
       if (accessToken) {
         localStorage.setItem("token", accessToken);
         localStorage.setItem("accessToken", accessToken);
@@ -153,6 +155,7 @@ function ThemeSynchronizer() {
   React.useEffect(() => {
     if (typeof window === "undefined") return;
     const root = document.documentElement;
+
     if (theme === "midnight-navy") {
       root.classList.add("dark");
     } else if (theme === "light") {
@@ -169,27 +172,34 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const [tauriSession, setTauriSession] = React.useState<any>(() => {
     if (typeof window !== "undefined" && "__TAURI__" in window) {
       const token = localStorage.getItem("accessToken");
+
       if (token) {
         return {
           user: {
             accessToken: token,
           },
-          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          expires: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
         };
       }
     }
+
     return undefined;
   });
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && "__TAURI__" in window) {
       const token = localStorage.getItem("accessToken");
+
       if (token) {
         setTauriSession({
           user: {
             accessToken: token,
           },
-          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          expires: new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
         });
         if (pathname === "/login" || pathname === "/") {
           router.replace("/new-chat");
@@ -207,7 +217,11 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <GoogleOAuthProvider
       clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "mock-client-id"}
     >
-      <SessionProvider session={tauriSession} refetchOnWindowFocus={false} refetchInterval={0}>
+      <SessionProvider
+        refetchInterval={0}
+        refetchOnWindowFocus={false}
+        session={tauriSession}
+      >
         <ReduxProvider store={store}>
           <HeroUIProvider navigate={router.push}>
             <Toaster position="top-center" reverseOrder={false} />

@@ -68,7 +68,7 @@ describe('GoogleDynamicSessionsService with Graceful Sandbox Fallbacks', () => {
         expect(result.success).toBe(true);
         expect(result.stdout).toBe('Local JS Output');
         expect(result.stderr).toBe('');
-        expect(CodeExecutionSandbox.execute).toHaveBeenCalledWith('console.log("hello")');
+        expect(CodeExecutionSandbox.execute).toHaveBeenCalledWith('console.log("hello")', expect.any(Object));
     });
 
     it('should gracefully fallback to DockerWorkspaceManager for Python (with Docker) if GCP API returns HTTP 500', async () => {
@@ -104,9 +104,9 @@ describe('GoogleDynamicSessionsService with Graceful Sandbox Fallbacks', () => {
         expect(result.stderr).toBe('');
         expect(mockManagerInstance.checkDockerAvailability).toHaveBeenCalled();
         expect(mockManagerInstance.executeOssCode).toHaveBeenCalledWith(
-            'python_generic',
+            'agent_generic',
             'print("hello")',
-            './logs/workspaces/oss_generic',
+            './logs/workspaces/agent_generic',
             { language: 'python', timeoutMs: 5000 }
         );
     });

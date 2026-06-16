@@ -11,6 +11,7 @@
  */
 
 import { exec } from 'child_process';
+import * as hostCp from 'child_process';
 import * as hostFs from 'fs';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
@@ -235,7 +236,7 @@ export class DockerWorkspaceManager {
                 if (targetPath.startsWith('/workspace')) {
                     targetPath = targetPath.replace('/workspace', hostWorkspacePath);
                 }
-                targetPath = resolve(targetPath);
+                targetPath = resolve(hostWorkspacePath, targetPath);
                 if (!targetPath.startsWith(hostWorkspacePath)) {
                     throw new Error(`Zero-Trust Violation: Path traversal attempt outside workspace: ${targetPath}`);
                 }
@@ -285,10 +286,42 @@ export class DockerWorkspaceManager {
                 },
                 require: (mod) => {
                     if (mod === 'fs') return fsMock;
+                    if (mod === 'child_process') {
+                        return {
+                            ...hostCp,
+                            exec: (cmd, opts, cb) => {
+                                const actualOpts = typeof opts === 'function' ? {} : opts || {};
+                                const actualCb = typeof opts === 'function' ? opts : cb;
+                                if (!actualOpts.cwd) actualOpts.cwd = hostWorkspacePath;
+                                return hostCp.exec(cmd, actualOpts, actualCb);
+                            },
+                            execSync: (cmd, opts) => {
+                                const actualOpts = opts || {};
+                                if (!actualOpts.cwd) actualOpts.cwd = hostWorkspacePath;
+                                return hostCp.execSync(cmd, actualOpts);
+                            }
+                        };
+                    }
                     throw new Error("Module not found: " + mod);
                 },
                 _hostImport: async (mod) => {
                     if (mod === 'fs') return fsMock;
+                    if (mod === 'child_process') {
+                        return {
+                            ...hostCp,
+                            exec: (cmd, opts, cb) => {
+                                const actualOpts = typeof opts === 'function' ? {} : opts || {};
+                                const actualCb = typeof opts === 'function' ? opts : cb;
+                                if (!actualOpts.cwd) actualOpts.cwd = hostWorkspacePath;
+                                return hostCp.exec(cmd, actualOpts, actualCb);
+                            },
+                            execSync: (cmd, opts) => {
+                                const actualOpts = opts || {};
+                                if (!actualOpts.cwd) actualOpts.cwd = hostWorkspacePath;
+                                return hostCp.execSync(cmd, actualOpts);
+                            }
+                        };
+                    }
                     throw new Error("Module not found: " + mod);
                 },
                 process: {
@@ -332,8 +365,35 @@ export class DockerWorkspaceManager {
         const cleanUserId = userId.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `user_sandbox_${cleanUserId}`;
         const hostPath = this.provisionUserWorkspace(userId);
-
+        const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const startTime = Date.now();
+
+        if (provider === 'crabbox') {
+            const { crabboxService } = await import('../crabbox/crabbox.service.js');
+            const tempFileName = `temp_exec_${Math.random().toString(36).substring(2, 9)}.js`;
+            this.safeWriteFile(userId, tempFileName, code);
+
+            try {
+                const result = await crabboxService.run(`node ${tempFileName}`, {
+                    id: options.leaseId,
+                    provider: options.crabboxProvider,
+                    class: options.crabboxClass,
+                    cwd: hostPath
+                });
+
+                return {
+                    success: result.success,
+                    logs: result.stdout ? result.stdout.split('\n') : [],
+                    errors: result.stderr ? result.stderr.split('\n') : [],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            } finally {
+                try {
+                    rmSync(join(hostPath, tempFileName), { force: true });
+                } catch (e) {}
+            }
+        }
 
         // Write the code snippet to a temporary execution file inside the user volume
         const tempFileName = `temp_exec_${Math.random().toString(36).substring(2, 9)}.js`;
@@ -465,8 +525,41 @@ export class DockerWorkspaceManager {
         const isPython = options.language === 'python';
         const containerName = `oss_container_${cleanModuleName}${isPython ? '_python' : ''}`;
         const targetHostPath = resolve(hostPath);
-
+        const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const startTime = Date.now();
+
+        if (provider === 'crabbox') {
+            const { crabboxService } = await import('../crabbox/crabbox.service.js');
+            const tempExt = isPython ? 'py' : 'js';
+            const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.${tempExt}`;
+            const tempHostPath = join(targetHostPath, tempFileName);
+            
+            mkdirSync(targetHostPath, { recursive: true });
+            writeFileSync(tempHostPath, code, 'utf8');
+
+            try {
+                const runtimeCmd = isPython ? 'python' : 'node';
+                const result = await crabboxService.run(`${runtimeCmd} ${tempFileName}`, {
+                    id: options.leaseId,
+                    provider: options.crabboxProvider,
+                    class: options.crabboxClass,
+                    cwd: targetHostPath
+                });
+
+                return {
+                    success: result.success,
+                    exitCode: result.exitCode,
+                    logs: result.stdout ? result.stdout.split('\n') : [],
+                    errors: result.stderr ? result.stderr.split('\n') : [],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            } finally {
+                try {
+                    rmSync(tempHostPath, { force: true });
+                } catch (e) {}
+            }
+        }
 
         // Write code snippet to host volume
         const tempExt = isPython ? 'py' : 'js';

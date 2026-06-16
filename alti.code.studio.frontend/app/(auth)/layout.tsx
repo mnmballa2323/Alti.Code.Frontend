@@ -428,7 +428,9 @@ export default function AuthLayout({
       )}
 
       {/* Right Panel: Auth Form */}
-      <div className={`w-full ${isTauri ? "max-w-2xl mx-auto" : "lg:w-1/2"} flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative`}>
+      <div
+        className={`w-full ${isTauri ? "max-w-2xl mx-auto" : "lg:w-1/2"} flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative`}
+      >
         {/* Logo in top right */}
         {!isTauri && (
           <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
@@ -455,9 +457,12 @@ export default function AuthLayout({
           </div>
         )}
 
-        <div className={`w-full max-w-sm ${isTauri ? "mt-0" : "mt-20 lg:mt-12"}`}>{children}</div>
+        <div
+          className={`w-full max-w-sm ${isTauri ? "mt-0" : "mt-20 lg:mt-12"}`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
 }
-

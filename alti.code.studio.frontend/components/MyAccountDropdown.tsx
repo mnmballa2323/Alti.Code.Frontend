@@ -48,10 +48,11 @@ const MyAccountDropdown = () => {
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
+        <DropdownMenuContent
+          align="start"
+          className="w-[var(--radix-dropdown-menu-trigger-width)]"
+        >
           <DropdownMenuGroup>
-
-
             {(profile?.role === "admin" || profile?.role === "ADMIN") && (
               <DropdownMenuItem className="relative">
                 <span className="flex items-center space-x-2">

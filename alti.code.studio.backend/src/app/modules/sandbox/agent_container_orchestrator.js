@@ -203,11 +203,15 @@ export class AgentContainerOrchestrator {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
         const hostWorkspacePath = resolve(sessionWorkspacePath);
+        const provider = options.provider || context?.provider || process.env.SANDBOX_PROVIDER || 'local';
 
         const startTime = Date.now();
 
         // 1. Start the agent's container (if not already running) scoped to the tenant's network
-        const containerResult = await this.startAgentContainer(agentName, hostWorkspacePath, tenantId, options);
+        let containerResult = null;
+        if (provider !== 'crabbox') {
+            containerResult = await this.startAgentContainer(agentName, hostWorkspacePath, tenantId, options);
+        }
 
         // 2. Serialize tool execution function, arguments, and context into a temporary JS file inside the shared workspace
         const tempFileName = `temp_tool_${cleanAgentName}_${Math.random().toString(36).substring(2, 9)}.js`;
@@ -258,7 +262,35 @@ export class AgentContainerOrchestrator {
         let stderrLogs = [];
         let executionReport = null;
 
-        if (containerResult.isMock) {
+        if (provider === 'crabbox') {
+            try {
+                const { crabboxService } = await import('../crabbox/crabbox.service.js');
+                const result = await crabboxService.run(`node ${tempFileName}`, {
+                    id: options.leaseId || context?.leaseId,
+                    provider: options.crabboxProvider || context?.crabboxProvider,
+                    class: options.crabboxClass || context?.crabboxClass,
+                    cwd: hostWorkspacePath
+                });
+
+                if (result.stdout) {
+                    const lines = result.stdout.split('\n');
+                    lines.forEach(line => {
+                        if (line.startsWith('RESULT_PAYLOAD:')) {
+                            try {
+                                executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
+                            } catch (e) {}
+                        } else {
+                            stdoutLogs.push(line);
+                        }
+                    });
+                }
+                if (!executionReport && !result.success) {
+                    executionReport = { success: false, error: result.stderr || 'Execution failed' };
+                }
+            } catch (err) {
+                executionReport = { success: false, error: err.message };
+            }
+        } else if (containerResult.isMock) {
             try {
                 const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
                 const manager = new DockerWorkspaceManager(this.baseSandboxDir);

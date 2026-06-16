@@ -47,7 +47,12 @@ OPERATIONAL PRINCIPLES:
                     apiContract: `POST /api/auth/rotate-token\nPayload: { "refreshToken": "string" }\nResponse: 200 OK { "accessToken": "string", "refreshToken": "string" }`,
                     scalingStrategy: 'Indexed userId, Redis caching for active tokens, and sliding window rate-limiting.'
                 };
-                return `[Architect Design Specs]:\n1. Database Schema:\n${context.architectureDesign.dbModel}\n2. API Endpoint:\n${context.architectureDesign.apiContract}\n3. Scaling: ${context.architectureDesign.scalingStrategy}\n\nArchitecture successfully designed. Delegating to Coder.`;
+                
+                const fs = await eval("import('fs')");
+                const designDoc = `# Architecture Design: ${args.featureName}\n\n## Database Model\n\`\`\`\n${context.architectureDesign.dbModel}\n\`\`\`\n\n## API Contract\n\`\`\`\n${context.architectureDesign.apiContract}\n\`\`\`\n\n## Scaling Strategy\n${context.architectureDesign.scalingStrategy}\n`;
+                fs.writeFileSync('architecture_design.md', designDoc, 'utf8');
+
+                return `[Architect Design Specs]:\n1. Database Schema:\n${context.architectureDesign.dbModel}\n2. API Endpoint:\n${context.architectureDesign.apiContract}\n3. Scaling: ${context.architectureDesign.scalingStrategy}\n\nArchitecture successfully designed and saved to architecture_design.md. Delegating to Coder.`;
             }
         },
         {
@@ -56,7 +61,7 @@ OPERATIONAL PRINCIPLES:
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
                 console.log('[SwarmArchitect] Handing off task to SwarmTddCoder...');
-                return SwarmTddCoderAgent; // Handoff
+                return { isHandoff: true, handoffAgentName: 'SwarmTddCoder' };
             }
         }
     ]
@@ -85,8 +90,7 @@ OPERATIONAL PRINCIPLES:
             },
             execute: async (args, context) => {
                 console.log('[SwarmTddCoder] Generating pure MIT-compliant, optimized implementation...');
-                context.generatedCode = `
-import crypto from 'crypto';
+                context.generatedCode = `import crypto from 'crypto';
 
 export class SessionTokenManager {
     constructor(redisClient) {
@@ -115,7 +119,10 @@ export class SessionTokenManager {
     }
 }
 `;
-                return `[Lead Coder Output]:\n${context.generatedCode}\n\nCode successfully generated under TDD principles. Handing off to QA Tester.`;
+                const fs = await eval("import('fs')");
+                fs.writeFileSync('SessionTokenManager.js', context.generatedCode, 'utf8');
+
+                return `[Lead Coder Output]:\nSource code generated and written to SessionTokenManager.js.\n\nCode successfully generated under TDD principles. Handing off to QA Tester.`;
             }
         },
         {
@@ -124,7 +131,7 @@ export class SessionTokenManager {
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
                 console.log('[SwarmTddCoder] Handing off task to SwarmQaTester...');
-                return SwarmQaTesterAgent; // Handoff
+                return { isHandoff: true, handoffAgentName: 'SwarmQaTester' };
             }
         }
     ]
@@ -153,42 +160,63 @@ OPERATIONAL PRINCIPLES:
             },
             execute: async (args, context) => {
                 console.log('[SwarmQaTester] Generating automated integration tests and mock wrappers...');
-                context.testSuite = `
-import { SessionTokenManager } from './SessionTokenManager.js';
-import { assert } from 'vitest';
+                context.testSuite = `import { SessionTokenManager } from './SessionTokenManager.js';
+import crypto from 'crypto';
 
 class MockRedis {
     constructor() { this.store = {}; }
     multi() {
-        return {
-            set: (k, v) => { this.store[k] = v; return this; },
-            expire: () => this,
+        const self = this;
+        const multiObj = {
+            set: (k, v) => { self.store[k] = v; return multiObj; },
+            expire: () => multiObj,
             exec: async () => [true]
         };
+        return multiObj;
     }
 }
 
-// Integration Test Suite
 async function testTokenRotation() {
     const mockDb = new MockRedis();
     const manager = new SessionTokenManager(mockDb);
 
     // 1. Happy Path Test
     const result = await manager.rotateToken('user_123', 'hash_abc');
-    assert.ok(result.token, 'Token must be generated');
-    assert.equal(result.hash.length, 64, 'SHA-256 hash must be 64 characters');
+    if (!result.token) throw new Error('Token must be generated');
+    if (result.hash.length !== 64) throw new Error('SHA-256 hash must be 64 characters');
 
     // 2. Exception Boundary Test
     try {
         await manager.rotateToken(null, null);
-        assert.fail('Should throw on invalid input');
+        throw new Error('Should throw on invalid input');
     } catch (e) {
-        assert.include(e.message, 'Invalid authentication payload');
+        if (!e.message.includes('Invalid authentication payload')) {
+            throw e;
+        }
     }
     console.log('✅ QA Assertion: All happy path and error boundary tests passed successfully.');
 }
+
+testTokenRotation().catch(err => {
+    console.error('❌ QA Test failed:', err.message);
+    process.exit(1);
+});
 `;
-                return `[QA Test Suite]:\n${context.testSuite}\n\nAll integration tests and boundaries successfully verified. Handing off to Security Auditor.`;
+                const fs = await eval("import('fs')");
+                const cp = await eval("import('child_process')");
+                
+                fs.writeFileSync('SessionTokenManager.test.js', context.testSuite, 'utf8');
+
+                let testExecutionOutput = '';
+                try {
+                    const execResult = cp.execSync('node SessionTokenManager.test.js', { encoding: 'utf8', timeout: 5000 });
+                    testExecutionOutput = execResult.trim();
+                } catch (e) {
+                    testExecutionOutput = `Execution failed: ${e.message}\nStdout: ${e.stdout}\nStderr: ${e.stderr}`;
+                    throw new Error(`QA Integration tests execution failed inside sandbox: ${testExecutionOutput}`);
+                }
+
+                return `[QA Test Suite]:\nSaved to SessionTokenManager.test.js\nExecution Output:\n${testExecutionOutput}\n\nAll integration tests and boundaries successfully verified. Handing off to Security Auditor.`;
             }
         },
         {
@@ -197,7 +225,7 @@ async function testTokenRotation() {
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
                 console.log('[SwarmQaTester] Handing off task to SwarmSecurityAuditor...');
-                return SwarmSecurityAuditorAgent; // Handoff
+                return { isHandoff: true, handoffAgentName: 'SwarmSecurityAuditor' };
             }
         }
     ]
@@ -227,9 +255,18 @@ OPERATIONAL PRINCIPLES:
             execute: async (args, context) => {
                 console.log('[SwarmSecurityAuditor] Running zero-trust security audit and compliance checks...');
                 
-                const hasSecrets = /key|secret|password|token\s*=\s*['"][a-zA-Z0-9]{15,}['"]/i.test(args.code);
-                const hasEval = /eval\s*\(/.test(args.code);
-                const usesCrypto = args.code.includes('crypto');
+                const fs = await eval("import('fs')");
+                
+                let codeToScan = '';
+                if (fs.existsSync('SessionTokenManager.js')) {
+                    codeToScan = fs.readFileSync('SessionTokenManager.js', 'utf8');
+                } else {
+                    codeToScan = args.code || '';
+                }
+
+                const hasSecrets = /key|secret|password|token\s*=\s*['"][a-zA-Z0-9]{15,}['"]/i.test(codeToScan);
+                const hasEval = /eval\s*\(/.test(codeToScan);
+                const usesCrypto = codeToScan.includes('crypto');
                 
                 context.securityAudit = {
                     secretsOk: !hasSecrets,
@@ -238,8 +275,8 @@ OPERATIONAL PRINCIPLES:
                     licenseOk: true
                 };
 
-                return JSON.stringify({
-                    verdict: '100% PASSED',
+                const report = {
+                    verdict: hasSecrets || hasEval ? 'FAILED' : '100% PASSED',
                     checks: {
                         no_hardcoded_secrets: !hasSecrets ? 'PASS' : 'FAIL',
                         no_eval_calls: !hasEval ? 'PASS' : 'FAIL',
@@ -247,7 +284,11 @@ OPERATIONAL PRINCIPLES:
                         license_compliance: 'PASS (Pure MIT/Apache-2.0)'
                     },
                     report: 'Source code mathematically secure. Signed off. Handing off to DevOps.'
-                });
+                };
+
+                fs.writeFileSync('security_report.json', JSON.stringify(report, null, 2), 'utf8');
+
+                return JSON.stringify(report);
             }
         },
         {
@@ -256,7 +297,7 @@ OPERATIONAL PRINCIPLES:
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
                 console.log('[SwarmSecurityAuditor] Handing off task to SwarmDevOpsEngineer...');
-                return SwarmDevOpsEngineerAgent; // Handoff
+                return { isHandoff: true, handoffAgentName: 'SwarmDevOpsEngineer' };
             }
         }
     ]
@@ -291,6 +332,10 @@ OPERATIONAL PRINCIPLES:
                     dockerCompose: `version: '3.8'\nservices:\n  ${args.serviceName}:\n    build: .\n    ports:\n      - "5001:5001"\n    environment:\n      - REDIS_URL=redis://cache:6379\n    depends_on:\n      - cache\n  cache:\n    image: redis:7-alpine\n    ports:\n      - "6379:6379"`,
                     healthCheckRoute: `app.get('/health', (req, res) => res.status(200).json({ status: 'UP', service: '${args.serviceName}', timestamp: new Date() }));`
                 };
+
+                const fs = await eval("import('fs')");
+                fs.writeFileSync('Dockerfile', context.devOpsSpec.dockerfile, 'utf8');
+                fs.writeFileSync('docker-compose.yml', context.devOpsSpec.dockerCompose, 'utf8');
 
                 return `[DevOps Infrastructure Specs]:\n1. Dockerfile:\n${context.devOpsSpec.dockerfile}\n2. Docker-Compose:\n${context.devOpsSpec.dockerCompose}\n3. Health Route:\n${context.devOpsSpec.healthCheckRoute}\n\nInfrastructure containerized. Deployment ready.`;
             }
