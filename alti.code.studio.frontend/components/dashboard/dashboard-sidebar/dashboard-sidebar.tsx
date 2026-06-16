@@ -9,10 +9,7 @@ import {
   DropdownSection,
   DropdownTrigger,
   Modal,
-  ModalBody,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ScrollShadow,
   Spacer,
   useDisclosure,
@@ -202,7 +199,16 @@ export default function Component() {
         <LogoutModal
           isOpen={isLogoutOpen}
           onConfirm={async () => {
-            await signOut({ callbackUrl: "/" });
+            const isDesktop =
+              typeof window !== "undefined" && "__TAURI__" in window;
+
+            if (isDesktop) {
+              localStorage.removeItem("token");
+              localStorage.removeItem("accessToken");
+              window.location.href = "/";
+            } else {
+              await signOut({ callbackUrl: "/" });
+            }
           }}
           onOpenChange={onLogoutOpenChange}
         />

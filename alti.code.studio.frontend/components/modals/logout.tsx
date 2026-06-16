@@ -11,10 +11,19 @@ export function Logout() {
   const router = useRouter();
 
   const handleLogOut = async () => {
-    await signOut({
-      redirect: false,
-    });
-    onClose();
+    const isDesktop = typeof window !== "undefined" && "__TAURI__" in window;
+
+    if (isDesktop) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+      onClose();
+      window.location.href = "/";
+    } else {
+      await signOut({
+        redirect: false,
+      });
+      onClose();
+    }
   };
 
   return (

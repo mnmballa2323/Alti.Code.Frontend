@@ -18,15 +18,15 @@ import {
 import { Button } from "@heroui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useModalStore } from "@/store/useModalStore";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 import MobileNavSheet from "./landing-page/MobileNavSheet";
 
+import { useModalStore } from "@/store/useModalStore";
 import { useAppSelector } from "@/store";
 
 function Navbar() {
@@ -414,13 +414,7 @@ function Navbar() {
                     className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
                     size="sm"
                     onClick={() => {
-                      if (isDesktopApp) {
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("accessToken");
-                        window.location.href = "/";
-                      } else {
-                        signOut({ callbackUrl: "/" });
-                      }
+                      useModalStore.getState().onOpen({ type: "logout" });
                     }}
                   >
                     Logout
