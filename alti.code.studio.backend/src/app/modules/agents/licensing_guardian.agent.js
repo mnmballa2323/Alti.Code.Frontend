@@ -58,7 +58,8 @@ OPERATIONAL PARAMETERS:
                 { name: 'ruflo', path: 'submodules/ruflo', license: 'MIT' },
                 { name: 'CowAgent', path: 'submodules/CowAgent', license: 'MIT' },
                 { name: 'antigravity-awesome-skills', path: 'submodules/antigravity-awesome-skills', license: 'MIT' },
-                { name: 'agents', path: 'submodules/agents', license: 'MIT' }
+                { name: 'agents', path: 'submodules/agents', license: 'MIT' },
+                { name: 'ponytail', path: 'submodules/ponytail', license: 'MIT' }
             ];
         }
 
