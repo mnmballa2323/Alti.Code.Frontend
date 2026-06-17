@@ -1,0 +1,15 @@
+{
+  "test-resilient-thread-id": {
+    "checkpoint": {
+      "v": 1,
+      "ts": "2026-06-16",
+      "channel_values": {
+        "goal": "resilience test"
+      }
+    },
+    "metadata": {
+      "source": "test"
+    },
+    "pendingSends": []
+  }
+}

@@ -164,7 +164,7 @@ export default function InvitePage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
           <p className="text-[11px] text-neutral-400 dark:text-neutral-500 font-medium">
             Billing notice: Adding a new team member adds an active seat to your
-            plan at $1,500/month.
+            plan at $2,000/month.
           </p>
           <button
             className="h-10 px-6 bg-neutral-800 dark:bg-neutral-200 hover:bg-neutral-900 dark:hover:bg-white text-white dark:text-neutral-950 font-semibold rounded-xl text-sm transition-all shadow-md shadow-neutral-800/10 flex items-center justify-center gap-2 self-end md:self-auto"

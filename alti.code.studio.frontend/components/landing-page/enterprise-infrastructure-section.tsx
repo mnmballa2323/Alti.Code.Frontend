@@ -17,13 +17,13 @@ export default function EnterpriseInfrastructureSection() {
 
         {/* Simplified 2-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl mx-auto text-left">
-          {/* Card 1: Multi Tenant Private Cloud */}
+          {/* Card 1: Multi-Tenant Private Cloud */}
           <div className="relative p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="absolute top-6 right-6 text-blue-600">
               <Cloud className="w-5 h-5" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3 pr-12">
-              Multi Tenant Private Cloud
+              Multi-Tenant Private Cloud
             </h3>
             <p className="text-gray-600 leading-relaxed font-medium text-balance">
               The standard hosted version of our platform. Get started instantly
@@ -32,16 +32,16 @@ export default function EnterpriseInfrastructureSection() {
             </p>
           </div>
 
-          {/* Card 2: Single Tenant Private Cloud */}
+          {/* Card 2: Single-Tenant Private Cloud */}
           <div className="relative p-8 rounded-3xl bg-gray-100 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="absolute top-6 right-6 text-blue-600">
               <Lock className="w-5 h-5" />
             </div>
             <h3 className="text-2xl font-bold text-black tracking-tight mb-3 pr-12">
-              Single Tenant Private Cloud
+              Single-Tenant Private Cloud
             </h3>
             <p className="text-gray-600 leading-relaxed font-medium text-balance">
-              A dedicated, single tenant private cloud managed entirely by our
+              A dedicated, single-tenant private cloud managed entirely by our
               team. Get isolated workspaces and uptime SLAs with zero
               infrastructure overhead.
             </p>

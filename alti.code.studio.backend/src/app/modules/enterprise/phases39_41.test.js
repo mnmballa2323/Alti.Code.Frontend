@@ -122,7 +122,7 @@ describe('Phase 39: Rate Limiting', () => {
     it('should enforce per-tenant rate limits', async () => {
         const { rateLimiter } = await import('./api.keys.js');
 
-        const result = rateLimiter.check('test-tenant', 'starter');
+        const result = await rateLimiter.check('test-tenant', 'starter');
         expect(result.allowed).toBe(true);
         expect(result.remaining).toBeLessThan(60);
         expect(result.tier).toBe('starter');
@@ -440,7 +440,7 @@ describe('Phases 39-41 Cross Integration', () => {
         expect(auth.valid).toBe(true);
 
         // 3. Rate check
-        const rate = rateLimiter.check(auth.tenantId, 'enterprise');
+        const rate = await rateLimiter.check(auth.tenantId, 'enterprise');
         expect(rate.allowed).toBe(true);
 
         // 4. Validate request

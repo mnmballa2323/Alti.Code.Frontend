@@ -45,7 +45,7 @@ export default function ChatBotLayout({
         <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
           <React.Suspense
             fallback={
-              <div className="w-64 h-full bg-[#F4F4F6] dark:bg-sidebar" />
+              <div className="w-72 h-full bg-[#F4F4F6] dark:bg-sidebar" />
             }
           >
             <Sidebar />

@@ -2,6 +2,9 @@ import { logger } from '../../../shared/logger.js';
 import { capabilityRouter } from '../agents/capability.router.js';
 import { BaseSpecialistAgent } from '../agents/base_specialist.agent.js';
 import { mcpClientService, PRESETS } from './mcp.client.js';
+import { AsyncLocalStorage } from 'async_hooks';
+
+export const mcpTokenContext = new AsyncLocalStorage();
 
 /**
  * Dynamic Nano-Agent acting as a transparent proxy for an MCP Server.
@@ -204,6 +207,21 @@ You must strictly format your outputs to match the expected schema of the MCP to
             ...tools.map(t => t.name.replace(/_/g, ' ')),
             ...tools.map(t => `${serverName} ${t.name.replace(/_/g, ' ')}`)
         ];
+    }
+
+    /**
+     * Executes a tool via the MCP STDIO protocol, dynamically forwarding user OAuth2 context.
+     */
+    async executeToolWithContext(serverName, toolName, args = {}, userToken = null) {
+        const token = userToken || mcpTokenContext.getStore();
+        if (token) {
+            args.accessToken = token;
+            args.authToken = token;
+            args._oauthToken = token;
+            logger.info(`🔑 MCP Gateway: Propagated user OAuth2 access token to tool execution context of server '${serverName}'.`);
+        }
+        const { mcpBridgeService } = await import('../agents/mcp.service.js');
+        return await mcpBridgeService.executeTool(serverName, toolName, args);
     }
 }
 

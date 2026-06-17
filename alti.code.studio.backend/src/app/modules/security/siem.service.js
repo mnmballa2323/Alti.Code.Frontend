@@ -8,6 +8,7 @@
 import axios from 'axios';
 import { prisma } from '../../../config/prisma.js';
 import { logger } from '../../../shared/logger.js';
+import { complianceEngine } from '../enterprise/compliance.engine.js';
 
 class SiemService {
     
@@ -34,13 +35,29 @@ class SiemService {
                 details
             };
 
+            // Sign the webhook payload if Barbican is configured
+            let signature = null;
+            const isBarbicanConfigured = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
+            if (isBarbicanConfigured) {
+                try {
+                    signature = await complianceEngine._signWithBarbican(JSON.stringify(payload));
+                } catch (err) {
+                    logger.warn(`⚠️ Barbican Signing for SIEM failed (${err.message}). Falling back to local mock signature.`);
+                    const crypto = await import('crypto');
+                    signature = crypto.createHmac('sha256', 'mock-barbican-hsm-secret').update(JSON.stringify(payload)).digest('base64');
+                }
+            }
+
             for (const webhook of webhooks) {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    ...(webhook.authToken ? { 'Authorization': `Bearer ${webhook.authToken}` } : {}),
+                    ...(signature ? { 'X-Alti-Signature': signature } : {})
+                };
+
                 // Fire and forget
                 axios.post(webhook.endpoint, payload, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...(webhook.authToken ? { 'Authorization': `Bearer ${webhook.authToken}` } : {})
-                    },
+                    headers,
                     timeout: 5000
                 }).catch(err => {
                     // Do not bubble up error, just log it internally

@@ -113,7 +113,10 @@ class TenantService {
             compliance: complianceProfiles,
             sla: plan.sla || null,
             support: plan.support,
-            dedicatedInfra: plan.dedicatedInfra || false,
+            dedicatedInfra: plan.dedicatedInfra || config.dedicatedInfra || false,
+            byocEnabled: config.byocEnabled || false,
+            byocEndpoint: config.byocEndpoint || null,
+            vpnConfig: config.vpnConfig || null,
             owner: config.owner,
             usage: {
                 currentMonthTokens: 0,

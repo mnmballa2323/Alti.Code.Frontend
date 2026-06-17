@@ -75,7 +75,37 @@ class VertexService {
         }
 
         const startTime = Date.now();
-        if (this.isMockMode || !this.generativeModel) {
+
+        let activeModel = this.generativeModel;
+
+        if (metadata.gcpProjectId && metadata.gcpPrivateKey) {
+            try {
+                const configObj = {
+                    project: metadata.gcpProjectId,
+                    location: metadata.location || this.location || 'us-central1'
+                };
+
+                if (metadata.gcpClientEmail) {
+                    let cleanPrivateKey = metadata.gcpPrivateKey;
+                    if (typeof cleanPrivateKey === 'string') {
+                        cleanPrivateKey = cleanPrivateKey.replace(/\\n/g, '\n');
+                    }
+                    configObj.googleAuthOptions = {
+                        credentials: {
+                            client_email: metadata.gcpClientEmail,
+                            private_key: cleanPrivateKey
+                        }
+                    };
+                }
+
+                const tempVertex = new VertexAI(configObj);
+                activeModel = tempVertex.getGenerativeModel({ model: metadata.modelName || this.modelName || 'gemini-3.1-pro' });
+            } catch (err) {
+                logger.warn('Failed to initialize dynamic Vertex AI client. Falling back to default/mock model.', err);
+            }
+        }
+
+        if (this.isMockMode || !activeModel) {
             return this.mockGenerate(prompt);
         }
 

@@ -625,11 +625,12 @@ If you require assistance from another specialized agent to complete your task, 
                         const toolName = toolNameParts.join('__');
                         const serverName = formattedServerName.replace(/_/g, '-');
                         
-                        const mcpResult = await import('./mcp.service.js').then(m => m.mcpBridgeService.executeTool(
+                        const { mcpGateway } = await import('../mcp/mcp_gateway.service.js');
+                        const mcpResult = await mcpGateway.executeToolWithContext(
                             serverName,
                             toolName,
                             mcpCall.params || {}
-                        ));
+                        );
                         return `[MCP_TOOL_RESULT (${mcpCall.tool})]:\n${JSON.stringify(mcpResult)}`;
                     } catch (mcpErr) {
                         this.hiveMindMesh.emit('cognitive_alert', `Agent [${agent.name}] failed to use MCP tool ${mcpCall.tool}. Error: ${mcpErr.message}`);

@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { prisma } from '../../../config/prisma.js';
 import { encryptionService } from '../security/encryption.service.js';
 import { logger } from '../../../shared/logger.js';
@@ -11,22 +12,108 @@ const maskKey = (key) => {
     return `${key.substring(0, 4)}...${key.substring(key.length - 4)}`;
 };
 
+const kekCache = new Map();
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
+/**
+ * Resolves a Barbican master key to unwrap KEK, with fallback to derived mock key if offline.
+ */
+const resolveBarbicanKey = async (customerKmsKeyArn, bypassCache = false) => {
+    if (!customerKmsKeyArn) return null;
+
+    if (!bypassCache) {
+        const cached = kekCache.get(customerKmsKeyArn);
+        if (cached && cached.expiresAt > Date.now()) {
+            logger.info(`💾 [BYOK] Using cached Barbican KEK for ${customerKmsKeyArn}`);
+            return cached.key;
+        }
+    }
+
+    const isBarbicanConfigured = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
+    if (isBarbicanConfigured) {
+        try {
+            const url = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
+            const secretId = customerKmsKeyArn.split('/').pop()?.replace('barbican:', '');
+            
+            const axios = (await import('axios')).default;
+            let token = process.env.OS_TOKEN;
+            if (!token && process.env.OS_AUTH_URL) {
+                const authResponse = await axios.post(`${process.env.OS_AUTH_URL}/v3/auth/tokens`, {
+                    auth: {
+                        identity: {
+                            methods: ['password'],
+                            password: {
+                                user: {
+                                    name: process.env.OS_USERNAME || 'admin',
+                                    domain: { name: process.env.OS_USER_DOMAIN_NAME || 'Default' },
+                                    password: process.env.OS_PASSWORD || 'password'
+                                }
+                            }
+                        },
+                        scope: {
+                            project: {
+                                name: process.env.OS_PROJECT_NAME || 'admin',
+                                domain: { name: process.env.OS_PROJECT_DOMAIN_NAME || 'Default' }
+                            }
+                        }
+                    }
+                });
+                token = authResponse.headers['x-subject-token'];
+            }
+
+            if (token) {
+                const keyResponse = await axios.get(
+                    `${url}/v1/secrets/${secretId}/payload`,
+                    {
+                        headers: {
+                            'X-Auth-Token': token,
+                            'Accept': 'text/plain'
+                        }
+                    }
+                );
+                if (keyResponse.data) {
+                    logger.info(`🔑 [BYOK] Resolved Barbican KMS key payload for secret ${secretId}`);
+                    const resolvedKey = keyResponse.data.toString().trim();
+                    kekCache.set(customerKmsKeyArn, {
+                        key: resolvedKey,
+                        expiresAt: Date.now() + CACHE_TTL
+                    });
+                    return resolvedKey;
+                }
+            }
+        } catch (error) {
+            logger.warn(`⚠️ Barbican key retrieval failed (${error.message}). Falling back to local mock Barbican KEK.`);
+        }
+        // Local mock Barbican KEK derivation
+        const mockKek = crypto.createHmac('sha256', 'mock-barbican-kek-secret').update(customerKmsKeyArn).digest('hex');
+        const resolvedMockKey = `barbican-mock-kek:${mockKek}`;
+        kekCache.set(customerKmsKeyArn, {
+            key: resolvedMockKey,
+            expiresAt: Date.now() + CACHE_TTL
+        });
+        return resolvedMockKey;
+    }
+
+    return customerKmsKeyArn;
+};
+
 /**
  * Encrypt a field value safely.
  */
-const encryptField = async (value) => {
+const encryptField = async (value, tenantKmsKey = null) => {
     if (!value || value.startsWith('****') || value.includes('...')) return undefined; // Skip already masked or empty values
-    return encryptionService.encrypt(value);
+    return encryptionService.encrypt(value, tenantKmsKey);
 };
 
 /**
  * Decrypt a field value safely.
  */
-const decryptField = async (encryptedValue) => {
+const decryptField = async (encryptedValue, tenantKmsKey = null, throwOnError = false) => {
     if (!encryptedValue) return '';
     try {
-        return encryptionService.decrypt(encryptedValue);
+        return await encryptionService.decrypt(encryptedValue, tenantKmsKey);
     } catch (e) {
+        if (throwOnError) throw e;
         logger.error('Failed to decrypt vault field:', e);
         return '';
     }
@@ -55,25 +142,59 @@ const resolveUserId = async (userId) => {
  */
 const getRawCredentials = async (userId) => {
     const targetUserId = await resolveUserId(userId);
+    
+    let tenantKmsKey = null;
+    let customerKmsKeyArn = null;
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: targetUserId },
+            include: { tenant: true }
+        });
+        if (user?.tenant?.customerKmsKeyArn) {
+            customerKmsKeyArn = user.tenant.customerKmsKeyArn;
+            tenantKmsKey = await resolveBarbicanKey(customerKmsKeyArn);
+        }
+    } catch (err) {
+        logger.warn(`⚠️ [VaultService] Failed to load tenant key for user ${targetUserId}: ${err.message}. Falling back to master key.`);
+    }
+
     let vault = await prisma.vault.findUnique({
         where: { userId: targetUserId }
     });
 
     if (!vault) return {};
 
-    return {
-        openaiApiKey: await decryptField(vault.openaiApiKey),
-        anthropicApiKey: await decryptField(vault.anthropicApiKey),
-        geminiApiKey: await decryptField(vault.geminiApiKey),
-        azureEndpoint: await decryptField(vault.azureEndpoint),
-        azureApiKey: await decryptField(vault.azureApiKey),
-        gcpProjectId: await decryptField(vault.gcpProjectId),
-        gcpClientEmail: await decryptField(vault.gcpClientEmail),
-        gcpPrivateKey: await decryptField(vault.gcpPrivateKey),
-        awsAccessKeyId: await decryptField(vault.awsAccessKeyId),
-        awsSecretAccessKey: await decryptField(vault.awsSecretAccessKey),
-        awsRegion: await decryptField(vault.awsRegion),
+    const decryptAll = async (key, throwOnError = false) => {
+        return {
+            openaiApiKey: await decryptField(vault.openaiApiKey, key, throwOnError),
+            anthropicApiKey: await decryptField(vault.anthropicApiKey, key, throwOnError),
+            geminiApiKey: await decryptField(vault.geminiApiKey, key, throwOnError),
+            azureEndpoint: await decryptField(vault.azureEndpoint, key, throwOnError),
+            azureApiKey: await decryptField(vault.azureApiKey, key, throwOnError),
+            gcpProjectId: await decryptField(vault.gcpProjectId, key, throwOnError),
+            gcpClientEmail: await decryptField(vault.gcpClientEmail, key, throwOnError),
+            gcpPrivateKey: await decryptField(vault.gcpPrivateKey, key, throwOnError),
+            awsAccessKeyId: await decryptField(vault.awsAccessKeyId, key, throwOnError),
+            awsSecretAccessKey: await decryptField(vault.awsSecretAccessKey, key, throwOnError),
+            awsRegion: await decryptField(vault.awsRegion, key, throwOnError),
+        };
     };
+
+    try {
+        return await decryptAll(tenantKmsKey, true);
+    } catch (error) {
+        if (customerKmsKeyArn) {
+            logger.warn(`⚠️ Decryption failed (potential KEK rotation). Bypassing cache to pull fresh Barbican KEK...`);
+            try {
+                tenantKmsKey = await resolveBarbicanKey(customerKmsKeyArn, true); // bypassCache = true
+                return await decryptAll(tenantKmsKey, false);
+            } catch (retryError) {
+                logger.error(`❌ Decryption retry failed even after KEK reload: ${retryError.message}`);
+                return await decryptAll(tenantKmsKey, false);
+            }
+        }
+        return await decryptAll(tenantKmsKey, false);
+    }
 };
 
 /**
@@ -104,6 +225,19 @@ const updateCredentials = async (userId, keys) => {
     const targetUserId = await resolveUserId(userId);
     logger.info(`🔐 [VaultService] Updating credentials for user ${targetUserId}...`);
 
+    let tenantKmsKey = null;
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: targetUserId },
+            include: { tenant: true }
+        });
+        if (user?.tenant?.customerKmsKeyArn) {
+            tenantKmsKey = await resolveBarbicanKey(user.tenant.customerKmsKeyArn);
+        }
+    } catch (err) {
+        logger.warn(`⚠️ [VaultService] Failed to load tenant key for user ${targetUserId} during update: ${err.message}.`);
+    }
+
     // Fetch existing vault to avoid overwriting unchanged (masked) keys
     const existing = await prisma.vault.findUnique({ where: { userId: targetUserId } });
 
@@ -116,7 +250,7 @@ const updateCredentials = async (userId, keys) => {
             if (value.includes('...')) {
                 if (existing) updateData[fieldName] = existing[fieldName];
             } else {
-                updateData[fieldName] = await encryptField(value);
+                updateData[fieldName] = await encryptField(value, tenantKmsKey);
             }
         } else if (value === '') {
             updateData[fieldName] = null;

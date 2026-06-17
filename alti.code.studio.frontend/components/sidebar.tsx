@@ -45,6 +45,7 @@ import {
   LayoutGrid,
   Bot,
   Database,
+  GitBranch,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -884,6 +885,15 @@ export default function Sidebar() {
       },
     },
     {
+      label: "Repositories",
+      icon: GitBranch,
+      path: "/repositories",
+      isActive: pathname === "/repositories",
+      onClick: () => {
+        router.push("/repositories");
+      },
+    },
+    {
       label: "Vault",
       icon: Lock,
       path: "/vault",
@@ -1369,7 +1379,7 @@ export default function Sidebar() {
       <div
         className={cn(
           "flex h-full flex-col transition-all duration-300 bg-white dark:bg-sidebar border-r border-default-200",
-          isSidebarOpen ? "w-64" : "w-10",
+          isSidebarOpen ? "w-72" : "w-10",
         )}
       >
         {/* Top Section - Brand & Toggle */}
@@ -1713,7 +1723,7 @@ export default function Sidebar() {
             className={cn(
               "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
-                ? "grid grid-cols-7 gap-0.5"
+                ? "grid grid-cols-8 gap-0.5"
                 : "flex flex-col items-center gap-2",
             )}
           >
@@ -1756,7 +1766,7 @@ export default function Sidebar() {
               );
             })}
             {isSidebarOpen && filteredNavigationItems.length === 0 && (
-              <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
+              <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
                 No results found
               </div>
             )}

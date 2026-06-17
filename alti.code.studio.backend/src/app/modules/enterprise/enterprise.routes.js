@@ -106,6 +106,331 @@ router.post('/tenants', rbac('tenants:configure'), (req, res) => {
 });
 
 // ═══════════════════════════════════════════════
+// SCIM 2.0 User Provisioning
+// ═══════════════════════════════════════════════
+
+const getLocalUsers = () => {
+    try {
+        const mockFilePath = path.join(process.cwd(), 'users_mock.json');
+        if (fs.existsSync(mockFilePath)) {
+            return JSON.parse(fs.readFileSync(mockFilePath, 'utf8'));
+        }
+    } catch (err) {
+        logger.error('Error reading mock users inside SCIM:', err);
+    }
+    return [];
+};
+
+const saveLocalUsers = (users) => {
+    try {
+        const mockFilePath = path.join(process.cwd(), 'users_mock.json');
+        fs.writeFileSync(mockFilePath, JSON.stringify(users, null, 2), 'utf8');
+    } catch (err) {
+        logger.error('Error writing mock users inside SCIM:', err);
+    }
+};
+
+// Map database or mock user to SCIM representation
+const mapToScimUser = (user) => {
+    return {
+        schemas: ["urn:ietf:params:scim:schemas:core:2.0:User"],
+        id: user.id,
+        userName: user.email,
+        name: {
+            formatted: user.name || user.email.split('@')[0],
+            familyName: "",
+            givenName: user.name || user.email.split('@')[0]
+        },
+        emails: [
+            {
+                value: user.email,
+                primary: true
+            }
+        ],
+        active: user.role !== 'unauthorized',
+        meta: {
+            resourceType: "User",
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt
+        }
+    };
+};
+
+// GET /scim/v2/Users
+router.get('/scim/v2/Users', rbac('users:manage'), async (req, res) => {
+    try {
+        const tenantId = req.tenantId;
+        const { filter, startIndex = 1, count = 100 } = req.query;
+        let users = [];
+        
+        try {
+            // Retrieve from Postgres
+            users = await prisma.user.findMany({
+                where: { tenantId }
+            });
+        } catch (dbError) {
+            // Fallback to mock users JSON
+            users = getLocalUsers().filter(u => u.tenantId === tenantId);
+        }
+
+        // Apply filters if present (e.g. userName eq "user@example.com")
+        if (filter) {
+            const match = filter.match(/userName\s+eq\s+["']([^"']+)["']/i);
+            if (match) {
+                const userName = match[1];
+                users = users.filter(u => u.email.toLowerCase() === userName.toLowerCase());
+            }
+        }
+
+        const paginatedUsers = users.slice(parseInt(startIndex) - 1, parseInt(startIndex) - 1 + parseInt(count));
+        
+        res.json({
+            schemas: ["urn:ietf:params:scim:api:messages:2.0:ListResponse"],
+            totalResults: users.length,
+            startIndex: parseInt(startIndex),
+            itemsPerPage: paginatedUsers.length,
+            Resources: paginatedUsers.map(mapToScimUser)
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// GET /scim/v2/Users/:id
+router.get('/scim/v2/Users/:id', rbac('users:manage'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenantId = req.tenantId;
+        let user = null;
+
+        try {
+            user = await prisma.user.findFirst({
+                where: { id, tenantId }
+            });
+        } catch (dbError) {
+            user = getLocalUsers().find(u => u.id === id && u.tenantId === tenantId);
+        }
+
+        if (!user) {
+            return res.status(404).json({
+                schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                detail: `User with ID ${id} not found`,
+                status: "404"
+            });
+        }
+
+        res.json(mapToScimUser(user));
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// POST /scim/v2/Users
+router.post('/scim/v2/Users', rbac('users:manage'), async (req, res) => {
+    try {
+        const tenantId = req.tenantId;
+        const { userName, emails, active } = req.body;
+        const email = emails?.[0]?.value || userName;
+
+        if (!email) {
+            return res.status(400).json({
+                schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                detail: "Email or userName is required",
+                status: "400"
+            });
+        }
+
+        const userId = crypto.randomUUID();
+        const now = new Date().toISOString();
+        const newUser = {
+            id: userId,
+            tenantId,
+            tenantRole: 'developer',
+            provider: 'local',
+            googleId: null,
+            githubId: null,
+            avatar: null,
+            email,
+            password: null,
+            role: active === false ? 'unauthorized' : 'user',
+            isSubscribed: true,
+            subscriptionPlan: 'individual',
+            promptsUsed: 0,
+            imagesUsed: 0,
+            createdAt: now,
+            updatedAt: now
+        };
+
+        try {
+            await prisma.user.create({
+                data: {
+                    id: userId,
+                    tenantId,
+                    tenantRole: 'developer',
+                    provider: 'local',
+                    email,
+                    role: active === false ? 'unauthorized' : 'user',
+                    isSubscribed: true,
+                    subscriptionPlan: 'individual'
+                }
+            });
+        } catch (dbError) {
+            const mockUsers = getLocalUsers();
+            if (mockUsers.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                return res.status(409).json({
+                    schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                    detail: "User already exists",
+                    status: "409"
+                });
+            }
+            mockUsers.push(newUser);
+            saveLocalUsers(mockUsers);
+        }
+
+        res.status(201).json(mapToScimUser(newUser));
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// PUT /scim/v2/Users/:id
+router.put('/scim/v2/Users/:id', rbac('users:manage'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenantId = req.tenantId;
+        const { emails, userName, active } = req.body;
+        const email = emails?.[0]?.value || userName;
+        const now = new Date().toISOString();
+
+        let updatedUser = null;
+
+        try {
+            updatedUser = await prisma.user.update({
+                where: { id, tenantId },
+                data: {
+                    email,
+                    role: active === false ? 'unauthorized' : 'user',
+                    updatedAt: now
+                }
+            });
+        } catch (dbError) {
+            const mockUsers = getLocalUsers();
+            const index = mockUsers.findIndex(u => u.id === id && u.tenantId === tenantId);
+            if (index === -1) {
+                return res.status(404).json({
+                    schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                    detail: `User with ID ${id} not found`,
+                    status: "404"
+                });
+            }
+            mockUsers[index] = {
+                ...mockUsers[index],
+                email,
+                role: active === false ? 'unauthorized' : 'user',
+                updatedAt: now
+            };
+            updatedUser = mockUsers[index];
+            saveLocalUsers(mockUsers);
+        }
+
+        res.json(mapToScimUser(updatedUser));
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// PATCH /scim/v2/Users/:id
+router.patch('/scim/v2/Users/:id', rbac('users:manage'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenantId = req.tenantId;
+        const { Operations } = req.body;
+        const now = new Date().toISOString();
+
+        let activeVal = true;
+        if (Array.isArray(Operations)) {
+            const activeOp = Operations.find(op => op.path === 'active' || (op.value && typeof op.value.active !== 'undefined'));
+            if (activeOp) {
+                activeVal = typeof activeOp.value === 'boolean' ? activeOp.value : activeOp.value?.active;
+            }
+        }
+
+        let updatedUser = null;
+        try {
+            updatedUser = await prisma.user.update({
+                where: { id, tenantId },
+                data: {
+                    role: activeVal === false ? 'unauthorized' : 'user',
+                    updatedAt: now
+                }
+            });
+        } catch (dbError) {
+            const mockUsers = getLocalUsers();
+            const index = mockUsers.findIndex(u => u.id === id && u.tenantId === tenantId);
+            if (index === -1) {
+                return res.status(404).json({
+                    schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                    detail: `User with ID ${id} not found`,
+                    status: "404"
+                });
+            }
+            mockUsers[index] = {
+                ...mockUsers[index],
+                role: activeVal === false ? 'unauthorized' : 'user',
+                updatedAt: now
+            };
+            updatedUser = mockUsers[index];
+            saveLocalUsers(mockUsers);
+        }
+
+        res.json(mapToScimUser(updatedUser));
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// DELETE /scim/v2/Users/:id
+router.delete('/scim/v2/Users/:id', rbac('users:manage'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tenantId = req.tenantId;
+
+        try {
+            await prisma.user.delete({
+                where: { id, tenantId }
+            });
+        } catch (dbError) {
+            const mockUsers = getLocalUsers();
+            const index = mockUsers.findIndex(u => u.id === id && u.tenantId === tenantId);
+            if (index === -1) {
+                return res.status(404).json({
+                    schemas: ["urn:ietf:params:scim:api:messages:2.0:Error"],
+                    detail: `User with ID ${id} not found`,
+                    status: "404"
+                });
+            }
+            mockUsers.splice(index, 1);
+            saveLocalUsers(mockUsers);
+        }
+
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+    }
+});
+
+// GET /scim/v2/Groups
+router.get('/scim/v2/Groups', rbac('users:manage'), (req, res) => {
+    res.json({
+        schemas: ["urn:ietf:params:scim:api:messages:2.0:ListResponse"],
+        totalResults: 0,
+        startIndex: 1,
+        itemsPerPage: 0,
+        Resources: []
+    });
+});
+
+// ═══════════════════════════════════════════════
 // Cost Attribution
 // ═══════════════════════════════════════════════
 

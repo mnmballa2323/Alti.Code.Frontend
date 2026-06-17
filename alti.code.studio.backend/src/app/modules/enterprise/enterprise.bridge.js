@@ -41,12 +41,31 @@ class EnterpriseBridge {
         const { agentName, task, tenantId = 'default', mode = 'AUTONOMOUS' } = job;
         this.stats.totalDispatches++;
 
+        // Check token and API quota limits
+        const { quotaMeter } = await import('./quota.meter.js');
+        const tokenCheck = quotaMeter.checkQuota(tenantId, 'tokens');
+        const apiCheck = quotaMeter.checkQuota(tenantId, 'api_calls');
+        if (!tokenCheck.allowed || !apiCheck.allowed) {
+            const exceededType = !tokenCheck.allowed ? 'tokens' : 'api_calls';
+            const limitVal = !tokenCheck.allowed ? tokenCheck.limit : apiCheck.limit;
+            logger.warn(`🚫 Quota Exceeded: Dispatch to ${agentName} blocked for tenant ${tenantId} due to ${exceededType} limits`);
+            throw new Error(`QUOTA_EXCEEDED: Tenant ${tenantId} exceeded ${exceededType} quota (Limit: ${limitVal})`);
+        }
+
         // 1. Classify inbound data for PII
         const inputText = typeof task === 'string' ? task : JSON.stringify(task);
         const classification = complianceEngine.classifyData(inputText);
 
+        let scrubbedTask = task;
+
         if (classification.findings.length > 0) {
             this.stats.piiDetections++;
+
+            // Active masking if required by classification profile
+            if (classification.requiresMasking) {
+                scrubbedTask = classification.scrubbedText;
+                logger.info(`🛡️ DLP: Active redaction applied to task input for ${agentName}`);
+            }
 
             // Log the detection
             await complianceEngine.log({
@@ -84,6 +103,7 @@ class EnterpriseBridge {
 
         return {
             ...job,
+            task: scrubbedTask,
             _bridge: {
                 startTime: Date.now(),
                 classification: classification.classification,
@@ -125,6 +145,11 @@ class EnterpriseBridge {
         // 2. Persist result for billing/cost attribution
         const tokensUsed = result?.tokensUsed || result?.usage?.total_tokens || 0;
         this.stats.totalTokens += tokensUsed;
+
+        // Record usage in quota meter
+        const { quotaMeter } = await import('./quota.meter.js');
+        quotaMeter.recordUsage(tenantId, 'tokens', tokensUsed);
+        quotaMeter.recordUsage(tenantId, 'api_calls', 1);
 
         await resultStore.save({
             tenantId,

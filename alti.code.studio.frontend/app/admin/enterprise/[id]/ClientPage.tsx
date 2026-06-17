@@ -267,7 +267,6 @@ export default function EnterpriseDetailPage() {
                         <option value="$750">$750</option>
                         <option value="$1,000">$1,000</option>
                         <option value="$1,250">$1,250</option>
-                        <option value="$1,500">$1,500</option>
                         <option value="$2,000">$2,000</option>
                         <option value="$2,500">$2,500</option>
                       </select>

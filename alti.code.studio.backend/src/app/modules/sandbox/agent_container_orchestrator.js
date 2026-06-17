@@ -15,6 +15,8 @@ import { exec } from 'child_process';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { TenantContainerOrchestrator } from './tenant_container_orchestrator.js';
+import crypto from 'crypto';
+import { logger } from '../../../shared/logger.js';
 
 export class AgentContainerOrchestrator {
     /**
@@ -26,6 +28,7 @@ export class AgentContainerOrchestrator {
         this.baseSandboxDir = resolve(baseSandboxDir);
         this.baseImage = baseImage;
         this.activeContainers = new Set();
+        this.containerWorkspaces = new Map();
         this.isDockerAvailable = null;
         this.tenantOrchestrator = new TenantContainerOrchestrator();
 
@@ -87,6 +90,7 @@ export class AgentContainerOrchestrator {
             // High-Fidelity Mock Sandbox Fallback
             console.log(`⚠️ Docker daemon not responding. Spawning agent [${agentName}] in Mock Container Sandbox.`);
             this.activeContainers.add(containerName);
+            this.containerWorkspaces.set(containerName, hostWorkspacePath);
             return {
                 containerName,
                 hostWorkspacePath,
@@ -98,6 +102,7 @@ export class AgentContainerOrchestrator {
         const inspect = await this._execCmd(`docker inspect -f '{{.State.Running}}' ${containerName}`);
         if (inspect.success && inspect.stdout === 'true') {
             this.activeContainers.add(containerName);
+            this.containerWorkspaces.set(containerName, hostWorkspacePath);
             return { containerName, hostWorkspacePath, isMock: false };
         }
 
@@ -120,6 +125,24 @@ export class AgentContainerOrchestrator {
         // If tenantId exists, bind to tenant's air-gapped bridge network. Else, use 'bridge'.
         const networkFlag = tenantId ? `--network ${this.tenantOrchestrator.getTenantNetwork(tenantId)}` : `--network bridge`;
 
+        // Check tenant compliance and infrastructure settings for sovereign microVM runtime
+        let runtime = process.env.SOVEREIGN_MICROVM_RUNTIME || null;
+        if (tenantId) {
+            try {
+                const { tenantService } = await import('../enterprise/tenant.service.js');
+                const tenant = await tenantService.resolve(tenantId);
+                if (tenant) {
+                    const hasFipsCompliance = tenant.compliance?.some(c => c.fips || c.label === 'FedRAMP');
+                    if (tenant.dedicatedInfra || hasFipsCompliance) {
+                        runtime = runtime || 'kata-fc';
+                    }
+                }
+            } catch (err) {
+                console.warn(`Failed to resolve tenant compliance profile: ${err.message}`);
+            }
+        }
+        const runtimeFlag = runtime ? `--runtime=${runtime} ` : '';
+
         // 3. Launch isolated resource-limited and heavily hardened Docker container:
         // - Strict Network Isolation: networkFlag
         // - Root filesystem read-only: --read-only
@@ -133,6 +156,7 @@ export class AgentContainerOrchestrator {
             `--name ${containerName} ` +
             `-v "${hostWorkspacePath}":/workspace ` +
             `${networkFlag} ` +
+            runtimeFlag +
             `--read-only ` +
             `--security-opt=no-new-privileges:true ` +
             `--cap-drop=ALL ` +
@@ -164,27 +188,106 @@ export class AgentContainerOrchestrator {
 
         console.log(`🚀 Launched isolated Agent Container: [${containerName}] -> Mounted Shared Workspace: ${hostWorkspacePath}`);
         this.activeContainers.add(containerName);
+        this.containerWorkspaces.set(containerName, hostWorkspacePath);
         return { containerName, hostWorkspacePath, isMock: false };
     }
 
     /**
      * Stop and clean up an agent's container.
      */
-    async stopAgentContainer(agentName) {
+    async stopAgentContainer(agentName, workspacePath = null) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
         const containerName = `agent_container_${cleanAgentName}`;
 
         this.activeContainers.delete(containerName);
         const hasDocker = await this.checkDockerAvailability();
 
+        let workspacePathToShred = workspacePath || this.containerWorkspaces.get(containerName);
+        this.containerWorkspaces.delete(containerName);
+
         if (hasDocker) {
+            // Try to resolve workspace path via docker inspect if not provided/resolved
+            if (!workspacePathToShred) {
+                const inspectMount = await this._execCmd(`docker inspect -f '{{ range .Mounts }}{{ if eq .Destination "/workspace" }}{{ .Source }}{{ end }}{{ end }}' ${containerName}`);
+                if (inspectMount.success && inspectMount.stdout) {
+                    workspacePathToShred = inspectMount.stdout;
+                }
+            }
+
             await this._execCmd(`docker stop ${containerName}`);
             await this._execCmd(`docker rm -f ${containerName}`);
             console.log(`🧹 Stopped and pruned Agent Container: [${containerName}]`);
         } else {
             console.log(`🧹 Cleaned up mock state for Agent Container: [${containerName}]`);
         }
+
+        if (workspacePathToShred) {
+            const resolvedPath = resolve(workspacePathToShred);
+            if (resolvedPath.startsWith(this.baseSandboxDir)) {
+                await this._shredWorkspace(resolvedPath);
+            } else {
+                logger.warn(`🔒 [Shred] Refusing to shred path outside sandbox directory: ${resolvedPath}`);
+            }
+        }
+
         return { success: true };
+    }
+
+    /**
+     * Ephemeral Cryptographically-Shredded Workspaces (Pillar 22)
+     * Securely overwrites all files in the directory with random bytes or zeroes, then deletes them.
+     */
+    async _shredWorkspace(workspacePath) {
+        if (!workspacePath || !existsSync(workspacePath)) return;
+        
+        logger.info(`🔒 Shredding ephemeral workspace files securely: ${workspacePath}`);
+        
+        const fs = await import('fs');
+        const path = await import('path');
+
+        const shredDirectory = async (dir) => {
+            let entries = [];
+            try {
+                entries = fs.readdirSync(dir, { withFileTypes: true });
+            } catch (err) {
+                return;
+            }
+
+            for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory()) {
+                    await shredDirectory(fullPath);
+                    try {
+                        fs.rmdirSync(fullPath);
+                    } catch (e) {}
+                } else if (entry.isFile()) {
+                    try {
+                        const stat = fs.statSync(fullPath);
+                        // Overwrite with random bytes
+                        const randomBuffer = crypto.randomBytes(stat.size);
+                        fs.writeFileSync(fullPath, randomBuffer);
+                        // Overwrite with zeros
+                        const zeroBuffer = Buffer.alloc(stat.size, 0);
+                        fs.writeFileSync(fullPath, zeroBuffer);
+                        // Also try running cli shred for system-level scrubbing if available
+                        await this._execCmd(`shred -u "${fullPath}"`);
+                    } catch (e) {
+                        try {
+                            fs.unlinkSync(fullPath);
+                        } catch (err) {}
+                    }
+                }
+            }
+        };
+
+        await shredDirectory(workspacePath);
+        try {
+            fs.rmdirSync(workspacePath);
+        } catch (e) {
+            try {
+                fs.rmSync(workspacePath, { recursive: true, force: true });
+            } catch (err) {}
+        }
     }
 
     /**

@@ -13,6 +13,7 @@
 
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
+import { memorystoreService } from '../googleCloud/memorystore.service.js';
 
 // ═══════════════════════════════════════════════
 // Rate Limit Tiers (per tenant plan)
@@ -249,16 +250,8 @@ class TenantRateLimiter {
         this.windows = new Map();  // `${tenantId}:${windowKey}` → { count, resetAt }
     }
 
-    /**
-     * Check if a request is within rate limits for the tenant's plan.
-     * @returns {{ allowed: boolean, remaining: number, resetAt: string, tier: string }}
-     */
-    check(tenantId, plan = 'starter') {
+    _checkMemory(tenantId, plan, now, minuteKey) {
         const tier = RATE_TIERS[plan] || RATE_TIERS.starter;
-        const now = Date.now();
-        const minuteKey = `${tenantId}:minute:${Math.floor(now / 60000)}`;
-
-        // Get or create window
         let window = this.windows.get(minuteKey);
         if (!window || now > window.resetAt) {
             window = { count: 0, resetAt: now + 60000 };
@@ -267,25 +260,66 @@ class TenantRateLimiter {
 
         window.count++;
         const allowed = window.count <= tier.requestsPerMinute;
-        const remaining = Math.max(0, tier.requestsPerMinute - window.count);
 
-        // Garbage collect old windows probabilistically (5% chance) to prevent O(N) event loop blocking under heavy load
+        // Garbage collect old windows probabilistically (5% chance)
         if (this.windows.size > 5000 && Math.random() < 0.05) {
             for (const [key, w] of this.windows) {
                 if (now > w.resetAt) this.windows.delete(key);
             }
         }
 
+        return { allowed, count: window.count, resetAt: window.resetAt };
+    }
+
+    /**
+     * Check if a request is within rate limits for the tenant's plan.
+     * @returns {Promise<{ allowed: boolean, remaining: number, resetAt: string, tier: string }>}
+     */
+    async check(tenantId, plan = 'starter') {
+        const tier = RATE_TIERS[plan] || RATE_TIERS.starter;
+        const now = Date.now();
+        const minuteKey = `${tenantId}:minute:${Math.floor(now / 60000)}`;
+
+        let allowed = true;
+        let count = 0;
+        let resetAt = now + 60000;
+
+        if (memorystoreService.isInitialized) {
+            try {
+                const client = memorystoreService.publisher;
+                count = await client.incr(minuteKey);
+                if (count === 1) {
+                    await client.expire(minuteKey, 60);
+                }
+                const ttl = await client.ttl(minuteKey);
+                resetAt = ttl > 0 ? now + (ttl * 1000) : now + 60000;
+                allowed = count <= tier.requestsPerMinute;
+            } catch (err) {
+                logger.warn(`⚠️ Redis rate limit check failed, falling back to memory: ${err.message}`);
+                const memResult = this._checkMemory(tenantId, plan, now, minuteKey);
+                allowed = memResult.allowed;
+                count = memResult.count;
+                resetAt = memResult.resetAt;
+            }
+        } else {
+            const memResult = this._checkMemory(tenantId, plan, now, minuteKey);
+            allowed = memResult.allowed;
+            count = memResult.count;
+            resetAt = memResult.resetAt;
+        }
+
+        const remaining = Math.max(0, tier.requestsPerMinute - count);
+
         return {
             allowed,
             remaining,
             limit: tier.requestsPerMinute,
-            resetAt: new Date(window.resetAt).toISOString(),
+            resetAt: new Date(resetAt).toISOString(),
             tier: plan,
             headers: {
                 'X-RateLimit-Limit': tier.requestsPerMinute,
                 'X-RateLimit-Remaining': remaining,
-                'X-RateLimit-Reset': Math.ceil(window.resetAt / 1000),
+                'X-RateLimit-Reset': Math.ceil(resetAt / 1000),
             },
         };
     }
@@ -294,10 +328,10 @@ class TenantRateLimiter {
      * Express middleware factory.
      */
     middleware() {
-        return (req, res, next) => {
+        return async (req, res, next) => {
             const tenantId = req.tenantId || 'anonymous';
             const plan = req.tenantPlan || 'starter';
-            const result = this.check(tenantId, plan);
+            const result = await this.check(tenantId, plan);
 
             // Set rate limit headers
             res.set(result.headers);

@@ -4,34 +4,32 @@ import React from "react";
 
 const plans = [
   {
-    name: "Individual",
-    price: "1,000",
-    description:
-      "For developers who want zero configuration, production grade agentic swarm power.",
-    cta: "Start Free Trial",
-    buttonClass:
-      "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
-    cloudType: "Multi-Tenant Private Cloud",
-  },
-  {
-    name: "Team",
-    price: "1,500",
-    description:
-      "For engineering teams collaborating on complex swarms and shared workflows.",
+    name: "Multi-Tenant Private Cloud",
+    price: "2,000",
+    description: (
+      <>
+        Scale collaborative agent swarms with secure local
+        <br />
+        sandboxing and dedicated high performance compute.
+      </>
+    ),
     cta: "Upgrade Team",
     buttonClass:
-      "bg-red-600 hover:bg-red-700 text-white dark:bg-red-500 dark:hover:bg-red-600",
-    cloudType: "Multi-Tenant Private Cloud",
+      "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
   },
   {
-    name: "Enterprise",
+    name: "Single-Tenant Private Cloud",
     price: "2,500",
-    description:
-      "For enterprises requiring complete data sovereignty and private cloud environments.",
+    description: (
+      <>
+        Enforce absolute data sovereignty with dedicated
+        <br />
+        single-tenant private cloud server environments.
+      </>
+    ),
     cta: "Contact Enterprise",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
-    cloudType: "Single-Tenant Private Cloud",
   },
 ];
 
@@ -55,7 +53,7 @@ export default function PricingSection() {
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl items-stretch">
           {plans.map((plan, idx) => (
             <div
               key={idx}
@@ -63,14 +61,11 @@ export default function PricingSection() {
             >
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
-                  {/* Plan Name & Cloud Type */}
+                  {/* Plan Name */}
                   <div className="flex justify-between items-baseline mb-6 gap-4">
                     <h3 className="text-2xl font-bold text-black dark:text-white tracking-tight text-left">
                       {plan.name}
                     </h3>
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">
-                      {plan.cloudType}
-                    </span>
                   </div>
 
                   {/* Price Display */}

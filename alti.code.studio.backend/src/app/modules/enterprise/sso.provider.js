@@ -103,7 +103,14 @@ class EnterpriseSSO {
      */
     async validateToken(token) {
         if (!token || typeof token !== 'string') {
-            throw new Error('AUTH_NO_TOKEN: No authentication token provided or invalid type');
+            const err = new Error('AUTH_NO_TOKEN: No authentication token provided or invalid type');
+            try {
+                const { siemService } = await import('../security/siem.service.js');
+                await siemService.dispatchEvent('system', 'SSO_AUTH_FAILURE', {
+                    error: err.message
+                });
+            } catch (siemErr) {}
+            throw err;
         }
 
         // 1. Try local JWT verification first
@@ -181,31 +188,59 @@ class EnterpriseSSO {
 
         // 2. Google Cloud Identity / SSO token verification
         try {
-            // Decode JWT (in production, verify signature against Google's public keys)
+            // Parse token parts to check malformed JWT
             const parts = token.split('.');
             if (parts.length !== 3) throw new Error('AUTH_INVALID_TOKEN: Malformed JWT');
 
-            let payload;
-            try {
-                payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString());
-            } catch (parseErr) {
-                throw new Error('AUTH_INVALID_TOKEN: Malformed JWT payload JSON');
+            // Decode JWT payload without verification first to extract tenant context
+            const payload = jwt.decode(token);
+            if (!payload) {
+                throw new Error('AUTH_INVALID_TOKEN: Malformed or unparseable JWT payload');
             }
+
+            const tenantId = payload.tenant_id || payload.firebase?.tenant || payload.tenantId || 'default';
 
             // Validate expiration
             if (payload.exp && Date.now() / 1000 > payload.exp) {
                 throw new Error('AUTH_TOKEN_EXPIRED: Token has expired');
             }
 
-            // Validate issuer (Google Cloud Identity Platform)
-            const validIssuers = [
-                'https://securetoken.google.com',
-                'https://accounts.google.com',
-                process.env.GCP_IDENTITY_ISSUER,
-            ].filter(Boolean);
+            // Look up tenant from database to check for custom SSO configuration
+            let tenant = null;
+            try {
+                tenant = await prisma.tenant.findUnique({
+                    where: { id: tenantId }
+                });
+            } catch (dbError) {
+                logger.warn(`⚠️ [Postgres Offline] Using in-memory configuration fallback for tenant ${tenantId}`);
+            }
 
-            if (payload.iss && !validIssuers.some(i => payload.iss.startsWith(i))) {
-                throw new Error('AUTH_INVALID_ISSUER: Token issuer not recognized');
+            // Active cryptographic signature verification if tenant-specific SAML/OIDC cert is configured
+            if (tenant && tenant.ssoEnabled && tenant.samlCert) {
+                try {
+                    // Verify the signature against the tenant's specific SAML public certificate
+                    jwt.verify(token, tenant.samlCert, {
+                        algorithms: ['RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512']
+                    });
+                    // Signature verified!
+                    logger.debug(`🔒 Cryptographically verified tenant SSO token for ${payload.email} using custom cert`);
+                } catch (verifyErr) {
+                    throw new Error(`AUTH_INVALID_SIGNATURE: JWT signature verification failed for tenant IdP cert: ${verifyErr.message}`);
+                }
+            } else {
+                // Validate issuer (Google Cloud Identity Platform or configured OIDC issuer)
+                const validIssuers = [
+                    'https://securetoken.google.com',
+                    'https://accounts.google.com',
+                    process.env.GCP_IDENTITY_ISSUER,
+                    tenant?.oidcIssuer,
+                ].filter(Boolean);
+
+                if (payload.iss && !validIssuers.some(i => payload.iss.startsWith(i))) {
+                    throw new Error('AUTH_INVALID_ISSUER: Token issuer not recognized');
+                }
+
+                logger.debug(`⚠️ Local dev/default SSO signature validation for ${payload.email}`);
             }
 
             let identityRole = payload.role || payload.custom_claims?.role || payload.tenantRole || ROLES.DEVELOPER;
@@ -221,7 +256,7 @@ class EnterpriseSSO {
                 userId: payload.sub || payload.user_id || payload._id,
                 email: payload.email,
                 name: payload.name || (payload.email ? payload.email.split('@')[0] : 'user'),
-                tenantId: payload.tenant_id || payload.firebase?.tenant || payload.tenantId || 'default',
+                tenantId: tenantId,
                 role: identityRole,
                 region: payload.region || payload.custom_claims?.region || 'us-central1',
                 permissions: PERMISSIONS[identityRole] || PERMISSIONS[ROLES.VIEWER],
@@ -229,6 +264,22 @@ class EnterpriseSSO {
                 exp: payload.exp,
             };
         } catch (err) {
+            let tenantId = 'system';
+            try {
+                const decoded = jwt.decode(token);
+                if (decoded) {
+                    tenantId = decoded.tenant_id || decoded.firebase?.tenant || decoded.tenantId || 'default';
+                }
+            } catch (e) {}
+
+            try {
+                const { siemService } = await import('../security/siem.service.js');
+                await siemService.dispatchEvent(tenantId, 'SSO_AUTH_FAILURE', {
+                    error: err.message,
+                    tokenSnippet: token ? `${token.substring(0, 15)}...` : null
+                });
+            } catch (siemErr) {}
+
             if (err.message.startsWith('AUTH_')) throw err;
             throw new Error(`AUTH_VALIDATION_FAILED: ${err.message}`);
         }

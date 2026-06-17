@@ -113,7 +113,7 @@ class MultiCloudInferenceService {
     /**
      * Executes inference on Google Cloud Vertex AI (Core Platform)
      */
-    async _executeGcp(prompt, activeAgent, modelId) {
+    async _executeGcp(prompt, activeAgent, modelId, options = {}) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on Google Cloud Vertex AI using model ${modelId}...`);
         const startTime = Date.now();
         let text = '';
@@ -125,7 +125,15 @@ class MultiCloudInferenceService {
             const res = await fetch(gcpUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, model: modelId }),
+                body: JSON.stringify({ 
+                    prompt, 
+                    model: modelId,
+                    credentials: options.vaultCredentials ? {
+                        gcpProjectId: options.vaultCredentials.gcpProjectId,
+                        gcpClientEmail: options.vaultCredentials.gcpClientEmail,
+                        gcpPrivateKey: options.vaultCredentials.gcpPrivateKey
+                    } : null
+                }),
                 signal: AbortSignal.timeout(15000)
             });
             if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
@@ -134,7 +142,16 @@ class MultiCloudInferenceService {
             latency = Date.now() - startTime;
         } catch (e) {
             logger.warn(`GCP Microservice unavailable (${e.message}). Falling back to local SDK...`);
-            text = await vertexService.generateContent(prompt, { agentName: activeAgent });
+            const gcpProjectId = options.vaultCredentials?.gcpProjectId || process.env.GCP_PROJECT_ID;
+            const gcpClientEmail = options.vaultCredentials?.gcpClientEmail || process.env.GCP_CLIENT_EMAIL;
+            const gcpPrivateKey = options.vaultCredentials?.gcpPrivateKey || process.env.GCP_PRIVATE_KEY;
+
+            text = await vertexService.generateContent(prompt, { 
+                agentName: activeAgent,
+                gcpProjectId,
+                gcpClientEmail,
+                gcpPrivateKey
+            });
             latency = Date.now() - startTime;
         }
 
@@ -154,7 +171,7 @@ class MultiCloudInferenceService {
     /**
      * Executes inference on AWS Bedrock (Marketplace Integrated)
      */
-    async _executeAwsBedrock(prompt, activeAgent, modelId) {
+    async _executeAwsBedrock(prompt, activeAgent, modelId, options = {}) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on AWS Bedrock using model ${modelId}...`);
         const startTime = Date.now();
         let text = '';
@@ -166,7 +183,15 @@ class MultiCloudInferenceService {
             const res = await fetch(awsUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, model: modelId }),
+                body: JSON.stringify({ 
+                    prompt, 
+                    model: modelId,
+                    credentials: options.vaultCredentials ? {
+                        awsAccessKeyId: options.vaultCredentials.awsAccessKeyId,
+                        awsSecretAccessKey: options.vaultCredentials.awsSecretAccessKey,
+                        awsRegion: options.vaultCredentials.awsRegion
+                    } : null
+                }),
                 signal: AbortSignal.timeout(15000)
             });
             if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
@@ -175,11 +200,13 @@ class MultiCloudInferenceService {
             latency = Date.now() - startTime;
         } catch (e) {
             logger.warn(`AWS Microservice unavailable (${e.message}). Falling back to local Bedrock client...`);
-            let promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-            if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+            let awsAccessKeyId = options.vaultCredentials?.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
+            let awsSecretAccessKey = options.vaultCredentials?.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
+            let awsRegion = options.vaultCredentials?.awsRegion || process.env.AWS_REGION || 'us-east-1';
+
+            if (awsAccessKeyId && awsSecretAccessKey) {
                 try {
-                    const region = process.env.AWS_REGION || 'us-east-1';
-                    const endpoint = `https://bedrock-runtime.${region}.amazonaws.com/model/${modelId}/invoke`;
+                    const endpoint = `https://bedrock-runtime.${awsRegion}.amazonaws.com/model/${modelId}/invoke`;
                     const body = JSON.stringify({
                         prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
                         max_tokens_to_sample: 4096,
@@ -189,7 +216,7 @@ class MultiCloudInferenceService {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `AWS4-HMAC-SHA256 Credential=${process.env.AWS_ACCESS_KEY_ID}/...`
+                            'Authorization': `AWS4-HMAC-SHA256 Credential=${awsAccessKeyId}/...`
                         },
                         body
                     });
@@ -223,7 +250,7 @@ class MultiCloudInferenceService {
     /**
      * Executes inference on Azure Foundry (Marketplace Integrated)
      */
-    async _executeAzureFoundry(prompt, activeAgent, modelId) {
+    async _executeAzureFoundry(prompt, activeAgent, modelId, options = {}) {
         logger.info(`☁️ [Multi-Cloud Inference] Executing on Azure AI Studio Foundry using model ${modelId}...`);
         const startTime = Date.now();
         let text = '';
@@ -235,7 +262,14 @@ class MultiCloudInferenceService {
             const res = await fetch(azureUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt, model: modelId }),
+                body: JSON.stringify({ 
+                    prompt, 
+                    model: modelId,
+                    credentials: options.vaultCredentials ? {
+                        azureApiKey: options.vaultCredentials.azureApiKey,
+                        azureEndpoint: options.vaultCredentials.azureEndpoint
+                    } : null
+                }),
                 signal: AbortSignal.timeout(15000)
             });
             if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
@@ -244,16 +278,18 @@ class MultiCloudInferenceService {
             latency = Date.now() - startTime;
         } catch (e) {
             logger.warn(`Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client...`);
-            if (process.env.AZURE_API_KEY) {
+            let azureApiKey = options.vaultCredentials?.azureApiKey || process.env.AZURE_API_KEY;
+            let azureEndpoint = options.vaultCredentials?.azureEndpoint || process.env.AZURE_ENDPOINT || 'https://my-azure-foundry-resource.openai.azure.com';
+
+            if (azureApiKey) {
                 try {
-                    const endpoint = process.env.AZURE_ENDPOINT || 'https://my-azure-foundry-resource.openai.azure.com';
                     const deploymentId = modelId;
-                    const url = `${endpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
+                    const url = `${azureEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
                     const res = await fetch(url, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'api-key': process.env.AZURE_API_KEY
+                            'api-key': azureApiKey
                         },
                         body: JSON.stringify({
                             messages: [{ role: 'user', content: prompt }],

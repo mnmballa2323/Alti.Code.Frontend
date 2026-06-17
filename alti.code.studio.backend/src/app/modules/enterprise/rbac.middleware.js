@@ -106,7 +106,15 @@ export function rbac(...requiredPermissions) {
             // 7. Log access for audit trail
             logger.debug(`✅ RBAC: ${identity.email} (${identity.role}) → ${req.method} ${req.path}`);
 
-            next();
+            // Propagate the active user's authorization token using AsyncLocalStorage context
+            const { mcpTokenContext } = await import('../mcp/mcp_gateway.service.js').catch(() => ({}));
+            if (mcpTokenContext) {
+                mcpTokenContext.run(token, () => {
+                    next();
+                });
+            } else {
+                next();
+            }
         } catch (err) {
             if (err.message.startsWith('AUTH_TOKEN_EXPIRED')) {
                 return res.status(401).json({ error: 'TOKEN_EXPIRED', message: 'Token has expired. Please re-authenticate.' });

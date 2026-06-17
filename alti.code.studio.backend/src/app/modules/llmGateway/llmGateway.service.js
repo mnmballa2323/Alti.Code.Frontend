@@ -361,7 +361,11 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     else if (actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.')) {
         logger.info('🧠 [LlmGateway] Delegating AWS Bedrock inference to MultiCloudInferenceService...');
         try {
-            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { preferredProvider: 'aws', modelId: actualModelName });
+            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { 
+                preferredProvider: 'aws', 
+                modelId: actualModelName,
+                vaultCredentials: creds
+            });
             reply = result.content;
             usedModelName = result.model;
         } catch (err) {
@@ -373,7 +377,11 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         logger.info('🧠 [LlmGateway] Delegating Azure OpenAI inference to MultiCloudInferenceService...');
         try {
             const cleanModelName = actualModelName.replace(/^azure\//, '');
-            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { preferredProvider: 'azure', modelId: cleanModelName });
+            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { 
+                preferredProvider: 'azure', 
+                modelId: cleanModelName,
+                vaultCredentials: creds
+            });
             reply = result.content;
             usedModelName = `azure/${result.model}`;
         } catch (err) {
