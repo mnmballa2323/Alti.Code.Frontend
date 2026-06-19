@@ -44,6 +44,7 @@ import { databricksSparkAgent } from './databricks_spark.agent.js';
 import { uipathRpaBotAgent } from './uipath_rpa_bot.agent.js';
 import { intuneMdmPolicyAgent } from './intune_mdm_policy.agent.js';
 import { peoplesoftHcmBridgeAgent } from './peoplesoft_hcm_bridge.agent.js';
+import { ciceroLawEnforcementAgent } from './cicero_law_enforcement.agent.js';
 
 class AgentRegistry {
 
@@ -1953,6 +1954,24 @@ agentRegistry.register({
     capabilities: peoplesoftHcmBridgeAgent.capabilities || ['peoplesoft'],
     version: '1.0.0',
     instance: peoplesoftHcmBridgeAgent
+});
+
+agentRegistry.register({
+    name: 'cicero_law_enforcement',
+    description: ciceroLawEnforcementAgent.description,
+    queue: 'cicero-law-enforcement-queue',
+    capabilities: ['legal', 'compliance', 'smart-contracts', 'sla-enforcement'],
+    version: '1.0.0',
+    instance: ciceroLawEnforcementAgent
+});
+
+agentRegistry.register({
+    name: 'Cicero_Law_Enforcement',
+    description: ciceroLawEnforcementAgent.description,
+    queue: 'cicero-law-enforcement-queue',
+    capabilities: ['legal', 'compliance', 'smart-contracts', 'sla-enforcement'],
+    version: '1.0.0',
+    instance: ciceroLawEnforcementAgent
 });
 
 // ── Dynamic JSON-based Swarm Registry Loader ──

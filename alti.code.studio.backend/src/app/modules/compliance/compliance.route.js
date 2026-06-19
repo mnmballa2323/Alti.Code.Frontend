@@ -1,6 +1,7 @@
 import express from 'express';
 import { industryComplianceService } from './industry_compliance.service.js';
 import { industryIntegrationService } from './industry_integration.service.js';
+import { ciceroLawEnforcementService } from './cicero_law_enforcement.service.js';
 import { logger } from '../../../shared/logger.js';
 
 const router = express.Router();
@@ -244,6 +245,36 @@ router.post('/integration/automotive/telemetry', async (req, res) => {
     } catch (error) {
         logger.error('[GovernanceRoute] Automotive Telemetry Decoding Error:', error);
         res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+/**
+ * POST /api/governance/legal/enforce
+ * Cicero Law Enforcement Matrix SLA compliance check, notice generation, and Azure routing.
+ */
+router.post('/legal/enforce', async (req, res) => {
+    try {
+        const { contractId, slaConditions, telemetry } = req.body;
+        const userId = req.user?.id || 'system_dev_user';
+        const tenantId = req.user?.tenantId || null;
+
+        if (!contractId || !slaConditions || !telemetry) {
+            return res.status(400).json({
+                success: false,
+                error: 'contractId, slaConditions, and telemetry are required.'
+            });
+        }
+
+        const result = await ciceroLawEnforcementService.enforceSlaCompliance(userId, tenantId, {
+            contractId,
+            slaConditions,
+            telemetry
+        });
+
+        res.status(200).json({ success: true, ...result });
+    } catch (error) {
+        logger.error('[GovernanceRoute] Cicero Law Enforcement Error:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 

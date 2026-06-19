@@ -4,6 +4,11 @@ import { industryComplianceService } from './industry_compliance.service.js';
 import { encryptionService } from '../security/encryption.service.js';
 import { auditLogService } from '../security/auditLog.service.js';
 import { kmsService } from '../googleCloud/kms.service.js';
+import { ciceroLawEnforcementService } from './cicero_law_enforcement.service.js';
+import { azureLegalNoticeService } from './azure_legal_notice.service.js';
+import { ciceroLawEnforcementAgent } from '../agents/cicero_law_enforcement.agent.js';
+import { complianceRoutes } from './compliance.route.js';
+import axios from 'axios';
 
 describe('Industry Compliance Service Tests', () => {
     beforeEach(() => {
@@ -185,6 +190,147 @@ describe('Industry Compliance Service Tests', () => {
             expect(result.findings.some(f => f.rule === 'ISO-26262-MALLOC-PROHIBITED')).toBe(true);
             expect(result.findings.some(f => f.rule === 'ISO-26262-UNBOUNDED-LOOP')).toBe(true);
             expect(result.findings.some(f => f.rule === 'ISO-26262-RECURSION-PROHIBITED')).toBe(true);
+        });
+    });
+
+    describe('Cicero Law Enforcement Matrix & Azure SLA Enforcement', () => {
+        beforeEach(() => {
+            delete process.env.AZURE_LEGAL_NOTICE_URL;
+        });
+
+        it('should report fully compliant if no SLA breach is detected', async () => {
+            const payload = {
+                contractId: 'sovereign-contract-001',
+                slaConditions: {
+                    minUptime: 0.99,
+                    maxLatencyMs: 100
+                },
+                telemetry: {
+                    uptime: 0.995,
+                    avgLatencyMs: 85
+                }
+            };
+
+            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+
+            expect(result.breach_detected).toBe(false);
+            expect(result.severity).toBe('LOW');
+            expect(result.legal_notice_draft).toBeNull();
+            expect(result.azure_routing_metadata.status).toBe('SKIPPED');
+        });
+
+        it('should trigger notice drafting and mock dispatch on SLA breach (uptime)', async () => {
+            const payload = {
+                contractId: 'sovereign-contract-002',
+                slaConditions: {
+                    minUptime: 0.99,
+                    maxLatencyMs: 100
+                },
+                telemetry: {
+                    uptime: 0.95, // breach!
+                    avgLatencyMs: 85
+                }
+            };
+
+            // Mock Cicero Agent response
+            const mockNoticeText = 'FORMAL DEMAND: SLA UPTIME BREACH NOTICE. Violation of minimum 99% uptime.';
+            const mockAgentResponse = JSON.stringify({
+                breach_detected: true,
+                severity: 'HIGH',
+                legal_notice_draft: mockNoticeText
+            });
+
+            const agentSpy = vi.spyOn(ciceroLawEnforcementAgent, 'consult').mockResolvedValue(mockAgentResponse);
+            const dispatchSpy = vi.spyOn(azureLegalNoticeService, 'dispatchNotice');
+
+            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+
+            expect(result.breach_detected).toBe(true);
+            expect(result.severity).toBe('HIGH');
+            expect(result.legal_notice_draft).toBe(mockNoticeText);
+            expect(result.azure_routing_metadata.status).toBe('QUEUED');
+            expect(result.azure_routing_metadata.messageId).toBeDefined();
+
+            expect(agentSpy).toHaveBeenCalled();
+            expect(dispatchSpy).toHaveBeenCalledWith(mockNoticeText, expect.objectContaining({
+                contractId: 'sovereign-contract-002',
+                severity: 'HIGH'
+            }));
+        });
+
+        it('should invoke Azure service endpoint when AZURE_LEGAL_NOTICE_URL is set', async () => {
+            process.env.AZURE_LEGAL_NOTICE_URL = 'https://api.azure.com/legal/dispatch';
+
+            const payload = {
+                contractId: 'sovereign-contract-003',
+                slaConditions: {
+                    minUptime: 0.99,
+                    maxLatencyMs: 100
+                },
+                telemetry: {
+                    uptime: 0.995,
+                    avgLatencyMs: 150 // breach!
+                }
+            };
+
+            // Mock agent response
+            const mockAgentResponse = JSON.stringify({
+                breach_detected: true,
+                severity: 'MEDIUM',
+                legal_notice_draft: 'Latency SLA Breach Notice'
+            });
+
+            vi.spyOn(ciceroLawEnforcementAgent, 'consult').mockResolvedValue(mockAgentResponse);
+            const axiosSpy = vi.spyOn(axios, 'post').mockResolvedValue({
+                data: { success: true, messageId: 'azure-live-msg-id-888' }
+            });
+
+            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+
+            expect(result.breach_detected).toBe(true);
+            expect(result.severity).toBe('MEDIUM');
+            expect(result.azure_routing_metadata.status).toBe('DISPATCHED');
+            expect(result.azure_routing_metadata.messageId).toBe('azure-live-msg-id-888');
+            expect(axiosSpy).toHaveBeenCalledWith('https://api.azure.com/legal/dispatch', expect.any(Object));
+        });
+
+        it('should route via compliance routes POST /legal/enforce successfully', async () => {
+            const payload = {
+                contractId: 'sovereign-contract-004',
+                slaConditions: { minUptime: 0.99, maxLatencyMs: 100 },
+                telemetry: { uptime: 0.95 }
+            };
+
+            // Mock service response
+            const mockServiceResponse = {
+                breach_detected: true,
+                severity: 'HIGH',
+                legal_notice_draft: 'SLA Breach Notice',
+                azure_routing_metadata: { success: true, status: 'QUEUED', messageId: 'msg-999' }
+            };
+
+            const serviceSpy = vi.spyOn(ciceroLawEnforcementService, 'enforceSlaCompliance').mockResolvedValue(mockServiceResponse);
+
+            const mockReq = {
+                body: payload,
+                user: { id: 'dev-user-007', tenantId: 'tenant-999' }
+            };
+
+            const mockRes = {
+                status: vi.fn().mockReturnThis(),
+                json: vi.fn()
+            };
+
+            // Locate route handler
+            const route = complianceRoutes.stack.find(s => s.route && s.route.path === '/legal/enforce');
+            expect(route).toBeDefined();
+
+            const handler = route.route.stack[0].handle;
+            await handler(mockReq, mockRes);
+
+            expect(serviceSpy).toHaveBeenCalledWith('dev-user-007', 'tenant-999', payload);
+            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(mockRes.json).toHaveBeenCalledWith({ success: true, ...mockServiceResponse });
         });
     });
 });

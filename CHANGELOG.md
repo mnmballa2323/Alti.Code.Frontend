@@ -5,6 +5,17 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [40.0.1] - 2026-06-19 — Cicero Law Enforcement Matrix
+
+### Added
+
+- **Cicero Compliance Service**: Implemented `CiceroLawEnforcementService` (`cicero_law_enforcement.service.js`) to automatically evaluate smart contract telemetry against SLA conditions.
+- **AM Law 100 Legal Notice Generation**: Integrated the `CiceroLawEnforcementAgent` to draft legally binding notices when SLA violations occur.
+- **Azure Legal Notice Service**: Implemented `AzureLegalNoticeService` (`azure_legal_notice.service.js`) to dispatch compliance notice artifacts directly to Azure (or a mock queue fallback).
+- **Express Route Integration**: Exposed `POST /api/governance/legal/enforce` in `compliance.route.js` to trigger the Cicero SLA breach enforcement pipeline.
+- **Statically Registered Cicero Agent**: Configured static agent registry mapping in `agent.registry.js` for key lookups of `cicero_law_enforcement`.
+- **Vitest Unit & Route Test Suite**: Added a comprehensive suite of unit and route tests under `compliance.test.js` validating the end-to-end SLA detection and dispatch.
+
 ## [40.0.0] - 2026-06-19 — Advanced Hermes Integration & Adversarial Debate Chamber
 
 ### Added
