@@ -94,6 +94,19 @@ GraphOrchestrator (LangGraph)
 | POST | `/api/gemini-extensions/invoke` | Invoke installed extension with args |
 | DELETE | `/api/gemini-extensions/uninstall/:name` | Uninstall extension by name |
 
+### Advanced Developer Tools & Frameworks (`/api/v1`)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/v1/frameworks/vercel-ai` | Vercel AI SDK wrapper for Vertex AI |
+| POST | `/api/v1/frameworks/eliza` | ElizaOS personality system bridge |
+| POST | `/api/v1/frameworks/gensx` | GenSX declarative component workflows |
+| POST | `/api/v1/frameworks/mastra` | Mastra agent runtime and tool hooks |
+| POST | `/api/v1/pglite/query` | Secure sandboxed SQL queries against in-memory PGLite |
+| POST | `/api/v1/pglite/reset` | Reset/shutdown PGLite tenant instances |
+| POST | `/api/v1/astGrep/search` | Rust-backed structural pattern search using ast-grep |
+| POST | `/api/v1/astGrep/rewrite` | Structural rewrite / Recast style-preserving rename |
+
 ---
 
 ## Agent Swarm

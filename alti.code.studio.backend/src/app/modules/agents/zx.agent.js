@@ -1,5 +1,6 @@
 import { $, chalk } from 'zx';
 import { logger } from '../../../shared/logger.js';
+import { sandboxService } from './sandbox.service.js';
 
 /**
  * Google zx DevOps Agent.
@@ -21,6 +22,11 @@ class ZxDevOpsAgent {
     async executeScript(script) {
         logger.info(`🛠️ [zx DevOps] Swarm is executing an autonomous shell script...`);
         
+        if (process.env.USE_E2B_SANDBOX === 'true' && sandboxService.isActive()) {
+            logger.info(`🔒 [zx DevOps] Routing execution to secure E2B sandbox microVM.`);
+            return await sandboxService.executeCommand(script);
+        }
+
         try {
             // Native bash execution using template literals via Google zx
             const output = await $`bash -c ${script}`;

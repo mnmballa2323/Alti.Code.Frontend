@@ -8,6 +8,7 @@
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { vertexService } from './vertex.service.js';
 import { logger } from '../../../shared/logger.js';
+import { swarmTraceService } from '../telemetry/trace.service.js';
 import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
@@ -54,15 +55,19 @@ class MultiCloudInferenceService {
 
         const providersQueue = [primaryProvider, ...['gcp', 'aws', 'azure'].filter(p => p !== primaryProvider)];
         let lastError = null;
+        let resultObj = null;
 
         for (const provider of providersQueue) {
             try {
                 if (provider === 'gcp') {
-                    return await this._executeGcp(prompt, activeAgent, modelId);
+                    resultObj = await this._executeGcp(prompt, activeAgent, modelId);
+                    break;
                 } else if (provider === 'aws') {
-                    return await this._executeAwsBedrock(prompt, activeAgent, modelId);
+                    resultObj = await this._executeAwsBedrock(prompt, activeAgent, modelId);
+                    break;
                 } else if (provider === 'azure') {
-                    return await this._executeAzureFoundry(prompt, activeAgent, modelId);
+                    resultObj = await this._executeAzureFoundry(prompt, activeAgent, modelId);
+                    break;
                 }
             } catch (err) {
                 logger.warn(`⚠️ [Multi-Cloud Inference] Provider [${provider.toUpperCase()}] failed: ${err.message}. Falling back to next in queue.`);
@@ -70,8 +75,33 @@ class MultiCloudInferenceService {
             }
         }
 
-        logger.error(`❌ [Multi-Cloud Inference] All cloud providers exhausted. Inference has failed completely.`);
-        throw new Error(`MultiCloudInference failed: All providers failed. Last error: ${lastError?.message}`);
+        if (!resultObj) {
+            logger.error(`❌ [Multi-Cloud Inference] All cloud providers exhausted. Inference has failed completely.`);
+            throw new Error(`MultiCloudInference failed: All providers failed. Last error: ${lastError?.message}`);
+        }
+
+        // Trace generation if spanId is present
+        const spanId = options.spanId || options.parentSpanId;
+        if (spanId) {
+            try {
+                swarmTraceService.recordGeneration(spanId, {
+                    name: `${activeAgent}_llm_call`,
+                    model: modelId,
+                    input: prompt,
+                    output: resultObj.content,
+                    provider: resultObj.provider,
+                    latencyMs: resultObj.latencyMs,
+                    usage: resultObj.tokens || {
+                        prompt: Math.max(1, Math.ceil(prompt.length / 4)),
+                        completion: Math.max(1, Math.ceil((resultObj.content || '').length / 4))
+                    }
+                });
+            } catch (e) {
+                logger.warn(`Failed to trace generation in Langfuse: ${e.message}`);
+            }
+        }
+
+        return resultObj;
     }
 
     /**

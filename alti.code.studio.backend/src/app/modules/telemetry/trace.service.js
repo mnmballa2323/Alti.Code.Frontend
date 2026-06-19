@@ -9,8 +9,9 @@ import pg from 'pg';
 const { Pool } = pg;
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
+import { Langfuse } from 'langfuse';
 
-class SwarmTraceService {
+export class SwarmTraceService {
   constructor() {
     this.pool = new Pool({
       connectionString:
@@ -18,6 +19,18 @@ class SwarmTraceService {
         'postgresql://postgres:postgres@localhost:5432/postgres',
     });
     this.activeSpans = new Map();
+    this.activeLangfuseObjects = new Map();
+
+    this.langfuse = null;
+    if (process.env.LANGFUSE_PUBLIC_KEY && process.env.LANGFUSE_SECRET_KEY) {
+      this.langfuse = new Langfuse({
+        publicKey: process.env.LANGFUSE_PUBLIC_KEY,
+        secretKey: process.env.LANGFUSE_SECRET_KEY,
+        baseUrl: process.env.LANGFUSE_HOST || 'https://cloud.langfuse.com'
+      });
+      logger.info('📊 SwarmTrace: Langfuse telemetry client initialized.');
+    }
+
     this.init();
   }
 
@@ -59,6 +72,34 @@ class SwarmTraceService {
       );
     }
 
+    // Langfuse tracing
+    if (this.langfuse) {
+      try {
+        if (!parentSpanId) {
+          // Start a new Trace
+          const traceObj = this.langfuse.trace({
+            id: spanId,
+            name: agentId,
+            userId: tenantId || undefined,
+            input: query || undefined,
+          });
+          this.activeLangfuseObjects.set(spanId, traceObj);
+        } else {
+          // Start a child Span nested under parentSpanId
+          const spanObj = this.langfuse.span({
+            id: spanId,
+            traceId: parentSpanId,
+            parentSpanId: parentSpanId,
+            name: agentId,
+            input: query || undefined,
+          });
+          this.activeLangfuseObjects.set(spanId, spanObj);
+        }
+      } catch (lfError) {
+        logger.warn(`SwarmTrace: Langfuse startSpan failed: ${lfError.message}`);
+      }
+    }
+
     return spanId;
   }
 
@@ -83,6 +124,65 @@ class SwarmTraceService {
       );
     } catch (error) {
       logger.error(`SwarmTrace: Failed to update endSpan for ${spanId}`, error);
+    }
+
+    // Langfuse tracing end
+    if (this.langfuse) {
+      try {
+        const langfuseObj = this.activeLangfuseObjects.get(spanId);
+        if (langfuseObj) {
+          const outputVal = metadata.output || metadata.content || '';
+          
+          if (typeof langfuseObj.update === 'function') {
+            // It's a Trace
+            langfuseObj.update({
+              output: outputVal,
+              metadata: {
+                ...metadata,
+                tokenCount: tokenCount || 0,
+                cost: cost || 0,
+                durationMs
+              }
+            });
+          } else if (typeof langfuseObj.end === 'function') {
+            // It's a Span
+            langfuseObj.end({
+              output: outputVal,
+              metadata: {
+                ...metadata,
+                tokenCount: tokenCount || 0,
+                cost: cost || 0,
+                durationMs
+              }
+            });
+          }
+          this.activeLangfuseObjects.delete(spanId);
+        }
+      } catch (lfError) {
+        logger.warn(`SwarmTrace: Langfuse endSpan failed: ${lfError.message}`);
+      }
+    }
+  }
+
+  recordGeneration(spanId, { name, model, input, output, provider, latencyMs, usage }) {
+    if (!this.langfuse) return;
+    try {
+      const parentObj = this.activeLangfuseObjects.get(spanId);
+      if (parentObj && typeof parentObj.generation === 'function') {
+        parentObj.generation({
+          name: name || 'llm_call',
+          model: model,
+          input: input,
+          output: output,
+          metadata: { provider, latencyMs },
+          usage: usage ? {
+            promptTokens: usage.prompt || usage.promptTokens,
+            completionTokens: usage.completion || usage.completionTokens
+          } : undefined
+        });
+      }
+    } catch (lfError) {
+      logger.warn(`SwarmTrace: Langfuse recordGeneration failed: ${lfError.message}`);
     }
   }
 

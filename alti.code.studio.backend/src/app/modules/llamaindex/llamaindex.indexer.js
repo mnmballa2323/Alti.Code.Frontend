@@ -11,7 +11,8 @@
 import { ChatOpenAI } from '@langchain/openai';
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import { BufferMemory } from 'langchain/memory';
-import { Document, Settings, VectorStoreIndex, OpenAI, OpenAIEmbedding } from 'llamaindex';
+import { Document, Settings, VectorStoreIndex } from 'llamaindex';
+import { OpenAI, OpenAIEmbedding } from '@llamaindex/openai';
 import fs from 'node:fs/promises';
 import config from '../../../../config/index.js';
 

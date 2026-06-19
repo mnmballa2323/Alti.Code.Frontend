@@ -21,6 +21,16 @@
       "command": "node",
       "args": ["/Users/michaelmeram/workspace/alti.code.studio/submodules/fazm/acp-bridge/dist/fazm-tools-stdio.js"],
       "env": {}
+    },
+    "custom-diagnostics": {
+      "command": "node",
+      "args": ["/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/mcp/custom_mcp.js"],
+      "env": {}
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "env": {}
     }
   }
 }

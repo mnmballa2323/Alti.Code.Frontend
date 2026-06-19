@@ -22,6 +22,7 @@ import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
 import { RedisChatMessageHistory } from '@langchain/community/stores/message/ioredis';
 import { redisCacheService } from '../memory/redis.service.js';
+import { zepMemoryService } from '../memory/zep.service.js';
 
 const geminiOpenMemoryService = async (sessionId, prompt, userId, language, mode = 'Agent', domain) => {
   const memory = new BufferMemory({
@@ -117,10 +118,24 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     systemPrompt += `You must write and explain code exclusively in the following programming language: ${language}.\n`;
   }
 
+  if (zepMemoryService.isActive()) {
+    try {
+      const zepMemory = await zepMemoryService.getMemory(sessionId);
+      if (zepMemory && zepMemory.summary) {
+        systemPrompt += `\n[Long-term Chat Summary]: ${zepMemory.summary}\n`;
+      }
+    } catch (e) {
+      logger.warn('Failed to retrieve Zep memory: ' + e.message);
+    }
+  }
+
   const enhancedPrompt = `${systemPrompt}\nUser Request: ${prompt}`;
 
   try {
     await memory.chatHistory.addMessage(new HumanMessage(prompt));
+    if (zepMemoryService.isActive()) {
+      await zepMemoryService.addMemory(sessionId, 'human', prompt);
+    }
 
     // Inject active user tools from Composio MCP
     let activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
@@ -206,6 +221,9 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     }
 
     await memory.chatHistory.addMessage(new AIMessage(reply));
+    if (zepMemoryService.isActive()) {
+      await zepMemoryService.addMemory(sessionId, 'ai', reply);
+    }
 
     const responseData = {
       prompt,
