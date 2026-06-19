@@ -7,6 +7,7 @@
 
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 import { vertexService } from './vertex.service.js';
+import { VercelAiService } from './vercel_ai.service.js';
 import { logger } from '../../../shared/logger.js';
 import { swarmTraceService } from '../telemetry/trace.service.js';
 import fs from 'fs/promises';
@@ -53,7 +54,7 @@ class MultiCloudInferenceService {
 
         logger.info(`🌐 [Multi-Cloud Inference] Initiating inference for Agent [${activeAgent}] on Primary Provider [${primaryProvider.toUpperCase()}]`);
 
-        const providersQueue = [primaryProvider, ...['gcp', 'aws', 'azure'].filter(p => p !== primaryProvider)];
+        const providersQueue = [primaryProvider, ...['gcp', 'aws', 'azure', 'vercel-ai'].filter(p => p !== primaryProvider)];
         let lastError = null;
         let resultObj = null;
 
@@ -67,6 +68,9 @@ class MultiCloudInferenceService {
                     break;
                 } else if (provider === 'azure') {
                     resultObj = await this._executeAzureFoundry(prompt, activeAgent, modelId);
+                    break;
+                } else if (provider === 'vercel-ai') {
+                    resultObj = await this._executeVercelAi(prompt, activeAgent, modelId);
                     break;
                 }
             } catch (err) {
@@ -351,6 +355,29 @@ class MultiCloudInferenceService {
             provider: 'azure',
             model: modelId,
             latencyMs: latency
+        };
+    }
+
+    /**
+     * Executes inference using Vercel AI SDK
+     */
+    async _executeVercelAi(prompt, activeAgent, modelId, options = {}) {
+        logger.info(`⚡ [Multi-Cloud Inference] Executing via Vercel AI SDK using model ${modelId}...`);
+        const startTime = Date.now();
+        const res = await VercelAiService.generate(prompt, { model: modelId });
+        const latency = Date.now() - startTime;
+
+        const promptTokens = res.usage?.promptTokens || Math.max(1, Math.ceil(prompt.length / 4));
+        const completionTokens = res.usage?.completionTokens || Math.max(1, Math.ceil(res.text.length / 4));
+        await this._recordMarketplaceBilling('gcp', promptTokens, completionTokens, modelId, latency);
+
+        return {
+            content: res.text,
+            venue: 'VERCEL_AI_SDK',
+            provider: 'vercel-ai',
+            model: modelId,
+            latencyMs: latency,
+            tokens: { prompt: promptTokens, completion: completionTokens }
         };
     }
 
