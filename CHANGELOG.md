@@ -4,6 +4,14 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [45.0.0] - 2026-06-19 — The Dynamic Dependency Sandbox & Package Patching Swarm
+
+### Added
+
+- **Dynamic Sandbox Dependency Installer**: Implemented `SandboxDependencyService` (`sandbox_dependency.service.js`) and tests (`sandbox_dependency.test.js`) to parse error logs for missing package modules and run dynamic installs inside GKE sandbox execution containers.
+- **Autonomous Package Patcher**: Implemented `PackagePatcherService` (`package_patcher.service.js`) and tests (`package_patcher.test.js`) to apply and rollback hotfix overrides inside node_modules mounts.
+- **Sandbox Volume State Synchronizer**: Implemented `SandboxVolumeService` (`sandbox_volume.service.js`) and tests (`sandbox_volume.test.js`) to scan and sync incremental workspace directory diffs into active sandbox executors.
+
 ## [44.0.0] - 2026-06-19 — The API Mock Generator & Cost Control Gateway
 
 ### Added
