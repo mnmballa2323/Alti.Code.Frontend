@@ -4,6 +4,14 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [43.0.0] - 2026-06-19 — The Reinforcement Learning Router & Git Conflict Resolver Swarm
+
+### Added
+
+- **Reinforcement Learning Swarm Router**: Implemented `RlRouterService` (`rl_router.service.js`) and tests (`rl_router.test.js`) to optimize agent selection using an Epsilon-Greedy contextual bandit policy based on completed sprint reward feedback.
+- **Autonomous Git Conflict Resolver Swarm**: Implemented `GitConflictResolverService` (`git_conflict_resolver.service.js`) and tests (`git_conflict_resolver.test.js`) to automatically detect, parse, and resolve git merge conflict markers inside workspace code files.
+- **E2E Playwright Auto-Generator**: Implemented `PlaywrightGeneratorService` (`playwright_generator.service.js`) and tests (`playwright_generator.test.js`) to compile DOM interaction flows into valid, executable Playwright E2E integration test scripts.
+
 ## [42.0.0] - 2026-06-19 — The Cognitive Code-Graph & Adversarial Swarm
 
 ### Added
