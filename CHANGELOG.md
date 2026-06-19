@@ -4,6 +4,16 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+
+## [47.0.0] - 2026-06-19 — The Directed Acyclic Swarm Orchestrator & Self-Healing Test Suite
+
+### Added
+
+- **Directed Acyclic Swarm Orchestrator**: Implemented `TaskDecomposerService` (`task_decomposer.service.js`) and tests (`task_decomposer.test.js`) to parse task dependencies, check circular graphs, and topologically sort agent tasks.
+- **Autonomic Self-Healing Test Suite**: Implemented `SelfHealingTestSuiteService` (`self_healing_test_suite.service.js`) and tests (`self_healing_test_suite.test.js`) to run test commands, capture failure stack traces, query AI for fixes, verify passes, and roll back on failure.
+- **AST Duplicate & DRY Scanner**: Implemented `DryScannerService` (`dry_scanner.service.js`) and tests (`dry_scanner.test.js`) to parse and analyze AST files, normalise tokens, and report function similarity pairs.
+- **Context-Aware Prompt Cache Gateway**: Implemented `PromptCacheGatewayService` (`prompt_cache_gateway.service.js`) and tests (`prompt_cache_gateway.test.js`) to partition prompts and cache static file contexts, keeping cache hit/miss statistics.
+
 ## [46.0.0] - 2026-06-19 — The Ephemeral Feature Flag Mocking & Performance Profiling Swarm
 
 ### Added
