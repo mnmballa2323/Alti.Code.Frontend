@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Panel, Group, Separator } from "react-resizable-panels";
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
-import "@copilotkit/react-ui/dist/index.css";
+import "@copilotkit/react-ui/styles.css";
 
 import { RootState } from "@/store";
 import Sidebar from "@/components/sidebar";
