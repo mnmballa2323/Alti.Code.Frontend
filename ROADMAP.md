@@ -8,6 +8,22 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 ## ✅ Completed
 
+### v47.0.0 — The Directed Acyclic Swarm Orchestrator & Self-Healing Test Suite (2026-06-19)
+- [x] **Swarm DAG Task Decomposer**: `task_decomposer.service.js` parses raw task dependencies, detects circular references, and topologically sorts execution steps.
+- [x] **Autonomic Self-Healing Test Suite**: `self_healing_test_suite.service.js` monitors unit tests, generates corrective fixes via AI diagnostics, and manages rollbacks on failure.
+- [x] **AST Duplicate & DRY Scanner**: `dry_scanner.service.js` parses file trees and computes function similarities to find duplicate code segments.
+- [x] **Prompt Cache Gateway**: `prompt_cache_gateway.service.js` structures prompts to maximize API provider caching, collecting hit/miss telemetry.
+
+### v46.0.0 — The Ephemeral Feature Flag Mocking & Performance Profiling Swarm (2026-06-19)
+- [x] **Dynamic Feature Flag Mocker**: `feature_flag_mocker.service.js` manages transient overrides for test runs and preview sandboxes.
+- [x] **Autonomous Performance Profiler**: `performance_profiler.service.js` monitors CPU time, execution latency, and heap memory usage against limit thresholds.
+- [x] **AST Dead-Code Scanner**: `dead_code_scanner.service.js` parses AST syntax trees and identifies unreferenced variables and imports.
+
+### v45.0.0 — The Dynamic Dependency Sandbox & Package Patching Swarm (2026-06-19)
+- [x] **Dynamic Sandbox Dependency Installer**: `sandbox_dependency.service.js` intercepts sandbox run logs and executes missing package installs.
+- [x] **Autonomous Package Patcher**: `package_patcher.service.js` applies and rolls back hotfixes inside `node_modules` paths.
+- [x] **Sandbox Volume State Synchronizer**: `sandbox_volume.service.js` performs incremental directory state updates inside sandbox mounts.
+
 ### v39.0.0 — The Autonomous Cryptography & Distributed Systems Epic (2026-03-03)
 - [x] **Zero-Knowledge Architecture**: `crypto.zk.agent.js` scaffolds zk-SNARKs and zk-STARKs circuits, Halo2 implementations, and Circom R1CS schemas.
 - [x] **Post-Quantum Defense**: `crypto.pqc.agent.js` mathematically generates C/Rust bindings for NIST ML-KEM/Kyber and Dilithium lattice cryptography.
@@ -442,6 +458,9 @@ To be the premier AI-native development platform where a self-orchestrating arma
 
 | Version | Target | Theme | Status |
 |---------|--------|-------|---------|
+| v47.0.0 | Jun 2026 | Directed Acyclic Swarm Orchestrator & Self-Healing Test Suite | ✅ Done |
+| v46.0.0 | Jun 2026 | Ephemeral Feature Flag Mocking & Performance Profiling Swarm | ✅ Done |
+| v45.0.0 | Jun 2026 | Dynamic Dependency Sandbox & Package Patching Swarm | ✅ Done |
 | v40.0.0 | Jun 2026 | The Sovereign Neuromorphic Epic | 🏃 In Progress |
 | v4.0.0 | Feb 2026 | Industry Armada (16 verticals, 119 routes) | ✅ Done |
 | v4.1.0 | Feb 2026 | DevSecOps (5) + Supply Chain (4) = 9 agents | ✅ Done |
