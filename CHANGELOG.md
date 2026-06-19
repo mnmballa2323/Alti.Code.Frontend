@@ -4,6 +4,14 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [42.0.0] - 2026-06-19 — The Cognitive Code-Graph & Adversarial Swarm
+
+### Added
+
+- **AST Code-Graph Navigation Engine**: Implemented `AstGraphService` (`ast_graph.service.js`) and tests (`ast_graph.test.js`) to build dynamic codebase AST dependency graphs, mapping definitions, callers, and class inheritance chains.
+- **Adversarial Swarm Debate Reviewer**: Implemented `AdversarialReviewerService` (`adversarial_reviewer.service.js`) and tests (`adversarial_reviewer.test.js`) to run collaborative Red-Team and Blue-Team consensus debates over proposed code patches.
+- **Context-Aware Token Pruning**: Implemented `ContextPrunerService` (`context_pruner.service.js`) and tests (`context_pruner.test.js`) to strip comments, imports, and collapse empty lines, optimizing LLM prompt token sizes.
+
 ## [41.0.0] - 2026-06-19 — The Self-Healing Swarm & Autonomous Sandbox
 
 ### Added
