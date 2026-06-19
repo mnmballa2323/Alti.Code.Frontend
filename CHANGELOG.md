@@ -4,6 +4,14 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [46.0.0] - 2026-06-19 — The Ephemeral Feature Flag Mocking & Performance Profiling Swarm
+
+### Added
+
+- **Dynamic Feature Flag Mocker**: Implemented `FeatureFlagMockerService` (`feature_flag_mocker.service.js`) and tests (`feature_flag_mocker.test.js`) to manage transient overrides for test runs and preview sandboxes.
+- **Autonomous Performance Profiler**: Implemented `PerformanceProfilerService` (`performance_profiler.service.js`) and tests (`performance_profiler.test.js`) to monitor CPU time, execution latency, and heap memory delta metrics.
+- **AST Dead-Code Scanner**: Implemented `DeadCodeScannerService` (`dead_code_scanner.service.js`) and tests (`dead_code_scanner.test.js`) to recursively parse file syntax trees and identify unreferenced imports and variable declarations.
+
 ## [45.0.0] - 2026-06-19 — The Dynamic Dependency Sandbox & Package Patching Swarm
 
 ### Added
