@@ -4,6 +4,14 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [44.0.0] - 2026-06-19 — The API Mock Generator & Cost Control Gateway
+
+### Added
+
+- **Automated API Mock Generator**: Implemented `ApiMockGeneratorService` (`api_mock_generator.service.js`) and tests (`api_mock_generator.test.js`) to parse and spin up dynamic express servers hosting mocked endpoint payloads.
+- **Cost Control Gateway**: Implemented `CostGateService` (`cost_gate.service.js`) and tests (`cost_gate.test.js`) to intercept LLM requests, estimate character cost, and block executions exceeding budget thresholds.
+- **Code Quality Gate Auditor**: Implemented `QualityGateService` (`quality_gate.service.js`) and tests (`quality_gate.test.js`) to analyze and validate code cyclomatic complexity before code writes.
+
 ## [43.0.0] - 2026-06-19 — The Reinforcement Learning Router & Git Conflict Resolver Swarm
 
 ### Added
