@@ -4,6 +4,13 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [40.0.2] - 2026-06-19 — Global Enterprise Spec Matrix Compliance
+
+### Added
+
+- **SpecKit Compliance Regional Support**: Upgraded `speckit.service.js` to parse regional compliance options (EU, US, UK, APAC) and dynamically inject regional regulation prompts (such as GDPR, HIPAA, UK DPA, and APRA) during requirements and design generation phases.
+- **SpecKit Controller Integration**: Updated `speckit.controller.js` to extract regional selections from client payload parameters and pass them directly into the SpecKit generation pipeline.
+- **SpecKit Compliance Test Suite**: Created `speckit.test.js` covering default specs, regional requirement validations (e.g. data residency topology, HIPAA disclosures), design artifact retrieval from saved metadata (`meta.json`), and controller route endpoints.
 
 ## [40.0.1] - 2026-06-19 — Cicero Law Enforcement Matrix
 

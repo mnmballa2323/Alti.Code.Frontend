@@ -116,12 +116,21 @@ class SpecKitService {
      * @param {string} request - Natural language description of the feature
      * @returns {Promise<{ specId, requirements }>}
      */
-    async createSpec(request) {
+    async createSpec(request, regions = []) {
         if (!request?.trim()) throw new Error('request must be a non-empty string.');
         await this.init();
 
         const specId = this._generateId(request.split(' ').slice(0, 4).join('-'));
         const constitution = await this._readConstitution();
+
+        const compliancePromptSection = (Array.isArray(regions) && regions.length > 0) ? `
+REGIONAL COMPLIANCE RULES:
+You MUST design this feature to comply with the regulations of the specified regions: ${regions.join(', ')}.
+- **EU**: Enforce EU GDPR (Data residency in EU, explicit user consent, Right to Erasure, right to download data).
+- **US**: Enforce US HIPAA (PHI protection, no plaintext medical logging, encryption-at-rest, secure audit vaults) and SOC2.
+- **UK**: Enforce UK GDPR.
+- **APAC**: Enforce APEC CBPR data protection principles.
+` : '';
 
         const prompt = `
 You are SpecKit — a Spec-Driven Development engine for a senior engineering team.
@@ -131,6 +140,7 @@ ${constitution}
 
 USER REQUEST:
 "${request}"
+${compliancePromptSection}
 
 TASK:
 Generate a requirements.md file using EARS (Easy Approach to Requirements Syntax) notation.
@@ -154,6 +164,7 @@ Include at least 3 user stories with 2-3 acceptance criteria each.
 - Performance: ...
 - Security: ...
 - Accessibility: ...
+${(Array.isArray(regions) && regions.length > 0) ? '- Regional Compliance: Explicitly list how the feature complies with: ' + regions.join(', ') : ''}
 
 ## Out of Scope
 - List 2-3 explicit exclusions to prevent scope creep.
@@ -168,6 +179,7 @@ Return ONLY the markdown content, no JSON or code fences.
             specId,
             title: request.slice(0, 80),
             type: 'feature',
+            regions: regions || [],
             phases: { requirements: 'done', design: 'pending', tasks: 'pending' },
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -185,12 +197,23 @@ Return ONLY the markdown content, no JSON or code fences.
      * @param {string} specId
      * @returns {Promise<{ specId, design }>}
      */
-    async createDesign(specId) {
+    async createDesign(specId, regions = []) {
         await this.init();
         const requirements = await this._readPhaseFile(specId, 'requirements.md');
         if (!requirements) throw new Error(`Spec "${specId}" has no requirements.md. Run Phase 1 first.`);
 
         const constitution = await this._readConstitution();
+        const meta = await this._readMeta(specId) || {};
+        const specRegions = (Array.isArray(regions) && regions.length > 0) ? regions : (meta.regions || []);
+
+        const complianceDesignSection = specRegions.length > 0 ? `
+REGIONAL COMPLIANCE ARCHITECTURE:
+The technical architecture MUST explicitly address compliance for: ${specRegions.join(', ')}.
+- **EU**: Specify data residency topology (e.g. European database regions), encryption-in-transit, and data purge cascades.
+- **US**: Specify KMS CMEK key configurations, encryption-at-rest, and immutable log routing structures for HIPAA.
+- **UK**: Specify data sovereignty boundaries.
+- **APAC**: Specify cross-border privacy boundaries.
+` : '';
 
         const prompt = `
 You are SpecKit — a senior software architect.
@@ -200,9 +223,11 @@ ${constitution}
 
 REQUIREMENTS:
 ${requirements}
+${complianceDesignSection}
 
 TASK:
 Generate a design.md file with the full technical architecture.
+The Component Design, Data Model, API Design, and Security Considerations sections MUST explicitly outline the architectural blocks satisfying these regional compliance rules.
 
 Structure:
 # Design: <Feature Title>
@@ -247,10 +272,10 @@ Return ONLY the markdown content, no JSON or outer code fences.
 
         await this._writePhaseFile(specId, 'design.md', design);
 
-        const meta = await this._readMeta(specId) || {};
-        meta.phases = { ...meta.phases, design: 'done' };
-        meta.updatedAt = new Date().toISOString();
-        await this._writeMeta(specId, meta);
+        const updatedMeta = await this._readMeta(specId) || {};
+        updatedMeta.phases = { ...updatedMeta.phases, design: 'done' };
+        updatedMeta.updatedAt = new Date().toISOString();
+        await this._writeMeta(specId, updatedMeta);
 
         logger.info(`🏗️ SpecKit [Phase 2]: design.md created for spec ${specId}`);
         return { specId, design };

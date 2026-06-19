@@ -10,9 +10,9 @@ class SpecKitController {
     // POST /specs  — Phase 1: Create spec + requirements
     async createSpec(req, res) {
         try {
-            const { request } = req.body;
+            const { request, regions } = req.body;
             if (!request) return res.status(400).json({ error: '"request" is required.' });
-            const result = await specKitService.createSpec(request);
+            const result = await specKitService.createSpec(request, regions);
             res.status(201).json({ success: true, ...result });
         } catch (err) {
             logger.error(`[SpecKitController] createSpec: ${err.message}`);
@@ -45,7 +45,8 @@ class SpecKitController {
     // POST /specs/:id/design — Phase 2: generate design.md
     async createDesign(req, res) {
         try {
-            const result = await specKitService.createDesign(req.params.id);
+            const { regions } = req.body || {};
+            const result = await specKitService.createDesign(req.params.id, regions);
             res.json({ success: true, ...result });
         } catch (err) {
             logger.error(`[SpecKitController] createDesign: ${err.message}`);
