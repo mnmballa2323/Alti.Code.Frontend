@@ -48,9 +48,11 @@ OPERATIONAL PRINCIPLES:
                     scalingStrategy: 'Indexed userId, Redis caching for active tokens, and sliding window rate-limiting.'
                 };
                 
+                const path = await eval("import('path')");
                 const fs = await eval("import('fs')");
                 const designDoc = `# Architecture Design: ${args.featureName}\n\n## Database Model\n\`\`\`\n${context.architectureDesign.dbModel}\n\`\`\`\n\n## API Contract\n\`\`\`\n${context.architectureDesign.apiContract}\n\`\`\`\n\n## Scaling Strategy\n${context.architectureDesign.scalingStrategy}\n`;
-                fs.writeFileSync('architecture_design.md', designDoc, 'utf8');
+                const workspacePath = context.sessionWorkspacePath || '.';
+                fs.writeFileSync(path.join(workspacePath, 'architecture_design.md'), designDoc, 'utf8');
 
                 return `[Architect Design Specs]:\n1. Database Schema:\n${context.architectureDesign.dbModel}\n2. API Endpoint:\n${context.architectureDesign.apiContract}\n3. Scaling: ${context.architectureDesign.scalingStrategy}\n\nArchitecture successfully designed and saved to architecture_design.md. Delegating to Coder.`;
             }
@@ -119,8 +121,10 @@ export class SessionTokenManager {
     }
 }
 `;
+                const path = await eval("import('path')");
                 const fs = await eval("import('fs')");
-                fs.writeFileSync('SessionTokenManager.js', context.generatedCode, 'utf8');
+                const workspacePath = context.sessionWorkspacePath || '.';
+                fs.writeFileSync(path.join(workspacePath, 'SessionTokenManager.js'), context.generatedCode, 'utf8');
 
                 return `[Lead Coder Output]:\nSource code generated and written to SessionTokenManager.js.\n\nCode successfully generated under TDD principles. Handing off to QA Tester.`;
             }
@@ -202,17 +206,61 @@ testTokenRotation().catch(err => {
     process.exit(1);
 });
 `;
+                const path = await eval("import('path')");
                 const fs = await eval("import('fs')");
                 const cp = await eval("import('child_process')");
                 
-                fs.writeFileSync('SessionTokenManager.test.js', context.testSuite, 'utf8');
+                let CodeExecutionSandbox;
+                try {
+                    const sandboxModule = await eval("import('../sandbox/code_execution_sandbox.js')");
+                    CodeExecutionSandbox = sandboxModule.CodeExecutionSandbox;
+                } catch (e) {
+                    // Fallback if not found or not importable
+                }
+
+                const workspacePath = context.sessionWorkspacePath || '.';
+                const testFilePath = path.join(workspacePath, 'SessionTokenManager.test.js');
+                fs.writeFileSync(testFilePath, context.testSuite, 'utf8');
 
                 let testExecutionOutput = '';
-                try {
-                    const execResult = cp.execSync('node SessionTokenManager.test.js', { encoding: 'utf8', timeout: 5000 });
-                    testExecutionOutput = execResult.trim();
-                } catch (e) {
-                    testExecutionOutput = `Execution failed: ${e.message}\nStdout: ${e.stdout}\nStderr: ${e.stderr}`;
+                let success = false;
+
+                if (CodeExecutionSandbox) {
+                    try {
+                        const result = await CodeExecutionSandbox.execute(context.testSuite, {
+                            provider: context.provider,
+                            leaseId: context.leaseId,
+                            workspacePath: workspacePath,
+                            agentId: 'SwarmQaTester'
+                        });
+
+                        const stdout = (result.logs || []).join('\n').trim();
+                        const stderr = (result.errors || []).join('\n').trim();
+                        success = result.success;
+
+                        if (!success) {
+                            testExecutionOutput = `Execution failed: exit code ${result.exitCode}\nStdout: ${stdout}\nStderr: ${stderr}`;
+                        } else {
+                            testExecutionOutput = stdout || 'Execution succeeded';
+                        }
+                    } catch (e) {
+                        testExecutionOutput = `Sandbox execution failed: ${e.message}`;
+                    }
+                } else {
+                    try {
+                        const execResult = cp.execSync('node SessionTokenManager.test.js', { 
+                            encoding: 'utf8', 
+                            timeout: 5000,
+                            cwd: workspacePath
+                        });
+                        testExecutionOutput = execResult.trim();
+                        success = true;
+                    } catch (e) {
+                        testExecutionOutput = `Execution failed: ${e.message}\nStdout: ${e.stdout}\nStderr: ${e.stderr}`;
+                    }
+                }
+
+                if (!success) {
                     throw new Error(`QA Integration tests execution failed inside sandbox: ${testExecutionOutput}`);
                 }
 
@@ -255,15 +303,18 @@ OPERATIONAL PRINCIPLES:
             execute: async (args, context) => {
                 console.log('[SwarmSecurityAuditor] Running zero-trust security audit and compliance checks...');
                 
+                const path = await eval("import('path')");
                 const fs = await eval("import('fs')");
                 
+                const workspacePath = context.sessionWorkspacePath || '.';
                 let codeToScan = '';
-                if (fs.existsSync('SessionTokenManager.js')) {
-                    codeToScan = fs.readFileSync('SessionTokenManager.js', 'utf8');
+                const sourceFilePath = path.join(workspacePath, 'SessionTokenManager.js');
+                if (fs.existsSync(sourceFilePath)) {
+                    codeToScan = fs.readFileSync(sourceFilePath, 'utf8');
                 } else {
                     codeToScan = args.code || '';
                 }
-
+ 
                 const hasSecrets = /key|secret|password|token\s*=\s*['"][a-zA-Z0-9]{15,}['"]/i.test(codeToScan);
                 const hasEval = /eval\s*\(/.test(codeToScan);
                 const usesCrypto = codeToScan.includes('crypto');
@@ -274,7 +325,7 @@ OPERATIONAL PRINCIPLES:
                     cryptoSecure: usesCrypto,
                     licenseOk: true
                 };
-
+ 
                 const report = {
                     verdict: hasSecrets || hasEval ? 'FAILED' : '100% PASSED',
                     checks: {
@@ -285,9 +336,10 @@ OPERATIONAL PRINCIPLES:
                     },
                     report: 'Source code mathematically secure. Signed off. Handing off to DevOps.'
                 };
-
-                fs.writeFileSync('security_report.json', JSON.stringify(report, null, 2), 'utf8');
-
+ 
+                const reportFilePath = path.join(workspacePath, 'security_report.json');
+                fs.writeFileSync(reportFilePath, JSON.stringify(report, null, 2), 'utf8');
+ 
                 return JSON.stringify(report);
             }
         },
@@ -333,9 +385,11 @@ OPERATIONAL PRINCIPLES:
                     healthCheckRoute: `app.get('/health', (req, res) => res.status(200).json({ status: 'UP', service: '${args.serviceName}', timestamp: new Date() }));`
                 };
 
+                const path = await eval("import('path')");
                 const fs = await eval("import('fs')");
-                fs.writeFileSync('Dockerfile', context.devOpsSpec.dockerfile, 'utf8');
-                fs.writeFileSync('docker-compose.yml', context.devOpsSpec.dockerCompose, 'utf8');
+                const workspacePath = context.sessionWorkspacePath || '.';
+                fs.writeFileSync(path.join(workspacePath, 'Dockerfile'), context.devOpsSpec.dockerfile, 'utf8');
+                fs.writeFileSync(path.join(workspacePath, 'docker-compose.yml'), context.devOpsSpec.dockerCompose, 'utf8');
 
                 return `[DevOps Infrastructure Specs]:\n1. Dockerfile:\n${context.devOpsSpec.dockerfile}\n2. Docker-Compose:\n${context.devOpsSpec.dockerCompose}\n3. Health Route:\n${context.devOpsSpec.healthCheckRoute}\n\nInfrastructure containerized. Deployment ready.`;
             }

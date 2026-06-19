@@ -26,7 +26,7 @@ export class CodeExecutionSandbox {
         const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const agentId = options.agentId || 'generic';
         const cleanAgentId = agentId.replace(/[^a-zA-Z0-9_]/g, '_');
-        const workspacePath = resolve(`./logs/workspaces/agent_${cleanAgentId}`);
+        const workspacePath = options.workspacePath ? resolve(options.workspacePath) : resolve(`./logs/workspaces/agent_${cleanAgentId}`);
         const startTime = Date.now();
 
         if (provider === 'crabbox') {

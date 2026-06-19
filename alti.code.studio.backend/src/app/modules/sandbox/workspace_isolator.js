@@ -39,6 +39,12 @@ export class WorkspaceIsolator {
         mkdirSync(path, { recursive: true });
         console.log(`📂 Provisioned isolated sandbox workspace: [${id}] -> ${path}`);
         
+        try {
+            writeFileSync(join(path, 'package.json'), JSON.stringify({ type: 'module' }, null, 2), 'utf8');
+        } catch (e) {
+            // Ignore workspace configuration errors
+        }
+
         return { id, path };
     }
 
