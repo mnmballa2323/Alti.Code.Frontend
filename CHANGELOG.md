@@ -4,7 +4,16 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [41.0.0] - 2026-06-19 — The Self-Healing Swarm & Autonomous Sandbox
+
+### Added
+
+- **Self-Healing Agent Loops Service**: Implemented `SelfHealingSwarmService` (`self_healing_swarm.service.js`) and tests (`self_healing_swarm.test.js`) to automatically detect workspace errors, consult healing agents, apply patches, and run verification iterations.
+- **Dynamic Context Compaction Engine**: Implemented `ContextCompactionService` (`context_compaction.service.js`) and tests (`context_compaction.test.js`) to semantically compress conversation traces and files to keep LLM context windows optimal.
+- **Secure Sandbox Execution containment**: Implemented `CrabboxSandboxService` (`crabbox_sandbox.service.js`) and tests (`crabbox_sandbox.test.js`) to provision, execute commands, monitor timeouts, and release remote sandboxes managed by the Crabbox agent.
+
 ## [40.3.0] - 2026-06-19 — Asynchronous Telemetry & Compliance Governance Deck
+
 
 ### Added
 
