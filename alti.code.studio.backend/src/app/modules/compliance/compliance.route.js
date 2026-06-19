@@ -1,8 +1,34 @@
 import express from 'express';
+import fastJson from 'fast-json-stringify';
 import { industryComplianceService } from './industry_compliance.service.js';
 import { industryIntegrationService } from './industry_integration.service.js';
 import { ciceroLawEnforcementService } from './cicero_law_enforcement.service.js';
 import { logger } from '../../../shared/logger.js';
+
+const enforceResponseSchema = fastJson({
+    title: 'EnforceResponse',
+    type: 'object',
+    properties: {
+        success: { type: 'boolean' },
+        status: { type: 'string' },
+        jobId: { type: 'string' },
+        message: { type: 'string' },
+        breach_detected: { type: 'boolean' },
+        severity: { type: 'string' },
+        legal_notice_draft: { type: 'string', nullable: true },
+        azure_routing_metadata: {
+            type: 'object',
+            properties: {
+                success: { type: 'boolean' },
+                status: { type: 'string' },
+                message: { type: 'string' },
+                receiptId: { type: 'string' },
+                destinationUrl: { type: 'string' },
+                timestamp: { type: 'string' }
+            }
+        }
+    }
+});
 
 const router = express.Router();
 
@@ -271,7 +297,7 @@ router.post('/legal/enforce', async (req, res) => {
             telemetry
         });
 
-        res.status(200).json({ success: true, ...result });
+        res.status(200).setHeader('Content-Type', 'application/json').send(enforceResponseSchema({ success: true, ...result }));
     } catch (error) {
         logger.error('[GovernanceRoute] Cicero Law Enforcement Error:', error);
         res.status(500).json({ success: false, error: error.message });

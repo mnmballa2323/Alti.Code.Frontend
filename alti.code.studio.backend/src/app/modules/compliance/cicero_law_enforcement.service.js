@@ -1,11 +1,11 @@
 import { logger } from '../../../shared/logger.js';
 import { ciceroLawEnforcementAgent } from '../agents/cicero_law_enforcement.agent.js';
 import { azureLegalNoticeService } from './azure_legal_notice.service.js';
+import { queueService } from '../queue/queue.service.js';
 
 class CiceroLawEnforcementService {
     /**
-     * Enforces SLA compliance for sovereign smart contracts.
-     * Checks telemetry, invokes Cicero agent for notice drafting on breach, and dispatches via Azure.
+     * Enforces SLA compliance asynchronously by queueing a background check job.
      * 
      * @param {string} userId 
      * @param {string} tenantId 
@@ -13,11 +13,37 @@ class CiceroLawEnforcementService {
      * @returns {Promise<Object>}
      */
     async enforceSlaCompliance(userId, tenantId, payload) {
-        logger.info(`⚖️ Cicero Compliance: Executing SLA compliance enforcement for contract [${payload.contractId || 'unknown'}]`);
+        logger.info(`⚖️ Cicero Compliance: Queueing SLA compliance enforcement job for contract [${payload?.contractId || 'unknown'}]`);
 
         if (!payload || !payload.slaConditions || !payload.telemetry) {
             throw new Error('SLA conditions and telemetry data are required for enforcement.');
         }
+
+        const job = await queueService.addJob('compliance', {
+            type: 'cicero_sla_check',
+            userId,
+            tenantId,
+            payload
+        });
+
+        return {
+            success: true,
+            status: 'QUEUED',
+            jobId: job.id,
+            message: 'SLA compliance enforcement task has been queued asynchronously.'
+        };
+    }
+
+    /**
+     * The background worker executor for SLA compliance checks.
+     * Checks telemetry, invokes Cicero agent for notice drafting on breach, and dispatches via Azure.
+     * 
+     * @param {Object} jobData
+     * @returns {Promise<Object>}
+     */
+    async processSlaEnforcementJob(jobData) {
+        const { userId, tenantId, payload } = jobData;
+        logger.info(`⚖️ Cicero Compliance: Executing background SLA compliance check for contract [${payload?.contractId || 'unknown'}]`);
 
         const { contractId, slaConditions, telemetry } = payload;
         const violations = [];
@@ -130,3 +156,4 @@ You MUST return a JSON response matching the required envelope schema:
 }
 
 export const ciceroLawEnforcementService = new CiceroLawEnforcementService();
+

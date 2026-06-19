@@ -6,8 +6,14 @@
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
+import { ciceroLawEnforcementService } from '../compliance/cicero_law_enforcement.service.js';
 
 export const complianceWorkerProcessor = async (job) => {
+    if (job.data && job.data.type === 'cicero_sla_check') {
+        logger.info(`⚖️ Compliance Worker [${job.id}]: Running Cicero SLA Compliance enforcement...`);
+        return await ciceroLawEnforcementService.processSlaEnforcementJob(job.data);
+    }
+
     const { code, framework, dataTypes } = job.data;
     logger.info(`⚖️ Compliance [${job.id}]: Checking ${framework || 'all frameworks'}...`);
 

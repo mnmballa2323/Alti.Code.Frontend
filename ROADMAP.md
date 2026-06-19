@@ -294,7 +294,7 @@ To be the premier AI-native development platform where a self-orchestrating arma
 ### v40.0.0 — The Sovereign Neuromorphic Epic (Draft)
 - [x] **Advanced Hermes Integration**: Enable persistent cross-agent debate pipelines utilizing the Hermes model to critically evaluate architectural decisions before deployment.
 - [x] **Cicero Law Enforcement Matrix**: Fully automate the penalization of non-compliant sovereign smart contracts, mapping SLA breaches directly to auto-generated legal notices via Azure.
-- [ ] **The Global Enterprise Spec Matrix**: Expand the Spec Kit integration to automatically generate compliance architectures based on region (e.g., EU GDPR vs. US HIPAA).
+- [x] **The Global Enterprise Spec Matrix**: Expand the Spec Kit integration to automatically generate compliance architectures based on region (e.g., EU GDPR vs. US HIPAA).
 
 ### v3.1.0 — Agent Store & Plugin System ✅ (2026-02-21)
 - [x] **Agent Marketplace**: Discover, install, and publish community specialist agents

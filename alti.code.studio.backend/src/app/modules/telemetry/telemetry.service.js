@@ -34,6 +34,7 @@ import { guardianAgent } from '../agents/guardian.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
 import { telemetryBus } from './telemetry.bus.js';
+import { SpscRingBuffer } from './spsc_ring_buffer.js';
 import { sreAgent } from '../agents/sre.agent.js';
 import { videoIntelligenceService } from '../googleCloud/video_intelligence.service.js';
 import { GoogleDlpService } from '../googleCloud/dlp.service.js';
@@ -58,7 +59,30 @@ class TelemetryCollector {
         this.ring = [];
         /** Seen exception classes for novel-error detection */
         this.knownExceptions = new Set();
-        logger.info('📡 TelemetryCollector: initialized.');
+        /** Lock-free SPSC Ring Buffer for fast telemetry ingestion */
+        this.spscRingBuffer = new SpscRingBuffer();
+
+        // Start a background drain cycle to consume telemetry items from the ring buffer
+        this.drainInterval = setInterval(() => this.drainBuffer(), 100);
+        // Ensure the interval doesn't prevent Node process from exiting
+        if (this.drainInterval && typeof this.drainInterval.unref === 'function') {
+            this.drainInterval.unref();
+        }
+
+        logger.info('📡 TelemetryCollector: initialized with SPSC Ring Buffer.');
+    }
+
+    drainBuffer() {
+        let item;
+        let count = 0;
+        // Limit processing per tick to avoid blocking the main thread
+        while ((item = this.spscRingBuffer.pop()) !== null && count < 500) {
+            this.ring.push(item);
+            count++;
+        }
+        if (this.ring.length > MAX_RING_SIZE) {
+            this.ring = this.ring.slice(-MAX_RING_SIZE);
+        }
     }
 
     /**
@@ -167,9 +191,12 @@ class TelemetryCollector {
 
     _record(event) {
         const entry = { ts: Date.now(), ...event };
-        this.ring.push(entry);
-        // Trim ring buffer
-        if (this.ring.length > MAX_RING_SIZE) this.ring.shift();
+        const pushed = this.spscRingBuffer.push(entry);
+        if (!pushed) {
+            // If the buffer is full, fall back to writing directly to the ring to prevent data loss
+            this.ring.push(entry);
+            if (this.ring.length > MAX_RING_SIZE) this.ring.shift();
+        }
         telemetryBus.emit('telemetry:event', entry);
     }
 }

@@ -4,7 +4,19 @@ All notable changes to **Inso Code** will be documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+## [40.3.0] - 2026-06-19 — Asynchronous Telemetry & Compliance Governance Deck
+
+### Added
+
+- **Lock-Free Concurrency SPSC Ring Buffer**: Implemented `SpscRingBuffer` (`spsc_ring_buffer.js`) utilizing a `SharedArrayBuffer` and the `Atomics` API to ingest high-frequency telemetry events in a lock-free circular queue.
+- **Background SLA compliance Job Queueing**: Integrated `compliance.worker.js` with `cicero_law_enforcement.service.js` to run SLA evaluations and notice drafting as background jobs in BullMQ.
+- **Compiled Schema-Based JSON Serialization**: Integrated `fast-json-stringify` in `compliance.route.js` response handlers to speed up legal enforcement API response times.
+- **Sovereign Compliance Deck Dashboard**: Added the Cicero SLA Triage Simulator interface, real-time telemetry metrics grid, job queue history logger, and cryptographic audit log record exports to `app/governance/page.tsx`.
+- **SpecKit Regional Selection Controls**: Added interactive selector buttons to the spec creation form in `app/specs/page.tsx` allowing users to toggle EU (GDPR), US (HIPAA/SOC2), UK (DPA), and APAC (APRA) frameworks.
+- **Telemetry & Compliance Test Suites**: Created `spsc_ring_buffer.test.js` and updated `compliance.test.js` to fully verify the asynchronous queueing operations.
+
 ## [40.0.2] - 2026-06-19 — Global Enterprise Spec Matrix Compliance
+
 
 ### Added
 

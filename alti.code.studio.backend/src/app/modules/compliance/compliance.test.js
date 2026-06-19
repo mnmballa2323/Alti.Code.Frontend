@@ -211,7 +211,7 @@ describe('Industry Compliance Service Tests', () => {
                 }
             };
 
-            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+            const result = await ciceroLawEnforcementService.processSlaEnforcementJob({ userId: 'user-123', tenantId: 'tenant-123', payload });
 
             expect(result.breach_detected).toBe(false);
             expect(result.severity).toBe('LOW');
@@ -243,7 +243,7 @@ describe('Industry Compliance Service Tests', () => {
             const agentSpy = vi.spyOn(ciceroLawEnforcementAgent, 'consult').mockResolvedValue(mockAgentResponse);
             const dispatchSpy = vi.spyOn(azureLegalNoticeService, 'dispatchNotice');
 
-            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+            const result = await ciceroLawEnforcementService.processSlaEnforcementJob({ userId: 'user-123', tenantId: 'tenant-123', payload });
 
             expect(result.breach_detected).toBe(true);
             expect(result.severity).toBe('HIGH');
@@ -285,13 +285,28 @@ describe('Industry Compliance Service Tests', () => {
                 data: { success: true, messageId: 'azure-live-msg-id-888' }
             });
 
-            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+            const result = await ciceroLawEnforcementService.processSlaEnforcementJob({ userId: 'user-123', tenantId: 'tenant-123', payload });
 
             expect(result.breach_detected).toBe(true);
             expect(result.severity).toBe('MEDIUM');
             expect(result.azure_routing_metadata.status).toBe('DISPATCHED');
             expect(result.azure_routing_metadata.messageId).toBe('azure-live-msg-id-888');
             expect(axiosSpy).toHaveBeenCalledWith('https://api.azure.com/legal/dispatch', expect.any(Object));
+        });
+
+        it('should asynchronously queue the SLA compliance check job', async () => {
+            const payload = {
+                contractId: 'sovereign-contract-queue',
+                slaConditions: { minUptime: 0.99, maxLatencyMs: 100 },
+                telemetry: { uptime: 0.95 }
+            };
+
+            const result = await ciceroLawEnforcementService.enforceSlaCompliance('user-123', 'tenant-123', payload);
+
+            expect(result.success).toBe(true);
+            expect(result.status).toBe('QUEUED');
+            expect(result.jobId).toBeDefined();
+            expect(result.message).toContain('queued asynchronously');
         });
 
         it('should route via compliance routes POST /legal/enforce successfully', async () => {
@@ -303,10 +318,10 @@ describe('Industry Compliance Service Tests', () => {
 
             // Mock service response
             const mockServiceResponse = {
-                breach_detected: true,
-                severity: 'HIGH',
-                legal_notice_draft: 'SLA Breach Notice',
-                azure_routing_metadata: { success: true, status: 'QUEUED', messageId: 'msg-999' }
+                success: true,
+                status: 'QUEUED',
+                jobId: 'job-999',
+                message: 'Task has been queued asynchronously.'
             };
 
             const serviceSpy = vi.spyOn(ciceroLawEnforcementService, 'enforceSlaCompliance').mockResolvedValue(mockServiceResponse);
@@ -318,7 +333,8 @@ describe('Industry Compliance Service Tests', () => {
 
             const mockRes = {
                 status: vi.fn().mockReturnThis(),
-                json: vi.fn()
+                setHeader: vi.fn().mockReturnThis(),
+                send: vi.fn()
             };
 
             // Locate route handler
@@ -330,7 +346,8 @@ describe('Industry Compliance Service Tests', () => {
 
             expect(serviceSpy).toHaveBeenCalledWith('dev-user-007', 'tenant-999', payload);
             expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({ success: true, ...mockServiceResponse });
+            expect(mockRes.setHeader).toHaveBeenCalledWith('Content-Type', 'application/json');
+            expect(mockRes.send).toHaveBeenCalled();
         });
     });
 });

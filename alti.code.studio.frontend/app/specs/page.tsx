@@ -335,6 +335,7 @@ export default function SpecsPage() {
     expectedBehavior: "",
     stepsToReproduce: "",
   });
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
 
   const loadSpecs = useCallback(async () => {
     try {
@@ -378,21 +379,23 @@ export default function SpecsPage() {
       if (mode === "feature") {
         const data = await apiFetch("/specs", {
           method: "POST",
-          body: JSON.stringify({ request: newRequest }),
+          body: JSON.stringify({ request: newRequest, regions: selectedRegions }),
         });
 
         setShowNewForm(false);
         setNewRequest("");
+        setSelectedRegions([]);
         await loadSpecs();
         openSpec(data.specId);
       } else {
         const data = await apiFetch("/specs/bugfix/create", {
           method: "POST",
-          body: JSON.stringify({ bugDescription: newRequest, ...bugDetails }),
+          body: JSON.stringify({ bugDescription: newRequest, ...bugDetails, regions: selectedRegions }),
         });
 
         setShowNewForm(false);
         setNewRequest("");
+        setSelectedRegions([]);
         await loadSpecs();
         openSpec(data.specId);
       }
@@ -487,19 +490,57 @@ export default function SpecsPage() {
                 ))}
               </div>
             )}
+            {/* Regional Compliance Selection */}
+            <div className="mb-5 bg-slate-900/35 border border-slate-700/30 rounded-xl p-4">
+              <span className="text-xs font-semibold text-slate-400 block mb-2 font-mono uppercase tracking-wider">
+                🛡️ Regional Compliance Architectures (Optional)
+              </span>
+              <div className="flex flex-wrap gap-2.5">
+                {[
+                  { id: "EU", label: "🇪🇺 EU (GDPR)" },
+                  { id: "US", label: "🇺🇸 US (HIPAA/SOC2)" },
+                  { id: "UK", label: "🇬🇧 UK (DPA)" },
+                  { id: "APAC", label: "🌏 APAC (APRA)" },
+                ].map((r) => {
+                  const active = selectedRegions.includes(r.id);
+                  return (
+                    <button
+                      key={r.id}
+                      type="button"
+                      className={`px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-200 ${
+                        active
+                          ? "bg-indigo-500/15 text-indigo-300 border-indigo-500/50 shadow-sm shadow-indigo-500/5"
+                          : "bg-slate-900/40 text-slate-400 border-slate-700/60 hover:text-slate-300 hover:border-slate-600/80"
+                      }`}
+                      onClick={() => {
+                        setSelectedRegions((prev) =>
+                          prev.includes(r.id)
+                            ? prev.filter((id) => id !== r.id)
+                            : [...prev, r.id]
+                        );
+                      }}
+                    >
+                      {r.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="flex gap-3">
               <button
-                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-all"
+                className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-all"
                 disabled={creating || !newRequest.trim()}
                 onClick={createSpec}
               >
                 {creating ? "Creating…" : "Create Spec"}
               </button>
               <button
-                className="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-medium rounded-lg transition-all"
+                className="px-6 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-medium rounded-lg transition-all"
                 onClick={() => {
                   setShowNewForm(false);
                   setNewRequest("");
+                  setSelectedRegions([]);
                 }}
               >
                 Cancel
