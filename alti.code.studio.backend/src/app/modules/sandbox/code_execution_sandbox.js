@@ -60,6 +60,20 @@ export class CodeExecutionSandbox {
             }
         }
 
+        if (provider === 'e2b') {
+            const { sandboxService } = await import('../agents/sandbox.service.js');
+            const language = options.language || 'javascript';
+            const result = await sandboxService.runCode(code, language);
+            return {
+                success: result.success,
+                exitCode: result.success ? 0 : -1,
+                logs: result.stdout ? result.stdout.split('\n') : [],
+                errors: result.stderr ? result.stderr.split('\n') : [],
+                durationMs: Date.now() - startTime,
+                isMock: false
+            };
+        }
+
         const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
         const manager = new DockerWorkspaceManager(workspacePath);
         
