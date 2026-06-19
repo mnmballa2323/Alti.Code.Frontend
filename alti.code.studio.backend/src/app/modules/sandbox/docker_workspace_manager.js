@@ -16,6 +16,8 @@ import * as hostFs from 'fs';
 import { mkdirSync, writeFileSync, rmSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import vm from 'vm';
+import hostPath from 'path';
+import hostCrypto from 'crypto';
 
 export class DockerWorkspaceManager {
     /**
@@ -286,6 +288,8 @@ export class DockerWorkspaceManager {
                 },
                 require: (mod) => {
                     if (mod === 'fs') return fsMock;
+                    if (mod === 'path') return hostPath;
+                    if (mod === 'crypto') return hostCrypto;
                     if (mod === 'child_process') {
                         return {
                             ...hostCp,
@@ -306,6 +310,8 @@ export class DockerWorkspaceManager {
                 },
                 _hostImport: async (mod) => {
                     if (mod === 'fs') return fsMock;
+                    if (mod === 'path') return hostPath;
+                    if (mod === 'crypto') return hostCrypto;
                     if (mod === 'child_process') {
                         return {
                             ...hostCp,

@@ -9,9 +9,11 @@
  */
 
 import { SwarmAgent } from './custom_swarm_orchestrator.js';
+import { hermesDebateChamberService } from './hermes_debate_chamber.service.js';
 
 // Forward declaration pointers
 let SwarmArchitectAgent;
+let SwarmHermesDebateAgent;
 let SwarmTddCoderAgent;
 let SwarmQaTesterAgent;
 let SwarmSecurityAuditorAgent;
@@ -26,7 +28,7 @@ Your core directive is to design high-performance, secure, and horizontally scal
 OPERATIONAL PRINCIPLES:
 1. **API Contracts**: Define exact endpoints, JSON payload shapes, and status codes.
 2. **Data Modeling**: Design robust schema relations, database partitions, and indexing strategies.
-3. **Handoff Requirement**: Once you have created a complete, flawless architectural design, you MUST handoff the task to the SwarmTddCoder agent to write the actual implementation.`,
+3. **Handoff Requirement**: Once you have designed the initial architecture, you MUST handoff the task to the SwarmHermesDebate agent to run the Hermes Debate Chamber and refine the design.`,
     functions: [
         {
             name: 'design_system_architecture',
@@ -54,15 +56,68 @@ OPERATIONAL PRINCIPLES:
                 const workspacePath = context.sessionWorkspacePath || '.';
                 fs.writeFileSync(path.join(workspacePath, 'architecture_design.md'), designDoc, 'utf8');
 
-                return `[Architect Design Specs]:\n1. Database Schema:\n${context.architectureDesign.dbModel}\n2. API Endpoint:\n${context.architectureDesign.apiContract}\n3. Scaling: ${context.architectureDesign.scalingStrategy}\n\nArchitecture successfully designed and saved to architecture_design.md. Delegating to Coder.`;
+                return `[Architect Design Specs]:\n1. Database Schema:\n${context.architectureDesign.dbModel}\n2. API Endpoint:\n${context.architectureDesign.apiContract}\n3. Scaling: ${context.architectureDesign.scalingStrategy}\n\nArchitecture successfully designed and saved to architecture_design.md. Next, handoff to Hermes Debate agent.`;
+            }
+        },
+        {
+            name: 'handoff_to_hermes_debate',
+            description: 'Handoff the task to the SwarmHermesDebate agent to run the adversarial debate chamber and refine the architecture.',
+            parameters: { type: 'OBJECT', properties: {} },
+            execute: async (args, context) => {
+                console.log('[SwarmArchitect] Handing off task to SwarmHermesDebate...');
+                return { isHandoff: true, handoffAgentName: 'SwarmHermesDebate' };
+            }
+        }
+    ]
+});
+
+// ── 1.5. SWARM HERMES DEBATE AGENT ──
+SwarmHermesDebateAgent = new SwarmAgent({
+    name: 'SwarmHermesDebate',
+    instructions: `You are the Swarm Hermes Debate Agent. 
+Your core directive is to run the adversarial Hermes Debate Chamber to critically analyze, optimize, and refine the architectural design before coding.
+
+OPERATIONAL PRINCIPLES:
+1. **Adversarial Debate**: You simulate a debate between:
+   - Alpha (The Architect): Proposes the design.
+   - Beta (The SRE/Pragmatist): Critiques reliability, scalability, ACID properties.
+   - Hermes (The AI Code Auditor): Critically reviews logic structures, security boundaries, and sandbox escape risks.
+   - Gamma (The Arbiter): Synthesizes these viewpoints into a refined consensus spec.
+2. **Refine and Save**: After synthesizing the consensus, you MUST call save_refined_architecture to save the consensus spec to refined_architecture_design.md.
+3. **Handoff Requirement**: Once the architecture is refined and saved, you MUST handoff the task to the SwarmTddCoder agent.`,
+    functions: [
+        {
+            name: 'save_refined_architecture',
+            description: 'Save the mathematically refined architectural consensus spec doc to refined_architecture_design.md.',
+            parameters: {
+                type: 'OBJECT',
+                properties: {
+                    refinedSpec: { type: 'STRING', description: 'The mathematically refined consensus spec document' }
+                },
+                required: ['refinedSpec']
+            },
+            execute: async (args, context) => {
+                console.log('[SwarmHermesDebate] Saving refined architectural consensus spec...');
+                
+                if (!context.architectureDesign) {
+                    context.architectureDesign = {};
+                }
+                context.architectureDesign.refinedSpec = args.refinedSpec;
+
+                const path = await eval("import('path')");
+                const fs = await eval("import('fs')");
+                const workspacePath = context.sessionWorkspacePath || '.';
+                fs.writeFileSync(path.join(workspacePath, 'refined_architecture_design.md'), args.refinedSpec, 'utf8');
+
+                return `Consensus refined spec successfully saved to refined_architecture_design.md. Next, handoff to Coder.`;
             }
         },
         {
             name: 'handoff_to_coder',
-            description: 'Handoff the designed specifications to the SwarmTddCoder agent to write the actual code.',
+            description: 'Handoff the refined specifications to the SwarmTddCoder agent to write the actual code.',
             parameters: { type: 'OBJECT', properties: {} },
             execute: async (args, context) => {
-                console.log('[SwarmArchitect] Handing off task to SwarmTddCoder...');
+                console.log('[SwarmHermesDebate] Handing off task to SwarmTddCoder...');
                 return { isHandoff: true, handoffAgentName: 'SwarmTddCoder' };
             }
         }
@@ -413,6 +468,7 @@ OPERATIONAL PRINCIPLES:
 
 export {
     SwarmArchitectAgent,
+    SwarmHermesDebateAgent,
     SwarmTddCoderAgent,
     SwarmQaTesterAgent,
     SwarmSecurityAuditorAgent,

@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { SwarmEngine } from './custom_swarm_orchestrator.js';
 import { 
     SwarmArchitectAgent, 
+    SwarmHermesDebateAgent,
     SwarmTddCoderAgent, 
     SwarmQaTesterAgent,
     SwarmSecurityAuditorAgent,
@@ -23,7 +24,15 @@ vi.mock('../ai/ai.provider.js', () => {
     };
 });
 
-describe('5-Agent Collaborative Developer Swarm with Crabbox Remote Execution', () => {
+vi.mock('./hermes_debate_chamber.service.js', () => {
+    return {
+        hermesDebateChamberService: {
+            initiateDebate: vi.fn().mockResolvedValue('Mocked refined architectural consensus spec')
+        }
+    };
+});
+
+describe('6-Agent Collaborative Developer Swarm with Crabbox Remote Execution', () => {
     let engine;
 
     beforeEach(() => {
@@ -31,41 +40,48 @@ describe('5-Agent Collaborative Developer Swarm with Crabbox Remote Execution', 
         engine = new SwarmEngine();
     });
 
-    it('should successfully run the entire 5-agent SDLC pipeline executing via Crabbox', async () => {
+    it('should successfully run the entire 6-agent SDLC pipeline executing via Crabbox', async () => {
         // 1. Mock the AI Provider reason to simulate LLM swarm orchestration trace
         let turnCount = 0;
         aiProvider.reason.mockImplementation(async (prompt, options = {}) => {
             turnCount++;
             if (turnCount === 1) {
-                // Architect designs and hands off to Coder
+                // Architect designs and hands off to Hermes Debate
                 const design = await options.onToolCall('design_system_architecture', {
                     featureName: 'Secure Token Rotator',
                     requirements: 'Low latency'
                 });
-                await options.onToolCall('handoff_to_coder', {});
-                return 'Architecture designed.';
+                await options.onToolCall('handoff_to_hermes_debate', {});
+                return 'Architecture designed and handed off to Hermes Debate.';
             } else if (turnCount === 2) {
+                // Hermes Debate Chamber saves refined architecture and hands off to Coder
+                const refined = await options.onToolCall('save_refined_architecture', {
+                    refinedSpec: 'Mocked refined architectural consensus spec'
+                });
+                await options.onToolCall('handoff_to_coder', {});
+                return 'Architecture refined and consensus spec saved.';
+            } else if (turnCount === 3) {
                 // Coder generates code and hands off to QA
                 const code = await options.onToolCall('generate_permissive_code', {
                     specifications: 'Specs'
                 });
                 await options.onToolCall('handoff_to_qa_tester', {});
                 return 'Code generated.';
-            } else if (turnCount === 3) {
+            } else if (turnCount === 4) {
                 // QA generates tests, runs them, and hands off to Security
                 const test = await options.onToolCall('generate_integration_tests', {
                     sourceCode: 'import crypto from "crypto";'
                 });
                 await options.onToolCall('handoff_to_security_auditor', {});
                 return 'Tests generated and run.';
-            } else if (turnCount === 4) {
+            } else if (turnCount === 5) {
                 // Security audits and hands off to DevOps
                 const audit = await options.onToolCall('verify_security_compliance', {
                     code: 'Code'
                 });
                 await options.onToolCall('handoff_to_devops', {});
                 return 'Security audit complete.';
-            } else if (turnCount === 5) {
+            } else if (turnCount === 6) {
                 // DevOps generates compose and signs off
                 const deploy = await options.onToolCall('generate_deployment_spec', {
                     serviceName: 'token-rotator'
@@ -108,13 +124,14 @@ describe('5-Agent Collaborative Developer Swarm with Crabbox Remote Execution', 
 
         // 6. Assertions
         expect(result.agent.name).toBe('SwarmDevOpsEngineer');
-        expect(result.history.length).toBe(5);
+        expect(result.history.length).toBe(6);
         expect(runSpy).toHaveBeenCalled();
 
         // Verify that the files were actually created inside the sandbox workspace
         const wsPath = result.contextVariables.sessionWorkspacePath;
         try {
             expect(fs.existsSync(path.join(wsPath, 'architecture_design.md'))).toBe(true);
+            expect(fs.existsSync(path.join(wsPath, 'refined_architecture_design.md'))).toBe(true);
             expect(fs.existsSync(path.join(wsPath, 'SessionTokenManager.js'))).toBe(true);
             expect(fs.existsSync(path.join(wsPath, 'SessionTokenManager.test.js'))).toBe(true);
             expect(fs.existsSync(path.join(wsPath, 'security_report.json'))).toBe(true);
