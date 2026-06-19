@@ -7,6 +7,7 @@
 -   **Frontend**: Next.js 15 App Router. State management via Redux Toolkit (`store/`). UI components are largely custom or wrapped Shadcn/HeroUI.
 -   **YAML DSL Agents**: New specialist agents can be defined as `.agent.yaml` files in `src/app/modules/agents/definitions/`. The `yaml_agent_loader.js` dynamically creates `BaseSpecialistAgent` subclasses and supports hot-reload via `fs.watch` — no server restart required.
 -   **Marketplace Registry**: Installed agents are tracked in `src/app/modules/agents/plugins/registry.json` (primary) and `MarketplacePlugin` Mongoose collection (secondary). If Mongo is unavailable, the file-based registry is used as fallback.
+-   **Collaborative Developer Swarm**: A stateful 6-agent multi-agent pipeline (`SwarmEngine` inside `custom_swarm_orchestrator.js`) executing autonomous software developer sprints: `SwarmArchitect` -> `SwarmHermesDebate` (adversarial debate chamber using `hermes_debate_chamber.service.js`) -> `SwarmTddCoder` -> `SwarmQaTester` -> `SwarmSecurityAuditor` -> `SwarmDevOpsEngineer`.
 
 ## ⚠️ Known Issues / Technical Debt
 -   **Version Sync**: Frontend version display is hard-coded in `sidebar.tsx` `v3.1.0`. Needs a build-time script or `/api/version` API call to auto-sync.

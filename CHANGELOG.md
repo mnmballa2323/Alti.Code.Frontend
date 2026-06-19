@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [40.0.0] - 2026-06-19 — Advanced Hermes Integration & Adversarial Debate Chamber
+
+### Added
+
+- **Adversarial Hermes Debate Chamber Service**: Implemented `HermesDebateChamberService` (`hermes_debate_chamber.service.js`) orchestrating structured cross-agent debates (Architect, SRE, and Code Auditor) utilizing the Hermes model, with unit and integration tests (`hermes_debate_chamber.test.js`).
+- **6-Agent Swarm SDLC Developer Pipeline**: Integrated `SwarmHermesDebateAgent` as a dedicated agent in the swarm engine (`software_engineering_swarm.js`). The Architect now delegates tasks to the Debate Chamber before implementation starts.
+- **VM Sandbox Expose & Whitelisting**: Whitelisted `path` and `crypto` modules in the fallback VM sandbox (`docker_workspace_manager.js`) to support pure local mock runs.
+- **Runner Script & Swarm Test Verification**: Upgraded test suite (`software_engineering_swarm.test.js`) and run script (`run_software_engineering_swarm.js`) to support the 6-agent developer swarm execution loop.
+
 ## [39.37.232] - 2026-06-16 — Deep Backend Audit, Performance & Security Optimization
 
 ### Improved
