@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.8] - 2026-06-20 — Resilient Retries, Bytes formats & LRU caching
+
+### Added
+
+- **Pure MIT Caching, Retry, and Bytes formatting Packages**: Integrated `quick-lru` (high-performance Least Recently Used cache for configurations/AST tokens), `p-retry` (resilient execution queue with exponential backoff retry parameters), and `pretty-bytes` (utility to translate byte values into human-readable strings) to improve air-gapped agent operations and queue systems.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.7] - 2026-06-20 — Archiver, Media types & Priority Queueing
 
 ### Added

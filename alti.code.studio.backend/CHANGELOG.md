@@ -2,6 +2,13 @@
 
 All notable changes to the backend will be documented here.
 
+## [39.37.236] — 2026-06-20
+
+### Added
+- **Additional Air-Gapped Dependencies**: Installed `p-retry` (resilient execution with exponential backoff retries), `pretty-bytes` (bytes to human-readable strings), and `quick-lru` (high-performance LRU cache).
+- **Licensing Audit Compliance**: Verified that the new packages are 100% compliant under strict MIT/Apache-2.0 audits.
+- **System Integrity Testing**: Executed Vitest integration suites with 100% green status across milestones v49, v50, v52, and v53.
+
 ## [39.37.235] — 2026-06-20
 
 ### Added
