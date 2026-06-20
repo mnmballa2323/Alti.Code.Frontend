@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.29] - 2026-06-20 — Escape String Regexp, Resolve From & Import Fresh
+
+### Added
+
+- **Pure MIT Escape String Regexp, Resolve From, and Import Fresh Packages**: Integrated `escape-string-regexp` (escapes RegExp special characters in strings), `resolve-from` (resolves the path of a module from a specific directory), and `import-fresh` (imports a module bypassing node cache) to improve module loading safety and AST pattern matching in sandboxed runtimes.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.28] - 2026-06-20 — Plain Object Checker, Clean Stack & Aggregate Error
 
 ### Added
