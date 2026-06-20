@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.22] - 2026-06-20 — Promise Do Whilst, Promise All & Promise State
+
+### Added
+
+- **Pure MIT Promise Do Whilst, Promise All, and Promise State Packages**: Integrated `p-do-whilst` (executes promise-returning functions sequentially, verifying continuation condition afterwards), `p-all` (resolves multiple promise-returning functions concurrently with options), and `p-state` (inspects active promise status returns like pending/fulfilled/rejected without rejecting) to support granular promise state introspection and execution flow.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.21] - 2026-06-20 — Promise Time, Promise Whilst & Promise Break
 
 ### Added
