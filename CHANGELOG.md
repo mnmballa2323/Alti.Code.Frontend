@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.3] - 2026-06-20 — Refactoring Utilities & Concurrency Mappings
+
+### Added
+
+- **Pure MIT AST, Comment, and Concurrency Packages**: Integrated `detect-indent` (precise code indentation layout detection), `p-map` (promise mapping with concurrency control), and `strip-comments` (comment stripping utility for token pruning) to optimize air-gapped agent prompt context sizes and code patching formats.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.2] - 2026-06-20 — More Air-Gapped Dependencies & Concurrency Utilities
 
 ### Added
