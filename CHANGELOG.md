@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.5] - 2026-06-20 — Duration formatting, Glob validation & URL Checking
+
+### Added
+
+- **Pure MIT Durations, Glob checks, and URL Validator Packages**: Integrated `ms` (formats millisecond durations into readable strings for sandbox and agent logging), `is-glob` (verifies string configurations for wildcard glob matching rules), and `is-url` (checks strings for valid URL structures) to improve air-gapped agent operations and logging clarity.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.4] - 2026-06-20 — Fast Imports Lexer, Binary Path & CLI Log Stripping
 
 ### Added
