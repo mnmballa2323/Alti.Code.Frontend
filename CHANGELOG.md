@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.12] - 2026-06-20 — Promise Throttle, Promise Debounce & Promise WaitFor
+
+### Added
+
+- **Pure MIT Promise Throttle, Promise Debounce, and Promise WaitFor Packages**: Integrated `p-throttle` (rate-limits promise-returning execution rates to prevent model gateway or resource overloads), `p-debounce` (debounces asynchronous function calls to minimize redundant AST or database writes), and `p-wait-for` (asynchronously waits for targeted states or consensus criteria to resolve) to optimize execution flow and stability.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.11] - 2026-06-20 — Promise Settle, Promise Props & Promise Race
 
 ### Added
