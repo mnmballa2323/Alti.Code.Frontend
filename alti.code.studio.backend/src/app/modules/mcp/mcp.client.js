@@ -256,6 +256,12 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_MEMORY',
   },
   {
+    name: 'codebase-memory',
+    command: 'npx',
+    args: ['-y', 'codebase-memory-mcp', "--ui=true", "--port=9749"],
+    envKey: 'MCP_ENABLE_CODEBASE_MEMORY',
+  },
+  {
     name: 'fetch',
     command: 'npx',
     args: ['-y', '@modelcontextprotocol/server-fetch'],

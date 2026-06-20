@@ -31,6 +31,11 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
       "env": {}
+    },
+    "codebase-memory": {
+      "command": "npx",
+      "args": ["-y", "codebase-memory-mcp", "--ui=true", "--port=9749"],
+      "env": {}
     }
   }
 }
