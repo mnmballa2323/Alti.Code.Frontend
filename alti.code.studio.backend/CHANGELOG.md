@@ -2,6 +2,13 @@
 
 All notable changes to the backend will be documented here.
 
+## [39.37.232] — 2026-06-20
+
+### Added
+- **Additional Air-Gapped Dependencies**: Installed `es-module-lexer` (fast JS/TS import/export analyzer), `is-binary-path` (checks paths for binary structures), and `strip-ansi` (removes ANSI escape codes from stdout console logs).
+- **Licensing Audit Compliance**: Verified that the new packages are 100% compliant under strict MIT/Apache-2.0 audits.
+- **System Integrity Testing**: Executed Vitest integration suites with 100% green status across milestones v49, v50, v52, and v53.
+
 ## [39.37.231] — 2026-06-20
 
 ### Added
