@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.31] - 2026-06-20 — Pkg Dir, Strip Outer & Trim Repeated
+
+### Added
+
+- **Pure MIT Pkg Dir, Strip Outer, and Trim Repeated Packages**: Integrated `pkg-dir` (finds the root directory of a npm package), `strip-outer` (strips a substring from the start/end of a string), and `trim-repeated` (trims a repeated substring to a single occurrence) to normalize user prompts and sanitize code input paths.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.30] - 2026-06-20 — Parent Module, Path Exists & Find Up
 
 ### Added
