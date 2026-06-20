@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.7] - 2026-06-20 — Archiver, Media types & Priority Queueing
+
+### Added
+
+- **Pure MIT Archiving, Media types, and Priority Queue Packages**: Integrated `archiver` (generates tarball/zip archive buffers for snapshotting and transport), `mime-types` (media type extraction based on extensions during walks), and `p-queue` (priority and rate-limited queue execution for async tasks) to improve air-gapped agent operations and queueing systems.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.6] - 2026-06-20 — Directory comparison, IP checking & Fast Glob Matching
 
 ### Added
