@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.21] - 2026-06-20 — Promise Time, Promise Whilst & Promise Break
+
+### Added
+
+- **Pure MIT Promise Time, Promise Whilst, and Promise Break Packages**: Integrated `p-time` (measures promise execution duration for detailed latency telemetry), `p-whilst` (executes promise-returning functions repeatedly whilst a synchronous predicate returns true), and `p-break` (breaks out of active promise loops like `p-forever` or `p-whilst`) to enhance control flow and duration auditing in the backend.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.20] - 2026-06-20 — Promise Forever, Promise Is Promise & Promise Waterfall
 
 ### Added
