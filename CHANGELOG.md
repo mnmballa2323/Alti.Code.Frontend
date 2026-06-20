@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.25] - 2026-06-20 — Utility Types, Execa & Globby
+
+### Added
+
+- **Pure MIT Utility Types, Execa, and Globby Packages**: Integrated `utility-types` (essential TypeScript utility types collection), `execa` (process execution tool), and `globby` (multi-path file globbing utility) to enhance filesystem traversal and child process sandboxing.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.24] - 2026-06-20 — Array Union, Array Differ & Map Obj
 
 ### Added
