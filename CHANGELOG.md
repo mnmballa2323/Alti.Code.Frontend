@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.27] - 2026-06-20 — Camelcase, Decamelize & Dot Prop
+
+### Added
+
+- **Pure MIT Camelcase, Decamelize, and Dot Prop Packages**: Integrated `camelcase` (string camel-casing utility), `decamelize` (separates camelcase strings), and `dot-prop` (sets/gets nested object properties using dot paths) to optimize AST symbol name processing and metadata mapping.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.26] - 2026-06-20 — Strip BOM, Strip Indent & Indent String
 
 ### Added

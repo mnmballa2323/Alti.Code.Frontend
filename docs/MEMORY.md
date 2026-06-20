@@ -40,6 +40,7 @@
 -   **v53.0.24 Platform Dependencies (Array Union, Array Differ & Map Obj Packages)**: Integrated `array-union` (uniquifies arrays), `array-differ` (computes differences between arrays), and `map-obj` (maps object keys/values) in the backend. Audited dependencies for strict MIT/Apache-2.0 compliance, and successfully verified system stability via Vitest integration tests.
 -   **v53.0.25 Platform Dependencies (Utility Types, Execa & Globby Packages)**: Integrated `utility-types` (TypeScript utility types collection), `execa` (process execution utility), and `globby` (file globbing utility) in the backend. Audited dependencies for strict MIT/Apache-2.0 compliance, and successfully verified system stability via Vitest integration tests.
 -   **v53.0.26 Platform Dependencies (Strip BOM, Strip Indent & Indent String Packages)**: Integrated `strip-bom` (UTF-8 BOM remover), `strip-indent` (whitespace indentation remover), and `indent-string` (line indentation utility) in the backend. Audited dependencies for strict MIT/Apache-2.0 compliance, and successfully verified system stability via Vitest integration tests.
+-   **v53.0.27 Platform Dependencies (Camelcase, Decamelize & Dot Prop Packages)**: Integrated `camelcase` (string camel-casing utility), `decamelize` (decamelizes string formats), and `dot-prop` (nested object dot-path manager) in the backend. Audited dependencies for strict MIT/Apache-2.0 compliance, and successfully verified system stability via Vitest integration tests.
 
 
 
