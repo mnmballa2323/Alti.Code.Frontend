@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.30] - 2026-06-20 — Parent Module, Path Exists & Find Up
+
+### Added
+
+- **Pure MIT Parent Module, Path Exists, and Find Up Packages**: Integrated `parent-module` (gets the path of the parent module), `path-exists` (checks if a path exists safely), and `find-up` (finds a file or directory by walking up parent directories) to enhance workspace configuration file discovery.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.29] - 2026-06-20 — Escape String Regexp, Resolve From & Import Fresh
 
 ### Added
