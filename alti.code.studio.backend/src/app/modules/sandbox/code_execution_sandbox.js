@@ -29,6 +29,42 @@ export class CodeExecutionSandbox {
         const workspacePath = options.workspacePath ? resolve(options.workspacePath) : resolve(`./logs/workspaces/agent_${cleanAgentId}`);
         const startTime = Date.now();
 
+        if (provider === 'flue') {
+            try {
+                const { register } = await import('node:module');
+                const loaderUrl = new URL('./sqlite-loader.js', import.meta.url).href;
+                register(loaderUrl);
+            } catch (regErr) {
+                // Fail silent in case dynamic import hooks are not supported in execution env
+            }
+
+            const { local } = await import('@flue/runtime/node');
+            const tempFileName = `temp_exec_flue_${Math.random().toString(36).substring(2, 9)}.js`;
+            const tempFilePath = join(workspacePath, tempFileName);
+
+            mkdirSync(workspacePath, { recursive: true });
+            writeFileSync(tempFilePath, code, 'utf8');
+
+            try {
+                const sandbox = local({ cwd: workspacePath });
+                const sessionEnv = await sandbox.createSessionEnv();
+                const result = await sessionEnv.exec(`node ${tempFileName}`);
+
+                return {
+                    success: result.exitCode === 0,
+                    exitCode: result.exitCode,
+                    logs: result.stdout ? result.stdout.trim().split('\n') : [],
+                    errors: result.stderr ? result.stderr.trim().split('\n') : [],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            } finally {
+                try {
+                    rmSync(tempFilePath, { force: true });
+                } catch (e) {}
+            }
+        }
+
         if (provider === 'crabbox') {
             const { crabboxService } = await import('../crabbox/crabbox.service.js');
             const tempFileName = `temp_exec_crabbox_${Math.random().toString(36).substring(2, 9)}.js`;

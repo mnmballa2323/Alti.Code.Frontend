@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [48.0.0] - 2026-06-20 — The 5 Core AI-Native Engineering Pillars & Astro Flue Sandbox Integration
+
+### Added
+
+- **Closed-Loop Sandbox with Flue Runtime**: Integrated Astro's `@flue/runtime` into the code execution module to run untrusted code snippets locally in sandboxed runtimes, capturing exit codes, stdout/stderr, and durations.
+- **AST-Based Context Navigator**: Implemented recursive syntax tree traversal to map references, symbols, callers, and class/method hierarchies, pruning codebase files to keep LLM context sizes minimal.
+- **Multi-Agent Socratic Debate Chamber**: Engineered a multi-model debate loop (Proposer-Critic-Auditor) matching the Tri-Cloud Inference strategy (GCP Vertex, AWS Bedrock, Azure OpenAI) to reach architectural consensus before file writes.
+- **Policy-as-Code Compliance Gates**: Intercepted file writes at system boundaries to enforce compliance rules: blocking plaintext secret keys, copyleft licenses (GPL/AGPL), and POST routes lacking CSRF protection.
+- **Autopoietic Self-Evolution Daemon**: Implemented a background evolution daemon (`run_autopoietic_evolution_daemon.js`) to continuously scan workspace logs for runtime errors or compilation/linter warnings and generate/apply git repair patches.
+
 ## [47.4.0] - 2026-06-20 — Ultimate System-Wide OKF Knowledge Catalog Integration
 
 ### Added
