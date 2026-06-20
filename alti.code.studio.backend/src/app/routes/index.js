@@ -91,6 +91,7 @@ try {
               if (file === 'debugAgent.route.js') basePath = '/debug-agent';
               if (file === 'compliance.route.js') basePath = '/governance';
               if (file === 'observability.route.js') basePath = '/observability';
+              if (file === 'sentry.route.js') basePath = '/observability/sentry';
               if (file === 'metrics.route.js') basePath = '/metrics';
               if (file === 'agent.route.js') basePath = '/agents';
               if (file === 'omni_polyglot.route.js') basePath = '/agents/polyglot';

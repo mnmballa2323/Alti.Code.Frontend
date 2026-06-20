@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [50.0.0] - 2026-06-20 — Autopoietic Sentry Healing Loops & Codebase Memory MCP
+
+### Added
+
+- **Autopoietic Sentry Healing Loops**: Implemented SentryHealingLoopService to poll/consume Sentry production exceptions, trigger isolated replications, and debate and verify fixes.
+- **Automated Production Bug Replication**: Dynamically synthesizes failing replication test cases inside isolated workspaces and runs them under a local Flue sandbox.
+- **Zero-Downtime Sandbox Patching**: Debates fixes via the Socratic Chamber, verifies patched versions inside Flue sandboxes, scans them against write-time compliance policies, and exports git patches.
+- **Codebase Memory MCP server deep integration**: Installed and deeply integrated DeusData's `codebase-memory-mcp` Tree-sitter powered codebase indexer across MCP client presets and server configurations, enabling 3D repository visualization on port 9749.
+
 ## [49.0.0] - 2026-06-20 — Unified Neo4j AST Code-Graph & Git Blame Grounding
 
 ### Added
