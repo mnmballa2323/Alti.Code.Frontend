@@ -186,29 +186,37 @@ cd terraform
 
 if [ "$DRY_RUN" = true ]; then
     echo -e "${YELLOW}Running dry-run validation for Customer: $(echo "$CUSTOMER" | tr '[:lower:]' '[:upper:]')...${NC}"
-    terraform init -backend=false
-    terraform validate
-    echo -e "${GREEN}✔ Terraform configurations validated successfully (Dry-Run).${NC}"
-    cd ..
-    exit 0
+    if command -v terraform &> /dev/null; then
+        terraform init -backend=false
+        terraform validate
+        echo -e "${GREEN}✔ Terraform configurations validated successfully (Dry-Run).${NC}"
+    else
+        echo -e "${YELLOW}ℹ terraform command not found, skipping dry-run IaC validation.${NC}"
+    fi
+    # If mode is not k8s, exit now
+    if [ "$MODE" != "k8s" ]; then
+        cd ..
+        exit 0
+    fi
+else
+    # Initialize Terraform
+    terraform init
+
+    # Create or select isolated workspace for the customer to prevent state conflicts
+    echo -e "Selecting Terraform workspace for customer: ${CYAN}${CUSTOMER}${NC}..."
+    terraform workspace select ${CUSTOMER} || terraform workspace new ${CUSTOMER}
+
+    # Deploy the infrastructure
+    echo -e "Applying customer VPC and Compute VM resource rules (Subnet: ${SUBNET_CIDR})..."
+    terraform apply -var="customer_id=${CUSTOMER}" \
+                    -var="customer_subnet_cidr=${SUBNET_CIDR}" \
+                    -var="customer_domain=${DOMAIN}" \
+                    -var="tenancy_model=${TENANCY}" \
+                    -auto-approve
+
+    echo -e "${GREEN}✔ Customer-isolated VPC infrastructure provisioned successfully.${NC}"
 fi
 
-# Initialize Terraform
-terraform init
-
-# Create or select isolated workspace for the customer to prevent state conflicts
-echo -e "Selecting Terraform workspace for customer: ${CYAN}${CUSTOMER}${NC}..."
-terraform workspace select ${CUSTOMER} || terraform workspace new ${CUSTOMER}
-
-# Deploy the infrastructure
-echo -e "Applying customer VPC and Compute VM resource rules (Subnet: ${SUBNET_CIDR})..."
-terraform apply -var="customer_id=${CUSTOMER}" \
-                -var="customer_subnet_cidr=${SUBNET_CIDR}" \
-                -var="customer_domain=${DOMAIN}" \
-                -var="tenancy_model=${TENANCY}" \
-                -auto-approve
-
-echo -e "${GREEN}✔ Customer-isolated VPC infrastructure provisioned successfully.${NC}"
 
 # Provision VPNaaS if requested
 if [ "$VPN" = true ] && [ "$DRY_RUN" = false ]; then
@@ -239,7 +247,7 @@ if [ "$MODE" == "vm" ]; then
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER VPC DEPLOYMENT SUCCESSFUL! ✨${NC}"
     echo -e "=================================================================="
     echo -e "• Customer ID:    ${CYAN}${CUSTOMER}${NC}"
-    echo -e "• Tenancy Model:  ${CYAN}${TENANCY^} Private Cloud (Tier: ${TIER^})${NC}"
+    echo -e "• Tenancy Model:  ${CYAN}${TENANCY} Private Cloud (Tier: ${TIER})${NC}"
     echo -e "• VPC Subnet:     ${CYAN}${SUBNET_CIDR}${NC}"
     echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
     echo -e "• Direct IP API:  ${CYAN}http://${VM_IP}:5000/api/v1/healthz${NC}"
@@ -266,29 +274,39 @@ if [ "$MODE" == "vm" ]; then
 else
     # Kubernetes Deployment Pathway
     echo -e "\n[3/5] ${YELLOW}Acquiring Kubernetes COE Cluster Credentials...${NC}"
-    openstack coe cluster config alti-sovereign-cluster
-    echo -e "${GREEN}✔ kubectl context updated for cluster 'alti-sovereign-cluster'.${NC}"
+    if [ "$DRY_RUN" = false ]; then
+        openstack coe cluster config alti-sovereign-cluster
+        echo -e "${GREEN}✔ kubectl context updated for cluster 'alti-sovereign-cluster'.${NC}"
+    else
+        echo -e "• [Dry-Run] Would acquire credentials: openstack coe cluster config alti-sovereign-cluster"
+    fi
 
     echo -e "\n[4/5] ${YELLOW}Building and Uploading Docker Container Images...${NC}"
     
-    if [ -n "$OS_REGISTRY_USER" ] && [ -n "$OS_REGISTRY_PASSWORD" ]; then
-        echo -e "Logging in to private registry ${REGISTRY}..."
-        echo "$OS_REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$OS_REGISTRY_USER" --password-stdin
-    fi
+    if [ "$DRY_RUN" = false ]; then
+        if [ -n "$OS_REGISTRY_USER" ] && [ -n "$OS_REGISTRY_PASSWORD" ]; then
+            echo -e "Logging in to private registry ${REGISTRY}..."
+            echo "$OS_REGISTRY_PASSWORD" | docker login "$REGISTRY" -u "$OS_REGISTRY_USER" --password-stdin
+        fi
 
-    BACKEND_IMAGE="${REGISTRY}/alti-backend-${CUSTOMER}:latest"
-    FRONTEND_IMAGE="${REGISTRY}/alti-frontend-${CUSTOMER}:latest"
-    
-    echo -e "Building backend image: ${BACKEND_IMAGE}..."
-    docker build -t ${BACKEND_IMAGE} ../alti.code.studio.backend
-    
-    echo -e "Building frontend image: ${FRONTEND_IMAGE}..."
-    docker build -t ${FRONTEND_IMAGE} ../alti.code.studio.frontend
-    
-    echo -e "Pushing images to private registry..."
-    docker push ${BACKEND_IMAGE}
-    docker push ${FRONTEND_IMAGE}
-    echo -e "${GREEN}✔ Images pushed to registry.${NC}"
+        BACKEND_IMAGE="${REGISTRY}/alti-backend-${CUSTOMER}:latest"
+        FRONTEND_IMAGE="${REGISTRY}/alti-frontend-${CUSTOMER}:latest"
+        
+        echo -e "Building backend image: ${BACKEND_IMAGE}..."
+        docker build -t ${BACKEND_IMAGE} ../alti.code.studio.backend
+        
+        echo -e "Building frontend image: ${FRONTEND_IMAGE}..."
+        docker build -t ${FRONTEND_IMAGE} ../alti.code.studio.frontend
+        
+        echo -e "Pushing images to private registry..."
+        docker push ${BACKEND_IMAGE}
+        docker push ${FRONTEND_IMAGE}
+        echo -e "${GREEN}✔ Images pushed to registry.${NC}"
+    else
+        echo -e "• [Dry-Run] Would login to private registry: ${REGISTRY}"
+        echo -e "• [Dry-Run] Would build and push backend image: ${REGISTRY}/alti-backend-${CUSTOMER}:latest"
+        echo -e "• [Dry-Run] Would build and push frontend image: ${REGISTRY}/alti-frontend-${CUSTOMER}:latest"
+    fi
 
     echo -e "\n[5/5] ${YELLOW}Executing Helm Sovereign Deployment Chart...${NC}"
     cd ../alti.code.studio.backend/k8s
@@ -298,12 +316,35 @@ else
     export OLLAMA_API_URL="${LOCAL_MODEL_URL}"
     export OLLAMA_URL="${LOCAL_MODEL_URL}"
     
+    if [ "$AIR_GAPPED" = true ]; then
+        echo -e "\n[Air-Gapped] Preloading Magnum cluster system images to local registry ${REGISTRY}..."
+        # Simulate retagging and pushing essential system images to private registry
+        for img in "kube-apiserver:v1.28.2" "kube-controller-manager:v1.28.2" "kube-scheduler:v1.28.2" "etcd:3.5.9-0" "coredns:1.10.1"; do
+            echo "• Preloading and retagging k8s.gcr.io/${img} -> ${REGISTRY}/${img}..."
+            if [ "$DRY_RUN" = false ]; then
+                docker pull "k8s.gcr.io/${img}" || true
+                docker tag "k8s.gcr.io/${img}" "${REGISTRY}/${img}" || true
+                docker push "${REGISTRY}/${img}" || true
+            fi
+        done
+        
+        echo -e "[Air-Gapped] Overriding Magnum COE cluster template configuration to reference local registry..."
+        if [ "$DRY_RUN" = false ]; then
+            openstack coe cluster template update AltiMagnumTemplate replace image_providers="${REGISTRY}" || true
+        fi
+        
+        # Override remote helm dependency updates to run locally
+        export HELM_OFFLINE_MODE="true"
+        export HELM_PATH_OVERRIDE="./charts"
+    fi
+
     # Install with customer-specific namespace and configuration environment variables
-    REGISTRY="${REGISTRY}" CUSTOMER_ID="${CUSTOMER}" CUSTOMER_DOMAIN="${DOMAIN}" ./omni_sovereign_operator.sh openstack "alti-sovereign-${CUSTOMER}"
-    
-    if [ "$MTLS" = true ]; then
-        echo -e "\n[mTLS] Injecting Envoy PeerAuthentication mutual TLS policies..."
-        cat <<EOF | kubectl apply -f - || true
+    if [ "$DRY_RUN" = false ]; then
+        REGISTRY="${REGISTRY}" CUSTOMER_ID="${CUSTOMER}" CUSTOMER_DOMAIN="${DOMAIN}" ./omni_sovereign_operator.sh openstack "alti-sovereign-${CUSTOMER}"
+        
+        if [ "$MTLS" = true ]; then
+            echo -e "\n[mTLS] Injecting Envoy PeerAuthentication mutual TLS policies..."
+            cat <<EOF | kubectl apply -f - || true
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
@@ -313,28 +354,35 @@ spec:
   mtls:
     mode: STRICT
 EOF
-        echo -e "${GREEN}✔ Mutual TLS STRICT peer authentication policy injected successfully.${NC}"
-    fi
+            echo -e "${GREEN}✔ Mutual TLS STRICT peer authentication policy injected successfully.${NC}"
+        fi
 
-    # Extract external IP of the ingress gateway
-    echo -e "\n[DNS] Resolving Ingress LoadBalancer IP..."
-    INGRESS_IP=$(kubectl get svc -n "alti-sovereign-${CUSTOMER}" omni-backend-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
-    if [ -z "$INGRESS_IP" ]; then
-        INGRESS_IP=$(kubectl get ingress omni-backend-ingress -n "alti-sovereign-${CUSTOMER}" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
-    fi
+        # Extract external IP of the ingress gateway
+        echo -e "\n[DNS] Resolving Ingress LoadBalancer IP..."
+        INGRESS_IP=$(kubectl get svc -n "alti-sovereign-${CUSTOMER}" omni-backend-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+        if [ -z "$INGRESS_IP" ]; then
+            INGRESS_IP=$(kubectl get ingress omni-backend-ingress -n "alti-sovereign-${CUSTOMER}" -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || true)
+        fi
 
-    if [ -n "$INGRESS_IP" ]; then
-        echo -e "${GREEN}✔ Ingress LoadBalancer IP resolved: ${INGRESS_IP}${NC}"
-        provision_dns "$DOMAIN" "$INGRESS_IP"
+        if [ -n "$INGRESS_IP" ]; then
+            echo -e "${GREEN}✔ Ingress LoadBalancer IP resolved: ${INGRESS_IP}${NC}"
+            provision_dns "$DOMAIN" "$INGRESS_IP"
+        else
+            echo -e "${YELLOW}⚠ Could not resolve load balancer ingress IP. Skipping DNS sync.${NC}"
+        fi
     else
-        echo -e "${YELLOW}⚠ Could not resolve load balancer ingress IP. Skipping DNS sync.${NC}"
+        echo -e "• [Dry-Run] Would run: ./omni_sovereign_operator.sh openstack alti-sovereign-${CUSTOMER}"
+        if [ "$MTLS" = true ]; then
+            echo -e "• [Dry-Run] Would inject Envoy PeerAuthentication policy in namespace: alti-sovereign-${CUSTOMER}"
+        fi
+        echo -e "• [Dry-Run] Would resolve Ingress LoadBalancer IP and provision DNS for ${DOMAIN}"
     fi
 
     echo -e "=================================================================="
     echo -e "${GREEN}✨ ONE-CLICK CUSTOMER KUBERNETES DEPLOYMENT COMPLETE! ✨${NC}"
     echo -e "=================================================================="
     echo -e "• Customer ID:    ${CYAN}${CUSTOMER}${NC}"
-    echo -e "• Tenancy Model:  ${CYAN}${TENANCY^} Private Cloud (Tier: ${TIER^})${NC}"
+    echo -e "• Tenancy Model:  ${CYAN}${TENANCY} Private Cloud (Tier: ${TIER})${NC}"
     echo -e "• Target Domain:  ${CYAN}https://${DOMAIN}${NC}"
     echo -e "\n[Replication] Verifying multi-region active-active replication mappings..."
     if [ "$VPN" = true ]; then
@@ -345,6 +393,7 @@ EOF
     echo -e "• PostgreSQL BDR replication status: ${GREEN}ACTIVE (Multi-Master)${NC}"
     echo -e "• Kafka Mirrored Thread replication status: ${GREEN}ACTIVE (Syncing)${NC}"
     echo -e "=================================================================="
+    
+    cd ../..
 fi
 
-cd ..

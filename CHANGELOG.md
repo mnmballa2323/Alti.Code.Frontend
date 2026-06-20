@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [52.0.0] - 2026-06-20 — Air-Gapped Magnum deployment & Local Model Routing
+
+### Added
+
+- **Air-Gapped Magnum Private Registry Preloading**: Configured the OpenStack deployer script to preload essential Kubernetes container images (kube-apiserver, etcd, coredns) to the local private registry, override Magnum COE cluster templates, and run Helm in offline mode using local charts.
+- **Local Model Routing**: Updated AIProvider to automatically detect air-gapped configuration and route code-related generation/refactoring tasks to `codestral` (or local equivalent) and reasoning/Socratic critique tasks to `llama3` (or local equivalent) via the local Ollama API.
+- **Offline Vector Embedding Cache**: Implemented a caching system for text embeddings that prioritizes database or JSON file-based cache hits to optimize local CPU/GPU usage when air-gapped.
+
 ## [50.0.0] - 2026-06-20 — Autopoietic Sentry Healing Loops & Codebase Memory MCP
 
 ### Added
