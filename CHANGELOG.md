@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.1] - 2026-06-20 — Air-Gapped Dependencies & Compliance Verification
+
+### Added
+
+- **Pure MIT Open-Source Dependencies**: Integrated `fast-glob`, `js-yaml`, and `magic-string` packages into the backend to enable faster workspace traversal, dynamic YAML-based agent configurations loading, and in-memory AST code-patching respectively.
+- **License Compliance Verification**: Verified that all new dependencies strictly conform to the 100% pure MIT or Apache-2.0 license policy via the repository's strict license checking scripts.
+- **Green System Stability Verification**: Asserted complete system correctness and compatibility by successfully executing Vitest integration tests for milestones v49, v50, v52, and v53 features.
+
 ## [53.0.0] - 2026-06-20 — Platform Enhancements: Performance, Security, Compliance, & Diagnostics
 
 ### Added
