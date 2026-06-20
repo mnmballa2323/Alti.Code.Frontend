@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.23] - 2026-06-20 — Promise If, Promise Tap & Arrify
+
+### Added
+
+- **Pure MIT Promise If, Promise Tap, and Arrify Packages**: Integrated `p-if` (conditional promise chain execution builder), `p-tap` (taps into promise resolve/reject states to run side-effects without altering values), and `arrify` (safely converts values or iterables into array formats) to normalize data shapes and conditional flows during AST traversal.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.22] - 2026-06-20 — Promise Do Whilst, Promise All & Promise State
 
 ### Added
