@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.13] - 2026-06-20 — Promise Series, Promise Times & Promise Progress
+
+### Added
+
+- **Pure MIT Promise Series, Promise Times, and Promise Progress Packages**: Integrated `p-series` (executes promise-returning and async functions in a strict sequential order to avoid resource conflicts), `p-times` (runs promise-returning functions a specific number of times concurrently for multi-iteration agent loops), and `p-progress` (creates promises that report intermediate execution status for progress reporting in agent UI/dashboards) to enhance swarm pipeline robustness.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.12] - 2026-06-20 — Promise Throttle, Promise Debounce & Promise WaitFor
 
 ### Added
