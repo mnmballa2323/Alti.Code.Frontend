@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.32] - 2026-06-20 — Escape Goat, Caller Path & Caller Callsite
+
+### Added
+
+- **Pure MIT Escape Goat, Caller Path, and Caller Callsite Packages**: Integrated `escape-goat` (escapes/unescapes HTML entities), `caller-path` (gets the path of the caller of the current function), and `caller-callsite` (gets the callsite of the caller function) to improve sandbox stack trace tracing and security audit metrics.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.31] - 2026-06-20 — Pkg Dir, Strip Outer & Trim Repeated
 
 ### Added
