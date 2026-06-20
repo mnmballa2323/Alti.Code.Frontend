@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.33] - 2026-06-20 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 path-type Package**: Integrated `path-type` (Check if a path is a file, directory, or symlink) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.32] - 2026-06-20 — Escape Goat, Caller Path & Caller Callsite
 
 ### Added

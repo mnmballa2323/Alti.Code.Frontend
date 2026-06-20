@@ -1,6 +1,6 @@
 {
   "name": "alti.code.studio.backend",
-  "version": "39.37.260",
+  "version": "39.37.261",
   "description": "",
   "main": "index.js",
   "type": "module",
@@ -275,6 +275,7 @@
     "passport-openidconnect": "^0.1.2",
     "passport-saml": "^3.2.4",
     "path-exists": "^5.0.0",
+    "path-type": "^6.0.0",
     "pg": "^8.18.0",
     "pgvector": "^0.2.1",
     "picomatch": "^4.0.4",
