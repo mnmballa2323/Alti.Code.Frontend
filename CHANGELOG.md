@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.16] - 2026-06-20 — Strip JSON Comments, Promise Lazy & Promise Try
+
+### Added
+
+- **Pure MIT Strip JSON Comments, Promise Lazy, and Promise Try Packages**: Integrated `strip-json-comments` (strips comments from JSON strings to parse config files with developer comments safely), `p-lazy` (creates lazy promises that only execute when awaited to defer heavy model or AST builds), and `p-try` (wraps synchronous or asynchronous blocks into a promise chain to normalize error catching in agent task steps) to support developer configuration and deferred actions.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.15] - 2026-06-20 — Promise Map Series, Promise Pipe & Promise Catch If
 
 ### Added
