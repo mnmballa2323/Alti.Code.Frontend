@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.15] - 2026-06-20 — Promise Map Series, Promise Pipe & Promise Catch If
+
+### Added
+
+- **Pure MIT Promise Map Series, Promise Pipe, and Promise Catch If Packages**: Integrated `p-map-series` (maps over promises serially to avoid parallel execution conflicts), `p-pipe` (composes promise-returning functions into reusable pipelines for clean agent step workflows), and `p-catch-if` (handles conditional promise recovery parameters to support selective error fallbacks) to enhance task piping and self-healing.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.14] - 2026-06-20 — Promise Event, Get Stream & Is Stream
 
 ### Added
