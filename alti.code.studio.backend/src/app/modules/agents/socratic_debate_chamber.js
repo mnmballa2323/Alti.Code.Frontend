@@ -1,5 +1,7 @@
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
+import { GitContextGrounder } from '../sandbox/git_context_grounder.js';
+import { AstGraphNavigator } from '../sandbox/ast_graph_navigator.js';
 
 export class SocraticDebateChamber {
     /**
@@ -7,10 +9,35 @@ export class SocraticDebateChamber {
      * @param {string} topic - The engineering topic or objective
      * @param {string} initialProposal - The first architectural draft or code snippet
      * @param {number} [maxRounds=3] - Maximum debate refinement rounds
+     * @param {object} [options={}] - Optional metadata including { filePath, symbolName }
      * @returns {Promise<object>} Debate outcome { consensus, approvedProposal, history }
      */
-    static async runDebate(topic, initialProposal, maxRounds = 3) {
+    static async runDebate(topic, initialProposal, maxRounds = 3, options = {}) {
         logger.info(`🗣️ [Socratic Debate] Initiating debate chamber on topic: "${topic}"`);
+
+        let gitContext = '';
+        let astPrunedContent = '';
+
+        if (options.filePath && options.symbolName) {
+            try {
+                const graph = AstGraphNavigator.buildGraph(options.filePath);
+                const sym = graph.symbols[options.symbolName];
+                if (sym) {
+                    gitContext = await GitContextGrounder.getLineBlameContext(options.filePath, sym.startLine, sym.endLine);
+                    astPrunedContent = AstGraphNavigator.pruneFile(options.filePath, options.symbolName);
+                    logger.info(`🗣️ [Socratic Debate] Grounded debate with Git blame & AST definition for symbol [${options.symbolName}]`);
+                }
+            } catch (err) {
+                logger.warn(`🗣️ [Socratic Debate] Failed to resolve debate grounding context: ${err.message}`);
+            }
+        }
+
+        const contextSection = (gitContext || astPrunedContent) ? `
+
+## Grounded Codebase Context
+${gitContext ? `### Git Ownership & History:\n${gitContext}\n` : ''}
+${astPrunedContent ? `### Target AST Symbol Code:\n${astPrunedContent}\n` : ''}
+` : '';
 
         let currentProposal = initialProposal;
         const history = [];
@@ -21,6 +48,7 @@ export class SocraticDebateChamber {
             // 1. The Critic reviews the proposal (Model: Gemini / Vertex)
             const criticPrompt = `
 You are the adversarial Red Team Socratic Critic. Your task is to analyze the proposed solution and find all possible defects, edge cases, scalability limitations ($O(N^2)$ bottlenecks), and security holes (OWASP Top 10 vulnerabilities, injection flaws, data leaks).
+${contextSection}
 
 Topic: ${topic}
 Current Proposed Solution:
@@ -40,6 +68,7 @@ Write a detailed critique. Focus ONLY on valid technical risks, missing test cas
             // 2. The Proposer refactors the proposal based on critique (Model: Bedrock / Claude)
             const proposerPrompt = `
 You are the Blue Team Software Architect. Refactor the current proposed solution to resolve the concerns raised in the critic's critique.
+${contextSection}
 
 Topic: ${topic}
 Current Proposal:
@@ -102,3 +131,4 @@ Evaluate if the refined proposal is ready for production. Output exactly one of 
         };
     }
 }
+

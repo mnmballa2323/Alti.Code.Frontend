@@ -16,6 +16,8 @@ import fs from 'fs';
 import path from 'path';
 import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
+import { socketService } from '../../services/socket.service.js';
+import { AstGraphNavigator } from '../sandbox/ast_graph_navigator.js';
 
 const execAsync = promisify(exec);
 const execFileAsync = promisify(execFile);
@@ -43,6 +45,12 @@ async function toolWriteFile(filePath, content) {
     try {
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
         fs.writeFileSync(filePath, content, 'utf8');
+        
+        // Emit workspace update event over websockets
+        socketService.broadcast('workspace', 'changed', { path: filePath, action: 'write_file' });
+        // Sync symbol graph to Neo4j database asynchronously
+        AstGraphNavigator.syncFileToNeo4j(filePath).catch(() => {});
+
         return { ok: true, path: filePath, bytesWritten: Buffer.byteLength(content) };
     } catch (e) {
         return { ok: false, error: e.message };

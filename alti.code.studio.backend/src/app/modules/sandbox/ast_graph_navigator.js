@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { logger } from '../../../shared/logger.js';
+import { neo4jService } from '../../services/neo4j.service.js';
 
 export class AstGraphNavigator {
     /**
@@ -157,5 +158,112 @@ export class AstGraphNavigator {
         }
 
         return lines.length; // Fallback to EOF
+    }
+
+    /**
+     * Parses the file symbols and synchronizes them to Neo4j.
+     * @param {string} filePath - Absolute path to the file
+     */
+    static async syncFileToNeo4j(filePath) {
+        if (!fs.existsSync(filePath)) {
+            logger.warn(`[AST Neo4j Sync] File not found: \${filePath}`);
+            return;
+        }
+
+        const relativePath = path.relative(process.cwd(), filePath);
+        logger.info(`[AST Neo4j Sync] Syncing \${relativePath} to Neo4j...`);
+
+        const graph = this.buildGraph(filePath);
+        const symbols = graph.symbols;
+
+        try {
+            // Merge file node first
+            await neo4jService.executeCypher(
+                'MERGE (f:File {path: $path}) SET f.name = $name, f.lastUpdated = datetime()',
+                { path: relativePath, name: path.basename(filePath) }
+            );
+
+            for (const [key, sym] of Object.entries(symbols)) {
+                const nodeId = `\${relativePath}:\${key}`;
+                
+                // Create AstSymbol node
+                await neo4jService.executeCypher(
+                    `MERGE (s:AstSymbol {id: $id})
+                     SET s.name = $name, s.type = $type, s.filePath = $filePath, s.startLine = $startLine, s.endLine = $endLine`,
+                    {
+                        id: nodeId,
+                        name: sym.name,
+                        type: sym.type,
+                        filePath: relativePath,
+                        startLine: sym.startLine,
+                        endLine: sym.endLine
+                    }
+                );
+
+                // Connect symbol to the File node
+                await neo4jService.executeCypher(
+                    `MATCH (f:File {path: $filePath})
+                     MATCH (s:AstSymbol {id: $id})
+                     MERGE (f)-[:CONTAINS]->(s)`,
+                    { filePath: relativePath, id: nodeId }
+                );
+
+                // Connect method to its parent class if applicable
+                if (sym.type === 'method' && sym.parentClass) {
+                    const parentId = `\${relativePath}:\${sym.parentClass}`;
+                    await neo4jService.executeCypher(
+                        `MATCH (c:AstSymbol {id: $parentId})
+                         MATCH (m:AstSymbol {id: $id})
+                         MERGE (c)-[:HAS_METHOD]->(m)`,
+                        { parentId, id: nodeId }
+                    );
+                }
+            }
+
+            // Parse imports/requires to construct :DEPENDS_ON relationships
+            const content = fs.readFileSync(filePath, 'utf8');
+            const lines = content.split('\n');
+            
+            // Match standard ES6 imports or require statements
+            const importRegex = /(?:import\s+(?:[\w\s{},*]+)\s+from\s+['"]([^'"]+)['"])|(?:require\s*\(\s*['"]([^'"]+)['"]\s*\))/g;
+            
+            for (const line of lines) {
+                let match;
+                while ((match = importRegex.exec(line)) !== null) {
+                    const importPath = match[1] || match[2];
+                    if (importPath && (importPath.startsWith('.') || importPath.startsWith('/'))) {
+                        // Resolve relative import to relative path from root
+                        const absoluteImport = path.resolve(path.dirname(filePath), importPath);
+                        // Handle JS file extension resolution
+                        let resolvedImport = absoluteImport;
+                        if (!resolvedImport.endsWith('.js') && !resolvedImport.endsWith('.ts')) {
+                            if (fs.existsSync(resolvedImport + '.js')) {
+                                resolvedImport += '.js';
+                            } else if (fs.existsSync(resolvedImport + '/index.js')) {
+                                resolvedImport += '/index.js';
+                            }
+                        }
+                        
+                        const relativeImportPath = path.relative(process.cwd(), resolvedImport);
+                        
+                        // Create referenced file node and link
+                        await neo4jService.executeCypher(
+                            `MERGE (target:File {path: $targetPath})
+                             ON CREATE SET target.name = $name
+                             WITH target
+                             MATCH (source:File {path: $sourcePath})
+                             MERGE (source)-[:DEPENDS_ON]->(target)`,
+                            {
+                                targetPath: relativeImportPath,
+                                name: path.basename(resolvedImport),
+                                sourcePath: relativePath
+                            }
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            logger.error(`[AST Neo4j Sync] Failed to sync to Neo4j: \${error.message}`);
+        }
     }
 }

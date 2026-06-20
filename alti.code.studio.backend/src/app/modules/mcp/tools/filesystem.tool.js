@@ -7,6 +7,8 @@
 
 import fs from 'fs/promises';
 import path from 'path';
+import { socketService } from '../../../services/socket.service.js';
+import { AstGraphNavigator } from '../../sandbox/ast_graph_navigator.js';
 
 export const filesystemTool = {
     name: 'filesystem',
@@ -37,6 +39,10 @@ export const filesystemTool = {
 
                 case 'write_file':
                     await fs.writeFile(fullPath, content || '');
+                    // Emit real-time workspace update event over websockets
+                    socketService.broadcast('workspace', 'changed', { path: userPath, action: 'write_file' });
+                    // Sync symbol graph to Neo4j database asynchronously
+                    AstGraphNavigator.syncFileToNeo4j(fullPath).catch(() => {});
                     return { content: [{ type: 'text', text: `Successfully wrote to ${userPath}` }] };
 
                 case 'list_directory':

@@ -5,6 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [49.0.0] - 2026-06-20 — Unified Neo4j AST Code-Graph & Git Blame Grounding
+
+### Added
+
+- **Unified Neo4j AST Code-Graph**: Integrated recursive syntax tree symbol mappings directly with Neo4j, automatically synchronizing class, method, and function symbol nodes along with file containment and module dependency (`:DEPENDS_ON`) relationships.
+- **Historical Git Blame Grounding**: Engineered a line-level context grounder that queries git blame porcelain output and commit messages to inject authorship and change intent context directly into AI prompts.
+- **Cognitive Socratic Debate Refinement**: Updated the Socratic proposer-critic debate loop to automatically ground critiques and refactoring tasks with resolved symbol Git history and AST code structures.
+- **Real-Time Workspace Broadcasting**: Wired file-write tools (filesystem MCP tool, nano agent) to broadcast change updates over Socket.io namespaces and automatically trigger asynchronous Neo4j re-indexing.
+
 ## [48.0.0] - 2026-06-20 — The 5 Core AI-Native Engineering Pillars & Astro Flue Sandbox Integration
 
 ### Added
