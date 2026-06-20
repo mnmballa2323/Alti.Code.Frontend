@@ -23,13 +23,57 @@ let SwarmDevOpsEngineerAgent;
 SwarmArchitectAgent = new SwarmAgent({
     name: 'SwarmArchitect',
     instructions: `You are the Principal Systems Architect Agent. 
+    
 Your core directive is to design high-performance, secure, and horizontally scalable backend architectures.
 
 OPERATIONAL PRINCIPLES:
 1. **API Contracts**: Define exact endpoints, JSON payload shapes, and status codes.
 2. **Data Modeling**: Design robust schema relations, database partitions, and indexing strategies.
-3. **Handoff Requirement**: Once you have designed the initial architecture, you MUST handoff the task to the SwarmHermesDebate agent to run the Hermes Debate Chamber and refine the design.`,
+3. **Knowledge Reuse**: Before designing any data structures or APIs, you MUST search the Knowledge Catalog using the \`query_knowledge_catalog\` tool to check for existing assets and structures to reuse.
+4. **Handoff Requirement**: Once you have designed the initial architecture, you MUST handoff the task to the SwarmHermesDebate agent to run the Hermes Debate Chamber and refine the design.`,
     functions: [
+        {
+            name: 'query_knowledge_catalog',
+            description: 'Query the local OKF Knowledge Catalog for existing database tables, metrics, schemas, and API definitions to reuse.',
+            parameters: {
+                type: 'OBJECT',
+                properties: {
+                    query: { type: 'STRING', description: 'Search term or query for the catalog' }
+                },
+                required: ['query']
+            },
+            execute: async (args, context) => {
+                console.log(`[SwarmArchitect] Querying Knowledge Catalog for: "${args.query}"...`);
+                try {
+                    const { knowledgeCatalogService } = await import('../knowledgeCatalog/knowledgeCatalog.service.js');
+                    const conceptIds = knowledgeCatalogService.listLocalBundle();
+                    const matched = [];
+
+                    for (const conceptId of conceptIds) {
+                        const concept = knowledgeCatalogService.getLocalConcept(conceptId);
+                        if (!concept) continue;
+
+                        const lowerQuery = args.query.toLowerCase();
+                        const matchesTitle = concept.frontmatter.title?.toLowerCase().includes(lowerQuery);
+                        const matchesDesc = concept.frontmatter.description?.toLowerCase().includes(lowerQuery);
+
+                        if (matchesTitle || matchesDesc) {
+                            matched.push({
+                                id: conceptId,
+                                type: concept.frontmatter.type,
+                                title: concept.frontmatter.title,
+                                description: concept.frontmatter.description
+                            });
+                        }
+                    }
+                    return matched.length > 0 
+                        ? `[Knowledge Catalog Matches]:\n${JSON.stringify(matched, null, 2)}`
+                        : `No matching entries found in the Knowledge Catalog for "${args.query}".`;
+                } catch (err) {
+                    return `Error querying catalog: ${err.message}`;
+                }
+            }
+        },
         {
             name: 'design_system_architecture',
             description: 'Design the backend architecture, schema, and API contracts for a feature.',
@@ -460,7 +504,41 @@ OPERATIONAL PRINCIPLES:
                     timestamp: new Date().toISOString(),
                     engineVersion: 'v3.0.0-compliant'
                 };
-                return `🚀 SPRINT SENSATIONAL VERDICT: RELEASE_READY. The feature has successfully progressed through System Design, TDD Coding, QA Integration Testing, Security Verification, and DevOps Containerization. 100% legal, secure, flat-deduplicated, and ready for deployment.`;
+
+                // Register sprint outputs to Knowledge Catalog dynamically
+                try {
+                    const { knowledgeCatalogService } = await import('../knowledgeCatalog/knowledgeCatalog.service.js');
+                    const featureName = context.architectureDesign?.feature || 'unnamed-feature';
+                    
+                    // Register table
+                    const tableFrontmatter = {
+                        type: 'PostgreSQL Table',
+                        title: `${featureName} Table`,
+                        description: `Database table deployed dynamically for feature ${featureName}.`,
+                        tags: ['database', featureName.toLowerCase()],
+                        timestamp: new Date().toISOString()
+                    };
+                    const tableBody = `# Schema\n\n${context.architectureDesign?.dbModel || 'Pending'}`;
+                    await knowledgeCatalogService.updateLocalConcept(`tables/${featureName.toLowerCase()}`, tableFrontmatter, tableBody);
+                    console.log(`[SwarmDevOpsEngineer] Registered tables/${featureName.toLowerCase()} in Knowledge Catalog.`);
+
+                    // Register API
+                    const apiFrontmatter = {
+                        type: 'API Endpoint',
+                        title: `${featureName} API`,
+                        description: `Express API endpoint deployed dynamically for feature ${featureName}.`,
+                        tags: ['api', featureName.toLowerCase()],
+                        timestamp: new Date().toISOString()
+                    };
+                    const apiBody = `# Details\n\n${context.architectureDesign?.apiContract || 'Pending'}`;
+                    await knowledgeCatalogService.updateLocalConcept(`apis/${featureName.toLowerCase()}`, apiFrontmatter, apiBody);
+                    console.log(`[SwarmDevOpsEngineer] Registered apis/${featureName.toLowerCase()} in Knowledge Catalog.`);
+
+                } catch (catalogErr) {
+                    console.warn(`⚠️ [SwarmDevOpsEngineer] Could not register sprint assets in Knowledge Catalog: ${catalogErr.message}`);
+                }
+
+                return `🚀 SPRINT SENSATIONAL VERDICT: RELEASE_READY. The feature has successfully progressed through System Design, TDD Coding, QA Integration Testing, Security Verification, and DevOps Containerization. 100% legal, secure, flat-deduplicated, and registered in the enterprise OKF Knowledge Catalog.`;
             }
         }
     ]

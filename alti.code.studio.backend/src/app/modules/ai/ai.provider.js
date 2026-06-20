@@ -162,8 +162,31 @@ class AIProvider {
      * Used by SecurityWorker, MonitoringWorker, QAWorker.
      */
     async reason(prompt, options = {}) {
+        let groundedPrompt = prompt;
+        try {
+            const { knowledgeCatalogService } = await import('../knowledgeCatalog/knowledgeCatalog.service.js');
+            const conceptIds = knowledgeCatalogService.listLocalBundle();
+            let injectedContext = '';
+
+            for (const conceptId of conceptIds) {
+                const concept = knowledgeCatalogService.getLocalConcept(conceptId);
+                if (concept) {
+                    const conceptName = concept.frontmatter.title || conceptId;
+                    if (prompt.toLowerCase().includes(conceptName.toLowerCase()) || prompt.toLowerCase().includes(conceptId.toLowerCase())) {
+                        injectedContext += `\n--- OKF Architectural Rule [${conceptName}] ---\nType: ${concept.frontmatter.type}\nSpecification:\n${concept.body}\n`;
+                    }
+                }
+            }
+
+            if (injectedContext) {
+                groundedPrompt = `[ENTERPRISE COMPLIANCE & ARCHITECTURAL GUIDELINES]\nThe following OKF rules from the enterprise catalog are active for this request. You MUST conform to these schemas, endpoints, and standards:\n${injectedContext}\n==================================================\n\nRequest:\n${prompt}`;
+            }
+        } catch (err) {
+            // Fail silent to prevent circular loops
+        }
+
         const provider = this.providers[this.activeProvider];
-        return provider.reason(this.client, prompt, { ...options, temperature: 0.2 });
+        return provider.reason(this.client, groundedPrompt, { ...options, temperature: 0.2 });
     }
 
     /**
@@ -171,8 +194,31 @@ class AIProvider {
      * Used by RefactorWorker, IacWorker, CiCdWorker.
      */
     async generate(prompt, options = {}) {
+        let groundedPrompt = prompt;
+        try {
+            const { knowledgeCatalogService } = await import('../knowledgeCatalog/knowledgeCatalog.service.js');
+            const conceptIds = knowledgeCatalogService.listLocalBundle();
+            let injectedContext = '';
+
+            for (const conceptId of conceptIds) {
+                const concept = knowledgeCatalogService.getLocalConcept(conceptId);
+                if (concept) {
+                    const conceptName = concept.frontmatter.title || conceptId;
+                    if (prompt.toLowerCase().includes(conceptName.toLowerCase()) || prompt.toLowerCase().includes(conceptId.toLowerCase())) {
+                        injectedContext += `\n--- OKF Architectural Rule [${conceptName}] ---\nType: ${concept.frontmatter.type}\nSpecification:\n${concept.body}\n`;
+                    }
+                }
+            }
+
+            if (injectedContext) {
+                groundedPrompt = `[ENTERPRISE COMPLIANCE & ARCHITECTURAL GUIDELINES]\nThe following OKF rules from the enterprise catalog are active for this request. You MUST conform to these schemas, endpoints, and standards:\n${injectedContext}\n==================================================\n\nRequest:\n${prompt}`;
+            }
+        } catch (err) {
+            // Fail silent to prevent circular loops
+        }
+
         const provider = this.providers[this.activeProvider];
-        return provider.generate(this.client, prompt, { ...options, temperature: 0.7 });
+        return provider.generate(this.client, groundedPrompt, { ...options, temperature: 0.7 });
     }
 
     /**

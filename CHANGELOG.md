@@ -5,6 +5,41 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [47.4.0] - 2026-06-20 — Ultimate System-Wide OKF Knowledge Catalog Integration
+
+### Added
+
+- **Zero-Trust OKF Governance Middleware**: Intercepts API route requests matching OKF specifications to dynamically enforce Zero-Trust Identity-Aware Proxy (IAP) headers and regional FedRAMP IP compliance boundaries.
+- **Deep Database Persistence & pgvector Search**: Persisted OKF concepts in PostgreSQL using Prisma, index-supporting high-dimensional vector embeddings, and enabling pgvector raw query hybrid semantic search.
+- **AI Provider-Level Grounding**: Hardwired OKF specifications directly into the `AIProvider` gateway (`ai.provider.js`) to ground prompts dynamically using relevant catalog playbooks.
+- **Neo4j Graph Database Sync & Broadcast**: Synced OKF entries as graph nodes and citations as `DEPENDS_ON` relationships, broadcasting real-time catalog changes over collaborative WebSockets.
+- **Active Code-Drift Resolution**: Audited database schema mismatches and Express routes against OKF definitions to automatically generate git repair patches in `/catalog/patches/`.
+- **Continuous Enterprise Hardening Daemon**: Integrated `run_enterprise_continuous_hardening.js` background daemon script to check schema isolation, audit log scoping, model gateway limits, and OpenStack configuration details.
+
+## [47.3.0] - 2026-06-20 — Active RAG Pipelines & Self-Healing OKF Catalog Integration
+
+### Added
+
+- **OKF-Aware Code Reviewer**: Updated the autonomous code review pipeline to evaluate commit diffs against local OKF table/API concept playbooks.
+- **Intelligent Playbook Runbooks**: Integrated local OKF playbook concepts directly into the exception runbook generation pipeline.
+- **Self-Healing OKF Catalog**: Enabled post-merge git hook simulation to parse commit diffs and automatically document new tables/APIs as OKF concept assets.
+
+## [47.2.0] - 2026-06-20 — Swarm Orchestrator & Knowledge Catalog Deep Loop Integration
+
+### Added
+
+- **Swarm Catalog Query Tool**: Integrated the `query_knowledge_catalog` tool into the `SwarmArchitect` agent. The architect now queries existing catalog metadata to reuse schemas and API contracts.
+- **Dynamic Catalog Registration**: Updated the `SwarmDevOpsEngineer` agent's `sign_off_sprint` function to automatically write the newly developed schemas and APIs back to the local Knowledge Catalog as OKF concept documents.
+
+## [47.1.0] - 2026-06-20 — Google Cloud Knowledge Catalog & Open Knowledge Format Integration
+
+### Added
+
+- **Open Knowledge Format Parser**: Implemented `okf.parser.js` to parse and validate Markdown assets with YAML frontmatter.
+- **Knowledge Catalog Ingestion Service**: Implemented `knowledgeCatalog.service.js` to pull/push OKF entries with Google Cloud Dataplex (Knowledge Catalog) and dynamically bootstrap local bundles from database and API routes.
+- **Autonomous OKF Enrichment Agent**: Implemented `knowledgeCatalog.enricher.js` to loop over catalog assets, query metadata, and utilize Vertex AI Gemini models to enrich documentation.
+- **Deep RAG & Governance Ingestion**: Updated `knowledge.rag.service.js` and `data_catalog.service.js` to extract OKF metadata, apply policy tags, and prioritize OKF assets during query synthesis.
+
 ## [47.0.0] - 2026-06-19 — The Directed Acyclic Swarm Orchestrator & Self-Healing Test Suite
 
 ### Added

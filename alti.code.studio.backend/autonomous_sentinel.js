@@ -82,6 +82,18 @@ const runRefinementCycle = async () => {
     logger('🚀 INITIATING AUTONOMOUS REFINEMENT CYCLE');
     logger('==================================================');
 
+    // 0. OKF Knowledge Catalog validation & synchronization
+    logger('Step 0: Validating OKF Catalog and synchronizing with Postgres/Neo4j...');
+    try {
+        const { knowledgeCatalogService } = await import('./src/app/modules/knowledgeCatalog/knowledgeCatalog.service.js');
+        const conceptIds = knowledgeCatalogService.listLocalBundle();
+        logger(`   Found ${conceptIds.length} OKF concepts. Running service synchronization...`);
+        await knowledgeCatalogService.syncLocalToServices();
+        logger('✅ OKF Knowledge Catalog verified and synchronized.');
+    } catch (err) {
+        logger(`⚠️ OKF Catalog sync bypassed or failed: ${err.message}`);
+    }
+
     // 1. ESLint Autofix for syntactic perfection
     logger('Step 1: Enforcing strict Linting and dead-code elimination...');
     await execute('npx eslint --fix src/');

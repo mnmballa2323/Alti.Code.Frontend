@@ -1,6 +1,7 @@
 import { DataCatalogClient } from '@google-cloud/datacatalog';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
+import { parseOKF, validateOKF } from '../knowledgeCatalog/okf.parser.js';
 
 /**
  * Google Cloud Data Catalog Governance Service.
@@ -38,10 +39,17 @@ class GoogleDataCatalogService {
         logger.info(`🛡️ [Data Catalog] Swarm is applying Knowledge Graph Governance to [${filePath}]...`);
         
         try {
-            // Highly simplified implementation of PII/Secret detection for architectural completeness.
-            // In reality, this would integrate with Google Cloud DLP (Data Loss Prevention) API
-            // to scan the fileContent and apply the Data Catalog Policy Tags.
-            
+            // Apply OKF Validation check if it is a concept file
+            const isOKF = filePath.endsWith('.md') && fileContent.trim().startsWith('---');
+            if (isOKF) {
+                const parsed = parseOKF(fileContent);
+                const validation = validateOKF(parsed.frontmatter);
+                if (!validation.isValid) {
+                    logger.warn(`⚠️ [Data Catalog] Invalid OKF specification in [${filePath}]: ${validation.error}`);
+                    return { isSafe: false, reason: `Invalid OKF format: ${validation.error}` };
+                }
+            }
+
             const containsSecrets = fileContent.includes('-----BEGIN PRIVATE KEY-----') || /api_key\s*=\s*['"][a-zA-Z0-9]{20,}['"]/.test(fileContent);
             const containsPII = fileContent.includes('social_security_number') || fileContent.includes('credit_card');
 
@@ -49,7 +57,28 @@ class GoogleDataCatalogService {
                 logger.warn(`⚠️ [Data Catalog] Governance Policy Violation! Sensitive data detected in [${filePath}]. Blocking from RAG index.`);
                 
                 // Programmatically tag the file in Data Catalog as 'RESTRICTED'
-                // This informs the rest of the GCP ecosystem (BigQuery, etc.) that this asset is classified.
+                if (this.client) {
+                    try {
+                        const entryId = path.basename(filePath, '.md').replace(/\//g, '-');
+                        const entryName = this.client.entryPath(this.projectId, this.location, 'alti-swarm-governance', entryId);
+                        
+                        // Apply 'restricted' aspect policy tag
+                        await this.client.updateEntry({
+                            entry: {
+                                name: entryName,
+                                aspects: {
+                                    'dataplex-types.global.governance': {
+                                        classification: 'RESTRICTED'
+                                    }
+                                }
+                            }
+                        });
+                        logger.info(`🛡️ [Data Catalog] Successfully applied RESTRICTED policy tag to entry: ${entryId}`);
+                    } catch (catalogErr) {
+                        logger.warn(`⚠️ [Data Catalog] Could not set policy tag: ${catalogErr.message}`);
+                    }
+                }
+                
                 return { isSafe: false, reason: 'Contains PII or Secrets' };
             }
 

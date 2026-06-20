@@ -26,6 +26,7 @@ import { auditMiddleware } from '../middlewares/audit.middleware.js';
 import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
 import { scimRoutes } from '../modules/iam/scim.route.js';
+import { okfGovernanceMiddleware } from '../middlewares/okfGovernanceMiddleware.js';
 
 // 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
 router.use(auditMiddleware('GLOBAL_API_REQUEST'));
@@ -48,6 +49,9 @@ router.use(tenantDbRouter);
 
 // 🌍 Data Sovereignty (Geo-Fencing)
 router.use(geoFenceMiddleware);
+
+// 🛡️ OKF Knowledge Catalog Routing Governance
+router.use(okfGovernanceMiddleware);
 
 // 🔐 Enterprise FinOps & RBAC Policy
 router.use(rbacService.enforceModelTierPolicy());
@@ -158,6 +162,7 @@ try {
               if (file === 'ragEvaluator.route.js') basePath = '/rag-evaluator';
               if (file === 'uDeployment.route.js') basePath = '/u-deployment';
               if (file === 'dataCatalog.route.js') basePath = '/data-catalog';
+              if (file === 'knowledgeCatalog.route.js') basePath = '/knowledge-catalog';
               if (file === 'featureStore.route.js') basePath = '/feature-store';
               if (file === 'eval.route.js') basePath = '/eval';
               if (file === 'scc.route.js') basePath = '/scc';

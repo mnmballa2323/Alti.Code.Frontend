@@ -96,6 +96,16 @@ const runSingleDevopsCycle = async () => {
     logger(`🚀 INITIATING DEVOPS RUN CYCLE #${cyclesCount}`, 'INFO');
     logger(`==================================================`, 'INFO');
 
+    // Step 0: Sync OKF Knowledge Catalog with Services
+    logger('Step 0: Executing OKF catalog database/graph synchronization...');
+    try {
+        const { knowledgeCatalogService } = await import('./src/app/modules/knowledgeCatalog/knowledgeCatalog.service.js');
+        await knowledgeCatalogService.syncLocalToServices();
+        logger('✅ OKF Knowledge Catalog synced.');
+    } catch (err) {
+        logger(`⚠️ OKF Catalog sync failed: ${err.message}`, 'WARNING');
+    }
+
     // Step 1: Syntactic check (ESLint Autofix)
     logger('Step 1: Enforcing syntax standards via ESLint auto-formatter...');
     const eslintResult = await execute('npx eslint --fix src/');

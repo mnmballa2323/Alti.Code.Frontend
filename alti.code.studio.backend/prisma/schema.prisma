@@ -471,3 +471,24 @@ model SiemWebhook {
   
   @@index([tenantId])
 }
+
+// -----------------------------------------------------------------
+// OKF Knowledge Catalog
+// -----------------------------------------------------------------
+
+model OkfConcept {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conceptId   String   @unique // e.g. 'tables/users', 'apis/auth'
+  type        String   // e.g. 'PostgreSQL Table', 'API Endpoint', 'Playbook'
+  title       String
+  description String   @db.Text
+  resource    String?  @db.Text
+  tags        String[]
+  body        String   @db.Text
+  timestamp   DateTime @default(now())
+  metadata    Json     @default("{}")
+  embedding   Unsupported("vector(768)")?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
