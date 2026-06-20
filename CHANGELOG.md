@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.18] - 2026-06-20 — Promise Reduce, Promise Each Series & Promise Immediate
+
+### Added
+
+- **Pure MIT Promise Reduce, Promise Each Series, and Promise Immediate Packages**: Integrated `p-reduce` (sequentially reduces arrays using async promise accumulators to assemble consensus/logs), `p-each-series` (iterates async callbacks sequentially to ensure step logs and hooks run in order), and `p-immediate` (yields event-loop control using microtask scheduling to prevent event-loop starvation during intensive AST analysis) to support debounced agent updates and sequential log aggregation.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.17] - 2026-06-20 — Promise Reflect, Promise Locate & Promise Some
 
 ### Added
