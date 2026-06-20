@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.26] - 2026-06-20 — Strip BOM, Strip Indent & Indent String
+
+### Added
+
+- **Pure MIT Strip BOM, Strip Indent, and Indent String Packages**: Integrated `strip-bom` (strips UTF-8 byte order mark from strings), `strip-indent` (removes leading whitespace from multiline strings), and `indent-string` (indents each line in a string) to improve codebase file parsing and code layout formatting in autonomous sandboxes.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.25] - 2026-06-20 — Utility Types, Execa & Globby
 
 ### Added
