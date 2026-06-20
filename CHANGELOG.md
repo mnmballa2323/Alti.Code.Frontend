@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.24] - 2026-06-20 — Array Union, Array Differ & Map Obj
+
+### Added
+
+- **Pure MIT Array Union, Array Differ, and Map Obj Packages**: Integrated `array-union` (uniquifies array entries in order), `array-differ` (computes differences between arrays), and `map-obj` (maps keys and values of objects) to improve list operations and AST node mapping during codebase synchronization.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.23] - 2026-06-20 — Promise If, Promise Tap & Arrify
 
 ### Added
