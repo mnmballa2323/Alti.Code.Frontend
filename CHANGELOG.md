@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.14] - 2026-06-20 — Promise Event, Get Stream & Is Stream
+
+### Added
+
+- **Pure MIT Promise Event, Get Stream, and Is Stream Packages**: Integrated `p-event` (promisifies event emitters to wait for process/socket exits or completions as async promises), `get-stream` (safely captures stdout/stderr streams into string variables for log ingestion), and `is-stream` (validates Node.js stream types for pipeline execution gates) to support child processes and event-driven task routing.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.13] - 2026-06-20 — Promise Series, Promise Times & Promise Progress
 
 ### Added
