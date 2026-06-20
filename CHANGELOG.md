@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.28] - 2026-06-20 — Plain Object Checker, Clean Stack & Aggregate Error
+
+### Added
+
+- **Pure MIT Plain Object Checker, Clean Stack, and Aggregate Error Packages**: Integrated `is-plain-obj` (checks if values are plain JS objects), `clean-stack` (strips noisy system paths from stack traces), and `aggregate-error` (groups multiple errors into a single aggregated object) to improve sandboxed execution logging and diagnostics reporting.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.27] - 2026-06-20 — Camelcase, Decamelize & Dot Prop
 
 ### Added
