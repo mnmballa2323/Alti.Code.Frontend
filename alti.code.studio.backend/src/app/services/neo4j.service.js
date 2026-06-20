@@ -1,5 +1,5 @@
 import neo4j from 'neo4j-driver';
-import { logger } from '../../../shared/logger.js';
+import { logger } from '../../shared/logger.js';
 
 /**
  * Neo4j Graph Database Service
