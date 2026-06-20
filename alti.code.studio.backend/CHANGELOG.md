@@ -2,6 +2,13 @@
 
 All notable changes to the backend will be documented here.
 
+## [39.37.230] — 2026-06-20
+
+### Added
+- **More Air-Gapped Dependencies**: Installed `adm-zip` (zero-dependency in-memory zip files), `fastest-levenshtein` (fuzzy query/command matches), and `p-limit` (promise concurrency control) to improve air-gapped agent operations.
+- **Licensing Audit Compliance**: Verified that the new packages are 100% compliant under strict MIT/Apache-2.0 audits.
+- **System Integrity Testing**: Executed Vitest integration suites with 100% green status across milestones v49, v50, v52, and v53.
+
 ## [39.37.229] — 2026-06-20
 
 ### Added
