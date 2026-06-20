@@ -263,12 +263,14 @@ class AIProvider {
             // Fail silent to prevent circular loops
         }
 
+        const scrubbedPrompt = this._scrubCredentials(groundedPrompt);
+
         if (process.env.AIR_GAPPED_MODE === 'true') {
-            return this._executeOllama(groundedPrompt, { ...options, isReason: true });
+            return this._executeOllama(scrubbedPrompt, { ...options, isReason: true });
         }
 
         const provider = this.providers[this.activeProvider];
-        return provider.reason(this.client, groundedPrompt, { ...options, temperature: 0.2 });
+        return provider.reason(this.client, scrubbedPrompt, { ...options, temperature: 0.2 });
     }
 
     /**
@@ -299,12 +301,14 @@ class AIProvider {
             // Fail silent to prevent circular loops
         }
 
+        const scrubbedPrompt = this._scrubCredentials(groundedPrompt);
+
         if (process.env.AIR_GAPPED_MODE === 'true') {
-            return this._executeOllama(groundedPrompt, { ...options, isReason: false });
+            return this._executeOllama(scrubbedPrompt, { ...options, isReason: false });
         }
 
         const provider = this.providers[this.activeProvider];
-        return provider.generate(this.client, groundedPrompt, { ...options, temperature: 0.7 });
+        return provider.generate(this.client, scrubbedPrompt, { ...options, temperature: 0.7 });
     }
 
     /**
@@ -337,6 +341,37 @@ class AIProvider {
         this.activeProvider = providerName;
         this.client = await this.providers[providerName].initialize();
         logger.info(`🧠 AIProvider: Switched to [${this.providers[providerName].name}]`);
+    }
+
+    _scrubCredentials(text) {
+        if (typeof text !== 'string') return text;
+        
+        let scrubbed = text;
+        
+        // 1. Private keys
+        scrubbed = scrubbed.replace(/-----BEGIN[A-Z0-9\s_]+PRIVATE\s+KEY-----[a-zA-Z0-9/+=:\r\n\s]+-----END[A-Z0-9\s_]+PRIVATE\s+KEY-----/g, '[REDACTED_SECURE_CREDENTIAL]');
+        
+        // 2. GCP Service Account Keys / JSON values
+        scrubbed = scrubbed.replace(/"private_key"\s*:\s*"[^"]+"/g, '"private_key": "[REDACTED_SECURE_CREDENTIAL]"');
+        
+        // 3. GCP API Keys
+        scrubbed = scrubbed.replace(/AIzaSy[A-Za-z0-9_-]{33,40}/g, '[REDACTED_SECURE_CREDENTIAL]');
+        
+        // 4. General secrets/tokens assignments
+        scrubbed = scrubbed.replace(/(secret|password|passwd|api_key|apikey|private_key|auth_token|token|credential|oauth_token)\s*([:=]+)\s*["']([^"'\r\n\s]{16,})["']/gi, (match, p1, p2, p3) => {
+            return `${p1}${p2}"[REDACTED_SECURE_CREDENTIAL]"`;
+        });
+
+        // 5. Slack tokens
+        scrubbed = scrubbed.replace(/xox[bapr]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24}/g, '[REDACTED_SECURE_CREDENTIAL]');
+        
+        // 6. AWS Access Key ID
+        scrubbed = scrubbed.replace(/AKIA[0-9A-Z]{16}/g, '[REDACTED_SECURE_CREDENTIAL]');
+        
+        // 7. Database URI connection password
+        scrubbed = scrubbed.replace(/(mongodb(?:\+srv)?|postgres|postgresql|mysql|sqlite|redis):\/\/([^:]+):([^@]+)@/g, '$1://$2:[REDACTED_SECURE_CREDENTIAL]@');
+
+        return scrubbed;
     }
 
     /** Get current provider info */

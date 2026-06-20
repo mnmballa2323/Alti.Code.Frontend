@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.0] - 2026-06-20 — Platform Enhancements: Performance, Security, Compliance, & Diagnostics
+
+### Added
+
+- **Neo4j AST Index Debouncer**: Implemented a debounced, promise-based batch indexing queue for AstGraphNavigator.syncFileToNeo4j with a configurable debounce delay to prevent database locks and double write cycles.
+- **Hardened isolated-vm Sandboxing**: Replaced raw node execution in Astro Flue sandboxes with a hardened isolated-vm runner that isolates code execution into resource-limited and context-free JS scopes, with a graceful secure fallback to a standard Node VM subprocess if isolated-vm experiences platform compatibility crashes (such as Apple Silicon segfaults).
+- **Outgoing Payload Credential Scrubber**: Hardwired proactive credentials sanitization into the AIProvider reason and generate loops, automatically redacting Google Cloud API keys, AWS access keys, Slack tokens, private keys, and database connection passwords prior to making external cloud API requests.
+- **Pre-Reproduction Compliance Checks**: Integrated PolicyComplianceGate scans in SentryHealingLoopService to verify Sentry event code snippets prior to executing them in the reproduction sandbox, ensuring untrusted third-party inputs are validated first.
+- **Centralized Diagnostics Endpoint**: Created a GET /api/v1/diagnostics/health route exposing comprehensive connectivity status for Prisma (PostgreSQL), Neo4j driver, active AI provider configuration, disk write capabilities, and memory statistics.
+
 ## [52.0.0] - 2026-06-20 — Air-Gapped Magnum deployment & Local Model Routing
 
 ### Added

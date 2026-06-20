@@ -34,6 +34,7 @@ describe('Milestone v49.0.0 Feature Tests', () => {
     const mockCodeFile = path.resolve('./logs/workspaces/v49_mock_file.js');
 
     beforeAll(() => {
+        AstGraphNavigator.debounceDelay = 0;
         const mockCode = `
             class MathOperations {
                 async add(a, b) {
@@ -124,6 +125,9 @@ describe('Milestone v49.0.0 Feature Tests', () => {
                 path: tempWritePath,
                 action: 'write_file'
             });
+
+            // Wait for debounced sync to complete
+            await new Promise(resolve => setTimeout(resolve, 50));
 
             // Verify Neo4j sync was triggered for the written file
             expect(neo4jService.executeCypher).toHaveBeenCalled();

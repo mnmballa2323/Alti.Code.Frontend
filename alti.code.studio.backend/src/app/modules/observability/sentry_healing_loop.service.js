@@ -46,6 +46,15 @@ export class SentryHealingLoopService {
             fs.writeFileSync(path.join(workspacePath, path.basename(culpritFile)), originalContent, 'utf8');
         }
 
+        // 1.5 Pre-reproduction compliance check on external snippet
+        if (codeSnippet) {
+            const preReproCheck = PolicyComplianceGate.verify(absoluteCulpritPath, codeSnippet);
+            if (!preReproCheck.isValid) {
+                logger.warn(`🚨 [Sentry Healing] Pre-reproduction compliance check failed: ${preReproCheck.errors.join('; ')}`);
+                return { success: false, reason: 'Pre-reproduction compliance gate veto', errors: preReproCheck.errors };
+            }
+        }
+
         // Run replication test via sandbox
         logger.info(`🚨 [Sentry Healing] Running reproduction test in sandbox...`);
         const initialRun = await CodeExecutionSandbox.execute(`

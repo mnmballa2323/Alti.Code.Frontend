@@ -48,15 +48,53 @@ export class CodeExecutionSandbox {
             try {
                 const sandbox = local({ cwd: workspacePath });
                 const sessionEnv = await sandbox.createSessionEnv();
-                const result = await sessionEnv.exec(`node ${tempFileName}`);
+
+                const runnerPath = resolve(new URL('./isolated_vm_runner.js', import.meta.url).pathname);
+                let result;
+                let usedFallback = false;
+
+                try {
+                    result = await sessionEnv.exec(`node "${runnerPath}" "${tempFileName}"`);
+                } catch (e) {
+                    result = null;
+                }
+
+                let parsedResult = null;
+                if (result && result.stdout) {
+                    try {
+                        parsedResult = JSON.parse(result.stdout.trim());
+                    } catch (e) {
+                        // stdout was not valid JSON
+                    }
+                }
+
+                if (!parsedResult || result.exitCode === null || result.exitCode === 139 || result.exitCode === 255) {
+                    // Segfault, abort, or load failure. Fallback to vm_fallback_runner.js
+                    const fallbackRunnerPath = resolve(new URL('./vm_fallback_runner.js', import.meta.url).pathname);
+                    usedFallback = true;
+                    try {
+                        result = await sessionEnv.exec(`node "${fallbackRunnerPath}" "${tempFileName}"`);
+                        if (result && result.stdout) {
+                            parsedResult = JSON.parse(result.stdout.trim());
+                        }
+                    } catch (fallbackErr) {
+                        parsedResult = {
+                            success: false,
+                            exitCode: 1,
+                            logs: [],
+                            errors: [fallbackErr.message || String(fallbackErr)]
+                        };
+                    }
+                }
 
                 return {
-                    success: result.exitCode === 0,
-                    exitCode: result.exitCode,
-                    logs: result.stdout ? result.stdout.trim().split('\n') : [],
-                    errors: result.stderr ? result.stderr.trim().split('\n') : [],
+                    success: parsedResult ? parsedResult.success : false,
+                    exitCode: parsedResult ? parsedResult.exitCode : 1,
+                    logs: parsedResult ? parsedResult.logs : [],
+                    errors: parsedResult ? parsedResult.errors : (result && result.stderr ? [result.stderr] : []),
                     durationMs: Date.now() - startTime,
-                    isMock: false
+                    isMock: false,
+                    usedFallback
                 };
             } finally {
                 try {

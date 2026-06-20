@@ -4,6 +4,11 @@ import { logger } from '../../../shared/logger.js';
 import { neo4jService } from '../../services/neo4j.service.js';
 
 export class AstGraphNavigator {
+    static pendingSyncPaths = new Set();
+    static resolveCallbacks = [];
+    static debounceTimer = null;
+    static debounceDelay = 2000;
+
     /**
      * Parses a JS/TS file to build a map of its symbol definitions (classes, functions, methods).
      * @param {string} filePath - Absolute path to the file
@@ -161,17 +166,55 @@ export class AstGraphNavigator {
     }
 
     /**
-     * Parses the file symbols and synchronizes them to Neo4j.
+     * Parses the file symbols and synchronizes them to Neo4j, debounced to avoid locks.
      * @param {string} filePath - Absolute path to the file
      */
     static async syncFileToNeo4j(filePath) {
+        return new Promise((resolve, reject) => {
+            this.pendingSyncPaths.add(filePath);
+            this.resolveCallbacks.push({ filePath, resolve, reject });
+
+            if (this.debounceTimer) {
+                clearTimeout(this.debounceTimer);
+            }
+
+            this.debounceTimer = setTimeout(async () => {
+                this.debounceTimer = null;
+                const pathsToProcess = Array.from(this.pendingSyncPaths);
+                const callbacksToProcess = [...this.resolveCallbacks];
+
+                this.pendingSyncPaths.clear();
+                this.resolveCallbacks = [];
+
+                for (const path of pathsToProcess) {
+                    try {
+                        await this._syncFileToNeo4jInternal(path);
+                        const pathCallbacks = callbacksToProcess.filter(cb => cb.filePath === path);
+                        for (const cb of pathCallbacks) {
+                            cb.resolve();
+                        }
+                    } catch (err) {
+                        const pathCallbacks = callbacksToProcess.filter(cb => cb.filePath === path);
+                        for (const cb of pathCallbacks) {
+                            cb.reject(err);
+                        }
+                    }
+                }
+            }, this.debounceDelay);
+        });
+    }
+
+    /**
+     * Internal direct sync helper.
+     */
+    static async _syncFileToNeo4jInternal(filePath) {
         if (!fs.existsSync(filePath)) {
-            logger.warn(`[AST Neo4j Sync] File not found: \${filePath}`);
+            logger.warn(`[AST Neo4j Sync] File not found: ${filePath}`);
             return;
         }
 
         const relativePath = path.relative(process.cwd(), filePath);
-        logger.info(`[AST Neo4j Sync] Syncing \${relativePath} to Neo4j...`);
+        logger.info(`[AST Neo4j Sync] Syncing ${relativePath} to Neo4j...`);
 
         const graph = this.buildGraph(filePath);
         const symbols = graph.symbols;
