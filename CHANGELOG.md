@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.9] - 2026-06-20 — Safe stringify, Deferred promises & Async Timeouts
+
+### Added
+
+- **Pure MIT Safe Stringify, Deferred promises, and Async Timeout Packages**: Integrated `fast-safe-stringify` (safe, high-performance JSON stringifier that handles circular references), `p-defer` (creates deferred promises), and `p-timeout` (asynchronous execution timeout utility) to improve air-gapped agent operations, diagnostics dumps, and process limits.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.8] - 2026-06-20 — Resilient Retries, Bytes formats & LRU caching
 
 ### Added
