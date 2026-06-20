@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.20] - 2026-06-20 — Promise Forever, Promise Is Promise & Promise Waterfall
+
+### Added
+
+- **Pure MIT Promise Forever, Promise Is Promise, and Promise Waterfall Packages**: Integrated `p-forever` (executes promise-returning functions repeatedly until a stop condition resolves), `p-is-promise` (type-guards object thenables to verify active Promise properties), and `p-waterfall` (composes waterfall promise chains where results flow sequentially as parameters to subsequent promises) to support recursive agent loops and sequential token-flow pipelines.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.19] - 2026-06-20 — Promise Log, Promise Memoize & Promise Min Delay
 
 ### Added
