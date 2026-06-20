@@ -5,6 +5,14 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.11] - 2026-06-20 — Promise Settle, Promise Props & Promise Race
+
+### Added
+
+- **Pure MIT Promise Settle, Promise Props, and Promise Race Packages**: Integrated `p-settle` (concurrently settles multiple promises with status indicators to orchestrate parallel swarm tasks), `p-props` (resolves keys of objects concurrently to gather structured AST/Git data), and `p-race` (safe competition routing between multiple LLM model results) to improve air-gapped agent operations and swarm orchestration.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration suites for milestones v49, v50, v52, and v53.
+
 ## [53.0.10] - 2026-06-20 — Fast Memoize, Promise Any & Promise Filter
 
 ### Added
