@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.40] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 write-json-file Package**: Integrated `write-json-file` (Stringify and write JSON to a file atomically) to enhance backend operations.
+- **Pure MIT/Apache-2.0 pkg-conf Package**: Integrated `pkg-conf` (Get namespaced config from the closest package.json) to enhance backend operations.
+- **Pure MIT/Apache-2.0 globals Package**: Integrated `globals` (Global identifiers from different JavaScript environments) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-svg Package**: Integrated `is-svg` (Check if a string is SVG) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-npm Package**: Integrated `is-npm` (Check if your code is running as an npm script) to enhance backend operations.
+- **Pure MIT/Apache-2.0 crypto-random-string Package**: Integrated `crypto-random-string` (Generate a cryptographically strong random string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 tempy Package**: Integrated `tempy` (Get a random temporary file or directory path) to enhance backend operations.
+- **Pure MIT/Apache-2.0 unique-string Package**: Integrated `unique-string` (Generate a unique random string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 get-port Package**: Integrated `get-port` (Get an available port) to enhance backend operations.
+- **Pure MIT/Apache-2.0 terminal-link Package**: Integrated `terminal-link` (Create clickable links in the terminal) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.39] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
