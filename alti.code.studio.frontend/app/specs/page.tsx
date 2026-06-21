@@ -379,7 +379,10 @@ export default function SpecsPage() {
       if (mode === "feature") {
         const data = await apiFetch("/specs", {
           method: "POST",
-          body: JSON.stringify({ request: newRequest, regions: selectedRegions }),
+          body: JSON.stringify({
+            request: newRequest,
+            regions: selectedRegions,
+          }),
         });
 
         setShowNewForm(false);
@@ -390,7 +393,11 @@ export default function SpecsPage() {
       } else {
         const data = await apiFetch("/specs/bugfix/create", {
           method: "POST",
-          body: JSON.stringify({ bugDescription: newRequest, ...bugDetails, regions: selectedRegions }),
+          body: JSON.stringify({
+            bugDescription: newRequest,
+            ...bugDetails,
+            regions: selectedRegions,
+          }),
         });
 
         setShowNewForm(false);
@@ -503,20 +510,21 @@ export default function SpecsPage() {
                   { id: "APAC", label: "🌏 APAC (APRA)" },
                 ].map((r) => {
                   const active = selectedRegions.includes(r.id);
+
                   return (
                     <button
                       key={r.id}
-                      type="button"
                       className={`px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-200 ${
                         active
                           ? "bg-indigo-500/15 text-indigo-300 border-indigo-500/50 shadow-sm shadow-indigo-500/5"
                           : "bg-slate-900/40 text-slate-400 border-slate-700/60 hover:text-slate-300 hover:border-slate-600/80"
                       }`}
+                      type="button"
                       onClick={() => {
                         setSelectedRegions((prev) =>
                           prev.includes(r.id)
                             ? prev.filter((id) => id !== r.id)
-                            : [...prev, r.id]
+                            : [...prev, r.id],
                         );
                       }}
                     >

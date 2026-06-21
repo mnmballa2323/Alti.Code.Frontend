@@ -30,13 +30,13 @@ export default function GovernancePage() {
       timestamp: new Date(Date.now() - 600000).toISOString(),
       violations: [
         "Uptime breach: actual 98.2 < target SLA minUptime 99.9",
-        "Latency breach: actual 3820ms > target SLA maxLatencyMs 3000ms"
+        "Latency breach: actual 3820ms > target SLA maxLatencyMs 3000ms",
       ],
       severity: "HIGH",
       status: "QUEUED",
       receiptId: "az-rcpt-df38a109",
-      hash: "8a4f91b3ce1982a7f80498b2cd6e0fa12a3b9c7d"
-    }
+      hash: "8a4f91b3ce1982a7f80498b2cd6e0fa12a3b9c7d",
+    },
   ]);
 
   useEffect(() => {
@@ -59,7 +59,8 @@ export default function GovernancePage() {
     setError(null);
     setAuditResult(null);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
       const res = await fetch(`${apiBase}/governance/legal/enforce`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,54 +69,82 @@ export default function GovernancePage() {
           slaConditions: {
             minUptime: parseFloat(minUptime),
             maxLatencyMs: parseFloat(maxLatency),
-            rateLimit: parseFloat(rateLimit)
+            rateLimit: parseFloat(rateLimit),
           },
           telemetry: {
             uptime: parseFloat(uptime),
             avgLatencyMs: parseFloat(latency),
-            requestCount: parseFloat(requestCount)
-          }
-        })
+            requestCount: parseFloat(requestCount),
+          },
+        }),
       });
 
       const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(data.error || "Failed to trigger Cicero SLA compliance check.");
+        throw new Error(
+          data.error || "Failed to trigger Cicero SLA compliance check.",
+        );
       }
 
       setAuditResult(data);
 
       // Determine violations locally for history log display
       const violations: string[] = [];
+
       if (parseFloat(uptime) < parseFloat(minUptime)) {
-        violations.push(`Uptime breach: actual ${uptime} < target SLA minUptime ${minUptime}`);
+        violations.push(
+          `Uptime breach: actual ${uptime} < target SLA minUptime ${minUptime}`,
+        );
       }
       if (parseFloat(latency) > parseFloat(maxLatency)) {
-        violations.push(`Latency breach: actual ${latency}ms > target SLA maxLatencyMs ${maxLatency}ms`);
+        violations.push(
+          `Latency breach: actual ${latency}ms > target SLA maxLatencyMs ${maxLatency}ms`,
+        );
       }
       if (parseFloat(requestCount) > parseFloat(rateLimit)) {
-        violations.push(`Rate limit breach: actual requestCount ${requestCount} > SLA limit ${rateLimit}`);
+        violations.push(
+          `Rate limit breach: actual requestCount ${requestCount} > SLA limit ${rateLimit}`,
+        );
       }
 
       const hashBuffer = await crypto.subtle.digest(
         "SHA-256",
-        new TextEncoder().encode(JSON.stringify({ contractId, uptime, latency, requestCount, ts: Date.now() }))
+        new TextEncoder().encode(
+          JSON.stringify({
+            contractId,
+            uptime,
+            latency,
+            requestCount,
+            ts: Date.now(),
+          }),
+        ),
       );
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const cryptHash = hashArray.map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 40);
+      const cryptHash = hashArray
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("")
+        .slice(0, 40);
 
-      setAuditHistory(prev => [
+      setAuditHistory((prev) => [
         {
           id: data.jobId || `job-${Math.floor(1000 + Math.random() * 9000)}`,
           contractId,
           timestamp: new Date().toISOString(),
           violations,
-          severity: violations.length > 0 ? (violations.some(v => v.includes("Uptime")) ? "HIGH" : "MEDIUM") : "LOW",
+          severity:
+            violations.length > 0
+              ? violations.some((v) => v.includes("Uptime"))
+                ? "HIGH"
+                : "MEDIUM"
+              : "LOW",
           status: data.status || (violations.length > 0 ? "QUEUED" : "SKIPPED"),
-          receiptId: data.azure_routing_metadata?.receiptId || (violations.length > 0 ? "az-rcpt-pending" : "N/A"),
-          hash: cryptHash
+          receiptId:
+            data.azure_routing_metadata?.receiptId ||
+            (violations.length > 0 ? "az-rcpt-pending" : "N/A"),
+          hash: cryptHash,
         },
-        ...prev
+        ...prev,
       ]);
     } catch (e: any) {
       setError(e.message);
@@ -136,12 +165,15 @@ export default function GovernancePage() {
       queueStatus: item.status,
       azureNoticeReceiptId: item.receiptId,
       cryptographicProvenanceHash: item.hash,
-      signature: "INSO-CODE-GOVERNANCE-OFFICE-AUTOSIGN-SHA256"
+      signature: "INSO-CODE-GOVERNANCE-OFFICE-AUTOSIGN-SHA256",
     };
 
-    const blob = new Blob([JSON.stringify(record, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(record, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+
     a.href = url;
     a.download = `compliance-audit-${item.id}.json`;
     document.body.appendChild(a);
@@ -185,7 +217,9 @@ export default function GovernancePage() {
         </Card>
         <Card className="glass border-l-4 border-l-blue-500">
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-            <p className="text-tiny uppercase font-bold text-default-400">Cost Analytics</p>
+            <p className="text-tiny uppercase font-bold text-default-400">
+              Cost Analytics
+            </p>
             <h4 className="font-bold text-large text-default-200">
               {loading ? (
                 <Spinner size="sm" />
@@ -202,8 +236,12 @@ export default function GovernancePage() {
         </Card>
         <Card className="glass border-l-4 border-l-purple-500">
           <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-            <p className="text-tiny uppercase font-bold text-default-400">Audit Trail</p>
-            <h4 className="font-bold text-large text-default-200">Active Stream</h4>
+            <p className="text-tiny uppercase font-bold text-default-400">
+              Audit Trail
+            </p>
+            <h4 className="font-bold text-large text-default-200">
+              Active Stream
+            </h4>
           </CardHeader>
           <CardBody className="overflow-visible py-2">
             <p className="text-sm text-default-400">
@@ -220,7 +258,8 @@ export default function GovernancePage() {
             ⚖️ Cicero SLA Triage Simulator
           </h3>
           <p className="text-xs text-slate-400">
-            Simulate smart contract SLA threshold configurations and telemetry to trigger automated background legal notice routing.
+            Simulate smart contract SLA threshold configurations and telemetry
+            to trigger automated background legal notice routing.
           </p>
 
           {error && (
@@ -231,7 +270,9 @@ export default function GovernancePage() {
 
           <div className="space-y-3 pt-2">
             <div>
-              <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Contract ID</label>
+              <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                Contract ID
+              </label>
               <input
                 className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                 value={contractId}
@@ -241,7 +282,9 @@ export default function GovernancePage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Min Uptime SLA (%)</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Min Uptime SLA (%)
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={minUptime}
@@ -249,7 +292,9 @@ export default function GovernancePage() {
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Current Uptime (%)</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Current Uptime (%)
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={uptime}
@@ -260,7 +305,9 @@ export default function GovernancePage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Max Latency SLA (ms)</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Max Latency SLA (ms)
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={maxLatency}
@@ -268,7 +315,9 @@ export default function GovernancePage() {
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Avg Latency (ms)</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Avg Latency (ms)
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={latency}
@@ -279,7 +328,9 @@ export default function GovernancePage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Rate Limit SLA</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Rate Limit SLA
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={rateLimit}
@@ -287,7 +338,9 @@ export default function GovernancePage() {
                 />
               </div>
               <div>
-                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">Request Count</label>
+                <label className="text-[10px] uppercase font-bold text-slate-500 block mb-1">
+                  Request Count
+                </label>
                 <input
                   className="w-full bg-slate-900/60 border border-slate-700 rounded-xl text-slate-200 px-3 py-2 text-xs focus:outline-none focus:border-red-500"
                   value={requestCount}
@@ -301,7 +354,9 @@ export default function GovernancePage() {
               disabled={auditing}
               onClick={handleTriggerAudit}
             >
-              {auditing ? "⏳ Analyzing SLA Compliance…" : "⚖️ Trigger Cicero SLA Audit"}
+              {auditing
+                ? "⏳ Analyzing SLA Compliance…"
+                : "⚖️ Trigger Cicero SLA Audit"}
             </button>
           </div>
         </div>
@@ -315,26 +370,36 @@ export default function GovernancePage() {
             {auditResult && (
               <div className="bg-slate-900/50 border border-slate-700/80 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-300">Latest Execution Response</span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${auditResult.status === "QUEUED" ? "bg-amber-500/25 text-amber-300" : "bg-emerald-500/25 text-emerald-300"}`}>
+                  <span className="text-xs font-semibold text-slate-300">
+                    Latest Execution Response
+                  </span>
+                  <span
+                    className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${auditResult.status === "QUEUED" ? "bg-amber-500/25 text-amber-300" : "bg-emerald-500/25 text-emerald-300"}`}
+                  >
                     {auditResult.status || "COMPLETED"}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div>
                     <span className="text-slate-500">Job ID: </span>
-                    <span className="text-slate-300 font-mono">{auditResult.jobId || "N/A"}</span>
+                    <span className="text-slate-300 font-mono">
+                      {auditResult.jobId || "N/A"}
+                    </span>
                   </div>
                   <div>
                     <span className="text-slate-500">Message: </span>
-                    <span className="text-slate-300">{auditResult.message}</span>
+                    <span className="text-slate-300">
+                      {auditResult.message}
+                    </span>
                   </div>
                 </div>
               </div>
             )}
 
             <div className="space-y-3">
-              <span className="text-xs font-semibold text-slate-400 block font-mono">Job History (BullMQ Asynchronous)</span>
+              <span className="text-xs font-semibold text-slate-400 block font-mono">
+                Job History (BullMQ Asynchronous)
+              </span>
               {auditHistory.map((item) => (
                 <div
                   key={item.id}
@@ -342,9 +407,15 @@ export default function GovernancePage() {
                 >
                   <div className="space-y-2">
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-bold text-slate-300 font-mono">{item.id}</span>
-                      <span className="text-xs text-slate-500 font-mono">({item.contractId})</span>
-                      <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${item.status === "QUEUED" ? "bg-amber-500/20 text-amber-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                      <span className="text-xs font-bold text-slate-300 font-mono">
+                        {item.id}
+                      </span>
+                      <span className="text-xs text-slate-500 font-mono">
+                        ({item.contractId})
+                      </span>
+                      <span
+                        className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${item.status === "QUEUED" ? "bg-amber-500/20 text-amber-400" : "bg-emerald-500/20 text-emerald-400"}`}
+                      >
                         {item.status}
                       </span>
                     </div>
@@ -352,7 +423,10 @@ export default function GovernancePage() {
                     <div className="text-xs text-slate-400 space-y-1">
                       {item.violations.length > 0 ? (
                         item.violations.map((v: string, i: number) => (
-                          <div key={i} className="text-red-400 flex items-start gap-1">
+                          <div
+                            key={i}
+                            className="text-red-400 flex items-start gap-1"
+                          >
                             <span>•</span>
                             <span>{v}</span>
                           </div>
@@ -360,15 +434,29 @@ export default function GovernancePage() {
                       ) : (
                         <div className="text-emerald-400 flex items-center gap-1">
                           <span>✔</span>
-                          <span>No violations found (fully SLA-compliant).</span>
+                          <span>
+                            No violations found (fully SLA-compliant).
+                          </span>
                         </div>
                       )}
                     </div>
 
                     <div className="text-[10px] text-slate-500 space-y-0.5">
-                      <div>Timestamp: {new Date(item.timestamp).toLocaleString()}</div>
-                      <div>Azure Dispatch Receipt: <span className="font-mono text-slate-400">{item.receiptId}</span></div>
-                      <div>Provenance Hash: <span className="font-mono text-slate-400">{item.hash}</span></div>
+                      <div>
+                        Timestamp: {new Date(item.timestamp).toLocaleString()}
+                      </div>
+                      <div>
+                        Azure Dispatch Receipt:{" "}
+                        <span className="font-mono text-slate-400">
+                          {item.receiptId}
+                        </span>
+                      </div>
+                      <div>
+                        Provenance Hash:{" "}
+                        <span className="font-mono text-slate-400">
+                          {item.hash}
+                        </span>
+                      </div>
                     </div>
                   </div>
 

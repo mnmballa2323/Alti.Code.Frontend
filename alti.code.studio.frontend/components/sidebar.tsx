@@ -1007,19 +1007,23 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
-  const [licenses, setLicenses] = useState<{ id: string; name: string }[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("selected_licenses");
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (e) {
-          console.error("Failed to parse selected_licenses", e);
+  const [licenses, setLicenses] = useState<{ id: string; name: string }[]>(
+    () => {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("selected_licenses");
+
+        if (saved) {
+          try {
+            return JSON.parse(saved);
+          } catch (e) {
+            console.error("Failed to parse selected_licenses", e);
+          }
         }
       }
-    }
-    return [];
-  });
+
+      return [];
+    },
+  );
   const [knowledgeFolders, setKnowledgeFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1278,6 +1282,7 @@ export default function Sidebar() {
   useEffect(() => {
     const handleSyncLicenses = () => {
       const saved = localStorage.getItem("selected_licenses");
+
       if (saved) {
         try {
           setLicenses(JSON.parse(saved));
@@ -1286,7 +1291,9 @@ export default function Sidebar() {
         }
       }
     };
+
     window.addEventListener("sync-licenses", handleSyncLicenses);
+
     return () => {
       window.removeEventListener("sync-licenses", handleSyncLicenses);
     };

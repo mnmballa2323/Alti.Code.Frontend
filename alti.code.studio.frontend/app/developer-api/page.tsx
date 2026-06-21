@@ -13,7 +13,15 @@ import {
   useDisclosure,
   cn,
 } from "@heroui/react";
-import { Key, Plus, Trash2, ShieldAlert, Check, Copy, HelpCircle } from "lucide-react";
+import {
+  Key,
+  Plus,
+  Trash2,
+  ShieldAlert,
+  Check,
+  Copy,
+  HelpCircle,
+} from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
@@ -61,7 +69,9 @@ export default function DeveloperApiPage() {
   ]);
 
   const [newKeyName, setNewKeyName] = useState("");
-  const [newKeyScope, setNewKeyScope] = useState<"Read" | "Read/Write" | "Admin">("Read/Write");
+  const [newKeyScope, setNewKeyScope] = useState<
+    "Read" | "Read/Write" | "Admin"
+  >("Read/Write");
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -73,10 +83,15 @@ export default function DeveloperApiPage() {
   const handleCreateKey = () => {
     if (!newKeyName.trim()) return;
     const randomHex = Array.from({ length: 32 }, () =>
-      Math.floor(Math.random() * 16).toString(16)
+      Math.floor(Math.random() * 16).toString(16),
     ).join("");
-    
-    const prefix = newKeyScope === "Admin" ? "sk_admin_" : newKeyScope === "Read/Write" ? "sk_live_" : "sk_test_";
+
+    const prefix =
+      newKeyScope === "Admin"
+        ? "sk_admin_"
+        : newKeyScope === "Read/Write"
+          ? "sk_live_"
+          : "sk_test_";
     const fullKey = `${prefix}${randomHex}`;
     const truncatedPrefix = `${fullKey.slice(0, 11)}...${fullKey.slice(-4)}`;
 
@@ -126,25 +141,29 @@ export default function DeveloperApiPage() {
                 </h1>
               </div>
               <p className="text-sm text-default-500 max-w-2xl mt-1">
-                Authenticate your scripts and external services to securely access Alti’s background agent orchestration, repository indexing, and security analysis pipelines.
+                Authenticate your scripts and external services to securely
+                access Alti’s background agent orchestration, repository
+                indexing, and security analysis pipelines.
               </p>
             </div>
 
             {/* Create API Key Form card */}
             <div className="bg-[#FCFCFD] dark:bg-default-50/50 border border-default-200/60 rounded-2xl p-6 shadow-sm flex flex-col gap-6">
-              <h2 className="text-lg font-medium text-foreground">Generate New API Key</h2>
+              <h2 className="text-lg font-medium text-foreground">
+                Generate New API Key
+              </h2>
               <div className="flex flex-col md:flex-row gap-4 items-end">
                 <div className="flex-1 flex flex-col gap-2 w-full">
                   <label className="text-xs font-semibold text-default-500 uppercase tracking-wider">
                     Key Name
                   </label>
                   <Input
-                    placeholder="e.g. Production Jenkins Hook"
-                    value={newKeyName}
-                    onValueChange={setNewKeyName}
-                    variant="bordered"
-                    radius="md"
                     className="max-w-md"
+                    placeholder="e.g. Production Jenkins Hook"
+                    radius="md"
+                    value={newKeyName}
+                    variant="bordered"
+                    onValueChange={setNewKeyName}
                   />
                 </div>
 
@@ -153,9 +172,9 @@ export default function DeveloperApiPage() {
                     Permissions / Scope
                   </label>
                   <select
+                    className="h-10 px-3 rounded-lg border-2 border-default-200 bg-transparent text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                     value={newKeyScope}
                     onChange={(e) => setNewKeyScope(e.target.value as any)}
-                    className="h-10 px-3 rounded-lg border-2 border-default-200 bg-transparent text-sm text-foreground focus:outline-none focus:border-primary transition-colors"
                   >
                     <option value="Read">Read Only</option>
                     <option value="Read/Write">Read & Write</option>
@@ -164,12 +183,12 @@ export default function DeveloperApiPage() {
                 </div>
 
                 <Button
-                  color="primary"
-                  radius="md"
                   className="font-medium h-10 w-full md:w-auto px-6 shrink-0"
-                  onPress={handleCreateKey}
-                  startContent={<Plus className="size-4" />}
+                  color="primary"
                   isDisabled={!newKeyName.trim()}
+                  radius="md"
+                  startContent={<Plus className="size-4" />}
+                  onPress={handleCreateKey}
                 >
                   Create Key
                 </Button>
@@ -179,7 +198,9 @@ export default function DeveloperApiPage() {
             {/* API Keys Table / list */}
             <div className="bg-white dark:bg-default-50 border border-default-200/60 rounded-2xl shadow-sm overflow-hidden">
               <div className="p-6 border-b border-default-100 flex items-center justify-between">
-                <h2 className="text-lg font-medium text-foreground">Active Keys</h2>
+                <h2 className="text-lg font-medium text-foreground">
+                  Active Keys
+                </h2>
                 <span className="text-xs px-2.5 py-1 bg-default-100 rounded-full font-medium text-default-600">
                   {keys.length} Keys Active
                 </span>
@@ -190,9 +211,12 @@ export default function DeveloperApiPage() {
                   <div className="p-3 bg-default-100 rounded-full text-default-400">
                     <Key className="size-6" />
                   </div>
-                  <h3 className="text-sm font-medium text-foreground">No active keys</h3>
+                  <h3 className="text-sm font-medium text-foreground">
+                    No active keys
+                  </h3>
                   <p className="text-xs text-default-500 max-w-sm">
-                    You don't have any active API credentials. Generate one above to access the API.
+                    You don't have any active API credentials. Generate one
+                    above to access the API.
                   </p>
                 </div>
               ) : (
@@ -210,7 +234,10 @@ export default function DeveloperApiPage() {
                     </thead>
                     <tbody className="divide-y divide-default-100">
                       {keys.map((key) => (
-                        <tr key={key.id} className="hover:bg-default-50/20 transition-colors">
+                        <tr
+                          key={key.id}
+                          className="hover:bg-default-50/20 transition-colors"
+                        >
                           <td className="py-4 px-6 font-medium text-foreground">
                             {key.name}
                           </td>
@@ -221,8 +248,8 @@ export default function DeveloperApiPage() {
                                 key.scope === "Admin"
                                   ? "bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400"
                                   : key.scope === "Read/Write"
-                                  ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/50 text-amber-600 dark:text-amber-400"
-                                  : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400"
+                                    ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/50 text-amber-600 dark:text-amber-400"
+                                    : "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400",
                               )}
                             >
                               {key.scope}
@@ -238,13 +265,17 @@ export default function DeveloperApiPage() {
                             {key.lastUsed}
                           </td>
                           <td className="py-4 px-6 text-right">
-                            <Tooltip content="Revoke Access" color="danger" closeDelay={0}>
+                            <Tooltip
+                              closeDelay={0}
+                              color="danger"
+                              content="Revoke Access"
+                            >
                               <Button
                                 isIconOnly
-                                size="sm"
-                                variant="light"
                                 color="danger"
                                 radius="md"
+                                size="sm"
+                                variant="light"
                                 onPress={() => handleRevokeKey(key.id)}
                               >
                                 <Trash2 className="size-4" />
@@ -270,14 +301,18 @@ export default function DeveloperApiPage() {
                   <HelpCircle className="size-4 text-default-400 cursor-help" />
                 </h3>
                 <p className="text-xs text-default-500 mt-1 max-w-xl">
-                  By default, API keys are constrained to <strong>120 requests/minute</strong> and <strong>10,000 requests/day</strong>. Contact the platform administrator to request elevated custom limits for deployment nodes.
+                  By default, API keys are constrained to{" "}
+                  <strong>120 requests/minute</strong> and{" "}
+                  <strong>10,000 requests/day</strong>. Contact the platform
+                  administrator to request elevated custom limits for deployment
+                  nodes.
                 </p>
               </div>
               <Button
-                variant="bordered"
+                className="font-medium shrink-0 border-default-300 dark:border-default-700"
                 radius="md"
                 size="sm"
-                className="font-medium shrink-0 border-default-300 dark:border-default-700"
+                variant="bordered"
               >
                 View Documentation
               </Button>
@@ -287,7 +322,12 @@ export default function DeveloperApiPage() {
       </div>
 
       {/* Modal for Newly Generated Secret Key */}
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} hideCloseButton>
+      <Modal
+        hideCloseButton
+        isDismissable={false}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           <ModalHeader className="flex flex-col gap-1">
             <h3 className="text-lg font-semibold flex items-center gap-2 text-foreground">
@@ -297,7 +337,9 @@ export default function DeveloperApiPage() {
           </ModalHeader>
           <ModalBody className="flex flex-col gap-4">
             <div className="bg-amber-500/10 text-amber-700 dark:text-amber-400 p-3 rounded-lg border border-amber-500/20 text-xs">
-              <strong>CRITICAL WARNING:</strong> Copy this secret API key now. For security purposes, it will never be displayed in the panel again. If lost, you must create a new one.
+              <strong>CRITICAL WARNING:</strong> Copy this secret API key now.
+              For security purposes, it will never be displayed in the panel
+              again. If lost, you must create a new one.
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -305,28 +347,34 @@ export default function DeveloperApiPage() {
                 Secret Token
               </label>
               <div className="flex items-center gap-2 bg-default-100 dark:bg-default-50 border border-default-200 rounded-lg p-2 font-mono text-xs overflow-x-auto select-all">
-                <span className="flex-1 break-all pr-2 text-foreground select-all">{generatedKey}</span>
+                <span className="flex-1 break-all pr-2 text-foreground select-all">
+                  {generatedKey}
+                </span>
                 <Button
                   isIconOnly
+                  className="shrink-0"
                   size="sm"
                   variant="flat"
                   onPress={() => generatedKey && copyToClipboard(generatedKey)}
-                  className="shrink-0"
                 >
-                  {copied ? <Check className="size-3.5 text-success" /> : <Copy className="size-3.5" />}
+                  {copied ? (
+                    <Check className="size-3.5 text-success" />
+                  ) : (
+                    <Copy className="size-3.5" />
+                  )}
                 </Button>
               </div>
             </div>
           </ModalBody>
           <ModalFooter>
             <Button
+              className="font-medium"
               color="primary"
+              radius="md"
               onPress={() => {
                 setGeneratedKey(null);
                 onOpenChange();
               }}
-              radius="md"
-              className="font-medium"
             >
               I Have Saved This Key
             </Button>

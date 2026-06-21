@@ -32,7 +32,9 @@ export default function ChatBotLayout({
       setIsTauri(true);
     }
 
-    const token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("accessToken");
+
     if (token) {
       setHeaders({
         Authorization: `Bearer ${token}`,
@@ -40,17 +42,20 @@ export default function ChatBotLayout({
     }
   }, []);
 
-  const copilotRuntimeUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1") + "/copilot";
+  const copilotRuntimeUrl =
+    (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1") +
+    "/copilot";
 
   return (
-    <CopilotKit runtimeUrl={copilotRuntimeUrl} headers={headers}>
+    <CopilotKit headers={headers} runtimeUrl={copilotRuntimeUrl}>
       <CopilotSidebar
+        Button={() => null}
         defaultOpen={false}
         labels={{
           title: "Inso Copilot",
-          initial: "Hi! 👋 How can I assist you with your code or deployments today?",
+          initial:
+            "Hi! 👋 How can I assist you with your code or deployments today?",
         }}
-        Button={() => null}
       >
         <div className="flex flex-col w-full h-screen overflow-hidden bg-[#F4F4F6] dark:bg-background">
           {/* Title Bar */}
@@ -119,4 +124,3 @@ export default function ChatBotLayout({
     </CopilotKit>
   );
 }
-

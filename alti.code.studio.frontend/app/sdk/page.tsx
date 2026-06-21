@@ -2,7 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Button, cn } from "@heroui/react";
-import { Blocks, Copy, Check, Terminal, Code2, ShieldCheck, Download } from "lucide-react";
+import {
+  Blocks,
+  Copy,
+  Check,
+  Terminal,
+  Code2,
+  ShieldCheck,
+  Download,
+} from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
@@ -125,7 +133,9 @@ func main() {
                 </h1>
               </div>
               <p className="text-sm text-default-500 max-w-2xl mt-1">
-                Install and configure the native client SDKs to query corporate knowledge, programmatically manage guardrail rules, and invoke specialized agent swarms directly from your source code.
+                Install and configure the native client SDKs to query corporate
+                knowledge, programmatically manage guardrail rules, and invoke
+                specialized agent swarms directly from your source code.
               </p>
             </div>
 
@@ -134,13 +144,13 @@ func main() {
               {(["node", "python", "go"] as LanguageTab[]).map((tab) => (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
                   className={cn(
                     "pb-3 text-sm font-semibold tracking-wide border-b-2 transition-all capitalize focus:outline-none",
                     activeTab === tab
                       ? "border-primary text-primary"
-                      : "border-transparent text-default-400 hover:text-default-700"
+                      : "border-transparent text-default-400 hover:text-default-700",
                   )}
+                  onClick={() => setActiveTab(tab)}
                 >
                   {tab === "node" ? "Node.js" : tab}
                 </button>
@@ -156,13 +166,17 @@ func main() {
                   Installation
                 </div>
                 <div className="flex items-center gap-2 bg-default-100 dark:bg-default-50 border border-default-200 rounded-xl p-3 font-mono text-sm overflow-x-auto">
-                  <span className="flex-1 text-foreground select-all">$ {sdkContent[activeTab].install}</span>
+                  <span className="flex-1 text-foreground select-all">
+                    $ {sdkContent[activeTab].install}
+                  </span>
                   <Button
                     isIconOnly
+                    className="shrink-0"
                     size="sm"
                     variant="flat"
-                    onPress={() => handleCopy(sdkContent[activeTab].install, "install")}
-                    className="shrink-0"
+                    onPress={() =>
+                      handleCopy(sdkContent[activeTab].install, "install")
+                    }
                   >
                     {copiedText === "install" ? (
                       <Check className="size-3.5 text-success" />
@@ -181,11 +195,19 @@ func main() {
                     Boilerplate Initialization
                   </div>
                   <Button
-                    size="sm"
-                    variant="light"
-                    onPress={() => handleCopy(sdkContent[activeTab].code, "code")}
                     className="font-medium text-xs border border-default-200 hover:bg-default-100 rounded-lg h-8 px-3"
-                    startContent={copiedText === "code" ? <Check className="size-3.5 text-success" /> : <Copy className="size-3.5" />}
+                    size="sm"
+                    startContent={
+                      copiedText === "code" ? (
+                        <Check className="size-3.5 text-success" />
+                      ) : (
+                        <Copy className="size-3.5" />
+                      )
+                    }
+                    variant="light"
+                    onPress={() =>
+                      handleCopy(sdkContent[activeTab].code, "code")
+                    }
                   >
                     {copiedText === "code" ? "Copied" : "Copy Snippet"}
                   </Button>
@@ -202,9 +224,13 @@ func main() {
                 <div className="p-2 bg-success/10 text-success rounded-lg w-fit">
                   <ShieldCheck className="size-5" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Secure Credentials</h3>
+                <h3 className="text-base font-semibold text-foreground">
+                  Secure Credentials
+                </h3>
                 <p className="text-xs text-default-500 leading-relaxed">
-                  Never commit raw API keys to version control. Initialize the client using environment variables (`ALTI_API_KEY`) or access them at runtime from a secure secrets manager.
+                  Never commit raw API keys to version control. Initialize the
+                  client using environment variables (`ALTI_API_KEY`) or access
+                  them at runtime from a secure secrets manager.
                 </p>
               </div>
 
@@ -212,13 +238,16 @@ func main() {
                 <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg w-fit">
                   <Download className="size-5" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Advanced SDK Features</h3>
+                <h3 className="text-base font-semibold text-foreground">
+                  Advanced SDK Features
+                </h3>
                 <p className="text-xs text-default-500 leading-relaxed">
-                  Explore full features such as custom tool definition, asynchronous webhook callbacks, streaming agent token responses, and custom model routing mappings.
+                  Explore full features such as custom tool definition,
+                  asynchronous webhook callbacks, streaming agent token
+                  responses, and custom model routing mappings.
                 </p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
