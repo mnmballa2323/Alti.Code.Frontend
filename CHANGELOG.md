@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.58] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 has-bigints Package**: Integrated `has-bigints` (Determine if the JS environment has BigInt support.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 for-each Package**: Integrated `for-each` (A better forEach) to enhance backend operations.
+- **Pure MIT/Apache-2.0 available-typed-arrays Package**: Integrated `available-typed-arrays` (Returns an array of Typed Array names that are available in the current environment) to enhance backend operations.
+- **Pure MIT/Apache-2.0 side-channel Package**: Integrated `side-channel` (Store information about any JS value in a side channel. Uses WeakMap if available.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 gopd Package**: Integrated `gopd` (`Object.getOwnPropertyDescriptor`, but accounts for IE's broken implementation.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 has-proto Package**: Integrated `has-proto` (Does this environment have the ability to get the [[Prototype]] of an object on creation with `__proto__`?) to enhance backend operations.
+- **Pure MIT/Apache-2.0 get-proto Package**: Integrated `get-proto` (Robustly get the [[Prototype]] of an object) to enhance backend operations.
+- **Pure MIT/Apache-2.0 functions-have-names Package**: Integrated `functions-have-names` (Does this JS environment support the `name` property on functions?) to enhance backend operations.
+- **Pure MIT/Apache-2.0 hasown Package**: Integrated `hasown` (A robust, ES3 compatible, "has own property" predicate.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 has-symbols Package**: Integrated `has-symbols` (Determine if the JS environment has Symbol support. Supports spec, or shams.) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.57] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
