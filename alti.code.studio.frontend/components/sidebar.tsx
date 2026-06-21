@@ -1065,17 +1065,20 @@ export default function Sidebar() {
 
   // Prefetch all navigation routes on mount to ensure instant, zero-latency page transitions
   useEffect(() => {
-    router.prefetch("/");
+    router.prefetch("/new-chat");
     router.prefetch("/chat");
-    router.prefetch("/agents-showcase");
-    router.prefetch("/vault");
-    router.prefetch("/cloud");
+    router.prefetch("/agents");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
+    router.prefetch("/licenses");
     router.prefetch("/knowledge");
     router.prefetch("/repositories");
-    router.prefetch("/documents");
+    router.prefetch("/developer-api");
+    router.prefetch("/sdk");
+    router.prefetch("/vault");
     router.prefetch("/connect-apps");
+    router.prefetch("/database");
+    router.prefetch("/cloud");
   }, [router]);
 
   useEffect(() => {
