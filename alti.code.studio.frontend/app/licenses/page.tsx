@@ -436,9 +436,9 @@ export default function LicensesPage() {
                   <div
                     key={license.id}
                     className={cn(
-                      "group border rounded-2xl p-5 flex flex-col justify-between cursor-pointer select-none transition-all duration-300 relative overflow-hidden",
+                      "group border-2 rounded-2xl p-5 flex flex-col justify-between cursor-pointer select-none transition-all duration-300 relative overflow-hidden",
                       isSelected
-                        ? "border-blue-500/80 dark:border-blue-400 bg-blue-50/80 dark:bg-blue-950/40 shadow-sm shadow-blue-500/5 scale-[1.01]"
+                        ? "border-blue-600 dark:border-blue-400 bg-blue-100 dark:bg-blue-950/60 shadow-[0_4px_20px_rgba(37,99,235,0.12)] scale-[1.02]"
                         : "border-default-200/60 bg-white dark:bg-default-50 hover:border-default-400 hover:shadow-sm",
                     )}
                     onClick={() => handleToggleLicense(license)}
