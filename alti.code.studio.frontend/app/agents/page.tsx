@@ -145,10 +145,6 @@ function AgentPageContent() {
                 >
                   Build Your Agent
                 </h1>
-                <p className="text-sm text-default-500 mt-2 max-w-lg leading-relaxed">
-                  Describe what your agent should do, and we will configure its
-                  instructions, guardrails, and tools instantly.
-                </p>
               </div>
 
               <div className="flex w-full flex-col gap-4 max-w-2xl">
