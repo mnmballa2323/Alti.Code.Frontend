@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.46] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 url-regex Package**: Integrated `url-regex` (Regular expression for matching URLs) to enhance backend operations.
+- **Pure MIT/Apache-2.0 strip-css-comments Package**: Integrated `strip-css-comments` (Strip comments from CSS) to enhance backend operations.
+- **Pure MIT/Apache-2.0 trim-newlines Package**: Integrated `trim-newlines` (Trim newlines from the start and/or end of a string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 detect-newline Package**: Integrated `detect-newline` (Detect the dominant newline character of a string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 get-stdin Package**: Integrated `get-stdin` (Get stdin as a string or Uint8Array) to enhance backend operations.
+- **Pure MIT/Apache-2.0 stdin-discarder Package**: Integrated `stdin-discarder` (Discard stdin input except for Ctrl+C) to enhance backend operations.
+- **Pure MIT/Apache-2.0 term-size Package**: Integrated `term-size` (Reliably get the terminal window size (columns & rows)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 user-home Package**: Integrated `user-home` (Get the path to the user home directory) to enhance backend operations.
+- **Pure MIT/Apache-2.0 home-or-tmp Package**: Integrated `home-or-tmp` (Get the user home directory with fallback to the system temp directory) to enhance backend operations.
+- **Pure MIT/Apache-2.0 os-homedir Package**: Integrated `os-homedir` (Node.js 4 `os.homedir()` ponyfill) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.45] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
