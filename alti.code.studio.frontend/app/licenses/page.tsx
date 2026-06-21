@@ -352,8 +352,10 @@ export default function LicensesPage() {
   const [selectedLicenses, setSelectedLicenses] = useState<
     { id: string; name: string }[]
   >([]);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     dispatch(startNewChat());
     dispatch(setChatContext({ sessionId: null, model: "default" }));
 
@@ -414,6 +416,11 @@ export default function LicensesPage() {
     }
   };
 
+  const selectedIds = React.useMemo(
+    () => new Set(selectedLicenses.map((l) => l.id)),
+    [selectedLicenses],
+  );
+
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-y-auto bg-transparent flex flex-col h-full font-sans text-foreground">
@@ -422,10 +429,8 @@ export default function LicensesPage() {
           <div className="flex w-full max-w-4xl flex-col gap-6 z-10">
             {/* Interactive Grid of Licenses */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-              {AVAILABLE_LICENSES.map((license) => {
-                const isSelected = selectedLicenses.some(
-                  (l) => l.id === license.id,
-                );
+              {mounted && AVAILABLE_LICENSES.map((license) => {
+                const isSelected = selectedIds.has(license.id);
 
                 return (
                   <div
@@ -433,7 +438,7 @@ export default function LicensesPage() {
                     className={cn(
                       "group border rounded-2xl p-5 flex flex-col justify-between cursor-pointer select-none transition-all duration-300 relative overflow-hidden",
                       isSelected
-                        ? "border-blue-500/80 dark:border-blue-400 bg-blue-50/30 dark:bg-blue-950/15 shadow-sm shadow-blue-500/5 scale-[1.01]"
+                        ? "border-blue-500/80 dark:border-blue-400 bg-blue-50/80 dark:bg-blue-950/40 shadow-sm shadow-blue-500/5 scale-[1.01]"
                         : "border-default-200/60 bg-white dark:bg-default-50 hover:border-default-400 hover:shadow-sm",
                     )}
                     onClick={() => handleToggleLicense(license)}
