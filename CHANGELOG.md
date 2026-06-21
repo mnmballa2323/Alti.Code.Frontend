@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.47] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 is-jpg Package**: Integrated `is-jpg` (Check if a Buffer/Uint8Array is a JPEG image) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-png Package**: Integrated `is-png` (Check if a Buffer/Uint8Array is a PNG image) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-gif Package**: Integrated `is-gif` (Check if a Buffer/Uint8Array is a GIF image) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-webp Package**: Integrated `is-webp` (Check if a Buffer/Uint8Array is a WebP image) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-tif Package**: Integrated `is-tif` (Check if a Buffer/Uint8Array is a TIFF image) to enhance backend operations.
+- **Pure MIT/Apache-2.0 clone-regexp Package**: Integrated `clone-regexp` (Clone and modify a RegExp instance) to enhance backend operations.
+- **Pure MIT/Apache-2.0 filter-obj Package**: Integrated `filter-obj` (Filter object keys and values into a new object) to enhance backend operations.
+- **Pure MIT/Apache-2.0 filename-reserved-regex Package**: Integrated `filename-reserved-regex` (Regular expression for matching reserved filename characters) to enhance backend operations.
+- **Pure MIT/Apache-2.0 filenamify-url Package**: Integrated `filenamify-url` (Convert a URL to a valid filename) to enhance backend operations.
+- **Pure MIT/Apache-2.0 number-is-nan Package**: Integrated `number-is-nan` (ES2015 `Number.isNaN()` ponyfill) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.46] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
