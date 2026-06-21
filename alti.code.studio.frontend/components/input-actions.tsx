@@ -1064,6 +1064,170 @@ function PromptInputFullLineComponent({
             </Dropdown>
           )}
 
+          {!hideRunLocally && (
+            <Dropdown
+              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
+              placement="top-start"
+            >
+              <DropdownTrigger>
+                <button
+                  className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
+                  type="button"
+                >
+                  <span className="transition-colors duration-200">
+                    Select Function
+                  </span>
+                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                </button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Function Options"
+                className="p-1 overflow-hidden"
+                variant="flat"
+              >
+                <DropdownItem
+                    key="security"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Security Audit"
+                    onPress={() => handleFunctionSelect("security")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Shield className="size-4 text-red-500 dark:text-red-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Security Audit
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="qa"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Autonomous QA Loop"
+                    onPress={() => handleFunctionSelect("qa")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <FlaskConical className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Autonomous QA Loop
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="graph"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Generate Knowledge Graph"
+                    onPress={() => handleFunctionSelect("graph")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Network className="size-4 text-blue-500 dark:text-blue-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Generate Knowledge Graph
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="architecture"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="System Architecture"
+                    onPress={() => handleFunctionSelect("architecture")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Cpu className="size-4 text-purple-500 dark:text-purple-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        System Architecture
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="refactor"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Refactor & Optimize"
+                    onPress={() => handleFunctionSelect("refactor")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Wand2 className="size-4 text-orange-500 dark:text-orange-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Refactor & Optimize
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="documentation"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Write Documentation"
+                    onPress={() => handleFunctionSelect("documentation")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <BookOpen className="size-4 text-teal-500 dark:text-teal-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Write Documentation
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="explain"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Explain Code"
+                    onPress={() => handleFunctionSelect("explain")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <HelpCircle className="size-4 text-sky-500 dark:text-sky-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Explain Code
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="database"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Database Designer"
+                    onPress={() => handleFunctionSelect("database")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Database className="size-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Database Designer
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="github"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Push to GitHub"
+                    onPress={() => handleFunctionSelect("github")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Github className="size-4 text-neutral-700 dark:text-neutral-350 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Push to GitHub
+                      </span>
+                    </div>
+                  </DropdownItem>
+
+                  <DropdownItem
+                    key="deploy"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Deploy to Cloud"
+                    onPress={() => handleFunctionSelect("deploy")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <CloudUpload className="size-4 text-violet-500 dark:text-violet-400 shrink-0" />
+                      <span className="text-[12px] font-medium text-foreground">
+                        Deploy to Cloud
+                      </span>
+                    </div>
+                  </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
+
           {customActions}
         </div>
 
@@ -1180,184 +1344,6 @@ function PromptInputFullLineComponent({
                     <p>Make Responsive</p>
                   </TooltipContent>
                 </Tooltip>
-              )}
-
-              {!hideRunLocally && (
-                <Dropdown
-                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
-                  placement="top-start"
-                >
-                  <DropdownTrigger>
-                    <button
-                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
-                      type="button"
-                    >
-                      <Icon
-                        className="size-4 shrink-0 text-purple-500"
-                        icon="lucide:sparkles"
-                      />
-                      <span className="transition-colors duration-200">
-                        Select Function
-                      </span>
-                      <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
-                    </button>
-                  </DropdownTrigger>
-                  <DropdownMenu
-                    aria-label="Function Options"
-                    className="p-0 overflow-hidden"
-                    variant="flat"
-                  >
-                    <DropdownSection
-                      className="mb-0"
-                      classNames={{
-                        heading:
-                          "px-3 py-1 text-[11px] font-semibold text-gray-450 select-none uppercase tracking-wider",
-                        group: "flex flex-col gap-0.5",
-                      }}
-                      title="AUTONOMOUS FUNCTIONS"
-                    >
-                      <DropdownItem
-                        key="security"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Security Audit"
-                        onPress={() => handleFunctionSelect("security")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Shield className="size-4 text-red-500 dark:text-red-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Security Audit
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="qa"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Autonomous QA Loop"
-                        onPress={() => handleFunctionSelect("qa")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <FlaskConical className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Autonomous QA Loop
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="graph"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Generate Knowledge Graph"
-                        onPress={() => handleFunctionSelect("graph")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Network className="size-4 text-blue-500 dark:text-blue-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Generate Knowledge Graph
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="architecture"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="System Architecture"
-                        onPress={() => handleFunctionSelect("architecture")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Cpu className="size-4 text-purple-500 dark:text-purple-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            System Architecture
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="refactor"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Refactor & Optimize"
-                        onPress={() => handleFunctionSelect("refactor")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Wand2 className="size-4 text-orange-500 dark:text-orange-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Refactor & Optimize
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="documentation"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Write Documentation"
-                        onPress={() => handleFunctionSelect("documentation")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <BookOpen className="size-4 text-teal-500 dark:text-teal-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Write Documentation
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="explain"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Explain Code"
-                        onPress={() => handleFunctionSelect("explain")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <HelpCircle className="size-4 text-sky-500 dark:text-sky-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Explain Code
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="database"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Database Designer"
-                        onPress={() => handleFunctionSelect("database")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Database className="size-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Database Designer
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="github"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Push to GitHub"
-                        onPress={() => handleFunctionSelect("github")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Github className="size-4 text-neutral-700 dark:text-neutral-350 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Push to GitHub
-                          </span>
-                        </div>
-                      </DropdownItem>
-
-                      <DropdownItem
-                        key="deploy"
-                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Deploy to Cloud"
-                        onPress={() => handleFunctionSelect("deploy")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <CloudUpload className="size-4 text-violet-500 dark:text-violet-400 shrink-0" />
-                          <span className="text-[12px] font-medium text-foreground">
-                            Deploy to Cloud
-                          </span>
-                        </div>
-                      </DropdownItem>
-                    </DropdownSection>
-                  </DropdownMenu>
-                </Dropdown>
               )}
             </>
           )}
