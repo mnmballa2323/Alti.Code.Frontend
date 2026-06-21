@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.42] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 ansi-escapes Package**: Integrated `ansi-escapes` (ANSI escape codes for manipulating the terminal) to enhance backend operations.
+- **Pure MIT/Apache-2.0 supports-color Package**: Integrated `supports-color` (Detect whether a terminal supports color) to enhance backend operations.
+- **Pure MIT/Apache-2.0 has-ansi Package**: Integrated `has-ansi` (Check if a string has ANSI escape codes) to enhance backend operations.
+- **Pure MIT/Apache-2.0 map-age-cleaner Package**: Integrated `map-age-cleaner` (Automatically cleanup expired items in a Map) to enhance backend operations.
+- **Pure MIT/Apache-2.0 cli-truncate Package**: Integrated `cli-truncate` (Truncate a string to a specific width in the terminal) to enhance backend operations.
+- **Pure MIT/Apache-2.0 slice-ansi Package**: Integrated `slice-ansi` (Slice a string with ANSI escape codes) to enhance backend operations.
+- **Pure MIT/Apache-2.0 wrap-ansi Package**: Integrated `wrap-ansi` (Wordwrap a string with ANSI escape codes) to enhance backend operations.
+- **Pure MIT/Apache-2.0 string-width Package**: Integrated `string-width` (Get the visual width of a string - the number of columns required to display it) to enhance backend operations.
+- **Pure MIT/Apache-2.0 boxen Package**: Integrated `boxen` (Create boxes in the terminal) to enhance backend operations.
+- **Pure MIT/Apache-2.0 ora Package**: Integrated `ora` (Elegant terminal spinner) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.41] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
