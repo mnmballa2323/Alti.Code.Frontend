@@ -80,7 +80,7 @@ export default function ChatHome() {
                   rightActions={
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Search
+                        <Microscope
                           className={cn(
                             "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-all active:scale-95",
                             isResearchMode
@@ -99,6 +99,7 @@ export default function ChatHome() {
                       </TooltipContent>
                     </Tooltip>
                   }
+                  showModelDropdown={true}
                   onSend={handleFirstMessageSend}
                 />
               </div>

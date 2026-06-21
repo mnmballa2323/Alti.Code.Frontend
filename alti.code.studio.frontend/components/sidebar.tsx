@@ -844,17 +844,18 @@ export default function Sidebar() {
     {
       label: "Code",
       icon: Code,
-      path: "/code",
-      isActive: pathname === "/code",
+      path: "/new-chat",
+      isActive: pathname === "/new-chat" || pathname === "/code",
       onClick: () => {
-        router.push("/code");
+        dispatch(startNewChat());
+        router.push("/new-chat");
       },
     },
     {
       label: "Chat",
       icon: MessageSquare,
       path: "/chat",
-      isActive: pathname.startsWith("/chat") || pathname === "/new-chat",
+      isActive: pathname?.startsWith("/chat"),
       onClick: () => {
         router.push("/chat");
       },
@@ -863,7 +864,7 @@ export default function Sidebar() {
       label: "Agents",
       icon: Bot,
       path: "/agents",
-      isActive: pathname === "/agents" || pathname.startsWith("/agents/"),
+      isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
       onClick: () => {
         router.push("/agents");
       },
@@ -958,7 +959,7 @@ export default function Sidebar() {
       label: "Database",
       icon: Server,
       path: "/database",
-      isActive: pathname.startsWith("/database"),
+      isActive: pathname?.startsWith("/database"),
       onClick: () => {
         router.push("/database");
       },
@@ -980,7 +981,7 @@ export default function Sidebar() {
 
   const getPlusTooltipContent = () => {
     if (pathname === "/" || pathname === "/code") return "New Code";
-    if (pathname.startsWith("/chat")) return "New Chat";
+    if (pathname?.startsWith("/chat")) return "New Chat";
     if (pathname === "/vault") return "New Vault";
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
@@ -1905,7 +1906,7 @@ export default function Sidebar() {
                   })()
                 )}
               </div>
-            ) : pathname.startsWith("/database") ? (
+            ) : pathname?.startsWith("/database") ? (
               <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
                 {(() => {
                   const filtered = SUPPORTED_DATABASES.filter((db) =>
@@ -2304,7 +2305,7 @@ export default function Sidebar() {
                   ));
                 })()}
               </div>
-            ) : pathname === "/agents" || pathname.startsWith("/agents/") ? (
+            ) : pathname === "/agents" || pathname?.startsWith("/agents/") ? (
               <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                 {(() => {
                   const filtered = customAgents.filter((agent) =>

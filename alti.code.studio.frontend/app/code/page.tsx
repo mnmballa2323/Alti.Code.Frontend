@@ -166,7 +166,7 @@ export default function CodeStudioPage() {
                 </div>
                 <div className="w-full max-w-6xl">
                   <EnterpriseConnectors
-                    onGenerate={(prompt) => {
+                    onGenerate={async (prompt) => {
                       // In full production, this dispatches to the swarms GraphOrchestrator
                       toast.success("Swarm Nexus Prompt Synthesized");
                     }}
