@@ -58,6 +58,8 @@ import {
   removeRepository,
   removeDocument,
   setActiveWorkspace,
+  removeApi,
+  removeSdk,
 } from "@/store/systemSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
@@ -988,8 +990,8 @@ export default function Sidebar() {
     if (pathname === "/licenses") return "New License";
     if (pathname === "/knowledge") return "New Knowledge";
     if (pathname === "/repositories") return "New Repository";
-    if (pathname === "/developer-api") return "New API Key";
-    if (pathname === "/sdk") return "New SDK Package";
+    if (pathname === "/developer-api") return "New API";
+    if (pathname === "/sdk") return "New SDK";
     if (pathname === "/documents") return "New Documentation";
 
     return "New";
@@ -1004,6 +1006,8 @@ export default function Sidebar() {
   const repositories = useSelector(
     (state: RootState) => state.system.repositories || [],
   );
+  const apis = useSelector((state: RootState) => state.system.apis || []);
+  const sdks = useSelector((state: RootState) => state.system.sdks || []);
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
@@ -1721,6 +1725,10 @@ export default function Sidebar() {
                   window.dispatchEvent(
                     new CustomEvent("open-repository-modal"),
                   );
+                } else if (pathname === "/developer-api") {
+                  window.dispatchEvent(new CustomEvent("open-api-modal"));
+                } else if (pathname === "/sdk") {
+                  window.dispatchEvent(new CustomEvent("open-sdk-modal"));
                 } else if (pathname === "/documents") {
                   window.dispatchEvent(new CustomEvent("open-document-modal"));
                 } else if (pathname === "/knowledge") {
@@ -1735,6 +1743,10 @@ export default function Sidebar() {
                   router.prefetch("/vault");
                 } else if (pathname === "/repositories") {
                   router.prefetch("/repositories");
+                } else if (pathname === "/developer-api") {
+                  router.prefetch("/developer-api");
+                } else if (pathname === "/sdk") {
+                  router.prefetch("/sdk");
                 } else if (pathname === "/documents") {
                   router.prefetch("/documents");
                 } else {
@@ -2426,6 +2438,170 @@ export default function Sidebar() {
                             onClick={(e) => {
                               e.stopPropagation();
                               dispatch(removeRepository(repo.id));
+                            }}
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/developer-api" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = apis.filter((api) =>
+                    api.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
+                  );
+
+                  if (apis.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:link-round-angle-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No APIs added yet
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:link-round-angle-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((api) => (
+                    <div
+                      key={api.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-api", { detail: api }),
+                        )
+                      }
+                    >
+                      <span className="truncate">{api.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
+                      >
+                        <DropdownTrigger>
+                          <button
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="API options"
+                          className="p-0"
+                          variant="flat"
+                        >
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dispatch(removeApi(api.id));
+                            }}
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/sdk" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = sdks.filter((sdk) =>
+                    sdk.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
+                  );
+
+                  if (sdks.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:box-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No SDKs added yet
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:box-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((sdk) => (
+                    <div
+                      key={sdk.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-sdk", { detail: sdk }),
+                        )
+                      }
+                    >
+                      <span className="truncate">{sdk.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
+                      >
+                        <DropdownTrigger>
+                          <button
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="SDK options"
+                          className="p-0"
+                          variant="flat"
+                        >
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              dispatch(removeSdk(sdk.id));
                             }}
                           >
                             Delete

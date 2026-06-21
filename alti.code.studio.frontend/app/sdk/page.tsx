@@ -1,252 +1,152 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, cn } from "@heroui/react";
-import {
-  Blocks,
-  Copy,
-  Check,
-  Terminal,
-  Code2,
-  ShieldCheck,
-  Download,
-} from "lucide-react";
+import { Button } from "@heroui/react";
+import { Code, Link } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
 import { setChatContext, startNewChat } from "@/store/messagesSlice";
-import { AgentCommandCenter } from "@/components/AgentCommandCenter";
-
-type LanguageTab = "node" | "python" | "go";
+import { addSdk, updateSdk } from "@/store/systemSlice";
 
 export default function SdkPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const [activeTab, setActiveTab] = useState<LanguageTab>("node");
-  const [copiedText, setCopiedText] = useState<string | null>(null);
+
+  const [activeSdkId, setActiveSdkId] = useState<string | null>(null);
+  const [newSdkName, setNewSdkName] = useState("");
+  const [newSdkUrl, setNewSdkUrl] = useState("");
 
   useEffect(() => {
     dispatch(startNewChat());
     dispatch(setChatContext({ sessionId: null, model: "default" }));
+
+    const handleOpenPanel = () => {
+      setActiveSdkId(null);
+      setNewSdkName("");
+      setNewSdkUrl("");
+    };
+
+    const handleEditSdk = (e: any) => {
+      const sdk = e.detail;
+
+      setActiveSdkId(sdk.id);
+      setNewSdkName(sdk.name);
+      setNewSdkUrl(sdk.url);
+    };
+
+    window.addEventListener("open-sdk-modal", handleOpenPanel);
+    window.addEventListener("edit-sdk", handleEditSdk);
+
+    return () => {
+      window.removeEventListener("open-sdk-modal", handleOpenPanel);
+      window.removeEventListener("edit-sdk", handleEditSdk);
+    };
   }, [dispatch]);
 
-  const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedText(id);
-    setTimeout(() => setCopiedText(null), 2000);
-  };
+  const handleSaveSdk = () => {
+    if (!newSdkUrl || !newSdkName) return;
 
-  const sdkContent = {
-    node: {
-      install: "npm install @alti/sdk-core",
-      code: `import { AltiClient } from "@alti/sdk-core";
+    if (activeSdkId) {
+      dispatch(
+        updateSdk({
+          id: activeSdkId,
+          url: newSdkUrl,
+          name: newSdkName,
+          licenseType: "",
+          customInstructions: "",
+          guardrails: "",
+          isActive: true,
+        }),
+      );
+    } else {
+      dispatch(
+        addSdk({
+          url: newSdkUrl,
+          name: newSdkName,
+          licenseType: "",
+          customInstructions: "",
+          guardrails: "",
+          isActive: true,
+        }),
+      );
+    }
 
-// Initialize the enterprise client
-const alti = new AltiClient({
-  apiKey: process.env.ALTI_API_KEY, // Set from API Keys panel
-  workspace: "alti.code.studio"
-});
-
-// Run a swarm-orchestrated code review task
-const response = await alti.agents.execute({
-  agent: "code-reviewer",
-  input: {
-    repoPath: "./src",
-    depth: "detailed"
-  }
-});
-
-console.log("Analysis results:", response.summary);`,
-    },
-    python: {
-      install: "pip install alti-sdk",
-      code: `from alti import AltiClient
-import os
-
-# Initialize the enterprise client
-client = AltiClient(
-    api_key=os.environ.get("ALTI_API_KEY"), # Set from API Keys panel
-    workspace="alti.code.studio"
-)
-
-# Query the vectorized knowledge bases
-results = client.knowledge.search(
-    query="MIT and Apache-2.0 licenses compliance rules",
-    limit=5
-)
-
-for doc in results:
-    print(f"[{doc.score}] {doc.title}: {doc.snippet}")`,
-    },
-    go: {
-      install: "go get github.com/alti/sdk-go",
-      code: `package main
-
-import (
-	"context"
-	"fmt"
-	"log"
-	"os"
-
-	"github.com/alti/sdk-go/alti"
-)
-
-func main() {
-	// Initialize the client
-	client, err := alti.NewClient(
-		alti.WithAPIKey(os.Getenv("ALTI_API_KEY")),
-		alti.WithWorkspace("alti.code.studio"),
-	)
-	if err != nil {
-		log.Fatalf("Failed to initialize client: %v", err)
-	}
-
-	// Trigger a compliance audit on active repository
-	ctx := context.Background()
-	report, err := client.Compliance.Audit(ctx, "repo-id-123")
-	if err != nil {
-		log.Fatalf("Audit failed: %v", err)
-	}
-
-	fmt.Printf("Audit Status: %s. Issues Found: %d\\n", report.Status, len(report.Issues))
-}`,
-    },
+    // Clear form after saving
+    setActiveSdkId(null);
+    setNewSdkName("");
+    setNewSdkUrl("");
   };
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-y-auto bg-transparent flex flex-col h-full font-sans text-foreground">
-        <div className="relative flex flex-col w-full items-center justify-start py-12 px-6 md:px-12">
-          {/* Abstract overlay */}
-          <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none blur-sm mix-blend-screen">
-            <AgentCommandCenter />
+      <div className="relative flex flex-1 w-full flex-col items-center justify-center h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
+        <div className="flex w-full flex-col max-w-2xl pb-20">
+          <div className="flex flex-col items-center text-center mb-8">
+            <h1
+              className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+              style={{ fontFamily: "var(--font-secondary)" }}
+            >
+              {activeSdkId ? "Edit SDK" : "New SDK"}
+            </h1>
           </div>
 
-          <div className="flex w-full max-w-4xl flex-col gap-8 z-10">
-            {/* Header section */}
-            <div className="flex flex-col gap-2 border-b border-default-100 pb-6">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/10 rounded-xl text-primary">
-                  <Blocks className="size-6" />
-                </div>
-                <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-                  SDK Packages
-                </h1>
-              </div>
-              <p className="text-sm text-default-500 max-w-2xl mt-1">
-                Install and configure the native client SDKs to query corporate
-                knowledge, programmatically manage guardrail rules, and invoke
-                specialized agent swarms directly from your source code.
-              </p>
+          <div className="flex flex-col gap-4 w-full">
+            {/* Box 1: Enter SDK Name */}
+            <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3">
+              <Code className="w-4 h-4 text-gray-400" />
+              <input
+                className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                placeholder="Enter SDK name..."
+                type="text"
+                value={newSdkName}
+                onChange={(e) => setNewSdkName(e.target.value)}
+              />
             </div>
 
-            {/* Main Tabs Selection */}
-            <div className="flex border-b border-default-200 gap-6">
-              {(["node", "python", "go"] as LanguageTab[]).map((tab) => (
-                <button
-                  key={tab}
-                  className={cn(
-                    "pb-3 text-sm font-semibold tracking-wide border-b-2 transition-all capitalize focus:outline-none",
-                    activeTab === tab
-                      ? "border-primary text-primary"
-                      : "border-transparent text-default-400 hover:text-default-700",
-                  )}
-                  onClick={() => setActiveTab(tab)}
+            {/* Box 2: Enter SDK Link */}
+            <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3">
+              <Link className="w-4 h-4 text-gray-400" />
+              <input
+                className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                placeholder="Enter SDK link..."
+                type="text"
+                value={newSdkUrl}
+                onChange={(e) => setNewSdkUrl(e.target.value)}
+              />
+            </div>
+
+            {/* Save / Add Button */}
+            <div className="mt-8 flex w-full gap-4">
+              {activeSdkId ? (
+                <>
+                  <Button
+                    className="flex-1 py-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-900 text-base transition-all duration-200"
+                    onPress={() => {
+                      setActiveSdkId(null);
+                      setNewSdkName("");
+                      setNewSdkUrl("");
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="flex-1 py-6 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-base shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                    isDisabled={!newSdkName.trim() || !newSdkUrl.trim()}
+                    onPress={handleSaveSdk}
+                  >
+                    Save Changes
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className="w-full py-6 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-base shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                  isDisabled={!newSdkName.trim() || !newSdkUrl.trim()}
+                  onPress={handleSaveSdk}
                 >
-                  {tab === "node" ? "Node.js" : tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Tab Panel Content */}
-            <div className="flex flex-col gap-6">
-              {/* Installation Command Block */}
-              <div className="bg-[#FCFCFD] dark:bg-default-50/50 border border-default-200/60 rounded-2xl p-6 shadow-sm flex flex-col gap-3">
-                <div className="flex items-center gap-2 text-xs font-semibold text-default-500 uppercase tracking-wider">
-                  <Terminal className="size-4 text-default-400" />
-                  Installation
-                </div>
-                <div className="flex items-center gap-2 bg-default-100 dark:bg-default-50 border border-default-200 rounded-xl p-3 font-mono text-sm overflow-x-auto">
-                  <span className="flex-1 text-foreground select-all">
-                    $ {sdkContent[activeTab].install}
-                  </span>
-                  <Button
-                    isIconOnly
-                    className="shrink-0"
-                    size="sm"
-                    variant="flat"
-                    onPress={() =>
-                      handleCopy(sdkContent[activeTab].install, "install")
-                    }
-                  >
-                    {copiedText === "install" ? (
-                      <Check className="size-3.5 text-success" />
-                    ) : (
-                      <Copy className="size-3.5" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Code Snippet Block */}
-              <div className="bg-white dark:bg-default-50 border border-default-200/60 rounded-2xl overflow-hidden shadow-sm flex flex-col">
-                <div className="px-6 py-4 border-b border-default-100 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-default-500 uppercase tracking-wider">
-                    <Code2 className="size-4 text-default-400" />
-                    Boilerplate Initialization
-                  </div>
-                  <Button
-                    className="font-medium text-xs border border-default-200 hover:bg-default-100 rounded-lg h-8 px-3"
-                    size="sm"
-                    startContent={
-                      copiedText === "code" ? (
-                        <Check className="size-3.5 text-success" />
-                      ) : (
-                        <Copy className="size-3.5" />
-                      )
-                    }
-                    variant="light"
-                    onPress={() =>
-                      handleCopy(sdkContent[activeTab].code, "code")
-                    }
-                  >
-                    {copiedText === "code" ? "Copied" : "Copy Snippet"}
-                  </Button>
-                </div>
-                <pre className="p-6 font-mono text-xs overflow-x-auto text-default-800 dark:text-default-200 bg-default-50/20 leading-relaxed">
-                  <code>{sdkContent[activeTab].code}</code>
-                </pre>
-              </div>
-            </div>
-
-            {/* Additional documentation cards grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              <div className="border border-default-200/60 rounded-2xl p-6 bg-white dark:bg-default-50 flex flex-col gap-3 shadow-sm">
-                <div className="p-2 bg-success/10 text-success rounded-lg w-fit">
-                  <ShieldCheck className="size-5" />
-                </div>
-                <h3 className="text-base font-semibold text-foreground">
-                  Secure Credentials
-                </h3>
-                <p className="text-xs text-default-500 leading-relaxed">
-                  Never commit raw API keys to version control. Initialize the
-                  client using environment variables (`ALTI_API_KEY`) or access
-                  them at runtime from a secure secrets manager.
-                </p>
-              </div>
-
-              <div className="border border-default-200/60 rounded-2xl p-6 bg-white dark:bg-default-50 flex flex-col gap-3 shadow-sm">
-                <div className="p-2 bg-blue-500/10 text-blue-500 rounded-lg w-fit">
-                  <Download className="size-5" />
-                </div>
-                <h3 className="text-base font-semibold text-foreground">
-                  Advanced SDK Features
-                </h3>
-                <p className="text-xs text-default-500 leading-relaxed">
-                  Explore full features such as custom tool definition,
-                  asynchronous webhook callbacks, streaming agent token
-                  responses, and custom model routing mappings.
-                </p>
-              </div>
+                  Add SDK
+                </Button>
+              )}
             </div>
           </div>
         </div>
