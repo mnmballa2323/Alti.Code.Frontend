@@ -3,27 +3,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import dynamic from "next/dynamic";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import { AppDispatch, RootState } from "@/store";
 import { setChatContext, startNewChat } from "@/store/messagesSlice";
-
-const AgentCommandCenter = dynamic(
-  () =>
-    import("@/components/AgentCommandCenter").then(
-      (mod) => mod.AgentCommandCenter,
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[300px] flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
-        Orchestrating Command Center...
-      </div>
-    ),
-  },
-);
 
 export default function Guardrails() {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,12 +55,8 @@ export default function Guardrails() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
+      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans">
         <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
-          <div className="absolute inset-0 z-0 opacity-10 pointer-events-none blur-sm mix-blend-screen">
-            <AgentCommandCenter />
-          </div>
-
           <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
             <div className="flex flex-col items-center text-center z-30 mb-6">
               <h1

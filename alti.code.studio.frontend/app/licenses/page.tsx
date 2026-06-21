@@ -3,26 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Check } from "lucide-react";
 import { cn } from "@heroui/react";
-import dynamic from "next/dynamic";
-
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
 import { setChatContext, startNewChat } from "@/store/messagesSlice";
-
-const AgentCommandCenter = dynamic(
-  () =>
-    import("@/components/AgentCommandCenter").then(
-      (mod) => mod.AgentCommandCenter,
-    ),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-[300px] flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
-        Orchestrating Command Center...
-      </div>
-    ),
-  },
-);
 
 type AvailableLicense = {
   id: string;
@@ -433,12 +416,8 @@ export default function LicensesPage() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-y-auto bg-transparent flex flex-col h-full font-sans text-foreground">
+      <div className="flex-1 overflow-y-auto bg-white dark:bg-background flex flex-col h-full font-sans text-foreground">
         <div className="relative flex flex-col w-full items-center justify-start py-12 px-6 md:px-12">
-          {/* Visual abstract overlay */}
-          <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none blur-sm mix-blend-screen">
-            <AgentCommandCenter />
-          </div>
 
           <div className="flex w-full max-w-4xl flex-col gap-6 z-10">
             {/* Interactive Grid of Licenses */}
