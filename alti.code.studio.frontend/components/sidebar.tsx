@@ -1765,8 +1765,9 @@ export default function Sidebar() {
                 : "flex flex-col items-center gap-2",
             )}
           >
-            {filteredNavigationItems.map((item) => {
+            {filteredNavigationItems.map((item, index) => {
               const IconComponent = item.icon;
+              const isSecondRow = index >= 7;
 
               return (
                 <Tooltip
@@ -1779,7 +1780,7 @@ export default function Sidebar() {
                   closeDelay={0}
                   content={item.label}
                   delay={0}
-                  placement={isSidebarOpen ? "top" : "right"}
+                  placement={isSidebarOpen ? (isSecondRow ? "bottom" : "top") : "right"}
                 >
                   <Button
                     isIconOnly
