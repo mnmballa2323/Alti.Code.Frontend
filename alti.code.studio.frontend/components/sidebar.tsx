@@ -2247,53 +2247,6 @@ export default function Sidebar() {
                       className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                     >
                       <span className="truncate">{lic.name}</span>
-                      <Dropdown
-                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                        placement="bottom-end"
-                      >
-                        <DropdownTrigger>
-                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
-                            <MoreHorizontal size={16} />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="License options"
-                          className="p-0"
-                          variant="flat"
-                        >
-                          <DropdownItem
-                            key="edit"
-                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                            startContent={
-                              <Edit2 className="text-default-500" size={14} />
-                            }
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("edit-license", {
-                                  detail: lic,
-                                }),
-                              )
-                            }
-                          >
-                            Edit
-                          </DropdownItem>
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                            color="danger"
-                            startContent={<Trash2 size={14} />}
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("delete-license", {
-                                  detail: lic.id,
-                                }),
-                              )
-                            }
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
                     </div>
                   ));
                 })()}
