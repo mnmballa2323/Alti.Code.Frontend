@@ -179,7 +179,7 @@ export default function LicensesPage() {
                         </h3>
                       </div>
 
-                      <p className="text-xs text-default-500 leading-relaxed pr-2">
+                      <p className="text-xs text-default-500 leading-relaxed pr-2 line-clamp-3 h-[58px] overflow-hidden">
                         {license.desc}
                       </p>
                     </div>
