@@ -17,10 +17,4 @@ export const fontSerif = Instrument_Serif({
   variable: "--font-serif",
   weight: ["400"],
 });
-// export const fontThinker = Thinker({
-//   subsets: ["latin"],
-//   variable: "--font-thinker",
-//   path: path.join(process.cwd(), "../"),
-//   display: "swap",
-//   weight: ["400", "500", "700"],
-// });
+
