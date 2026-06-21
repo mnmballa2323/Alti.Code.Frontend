@@ -80,8 +80,8 @@ export default function Repositories() {
 
   return (
     <ChatBotLayout>
-      <div className="relative flex flex-1 w-full flex-col items-center justify-start h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
-        <div className="flex w-full flex-col max-w-2xl pb-20 pt-16">
+      <div className="relative flex flex-1 w-full flex-col items-center justify-center h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
+        <div className="flex w-full flex-col max-w-2xl pb-20">
           <div className="flex flex-col items-center text-center mb-8">
             <h1
               className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
