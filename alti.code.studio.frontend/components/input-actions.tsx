@@ -457,6 +457,371 @@ function PromptInputFullLineComponent({
     [],
   );
 
+  const handleFunctionSelect = (key: string) => {
+    const currentPromptVal = prompt.trim();
+
+    switch (key) {
+      case "security": {
+        const sweepPrompt =
+          currentPromptVal ||
+          "Security Sweep: Audit my repository coordinates for dependency vulnerabilities, CVE threat coordinates, and compile secure self-healing patches.";
+
+        setPrompt(sweepPrompt);
+        if (onSend) {
+          onSend(
+            sweepPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: sweepPrompt,
+              model: "default",
+              domain: "Security",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "qa": {
+        const qaPrompt =
+          currentPromptVal ||
+          "Autonomous QA Loop: Run all unit tests, detect syntax or hydration failures, look up error stack traces, and autonomously patch the code until the entire test suite passes successfully.";
+
+        setPrompt(qaPrompt);
+        if (onSend) {
+          onSend(
+            qaPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: qaPrompt,
+              model: "default",
+              domain: "QA",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "graph": {
+        const graphPrompt =
+          currentPromptVal ||
+          "Generate Knowledge Graph: Analyze the repository structure, parse all files, build dependency relationships, and render the complete visual knowledge graph of the codebase.";
+
+        setPrompt(graphPrompt);
+        if (onSend) {
+          onSend(
+            graphPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: graphPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "architecture": {
+        const archPrompt =
+          currentPromptVal ||
+          "System Architecture: Trace the codebase components, map key layers (API, backend, database), analyze system dependencies, and compile the full topography map.";
+
+        setPrompt(archPrompt);
+        if (onSend) {
+          onSend(
+            archPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: archPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "refactor": {
+        const refactorPrompt =
+          currentPromptVal ||
+          "Refactor & Optimize: Analyze the active files, apply DRY and clean code principles, refactor complex methods, optimize performance, and inject JSDoc/TypeScript types.";
+
+        setPrompt(refactorPrompt);
+        if (onSend) {
+          onSend(
+            refactorPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: refactorPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "documentation": {
+        const docsPrompt =
+          currentPromptVal ||
+          "Write Documentation: Scan the codebase components, analyze implementation details, and generate comprehensive markdown API documentation, architectural summaries, or README guides.";
+
+        setPrompt(docsPrompt);
+        if (onSend) {
+          onSend(
+            docsPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: docsPrompt,
+              model: "default",
+              domain: "Documentation",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "explain": {
+        const explainPrompt =
+          currentPromptVal ||
+          "Explain Code: Trace the execution flow of the active files, provide a line-by-line conceptual walkthrough, explain technical trade-offs, and detail how the components interact.";
+
+        setPrompt(explainPrompt);
+        if (onSend) {
+          onSend(
+            explainPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: explainPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "database": {
+        const dbPrompt =
+          currentPromptVal ||
+          "Database Designer: Architect the relational database schema, design Prisma or Mongoose models, write SQL migration scripts, optimize indexes, and map out entity relationships.";
+
+        setPrompt(dbPrompt);
+        if (onSend) {
+          onSend(
+            dbPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: dbPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "github": {
+        setGithubSelected(!githubSelected);
+        const pushPrompt =
+          currentPromptVal ||
+          "Push to GitHub: Stage all refined codebase modifications, perform licensing and security compliance checks, compile a precise conventional commit message, and push the verified changes to the remote branch.";
+
+        setPrompt(pushPrompt);
+        if (onSend) {
+          onSend(
+            pushPrompt,
+            selectedLanguage === "Mode"
+              ? "default"
+              : selectedLanguage.toLowerCase(),
+            selectedModel === "Stack"
+              ? "fullstack"
+              : selectedModel.toLowerCase(),
+            selectedProgLang === "Language"
+              ? "typescript"
+              : selectedProgLang.toLowerCase(),
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: pushPrompt,
+              model: "default",
+              domain: "Code",
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      case "deploy": {
+        const hasConnectedCloud = connectedClouds && connectedClouds.length > 0;
+
+        if (!hasConnectedCloud) {
+          onOpen({ type: "connect-cloud" });
+
+          return;
+        }
+        const deployPrompt =
+          currentPromptVal ||
+          "Analyze the workspace and autonomously deploy this application to production.";
+
+        if (onSend) {
+          onSend(
+            deployPrompt,
+            "Deploy",
+            selectedModel === "Stack" || selectedModel === "Framework"
+              ? "Full Stack"
+              : selectedModel,
+            selectedProgLang === "Language" ? undefined : selectedProgLang,
+          );
+        } else {
+          dispatch(
+            sendMessage({
+              prompt: deployPrompt,
+              model: "Deploy",
+              domain:
+                selectedModel === "Stack" || selectedModel === "Framework"
+                  ? "Full Stack"
+                  : selectedModel,
+              language:
+                selectedProgLang === "Language" ? undefined : selectedProgLang,
+              sessionId,
+              token,
+            }),
+          );
+        }
+        setPrompt("");
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   return (
     <Form
       className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-background/90 backdrop-blur-3xl rounded-[32px] border border-default-200/80 shadow-xl transition-all duration-300 hover:shadow-2xl hover:border-default-300 dark:border-white/10 dark:bg-content1/80"
@@ -818,495 +1183,181 @@ function PromptInputFullLineComponent({
               )}
 
               {!hideRunLocally && (
-                <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Shield
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const sweepPrompt =
-                            prompt.trim() ||
-                            "Security Sweep: Audit my repository coordinates for dependency vulnerabilities, CVE threat coordinates, and compile secure self-healing patches.";
-
-                          setPrompt(sweepPrompt);
-                          if (onSend) {
-                            onSend(
-                              sweepPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: sweepPrompt,
-                                model: "default",
-                                domain: "Security",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
+                <Dropdown
+                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
+                  placement="top-start"
+                >
+                  <DropdownTrigger>
+                    <button
+                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
+                      type="button"
+                    >
+                      <Icon
+                        className="size-4 shrink-0 text-purple-500"
+                        icon="lucide:sparkles"
                       />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Security Audit</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <span className="transition-colors duration-200">
+                        Select Function
+                      </span>
+                      <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                    </button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Function Options"
+                    className="p-0 overflow-hidden"
+                    variant="flat"
+                  >
+                    <DropdownSection
+                      className="mb-0"
+                      classNames={{
+                        heading:
+                          "px-3 py-1 text-[11px] font-semibold text-gray-450 select-none uppercase tracking-wider",
+                        group: "flex flex-col gap-0.5",
+                      }}
+                      title="AUTONOMOUS FUNCTIONS"
+                    >
+                      <DropdownItem
+                        key="security"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Security Audit"
+                        onPress={() => handleFunctionSelect("security")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Shield className="size-4 text-red-500 dark:text-red-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Security Audit
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <FlaskConical
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const qaPrompt =
-                            prompt.trim() ||
-                            "Autonomous QA Loop: Run all unit tests, detect syntax or hydration failures, look up error stack traces, and autonomously patch the code until the entire test suite passes successfully.";
+                      <DropdownItem
+                        key="qa"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Autonomous QA Loop"
+                        onPress={() => handleFunctionSelect("qa")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <FlaskConical className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Autonomous QA Loop
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                          setPrompt(qaPrompt);
-                          if (onSend) {
-                            onSend(
-                              qaPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: qaPrompt,
-                                model: "default",
-                                domain: "QA",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Autonomous QA Loop</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <DropdownItem
+                        key="graph"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Generate Knowledge Graph"
+                        onPress={() => handleFunctionSelect("graph")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Network className="size-4 text-blue-500 dark:text-blue-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Generate Knowledge Graph
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Network
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const graphPrompt =
-                            prompt.trim() ||
-                            "Generate Knowledge Graph: Analyze the repository structure, parse all files, build dependency relationships, and render the complete visual knowledge graph of the codebase.";
+                      <DropdownItem
+                        key="architecture"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="System Architecture"
+                        onPress={() => handleFunctionSelect("architecture")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Cpu className="size-4 text-purple-500 dark:text-purple-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            System Architecture
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                          setPrompt(graphPrompt);
-                          if (onSend) {
-                            onSend(
-                              graphPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: graphPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Generate Knowledge Graph</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <DropdownItem
+                        key="refactor"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Refactor & Optimize"
+                        onPress={() => handleFunctionSelect("refactor")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Wand2 className="size-4 text-orange-500 dark:text-orange-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Refactor & Optimize
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Cpu
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const archPrompt =
-                            prompt.trim() ||
-                            "System Architecture: Trace the codebase components, map key layers (API, backend, database), analyze system dependencies, and compile the full topography map.";
+                      <DropdownItem
+                        key="documentation"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Write Documentation"
+                        onPress={() => handleFunctionSelect("documentation")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <BookOpen className="size-4 text-teal-500 dark:text-teal-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Write Documentation
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                          setPrompt(archPrompt);
-                          if (onSend) {
-                            onSend(
-                              archPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: archPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>System Architecture</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <DropdownItem
+                        key="explain"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Explain Code"
+                        onPress={() => handleFunctionSelect("explain")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <HelpCircle className="size-4 text-sky-500 dark:text-sky-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Explain Code
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Wand2
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const refactorPrompt =
-                            prompt.trim() ||
-                            "Refactor & Optimize: Analyze the active files, apply DRY and clean code principles, refactor complex methods, optimize performance, and inject JSDoc/TypeScript types.";
+                      <DropdownItem
+                        key="database"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Database Designer"
+                        onPress={() => handleFunctionSelect("database")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Database className="size-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Database Designer
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                          setPrompt(refactorPrompt);
-                          if (onSend) {
-                            onSend(
-                              refactorPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: refactorPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Refactor & Optimize</p>
-                    </TooltipContent>
-                  </Tooltip>
+                      <DropdownItem
+                        key="github"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Push to GitHub"
+                        onPress={() => handleFunctionSelect("github")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Github className="size-4 text-neutral-700 dark:text-neutral-350 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Push to GitHub
+                          </span>
+                        </div>
+                      </DropdownItem>
 
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <BookOpen
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const docsPrompt =
-                            prompt.trim() ||
-                            "Write Documentation: Scan the codebase components, analyze implementation details, and generate comprehensive markdown API documentation, architectural summaries, or README guides.";
-
-                          setPrompt(docsPrompt);
-                          if (onSend) {
-                            onSend(
-                              docsPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: docsPrompt,
-                                model: "default",
-                                domain: "Documentation",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Write Documentation</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <HelpCircle
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const explainPrompt =
-                            prompt.trim() ||
-                            "Explain Code: Trace the execution flow of the active files, provide a line-by-line conceptual walkthrough, explain technical trade-offs, and detail how the components interact.";
-
-                          setPrompt(explainPrompt);
-                          if (onSend) {
-                            onSend(
-                              explainPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: explainPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Explain Code</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Database
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          const dbPrompt =
-                            prompt.trim() ||
-                            "Database Designer: Architect the relational database schema, design Prisma or Mongoose models, write SQL migration scripts, optimize indexes, and map out entity relationships.";
-
-                          setPrompt(dbPrompt);
-                          if (onSend) {
-                            onSend(
-                              dbPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: dbPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Database Designer</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Github
-                        className={cn(
-                          "size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95",
-                          githubSelected
-                            ? "bg-indigo-500 border-indigo-500"
-                            : "bg-black border-gray-300",
-                        )}
-                        onClick={() => {
-                          setGithubSelected(!githubSelected);
-                          const pushPrompt =
-                            prompt.trim() ||
-                            "Push to GitHub: Stage all refined codebase modifications, perform licensing and security compliance checks, compile a precise conventional commit message, and push the verified changes to the remote branch.";
-
-                          setPrompt(pushPrompt);
-                          if (onSend) {
-                            onSend(
-                              pushPrompt,
-                              selectedLanguage === "Mode"
-                                ? "default"
-                                : selectedLanguage.toLowerCase(),
-                              selectedModel === "Stack"
-                                ? "fullstack"
-                                : selectedModel.toLowerCase(),
-                              selectedProgLang === "Language"
-                                ? "typescript"
-                                : selectedProgLang.toLowerCase(),
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: pushPrompt,
-                                model: "default",
-                                domain: "Code",
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Push to GitHub</p>
-                    </TooltipContent>
-                  </Tooltip>
-
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <CloudUpload
-                        className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
-                        onClick={() => {
-                          // Check if any cloud providers are connected in the global Redux store
-                          const hasConnectedCloud =
-                            connectedClouds && connectedClouds.length > 0;
-
-                          if (!hasConnectedCloud) {
-                            onOpen({ type: "connect-cloud" });
-
-                            return;
-                          }
-
-                          const deployPrompt =
-                            prompt.trim() ||
-                            "Analyze the workspace and autonomously deploy this application to production.";
-
-                          if (onSend) {
-                            onSend(
-                              deployPrompt,
-                              "Deploy",
-                              selectedModel === "Stack" ||
-                                selectedModel === "Framework"
-                                ? "Full Stack"
-                                : selectedModel,
-                              selectedProgLang === "Language"
-                                ? undefined
-                                : selectedProgLang,
-                            );
-                          } else {
-                            dispatch(
-                              sendMessage({
-                                prompt: deployPrompt,
-                                model: "Deploy",
-                                domain:
-                                  selectedModel === "Stack" ||
-                                  selectedModel === "Framework"
-                                    ? "Full Stack"
-                                    : selectedModel,
-                                language:
-                                  selectedProgLang === "Language"
-                                    ? undefined
-                                    : selectedProgLang,
-                                sessionId,
-                                token,
-                              }),
-                            );
-                          }
-                          setPrompt("");
-                        }}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      <p>Deploy to Cloud</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </>
+                      <DropdownItem
+                        key="deploy"
+                        className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Deploy to Cloud"
+                        onPress={() => handleFunctionSelect("deploy")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <CloudUpload className="size-4 text-violet-500 dark:text-violet-400 shrink-0" />
+                          <span className="text-[12px] font-medium text-foreground">
+                            Deploy to Cloud
+                          </span>
+                        </div>
+                      </DropdownItem>
+                    </DropdownSection>
+                  </DropdownMenu>
+                </Dropdown>
               )}
             </>
           )}
