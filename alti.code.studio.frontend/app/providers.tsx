@@ -15,6 +15,7 @@ import { store } from "@/store";
 import { getUserData } from "@/lib/user";
 import { userController } from "@/store/userSlice";
 import { TRPCProvider } from "@/components/providers/TRPCProvider";
+import { PersistentLayout } from "@/components/ChatbotLayout";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -55,6 +56,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
   const [ssoAttempted, setSsoAttempted] = React.useState(false);
   const iframeRef = React.useRef<HTMLIFrameElement | null>(null);
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const accessToken = session?.user?.accessToken ?? null;
@@ -145,6 +147,17 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
       cleanup();
     };
   }, [status, ssoAttempted]);
+
+  const isAuthRoute = ![
+    "/",
+    "/login",
+    "/register",
+    "/auth/sso-iframe",
+  ].includes(pathname);
+
+  if (isAuthRoute) {
+    return <PersistentLayout>{children}</PersistentLayout>;
+  }
 
   return <>{children}</>;
 }
