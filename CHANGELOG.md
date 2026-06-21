@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.38] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 is-obj Package**: Integrated `is-obj` (Check if a value is an object) to enhance backend operations.
+- **Pure MIT/Apache-2.0 delay Package**: Integrated `delay` (Delay a promise a specified amount of time) to enhance backend operations.
+- **Pure MIT/Apache-2.0 yoctodelay Package**: Integrated `yoctodelay` (Delay a promise a specified amount of time) to enhance backend operations.
+- **Pure MIT/Apache-2.0 in-range Package**: Integrated `in-range` (Check if a number is in a given range) to enhance backend operations.
+- **Pure MIT/Apache-2.0 negative-zero Package**: Integrated `negative-zero` (Check if a number is negative zero) to enhance backend operations.
+- **Pure MIT/Apache-2.0 lowercase-keys Package**: Integrated `lowercase-keys` (Lowercase the keys of an object) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-absolute-url Package**: Integrated `is-absolute-url` (Check if a URL is absolute) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-relative-url Package**: Integrated `is-relative-url` (Check if a URL is relative) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-port-reachable Package**: Integrated `is-port-reachable` (Check if a local or remote port is reachable) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-retry-allowed Package**: Integrated `is-retry-allowed` (Check whether a request can be retried based on the `error.code`) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.36] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
