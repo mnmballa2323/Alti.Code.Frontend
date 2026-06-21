@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.45] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 is-html Package**: Integrated `is-html` (Check if a string is HTML) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-text-path Package**: Integrated `is-text-path` (Check if a file path is a text file) to enhance backend operations.
+- **Pure MIT/Apache-2.0 ip-regex Package**: Integrated `ip-regex` (Regular expression for matching IP addresses (IPv4 & IPv6)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 email-regex Package**: Integrated `email-regex` (Regular expression for matching email addresses) to enhance backend operations.
+- **Pure MIT/Apache-2.0 resolve-cwd Package**: Integrated `resolve-cwd` (Resolve the path of a module like `require.resolve()` but from the current working directory) to enhance backend operations.
+- **Pure MIT/Apache-2.0 resolve-global Package**: Integrated `resolve-global` (Resolve the path of a globally installed module) to enhance backend operations.
+- **Pure MIT/Apache-2.0 import-cwd Package**: Integrated `import-cwd` (Import a module like with `require()` but from the current working directory) to enhance backend operations.
+- **Pure MIT/Apache-2.0 import-global Package**: Integrated `import-global` (Import a globally installed module) to enhance backend operations.
+- **Pure MIT/Apache-2.0 import-from Package**: Integrated `import-from` (Import a module like with `require()` but from a given path) to enhance backend operations.
+- **Pure MIT/Apache-2.0 object-assign Package**: Integrated `object-assign` (ES2015 `Object.assign()` ponyfill) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.44] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
