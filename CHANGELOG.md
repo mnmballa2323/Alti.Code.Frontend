@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.43] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 widest-line Package**: Integrated `widest-line` (Get the visual width of the widest line in a string - the number of columns required to display it) to enhance backend operations.
+- **Pure MIT/Apache-2.0 ansi-regex Package**: Integrated `ansi-regex` (Regular expression for matching ANSI escape codes) to enhance backend operations.
+- **Pure MIT/Apache-2.0 has-flag Package**: Integrated `has-flag` (Check if argv has a specific flag) to enhance backend operations.
+- **Pure MIT/Apache-2.0 cli-boxes Package**: Integrated `cli-boxes` (Boxes for use in the terminal) to enhance backend operations.
+- **Pure MIT/Apache-2.0 camelcase-keys Package**: Integrated `camelcase-keys` (Convert object keys to camel case) to enhance backend operations.
+- **Pure MIT/Apache-2.0 decamelize-keys Package**: Integrated `decamelize-keys` (Convert object keys from camel case) to enhance backend operations.
+- **Pure MIT/Apache-2.0 hard-rejection Package**: Integrated `hard-rejection` (Make unhandled promise rejections fail hard right away instead of the default silent fail) to enhance backend operations.
+- **Pure MIT/Apache-2.0 loud-rejection Package**: Integrated `loud-rejection` (Make unhandled promise rejections fail loudly instead of the default silent fail) to enhance backend operations.
+- **Pure MIT/Apache-2.0 currently-unhandled Package**: Integrated `currently-unhandled` (Track the list of currently unhandled promise rejections.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-error Package**: Integrated `is-error` (Detect whether a value is an error) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.42] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
