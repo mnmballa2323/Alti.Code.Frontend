@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
-import AgentCreationWizard from "@/components/agents/agent-creation-wizard";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import AgentRightSidebar from "@/components/agent-right-sidebar";
 import { AppDispatch } from "@/store";
@@ -137,15 +136,32 @@ function AgentPageContent() {
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-[calc(100vh-80px)] font-sans w-full relative">
         {!agentId ? (
           // Creation Mode
-          <div className="relative flex flex-1 w-full h-full">
-            <AgentCreationWizard
-              onComplete={(data) => {
-                console.log("Agent Created:", data);
-                window.dispatchEvent(
-                  new CustomEvent("create-agent", { detail: data }),
-                );
-              }}
-            />
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden animate-in fade-in duration-300">
+            <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
+              <div className="flex flex-col items-center text-center z-30 mb-6 max-w-2xl">
+                <h1
+                  className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
+                  style={{ fontFamily: "var(--font-secondary)" }}
+                >
+                  Build Your Agent
+                </h1>
+                <p className="text-sm text-default-500 mt-2 max-w-lg leading-relaxed">
+                  Describe what your agent should do, and we will configure its
+                  instructions, guardrails, and tools instantly.
+                </p>
+              </div>
+
+              <div className="flex w-full flex-col gap-4 max-w-2xl">
+                <PromptInputFullLineWithBottomActions
+                  hideAgents={true}
+                  hideDropdown={true}
+                  placeholder="Describe the agent you want to build..."
+                  prompt={inputValue}
+                  setPrompt={setInputValue}
+                  onSend={handleSend}
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <div className="flex h-full w-full relative">
