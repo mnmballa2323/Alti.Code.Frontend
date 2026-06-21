@@ -121,7 +121,7 @@ export default function Repositories() {
               {activeRepoId ? (
                 <>
                   <Button
-                    className="flex-1 py-6 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-900 text-base transition-all duration-200"
+                    className="flex-1 py-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-900 text-base transition-all duration-200"
                     onPress={() => {
                       setActiveRepoId(null);
                       setNewRepoName("");
