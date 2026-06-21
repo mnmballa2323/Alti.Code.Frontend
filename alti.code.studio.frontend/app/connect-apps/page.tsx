@@ -227,92 +227,20 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
   },
 };
 
-const CORE_APPS: AppIntegration[] = [
-  {
-    id: "github",
-    name: "GitHub",
-    description: "Sync repositories, read PRs, and commit code directly.",
-    icon: "mdi:github",
-    color: "bg-gray-800 dark:bg-white text-white dark:text-gray-900",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "slack",
-    name: "Slack",
-    description: "Read channel messages and send notifications.",
-    icon: "logos:slack-icon",
+const FALLBACK_APPS: AppIntegration[] = SAAS_MOCKS.map(
+  (mockApp) => ({
+    id: `app-${mockApp.slug}`,
+    name: mockApp.name,
+    description: mockApp.slug.startsWith("mcp_toolbox_")
+      ? `Connect and explore data dynamically within ${mockApp.name} powered by the Google Cloud MCP Toolbox.`
+      : `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+    icon: mockApp.icon,
     color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "jira",
-    name: "Jira",
-    description: "Manage sprints, update tickets, and track velocity.",
-    icon: "logos:jira",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "notion",
-    name: "Notion",
-    description: "Search internal docs and update knowledge base.",
-    icon: "logos:notion-icon",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "linear",
-    name: "Linear",
-    description:
-      "Modern issue tracking and project management for software teams.",
-    icon: "logos:linear",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "googledrive",
-    name: "Google Drive",
-    description: "Read and write documents directly to Google Workspace.",
-    icon: "logos:google-drive",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-  {
-    id: "discord",
-    name: "Discord",
-    description:
-      "Interact with community channels, manage roles, and deploy bots.",
-    icon: "logos:discord-icon",
-    color: "bg-white border border-gray-200",
-    status: "disconnected",
-    type: "official",
-  },
-];
+    status: "disconnected" as const,
+    type: "official" as const,
+  }),
+).sort((a, b) => a.name.localeCompare(b.name));
 
-const coreAppIds = new Set(CORE_APPS.map((app) => app.id));
-
-const FALLBACK_APPS: AppIntegration[] = [
-  ...CORE_APPS,
-  ...SAAS_MOCKS.filter((mockApp) => !coreAppIds.has(mockApp.slug)).map(
-    (mockApp) => ({
-      id: `app-${mockApp.slug}`,
-      name: mockApp.name,
-      description: mockApp.slug.startsWith("mcp_toolbox_")
-        ? `Connect and explore data dynamically within ${mockApp.name} powered by the Google Cloud MCP Toolbox.`
-        : `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
-      icon: mockApp.icon,
-      color: "bg-white border border-gray-200",
-      status: "disconnected" as const,
-      type: "official" as const,
-    }),
-  ),
-].sort((a, b) => a.name.localeCompare(b.name));
 
 const AppIcon = ({
   app,
@@ -509,10 +437,6 @@ const AppIcon = ({
       `https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`,
     );
     addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
-
-    // 4. Try Composio official logo API
-    addUrl(`https://logos.composio.dev/api/${cleanSlug.replace(/_/g, "-")}`);
-    addUrl(`https://logos.composio.dev/api/${cleanSlug}`);
 
     // 5. Try Clearbit Logo API
     addUrl(`https://logo.clearbit.com/${simpleIconBrand}.com`);
@@ -747,26 +671,7 @@ export default function ConnectAppsPage() {
       return;
     }
 
-    try {
-      const headers = accessToken
-        ? { Authorization: `Bearer ${accessToken}` }
-        : {};
-      const [triggersRes, toolsRes] = await Promise.all([
-        axios
-          .get(`${API_URL}/mcp/composio/triggers/${slug}`, { headers })
-          .catch(() => ({ data: { success: false, data: [] } })),
-        axios
-          .get(`${API_URL}/mcp/composio/tools/${slug}`, { headers })
-          .catch(() => ({ data: { success: false, data: [] } })),
-      ]);
-
-      if (triggersRes.data?.success) setAppTriggers(triggersRes.data.data);
-      if (toolsRes.data?.success) setAppTools(toolsRes.data.data);
-    } catch (err) {
-      console.error("Failed to load app details", err);
-    } finally {
-      setLoadingDetails(false);
-    }
+    setLoadingDetails(false);
   };
 
   useEffect(() => {
@@ -800,62 +705,40 @@ export default function ConnectAppsPage() {
           console.error("Failed to fetch custom servers", e);
         }
 
-        const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        // Custom MCP Apps
+        const customAppsMapped = customServers.map((s: any) => ({
+          id: `app-${s.name}`,
+          name: s.title,
+          description: s.description,
+          icon: "solar:server-square-bold",
+          color: "bg-white border border-gray-200",
+          status: activeTools.some((t: any) => t.server === s.name)
+            ? ("connected" as const)
+            : ("disconnected" as const),
+          type: "custom" as const,
+        }));
 
-        if (res.data && res.data.success && Array.isArray(res.data.data)) {
-          const connectedIds = new Set(
-            res.data.data.map((c: any) =>
-              (c.appId || c.toolkit || c.appName || "").toLowerCase(),
-            ),
-          );
+        // Standard SaaS & Presets
+        const standardAppsMapped = FALLBACK_APPS.map((app) => {
+          const slug = app.id.replace("app-", "").toLowerCase();
+          const active = activeTools.some((t: any) => t.server === slug);
 
-          // Custom MCP Apps
-          const customAppsMapped = customServers.map((s: any) => ({
-            id: `app-${s.name}`,
-            name: s.title,
-            description: s.description,
-            icon: "solar:server-square-bold",
-            color: "bg-white border border-gray-200",
-            status: activeTools.some((t: any) => t.server === s.name)
+          return {
+            ...app,
+            status: active
               ? ("connected" as const)
               : ("disconnected" as const),
-            type: "custom" as const,
-          }));
+          };
+        });
 
-          // Standard SaaS & Presets
-          const standardAppsMapped = FALLBACK_APPS.map((app) => {
-            const slug = app.id.replace("app-", "").toLowerCase();
+        // Sort all custom + standard apps alphabetically by name
+        const otherAppsSorted = [
+          ...customAppsMapped,
+          ...standardAppsMapped,
+        ].sort((a, b) => a.name.localeCompare(b.name));
 
-            if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
-              const active = activeTools.some((t: any) => t.server === slug);
-
-              return {
-                ...app,
-                status: active
-                  ? ("connected" as const)
-                  : ("disconnected" as const),
-              };
-            }
-
-            if (connectedIds.has(slug)) {
-              return { ...app, status: "connected" as const };
-            }
-            if (app.status === "connecting") return app;
-
-            return { ...app, status: "disconnected" as const };
-          });
-
-          // Sort all custom + standard apps alphabetically by name
-          const otherAppsSorted = [
-            ...customAppsMapped,
-            ...standardAppsMapped,
-          ].sort((a, b) => a.name.localeCompare(b.name));
-
-          setApps(otherAppsSorted);
-          window.dispatchEvent(new CustomEvent("sync-connect-apps"));
-        }
+        setApps(otherAppsSorted);
+        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
       } catch (err) {
         console.error("Failed to fetch connections", err);
       } finally {
@@ -891,9 +774,13 @@ export default function ConnectAppsPage() {
 
     try {
       const slug = id.replace("app-", "");
+      const preset = COMMAND_PRESETS[slug] || {
+        command: "npx",
+        args: ["-y", `@modelcontextprotocol/server-${slug.replace("mcp_", "")}`],
+      };
       const res = await axios.post(
-        `${API_URL}/mcp/composio/connect`,
-        { appName: slug },
+        `${API_URL}/mcp/connect`,
+        { name: slug, command: preset.command, args: preset.args },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }
@@ -901,11 +788,18 @@ export default function ConnectAppsPage() {
         },
       );
 
-      if (res.data && res.data.success && res.data.data?.redirectUrl) {
-        window.open(res.data.data.redirectUrl, "_blank");
-        window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+      if (res.data && res.data.success) {
+        setApps((prev) => {
+          const next = prev.map((app) =>
+            app.id === id ? { ...app, status: "connected" as const } : app,
+          );
+
+          window.dispatchEvent(new CustomEvent("sync-connect-apps"));
+
+          return next;
+        });
       } else {
-        throw new Error("No redirect URL returned from backend");
+        throw new Error("No success returned from backend");
       }
     } catch (err) {
       console.error("Connection failed:", err);
@@ -987,8 +881,8 @@ export default function ConnectAppsPage() {
     try {
       // Direct REST dynamic transport disconnect triggers
       await axios.post(
-        `${API_URL}/mcp/composio/disconnect`,
-        { appName: slug },
+        `${API_URL}/mcp/disconnect`,
+        { name: slug },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }
@@ -1121,8 +1015,8 @@ export default function ConnectAppsPage() {
       const slug = id.replace("app-", "");
 
       await axios.post(
-        `${API_URL}/mcp/composio/disconnect`,
-        { appName: slug },
+        `${API_URL}/mcp/disconnect`,
+        { name: slug },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }
@@ -1179,7 +1073,7 @@ export default function ConnectAppsPage() {
                 <motion.div
                   key="idle"
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex-1 flex flex-col items-center justify-start p-8 max-w-2xl mx-auto text-center gap-8 min-h-full py-12 w-full"
+                  className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full w-full"
                   exit={{ opacity: 0, scale: 0.98 }}
                   initial={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
@@ -1199,54 +1093,6 @@ export default function ConnectAppsPage() {
                       authentication and interact with its tools in a focused,
                       zero-hallucination agent session.
                     </p>
-                  </div>
-
-                  {/* Dual Bottom Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full text-left">
-                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
-                      <div className="flex items-center gap-2 text-primary">
-                        <Icon
-                          className="text-xl"
-                          icon="solar:shield-keyhole-bold"
-                        />
-                        <span className="text-xs font-bold uppercase tracking-wider">
-                          100% Isolated Scoping
-                        </span>
-                      </div>
-                      <p className="text-xs text-default-500 leading-normal">
-                        Tools are locked dynamically to ensure strict
-                        deterministic execution.
-                      </p>
-                    </div>
-
-                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
-                      <div className="flex items-center gap-2 text-primary">
-                        <Icon className="text-xl" icon="solar:key-bold" />
-                        <span className="text-xs font-bold uppercase tracking-wider">
-                          Composio MCP Auth
-                        </span>
-                      </div>
-                      <p className="text-xs text-default-500 leading-normal">
-                        Universal OAuth management handles complex
-                        authentications seamlessly.
-                      </p>
-                    </div>
-
-                    <div className="p-5 border border-default-200 dark:border-default-100/50 rounded-2xl flex flex-col gap-2.5 bg-[#f4f4f5]/30 dark:bg-default-50/5 hover:border-default-300 dark:hover:border-default-100 transition-all">
-                      <div className="flex items-center gap-2 text-success">
-                        <Icon
-                          className="text-xl"
-                          icon="solar:verified-check-bold"
-                        />
-                        <span className="text-xs font-bold uppercase tracking-wider">
-                          Data Privacy Guarantee
-                        </span>
-                      </div>
-                      <p className="text-xs text-default-500 leading-normal">
-                        SOC2/HIPAA compliant architecture. Zero data retention
-                        and strict no-training policies enforced.
-                      </p>
-                    </div>
                   </div>
                 </motion.div>
               ) : isMcp ? (
@@ -1636,7 +1482,7 @@ export default function ConnectAppsPage() {
                     {/* Footnote */}
                     <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
                       <Icon className="text-xs" icon="solar:lock-bold" />
-                      Authenticated securely via Composio protocol
+                      Authenticated securely via local protocol
                     </div>
                   </div>
 
@@ -1676,7 +1522,7 @@ export default function ConnectAppsPage() {
                             icon="line-md:loading-twotone-loop"
                           />
                           <span className="text-[11px] text-default-400">
-                            Syncing with Composio...
+                            Syncing connection...
                           </span>
                         </div>
                       ) : modalTab === "tools" ? (

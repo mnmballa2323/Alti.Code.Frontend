@@ -295,9 +295,7 @@ const AppIcon = ({
     );
     addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
 
-    // 4. Try Composio official logo API
-    addUrl(`https://logos.composio.dev/api/${cleanSlug.replace(/_/g, "-")}`);
-    addUrl(`https://logos.composio.dev/api/${cleanSlug}`);
+
 
     // 5. Try Clearbit Logo API
     addUrl(`https://logo.clearbit.com/${simpleIconBrand}.com`);
@@ -1137,61 +1135,51 @@ export default function Sidebar() {
           console.error("Failed to fetch custom servers in sidebar:", e);
         }
 
-        const res = await axios.get(`${API_URL}/mcp/composio/connections`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const connectedIds = new Set<string>();
+
+        // Custom MCP Apps
+        const customAppsMapped = customServers.map((s: any) => ({
+          id: `app-${s.name}`,
+          name: s.title,
+          description: s.description,
+          icon: "solar:server-square-bold",
+          color: "bg-white border border-gray-200",
+          status: activeTools.some((t: any) => t.server === s.name)
+            ? ("connected" as const)
+            : ("disconnected" as const),
+          type: "custom" as const,
+        }));
+
+        // Standard SaaS & Presets
+        const standardAppsMapped = FALLBACK_APPS.map((app) => {
+          const slug = app.id.replace("app-", "").toLowerCase();
+
+          if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
+            const active = activeTools.some((t: any) => t.server === slug);
+
+            return {
+              ...app,
+              status: active
+                ? ("connected" as const)
+                : ("disconnected" as const),
+            };
+          }
+
+          if (connectedIds.has(slug)) {
+            return { ...app, status: "connected" as const };
+          }
+          if (app.status === "connecting") return app;
+
+          return { ...app, status: "disconnected" as const };
         });
 
-        if (res.data && res.data.success && Array.isArray(res.data.data)) {
-          const connectedIds = new Set(
-            res.data.data.map((c: any) =>
-              (c.appId || c.toolkit || c.appName || "").toLowerCase(),
-            ),
-          );
+        // Sort all custom + standard apps alphabetically by name
+        const otherAppsSorted = [
+          ...customAppsMapped,
+          ...standardAppsMapped,
+        ].sort((a, b) => a.name.localeCompare(b.name));
 
-          // Custom MCP Apps
-          const customAppsMapped = customServers.map((s: any) => ({
-            id: `app-${s.name}`,
-            name: s.title,
-            description: s.description,
-            icon: "solar:server-square-bold",
-            color: "bg-white border border-gray-200",
-            status: activeTools.some((t: any) => t.server === s.name)
-              ? ("connected" as const)
-              : ("disconnected" as const),
-            type: "custom" as const,
-          }));
-
-          // Standard SaaS & Presets
-          const standardAppsMapped = FALLBACK_APPS.map((app) => {
-            const slug = app.id.replace("app-", "").toLowerCase();
-
-            if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
-              const active = activeTools.some((t: any) => t.server === slug);
-
-              return {
-                ...app,
-                status: active
-                  ? ("connected" as const)
-                  : ("disconnected" as const),
-              };
-            }
-
-            if (connectedIds.has(slug)) {
-              return { ...app, status: "connected" as const };
-            }
-            if (app.status === "connecting") return app;
-
-            return { ...app, status: "disconnected" as const };
-          });
-
-          // Sort all custom + standard apps alphabetically by name
-          const otherAppsSorted = [
-            ...customAppsMapped,
-            ...standardAppsMapped,
-          ].sort((a, b) => a.name.localeCompare(b.name));
-
-          setApps(otherAppsSorted);
-        }
+        setApps(otherAppsSorted);
       } catch (err) {
         console.error("Failed to fetch connections in sidebar:", err);
       } finally {

@@ -4,49 +4,10 @@ const path = require('path');
 const serve = require('electron-serve');
 const { spawn } = require('child_process');
 const { OpenClaudeSessionSyncer } = require('../desktop/session.sync.js');
-const { MoltbotOnboarder } = require('../desktop/moltbot.onboard.js');
-
 const appServe = app.isPackaged ? serve({ directory: path.join(__dirname, '../out') }) : null;
-let moltbotProcess = null;
 let openworkProcess = null;
-let currentComposioKey = null;
 
-// Function to boot the Composio-native Moltbot local surrogate
-function bootMoltbot(composioApiKey) {
-    if (moltbotProcess) {
-        moltbotProcess.kill();
-        moltbotProcess = null;
-    }
 
-    if (!composioApiKey) {
-        console.log('🤖 Electron: Moltbot Surrogate waiting for COMPOSIO_API_KEY...');
-        return;
-    }
-
-    console.log('🤖 Electron: Booting embedded Moltbot (Composio-native Surrogate)...');
-
-    const env = { ...process.env, COMPOSIO_API_KEY: composioApiKey };
-
-    // Mock the Moltbot process
-    moltbotProcess = spawn('node', ['-e', `
-        console.log("Moltbot Surrogate (Composio Integration) v1.0.0 Online.");
-        console.log("Composio API Key securely loaded into environment.");
-        console.log("Listening on ws://localhost:8081");
-        setInterval(() => {}, 1000); // Keep alive
-    `], { env });
-
-    moltbotProcess.stdout.on('data', (data) => {
-        console.log(`[Moltbot AST]: ${data.toString().trim()}`);
-    });
-
-    moltbotProcess.stderr.on('data', (data) => {
-        console.error(`[Moltbot ERR]: ${data.toString().trim()}`);
-    });
-
-    moltbotProcess.on('close', (code) => {
-        console.log(`Moltbot exited with code ${code}`);
-    });
-}
 
 // Function to boot the deepagentsjs / OpenWork Desktop Engine
 function bootOpenWork() {
@@ -114,25 +75,7 @@ const createWindow = () => {
         });
     });
 
-    // ─────────────────────────────────────────────────────────────────────────────
-    // Moltbot Authentication Bridge (Zero-Touch Onboarding)
-    // ─────────────────────────────────────────────────────────────────────────────
-    ipcMain.removeHandler('moltbot:set-key');
-    ipcMain.handle('moltbot:set-key', async (event, key) => {
-        console.log('🔑 Received COMPOSIO_API_KEY from UI. Initiating zero-touch Moltbot onboarding...');
 
-        try {
-            const onboarder = new MoltbotOnboarder();
-            // Automatically pass our Swarm's LLM keys alongside the user's Composio key
-            await onboarder.injectCredentials(key, process.env.ALTI_API_KEY || 'demo-llm-key');
-        } catch (e) {
-            console.error('Failed zero-touch onboarding:', e);
-        }
-
-        currentComposioKey = key;
-        bootMoltbot(key);
-        return { success: true };
-    });
 
     // ─────────────────────────────────────────────────────────────────────────────
     // OpenWork / deepagentsjs HITL Bridge (Phase 12)
@@ -230,10 +173,7 @@ const createWindow = () => {
         console.log(`✅ ClawHub: Extracted ${skill.name} to ~/.openclaw/skills/`);
         console.log(`🔄 ClawHub: Hot-reloading local Moltbot surrogate to register new intents...`);
 
-        // Rebooting the local Moltbot to simulate picking up the new skill
-        if (currentComposioKey) {
-            bootMoltbot(currentComposioKey);
-        }
+
 
         return { success: true, message: `${skill.name} integrated with Moltbot.` };
     });
@@ -324,11 +264,7 @@ const createWindow = () => {
 let syncer = null;
 
 app.on('ready', () => {
-    // We don't boot Moltbot immediately until we have the API key from the UI or environment
-    if (process.env.COMPOSIO_API_KEY) {
-        currentComposioKey = process.env.COMPOSIO_API_KEY;
-        bootMoltbot(currentComposioKey);
-    }
+
 
     bootOpenWork();
 
@@ -339,9 +275,7 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
     if (syncer) syncer.stop();
-    if (moltbotProcess) {
-        moltbotProcess.kill();
-    }
+
     if (openworkProcess) {
         openworkProcess.kill();
     }

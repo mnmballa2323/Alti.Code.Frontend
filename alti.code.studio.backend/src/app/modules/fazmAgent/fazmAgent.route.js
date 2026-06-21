@@ -128,29 +128,6 @@ router.post(
     FazmAgentController.uploadAttachment
 );
 
-// Composio stubs
-router.post(
-    '/api/composio/connect',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    FazmAgentController.composioConnect
-);
 
-router.get(
-    '/api/composio/status',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    FazmAgentController.composioStatus
-);
-
-router.post(
-    '/api/composio/disconnect',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    FazmAgentController.composioDisconnect
-);
-
-router.post(
-    '/api/composio/mcp/:toolkit',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    FazmAgentController.composioMcp
-);
 
 export const FazmAgentRoutes = router;

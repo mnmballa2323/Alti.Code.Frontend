@@ -29,7 +29,7 @@ describe('New Open-Source Entrenched Agents Integration', () => {
 
         const awesome = agentRegistry.get('awesome_claude_skills');
         expect(awesome.capabilities).toContain('skills-catalog');
-        expect(awesome.capabilities).toContain('composio-recipes');
+        expect(awesome.capabilities).toContain('mcp-recipes');
 
         const cow = agentRegistry.get('cow_agent');
         expect(cow.capabilities).toContain('wechat-bridge');

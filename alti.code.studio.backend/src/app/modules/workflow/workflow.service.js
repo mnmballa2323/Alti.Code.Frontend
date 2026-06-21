@@ -18,7 +18,7 @@ class WorkflowService {
         
         Workflow Name: ${name}
         Trigger: ${triggerType === 'schedule' ? `Cron (${cronExpression})` : `Webhook (${webhookEvent})`}
-        Authorized Tools (Composio App IDs): ${selectedTools.join(', ') || 'None'}
+        Authorized Tools (MCP Tool Names): ${selectedTools.join(', ') || 'None'}
         
         User Prompt: "${prompt}"
         

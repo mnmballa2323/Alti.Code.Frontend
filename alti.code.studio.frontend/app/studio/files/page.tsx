@@ -213,7 +213,7 @@ function CoWorkChatPanel() {
     {
       id: nid(),
       type: "system",
-      text: "Open-Claude Co-Work Nexus · Connected to Swarm & Composio HQ",
+      text: "Open-Claude Co-Work Nexus · Connected to Swarm",
     },
   ]);
   const [input, setInput] = useState("");
@@ -311,7 +311,7 @@ function CoWorkChatPanel() {
                       </span>
                     </div>
                     <span className="text-[10px] uppercase text-white/30 tracking-widest">
-                      Composio Router
+                      Local Router
                     </span>
                   </div>
                   <div className="p-3 text-xs font-mono text-white/50">
@@ -728,7 +728,7 @@ export default function StudioFilesPage() {
   const [activePane, setActivePane] = useState<
     "terminal" | "cowork" | "openwork" | "openinspect" | "pentagi" | "fossflow"
   >("terminal");
-  const [showVaultModal, setShowVaultModal] = useState(false);
+
   const [showClawHubModal, setShowClawHubModal] = useState(false);
   const [showMoltworkerModal, setShowMoltworkerModal] = useState(false);
   const [moltworkerUrl, setMoltworkerUrl] = useState("");
@@ -740,7 +740,7 @@ export default function StudioFilesPage() {
     risk: string;
     reason: string;
   } | null>(null);
-  const [composioKey, setComposioKey] = useState("");
+
   const editorRef = useRef<any>(null);
 
   const openClawHub = async () => {
@@ -802,15 +802,7 @@ export default function StudioFilesPage() {
     }
   };
 
-  const saveMoltbotVault = async () => {
-    if ((window as any).electron?.invoke) {
-      await (window as any).electron.invoke("moltbot:set-key", composioKey);
-      toast.success("Composio API Key securely injected into Moltbot!");
-    } else {
-      toast.error("Not running in Electron context!");
-    }
-    setShowVaultModal(false);
-  };
+
 
   const saveMoltworkerConfig = async () => {
     try {
@@ -971,12 +963,7 @@ export default function StudioFilesPage() {
           >
             ☁️ Moltworker Edge
           </button>
-          <button
-            className="text-xs px-3 py-1 bg-amber-600/20 text-amber-500 border border-amber-500/30 hover:bg-amber-600/30 rounded-lg transition-colors"
-            onClick={() => setShowVaultModal(true)}
-          >
-            🔑 Composio Vault
-          </button>
+
         </div>
 
         {selectedPath && (
@@ -1023,40 +1010,7 @@ export default function StudioFilesPage() {
         )}
       </div>
 
-      {showVaultModal && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#1e1e2e] border border-white/10 rounded-xl p-6 shadow-2xl w-[400px]">
-            <h2 className="text-lg font-bold text-white mb-2">
-              Composio Vault
-            </h2>
-            <p className="text-xs text-white/50 mb-4">
-              Enter your Composio API Key to authenticate the local Moltbot
-              Surrogate across 800+ SaaS apps.
-            </p>
-            <input
-              className="w-full bg-[#0d1117] border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 mb-4"
-              placeholder="Enter COMPOSIO_API_KEY..."
-              type="password"
-              value={composioKey}
-              onChange={(e) => setComposioKey(e.target.value)}
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                className="px-4 py-1.5 text-xs text-white/60 hover:text-white transition-colors"
-                onClick={() => setShowVaultModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-1.5 text-xs bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition-colors"
-                onClick={saveMoltbotVault}
-              >
-                Inject Credentials
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+
 
       {/* ClawHub Marketplace Modal */}
       {showClawHubModal && (

@@ -16,7 +16,7 @@ import { logger } from '../../../shared/logger.js';
 import { prisma } from '../../../config/prisma.js';
 import { paymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
-import { composioService } from '../mcp/composio.service.js';
+import { mcpClientService } from '../mcp/mcp.client.js';
 
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
@@ -137,17 +137,17 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
       await zepMemoryService.addMemory(sessionId, 'human', prompt);
     }
 
-    // Inject active user tools from Composio MCP
+    // Inject active user tools from local MCP servers
     let activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
     try {
-      const connectedTools = await composioService.getConnectedToolsSchema(userId);
+      const connectedTools = await mcpClientService.getAllTools();
       if (connectedTools && connectedTools.length > 0) {
-        // Composio MCP tool integration requires advanced Vertex setup, falling back to base model for now
+        // Local MCP tool integration requires advanced Vertex setup, falling back to base model for now
         activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
-        logger.info(`🔌 Injected ${connectedTools.length} Composio MCP tools into active LLM session for user ${userId}`);
+        logger.info(`🔌 Injected ${connectedTools.length} local MCP tools into active LLM session for user ${userId}`);
       }
     } catch(e) {
-      logger.warn('Failed to inject Composio tools: ' + e.message);
+      logger.warn('Failed to inject local MCP tools: ' + e.message);
     }
 
     // Initialize multi-turn chat to support function calling loops
@@ -172,7 +172,10 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
         logger.info(`🤖 LLM requested tool execution [Loop ${loopCount}]: ${functionCall.name}`);
         let toolResult;
         try {
-          const executionData = await composioService.executeTool(functionCall.name, functionCall.args, userId);
+          const mcpTools = await mcpClientService.getAllTools();
+          const targetTool = mcpTools.find(t => t.name === functionCall.name);
+          const serverName = targetTool ? targetTool.server : 'local';
+          const executionData = await mcpClientService.callTool(serverName, functionCall.name, functionCall.args);
           toolResult = { result: executionData };
           logger.info(`✅ Tool executed successfully`);
         } catch (err) {

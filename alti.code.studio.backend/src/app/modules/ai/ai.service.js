@@ -74,7 +74,7 @@ class AiService {
 
         try {
             // MOCK: Run an execution loop via Vertex AI
-            // In a real scenario, you'd define Composio tools as Vertex Function Declarations.
+            // In a real scenario, you'd define MCP tools as Vertex Function Declarations.
             const systemPrompt = `You are an autonomous agent executing a workflow.
             Your objective: ${workflow.prompt}
             Available Tools: ${workflow.tools.join(', ')}.

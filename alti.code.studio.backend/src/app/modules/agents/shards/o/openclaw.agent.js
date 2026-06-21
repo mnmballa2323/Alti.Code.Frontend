@@ -25,15 +25,14 @@ class OpenClawAgent extends BaseSpecialistAgent {
 
         // 1. Synthesize the OpenClaw Intent
         const prompt = `You are the Local Automator Swarm Agent.
-Your job is to translate the current Cloud Sprint Goal into a specific automation intent for "Moltbot" (OpenClaw + Composio), an autonomous agent running physically on the user's local machine.
+Your job is to translate the current Cloud Sprint Goal into a specific automation intent for "Moltbot" (OpenClaw), an autonomous agent running physically on the user's local machine.
 
-Moltbot has full system access, shell access, browser access, AND is natively authenticated across 800+ SaaS apps via the built-in Composio Plugin (Jira, GitHub, Slack, Notion, Salesforce, etc.).
+Moltbot has full system access, shell access, browser access, and direct local MCP/local tools integrations.
 
 Cloud Sprint Goal: "${context.goal}"
 Current Code Context: ${JSON.stringify(context.files || {})}
 
 Generate a precise natural language command for the local Moltbot Surrogate.
-If the goal involves SaaS platforms, explicitly instruct it to use its Composio capabilities (e.g. "Use your Composio integration to fetch Jira ticket PROJ-123 and test it against the local repository").
 Optionally, it can do standard OS automation: "Open the Chrome browser, navigate to staging.insocode.com...".
 Return ONLY the raw intent string, no markdown.`;
 

@@ -7,7 +7,7 @@
 
 import { GoogleGenAiService } from '../src/app/modules/googleGenAi/googleGenAi.service.js';
 import { agenticRouter } from '../src/app/modules/agents/agentic_router.service.js';
-import { composioService } from '../src/app/modules/mcp/composio.service.js';
+import { mcpClientService } from '../src/app/modules/mcp/mcp.client.js';
 import { logger } from '../src/shared/logger.js';
 
 async function runLiveVerification() {
@@ -54,24 +54,16 @@ async function runLiveVerification() {
     }
 
     // --------------------------------------------------------------------------------
-    // SECTION 2: COMPOSIO & MCP TOOL CONNECTIONS AUDIT
+    // SECTION 2: MCP TOOL CONNECTIONS AUDIT
     // --------------------------------------------------------------------------------
     console.log("\n================================================================================");
-    console.log("🔌 [TEST 2] Auditing Backend Composio & MCP Tool Connection Integrations...");
+    console.log("🔌 [TEST 2] Auditing Backend MCP Tool Connection Integrations...");
     console.log("================================================================================\n");
 
     try {
-        // Step 1: Fetch active Composio/MCP apps
-        console.log("🔍 Step 2.1: Retrieving Composio Toolkits...");
-        const apps = await composioService.getApps();
-        console.log(`✅ Loaded ${apps.length} applications in the ecosystem registry.`);
-        
-        const previewApps = apps.slice(0, 5).map(a => a.name || a.key);
-        console.log(`👉 Active Registry Apps (Sample): ${previewApps.join(', ')}`);
-
-        // Step 2: Inspect active dynamic tools schema
-        console.log("\n🔍 Step 2.2: Extracting Consolidated Function Call Schemas (MCP + Composio)...");
-        const schemas = await composioService.getConnectedToolsSchema();
+        // Step 1: Inspect active dynamic tools schema
+        console.log("\n🔍 Step 2.1: Extracting Consolidated Function Call Schemas (MCP)...");
+        const schemas = await mcpClientService.getAllTools();
         console.log(`✅ Success! Found ${schemas.length} active registered function schemas.`);
         
         if (schemas.length > 0) {
@@ -82,7 +74,7 @@ async function runLiveVerification() {
         }
 
     } catch (err) {
-        console.error("❌ Composio / MCP Tool connections audit failed:", err);
+        console.error("❌ MCP Tool connections audit failed:", err);
     }
 
     console.log("\n================================================================================");

@@ -6,19 +6,7 @@ import { BrowserUseAgentService } from '../../src/app/modules/browserUseAgent/br
 import { agentSService } from '../../src/app/modules/senses/agent_s.service.js';
 import { FazmAgentService } from '../../src/app/modules/fazmAgent/fazmAgent.service.js';
 import { FazmAgentController } from '../../src/app/modules/fazmAgent/fazmAgent.controller.js';
-import { composioService } from '../../src/app/modules/mcp/composio.service.js';
 import { redisClient } from '../../src/shared/redis.client.js';
-
-
-vi.mock('../../src/app/modules/mcp/composio.service.js', () => ({
-    composioService: {
-        initiateConnection: vi.fn(),
-        getConnections: vi.fn(),
-        disconnectApp: vi.fn(),
-        executeTool: vi.fn(),
-        getToolkitTools: vi.fn()
-    }
-}));
 
 
 vi.mock('axios');
@@ -410,77 +398,6 @@ describe('Production-Grade Swarm Agent Upgrades', () => {
                 send: vi.fn().mockReturnThis(),
                 setHeader: vi.fn()
             };
-        });
-
-        it('should call composioConnect and initiate connection via composioService', async () => {
-            mockReq.body = { appName: 'github' };
-            composioService.initiateConnection.mockResolvedValue({
-                redirectUrl: 'https://oauth.composio.com/github',
-                connectionId: 'conn-github-111'
-            });
-
-            await FazmAgentController.composioConnect(mockReq, mockRes);
-
-            expect(composioService.initiateConnection).toHaveBeenCalledWith('github', 'test-user-123');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({
-                url: 'https://oauth.composio.com/github',
-                connectionId: 'conn-github-111'
-            });
-        });
-
-        it('should call composioStatus and return active connection details', async () => {
-            composioService.getConnections.mockResolvedValue([{ id: 'conn-github-111', appName: 'github' }]);
-
-            await FazmAgentController.composioStatus(mockReq, mockRes);
-
-            expect(composioService.getConnections).toHaveBeenCalledWith('test-user-123');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({
-                connected: true,
-                count: 1,
-                connections: [{ id: 'conn-github-111', appName: 'github' }]
-            });
-        });
-
-        it('should call composioDisconnect and disconnect app', async () => {
-            mockReq.body = { appName: 'github' };
-            composioService.disconnectApp.mockResolvedValue(true);
-
-            await FazmAgentController.composioDisconnect(mockReq, mockRes);
-
-            expect(composioService.disconnectApp).toHaveBeenCalledWith('github', 'test-user-123');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({ ok: true });
-        });
-
-        it('should call composioMcp and list tools when action is not provided', async () => {
-            mockReq.params = { toolkit: 'github' };
-            composioService.getToolkitTools.mockResolvedValue([{ id: 'github_create_issue', name: 'Create Issue' }]);
-
-            await FazmAgentController.composioMcp(mockReq, mockRes);
-
-            expect(composioService.getToolkitTools).toHaveBeenCalledWith('github');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({
-                success: true,
-                tools: [{ id: 'github_create_issue', name: 'Create Issue' }]
-            });
-        });
-
-        it('should call composioMcp and execute tool when action is provided', async () => {
-            mockReq.params = { toolkit: 'github' };
-            mockReq.body = { action: 'github_create_issue', args: { title: 'Bug' } };
-            composioService.executeTool.mockResolvedValue({ id: 'issue-101' });
-
-            await FazmAgentController.composioMcp(mockReq, mockRes);
-
-            expect(composioService.executeTool).toHaveBeenCalledWith('github_create_issue', { title: 'Bug' }, 'test-user-123');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
-            expect(mockRes.json).toHaveBeenCalledWith({
-                success: true,
-                result: { id: 'issue-101' }
-            });
         });
 
         it('should call uploadAttachment and return uploaded file path', async () => {

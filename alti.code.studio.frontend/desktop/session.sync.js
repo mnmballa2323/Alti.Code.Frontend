@@ -52,9 +52,9 @@ class OpenClaudeSessionSyncer {
                     timestamp: new Date().toISOString(),
                     type: "tool_execution",
                     agent: "Claude 3.5 Sonnet",
-                    tool: "Composio.Jira.GetIssue",
-                    app: "Jira",
-                    summary: "Retrieved PROJ-123 to understand the current login bug context."
+                    tool: "GitHub.GetRepo",
+                    app: "GitHub",
+                    summary: "Retrieved repository information to understand the current login bug context."
                 });
             } else {
                 // Return hypothetical memories for platform simulation
