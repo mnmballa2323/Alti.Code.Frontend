@@ -88,34 +88,40 @@ function KnowledgePageContent() {
             </div>
           </div>
         ) : (
-          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-8 h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
-            <div className="flex w-full flex-col gap-4 max-w-2xl pb-20">
-              {/* Thin Upload Box */}
-              <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all border border-gray-100 dark:border-gray-800">
-                <div className="p-1.5 bg-gray-900 dark:bg-gray-100 rounded-lg">
-                  <Paperclip className="w-3.5 h-3.5 text-white dark:text-gray-900" />
-                </div>
-                <span className="text-sm text-gray-400">
-                  Click or drag & drop files here...
-                </span>
-                <input
-                  multiple
-                  className="hidden"
-                  type="file"
-                  onChange={handleFileUpload}
-                />
-              </label>
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
+            <div className="flex w-full flex-col max-w-2xl pb-20">
+              {/* Sticky Header Wrapper */}
+              <div className="sticky top-0 z-20 w-full bg-[#F4F4F6] dark:bg-background pt-8 pb-0 flex flex-col gap-4">
+                {/* Thin Upload Box */}
+                <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all">
+                  <div className="p-1.5 bg-gray-900 dark:bg-gray-100 rounded-lg">
+                    <Paperclip className="w-3.5 h-3.5 text-white dark:text-gray-900" />
+                  </div>
+                  <span className="text-sm text-gray-400">
+                    Click or drag & drop files here...
+                  </span>
+                  <input
+                    multiple
+                    className="hidden"
+                    type="file"
+                    onChange={handleFileUpload}
+                  />
+                </label>
 
-              {/* Thin Search Bar */}
-              <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3 border border-gray-100 dark:border-gray-800">
-                <Search className="w-4 h-4 text-gray-400" />
-                <input
-                  className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
-                  placeholder="Search files..."
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+                {/* Thin Search Bar */}
+                <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center gap-3">
+                  <Search className="w-4 h-4 text-gray-400" />
+                  <input
+                    className="bg-transparent border-none outline-none w-full text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
+                    placeholder="Search files..."
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                {/* Solid gray bar on the bottom to act as a padding */}
+                <div className="h-4 w-full bg-[#F4F4F6] dark:bg-background" />
               </div>
 
               {/* File List */}
