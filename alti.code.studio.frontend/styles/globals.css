@@ -405,3 +405,7 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: #f3f4f6 !important;
 }
 
+/* Hide CopilotKit floating chat bubble/trigger button */
+.copilotKitButton {
+  display: none !important;
+}

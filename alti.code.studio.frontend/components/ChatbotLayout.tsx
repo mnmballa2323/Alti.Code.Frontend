@@ -50,6 +50,7 @@ export default function ChatBotLayout({
           title: "Inso Copilot",
           initial: "Hi! 👋 How can I assist you with your code or deployments today?",
         }}
+        Button={() => null}
       >
         <div className="flex flex-col w-full h-screen overflow-hidden bg-[#F4F4F6] dark:bg-background">
           {/* Title Bar */}
