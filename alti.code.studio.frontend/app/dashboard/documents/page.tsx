@@ -2,7 +2,6 @@
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Icon } from "@iconify/react";
-import jsPDF from "jspdf";
 import React, { useRef, useState } from "react";
 
 import { documentsDummyData } from "@/lib/documents-dummy-data";
@@ -77,7 +76,8 @@ function DocumentsPage() {
     setDocumentTitle("");
   };
 
-  const handleSavePDF = () => {
+  const handleSavePDF = async () => {
+    const { default: jsPDF } = await import("jspdf");
     const doc = new jsPDF();
 
     // Add title

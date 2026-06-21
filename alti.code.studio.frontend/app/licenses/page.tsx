@@ -3,11 +3,26 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Check } from "lucide-react";
 import { cn } from "@heroui/react";
+import dynamic from "next/dynamic";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { AppDispatch } from "@/store";
 import { setChatContext, startNewChat } from "@/store/messagesSlice";
-import { AgentCommandCenter } from "@/components/AgentCommandCenter";
+
+const AgentCommandCenter = dynamic(
+  () =>
+    import("@/components/AgentCommandCenter").then(
+      (mod) => mod.AgentCommandCenter,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[300px] flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
+        Orchestrating Command Center...
+      </div>
+    ),
+  },
+);
 
 type AvailableLicense = {
   id: string;

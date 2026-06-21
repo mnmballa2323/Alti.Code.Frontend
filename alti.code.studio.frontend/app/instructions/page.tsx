@@ -3,12 +3,27 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import dynamic from "next/dynamic";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import { AppDispatch, RootState } from "@/store";
 import { setChatContext, startNewChat } from "@/store/messagesSlice";
-import { AgentCommandCenter } from "@/components/AgentCommandCenter";
+
+const AgentCommandCenter = dynamic(
+  () =>
+    import("@/components/AgentCommandCenter").then(
+      (mod) => mod.AgentCommandCenter,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[300px] flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
+        Orchestrating Command Center...
+      </div>
+    ),
+  },
+);
 
 export default function Instructions() {
   const dispatch = useDispatch<AppDispatch>();
