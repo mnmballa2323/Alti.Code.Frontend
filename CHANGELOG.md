@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.52] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 min-indent Package**: Integrated `min-indent` (Get the shortest leading whitespace from lines in a string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 strip-eof Package**: Integrated `strip-eof` (Strip the final newline character from a string/buffer) to enhance backend operations.
+- **Pure MIT/Apache-2.0 shebang-regex Package**: Integrated `shebang-regex` (Regular expression for matching a shebang line) to enhance backend operations.
+- **Pure MIT/Apache-2.0 shebang-command Package**: Integrated `shebang-command` (Get the command from a shebang) to enhance backend operations.
+- **Pure MIT/Apache-2.0 lcid Package**: Integrated `lcid` (Mapping between standard locale identifiers and Windows locale identifiers (LCID)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 ipify Package**: Integrated `ipify` (Get your public IP address) to enhance backend operations.
+- **Pure MIT/Apache-2.0 caller-id Package**: Integrated `caller-id` (A utility for getting information on the caller of a function in node.js) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-relative Package**: Integrated `is-relative` (Returns `true` if the path appears to be relative.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-absolute Package**: Integrated `is-absolute` (Returns true if a file path is absolute. Does not rely on the path module and can be used as a polyfill for node.js native `path.isAbolute`.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 npm-run-path Package**: Integrated `npm-run-path` (Get your PATH prepended with locally installed binaries) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.51] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
