@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.53] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 url-regex-safe Package**: Integrated `url-regex-safe` (Regular expression matching for URL's. Maintained, safe, and browser-friendly version of url-regex. Resolves CVE-2020-7661. Works in Node v10.12.0+ and browsers.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 public-ip Package**: Integrated `public-ip` (Get your public IP address — very fast!) to enhance backend operations.
+- **Pure MIT/Apache-2.0 internal-ip Package**: Integrated `internal-ip` (Get your internal IP address) to enhance backend operations.
+- **Pure MIT/Apache-2.0 array-uniq Package**: Integrated `array-uniq` (Create an array without duplicates) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-primitive Package**: Integrated `is-primitive` (Returns `true` if the value is a primitive. ) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-extglob Package**: Integrated `is-extglob` (Returns true if a string has an extglob.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-equal-shallow Package**: Integrated `is-equal-shallow` (Does a shallow comparison of two objects, returning false if the keys or values differ.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-plain-object Package**: Integrated `is-plain-object` (Returns true if an object was created by the `Object` constructor, or Object.create(null).) to enhance backend operations.
+- **Pure MIT/Apache-2.0 isobject Package**: Integrated `isobject` (Returns true if the value is an object and not an array or null.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-data-descriptor Package**: Integrated `is-data-descriptor` (Returns true if a value has the characteristics of a valid JavaScript data descriptor.) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.52] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
