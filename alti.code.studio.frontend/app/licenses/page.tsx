@@ -438,7 +438,7 @@ export default function LicensesPage() {
                     className={cn(
                       "group border-2 rounded-2xl p-5 flex flex-col justify-between cursor-pointer select-none transition-all duration-300 relative overflow-hidden",
                       isSelected
-                        ? "border-blue-600 dark:border-blue-400 bg-blue-100 dark:bg-blue-950/60 shadow-[0_4px_20px_rgba(37,99,235,0.12)] scale-[1.02]"
+                        ? "border-blue-600 dark:border-blue-400 bg-black dark:bg-zinc-900 shadow-[0_4px_20px_rgba(37,99,235,0.15)] scale-[1.02]"
                         : "border-default-200/60 bg-white dark:bg-default-50 hover:border-default-400 hover:shadow-sm",
                     )}
                     onClick={() => handleToggleLicense(license)}
@@ -459,12 +459,26 @@ export default function LicensesPage() {
 
                     <div className="flex flex-col gap-3">
                       <div className="flex items-start justify-between pr-6">
-                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors whitespace-nowrap overflow-hidden">
+                        <h3
+                          className={cn(
+                            "text-sm font-semibold tracking-tight transition-colors whitespace-nowrap overflow-hidden",
+                            isSelected
+                              ? "text-white"
+                              : "text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400",
+                          )}
+                        >
                           {license.name}
                         </h3>
                       </div>
 
-                      <p className="text-xs text-default-500 leading-5 pr-2 h-[60px] overflow-hidden">
+                      <p
+                        className={cn(
+                          "text-xs leading-5 pr-2 h-[60px] overflow-hidden transition-colors",
+                          isSelected
+                            ? "text-zinc-300 dark:text-zinc-400"
+                            : "text-default-500",
+                        )}
+                      >
                         {license.desc}
                       </p>
                     </div>
