@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.49] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 parse-ms Package**: Integrated `parse-ms` (Parse milliseconds into an object) to enhance backend operations.
+- **Pure MIT/Apache-2.0 pretty-ms Package**: Integrated `pretty-ms` (Convert milliseconds to a human readable string: `1337000000` → `15d 11h 23m 20s`) to enhance backend operations.
+- **Pure MIT/Apache-2.0 time-zone Package**: Integrated `time-zone` (Pretty time zone: `+2` or `-9:30`) to enhance backend operations.
+- **Pure MIT/Apache-2.0 mimic-response Package**: Integrated `mimic-response` (Mimic a Node.js HTTP response stream) to enhance backend operations.
+- **Pure MIT/Apache-2.0 decompress-response Package**: Integrated `decompress-response` (Decompress a HTTP response if needed) to enhance backend operations.
+- **Pure MIT/Apache-2.0 ky Package**: Integrated `ky` (Tiny and elegant HTTP client based on the Fetch API) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-docker Package**: Integrated `is-docker` (Check if the process is running inside a Docker container) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-wsl Package**: Integrated `is-wsl` (Check if the process is running inside Windows Subsystem for Linux (Bash on Windows)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-inside-container Package**: Integrated `is-inside-container` (Check if the process is running inside a container (Docker/Podman)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 p-finally Package**: Integrated `p-finally` (`Promise#finally()` ponyfill - Invoked when the promise is settled regardless of outcome) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.48] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
