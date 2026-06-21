@@ -55,7 +55,7 @@ export default function Guardrails() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-white dark:bg-background flex flex-col h-full font-sans">
+      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
         <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
           <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
             <div className="flex flex-col items-center text-center z-30 mb-6">

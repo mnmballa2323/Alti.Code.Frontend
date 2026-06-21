@@ -416,7 +416,7 @@ export default function LicensesPage() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-y-auto bg-white dark:bg-background flex flex-col h-full font-sans text-foreground">
+      <div className="flex-1 overflow-y-auto bg-transparent flex flex-col h-full font-sans text-foreground">
         <div className="relative flex flex-col w-full items-center justify-start py-12 px-6 md:px-12">
 
           <div className="flex w-full max-w-4xl flex-col gap-6 z-10">
