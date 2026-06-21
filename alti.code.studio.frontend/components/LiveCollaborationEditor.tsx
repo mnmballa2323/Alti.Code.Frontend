@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import Editor from "@monaco-editor/react";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex-1 h-[400px] flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
+      Orchestrating Collaboration Editor...
+    </div>
+  ),
+});
+
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";

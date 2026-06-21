@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
 
   loader.config({
     paths: {
-      vs: "https://unpkg.com/monaco-editor@0.53.0/min/vs",
+      vs: "/monaco/min/vs",
     },
   });
 }

@@ -18,8 +18,17 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import Editor from "@monaco-editor/react";
+import dynamic from "next/dynamic";
 import { toast } from "sonner";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex-1 flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
+      Orchestrating Monaco Editor...
+    </div>
+  ),
+});
 
 import { API_URL } from "@/lib/config";
 import GlassBoxGraph from "@/components/GlassBoxGraph";
@@ -802,8 +811,6 @@ export default function StudioFilesPage() {
     }
   };
 
-
-
   const saveMoltworkerConfig = async () => {
     try {
       const r = await api("/api/v1/openclaw/config", "POST", {
@@ -963,7 +970,6 @@ export default function StudioFilesPage() {
           >
             ☁️ Moltworker Edge
           </button>
-
         </div>
 
         {selectedPath && (
@@ -1009,8 +1015,6 @@ export default function StudioFilesPage() {
           </>
         )}
       </div>
-
-
 
       {/* ClawHub Marketplace Modal */}
       {showClawHubModal && (

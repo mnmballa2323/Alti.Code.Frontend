@@ -1,7 +1,19 @@
 "use client";
 
+import type { OnMount } from "@monaco-editor/react";
+
 import React, { useRef } from "react";
-import Editor, { OnMount } from "@monaco-editor/react";
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex-grow flex items-center justify-center bg-zinc-950 text-default-400 font-mono text-xs">
+      Orchestrating Editor...
+    </div>
+  ),
+});
+
 import * as monaco from "monaco-editor";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";

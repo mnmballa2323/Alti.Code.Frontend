@@ -5,11 +5,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "ulimit -n 4096 && next dev",
-    "build": "node scripts/check-build-safety.js && next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
+    "build": "node scripts/copy-monaco.js && node scripts/check-build-safety.js && next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
     "start": "node .next/standalone/server.js || next start",
     "lint": "eslint --fix",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:build": "npm run build && electron-builder"
+    "electron:build": "npm run build && electron-builder",
+    "postinstall": "node scripts/copy-monaco.js"
   },
   "main": "electron/main.js",
   "dependencies": {
