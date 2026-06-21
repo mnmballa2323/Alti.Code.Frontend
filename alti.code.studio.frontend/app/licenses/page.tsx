@@ -69,7 +69,8 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   { id: "Fair", name: "Fair License", type: "Permissive", desc: "Extremely short, simple two-sentence permissive open-source license." },
   { id: "MirOS", name: "MirOS License", type: "Permissive", desc: "Permissive BSD/MIT derivative popular in European and German BSD projects." },
   { id: "RPL 1.5", name: "Reciprocal Public License 1.5", type: "Strong Copyleft", desc: "Aggressive copyleft requiring source disclosure even for internal private use." },
-  { id: "UPL 1.0", name: "Universal Permissive License 1.0", type: "Permissive", desc: "Oracle's permissive license providing explicit patent grant clauses." }
+  { id: "UPL 1.0", name: "Universal Permissive License 1.0", type: "Permissive", desc: "Oracle's permissive license providing explicit patent grant clauses." },
+  { id: "AFL 3.0", name: "Academic Free License 3.0", type: "Permissive", desc: "Permissive license similar to BSD but with explicit patent grants and liability terms." }
 ];
 
 export default function LicensesPage() {
