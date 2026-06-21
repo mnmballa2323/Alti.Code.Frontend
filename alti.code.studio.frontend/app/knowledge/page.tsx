@@ -91,7 +91,7 @@ function KnowledgePageContent() {
           <div className="relative flex flex-1 w-full flex-col items-center justify-start h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
             <div className="flex w-full flex-col max-w-2xl pb-20">
               {/* Sticky Header Wrapper */}
-              <div className="sticky top-0 z-20 w-full bg-[#F4F4F6] dark:bg-background pt-8 pb-0 flex flex-col gap-4">
+              <div className="sticky top-0 z-20 w-full bg-[#F4F4F6] dark:bg-background pt-8 pb-0 flex flex-col gap-4 -mx-6 px-6">
                 {/* Thin Upload Box */}
                 <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all">
                   <div className="p-1.5 bg-gray-900 dark:bg-gray-100 rounded-lg">
