@@ -88,7 +88,7 @@ function KnowledgePageContent() {
             </div>
           </div>
         ) : (
-          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-8 h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
             <div className="flex w-full flex-col gap-4 max-w-2xl pb-20">
               {/* Thin Upload Box */}
               <label className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all border border-gray-100 dark:border-gray-800">
