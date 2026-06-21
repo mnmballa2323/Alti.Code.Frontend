@@ -46,6 +46,9 @@ import {
   Bot,
   Database,
   GitBranch,
+  Scale,
+  Webhook,
+  Blocks,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -785,7 +788,10 @@ export default function Sidebar() {
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
+    router.prefetch("/licenses");
     router.prefetch("/repositories");
+    router.prefetch("/developer-api");
+    router.prefetch("/sdk");
     router.prefetch("/documents");
     router.prefetch("/connect-apps");
   }, [router]);
@@ -806,10 +812,16 @@ export default function Sidebar() {
         return "Instructions";
       case "/guardrails":
         return "Guardrails";
+      case "/licenses":
+        return "Licenses";
       case "/knowledge":
         return "Knowledge";
       case "/repositories":
         return "Repositories";
+      case "/developer-api":
+        return "API Keys";
+      case "/sdk":
+        return "SDK Packages";
       case "/connect-apps":
       case "/integrations":
         return "Integrations";
@@ -876,6 +888,15 @@ export default function Sidebar() {
       },
     },
     {
+      label: "Licenses",
+      icon: Scale,
+      path: "/licenses",
+      isActive: pathname === "/licenses",
+      onClick: () => {
+        router.push("/licenses");
+      },
+    },
+    {
       label: "Knowledge",
       icon: Database,
       path: "/knowledge",
@@ -894,6 +915,24 @@ export default function Sidebar() {
       },
     },
     {
+      label: "API",
+      icon: Webhook,
+      path: "/developer-api",
+      isActive: pathname === "/developer-api",
+      onClick: () => {
+        router.push("/developer-api");
+      },
+    },
+    {
+      label: "SDK",
+      icon: Blocks,
+      path: "/sdk",
+      isActive: pathname === "/sdk",
+      onClick: () => {
+        router.push("/sdk");
+      },
+    },
+    {
       label: "Vault",
       icon: Lock,
       path: "/vault",
@@ -905,6 +944,33 @@ export default function Sidebar() {
           );
         }
         router.push("/vault");
+      },
+    },
+    {
+      label: "Integrations",
+      icon: LayoutGrid,
+      path: "/connect-apps",
+      isActive: pathname === "/connect-apps",
+      onClick: () => {
+        router.push("/connect-apps");
+      },
+    },
+    {
+      label: "Database",
+      icon: Server,
+      path: "/database",
+      isActive: pathname.startsWith("/database"),
+      onClick: () => {
+        router.push("/database");
+      },
+    },
+    {
+      label: "Cloud",
+      icon: Cloud,
+      path: "/cloud",
+      isActive: pathname === "/cloud",
+      onClick: () => {
+        router.push("/cloud");
       },
     },
   ];
@@ -919,8 +985,11 @@ export default function Sidebar() {
     if (pathname === "/vault") return "New Vault";
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
+    if (pathname === "/licenses") return "New License";
     if (pathname === "/knowledge") return "New Knowledge";
     if (pathname === "/repositories") return "New Repository";
+    if (pathname === "/developer-api") return "New API Key";
+    if (pathname === "/sdk") return "New SDK Package";
     if (pathname === "/documents") return "New Documentation";
 
     return "New";
@@ -938,6 +1007,19 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const [licenses, setLicenses] = useState<{ id: string; name: string }[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("selected_licenses");
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse selected_licenses", e);
+        }
+      }
+    }
+    return [];
+  });
   const [knowledgeFolders, setKnowledgeFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1186,6 +1268,30 @@ export default function Sidebar() {
     };
   }, [instructions, guardrails, token, isInitialLoad]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("selected_licenses", JSON.stringify(licenses));
+      window.dispatchEvent(new CustomEvent("sync-licenses-page"));
+    }
+  }, [licenses]);
+
+  useEffect(() => {
+    const handleSyncLicenses = () => {
+      const saved = localStorage.getItem("selected_licenses");
+      if (saved) {
+        try {
+          setLicenses(JSON.parse(saved));
+        } catch (e) {
+          console.error("Failed to parse selected_licenses from sync", e);
+        }
+      }
+    };
+    window.addEventListener("sync-licenses", handleSyncLicenses);
+    return () => {
+      window.removeEventListener("sync-licenses", handleSyncLicenses);
+    };
+  }, []);
+
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],
   );
@@ -1202,7 +1308,7 @@ export default function Sidebar() {
   } = useDisclosure();
   const [itemToDelete, setItemToDelete] = useState<{
     id: string;
-    type: "instruction" | "guardrail";
+    type: "instruction" | "guardrail" | "license";
   } | null>(null);
 
   const {
@@ -1218,6 +1324,8 @@ export default function Sidebar() {
       setInstructions((prev) => prev.filter((i) => i.id !== itemToDelete.id));
     } else if (itemToDelete.type === "guardrail") {
       setGuardrails((prev) => prev.filter((i) => i.id !== itemToDelete.id));
+    } else if (itemToDelete.type === "license") {
+      setLicenses((prev) => prev.filter((i) => i.id !== itemToDelete.id));
     }
     closeDeleteModal();
     setItemToDelete(null);
@@ -1253,6 +1361,22 @@ export default function Sidebar() {
       );
     const handleDeleteGuardrail = (e: any) => {
       setItemToDelete({ id: e.detail, type: "guardrail" });
+      openDeleteModal();
+    };
+
+    const handleAddLicense = (e: any) =>
+      setLicenses((prev) => [
+        ...prev,
+        { id: "lic-" + Date.now(), name: e.detail },
+      ]);
+    const handleUpdateLicense = (e: any) =>
+      setLicenses((prev) =>
+        prev.map((i) =>
+          i.id === e.detail.id ? { ...i, name: e.detail.name } : i,
+        ),
+      );
+    const handleDeleteLicense = (e: any) => {
+      setItemToDelete({ id: e.detail, type: "license" });
       openDeleteModal();
     };
 
@@ -1294,6 +1418,9 @@ export default function Sidebar() {
     window.addEventListener("add-guardrail", handleAddGuardrail);
     window.addEventListener("update-guardrail", handleUpdateGuardrail);
     window.addEventListener("delete-guardrail", handleDeleteGuardrail);
+    window.addEventListener("add-license", handleAddLicense);
+    window.addEventListener("update-license", handleUpdateLicense);
+    window.addEventListener("delete-license", handleDeleteLicense);
     window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
     window.addEventListener("create-agent", handleCreateAgent);
 
@@ -1304,6 +1431,9 @@ export default function Sidebar() {
       window.removeEventListener("add-guardrail", handleAddGuardrail);
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
+      window.removeEventListener("add-license", handleAddLicense);
+      window.removeEventListener("update-license", handleUpdateLicense);
+      window.removeEventListener("delete-license", handleDeleteLicense);
       window.removeEventListener(
         "open-knowledge-modal",
         handleOpenKnowledgeModal,
@@ -1610,108 +1740,6 @@ export default function Sidebar() {
           </Tooltip>
         </div>
 
-        {/* Connectors */}
-        <div
-          className={cn(
-            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
-            !isSidebarOpen && "hidden",
-          )}
-        >
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="App Connections"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0 flex-1",
-                pathname === "/connect-apps"
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/connect-apps");
-              }}
-              onMouseEnter={() => {
-                router.prefetch("/connect-apps");
-              }}
-            >
-              <LayoutGrid className="size-3.5" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="Database Connectors"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0 flex-1",
-                pathname.startsWith("/database")
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/database");
-              }}
-              onMouseEnter={() => {
-                router.prefetch("/database");
-              }}
-            >
-              <Database className="size-3.5" />
-            </Button>
-          </Tooltip>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content="Cloud Connections"
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className={cn(
-                "border rounded-lg flex-shrink-0 flex-1",
-                pathname === "/cloud"
-                  ? "bg-primary/10 border-primary text-primary-500 shadow-sm"
-                  : "bg-[#F4F4F6] dark:bg-default-100 border-default-200 text-default-600 hover:text-default-800",
-              )}
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                router.push("/cloud");
-              }}
-              onMouseEnter={() => {
-                router.prefetch("/cloud");
-              }}
-            >
-              <Cloud className="size-3.5" />
-            </Button>
-          </Tooltip>
-        </div>
-
         {/* 6 navigation icons toggle container */}
         <div
           className={cn(
@@ -1723,7 +1751,7 @@ export default function Sidebar() {
             className={cn(
               "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
-                ? "grid grid-cols-8 gap-0.5"
+                ? "grid grid-cols-7 gap-0.5"
                 : "flex flex-col items-center gap-2",
             )}
           >
@@ -2158,6 +2186,99 @@ export default function Sidebar() {
                               window.dispatchEvent(
                                 new CustomEvent("delete-guardrail", {
                                   detail: gr.id,
+                                }),
+                              )
+                            }
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/licenses" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = licenses.filter((lic) =>
+                    lic.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
+                  );
+
+                  if (licenses.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:document-text-outline"
+                        />
+                        <span className="text-xs text-default-400">
+                          No license policies added yet
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:document-text-outline"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((lic) => (
+                    <div
+                      key={lic.id}
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    >
+                      <span className="truncate">{lic.name}</span>
+                      <Dropdown
+                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                        placement="bottom-end"
+                      >
+                        <DropdownTrigger>
+                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                            <MoreHorizontal size={16} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                          aria-label="License options"
+                          className="p-0"
+                          variant="flat"
+                        >
+                          <DropdownItem
+                            key="edit"
+                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                            startContent={
+                              <Edit2 className="text-default-500" size={14} />
+                            }
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("edit-license", {
+                                  detail: lic,
+                                }),
+                              )
+                            }
+                          >
+                            Edit
+                          </DropdownItem>
+                          <DropdownItem
+                            key="delete"
+                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                            color="danger"
+                            startContent={<Trash2 size={14} />}
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("delete-license", {
+                                  detail: lic.id,
                                 }),
                               )
                             }

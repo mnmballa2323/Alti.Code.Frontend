@@ -459,7 +459,7 @@ function PromptInputFullLineComponent({
 
   return (
     <Form
-      className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-background/90 backdrop-blur-3xl rounded-[24px] border border-default-200/80 shadow-lg transition-all duration-300 hover:shadow-xl hover:border-default-300 dark:border-white/10 dark:bg-content1/80"
+      className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-background/90 backdrop-blur-3xl rounded-[32px] border border-default-200/80 shadow-xl transition-all duration-300 hover:shadow-2xl hover:border-default-300 dark:border-white/10 dark:bg-content1/80"
       onSubmit={onSubmit}
     >
       <div
@@ -484,7 +484,7 @@ function PromptInputFullLineComponent({
           innerWrapper: "relative",
           input:
             "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-          inputWrapper: "!bg-transparent shadow-none !border-0 px-5 pt-4 pb-1",
+          inputWrapper: "!bg-transparent shadow-none !border-0 px-6 pt-5 pb-2",
         }}
         maxRows={12}
         minRows={1}
@@ -499,7 +499,7 @@ function PromptInputFullLineComponent({
         onValueChange={setPrompt}
       />
 
-      <div className="flex w-full flex-row items-center justify-between gap-4 px-4 pb-2 pt-0 overflow-visible scrollbar-hide">
+      <div className="flex w-full flex-row items-center justify-between gap-4 px-6 pb-4 pt-1 overflow-visible scrollbar-hide">
         <div className="flex flex-row items-center gap-2 flex-nowrap shrink-0">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -1695,7 +1695,7 @@ export default function PromptInputFullLineWithBottomActions({
         : internalPrompt;
 
   return (
-    <div className="flex w-full flex-col gap-4 mb-6 !z-50">
+    <div className="flex w-full flex-col gap-4 px-4 pb-6 mb-2 !z-50">
       <PromptInputFullLineComponent
         customActions={customActions}
         hideAgents={hideAgents}
