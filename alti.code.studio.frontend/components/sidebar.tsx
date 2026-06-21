@@ -844,18 +844,17 @@ export default function Sidebar() {
     {
       label: "Code",
       icon: Code,
-      path: "/new-chat",
-      isActive: pathname === "/new-chat" || pathname === "/code",
+      path: "/code",
+      isActive: pathname === "/code",
       onClick: () => {
-        dispatch(startNewChat());
-        router.push("/new-chat");
+        router.push("/code");
       },
     },
     {
       label: "Chat",
       icon: MessageSquare,
       path: "/chat",
-      isActive: pathname.startsWith("/chat"),
+      isActive: pathname.startsWith("/chat") || pathname === "/new-chat",
       onClick: () => {
         router.push("/chat");
       },
