@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.55] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 object.omit Package**: Integrated `object.omit` (Return a copy of an object excluding the given key, or array of keys. Also accepts an optional filter function as the last argument.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 object.defaults Package**: Integrated `object.defaults` (Like `extend` but only copies missing properties/values to the target object.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 lazy-cache Package**: Integrated `lazy-cache` (Cache requires to be lazy-loaded when needed.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 define-property Package**: Integrated `define-property` (Define a non-enumerable property on an object. Uses Reflect.defineProperty when available, otherwise Object.defineProperty.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 mixin-deep Package**: Integrated `mixin-deep` (Deeply mix the properties of objects into the first object. Like merge-deep, but doesn't clone. No dependencies.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-extendable Package**: Integrated `is-extendable` (Returns true if a value is a plain object, array or function.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 array-each Package**: Integrated `array-each` (Loop over each item in an array and call the given function on every element.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 set-getter Package**: Integrated `set-getter` (Create nested getter properties and any intermediary dot notation (`'a.b.c'`) paths) to enhance backend operations.
+- **Pure MIT/Apache-2.0 to-object-path Package**: Integrated `to-object-path` (Create an object path from a list or array of strings.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-weakmap Package**: Integrated `is-weakmap` (Is this value a JS WeakMap? This module works cross-realm/iframe, and despite ES6 @@toStringTag.) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.54] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
