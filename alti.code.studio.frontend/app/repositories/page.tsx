@@ -120,7 +120,7 @@ export default function Repositories() {
             <div className="mt-8 flex justify-center w-full gap-4">
               {activeRepoId && (
                 <Button
-                  className="px-6 py-6 rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-900 font-semibold text-base transition-all duration-200"
+                  className="px-6 py-6 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-900 text-base transition-all duration-200"
                   onPress={() => {
                     setActiveRepoId(null);
                     setNewRepoName("");
@@ -131,7 +131,7 @@ export default function Repositories() {
                 </Button>
               )}
               <Button
-                className="px-8 py-6 rounded-full bg-black dark:bg-white text-white dark:text-black hover:opacity-90 font-semibold text-base shadow-lg transition-all duration-200 flex items-center gap-2"
+                className="px-8 py-6 rounded-xl bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-base shadow-lg transition-all duration-200 flex items-center gap-2"
                 isDisabled={!newRepoName.trim() || !newRepoUrl.trim()}
                 onPress={handleSaveRepository}
               >
