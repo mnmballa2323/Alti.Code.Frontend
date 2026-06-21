@@ -67,7 +67,7 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "ISC",
-    name: "ISC License",
+    name: "ISC",
     type: "Permissive",
     desc: "Permissive license equivalent to BSD 2-Clause and MIT, using simpler and cleaner language.",
   },
@@ -85,13 +85,13 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Mozilla Public 2.0",
-    name: "Mozilla Public 2.0",
+    name: "MPL 2.0",
     type: "Copyleft",
     desc: "Weak copyleft. Modifications must be open sourced, but can combine with proprietary codebases.",
   },
   {
     id: "Unlicense",
-    name: "The Unlicense",
+    name: "Unlicense",
     type: "Public Domain",
     desc: "Dedicated to public domain. Completely and permanently waives all copyright rights globally.",
   },
@@ -109,31 +109,31 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Meta Llama",
-    name: "Meta Llama License",
+    name: "Meta Llama",
     type: "Source-Available",
     desc: "Vibrant source-available license. Allows commercial use under 700 million monthly active users.",
   },
   {
     id: "OpenRAIL",
-    name: "OpenRAIL License",
+    name: "OpenRAIL",
     type: "Permissive",
     desc: "Responsible AI license that enforces downstream restrictions and safe behavioral usage rules.",
   },
   {
     id: "BSL 1.1",
-    name: "Business Source License 1.1",
+    name: "BSL 1.1",
     type: "Source-Available",
     desc: "Source-available license. Restricts commercial production use until a specified future date.",
   },
   {
     id: "SSPL",
-    name: "Server Side Public License",
+    name: "SSPL",
     type: "Strong Copyleft",
     desc: "Strong copyleft. Requires open-sourcing the hosting infrastructure stack if run as a service.",
   },
   {
     id: "ELv2",
-    name: "Elastic License v2",
+    name: "Elastic v2",
     type: "Source-Available",
     desc: "Source-available license. Allows free modifications but prohibits hosting as managed SaaS.",
   },
@@ -157,37 +157,37 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "PSF 2.0",
-    name: "Python Software Foundation License 2.0",
+    name: "PSF 2.0",
     type: "Permissive",
     desc: "Permissive open-source license used by Python software foundation core and major libraries.",
   },
   {
     id: "zlib",
-    name: "zlib/libpng License",
+    name: "zlib/libpng",
     type: "Permissive",
     desc: "Permissive license used in graphics libraries, compression algorithms, and game development.",
   },
   {
     id: "OFL 1.1",
-    name: "SIL Open Font License 1.1",
+    name: "OFL 1.1",
     type: "Permissive",
     desc: "Industry-standard font license. Allows free use, modification, and redistribution of typefaces.",
   },
   {
     id: "PostgreSQL",
-    name: "PostgreSQL License",
+    name: "PostgreSQL",
     type: "Permissive",
     desc: "Permissive MIT-style license used by PostgreSQL database development and associated tools.",
   },
   {
     id: "Ruby",
-    name: "Ruby License",
+    name: "Ruby",
     type: "Permissive",
     desc: "Permissive dual-license option used by the Ruby programming language core implementation base.",
   },
   {
     id: "PHP 3.01",
-    name: "PHP License 3.01",
+    name: "PHP 3.01",
     type: "Permissive",
     desc: "Permissive license used by the PHP Group for the PHP interpreter engine and its extensions.",
   },
@@ -199,7 +199,7 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Beerware",
-    name: "Beerware License",
+    name: "Beerware",
     type: "Permissive",
     desc: "Informal and extremely permissive license. Keep this notice and buy the developer a nice beer.",
   },
@@ -229,13 +229,13 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Proprietary",
-    name: "Proprietary / Custom",
+    name: "Proprietary",
     type: "Restricted",
     desc: "Strictly custom commercial license rules. Requires corporate legal team sign-off for ingestion.",
   },
   {
     id: "JSON",
-    name: "JSON License",
+    name: "JSON",
     type: "Restricted",
     desc: "Restricted MIT-based license containing the custom clause: 'Software must be used for Good.'",
   },
@@ -247,43 +247,43 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "LAL 1.3",
-    name: "LAL 1.3 (Licence Art Libre)",
+    name: "LAL 1.3",
     type: "Copyleft",
     desc: "Free Art License. A European copyleft license designed for sharing artistic or creative assets.",
   },
   {
     id: "CPL 1.0",
-    name: "Common Public License 1.0",
+    name: "CPL 1.0",
     type: "Copyleft",
     desc: "IBM early copyleft software license, serving as direct predecessor to Eclipse Public License.",
   },
   {
     id: "SPL 1.0",
-    name: "Sun Public License 1.0",
+    name: "SPL 1.0",
     type: "Copyleft",
     desc: "Sun Microsystems copyleft license that was historically used for early NetBeans development.",
   },
   {
     id: "Nokia",
-    name: "Nokia Open Source License",
+    name: "Nokia OS",
     type: "Copyleft",
     desc: "Nokia's historical open-source license designed for early mobile and Symbian platform codebases.",
   },
   {
     id: "wxWindows",
-    name: "wxWindows Library License",
+    name: "wxWindows",
     type: "Copyleft",
     desc: "Custom LGPL-derivative software license. Designed specifically for the wxWidgets C++ library.",
   },
   {
     id: "Yahoo 1.1",
-    name: "Yahoo! Public License 1.1",
+    name: "Yahoo 1.1",
     type: "Copyleft",
     desc: "Yahoo historical copyleft software license designed for early web platform development systems.",
   },
   {
     id: "Sleepycat",
-    name: "Sleepycat License",
+    name: "Sleepycat",
     type: "Strong Copyleft",
     desc: "Historically used for Berkeley DB. Requires open-sourcing the entire host application code.",
   },
@@ -301,13 +301,13 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Lucent 1.02",
-    name: "Lucent Public License 1.02",
+    name: "Lucent 1.02",
     type: "Copyleft",
     desc: "Lucent Technologies open-source license, historically applied to the Plan 9 operating system.",
   },
   {
     id: "NCSA",
-    name: "NCSA Open Source License",
+    name: "NCSA OS",
     type: "Permissive",
     desc: "University of Illinois/NCSA permissive license. Historically used by the LLVM compiler project.",
   },
@@ -319,13 +319,13 @@ const AVAILABLE_LICENSES: AvailableLicense[] = [
   },
   {
     id: "Fair",
-    name: "Fair License",
+    name: "Fair",
     type: "Permissive",
     desc: "Extremely short, simple two-sentence permissive open-source license with copyright waiver.",
   },
   {
     id: "MirOS",
-    name: "MirOS License",
+    name: "MirOS",
     type: "Permissive",
     desc: "Permissive BSD/MIT derivative license popular in European and German BSD compiler projects.",
   },
@@ -460,7 +460,7 @@ export default function LicensesPage() {
 
                     <div className="flex flex-col gap-3">
                       <div className="flex items-start justify-between pr-6">
-                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        <h3 className="text-sm font-semibold tracking-tight text-foreground group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors whitespace-nowrap overflow-hidden">
                           {license.name}
                         </h3>
                       </div>
