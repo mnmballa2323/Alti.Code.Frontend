@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.51] - 2026-06-21 — Dynamic Sovereign Packages
+
+### Added
+
+- **Pure MIT/Apache-2.0 invert-kv Package**: Integrated `invert-kv` (Invert the key/value of an object. Example: `{foo: 'bar'}` → `{bar: 'foo'}`) to enhance backend operations.
+- **Pure MIT/Apache-2.0 chunkify Package**: Integrated `chunkify` (Split an iterable into evenly sized chunks) to enhance backend operations.
+- **Pure MIT/Apache-2.0 @sindresorhus/slugify Package**: Integrated `@sindresorhus/slugify` (Slugify a string) to enhance backend operations.
+- **Pure MIT/Apache-2.0 @sindresorhus/transliterate Package**: Integrated `@sindresorhus/transliterate` (Convert Unicode characters to Latin characters using transliteration) to enhance backend operations.
+- **Pure MIT/Apache-2.0 uint8array-extras Package**: Integrated `uint8array-extras` (Useful utilities for working with Uint8Array (and Buffer)) to enhance backend operations.
+- **Pure MIT/Apache-2.0 auto-bind Package**: Integrated `auto-bind` (Automatically bind methods to their class instance) to enhance backend operations.
+- **Pure MIT/Apache-2.0 log-update Package**: Integrated `log-update` (Log by overwriting the previous output in the terminal. Useful for rendering progress bars, animations, etc.) to enhance backend operations.
+- **Pure MIT/Apache-2.0 is-url-superb Package**: Integrated `is-url-superb` (Check if a string is a URL) to enhance backend operations.
+- **Pure MIT/Apache-2.0 @sindresorhus/to-milliseconds Package**: Integrated `@sindresorhus/to-milliseconds` (Convert an object of time properties to milliseconds: `{seconds: 2}` → `2000`) to enhance backend operations.
+- **Pure MIT/Apache-2.0 strip-final-newline Package**: Integrated `strip-final-newline` (Strip the final newline character from a string or Uint8Array) to enhance backend operations.
+- **License Compliance Scan Verification**: Confirmed that the newly installed libraries are 100% compliant with the strict MIT/Apache-2.0 only policy.
+- **System Stability Assurance**: Validated correct system execution by successfully running Vitest integration tests.
+
 ## [53.0.50] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added
