@@ -5,6 +5,47 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.0.66] - 2026-06-21 — Global Discovery Sync & Federated Search
+
+### Added
+
+- **Federated Registry Background Synchronizer**: Integrated an automated background crawler scheduler in `server.js` that triggers on boot and runs every 6 hours, pulling the latest catalog schema definitions from all tracked federated domains.
+- **Global Capabilities Search**: Extended the visual Discovery dashboard tab with an interactive global search filter that queries, maps, and displays remote matching tools across all tracked registries simultaneously.
+
+## [53.0.65] - 2026-06-21 — Autonomous Discovery Self-Provisioning Router
+
+### Added
+
+- **Persistent Federated Registry Store**: Added a persistent cache `.alti/federated_catalogs.json` that tracks all resolved external ARD catalogs, did:web identity, last sync times, and schema definitions.
+- **Autonomous Swarm Self-Provisioning Resolution**: Integrated a dynamic self-provisioning resolver inside the `CapabilityRouter` task execution loop. When the router encounters a capability gap (`MISSING_CAPABILITY`), it queries tracked federated catalogs, identifies compliant remote resources, auto-installs/mounts the MCP server, and dynamically routes the query to the newly registered specialist agent.
+- **Visual Tracked Registries panel**: Extended the Federated Explorer tab with an interactive dashboard displaying tracked domains, active capability counters, verification identifiers, and providing one-click instant registry loading.
+
+## [53.0.64] - 2026-06-21 — Deeper Federated ARD Integration
+
+### Added
+
+- **Sovereign MCP Auto-Mount Startup Sequence**: Implemented an automated loading routine in the `mcpGateway` startup lifecycle that reads `.alti/custom_mcp_servers.json` and active environment-enabled presets, establishing connections and auto-mounting them as active dynamic specialists.
+- **Dynamic Swarm Specialist Mounting**: Entrenched dynamic capability registration across the entire AI agent swarm. Discovered MCP servers installed via the visual Discovery Hub are instantly registered in the `capabilityRouter` and exposed dynamically in the public ARD catalog.
+
+## [53.0.63] - 2026-06-21 — Federated AI Capabilities Resolution
+
+### Added
+
+- **Federated Discovery Resolver Endpoint**: Implemented a backend crawler route `/api/v1/discovery/resolve` that resolves target domains, scrapes `robots.txt` for `Agentmap` definitions, and retrieves external `ai-catalog.json` schemas.
+- **Dynamic Local Capabilities Registration**: Implemented a local installer endpoint `/api/v1/discovery/install` that dynamically appends external discovered MCP servers to `.alti/custom_mcp_servers.json` and connects them in real-time.
+- **Visual Federated Explorer UI**: Built an interactive "Federated Explorer" view inside the `/discovery` dashboard, allowing developers to enter any domain, inspect resolved capabilities, verify did:web: host trust, and install custom MCP servers with one click.
+
+## [53.0.62] - 2026-06-21 — Agentic Resource Discovery
+
+### Added
+
+- **Deep Integration of Agentic Resource Discovery (ARD) Spec**: Entrenched the ARD specification (`ards-project/ard-spec`) to standardise dynamic capabilities discovery.
+- **Dynamic Backend Catalog API Endpoint**: Created a public, zero-trust-bypassing endpoint `/api/v1/discovery` that aggregates active specialist agents and Model Context Protocol (MCP) servers.
+- **Frontend Well-Known AI Catalog Handler**: Added a dynamic proxy route at `/.well-known/ai-catalog.json` returning the JSON manifest structure.
+- **Dynamic robots.txt Agentmap Directives**: Implemented an automated `robots.txt` route serving correct `Agentmap` addresses to external crawlers.
+- **RootLayout Metadata Ingress**: Injected the header link tag `<link rel="ai-catalog">` dynamically across the application structure.
+- **Visual Discovery Hub UI**: Built a premium, interactive capability dashboard (`/discovery`) with live directory views, conformance status, JSON inspector, copy triggers, and manifest downloads.
+
 ## [53.0.61] - 2026-06-21 — Dynamic Sovereign Packages
 
 ### Added

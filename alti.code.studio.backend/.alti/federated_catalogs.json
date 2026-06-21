@@ -1,0 +1,18 @@
+[
+  {
+    "domain": "example-federated-domain.com",
+    "origin": "https://example-federated-domain.com",
+    "catalogUrl": "https://example-federated-domain.com/manifest/ai-catalog.json",
+    "displayName": "Mock Domain",
+    "identifier": "did:web:mock.com",
+    "lastResolvedAt": "2026-06-21T22:46:05.089Z",
+    "catalog": {
+      "specVersion": "1.0",
+      "host": {
+        "displayName": "Mock Domain",
+        "identifier": "did:web:mock.com"
+      },
+      "entries": []
+    }
+  }
+]

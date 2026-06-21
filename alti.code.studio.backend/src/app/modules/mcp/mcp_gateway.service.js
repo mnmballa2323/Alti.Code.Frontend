@@ -3,6 +3,8 @@ import { capabilityRouter } from '../agents/capability.router.js';
 import { BaseSpecialistAgent } from '../agents/base_specialist.agent.js';
 import { mcpClientService, PRESETS } from './mcp.client.js';
 import { AsyncLocalStorage } from 'async_hooks';
+import fs from 'fs';
+import path from 'path';
 
 export const mcpTokenContext = new AsyncLocalStorage();
 
@@ -67,6 +69,48 @@ class MCPGateway {
     constructor() {
         this.connectedServers = new Map();
         logger.info('🔌 MCPGateway initialized. Scanning for local and remote MCP hosts.');
+    }
+
+    /**
+     * Boot-time auto-mount routine for both opt-in preset and custom discovered servers.
+     */
+    async init() {
+        logger.info('🔌 [MCPGateway] Starting auto-mount sequence...');
+        
+        // 1. Load standard presets that are enabled via env
+        for (const preset of PRESETS) {
+            if (process.env[preset.envKey] === 'true') {
+                try {
+                    logger.info(`🔌 [MCPGateway] Auto-mounting preset server: ${preset.name}`);
+                    await this.mountServer(preset.name, {
+                        command: preset.command,
+                        args: preset.args,
+                        env: {}
+                    });
+                } catch (err) {
+                    logger.error(`❌ [MCPGateway] Failed to auto-mount preset ${preset.name}: ${err.message}`);
+                }
+            }
+        }
+
+        // 2. Load custom discovered servers from .alti/custom_mcp_servers.json
+        const customServersFilePath = path.join(process.cwd(), '.alti/custom_mcp_servers.json');
+        if (fs.existsSync(customServersFilePath)) {
+            try {
+                const fileData = fs.readFileSync(customServersFilePath, 'utf8');
+                const customServers = JSON.parse(fileData);
+                for (const server of customServers) {
+                    logger.info(`🔌 [MCPGateway] Auto-mounting custom server: ${server.name}`);
+                    await this.mountServer(server.name, {
+                        command: server.command,
+                        args: server.args,
+                        env: server.env || {}
+                    });
+                }
+            } catch (err) {
+                logger.error(`❌ [MCPGateway] Failed to load custom MCP servers from JSON: ${err.message}`);
+            }
+        }
     }
 
     /** Mapped active presets available in the ecosystem. */

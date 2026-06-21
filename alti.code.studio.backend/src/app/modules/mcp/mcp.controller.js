@@ -119,6 +119,14 @@ const addCustomMcpServer = catchAsync(async (req, res) => {
 
     fs.writeFileSync(customServersFilePath, JSON.stringify(servers, null, 2), 'utf8');
 
+    // Instantly spin up, connect, and mount the new server locally as a swarm agent
+    try {
+        const { mcpGateway } = await import('./mcp_gateway.service.js');
+        await mcpGateway.mountServer(name, { command, args: args || [], env: env || {} });
+    } catch (connectErr) {
+        console.warn(`Dynamic mount failed for newly registered custom MCP server ${name}:`, connectErr.message);
+    }
+
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

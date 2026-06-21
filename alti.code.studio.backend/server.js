@@ -208,6 +208,19 @@ async function main() {
       mcpBridgeService.init();
     }).catch(err => logger.error('❌ Failed to start MCP Bridge Service', err));
 
+    import('./src/app/modules/mcp/mcp_gateway.service.js').then(({ mcpGateway }) => {
+      mcpGateway.init();
+    }).catch(err => logger.error('❌ Failed to start MCP Gateway Service', err));
+
+    // Initialize ARD Federated Catalogs Sync Scheduler (Every 6 hours)
+    import('./src/app/modules/discovery/discovery.controller.js').then(({ syncFederatedCatalogs }) => {
+      syncFederatedCatalogs().catch(err => logger.error('❌ Failed to run initial federated catalogs sync', err));
+      setInterval(() => {
+        syncFederatedCatalogs().catch(err => logger.error('❌ Failed to run periodic federated catalogs sync', err));
+      }, 21600000);
+      logger.info('✅ ARD Federated Catalogs Sync Scheduler active (6h interval)');
+    }).catch(err => logger.error('❌ Failed to start ARD Catalogs Sync Service', err));
+
     // 🌌 Omni-Cloud Epic: Boot the massive AWS/GCP/Azure Open Source Ingestion Engine
     import('./src/app/modules/agents/omni_cloud_ingestion.service.js').then(({ omniCloudIngestionService }) => {
       omniCloudIngestionService.init();

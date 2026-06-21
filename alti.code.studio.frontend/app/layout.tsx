@@ -36,7 +36,9 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
+      <head>
+        <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
+      </head>
       <body
         className={clsx(
           "min-h-screen text-foreground bg-white dark:bg-black font-sans antialiased",

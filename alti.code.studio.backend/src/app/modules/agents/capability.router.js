@@ -11,6 +11,8 @@ import { GoogleDlpService } from '../googleCloud/dlp.service.js';
 import { workflowService } from '../googleCloud/workflow.service.js';
 import crypto from 'crypto';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
+import fs from 'fs';
+import path from 'path';
 
 import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
 
@@ -155,8 +157,15 @@ class CapabilityRouter {
                 const decision = JSON.parse(jsonMatch[0]);
                 
                 if (decision.agentId === 'MISSING_CAPABILITY') {
-                    logger.warn(`⚠️ [CapabilityRouter] No capability found. Triggering self-expanding swarm for: ${decision.reason}`);
-                    // Trigger dynamic expansion to forge the new agent
+                    logger.warn(`⚠️ [CapabilityRouter] No capability found. Scanning federated ARD catalogs for dynamic provisioning: ${decision.reason}`);
+                    
+                    const provisionedAgentId = await this.findAndProvisionCapability(query);
+                    if (provisionedAgentId) {
+                        logger.info(`✨ [CapabilityRouter] Routing query directly to newly provisioned agent: [${provisionedAgentId}]`);
+                        return { agentId: provisionedAgentId, semanticMatch: true, dynamicallyForged: true };
+                    }
+                    
+                    // Trigger dynamic expansion to forge the new agent if ARD discovery didn't find anything
                     const newAgentId = await selfExpandingSwarmService.expandSwarm(decision.reason);
                     return { agentId: newAgentId || 'jules', semanticMatch: true, dynamicallyForged: !!newAgentId };
                 }
@@ -353,6 +362,104 @@ class CapabilityRouter {
             edges: [],
             orchestrationMode: 'LOCAL_SEMAPHORE'
         };
+    }
+
+    /**
+     * Scans tracked federated ARD catalogs for uninstalled tools matching the query.
+     * If found, installs them locally on-the-fly and returns the dynamic agent ID.
+     */
+    async findAndProvisionCapability(query) {
+        logger.info(`🗺️ [CapabilityRouter] Attempting dynamic ARD self-provisioning for query: "${query}"`);
+        const federatedFilePath = path.join(process.cwd(), '.alti/federated_catalogs.json');
+        if (!fs.existsSync(federatedFilePath)) {
+            logger.info(`🗺️ [CapabilityRouter] No federated catalogs tracked yet.`);
+            return null;
+        }
+
+        let catalogs = [];
+        try {
+            const fileData = fs.readFileSync(federatedFilePath, 'utf8');
+            catalogs = JSON.parse(fileData);
+        } catch (err) {
+            logger.error(`❌ [CapabilityRouter] Failed to parse federated catalogs: ${err.message}`);
+            return null;
+        }
+
+        const queryLower = query.toLowerCase();
+
+        for (const entry of catalogs) {
+            const catalog = entry.catalog;
+            if (!catalog || !Array.isArray(catalog.entries)) continue;
+
+            for (const item of catalog.entries) {
+                const isMcp = item.type === "application/mcp-server-card+json" || item.type === "application/mcp-server+json";
+                if (!isMcp) continue;
+
+                const name = item.identifier.split(':').pop();
+                const displayName = item.displayName || '';
+                const desc = item.description || '';
+                const caps = Array.isArray(item.capabilities) ? item.capabilities : [];
+                const queries = Array.isArray(item.representativeQueries) ? item.representativeQueries : [];
+
+                const matches = 
+                    queryLower.includes(name.toLowerCase()) ||
+                    displayName.toLowerCase().includes(queryLower) ||
+                    caps.some(c => queryLower.includes(c.toLowerCase())) ||
+                    queries.some(q => queryLower.includes(q.toLowerCase()) || q.toLowerCase().includes(queryLower));
+
+                if (matches) {
+                    logger.info(`✨ [CapabilityRouter] Discovered matching capability [${name}] in catalog from ${entry.domain}!`);
+
+                    const customServersFilePath = path.join(process.cwd(), '.alti/custom_mcp_servers.json');
+                    let customServers = [];
+                    if (fs.existsSync(customServersFilePath)) {
+                        try {
+                            customServers = JSON.parse(fs.readFileSync(customServersFilePath, 'utf8'));
+                        } catch (e) {
+                            logger.error(`❌ [CapabilityRouter] Failed to parse custom mcp servers: ${e.message}`);
+                        }
+                    }
+
+                    if (customServers.some(s => s.name === name)) {
+                        logger.info(`🔌 [CapabilityRouter] Capability [${name}] is already registered in custom_mcp_servers.json.`);
+                        return `${name}_agent`;
+                    }
+
+                    const { PRESETS } = await import('../mcp/mcp.client.js');
+                    const preset = PRESETS.find(p => p.name === name);
+                    
+                    const command = preset ? preset.command : 'npx';
+                    const args = preset ? preset.args : ['-y', `@modelcontextprotocol/server-${name}`];
+
+                    const newServer = {
+                        name,
+                        title: displayName || name,
+                        description: desc || `ARD Self-provisioned Model Context Protocol server`,
+                        command,
+                        args,
+                        env: {},
+                        installedVia: "ard-self-provisioning",
+                        installedAt: new Date().toISOString()
+                    };
+
+                    customServers.push(newServer);
+                    fs.writeFileSync(customServersFilePath, JSON.stringify(customServers, null, 2), 'utf8');
+
+                    try {
+                        const { mcpGateway } = await import('../mcp/mcp_gateway.service.js');
+                        const mountRes = await mcpGateway.mountServer(name, { command, args, env: {} });
+                        if (mountRes && mountRes.success) {
+                            logger.info(`✅ [CapabilityRouter] Dynamic self-provisioning succeeded! Server [${name}] mounted as Swarm Agent [${mountRes.agentId}].`);
+                            return mountRes.agentId;
+                        }
+                    } catch (mountErr) {
+                        logger.error(`❌ [CapabilityRouter] Dynamic mounting failed for self-provisioned server ${name}: ${mountErr.message}`);
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

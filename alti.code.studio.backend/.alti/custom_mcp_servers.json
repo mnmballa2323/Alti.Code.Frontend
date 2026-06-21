@@ -1,0 +1,14 @@
+[
+  {
+    "name": "test-discovery-server",
+    "title": "test-discovery-server",
+    "description": "ARD Discovered Model Context Protocol server",
+    "command": "echo",
+    "args": [
+      "hello"
+    ],
+    "env": {},
+    "installedVia": "ard-spec-discovery",
+    "installedAt": "2026-06-21T22:31:29.063Z"
+  }
+]
