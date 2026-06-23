@@ -238,13 +238,33 @@ if ! check_env_creds; then
     if command -v az &> /dev/null; then
         echo -e "No ARM_* env variables. Checking Azure CLI status..."
         if az account show &> /dev/null; then
+            # Verify Cloud Environment match
+            ACTIVE_CLOUD=$(az cloud show --query name -o tsv 2>/dev/null || echo "AzureCloud")
+            if [ "$DEPLOY_OPTION" = "government" ] && [ "$ACTIVE_CLOUD" != "AzureUSGovernment" ]; then
+                echo -e "${YELLOW}⚠️ WARNING: You are deploying to Azure Government, but Azure CLI is active on: ${RED}$ACTIVE_CLOUD${NC}"
+                echo -e "Please run the following to switch environments:"
+                echo -e "  ${CYAN}az cloud set --name AzureUSGovernment && az login${NC}"
+                echo -e "----------------------------------------------------"
+            elif [ "$DEPLOY_OPTION" != "government" ] && [ "$ACTIVE_CLOUD" = "AzureUSGovernment" ]; then
+                echo -e "${YELLOW}⚠️ WARNING: You are deploying to Azure Commercial, but Azure CLI is active on: ${RED}$ACTIVE_CLOUD${NC}"
+                echo -e "Please run the following to switch environments:"
+                echo -e "  ${CYAN}az cloud set --name AzureCloud && az login${NC}"
+                echo -e "----------------------------------------------------"
+            fi
+
             echo -e "${GREEN}✔ Logged in via Azure CLI. Fetching active Subscription & Tenant...${NC}"
             ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
             ARM_TENANT_ID=$(az account show --query tenantId -o tsv)
             export ARM_SUBSCRIPTION_ID
             export ARM_TENANT_ID
+            if [ "$DEPLOY_OPTION" = "government" ]; then
+                export ARM_ENVIRONMENT="usgovernment"
+            else
+                export ARM_ENVIRONMENT="public"
+            fi
             echo -e "• Subscription ID: ${CYAN}$ARM_SUBSCRIPTION_ID${NC}"
             echo -e "• Tenant ID:       ${CYAN}$ARM_TENANT_ID${NC}"
+            echo -e "• Cloud Instance:  ${CYAN}$ACTIVE_CLOUD${NC}"
             echo -e "${GREEN}✔ Configured to authenticate via Azure CLI login session.${NC}"
         else
             PROMPT_CREDS=true
