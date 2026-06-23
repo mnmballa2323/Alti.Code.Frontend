@@ -68,3 +68,25 @@ variable "github_repository" {
   type        = string
   default     = "mnmballa2323/alti.code.studio"
 }
+
+# ------------------------------------------------------------------------------
+# Deployment Option Toggles
+# ------------------------------------------------------------------------------
+variable "enable_azure_cloud" {
+  description = "Deploy the Azure Cloud tier (commercial multi-tenant VM)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_azure_dedicated" {
+  description = "Deploy the Azure Dedicated tier (commercial VM on dedicated host)"
+  type        = bool
+  default     = false
+}
+
+variable "enable_azure_government" {
+  description = "Deploy the Azure Government tier (government VM)"
+  type        = bool
+  default     = false
+}
+

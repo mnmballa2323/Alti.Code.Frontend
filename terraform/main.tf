@@ -26,35 +26,40 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
   features {}
 }
-
-
+locals {
+  deploy_commercial = var.enable_azure_cloud || var.enable_azure_dedicated
+}
 
 # ==============================================================================
 # Azure Commercial Cloud Infrastructure
 # ==============================================================================
 resource "azurerm_resource_group" "commercial_rg" {
+  count    = local.deploy_commercial ? 1 : 0
   name     = "alti-${var.customer_id}-commercial-rg"
   location = var.azure_commercial_region
 }
 
 resource "azurerm_virtual_network" "commercial_vnet" {
+  count               = local.deploy_commercial ? 1 : 0
   name                = "alti-${var.customer_id}-commercial-vnet"
   address_space       = ["10.100.0.0/16"]
-  location            = azurerm_resource_group.commercial_rg.location
-  resource_group_name = azurerm_resource_group.commercial_rg.name
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
 }
 
 resource "azurerm_subnet" "commercial_subnet" {
+  count                = local.deploy_commercial ? 1 : 0
   name                 = "commercial-subnet"
-  resource_group_name  = azurerm_resource_group.commercial_rg.name
-  virtual_network_name = azurerm_virtual_network.commercial_vnet.name
+  resource_group_name  = azurerm_resource_group.commercial_rg[0].name
+  virtual_network_name = azurerm_virtual_network.commercial_vnet[0].name
   address_prefixes     = ["10.100.1.0/24"]
 }
 
 resource "azurerm_network_security_group" "commercial_nsg" {
+  count               = local.deploy_commercial ? 1 : 0
   name                = "alti-${var.customer_id}-commercial-nsg"
-  location            = azurerm_resource_group.commercial_rg.location
-  resource_group_name = azurerm_resource_group.commercial_rg.name
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
 
   security_rule {
     name                       = "allow-ssh-inbound"
@@ -94,40 +99,45 @@ resource "azurerm_network_security_group" "commercial_nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "commercial_nsg_assoc" {
-  subnet_id                 = azurerm_subnet.commercial_subnet.id
-  network_security_group_id = azurerm_network_security_group.commercial_nsg.id
+  count                     = local.deploy_commercial ? 1 : 0
+  subnet_id                 = azurerm_subnet.commercial_subnet[0].id
+  network_security_group_id = azurerm_network_security_group.commercial_nsg[0].id
 }
 
 # ==============================================================================
 # Azure Government Cloud (IL5) Infrastructure
 # ==============================================================================
 resource "azurerm_resource_group" "government_rg" {
+  count    = var.enable_azure_government ? 1 : 0
   provider = azurerm.government
   name     = "alti-${var.customer_id}-government-rg"
   location = var.azure_government_region
 }
 
 resource "azurerm_virtual_network" "government_vnet" {
+  count               = var.enable_azure_government ? 1 : 0
   provider            = azurerm.government
   name                = "alti-${var.customer_id}-government-vnet"
   address_space       = ["10.200.0.0/16"]
-  location            = azurerm_resource_group.government_rg.location
-  resource_group_name = azurerm_resource_group.government_rg.name
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
 }
 
 resource "azurerm_subnet" "government_subnet" {
+  count                = var.enable_azure_government ? 1 : 0
   provider             = azurerm.government
   name                 = "government-subnet"
-  resource_group_name  = azurerm_resource_group.government_rg.name
-  virtual_network_name = azurerm_virtual_network.government_vnet.name
+  resource_group_name  = azurerm_resource_group.government_rg[0].name
+  virtual_network_name = azurerm_virtual_network.government_vnet[0].name
   address_prefixes     = ["10.200.1.0/24"]
 }
 
 resource "azurerm_network_security_group" "government_nsg" {
+  count               = var.enable_azure_government ? 1 : 0
   provider            = azurerm.government
   name                = "alti-${var.customer_id}-government-nsg"
-  location            = azurerm_resource_group.government_rg.location
-  resource_group_name = azurerm_resource_group.government_rg.name
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
 
   # Allow inbound only from designated Gov IP ranges/internal bastion
   security_rule {
@@ -156,7 +166,9 @@ resource "azurerm_network_security_group" "government_nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "government_nsg_assoc" {
+  count                     = var.enable_azure_government ? 1 : 0
   provider                  = azurerm.government
-  subnet_id                 = azurerm_subnet.government_subnet.id
-  network_security_group_id = azurerm_network_security_group.government_nsg.id
+  subnet_id                 = azurerm_subnet.government_subnet[0].id
+  network_security_group_id = azurerm_network_security_group.government_nsg[0].id
 }
+
