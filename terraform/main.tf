@@ -28,7 +28,12 @@ provider "azurerm" {
 }
 locals {
   deploy_commercial = var.enable_azure_cloud || var.enable_azure_dedicated
+  commercial_vm_ids = concat(
+    var.enable_azure_cloud ? [azurerm_linux_virtual_machine.commercial_node[0].id] : [],
+    var.enable_azure_dedicated ? [azurerm_linux_virtual_machine.dedicated_node[0].id] : []
+  )
 }
+
 
 # ==============================================================================
 # Azure Commercial Cloud Infrastructure
@@ -54,6 +59,23 @@ resource "azurerm_subnet" "commercial_subnet" {
   virtual_network_name = azurerm_virtual_network.commercial_vnet[0].name
   address_prefixes     = ["10.100.1.0/24"]
 }
+
+resource "azurerm_subnet" "commercial_db_subnet" {
+  count                = local.deploy_commercial ? 1 : 0
+  name                 = "commercial-db-subnet"
+  resource_group_name  = azurerm_resource_group.commercial_rg[0].name
+  virtual_network_name = azurerm_virtual_network.commercial_vnet[0].name
+  address_prefixes     = ["10.100.2.0/24"]
+
+  delegation {
+    name = "db-delegation"
+    service_delegation {
+      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    }
+  }
+}
+
 
 resource "azurerm_network_security_group" "commercial_nsg" {
   count               = local.deploy_commercial ? 1 : 0
@@ -132,6 +154,24 @@ resource "azurerm_subnet" "government_subnet" {
   address_prefixes     = ["10.200.1.0/24"]
 }
 
+resource "azurerm_subnet" "government_db_subnet" {
+  count                = var.enable_azure_government ? 1 : 0
+  provider             = azurerm.government
+  name                 = "government-db-subnet"
+  resource_group_name  = azurerm_resource_group.government_rg[0].name
+  virtual_network_name = azurerm_virtual_network.government_vnet[0].name
+  address_prefixes     = ["10.200.2.0/24"]
+
+  delegation {
+    name = "db-delegation"
+    service_delegation {
+      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
+    }
+  }
+}
+
+
 resource "azurerm_network_security_group" "government_nsg" {
   count               = var.enable_azure_government ? 1 : 0
   provider            = azurerm.government
@@ -171,4 +211,90 @@ resource "azurerm_subnet_network_security_group_association" "government_nsg_ass
   subnet_id                 = azurerm_subnet.government_subnet[0].id
   network_security_group_id = azurerm_network_security_group.government_nsg[0].id
 }
+
+# ==============================================================================
+# Commercial Sovereign Services Module Instantiations
+# ==============================================================================
+module "secrets_commercial" {
+  count               = local.deploy_commercial ? 1 : 0
+  source              = "./modules/secrets"
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+  tenant_id           = var.tenant_id
+  secrets = {
+    "pg-admin-password" = var.pg_admin_password
+  }
+}
+
+module "database_commercial" {
+  count               = local.deploy_commercial ? 1 : 0
+  source              = "./modules/database"
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+  subnet_id           = azurerm_subnet.commercial_db_subnet[0].id
+  admin_username      = var.pg_admin_username
+  admin_password      = var.pg_admin_password
+}
+
+module "observability_commercial" {
+  count               = local.deploy_commercial ? 1 : 0
+  source              = "./modules/observability"
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+  target_resource_ids = local.commercial_vm_ids
+}
+
+# ==============================================================================
+# Government Sovereign Services Module Instantiations
+# ==============================================================================
+module "secrets_government" {
+  count               = var.enable_azure_government ? 1 : 0
+  source              = "./modules/secrets"
+  providers = {
+    azurerm = azurerm.government
+  }
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
+  tenant_id           = var.tenant_id
+  secrets = {
+    "pg-admin-password" = var.pg_admin_password
+  }
+}
+
+module "database_government" {
+  count               = var.enable_azure_government ? 1 : 0
+  source              = "./modules/database"
+  providers = {
+    azurerm = azurerm.government
+  }
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
+  subnet_id           = azurerm_subnet.government_db_subnet[0].id
+  admin_username      = var.pg_admin_username
+  admin_password      = var.pg_admin_password
+}
+
+module "observability_government" {
+  count               = var.enable_azure_government ? 1 : 0
+  source              = "./modules/observability"
+  providers = {
+    azurerm = azurerm.government
+  }
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
+  target_resource_ids = var.enable_azure_government ? [azurerm_linux_virtual_machine.government_node[0].id] : []
+}
+
 

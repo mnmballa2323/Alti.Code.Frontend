@@ -15,7 +15,7 @@ terraform {
 # Azure Key Vault
 # ------------------------------------------------------------------------------
 resource "azurerm_key_vault" "vault" {
-  name                        = "alti-vault-${var.environment}"
+  name                        = substr("altikv-${var.customer_id}-${var.environment}", 0, 24)
   location                    = var.location
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
@@ -45,10 +45,16 @@ resource "azurerm_key_vault_secret" "secret" {
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+variable "customer_id" {
+  type        = string
+  description = "Unique identifier for the customer/tenant to ensure naming uniqueness"
+}
+
 variable "environment" {
   type        = string
   description = "Deployment environment (e.g. prod, staging)"
 }
+
 
 variable "location" {
   type        = string

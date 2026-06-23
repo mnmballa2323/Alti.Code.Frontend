@@ -15,7 +15,7 @@ terraform {
 # 1. Log Analytics Workspace
 # ------------------------------------------------------------------------------
 resource "azurerm_log_analytics_workspace" "workspace" {
-  name                = "alti-log-workspace-${var.environment}"
+  name                = "alti-logs-${var.customer_id}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
   sku                 = "PerGB2018"
@@ -45,10 +45,16 @@ resource "azurerm_monitor_diagnostic_setting" "audit_diagnostics" {
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+variable "customer_id" {
+  type        = string
+  description = "Unique identifier for the customer/tenant to ensure naming uniqueness"
+}
+
 variable "environment" {
   type        = string
   description = "Deployment environment (e.g. prod, staging)"
 }
+
 
 variable "location" {
   type        = string

@@ -15,7 +15,7 @@ terraform {
 # 1. Azure Database for PostgreSQL Flexible Server
 # ------------------------------------------------------------------------------
 resource "azurerm_postgresql_flexible_server" "postgres" {
-  name                   = "alti-postgres-${var.environment}"
+  name                   = "alti-pg-${var.customer_id}-${var.environment}"
   resource_group_name    = var.resource_group_name
   location               = var.location
   version                = "15"
@@ -50,7 +50,7 @@ resource "azurerm_postgresql_flexible_server_database" "pentagidb" {
 # 2. Azure Cache for Redis
 # ------------------------------------------------------------------------------
 resource "azurerm_redis_cache" "cache" {
-  name                = "alti-redis-${var.environment}"
+  name                = "alti-redis-${var.customer_id}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
   capacity            = 1
@@ -67,10 +67,16 @@ resource "azurerm_redis_cache" "cache" {
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+variable "customer_id" {
+  type        = string
+  description = "Unique identifier for the customer/tenant to ensure naming uniqueness"
+}
+
 variable "environment" {
   type        = string
   description = "Deployment environment (e.g. prod, staging)"
 }
+
 
 variable "location" {
   type        = string
