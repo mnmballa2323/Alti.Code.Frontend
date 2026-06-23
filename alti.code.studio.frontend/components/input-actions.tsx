@@ -900,7 +900,7 @@ function PromptInputFullLineComponent({
                         (defaultModel || "").includes("gemini") &&
                           "text-[#1A73E8]",
                         (defaultModel || "").includes("claude") &&
-                          "text-black dark:text-white",
+                          "text-[#CC9980]",
                         (defaultModel || "").includes("gpt") &&
                           "text-black dark:text-white",
                       )}
@@ -950,7 +950,7 @@ function PromptInputFullLineComponent({
                 >
                   <div className="flex items-center gap-3 text-left">
                     <Icon
-                      className="size-4 text-black dark:text-white shrink-0"
+                      className="size-4 text-[#CC9980] shrink-0"
                       icon="simple-icons:claude"
                     />
                     <span className="text-xs font-medium text-foreground text-[12px]">
@@ -966,7 +966,7 @@ function PromptInputFullLineComponent({
                 >
                   <div className="flex items-center gap-3 text-left">
                     <Icon
-                      className="size-4 text-black dark:text-white shrink-0"
+                      className="size-4 text-[#CC9980] shrink-0"
                       icon="simple-icons:claude"
                     />
                     <span className="text-xs font-medium text-foreground text-[12px]">

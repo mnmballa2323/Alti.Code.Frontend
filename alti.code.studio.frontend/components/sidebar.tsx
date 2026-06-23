@@ -790,7 +790,6 @@ export default function Sidebar() {
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
     router.prefetch("/licenses");
-    router.prefetch("/discovery");
     router.prefetch("/repositories");
     router.prefetch("/developer-api");
     router.prefetch("/sdk");
@@ -896,15 +895,6 @@ export default function Sidebar() {
       isActive: pathname === "/licenses",
       onClick: () => {
         router.push("/licenses");
-      },
-    },
-    {
-      label: "Discovery",
-      icon: Compass,
-      path: "/discovery",
-      isActive: pathname === "/discovery",
-      onClick: () => {
-        router.push("/discovery");
       },
     },
     {
@@ -1082,7 +1072,6 @@ export default function Sidebar() {
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
     router.prefetch("/licenses");
-    router.prefetch("/discovery");
     router.prefetch("/knowledge");
     router.prefetch("/repositories");
     router.prefetch("/developer-api");

@@ -7,9 +7,6 @@ export async function GET(request: Request) {
   const robots = `# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-
-# Agentic Resource Discovery (ARD) Spec Discovery Signal
-Agentmap: ${protocol}://${host}/.well-known/ai-catalog.json
 `;
 
   return new Response(robots, {
