@@ -5,15 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-// MUST BE THE VERY FIRST LINE: Google Cloud Trace initialization
-import traceAgent from '@google-cloud/trace-agent';
-if (process.env.NODE_ENV === 'production' || process.env.ENABLE_GCP_APM === 'true') {
-  traceAgent.start({ ignoreUrls: [/^\/healthz/, /^\/metrics/] });
-}
-
 import './polyfill.js';
-import { ErrorReporting } from '@google-cloud/error-reporting';
-import profiler from '@google-cloud/profiler';
 import http from 'http';
 import mongoose from 'mongoose';
 import fs from 'fs';
@@ -36,28 +28,9 @@ if (process.env.NODE_ENV === 'production') {
     }
 }
 
-// Initialize Google Cloud Error Reporting
-const errors = new ErrorReporting();
-
 process.on('uncaughtException', error => {
   logger.error('🚨 Uncaught Exception detected!', error);
   console.error('🚨 Uncaught Exception detected:', error);
-  // Pipe critical crashes directly to Google Cloud Console
-  errors.report(error);
-  // Do NOT exit the process. Background Google Cloud SDK auth failures 
-  // will otherwise crash the server constantly in local dev mode.
-});
-
-// Initialize Google Cloud Profiler (Autonomous Continuous FinOps)
-profiler.start({
-  serviceContext: {
-    service: 'alti-code-studio-backend',
-    version: '1.0.0',
-  },
-}).then(() => {
-  logger.info('🔬 [GCP] Google Cloud Profiler initialized. Continuous telemetry active.');
-}).catch(err => {
-  logger.warn(`⚠️ [GCP] Google Cloud Profiler failed to start: ${err.message}`);
 });
 
 import { connectPrisma } from './src/config/prisma.js';
@@ -68,13 +41,13 @@ mongoose.set('bufferCommands', false);
 
 async function main() {
   try {
-    // 0. Load Google Cloud Secret Manager enterprise secrets
+    // 0. Load Azure Key Vault / sovereign enterprise secrets
     try {
       const { loadEnterpriseSecrets } = await import('./config/index.js');
       await loadEnterpriseSecrets();
-      logger.info('🔑 [GCP] Google Cloud Secret Manager enterprise secrets synchronized.');
+      logger.info('🔑 [Azure Key Vault] Sovereign Enterprise secrets synchronized.');
     } catch (secretErr) {
-      logger.warn(`⚠️ Google Secret Manager auto-inject bypassed: ${secretErr.message}`);
+      logger.warn(`⚠️ Enterprise Key Vault auto-inject bypassed: ${secretErr.message}`);
     }
 
     // 1. Initialize PostgreSQL (Prisma)
@@ -255,12 +228,6 @@ async function main() {
   process.on('unhandledRejection', (reason, promise) => {
     logger.error('🚨 Unhandled Rejection detected at promise:', promise, 'reason:', reason);
     console.error('🚨 Unhandled Rejection:', reason);
-    // Pipe critical rejections directly to Google Cloud Console
-    if (reason instanceof Error) {
-        errors.report(reason);
-    } else {
-        errors.report(new Error(`Unhandled Rejection: ${reason}`));
-    }
   });
 }
 

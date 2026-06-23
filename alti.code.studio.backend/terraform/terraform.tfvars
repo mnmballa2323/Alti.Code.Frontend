@@ -1,12 +1,7 @@
 # ═══════════════════════════════════════════════
-# Terraform Variables
+# Terraform Variables (Azure Native Configuration)
 # ═══════════════════════════════════════════════
 
-# Environment
-environment    = "production"
-project_id     = "alti-code-studio"
-region         = "us-central1"
-
-# GKE
-gke_node_count  = 3
-gke_machine_type = "e2-standard-4"
+environment         = "production"
+resource_group_name = "alti-code-studio-rg"
+location            = "eastus2"

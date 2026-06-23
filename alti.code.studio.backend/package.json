@@ -37,6 +37,8 @@
   },
   "dependencies": {
     "@ast-grep/napi": "^0.22.0",
+    "@azure/arm-containerinstance": "^9.1.0",
+    "@azure/identity": "^4.0.0",
     "@azure/openai": "^2.0.0",
     "@babel/parser": "^7.29.0",
     "@babel/traverse": "^7.29.0",

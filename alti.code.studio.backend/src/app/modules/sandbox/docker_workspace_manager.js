@@ -18,6 +18,7 @@ import { join, resolve } from 'path';
 import vm from 'vm';
 import hostPath from 'path';
 import hostCrypto from 'crypto';
+import { azureContainerService } from '../../../shared/azureContainer.service.js';
 
 export class DockerWorkspaceManager {
     /**
@@ -58,6 +59,9 @@ export class DockerWorkspaceManager {
      * Detects if the Docker daemon is responsive.
      */
     async checkDockerAvailability() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            return true;
+        }
         if (this.isDockerAvailable !== null) {
             return this.isDockerAvailable;
         }
@@ -182,12 +186,20 @@ export class DockerWorkspaceManager {
      */
     async stopUserContainer(userId) {
         const cleanUserId = userId.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `user_sandbox_${cleanUserId}`;
+        const containerName = `user-sandbox-${cleanUserId}`.toLowerCase().replace(/_/g, '-');
 
         this.activeContainers.delete(containerName);
         const hasDocker = await this.checkDockerAvailability();
 
-        if (hasDocker) {
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            try {
+                await azureContainerService.deleteContainerGroup(containerName);
+                console.log(`🧹 [Azure/ACI] Stopped and pruned user container group: [${containerName}]`);
+            } catch (e) {
+                console.warn(`Failed to stop user ACI container group: ${e.message}`);
+            }
+        } else if (hasDocker) {
             await this._execCmd(`docker stop ${containerName}`);
             await this._execCmd(`docker rm -f ${containerName}`);
             console.log(`🧹 Stopped and pruned user container: [${containerName}]`);
@@ -369,10 +381,48 @@ export class DockerWorkspaceManager {
      */
     async executeCode(userId, code, options = {}) {
         const cleanUserId = userId.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `user_sandbox_${cleanUserId}`;
+        const containerName = `user-sandbox-${cleanUserId}`.toLowerCase().replace(/_/g, '-');
         const hostPath = this.provisionUserWorkspace(userId);
         const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const startTime = Date.now();
+
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const tempFileName = `temp_exec_${Math.random().toString(36).substring(2, 9)}.js`;
+            await this.startUserContainer(userId, options);
+
+            try {
+                // Write file inside ACI
+                await azureContainerService.writeFileToContainer(containerName, containerName, `/workspace/${tempFileName}`, code);
+
+                const execResult = await azureContainerService.executeCommandAndGetOutput(
+                    containerName,
+                    containerName,
+                    `node /workspace/${tempFileName}`
+                );
+
+                // Cleanup temp file inside ACI
+                await azureContainerService.executeCommandAndGetOutput(containerName, containerName, `rm /workspace/${tempFileName}`);
+
+                const durationMs = Date.now() - startTime;
+                return {
+                    success: execResult.success,
+                    logs: execResult.stdout ? execResult.stdout.split('\n') : [],
+                    errors: execResult.stderr ? execResult.stderr.split('\n') : [],
+                    durationMs,
+                    isMock: false
+                };
+            } catch (err) {
+                return {
+                    success: false,
+                    logs: [],
+                    errors: [err.message],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            }
+        }
+        // ------------------ END AZURE ACI PATH ------------------
 
         if (provider === 'crabbox') {
             const { crabboxService } = await import('../crabbox/crabbox.service.js');
@@ -456,10 +506,43 @@ export class DockerWorkspaceManager {
     async startOssContainer(moduleName, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
         const isPython = options.language === 'python';
-        const containerName = `oss_container_${cleanModuleName}${isPython ? '_python' : ''}`;
+        const containerName = `oss-container-${cleanModuleName}${isPython ? '-python' : ''}`.toLowerCase().replace(/_/g, '-');
         const targetHostPath = resolve(hostPath);
 
         const hasDocker = await this.checkDockerAvailability();
+
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const activeGroups = await azureContainerService.listContainers();
+            const existingGroup = activeGroups.find(g => g.Names.includes(containerName));
+            if (existingGroup && existingGroup.State === 'Running') {
+                this.activeContainers.add(containerName);
+                return { containerName, hostPath: targetHostPath, isMock: false };
+            }
+
+            try {
+                await azureContainerService.deleteContainerGroup(containerName);
+            } catch (e) {}
+
+            const memoryLimit = options.memory || '256m';
+            let memoryInGb = 0.5;
+            if (memoryLimit.endsWith('m')) {
+                memoryInGb = parseFloat(memoryLimit) / 1024;
+            } else if (memoryLimit.endsWith('g')) {
+                memoryInGb = parseFloat(memoryLimit);
+            }
+            const cpuLimit = parseFloat(options.cpus || '0.5');
+            const image = isPython ? 'python:3.11-alpine' : this.baseImage;
+
+            console.log(`[Azure/ACI] Spawning OSS container group ${containerName} using image ${image}...`);
+            await azureContainerService.createContainerGroup(containerName, image, cpuLimit, memoryInGb, {
+                command: ['tail', '-f', '/dev/null']
+            });
+
+            this.activeContainers.add(containerName);
+            return { containerName, hostPath: targetHostPath, isMock: false };
+        }
+        // ------------------ END AZURE ACI PATH ------------------
 
         if (!hasDocker) {
             this.activeContainers.add(containerName);
@@ -529,10 +612,54 @@ export class DockerWorkspaceManager {
     async executeOssCode(moduleName, code, hostPath, options = {}) {
         const cleanModuleName = moduleName.replace(/[^a-zA-Z0-9_]/g, '');
         const isPython = options.language === 'python';
-        const containerName = `oss_container_${cleanModuleName}${isPython ? '_python' : ''}`;
+        const containerName = `oss-container-${cleanModuleName}${isPython ? '-python' : ''}`.toLowerCase().replace(/_/g, '-');
         const targetHostPath = resolve(hostPath);
         const provider = options.provider || process.env.SANDBOX_PROVIDER || 'local';
         const startTime = Date.now();
+
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const tempExt = isPython ? 'py' : 'js';
+            const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.${tempExt}`;
+            await this.startOssContainer(moduleName, targetHostPath, options);
+
+            try {
+                // Write file inside ACI
+                await azureContainerService.writeFileToContainer(containerName, containerName, `/workspace/${tempFileName}`, code);
+
+                const runtimeCmd = isPython ? 'python' : 'node';
+                const execResult = await azureContainerService.executeCommandAndGetOutput(
+                    containerName,
+                    containerName,
+                    `${runtimeCmd} /workspace/${tempFileName}`
+                );
+
+                // Cleanup temp file inside ACI
+                await azureContainerService.executeCommandAndGetOutput(containerName, containerName, `rm /workspace/${tempFileName}`);
+
+                const durationMs = Date.now() - startTime;
+                const errors = execResult.stderr ? execResult.stderr.split('\n') : [];
+
+                return {
+                    success: execResult.success,
+                    exitCode: execResult.exitCode,
+                    logs: execResult.stdout ? execResult.stdout.split('\n') : [],
+                    errors,
+                    durationMs,
+                    isMock: false
+                };
+            } catch (err) {
+                return {
+                    success: false,
+                    exitCode: 1,
+                    logs: [],
+                    errors: [err.message],
+                    durationMs: Date.now() - startTime,
+                    isMock: false
+                };
+            }
+        }
+        // ------------------ END AZURE ACI PATH ------------------
 
         if (provider === 'crabbox') {
             const { crabboxService } = await import('../crabbox/crabbox.service.js');
@@ -624,6 +751,19 @@ export class DockerWorkspaceManager {
      * Scans and automatically stops/prunes any orphaned containers left behind from past crashed runs.
      */
     async pruneOrphanedContainers() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const containers = await azureContainerService.listContainers();
+            for (const c of containers) {
+                if (c.Names[0] && (c.Names[0].startsWith('user-sandbox-') || c.Names[0].startsWith('oss-container-'))) {
+                    console.log(`🧹 Self-Healing [Azure]: Pruning orphaned container: [${c.Names[0]}]`);
+                    try {
+                        await azureContainerService.deleteContainerGroup(c.Names[0]);
+                    } catch (e) {}
+                }
+            }
+            return;
+        }
+
         const hasDocker = await this.checkDockerAvailability();
         if (!hasDocker) return;
 

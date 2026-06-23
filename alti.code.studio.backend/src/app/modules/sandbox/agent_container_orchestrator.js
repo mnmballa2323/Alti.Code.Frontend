@@ -17,6 +17,7 @@ import { join, resolve } from 'path';
 import { TenantContainerOrchestrator } from './tenant_container_orchestrator.js';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
+import { azureContainerService } from '../../../shared/azureContainer.service.js';
 
 export class AgentContainerOrchestrator {
     /**
@@ -60,6 +61,9 @@ export class AgentContainerOrchestrator {
      * Detects if the Docker daemon is responsive.
      */
     async checkDockerAvailability() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            return true;
+        }
         if (this.isDockerAvailable !== null) {
             return this.isDockerAvailable;
         }
@@ -81,10 +85,44 @@ export class AgentContainerOrchestrator {
      */
     async startAgentContainer(agentName, sessionWorkspacePath, tenantId = null, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `agent_container_${cleanAgentName}`;
+        const containerName = `agent-container-${cleanAgentName}`.toLowerCase().replace(/_/g, '-');
         const hostWorkspacePath = resolve(sessionWorkspacePath);
 
         const hasDocker = await this.checkDockerAvailability();
+
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const activeGroups = await azureContainerService.listContainers();
+            const existingGroup = activeGroups.find(g => g.Names.includes(containerName));
+            if (existingGroup && existingGroup.State === 'Running') {
+                this.activeContainers.add(containerName);
+                this.containerWorkspaces.set(containerName, hostWorkspacePath);
+                return { containerName, hostWorkspacePath, isMock: false };
+            }
+
+            try {
+                await azureContainerService.deleteContainerGroup(containerName);
+            } catch (e) {}
+
+            const memoryLimit = options.memory || '256m';
+            let memoryInGb = 0.5;
+            if (memoryLimit.endsWith('m')) {
+                memoryInGb = parseFloat(memoryLimit) / 1024;
+            } else if (memoryLimit.endsWith('g')) {
+                memoryInGb = parseFloat(memoryLimit);
+            }
+            const cpuLimit = parseFloat(options.cpus || '0.5');
+
+            console.log(`[Azure/ACI] Spawning agent container group ${containerName} using image ${this.baseImage}...`);
+            await azureContainerService.createContainerGroup(containerName, this.baseImage, cpuLimit, memoryInGb, {
+                command: ['tail', '-f', '/dev/null']
+            });
+
+            this.activeContainers.add(containerName);
+            this.containerWorkspaces.set(containerName, hostWorkspacePath);
+            return { containerName, hostWorkspacePath, isMock: false };
+        }
+        // ------------------ END AZURE ACI PATH ------------------
 
         if (!hasDocker) {
             // High-Fidelity Mock Sandbox Fallback
@@ -197,7 +235,7 @@ export class AgentContainerOrchestrator {
      */
     async stopAgentContainer(agentName, workspacePath = null) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `agent_container_${cleanAgentName}`;
+        const containerName = `agent-container-${cleanAgentName}`.toLowerCase().replace(/_/g, '-');
 
         this.activeContainers.delete(containerName);
         const hasDocker = await this.checkDockerAvailability();
@@ -205,7 +243,15 @@ export class AgentContainerOrchestrator {
         let workspacePathToShred = workspacePath || this.containerWorkspaces.get(containerName);
         this.containerWorkspaces.delete(containerName);
 
-        if (hasDocker) {
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            try {
+                await azureContainerService.deleteContainerGroup(containerName);
+                console.log(`🧹 [Azure/ACI] Stopped and pruned Agent Container Group: [${containerName}]`);
+            } catch (e) {
+                console.warn(`Failed to stop ACI container group: ${e.message}`);
+            }
+        } else if (hasDocker) {
             // Try to resolve workspace path via docker inspect if not provided/resolved
             if (!workspacePathToShred) {
                 const inspectMount = await this._execCmd(`docker inspect -f '{{ range .Mounts }}{{ if eq .Destination "/workspace" }}{{ .Source }}{{ end }}{{ end }}' ${containerName}`);
@@ -304,7 +350,7 @@ export class AgentContainerOrchestrator {
      */
     async executeAgentTool(agentName, toolName, args, context, toolExecuteFn, sessionWorkspacePath, tenantId = null, options = {}) {
         const cleanAgentName = agentName.replace(/[^a-zA-Z0-9_]/g, '');
-        const containerName = `agent_container_${cleanAgentName}`;
+        const containerName = `agent-container-${cleanAgentName}`.toLowerCase().replace(/_/g, '-');
         const hostWorkspacePath = resolve(sessionWorkspacePath);
         const provider = options.provider || context?.provider || process.env.SANDBOX_PROVIDER || 'local';
 
@@ -359,24 +405,25 @@ export class AgentContainerOrchestrator {
             run();
         `;
 
-        writeFileSync(tempHostPath, executableScript, 'utf8');
-
         let stdoutLogs = [];
         let stderrLogs = [];
         let executionReport = null;
 
-        if (provider === 'crabbox') {
+        // ------------------ AZURE ACI PATH ------------------
+        if (process.env.ARM_SUBSCRIPTION_ID) {
             try {
-                const { crabboxService } = await import('../crabbox/crabbox.service.js');
-                const result = await crabboxService.run(`node ${tempFileName}`, {
-                    id: options.leaseId || context?.leaseId,
-                    provider: options.crabboxProvider || context?.crabboxProvider,
-                    class: options.crabboxClass || context?.crabboxClass,
-                    cwd: hostWorkspacePath
-                });
+                // Write file directly in ACI container
+                await azureContainerService.writeFileToContainer(containerName, containerName, `/workspace/${tempFileName}`, executableScript);
 
-                if (result.stdout) {
-                    const lines = result.stdout.split('\n');
+                // Run execution
+                const execResult = await azureContainerService.executeCommandAndGetOutput(
+                    containerName,
+                    containerName,
+                    `node /workspace/${tempFileName}`
+                );
+
+                if (execResult.stdout) {
+                    const lines = execResult.stdout.split('\n');
                     lines.forEach(line => {
                         if (line.startsWith('RESULT_PAYLOAD:')) {
                             try {
@@ -387,56 +434,92 @@ export class AgentContainerOrchestrator {
                         }
                     });
                 }
-                if (!executionReport && !result.success) {
-                    executionReport = { success: false, error: result.stderr || 'Execution failed' };
+                if (!executionReport && !execResult.success) {
+                    executionReport = { success: false, error: execResult.stderr || 'Execution failed' };
                 }
+
+                // Cleanup temp file inside ACI
+                await azureContainerService.executeCommandAndGetOutput(containerName, containerName, `rm /workspace/${tempFileName}`);
             } catch (err) {
                 executionReport = { success: false, error: err.message };
             }
-        } else if (containerResult.isMock) {
-            try {
-                const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
-                const manager = new DockerWorkspaceManager(this.baseSandboxDir);
-                const mockResult = await manager._executeMockInVM(executableScript, hostWorkspacePath, options);
-
-                mockResult.logs.forEach(line => {
-                    if (line.startsWith('RESULT_PAYLOAD:')) {
-                        try {
-                            executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
-                        } catch (e) {}
-                    } else {
-                        stdoutLogs.push(line);
-                    }
-                });
-
-                mockResult.errors.forEach(line => {
-                    stderrLogs.push(line);
-                });
-
-                if (!mockResult.success && !executionReport) {
-                    executionReport = { success: false, error: mockResult.errors.join('\n') };
-                }
-            } catch (e) {
-                executionReport = { success: false, error: e.message };
-            }
         } else {
-            // Active Docker container execution via exec
-            const execCmd = `docker exec ${containerName} node /workspace/${tempFileName}`;
-            const execResult = await this._execCmd(execCmd);
+            // Local mode
+            writeFileSync(tempHostPath, executableScript, 'utf8');
 
-            if (execResult.success && execResult.stdout) {
-                const lines = execResult.stdout.split('\n');
-                lines.forEach(line => {
-                    if (line.startsWith('RESULT_PAYLOAD:')) {
-                        try {
-                            executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
-                        } catch (e) {}
-                    } else {
-                        stdoutLogs.push(line);
+            if (provider === 'crabbox') {
+                try {
+                    const { crabboxService } = await import('../crabbox/crabbox.service.js');
+                    const result = await crabboxService.run(`node ${tempFileName}`, {
+                        id: options.leaseId || context?.leaseId,
+                        provider: options.crabboxProvider || context?.crabboxProvider,
+                        class: options.crabboxClass || context?.crabboxClass,
+                        cwd: hostWorkspacePath
+                    });
+
+                    if (result.stdout) {
+                        const lines = result.stdout.split('\n');
+                        lines.forEach(line => {
+                            if (line.startsWith('RESULT_PAYLOAD:')) {
+                                try {
+                                    executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
+                                } catch (e) {}
+                            } else {
+                                stdoutLogs.push(line);
+                            }
+                        });
                     }
-                });
+                    if (!executionReport && !result.success) {
+                        executionReport = { success: false, error: result.stderr || 'Execution failed' };
+                    }
+                } catch (err) {
+                    executionReport = { success: false, error: err.message };
+                }
+            } else if (containerResult.isMock) {
+                try {
+                    const { DockerWorkspaceManager } = await import('./docker_workspace_manager.js');
+                    const manager = new DockerWorkspaceManager(this.baseSandboxDir);
+                    const mockResult = await manager._executeMockInVM(executableScript, hostWorkspacePath, options);
+
+                    mockResult.logs.forEach(line => {
+                        if (line.startsWith('RESULT_PAYLOAD:')) {
+                            try {
+                                executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
+                            } catch (e) {}
+                        } else {
+                            stdoutLogs.push(line);
+                        }
+                    });
+
+                    mockResult.errors.forEach(line => {
+                        stderrLogs.push(line);
+                    });
+
+                    if (!mockResult.success && !executionReport) {
+                        executionReport = { success: false, error: mockResult.errors.join('\n') };
+                    }
+                } catch (e) {
+                    executionReport = { success: false, error: e.message };
+                }
             } else {
-                executionReport = { success: false, error: execResult.error || execResult.stderr };
+                // Active Docker container execution via exec
+                const execCmd = `docker exec ${containerName} node /workspace/${tempFileName}`;
+                const execResult = await this._execCmd(execCmd);
+
+                if (execResult.success && execResult.stdout) {
+                    const lines = execResult.stdout.split('\n');
+                    lines.forEach(line => {
+                        if (line.startsWith('RESULT_PAYLOAD:')) {
+                            try {
+                                executionReport = JSON.parse(line.replace('RESULT_PAYLOAD:', ''));
+                            } catch (e) {}
+                        } else {
+                            stdoutLogs.push(line);
+                        }
+                    });
+                } else {
+                    executionReport = { success: false, error: execResult.error || execResult.stderr };
+                }
             }
         }
 
@@ -475,6 +558,19 @@ export class AgentContainerOrchestrator {
      * Scans and automatically stops/prunes any orphaned agent containers left behind from past failed sessions.
      */
     async pruneOrphanedContainers() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            const containers = await azureContainerService.listContainers();
+            for (const c of containers) {
+                if (c.Names[0] && c.Names[0].startsWith('agent-container-')) {
+                    console.log(`🧹 Self-Healing [Azure]: Pruning orphaned agent container: [${c.Names[0]}]`);
+                    try {
+                        await azureContainerService.deleteContainerGroup(c.Names[0]);
+                    } catch (e) {}
+                }
+            }
+            return;
+        }
+
         const hasDocker = await this.checkDockerAvailability();
         if (!hasDocker) return;
 

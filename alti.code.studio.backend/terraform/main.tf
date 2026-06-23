@@ -1,42 +1,44 @@
 # ═══════════════════════════════════════════════════════════════
-# Alti.Code.Studio — GCP Infrastructure as Code (Terraform)
-# S&P 500 Enterprise Infrastructure
+# Alti.Code.Studio — Azure Native Infrastructure as Code (Terraform)
+# S&P 500 Enterprise Infrastructure — Non-Containerized
 # ═══════════════════════════════════════════════════════════════
 
 terraform {
   required_version = ">= 1.5.0"
 
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 5.0"
-    }
-    google-beta = {
-      source  = "hashicorp/google-beta"
-      version = "~> 5.0"
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
     }
   }
 
-  backend "gcs" {
-    bucket = "alti-code-studio-tfstate"
-    prefix = "terraform/state"
+  backend "azurerm" {
+    resource_group_name  = "alti-code-studio-tfstate-rg"
+    storage_account_name = "altitfstatesa"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
   }
+}
+
+provider "azurerm" {
+  features {}
 }
 
 # ═══════════════════════════════════════════════
 # Variables
 # ═══════════════════════════════════════════════
 
-variable "project_id" {
-  description = "GCP Project ID"
+variable "resource_group_name" {
+  description = "The name of the resource group."
   type        = string
-  default     = "alti-code-studio"
+  default     = "alti-code-studio-rg"
 }
 
-variable "region" {
-  description = "Primary GCP region"
+variable "location" {
+  description = "The Azure region to deploy resources."
   type        = string
-  default     = "us-central1"
+  default     = "eastus2"
 }
 
 variable "environment" {
@@ -45,953 +47,196 @@ variable "environment" {
   default     = "production"
 }
 
-variable "gke_node_count" {
-  description = "Number of GKE nodes per zone"
-  type        = number
-  default     = 3
-}
+# ═══════════════════════════════════════════════
+# Resource Group
+# ═══════════════════════════════════════════════
 
-variable "gke_machine_type" {
-  description = "Machine type for GKE nodes"
-  type        = string
-  default     = "e2-standard-4"
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location
+
+  tags = {
+    Environment = var.environment
+    Project     = "Alti.Code.Studio"
+  }
 }
 
 # ═══════════════════════════════════════════════
-# Provider
+# Virtual Network (VNet) & Subnets
 # ═══════════════════════════════════════════════
 
-provider "google" {
-  project = var.project_id
-  region  = var.region
+resource "azurerm_virtual_network" "vnet" {
+  name                = "alti-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
-provider "google-beta" {
-  project = var.project_id
-  region  = var.region
-}
+resource "azurerm_subnet" "web_subnet" {
+  name                 = "alti-web-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
 
-# ═══════════════════════════════════════════════
-# VPC Network
-# ═══════════════════════════════════════════════
-
-resource "google_compute_network" "vpc" {
-  name                    = "alti-vpc"
-  auto_create_subnetworks = false
-  routing_mode            = "GLOBAL"
-}
-
-resource "google_compute_subnetwork" "primary" {
-  name          = "alti-subnet-primary"
-  ip_cidr_range = "10.0.0.0/20"
-  region        = var.region
-  network       = google_compute_network.vpc.id
-
-  secondary_ip_range {
-    range_name    = "gke-pods"
-    ip_cidr_range = "10.16.0.0/14"
-  }
-
-  secondary_ip_range {
-    range_name    = "gke-services"
-    ip_cidr_range = "10.20.0.0/20"
-  }
-
-  private_ip_google_access = true
-}
-
-# ── Firewall Rules ──
-
-resource "google_compute_firewall" "allow_internal" {
-  name    = "alti-allow-internal"
-  network = google_compute_network.vpc.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
-  }
-  allow {
-    protocol = "udp"
-    ports    = ["0-65535"]
-  }
-  allow {
-    protocol = "icmp"
-  }
-
-  source_ranges = ["10.0.0.0/8"]
-}
-
-resource "google_compute_firewall" "allow_health_checks" {
-  name    = "alti-allow-health-checks"
-  network = google_compute_network.vpc.name
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "443", "3000"]
-  }
-
-  source_ranges = ["35.191.0.0/16", "130.211.0.0/22"]
-}
-
-# ═══════════════════════════════════════════════
-# GKE Cluster
-# ═══════════════════════════════════════════════
-
-resource "google_container_cluster" "primary" {
-  provider = google-beta
-  name     = "alti-gke-cluster"
-  location = var.region
-
-  # Autopilot for managed nodes
-  enable_autopilot = false
-
-  # VPC-native cluster
-  network    = google_compute_network.vpc.name
-  subnetwork = google_compute_subnetwork.primary.name
-
-  ip_allocation_policy {
-    cluster_secondary_range_name  = "gke-pods"
-    services_secondary_range_name = "gke-services"
-  }
-
-  # Security
-  workload_identity_config {
-    workload_pool = "${var.project_id}.svc.id.goog"
-  }
-
-  # Monitoring
-  monitoring_config {
-    enable_components = ["SYSTEM_COMPONENTS", "APISERVER", "SCHEDULER", "CONTROLLER_MANAGER"]
-    managed_prometheus {
-      enabled = true
+  delegation {
+    name = "web_app_delegation"
+    service_delegation {
+      name    = "Microsoft.Web/serverFarms"
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
     }
   }
-
-  logging_config {
-    enable_components = ["SYSTEM_COMPONENTS", "WORKLOADS"]
-  }
-
-  # Network policy
-  network_policy {
-    enabled = true
-  }
-
-  # Binary authorization
-  binary_authorization {
-    evaluation_mode = "PROJECT_SINGLETON_POLICY_ENFORCE"
-  }
-
-  # Release channel
-  release_channel {
-    channel = "STABLE"
-  }
-
-  # Master authorized networks
-  master_authorized_networks_config {
-    cidr_blocks {
-      cidr_block   = "0.0.0.0/0"
-      display_name = "All (restrict in production)"
-    }
-  }
-
-  # Maintenance window (Sunday 2-6 AM UTC)
-  maintenance_policy {
-    recurring_window {
-      start_time = "2024-01-01T02:00:00Z"
-      end_time   = "2024-01-01T06:00:00Z"
-      recurrence = "FREQ=WEEKLY;BYDAY=SU"
-    }
-  }
-
-  # Remove default node pool
-  remove_default_node_pool = true
-  initial_node_count       = 1
 }
 
-# ── API Server Node Pool ──
+resource "azurerm_subnet" "db_subnet" {
+  name                 = "alti-db-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.2.0/24"]
+  service_endpoints    = ["Microsoft.Sql"]
+}
 
-resource "google_container_node_pool" "api_pool" {
-  name     = "api-pool"
-  location = var.region
-  cluster  = google_container_cluster.primary.name
+# ═══════════════════════════════════════════════
+# Azure Key Vault (Secrets Management)
+# ═══════════════════════════════════════════════
 
-  initial_node_count = var.gke_node_count
+data "azurerm_client_config" "current" {}
 
-  autoscaling {
-    min_node_count = 2
-    max_node_count = 20
-  }
+resource "azurerm_key_vault" "kv" {
+  name                        = "alti-keyvault-${var.environment}"
+  location                    = azurerm_resource_group.rg.location
+  resource_group_name         = azurerm_resource_group.rg.name
+  enabled_for_disk_encryption = true
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = false
 
-  node_config {
-    machine_type = var.gke_machine_type
-    disk_size_gb = 100
-    disk_type    = "pd-ssd"
+  sku_name = "standard"
 
-    labels = {
-      role        = "api"
-      environment = var.environment
-    }
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
 
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
+    secret_permissions = [
+      "Get", "List", "Set", "Delete", "Purge", "Recover"
     ]
-
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-
-    shielded_instance_config {
-      enable_secure_boot          = true
-      enable_integrity_monitoring = true
-    }
-  }
-
-  management {
-    auto_repair  = true
-    auto_upgrade = true
-  }
-}
-
-# ── Worker Node Pool (GPU-capable for AI workloads) ──
-
-resource "google_container_node_pool" "worker_pool" {
-  name     = "worker-pool"
-  location = var.region
-  cluster  = google_container_cluster.primary.name
-
-  initial_node_count = var.gke_node_count
-
-  autoscaling {
-    min_node_count = 3
-    max_node_count = 50
-  }
-
-  node_config {
-    machine_type = "e2-standard-8"
-    disk_size_gb = 200
-    disk_type    = "pd-ssd"
-
-    labels = {
-      role        = "worker"
-      environment = var.environment
-    }
-
-    taint {
-      key    = "workload"
-      value  = "agent"
-      effect = "NO_SCHEDULE"
-    }
-
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/cloud-platform",
-    ]
-
-    workload_metadata_config {
-      mode = "GKE_METADATA"
-    }
-
-    shielded_instance_config {
-      enable_secure_boot          = true
-      enable_integrity_monitoring = true
-    }
-  }
-
-  management {
-    auto_repair  = true
-    auto_upgrade = true
   }
 }
 
 # ═══════════════════════════════════════════════
-# Cloud Memorystore (Redis)
+# Cosmos DB (MongoDB API)
 # ═══════════════════════════════════════════════
 
-resource "google_redis_instance" "primary" {
-  name           = "alti-redis"
-  tier           = "STANDARD_HA"
-  memory_size_gb = 5
-  region         = var.region
+resource "azurerm_cosmosdb_account" "cosmos" {
+  name                = "alti-cosmosdb-${var.environment}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  offer_type          = "Standard"
+  kind                = "MongoDB"
 
-  redis_version = "REDIS_7_0"
-
-  auth_enabled            = true
-  transit_encryption_mode = "SERVER_AUTHENTICATION"
-
-  maintenance_policy {
-    weekly_maintenance_window {
-      day = "SUNDAY"
-      start_time {
-        hours   = 2
-        minutes = 0
-      }
-    }
+  capabilities {
+    name = "EnableMongo"
   }
 
-  labels = {
-    environment = var.environment
-    service     = "alti-code-studio"
+  consistency_policy {
+    consistency_level = "Session"
+  }
+
+  geo_location {
+    location          = azurerm_resource_group.rg.location
+    failover_priority = 0
   }
 }
 
 # ═══════════════════════════════════════════════
-# Cloud KMS (Encryption)
+# Azure Database for PostgreSQL Flexible Server
 # ═══════════════════════════════════════════════
 
-resource "google_kms_key_ring" "primary" {
-  name     = "alti-keyring"
-  location = var.region
+resource "azurerm_postgresql_flexible_server" "postgres" {
+  name                   = "alti-postgres-${var.environment}"
+  resource_group_name    = azurerm_resource_group.rg.name
+  location               = azurerm_resource_group.rg.location
+  version                = "15"
+  administrator_login    = "altiadm"
+  administrator_password = "SecurePassword123!" # Replace with a Key Vault reference in prod
+  storage_mb             = 32768
+  sku_name               = "GP_Standard_D2s_v3"
 }
 
-resource "google_kms_crypto_key" "data_encryption" {
-  name     = "data-encryption-key"
-  key_ring = google_kms_key_ring.primary.id
-
-  rotation_period = "7776000s" # 90 days
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  labels = {
-    purpose     = "data-encryption"
-    environment = var.environment
-  }
-}
-
-resource "google_kms_crypto_key" "audit_signing" {
-  name     = "audit-signing-key"
-  key_ring = google_kms_key_ring.primary.id
-
-  purpose = "ASYMMETRIC_SIGN"
-
-  version_template {
-    algorithm        = "RSA_SIGN_PKCS1_4096_SHA256"
-    protection_level = "HSM"
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-
-  labels = {
-    purpose     = "audit-signing"
-    environment = var.environment
-  }
+# Allow connections from Azure services
+resource "azurerm_postgresql_flexible_server_firewall_rule" "allow_azure_services" {
+  name             = "allow-azure"
+  server_id        = azurerm_postgresql_flexible_server.postgres.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
 }
 
 # ═══════════════════════════════════════════════
-# Secret Manager
+# Azure Cache for Redis
 # ═══════════════════════════════════════════════
 
-resource "google_secret_manager_secret" "redis_password" {
-  secret_id = "redis-password"
-
-  replication {
-    auto {}
-  }
-
-  labels = {
-    environment = var.environment
-  }
-}
-
-resource "google_secret_manager_secret" "ai_api_keys" {
-  secret_id = "ai-api-keys"
-
-  replication {
-    auto {}
-  }
-
-  labels = {
-    environment = var.environment
-    component   = "ai-providers"
-  }
-}
-
-resource "google_secret_manager_secret" "sso_config" {
-  secret_id = "sso-config"
-
-  replication {
-    auto {}
-  }
-
-  labels = {
-    environment = var.environment
-    component   = "enterprise-auth"
-  }
+resource "azurerm_redis_cache" "redis" {
+  name                = "alti-redis-${var.environment}"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  capacity            = 1
+  family              = "C"
+  sku_name            = "Basic"
+  enable_non_ssl_port = false
+  minimum_tls_version = "1.2"
 }
 
 # ═══════════════════════════════════════════════
-# Cloud Armor (WAF/DDoS)
+# Azure App Service (Express API Host)
 # ═══════════════════════════════════════════════
 
-resource "google_compute_security_policy" "enterprise" {
-  name = "alti-enterprise-policy"
+resource "azurerm_service_plan" "asp" {
+  name                = "alti-appservice-plan"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_service_plan.asp.location
+  os_type             = "Linux"
+  sku_name            = "P1v2"
+}
 
-  # Default: Allow
-  rule {
-    action   = "allow"
-    priority = "2147483647"
-    match {
-      versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["*"]
-      }
-    }
-    description = "Default allow"
-  }
+resource "azurerm_linux_web_app" "web" {
+  name                = "alti-code-studio-backend"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  service_plan_id     = azurerm_service_plan.asp.id
 
-<<<<<<< HEAD
-  # Block known bad actors
-=======
-  # ═══════════════════════════════════════════════
-  # World-Class Adaptive Protection (ML-powered)
-  # ═══════════════════════════════════════════════
-  adaptive_protection_config {
-    layer_7_ddos_defense_config {
-      enable = true
-      rule_visibility = "STANDARD"
+  site_config {
+    always_on = true
+    
+    application_stack {
+      node_version = "node|18-lts"
     }
   }
 
-  # Block known bad actors
-
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
-  rule {
-    action   = "deny(403)"
-    priority = "1000"
-    match {
-      expr {
-        expression = "evaluatePreconfiguredExpr('xss-v33-stable')"
-      }
-    }
-    description = "XSS protection"
-  }
-
-  rule {
-    action   = "deny(403)"
-    priority = "1001"
-    match {
-      expr {
-        expression = "evaluatePreconfiguredExpr('sqli-v33-stable')"
-      }
-    }
-    description = "SQL injection protection"
-  }
-
-  # Rate limiting
-  rule {
-    action   = "rate_based_ban"
-    priority = "2000"
-    match {
-      versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["*"]
-      }
-    }
-    rate_limit_options {
-      conform_action = "allow"
-      exceed_action  = "deny(429)"
-      rate_limit_threshold {
-        count        = 1000
-        interval_sec = 60
-      }
-    }
-    description = "Rate limit: 1000 req/min"
-  }
-
-  # Bot protection
-  rule {
-    action   = "deny(403)"
-    priority = "3000"
-    match {
-      expr {
-        expression = "evaluatePreconfiguredExpr('rce-v33-stable')"
-      }
-    }
-    description = "RCE protection"
+  app_settings = {
+    "NODE_ENV"             = var.environment
+    "PORT"                 = "5000"
+    "AZURE_KEYVAULT_NAME"  = azurerm_key_vault.kv.name
+    "DATABASE_LOCAL"       = "postgresql://altiadm:SecurePassword123!@${azurerm_postgresql_flexible_server.postgres.fqdn}:5432/postgres?sslmode=require"
+    "REDIS_URL"            = "rediss://:${azurerm_redis_cache.redis.primary_access_key}@${azurerm_redis_cache.redis.hostname}:${azurerm_redis_cache.redis.ssl_port}"
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.appinsights.instrumentation_key
   }
 }
 
 # ═══════════════════════════════════════════════
-# Cloud Monitoring (Alerting)
+# Azure Monitor & Application Insights
 # ═══════════════════════════════════════════════
 
-resource "google_monitoring_alert_policy" "high_error_rate" {
-  display_name = "Alti - High Error Rate"
-  combiner     = "OR"
-
-  conditions {
-    display_name = "Error rate > 5%"
-    condition_threshold {
-      filter          = "resource.type = \"k8s_container\" AND resource.labels.namespace_name = \"alti-code-studio\""
-      comparison      = "COMPARISON_GT"
-      threshold_value = 5
-      duration        = "300s"
-      aggregations {
-        alignment_period   = "60s"
-        per_series_aligner = "ALIGN_RATE"
-      }
-    }
-  }
-
-  notification_channels = []
-  alert_strategy {
-    auto_close = "1800s"
-  }
+resource "azurerm_log_analytics_workspace" "logworkspace" {
+  name                = "alti-log-workspace"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
 }
 
-resource "google_monitoring_alert_policy" "high_latency" {
-  display_name = "Alti - High Agent Latency"
-  combiner     = "OR"
-
-  conditions {
-    display_name = "P95 latency > 10s"
-    condition_threshold {
-      filter          = "resource.type = \"k8s_container\" AND resource.labels.namespace_name = \"alti-code-studio\""
-      comparison      = "COMPARISON_GT"
-      threshold_value = 10000
-      duration        = "300s"
-      aggregations {
-        alignment_period   = "60s"
-        per_series_aligner = "ALIGN_PERCENTILE_95"
-      }
-    }
-  }
-
-  notification_channels = []
-  alert_strategy {
-    auto_close = "1800s"
-  }
+resource "azurerm_application_insights" "appinsights" {
+  name                = "alti-appinsights"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  workspace_id        = azurerm_log_analytics_workspace.logworkspace.id
+  application_type    = "web"
 }
-
-# ═══════════════════════════════════════════════
-# Service Accounts
-# ═══════════════════════════════════════════════
-
-resource "google_service_account" "api_sa" {
-  account_id   = "alti-api"
-  display_name = "Alti API Server"
-}
-
-resource "google_service_account" "worker_sa" {
-  account_id   = "alti-worker"
-  display_name = "Alti Worker Fleet"
-}
-
-# IAM bindings
-resource "google_project_iam_member" "api_monitoring" {
-  project = var.project_id
-  role    = "roles/monitoring.metricWriter"
-  member  = "serviceAccount:${google_service_account.api_sa.email}"
-}
-
-resource "google_project_iam_member" "api_trace" {
-  project = var.project_id
-  role    = "roles/cloudtrace.agent"
-  member  = "serviceAccount:${google_service_account.api_sa.email}"
-}
-
-resource "google_project_iam_member" "api_logging" {
-  project = var.project_id
-  role    = "roles/logging.logWriter"
-  member  = "serviceAccount:${google_service_account.api_sa.email}"
-}
-
-resource "google_project_iam_member" "api_kms" {
-  project = var.project_id
-  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
-  member  = "serviceAccount:${google_service_account.api_sa.email}"
-}
-
-resource "google_project_iam_member" "api_secrets" {
-  project = var.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.api_sa.email}"
-}
-
-resource "google_project_iam_member" "worker_monitoring" {
-  project = var.project_id
-  role    = "roles/monitoring.metricWriter"
-  member  = "serviceAccount:${google_service_account.worker_sa.email}"
-}
-
-resource "google_project_iam_member" "worker_trace" {
-  project = var.project_id
-  role    = "roles/cloudtrace.agent"
-  member  = "serviceAccount:${google_service_account.worker_sa.email}"
-}
-
-resource "google_project_iam_member" "worker_pubsub" {
-  project = var.project_id
-  role    = "roles/pubsub.subscriber"
-  member  = "serviceAccount:${google_service_account.worker_sa.email}"
-}
-
-# Workload Identity bindings
-resource "google_service_account_iam_member" "api_wi" {
-  service_account_id = google_service_account.api_sa.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[alti-code-studio/alti-api-sa]"
-}
-
-resource "google_service_account_iam_member" "worker_wi" {
-  service_account_id = google_service_account.worker_sa.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[alti-code-studio/alti-worker-sa]"
-}
-
-# ═══════════════════════════════════════════════
-<<<<<<< HEAD
-# Outputs
-# ═══════════════════════════════════════════════
-
-=======
-# Project Services (APIs)
-# ═══════════════════════════════════════════════
-
-resource "google_project_service" "vertex_ai" {
-  project = var.project_id
-  service = "aiplatform.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "dlp" {
-  project = var.project_id
-  service = "dlp.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "custom_search" {
-  project = var.project_id
-  service = "customsearch.googleapis.com"
-  disable_on_destroy = false
-}
-
-# ═══════════════════════════════════════════════
-# Cloud Storage (GCS) — Artificial Intelligence Buckets
-# ═══════════════════════════════════════════════
-
-resource "google_storage_bucket" "artifacts" {
-  name          = "alti-code-studio-artifacts-${var.project_id}"
-  location      = var.region
-  force_destroy = false
-
-  uniform_bucket_level_access = true
-
-  versioning {
-    enabled = true
-  }
-
-  cors {
-    origin          = ["*"]
-    method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
-    response_header = ["*"]
-    max_age_seconds = 3600
-  }
-
-  labels = {
-    purpose     = "agentic-artifacts"
-    environment = var.environment
-  }
-}
-
-resource "google_storage_bucket" "audit_logs" {
-  name          = "alti-code-studio-audit-logs-${var.project_id}"
-  location      = var.region
-  force_destroy = false
-
-  uniform_bucket_level_access = true
-
-  lifecycle_rule {
-    condition {
-      age = 365 # Keep logs for 1 year
-    }
-    action {
-      type = "Delete"
-    }
-  }
-
-  labels = {
-    purpose     = "security-auditing"
-    environment = var.environment
-  }
-}
-
-# ═══════════════════════════════════════════════
-# Google Cloud App Hub (Enterprise Orchestration)
-# ═══════════════════════════════════════════════
-
-resource "google_apphub_application" "alti_app" {
-  location       = var.region
-  application_id = "alti-code-studio"
-  display_name   = "Alti Code Studio"
-
-  scope {
-    type = "REGIONAL"
-  }
-
-  attributes {
-    environment {
-      type = "PRODUCTION"
-    }
-    criticality {
-      type = "MISSION_CRITICAL"
-    }
-    business_service {
-      display_name = "Agentic AI Infrastructure"
-    }
-    developer_team {
-      display_name = "MNM Ballas"
-    }
-  }
-}
-
-# ═══════════════════════════════════════════════
-# Spanner Graph (Cognitive Mapping)
-# ═══════════════════════════════════════════════
-
-resource "google_spanner_instance" "cognitive_graph" {
-  name         = "alti-cognitive-graph"
-  config       = "regional-${var.region}"
-  display_name = "Alti Swarm Cognitive Graph"
-  num_nodes    = 1
-  labels = {
-    purpose = "swarm-reasoning"
-  }
-}
-
-resource "google_spanner_database" "graph_db" {
-  instance = google_spanner_instance.cognitive_graph.name
-  name     = "reasoning-nodes"
-  version_retention_period = "7d"
-  ddl = [
-    "CREATE TABLE AgentReasoningNodes (id STRING(MAX), agent STRING(MAX), executionTime INT64) PRIMARY KEY(id)"
-  ]
-}
-
-# ═══════════════════════════════════════════════
-# Pub/Sub (Swarm Messaging)
-# ═══════════════════════════════════════════════
-
-resource "google_pubsub_topic" "swarm_events" {
-  name = "alti-swarm-events"
-  message_retention_duration = "86600s"
-}
-
-resource "google_pubsub_subscription" "swarm_sub" {
-  name  = "alti-swarm-sub"
-  topic = google_pubsub_topic.swarm_events.name
-  ack_deadline_seconds = 60
-}
-
-# ═══════════════════════════════════════════════
-# BigQuery (Enterprise Telemetry & Eval Scores)
-# ═══════════════════════════════════════════════
-
-resource "google_bigquery_dataset" "telemetry" {
-  dataset_id                  = "alti_metrics"
-  friendly_name               = "Alti Swarm Telemetry"
-  description                 = "Stores AI execution telemetry and Vertex Eval scores"
-  location                    = "US"
-}
-
-resource "google_bigquery_table" "agent_executions" {
-  dataset_id = google_bigquery_dataset.telemetry.dataset_id
-  table_id   = "agent_executions"
-
-  schema = <<EOF
-[
-  {"name": "agent_name", "type": "STRING", "mode": "REQUIRED"},
-  {"name": "prompt_length", "type": "INTEGER", "mode": "REQUIRED"},
-  {"name": "execution_time_ms", "type": "INTEGER", "mode": "REQUIRED"},
-  {"name": "timestamp", "type": "TIMESTAMP", "mode": "REQUIRED"},
-  {"name": "status", "type": "STRING", "mode": "REQUIRED"}
-]
-EOF
-}
-
-# ═══════════════════════════════════════════════
-# Artifact Registry (Docker Containers)
-# ═══════════════════════════════════════════════
-
-resource "google_artifact_registry_repository" "swarm_repo" {
-  location      = var.region
-  repository_id = "alti-swarm-repo"
-  description   = "Docker repository for the Swarm backend"
-  format        = "DOCKER"
-}
-
-# ═══════════════════════════════════════════════
-# AlloyDB (PostgreSQL AI Memory Layer)
-# ═══════════════════════════════════════════════
-
-resource "google_alloydb_cluster" "primary" {
-  cluster_id = "alti-ai-memory-cluster"
-  location   = var.region
-  network    = google_compute_network.vpc.id
-
-  initial_user {
-    user     = "postgres"
-    password = "super-secret-password-change-me"
-  }
-}
-
-resource "google_alloydb_instance" "primary" {
-  cluster       = google_alloydb_cluster.primary.name
-  instance_id   = "alti-ai-memory-primary"
-  instance_type = "PRIMARY"
-
-  machine_config {
-    cpu_count = 4
-  }
-}
-
-# ═══════════════════════════════════════════════
-# API Gateway (Swarm Routing)
-# ═══════════════════════════════════════════════
-
-resource "google_api_gateway_api" "swarm_api" {
-  provider     = google-beta
-  api_id       = "alti-swarm-api"
-  display_name = "Alti Swarm API Gateway"
-}
-
-resource "google_api_gateway_gateway" "swarm_gateway" {
-  provider   = google-beta
-  api_config = "" # Intentionally blank, updated via CI/CD
-  gateway_id = "alti-swarm-gateway"
-  region     = var.region
-}
-
-# ═══════════════════════════════════════════════
-# Cloud Router & NAT (Secure Outbound Connectivity)
-# ═══════════════════════════════════════════════
-
-resource "google_compute_router" "swarm_router" {
-  name    = "alti-swarm-router"
-  network = google_compute_network.vpc.id
-  region  = var.region
-}
-
-resource "google_compute_router_nat" "swarm_nat" {
-  name                               = "alti-swarm-nat"
-  router                             = google_compute_router.swarm_router.name
-  region                             = var.region
-  nat_ip_allocate_option             = "AUTO_ONLY"
-  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-
-  log_config {
-    enable = true
-    filter = "ERRORS_ONLY"
-  }
-}
-
-# ═══════════════════════════════════════════════
-# Vertex AI Feature Store (Sub-Millisecond AST Context)
-# ═══════════════════════════════════════════════
-
-resource "google_vertex_ai_featurestore" "ast_memory" {
-  name     = "alti_ast_featurestore"
-  region   = var.region
-  labels   = {
-    environment = var.environment
-  }
-  online_serving_config {
-    fixed_node_count = 1
-  }
-}
-
-# ═══════════════════════════════════════════════
-# Data Catalog (PII Governance)
-# ═══════════════════════════════════════════════
-
-resource "google_data_catalog_entry_group" "governance_group" {
-  entry_group_id = "alti_governance_group"
-  region         = var.region
-  description    = "Entry group for Alti Swarm governance policies"
-}
-
-# ═══════════════════════════════════════════════
-# Security Command Center (Vulnerability Reporting)
-# ═══════════════════════════════════════════════
-
-resource "google_scc_source" "swarm_scc" {
-  display_name = "Alti Swarm Agentic Intelligence"
-  organization = "123456789012" # Placeholder for enterprise org ID
-  description  = "Automated vulnerability reporting from Swarm Eval gates"
-}
-
-# ═══════════════════════════════════════════════
-# Google Cloud Workstations (Live Cloud IDEs)
-# ═══════════════════════════════════════════════
-
-resource "google_workstations_workstation_cluster" "ide_cluster" {
-  provider               = google-beta
-  workstation_cluster_id = "alti-workstation-cluster"
-  network                = google_compute_network.vpc.id
-  subnetwork             = google_compute_subnetwork.primary.id
-  location               = var.region
-
-  private_cluster_config {
-    enable_private_endpoint = false
-  }
-}
-
-resource "google_workstations_workstation_config" "agent_config" {
-  provider               = google-beta
-  workstation_config_id  = "alti-agent-config"
-  workstation_cluster_id = google_workstations_workstation_cluster.ide_cluster.workstation_cluster_id
-  location               = var.region
-
-  host {
-    gce_instance {
-      machine_type                = "e2-standard-4"
-      boot_disk_size_gb           = 50
-      disable_public_ip_addresses = true
-    }
-  }
-
-  container {
-    image = "us-central1-docker.pkg.dev/cloud-workstations-images/predefined/code-oss:latest"
-  }
-}
-
-# ═══════════════════════════════════════════════
-# Outputs
-# ═══════════════════════════════════════════════
-
-
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)
-output "gke_cluster_name" {
-  value = google_container_cluster.primary.name
-}
-
-output "gke_cluster_endpoint" {
-  value     = google_container_cluster.primary.endpoint
-  sensitive = true
-}
-
-output "redis_host" {
-  value = google_redis_instance.primary.host
-}
-
-output "redis_port" {
-  value = google_redis_instance.primary.port
-}
-
-output "vpc_network" {
-  value = google_compute_network.vpc.name
-}
-<<<<<<< HEAD
-=======
-
-output "artifact_bucket" {
-  value = google_storage_bucket.artifacts.url
-}
-
-output "audit_bucket" {
-  value = google_storage_bucket.audit_logs.url
-}
-
->>>>>>> ec1fead (feat(omni-cloud): integrate and visualize multi-cloud sovereign architecture)

@@ -42,7 +42,7 @@ The backend is structured as a **layered AI orchestration platform** with a clea
 │  (Lazy-loaded via DynamicAgentLoaderService)     │
 ├──────────────────────────────────────────────────┤
 │     GeminiAiService  │  MongoDB  │  Redis         │
-│     Qdrant Vector    │  PgBouncer│  GCP Logging   │
+│     Qdrant Vector    │  PgBouncer│  Azure Monitor │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -215,31 +215,29 @@ Runs a sweep every 5 minutes after orchestrator init. Each agent's health is tra
 
 ## Infrastructure & Data Layer
 
-As of v8.1.0, the platform is deployed exclusively on **Google Cloud Platform (GCP)** via Terraform and declarative GitOps (ArgoCD).
+As of v9.0.0, the platform is deployed exclusively on **Microsoft Azure** as a native, non-containerized application via Terraform and declarative GitOps.
 
-### Kubernetes (Global GKE Fleet)
-- **Multi-Region Fleet**: Identical GKE Autopilot clusters deployed across US, EU, and APAC for total regional failover.
-- **GitOps CD**: ArgoCD automatically syncs `k8s/` manifests; Workload Identity secures GitHub Actions image builds.
-- **Anthos Service Mesh**: Strict mTLS encryption between all internal pods.
-- **Global Ingress**: Google Premium Anycast networking (`MultiClusterIngress`) routes traffic to the nearest healthy cluster.
-- **Zero Trust**: Enforced by cluster-wide `NetworkPolicy` default-deny isolation and Kyverno Admission Webhooks.
+### App Service (Native Express API Host)
+- **Linux Web App**: Natively hosts the Express API and LangGraph orchestrator using a managed Linux environment with Node.js runtime (no Docker containers or orchestration overhead).
+- **VNet Integration**: Restricts inbound and outbound app traffic within a secure Azure Virtual Network (VNet).
+- **Zero Trust**: Restricts public endpoints, allowing traffic only through secure network policies and API Gateways.
 
-### GCP Secret Manager
-- All production secrets (Stripe, DB passwords, API keys) are stored in Secret Manager, completely eliminating `.env` file dependencies in production.
+### Azure Key Vault
+- All production secrets (Stripe, DB passwords, API keys) are stored securely in Azure Key Vault, completely eliminating `.env` file dependencies in production.
 
-### MongoDB Atlas (Primary Store)
-- Highly-available distributed cluster managed via Terraform.
+### Azure Cosmos DB (with MongoDB API)
+- Highly-available distributed database cluster managed via Terraform.
 - Users, sessions, audit logs, analytics events, and compliance records.
 - Agent execution history and task states.
 
-### GCP Memorystore (Redis)
+### Azure Cache for Redis
 - Session caching (sub-10ms agent comms).
 - Rate limiting counters and pubsub for socket events.
 - Central state store for distributed Autonomic jobs (mutex locks).
 
-### Cloud SQL for PostgreSQL (PentAGI & Vector Embeddings)
+### Azure Database for PostgreSQL (Flexible Server)
 - Managed PostgreSQL 15 for autonomous Pentesting agent (`vxcontrol/pentagi`).
-- `pgvector` for RAG-powered memory retrieval and code snippet similarity search.
+- `pgvector` extension for RAG-powered memory retrieval and code snippet similarity search.
 
 ### Mem0 (Long-term Memory)
 - Cross-session persistent agent memory and user preference learning.
@@ -250,9 +248,9 @@ As of v8.1.0, the platform is deployed exclusively on **Google Cloud Platform (G
 
 | Tool | Integration |
 |------|------------|
-| Google Managed Prometheus | Auto-scapes `/metrics` from backend pods natively |
-| GCP BigQuery | Tenant-level cost attribution and FinOps analytics |
-| GCP Pub/Sub | Real-time SIEM log exporting (Splunk, Datadog) |
+| Azure Application Insights | Native application trace and metric telemetry |
+| Azure Log Analytics Workspace | Tenant-level cost attribution and FinOps analytics |
+| Azure Event Grid / Event Hubs | Real-time SIEM log exporting (Splunk, Datadog) |
 | OpenTelemetry | Distributed tracing across all services |
 | Grafana | Dashboard for system performance |
 | `/api/swarm/health` | Live swarm health endpoint |
@@ -273,6 +271,11 @@ As of v8.1.0, the platform is deployed exclusively on **Google Cloud Platform (G
 - Context size caps prevent prompt injection via oversized files
 - `AgentError` typed errors prevent internal details leaking to clients
 - `SwarmValidation` and `OrchestratorValidation` enforce strict Zod schemas on core API payloads
+
+### User & Sandbox Isolation
+- **Azure Container Instances (ACI)**: In Azure production environments, every user session/task runs inside a dynamically provisioned, hypervisor-isolated sandbox container.
+- **Docker Bridge Integration**: A native abstraction layer maps containerized tasks (such as run commands) to ACI instances via the `@azure/arm-containerinstance` SDK, avoiding multi-tenant crosstalk.
+- **Local Fallback**: Local development defaults to a local Docker socket `/var/run/docker.sock` or in-memory mock modes.
 
 ### Data Protection
 - All secrets via environment variables (never in code)

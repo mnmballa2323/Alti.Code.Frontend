@@ -7,6 +7,7 @@
 
 import Docker from 'dockerode';
 import { logger } from './logger.js';
+import { azureContainerService } from './azureContainer.service.js';
 import fs from 'fs';
 
 class DockerService {
@@ -17,26 +18,17 @@ class DockerService {
     }
 
     init() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            logger.info('☁️ DockerService: Azure Cloud environment detected. Using Azure Container Instances.');
+            return;
+        }
         try {
             // Auto-detect socket path
             const socketPath = process.platform === 'win32'
                 ? '//./pipe/docker_engine'
                 : '/var/run/docker.sock';
 
-            // Check if socket exists (basic check, not perfect for named pipes but good heuristic)
-            // For Windows named pipes, fs.existsSync might not work as expected, but Dockerode handles connection.
-            // We'll try to instantiate and do a ping.
-
             this.client = new Docker({ socketPath });
-
-            // We can't easily wait for async ping in constructor, 
-            // so we'll do a lazy check or just let operations fail into mock mode?
-            // Better: assume real, but catch errors in methods.
-
-            // However, to be robust for "check_docker.js", let's verify connectivity.
-            // But constructors cannot be async.
-            // We'll expose an `ensureReady()` like JobQueueService.
-
         } catch (error) {
             logger.warn('⚠️ DockerService: Failed to initialize Docker client. Defaulting to MOCK MODE.');
             this.isMockMode = true;
@@ -44,6 +36,7 @@ class DockerService {
     }
 
     async ensureReady() {
+        if (process.env.ARM_SUBSCRIPTION_ID) return;
         if (this.isMockMode) return;
 
         try {
@@ -56,6 +49,9 @@ class DockerService {
     }
 
     async listContainers(all = false) {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            return azureContainerService.listContainers(all);
+        }
         await this.ensureReady();
 
         if (this.isMockMode) {
@@ -75,6 +71,9 @@ class DockerService {
     }
 
     getContainer(id) {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            return azureContainerService.getContainer(id);
+        }
         if (this.isMockMode) {
             return {
                 inspect: async () => ({
@@ -87,10 +86,6 @@ class DockerService {
                 exec: async (opts) => {
                     const cmd = opts.Cmd.join(' ');
                     logger.info(`DockerService (Mock): Executing '${cmd}' in ${id}`);
-                    // return a stream-like object or promise depending on how we use it
-                    // dockerode exec valid usage:
-                    // container.exec(options, function(err, exec) { exec.start(options, ... ) })
-                    // simplified for our service:
                     return {
                         start: async () => ({
                             output: 'Mock Output'
@@ -103,17 +98,26 @@ class DockerService {
     }
 
     async ensureEntireContainer() {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            await azureContainerService.createContainerGroup('entire-cli');
+            return;
+        }
         await this.ensureReady();
         if (this.isMockMode) {
             logger.info('DockerService (Mock): Entire CLI container "ready"');
             return;
         }
-
-        // In real implementation, we would list containers, check for 'entire-cli', and start if needed.
-        // Since we are likely in mock mode or docker is broken, we skip complex logic here for now.
     }
 
     async runEntireCommand(args) {
+        if (process.env.ARM_SUBSCRIPTION_ID) {
+            await this.ensureEntireContainer();
+            const container = this.getContainer('entire-cli');
+            const execResult = await container.exec({ Cmd: args });
+            const execRun = await execResult.start();
+            return execRun.output;
+        }
+
         await this.ensureEntireContainer();
 
         if (this.isMockMode) {
@@ -127,8 +131,6 @@ class DockerService {
         }
 
         // Real implementation would use exec
-        // const container = this.getContainer('entire-cli');
-        // ... exec logic ...
         throw new Error('Real Docker execution not fully implemented yet');
     }
 }
