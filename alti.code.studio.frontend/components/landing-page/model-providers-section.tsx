@@ -68,12 +68,6 @@ export default function ModelProvidersSection() {
                     </span>
                   </div>
                 </div>
-
-                {/* Description */}
-                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
-                  {provider.description}
-                </p>
-
                 {/* Models List */}
                 <div className="flex flex-col gap-3">
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Supported Models:</span>
