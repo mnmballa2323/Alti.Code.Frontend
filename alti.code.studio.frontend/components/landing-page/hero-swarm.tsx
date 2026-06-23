@@ -41,9 +41,7 @@ export default function HeroSwarm() {
               Autonomous Software Engineering.
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-500 font-medium text-center tracking-tight max-w-3xl">
-            Private Cloud Core. Single Tenant Isolation. Azure Sovereign Compute.
-          </p>
+
         </div>
 
         {/* Action Buttons */}
