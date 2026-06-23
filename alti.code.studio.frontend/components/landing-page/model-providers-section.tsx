@@ -4,7 +4,7 @@ import React from "react";
 
 const providers = [
   {
-    name: "Azure OpenAI Foundry",
+    name: "OpenAI",
     brand: "OpenAI GPT-4o / o1 Integration",
     description: "Enterprise GPT models are executed within your private tenant subnet. Data is fully encrypted at rest and in transit, with standard contractual guarantees that customer prompts and outputs are never stored or used for model training.",
     models: ["GPT-4o", "GPT-4-Turbo", "o1-preview", "o1-mini"],
@@ -17,7 +17,7 @@ const providers = [
     )
   },
   {
-    name: "Azure AI Studio",
+    name: "Anthropic",
     brand: "Anthropic Claude 3.5 Integration",
     description: "Claude models are deployed using Azure AI Studio's secure Model-as-a-Service (MaaS) serverless endpoints. This channels all Claude inference traffic directly through Microsoft's sovereign infrastructure, completely bypassing external networks.",
     models: ["Claude 3.5 Sonnet", "Claude 3.5 Haiku", "Claude 3 Opus"],
