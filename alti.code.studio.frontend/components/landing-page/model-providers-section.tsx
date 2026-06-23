@@ -43,8 +43,8 @@ export default function ModelProvidersSection() {
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
             Dual Model AI Restriction
           </h3>
-          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-            To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted exclusively to the industry's two premier model providers, hosted securely on Microsoft Azure.
+          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-3xl">
+            To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted<br className="hidden md:inline" /> exclusively to the industry's two premier model providers, hosted securely on Microsoft Azure.
           </p>
         </div>
 
