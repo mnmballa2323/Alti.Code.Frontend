@@ -40,11 +40,8 @@ export default function ModelProvidersSection() {
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-20">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-4xl">
-          <span className="text-xs font-bold tracking-widest text-blue-600 dark:text-blue-400 uppercase">
-            Sovereign Intelligence Engine
-          </span>
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
-            Dual-Engine AI Restriction.
+            Dual Model AI Restriction
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
             To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted exclusively to the industry's two premier model providers, hosted securely on Microsoft Azure.
