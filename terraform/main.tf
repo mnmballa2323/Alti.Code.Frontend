@@ -57,6 +57,14 @@ resource "azurerm_resource_group" "commercial_rg" {
   location = var.azure_commercial_region
 }
 
+resource "azurerm_management_lock" "commercial_rg_lock" {
+  count      = (local.deploy_commercial && var.environment == "prod") ? 1 : 0
+  name       = "rg-prevent-delete"
+  scope      = azurerm_resource_group.commercial_rg[0].id
+  lock_level = "CanNotDelete"
+  notes      = "Accidental deletion prevention lock for production resources"
+}
+
 resource "azurerm_virtual_network" "commercial_vnet" {
   count               = local.deploy_commercial ? 1 : 0
   name                = "alti-${var.customer_id}-commercial-vnet"
@@ -147,6 +155,15 @@ resource "azurerm_resource_group" "government_rg" {
   provider = azurerm.government
   name     = "alti-${var.customer_id}-government-rg"
   location = var.azure_government_region
+}
+
+resource "azurerm_management_lock" "government_rg_lock" {
+  count      = (var.enable_azure_government && var.environment == "prod") ? 1 : 0
+  provider   = azurerm.government
+  name       = "rg-prevent-delete"
+  scope      = azurerm_resource_group.government_rg[0].id
+  lock_level = "CanNotDelete"
+  notes      = "Accidental deletion prevention lock for production resources"
 }
 
 resource "azurerm_virtual_network" "government_vnet" {

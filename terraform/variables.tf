@@ -6,12 +6,22 @@ variable "customer_id" {
   description = "Unique identifier for the customer/tenant"
   type        = string
   default     = "generic-tenant"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]+$", var.customer_id))
+    error_message = "The customer_id value must contain only alphanumeric characters and hyphens."
+  }
 }
 
 variable "environment" {
   description = "Deployment environment (e.g., prod, staging, dev)"
   type        = string
   default     = "prod"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9-]+$", var.environment))
+    error_message = "The environment value must contain only alphanumeric characters and hyphens."
+  }
 }
 
 variable "azure_commercial_region" {
