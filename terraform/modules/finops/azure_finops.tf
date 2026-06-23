@@ -15,7 +15,7 @@ terraform {
 # 1. Monitor Action Group for Billing Alerts
 # ------------------------------------------------------------------------------
 resource "azurerm_monitor_action_group" "billing_alert_group" {
-  name                = "alti-billing-alert-group-${var.environment}"
+  name                = "alti-billing-${var.customer_id}-${var.environment}"
   resource_group_name = var.resource_group_name
   short_name          = "billingalert"
 
@@ -30,7 +30,7 @@ resource "azurerm_monitor_action_group" "billing_alert_group" {
 # 2. Consumption Budget for Resource Group
 # ------------------------------------------------------------------------------
 resource "azurerm_consumption_budget_resource_group" "budget" {
-  name              = "alti-rg-budget-${var.environment}"
+  name              = "alti-budget-${var.customer_id}-${var.environment}"
   resource_group_id = var.resource_group_id
 
   amount     = var.budget_amount
@@ -72,6 +72,10 @@ resource "azurerm_consumption_budget_resource_group" "budget" {
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+variable "customer_id" {
+  type        = string
+  description = "Unique identifier for the customer/tenant to ensure naming uniqueness"
+}
 variable "environment" { type = string }
 variable "resource_group_name" { type = string }
 variable "resource_group_id" { type = string }
@@ -83,3 +87,4 @@ variable "budget_amount" {
   type    = number
   default = 5000
 }
+

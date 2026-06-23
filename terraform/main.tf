@@ -297,4 +297,57 @@ module "observability_government" {
   target_resource_ids = var.enable_azure_government ? [azurerm_linux_virtual_machine.government_node[0].id] : []
 }
 
+# ==============================================================================
+# Commercial Advanced Sovereign Controls
+# ==============================================================================
+module "finops_commercial" {
+  count               = local.deploy_commercial ? 1 : 0
+  source              = "./modules/finops"
+  customer_id         = var.customer_id
+  environment         = var.environment
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+  resource_group_id   = azurerm_resource_group.commercial_rg[0].id
+  budget_amount       = 3500
+}
+
+module "workload_identity_commercial" {
+  count               = local.deploy_commercial ? 1 : 0
+  source              = "./modules/workload_identity"
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.commercial_rg[0].location
+  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+  github_repository   = var.github_repository
+}
+
+# ==============================================================================
+# Government Advanced Sovereign Controls
+# ==============================================================================
+module "finops_government" {
+  count               = var.enable_azure_government ? 1 : 0
+  source              = "./modules/finops"
+  providers = {
+    azurerm = azurerm.government
+  }
+  customer_id         = var.customer_id
+  environment         = var.environment
+  resource_group_name = azurerm_resource_group.government_rg[0].name
+  resource_group_id   = azurerm_resource_group.government_rg[0].id
+  budget_amount       = 5000
+}
+
+module "workload_identity_government" {
+  count               = var.enable_azure_government ? 1 : 0
+  source              = "./modules/workload_identity"
+  providers = {
+    azurerm = azurerm.government
+  }
+  customer_id         = var.customer_id
+  environment         = var.environment
+  location            = azurerm_resource_group.government_rg[0].location
+  resource_group_name = azurerm_resource_group.government_rg[0].name
+  github_repository   = var.github_repository
+}
+
+
 

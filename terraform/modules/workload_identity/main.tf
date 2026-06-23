@@ -15,7 +15,7 @@ terraform {
 # 1. User Assigned Managed Identity for GitHub Actions CI/CD
 # ------------------------------------------------------------------------------
 resource "azurerm_user_assigned_identity" "cicd_identity" {
-  name                = "alti-github-deployer-${var.environment}"
+  name                = "alti-git-${var.customer_id}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
 }
@@ -24,7 +24,7 @@ resource "azurerm_user_assigned_identity" "cicd_identity" {
 # 2. Federated Identity Credentials mapping to GitHub Actions OIDC
 # ------------------------------------------------------------------------------
 resource "azurerm_federated_identity_credential" "github_federation" {
-  name                = "alti-github-federated-credential-${var.environment}"
+  name                = "alti-fed-${var.customer_id}-${var.environment}"
   resource_group_name = var.resource_group_name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = "https://token.actions.githubusercontent.com"
@@ -35,10 +35,16 @@ resource "azurerm_federated_identity_credential" "github_federation" {
 # ------------------------------------------------------------------------------
 # Variables
 # ------------------------------------------------------------------------------
+variable "customer_id" {
+  type        = string
+  description = "Unique identifier for the customer/tenant to ensure naming uniqueness"
+}
+
 variable "environment" {
   type        = string
   description = "Deployment environment (e.g. prod, staging)"
 }
+
 
 variable "location" {
   type        = string
