@@ -9,6 +9,19 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  # ----------------------------------------------------------------------------
+  # Remote State Configuration (Azure Blob Storage Backend)
+  # ----------------------------------------------------------------------------
+  # To enable team collaboration and state locking, uncomment the following block
+  # and configure your Azure storage account coordinates.
+  #
+  # backend "azurerm" {
+  #   resource_group_name  = "alti-tfstate-rg"
+  #   storage_account_name = "altitfstatexxxx"
+  #   container_name       = "tfstate"
+  #   key                  = "terraform.tfstate"
+  # }
 }
 
 # 1. Azure Commercial Cloud Provider Configuration

@@ -25,6 +25,8 @@ CUSTOMER="enterprise-tenant"
 REGION=""
 DRY_RUN=false
 SSH_KEY_PATH="~/.ssh/id_rsa.pub"
+PLAN_ONLY=false
+AUTO_APPROVE=false
 
 usage() {
     echo -e "Usage: ./deploy_enterprise.sh [options]"
@@ -33,6 +35,8 @@ usage() {
     echo -e "  --customer <name>                                 Unique name of the enterprise tenant"
     echo -e "  --region <region>                                 Target Azure region for deployment"
     echo -e "  --ssh-key-path <path>                             Path to public SSH key (default: ~/.ssh/id_rsa.pub)"
+    echo -e "  --plan-only                                       Run terraform plan without applying changes"
+    echo -e "  --auto-approve                                    Bypass interactive prompts during apply"
     echo -e "  --dry-run                                         Simulate deployment steps without calling APIs"
     echo -e "  --help                                            Display this message"
     exit 1
@@ -45,6 +49,8 @@ while [[ "$#" -gt 0 ]]; do
         --customer) CUSTOMER="$2"; shift ;;
         --region) REGION="$2"; shift ;;
         --ssh-key-path) SSH_KEY_PATH="$2"; shift ;;
+        --plan-only) PLAN_ONLY=true ;;
+        --auto-approve) AUTO_APPROVE=true ;;
         --dry-run) DRY_RUN=true ;;
         --help) usage ;;
         *) echo "Unknown parameter: $1"; usage ;;
@@ -285,38 +291,58 @@ cd "$TF_DIR"
 
 terraform init
 
-case $DEPLOY_OPTION in
-    cloud)
-        terraform apply \
-          -var="customer_id=$CUSTOMER" \
-          -var="azure_commercial_region=$REGION" \
-          -var="ssh_public_key_path=$SSH_KEY_PATH" \
-          -var="enable_azure_cloud=true" \
-          -var="enable_azure_dedicated=false" \
-          -var="enable_azure_government=false" \
-          -auto-approve
-        ;;
-    dedicated)
-        terraform apply \
-          -var="customer_id=$CUSTOMER" \
-          -var="azure_commercial_region=$REGION" \
-          -var="ssh_public_key_path=$SSH_KEY_PATH" \
-          -var="enable_azure_cloud=false" \
-          -var="enable_azure_dedicated=true" \
-          -var="enable_azure_government=false" \
-          -auto-approve
-        ;;
-    government)
-        terraform apply \
-          -var="customer_id=$CUSTOMER" \
-          -var="azure_government_region=$REGION" \
-          -var="ssh_public_key_path=$SSH_KEY_PATH" \
-          -var="enable_azure_cloud=false" \
-          -var="enable_azure_dedicated=false" \
-          -var="enable_azure_government=true" \
-          -auto-approve
-        ;;
-esac
+# Build variables array
+TF_VARS=(
+  -var="customer_id=$CUSTOMER"
+  -var="ssh_public_key_path=$SSH_KEY_PATH"
+)
+
+if [ "$DEPLOY_OPTION" = "government" ]; then
+    TF_VARS+=(
+      -var="azure_government_region=$REGION"
+      -var="enable_azure_cloud=false"
+      -var="enable_azure_dedicated=false"
+      -var="enable_azure_government=true"
+    )
+elif [ "$DEPLOY_OPTION" = "cloud" ]; then
+    TF_VARS+=(
+      -var="azure_commercial_region=$REGION"
+      -var="enable_azure_cloud=true"
+      -var="enable_azure_dedicated=false"
+      -var="enable_azure_government=false"
+    )
+elif [ "$DEPLOY_OPTION" = "dedicated" ]; then
+    TF_VARS+=(
+      -var="azure_commercial_region=$REGION"
+      -var="enable_azure_cloud=false"
+      -var="enable_azure_dedicated=true"
+      -var="enable_azure_government=false"
+    )
+fi
+
+if [ "$PLAN_ONLY" = true ]; then
+    echo -e "\n${CYAN}Running Terraform Plan...${NC}"
+    terraform plan "${TF_VARS[@]}"
+    cd ..
+    exit 0
+fi
+
+if [ "$AUTO_APPROVE" != true ]; then
+    echo -e "\n${CYAN}Running Terraform Plan for preview...${NC}"
+    terraform plan "${TF_VARS[@]}"
+    
+    echo -e "\n${YELLOW}⚠️ Review the plan above.${NC}"
+    read -rp "Do you want to apply these changes? (y/N): " confirm_apply
+    if [[ ! "$confirm_apply" =~ ^[Yy]$ ]]; then
+        echo -e "\n${YELLOW}Deployment cancelled by user.${NC}"
+        cd ..
+        exit 0
+    fi
+fi
+
+echo -e "\n${GREEN}Applying Terraform changes...${NC}"
+terraform apply "${TF_VARS[@]}" -auto-approve
+
 
 echo -e "\n[3/3] ${YELLOW}Azure Enterprise Deployment Summary${NC}"
 echo -e "=================================================================="

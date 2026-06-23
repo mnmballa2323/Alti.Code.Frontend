@@ -36,18 +36,33 @@ variable "tenant_id" {
   description = "The Azure AD/Entra ID Directory Tenant ID"
   type        = string
   default     = "00000000-0000-0000-0000-000000000000"
+
+  validation {
+    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.tenant_id))
+    error_message = "The tenant_id value must be a valid UUID format (e.g., 00000000-0000-0000-0000-000000000000)."
+  }
 }
 
 variable "subscription_id_commercial" {
   description = "Subscription ID for Commercial Cloud (IL2) deployment"
   type        = string
   default     = "11111111-1111-1111-1111-111111111111"
+
+  validation {
+    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.subscription_id_commercial))
+    error_message = "The subscription_id_commercial value must be a valid UUID format."
+  }
 }
 
 variable "subscription_id_government" {
   description = "Subscription ID for Government Cloud (IL4/IL5) deployment"
   type        = string
   default     = "22222222-2222-2222-2222-222222222222"
+
+  validation {
+    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.subscription_id_government))
+    error_message = "The subscription_id_government value must be a valid UUID format."
+  }
 }
 
 variable "pg_admin_username" {
@@ -61,12 +76,22 @@ variable "pg_admin_password" {
   type        = string
   default     = "P@ssw0rd1234!" # Avoid using default password in live environments
   sensitive   = true
+
+  validation {
+    condition     = length(var.pg_admin_password) >= 8 && length(var.pg_admin_password) <= 128
+    error_message = "The pg_admin_password must be between 8 and 128 characters in length."
+  }
 }
 
 variable "github_repository" {
   description = "The GitHub repository path in format ORG/REPO"
   type        = string
   default     = "mnmballa2323/alti.code.studio"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$", var.github_repository))
+    error_message = "The github_repository value must be in the format 'organization/repository'."
+  }
 }
 
 # ------------------------------------------------------------------------------
