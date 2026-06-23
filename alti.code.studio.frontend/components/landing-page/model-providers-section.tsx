@@ -39,11 +39,11 @@ export default function ModelProvidersSection() {
     >
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-20">
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-6 max-w-4xl">
+        <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
             Dual Model AI Restriction
           </h3>
-          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-3xl">
+          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
             To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted<br className="hidden md:inline" /> exclusively to the industry's two premier model providers, hosted securely on Microsoft Azure.
           </p>
         </div>
