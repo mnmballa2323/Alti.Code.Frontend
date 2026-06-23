@@ -4,3 +4,6 @@ scratch/
 alti.code.studio.frontend/public/downloads/*.dmg
 alti.code.studio.frontend/public/downloads/*.exe
 
+# Ignore local deployment files
+deployments/
+.env
