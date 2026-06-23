@@ -352,22 +352,12 @@ const SettingsModal = () => {
                       variant="bordered"
                       onChange={(e) => setDefaultModel(e.target.value)}
                     >
-                      <SelectItem key="gemini-3.1-pro">
-                        Gemini 3.1 Pro
+                      <SelectItem key="gpt-5.5">GPT-5.5</SelectItem>
+                      <SelectItem key="claude-sonnet-4.6">
+                        Claude Sonnet 4.6
                       </SelectItem>
-                      <SelectItem key="gemini-3.1-flash">
-                        Gemini 3.1 Flash
-                      </SelectItem>
-                      <SelectItem key="gpt-4o">GPT-4o (Direct)</SelectItem>
-                      <SelectItem key="gpt-4">GPT-4 (Direct)</SelectItem>
-                      <SelectItem key="azure/gpt-4o">
-                        GPT-4o (Azure Foundry)
-                      </SelectItem>
-                      <SelectItem key="claude-3-5-sonnet-20241022">
-                        Claude 3.5 Sonnet
-                      </SelectItem>
-                      <SelectItem key="mistral-large-latest">
-                        Mistral Large 2
+                      <SelectItem key="claude-opus-4.6">
+                        Claude Opus 4.6
                       </SelectItem>
                     </Select>
                   </div>
