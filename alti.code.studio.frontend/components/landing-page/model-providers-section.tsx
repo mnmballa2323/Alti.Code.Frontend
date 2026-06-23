@@ -61,9 +61,6 @@ export default function ModelProvidersSection() {
                   <div className="w-14 h-14 bg-white dark:bg-[#111] border border-gray-100 dark:border-gray-800 rounded-2xl flex items-center justify-center p-3 shadow-sm">
                     {provider.icon}
                   </div>
-                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-100 dark:border-blue-900/50 uppercase tracking-wider">
-                    Azure Native
-                  </span>
                 </div>
 
                 {/* Title & Brand */}
