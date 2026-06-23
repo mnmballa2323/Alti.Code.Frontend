@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 // ==============================================================================
 // ALTI CODE STUDIO: CONTINUOUS SOVEREIGN LICENSE COMPLIANT RUNNER & DAEMON
 // ==============================================================================
-// Designed for OpenStack and Tri-Cloud deployments.
+// Designed for Azure Sovereign deployments.
 // Integrates predefined phases and listens for dynamic packages in candidates.json.
 // ==============================================================================
 

@@ -267,16 +267,11 @@ ${newErrors.join('\n\n')}
 
             const env = {
                 ...process.env,
-                GOOSE_PROVIDER: 'google',
-                GOOGLE_API_KEY: config.gemini_secret_key || process.env.GEMINI_API_KEY,
-                GOOSE_MODEL: config.gcp.model_name || 'gemini-1.5-pro',
+                GOOSE_PROVIDER: 'azure_openai',
+                AZURE_OPENAI_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
+                AZURE_OPENAI_ENDPOINT: process.env.ARM_ENDPOINT || 'https://dummy-endpoint.openai.azure.com',
+                GOOSE_MODEL: config.azure.model_name || 'gpt-5.5',
             };
-
-            if (process.env.GOOGLE_APPLICATION_CREDENTIALS && process.env.GOOGLE_APPLICATION_CREDENTIALS !== 'dummy-gcp-creds.json') {
-                env.GOOSE_PROVIDER = 'gcp_vertex_ai';
-                env.GCP_PROJECT_ID = config.gcp.project_id;
-                env.GCP_LOCATION = config.gcp.location;
-            }
 
             const gooseProcess = spawn(this.goosePath, [
                 'run',

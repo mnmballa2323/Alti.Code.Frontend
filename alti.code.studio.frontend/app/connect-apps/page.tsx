@@ -32,7 +32,7 @@ type Tool = {
   inputSchema?: any;
 };
 
-// Command Preset Registry for MCP & Google MCP Toolbox
+// Command Preset Registry for MCP & Azure MCP Toolbox
 const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
   mcp_sqlite: {
     command: "npx",
@@ -95,14 +95,6 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-gitlab"],
   },
-  mcp_google_calendar: {
-    command: "npx",
-    args: ["-y", "@modelcontextprotocol/server-google-calendar"],
-  },
-  mcp_google_maps: {
-    command: "npx",
-    args: ["-y", "@modelcontextprotocol/server-google-maps"],
-  },
   mcp_evernote: {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-evernote"],
@@ -123,117 +115,14 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-redis"],
   },
-  mcp_google_drive: {
-    command: "npx",
-    args: ["-y", "@modelcontextprotocol/server-gdrive"],
-  },
-  mcp_aws_kb_retrieval: {
-    command: "npx",
-    args: ["-y", "@modelcontextprotocol/server-aws-kb-retrieval"],
-  },
 
-  // Google MCP Toolbox Preset Databases
-  mcp_toolbox_alloydb: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=alloydb"],
-  },
-  mcp_toolbox_spanner: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=spanner"],
-  },
-  mcp_toolbox_bigquery: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=bigquery"],
-  },
-  mcp_toolbox_bigtable: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=bigtable"],
-  },
-  mcp_toolbox_cloudsql: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cloudsql"],
-  },
-  mcp_toolbox_looker: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=looker"],
-  },
-  mcp_toolbox_dataproc: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=dataproc"],
-  },
-  mcp_toolbox_monitoring: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=monitoring"],
-  },
-  mcp_toolbox_logging: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=logging"],
-  },
-  mcp_toolbox_healthcare: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=healthcare"],
-  },
-  mcp_toolbox_knowledge_catalog: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=knowledge_catalog"],
-  },
-  mcp_toolbox_mssql: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=mssql"],
-  },
-  mcp_toolbox_cockroachdb: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cockroachdb"],
-  },
-  mcp_toolbox_yugabytedb: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=yugabytedb"],
-  },
-  mcp_toolbox_clickhouse: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=clickhouse"],
-  },
-  mcp_toolbox_tidb: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=tidb"],
-  },
-  mcp_toolbox_oceanbase: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=oceanbase"],
-  },
-  mcp_toolbox_firebird: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=firebird"],
-  },
-  mcp_toolbox_singlestore: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=singlestore"],
-  },
-  mcp_toolbox_mariadb: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=mariadb"],
-  },
-  mcp_toolbox_couchbase: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=couchbase"],
-  },
-  mcp_toolbox_cassandra: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=cassandra"],
-  },
-  mcp_toolbox_dgraph: {
-    command: "npx",
-    args: ["-y", "@google/mcp-toolbox", "--prebuilt=dgraph"],
-  },
 };
 
 const FALLBACK_APPS: AppIntegration[] = SAAS_MOCKS.map(
   (mockApp) => ({
     id: `app-${mockApp.slug}`,
     name: mockApp.name,
-    description: mockApp.slug.startsWith("mcp_toolbox_")
-      ? `Connect and explore data dynamically within ${mockApp.name} powered by the Google Cloud MCP Toolbox.`
-      : `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+    description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
     icon: mockApp.icon,
     color: "bg-white border border-gray-200",
     status: "disconnected" as const,
@@ -252,6 +141,19 @@ const AppIcon = ({
   const [imageError, setImageError] = useState(false);
   const [urlIndex, setUrlIndex] = useState(0);
 
+  if (app.icon.startsWith("solar:") || app.icon.startsWith("mdi:")) {
+    return (
+      <div
+        className={cn(
+          "rounded-xl flex items-center justify-center bg-gray-55/10 shrink-0",
+          className,
+        )}
+      >
+        <Icon icon={app.icon} className="size-5 text-gray-600" />
+      </div>
+    );
+  }
+
   if (app.id === "custom-mcp-launcher") {
     return (
       <div
@@ -268,27 +170,12 @@ const AppIcon = ({
   const slug = app.id.replace("app-", "").toLowerCase();
   let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
 
-  if (cleanSlug.startsWith("mcp_toolbox_")) {
-    cleanSlug = cleanSlug.slice(12);
-  } else if (cleanSlug.startsWith("mcp_")) {
+  if (cleanSlug.startsWith("mcp_")) {
     cleanSlug = cleanSlug.slice(4);
   }
 
   const localSVGRegistry: Record<string, React.ReactNode> = {
-    aws_dynamodb: (
-      <svg
-        className="w-full h-full p-0.5 object-contain"
-        role="img"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <title>Amazon DynamoDB</title>
-        <path
-          d="M16.606 20.705v-2.371c-1.263 1.082-3.884 1.795-7.066 1.795-3.184 0-5.805-.714-7.068-1.797v2.369c0 1.168 2.903 2.47 7.068 2.47 4.16 0 7.06-1.3 7.066-2.466zm.001-6.765l.817-.005v.005c0 .517-.258.998-.75 1.441.601.54.75 1.071.75 1.449a1661.7 1661.7 0 0 0 0 3.87c0 1.881-3.389 3.3-7.884 3.3-4.471 0-7.846-1.404-7.88-3.27a583.119 583.119 0 0 1-.003-3.909c.001-.375.15-.9.745-1.437-.592-.538-.743-1.062-.746-1.435v-3.892c.002-.377.153-.903.747-1.438-.593-.54-.744-1.062-.747-1.435 0-1.357-.002-2.735.002-3.897C1.674 1.412 5.056 0 9.54 0c2.159 0 4.233.356 5.689.974l-.315.766c-1.36-.58-3.319-.91-5.374-.91-4.165 0-7.067 1.3-7.067 2.47 0 1.168 2.902 2.47 7.067 2.47.115 0 .222 0 .334-.005l.033.828c-.122.006-.245.006-.367.006-3.184 0-5.805-.714-7.068-1.798v2.38c.005.45.45.843.821 1.093 1.116.736 3.114 1.239 5.34 1.342l-.037.829c-2.254-.105-4.23-.59-5.5-1.332-.318.245-.623.573-.623.952 0 1.168 2.902 2.47 7.067 2.47.411 0 .812-.014 1.203-.042l.06.826c-.41.03-.833.045-1.263.045-3.184 0-5.805-.713-7.068-1.797v2.368c.005.462.449.855.821 1.104 1.275.842 3.67 1.366 6.247 1.366h.182v.83H9.54c-2.62 0-4.99-.507-6.444-1.359-.317.245-.623.574-.623.954 0 1.168 2.902 2.47 7.067 2.47 4.159 0 7.058-1.298 7.066-2.465v-.007c0-.377-.303-.705-.62-.948a5.732 5.732 0 0 1-.662.336l-.316-.764c.3-.128.56-.266.776-.412.376-.254.823-.651.823-1.1zm4.377-6.915h-2.717a.406.406 0 0 1-.332-.173.42.42 0 0 1-.055-.375l1.204-3.597h-5.403l-2.583 4.974h2.623c.128 0 .248.06.325.164a.418.418 0 0 1 .069.36l-2.249 8.365zm1.249-.128l-10.89 11.608a.408.408 0 0 1-.498.075.418.418 0 0 1-.192-.471l2.534-9.426h-2.766a.407.407 0 0 1-.349-.2.418.418 0 0 1-.012-.407l3.014-5.804a.408.408 0 0 1 .36-.222h6.22c.132 0 .256.065.332.174a.422.422 0 0 1 .055.374l-1.204 3.598h3.1c.164 0 .31.099.375.251a.422.422 0 0 1-.08.45zM3.085 20.723a8.107 8.107 0 0 0 1.72.72l.233-.794a7.32 7.32 0 0 1-1.546-.645zm1.72-5.984l.233-.795a7.262 7.262 0 0 1-1.546-.646l-.407.72a8.051 8.051 0 0 0 1.72.72zm-1.72-7.427l.407-.719c.418.244.939.462 1.546.646l-.232.794a8.046 8.046 0 0 1-1.72-.72Z"
-          fill="#4053D6"
-        />
-      </svg>
-    ),
+
     ansible: (
       <svg
         className="w-full h-full p-0.5 object-contain"
@@ -366,8 +253,6 @@ const AppIcon = ({
     jira: "jira.svg",
     notion: "notion.svg",
     linear: "linear.png",
-    googledrive: "google-drive.svg",
-    googlesheets: "google-sheets.svg",
     discord: "discord.svg",
     gmail: "gmail.svg",
     git: "git.svg",
@@ -377,23 +262,11 @@ const AppIcon = ({
     sentry: "sentry.svg",
     docker: "docker-icon.png",
     kubernetes: "kubernetes.png",
-    aws: "aws.svg",
     azure: "azure.svg",
   };
 
   const simpleIconsMapping: Record<string, string> = {
-    aws_dynamodb: "amazondynamodb",
-    aws_ec2: "amazonec2",
-    aws_lambda: "awslambda",
-    aws_s3: "amazons3",
-    aws_ecs: "amazonecs",
-    aws_cdk: "amazonwebservices",
-    aws_kb_retrieval: "amazonwebservices",
     apollo_graphql: "apollographql",
-    google_drive: "googledrive",
-    google_sheets: "googlesheets",
-    google_calendar: "googlecalendar",
-    google_maps: "googlemaps",
     bun_runtime: "bun",
     deno_runtime: "deno",
     prisma_orm: "prisma",
@@ -554,7 +427,6 @@ export default function ConnectAppsPage() {
     : "";
   const isMcp =
     cleanSlug.startsWith("mcp_") ||
-    cleanSlug.startsWith("mcp_toolbox_") ||
     selectedApp?.type === "custom";
   const isServerActive = activeTools.some((t) => t.server === cleanSlug);
 
@@ -651,7 +523,7 @@ export default function ConnectAppsPage() {
     }
 
     const isLocalMcp =
-      slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_");
+      slug.startsWith("mcp_");
 
     if (isLocalMcp) {
       // Ingest Launcher Presets dynamically

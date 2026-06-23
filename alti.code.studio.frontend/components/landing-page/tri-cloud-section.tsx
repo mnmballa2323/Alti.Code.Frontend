@@ -1,142 +1,96 @@
 "use client";
 
-import { Card, CardHeader, CardBody } from "@heroui/react";
+import React from "react";
 
-const providers = [
+const deployments = [
   {
-    name: "Azure Foundry",
-    logo: (
+    name: "Azure Cloud",
+    subtitle: "Multi tenant Azure Commercial",
+    icon: (
       <img
-        alt="Azure Foundry"
+        alt="Azure Cloud"
         className="w-8 h-8"
         src="/assets/cloud-logos/azure.svg"
       />
     ),
-    description: (
-      <>
-        Enterprise Grade access to OpenAI's <br /> library of large language
-        models.
-      </>
-    ),
-    models: [
-      { name: "GPT-5.5", inputPrice: "$5.00", outputPrice: "$30.00" },
-      { name: "GPT-5.5 Pro", inputPrice: "$10.00", outputPrice: "$45.00" },
-    ],
+    description: "Deploy scalable and shared cloud compute resources optimized for rapid deployment while ensuring corporate compliance in public tenant zones."
   },
   {
-    name: "AWS Bedrock",
-    logo: (
+    name: "Azure Dedicated",
+    subtitle: "Single tenant Azure Commercial",
+    icon: (
       <img
-        alt="AWS Bedrock"
+        alt="Azure Dedicated"
         className="w-8 h-8"
-        src="/assets/cloud-logos/aws.svg"
+        src="/assets/cloud-logos/azure.svg"
       />
     ),
-    description:
-      "Highly secure, deeply integrated access to Anthropic's Claude family of models.",
-    models: [
-      { name: "Claude Sonnet 4.6", inputPrice: "$3.00", outputPrice: "$15.00" },
-      { name: "Claude Opus 4.8", inputPrice: "$5.00", outputPrice: "$25.00" },
-    ],
+    description: "Deploy dedicated single tenant infrastructure featuring complete physical data isolation and advanced virtual networks for enterprise safety."
   },
   {
-    name: "GCP Vertex AI",
-    logo: (
+    name: "Azure Government",
+    subtitle: "Azure Government",
+    icon: (
       <img
-        alt="GCP Vertex AI"
+        alt="Azure Government"
         className="w-8 h-8"
-        src="/assets/cloud-logos/gcp.svg"
+        src="/assets/cloud-logos/azure.svg"
       />
     ),
-    description:
-      "Massive context window intelligence powered by Google DeepMind.",
-    models: [
-      { name: "Gemini 3.5 Flash", inputPrice: "$1.50", outputPrice: "$9.00" },
-      { name: "Gemini 3.1 Pro", inputPrice: "$2.00", outputPrice: "$12.00" },
-    ],
-  },
+    description: "Deploy compliant and isolated sovereign cloud instances certified for DoD Impact Levels 4 and 5 to secure sensitive public sector workloads and ensure compliance."
+  }
 ];
 
-export default function TriCloudSection() {
+export default function AzureSovereignSection() {
   return (
     <section
-      className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8"
+      className="w-full py-32 bg-white dark:bg-[#0A0A0A] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
       id="architecture"
     >
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-20">
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-6 max-w-4xl">
-          <h3 className="text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight">
-            No API Keys. No Rate Limits.
+        <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
+          <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
+            Azure Exclusive. Sovereign Security.
           </h3>
-          <p className="text-xl text-gray-500 leading-relaxed font-medium">
-            Direct SDK connections to foundational models are strictly blocked
-            for security. <br className="hidden md:block" />
-            Inso Code routes every prompt through our ultra-secure, zero-markup
-            Tri-Cloud infrastructure. You get unlimited access to all the latest
-            state-of-the-art models.
+          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
+            Deploy sovereign AI agent swarms on Azure Cloud, Dedicated, and Government environments.
+            <br className="hidden md:inline" />
+            Enforce absolute compliance and data isolation tailored to your organization.
           </p>
         </div>
 
-        {/* The 3 Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-          {providers.map((provider, idx) => (
-            <Card
+        {/* The 3 Environments */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl mx-auto">
+          {deployments.map((deployment, idx) => (
+            <div
               key={idx}
-              className="bg-gray-50 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 rounded-3xl overflow-hidden"
-              shadow="none"
+              className="relative flex flex-col justify-between p-6 xl:p-8 rounded-[32px] border bg-gray-50 dark:bg-black/40 border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300"
             >
-              <CardHeader className="flex flex-col items-start gap-6 p-6 sm:p-10">
-                <div className="p-4 rounded-2xl bg-white border border-gray-100">
-                  {provider.logo}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <h4 className="text-2xl font-semibold tracking-tight text-black">
-                    {provider.name}
-                  </h4>
-                  <p className="text-gray-500 text-base leading-relaxed">
-                    {provider.description}
-                  </p>
-                </div>
-              </CardHeader>
-
-              <div className="w-full h-px bg-gray-100" />
-
-              <CardBody className="p-6 sm:p-10 bg-gray-200">
-                <div className="flex items-center justify-between mb-5">
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    Supported Models
-                  </p>
-                  <div className="flex gap-2 sm:gap-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                    <span className="w-12 sm:w-16 text-left">Input</span>
-                    <span className="w-12 sm:w-16 text-left pl-1">Output</span>
+              <div className="flex flex-col gap-6">
+                {/* Header Row: Icon */}
+                <div className="flex items-center justify-between w-full">
+                  <div className="w-14 h-14 bg-white dark:bg-[#111] border border-gray-100 dark:border-gray-800 rounded-2xl flex items-center justify-center p-3 shadow-sm">
+                    {deployment.icon}
                   </div>
                 </div>
-                <ul className="flex flex-col gap-4">
-                  {provider.models.map((model, mIdx) => (
-                    <li
-                      key={mIdx}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-black shrink-0" />
-                        <span className="text-gray-900 font-medium whitespace-nowrap text-sm sm:text-base truncate max-w-[110px] sm:max-w-none">
-                          {model.name}
-                        </span>
-                      </div>
-                      <div className="flex gap-2 sm:gap-4 shrink-0">
-                        <span className="text-xs sm:text-sm text-gray-500 font-medium w-12 sm:w-16 text-left">
-                          {model.inputPrice}
-                        </span>
-                        <span className="text-xs sm:text-sm text-gray-500 font-medium w-12 sm:w-16 text-left pl-1">
-                          {model.outputPrice}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
+
+                {/* Title & Subtitle */}
+                <div className="flex flex-col gap-1">
+                  <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black dark:text-white">
+                    {deployment.name}
+                  </h4>
+                  <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+                    {deployment.subtitle}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  {deployment.description}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </div>

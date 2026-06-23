@@ -86,23 +86,23 @@ const runHardeningCycle = async () => {
         complianceIssues++;
     }
 
-    // 4. Audit OpenStack deployment parameters against catalog standards
-    logger('Step 4: Auditing OpenStack infrastructure files...');
-    const deployScriptPath = path.join(__dirname, '../../deploy_openstack.sh');
+    // 4. Audit Azure Sovereign deployment parameters against catalog standards
+    logger('Step 4: Auditing Azure Sovereign infrastructure files...');
+    const deployScriptPath = path.join(__dirname, '../../deploy_enterprise.sh');
     if (fs.existsSync(deployScriptPath)) {
         const deployContent = fs.readFileSync(deployScriptPath, 'utf8');
-        const hasMTLS = deployContent.includes('PeerAuthentication');
-        const hasVPN = deployContent.includes('IPSec site-to-site');
-        const hasK8s = deployContent.includes('Magnum cluster');
+        const hasAzure = deployContent.includes('AZURE SOVEREIGN ENTERPRISE DEPLOYER');
+        const hasTier = deployContent.includes('commercial|government|classified');
+        const hasTerraform = deployContent.includes('Executing Terraform IaC for Azure Sovereign Enterprise');
 
-        if (hasMTLS && hasVPN && hasK8s) {
-            logger('✅ OpenStack deploy script contains all required enterprise components.');
+        if (hasAzure && hasTier && hasTerraform) {
+            logger('✅ Azure Sovereign deploy script contains all required enterprise components.');
         } else {
-            logger('❌ OpenStack deploy script is missing key security components.', 'CRITICAL');
+            logger('❌ Azure Sovereign deploy script is missing key security components.', 'CRITICAL');
             complianceIssues++;
         }
     } else {
-        logger('⚠️ deploy_openstack.sh not found at workspace root.', 'WARNING');
+        logger('⚠️ deploy_enterprise.sh not found at workspace root.', 'WARNING');
     }
 
     // 5. Force OKF Knowledge Catalog database synchronizations

@@ -113,7 +113,7 @@ class PrismaCheckpointSaver extends BaseCheckpointSaver {
 }
 
 // Core Live Agents
-import { gcpSentinel } from '../googleCloud/gcpSentinel.service.js';
+import { gcpSentinel } from '../azureCloud/azureSentinel.service.js';
 import { BrowserUseAgentService } from '../browserUseAgent/browserUseAgent.service.js';
 import { FazmAgentService } from '../fazmAgent/fazmAgent.service.js';
 import { LangGraphAgentService } from '../langGraphAgent/langGraphAgent.service.js';
@@ -196,7 +196,7 @@ import { steeringService } from '../steering/steering.service.js';
 import { hooksService } from '../hooks/hooks.service.js';
 import { knowledgeGraphService } from '../memory/knowledge_graph.service.js';
 // import { mcpPluginLoader } from './mcp_plugin_loader.service.js';
-import { googleSkillsLoaderService } from './google_skills_loader.service.js';
+
 import { pocockSkillsLoaderService } from './pocock_skills_loader.service.js';
 
 // Define the state interface
@@ -312,7 +312,7 @@ class GraphOrchestrator {
         // Initialize agent skills and plugins
         try {
             // if (mcpPluginLoader && typeof mcpPluginLoader.init === 'function') mcpPluginLoader.init();
-            if (googleSkillsLoaderService && typeof googleSkillsLoaderService.init === 'function') googleSkillsLoaderService.init();
+
             if (pocockSkillsLoaderService && typeof pocockSkillsLoaderService.init === 'function') pocockSkillsLoaderService.init();
         } catch (e) {
             logger.warn(`Loader init skipped: ${e.message}`);
@@ -584,13 +584,13 @@ class GraphOrchestrator {
                 fileSearch: (await import('../fileSearch/fileSearch.service.js').catch(() => ({}))).fileSearchService || {},
             };
 
-            // BYOC Check: If the tenant configuration directs to a private OpenStack executor
+            // BYOC Check: If the tenant configuration directs to a private Azure Stack Hub executor
             const { tenantService } = await import('../enterprise/tenant.service.js');
             const tenant = await tenantService.resolve(tenantId);
 
             if (tenant && tenant.byocEnabled && tenant.byocEndpoint) {
                 const axios = (await import('axios')).default;
-                logger.info(`🌐 BYOC Router: Delegating step ${step.agent}.${step.action} to private OpenStack node: ${tenant.byocEndpoint}`);
+                logger.info(`🌐 BYOC Router: Delegating step ${step.agent}.${step.action} to private Azure Stack Hub node: ${tenant.byocEndpoint}`);
                 try {
                     const response = await axios.post(`${tenant.byocEndpoint}/execute`, {
                         agent: step.agent,
@@ -601,7 +601,7 @@ class GraphOrchestrator {
                     result = response.data?.result || response.data;
                 } catch (err) {
                     logger.error(`❌ BYOC execution error routing to ${tenant.byocEndpoint}: ${err.message}`);
-                    throw new Error(`BYOC_ROUTING_FAILED: Failed to delegate to private OpenStack bare-metal node: ${err.message}`);
+                    throw new Error(`BYOC_ROUTING_FAILED: Failed to delegate to private Azure Stack Hub bare-metal node: ${err.message}`);
                 }
             } else {
                 const agentInstance = availableAgents[step.agent];

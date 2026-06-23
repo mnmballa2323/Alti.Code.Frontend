@@ -44,17 +44,7 @@ services:
     networks:
       - alti_net
 
-  # ☁️ The AWS Bedrock Microservice
-  backend_aws:
-    build: ./alti.code.studio.backend.aws
-    container_name: alti_backend_aws
-    ports:
-      - "5001:5001"
-    environment:
-      - PORT=5001
-      - AWS_REGION=us-east-1
-    networks:
-      - alti_net
+  # AWS Bedrock Microservice has been removed for pure Azure sovereign compliance.
 
   # ☁️ The Azure Foundry Microservice
   backend_azure:
@@ -67,16 +57,7 @@ services:
     networks:
       - alti_net
 
-  # ☁️ The GCP Vertex Microservice
-  backend_gcp:
-    build: ./alti.code.studio.backend.gcp
-    container_name: alti_backend_gcp
-    ports:
-      - "5003:5003"
-    environment:
-      - PORT=5003
-    networks:
-      - alti_net
+  # GCP Vertex Microservice has been removed for pure Azure sovereign compliance.
 
   # 🖥️ The Face: Frontend
   frontend:

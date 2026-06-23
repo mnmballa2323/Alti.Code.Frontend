@@ -17,7 +17,7 @@ const modulesPath = path.join(__dirname, '../modules');
 import { authRoutes } from '../modules/auth/auth.route.js';
 import { mcpRoutes } from '../modules/mcp/mcp.route.js';
 import { aiRoutes } from '../modules/ai/ai.route.js';
-import { iapService } from '../modules/googleCloud/iap.service.js';
+import { verifyAzureToken } from '../modules/auth/azureAd.service.js';
 import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
@@ -44,7 +44,7 @@ router.use('/discovery', discoveryRoutes);
 
 // 🛡️ Global Zero-Trust Boundary (IAP verification for all subsequent routes)
 // Note: In development, verifyIAPToken bypasses automatically if no token is present.
-router.use(iapService.verifyIAPToken);
+router.use(verifyAzureToken);
 
 // 🔌 Dynamic Database Context Router per Tenant
 router.use(tenantDbRouter);
@@ -103,9 +103,9 @@ try {
               if (file === 'cliAnything.route.js') basePath = '/cli-anything';
               if (file === 'geminiExtension.route.js') basePath = '/gemini-extensions';
               if (file === 'geminiOpenMemo.route.js') basePath = '/gemini-open-memory';
-              if (file === 'googleGenAi.route.js') basePath = '/google-gen-ai';
-              if (file === 'googleSearch.route.js') basePath = '/google-search';
-              if (file === 'googleAdkAgent.route.js') basePath = '/google-adk';
+              if (file === 'azureGenAi.route.js') basePath = '/azure-gen-ai';
+              if (file === 'azureSearch.route.js') basePath = '/azure-search';
+              if (file === 'azureAdkAgent.route.js') basePath = '/azure-adk';
               if (file === 'borg.route.js') basePath = '/borg';
               if (file === 'oss.agents.route.js') basePath = '/oss-agents';
               if (file === 'openHandsAgent.route.js') basePath = '/oss-swarm/openhands';

@@ -136,17 +136,17 @@ export function AgentCard({
                 .reduce((acc, char) => acc + char.charCodeAt(0), 0);
               const providers = [
                 {
-                  name: "AWS Bedrock",
+                  name: "Azure Government",
                   color:
                     "text-warning-500 bg-warning-500/10 border-warning-500/20",
                 },
                 {
-                  name: "GCP Vertex AI",
+                  name: "Azure Dedicated",
                   color:
                     "text-success-500 bg-success-500/10 border-success-500/20",
                 },
                 {
-                  name: "Azure Foundry",
+                  name: "Azure Cloud",
                   color:
                     "text-primary-500 bg-primary-500/10 border-primary-500/20",
                 },

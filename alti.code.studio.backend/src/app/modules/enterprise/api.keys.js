@@ -13,7 +13,7 @@
 
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
-import { memorystoreService } from '../googleCloud/memorystore.service.js';
+import { memorystoreService } from '../azureCloud/azureCache.service.js';
 
 // ═══════════════════════════════════════════════
 // Rate Limit Tiers (per tenant plan)

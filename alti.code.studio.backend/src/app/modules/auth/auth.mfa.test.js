@@ -6,7 +6,7 @@ import { UserRepository } from './prisma.user.repository.js';
 import { totp } from '@inso/platform';
 import config from '../../../../config/index.js';
 import bcrypt from 'bcryptjs';
-import { authenticateKeystone } from './openstack.service.js';
+import { authenticateAzureAD } from './azureAd.service.js';
 import { prisma } from '../../platform/db/prismaClient.js';
 
 vi.mock('../../platform/db/prismaClient.js', () => ({
@@ -17,8 +17,8 @@ vi.mock('../../platform/db/prismaClient.js', () => ({
   },
 }));
 
-vi.mock('./openstack.service.js', () => ({
-  authenticateKeystone: vi.fn(),
+vi.mock('./azureAd.service.js', () => ({
+  authenticateAzureAD: vi.fn(),
 }));
 
 vi.mock('./prisma.user.repository.js', () => ({
@@ -29,8 +29,8 @@ vi.mock('./prisma.user.repository.js', () => ({
   },
 }));
 
-vi.mock('../../middlewares/sendEmail/sendMailWithGoogleWorkspace.js', () => ({
-  sendMailWithGoogleWorkspace: vi.fn(),
+vi.mock('../../middlewares/sendEmail/sendMailWithAzureSMTP.js', () => ({
+  sendMailWithAzureSMTP: vi.fn(),
 }));
 
 describe('Multi-Factor Authentication (MFA) Integration', () => {

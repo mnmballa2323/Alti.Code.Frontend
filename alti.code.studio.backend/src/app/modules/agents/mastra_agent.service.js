@@ -7,7 +7,7 @@
 
 import { Agent } from '@mastra/core';
 import config from '../../../../config/index.js';
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 
 export class MastraAgentService {
     /**
@@ -16,7 +16,7 @@ export class MastraAgentService {
      * @returns {Agent} Mastra Agent
      */
     static createAgent(options = {}) {
-        const modelName = options.model || config.gcp.model_name || 'gemini-1.5-pro';
+        const modelName = options.model || config.azure.model_name || 'gpt-5.5';
         
         return new Agent({
             id: options.id || 'mastra-agent',
@@ -36,7 +36,7 @@ export class MastraAgentService {
      * @returns {Promise<{text: string}>} Response text
      */
     static async generate(agent, prompt) {
-        if (vertexService.isMockMode || process.env.NODE_ENV === 'test') {
+        if (azureSovereignCompatService.isMockMode || process.env.NODE_ENV === 'test') {
             return {
                 text: `[Mastra Agent Mock] Response for prompt: "${prompt.substring(0, 40)}" using agent ${agent.name}`
             };

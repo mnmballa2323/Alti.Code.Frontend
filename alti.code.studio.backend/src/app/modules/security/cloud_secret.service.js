@@ -1,20 +1,16 @@
-import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { azureSecretManagerService } from '../azureCloud/azureSecretManager.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
-let client = null;
-const getClient = () => {
-    if (!client) {
-        client = new SecretManagerServiceClient();
-    }
-    return client;
-};
-
 /**
  * Enterprise-Grade Secret Vault for Cloud Deployments.
- * Synchronizes production secrets with Google Cloud Secret Manager.
+ * Synchronizes production secrets with Azure Key Vault.
  */
 class CloudSecretService {
+    constructor() {
+        this.secretManager = azureSecretManagerService;
+    }
+
     /**
      * Injects secrets into the deployment environment autonomously.
      */
@@ -23,7 +19,7 @@ class CloudSecretService {
         
         try {
             for (const [key, value] of Object.entries(secrets)) {
-                // Ensure the secret exists in GCP Secret Manager or the target platform vault
+                // Ensure the secret exists in Azure Key Vault or the target platform vault
                 logger.debug(`[Secrets] Vaulting ${key} for mission-critical deployment.`);
             }
             return { success: true, timestamp: new Date().toISOString() };
@@ -38,32 +34,9 @@ class CloudSecretService {
      */
     async getSecret(secretName) {
         try {
-            const [version] = await getClient().accessSecretVersion({
-                name: `projects/${config.gcp.project_id}/secrets/${secretName}/versions/latest`,
-            });
-            return version.payload.data.toString();
+            return await this.secretManager.getSecret(secretName);
         } catch (error) {
-            logger.warn(`[Secrets] Secret ${secretName} not found in GCP Vault. Falling back to AWS Secrets Manager...`);
-            
-            if (process.env.AWS_REGION && process.env.AWS_SECRETS_ENABLED === 'true') {
-                try {
-                    const { SecretsManagerClient, GetSecretValueCommand } = await import('@aws-sdk/client-secrets-manager');
-                    const awsClient = new SecretsManagerClient({ region: process.env.AWS_REGION });
-                    
-                    const command = new GetSecretValueCommand({ SecretId: process.env.AWS_SECRET_NAME || 'alti-code-studio/prod' });
-                    const response = await awsClient.send(command);
-                    
-                    if (response.SecretString) {
-                        const secretObj = JSON.parse(response.SecretString);
-                        if (secretObj[secretName]) {
-                            return secretObj[secretName];
-                        }
-                    }
-                } catch (awsErr) {
-                    logger.warn(`[Secrets] Secret ${secretName} not found in AWS Vault either. Using env fallback.`);
-                }
-            }
-            
+            logger.warn(`[Secrets] Secret ${secretName} not found in Azure Key Vault. Using env fallback.`);
             return process.env[secretName];
         }
     }

@@ -11,9 +11,9 @@ interface SettingsState {
   // New secure Vault database credentials
   azureEndpoint: string;
   azureApiKey: string;
-  gcpProjectId: string;
-  gcpClientEmail: string;
-  gcpPrivateKey: string;
+  azureSovereignTenantId: string;
+  azureSovereignClientId: string;
+  azureSovereignClientSecret: string;
 
   // IDE & Editor Preferences
   editorFontSize: number;
@@ -33,9 +33,9 @@ interface SettingsState {
 
   setAzureEndpoint: (endpoint: string) => void;
   setAzureApiKey: (key: string) => void;
-  setGcpProjectId: (projectId: string) => void;
-  setGcpClientEmail: (email: string) => void;
-  setGcpPrivateKey: (key: string) => void;
+  setAzureSovereignTenantId: (projectId: string) => void;
+  setAzureSovereignClientId: (email: string) => void;
+  setAzureSovereignClientSecret: (key: string) => void;
 
   setEditorFontSize: (size: number) => void;
   setEditorWordWrap: (enabled: boolean) => void;
@@ -57,9 +57,9 @@ export const useSettingsStore = create<SettingsState>()(
       // Defaults for Vault credentials
       azureEndpoint: "",
       azureApiKey: "",
-      gcpProjectId: "",
-      gcpClientEmail: "",
-      gcpPrivateKey: "",
+      azureSovereignTenantId: "",
+      azureSovereignClientId: "",
+      azureSovereignClientSecret: "",
 
       editorFontSize: 14,
       editorWordWrap: true,
@@ -76,9 +76,9 @@ export const useSettingsStore = create<SettingsState>()(
 
       setAzureEndpoint: (endpoint) => set({ azureEndpoint: endpoint }),
       setAzureApiKey: (key) => set({ azureApiKey: key }),
-      setGcpProjectId: (projectId) => set({ gcpProjectId: projectId }),
-      setGcpClientEmail: (email) => set({ gcpClientEmail: email }),
-      setGcpPrivateKey: (key) => set({ gcpPrivateKey: key }),
+      setAzureSovereignTenantId: (projectId) => set({ azureSovereignTenantId: projectId }),
+      setAzureSovereignClientId: (email) => set({ azureSovereignClientId: email }),
+      setAzureSovereignClientSecret: (key) => set({ azureSovereignClientSecret: key }),
 
       setEditorFontSize: (size) => set({ editorFontSize: size }),
       setEditorWordWrap: (enabled) => set({ editorWordWrap: enabled }),

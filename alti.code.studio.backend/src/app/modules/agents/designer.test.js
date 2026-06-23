@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { designerAgent } from './designer.agent.js';
+import { designerAgent } from './shards/d/designer.agent.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 import { visionService } from '../senses/vision.service.js';
 

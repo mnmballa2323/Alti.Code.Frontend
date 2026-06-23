@@ -8,6 +8,13 @@ vi.mock('../../../shared/ast.service.js');
 vi.mock('../gemini/gemini.service.js');
 vi.mock('fs/promises');
 
+vi.mock('../../../shared/redis.client.js', () => ({
+    redisClient: {
+        setnx: vi.fn().mockResolvedValue(true),
+        del: vi.fn().mockResolvedValue(1),
+    }
+}));
+
 describe('Predictive Autonomic Refactoring (Phase 20 - Proactive Surgeon)', () => {
 
     beforeEach(() => {
@@ -17,6 +24,8 @@ describe('Predictive Autonomic Refactoring (Phase 20 - Proactive Surgeon)', () =
             filePath: '/mock/repo/bad_spaghetti_file.js',
             branchName: 'autonomic/flatten-complexity-1234'
         });
+        // Set unit test threshold
+        autonomicService.COMPLEXITY_THRESHOLD = 5;
     });
 
     it('should proactively scan files, identify high complexity via AST, and automatically draft a PR patch', async () => {
@@ -43,7 +52,7 @@ describe('Predictive Autonomic Refactoring (Phase 20 - Proactive Surgeon)', () =
         GeminiAiService.generateContent.mockResolvedValueOnce('const x = 100; // Refactored to O(1)');
 
         // Run the cron-job sweep
-        const debtEliminatedCount = await autonomicService.commenceProactiveSweep(filesToScan);
+        const result = await autonomicService.commenceProactiveSweep(filesToScan);
 
         // ASSERTIONS
         // It should have read both files
@@ -60,7 +69,7 @@ describe('Predictive Autonomic Refactoring (Phase 20 - Proactive Surgeon)', () =
         expect(autonomicService._applyAndStageRepair.mock.calls[0][0]).toContain('bad_spaghetti_file.js');
 
         // It should return 1 debt eliminated
-        expect(debtEliminatedCount).toBe(1);
+        expect(result.eliminated).toBe(1);
     });
 
 });

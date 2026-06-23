@@ -78,7 +78,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
   azure: {
     models: [
       {
-        name: "GPT-5.5",
+        name: "Azure OpenAI GPT-5",
         version: "v5.5",
         isPrimary: true,
         inputTokens: 4120000,
@@ -178,7 +178,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "GPT-5.5 Pro",
+        name: "Azure OpenAI GPT-5 Pro",
         version: "v5.5 Pro",
         isPrimary: false,
         inputTokens: 950000,
@@ -278,10 +278,10 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  aws: {
+  azure_gov: {
     models: [
       {
-        name: "Claude Sonnet 4.6",
+        name: "Azure Gov GPT-4o",
         version: "v4.6",
         isPrimary: true,
         inputTokens: 2450000,
@@ -381,7 +381,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Claude Opus 4.8",
+        name: "Azure Gov GPT-4o-Pro",
         version: "v4.8",
         isPrimary: false,
         inputTokens: 320000,
@@ -473,10 +473,10 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  gcp: {
+  azure_sovereign: {
     models: [
       {
-        name: "Gemini 3.5 Flash",
+        name: "Azure Sovereign GPT-4",
         version: "v3.5",
         isPrimary: true,
         inputTokens: 3100000,
@@ -567,7 +567,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Gemini 3.1 Pro",
+        name: "Azure Sovereign GPT-4 Pro",
         version: "v3.1",
         isPrimary: false,
         inputTokens: 1100000,
@@ -664,7 +664,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
 const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
   azure: [
     {
-      name: "GPT-4",
+      name: "Azure Commercial GPT-4",
       version: "v4.0",
       decommissionedDate: "March 15, 2026",
       tokensIn: "92.15M",
@@ -672,7 +672,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 1254.0,
     },
     {
-      name: "GPT-3.5-Turbo",
+      name: "Azure Commercial GPT-3.5",
       version: "v3.5",
       decommissionedDate: "November 20, 2025",
       tokensIn: "310.08M",
@@ -680,9 +680,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 900.24,
     },
   ],
-  aws: [
+  azure_gov: [
     {
-      name: "Claude 3.5 Sonnet",
+      name: "Azure Gov GPT-3.5 Sonnet",
       version: "v3.5 (Legacy)",
       decommissionedDate: "December 10, 2025",
       tokensIn: "60.40M",
@@ -690,7 +690,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 255.6,
     },
     {
-      name: "Claude 3 Haiku",
+      name: "Azure Gov GPT-3 Haiku",
       version: "v3.0",
       decommissionedDate: "August 05, 2025",
       tokensIn: "240.10M",
@@ -698,9 +698,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 96.04,
     },
   ],
-  gcp: [
+  azure_sovereign: [
     {
-      name: "Gemini 1.5 Pro",
+      name: "Azure Sovereign GPT-3.5 Pro",
       version: "v1.5",
       decommissionedDate: "February 28, 2026",
       tokensIn: "135.30M",
@@ -708,7 +708,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 360.9,
     },
     {
-      name: "Gemini 1.0 Pro",
+      name: "Azure Sovereign GPT-3.0 Pro",
       version: "v1.0",
       decommissionedDate: "October 15, 2025",
       tokensIn: "210.05M",
@@ -901,9 +901,9 @@ export default function MemberDetailsPage() {
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
-  const [activeProvider, setActiveProvider] = useState<"aws" | "gcp" | "azure">(
-    "azure",
-  );
+  const [activeProvider, setActiveProvider] = useState<
+    "azure_gov" | "azure_sovereign" | "azure"
+  >("azure");
   const [modelTimeframes, setModelTimeframes] = useState<
     Record<string, "1D" | "1W" | "1M" | "1Y" | "All">
   >({});
@@ -1698,27 +1698,27 @@ export default function MemberDetailsPage() {
                       }`}
                       onClick={() => setActiveProvider("azure")}
                     >
-                      GPT
+                      Azure Commercial
                     </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                        activeProvider === "aws"
+                        activeProvider === "azure_gov"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
-                      onClick={() => setActiveProvider("aws")}
+                      onClick={() => setActiveProvider("azure_gov")}
                     >
-                      Claude
+                      Azure Government (IL5)
                     </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                        activeProvider === "gcp"
+                        activeProvider === "azure_sovereign"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
-                      onClick={() => setActiveProvider("gcp")}
+                      onClick={() => setActiveProvider("azure_sovereign")}
                     >
-                      Gemini
+                      Azure Sovereign (IL6)
                     </button>
                   </div>
                 </div>

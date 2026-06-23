@@ -1,4 +1,20 @@
 import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('@apple/app-store-server-library', () => {
+  return {
+    Environment: {
+      SANDBOX: 'SANDBOX',
+      PRODUCTION: 'PRODUCTION'
+    },
+    AppStoreServerAPIClient: class {
+      constructor() {}
+    },
+    SignedDataVerifier: class {
+      constructor() {}
+    }
+  };
+});
+
 import { appleStoreService } from './appleStore.service.js';
 
 describe('AppleStoreService', () => {

@@ -36,9 +36,8 @@ import { vectorStoreService } from '../memory/vector.store.js';
 import { telemetryBus } from './telemetry.bus.js';
 import { SpscRingBuffer } from './spsc_ring_buffer.js';
 import { sreAgent } from '../agents/sre.agent.js';
-import { videoIntelligenceService } from '../googleCloud/video_intelligence.service.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
-import { cloudMonitoringService } from '../googleCloud/monitoring.service.js';
+import { videoIntelligenceService, cloudMonitoringService } from '../azureCloud/azureServices.service.js';
+import { GoogleDlpService } from '../ai/azureDlp.service.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants

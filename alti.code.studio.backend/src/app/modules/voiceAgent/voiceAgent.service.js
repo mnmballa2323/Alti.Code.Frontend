@@ -1,9 +1,8 @@
-import { speechClient } from '../googleCloud/speech.service.js';
+import { speechClient } from '../azureCloud/azureSpeech.service.js';
 import { logger } from '../../../shared/logger.js';
 import fs from 'fs';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
-import fs from 'fs';
 
 const transcribeAudio = async (audioFilePath) => {
     try {

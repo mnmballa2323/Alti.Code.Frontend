@@ -13,10 +13,11 @@
  */
 
 import { logger } from '../../../shared/logger.js';
-import monitoring from '@google-cloud/monitoring';
-
-const metricClient = new monitoring.MetricServiceClient();
-const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
+const metricClient = {
+    createTimeSeries: async () => {},
+    projectPath: (id) => `projects/${id}`
+};
+const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
 
 // ═══════════════════════════════════════════════
 // Metric Collector (exportable to Cloud Monitoring)

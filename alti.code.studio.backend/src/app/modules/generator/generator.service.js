@@ -11,19 +11,17 @@ import { exec } from 'child_process';
 import util from 'util';
 
 const execAsync = util.promisify(exec);
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { GuardianService } from '../guardian/guardian.service.js';
 import { closureService } from './closure.service.js';
 import { patchService } from './patch.service.js';
 import { wireitService } from './wireit.service.js';
-import { driveBackupService } from '../googleCloud/drive.service.js';
-import { gkeService } from '../googleCloud/gke.service.js';
 import { sentinelService } from '../security/sentinel.service.js';
 import { EventBus } from '../../shared/eventBus.js';
-import { discoveryEngineService } from '../googleCloud/discovery.service.js';
-import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
+import { discoveryEngineService } from '../azureCloud/azureSearch.service.js';
+import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
 import { modelGateway } from '../../platform/gateway/modelGateway.js';
 
@@ -137,16 +135,16 @@ const generateProject = async (prompt, type = 'react') => {
     `;
 
   try {
-    // 🧠 The Ultimate Google RAG: Vertex AI Discovery Engine + Spanner Graph
-    logger.info(`🔍 [RAG] Querying Google Vertex AI Discovery Engine...`);
+    // 🧠 The Ultimate Azure RAG: Azure AI Search + Cosmos DB Graph
+    logger.info(`🔍 [RAG] Querying Azure AI Search...`);
     const discoveryResults = await discoveryEngineService.searchCodebase(prompt);
     
-    logger.info(`🕸️ [RAG] Querying Google Cloud Spanner Graph for architectural topology...`);
+    logger.info(`🕸️ [RAG] Querying Azure Cosmos DB Graph for architectural topology...`);
     const graphResults = await spannerGraphService.queryArchitectureDependencies(type);
 
     let ragContext = '';
     if (discoveryResults.length > 0) {
-        ragContext += `\n\n### Google Discovery Engine Context (Highly Relevant Proprietary Code):\n`;
+        ragContext += `\n\n### Azure AI Search Context (Highly Relevant Proprietary Code):\n`;
         discoveryResults.slice(0, 3).forEach((res) => {
            const snippet = res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
            if (snippet) ragContext += `\n${snippet}\n`;
@@ -154,7 +152,7 @@ const generateProject = async (prompt, type = 'react') => {
     }
 
     if (graphResults.length > 0) {
-        ragContext += `\n\n### Google Spanner Graph Context (Architectural Topology):\n`;
+        ragContext += `\n\n### Azure Cosmos DB Graph Context (Architectural Topology):\n`;
         ragContext += JSON.stringify(graphResults, null, 2);
     }
 
@@ -177,7 +175,7 @@ const generateProject = async (prompt, type = 'react') => {
 
     // Execute the generation using Google Vertex AI (Gemini) instead of OpenAI
     const geminiPrompt = `${systemPrompt}\n\n${finalPrompt}\n\nOUTPUT ONLY VALID JSON.`;
-    const response = await GoogleGenAiService.generateContent(geminiPrompt, 'gemini-3.1-pro', 0.2);
+    const response = await AzureGenAiService.generateContent(geminiPrompt, 'gemini-3.1-pro', 0.2);
 
     let contentToParse = response.content;
     

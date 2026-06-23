@@ -2,8 +2,8 @@
 # ==============================================================================
 # ALTI CODE STUDIO: NON-STOP AUTONOMOUS ENTERPRISE DEVELOPMENT RUNNER
 # ==============================================================================
-# Optimized for: OpenStack Private Cloud (Liberty Center One)
-# Backed by: Tri-Cloud Inference Strategy (AWS Bedrock, Azure Foundry, Google Vertex)
+# Optimized for: Azure Sovereign Cloud (Commercial, Government, and Classified)
+# Backed by: Azure Sovereign Inference Strategy (Azure OpenAI Foundry)
 # ==============================================================================
 # Runs autonomously in a loop with safety gates, automatic quality reviews,
 # de-sloppify cleanup, and strict 2-hour execution limits.
@@ -22,31 +22,27 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}================================================================${NC}"
 echo -e "${CYAN}  🛡️  ALTI CODE STUDIO: AUTONOMOUS ENTERPRISE PIPELINE RUNNER     ${NC}"
-echo -e "${CYAN}  ☁️  Optimized for OpenStack (Liberty Center One) & Tri-Cloud     ${NC}"
+echo -e "${CYAN}  ☁️  Optimized for Azure Sovereign Cloud & Azure OpenAI Foundry   ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
 # ==============================================================================
-# 1. Environment & Tri-Cloud Credentials Validation
+# 1. Environment & Azure Credentials Validation
 # ==============================================================================
-echo -e "\n[1/5] ${YELLOW}Initializing Cloud Environment Context...${NC}"
+echo -e "\n[1/5] ${YELLOW}Initializing Azure Environment Context...${NC}"
 
-# Configure OpenStack Liberty Center One settings
-export CLOUD_PROVIDER="openstack"
-export OPENSTACK_REGION="libertycenterone"
-export OS_AUTH_URL="https://identity.libertycenterone.com:5000/v3"
+export CLOUD_PROVIDER="azure"
 
-echo -e "• Target Private Cloud: ${GREEN}OpenStack (Liberty Center One)${NC}"
-echo -e "• Keystone Auth URL:    ${GREEN}${OS_AUTH_URL}${NC}"
+echo -e "• Target Private Cloud: ${GREEN}Microsoft Azure Sovereign Cloud${NC}"
 
-# Verify Tri-Cloud Inference configuration (strictly block OpenAI / Anthropic direct SDKs)
-echo -e "\n[2/5] ${YELLOW}Verifying Tri-Cloud Inference Gateway Guardrails...${NC}"
+# Verify Azure Inference configuration (strictly block other clouds and direct SDKs)
+echo -e "\n[2/5] ${YELLOW}Verifying Azure Sovereign Inference Gateway Guardrails...${NC}"
 
-if [ -z "$AZURE_OPENAI_API_KEY" ] && [ -z "$AWS_ACCESS_KEY_ID" ] && [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
-    echo -e "${YELLOW}⚠️  WARNING: Running in air-gapped simulated model gateway mode. Real Tri-Cloud credentials not set.${NC}"
+if [ -z "$AZURE_OPENAI_API_KEY" ]; then
+    echo -e "${YELLOW}⚠️  WARNING: Running in air-gapped simulated model gateway mode. Real Azure OpenAI credentials not set.${NC}"
 else
     echo -e "• Azure OpenAI Foundry: ${GREEN}CONFIGURED${NC}"
-    echo -e "• AWS Bedrock (Claude): ${GREEN}CONFIGURED${NC}"
-    echo -e "• Google Cloud Vertex:  ${GREEN}CONFIGURED${NC}"
+    echo -e "• AWS Bedrock (Claude): ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
+    echo -e "• Google Cloud Vertex:  ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
     echo -e "• OpenAI / Anthropic:   ${RED}BLOCKED (Strict Guardrail Enforcement)${NC}"
 fi
 
@@ -152,7 +148,7 @@ done
 echo -e "\n[5/5] ${YELLOW}Loop Execution Completed.${NC}"
 echo -e "================================================================"
 echo -e "${GREEN}🎉 AUTONOMOUS DEVELOPMENT ITERATIONS LANDED SAFELY! ${NC}"
-echo -e "• Environment:    ${CYAN}OpenStack (Liberty Center One)${NC}"
+echo -e "• Environment:    ${CYAN}Azure Sovereign Cloud${NC}"
 echo -e "• Version Landed: ${CYAN}$(cat VERSION)${NC}"
 echo -e "• Duration:       ${CYAN}$(( ($(date +%s) - START_TIME) / 60 )) minutes${NC}"
 echo -e "================================================================"

@@ -41,7 +41,7 @@ interface ProviderUsageData {
 }
 
 const initialUsageData: Record<string, ProviderUsageData> = {
-  azure: {
+  azure_gpt: {
     models: [
       {
         name: "GPT-5.5",
@@ -244,7 +244,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  aws: {
+  azure_claude: {
     models: [
       {
         name: "Claude Sonnet 4.6",
@@ -439,10 +439,10 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  gcp: {
+  azure_sovereign: {
     models: [
       {
-        name: "Gemini 3.5 Flash",
+        name: "Azure Sovereign 3.5 Flash",
         version: "v3.5",
         isPrimary: true,
         inputTokens: 3100000,
@@ -513,7 +513,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gemini35-1",
+            id: "req-sovereign35-1",
             timestamp: "24 mins ago",
             promptSnippet:
               "Perform evolutionary conservation phyloP scores lookup UCSC...",
@@ -522,7 +522,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0182,
           },
           {
-            id: "req-gemini35-2",
+            id: "req-sovereign35-2",
             timestamp: "1 hr ago",
             promptSnippet:
               "Resolve biological ontology terms resolution lookup EBI OLS...",
@@ -533,7 +533,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Gemini 3.1 Pro",
+        name: "Azure Sovereign 3.1 Pro",
         version: "v3.1",
         isPrimary: false,
         inputTokens: 1100000,
@@ -604,7 +604,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gemini31-1",
+            id: "req-sovereign31-1",
             timestamp: "5 mins ago",
             promptSnippet:
               "Lookup clinical evidence pathogen classification ClinVar...",
@@ -613,7 +613,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0001,
           },
           {
-            id: "req-gemini31-2",
+            id: "req-sovereign31-2",
             timestamp: "3 hrs ago",
             promptSnippet:
               "Check active server healthz ping route status check...",
@@ -806,7 +806,7 @@ interface ArchivedModelInfo {
 }
 
 const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
-  azure: [
+  azure_gpt: [
     {
       name: "GPT-4",
       version: "v4.0",
@@ -824,7 +824,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 900.24,
     },
   ],
-  aws: [
+  azure_claude: [
     {
       name: "Claude 3.5 Sonnet",
       version: "v3.5 (Legacy)",
@@ -842,9 +842,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 96.04,
     },
   ],
-  gcp: [
+  azure_sovereign: [
     {
-      name: "Gemini 1.5 Pro",
+      name: "Azure Sovereign 1.5 Pro",
       version: "v1.5",
       decommissionedDate: "February 28, 2026",
       tokensIn: "135.30M",
@@ -852,7 +852,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 360.9,
     },
     {
-      name: "Gemini 1.0 Pro",
+      name: "Azure Sovereign 1.0 Pro",
       version: "v1.0",
       decommissionedDate: "October 15, 2025",
       tokensIn: "210.05M",
@@ -863,7 +863,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
 };
 
 export default function ModelUsagePage() {
-  const [activeTab, setActiveTab] = useState<"aws" | "gcp" | "azure">("azure");
+  const [activeTab, setActiveTab] = useState<"azure_claude" | "azure_sovereign" | "azure_gpt">("azure_gpt");
   const data = initialUsageData[activeTab];
 
   // Object tracking timeframe for each model name
@@ -940,31 +940,31 @@ export default function ModelUsagePage() {
           <div className="flex gap-2 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/50 dark:border-neutral-800 shrink-0 shadow-sm">
             <button
               className={`px-6 py-2 text-xs font-bold rounded-xl transition-all ${
-                activeTab === "azure"
+                activeTab === "azure_gpt"
                   ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
-              onClick={() => setActiveTab("azure")}
+              onClick={() => setActiveTab("azure_gpt")}
             >
               GPT
             </button>
             <button
               className={`px-6 py-2 text-xs font-bold rounded-xl transition-all ${
-                activeTab === "aws"
+                activeTab === "azure_claude"
                   ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
-              onClick={() => setActiveTab("aws")}
+              onClick={() => setActiveTab("azure_claude")}
             >
               Claude
             </button>
             <button
               className={`px-6 py-2 text-xs font-bold rounded-xl transition-all ${
-                activeTab === "gcp"
+                activeTab === "azure_sovereign"
                   ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
-              onClick={() => setActiveTab("gcp")}
+              onClick={() => setActiveTab("azure_sovereign")}
             >
               Gemini
             </button>

@@ -24,7 +24,7 @@ async function main() {
         "react", "vue", "nextjs", "svelte", "angular", "node", "golang", "rust", "python", "java", 
         "ruby", "cpp", "csharp", "scala", "kotlin", "swift", "dart", "php", "elixir", "haskell", 
         "julia", "postgres", "mongodb", "redis", "kafka", "rabbitmq", "docker", "kubernetes", "terraform", 
-        "ansible", "aws", "gcp", "azure", "graphql", "vite", "playwright", "cypress", "webpack", 
+        "ansible", "azure_native", "cloud_native", "azure", "graphql", "vite", "playwright", "cypress", "webpack", 
         "eslint", "vitest", "pytorch", "tensorflow", "airflow", "hadoop", "spark"
     ];
 

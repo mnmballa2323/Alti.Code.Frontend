@@ -5,7 +5,7 @@ import { logger } from '../../../shared/logger.js';
 const router = express.Router();
 
 /**
- * Ingests a new document via AWS Bedrock (Claude Opus + Titan)
+ * Ingests a new document via Azure OpenAI (GPT-5.5 + Text Embedding)
  */
 router.post('/ingest', async (req, res) => {
     try {
@@ -60,7 +60,7 @@ router.post('/webhook/self-heal', async (req, res) => {
 });
 
 /**
- * Queries the Tri-Cloud RAG via Vertex + Azure
+ * Queries the Sovereign Azure RAG
  */
 router.post('/query', async (req, res) => {
     try {
@@ -86,7 +86,7 @@ router.post('/ide-sync', async (req, res) => {
         // Simulating the WebSocket logic via HTTP for the demo
         const { codeContext } = req.body;
         if (!codeContext) return res.status(400).json({ error: "codeContext is required from IDE plugin" });
-        logger.info(`🔌 [Tri-Cloud RAG] IDE Plugin connection detected. Syncing live code context...`);
+        logger.info(`🔌 [Sovereign Azure RAG] IDE Plugin connection detected. Syncing live code context...`);
         
         // Simulating immediate autocomplete context resolution
         const review = await knowledgeRagService.queryKnowledgeBase(`Based on my live code: ${codeContext.slice(0, 50)}, what should I type next?`);
@@ -100,11 +100,11 @@ router.post('/voice-query', async (req, res) => {
     try {
         const { base64Audio } = req.body;
         if (!base64Audio) return res.status(400).json({ error: "base64Audio is required" });
-        logger.info(`🎙️ [Tri-Cloud RAG] Voice-to-Knowledge payload received. Passing to GCP Chirp (Speech-to-Text)...`);
+        logger.info(`🎙️ [Sovereign Azure RAG] Voice-to-Knowledge payload received. Passing to Azure Speech-to-Text...`);
         
-        // Simulating GCP Chirp transcription
-        const transcribedText = "How do I scale the Vertex AI cluster?";
-        logger.info(`   [GCP Chirp] Transcribed: "${transcribedText}"`);
+        // Simulating Azure Speech transcription
+        const transcribedText = "How do I scale the Azure Kubernetes Service cluster?";
+        logger.info(`   [Azure Speech] Transcribed: "${transcribedText}"`);
         
         const result = await knowledgeRagService.queryKnowledgeBase(transcribedText);
         res.status(200).json({ success: true, transcription: transcribedText, answer: result });

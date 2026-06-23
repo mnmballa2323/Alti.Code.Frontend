@@ -21,35 +21,21 @@ import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import { socketService } from '../../services/socket.service.js';
 import { capabilityRouter } from './capability.router.js';
 import { agentRegistry } from './agent.registry.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import { dynamicAgentLoaderService } from './dynamic_agent_loader.service.js';
-import { googleSkillsLoaderService } from './google_skills_loader.service.js';
+
 import { superpowersLoaderService } from './superpowers_loader.service.js';
-import { BigQueryService } from '../googleCloud/bigquery.service.js';
-import { CloudLoggingService } from '../googleCloud/logging.service.js';
-import { dataCatalogService } from '../googleCloud/data_catalog.service.js';
-import { featureStoreService } from '../googleCloud/feature_store.service.js';
-import { vertexEval } from '../googleCloud/eval.service.js';
-import { sccService } from '../googleCloud/scc.service.js';
-import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
-import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
-import { A2aService } from '../googleCloud/a2a.service.js';
-import { cloudRunJobsService } from '../googleCloud/cloud_run_jobs.service.js';
-import { workspaceAdminService } from '../googleCloud/workspaceAdmin.service.js';
-import { cloudWorkstationsService } from '../googleCloud/cloudWorkstations.service.js';
-import { dynamicSessionsService } from '../googleCloud/dynamic_sessions.service.js';
-import { recommenderService } from '../googleCloud/recommender.service.js';
-import { memorystoreService } from '../googleCloud/memorystore.service.js';
-import { GcsService } from '../googleCloud/gcs.service.js';
+import { BigQueryService, dataCatalogService, featureStoreService, vertexEval, sccService, cloudRunJobsService, workspaceAdminService, cloudWorkstationsService, dynamicSessionsService, recommenderService, cloudBuildService, SecretManagerService, tpuOrchestratorService, videoEyeService, workspaceService } from '../azureCloud/azureServices.service.js';
+import { CloudLoggingService } from '../azureCloud/azureLogging.service.js';
+import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
+import { FirestoreSyncService } from '../azureCloud/azureCosmosDb.service.js';
+import { A2aService } from '../azureCloud/azureA2a.service.js';
+import { memorystoreService } from '../azureCloud/azureCache.service.js';
+import { GcsService } from '../azureCloud/azureStorage.service.js';
+import { pubsubService } from '../azureCloud/azurePubSub.service.js';
 
 import { browserService } from '../senses/browser.service.js';
-/* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
-import { cloudBuildService } from '../googleCloud/build.service.js';
-import { SecretManagerService } from '../googleCloud/secretManager.service.js';
-import { tpuOrchestratorService } from '../googleCloud/tpu_orchestrator.service.js';
-import { videoEyeService } from '../googleCloud/video_eye.service.js';
-import { workspaceService } from '../googleCloud/workspace.service.js';
-import { pubsubService } from '../googleCloud/pubsub.service.js';
+/* DIRECT GEMINI BLOCKED - USE AZURE VIA GATEWAY */
 
 class SwarmBrain {
     constructor() {
@@ -57,9 +43,9 @@ class SwarmBrain {
         this.hiveMindMesh = new EventEmitter(); // Local memory bus
         this.hiveMindMesh.setMaxListeners(100);
         
-        // 🌐 Distributed Swarm Sync (Redis Pub/Sub via Cloud Memorystore)
+        // 🌐 Distributed Swarm Sync (Redis Pub/Sub via Azure Cache)
         // This bridges the local EventEmitter to the global Redis cluster.
-        import('../googleCloud/memorystore.service.js').then(({ memorystoreService }) => {
+        import('../azureCloud/azureCache.service.js').then(({ memorystoreService }) => {
             memorystoreService.subscribeToCrdt('global_hive_mind', (message) => {
                 try {
                     const data = JSON.parse(message);
@@ -85,7 +71,7 @@ class SwarmBrain {
         
         // Initialize loaders
         dynamicAgentLoaderService.init();
-        googleSkillsLoaderService.init();
+
         superpowersLoaderService.init();
 
         // Phase 31: Dynamic YAML DSL Agent Loader Activation
@@ -663,7 +649,7 @@ If you require assistance from another specialized agent to complete your task, 
                 const staffPrompt = `You are a Staff Software Engineer. Review this code for architectural flaws, performance, and best practices. If it is mathematically perfect, respond with exactly "APPROVED". Otherwise, explain the exact flaws in detail.\n\nCODE:\n${result}`;
                 
                 try {
-                     const review = await GoogleGenAiService.generateContent(staffPrompt, 'gemini-3.1-pro', 0.1);
+                     const review = await AzureGenAiService.generateContent(staffPrompt, 'gemini-3.1-pro', 0.1);
                      if (!review.content.includes('APPROVED')) {
                          peerReviewPassed = false;
                          peerReviewFeedback = review.content;
@@ -720,7 +706,7 @@ If you require assistance from another specialized agent to complete your task, 
                      const aguiPrompt = `You are the best software designer in the world, who was trained by the most famous software designers in history, and you have the ability to design software on any device, in any style, according to the user requirements. You are acting as a strict Frontend UX/UI QA Engineer. Analyze this rendered screenshot of the generated code. Does it look aesthetically pleasing, properly aligned, and functional? If it is mathematically perfect, respond with exactly "APPROVED". Otherwise, explain the visual defects in detail.`;
                      
                      try {
-                         const generativeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
+                         const generativeModel = AzureGenAiService.getGenerativeModel('gemini-3.1-pro');
                          const visionResult = await generativeModel.generateContent([
                               { text: aguiPrompt },
                               { inlineData: { data: renderResult.screenshot, mimeType: 'image/png' } }
@@ -743,7 +729,7 @@ If you require assistance from another specialized agent to complete your task, 
                           logger.info(`🎭 SwarmBrain: AGUI visual check passed. Synthesizing deterministic Playwright E2E tests...`);
                           const playwrightPrompt = `You are a strict QA Automation Engineer. Write a complete Playwright test suite (in TypeScript) for the following frontend code to verify all interactive elements, states, and assertions. Output ONLY valid TypeScript code inside a markdown block.\n\nCODE:\n${result}`;
                           try {
-                               const e2eResult = await GoogleGenAiService.generateContent(playwrightPrompt, 'gemini-3.1-pro', 0.1);
+                               const e2eResult = await AzureGenAiService.generateContent(playwrightPrompt, 'gemini-3.1-pro', 0.1);
                                const testMatch = e2eResult.content.match(/```(?:typescript|ts)?\n([\s\S]*?)```/);
                                if (testMatch && testMatch[1]) {
                                    const testCode = testMatch[1];
@@ -988,7 +974,7 @@ If you require assistance from another specialized agent to complete your task, 
                          if (diff.includes('<<<<<<< HEAD')) {
                               logger.info(`🛠️ SwarmBrain: Autonomously resolving Git Merge Markers...`);
                               const resolvePrompt = `You are a Principal DevOps Engineer. The codebase has a Git Merge Conflict.\nHere is the diff with conflict markers:\n\`\`\`\n${diff}\n\`\`\`\nProvide the exact resolved file content, mathematically resolving the structural conflicts.`;
-                              const resolution = await GoogleGenAiService.generateContent(resolvePrompt, 'gemini-3.1-pro', 0.1);
+                              const resolution = await AzureGenAiService.generateContent(resolvePrompt, 'gemini-3.1-pro', 0.1);
                               logger.info(`✅ SwarmBrain: Merge conflict resolved mathematically. Awaiting human verification.`);
                               // Auto-commit resolution
                               execSync(`git commit -am "🤖 Swarm Merge Resolution"`, { cwd: process.cwd() });
@@ -1052,32 +1038,32 @@ If you require assistance from another specialized agent to complete your task, 
             }
         }
 
-        // 10. Live Cloud IDE Provisioning (Google Cloud Workstations)
+        // 10. Live Cloud IDE Provisioning (Azure Dev Box)
         if (prompt.toLowerCase().includes('preview') || prompt.toLowerCase().includes('live environment')) {
-            logger.info(`💻 SwarmBrain: User requested live preview. Provisioning Google Cloud Workstation...`);
+            logger.info(`💻 SwarmBrain: User requested live preview. Provisioning Azure Dev Box...`);
             const workstationId = `swarm-preview-${Date.now()}`;
             const hostUrl = await cloudWorkstationsService.provisionWorkstation(workstationId);
             
             if (hostUrl) {
                 await cloudWorkstationsService.injectCodeAndStart(hostUrl, finalResult);
-                finalResult += `\n\n### 🚀 Live Cloud IDE Environment\nI have provisioned a Google Cloud Workstation for you to test this code live. Access it here: [${hostUrl}](${hostUrl})`;
+                finalResult += `\n\n### 🚀 Live Cloud IDE Environment\nI have provisioned an Azure Dev Box for you to test this code live. Access it here: [${hostUrl}](${hostUrl})`;
             }
         }
 
-        // 11. Autonomous CI/CD Pipeline (Google Cloud Build)
+        // 11. Autonomous CI/CD Pipeline (Azure Pipelines)
         if (prompt.toLowerCase().includes('deploy') || prompt.toLowerCase().includes('build') || prompt.toLowerCase().includes('release')) {
-            logger.info(`🏗️ SwarmBrain: User requested deployment. Triggering Autonomous CI/CD Pipeline via Google Cloud Build...`);
+            logger.info(`🏗️ SwarmBrain: User requested deployment. Triggering Autonomous CI/CD Pipeline via Azure Pipelines...`);
             try {
-                const imageName = `us-central1-docker.pkg.dev/${config.gcp.project_id}/alti-artifacts/swarm-app-${Date.now()}`;
+                const imageName = `${config.azure.client_id || 'azure-tenant'}.azurecr.io/alti-artifacts/swarm-app-${Date.now()}`;
                 const buildOp = await cloudBuildService.triggerContainerBuild('github.com/alti/temp-workspace', imageName);
-                finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nI have successfully bypassed human intervention and triggered an autonomous container build on Google Cloud Build. Your artifact is being packaged and deployed to Google Artifact Registry.\n- **Image:** \`${imageName}\`\n- **Operation ID:** \`${buildOp.operationId}\``;
+                finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nI have successfully bypassed human intervention and triggered an autonomous container build on Azure Pipelines. Your artifact is being packaged and deployed to Azure Container Registry.\n- **Image:** \`${imageName}\`\n- **Operation ID:** \`${buildOp.operationId}\``;
             } catch (e) {
-                logger.warn(`⚠️ SwarmBrain: Cloud Build triggered failed: ${e.message}`);
-                finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nAn error occurred while attempting to trigger Google Cloud Build: ${e.message}`;
+                logger.warn(`⚠️ SwarmBrain: Azure Pipelines triggered failed: ${e.message}`);
+                finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nAn error occurred while attempting to trigger Azure Pipelines: ${e.message}`;
             }
         }
 
-        // Asynchronously stream enterprise analytics to Google BigQuery
+        // Asynchronously stream enterprise analytics to Azure Synapse Analytics
         // Tracking: Execution time, Token heuristics, and routing metrics
         BigQueryService.streamMetrics('alti_metrics', 'agent_executions', [{
             agent_name: orchestratorName,
@@ -1086,17 +1072,17 @@ If you require assistance from another specialized agent to complete your task, 
             timestamp: new Date().toISOString(),
             status: evalScore.isApproved ? 'SUCCESS' : 'REJECTED'
         }]).catch(err => {
-            logger.warn(`📊 [BigQuery] Telemetry drop: ${err.message}`);
+            logger.warn(`📊 [Synapse] Telemetry drop: ${err.message}`);
         });
 
-        // 12. Infinite ML Compute (Google Cloud TPU v5e Orchestration)
+        // 12. Infinite ML Compute (Azure ND H100 v5 VM Orchestration)
         if (prompt.toLowerCase().match(/(train|tensorflow|pytorch|machine learning|deep learning|fine-tune)/)) {
-            logger.info(`🚀 SwarmBrain: Deep Learning payload detected. Provisioning Google Cloud TPU v5e Pod...`);
+            logger.info(`🚀 SwarmBrain: Deep Learning payload detected. Provisioning Azure ND H100 v5 VM...`);
             const tpuNodeId = `swarm-tpu-pod-${Date.now()}`;
             const tpuOp = await tpuOrchestratorService.provisionDedicatedTpu(tpuNodeId);
             
             if (tpuOp) {
-                finalResult += `\n\n### 🚀 Autonomous TPU Hardware Provisioning\nI detected a massive Machine Learning workload. Standard CPU/GPU limits are insufficient. I have autonomously bypassed local constraints and provisioned a dedicated **Google Cloud TPU v5e Pod** (\`${tpuNodeId}\`) to accelerate this physical computation by 400x. The Swarm is now routing training epochs directly to the tensor cores.`;
+                finalResult += `\n\n### 🚀 Autonomous GPU Hardware Provisioning\nI detected a massive Machine Learning workload. Standard CPU/GPU limits are insufficient. I have autonomously bypassed local constraints and provisioned a dedicated **Azure ND H100 v5 VM** (\`${tpuNodeId}\`) to accelerate this physical computation by 400x. The Swarm is now routing training epochs directly to the GPU cores.`;
             }
         }
 

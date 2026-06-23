@@ -9,7 +9,7 @@ import * as React from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider as ReduxProvider, useDispatch } from "react-redux";
 import { SessionProvider, useSession, signIn } from "next-auth/react";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 import { store } from "@/store";
 import { getUserData } from "@/lib/user";
@@ -227,28 +227,24 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   }, [pathname, router]);
 
   return (
-    <GoogleOAuthProvider
-      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "mock-client-id"}
+    <SessionProvider
+      refetchInterval={0}
+      refetchOnWindowFocus={false}
+      session={tauriSession}
     >
-      <SessionProvider
-        refetchInterval={0}
-        refetchOnWindowFocus={false}
-        session={tauriSession}
-      >
-        <ReduxProvider store={store}>
-          <HeroUIProvider navigate={router.push}>
-            <Toaster position="top-center" reverseOrder={false} />
-            <NextThemesProvider {...themeProps}>
-              <TRPCProvider>
-                <UserFetcher>
-                  <ThemeSynchronizer />
-                  {children}
-                </UserFetcher>
-              </TRPCProvider>
-            </NextThemesProvider>
-          </HeroUIProvider>
-        </ReduxProvider>
-      </SessionProvider>
-    </GoogleOAuthProvider>
+      <ReduxProvider store={store}>
+        <HeroUIProvider navigate={router.push}>
+          <Toaster position="top-center" reverseOrder={false} />
+          <NextThemesProvider {...themeProps}>
+            <TRPCProvider>
+              <UserFetcher>
+                <ThemeSynchronizer />
+                {children}
+              </UserFetcher>
+            </TRPCProvider>
+          </NextThemesProvider>
+        </HeroUIProvider>
+      </ReduxProvider>
+    </SessionProvider>
   );
 }

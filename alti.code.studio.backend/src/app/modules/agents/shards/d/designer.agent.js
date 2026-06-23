@@ -10,8 +10,9 @@
  */
 
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
-import { logger } from '../../../../shared/logger.js';
-import { GeminiAiService } from '../gemini/gemini.service.js';
+import { logger } from '../../../../../shared/logger.js';
+import { GeminiAiService } from '../../../gemini/gemini.service.js';
+import { visionService } from '../../../senses/vision.service.js';
 import fetch from 'node-fetch';
 
 /**
@@ -151,6 +152,45 @@ export default function SimulatedFigmaComponent() {
             `.trim()
         };
     }
+
+    async _mockWriteToDisk(filePath, code) {
+        logger.info(`💾 DesignerAgent: Writing generated component code to ${filePath}`);
+        return true;
+    }
+
+    async designPixelPerfect(prompt, filePath, previewUrl, maxLoops = 5) {
+        let loops = 0;
+        let currentPrompt = prompt;
+        let code = '';
+        let success = false;
+
+        while (loops < maxLoops) {
+            code = await GeminiAiService.generateContent(
+                `Generate React component code for: ${currentPrompt}`
+            );
+
+            await this._mockWriteToDisk(filePath, code);
+
+            const screenshot = await visionService.capturePage(previewUrl);
+
+            const critique = await visionService.analyze(screenshot, currentPrompt);
+
+            loops++;
+
+            if (critique.trim() === 'APPROVE') {
+                success = true;
+                break;
+            } else {
+                currentPrompt = `Original request: ${prompt}\nPrevious code: ${code}\nCritique to address: ${critique}`;
+            }
+        }
+
+        return {
+            success,
+            loops,
+            code
+        };
+    }
 }
 
-export const designerAgent = Object.freeze(new DesignerAgent());
+export const designerAgent = new DesignerAgent();

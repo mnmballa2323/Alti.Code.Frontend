@@ -25,48 +25,48 @@ describe('Multi-Cloud Inference & Marketplace Procurement Integration Tests', ()
         }
     });
 
-    it('should successfully execute primary inference on Google Cloud (Vertex) and log GCP Marketplace Billing', async () => {
-        const prompt = 'Design a scalable multi-cloud microservices architecture.';
+    it('should successfully execute primary inference on Azure OpenAI Foundry and log Azure Marketplace Billing', async () => {
+        const prompt = 'Design a scalable Azure architecture.';
         const result = await multiCloudInferenceService.executeMultiCloudInference(prompt, 'jules', {
-            preferredProvider: 'gcp',
-            modelId: 'gemini-3.1-pro'
+            preferredProvider: 'azure',
+            modelId: 'gpt-5.5'
         });
 
         expect(result).toBeDefined();
-        expect(result.provider).toBe('gcp');
-        expect(result.venue).toBe('GOOGLE_CLOUD_VERTEX');
+        expect(result.provider).toBe('azure');
+        expect(result.venue).toBe('AZURE_FOUNDRY_MARKETPLACE');
         expect(result.content).toBeDefined();
 
-        // Verify the GCP marketplace transaction was logged securely
+        // Verify the Azure marketplace transaction was logged securely
         const logContent = await fs.readFile(testLogPath, 'utf-8');
         const transactions = logContent.trim().split('\n').map(JSON.parse);
         expect(transactions.length).toBe(1);
 
         const tx = transactions[0];
-        expect(tx.cloudProvider).toBe('gcp');
-        expect(tx.marketplaceSku).toBe('GCP-MKT-ALTI-SWARM-001');
-        expect(tx.contractId).toBe('gcp-contract-7718');
+        expect(tx.cloudProvider).toBe('azure');
+        expect(tx.marketplaceSku).toBe('AZ-FOUNDRY-ALTI-SAAS-109');
+        expect(tx.contractId).toBe('az-ea-foundry-3882');
         expect(tx.financials.totalCostUsd).toBeGreaterThan(0);
     });
 
-    it('should fall back to AWS Bedrock and log AWS Marketplace Billing when requested in the prompt', async () => {
+    it('should route AWS Bedrock prompts to Azure Foundry under Sovereign mode and log Azure Billing', async () => {
         const prompt = 'Use AWS Bedrock to build a custom agent loop.';
         const result = await hybridRouterService.executeAgent(prompt);
 
         expect(result).toBeDefined();
-        expect(result.venue).toBe('AWS_BEDROCK_MARKETPLACE');
-        expect(result.content).toContain('AWS BEDROCK');
+        expect(result.venue).toBe('AZURE_FOUNDRY_MARKETPLACE');
+        expect(result.content).toContain('AZURE FOUNDRY');
 
-        // Verify the AWS marketplace transaction was logged securely
+        // Verify the Azure marketplace transaction was logged securely
         const logContent = await fs.readFile(testLogPath, 'utf-8');
         const transactions = logContent.trim().split('\n').map(JSON.parse);
-        const tx = transactions.find(t => t.cloudProvider === 'aws');
+        const tx = transactions.find(t => t.cloudProvider === 'azure');
         expect(tx).toBeDefined();
-        expect(tx.marketplaceSku).toBe('AWS-MP-ALTI-BEDROCK-042');
-        expect(tx.contractId).toBe('aws-ent-bedrock-4912');
+        expect(tx.marketplaceSku).toBe('AZ-FOUNDRY-ALTI-SAAS-109');
+        expect(tx.contractId).toBe('az-ea-foundry-3882');
     });
 
-    it('should fall back to Azure Foundry and log Azure Marketplace Billing when requested in the prompt', async () => {
+    it('should route Azure prompts to Azure Foundry and log Azure Marketplace Billing', async () => {
         const prompt = 'Route this to Azure Foundry for visual analysis.';
         const result = await hybridRouterService.executeAgent(prompt);
 
@@ -83,8 +83,8 @@ describe('Multi-Cloud Inference & Marketplace Procurement Integration Tests', ()
         expect(tx.contractId).toBe('az-ea-foundry-3882');
     });
 
-    it('should accurately aggregate and summarize marketplace procurement metrics across all providers', async () => {
-        // Execute multiple multi-cloud requests to build history
+    it('should accurately aggregate and summarize marketplace procurement metrics solely on Azure', async () => {
+        // Execute multiple multi-cloud requests to build history (all will resolve to Azure)
         await multiCloudInferenceService.executeMultiCloudInference('Query 1', 'jules', { preferredProvider: 'gcp' });
         await multiCloudInferenceService.executeMultiCloudInference('Query 2', 'jules', { preferredProvider: 'aws' });
         await multiCloudInferenceService.executeMultiCloudInference('Query 3', 'jules', { preferredProvider: 'azure' });
@@ -92,9 +92,7 @@ describe('Multi-Cloud Inference & Marketplace Procurement Integration Tests', ()
         const stats = await multiCloudInferenceService.getMarketplaceProcurementStats();
 
         expect(stats).toBeDefined();
-        expect(stats.gcp.transactionCount).toBe(1);
-        expect(stats.aws.transactionCount).toBe(1);
-        expect(stats.azure.transactionCount).toBe(1);
+        expect(stats.azure.transactionCount).toBe(3);
         expect(stats.global.totalTransactions).toBe(3);
         expect(stats.global.totalBilledUsd).toBeGreaterThan(0);
         expect(stats.global.totalTokens).toBeGreaterThan(0);

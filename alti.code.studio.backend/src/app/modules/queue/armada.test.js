@@ -133,8 +133,6 @@ describe('The Armada — 43-Agent Registry', () => {
         expect(names).toContain('apiDesign');
 
         // Tier 6: Cloud
-        expect(names).toContain('aws');
-        expect(names).toContain('gcp');
         expect(names).toContain('azure');
 
         // Tier 7: Language
@@ -191,7 +189,7 @@ describe('Capability-Based Agent Discovery', () => {
         const pythonAgents = agentRegistry.findByCapability('python');
         expect(pythonAgents.length).toBeGreaterThan(0);
 
-        const awsAgents = agentRegistry.findByCapability('aws');
-        expect(awsAgents.length).toBeGreaterThan(0);
+        const azureAgents = agentRegistry.findByCapability('azure');
+        expect(azureAgents.length).toBeGreaterThan(0);
     });
 });

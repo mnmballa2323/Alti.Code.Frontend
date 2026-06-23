@@ -5,33 +5,10 @@
  * https://opensource.org/licenses/MIT
  */
 
-// 🚀 Google Cloud APM: Microsecond-Level Tracing & Profiling
-import traceAgent from '@google-cloud/trace-agent';
-import profiler from '@google-cloud/profiler';
-import { ErrorReporting } from '@google-cloud/error-reporting';
-
 // 🛡️ The Intelligence Vanguard: Universal ReDoS Immunity
 import RE2 from 're2';
 // global.RegExp = RE2; // Disabling global override because RE2 does not support lookarounds used by Express's path-to-regexp
 console.log('🛡️ [V8 Engine Patch] Global RegExp override disabled to prevent path-to-regexp crash.');
-
-try {
-    if (process.env.NODE_ENV === 'production' || process.env.ENABLE_GCP_APM === 'true') {
-        // Initialize Error Reporting first to catch global exceptions
-        const errors = new ErrorReporting();
-        
-        traceAgent.start();
-        profiler.start({
-            serviceContext: {
-                service: 'alti-code-studio-backend',
-                version: '1.0.2',
-            },
-        });
-        console.log('✅ Google Cloud APM (Trace, Profiler, Error Reporting) successfully initialized.');
-    }
-} catch (err) {
-    console.warn('⚠️ Google Cloud APM could not be started:', err.message);
-}
 
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -217,7 +194,7 @@ import { acousticWorkspaceRouter } from './src/app/modules/agents/acoustic_works
 acousticWorkspaceRouter(app);
 
 import { dlpMiddleware } from './src/app/middlewares/dlp.middleware.js';
-import { CloudLoggingService } from './src/app/modules/googleCloud/logging.service.js';
+import { CloudLoggingService } from './src/app/modules/azureCloud/azureLogging.service.js';
 import { autoProfilerService } from './src/app/modules/qa/auto_profiler.service.js';
 import onFinished from 'on-finished';
 

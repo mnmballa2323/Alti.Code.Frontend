@@ -63,8 +63,6 @@ const WORKER_MANIFEST = {
     apiDesign: { path: '../apiDesignAgent/apiDesign.worker.js', processor: 'apiDesignWorkerProcessor' },
 
     // ── TIER 6: CLOUD-SPECIFIC ──
-    aws: { path: '../cloudAgents/aws.worker.js', processor: 'awsWorkerProcessor' },
-    gcp: { path: '../cloudAgents/gcp.worker.js', processor: 'gcpWorkerProcessor' },
     azure: { path: '../cloudAgents/azure.worker.js', processor: 'azureWorkerProcessor' },
 
     // ── TIER 7: LANGUAGE-SPECIFIC ──
@@ -107,7 +105,7 @@ class WorkerFactory {
      * Boot all workers — Armada (file-based) + Legion (auto-generated).
      */
     async init() {
-        if (process.env.DISABLE_REDIS === 'true') {
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') {
             logger.warn('⚠️ WorkerFactory: Redis disabled via env. Bypassing worker initialization.');
             return;
         }

@@ -97,18 +97,18 @@ describe('Milestone v52.0.0 Feature Tests', () => {
         });
     });
 
-    describe('Pillar 3: OpenStack deploy script dry-run validation', () => {
-        it('should validate air-gapped Magnum local registry preloading and template updates in dry-run', () => {
+    describe('Pillar 3: Azure deploy script dry-run validation', () => {
+        it('should validate air-gapped AKS local registry preloading and template updates in dry-run', () => {
             const rootPath = path.resolve(process.cwd(), '..');
             const result = execSync(
-                `bash ./deploy_openstack.sh --tier enterprise --mode k8s --air-gapped --dry-run`,
+                `bash ./deploy_enterprise.sh --deployment-option classified --dry-run`,
                 { encoding: 'utf8', cwd: rootPath }
             );
 
-            expect(result).toContain('[Air-Gapped] Preloading Magnum cluster system images');
-            expect(result).toContain('Preloading and retagging k8s.gcr.io/kube-apiserver');
-            expect(result).toContain('Preloading and retagging k8s.gcr.io/coredns');
-            expect(result).toContain('[Air-Gapped] Overriding Magnum COE cluster template configuration');
+            expect(result).toContain('[Classified] Preloading AKS cluster system images');
+            expect(result).toContain('Preloading and retagging mcr.microsoft.com/oss/kubernetes/kube-apiserver');
+            expect(result).toContain('Preloading and retagging mcr.microsoft.com/oss/kubernetes/coredns');
+            expect(result).toContain('[Classified] Overriding AKS cluster template configuration');
         });
     });
 });

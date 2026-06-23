@@ -51,7 +51,7 @@ export const neo4jGraphQLService = {
             
             await server.start();
             
-            const { iapService } = await import('../modules/googleCloud/iap.service.js');
+            const { iapService } = await import('../modules/auth/azureAd.service.js');
             
             app.use(
                 '/graphql',

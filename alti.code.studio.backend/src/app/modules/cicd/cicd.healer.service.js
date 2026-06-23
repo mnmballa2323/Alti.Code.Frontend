@@ -1,4 +1,4 @@
-import { VertexAI } from '@google-cloud/vertexai';
+// Removed VertexAI import
 import { logger } from '../../../logger/logger.service.js';
 
 /**
@@ -8,10 +8,7 @@ import { logger } from '../../../logger/logger.service.js';
  */
 class CICDHealerService {
     constructor() {
-        logger.info(`[CICDHealerService] Initializing GCP Vertex AI (Gemini 1.5 Pro)...`);
-        // Simulated initialization for Tri-Cloud adherence
-        this.vertexAi = new VertexAI({ project: 'alti-code-studio', location: 'us-central1' });
-        this.generativeModel = this.vertexAi.getGenerativeModel({ model: 'gemini-3.1-pro-preview-0409' });
+        logger.info('[CICDHealerService] Initialized Azure Healer.');
     }
 
     /**

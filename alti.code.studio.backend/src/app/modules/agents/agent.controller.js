@@ -11,7 +11,7 @@ import sendResponse from '../../../shared/sendResponse.js';
 import { graphOrchestrator } from './graph.orchestrator.js';
 import { logger } from '../../../shared/logger.js';
 import { puppeteerAgent } from './puppeteer.agent.js';
-import { cloudBatchService } from '../googleCloud/batch.service.js';
+import { cloudBatchService } from '../azureCloud/azureBatch.service.js';
 import { hermesAgentBridge } from './hermes.agent.js';
 
 const startMission = catchAsync(async (req, res) => {

@@ -27,9 +27,9 @@ class GitlabDocsService {
         `🦊 [GitLab Docs] Local RAG confidence low/empty. Falling back to live web search grounding...`,
       );
       try {
-        const { GoogleSearchService } =
-          await import('../googleSearch/googleSearch.service.js');
-        const webResult = await GoogleSearchService.getSearchContext(query);
+        const { AzureSearchService } =
+          await import('../azureSearch/azureSearch.service.js');
+        const webResult = await AzureSearchService.getSearchContext(query);
         return `[Live Web Grounding Fallback]\n\n${webResult}`;
       } catch (error) {
         logger.warn(
@@ -125,10 +125,9 @@ RULES:
 - If no candidate fits, return { "agentId": "NONE" }
 - Return raw JSON only, no markdown.`;
 
-          const { GoogleGenAiService } =
-            await import('../googleGenAi/googleGenAi.service.js');
+          const { azureGenAiService: AzureGenAiService } = await import('../ai/azureGenAi.service.js');
           const modelName = 'gemini-3.1-pro';
-          const result = await GoogleGenAiService.generateContent(
+          const result = await AzureGenAiService.generateContent(
             prompt,
             modelName,
             0.2,

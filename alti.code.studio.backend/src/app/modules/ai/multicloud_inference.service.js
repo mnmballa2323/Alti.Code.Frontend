@@ -5,8 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
-import { vertexService } from './vertex.service.js';
 import { VercelAiService } from './vercel_ai.service.js';
 import { logger } from '../../../shared/logger.js';
 import { swarmTraceService } from '../telemetry/trace.service.js';
@@ -18,18 +16,6 @@ class MultiCloudInferenceService {
     constructor() {
         this.billingLogPath = path.join(process.cwd(), 'logs', 'marketplace_billing.log');
         this.marketplaceSkus = {
-            gcp: {
-                sku: 'GCP-MKT-ALTI-SWARM-001',
-                pricePerKPrompt: 0.0015,
-                pricePerKCompletion: 0.0045,
-                contractId: 'gcp-contract-7718'
-            },
-            aws: {
-                sku: 'AWS-MP-ALTI-BEDROCK-042',
-                pricePerKPrompt: 0.0030,
-                pricePerKCompletion: 0.0150,
-                contractId: 'aws-ent-bedrock-4912'
-            },
             azure: {
                 sku: 'AZ-FOUNDRY-ALTI-SAAS-109',
                 pricePerKPrompt: 0.0025,
@@ -40,48 +26,39 @@ class MultiCloudInferenceService {
     }
 
     /**
-     * Executes robust multi-cloud inference with high-availability failover.
-     * Integrates Google Cloud (Core), AWS Bedrock, and Azure Foundry.
+     * Executes robust Azure Sovereign Cloud inference.
+     * Supports Azure Commercial (IL2), Azure Government (IL4/IL5), Azure Government Secret (IL6), and Azure Government Top Secret (IL6 Air-Gap).
      */
     async executeMultiCloudInference(prompt, activeAgent = 'jules', options = {}) {
-        const primaryProvider = options.preferredProvider || 'gcp';
-        const modelId = options.modelId || 'gemini-3.1-pro';
+        const primaryProvider = 'azure';
+        const modelId = options.modelId || 'gpt-5.5';
         
         if (process.env.AIR_GAPPED_MODE === 'true') {
-            logger.warn(`🛡️ [Multi-Cloud Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`);
+            logger.warn(`🛡️ [Azure Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`);
             return await this._executeAirGapped(prompt, activeAgent, modelId);
         }
 
-        logger.info(`🌐 [Multi-Cloud Inference] Initiating inference for Agent [${activeAgent}] on Primary Provider [${primaryProvider.toUpperCase()}]`);
+        logger.info(`🌐 [Azure Sovereign Inference] Initiating inference for Agent [${activeAgent}] on Microsoft Azure OpenAI Foundry`);
 
-        const providersQueue = [primaryProvider, ...['gcp', 'aws', 'azure', 'vercel-ai'].filter(p => p !== primaryProvider)];
+        const providersQueue = ['azure'];
         let lastError = null;
         let resultObj = null;
 
         for (const provider of providersQueue) {
             try {
-                if (provider === 'gcp') {
-                    resultObj = await this._executeGcp(prompt, activeAgent, modelId);
-                    break;
-                } else if (provider === 'aws') {
-                    resultObj = await this._executeAwsBedrock(prompt, activeAgent, modelId);
-                    break;
-                } else if (provider === 'azure') {
+                if (provider === 'azure') {
                     resultObj = await this._executeAzureFoundry(prompt, activeAgent, modelId);
-                    break;
-                } else if (provider === 'vercel-ai') {
-                    resultObj = await this._executeVercelAi(prompt, activeAgent, modelId);
                     break;
                 }
             } catch (err) {
-                logger.warn(`⚠️ [Multi-Cloud Inference] Provider [${provider.toUpperCase()}] failed: ${err.message}. Falling back to next in queue.`);
+                logger.warn(`⚠️ [Azure Sovereign Inference] Azure provider failed: ${err.message}`);
                 lastError = err;
             }
         }
 
         if (!resultObj) {
-            logger.error(`❌ [Multi-Cloud Inference] All cloud providers exhausted. Inference has failed completely.`);
-            throw new Error(`MultiCloudInference failed: All providers failed. Last error: ${lastError?.message}`);
+            logger.error(`❌ [Azure Sovereign Inference] Azure provider exhausted. Inference has failed completely.`);
+            throw new Error(`Azure Sovereign Inference failed. Last error: ${lastError?.message}`);
         }
 
         // Trace generation if spanId is present
@@ -112,7 +89,7 @@ class MultiCloudInferenceService {
      * Executes inference entirely locally for highly sensitive deployments (Defense/Intel)
      */
     async _executeAirGapped(prompt, activeAgent, modelId) {
-        logger.info(`🔒 [Multi-Cloud Inference] Executing Air-Gapped Local Inference on Ollama...`);
+        logger.info(`🔒 [Azure Sovereign Inference] Executing Air-Gapped Local Inference on Ollama...`);
         const startTime = Date.now();
         let text = '';
         let latency = 0;
@@ -132,7 +109,7 @@ class MultiCloudInferenceService {
             text = data.response;
             latency = Date.now() - startTime;
         } catch (e) {
-            logger.error(`❌ [Multi-Cloud Inference] Air-gapped local model failed: ${e.message}`);
+            logger.error(`❌ [Azure Sovereign Inference] Air-gapped local model failed: ${e.message}`);
             throw new Error('Critical failure: Air-gapped fallback is unavailable and public clouds are disabled.');
         }
 
@@ -144,148 +121,13 @@ class MultiCloudInferenceService {
         };
     }
 
-    /**
-     * Executes inference on Google Cloud Vertex AI (Core Platform)
-     */
-    async _executeGcp(prompt, activeAgent, modelId, options = {}) {
-        logger.info(`☁️ [Multi-Cloud Inference] Executing on Google Cloud Vertex AI using model ${modelId}...`);
-        const startTime = Date.now();
-        let text = '';
-        let latency = 0;
 
-        const gcpUrl = process.env.GCP_INFERENCE_URL || 'http://localhost:5003/api/v1/gcp/invoke';
-        try {
-            logger.info(`Sending GCP request to microservice: ${gcpUrl}`);
-            const res = await fetch(gcpUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    prompt, 
-                    model: modelId,
-                    credentials: options.vaultCredentials ? {
-                        gcpProjectId: options.vaultCredentials.gcpProjectId,
-                        gcpClientEmail: options.vaultCredentials.gcpClientEmail,
-                        gcpPrivateKey: options.vaultCredentials.gcpPrivateKey
-                    } : null
-                }),
-                signal: AbortSignal.timeout(15000)
-            });
-            if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
-            const data = await res.json();
-            text = data.content;
-            latency = Date.now() - startTime;
-        } catch (e) {
-            logger.warn(`GCP Microservice unavailable (${e.message}). Falling back to local SDK...`);
-            const gcpProjectId = options.vaultCredentials?.gcpProjectId || process.env.GCP_PROJECT_ID;
-            const gcpClientEmail = options.vaultCredentials?.gcpClientEmail || process.env.GCP_CLIENT_EMAIL;
-            const gcpPrivateKey = options.vaultCredentials?.gcpPrivateKey || process.env.GCP_PRIVATE_KEY;
-
-            text = await vertexService.generateContent(prompt, { 
-                agentName: activeAgent,
-                gcpProjectId,
-                gcpClientEmail,
-                gcpPrivateKey
-            });
-            latency = Date.now() - startTime;
-        }
-
-        const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-        const completionTokens = Math.max(1, Math.ceil(text.length / 4));
-        await this._recordMarketplaceBilling('gcp', promptTokens, completionTokens, modelId, latency);
-
-        return {
-            content: text,
-            venue: 'GOOGLE_CLOUD_VERTEX',
-            provider: 'gcp',
-            model: modelId,
-            latencyMs: latency
-        };
-    }
-
-    /**
-     * Executes inference on AWS Bedrock (Marketplace Integrated)
-     */
-    async _executeAwsBedrock(prompt, activeAgent, modelId, options = {}) {
-        logger.info(`☁️ [Multi-Cloud Inference] Executing on AWS Bedrock using model ${modelId}...`);
-        const startTime = Date.now();
-        let text = '';
-        let latency = 0;
-
-        const awsUrl = process.env.AWS_INFERENCE_URL || 'http://localhost:5001/api/v1/aws/invoke';
-        try {
-            logger.info(`Sending AWS request to microservice: ${awsUrl}`);
-            const res = await fetch(awsUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    prompt, 
-                    model: modelId,
-                    credentials: options.vaultCredentials ? {
-                        awsAccessKeyId: options.vaultCredentials.awsAccessKeyId,
-                        awsSecretAccessKey: options.vaultCredentials.awsSecretAccessKey,
-                        awsRegion: options.vaultCredentials.awsRegion
-                    } : null
-                }),
-                signal: AbortSignal.timeout(15000)
-            });
-            if (!res.ok) throw new Error(`Microservice responded with status ${res.status}`);
-            const data = await res.json();
-            text = data.content;
-            latency = Date.now() - startTime;
-        } catch (e) {
-            logger.warn(`AWS Microservice unavailable (${e.message}). Falling back to local Bedrock client...`);
-            let awsAccessKeyId = options.vaultCredentials?.awsAccessKeyId || process.env.AWS_ACCESS_KEY_ID;
-            let awsSecretAccessKey = options.vaultCredentials?.awsSecretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
-            let awsRegion = options.vaultCredentials?.awsRegion || process.env.AWS_REGION || 'us-east-1';
-
-            if (awsAccessKeyId && awsSecretAccessKey) {
-                try {
-                    const endpoint = `https://bedrock-runtime.${awsRegion}.amazonaws.com/model/${modelId}/invoke`;
-                    const body = JSON.stringify({
-                        prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
-                        max_tokens_to_sample: 4096,
-                        temperature: 0.1
-                    });
-                    const res = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `AWS4-HMAC-SHA256 Credential=${awsAccessKeyId}/...`
-                        },
-                        body
-                    });
-                    if (!res.ok) throw new Error(`AWS Bedrock REST API returned status ${res.status}`);
-                    const data = await res.json();
-                    text = data.completion;
-                } catch (err) {
-                    logger.error(`[AWS Bedrock Client] API call failed: ${err.message}. Falling back to Bedrock simulated mode.`);
-                    text = this._getSimulatedResponse(prompt, 'AWS Bedrock Anthropic Claude 3.5 Sonnet');
-                }
-            } else {
-                logger.warn('⚠️ No AWS Bedrock credentials found. Executing in secure Bedrock Marketplace simulated mode.');
-                text = this._getSimulatedResponse(prompt, 'AWS Bedrock Anthropic Claude 3.5 Sonnet');
-            }
-            latency = Date.now() - startTime;
-        }
-
-        const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-        const completionTokens = Math.max(1, Math.ceil(text.length / 4));
-        await this._recordMarketplaceBilling('aws', promptTokens, completionTokens, modelId, latency);
-
-        return {
-            content: text,
-            venue: 'AWS_BEDROCK_MARKETPLACE',
-            provider: 'aws',
-            model: modelId,
-            latencyMs: latency
-        };
-    }
 
     /**
      * Executes inference on Azure Foundry (Marketplace Integrated)
      */
     async _executeAzureFoundry(prompt, activeAgent, modelId, options = {}) {
-        logger.info(`☁️ [Multi-Cloud Inference] Executing on Azure AI Studio Foundry using model ${modelId}...`);
+        logger.info(`☁️ [Azure Sovereign Inference] Executing on Azure AI Studio Foundry using model ${modelId}...`);
         const startTime = Date.now();
         let text = '';
         let latency = 0;
@@ -362,19 +204,19 @@ class MultiCloudInferenceService {
      * Executes inference using Vercel AI SDK
      */
     async _executeVercelAi(prompt, activeAgent, modelId, options = {}) {
-        logger.info(`⚡ [Multi-Cloud Inference] Executing via Vercel AI SDK using model ${modelId}...`);
+        logger.info(`⚡ [Sovereign Inference] Executing via Azure OpenAI using model ${modelId}...`);
         const startTime = Date.now();
         const res = await VercelAiService.generate(prompt, { model: modelId });
         const latency = Date.now() - startTime;
 
         const promptTokens = res.usage?.promptTokens || Math.max(1, Math.ceil(prompt.length / 4));
         const completionTokens = res.usage?.completionTokens || Math.max(1, Math.ceil(res.text.length / 4));
-        await this._recordMarketplaceBilling('gcp', promptTokens, completionTokens, modelId, latency);
+        await this._recordMarketplaceBilling('azure', promptTokens, completionTokens, modelId, latency);
 
         return {
             content: res.text,
-            venue: 'VERCEL_AI_SDK',
-            provider: 'vercel-ai',
+            venue: 'AZURE_OPENAI',
+            provider: 'azure-openai',
             model: modelId,
             latencyMs: latency,
             tokens: { prompt: promptTokens, completion: completionTokens }
@@ -429,8 +271,6 @@ class MultiCloudInferenceService {
      */
     async getMarketplaceProcurementStats() {
         const stats = {
-            gcp: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
-            aws: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
             azure: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
             global: { totalBilledUsd: 0, totalTokens: 0, totalTransactions: 0 }
         };
@@ -457,8 +297,6 @@ class MultiCloudInferenceService {
         }
 
         // Format floats
-        stats.gcp.totalBilledUsd = parseFloat(stats.gcp.totalBilledUsd.toFixed(4));
-        stats.aws.totalBilledUsd = parseFloat(stats.aws.totalBilledUsd.toFixed(4));
         stats.azure.totalBilledUsd = parseFloat(stats.azure.totalBilledUsd.toFixed(4));
         stats.global.totalBilledUsd = parseFloat(stats.global.totalBilledUsd.toFixed(4));
 

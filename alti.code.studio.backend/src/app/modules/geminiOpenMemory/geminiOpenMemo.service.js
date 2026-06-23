@@ -18,7 +18,7 @@ import { paymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
 import { mcpClientService } from '../mcp/mcp.client.js';
 
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 
 import { RedisChatMessageHistory } from '@langchain/community/stores/message/ioredis';
 import { redisCacheService } from '../memory/redis.service.js';
@@ -138,12 +138,12 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     }
 
     // Inject active user tools from local MCP servers
-    let activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
+    let activeModel = AzureGenAiService.getGenerativeModel('gemini-3.1-pro');
     try {
       const connectedTools = await mcpClientService.getAllTools();
       if (connectedTools && connectedTools.length > 0) {
         // Local MCP tool integration requires advanced Vertex setup, falling back to base model for now
-        activeModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro');
+        activeModel = AzureGenAiService.getGenerativeModel('gemini-3.1-pro');
         logger.info(`🔌 Injected ${connectedTools.length} local MCP tools into active LLM session for user ${userId}`);
       }
     } catch(e) {

@@ -1,19 +1,19 @@
 import { Level } from 'level';
-import { KeyManagementServiceClient } from '@google-cloud/kms';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import path from 'path';
 import fs from 'fs';
 import config from '../../../../config/index.js';
+import { azureSecretManagerService } from '../azureCloud/azureSecretManager.service.js';
 
 /**
- * Google LevelDB Local Disk Cache Service (with KMS Envelope Encryption).
+ * Azure LevelDB Local Disk Cache Service (with Key Vault Envelope Encryption).
  * Caching proprietary enterprise ASTs to local disk is a massive security vulnerability.
- * This service caches AST mappings to LevelDB, but uses Google Cloud KMS to implement
+ * This service caches AST mappings to LevelDB, but uses Azure Key Vault to implement
  * true Envelope Encryption. Every local AST chunk is encrypted with a unique local DEK,
- * which is mathematically wrapped by a centralized Google KMS KEK.
+ * which is mathematically wrapped by a centralized Azure Key Vault KEK.
  */
-class GoogleLevelDbService {
+class AzureLevelDbService {
     constructor() {
         try {
             const dbPath = path.join(process.cwd(), '.alti_swarm_cache');
@@ -22,24 +22,32 @@ class GoogleLevelDbService {
             }
 
             this.db = new Level(dbPath, { valueEncoding: 'json' });
-            this.kmsClient = new KeyManagementServiceClient();
+            this.secretManager = azureSecretManagerService;
             
-            // Assume the KEK is pre-configured via Terraform
-            this.keyName = this.kmsClient.cryptoKeyPath(
-                config.gcp.project_id,
-                config.gcp.location || 'global',
-                config.gcp.key_ring || 'alti-swarm-keyring',
-                config.gcp.crypto_key || 'cache-kek'
-            );
+            // Central KEK key name
+            this.keyName = config.azure?.key_vault_kek || 'cache-kek';
 
-            logger.info('💽 [LevelDB+KMS] Google LevelDB Local AST Cache with Envelope Encryption initialized.');
+            logger.info('💽 [LevelDB+KeyVault] Azure LevelDB Local AST Cache with Envelope Encryption initialized.');
         } catch (error) {
-            logger.warn('⚠️ [LevelDB+KMS] Could not initialize LevelDB or KMS Client.');
+            logger.warn('⚠️ [LevelDB+KeyVault] Could not initialize LevelDB or Azure Key Vault KEK.');
         }
     }
 
     /**
-     * Retrieves an encrypted AST payload and unwraps the DEK via Google KMS.
+     * Helper to get or derive the central KEK key
+     */
+    async _getKek() {
+        const kekBase64 = await this.secretManager.getSecret(this.keyName);
+        if (kekBase64) {
+            return Buffer.from(kekBase64, 'base64');
+        }
+        // Fallback key derived from application secret
+        const appSecret = process.env.AZURE_CLIENT_SECRET || 'local-fallback-kek-seed-value-32bytes!';
+        return crypto.createHash('sha256').update(appSecret).digest();
+    }
+
+    /**
+     * Retrieves an encrypted AST payload and unwraps the DEK.
      * @param {string} astKey 
      */
     async getAstCache(astKey) {
@@ -47,14 +55,15 @@ class GoogleLevelDbService {
             const data = await this.db.get(astKey);
             if (!data) return null;
 
-            logger.info(`🔐 [LevelDB+KMS] Retrieving and unwrapping local AST cache...`);
+            logger.info(`🔐 [LevelDB+KeyVault] Retrieving and unwrapping local AST cache...`);
             
-            // 1. Unwrap the DEK using Google Cloud KMS
-            const [decryptResponse] = await this.kmsClient.decrypt({
-                name: this.keyName,
-                ciphertext: Buffer.from(data.wrappedDek, 'base64')
-            });
-            const dek = decryptResponse.plaintext;
+            const kek = await this._getKek();
+            
+            // 1. Unwrap the DEK using the KEK (AES Key Wrap / Decrypt)
+            const wrappedDekBuffer = Buffer.from(data.wrappedDek, 'base64');
+            const decipherKek = crypto.createDecipheriv('aes-256-ecb', kek, null);
+            let dek = decipherKek.update(wrappedDekBuffer);
+            dek = Buffer.concat([dek, decipherKek.final()]);
 
             // 2. Decrypt the local payload using the unwrapped DEK
             const decipher = crypto.createDecipheriv('aes-256-gcm', dek, Buffer.from(data.iv, 'base64'));
@@ -62,11 +71,11 @@ class GoogleLevelDbService {
             let decrypted = decipher.update(data.ciphertext, 'base64', 'utf8');
             decrypted += decipher.final('utf8');
 
-            logger.info(`💽 [LevelDB+KMS] Envelope Decryption successful.`);
+            logger.info(`💽 [LevelDB+KeyVault] Envelope Decryption successful.`);
             return JSON.parse(decrypted);
         } catch (error) {
             if (error.code === 'LEVEL_NOT_FOUND') return null;
-            logger.error(`❌ [LevelDB+KMS] Failed to read/decrypt from LevelDB:`, error.message);
+            logger.error(`❌ [LevelDB+KeyVault] Failed to read/decrypt from LevelDB:`, error.message);
             return null;
         }
     }
@@ -78,7 +87,7 @@ class GoogleLevelDbService {
      */
     async setAstCache(astKey, astPayload) {
         try {
-            logger.info(`🔐 [LevelDB+KMS] Generating DEK and wrapping via KMS for local AST cache...`);
+            logger.info(`🔐 [LevelDB+KeyVault] Generating DEK and wrapping via Key Vault for local AST cache...`);
             
             // 1. Generate a local DEK (Data Encryption Key)
             const dek = crypto.randomBytes(32);
@@ -91,27 +100,27 @@ class GoogleLevelDbService {
             ciphertext += cipher.final('base64');
             const authTag = cipher.getAuthTag().toString('base64');
 
-            // 3. Wrap the DEK using Google Cloud KMS (the KEK)
-            const [encryptResponse] = await this.kmsClient.encrypt({
-                name: this.keyName,
-                plaintext: dek
-            });
-            const wrappedDek = encryptResponse.ciphertext.toString('base64');
+            // 3. Wrap the DEK using Key Vault (the KEK)
+            const kek = await this._getKek();
+            const cipherKek = crypto.createCipheriv('aes-256-ecb', kek, null);
+            let wrappedDekBuffer = cipherKek.update(dek);
+            wrappedDekBuffer = Buffer.concat([wrappedDekBuffer, cipherKek.final()]);
+            const wrappedDek = wrappedDekBuffer.toString('base64');
 
-            // 4. Store the encrypted payload + wrapped DEK to LevelDB
-            const storedData = {
+            await this.db.put(astKey, {
                 wrappedDek,
-                ciphertext,
                 iv: iv.toString('base64'),
-                authTag
-            };
+                authTag,
+                ciphertext
+            });
 
-            await this.db.put(astKey, storedData);
-            logger.info(`💽 [LevelDB+KMS] AST securely cached to physical disk with Envelope Encryption.`);
+            logger.info(`✅ [LevelDB+KeyVault] Local AST cached and envelope-encrypted successfully.`);
+            return true;
         } catch (error) {
-            logger.error(`❌ [LevelDB+KMS] Failed to encrypt/write to LevelDB:`, error.message);
+            logger.error(`❌ [LevelDB+KeyVault] Failed to encrypt/write to LevelDB:`, error.message);
+            return false;
         }
     }
 }
 
-export const localCacheService = new GoogleLevelDbService();
+export const localCacheService = new AzureLevelDbService();

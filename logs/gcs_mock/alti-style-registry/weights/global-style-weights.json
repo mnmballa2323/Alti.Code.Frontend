@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "enforced_human_styles": [
+    "Ensure all functions use standard arrow syntax style",
+    "Bypass local loops in DB query"
+  ]
+}

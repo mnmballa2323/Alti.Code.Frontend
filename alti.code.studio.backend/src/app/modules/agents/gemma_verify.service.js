@@ -1,32 +1,17 @@
-import { PredictionServiceClient } from '@google-cloud/aiplatform';
 import { logger } from '../../../shared/logger.js';
-import config from '../../../../config/index.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 
 /**
- * Google Gemma Swarm Verification Service (Vertex Model Garden).
+ * Azure Phi Swarm Verification Service (Azure ML Model Garden).
  * A single model checking its own RAG retrieval leads to confirmation bias.
- * The Swarm autonomously queries a private, dedicated instance of Google's 
- * open-source 'Gemma-27B-it' (deployed from Vertex Model Garden). 
- * Gemma acts as a hostile "Red Team" auditor, aggressively challenging 
- * the Swarm's Gemini RAG retrievals to mathematically guarantee context accuracy.
+ * The Swarm autonomously queries a private, dedicated instance of Microsoft's
+ * open-source 'Phi-3' (deployed from Azure ML Model Garden).
+ * Phi acts as a hostile "Red Team" auditor, aggressively challenging
+ * the Swarm's Azure RAG retrievals to mathematically guarantee context accuracy.
  */
-class GoogleGemmaVerificationService {
+class AzurePhiVerificationService {
     constructor() {
-        try {
-            const apiEndpoint = `${config.gcp.location || 'us-central1'}-aiplatform.googleapis.com`;
-            this.client = new PredictionServiceClient({ apiEndpoint });
-            
-            // Assume the Gemma model is deployed to a Vertex Endpoint via Terraform
-            this.endpointName = this.client.endpointPath(
-                config.gcp.project_id,
-                config.gcp.location || 'us-central1',
-                config.gcp.gemma_endpoint_id || 'gemma-red-team'
-            );
-            
-            logger.info('🛡️ [Gemma Red-Team] Google Vertex Model Garden Verification initialized.');
-        } catch (error) {
-            logger.warn('⚠️ [Gemma Red-Team] Could not initialize Vertex Prediction Client.');
-        }
+        logger.info('🛡️ [Phi Red-Team] Azure ML Model Garden Verification initialized.');
     }
 
     /**
@@ -35,38 +20,28 @@ class GoogleGemmaVerificationService {
      * @param {string} retrievedContext - The AST that the primary Swarm retrieved
      */
     async hostileVerifyContext(originalQuery, retrievedContext) {
-        logger.info(`🛡️ [Gemma Red-Team] Swarm is initiating hostile Red-Team verification via Gemma-27B...`);
+        logger.info(`🛡️ [Phi Red-Team] Swarm is initiating hostile Red-Team verification via Phi-3...`);
         
         try {
             const prompt = `You are a hostile security and context auditor. The primary Swarm model retrieved the following code context to solve this query: "${originalQuery}". 
             Context: ${retrievedContext}
             Critically audit this context. Is it missing dependencies? Is it retrieving the wrong file? Return "PASS" if mathematically perfect, or detail the exact failure.`;
 
-            const request = {
-                endpoint: this.endpointName,
-                instances: [{ prompt: prompt }],
-                parameters: {
-                    temperature: 0.1, // Low temperature for deterministic hostile auditing
-                    maxOutputTokens: 256,
-                }
-            };
-
-            const [response] = await this.client.predict(request);
-            const auditResult = response.predictions[0].content || response.predictions[0];
+            const auditResult = await azureSovereignCompatService.generateContent(prompt, { agentName: 'phi_auditor' });
 
             if (auditResult.includes("PASS")) {
-                logger.info(`✅ [Gemma Red-Team] Verification PASSED. Context is mathematically sound.`);
+                logger.info(`✅ [Phi Red-Team] Verification PASSED. Context is mathematically sound.`);
                 return { isVerified: true, feedback: null };
             } else {
-                logger.warn(`⚠️ [Gemma Red-Team] Verification FAILED. Gemma intercepted a RAG hallucination: ${auditResult}`);
+                logger.warn(`⚠️ [Phi Red-Team] Verification FAILED. Phi intercepted a RAG hallucination: ${auditResult}`);
                 return { isVerified: false, feedback: auditResult };
             }
         } catch (error) {
-            logger.error(`❌ [Gemma Red-Team] Hostile verification failed:`, error.message);
+            logger.error(`❌ [Phi Red-Team] Hostile verification failed:`, error.message);
             // Fail open if the Red-Team model is down
             return { isVerified: true, feedback: null };
         }
     }
 }
 
-export const gemmaVerifyService = new GoogleGemmaVerificationService();
+export const gemmaVerifyService = new AzurePhiVerificationService();

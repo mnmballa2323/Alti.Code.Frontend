@@ -1,5 +1,5 @@
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
-import { GoogleSearchService } from '../googleSearch/googleSearch.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { AzureSearchService } from '../azureSearch/azureSearch.service.js';
 import { ragService } from '../memory/rag.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
@@ -9,7 +9,7 @@ class ResearchService {
      * Executes an autonomous "Deep Research" workflow.
      * 1. Analyzes the objective.
      * 2. Formulates highly specific search queries based on the requested depth.
-     * 3. Executes parallel Google Search Grounding to surf the live internet.
+     * 3. Executes parallel Azure Search Grounding to surf the live internet.
      * 4. Integrates internal RAG context (for 'exhaustive' depth).
      * 5. Synthesizes a comprehensive, citation-rich markdown report.
      * 
@@ -29,7 +29,7 @@ class ResearchService {
 
         // 1. Generate Search Queries
         logger.info(`🔬 [Deep Research] Phase 1: Formulating search strategies...`);
-        const queryPrompt = `You are an expert technical researcher. Formulate exactly ${numQueries} highly specific Google search queries to investigate the following objective: "${objective}".
+        const queryPrompt = `You are an expert technical researcher. Formulate exactly ${numQueries} highly specific Bing search queries to investigate the following objective: "${objective}".
         
         Rules:
         - Return ONLY a JSON array of strings. No markdown formatting.
@@ -38,7 +38,7 @@ class ResearchService {
         let searchQueries = [objective];
         try {
             if (numQueries > 1) {
-                const queryResponse = await GoogleGenAiService.generateContent(queryPrompt, 'gemini-2.5-flash', 0.2);
+                const queryResponse = await AzureGenAiService.generateContent(queryPrompt, 'gemini-2.5-flash', 0.2);
                 const cleaned = queryResponse.content.replace(/^```json?\n?/m, '').replace(/\n?```$/m, '').trim();
                 searchQueries = JSON.parse(cleaned);
                 if (!Array.isArray(searchQueries)) throw new Error('Not an array');
@@ -52,9 +52,9 @@ class ResearchService {
 
         logger.info(`🔬 [Deep Research] Phase 2: Surfing the live web for ${searchQueries.length} queries in parallel...`);
         
-        // 2. Execute Google Search Grounding in Parallel
+        // 2. Execute Azure Search Grounding in Parallel
         const searchPromises = searchQueries.map(async (query) => {
-            const context = await GoogleSearchService.getSearchContext(query);
+            const context = await AzureSearchService.getSearchContext(query);
             return { query, context };
         });
 
@@ -112,7 +112,7 @@ class ResearchService {
         - NEVER hallucinate. Ground your findings STRICTLY in the provided intelligence context.
         - Ensure flawless Markdown formatting.`;
 
-        const reportResponse = await GoogleGenAiService.generateContent(synthesisPrompt, 'gemini-3.1-pro', 0.2);
+        const reportResponse = await AzureGenAiService.generateContent(synthesisPrompt, 'gemini-3.1-pro', 0.2);
         
         const durationMs = Date.now() - startTime;
         logger.info(`✅ [Deep Research] Completed successfully in ${durationMs}ms`);

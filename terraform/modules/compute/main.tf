@@ -1,43 +1,83 @@
-resource "google_compute_instance" "app_server" {
-  name         = "alti-code-studio-backend-${var.environment}"
-  machine_type = var.machine_type
-  zone         = var.zone
-  project      = var.project_id
+# ==============================================================================
+# ALTI CODE STUDIO: Standard Azure VM Provisioning Module
+# ==============================================================================
 
-  tags = ["http-server", "https-server"]
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
     }
-  }
-
-  network_interface {
-    network = "default"
-
-    access_config {
-      # Ephemeral public IP
-    }
-  }
-
-  metadata_startup_script = <<-EOF
-    #! /bin/bash
-    echo "Installing Docker..."
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
-    
-    echo "Starting Docker container..."
-    # In a real scenario, this would pull from GCR (gcr.io/PROJECT_ID/image)
-    docker run -d -p 80:5000 --name backend inso-backend:latest
-  EOF
-  
-  metadata = {
-    environment = var.environment
-    managed_by  = "terraform"
   }
 }
 
-variable "project_id" {}
-variable "environment" {}
-variable "machine_type" {}
-variable "zone" {}
+resource "azurerm_network_interface" "nic" {
+  name                = "alti-node-nic-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "node" {
+  name                = "alti-node-${var.environment}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  size                = var.vm_size
+  admin_username      = var.admin_username
+  network_interface_ids = [
+    azurerm_network_interface.nic.id,
+  ]
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file(var.ssh_public_key_path)
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 128
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = {
+    Environment = var.environment
+  }
+}
+
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" { type = string }
+variable "location" { type = string }
+variable "resource_group_name" { type = string }
+variable "vm_size" { type = string }
+variable "subnet_id" { type = string }
+variable "admin_username" { type = string }
+variable "ssh_public_key_path" { type = string }
+
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "vm_id" {
+  value = azurerm_linux_virtual_machine.node.id
+}
+
+output "private_ip" {
+  value = azurerm_network_interface.nic.private_ip_address
+}

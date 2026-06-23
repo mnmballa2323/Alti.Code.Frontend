@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { vectorStoreService } from './vector.store.js';
 import { ragService } from './rag.service.js';
-import { vertexService } from '../ai/vertex.service.js';
-import { vertexVectorSearch } from '../googleCloud/vectorSearch.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { vertexVectorSearch } from '../azureCloud/azureServices.service.js';
 
-vi.mock('../ai/vertex.service.js');
-vi.mock('../googleCloud/vectorSearch.service.js', () => ({
+vi.mock('../ai/azureSovereignCompat.service.js');
+vi.mock('../azureCloud/azureServices.service.js', () => ({
     vertexVectorSearch: {
         upsertEmbeddings: vi.fn(),
         queryContext: vi.fn()
@@ -40,27 +40,27 @@ describe('Global Enterprise Memory (AlloyDB/pgvector)', () => {
     });
 
     it('ragService should query the vector store and synthesize a response via Gemini', async () => {
-        vertexService.getEmbeddings.mockResolvedValue([0.1, 0.2]);
+        azureSovereignCompatService.getEmbeddings.mockResolvedValue([0.1, 0.2]);
         vertexVectorSearch.queryContext.mockResolvedValue([{ id: 'test_id' }]);
         vectorStoreService.getByIds.mockResolvedValue(['Fragment 1 representing code context']);
-        vertexService.generateContent.mockResolvedValue('Synthesized response based on context.');
+        azureSovereignCompatService.generateContent.mockResolvedValue('Synthesized response based on context.');
 
         const response = await ragService.query('What is the architecture?');
 
         expect(vertexVectorSearch.queryContext).toHaveBeenCalledWith([0.1, 0.2], 5);
         expect(vectorStoreService.getByIds).toHaveBeenCalledWith(['test_id'], 'default_enterprise_tenant');
-        expect(vertexService.generateContent).toHaveBeenCalled();
+        expect(azureSovereignCompatService.generateContent).toHaveBeenCalled();
         expect(response).toBe('Synthesized response based on context.');
     });
 
     it('ragService should return a fallback message if no context is found', async () => {
-        vertexService.getEmbeddings.mockResolvedValue([0.1, 0.2]);
+        azureSovereignCompatService.getEmbeddings.mockResolvedValue([0.1, 0.2]);
         vertexVectorSearch.queryContext.mockResolvedValue([]);
 
         const response = await ragService.query('Is there anything here?');
 
         expect(vertexVectorSearch.queryContext).toHaveBeenCalledWith([0.1, 0.2], 5);
-        expect(vertexService.generateContent).not.toHaveBeenCalled();
+        expect(azureSovereignCompatService.generateContent).not.toHaveBeenCalled();
         expect(response).toBe('No relevant context found in Enterprise Memory to answer the query.');
     });
 });

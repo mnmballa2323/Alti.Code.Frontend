@@ -16,8 +16,8 @@ class AcousticWorkspaceService {
         logger.info(`🎙️ AcousticWorkspace: Received audio stream (${audioBuffer.byteLength} bytes). Processing via Google Cloud STT...`);
 
         try {
-            // Unmocked: Using Google Cloud Speech-to-Text V2 API
-            const { speechClient } = await import('../googleCloud/speech.service.js');
+            // Unmocked: Using Azure Cognitive Services Speech API
+            const { speechClient } = await import('../azureCloud/azureSpeech.service.js');
             
             const audioBytes = audioBuffer.toString('base64');
 

@@ -1,5 +1,5 @@
 export const SAAS_MOCKS = [
-  // 1. Developer Platforms & Version Control
+
   {
     name: "GitHub",
     slug: "mcp_github",
@@ -50,23 +50,6 @@ export const SAAS_MOCKS = [
     slug: "mcp_svn",
     icon: "logos:subversion",
   },
-
-  // 3. Cloud & Hosting Providers
-  {
-    name: "AWS EC2",
-    slug: "mcp_aws_ec2",
-    icon: "logos:aws",
-  },
-  {
-    name: "AWS Lambda",
-    slug: "mcp_aws_lambda",
-    icon: "logos:aws-lambda",
-  },
-  {
-    name: "AWS S3",
-    slug: "mcp_aws_s3",
-    icon: "logos:aws-s3",
-  },
   {
     name: "Azure Virtual Machines",
     slug: "mcp_azure_vm",
@@ -76,16 +59,6 @@ export const SAAS_MOCKS = [
     name: "Azure Blob Storage",
     slug: "mcp_azure_blob",
     icon: "logos:azure-icon",
-  },
-  {
-    name: "Google Cloud SQL",
-    slug: "mcp_toolbox_cloudsql",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud Dataproc",
-    slug: "mcp_toolbox_dataproc",
-    icon: "logos:google-cloud",
   },
   {
     name: "Vercel",
@@ -127,8 +100,6 @@ export const SAAS_MOCKS = [
     slug: "mcp_flyio",
     icon: "logos:fly",
   },
-
-  // 4. DevOps, CI/CD & Infrastructure
   {
     name: "Docker",
     slug: "mcp_docker",
@@ -189,8 +160,6 @@ export const SAAS_MOCKS = [
     slug: "mcp_prometheus",
     icon: "logos:prometheus",
   },
-
-  // 5. Monitoring, APM & Observability
   {
     name: "Sentry",
     slug: "mcp_sentry",
@@ -237,22 +206,10 @@ export const SAAS_MOCKS = [
     icon: "logos:kibana",
   },
   {
-    name: "Google Cloud Logging",
-    slug: "mcp_toolbox_logging",
-    icon: "logos:google-cloud",
-  },
-  {
-    name: "Google Cloud Monitoring",
-    slug: "mcp_toolbox_monitoring",
-    icon: "logos:google-cloud",
-  },
-  {
     name: "OpenTelemetry",
     slug: "mcp_opentelemetry",
     icon: "logos:opentelemetry-icon",
   },
-
-  // 6. AI Infrastructure & Vector Databases
   {
     name: "Pinecone",
     slug: "mcp_pinecone",
@@ -296,18 +253,6 @@ export const SAAS_MOCKS = [
     icon: "solar:document-bold-duotone",
   },
   {
-    name: "Gemini Developer API",
-    slug: "mcp_gemini",
-    icon: "logos:google-gemini",
-  },
-  {
-    name: "Vertex AI",
-    slug: "mcp_vertexai",
-    icon: "logos:google-cloud",
-  },
-
-  // 7. Security, Compliance & Identity
-  {
     name: "AbuseIPDB",
     slug: "mcp_abuseipdb",
     icon: "logos:abuseipdb-icon",
@@ -347,8 +292,6 @@ export const SAAS_MOCKS = [
     slug: "mcp_okta",
     icon: "logos:okta-icon",
   },
-
-  // 8. Developer Utilities, Testing & Collab
   {
     name: "Puppeteer Browser",
     slug: "mcp_puppeteer",
@@ -430,11 +373,6 @@ export const SAAS_MOCKS = [
     icon: "logos:trello",
   },
   {
-    name: "AWS KB Retrieval",
-    slug: "mcp_aws_kb_retrieval",
-    icon: "logos:aws",
-  },
-  {
     name: "GitHub PR Reviewer",
     slug: "mcp_github_pr_reviewer",
     icon: "mdi:github",
@@ -443,21 +381,6 @@ export const SAAS_MOCKS = [
     name: "GitLab Runners",
     slug: "mcp_gitlab_runners",
     icon: "logos:gitlab",
-  },
-  {
-    name: "AWS ECS / Fargate",
-    slug: "mcp_aws_ecs",
-    icon: "logos:aws-ecs",
-  },
-  {
-    name: "AWS CloudFormation / CDK",
-    slug: "mcp_aws_cdk",
-    icon: "logos:aws",
-  },
-  {
-    name: "Google Kubernetes Engine (GKE)",
-    slug: "mcp_gcp_gke",
-    icon: "logos:google-cloud",
   },
   {
     name: "Azure Kubernetes Service (AKS)",
@@ -645,11 +568,6 @@ export const SAAS_MOCKS = [
     icon: "logos:ngrok",
   },
   {
-    name: "LocalStack AWS Emulator",
-    slug: "mcp_localstack",
-    icon: "logos:localstack",
-  },
-  {
     name: "MinIO S3 Compatible Object Store",
     slug: "mcp_minio",
     icon: "logos:minio",
@@ -713,11 +631,6 @@ export const SAAS_MOCKS = [
     name: "Lighthouse Performance Auditor",
     slug: "mcp_lighthouse",
     icon: "logos:lighthouse",
-  },
-  {
-    name: "Google PageSpeed Insights",
-    slug: "mcp_pagespeed_insights",
-    icon: "logos:google",
   },
   {
     name: "Semgrep Static Code Analyzer",

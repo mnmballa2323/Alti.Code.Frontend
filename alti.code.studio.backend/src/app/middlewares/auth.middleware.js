@@ -10,22 +10,20 @@ import ApiError from '../../errors/ApiError.js';
 import { jwtHelpers } from '../helpers/jwtHelpers.js';
 import config from '../../../config/index.js';
 import { logger } from '../../shared/logger.js';
-import { iapService } from '../modules/googleCloud/iap.service.js';
+// Removed Google Cloud IAP import
 
 const auth = (...requiredRoles) => async (req, res, next) => {
     try {
-        // 🛡️ BEYONDCORP ZERO-TRUST INTEGRATION
-        const iapJwt = req.headers['x-goog-iap-jwt-assertion'];
+        // 🛡️ AZURE ZERO-TRUST INTEGRATION
+        const azurePrincipal = req.headers['x-ms-client-principal-name'];
         let verifiedUser = null;
 
-        if (iapJwt) {
-            try {
-                // Cryptographically verify Google IAP Identity
-                verifiedUser = await iapService.verifyIAPTokenDirectly(iapJwt);
-                verifiedUser.role = verifiedUser.role || 'USER'; 
-            } catch (iapError) {
-                throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid BeyondCorp IAP Identity');
-            }
+        if (azurePrincipal) {
+            verifiedUser = {
+                email: azurePrincipal,
+                role: 'USER',
+                subject: req.headers['x-ms-client-principal-id'] || 'unknown-id'
+            };
         } else {
             // Fallback to legacy Local Bearer JWT
             const authHeader = req.headers.authorization;

@@ -7,7 +7,7 @@
 
 import pg from 'pg';
 const { Pool } = pg;
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 
@@ -64,7 +64,7 @@ class VectorStoreService {
       );
     }
     try {
-      const embedding = await vertexService.getEmbeddings(text);
+      const embedding = await azureSovereignCompatService.getEmbeddings(text);
       // UUID prevents ID collision under concurrent add() calls
       const id = `doc_${crypto.randomUUID()}`;
 
@@ -102,7 +102,7 @@ class VectorStoreService {
       return { documents: [], metadatas: [], ids: [], distances: [] };
     }
     try {
-      const embedding = await vertexService.getEmbeddings(query);
+      const embedding = await azureSovereignCompatService.getEmbeddings(query);
 
       const { rows } = await this.pool.query(
         'SELECT id, metadata, document, (embedding <-> $1) as distance FROM alti_memory WHERE tenant_id = $2 ORDER BY embedding <-> $1 LIMIT $3',

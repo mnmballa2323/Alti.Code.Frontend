@@ -44,7 +44,7 @@ const ROLES_DATABASE = [
     id: "cloud-native-architect",
     title: "Cloud Native Architect",
     description: "Specializes in designing highly scalable, resilient cloud-native systems using Kubernetes, service meshes, serverless constructs, and multi-region network topologies.",
-    triggers: ["kubernetes", "cloud native", "docker", "serverless", "istio", "multi-region", "vpc", "aws", "gcp"],
+    triggers: ["kubernetes", "cloud native", "docker", "serverless", "istio", "multi-region", "vpc", "azure", "azure_gov"],
     category: "architecture",
     checklist: [
       "Configure appropriate container resource requests and limits to avoid OOMKilled events.",
@@ -158,10 +158,10 @@ function generateOfflineSpecialty(existingIds) {
   // Ultimate fallback
   const randNum = Math.floor(Math.random() * 1000000);
   return {
-    id: `custom-gcp-cs-agent-${randNum}`,
-    title: `Custom GCP CS Agent ${randNum}`,
-    description: `Specialized Computer Science and Systems Design AI Agent built on Google Cloud Platform.`,
-    triggers: ["custom", "google cloud", "systems design"],
+    id: `custom-azure-cs-agent-${randNum}`,
+    title: `Custom Azure CS Agent ${randNum}`,
+    description: `Specialized Computer Science and Systems Design AI Agent built on Microsoft Azure.`,
+    triggers: ["custom", "azure", "systems design"],
     category: "engineering",
     checklist: ["Verify cloud resource allocation meets quotas.", "Audit system logs for exceptions."],
     antipatterns: [{ issue: "Lack of Observability", why: "Hides runtime failures." }],
@@ -169,9 +169,9 @@ function generateOfflineSpecialty(existingIds) {
   };
 }
 
-// REST call to Google Gemini API (utilizes Google Cloud AI Platform)
-async function fetchGeminiSpecialAgent(existingIds, apiKey) {
-  const prompt = `You are a Principal AI Agent Architect working on a Google Cloud Platform developer ecosystem.
+// REST call to Azure OpenAI API (utilizes Azure AI Studio / Azure OpenAI Foundry)
+async function fetchAzureSpecialAgent(existingIds, apiKey) {
+  const prompt = `You are a Principal AI Agent Architect working on a Microsoft Azure developer ecosystem.
 We have a local system that registers specialized AI agent skill files (.md formats) to handle advanced computer science and software tech roles.
 
 Here is the list of already generated agent IDs:
@@ -196,25 +196,33 @@ Return the result strictly as a raw JSON object (WITHOUT markdown blocks, code f
 }`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const endpoint = process.env.ARM_ENDPOINT || 'https://dummy-endpoint.openai.azure.com';
+    const apiVersion = '2024-02-15-preview';
+    const deployment = process.env.AZURE_MODEL_NAME || 'gpt-5.5';
+    const baseEndpoint = endpoint.replace(/\/$/, '');
+    const url = `${baseEndpoint}/openai/deployments/${deployment}/chat/completions?api-version=${apiVersion}`;
+
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'api-key': apiKey || process.env.ARM_CLIENT_SECRET || 'dummy-key'
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json" }
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: "json_object" }
       })
     });
 
     if (!response.ok) {
-      throw new Error(`Google Gemini API responded with status ${response.status}`);
+      throw new Error(`Azure OpenAI API responded with status ${response.status}`);
     }
 
     const data = await response.json();
-    const rawText = data.candidates[0].content.parts[0].text.trim();
+    const rawText = data.choices[0].message.content.trim();
     return JSON.parse(rawText);
   } catch (err) {
-    console.error("⚠️ Failed to call Google Gemini API, falling back to offline combinator:", err.message);
+    console.error("⚠️ Failed to call Azure OpenAI API, falling back to offline combinator:", err.message);
     return generateOfflineSpecialty(existingIds);
   }
 }
@@ -364,12 +372,12 @@ async function run() {
 
     // Choose 10 new agents
     const nextRoles = [];
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.ARM_CLIENT_SECRET || process.env.AZURE_OPENAI_API_KEY;
 
     if (apiKey) {
-      console.log("Using Google Cloud Gemini API to dynamically generate premium agents...");
+      console.log("Using Azure OpenAI API to dynamically generate premium agents...");
     } else {
-      console.log("No GEMINI_API_KEY found, using Google Cloud Offline Combinator Matrix...");
+      console.log("No Azure credentials found, using Azure Offline Combinator Matrix...");
     }
 
     // First try database
@@ -381,7 +389,7 @@ async function run() {
     while (nextRoles.length < 10) {
       let role;
       if (apiKey) {
-        role = await fetchGeminiSpecialAgent(activeExistingIds, apiKey);
+        role = await fetchAzureSpecialAgent(activeExistingIds, apiKey);
       } else {
         role = generateOfflineSpecialty(activeExistingIds);
       }

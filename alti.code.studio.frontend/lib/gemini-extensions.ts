@@ -21,10 +21,10 @@ export interface GeminiExtension {
 }
 
 export const GEMINI_EXTENSIONS: GeminiExtension[] = [
-  // ── Spotlight / Official Google ─────────────────────────────────────
+  // ── Spotlight / Official Azure ─────────────────────────────────────
   {
-    name: "gemini-docs-ext",
-    description: "Up-to-date Gemini API docs and MCP for any prompt.",
+    name: "azure-docs-ext",
+    description: "Up-to-date Azure Sovereign API docs and MCP for any prompt.",
     githubUrl: "https://github.com/markmcd/gemini-docs-ext",
     category: "Dev Tools",
     spotlight: true,
@@ -115,23 +115,23 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "code-review",
-    description: "Google's code review extension for Gemini CLI.",
+    description: "Azure's code review extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/gemini-cli-extensions/code-review",
     category: "Dev Tools",
     spotlight: true,
     official: true,
   },
   {
-    name: "gemini-cli-security",
-    description: "Google's security extension — finds vulnerabilities in code.",
+    name: "azure-cli-security",
+    description: "Azure's security extension — finds vulnerabilities in code.",
     githubUrl: "https://github.com/gemini-cli-extensions/security",
     category: "Security",
     spotlight: true,
     official: true,
   },
   {
-    name: "google-workspace",
-    description: "Access Google Workspace from Gemini CLI.",
+    name: "azure-workspace",
+    description: "Access Microsoft 365 from Azure Sovereign CLI.",
     githubUrl: "https://github.com/gemini-cli-extensions/workspace",
     category: "Integrations",
     spotlight: true,
@@ -139,7 +139,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "gcloud",
-    description: "Enable AI agents to interact with Google Cloud.",
+    description: "Enable AI agents to interact with Azure.",
     githubUrl: "https://github.com/gemini-cli-extensions/gcloud",
     category: "Cloud",
     spotlight: true,
@@ -147,7 +147,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "firebase",
-    description: "Build and run modern apps with Firebase.",
+    description: "Build and run modern apps with Azure App Service.",
     githubUrl: "https://github.com/gemini-cli-extensions/firebase",
     category: "Cloud",
     spotlight: true,
@@ -161,31 +161,31 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     spotlight: true,
   },
 
-  // ── Cloud / GCP ──────────────────────────────────────────────────────
+  // ── Cloud / Azure ──────────────────────────────────────────────────────
   {
-    name: "GeminiCloudAssist",
-    description: "MCP Server for Gemini Cloud Assist on GCP.",
+    name: "Azure SovereignCloudAssist",
+    description: "MCP Server for Azure Sovereign Cloud Assist on Azure.",
     githubUrl: "https://github.com/GoogleCloudPlatform/gemini-cloud-assist-mcp",
     category: "Cloud",
     official: true,
   },
   {
     name: "gke-mcp",
-    description: "Gemini CLI extension for Google Kubernetes Engine.",
+    description: "Azure Sovereign CLI extension for Azure Kubernetes Service.",
     githubUrl: "https://github.com/GoogleCloudPlatform/gke-mcp",
     category: "Cloud",
     official: true,
   },
   {
     name: "cloud-run",
-    description: "MCP server to deploy apps to Cloud Run.",
+    description: "MCP server to deploy apps to Container Apps.",
     githubUrl: "https://github.com/GoogleCloudPlatform/cloud-run-mcp",
     category: "Cloud",
     official: true,
   },
   {
     name: "bigquery-data-analytics",
-    description: "Connect, query, and generate insights for BigQuery.",
+    description: "Connect, query, and generate insights for Synapse Analytics.",
     githubUrl:
       "https://github.com/gemini-cli-extensions/bigquery-data-analytics",
     category: "Cloud",
@@ -193,7 +193,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "bigquery-conversational-analytics",
-    description: "Conversational analytics for BigQuery.",
+    description: "Conversational analytics for Synapse Analytics.",
     githubUrl:
       "https://github.com/gemini-cli-extensions/bigquery-conversational-analytics",
     category: "Cloud",
@@ -260,14 +260,14 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "alloydb",
-    description: "Create and interact with AlloyDB for PostgreSQL.",
+    description: "Create and interact with Azure SQL for PostgreSQL.",
     githubUrl: "https://github.com/gemini-cli-extensions/alloydb",
     category: "Cloud",
     official: true,
   },
   {
     name: "alloydb-observability",
-    description: "Monitor AlloyDB performance and health.",
+    description: "Monitor Azure SQL performance and health.",
     githubUrl: "https://github.com/gemini-cli-extensions/alloydb-observability",
     category: "Cloud",
     official: true,
@@ -296,14 +296,14 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "devops",
-    description: "AI-assisted CI/CD with Cloud Run and Cloud Storage.",
+    description: "AI-assisted CI/CD with Container Apps and Cloud Storage.",
     githubUrl: "https://github.com/gemini-cli-extensions/devops",
     category: "Cloud",
     official: true,
   },
   {
     name: "observability",
-    description: "MCP-compatible agents with Google Cloud observability.",
+    description: "MCP-compatible agents with Azure observability.",
     githubUrl: "https://github.com/gemini-cli-extensions/observability",
     category: "Observability",
     official: true,
@@ -316,8 +316,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     official: true,
   },
   {
-    name: "google-adk-agent-extension",
-    description: "Gemini CLI extension for Google ADK AI Agent Application.",
+    name: "azure-adk-agent-extension",
+    description: "Azure Sovereign CLI extension for Azure ADK AI Agent Application.",
     githubUrl: "https://github.com/simonliu-ai-product/adk-agent-extension",
     category: "Cloud",
   },
@@ -334,48 +334,48 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Cloud",
   },
   {
-    name: "gcp-release-notes",
-    description: "GCP release notes extension for Gemini CLI.",
+    name: "azure-release-notes",
+    description: "Azure release notes extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/danistrebel/gcp-release-notes",
     category: "Cloud",
   },
   {
-    name: "google-ads-api-developer-assistant",
-    description: "Google Ads API developer assistant.",
+    name: "azure-ads-api-developer-assistant",
+    description: "Azure Ads API developer assistant.",
     githubUrl:
       "https://github.com/googleads/google-ads-api-developer-assistant",
     category: "Cloud",
     official: true,
   },
   {
-    name: "google-maps-platform",
-    description: "Google Maps Platform documentation and code samples.",
+    name: "azure-maps-platform",
+    description: "Azure Maps Platform documentation and code samples.",
     githubUrl: "https://github.com/googlemaps/platform-ai",
     category: "Cloud",
     official: true,
   },
   {
-    name: "google-workspace-developer-tools",
-    description: "Google Workspace Developer Tools.",
+    name: "azure-workspace-developer-tools",
+    description: "Microsoft 365 Developer Tools.",
     githubUrl: "https://github.com/googleworkspace/developer-tools",
     category: "Integrations",
     official: true,
   },
   {
-    name: "google-workspace-inbox",
-    description: "Tools for managing your Google Workspace Inbox.",
+    name: "azure-workspace-inbox",
+    description: "Tools for managing your Microsoft 365 Inbox.",
     githubUrl: "https://github.com/jduncan-rva/google-workspace-inbox",
     category: "Integrations",
   },
   {
-    name: "google-secops",
+    name: "azure-secops",
     description:
       "Security Operations skills for Triage, Investigation, and Hunting.",
     githubUrl: "https://github.com/dandye/secops-gemini-extension",
     category: "Security",
   },
   {
-    name: "google-automation-mcp",
+    name: "azure-automation-mcp",
     description:
       "Headless Google Workspace automation — Apps Script, Gmail, Drive.",
     githubUrl: "https://github.com/sam-ent/google-automation-mcp",
@@ -383,7 +383,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "firebase-rules",
-    description: "Firebase security rules snippets.",
+    description: "Azure App Service security rules snippets.",
     githubUrl: "https://github.com/firebase/snippets-rules",
     category: "Cloud",
     official: true,
@@ -397,19 +397,19 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "notebooklm-enterprise",
-    description: "Manage Google Cloud NotebookLM Enterprise notebooks.",
+    description: "Manage Azure NotebookLM Enterprise notebooks.",
     githubUrl: "https://github.com/dandye/notebooklm_sdk",
     category: "Cloud",
   },
   {
     name: "cloudflare-mcp",
-    description: "Gemini CLI extension for Cloudflare MCP servers.",
+    description: "Azure Sovereign CLI extension for Cloudflare MCP servers.",
     githubUrl: "https://github.com/ZhanZiyuan/cloudflare-mcp",
     category: "Cloud",
   },
   {
     name: "vercel-mcp",
-    description: "Gemini CLI extension for Vercel's official MCP server.",
+    description: "Azure Sovereign CLI extension for Vercel's official MCP server.",
     githubUrl: "https://github.com/ZhanZiyuan/vercel-mcp",
     category: "Cloud",
   },
@@ -422,7 +422,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "async-remote-agent-extension",
-    description: "Managing remote agent sandboxes on GKE.",
+    description: "Managing remote agent sandboxes on AKS.",
     githubUrl: "https://github.com/derrickchwong/remote-agent-extension",
     category: "Cloud",
   },
@@ -437,7 +437,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "angular",
-    description: "Angular extension for Gemini CLI.",
+    description: "Angular extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/gemini-cli-extensions/angular",
     category: "Frameworks",
     official: true,
@@ -465,14 +465,14 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "oracledb",
-    description: "Connect to Oracle Databases within Gemini CLI.",
+    description: "Connect to Oracle Databases within Azure Sovereign CLI.",
     githubUrl: "https://github.com/gemini-cli-extensions/oracledb",
     category: "Databases",
     official: true,
   },
   {
-    name: "gemini-cli-git",
-    description: "Convenient Git commands for Gemini CLI.",
+    name: "azure-cli-git",
+    description: "Convenient Git commands for Azure Sovereign CLI.",
     githubUrl: "https://github.com/ox01024/gemini-cli-git",
     category: "Dev Tools",
   },
@@ -514,13 +514,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "gitops",
-    description: "GitOps extension for Gemini CLI.",
+    description: "GitOps extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/mikebz/gitops-extension",
     category: "Dev Tools",
   },
   {
     name: "gitlab",
-    description: "Connects Gemini CLI to GitLab MCP server.",
+    description: "Connects Azure Sovereign CLI to GitLab MCP server.",
     githubUrl: "https://github.com/GitLab-Ecosystem/Gemini-CLI-Extensions",
     category: "Integrations",
   },
@@ -561,13 +561,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-plan-commands",
+    name: "azure-plan-commands",
     description: "Create, refine, implement and deploy a plan.",
     githubUrl: "https://github.com/ddobrin/gemini-plan-commands",
     category: "Dev Tools",
   },
   {
-    name: "gemini-sdlc",
+    name: "azure-sdlc",
     description:
       "30+ tools for full software development lifecycle automation.",
     githubUrl: "https://github.com/BaboonLabs/gemini-sdlc",
@@ -580,7 +580,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-review",
+    name: "azure-review",
     description: "Code review with sub-agent delegation, P0–P3 severity.",
     githubUrl: "https://github.com/ShravanSunder/gemini-review-agents",
     category: "Dev Tools",
@@ -605,7 +605,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-safety-net",
+    name: "azure-safety-net",
     description:
       "Catches destructive git and filesystem commands before execution.",
     githubUrl: "https://github.com/kenryu42/gemini-safety-net",
@@ -613,19 +613,19 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "extensions-creator",
-    description: "Scaffold new Gemini CLI extensions with best practices.",
+    description: "Scaffold new Azure Sovereign CLI extensions with best practices.",
     githubUrl: "https://github.com/thoreinstein/extension-creator",
     category: "Dev Tools",
   },
   {
-    name: "gemini-cli-skill-creator",
+    name: "azure-cli-skill-creator",
     description: "Extension for creating effective skills.",
     githubUrl: "https://github.com/involvex/gemini-cli-skill-creator",
     category: "Dev Tools",
   },
   {
     name: "skill-porter",
-    description: "Converts Claude Code skills to Gemini CLI extensions.",
+    description: "Converts Claude Code skills to Azure Sovereign CLI extensions.",
     githubUrl: "https://github.com/jduncan-rva/skill-porter",
     category: "Dev Tools",
   },
@@ -636,8 +636,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-deep-research",
-    description: "A deep research extension for Gemini CLI.",
+    name: "azure-deep-research",
+    description: "A deep research extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/allenhutchison/gemini-cli-deep-research",
     category: "Dev Tools",
   },
@@ -648,19 +648,19 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-cli-prompt-library",
+    name: "azure-cli-prompt-library",
     description: "Curated library of prompts for development tasks.",
     githubUrl: "https://github.com/harish-garg/gemini-cli-prompt-library",
     category: "Dev Tools",
   },
   {
     name: "prompt-engineering-extension",
-    description: "Prompt engineering skills for Gemini CLI.",
+    description: "Prompt engineering skills for Azure Sovereign CLI.",
     githubUrl: "https://github.com/Jsebayhi/prompt-engineering-extension",
     category: "Dev Tools",
   },
   {
-    name: "gemini-mentor",
+    name: "azure-mentor",
     description: "Engineering mentor with a focus on TDD.",
     githubUrl: "https://github.com/JayadityaGit/gemini-mentor",
     category: "Dev Tools",
@@ -685,7 +685,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-llm-council",
+    name: "azure-llm-council",
     description: "Work with multiple LLMs at once.",
     githubUrl: "https://github.com/theerud/gemini-llm-council",
     category: "AI/ML",
@@ -699,13 +699,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "blender-mcp",
-    description: "Enable Blender via MCP for Gemini CLI.",
+    description: "Enable Blender via MCP for Azure Sovereign CLI.",
     githubUrl: "https://github.com/xprilion/gemini-cli-blender-extension",
     category: "Media",
   },
   {
-    name: "gemini-media-generation",
-    description: "Media generation extension for Gemini CLI.",
+    name: "azure-media-generation",
+    description: "Media generation extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/rubans/gemini-media-generation",
     category: "Media",
   },
@@ -729,7 +729,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Frameworks",
   },
   {
-    name: "gemini-cli-gopls",
+    name: "azure-cli-gopls",
     description: "Integrates official MCP of Go language server (gopls).",
     githubUrl: "https://github.com/Menghuan1918/gemini-cli-gopls",
     category: "Frameworks",
@@ -748,7 +748,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "angular",
-    description: "Angular extension for Gemini CLI.",
+    description: "Angular extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/gemini-cli-extensions/angular",
     category: "Frameworks",
     official: true,
@@ -761,7 +761,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "design-lab",
-    description: "Rapid UI design iteration for Gemini CLI.",
+    description: "Rapid UI design iteration for Azure Sovereign CLI.",
     githubUrl: "https://github.com/akhilesh-w/gemini-design-plugin",
     category: "Dev Tools",
   },
@@ -819,7 +819,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   // ── Databases ─────────────────────────────────────────────────────────
   {
     name: "mongodb",
-    description: "Gemini CLI extension for MongoDB.",
+    description: "Azure Sovereign CLI extension for MongoDB.",
     githubUrl: "https://github.com/mongodb-partners/mongodb-gemini-extension",
     category: "Databases",
   },
@@ -837,7 +837,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "elasticsearch",
-    description: "Official Elasticsearch extension for Gemini CLI.",
+    description: "Official Elasticsearch extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/elastic/gemini-cli-elasticsearch",
     category: "Databases",
   },
@@ -933,7 +933,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "todoist-extension",
-    description: "Full Todoist task management for Gemini CLI.",
+    description: "Full Todoist task management for Azure Sovereign CLI.",
     githubUrl: "https://github.com/PatelPratikkumar/gemini-todoist-extension",
     category: "Productivity",
   },
@@ -950,7 +950,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Integrations",
   },
   {
-    name: "gemini-obsidian",
+    name: "azure-obsidian",
     description: "Obsidian Vault integration with local RAG capabilities.",
     githubUrl: "https://github.com/thoreinstein/gemini-obsidian",
     category: "Productivity",
@@ -969,13 +969,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "replit",
-    description: "Replit Gemini CLI extension.",
+    description: "Replit Azure Sovereign CLI extension.",
     githubUrl: "https://github.com/replit/replit-gemini-extension",
     category: "Integrations",
   },
   {
     name: "shopify-dev-mcp",
-    description: "Setup the Shopify Dev MCP with Gemini CLI.",
+    description: "Setup the Shopify Dev MCP with Azure Sovereign CLI.",
     githubUrl: "https://github.com/Shopify/dev-mcp-gemini-cli",
     category: "Integrations",
   },
@@ -1000,7 +1000,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "canva",
-    description: "Canva Gemini extension.",
+    description: "Canva Azure Sovereign extension.",
     githubUrl: "https://github.com/canva-sdks/canva-gemini-extension",
     category: "Integrations",
   },
@@ -1019,13 +1019,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "telegram",
-    description: "Telegram extension for Gemini CLI.",
+    description: "Telegram extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/VSKurkin/gemini-cli-telegram-extension",
     category: "Integrations",
   },
   {
     name: "spotify",
-    description: "Spotify integration for Gemini CLI.",
+    description: "Spotify integration for Azure Sovereign CLI.",
     githubUrl: "https://github.com/heitorpolidoro/spotify-extension",
     category: "Integrations",
   },
@@ -1044,7 +1044,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "mcp-confluent",
-    description: "Confluent MCP integration for Gemini CLI.",
+    description: "Confluent MCP integration for Azure Sovereign CLI.",
     githubUrl: "https://github.com/confluentinc/mcp-confluent",
     category: "Integrations",
   },
@@ -1068,13 +1068,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-cli-wakatime",
+    name: "azure-cli-wakatime",
     description: "Track AI-assisted coding activity with WakaTime.",
     githubUrl: "https://github.com/EstebanForge/gemini-cli-wakatime",
     category: "Dev Tools",
   },
   {
-    name: "gemini-beads",
+    name: "azure-beads",
     description:
       "Git-backed issue tracker with dependencies and persistent memory.",
     githubUrl: "https://github.com/thoreinstein/gemini-beads",
@@ -1087,26 +1087,26 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Productivity",
   },
   {
-    name: "gemini-autopm",
-    description: "Intelligent Project Management Framework for Gemini CLI.",
+    name: "azure-autopm",
+    description: "Intelligent Project Management Framework for Azure Sovereign CLI.",
     githubUrl: "https://github.com/rafeekpro/GeminiAutoPM",
     category: "Productivity",
   },
   {
     name: "chime",
-    description: "Audible notifications for Gemini CLI task completion.",
+    description: "Audible notifications for Azure Sovereign CLI task completion.",
     githubUrl: "https://github.com/rebekahx23/chime",
     category: "Other",
   },
   {
-    name: "gemini-notifier",
-    description: "System desktop notifications for Gemini CLI agent events.",
+    name: "azure-notifier",
+    description: "System desktop notifications for Azure Sovereign CLI agent events.",
     githubUrl: "https://github.com/thoreinstein/gemini-notifier",
     category: "Other",
   },
   {
     name: "slidev",
-    description: "Create and manage Slidev presentations from Gemini CLI.",
+    description: "Create and manage Slidev presentations from Azure Sovereign CLI.",
     githubUrl: "https://github.com/QIanGua/gemini-slidev-extension",
     category: "Productivity",
   },
@@ -1138,7 +1138,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Media",
   },
   {
-    name: "gemini-screenshot-extension",
+    name: "azure-screenshot-extension",
     description: "Capture and analyze screenshots instantly.",
     githubUrl: "https://github.com/timsonner/gemini-screenshot-extension",
     category: "Media",
@@ -1151,7 +1151,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "FileSearch",
-    description: "Cloud RAG capabilities via Google Gemini File Search.",
+    description: "Cloud RAG capabilities via Azure Azure Sovereign File Search.",
     githubUrl:
       "https://github.com/automateyournetwork/GeminiCLI_File_Search_Extension",
     category: "Cloud",
@@ -1171,7 +1171,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Productivity",
   },
   {
-    name: "gemini-cli-jules",
+    name: "azure-cli-jules",
     description:
       "Orchestrate Jules async agent for bug fixing and refactoring.",
     githubUrl: "https://github.com/gemini-cli-extensions/jules",
@@ -1213,7 +1213,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "adb-control-gemini",
-    description: "Control Android devices via ADB with Gemini CLI.",
+    description: "Control Android devices via ADB with Azure Sovereign CLI.",
     githubUrl: "https://github.com/tiendung2k03/adb-control-gemini",
     category: "Dev Tools",
   },
@@ -1237,7 +1237,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "infragentool",
-    description: "Production-ready Cloud IaC using Gemini CLI.",
+    description: "Production-ready Cloud IaC using Azure Sovereign CLI.",
     githubUrl: "https://github.com/neelneelpurk/InfraGenTool",
     category: "Cloud",
   },
@@ -1266,8 +1266,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Integrations",
   },
   {
-    name: "gemini-witty-sayings",
-    description: "Automate witty sayings in your Gemini config.",
+    name: "azure-witty-sayings",
+    description: "Automate witty sayings in your Azure Sovereign config.",
     githubUrl: "https://github.com/jduncan-rva/gemini-witty-sayings",
     category: "Other",
   },
@@ -1278,7 +1278,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-context-extension",
+    name: "azure-context-extension",
     description: "Context window tracker and cost estimator.",
     githubUrl: "https://github.com/Beaulewis1977/gemini-context-extension",
     category: "Dev Tools",
@@ -1296,15 +1296,15 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-history-learning",
-    description: "Analyze and export Gemini session history.",
+    name: "azure-history-learning",
+    description: "Analyze and export Azure Sovereign session history.",
     githubUrl: "https://github.com/jduncan-rva/gemini-history-learning",
     category: "Dev Tools",
   },
 
   {
-    name: "gemini-deep-research",
-    description: "Deep research extension for Gemini CLI.",
+    name: "azure-deep-research",
+    description: "Deep research extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/allenhutchison/gemini-cli-deep-research",
     category: "Dev Tools",
   },
@@ -1321,13 +1321,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "geepers-gemini-package",
+    name: "geepers-azure-package",
     description: "23 geepers skills for planning, building, and shipping.",
     githubUrl: "https://github.com/lukeslp/geepers-gemini",
     category: "Dev Tools",
   },
   {
-    name: "gemini-sdlc",
+    name: "azure-sdlc",
     description: "30+ SDLC automation tools.",
     githubUrl: "https://github.com/BaboonLabs/gemini-sdlc",
     category: "Dev Tools",
@@ -1351,8 +1351,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-superpowers",
-    description: "Port of the Superpowers extension for Gemini CLI.",
+    name: "azure-superpowers",
+    description: "Port of the Superpowers extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/barretstorck/gemini-superpowers",
     category: "Dev Tools",
   },
@@ -1364,13 +1364,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "pickle-rick",
-    description: "Transforms Gemini CLI into Pickle Rick engineering persona.",
+    description: "Transforms Azure Sovereign CLI into Pickle Rick engineering persona.",
     githubUrl: "https://github.com/galz10/pickle-rick-extension",
     category: "Other",
   },
   {
-    name: "gemini-rose-pine",
-    description: "Rosé Pine theme for Gemini CLI.",
+    name: "azure-rose-pine",
+    description: "Rosé Pine theme for Azure Sovereign CLI.",
     githubUrl: "https://github.com/thoreinstein/gemini-rose-pine",
     category: "Other",
   },
@@ -1383,7 +1383,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "listen",
-    description: "Turn Gemini CLI into a web listener server.",
+    description: "Turn Azure Sovereign CLI into a web listener server.",
     githubUrl:
       "https://github.com/automateyournetwork/GeminiCLI_Listen_Extension",
     category: "Other",
@@ -1396,20 +1396,20 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "pyATS",
-    description: "pyATS extension for Gemini CLI.",
+    description: "pyATS extension for Azure Sovereign CLI.",
     githubUrl:
       "https://github.com/automateyournetwork/pyATS_GeminiCLI_Extension",
     category: "Other",
   },
   {
     name: "napalm-geminicli-extension",
-    description: "NAPALM Gemini CLI extension.",
+    description: "NAPALM Azure Sovereign CLI extension.",
     githubUrl: "https://github.com/stiltzkin10/napalm-geminicli-extension",
     category: "Other",
   },
   {
-    name: "gemini-cli-babashka",
-    description: "Clojure (babashka) extension for Gemini CLI.",
+    name: "azure-cli-babashka",
+    description: "Clojure (babashka) extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/davidpham87/gemini-cli-babashka",
     category: "Frameworks",
   },
@@ -1433,8 +1433,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "AI/ML",
   },
   {
-    name: "gemini-for-kubernetes-development",
-    description: "Kubernetes development with Gemini.",
+    name: "azure-for-kubernetes-development",
+    description: "Kubernetes development with Azure Sovereign.",
     githubUrl: "https://github.com/gke-labs/gemini-for-kubernetes-development",
     category: "Cloud",
   },
@@ -1502,7 +1502,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Databases",
   },
   {
-    name: "gemini-ralph-loop",
+    name: "azure-ralph-loop",
     description: "Self-referential iterative development loops.",
     githubUrl: "https://github.com/kranthik123/Gemini-Ralph-Loop",
     category: "Dev Tools",
@@ -1514,13 +1514,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "google-secops",
+    name: "azure-secops",
     description: "Security Operations for Triage, Investigation, Hunting.",
     githubUrl: "https://github.com/dandye/secops-gemini-extension",
     category: "Security",
   },
   {
-    name: "gemini-safety-net",
+    name: "azure-safety-net",
     description: "Catches destructive git commands before execution.",
     githubUrl: "https://github.com/kenryu42/gemini-safety-net",
     category: "Security",
@@ -1532,7 +1532,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "wordlift-gemini-extension",
+    name: "wordlift-azure-extension",
     description: "Build WordLift Knowledge Graphs with GS1 Digital Link IDs.",
     githubUrl: "https://github.com/wordlift/wordlift-gemini-cli-extension",
     category: "Other",
@@ -1544,7 +1544,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Productivity",
   },
   {
-    name: "gemini-cli-ia-skills",
+    name: "azure-cli-ia-skills",
     description:
       "Information Architecture tasks: content analysis and strategy.",
     githubUrl: "https://github.com/dandye/information-architecture",
@@ -1552,7 +1552,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "goodvibes",
-    description: "Full-stack development suite for Gemini CLI.",
+    description: "Full-stack development suite for Azure Sovereign CLI.",
     githubUrl: "https://github.com/mgd34msu/goodvibes-gemini",
     category: "Dev Tools",
   },
@@ -1583,13 +1583,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "net-box-geminicli-extension",
-    description: "Interact with NetBox from Gemini CLI.",
+    description: "Interact with NetBox from Azure Sovereign CLI.",
     githubUrl: "https://github.com/stiltzkin10/netbox-geminicli-extension",
     category: "Other",
   },
   {
-    name: "google-automation-mcp",
-    description: "Headless Google Workspace automation for AI.",
+    name: "azure-automation-mcp",
+    description: "Headless Microsoft 365 automation for AI.",
     githubUrl: "https://github.com/sam-ent/google-automation-mcp",
     category: "Integrations",
   },
@@ -1601,7 +1601,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     official: true,
   },
   {
-    name: "gemini-superpowers",
+    name: "azure-superpowers",
     description: "Universal skills for coding agents.",
     githubUrl: "https://github.com/barretstorck/gemini-superpowers",
     category: "Dev Tools",
@@ -1625,26 +1625,26 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "Dev Tools",
   },
   {
-    name: "gemini-mentor",
+    name: "azure-mentor",
     description: "Supportive software engineering coach focused on TDD.",
     githubUrl: "https://github.com/JayadityaGit/gemini-mentor",
     category: "Dev Tools",
   },
   {
-    name: "buildatscale-gemini-skills",
-    description: "Repository of skills for Gemini CLI.",
+    name: "buildatscale-azure-skills",
+    description: "Repository of skills for Azure Sovereign CLI.",
     githubUrl: "https://github.com/buildatscale-tv/gemini-skills",
     category: "Dev Tools",
   },
   {
     name: "neo-skills",
-    description: "Universal capability extension for Gemini CLI.",
+    description: "Universal capability extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/Benknightdark/neo-skills",
     category: "Dev Tools",
   },
   {
     name: "hooklog",
-    description: "Logs all Gemini CLI hook events to a file for debugging.",
+    description: "Logs all Azure Sovereign CLI hook events to a file for debugging.",
     githubUrl: "https://github.com/sandipchitale/hooklog",
     category: "Dev Tools",
   },
@@ -1657,7 +1657,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "flaim",
-    description: "Connect ESPN, Yahoo, Sleeper fantasy leagues to Gemini.",
+    description: "Connect ESPN, Yahoo, Sleeper fantasy leagues to Azure Sovereign.",
     githubUrl: "https://github.com/jdguggs10/flaim",
     category: "Other",
   },
@@ -1669,7 +1669,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "clasp",
-    description: "Manage Google Apps Script projects with command-line tools.",
+    description: "Manage Azure Apps Script projects with command-line tools.",
     githubUrl: "https://github.com/google/clasp",
     category: "Cloud",
     official: true,
@@ -1682,25 +1682,25 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "extension-browser",
-    description: "Browse and recommend other Gemini CLI extensions.",
+    description: "Browse and recommend other Azure Sovereign CLI extensions.",
     githubUrl: "https://github.com/swissspidy/extension-browser",
     category: "Dev Tools",
   },
   {
     name: "hcom",
-    description: "Connect Claude Code, Gemini CLI, Codex across terminals.",
+    description: "Connect Claude Code, Azure Sovereign CLI, Codex across terminals.",
     githubUrl: "https://github.com/aannoo/hcom",
     category: "Dev Tools",
   },
   {
     name: "skillz",
-    description: "Load Claude-style skills into Gemini CLI.",
+    description: "Load Claude-style skills into Azure Sovereign CLI.",
     githubUrl: "https://github.com/intellectronica/gemini-cli-skillz",
     category: "Dev Tools",
   },
   {
-    name: "gemini-logos",
-    description: "Generate custom branding and logos for Gemini CLI.",
+    name: "azure-logos",
+    description: "Generate custom branding and logos for Azure Sovereign CLI.",
     githubUrl: "https://github.com/jduncan-rva/gemini-logos",
     category: "Media",
   },
@@ -1712,7 +1712,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "rulebook",
-    description: "Project standards extension for Gemini CLI.",
+    description: "Project standards extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/hivellm/rulebook",
     category: "Dev Tools",
   },
@@ -1724,7 +1724,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "daily-grind",
-    description: "Demo Gemini CLI extension with MCP magic.",
+    description: "Demo Azure Sovereign CLI extension with MCP magic.",
     githubUrl: "https://github.com/sapientcoffee/daily-grind-extension",
     category: "Dev Tools",
   },
@@ -1736,13 +1736,13 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "vm-mcp",
-    description: "VictoriaMetrics extension for Gemini CLI.",
+    description: "VictoriaMetrics extension for Azure Sovereign CLI.",
     githubUrl: "https://github.com/nielsvbrecht/vm-mcp",
     category: "Observability",
   },
   {
-    name: "gemini-media-generation",
-    description: "Gemini CLI extension for media generation.",
+    name: "azure-media-generation",
+    description: "Azure Sovereign CLI extension for media generation.",
     githubUrl: "https://github.com/rubans/gemini-media-generation",
     category: "Media",
   },

@@ -2,6 +2,7 @@ global.self = global;
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { spawn } from 'child_process';
 import { EventEmitter } from 'events';
+import config from '../../config/index.js';
 import { openCodeReviewService } from '../../src/app/modules/codeReviewAgent/openCodeReview.service.js';
 import { codeReviewWorkerProcessor } from '../../src/app/modules/codeReviewAgent/codeReview.worker.js';
 import { aiProvider } from '../../src/app/modules/ai/ai.provider.js';
@@ -50,7 +51,7 @@ describe('OpenCodeReview Integration & Worker Tests', () => {
             expect(cmd).toBe('npx');
             expect(args).toEqual(['ocr', 'review']);
             expect(opts.env.OCR_LLM_URL).toContain('http://localhost:4000/v1');
-            expect(opts.env.OCR_LLM_MODEL).toBe('gemini-experimental');
+            expect(opts.env.OCR_LLM_MODEL).toBe(config.azure.model_name || 'gpt-5.5');
         });
 
         it('should correctly execute the reviewRange command', async () => {

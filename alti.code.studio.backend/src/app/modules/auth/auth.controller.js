@@ -18,13 +18,11 @@ import { UserRepository } from './prisma.user.repository.js';
 import {
   generateOTP,
 } from './auth.utils.js';
-import { recaptchaService } from '../googleCloud/recaptcha.service.js';
-import { kmsService } from '../googleCloud/kms.service.js';
+import { recaptchaService, kmsService } from '../azureCloud/azureServices.service.js';
 
-// Mailgun has been purged. 
-// @todo: Implement Google Workspace / Gmail API via GCP Service Accounts for transactional emails.
-const sendMailWithGoogleWorkspace = async (mailData) => {
-    logger.info(`[GCP Identity] Simulating transactional email to ${mailData.to} via Google Workspace API`);
+// transactional emails.
+const sendMailWithAzure = async (mailData) => {
+    logger.info(`[Azure Identity] Simulating transactional email to ${mailData.to} via Azure Communication Services`);
     return { success: true };
 };
 
@@ -152,7 +150,7 @@ const forgetPassword = catchAsync(async (req, res) => {
   });
 
   const mailData = { to: email, subject: 'Password Reset', body: `OTP: ${OTP}` };
-  await sendMailWithGoogleWorkspace(mailData);
+  await sendMailWithAzure(mailData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -214,7 +212,7 @@ const deleteUserAccountOTP = catchAsync(async (req, res) => {
   });
 
   const mailData = { to: user.email, subject: 'Delete Account', body: `OTP: ${OTP}` };
-  await sendMailWithGoogleWorkspace(mailData);
+  await sendMailWithAzure(mailData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -328,17 +326,17 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
-const sendMailWithGoogleController = async (req, res) => {
+const sendMailWithAzureController = async (req, res) => {
   try {
     const mailData = { to: 'test@example.com', subject: 'Verify Email' };
-    const result = await sendMailWithGoogleWorkspace(mailData);
+    const result = await sendMailWithAzure(mailData);
     res.status(201).send(result);
   } catch (error) {
-    logger.error("Google Workspace Email Error:", error);
+    logger.error("Azure Email Error:", error);
   }
 };
 
-const googleAuthCallback = catchAsync(async (req, res) => {
+const azureAuthCallback = catchAsync(async (req, res) => {
   const user = req.user;
   const { accessToken, refreshToken } = authService.generateUserTokens(user);
 
@@ -482,8 +480,8 @@ export const authController = {
   deleteUserAccount,
   deleteUserAccountOTP,
   changePassword,
-  sendMailWithGoogleController,
-  googleAuthCallback,
+  sendMailWithAzureController,
+  azureAuthCallback,
   githubAuthCallback,
   ssoAuthCallback,
   setupMfa,

@@ -49,304 +49,90 @@ interface CloudFunctionAgent {
 
 // ──── DYNAMIC CLOUD SPECIALIZATION MAPPING ────
 const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
-  const name = provider.trim();
-  const safePrefix = name.toLowerCase().replace(/[^a-z0-9]+/g, "_");
-
-  // Custom mapping for Amazon Web Services
-  if (name.includes("Amazon") || name.includes("AWS")) {
-    return [
-      {
-        name: "EC2 Elastic Compute",
-        functionName: "Compute & Virtual Servers",
-        agentName: "AWS EC2 Specialist (Tier 14)",
-        agentId: "aws_ec2_specialist",
-        status: "ACTIVE",
-        capabilities: ["ec2-scaling", "instance-tuning", "ebs-optimization"],
-        description:
-          "Optimizes instance sizing, cost efficiency, and automated auto-scaling groups.",
-        icon: "Server",
-      },
-      {
-        name: "S3 Object Storage",
-        functionName: "Object & Blob Storage",
-        agentName: "AWS S3 Specialist (Tier 14)",
-        agentId: "aws_s3_specialist",
-        status: "ACTIVE",
-        capabilities: ["bucket-lifecycle", "cors-rules", "cloudfront-cdn"],
-        description:
-          "Manages object storage lifecycle rules, access controls, and low-latency CloudFront caching.",
-        icon: "Database",
-      },
-      {
-        name: "Lambda Serverless",
-        functionName: "Serverless Compute",
-        agentName: "AWS Lambda Specialist (Tier 14)",
-        agentId: "aws_lambda_specialist",
-        status: "OPTIMIZING",
-        capabilities: [
-          "cold-start-tuning",
-          "concurrency-limits",
-          "event-routing",
-        ],
-        description:
-          "Regulates cold-start latency, concurrency controls, and API Gateway bindings.",
-        icon: "Cpu",
-      },
-      {
-        name: "DynamoDB NoSQL",
-        functionName: "High-Throughput Database",
-        agentName: "AWS DynamoDB Specialist (Tier 14)",
-        agentId: "aws_dynamodb_specialist",
-        status: "ACTIVE",
-        capabilities: ["gsi-indexing", "partition-keys", "daas-caching"],
-        description:
-          "Configures secondary indexes, query throughput tuning, and hot-partition balancing.",
-        icon: "Database",
-      },
-      {
-        name: "IAM Identity & Access",
-        functionName: "Zero-Trust Access Control",
-        agentName: "AWS IAM Guardian (Tier 14)",
-        agentId: "aws_iam_guardian",
-        status: "SWARMING",
-        capabilities: ["least-privilege", "role-assumption", "policy-linting"],
-        description:
-          "Enforces least-privilege policies, audits assume-role bounds, and filters credentials.",
-        icon: "Lock",
-      },
-      {
-        name: "CloudFormation & CDK",
-        functionName: "Infrastructure as Code",
-        agentName: "AWS IaC Specialist (Tier 14)",
-        agentId: "aws_iac_specialist",
-        status: "IDLE",
-        capabilities: ["cdk-compilation", "stack-drift", "drift-remediation"],
-        description:
-          "Compiles TypeScript CDK structures, monitors drift compliance, and executes safe rollbacks.",
-        icon: "Activity",
-      },
-    ];
-  }
-
-  // Custom mapping for Google Cloud Platform
-  if (name.includes("Google") || name.includes("GCP")) {
-    return [
-      {
-        name: "Compute Engine VMs",
-        functionName: "Compute & Scale",
-        agentName: "GCP Compute Specialist (Tier 14)",
-        agentId: "gcp_compute_specialist",
-        status: "ACTIVE",
-        capabilities: ["vm-scaling", "live-migration", "sole-tenant-nodes"],
-        description:
-          "Optimizes machine-type configurations, persistent disk allocation, and live migrations.",
-        icon: "Server",
-      },
-      {
-        name: "Cloud Storage",
-        functionName: "Multi-Regional Storage",
-        agentName: "GCP Storage Specialist (Tier 14)",
-        agentId: "gcp_storage_specialist",
-        status: "ACTIVE",
-        capabilities: ["bucket-lifecycle", "dual-region-sync", "iam-binding"],
-        description:
-          "Controls dual-region replication, storage class auto-tiering, and access tokens.",
-        icon: "Database",
-      },
-      {
-        name: "Cloud Run Serverless",
-        functionName: "Containerized Serverless",
-        agentName: "GCP Cloud Run Specialist (Tier 14)",
-        agentId: "gcp_cloudrun_specialist",
-        status: "OPTIMIZING",
-        capabilities: ["min-instances", "cpu-allocation", "traffic-splitting"],
-        description:
-          "Manages container scaling, zero-to-one latency optimization, and green-blue canary deploys.",
-        icon: "Cpu",
-      },
-      {
-        name: "BigQuery Analytics",
-        functionName: "Serverless Data Warehouse",
-        agentName: "GCP BigQuery Specialist (Tier 14)",
-        agentId: "gcp_bigquery_specialist",
-        status: "ACTIVE",
-        capabilities: ["partition-pruning", "slot-allocation", "clustering"],
-        description:
-          "Coordinates query slot scheduling, partition optimization, and materialized view caching.",
-        icon: "Database",
-      },
-      {
-        name: "GCP IAM & Sovereignty",
-        functionName: "Access Control & Governance",
-        agentName: "GCP IAM Guardian (Tier 14)",
-        agentId: "gcp_iam_guardian",
-        status: "SWARMING",
-        capabilities: ["service-accounts", "workload-identity", "audit-logs"],
-        description:
-          "Secures Google Workload Identity federations, audits service accounts, and isolates project structures.",
-        icon: "Lock",
-      },
-      {
-        name: "Google Deployment Manager",
-        functionName: "Infrastructure as Code",
-        agentName: "GCP IaC Specialist (Tier 14)",
-        agentId: "gcp_iac_specialist",
-        status: "IDLE",
-        capabilities: ["gdm-templates", "terraform-gcp", "state-locking"],
-        description:
-          "Synthesizes Terraform GCP structures, maps state locking, and executes deployment dry-runs.",
-        icon: "Activity",
-      },
-    ];
-  }
-
-  // Custom mapping for Microsoft Azure
-  if (name.includes("Azure")) {
-    return [
-      {
-        name: "Azure Virtual Machines",
-        functionName: "Compute & Virtual Servers",
-        agentName: "Azure VM Specialist (Tier 14)",
-        agentId: "azure_vm_specialist",
-        status: "ACTIVE",
-        capabilities: ["vm-scaling", "hybrid-benefit", "disk-encryption"],
-        description:
-          "Optimizes Azure Hybrid Benefit licenses, VM scale sets, and premium disk configurations.",
-        icon: "Server",
-      },
-      {
-        name: "Blob Storage",
-        functionName: "Object & Cold Storage",
-        agentName: "Azure Blob Specialist (Tier 14)",
-        agentId: "azure_blob_specialist",
-        status: "ACTIVE",
-        capabilities: ["lifecycle-management", "immutable-blobs", "sas-tokens"],
-        description:
-          "Configures Shared Access Signatures, access tiers (Hot/Cool/Archive), and blob triggers.",
-        icon: "Database",
-      },
-      {
-        name: "Azure Functions",
-        functionName: "Serverless Operations",
-        agentName: "Azure Functions Specialist (Tier 14)",
-        agentId: "azure_functions_specialist",
-        status: "OPTIMIZING",
-        capabilities: [
-          "premium-plan-scaling",
-          "trigger-bindings",
-          "durable-workflows",
-        ],
-        description:
-          "Tunes Durable Functions orchestration, serverless bindings, and startup execution times.",
-        icon: "Cpu",
-      },
-      {
-        name: "Cosmos DB",
-        functionName: "Global NoSQL Database",
-        agentName: "Azure Cosmos Specialist (Tier 14)",
-        agentId: "azure_cosmos_specialist",
-        status: "ACTIVE",
-        capabilities: [
-          "multi-region-writes",
-          "ru-allocation",
-          "consistency-levels",
-        ],
-        description:
-          "Tunes Request Units (RUs), consistency parameters, and multi-region read/write replication.",
-        icon: "Database",
-      },
-      {
-        name: "Entra ID (Active Directory)",
-        functionName: "Identity & Access Control",
-        agentName: "Azure Entra Guardian (Tier 14)",
-        agentId: "azure_entra_guardian",
-        status: "SWARMING",
-        capabilities: [
-          "conditional-access",
-          "managed-identities",
-          "app-registrations",
-        ],
-        description:
-          "Audits conditional access policies, configures system-assigned managed identities, and registers APIs.",
-        icon: "Lock",
-      },
-      {
-        name: "ARM Templates & Bicep",
-        functionName: "Infrastructure as Code",
-        agentName: "Azure IaC Specialist (Tier 14)",
-        agentId: "azure_iac_specialist",
-        status: "IDLE",
-        capabilities: [
-          "bicep-compilation",
-          "arm-deployments",
-          "blueprint-compliance",
-        ],
-        description:
-          "Compiles declarative Bicep files, manages Azure Blueprints compliance, and runs validation gates.",
-        icon: "Activity",
-      },
-    ];
-  }
-
-  // Fallback programmatic generator for all other 64 cloud providers!
-  const categories = [
+  return [
     {
-      suffix: "Compute Specialist (Tier 12)",
-      type: "Compute & Microservices",
-      icon: "Server" as const,
-      caps: ["workload-isolation", "node-auto-scale", "virtualization"],
+      name: "Azure Virtual Machines",
+      functionName: "Compute & Virtual Servers",
+      agentName: "Azure VM Specialist (Tier 14)",
+      agentId: "azure_vm_specialist",
+      status: "ACTIVE",
+      capabilities: ["vm-scaling", "hybrid-benefit", "disk-encryption"],
+      description:
+        "Optimizes Azure Hybrid Benefit licenses, VM scale sets, and premium disk configurations.",
+      icon: "Server",
     },
     {
-      suffix: "Storage Specialist (Tier 12)",
-      type: "Persistent Data & Backups",
-      icon: "Database" as const,
-      caps: ["replication", "retention-policies", "data-scrubbing"],
+      name: "Blob Storage",
+      functionName: "Object & Cold Storage",
+      agentName: "Azure Blob Specialist (Tier 14)",
+      agentId: "azure_blob_specialist",
+      status: "ACTIVE",
+      capabilities: ["lifecycle-management", "immutable-blobs", "sas-tokens"],
+      description:
+        "Configures Shared Access Signatures, access tiers (Hot/Cool/Archive), and blob triggers.",
+      icon: "Database",
     },
     {
-      suffix: "Network Router (Tier 12)",
-      type: "Edge & Delivery Networks",
-      icon: "Network" as const,
-      caps: ["anycast-routing", "dns-failover", "ingress-filters"],
+      name: "Azure Functions",
+      functionName: "Serverless Operations",
+      agentName: "Azure Functions Specialist (Tier 14)",
+      agentId: "azure_functions_specialist",
+      status: "OPTIMIZING",
+      capabilities: [
+        "premium-plan-scaling",
+        "trigger-bindings",
+        "durable-workflows",
+      ],
+      description:
+        "Tunes Durable Functions orchestration, serverless bindings, and startup execution times.",
+      icon: "Cpu",
     },
     {
-      suffix: "Security Shield (Tier 12)",
-      type: "Zero-Trust & Vaults",
-      icon: "Lock" as const,
-      caps: ["token-rotation", "firewall-rules", "key-custody"],
+      name: "Cosmos DB",
+      functionName: "Global NoSQL Database",
+      agentName: "Azure Cosmos Specialist (Tier 14)",
+      agentId: "azure_cosmos_specialist",
+      status: "ACTIVE",
+      capabilities: [
+        "multi-region-writes",
+        "ru-allocation",
+        "consistency-levels",
+      ],
+      description:
+        "Tunes Request Units (RUs), consistency parameters, and multi-region read/write replication.",
+      icon: "Database",
     },
     {
-      suffix: "Telemetry Pulse (Tier 12)",
-      type: "Observability & Latency",
-      icon: "Activity" as const,
-      caps: ["log-streams", "latency-metrics", "alert-triggers"],
+      name: "Entra ID (Active Directory)",
+      functionName: "Identity & Access Control",
+      agentName: "Azure Entra Guardian (Tier 14)",
+      agentId: "azure_entra_guardian",
+      status: "SWARMING",
+      capabilities: [
+        "conditional-access",
+        "managed-identities",
+        "app-registrations",
+      ],
+      description:
+        "Audits conditional access policies, configures system-assigned managed identities, and registers APIs.",
+      icon: "Lock",
     },
     {
-      suffix: "Orchestrator Node (Tier 12)",
-      type: "Automated Deployments",
-      icon: "Cpu" as const,
-      caps: ["gitops-sync", "dry-run-compiles", "auto-rollback"],
+      name: "ARM Templates & Bicep",
+      functionName: "Infrastructure as Code",
+      agentName: "Azure IaC Specialist (Tier 14)",
+      agentId: "azure_iac_specialist",
+      status: "IDLE",
+      capabilities: [
+        "bicep-compilation",
+        "arm-deployments",
+        "blueprint-compliance",
+      ],
+      description:
+        "Compiles declarative Bicep files, manages Azure Blueprints compliance, and runs validation gates.",
+      icon: "Activity",
     },
   ];
-
-  return categories.map((cat, i) => {
-    return {
-      name: `${name} ${cat.type.split(" & ")[0]}`,
-      functionName: cat.type,
-      agentName: `${name} ${cat.suffix}`,
-      agentId: `${safePrefix}_${cat.suffix.split(" ")[0].toLowerCase()}_specialist`,
-      status:
-        i === 4
-          ? "OPTIMIZING"
-          : i === 3
-            ? "SWARMING"
-            : i === 5
-              ? "IDLE"
-              : "ACTIVE",
-      capabilities: cat.caps.map((cap) => `${safePrefix}-${cap}`),
-      description: `Bespoke dynamic specialist agent designed to manage, deploy, and audit ${cat.type.toLowerCase()} directly inside ${name}.`,
-      icon: cat.icon,
-    };
-  });
 };
 
 export default function CloudPage() {
@@ -419,82 +205,52 @@ export default function CloudPage() {
       } else {
         let workloads = [];
 
-        if (
-          selectedProvider?.includes("Amazon") ||
-          selectedProvider?.includes("AWS")
-        ) {
-          workloads = [
-            {
-              id: `i-${Math.floor(Math.random() * 10000000)}`,
-              name: "EC2 Inference Fleet",
-              status: "Running",
-              region: "us-east-1",
-              cpu: "65%",
-            },
-            {
-              id: `bedrock-${Math.floor(Math.random() * 1000)}`,
-              name: "Bedrock Claude Sonnet 4.6",
-              status: "Running",
-              region: "us-west-2",
-              cpu: "82%",
-            },
-            {
-              id: `ddb-${Math.floor(Math.random() * 1000)}`,
-              name: "DynamoDB Global Table",
-              status: "Running",
-              region: "eu-central-1",
-              cpu: "20%",
-            },
-          ];
-        } else if (
-          selectedProvider?.includes("Google") ||
-          selectedProvider?.includes("GCP")
-        ) {
-          workloads = [
-            {
-              id: `gk-${Math.floor(Math.random() * 100000)}`,
-              name: "GKE AI Cluster",
-              status: "Running",
-              region: "us-central1",
-              cpu: "45%",
-            },
-            {
-              id: `vertex-${Math.floor(Math.random() * 1000)}`,
-              name: "Vertex AI Gemini 3.5 Flash",
-              status: "Running",
-              region: "europe-west1",
-              cpu: "78%",
-            },
-            {
-              id: `bq-${Math.floor(Math.random() * 1000)}`,
-              name: "BigQuery Data Lake",
-              status: "Running",
-              region: "asia-northeast1",
-              cpu: "12%",
-            },
-          ];
-        } else if (selectedProvider?.includes("Azure")) {
+        if (selectedProvider === "Azure Government") {
           workloads = [
             {
               id: `vmss-${Math.floor(Math.random() * 10000)}`,
-              name: "AKS Workload Nodes",
+              name: "AKS Workload Nodes (Gov)",
               status: "Running",
-              region: "eastus",
-              cpu: "55%",
+              region: "usgovarizona",
+              cpu: "45%",
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure OpenAI GPT-5.5 Foundry",
+              name: "Azure OpenAI Government (IL5)",
               status: "Running",
-              region: "westeurope",
-              cpu: "88%",
+              region: "usgovvirginia",
+              cpu: "68%",
             },
             {
               id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-              name: "CosmosDB Multi-Write",
+              name: "CosmosDB Failover (IL5)",
               status: "Running",
-              region: "japaneast",
-              cpu: "18%",
+              region: "usgovtexas",
+              cpu: "15%",
+            },
+          ];
+        } else if (selectedProvider === "Azure Dedicated") {
+          workloads = [
+            {
+              id: `vmss-${Math.floor(Math.random() * 10000)}`,
+              name: "AKS Dedicated Nodes",
+              status: "Running",
+              region: "eastus2",
+              cpu: "38%",
+            },
+            {
+              id: `openai-${Math.floor(Math.random() * 1000)}`,
+              name: "Azure OpenAI Dedicated",
+              status: "Running",
+              region: "eastus2",
+              cpu: "25%",
+            },
+            {
+              id: `cosmos-${Math.floor(Math.random() * 1000)}`,
+              name: "CosmosDB Private Cluster",
+              status: "Running",
+              region: "eastus2",
+              cpu: "14%",
             },
           ];
         } else {
@@ -536,82 +292,52 @@ export default function CloudPage() {
       setIsAuthenticated(true);
       let workloads = [];
 
-      if (
-        selectedProvider?.includes("Amazon") ||
-        selectedProvider?.includes("AWS")
-      ) {
-        workloads = [
-          {
-            id: `i-${Math.floor(Math.random() * 10000000)}`,
-            name: "EC2 Inference Fleet",
-            status: "Running",
-            region: "us-east-1",
-            cpu: "65%",
-          },
-          {
-            id: `bedrock-${Math.floor(Math.random() * 1000)}`,
-            name: "Bedrock Claude Sonnet 4.6",
-            status: "Running",
-            region: "us-west-2",
-            cpu: "82%",
-          },
-          {
-            id: `ddb-${Math.floor(Math.random() * 1000)}`,
-            name: "DynamoDB Global Table",
-            status: "Running",
-            region: "eu-central-1",
-            cpu: "20%",
-          },
-        ];
-      } else if (
-        selectedProvider?.includes("Google") ||
-        selectedProvider?.includes("GCP")
-      ) {
-        workloads = [
-          {
-            id: `gk-${Math.floor(Math.random() * 100000)}`,
-            name: "GKE AI Cluster",
-            status: "Running",
-            region: "us-central1",
-            cpu: "45%",
-          },
-          {
-            id: `vertex-${Math.floor(Math.random() * 1000)}`,
-            name: "Vertex AI Gemini 3.5 Flash",
-            status: "Running",
-            region: "europe-west1",
-            cpu: "78%",
-          },
-          {
-            id: `bq-${Math.floor(Math.random() * 1000)}`,
-            name: "BigQuery Data Lake",
-            status: "Running",
-            region: "asia-northeast1",
-            cpu: "12%",
-          },
-        ];
-      } else if (selectedProvider?.includes("Azure")) {
+      if (selectedProvider === "Azure Government") {
         workloads = [
           {
             id: `vmss-${Math.floor(Math.random() * 10000)}`,
-            name: "AKS Workload Nodes",
+            name: "AKS Workload Nodes (Gov)",
             status: "Running",
-            region: "eastus",
-            cpu: "55%",
+            region: "usgovarizona",
+            cpu: "45%",
           },
           {
             id: `openai-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure OpenAI GPT-5.5 Foundry",
+            name: "Azure OpenAI Government (IL5)",
             status: "Running",
-            region: "westeurope",
-            cpu: "88%",
+            region: "usgovvirginia",
+            cpu: "68%",
           },
           {
             id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-            name: "CosmosDB Multi-Write",
+            name: "CosmosDB Failover (IL5)",
             status: "Running",
-            region: "japaneast",
-            cpu: "18%",
+            region: "usgovtexas",
+            cpu: "15%",
+          },
+        ];
+      } else if (selectedProvider === "Azure Dedicated") {
+        workloads = [
+          {
+            id: `vmss-${Math.floor(Math.random() * 10000)}`,
+            name: "AKS Dedicated Nodes",
+            status: "Running",
+            region: "eastus2",
+            cpu: "38%",
+          },
+          {
+            id: `openai-${Math.floor(Math.random() * 1000)}`,
+            name: "Azure OpenAI Dedicated",
+            status: "Running",
+            region: "eastus2",
+            cpu: "25%",
+          },
+          {
+            id: `cosmos-${Math.floor(Math.random() * 1000)}`,
+            name: "CosmosDB Private Cluster",
+            status: "Running",
+            region: "eastus2",
+            cpu: "14%",
           },
         ];
       } else {
@@ -661,7 +387,7 @@ export default function CloudPage() {
 
     const stages = [
       `[${timestamp()}] 🚀 Spawning sovereign docker-agent container for ${agent.agentName}...`,
-      `[${timestamp()}] 🔐 Establishing secure tunnel using GCP Workload Identity / IAM bindings...`,
+      `[${timestamp()}] 🔐 Establishing secure tunnel using Azure Workload Identity / Federated Credentials...`,
       `[${timestamp()}] 🔍 Injecting Dynamic DLP Scrubber & regex validation filters...`,
       `[${timestamp()}] 🩺 Conducting sandbox telemetry checklist & pre-flight compile diagnostics...`,
       `[${timestamp()}] 🎯 Dedicated specialist bound! Status promoted to ACTIVE & SWARMING.`,
@@ -781,8 +507,8 @@ export default function CloudPage() {
                       </div>
                     </div>
 
-                    {/* Tri-Cloud AI Gateway Endpoint Section */}
-                    {["AWS", "Amazon", "Google", "GCP", "Azure"].some((x) =>
+                    {/* Azure Sovereign AI Gateway Endpoint Section */}
+                    {["Azure"].some((x) =>
                       selectedProvider?.includes(x),
                     ) && (
                       <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
@@ -793,7 +519,7 @@ export default function CloudPage() {
                           </div>
                           <div>
                             <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                              Tri-Cloud AI Gateway Routing
+                              Azure Sovereign AI Gateway Routing
                             </h4>
                             <p className="text-[10px] text-gray-400">
                               Sovereign proxy path enforced for foundational
@@ -808,12 +534,11 @@ export default function CloudPage() {
                               Active Gateway
                             </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider?.includes("Azure")
-                                ? "Azure OpenAI Foundry"
-                                : selectedProvider?.includes("Google") ||
-                                    selectedProvider?.includes("GCP")
-                                  ? "GCP Vertex AI Gateway"
-                                  : "AWS Bedrock Gateway"}
+                              {selectedProvider === "Azure Government"
+                                ? "Azure OpenAI Government (IL5)"
+                                : selectedProvider === "Azure Dedicated"
+                                  ? "Azure OpenAI Dedicated (IL2)"
+                                  : "Azure OpenAI Foundry"}
                             </div>
                           </div>
 
@@ -822,12 +547,11 @@ export default function CloudPage() {
                               Active Model
                             </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider?.includes("Azure")
-                                ? "GPT-5.5 (State-of-the-Art)"
-                                : selectedProvider?.includes("Google") ||
-                                    selectedProvider?.includes("GCP")
-                                  ? "Gemini 3.5 Flash (State-of-the-Art)"
-                                  : "Claude Sonnet 4.6 (State-of-the-Art)"}
+                              {selectedProvider === "Azure Government"
+                                ? "GPT-4o (Gov/IL5)"
+                                : selectedProvider === "Azure Dedicated"
+                                  ? "GPT-4o (Dedicated/IL2)"
+                                  : "GPT-4o (Commercial)"}
                             </div>
                           </div>
                         </div>

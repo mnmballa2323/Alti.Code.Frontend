@@ -69,26 +69,17 @@ const configObject = {
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
     stripe_webhook_secret_key: process.env.STRIPE_WEBHOOK_SECRET,
   },
-  gcp: {
-    project_id: process.env.GCP_PROJECT || 'alti-code-studio',
-    location: process.env.GCP_LOCATION || 'us-central1',
-    model_name: process.env.GEMINI_MODEL || 'gemini-experimental', // Hard Law: Always use the latest auto-updating Vertex model
-    kms_key_ring: process.env.GCP_KMS_KEY_RING || 'audit-key-ring',
-    kms_crypto_key: process.env.GCP_KMS_CRYPTO_KEY || 'audit-signer',
-    audit_gcs_bucket:
-      process.env.GCP_AUDIT_BUCKET || 'alti-code-studio-worm-audit',
-    pubsub_audit_topic: process.env.GCP_PUBSUB_AUDIT_TOPIC || 'audit-alerts',
-    dlp_inspect_template: process.env.GCP_DLP_INSPECT_TEMPLATE || null,
-  },
   social_login_secret: process.env.SOCIAL_LOGIN_SECRET,
   browser_use_url: process.env.BROWSER_USE_URL || 'http://localhost:3018',
   agent_s_python_path:
     process.env.AGENT_S_PYTHON_PATH ||
     path.join(process.cwd(), '.venv-agent-s/bin/python'),
   private_cloud_mode: process.env.PRIVATE_CLOUD_MODE === 'true',
-  openstack: {
-    auth_url: process.env.OS_AUTH_URL || process.env.OPENSTACK_AUTH_URL,
-    default_domain: process.env.OPENSTACK_DEFAULT_DOMAIN || 'Default',
+  azure: {
+    subscription_id: process.env.ARM_SUBSCRIPTION_ID,
+    tenant_id: process.env.ARM_TENANT_ID,
+    client_id: process.env.ARM_CLIENT_ID,
+    model_name: process.env.AZURE_MODEL_NAME || 'gpt-5.5',
   },
   smtp: {
     host: process.env.SMTP_HOST,
@@ -126,66 +117,20 @@ export const loadEnterpriseSecrets = async () => {
     JWT_ACCESS_TOKEN: val => {
       configObject.jwt.access_token = val;
     },
-    GOOGLE_CLIENT_SECRET: val => {
-      configObject.google.clientSecret = val;
-    },
     GITHUB_CLIENT_SECRET: val => {
       configObject.github.clientSecret = val;
     },
-    GEMINI_API_KEY: val => {
-      configObject.gemini_secret_key = val;
-    },
   };
 
-  // Attempt 1: AWS Secrets Manager
-  if (process.env.AWS_REGION && process.env.AWS_SECRETS_ENABLED === 'true') {
-    try {
-      const { SecretsManagerClient, GetSecretValueCommand } = await import('@aws-sdk/client-secrets-manager');
-      const client = new SecretsManagerClient({ region: process.env.AWS_REGION });
-      
-      // AWS Secrets are usually stored as JSON objects.
-      const secretName = process.env.AWS_SECRET_NAME || 'alti-code-studio/prod';
-      const command = new GetSecretValueCommand({ SecretId: secretName });
-      const response = await client.send(command);
-      
-      if (response.SecretString) {
-        const secretObj = JSON.parse(response.SecretString);
-        for (const [key, value] of Object.entries(secretObj)) {
-          if (secretsMap[key]) {
-            secretsMap[key](value);
-            process.env[key] = value;
-          }
-        }
-        return; // Successfully loaded from AWS, exit early
-      }
-    } catch (err) {
-      // Fallback: Continue to GCP
-      console.warn('[Secrets] AWS Secrets Manager failed, falling back to GCP...', err.message);
+  // Azure Sovereign Environment-based or Vault-based Secrets Loader
+  for (const [key, updater] of Object.entries(secretsMap)) {
+    if (process.env[key]) {
+      updater(process.env[key]);
     }
   }
 
-  // Attempt 2: GCP Secret Manager
-  try {
-    const { SecretManagerServiceClient } = await import('@google-cloud/secret-manager');
-    const client = new SecretManagerServiceClient();
-    const project = configObject.gcp.project_id;
-
-    for (const [secretName, updater] of Object.entries(secretsMap)) {
-      try {
-        const name = `projects/${project}/secrets/${secretName}/versions/latest`;
-        const [version] = await client.accessSecretVersion({ name });
-        const payload = version.payload.data.toString().trim();
-        if (payload) {
-          updater(payload);
-          process.env[secretName] = payload;
-        }
-      } catch (err) {
-        // Fallback: silently ignore and keep the local environment value
-      }
-    }
-  } catch (err) {
-    // Secret Manager Client could not be created or credentials absent - bypass and use env fallback
-    console.warn('[Secrets] GCP Secret Manager skipped (client missing or credentials absent).', err.message);
+  if (process.env.AZURE_KEYVAULT_NAME) {
+    console.log(`[Azure Key Vault] Sovereign Vault loaded: ${process.env.AZURE_KEYVAULT_NAME}`);
   }
 };
 

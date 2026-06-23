@@ -1,95 +1,128 @@
+# ==============================================================================
+# ALTI CODE STUDIO: Azure Database & Cache Provisioning Module
+# ==============================================================================
+
 terraform {
-  required_providers {}
-}
-
-# -------------------------------------------------------------
-# Cloud SQL for PostgreSQL (PentAGI & Vector Embeddings)
-# -------------------------------------------------------------
-resource "google_sql_database_instance" "postgres" {
-  name             = "alti-postgres-${var.environment}"
-  database_version = "POSTGRES_15"
-  region           = var.region
-
-  settings {
-    tier              = "db-custom-4-15360" # 4 vCPU, 15GB RAM
-    availability_type = var.environment == "prod" ? "REGIONAL" : "ZONAL"
-    
-    backup_configuration {
-      enabled                        = true
-      point_in_time_recovery_enabled = true
-      start_time                     = "02:00"
-      transaction_log_retention_days = 7
-    }
-
-    ip_configuration {
-      ipv4_enabled    = false
-      private_network = var.network_id
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
     }
   }
-
-  deletion_protection = var.environment == "prod" ? true : false
 }
 
-resource "google_sql_database" "pentagidb" {
-  name     = "pentagidb"
-  instance = google_sql_database_instance.postgres.name
-}
+# ------------------------------------------------------------------------------
+# 1. Azure Database for PostgreSQL Flexible Server
+# ------------------------------------------------------------------------------
+resource "azurerm_postgresql_flexible_server" "postgres" {
+  name                   = "alti-postgres-${var.environment}"
+  resource_group_name    = var.resource_group_name
+  location               = var.location
+  version                = "15"
+  delegated_subnet_id    = var.subnet_id
+  
+  administrator_login    = var.admin_username
+  administrator_password = var.admin_password
 
-resource "google_sql_user" "pentagi_user" {
-  name     = "postgres"
-  instance = google_sql_database_instance.postgres.name
-  password = random_password.pg_password.result
-}
+  storage_mb = 131072 # 128 GB
 
-resource "random_password" "pg_password" {
-  length           = 16
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
-}
+  sku_name = "GP_Standard_D4ds_v5" # General Purpose VM instance
 
-# -------------------------------------------------------------
-# Cloud SQL Cross-Region Read Replica (Disaster Recovery)
-# -------------------------------------------------------------
-resource "google_sql_database_instance" "postgres_replica" {
-  name                 = "alti-postgres-${var.environment}-replica"
-  database_version     = "POSTGRES_15"
-  region               = "us-east4" # Secondary Region
-  master_instance_name = google_sql_database_instance.postgres.name
+  backup_retention_days        = var.environment == "prod" ? 30 : 7
+  geo_redundant_backup_enabled = var.environment == "prod" ? true : false
 
-  settings {
-    tier              = "db-custom-4-15360"
-    availability_type = "REGIONAL"
-    disk_autoresize   = true
+  lifecycle {
+    ignore_changes = [
+      zone,
+      high_availability,
+    ]
   }
 }
 
-# -------------------------------------------------------------
-# Memorystore for Redis (Synapse Cache & Memory)
-# -------------------------------------------------------------
-resource "google_redis_instance" "cache" {
-  name               = "alti-redis-${var.environment}"
-  tier               = var.environment == "prod" ? "STANDARD_HA" : "BASIC"
-  memory_size_gb     = 5
-  region             = var.region
-  authorized_network = var.network_id
-  redis_version      = "REDIS_7_0"
-
-  # Auth string enabled for security
-  auth_enabled = true
+resource "azurerm_postgresql_flexible_server_database" "pentagidb" {
+  name      = "pentagidb"
+  server_id = azurerm_postgresql_flexible_server.postgres.id
+  colormap  = "SQL_Latin1_General_CP1_CI_AS"
+  charset   = "UTF8"
 }
 
-variable "environment" { type = string }
-variable "region" { type = string }
-variable "network_id" { type = string }
+# ------------------------------------------------------------------------------
+# 2. Azure Cache for Redis
+# ------------------------------------------------------------------------------
+resource "azurerm_redis_cache" "cache" {
+  name                = "alti-redis-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  capacity            = 1
+  family              = "C"
+  sku_name            = "Standard"
+  enable_non_ssl_port = false
+  minimum_tls_version = "1.2"
 
-output "redis_host" { value = google_redis_instance.cache.host }
-output "redis_port" { value = google_redis_instance.cache.port }
-output "redis_auth_string" {
-  value = google_redis_instance.cache.auth_string
-  sensitive = true
+  redis_configuration {
+    enable_authentication = true
+  }
 }
-output "pg_connection_name" { value = google_sql_database_instance.postgres.connection_name }
-output "pg_password" {
-  value = random_password.pg_password.result
-  sensitive = true
+
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" {
+  type        = string
+  description = "Deployment environment (e.g. prod, staging)"
+}
+
+variable "location" {
+  type        = string
+  description = "Azure region where resources will be created"
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "Name of the resource group"
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "The ID of the delegated subnet for PostgreSQL integration"
+}
+
+variable "admin_username" {
+  type        = string
+  description = "PostgreSQL administrator login name"
+}
+
+variable "admin_password" {
+  type        = string
+  description = "PostgreSQL administrator login password"
+  sensitive   = true
+}
+
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "postgres_fqdn" {
+  value       = azurerm_postgresql_flexible_server.postgres.fqdn
+  description = "Fully qualified domain name of the PostgreSQL server"
+}
+
+output "postgres_server_id" {
+  value       = azurerm_postgresql_flexible_server.postgres.id
+  description = "ID of the PostgreSQL flexible server"
+}
+
+output "redis_hostname" {
+  value       = azurerm_redis_cache.cache.hostname
+  description = "The hostname of the Redis instance"
+}
+
+output "redis_ssl_port" {
+  value       = azurerm_redis_cache.cache.ssl_port
+  description = "The SSL port of the Redis instance"
+}
+
+output "redis_primary_access_key" {
+  value       = azurerm_redis_cache.cache.primary_access_key
+  sensitive   = true
+  description = "The primary access key for the Redis cache"
 }

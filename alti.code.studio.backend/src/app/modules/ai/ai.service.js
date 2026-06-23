@@ -1,5 +1,5 @@
 import { Workflow, WorkflowRun } from './ai.model.js';
-import { vertexService } from './vertex.service.js';
+import { azureSovereignCompatService } from './azureSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AiService {
@@ -15,7 +15,7 @@ class AiService {
             If it's invalid or unclear, default to '0 * * * *'.
             Input: "${frequencyStr}"`;
             
-            const rawResponse = await vertexService.generateContent(prompt);
+            const rawResponse = await azureSovereignCompatService.generateContent(prompt);
             const cronRegex = /(@(?:annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})/;
             const match = rawResponse.match(cronRegex);
             
@@ -81,7 +81,7 @@ class AiService {
             Generate a JSON array of 3 steps you took to achieve this goal, with "action", "tool", and "payload" fields for each step.
             ONLY output valid JSON.`;
 
-            const response = await vertexService.generateContent(systemPrompt);
+            const response = await azureSovereignCompatService.generateContent(systemPrompt);
             
             // Try to parse the JSON steps
             let steps = [];

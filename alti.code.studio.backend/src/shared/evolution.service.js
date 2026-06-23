@@ -9,8 +9,8 @@ import { logger } from './logger.js';
 import { GeminiAiService } from '../app/modules/gemini/gemini.service.js';
 import fs from 'fs/promises';
 import path from 'path';
-import { gcsService } from '../app/modules/googleCloud/storage.service.js';
-import { pubsubService } from '../app/modules/googleCloud/pubsub.service.js';
+import { gcsService } from '../app/modules/azureCloud/azureStorage.service.js';
+import { pubsubService } from '../app/modules/azureCloud/azurePubSub.service.js';
 
 export class EvolutionService {
     constructor() {

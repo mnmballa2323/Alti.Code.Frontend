@@ -179,41 +179,41 @@ const createWindow = () => {
     });
 
     // ─────────────────────────────────────────────────────────────────────────────
-    // Google Cloud Skills Registry (Phase 14)
+    // Azure Skills Registry (Phase 14)
     // ─────────────────────────────────────────────────────────────────────────────
-    ipcMain.removeHandler('google-skills:fetch');
-    ipcMain.handle('google-skills:fetch', async () => {
-        console.log('☁️ Google Skills: Fetching from google/skills repository...');
+    ipcMain.removeHandler('azure-skills:fetch');
+    ipcMain.handle('azure-skills:fetch', async () => {
+        console.log('☁️ Azure Skills: Fetching from azure/skills repository...');
         try {
             // For Desktop UI simulation, we return the verified 13 skills
-            // In the backend, we already ingest these automatically via google_skills_loader.service.js
+            // In the backend, we already ingest these automatically via azure_skills_loader.service.js
             const skills = [
-                { id: 'alloydb-basics', name: 'AlloyDB Basics', description: 'Manages clusters, instances, and backups for AlloyDB.', category: 'Database' },
-                { id: 'bigquery-basics', name: 'BigQuery Basics', description: 'Interact with datasets, tables, and SQL queries.', category: 'Data' },
-                { id: 'cloud-run-basics', name: 'Cloud Run Basics', description: 'Manages Cloud Run services, jobs, and worker pools.', category: 'Compute' },
-                { id: 'cloud-sql-basics', name: 'Cloud SQL Basics', description: 'Manages Cloud SQL instances, databases, and users.', category: 'Database' },
-                { id: 'firebase-basics', name: 'Firebase Basics', description: 'Firebase projects, apps, and services.', category: 'Mobile & Web' },
-                { id: 'gemini-api', name: 'Gemini API', description: 'Build generative AI apps with Gemini multimodal models.', category: 'AI' },
-                { id: 'gke-basics', name: 'GKE Basics', description: 'Manages Google Kubernetes Engine clusters and workloads.', category: 'Containers' },
-                { id: 'google-cloud-networking-observability', name: 'GCP Networking', description: 'Network topologies and connectivity tests.', category: 'Networking' },
-                { id: 'google-cloud-recipe-auth', name: 'GCP Auth Recipe', description: 'Authentication and authorization strategies.', category: 'Security' },
-                { id: 'google-cloud-recipe-onboarding', name: 'GCP Onboarding', description: 'Getting started and project setup.', category: 'Operations' },
-                { id: 'google-cloud-waf-cost-optimization', name: 'WAF: Cost Optimization', description: 'Well-Architected Framework cost practices.', category: 'Architecture' },
-                { id: 'google-cloud-waf-reliability', name: 'WAF: Reliability', description: 'Well-Architected Framework reliability practices.', category: 'Architecture' },
-                { id: 'google-cloud-waf-security', name: 'WAF: Security', description: 'Well-Architected Framework security practices.', category: 'Security' }
+                { id: 'azure-sql-basics', name: 'Azure SQL Basics', description: 'Manages databases, elastic pools, and backups for Azure SQL.', category: 'Database' },
+                { id: 'synapse-analytics-basics', name: 'Synapse Analytics Basics', description: 'Interact with workspaces, SQL pools, and analytics pipelines.', category: 'Data' },
+                { id: 'container-apps-basics', name: 'Container Apps Basics', description: 'Manages Azure Container Apps, jobs, and scale rules.', category: 'Compute' },
+                { id: 'azure-postgres-basics', name: 'Azure Postgres Basics', description: 'Manages Azure Database for PostgreSQL servers and databases.', category: 'Database' },
+                { id: 'azure-app-service', name: 'Azure App Service', description: 'Azure Web Apps, Deployment Slots, and App Service Plans.', category: 'Mobile & Web' },
+                { id: 'azure-openai-api', name: 'Azure OpenAI API', description: 'Build generative AI apps with Azure OpenAI GPT models.', category: 'AI' },
+                { id: 'aks-basics', name: 'AKS Basics', description: 'Manages Azure Kubernetes Service clusters and namespace workloads.', category: 'Containers' },
+                { id: 'azure-networking-observability', name: 'Azure Networking', description: 'NSGs, Route Tables, and Azure Network Watcher tests.', category: 'Networking' },
+                { id: 'azure-auth-recipe', name: 'Azure Auth Recipe', description: 'Entra ID tenant registration and Client Credentials flow.', category: 'Security' },
+                { id: 'azure-onboarding', name: 'Azure Onboarding', description: 'Getting started with Azure Subscriptions and Resource Groups.', category: 'Operations' },
+                { id: 'azure-well-architected-cost', name: 'WAF: Cost Optimization', description: 'Well-Architected Framework cost practices.', category: 'Architecture' },
+                { id: 'azure-well-architected-reliability', name: 'WAF: Reliability', description: 'Well-Architected Framework reliability practices.', category: 'Architecture' },
+                { id: 'azure-well-architected-security', name: 'WAF: Security', description: 'Well-Architected Framework security practices.', category: 'Security' }
             ];
             return { success: true, count: skills.length, data: skills };
         } catch (error) {
-            console.error('❌ Google Skills Fetch Error:', error.message);
+            console.error('❌ Azure Skills Fetch Error:', error.message);
             return { success: false, error: error.message };
         }
     });
 
-    ipcMain.removeHandler('google-skills:install');
-    ipcMain.handle('google-skills:install', async (event, skill) => {
-        console.log(`⬇️ Google Skills: Activating skill [${skill.name}] for local workspace...`);
+    ipcMain.removeHandler('azure-skills:install');
+    ipcMain.handle('azure-skills:install', async (event, skill) => {
+        console.log(`⬇️ Azure Skills: Activating skill [${skill.name}] for local workspace...`);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        console.log(`✅ Google Skills: ${skill.name} context injected into capabilityRouter.`);
+        console.log(`✅ Azure Skills: ${skill.name} context injected into capabilityRouter.`);
         return { success: true, message: `${skill.name} active.` };
     });
 

@@ -29,7 +29,7 @@ You ensure that the swarm moves as one perfectly synchronized entity.`;
      * Request a swarm expansion for massive workloads.
      */
     async expandSwarm(requiredWorkers) {
-        const { ScalingService } = await import('../googleCloud/scaling.service.js');
+        const { ScalingService } = await import('../../../azureCloud/azureServices.service.js');
         return await ScalingService.adjustSwarmCapacity(requiredWorkers);
     }
 }

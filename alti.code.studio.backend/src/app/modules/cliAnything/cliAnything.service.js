@@ -271,10 +271,10 @@ def history(ctx):
     else:
         click.echo("📜 History Trail:")
         for idx, entry in enumerate(session["history"]):
-            marker = "➡️" if idx === session["pointer"] else " "
+            marker = "➡️" if idx == session["pointer"] else " "
             click.echo(f"{marker} [{entry['id']}] {entry['action']} ({entry['payload']})")
 
-if __name__ === '__main__':
+if __name__ == '__main__':
     cli(obj={})
   `.trim();
 

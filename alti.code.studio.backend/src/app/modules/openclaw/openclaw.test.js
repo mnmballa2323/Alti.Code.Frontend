@@ -6,9 +6,25 @@ import fs from 'fs';
 
 vi.mock('fs');
 
+vi.mock('./acpx.service.js', () => ({
+    acpxService: {
+        ensureSession: vi.fn().mockResolvedValue('session-ok'),
+        prompt: vi.fn().mockResolvedValue('prompt-response'),
+        exec: vi.fn().mockResolvedValue('exec-response'),
+    }
+}));
+
 describe('OpenClaw Ecosystem Integration', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        
+        // Mock fs readdirSync to return a dummy SKILL.md entry
+        fs.readdirSync.mockReturnValue([
+            { name: 'SKILL.md', isDirectory: () => false }
+        ]);
+
+        // Mock fs readFileSync to return YAML frontmatter
+        fs.readFileSync.mockReturnValue(`name: openclaw_web_search\ndescription: Web search skill`);
     });
 
     it('OpenClaw Core: should initialize if submodules are present', async () => {
@@ -23,7 +39,7 @@ describe('OpenClaw Ecosystem Integration', () => {
         expect(skills.length).toBeGreaterThan(0);
 
         const tools = openClawSkills.getMcpToolDefinitions();
-        expect(tools[0].name).toBe('openclaw_web_search');
+        expect(tools[0].name).toBe('openclaw_openclaw_web_search');
     });
 
     it('OpenClaw Bots: should dispatch community bots up to core orchestration', async () => {

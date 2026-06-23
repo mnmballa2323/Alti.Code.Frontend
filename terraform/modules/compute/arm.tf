@@ -1,45 +1,81 @@
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
+# ==============================================================================
+# ALTI CODE STUDIO: Azure ARM64 VM Provisioning Module
+# ==============================================================================
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
 }
 
-variable "subnet_ids" {
-  description = "List of subnet IDs for ARM nodes"
-  type        = list(string)
+resource "azurerm_network_interface" "arm_nic" {
+  name                = "alti-arm-nic-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
 }
 
-resource "aws_eks_node_group" "arm_nodes" {
-  cluster_name    = var.cluster_name
-  node_group_name = "${var.cluster_name}-arm-nodes"
-  node_role_arn   = aws_iam_role.arm_node_role.arn
-  subnet_ids      = var.subnet_ids
+resource "azurerm_linux_virtual_machine" "arm_node" {
+  name                = "alti-arm-node-${var.environment}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  
+  # Standard_D4ps_v5: Azure ARM64 (Ampere Altra) Virtual Machine size
+  size                = "Standard_D4ps_v5"
+  admin_username      = var.admin_username
+  network_interface_ids = [
+    azurerm_network_interface.arm_nic.id,
+  ]
 
-  ami_type       = "AL2_ARM_64"
-  instance_types = ["m6g.large", "c6g.large"]
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file(var.ssh_public_key_path)
+  }
 
-  scaling_config {
-    desired_size = 2
-    max_size     = 4
-    min_size     = 1
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 128
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-arm64" # Canonical Ubuntu build for ARM64
+    version   = "latest"
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   tags = {
     Architecture = "ARM64"
-    Cost         = "Optimized"
+    Environment  = var.environment
   }
 }
 
-resource "aws_iam_role" "arm_node_role" {
-  name = "${var.cluster_name}-arm-node-role"
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" { type = string }
+variable "location" { type = string }
+variable "resource_group_name" { type = string }
+variable "subnet_id" { type = string }
+variable "admin_username" { type = string }
+variable "ssh_public_key_path" { type = string }
 
-  assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-    Version = "2012-10-17"
-  })
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "arm_vm_id" {
+  value = azurerm_linux_virtual_machine.arm_node.id
 }

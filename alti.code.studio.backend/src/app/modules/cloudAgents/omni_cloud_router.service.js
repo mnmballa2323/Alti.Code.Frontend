@@ -62,7 +62,7 @@ const CLOUD_SECTORS = {
     GPU_COMPUTE: ['coreweave', 'runpod', 'lambdal', 'paperspace', 'togethercomputer'],
     EDGE_NETWORK: ['cloudflare', 'fastly', 'vercel', 'fly.io', 'render-oss'],
     ENTERPRISE_DATA: ['snowflakedb', 'databricks', 'cloudera', 'oracle', 'SAP'],
-    HYPERSCALER: ['aws', 'GoogleCloudPlatform', 'azure', 'IBM-Cloud'],
+    HYPERSCALER: ['azure'],
     BARE_METAL: ['cherryservers', 'packethost', 'macstadium', 'rackspace'],
     VPS_CHEAP: ['hetznercloud', 'digitalocean', 'linode', 'vultr']
 };
@@ -79,7 +79,7 @@ class OmniCloudRouterService {
      * the very first deployment request is completely instant.
      */
     async preWarmConnections() {
-        const priorityProviders = ['aws', 'azure', 'GoogleCloudPlatform', 'cloudflare', 'coreweave'];
+        const priorityProviders = ['azure', 'cloudflare', 'coreweave'];
         logger.info(`[Omni-Router] ⚡ Pre-warming critical connections for: ${priorityProviders.join(', ')}...`);
         for (const provider of priorityProviders) {
             try {
@@ -106,8 +106,8 @@ class OmniCloudRouterService {
         
         logger.info(`[Omni-Router] Evaluating optimal deployment matrix for workload: ${type}`);
 
-        let primary = 'aws'; // Default fallback
-        let fallback = 'GoogleCloudPlatform';
+        let primary = 'azure'; // Default fallback
+        let fallback = 'azure';
 
         if (computeIntensity === 'HPC_GPU') {
             primary = 'coreweave'; // Highest Tier NVIDIA H100s
@@ -126,7 +126,7 @@ class OmniCloudRouterService {
             fallback = 'databricks';
         } else if (compliance === 'ENTERPRISE_HARDENED') {
             primary = 'azure';
-            fallback = 'aws';
+            fallback = 'azure';
         }
 
         logger.info(`[Omni-Router] 🎯 Routing Decision: PRIMARY=[${primary.toUpperCase()}] | FALLBACK=[${fallback.toUpperCase()}]`);

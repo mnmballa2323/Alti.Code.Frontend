@@ -7,8 +7,7 @@ import Navbar from "@/components/navbar";
 import PreFooter from "@/components/landing-page/pre-footer";
 import HeroSwarm from "@/components/landing-page/hero-swarm";
 import PairedProgrammerSection from "@/components/landing-page/paired-programmer-section";
-import EnterpriseInfrastructureSection from "@/components/landing-page/enterprise-infrastructure-section";
-import TriCloudSection from "@/components/landing-page/tri-cloud-section";
+import AzureSovereignSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
 import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
@@ -54,7 +53,7 @@ export default function LandingPage() {
           <PairedProgrammerSection />
         </div>
         <div id="section-2">
-          <TriCloudSection />
+          <AzureSovereignSection />
         </div>
         <div id="section-3">
           <AgentSwarmSection />
@@ -79,9 +78,6 @@ export default function LandingPage() {
         </div>
         <div id="section-10">
           <CapabilitiesBentoGrid />
-        </div>
-        <div id="section-11">
-          <EnterpriseInfrastructureSection />
         </div>
         <div id="section-12">
           <PricingSection />

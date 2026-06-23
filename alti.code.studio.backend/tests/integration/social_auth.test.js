@@ -23,7 +23,11 @@ vi.mock('../../src/config/prisma.js', () => {
             findUnique: vi.fn(),
             create: vi.fn(),
             update: vi.fn(),
-        }
+        },
+        tenant: {
+            create: vi.fn().mockResolvedValue({ id: 'mock-tenant-id' })
+        },
+        $transaction: vi.fn((callback) => callback(mockPrisma))
     };
     return { prisma: mockPrisma };
 });
@@ -77,6 +81,8 @@ describe('OAuth Integration Tests (Google & GitHub)', () => {
                     avatar: payload.avatar,
                     provider: 'google',
                     role: 'user',
+                    tenantId: 'mock-tenant-id',
+                    tenantRole: 'owner',
                 }
             });
             expect(user.googleId).toBe(payload.id);

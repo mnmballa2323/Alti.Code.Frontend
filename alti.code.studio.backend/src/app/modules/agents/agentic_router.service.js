@@ -5,7 +5,7 @@ import { agentRegistry } from './agent.registry.js';
 import { swarmNexusAgent } from './swarm_nexus.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 
 // DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 /**
@@ -14,11 +14,18 @@ import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
  */
 class AgenticRouterService {
     constructor() {
-        // model generation is lazy or uses the valid Vertex AI gateway
+        // model generation is lazy or uses the valid Azure AI Studio gateway
+    }
+
+    get model() {
+        if (!this._cachedModel) {
+            this._cachedModel = AzureGenAiService.getGenerativeModel(AzureGenAiService.PRIMARY_MODEL || 'gemini-3.1-pro');
+        }
+        return this._cachedModel;
     }
 
     get _model() {
-        return GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL || 'gemini-3.1-pro');
+        return this.model;
     }
 
     /**
@@ -116,11 +123,11 @@ class AgenticRouterService {
             4. **Parallel Execution**: Suggest parallel agent activations if the tasks are independent.
             5. **Final Synthesis**: Ensure the chain ends with a quality gate.
             6. **Zero-Limit Routing (The Forge)**: If the user requests a capability, domain, or industry that is NOT covered by any of the available specialists, you MUST route the task to 'agent_forge_generator'. Instruct the Forge to dynamically write, register, and deploy a new hyper-specialized agent capable of fulfilling the request.
-            7. **Dynamic Load Balancing**: You MUST explicitly balance execution workloads by assigning the appropriate 'workerConfig'. Assign 'GKE_BURST' for highly compute-heavy tasks (like comprehensive test runs, heavy security audits, full compilation, or extensive refactoring cycles) and 'STANDARD' for lightweight reasoning steps (initial planning, docstring generations, peer reviews). This ensures that standard node pools do not experience bottleneck starvation under heavy load.
+            7. **Dynamic Load Balancing**: You MUST explicitly balance execution workloads by assigning the appropriate 'workerConfig'. Assign 'AKS_BURST' for highly compute-heavy tasks (like comprehensive test runs, heavy security audits, full compilation, or extensive refactoring cycles) and 'STANDARD' for lightweight reasoning steps (initial planning, docstring generations, peer reviews). This ensures that standard node pools do not experience bottleneck starvation under heavy load.
             
             Return a JSON object: { 
                 strategy: string, 
-                sequence: [{ agentId: string, task: string, workerConfig: 'GKE_BURST' | 'STANDARD' }], 
+                sequence: [{ agentId: string, task: string, workerConfig: 'AKS_BURST' | 'STANDARD' }], 
                 priority: 'URGENT' | 'HIGH' | 'NORMAL'
             }
         `;
@@ -229,12 +236,12 @@ class AgenticRouterService {
                            outputLower.includes('table') || 
                            outputLower.includes('vector') || 
                            outputLower.includes('hnsw') || 
-                           outputLower.includes('alloydb') || 
+                           outputLower.includes('cosmosdb') || 
                            outputLower.includes('similarity');
         if (isDbOutput) {
             downstreamSequence.push(
                 { agentId: 'Database Performance & SQL Optimization Tuning Specialist', task: 'Tune database queries and schema indices' },
-                { agentId: 'AlloyDB pgvector Similarity Search Tuning Specialist', task: 'Optimize pgvector index and RAG embeddings alignment' }
+                { agentId: 'Cosmos DB pgvector Similarity Search Tuning Specialist', task: 'Optimize pgvector index and RAG embeddings alignment' }
             );
             strategy = 'Hierarchical Vector DB Optimization Swarm';
         }
@@ -250,13 +257,13 @@ class AgenticRouterService {
         if (isSecurityOutput) {
             downstreamSequence.push(
                 { agentId: 'Security & OWASP Hardening Sentinel', task: 'Perform basic credentials and configuration scanning' },
-                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Enforce Zero-Trust perimeter and IAM least-privilege policies' }
+                { agentId: 'Azure Sentinel Zero-Trust Security Auditor', task: 'Enforce Zero-Trust perimeter and IAM least-privilege policies' }
             );
             strategy = 'Hierarchical Zero-Trust Security Clearance Swarm';
         }
 
         // 3. Analyze Message Mesh/Events
-        const isPubSubOutput = outputLower.includes('pubsub') || 
+        const isPubSubOutput = outputLower.includes('servicebus') || 
                                outputLower.includes('topic') || 
                                outputLower.includes('subscription') || 
                                outputLower.includes('queue') || 
@@ -266,12 +273,12 @@ class AgenticRouterService {
         if (isPubSubOutput) {
             downstreamSequence.push(
                 { agentId: 'Distributed Queue & Event Coordinator', task: 'Scan queue worker configurations' },
-                { agentId: 'GCP Pub/Sub Event-Driven Mesh Conductor Specialist', task: 'Orchestrate event-driven Pub/Sub topologies and DLQ rules' }
+                { agentId: 'Azure Service Bus Event-Driven Mesh Conductor Specialist', task: 'Orchestrate event-driven Service Bus topologies and DLQ rules' }
             );
             strategy = 'Hierarchical Event-Driven Mesh Scaling Swarm';
         }
 
-        // 4. Analyze GCP Workflows & distributed task orchestration
+        // 4. Analyze Azure Workflows & distributed task orchestration
         const isWorkflowsOutput = outputLower.includes('workflow') || 
                                   outputLower.includes('cloudworkflow') || 
                                   outputLower.includes('cloudtask') || 
@@ -279,51 +286,51 @@ class AgenticRouterService {
                                   outputLower.includes('callback');
         if (isWorkflowsOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Orchestrate distributed serverless step flows and tasks' }
+                { agentId: 'Azure Workflows Conductor & Orchestration Specialist', task: 'Orchestrate distributed serverless step flows and tasks' }
             );
             strategy = 'Hierarchical Distributed Workflows Swarm';
         }
 
-        // 5. Analyze Vertex AI & model pipelines
-        const isVertexOutput = outputLower.includes('vertex') || 
+        // 5. Analyze Azure AI Studio & model pipelines
+        const isAzureAiOutput = outputLower.includes('azure_ai') || 
                                outputLower.includes('pipelines') || 
                                outputLower.includes('prompt_caching') || 
                                outputLower.includes('custom_training');
-        if (isVertexOutput) {
+        if (isAzureAiOutput) {
             downstreamSequence.push(
-                { agentId: 'Vertex AI & Gemini Pipeline Optimization Specialist', task: 'Optimize AI pipeline stages and Gemini prompt caching rules' }
+                { agentId: 'Azure AI Studio & Gemini Pipeline Optimization Specialist', task: 'Optimize AI pipeline stages and Gemini prompt caching rules' }
             );
-            strategy = 'Hierarchical Vertex AI Lifecycle Swarm';
+            strategy = 'Hierarchical Azure AI Studio Lifecycle Swarm';
         }
 
-        // 6. Analyze BigQuery vector analytics
-        const isBigQueryOutput = outputLower.includes('bigquery') || 
-                                 outputLower.includes('dataflow') || 
+        // 6. Analyze Synapse Analytics vector analytics
+        const isSynapseAnalyticsOutput = outputLower.includes('synapse') || 
+                                 outputLower.includes('streamanalytics') || 
                                  outputLower.includes('streaming') || 
                                  outputLower.includes('apache_beam') || 
                                  outputLower.includes('vector_search');
-        if (isBigQueryOutput) {
+        if (isSynapseAnalyticsOutput) {
             downstreamSequence.push(
-                { agentId: 'Google Cloud BigQuery & Dataflow Analytics Specialist', task: 'Structure high-scale analytical queries and streams' }
+                { agentId: 'Azure Synapse Analytics & Azure Stream Analytics Analytics Specialist', task: 'Structure high-scale analytical queries and streams' }
             );
             strategy = 'Hierarchical Vector Analytics Swarm';
         }
 
-        // 7. Analyze Spanner distributed scaling
-        const isSpannerOutput = outputLower.includes('spanner') || 
+        // 7. Analyze Cosmos DB distributed scaling
+        const isCosmosDbOutput = outputLower.includes('cosmos') || 
                                 outputLower.includes('interleave') || 
                                 outputLower.includes('multi-region') || 
                                 outputLower.includes('replication');
-        if (isSpannerOutput) {
+        if (isCosmosDbOutput) {
             downstreamSequence.push(
-                { agentId: 'Google Cloud Spanner Scalability Specialist', task: 'Design globally distributed child tables and scale database transactions' }
+                { agentId: 'Azure Cosmos DB Scalability Specialist', task: 'Design globally distributed child tables and scale database transactions' }
             );
-            strategy = 'Hierarchical Cloud Spanner Scaling Swarm';
+            strategy = 'Hierarchical Cosmos DB Scaling Swarm';
         }
 
-        // 8. Analyze Cloud Run & GKE Autopilot provisioning
-        const isCloudRunOutput = outputLower.includes('cloudrun') || 
-                                 outputLower.includes('gke') || 
+        // 8. Analyze Azure Container Apps & AKS Autopilot provisioning
+        const isCloudRunOutput = outputLower.includes('containerapps') || 
+                                 outputLower.includes('aks') || 
                                  outputLower.includes('kubernetes') || 
                                  outputLower.includes('k8s') || 
                                  outputLower.includes('autopilot') || 
@@ -334,13 +341,13 @@ class AgenticRouterService {
         if (isCloudRunOutput) {
             downstreamSequence.push(
                 { agentId: 'Kubernetes Manifest & Helm Compiler Agent', task: 'Scan and validate Kubernetes manifest templates' },
-                { agentId: 'GCP Cloud Run & GKE Autopilot Provisioning Specialist', task: 'Deploy containerized serverless resources and scale GKE Autopilot pods' }
+                { agentId: 'Azure Azure Container Apps & AKS Autopilot Provisioning Specialist', task: 'Deploy containerized serverless resources and scale AKS Autopilot pods' }
             );
             strategy = 'Hierarchical Serverless & Container Provisioning Swarm';
         }
 
-        // 9. Analyze GCS storage lifecycle policies
-        const isGcsOutput = outputLower.includes('gcs') || 
+        // 9. Analyze Blob Storage storage lifecycle policies
+        const isGcsOutput = outputLower.includes('blob') || 
                             outputLower.includes('bucket') || 
                             outputLower.includes('storage') || 
                             outputLower.includes('lifecycle') || 
@@ -351,9 +358,9 @@ class AgenticRouterService {
                             outputLower.includes('transfer');
         if (isGcsOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Storage & Data Lifecycle Governor Specialist', task: 'Structure lifecycle storage rules and signed URL security policies' }
+                { agentId: 'Azure Azure Blob Storage & Data Lifecycle Governor Specialist', task: 'Structure lifecycle storage rules and signed URL security policies' }
             );
-            strategy = 'Hierarchical GCS Storage & Lifecycle Swarm';
+            strategy = 'Hierarchical Blob Storage Storage & Lifecycle Swarm';
         }
 
         // 10. Analyze operations alerts and monitoring SLIs/SLOs
@@ -369,17 +376,17 @@ class AgenticRouterService {
         if (isMonitoringOutput) {
             downstreamSequence.push(
                 { agentId: 'Distributed Tracing & APM Instrumentation Architect', task: 'Correlate trace logs and OTel APM endpoints' },
-                { agentId: 'GCP Operations & Monitoring Specialist', task: 'Configure Cloud Operations sinks, continuous profiler, and SLI/SLO dashboards' }
+                { agentId: 'Azure Operations & Monitoring Specialist', task: 'Configure Cloud Operations sinks, continuous profiler, and SLI/SLO dashboards' }
             );
             strategy = 'Hierarchical Operations & Monitoring Swarm';
         }
 
-        // 11. Analyze Cloud Armor WAF & API Gateway routing
+        // 11. Analyze Azure Front Door WAF WAF & API Gateway routing
         const isArmorGatewayOutput = outputLower.includes('apigateway') || 
                                      outputLower.includes('api.gateway') || 
                                      outputLower.includes('api-gateway') || 
                                      outputLower.includes('gateway') || 
-                                     outputLower.includes('cloudarmor') || 
+                                     outputLower.includes('cloudwaf') || 
                                      outputLower.includes('waf') || 
                                      outputLower.includes('rate_limiting') || 
                                      outputLower.includes('ddos') || 
@@ -387,10 +394,10 @@ class AgenticRouterService {
                                      outputLower.includes('ssl');
         if (isArmorGatewayOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Armor & API Gateway WAF Specialist', task: 'Formulate OpenAPI Gateway routing and Cloud Armor WAF security profiles' },
+                { agentId: 'Azure Azure Front Door WAF & API Gateway WAF Specialist', task: 'Formulate OpenAPI Gateway routing and Azure Front Door WAF WAF security profiles' },
                 { agentId: 'Security & OWASP Hardening Sentinel', task: 'Audit WAF rate limiting and API edge protection rules' }
             );
-            strategy = 'Hierarchical API Gateway & Cloud Armor WAF Swarm';
+            strategy = 'Hierarchical API Gateway & Azure Front Door WAF WAF Swarm';
         }
 
         // 12. Analyze Relational DB / Cloud SQL
@@ -401,14 +408,14 @@ class AgenticRouterService {
                                      outputLower.includes('read_replica') || 
                                      outputLower.includes('high_availability') || 
                                      outputLower.includes('ha') || 
-                                     outputLower.includes('alloydb_instance') || 
+                                     outputLower.includes('cosmosdb_instance') || 
                                      outputLower.includes('query_cache');
         if (isRelationalDbOutput) {
             downstreamSequence.push(
                 { agentId: 'Database Performance & SQL Optimization Tuning Specialist', task: 'Audit queries and indexing strategies' },
-                { agentId: 'GCP Relational Database & AlloyDB Architect', task: 'Design highly available database replications and Cloud SQL connection pools' }
+                { agentId: 'Azure Relational Database & Cosmos DB Architect', task: 'Design highly available database replications and Cloud SQL connection pools' }
             );
-            strategy = 'Hierarchical Relational DB & AlloyDB Tuning Swarm';
+            strategy = 'Hierarchical Relational DB & Cosmos DB Tuning Swarm';
         }
 
         // 13. Analyze Identity & Federated login
@@ -423,16 +430,16 @@ class AgenticRouterService {
                                  outputLower.includes('custom_claims');
         if (isIdentityOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Identity Platform & Firebase Auth Specialist', task: 'Configure enterprise identity federations and custom JWT tokens' },
-                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Audit user access controls and authentication boundaries' }
+                { agentId: 'Azure Entra ID & Entra ID External Identities Specialist', task: 'Configure enterprise identity federations and custom JWT tokens' },
+                { agentId: 'Azure Sentinel Zero-Trust Security Auditor', task: 'Audit user access controls and authentication boundaries' }
             );
             strategy = 'Hierarchical IAM & Federated Identity Swarm';
         }
 
-        // 14. Analyze Eventarc and serverless functions triggers
+        // 14. Analyze Event Grid and serverless functions triggers
         const isFunctionsMeshOutput = outputLower.includes('cloudfunction') || 
                                       outputLower.includes('cloudfunctions') || 
-                                      outputLower.includes('eventarc') || 
+                                      outputLower.includes('eventgrid') || 
                                       outputLower.includes('trigger') || 
                                       outputLower.includes('oncreate') || 
                                       outputLower.includes('onupdate') || 
@@ -440,19 +447,19 @@ class AgenticRouterService {
                                       outputLower.includes('firestore.document') || 
                                       outputLower.includes('event_routing') || 
                                       outputLower.includes('firestore_trigger') || 
-                                      outputLower.includes('pubsub_trigger') || 
+                                      outputLower.includes('servicebus_trigger') || 
                                       outputLower.includes('serverless_function');
         if (isFunctionsMeshOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Functions & Eventarc Micro-Mesh Specialist', task: 'Configure 2nd gen serverless handlers and Eventarc trigger meshes' },
-                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Orchestrate step workflow callbacks and cloud task runs' }
+                { agentId: 'Azure Azure Functions & Event Grid Micro-Mesh Specialist', task: 'Configure 2nd gen serverless handlers and Event Grid trigger meshes' },
+                { agentId: 'Azure Workflows Conductor & Orchestration Specialist', task: 'Orchestrate step workflow callbacks and cloud task runs' }
             );
-            strategy = 'Hierarchical Eventarc & Serverless Micro-Mesh Swarm';
+            strategy = 'Hierarchical Event Grid & Serverless Micro-Mesh Swarm';
         }
 
-        // 15. Analyze Secret Manager & KMS encryption keys
+        // 15. Analyze Key Vault Secrets & Key Vault encryption keys
         const isKmsOfficerOutput = outputLower.includes('secretmanager') || 
-                                   outputLower.includes('kms') || 
+                                   outputLower.includes('keyvault') || 
                                    outputLower.includes('encryption_key') || 
                                    outputLower.includes('cmek') || 
                                    outputLower.includes('envelope_encryption') || 
@@ -460,13 +467,13 @@ class AgenticRouterService {
                                    outputLower.includes('cryptographic');
         if (isKmsOfficerOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Secret Manager & KMS Cryptographic Officer', task: 'Secure secret manager rotation schemes and KMS key envelopes' },
+                { agentId: 'Azure Key Vault Secrets & Key Vault Cryptographic Officer', task: 'Secure secret manager rotation schemes and Key Vault key envelopes' },
                 { agentId: 'Security & OWASP Hardening Sentinel', task: 'Scan configurations for encryption and secrets leaks compliance' }
             );
-            strategy = 'Hierarchical Cryptographic & KMS Officer Swarm';
+            strategy = 'Hierarchical Cryptographic & Key Vault Officer Swarm';
         }
 
-        // 16. Analyze Cloud Build & Artifact Registry CI/CD
+        // 16. Analyze Azure Pipelines & Artifact Registry CI/CD
         const isBuildCicdOutput = outputLower.includes('cloudbuild') || 
                                   outputLower.includes('artifact_registry') || 
                                   outputLower.includes('gcr.io') || 
@@ -480,7 +487,7 @@ class AgenticRouterService {
                                   outputLower.includes('pipeline_trigger');
         if (isBuildCicdOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Build & Artifact Registry CI/CD Specialist', task: 'Design secure Cloud Build pipelines and Artifact Registry repos' },
+                { agentId: 'Azure Azure Pipelines & Artifact Registry CI/CD Specialist', task: 'Design secure Azure Pipelines pipelines and Artifact Registry repos' },
                 { agentId: 'Kubernetes Manifest & Helm Compiler Agent', task: 'Audit pipeline deployment manifests' }
             );
             strategy = 'Hierarchical CI/CD & Artifact Registry Swarm';
@@ -502,8 +509,8 @@ class AgenticRouterService {
                                     outputLower.includes('signed_cookies');
         if (isEdgeNetworkOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Configure Anycast routing, Cloud DNS zones, and Cloud CDN caches' },
-                { agentId: 'GCP Cloud Armor & API Gateway WAF Specialist', task: 'Enforce edge load balancer WAF configurations' }
+                { agentId: 'Azure Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Configure Anycast routing, Cloud DNS zones, and Cloud CDN caches' },
+                { agentId: 'Azure Azure Front Door WAF & API Gateway WAF Specialist', task: 'Enforce edge load balancer WAF configurations' }
             );
             strategy = 'Hierarchical Edge Network & CDN Swarm';
         }
@@ -518,13 +525,13 @@ class AgenticRouterService {
                                       outputLower.includes('data_governance');
         if (isDlpGovernanceOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Data Catalog & Cloud DLP Compliance Officer', task: 'Build DLP inspection templates and Data Catalog taxologies' },
-                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Verify data privacy access perimeters' }
+                { agentId: 'Azure Data Catalog & Cloud DLP Compliance Officer', task: 'Build DLP inspection templates and Data Catalog taxologies' },
+                { agentId: 'Azure Sentinel Zero-Trust Security Auditor', task: 'Verify data privacy access perimeters' }
             );
             strategy = 'Hierarchical Data Governance & DLP Swarm';
         }
 
-        // 19. Analyze Vertex AI Feature Store & ML serving
+        // 19. Analyze Azure AI Studio Feature Store & ML serving
         const isFeatureStoreOutput = outputLower.includes('feature_store') || 
                                      outputLower.includes('feature-store') || 
                                      outputLower.includes('model_registry') || 
@@ -532,29 +539,29 @@ class AgenticRouterService {
                                      outputLower.includes('deploymodel') || 
                                      outputLower.includes('deploy_model') || 
                                      outputLower.includes('endpoint') || 
-                                     outputLower.includes('vertex_endpoint') || 
+                                     outputLower.includes('azure_ai_endpoint') || 
                                      outputLower.includes('model_serving') || 
                                      outputLower.includes('online_serving') || 
                                      outputLower.includes('feature_engineering');
         if (isFeatureStoreOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Vertex AI Feature Store & Model Registry Specialist', task: 'Optimize online Feature Store view lookups and Vertex endpoints' },
-                { agentId: 'Vertex AI & Gemini Pipeline Optimization Specialist', task: 'Deploy and version models in Vertex Registry' }
+                { agentId: 'Azure Azure AI Studio Feature Store & Model Registry Specialist', task: 'Optimize online Feature Store view lookups and Azure AI endpoints' },
+                { agentId: 'Azure AI Studio & Gemini Pipeline Optimization Specialist', task: 'Deploy and version models in Azure AI Registry' }
             );
-            strategy = 'Hierarchical Vertex Feature Store & Model Swarm';
+            strategy = 'Hierarchical Azure AI Feature Store & Model Swarm';
         }
 
-        // 20. Analyze Cloud Run Jobs and scheduler cron tasks
-        const isRunJobsOutput = outputLower.includes('cloudrun_job') || 
+        // 20. Analyze Azure Container Apps Jobs and scheduler cron tasks
+        const isRunJobsOutput = outputLower.includes('containerapps_job') || 
                                 outputLower.includes('cloud_run_job') || 
                                 outputLower.includes('run-job') || 
                                 outputLower.includes('scheduler_cron') || 
                                 outputLower.includes('cron-trigger');
         if (isRunJobsOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Run Jobs & Scheduled Tasks Specialist', task: 'Orchestrate batch job executions, scheduled crons, and container retry policies' }
+                { agentId: 'Azure Azure Container Apps Jobs & Scheduled Tasks Specialist', task: 'Orchestrate batch job executions, scheduled crons, and container retry policies' }
             );
-            strategy = 'Hierarchical Cloud Run Jobs & Batch Tasks Swarm';
+            strategy = 'Hierarchical Azure Container Apps Jobs & Batch Tasks Swarm';
         }
 
         // 21. Analyze Cloud DNSSEC & global failover routing
@@ -565,12 +572,12 @@ class AgenticRouterService {
                                     outputLower.includes('dns-challenge');
         if (isDnsFailoverOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud DNSSEC & Global Failover Specialist', task: 'Configure secure global DNSSEC policies and geolocation failovers' }
+                { agentId: 'Azure Cloud DNSSEC & Global Failover Specialist', task: 'Configure secure global DNSSEC policies and geolocation failovers' }
             );
             strategy = 'Hierarchical Global DNSSEC & Failover Swarm';
         }
 
-        // 22. Analyze AlloyDB Columnar Engine and Cache configurations
+        // 22. Analyze Cosmos DB Columnar Engine and Cache configurations
         const isAlloydbColumnarOutput = outputLower.includes('columnar_engine') || 
                                         outputLower.includes('columnar_store') || 
                                         outputLower.includes('columnar_size') || 
@@ -578,74 +585,74 @@ class AgenticRouterService {
                                         outputLower.includes('htap');
         if (isAlloydbColumnarOutput) {
             downstreamSequence.push(
-                { agentId: 'AlloyDB Columnar Engine & Cache Specialist', task: 'Optimize AlloyDB columnar memory sizing, htaps queries, and cache buffers' }
+                { agentId: 'Cosmos DB Columnar Engine & Cache Specialist', task: 'Optimize Cosmos DB columnar memory sizing, htaps queries, and cache buffers' }
             );
-            strategy = 'Hierarchical AlloyDB Columnar Store Swarm';
+            strategy = 'Hierarchical Cosmos DB Columnar Store Swarm';
         }
 
-        // 23. Analyze Spanner Graph property databases
-        const isSpannerGraphOutput = outputLower.includes('spanner_graph') || 
+        // 23. Analyze Cosmos DB Graph property databases
+        const isCosmosDbGraphOutput = outputLower.includes('cosmos_graph') || 
                                      outputLower.includes('property_graph') || 
                                      outputLower.includes('gql') || 
                                      outputLower.includes('match_pattern') || 
                                      outputLower.includes('graph_schema');
-        if (isSpannerGraphOutput) {
+        if (isCosmosDbGraphOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Spanner Graph & Property Database Specialist', task: 'Design Spanner property graph structures and optimize GQL queries' }
+                { agentId: 'Azure Cosmos DB Graph & Property Database Specialist', task: 'Design Cosmos DB property graph structures and optimize GQL queries' }
             );
-            strategy = 'Hierarchical Spanner Property Graph Swarm';
+            strategy = 'Hierarchical Cosmos DB Property Graph Swarm';
         }
 
-        // 24. Analyze Vertex AI Vector Search & Matching Engine
-        const isVertexVectorOutput = outputLower.includes('matching_engine') || 
+        // 24. Analyze Azure AI Studio Vector Search & Matching Engine
+        const isAzureAiVectorOutput = outputLower.includes('matching_engine') || 
                                      outputLower.includes('vector_search_endpoint') || 
                                      outputLower.includes('ann_index') || 
                                      outputLower.includes('hnsw_index') || 
                                      outputLower.includes('index_metadata');
-        if (isVertexVectorOutput) {
+        if (isAzureAiVectorOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Vertex AI Vector Search & Matching Engine Specialist', task: 'Configure high-dimensional Vector Search index parameters and endpoints' }
+                { agentId: 'Azure Azure AI Studio Vector Search & Matching Engine Specialist', task: 'Configure high-dimensional Vector Search index parameters and endpoints' }
             );
-            strategy = 'Hierarchical Vertex Vector Search Swarm';
+            strategy = 'Hierarchical Azure AI Vector Search Swarm';
         }
 
-        // 25. Analyze BigQuery Omni & Multi-Cloud Query setups
-        const isBigQueryOmniOutput = outputLower.includes('bigquery_omni') || 
+        // 25. Analyze Synapse Analytics Omni & Multi-Cloud Query setups
+        const isSynapseAnalyticsOmniOutput = outputLower.includes('synapse_omni') || 
                                      outputLower.includes('cross_cloud') || 
                                      outputLower.includes('external_connection') || 
                                      outputLower.includes('federated_query') || 
                                      outputLower.includes('s3_external');
-        if (isBigQueryOmniOutput) {
+        if (isSynapseAnalyticsOmniOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP BigQuery Omni & Multi-Cloud Query Coordinator', task: 'Orchestrate federated multi-cloud external connections and queries' }
+                { agentId: 'Azure Synapse Analytics Omni & Multi-Cloud Query Coordinator', task: 'Orchestrate federated multi-cloud external connections and queries' }
             );
-            strategy = 'Hierarchical BigQuery Omni Multi-Cloud Swarm';
+            strategy = 'Hierarchical Synapse Analytics Omni Multi-Cloud Swarm';
         }
 
-        // 26. Analyze Cloud Bigtable NoSQL scalability
-        const isBigtableSpecialistOutput = outputLower.includes('bigtable_schema') || 
+        // 26. Analyze Cloud Cosmos DB Table API NoSQL scalability
+        const isCosmosDbTableApiSpecialistOutput = outputLower.includes('cosmos_table_schema') || 
                                            outputLower.includes('row_key') || 
                                            outputLower.includes('gc_policy') || 
                                            outputLower.includes('column_family') || 
                                            outputLower.includes('nosql_hotspot');
-        if (isBigtableSpecialistOutput) {
+        if (isCosmosDbTableApiSpecialistOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Bigtable & NoSQL Scalability Specialist', task: 'Optimize Bigtable NoSQL row-key design, replication, and garbage collection policies' }
+                { agentId: 'Azure Cloud Cosmos DB Table API & NoSQL Scalability Specialist', task: 'Optimize Cosmos DB Table API NoSQL row-key design, replication, and garbage collection policies' }
             );
-            strategy = 'Hierarchical Cloud Bigtable NoSQL Swarm';
+            strategy = 'Hierarchical Cloud Cosmos DB Table API NoSQL Swarm';
         }
 
-        // 27. Analyze Cloud Memorystore Redis caching tuning
-        const isMemorystoreTunerOutput = outputLower.includes('memorystore_redis') || 
+        // 27. Analyze Cloud Azure Cache for Redis Redis caching tuning
+        const isAzureCacheForRedisTunerOutput = outputLower.includes('azure_redis_redis') || 
                                          outputLower.includes('redis_eviction') || 
                                          outputLower.includes('redis_failover') || 
                                          outputLower.includes('cache_aside') || 
                                          outputLower.includes('resp_protocol');
-        if (isMemorystoreTunerOutput) {
+        if (isAzureCacheForRedisTunerOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Memorystore Redis & Caching Tuning Specialist', task: 'Tune Memorystore Redis memory limits, evictions, and connection routing' }
+                { agentId: 'Azure Cloud Azure Cache for Redis Redis & Caching Tuning Specialist', task: 'Tune Azure Cache for Redis Redis memory limits, evictions, and connection routing' }
             );
-            strategy = 'Hierarchical Memorystore Redis Caching Swarm';
+            strategy = 'Hierarchical Azure Cache for Redis Redis Caching Swarm';
         }
 
         // 28. Analyze Cloud NAT & Secure Egress VPC configurations
@@ -656,7 +663,7 @@ class AgenticRouterService {
                                    outputLower.includes('private_subnet');
         if (isNatNetworkOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud NAT & Secure Egress Network Specialist', task: 'Configure secure NAT egress routing policies and subnet port allocations' }
+                { agentId: 'Azure Cloud NAT & Secure Egress Network Specialist', task: 'Configure secure NAT egress routing policies and subnet port allocations' }
             );
             strategy = 'Hierarchical Cloud NAT Secure Egress Swarm';
         }
@@ -669,65 +676,65 @@ class AgenticRouterService {
                                      outputLower.includes('gcloud_asset');
         if (isAssetAuditorOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Asset Inventory & IAM Compliance Auditor', task: 'Audit resource compliance posture and Organization Policy enforcements' }
+                { agentId: 'Azure Cloud Asset Inventory & IAM Compliance Auditor', task: 'Audit resource compliance posture and Organization Policy enforcements' }
             );
             strategy = 'Hierarchical Asset Compliance & IAM Posture Swarm';
         }
 
-        // 30. Analyze Cloud Composer & Airflow orchestration
-        const isComposerOutput = outputLower.includes('composer_env') || 
+        // 30. Analyze Azure Data Factory & Airflow orchestration
+        const isComposerOutput = outputLower.includes('datafactory_env') || 
                                  outputLower.includes('apache_airflow') || 
                                  outputLower.includes('dag_generation') || 
                                  outputLower.includes('airflow_task') || 
-                                 outputLower.includes('composer_autoscaling');
+                                 outputLower.includes('datafactory_autoscaling');
         if (isComposerOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Composer & Apache Airflow Orchestrator', task: 'Design Apache Airflow DAG structures, task dependencies, and provision Cloud Composer environments' },
-                { agentId: 'GCP Workflows Conductor & Orchestration Specialist', task: 'Audit and coordinate cross-environment task workflows' }
+                { agentId: 'Azure Azure Data Factory & Apache Airflow Orchestrator', task: 'Design Apache Airflow DAG structures, task dependencies, and provision Azure Data Factory environments' },
+                { agentId: 'Azure Workflows Conductor & Orchestration Specialist', task: 'Audit and coordinate cross-environment task workflows' }
             );
-            strategy = 'Hierarchical Cloud Composer & Airflow Orchestration Swarm';
+            strategy = 'Hierarchical Azure Data Factory & Airflow Orchestration Swarm';
         }
 
-        // 31. Analyze Cloud Dataflow & Beam pipelines
-        const isDataflowOutput = outputLower.includes('cloud_dataflow') || 
+        // 31. Analyze Cloud Azure Stream Analytics & Beam pipelines
+        const isAzureStreamAnalyticsOutput = outputLower.includes('cloud_streamanalytics') || 
                                  outputLower.includes('apache_beam') || 
                                  outputLower.includes('ptransform') || 
                                  outputLower.includes('side_input') || 
                                  outputLower.includes('flexrs');
-        if (isDataflowOutput) {
+        if (isAzureStreamAnalyticsOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Dataflow & Apache Beam Specialist', task: 'Design real-time Apache Beam pipelines and optimize Cloud Dataflow execution' },
-                { agentId: 'Google Cloud BigQuery & Dataflow Analytics Specialist', task: 'Optimize big data analytical downstream query structures' }
+                { agentId: 'Azure Cloud Azure Stream Analytics & Apache Beam Specialist', task: 'Design real-time Apache Beam pipelines and optimize Cloud Azure Stream Analytics execution' },
+                { agentId: 'Azure Synapse Analytics & Azure Stream Analytics Analytics Specialist', task: 'Optimize big data analytical downstream query structures' }
             );
-            strategy = 'Hierarchical Cloud Dataflow & Beam Pipeline Swarm';
+            strategy = 'Hierarchical Cloud Azure Stream Analytics & Beam Pipeline Swarm';
         }
 
-        // 32. Analyze Vertex AI Feature Store Feast
-        const isVertexFeastOutput = outputLower.includes('vertex_feast') || 
+        // 32. Analyze Azure AI Studio Feature Store Feast
+        const isAzureAiFeastOutput = outputLower.includes('azure_ai_feast') || 
                                     outputLower.includes('feature_view') || 
                                     outputLower.includes('feature_registry') || 
                                     outputLower.includes('offline_store') || 
                                     outputLower.includes('feast_sdk');
-        if (isVertexFeastOutput) {
+        if (isAzureAiFeastOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Vertex AI Feature Store Feast Specialist', task: 'Configure Feast feature store registries and high-throughput online lookup views' },
-                { agentId: 'GCP Vertex AI Feature Store & Model Registry Specialist', task: 'Align features definitions with model endpoints registry policies' }
+                { agentId: 'Azure Azure AI Studio Feature Store Feast Specialist', task: 'Configure Feast feature store registries and high-throughput online lookup views' },
+                { agentId: 'Azure Azure AI Studio Feature Store & Model Registry Specialist', task: 'Align features definitions with model endpoints registry policies' }
             );
-            strategy = 'Hierarchical Vertex AI Feast Feature Store Swarm';
+            strategy = 'Hierarchical Azure AI Studio Feast Feature Store Swarm';
         }
 
-        // 33. Analyze Cloud Filestore & Distributed NFS storage
-        const isFilestoreOutput = outputLower.includes('cloud_filestore') || 
+        // 33. Analyze Cloud Azure Files & Distributed NFS storage
+        const isAzureFilesOutput = outputLower.includes('cloud_azure_files') || 
                                   outputLower.includes('distributed_nfs') || 
                                   outputLower.includes('nfs_mount') || 
-                                  outputLower.includes('filestore_tier') || 
+                                  outputLower.includes('azure_files_tier') || 
                                   outputLower.includes('shared_file_share');
-        if (isFilestoreOutput) {
+        if (isAzureFilesOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Filestore & Distributed NFS Storage Specialist', task: 'Configure enterprise NFS file systems and Cloud Filestore capacity tiers' },
-                { agentId: 'GCP Cloud Storage & Data Lifecycle Governor Specialist', task: 'Integrate shared file shares with object storage boundaries' }
+                { agentId: 'Azure Cloud Azure Files & Distributed NFS Storage Specialist', task: 'Configure enterprise NFS file systems and Cloud Azure Files capacity tiers' },
+                { agentId: 'Azure Azure Blob Storage & Data Lifecycle Governor Specialist', task: 'Integrate shared file shares with object storage boundaries' }
             );
-            strategy = 'Hierarchical Cloud Filestore & NFS Storage Swarm';
+            strategy = 'Hierarchical Cloud Azure Files & NFS Storage Swarm';
         }
 
         // 34. Analyze Web Security Scanner & vulnerability auditing
@@ -738,24 +745,24 @@ class AgenticRouterService {
                                         outputLower.includes('scan_target');
         if (isSecurityScannerOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Web Security Scanner & Vulnerability Auditor', task: 'Formulate dynamic security scans, target crawl configurations, and vulnerability assessments' },
+                { agentId: 'Azure Web Security Scanner & Vulnerability Auditor', task: 'Formulate dynamic security scans, target crawl configurations, and vulnerability assessments' },
                 { agentId: 'Security & OWASP Hardening Sentinel', task: 'Remediate identified application vulnerabilities and secure boundaries' }
             );
             strategy = 'Hierarchical Web Security Scanner Swarm';
         }
 
-        // 35. Analyze Eventarc & CloudEvents Mesh
-        const isEventarcOutput = outputLower.includes('eventarc_mesh') || 
+        // 35. Analyze Event Grid & CloudEvents Mesh
+        const isEventGridOutput = outputLower.includes('eventgrid_mesh') || 
                                  outputLower.includes('cloudevents') || 
                                  outputLower.includes('event_filter') || 
-                                 outputLower.includes('eventarc_trigger') || 
+                                 outputLower.includes('eventgrid_trigger') || 
                                  outputLower.includes('channel_connection');
-        if (isEventarcOutput) {
+        if (isEventGridOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Eventarc & CloudEvents Mesh Specialist', task: 'Design Eventarc trigger meshes and coordinate CloudEvents payload mappings' },
-                { agentId: 'GCP Pub/Sub Event-Driven Mesh Conductor Specialist', task: 'Integrate Eventarc triggers with high-throughput Pub/Sub message topics' }
+                { agentId: 'Azure Event Grid & CloudEvents Mesh Specialist', task: 'Design Event Grid trigger meshes and coordinate CloudEvents payload mappings' },
+                { agentId: 'Azure Service Bus Event-Driven Mesh Conductor Specialist', task: 'Integrate Event Grid triggers with high-throughput Service Bus message topics' }
             );
-            strategy = 'Hierarchical Eventarc & CloudEvents Mesh Swarm';
+            strategy = 'Hierarchical Event Grid & CloudEvents Mesh Swarm';
         }
 
         // 36. Analyze Cloud SQL Auth Proxy & IAM database setup
@@ -766,24 +773,24 @@ class AgenticRouterService {
                                  outputLower.includes('db_token');
         if (isSqlProxyOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud SQL Auth Proxy & IAM Database Specialist', task: 'Set up secure database IAM passwordless logins and Cloud SQL Auth Proxies' },
-                { agentId: 'GCP Relational Database & AlloyDB Architect', task: 'Audit relational connection pools and high-availability replications' }
+                { agentId: 'Azure Cloud SQL Auth Proxy & IAM Database Specialist', task: 'Set up secure database IAM passwordless logins and Cloud SQL Auth Proxies' },
+                { agentId: 'Azure Relational Database & Cosmos DB Architect', task: 'Audit relational connection pools and high-availability replications' }
             );
-            strategy = 'Hierarchical Cloud SQL Proxy & IAM DB Swarm';
+            strategy = 'Hierarchical Azure Cloud SQL Proxy & IAM DB Swarm';
         }
 
         // 37. Analyze Binary Authorization & software supply chain
-        const isBinauthOutput = outputLower.includes('binauth_guardian') || 
+        const isAzureContainerRegistryTrustOutput = outputLower.includes('acr_trust_guardian') || 
                                 outputLower.includes('binary_authorization_policy') || 
                                 outputLower.includes('kritis_signer') || 
                                 outputLower.includes('attestation_authority') || 
                                 outputLower.includes('supply_chain_security');
-        if (isBinauthOutput) {
+        if (isAzureContainerRegistryTrustOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Binary Authorization & Software Supply Chain Specialist', task: 'Formulate Kubernetes binary authorization policies and attestation authorities' },
-                { agentId: 'GCP Cloud Build & Artifact Registry CI/CD Specialist', task: 'Audit build container provenance and secure software supply chains' }
+                { agentId: 'Azure Binary Authorization & Software Supply Chain Specialist', task: 'Formulate Kubernetes binary authorization policies and attestation authorities' },
+                { agentId: 'Azure Azure Pipelines & Artifact Registry CI/CD Specialist', task: 'Audit build container provenance and secure software supply chains' }
             );
-            strategy = 'Hierarchical Binary Authorization & Supply Chain Swarm';
+            strategy = 'Hierarchical Azure Container Registry Trust & Supply Chain Swarm';
         }
 
         // 38. Analyze Cloud Interconnect & Secure VPN connections
@@ -794,48 +801,48 @@ class AgenticRouterService {
                                      outputLower.includes('ipsec_tunnel');
         if (isInterconnectOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Interconnect & Secure VPN Specialist', task: 'Configure Anycast private connections, BGP dynamic routing, and IPSec VPN tunnels' },
-                { agentId: 'GCP Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Integrate private network interconnects with edge DNS routing policies' }
+                { agentId: 'Azure Cloud Interconnect & Secure VPN Specialist', task: 'Configure Anycast private connections, BGP dynamic routing, and IPSec VPN tunnels' },
+                { agentId: 'Azure Edge Network, Cloud CDN & Cloud DNS Specialist', task: 'Integrate private network interconnects with edge DNS routing policies' }
             );
-            strategy = 'Hierarchical Cloud Interconnect & Secure VPN Swarm';
+            strategy = 'Hierarchical Azure Cloud Interconnect & Secure VPN Swarm';
         }
 
-        // 39. Analyze Workload Identity Federation & OIDC Specialist
+        // 39. Analyze Azure Workload Identity & OIDC Specialist
         const isWorkloadFederationOutput = outputLower.includes('workload_identity_federation') || 
                                            outputLower.includes('oidc_provider') || 
-                                           outputLower.includes('aws_identity_pool') || 
+                                           outputLower.includes('azure_identity_pool') || 
                                            outputLower.includes('github_actions_oidc') || 
                                            outputLower.includes('federated_credential');
         if (isWorkloadFederationOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Workload Identity Federation & OIDC Specialist', task: 'Build keyless multi-cloud OIDC provider integrations and Workload Identity pools' },
-                { agentId: 'GCP Sentinel Zero-Trust Security Auditor', task: 'Enforce Zero-Trust external clearance boundaries and IAM trust policies' }
+                { agentId: 'Azure Azure Workload Identity & OIDC Specialist', task: 'Build keyless multi-cloud OIDC provider integrations and Workload Identity pools' },
+                { agentId: 'Azure Sentinel Zero-Trust Security Auditor', task: 'Enforce Zero-Trust external clearance boundaries and IAM trust policies' }
             );
-            strategy = 'Hierarchical Workload Identity Federation & OIDC Swarm';
+            strategy = 'Hierarchical Azure Workload Identity & OIDC Swarm';
         }
 
-        // 40. Analyze GKE Enterprise multi-cluster fleet management
-        const isGkeFleetOutput = outputLower.includes('gke_fleet') || 
+        // 40. Analyze AKS Enterprise multi-cluster fleet management
+        const isGkeFleetOutput = outputLower.includes('aks_fleet') || 
                                  outputLower.includes('multi_cluster_ingress') || 
                                  outputLower.includes('config_sync') || 
                                  outputLower.includes('fleet_membership');
         if (isGkeFleetOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP GKE Enterprise Multi-Cluster Fleet Manager', task: 'Enforce Config Sync fleet policies and coordinate multi-cluster ingress routing' }
+                { agentId: 'Azure AKS Enterprise Multi-Cluster Fleet Manager', task: 'Enforce Config Sync fleet policies and coordinate multi-cluster ingress routing' }
             );
-            strategy = 'Hierarchical GKE Enterprise Fleet Swarm';
+            strategy = 'Hierarchical AKS Enterprise Fleet Swarm';
         }
 
-        // 41. Analyze Vertex AI model monitoring & prediction drift
-        const isVertexMonitoringOutput = outputLower.includes('vertex_model_monitoring') || 
+        // 41. Analyze Azure AI Studio model monitoring & prediction drift
+        const isAzureAiMonitoringOutput = outputLower.includes('azure_ai_model_monitoring') || 
                                          outputLower.includes('drift_detection') || 
                                          outputLower.includes('model_skew') || 
                                          outputLower.includes('prediction_telemetry');
-        if (isVertexMonitoringOutput) {
+        if (isAzureAiMonitoringOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Vertex AI Model Monitoring & Drift Auditor', task: 'Formulate model continuous evaluation baseline schemas and statistical drift alerts' }
+                { agentId: 'Azure Azure AI Studio Model Monitoring & Drift Auditor', task: 'Formulate model continuous evaluation baseline schemas and statistical drift alerts' }
             );
-            strategy = 'Hierarchical Vertex AI Model Monitoring Swarm';
+            strategy = 'Hierarchical Azure AI Studio Model Monitoring Swarm';
         }
 
         // 42. Analyze Healthcare API & FHIR protocol data
@@ -845,57 +852,57 @@ class AgenticRouterService {
                                        outputLower.includes('dicom_deid');
         if (isHealthcareFhirOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Healthcare API & HL7/FHIR Specialist', task: 'Design secure FHIR data store integrations and HIPAA de-identification pipelines' }
+                { agentId: 'Azure Cloud Healthcare API & HL7/FHIR Specialist', task: 'Design secure FHIR data store integrations and HIPAA de-identification pipelines' }
             );
             strategy = 'Hierarchical Healthcare & FHIR Data Swarm';
         }
 
-        // 43. Analyze Apigee Enterprise API management
-        const isApigeeEnterpriseOutput = outputLower.includes('apigee_proxy') || 
+        // 43. Analyze Azure API Management Enterprise API management
+        const isAzureApiManagementEnterpriseOutput = outputLower.includes('apim_proxy') || 
                                          outputLower.includes('spike_arrest') || 
-                                         outputLower.includes('apigee_quota') || 
+                                         outputLower.includes('apim_quota') || 
                                          outputLower.includes('api_developer_portal');
-        if (isApigeeEnterpriseOutput) {
+        if (isAzureApiManagementEnterpriseOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Apigee Enterprise API Management Specialist', task: 'Configure Apigee proxy routing configurations and traffic rate-limiting policies' }
+                { agentId: 'Azure Azure API Management Enterprise API Management Specialist', task: 'Configure Azure API Management proxy routing configurations and traffic rate-limiting policies' }
             );
-            strategy = 'Hierarchical Apigee Enterprise Swarm';
+            strategy = 'Hierarchical Azure API Management Enterprise Swarm';
         }
 
-        // 44. Analyze Dataplex data mesh governance
-        const isDataplexMeshOutput = outputLower.includes('dataplex_lake') || 
+        // 44. Analyze Azure Purview data mesh governance
+        const isAzurePurviewMeshOutput = outputLower.includes('purview_lake') || 
                                      outputLower.includes('data_mesh_governance') || 
                                      outputLower.includes('data_quality_rule') || 
                                      outputLower.includes('metadata_lineage');
-        if (isDataplexMeshOutput) {
+        if (isAzurePurviewMeshOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Dataplex Data Mesh Governance Specialist', task: 'Audit Dataplex data quality rule configurations and metadata catalog lineage' }
+                { agentId: 'Azure Azure Purview Data Mesh Governance Specialist', task: 'Audit Azure Purview data quality rule configurations and metadata catalog lineage' }
             );
-            strategy = 'Hierarchical Dataplex Data Mesh Swarm';
+            strategy = 'Hierarchical Azure Purview Data Mesh Swarm';
         }
 
-        // 45. Analyze Dataproc serverless Spark computing
-        const isDataprocSparkOutput = outputLower.includes('dataproc_serverless') || 
+        // 45. Analyze Azure HDInsight serverless Spark computing
+        const isAzureHDInsightSparkOutput = outputLower.includes('hdinsight_serverless') || 
                                       outputLower.includes('pyspark_batch') || 
                                       outputLower.includes('spark_sql_tuning') || 
                                       outputLower.includes('ephemeral_hive');
-        if (isDataprocSparkOutput) {
+        if (isAzureHDInsightSparkOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Dataproc Serverless & Apache Spark Specialist', task: 'Design serverless Spark batches and tune distributed memory executor settings' }
+                { agentId: 'Azure Azure HDInsight Serverless & Apache Spark Specialist', task: 'Design serverless Spark batches and tune distributed memory executor settings' }
             );
-            strategy = 'Hierarchical Dataproc Serverless Spark Swarm';
+            strategy = 'Hierarchical Azure HDInsight Serverless Spark Swarm';
         }
 
-        // 46. Analyze Vertex AI Search & Conversation Builder
-        const isVertexSearchOutput = outputLower.includes('vertex_search_engine') || 
+        // 46. Analyze Azure AI Studio Search & Conversation Builder
+        const isAzureAiSearchOutput = outputLower.includes('azure_ai_search_engine') || 
                                      outputLower.includes('agent_builder') || 
                                      outputLower.includes('data_store_index') || 
                                      outputLower.includes('dialogflow_cx');
-        if (isVertexSearchOutput) {
+        if (isAzureAiSearchOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Vertex AI Search & Conversation Agentic Specialist', task: 'Configure RAG data store search indexes and conversational Dialogflow CX intents' }
+                { agentId: 'Azure Azure AI Studio Search & Conversation Agentic Specialist', task: 'Configure RAG data store search indexes and conversational Dialogflow CX intents' }
             );
-            strategy = 'Hierarchical Vertex AI Agent Builder Swarm';
+            strategy = 'Hierarchical Azure AI Studio Agent Builder Swarm';
         }
 
         // 47. Analyze Secure Web Proxy & egress decryption gateway
@@ -905,21 +912,21 @@ class AgenticRouterService {
                                     outputLower.includes('tls_inspection');
         if (isSecureProxyOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist', task: 'Deploy secure SWP gateways, TLS decryption boundaries, and egress routing filters' }
+                { agentId: 'Azure Secure Web Proxy & Zero-Trust Access Gateway Specialist', task: 'Deploy secure SWP gateways, TLS decryption boundaries, and egress routing filters' }
             );
-            strategy = 'Hierarchical Secure Web Proxy Egress Swarm';
+            strategy = 'Hierarchical Azure Secure Web Proxy Egress Swarm';
         }
 
-        // 48. Analyze Cloud Run Multicontainer sidecar proxying
+        // 48. Analyze Azure Container Apps Multicontainer sidecar proxying
         const isRunMulticontainerOutput = outputLower.includes('run_multicontainer') || 
                                           outputLower.includes('sidecar_proxy') || 
                                           outputLower.includes('run_nginx_egress') || 
                                           outputLower.includes('run_shared_volume');
         if (isRunMulticontainerOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud Run Multicontainer & Sidecar Orchestration Specialist', task: 'Design Cloud Run sidecar services and memory-backed shared scratch volumes' }
+                { agentId: 'Azure Azure Container Apps Multicontainer & Sidecar Orchestration Specialist', task: 'Design Azure Container Apps sidecar services and memory-backed shared scratch volumes' }
             );
-            strategy = 'Hierarchical Cloud Run Multicontainer Swarm';
+            strategy = 'Hierarchical Azure Container Apps Multicontainer Swarm';
         }
 
         // 49. Analyze Cloud TPU & HPC cluster scheduling
@@ -929,9 +936,9 @@ class AgenticRouterService {
                                outputLower.includes('slurm_cluster');
         if (isTpuHpcOutput) {
             downstreamSequence.push(
-                { agentId: 'GCP Cloud TPU & High-Performance Compute Cluster Specialist', task: 'Configure Slurm cluster batch schedulers and JAX TPU VM pod configurations' }
+                { agentId: 'Azure Cloud TPU & High-Performance Compute Cluster Specialist', task: 'Configure Slurm cluster batch schedulers and JAX TPU VM pod configurations' }
             );
-            strategy = 'Hierarchical TPU & High-Performance Compute Swarm';
+            strategy = 'Hierarchical Azure TPU & High-Performance Compute Swarm';
         }
 
         // 50. Analyze Economic Sector: Financial Services
@@ -1025,7 +1032,7 @@ class AgenticRouterService {
         if (isSectorTechMediaOutput) {
             downstreamSequence.push(
                 { agentId: 'Next-Gen 5G/6G Network Slice & Edge Compute Architect', task: 'Design software-defined SDN slicings and map low-latency NFV topologies' },
-                { agentId: 'Spatial Computing & High-Fidelity Metaverse Specialist', task: 'Optimize WebGL glTF vertex shaders and synchronize avatar collision parameters' }
+                { agentId: 'Spatial Computing & High-Fidelity Metaverse Specialist', task: 'Optimize WebGL glTF azure_ai shaders and synchronize avatar collision parameters' }
             );
             strategy = 'Economic Sector Swarm: Technology & Media';
         }
@@ -1658,14 +1665,14 @@ class AgenticRouterService {
             strategy = 'Cybersecurity Swarm: Penetration & Red Teaming';
         }
 
-        // 112. Security Engineering: Cryptographic Key & Secret Manager Sentinel
-        const isKmsSentinelOutput = outputLower.includes('kms_cryptographic_key_rotation') || 
+        // 112. Security Engineering: Cryptographic Key & Key Vault Secrets Sentinel
+        const isKmsSentinelOutput = outputLower.includes('keyvault_cryptographic_key_rotation') || 
                                     outputLower.includes('envelope_encryption_wrapping') || 
                                     outputLower.includes('dynamic_secrets_rotation') || 
                                     outputLower.includes('api_token_leak_scanning');
         if (isKmsSentinelOutput) {
             downstreamSequence.push(
-                { agentId: 'Cryptographic Key & Secret Manager Sentinel', task: 'Enforce AES-GCM envelope encryption configurations and audit token scanning alerts' }
+                { agentId: 'Cryptographic Key & Key Vault Secrets Sentinel', task: 'Enforce AES-GCM envelope encryption configurations and audit token scanning alerts' }
             );
             strategy = 'Cybersecurity Swarm: Cryptographic Keys & Secrets';
         }
@@ -1696,7 +1703,7 @@ class AgenticRouterService {
 
         // 115. Security Engineering: Threat Modeling & Attack Graph Specialist
         const isThreatModelingOutput = outputLower.includes('stride_threat_model_classification') || 
-                                       outputLower.includes('dataflow_trust_boundary_mapping') || 
+                                       outputLower.includes('streamanalytics_trust_boundary_mapping') || 
                                        outputLower.includes('attack_graph_path_generation') || 
                                        outputLower.includes('cvss_vulnerability_metric_scoring');
         if (isThreatModelingOutput) {
@@ -1912,7 +1919,7 @@ class AgenticRouterService {
 
         // 132. API Systems: WebSockets & Real-Time Sync Coordinator
         const isWebSocketSyncOutput = outputLower.includes('websocket_connection_heartbeat_tuning') || 
-                                      outputLower.includes('pubsub_channel_state_distribution') || 
+                                      outputLower.includes('servicebus_channel_state_distribution') || 
                                       outputLower.includes('connection_backpressure_buffer_management') || 
                                       outputLower.includes('socketio_horizontal_scaling_redis');
         if (isWebSocketSyncOutput) {
@@ -2249,7 +2256,7 @@ class AgenticRouterService {
         // 160. Graphics: WebGPU & WebGL Rendering Pipeline Engineer
         const isWebGpuPipelineOutput = outputLower.includes('webgpu_gpu_render_passes') || 
                                        outputLower.includes('wgsl_glsl_shader_compile') || 
-                                       outputLower.includes('bind_groups_vertex_buffers') || 
+                                       outputLower.includes('bind_groups_azure_ai_buffers') || 
                                        outputLower.includes('gpu_compute_pipelines');
         if (isWebGpuPipelineOutput) {
             downstreamSequence.push(
@@ -2271,7 +2278,7 @@ class AgenticRouterService {
         }
 
         // 162. Graphics: Creative Shader & Visual Effects Artist
-        const isShaderArtistOutput = outputLower.includes('fragment_vertex_shader_effects') || 
+        const isShaderArtistOutput = outputLower.includes('fragment_azure_ai_shader_effects') || 
                                      outputLower.includes('simplex_perlin_noise_functions') || 
                                      outputLower.includes('post_processing_effects_filters') || 
                                      outputLower.includes('raymarching_signed_distance_fields');

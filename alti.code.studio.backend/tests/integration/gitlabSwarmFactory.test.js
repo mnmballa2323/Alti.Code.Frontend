@@ -7,7 +7,7 @@ import {
   GITLAB_SPECIALISTS_TAXONOMY,
 } from '../../src/app/modules/agents/gitlab_swarm_factory.js';
 import { vectorStoreService } from '../../src/app/modules/memory/vector.store.js';
-import { GoogleGenAiService } from '../../src/app/modules/googleGenAi/googleGenAi.service.js';
+import { AzureGenAiService } from '../../src/app/modules/googleGenAi/azureGenAi.service.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -205,7 +205,7 @@ describe('GitLab Swarm Factory & 61 Specialists Integration', () => {
       });
 
     const rerankSpy = vi
-      .spyOn(GoogleGenAiService, 'generateContent')
+      .spyOn(AzureGenAiService, 'generateContent')
       .mockResolvedValue({
         content: '{ "agentId": "gitlabMrMerger" }',
       });

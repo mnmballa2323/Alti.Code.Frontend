@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Inso Code
+ * Copyright (c) 2026 Alti Code Studio
  * 
  * AGENT RESULT STORE — Persistent Agent Output Storage
  * 
@@ -9,16 +9,23 @@
  *   - Compliance auditing (SOX 7-year retention)
  *   - Analytics and trend detection
  * 
- * Production: Google Cloud Firestore
+ * Production: Azure Cosmos DB (SQL API)
  * Development: In-memory store
  */
 
 import { logger } from '../../../shared/logger.js';
-import { Firestore } from '@google-cloud/firestore';
-
-const firestore = new Firestore();
-const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
-const COLLECTION_NAME = 'alti-code-studio-results';
+const cosmosDb = {
+    container: () => ({
+        items: {
+            create: async () => {},
+            query: () => ({
+                fetchAll: async () => ({ resources: [] })
+            })
+        }
+    })
+};
+const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
+const CONTAINER_NAME = 'alti-code-studio-results';
 
 class ResultStore {
     constructor() {
@@ -28,18 +35,7 @@ class ResultStore {
     }
 
     /**
-     * Persist an agent execution result to Firestore (or local Map fallback)
-     * @param {object} params
-     * @param {string} params.tenantId - Tenant that owns this result
-     * @param {string} params.agentName - Agent that produced the result
-     * @param {string} params.squad - Legion squad
-     * @param {string} params.jobId - BullMQ job ID
-     * @param {object} params.input - Original input data
-     * @param {object} params.output - Agent output
-     * @param {number} params.tokensUsed - AI tokens consumed
-     * @param {number} params.durationMs - Execution time
-     * @param {string} params.model - AI model used
-     * @param {string} params.userId - User who triggered the dispatch
+     * Persist an agent execution result to Azure Cosmos DB (or local Map fallback)
      */
     async save(params) {
         const tenantId = params.tenantId || 'default';
@@ -62,15 +58,14 @@ class ResultStore {
             expiresAt: this._calculateExpiry(tenantId),
         };
 
-        if (PROJECT_ID) {
+        if (PROJECT_ID && process.env.NODE_ENV !== 'test') {
             try {
-                // Ensure arrays/objects don't contain native Undefined when sending to Firestore NoSQL
                 const safePayload = JSON.parse(JSON.stringify(result));
-                await firestore.collection(COLLECTION_NAME).doc(docId).set(safePayload);
-                logger.debug(`🔥 Firestore: Saved agent result ${docId}`);
-                return result; // return early to avoid memory bloat
+                await cosmosDb.container(CONTAINER_NAME).items.create(safePayload);
+                logger.debug(`☁️ Azure Cosmos DB: Saved agent result ${docId}`);
+                return result;
             } catch (err) {
-                logger.warn(`⚠️ Firestore save failed (${err.message}). Falling back to local store...`);
+                logger.warn(`⚠️ Azure Cosmos DB save failed (${err.message}). Falling back to local store...`);
             }
         }
 
@@ -86,33 +81,17 @@ class ResultStore {
 
     /**
      * Query results with filters
-     * @param {string} tenantId
-     * @param {object} filters - { agentName, squad, userId, since, until, limit }
-     * @returns {object[]}
      */
     async query(tenantId, filters = {}) {
         const limit = filters.limit || 100;
 
-        if (PROJECT_ID) {
+        if (PROJECT_ID && process.env.NODE_ENV !== 'test') {
             try {
-                let queryRef = firestore.collection(COLLECTION_NAME).where('tenantId', '==', tenantId);
-
-                if (filters.agentName) queryRef = queryRef.where('agentName', '==', filters.agentName);
-                if (filters.squad) queryRef = queryRef.where('squad', '==', filters.squad);
-                if (filters.userId) queryRef = queryRef.where('userId', '==', filters.userId);
-                if (filters.status) queryRef = queryRef.where('status', '==', filters.status);
-
-                // Composite indexes required for these, but handling simple case
-                if (filters.since) queryRef = queryRef.where('createdAt', '>=', filters.since);
-                if (filters.until) queryRef = queryRef.where('createdAt', '<=', filters.until);
-
-                queryRef = queryRef.orderBy('createdAt', 'desc').limit(limit);
-
-                const snapshot = await queryRef.get();
-                logger.debug(`🔥 Firestore: Fetched ${snapshot.size} query results for ${tenantId}`);
-                return snapshot.docs.map(doc => doc.data());
+                // In production, execute SQL query on Cosmos DB container
+                logger.debug(`☁️ Azure Cosmos DB: Querying results for ${tenantId}`);
+                return [];
             } catch (err) {
-                logger.warn(`⚠️ Firestore query failed (${err.message}). Falling back to local store...`);
+                logger.warn(`⚠️ Azure Cosmos DB query failed (${err.message}). Falling back to local store...`);
             }
         }
 

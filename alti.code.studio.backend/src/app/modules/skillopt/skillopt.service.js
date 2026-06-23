@@ -1,4 +1,4 @@
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import { Skill, SkillOptRun } from './skillopt.model.js';
 import { logger } from '../../../shared/logger.js';
 
@@ -37,7 +37,7 @@ export class SkillOptService {
                     feedback = res.feedback || '';
                 } else {
                     // Default evaluation harness: Run model with custom instruction and evaluate response
-                    const model = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro', 0.2);
+                    const model = AzureGenAiService.getGenerativeModel('gemini-3.1-pro', 0.2);
                     
                     const prompt = `
                         SYSTEM INSTRUCTION:
@@ -51,7 +51,7 @@ export class SkillOptService {
                     agentOutput = result.response.text().trim();
 
                     // Validation scorer
-                    const scorerModel = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro', 0.0);
+                    const scorerModel = AzureGenAiService.getGenerativeModel('gemini-3.1-pro', 0.0);
                     const validationPrompt = `
                         TASK: Determine if the AGENT OUTPUT matches the EXPECTED output according to the given CRITERIA.
                         
@@ -165,7 +165,7 @@ export class SkillOptService {
             ]
         `;
 
-        const model = GoogleGenAiService.getGenerativeModel('gemini-3.1-pro', 0.3);
+        const model = AzureGenAiService.getGenerativeModel('gemini-3.1-pro', 0.3);
         const result = await model.generateContent(prompt);
         const cleanJson = result.response.text()
             .replace(/```json/g, '')

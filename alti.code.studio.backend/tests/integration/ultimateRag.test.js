@@ -1,28 +1,29 @@
 global.self = global;
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { ultimateRagService } from '../../src/app/modules/rag/ultimate_rag.service.js';
-import { GoogleGenAiService } from '../../src/app/modules/googleGenAi/googleGenAi.service.js';
-import { discoveryEngineService } from '../../src/app/modules/googleCloud/discovery.service.js';
-import { spannerGraphService } from '../../src/app/modules/googleCloud/spanner_graph.service.js';
+import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
+import { discoveryEngineService } from '../../src/app/modules/azureCloud/azureSearch.service.js';
+import { spannerGraphService } from '../../src/app/modules/azureCloud/azureCosmosGraph.service.js';
 import { GeminiCliService } from '../../src/app/modules/geminiCli/geminiCli.service.js';
 import { fileSearchService } from '../../src/app/modules/fileSearch/fileSearch.service.js';
-import { ragCacheService } from '../../src/app/modules/googleCloud/rag_cache.service.js';
+import { ragCacheService } from '../../src/app/modules/azureCloud/azureCache.service.js';
 
-vi.mock('../../src/app/modules/googleGenAi/googleGenAi.service.js', () => ({
-    GoogleGenAiService: {
+vi.mock('../../src/app/modules/ai/azureGenAi.service.js', () => ({
+    azureGenAiService: {
         generateContent: vi.fn()
     }
 }));
 
-vi.mock('../../src/app/modules/googleCloud/discovery.service.js', () => ({
+vi.mock('../../src/app/modules/azureCloud/azureSearch.service.js', () => ({
     discoveryEngineService: {
         searchCodebase: vi.fn().mockResolvedValue([])
     }
 }));
 
-vi.mock('../../src/app/modules/googleCloud/spanner_graph.service.js', () => ({
+vi.mock('../../src/app/modules/azureCloud/azureCosmosGraph.service.js', () => ({
     spannerGraphService: {
-        queryArchitectureDependencies: vi.fn().mockResolvedValue([])
+        queryArchitectureDependencies: vi.fn().mockResolvedValue([]),
+        executeAstGraphTraversal: vi.fn().mockResolvedValue([])
     }
 }));
 
@@ -39,10 +40,16 @@ vi.mock('../../src/app/modules/fileSearch/fileSearch.service.js', () => ({
     }
 }));
 
-vi.mock('../../src/app/modules/googleCloud/rag_cache.service.js', () => ({
+vi.mock('../../src/app/modules/azureCloud/azureCache.service.js', () => ({
     ragCacheService: {
         getCachedContext: vi.fn().mockResolvedValue(null),
         setCachedContext: vi.fn().mockResolvedValue(true)
+    }
+}));
+
+vi.mock('../../src/app/modules/ai/multicloud_inference.service.js', () => ({
+    multiCloudInferenceService: {
+        executeMultiCloudInference: vi.fn()
     }
 }));
 
@@ -62,6 +69,15 @@ vi.mock('../../src/config/prisma.js', () => ({
             findFirst: vi.fn().mockResolvedValue(null),
             create: vi.fn().mockResolvedValue(true),
             update: vi.fn().mockResolvedValue(true)
+        },
+        vault: {
+            findUnique: vi.fn().mockResolvedValue({
+                openaiApiKey: 'mocked-key',
+                anthropicApiKey: 'mocked-key',
+                geminiApiKey: 'mocked-key',
+                azureEndpoint: 'mocked-endpoint',
+                azureApiKey: 'mocked-key',
+            })
         }
     }
 }));
@@ -78,7 +94,7 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
     it('should inject Chat Workspace guardrails and block raw code output when domain is "Chat"', async () => {
         let capturedPrompt = '';
-        GoogleGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             // Capture the main synthesis prompt containing context
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 capturedPrompt = prompt;
@@ -99,7 +115,7 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
     it('should NOT inject Chat Workspace guardrails when domain is "Full Stack"', async () => {
         let capturedPrompt = '';
-        GoogleGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 capturedPrompt = prompt;
                 return { content: 'Here is the code block: ```javascript\nconst express = require("express");\n```' };
@@ -116,13 +132,18 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
     it('LLM Gateway Agentic Routing: should classify codebase queries as RAG and redirect seamlessly', async () => {
         const { LlmGatewayService } = await import('../../src/app/modules/llmGateway/llmGateway.service.js');
+        const { multiCloudInferenceService } = await import('../../src/app/modules/ai/multicloud_inference.service.js');
         
         let classificationRun = false;
-        GoogleGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        multiCloudInferenceService.executeMultiCloudInference.mockImplementation(async (prompt, agent, options) => {
             if (prompt.includes('requires searching the codebase')) {
                 classificationRun = true;
-                return { content: 'RAG' };
+                return { content: 'RAG', model: 'gpt-5.5' };
             }
+            return { content: 'mocked content', model: 'gpt-5.5' };
+        });
+
+        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 return { content: 'This is the RAG answer explaining architecture conceptually.' };
             }

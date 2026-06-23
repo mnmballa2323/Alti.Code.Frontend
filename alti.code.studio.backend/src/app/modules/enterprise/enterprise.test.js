@@ -422,17 +422,17 @@ describe('Phase 31: Compliance Engine — SOX / HIPAA / PCI-DSS / GDPR / FedRAMP
         expect(entry.timestamp).toBeDefined();
     });
 
-    it('should sign logs using OpenStack Barbican HSM when configured', async () => {
+    it('should sign logs using Azure Key Vault HSM when configured', async () => {
         const { complianceEngine } = await import('./compliance.engine.js');
         const axios = await import('axios');
         
         // Configure Barbican URL and credentials
-        process.env.OS_KEY_MANAGER_URL = 'http://barbican.liberty.one:9311';
-        process.env.OS_BARBICAN_KEY_ID = 'test-audit-key-uuid';
-        process.env.OS_TOKEN = 'test-keystone-token';
+        process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
+        process.env.AZURE_KEYVAULT_KEY_NAME = 'test-audit-key-uuid';
+        process.env.AZURE_AD_TOKEN = 'test-keystone-token';
 
         const mockPost = vi.spyOn(axios.default, 'post').mockResolvedValue({
-            data: { signature: 'mocked-barbican-signature-data' }
+            data: { value: 'mocked-azure-keyvault-signature-data' }
         });
 
         const entry = await complianceEngine.log({
@@ -441,23 +441,23 @@ describe('Phase 31: Compliance Engine — SOX / HIPAA / PCI-DSS / GDPR / FedRAMP
             tenantId: 'enterprise-tenant'
         });
 
-        expect(entry.hash).toBe('barbican-signed:mocked-barbican-signature-data');
+        expect(entry.hash).toBe('azure-keyvault-signed:mocked-azure-keyvault-signature-data');
         expect(mockPost).toHaveBeenCalled();
 
         // Clean up environment variables & mock
-        delete process.env.OS_KEY_MANAGER_URL;
-        delete process.env.OS_BARBICAN_KEY_ID;
-        delete process.env.OS_TOKEN;
+        delete process.env.AZURE_KEYVAULT_ENDPOINT;
+        delete process.env.AZURE_KEYVAULT_KEY_NAME;
+        delete process.env.AZURE_AD_TOKEN;
         mockPost.mockRestore();
     });
 
-    it('should fallback to local mock signature when Barbican API call fails', async () => {
+    it('should fallback to local mock signature when Azure Key Vault API call fails', async () => {
         const { complianceEngine } = await import('./compliance.engine.js');
         const axios = await import('axios');
 
-        process.env.OS_KEY_MANAGER_URL = 'http://barbican.liberty.one:9311';
-        process.env.OS_BARBICAN_KEY_ID = 'test-audit-key-uuid';
-        process.env.OS_TOKEN = 'test-keystone-token';
+        process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
+        process.env.AZURE_KEYVAULT_KEY_NAME = 'test-audit-key-uuid';
+        process.env.AZURE_AD_TOKEN = 'test-keystone-token';
 
         const mockPost = vi.spyOn(axios.default, 'post').mockRejectedValue(new Error('HSM Timeout'));
 
@@ -467,12 +467,12 @@ describe('Phase 31: Compliance Engine — SOX / HIPAA / PCI-DSS / GDPR / FedRAMP
             tenantId: 'enterprise-tenant'
         });
 
-        expect(entry.hash).toContain('barbican-mock-signed:');
+        expect(entry.hash).toContain('azure-keyvault-mock-signed:');
         mockPost.mockRestore();
 
-        delete process.env.OS_KEY_MANAGER_URL;
-        delete process.env.OS_BARBICAN_KEY_ID;
-        delete process.env.OS_TOKEN;
+        delete process.env.AZURE_KEYVAULT_ENDPOINT;
+        delete process.env.AZURE_KEYVAULT_KEY_NAME;
+        delete process.env.AZURE_AD_TOKEN;
     });
 
     it('should store audit logs in append-only WORM MongoDB collection when active', async () => {
@@ -847,17 +847,17 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             vi.restoreAllMocks();
         });
 
-        it('should encrypt and decrypt Vault credentials dynamically using Barbican KMS keys', async () => {
+        it('should encrypt and decrypt Vault credentials dynamically using Azure Key Vault KMS keys', async () => {
             const { prisma } = await import('../../../config/prisma.js');
             const { VaultService } = await import('../vault/vault.service.js');
             
-            // Mock tenant with Barbican KEK
+            // Mock tenant with Azure Key Vault KEK
             vi.spyOn(prisma.user, 'findUnique').mockResolvedValue({
                 id: 'byok-user-uuid',
                 tenantId: 'byok-tenant-uuid',
                 tenant: {
                     id: 'byok-tenant-uuid',
-                    customerKmsKeyArn: 'barbican:test-customer-kek-uuid'
+                    customerKmsKeyArn: 'azure-keyvault:test-customer-kek-uuid'
                 }
             });
 
@@ -868,14 +868,14 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
                 return mockVaultRecord;
             });
 
-            // Mock Barbican API HTTP response
+            // Mock Azure Key Vault API HTTP response
             const axios = await import('axios');
             const mockGet = vi.spyOn(axios.default, 'get').mockResolvedValue({
-                data: 'my-barbican-payload-decrypted-kek-32bytes'
+                data: 'my-azure-keyvault-payload-decrypted-kek-32bytes'
             });
 
-            process.env.OS_KEY_MANAGER_URL = 'http://barbican.liberty.one:9311';
-            process.env.OS_TOKEN = 'mock-auth-token';
+            process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
+            process.env.AZURE_AD_TOKEN = 'mock-auth-token';
 
             const rawKeys = {
                 openaiApiKey: 'sk-1234567890abcdef',
@@ -886,10 +886,10 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             await VaultService.updateCredentials('byok-user-uuid', rawKeys);
             
             expect(mockGet).toHaveBeenCalledWith(
-                'http://barbican.liberty.one:9311/v1/secrets/test-customer-kek-uuid/payload',
+                'https://my-keyvault.vault.azure.net/secrets/test-customer-kek-uuid?api-version=7.4',
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        'X-Auth-Token': 'mock-auth-token'
+                        'Authorization': 'Bearer mock-auth-token'
                     })
                 })
             );
@@ -903,8 +903,8 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             expect(decrypted.openaiApiKey).toBe('sk-1234567890abcdef');
             expect(decrypted.anthropicApiKey).toBe('sk-ant-9876543210');
 
-            delete process.env.OS_KEY_MANAGER_URL;
-            delete process.env.OS_TOKEN;
+            delete process.env.AZURE_KEYVAULT_ENDPOINT;
+            delete process.env.AZURE_AD_TOKEN;
         });
 
         it('should propagate Vault credentials from llmGateway to MultiCloudInferenceService', async () => {
@@ -913,25 +913,24 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             const { VaultService } = await import('../vault/vault.service.js');
 
             vi.spyOn(VaultService, 'getRawCredentials').mockResolvedValue({
-                awsAccessKeyId: 'vault-aws-access-key',
-                awsSecretAccessKey: 'vault-aws-secret-key',
-                awsRegion: 'us-east-1'
+                azureApiKey: 'vault-azure-api-key',
+                azureEndpoint: 'vault-azure-endpoint'
             });
 
             const mockInference = vi.spyOn(multiCloudInferenceService, 'executeMultiCloudInference').mockResolvedValue({
-                content: 'Bedrock response with custom vault keys',
-                model: 'anthropic.claude-v2'
+                content: 'Azure response with custom vault keys',
+                model: 'gpt-5.5'
             });
 
-            await LlmGatewayService.routeCompletion('user-123', 'session-123', 'hello', 'anthropic.claude-v2');
+            await LlmGatewayService.routeCompletion('user-123', 'session-123', 'hello', 'gpt-5.5');
 
             expect(mockInference).toHaveBeenCalledWith(
                 expect.any(String),
                 'gateway',
                 expect.objectContaining({
-                    preferredProvider: 'aws',
+                    preferredProvider: 'azure',
                     vaultCredentials: expect.objectContaining({
-                        awsAccessKeyId: 'vault-aws-access-key'
+                        azureApiKey: 'vault-azure-api-key'
                     })
                 })
             );
@@ -999,12 +998,12 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
                 tenantId: 'rotation-tenant-uuid',
                 tenant: {
                     id: 'rotation-tenant-uuid',
-                    customerKmsKeyArn: 'barbican:test-rotated-kek-uuid'
+                    customerKmsKeyArn: 'azure-keyvault:test-rotated-kek-uuid'
                 }
             });
 
             // Encrypt secret with NEW key
-            const newKey = 'my-new-barbican-key-payload-32b';
+            const newKey = 'my-new-azure-key-payload-32b';
             const secretValue = 'super-secret-key-data';
             const encryptedSecret = await encryptionService.encrypt(secretValue, newKey);
 
@@ -1015,8 +1014,8 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             });
 
             // Configure Barbican URL
-            process.env.OS_KEY_MANAGER_URL = 'http://barbican.liberty.one:9311';
-            process.env.OS_TOKEN = 'mock-auth-token';
+            process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
+            process.env.AZURE_AD_TOKEN = 'mock-auth-token';
 
             // First get resolves to oldKey (decryption will fail), second resolves to newKey (decryption succeeds)
             const oldKey = 'my-old-rotated-key-payload-32b';
@@ -1024,9 +1023,9 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             const mockGet = vi.spyOn(axios.default, 'get').mockImplementation(async () => {
                 callCount++;
                 if (callCount === 1) {
-                    return { data: oldKey };
+                    return { data: { value: oldKey } };
                 }
-                return { data: newKey };
+                return { data: { value: newKey } };
             });
 
             const decrypted = await VaultService.getRawCredentials('rotation-user-uuid');
@@ -1036,8 +1035,8 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             // Verify it was fetched twice (first for cached value, second for bypass retry)
             expect(callCount).toBe(2);
 
-            delete process.env.OS_KEY_MANAGER_URL;
-            delete process.env.OS_TOKEN;
+            delete process.env.AZURE_KEYVAULT_ENDPOINT;
+            delete process.env.AZURE_AD_TOKEN;
         });
 
         it('should sign SIEM webhook payloads and attach X-Alti-Signature header', async () => {
@@ -1060,14 +1059,14 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             const mockPost = vi.spyOn(axios.default, 'post').mockResolvedValue({ status: 200 });
 
             // Configure Barbican URL to trigger signing
-            process.env.OS_KEY_MANAGER_URL = 'http://barbican.liberty.one:9311';
-            process.env.OS_BARBICAN_KEY_ID = 'test-siem-key-uuid';
-            process.env.OS_TOKEN = 'mock-auth-token';
+            process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
+            process.env.AZURE_KEYVAULT_KEY_NAME = 'test-siem-key-uuid';
+            process.env.AZURE_AD_TOKEN = 'mock-auth-token';
 
-            // Mock Barbican signature response
+            // Mock Azure Key Vault signature response
             const mockSignPost = vi.spyOn(axios.default, 'post').mockImplementation(async (url) => {
                 if (url.includes('/sign')) {
-                    return { data: { signature: 'mock-asymmetric-signature-from-hsm' } };
+                    return { data: { value: 'mock-asymmetric-signature-from-keyvault' } };
                 }
                 return { status: 200 };
             });
@@ -1080,15 +1079,15 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
                 expect.any(Object),
                 expect.objectContaining({
                     headers: expect.objectContaining({
-                        'X-Alti-Signature': 'mock-asymmetric-signature-from-hsm',
+                        'X-Alti-Signature': 'mock-asymmetric-signature-from-keyvault',
                         'Authorization': 'Bearer splunk-token'
                     })
                 })
             );
 
-            delete process.env.OS_KEY_MANAGER_URL;
-            delete process.env.OS_BARBICAN_KEY_ID;
-            delete process.env.OS_TOKEN;
+            delete process.env.AZURE_KEYVAULT_ENDPOINT;
+            delete process.env.AZURE_KEYVAULT_KEY_NAME;
+            delete process.env.AZURE_AD_TOKEN;
         });
 
         it('should detect PKCS#11 bridge configuration and log active status', async () => {
@@ -1219,21 +1218,21 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
             expect(tenant.vpnConfig).toEqual(config.vpnConfig);
         });
 
-        it('should verify Barbican key attestation and return validated HSM metadata', async () => {
+        it('should verify Azure Key Vault key attestation and return validated HSM metadata', async () => {
             const { complianceEngine } = await import('./compliance.engine.js');
             
-            const attestation = await complianceEngine.verifyBarbicanKeyAttestation('test-key-id');
+            const attestation = await complianceEngine.verifyAzureKeyVaultKeyAttestation('test-key-id');
             
             expect(attestation.keyId).toBe('test-key-id');
             expect(attestation.attestationStatus).toBe('VERIFIED');
-            expect(attestation.hsmVendor).toBe('Thales Luna HSM');
+            expect(attestation.hsmVendor).toBe('Microsoft Azure HSM (nCipher)');
             expect(attestation.attestationCertificateChain).toBeDefined();
             expect(attestation.verifiedAt).toBeDefined();
         });
 
         it('should execute distributed rate limiter check asynchronously using Redis client', async () => {
             const { rateLimiter } = await import('./api.keys.js');
-            const { memorystoreService } = await import('../googleCloud/memorystore.service.js');
+            const { memorystoreService } = await import('../azureCloud/azureCache.service.js');
 
             // Set Redis to initialized and mock incr/ttl methods
             memorystoreService.isInitialized = true;

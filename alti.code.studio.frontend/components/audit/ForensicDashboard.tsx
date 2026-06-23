@@ -74,10 +74,10 @@ export default function ForensicDashboard() {
   const handleExportWORM = async () => {
     try {
       const loadingToast = toast.loading(
-        "Dispatching export to GCP WORM Bucket...",
+        "Dispatching export to Azure WORM Container...",
       );
       const response = await axios.post(
-        "http://localhost:5000/api/v1/audit/export/gcs",
+        "http://localhost:5000/api/v1/audit/export/azure",
       );
 
       toast.dismiss(loadingToast);

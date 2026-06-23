@@ -191,9 +191,9 @@ const requestMagicLink = async (email) => {
     }
 
     try {
-        const { sendMailForRegisterWithGmail } = await import('../../middlewares/sendEmail/verifyRegisterEmail.js').catch(() => ({}));
-        if (sendMailForRegisterWithGmail) {
-            await sendMailForRegisterWithGmail({
+        const { sendMailForRegisterWithAzure } = await import('../../middlewares/sendEmail/verifyRegisterEmail.js').catch(() => ({}));
+        if (sendMailForRegisterWithAzure) {
+            await sendMailForRegisterWithAzure({
                 to: normalizedEmail,
                 subject: `Your Fazm sign-in code: ${code}`,
                 text: `<p>Enter this code in the Fazm app to sign in. It expires in 10 minutes.</p><h3>${code}</h3>`

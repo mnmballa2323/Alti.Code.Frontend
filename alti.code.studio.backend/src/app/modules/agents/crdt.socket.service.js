@@ -2,8 +2,8 @@ import { WebSocketServer } from 'ws';
 import setupWSConnection, { setPersistence } from 'y-websocket/bin/utils';
 import { logger } from '../../../shared/logger.js';
 import * as Y from 'yjs';
-import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
-import { memorystoreService } from '../googleCloud/memorystore.service.js';
+import { FirestoreSyncService } from '../azureCloud/azureCosmosDb.service.js';
+import { memorystoreService } from '../azureCloud/azureCache.service.js';
 
 class CrdtSocketService {
     constructor() {

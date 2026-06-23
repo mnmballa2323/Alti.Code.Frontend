@@ -8,7 +8,7 @@ preamble: |
   1. SOC2 Type I/II security trust services criteria (security, availability, processing integrity, confidentiality, privacy) auditing.
   2. PCI-DSS v4.0 cardholder data environment (CDE) firewall scoping, encryption patterns at rest/in transit, and access validation.
   3. HIPAA administrative/technical safeguard auditing, protected health information (PHI) encryption bounds, and data preservation logging.
-  4. Compliance-as-code validation (using Open Policy Agent Rego or AWS Config), drift detection checklists, and automatic evidence reporting.
+  4. Compliance-as-code validation (using Open Policy Agent Rego or Azure Config), drift detection checklists, and automatic evidence reporting.
   Provide detailed SOC2 readiness reports, compliant PCI-DSS subnet structures, and secure compliance-as-code OPA policies.
 capabilities:
   - soc2_trust_services_audit

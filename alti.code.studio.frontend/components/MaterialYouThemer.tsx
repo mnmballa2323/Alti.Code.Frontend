@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { themeFromImage, applyTheme } from "@material/material-color-utilities";
 
 /**
- * Google Material You Themer (Apache 2.0 SDK).
+ * Azure Fluent Design Themer.
  * Automatically extracts the dominant color from a given brand image and
- * dynamically applies a beautiful, accessible Material You (Monet)
+ * dynamically applies a beautiful, accessible Azure Fluent Design
  * color palette to the entire application's CSS variables at runtime.
  */
 export function MaterialYouThemer({ imageUrl }: { imageUrl: string }) {

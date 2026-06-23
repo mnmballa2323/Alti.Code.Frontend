@@ -6,36 +6,23 @@
  * and behavioral deviations based on audit ledger trails.
  */
 
-import { VertexAI } from '@google-cloud/vertexai';
+import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { AuditLog } from './audit.model.js';
 
 class AuditAnomalyService {
     constructor() {
-        this.projectId = config.gcp.project_id;
-        this.location = config.gcp.location || 'us-central1';
-        this.modelName = config.gcp.model_name || 'gemini-3.1-pro';  // Use primary analytical model
+        this.projectId = config.azure.tenant_id;
+        this.location = 'eastus';
+        this.modelName = config.azure.model_name || 'gpt-5.5';  // Use primary analytical model
 
         try {
-            if (this.projectId) {
-                this.vertexAI = new VertexAI({ project: this.projectId, location: this.location });
-                this.generativeModel = this.vertexAI.getGenerativeModel({
-                    model: this.modelName,
-                    generationConfig: {
-                        temperature: 0.1, // Low temp for analytical consistency
-                        responseMimeType: 'application/json'
-                    }
-                });
-                this.isEnabled = true;
-                logger.info(`🤖 AuditAnomalyService: Initialized Vertex AI (${this.modelName})`);
-            } else {
-                this.isEnabled = false;
-                logger.warn('⚠️ AuditAnomalyService: No GCP Project ID. Vertex AI disabled.');
-            }
+            this.isEnabled = true;
+            logger.info('🤖 AuditAnomalyService: Initialized with Azure OpenAI.');
         } catch (error) {
             this.isEnabled = false;
-            logger.error('❌ AuditAnomalyService: Vertex AI initialization failed.', error.message);
+            logger.error('❌ AuditAnomalyService: Azure OpenAI initialization failed.', error.message);
         }
     }
 
@@ -77,12 +64,8 @@ class AuditAnomalyService {
                 "reason": "String detailing exactly what anomalous behavior was detected, or 'Behavior normal' if safe"
             }`;
 
-            const request = {
-                contents: [{ role: 'user', parts: [{ text: prompt }] }]
-            };
-
-            const result = await this.generativeModel.generateContent(request);
-            const responseText = result.response.candidates[0].content.parts[0].text;
+            const result = await multiCloudInferenceService.executeMultiCloudInference(prompt, 'audit_anomaly', { modelId: 'gpt-5.5' });
+            const responseText = result.content;
 
             // Clean up any markdown blocks if the LLM adds them
             const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();

@@ -1,6 +1,6 @@
-# GitHub API Integrations & Sovereign Cloud Deployment Guide
+# Azure Sovereign Deployment & GitHub Integration Guide
 
-This document defines the architecture, endpoints, and deployment tiers for **Alti.Code.Studio** on the **Liberty Center One** private cloud, OpenStack environment, and public cloud providers (AWS, Azure, GCP).
+This document defines the architecture, endpoints, and deployment tiers for **Alti.Code.Studio** exclusively on **Microsoft Azure**, supporting the three core options: Commercial Cloud, Government Cloud, and Classified & Air-Gapped Cloud.
 
 ---
 
@@ -42,40 +42,37 @@ The integration includes a robust, isolated Vitest test suite with **488 unit te
 
 ## 🚀 Part 2: Deployment Configuration Tiers
 
-Our infrastructure is configured to support three customer archetypes, ranging from cost-effective shared deployments to fully isolated private-cloud VMs and custom public-cloud environments.
+Our infrastructure is configured exclusively on Microsoft Azure to support three deployment archetypes:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────────────┐
 │                          Deployment Archetypes                          │
 ├───────────────────┬─────────────────────────────┬───────────────────────┤
-│    Individuals    │            Teams            │      Enterprise       │
+│    Commercial     │         Government          │      Classified       │
 ├───────────────────┼─────────────────────────────┼───────────────────────┤
-│ Shared VM Cluster │ Single-Tenant VM (Isolated) │ Bring Your Own Cloud  │
-│  Logical Tenant   │      Physical VPC & Cinder  │   Customer AWS/Azure/ │
-│    Isolation      │         Encryption          │      GCP VPC          │
+│ Azure Public      │ Azure Government (L4/L5)    │ Azure Secret / AirGap │
+│ VM/App Service    │ Isolated Gov VNets & Entra  │ Air-Gapped local VMs  │
+│  Standard Tenant  │   DoD IL5 / FedRAMP High    │   DoD IL6 / Isolated  │
 └───────────────────┴─────────────────────────────┴───────────────────────┘
 ```
 
-### 1. Individuals (Shared Private Cloud)
-* **Architecture:** Multi-user shared pool running on a single large Liberty Center One instance.
+### 1. Azure Commercial Cloud
+* **Architecture:** Multi-user shared or single-tenant pools running on standard Azure App Services and VM scale sets.
 * **Logical Isolation:** Data segregation is enforced at the application boundary via the `tenantDbRouter` database connection pooling middleware. Individual developer accounts are logically isolated in separate databases/schemas.
-* **Resource Profile:** Shared pool.
+* **Resource Profile:** Azure D-series compute and Azure SQL pools.
 
-### 2. Teams (Single-Tenant Private Cloud)
-* **Architecture:** One dedicated VM compute node per customer company, deployed in an isolated OpenStack VPC network with no external sharing.
-* **Physical Isolation:** Booted from a dedicated, persistent Cinder block storage volume with Barbican HSM encryption metadata enabled.
-* **One-Click Configuration (`terraform/variables.tf` Defaults):**
-  * **Nova Compute Flavor:** `m1.2xlarge` (16 vCPUs, 32 GB RAM) — necessary to run all 15+ concurrent service containers comfortably.
-  * **Cinder Volume Size:** `250 GB` NVMe storage.
-  * **Image:** `Ubuntu 22.04 LTS`.
+### 2. Azure Government Cloud
+* **Architecture:** One dedicated VM compute node per customer company, deployed in an isolated Azure Government subscription inside a Gov VNet with no external sharing.
+* **Physical Isolation:** Booted from dedicated Azure Managed Disks with customer-managed key (CMK) encryption enabled via Azure Key Vault.
+* **FedRAMP Compliance:** Built to meet FedRAMP High and DoD IL5 requirements.
 
-### 3. Enterprise (Bring Your Own Cloud - BYOC)
-* **Architecture:** Deployed directly inside the customer's own cloud perimeter (AWS VPC, Azure VNet, or GCP VPC) using the repository's native Kubernetes Helm charts and multi-region Terraform modules.
+### 3. Azure Classified & Air-Gapped Cloud
+* **Architecture:** Deployed directly inside fully disconnected, air-gapped environments (Azure Secret, Top Secret, or local hardware) utilizing the repository's native Kubernetes manifests and isolated Terraform modules.
 * **Data Privacy:** Customer maintains absolute ownership of compute, data, and access keys.
-* **Inference Routing:** The platform connects directly to customer-owned public cloud AI endpoints:
-  * **AWS:** AWS Bedrock (Claude)
-  * **Azure:** Azure OpenAI Foundry (GPT)
-  * **GCP:** Google Cloud Vertex AI (Gemini)
+* **Inference Routing:** The platform connects directly to Azure OpenAI Sovereign endpoints or local air-gapped models (e.g. Ollama):
+  * **Azure OpenAI Foundry:** Private link connections to sovereign Azure OpenAI deployments.
+  * **Air-Gapped Local Model:** Fallback to local Ollama running `codestral` and `llama3`.
 
 ---
 
@@ -83,10 +80,12 @@ Our infrastructure is configured to support three customer archetypes, ranging f
 
 The platform provides a suite of custom shell scripts to bootstrap, heal, and deploy the stack autonomously.
 
-### 1. VPC Deployer (`deploy_openstack.sh`)
-Automates the provisioning of isolated customer VPC networks, routers, firewalls, and boot volumes on the Liberty Center One OpenStack private cloud:
+### 1. Azure Sovereign Deployer (`deploy_enterprise.sh`)
+Automates the provisioning of Azure infrastructure (VNets, VM clusters, and endpoints) using Terraform:
 ```bash
-./deploy_openstack.sh --customer <customer-name> --subnet <private-cidr> --mode vm
+./deploy_enterprise.sh --deployment-option commercial
+./deploy_enterprise.sh --deployment-option government
+./deploy_enterprise.sh --deployment-option classified
 ```
 
 ### 2. Blue-Green Orchestrator (`deploy_blue_green.sh`)

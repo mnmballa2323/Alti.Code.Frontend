@@ -35,7 +35,7 @@ export default function MatrixMissionControl() {
 
     setGraphData({ nodes, links });
 
-    // Simulate real-time Pub/Sub activity
+    // Simulate real-time Event Grid activity
     const interval = setInterval(() => {
       if (graphRef.current) {
         // Shoot dynamic light particles across edges
@@ -86,7 +86,7 @@ export default function MatrixMissionControl() {
           </Chip>
         </div>
         <p className="text-blue-400/80 font-mono text-sm mt-2 max-w-lg">
-          Real-time topological visualization of the Google Cloud Pub/Sub
+          Real-time topological visualization of the Azure Event Grid
           Agentic Mesh. Monitoring 300+ highly specialized Sovereign Agents in
           multi-dimensional space.
         </p>

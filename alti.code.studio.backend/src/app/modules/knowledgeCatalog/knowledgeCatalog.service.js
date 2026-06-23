@@ -1,22 +1,22 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { DataCatalogClient } from '@google-cloud/datacatalog';
+// Removed DataCatalogClient import
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 import { parseOKF, validateOKF } from './okf.parser.js';
 import { prisma } from '../../../config/prisma.js';
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 import { socketService } from '../../services/socket.service.js';
 import { neo4jService } from '../../services/neo4j.service.js';
 
 class KnowledgeCatalogService {
     constructor() {
         this.catalogDir = path.join(process.cwd(), 'catalog');
-        this.location = config.gcp?.location || 'us-central1';
-        this.projectId = config.gcp?.project_id || 'mock-project-id';
+        this.location = 'eastus';
+        this.projectId = config.azure?.tenant_id || 'mock-project-id';
         
         try {
-            this.client = new DataCatalogClient();
+            this.client = null;
             logger.info('🛡️ [Knowledge Catalog] Client initialized successfully.');
         } catch (error) {
             logger.warn('⚠️ [Knowledge Catalog] Running in local-only fallback mode. Client could not be initialized.');
@@ -208,7 +208,7 @@ ${generatedFiles.filter(f => f.startsWith('apis/')).map(f => `  - [${f.split('/'
 
                 // 2. Generate and store pgvector embedding (with safety fallback)
                 try {
-                    const embedding = await vertexService.getEmbeddings(concept.body);
+                    const embedding = await azureSovereignCompatService.getEmbeddings(concept.body);
                     const embeddingStr = `[${embedding.join(',')}]`;
                     await prisma.$executeRawUnsafe(`
                         UPDATE "OkfConcept"
@@ -274,7 +274,7 @@ ${generatedFiles.filter(f => f.startsWith('apis/')).map(f => `  - [${f.split('/'
      */
     async searchCatalogSemantically(query, topK = 5) {
         try {
-            const embedding = await vertexService.getEmbeddings(query);
+            const embedding = await azureSovereignCompatService.getEmbeddings(query);
             const embeddingStr = `[${embedding.join(',')}]`;
 
             // Query OkfConcept using cosine distance (<=>)
@@ -518,7 +518,7 @@ timestamp: ${new Date().toISOString()}
             });
 
             try {
-                const embedding = await vertexService.getEmbeddings(body);
+                const embedding = await azureSovereignCompatService.getEmbeddings(body);
                 const embeddingStr = `[${embedding.join(',')}]`;
                 await prisma.$executeRawUnsafe(`
                     UPDATE "OkfConcept"

@@ -20,18 +20,14 @@ vi.mock('./auth.utils.js', () => {
     };
 });
 
-vi.mock('../googleCloud/recaptcha.service.js', () => {
+vi.mock('../azureCloud/azureServices.service.js', () => {
     return {
         recaptchaService: {
-            createAssessment: vi.fn(),
-        }
-    };
-});
-
-vi.mock('../googleCloud/kms.service.js', () => {
-    return {
+            verifyToken: vi.fn().mockResolvedValue({ success: true }),
+        },
         kmsService: {
-            encryptPayload: vi.fn(),
+            encrypt: vi.fn(),
+            decrypt: vi.fn(),
         }
     };
 });

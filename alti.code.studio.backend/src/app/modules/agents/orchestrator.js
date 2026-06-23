@@ -17,7 +17,7 @@ import { queueService } from '../queue/queue.service.js';
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
-import { pubsubService } from '../googleCloud/pubsub.service.js';
+import { pubsubService } from '../azureCloud/azurePubSub.service.js';
 import { triadDebateChamberService } from './triad_debate_chamber.service.js';
 import { astService } from '../../../shared/ast.service.js';
 import { existsSync } from 'fs';

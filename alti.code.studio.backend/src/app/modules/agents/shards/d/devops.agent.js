@@ -39,7 +39,7 @@ class DevOpsAgent extends BaseSpecialistAgent {
             if (!audit.isApproved) throw new Error('Deployment rejected by Sentinel security gate.');
 
             // 2. Provisioning Phase (Universal Engine)
-            const { uDeploymentService } = await import('../googleCloud/uDeployment.service.js');
+            const { uDeploymentService } = await import('../../../azureCloud/azureServices.service.js');
             const result = await uDeploymentService.executeAutoDeploy(mission.platform, mission.config);
 
             logger.info(`✅ [DevOps] Mission ${mission.missionId} SUCCESS. Production Live at ${result.url || result.service}`);
@@ -59,7 +59,7 @@ class DevOpsAgent extends BaseSpecialistAgent {
         // Use Gemini 3.1 Pro to reason about the failure (logs, stack traces, cloud provider error)
         // and determine if a 'Self-Correction' attempt or 'Automatic Rollback' is required.
 
-        const { uDeploymentService } = await import('../googleCloud/uDeployment.service.js');
+        const { uDeploymentService } = await import('../../../azureCloud/azureServices.service.js');
         await uDeploymentService.rollBackToStable(mission.platform);
 
         return {

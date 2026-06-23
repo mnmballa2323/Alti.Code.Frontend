@@ -172,8 +172,8 @@ class GithubDocsService {
             ragResult.includes('does not contain enough information')) {
             logger.info(`🪐 [GitHub Docs] Local RAG confidence low/empty. Falling back to live web search grounding...`);
             try {
-                const { GoogleSearchService } = await import('../googleSearch/googleSearch.service.js');
-                const webResult = await GoogleSearchService.getSearchContext(query);
+                const { AzureSearchService } = await import('../azureSearch/azureSearch.service.js');
+                const webResult = await AzureSearchService.getSearchContext(query);
                 return `[Live Web Grounding Fallback]\n\n${webResult}`;
             } catch (error) {
                 logger.warn(`🪐 [GitHub Docs] Web search grounding failed: ${error.message}`);
@@ -285,8 +285,8 @@ class GithubDocsService {
         
         let dag = null;
         try {
-            const { GoogleGenAiService } = await import('../googleGenAi/googleGenAi.service.js');
-            const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL);
+            const { azureGenAiService: AzureGenAiService } = await import('../ai/azureGenAi.service.js');
+            const model = AzureGenAiService.getGenerativeModel(AzureGenAiService.PRIMARY_MODEL);
             const prompt = `Decompose the following complex user query into a topological Directed Acyclic Graph (DAG) of task nodes to solve it using the specialized GitHub Swarm.
 Each node must represent a distinct task and must specify:
 1. "id": A unique string identifier.
@@ -431,8 +431,8 @@ Respond ONLY with a valid JSON object matching this schema:
 
         let synthesizedContent = '';
         try {
-            const { GoogleGenAiService } = await import('../googleGenAi/googleGenAi.service.js');
-            const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL);
+            const { azureGenAiService: AzureGenAiService } = await import('../ai/azureGenAi.service.js');
+            const model = AzureGenAiService.getGenerativeModel(AzureGenAiService.PRIMARY_MODEL);
             const prompt = `ACT AS THE MASTER ARCHITECT OF INSO CODE.
 You are synthesizing the topological execution of a multi-agent Swarm DAG workflow.
 Construct a professional, unified final response addressing the user's initial query based on the complete execution log.

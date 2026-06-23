@@ -9,9 +9,6 @@ import { ModalProvider } from "@/components/modals/ModalProvider";
 import { fontSans, fontSecondary, fontSerif } from "@/config/fonts";
 import { siteConfig } from "@/config/site";
 
-// 🌐 Deep Google Integration: reCAPTCHA v3
-import { RecaptchaProvider } from "@/components/providers/RecaptchaProvider";
-
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -47,26 +44,20 @@ export default function RootLayout({
           fontSerif.variable,
         )}
       >
-        <RecaptchaProvider
-          reCaptchaKey={
-            process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "dummy-key"
-          }
-        >
-          <ClientQueryProvider>
-            <I18nProvider>
-              <Providers
-                themeProps={{
-                  attribute: "class",
-                  defaultTheme: "light",
-                  themes: ["light", "dark", "midnight-navy"],
-                }}
-              >
-                {children}
-                <ModalProvider />
-              </Providers>
-            </I18nProvider>
-          </ClientQueryProvider>
-        </RecaptchaProvider>
+        <ClientQueryProvider>
+          <I18nProvider>
+            <Providers
+              themeProps={{
+                attribute: "class",
+                defaultTheme: "light",
+                themes: ["light", "dark", "midnight-navy"],
+              }}
+            >
+              {children}
+              <ModalProvider />
+            </Providers>
+          </I18nProvider>
+        </ClientQueryProvider>
       </body>
     </html>
   );

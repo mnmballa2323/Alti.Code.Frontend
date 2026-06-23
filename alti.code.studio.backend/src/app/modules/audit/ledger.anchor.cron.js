@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 Inso Code
+ * Copyright (c) 2026 Alti Code Studio
  * 
  * Cryptographic Daily Ledger Anchor.
  * Extracts the single trailing hash representing the entire 
@@ -10,16 +10,15 @@ import crypto from 'crypto';
 import cron from 'node-cron';
 import { logger } from '../../../shared/logger.js';
 import { AuditLog } from './audit.model.js';
-import { Storage } from '@google-cloud/storage';
+import { azureStorageService } from '../azureCloud/azureStorage.service.js';
 import config from '../../../../config/index.js';
 
 class DailyHashAnchor {
     constructor() {
-        this.projectId = config.gcp.project_id;
+        this.subscriptionId = config.azure?.subscription_id;
 
-        // Simulating the enterprise anchor target (Could be Ethereum Mainnet via Infura, Azure Ledger, or GCP Confidential Space)
-        this.storageClient = new Storage({ projectId: this.projectId });
-        this.anchorBucket = config.gcp.audit_gcs_bucket || 'alti-code-studio-worm-audit';
+        // Simulating the enterprise anchor target (Could be Ethereum Mainnet via Infura, Azure Ledger, or Azure Confidential Space)
+        this.anchorContainer = 'alti-code-studio-worm-audit';
 
         // Run every night at midnight (0 0 * * *)
         this.job = cron.schedule('0 0 * * *', () => {
@@ -57,23 +56,17 @@ class DailyHashAnchor {
                 date: startOfDay.toISOString().split('T')[0],
                 totalRecords: logCount,
                 terminalMerkleHash: terminalHash,
-                // Assuming we simulate dropping this hash onto Ethereum Blockchain or Google Confidential Ledger
+                // Assuming we simulate dropping this hash onto Ethereum Blockchain or Azure Confidential Ledger
                 // E.g., const ethTx = await web3.eth.sendTransaction({ data: web3.utils.toHex(terminalHash) });
                 ledgerTransactionId: crypto.randomBytes(32).toString('hex'),
-                ledgerNetwork: 'GCP_CONFIDENTIAL_SPACE_SIMULATION'
+                ledgerNetwork: 'AZURE_CONFIDENTIAL_SPACE_SIMULATION'
             };
 
-            // In our S&P500 architecture, we persist this anchor payload independently into the WORM bucket
-            if (this.anchorBucket) {
-                const bucket = this.storageClient.bucket(this.anchorBucket);
+            // In our S&P500 architecture, we persist this anchor payload independently into the WORM container
+            if (this.anchorContainer) {
                 const fileName = `anchors/anchor_${anchorProof.date}.json`;
-                const file = bucket.file(fileName);
-
-                await file.save(JSON.stringify(anchorProof, null, 2), {
-                    resumable: false,
-                    contentType: 'application/json',
-                });
-                logger.info(`✅ Daily Audit Anchor successful! Terminal Hash [${terminalHash.substring(0, 8)}] locked to Ledger: gs://${this.anchorBucket}/${fileName}`);
+                await azureStorageService.uploadContent(this.anchorContainer, fileName, JSON.stringify(anchorProof, null, 2));
+                logger.info(`✅ Daily Audit Anchor successful! Terminal Hash [${terminalHash.substring(0, 8)}] locked to Ledger: azure://${this.anchorContainer}/${fileName}`);
             }
 
             return anchorProof;

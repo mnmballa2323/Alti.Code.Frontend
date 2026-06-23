@@ -6,7 +6,7 @@
  */
 
 import { RateLimiterRedis, RateLimiterMemory } from 'rate-limiter-flexible';
-import { memorystoreService } from '../googleCloud/memorystore.service.js';
+import { memorystoreService } from '../azureCloud/azureCache.service.js';
 import { sentinelService } from './sentinel.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';

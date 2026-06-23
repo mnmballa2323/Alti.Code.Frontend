@@ -11,7 +11,7 @@
 
 export const CORE_OMNI_CLOUD_PROVIDERS = Object.freeze([
     // Hyperscalers
-    'aws', 'GoogleCloudPlatform', 'azure', 'oracle', 'IBM-Cloud',
+    'azure',
     
     // AI & GPU Compute
     'coreweave', 'lambdal', 'paperspace', 'runpod', 'togethercomputer',

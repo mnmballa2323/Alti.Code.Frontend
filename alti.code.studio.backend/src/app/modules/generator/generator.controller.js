@@ -11,9 +11,7 @@ import sendResponse from '../../../shared/sendResponse.js';
 import { GeneratorService } from './generator.service.js';
 import path from 'path';
 import { logger } from '../../../shared/logger.js';
-import { gkeService } from '../googleCloud/gke.service.js';
-import { driveBackupService } from '../googleCloud/drive.service.js';
-import { fcmService } from '../googleCloud/fcm.service.js';
+import { gkeService, driveBackupService, fcmService } from '../azureCloud/azureServices.service.js';
 
 const generate = catchAsync(async (req, res) => {
     const prompt = req.body.prompt;

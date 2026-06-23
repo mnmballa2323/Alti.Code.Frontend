@@ -29,7 +29,7 @@ You are the 'Sentinel' that ensures Alti remains flawless through every iteratio
      * Verify the integrity of a file write using a high-fidelity 'Judge' loop.
      */
     async verifyFileIntegrity(agentId, prompt, content) {
-        const { vertexEval } = await import('../googleCloud/eval.service.js');
+        const { vertexEval } = await import('../../../azureCloud/azureServices.service.js');
         const audit = await vertexEval.evaluateOutput(agentId, prompt, content);
 
         return {

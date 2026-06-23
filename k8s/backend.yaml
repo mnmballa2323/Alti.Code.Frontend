@@ -18,7 +18,7 @@ spec:
       containers:
       - name: backend
         # In production this would be replaced with your private container registry URI
-        image: registry.internal.libertycenterone.com/alti-backend:latest
+        image: registry.azurecr.io/alti-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -29,7 +29,7 @@ spec:
           value: "5000"
         - name: PENTAGI_API_URL
           value: "http://pentagi:8443/api/v1"
-        # Secrets (Database URLs) are injected via External Secrets Operator syncing from OpenStack Barbican
+        # Secrets (Database URLs) are injected via External Secrets Operator syncing from Azure Key Vault
         # Using a dummy secret reference as a placeholder
         envFrom:
         - secretRef:

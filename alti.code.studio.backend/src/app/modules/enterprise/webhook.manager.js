@@ -48,17 +48,37 @@ class WebhookManager {
 
     // ── Registration ──
 
-    register(config) {
-        const {
-            tenantId,
-            url,
-            events = ['*'],
-            secret = crypto.randomBytes(32).toString('hex'),
-            active = true,
-            headers = {},
-            payloadTemplate = null,
-            description = '',
-        } = config;
+    register(tenantIdOrConfig, config) {
+        let tenantId = 'default';
+        let url;
+        let events = ['*'];
+        let secret = crypto.randomBytes(32).toString('hex');
+        let active = true;
+        let headers = {};
+        let payloadTemplate = null;
+        let description = '';
+
+        if (typeof tenantIdOrConfig === 'string') {
+            tenantId = tenantIdOrConfig;
+            if (config) {
+                if (config.url) url = config.url;
+                if (config.events) events = config.events;
+                if (config.secret) secret = config.secret;
+                if (config.active !== undefined) active = config.active;
+                if (config.headers) headers = config.headers;
+                if (config.payloadTemplate) payloadTemplate = config.payloadTemplate;
+                if (config.description) description = config.description;
+            }
+        } else if (tenantIdOrConfig && typeof tenantIdOrConfig === 'object') {
+            tenantId = tenantIdOrConfig.tenantId || 'default';
+            url = tenantIdOrConfig.url;
+            if (tenantIdOrConfig.events) events = tenantIdOrConfig.events;
+            if (tenantIdOrConfig.secret) secret = tenantIdOrConfig.secret;
+            if (tenantIdOrConfig.active !== undefined) active = tenantIdOrConfig.active;
+            if (tenantIdOrConfig.headers) headers = tenantIdOrConfig.headers;
+            if (tenantIdOrConfig.payloadTemplate) payloadTemplate = tenantIdOrConfig.payloadTemplate;
+            if (tenantIdOrConfig.description) description = tenantIdOrConfig.description;
+        }
 
         const webhook = {
             id: `wh_${crypto.randomBytes(8).toString('hex')}`,

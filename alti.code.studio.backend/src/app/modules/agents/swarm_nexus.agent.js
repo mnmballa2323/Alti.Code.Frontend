@@ -3,7 +3,7 @@ import { agentRegistry } from './agent.registry.js';
 import { logger } from '../../../shared/logger.js';
 /* DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY */
 import config from '../../../../config/index.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
+import { GoogleDlpService } from '../ai/azureDlp.service.js';
 import { agentMemoryService } from '../memory/agentmemory.service.js';
 import { knowledgeGraphService } from '../memory/knowledge_graph.service.js';
 
@@ -13,7 +13,7 @@ if (!apiKey) {
     logger.error('🚨 [SwarmNexus] CRITICAL SECURITY WARNING: GEMINI_API_KEY environment variable is missing.');
 }
 
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 
 // DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 export class SwarmNexusAgent extends BaseSpecialistAgent {
@@ -35,8 +35,11 @@ You integrate:
         // model initialized lazy
     }
 
-    get _model() {
-        return GoogleGenAiService.getGenerativeModel('gemini-2.5-flash');
+    get model() {
+        if (!this._cachedModel) {
+            this._cachedModel = AzureGenAiService.getGenerativeModel('gemini-2.5-flash');
+        }
+        return this._cachedModel;
     }
 
     async _invoke(prompt, contextBlock, opts = {}) {
@@ -112,7 +115,7 @@ Code Context: ${contextBlock}
 
 Provide a compliance scorecard (COMPLIANT / NON-COMPLIANT) for each rule with actionable remediation instructions.
 `;
-        const res = await this._model.generateContent([instruction]);
+        const res = await this.model.generateContent([instruction]);
         return res.response.text();
     }
 
@@ -132,7 +135,7 @@ Code Context: ${contextBlock}
 
 Return a structured roadmap detailing the task assignment for each role to complete the goal.
 `;
-        const res = await this._model.generateContent([instruction]);
+        const res = await this.model.generateContent([instruction]);
         return res.response.text();
     }
 
@@ -194,7 +197,7 @@ Orchestrate a parallel swarming plan using these registered specialists: ${JSON.
 to fulfill the target prompt: "${prompt}".
 Segment the prompt into modular subtasks, assign each to a specific specialist agent, and define the final quality synthesis gate.
 `;
-        const res = await this._model.generateContent([instruction]);
+        const res = await this.model.generateContent([instruction]);
         return res.response.text();
     }
 }

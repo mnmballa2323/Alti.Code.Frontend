@@ -34,7 +34,7 @@ class QueueService {
 
     init() {
         if (this.isInitialized) return;
-        if (process.env.DISABLE_REDIS === 'true') {
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') {
             this.isInitialized = true;
             logger.info('⚠️ QueueService: Redis disabled via env. Bypassing queue initialization.');
             return;
@@ -53,7 +53,7 @@ class QueueService {
 
     /** @private Create and register a named queue with error handling. */
     _createQueue(name) {
-        if (process.env.DISABLE_REDIS === 'true') return null;
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') return null;
         const queue = new Queue(name, { connection: this.redisConfig });
         queue.on('error', (err) => logger.error(`❌ Queue [${name}] Error`, err));
         this.queues.set(name, queue);
@@ -66,7 +66,7 @@ class QueueService {
      * @returns {Queue}
      */
     _getOrCreateQueue(queueName) {
-        if (process.env.DISABLE_REDIS === 'true') return null;
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') return null;
         if (!this.isInitialized) this.init();
         if (!this.queues.has(queueName)) {
             logger.info(`🔧 QueueService: Lazily creating queue "${queueName}"`);
@@ -85,7 +85,7 @@ class QueueService {
      * @returns {Promise<import('bullmq').Job>}
      */
     async addJob(queueName, data, opts = {}) {
-        if (process.env.DISABLE_REDIS === 'true') {
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') {
             logger.info(`[Mock Queue] Bypassed adding job to ${queueName}`);
             return { id: `mock-${Date.now()}`, name: queueName, data };
         }
@@ -115,7 +115,7 @@ class QueueService {
      * @returns {Promise<import('bullmq').Job | null>}
      */
     async getJob(queueName, jobId) {
-        if (process.env.DISABLE_REDIS === 'true') return null;
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') return null;
         const queue = this._getOrCreateQueue(queueName);
         try {
             return await queue.getJob(jobId);
@@ -131,7 +131,7 @@ class QueueService {
      * @returns {Promise<object>}
      */
     async getQueueStats(queueName) {
-        if (process.env.DISABLE_REDIS === 'true') {
+        if (process.env.DISABLE_REDIS === 'true' && process.env.NODE_ENV !== 'test') {
             return { queueName, waiting: 0, active: 0, completed: 0, failed: 0, delayed: 0 };
         }
         const queue = this._getOrCreateQueue(queueName);

@@ -1,9 +1,9 @@
-import { discoveryEngineService } from '../googleCloud/discovery.service.js';
-import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
+import { discoveryEngineService } from '../azureCloud/azureSearch.service.js';
+import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import { fileSearchService } from '../fileSearch/fileSearch.service.js';
-import { ragCacheService } from '../googleCloud/rag_cache.service.js';
+import { ragCacheService } from '../azureCloud/azureCache.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
@@ -63,7 +63,7 @@ Rules:
 
 Example: ["original query", "specific technical term query", "architectural pattern query"]`;
 
-            const raw = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.3);
+            const raw = await AzureGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.3);
             const cleaned = raw.content.replace(/^```json?\n?/m, '').replace(/\n?```$/m, '').trim();
             const expanded = JSON.parse(cleaned);
 
@@ -315,7 +315,7 @@ Example: ["original query", "specific technical term query", "architectural patt
         const finalPrompt = `USER QUERY: ${query}\n\n=== GOOGLE RAG CONTEXT ===\n${combinedContext}\n\nSynthesize the ultimate answer based strictly on the context and include citations.`;
 
         logger.info(`🧠 [Ultimate RAG] Synthesizing via Google Gemini 3.1 Pro...`);
-        const response = await GoogleGenAiService.generateContent(`${systemPrompt}\n\n${finalPrompt}`, 'gemini-3.1-pro', 0.2);
+        const response = await AzureGenAiService.generateContent(`${systemPrompt}\n\n${finalPrompt}`, 'gemini-3.1-pro', 0.2);
 
         const totalMs = Date.now() - synthesisStart;
 

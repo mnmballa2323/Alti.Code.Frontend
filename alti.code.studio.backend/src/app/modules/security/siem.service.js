@@ -35,16 +35,16 @@ class SiemService {
                 details
             };
 
-            // Sign the webhook payload if Barbican is configured
+            // Sign the webhook payload if Azure Key Vault is configured
             let signature = null;
-            const isBarbicanConfigured = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
-            if (isBarbicanConfigured) {
+            const isKeyVaultConfigured = process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
+            if (isKeyVaultConfigured) {
                 try {
-                    signature = await complianceEngine._signWithBarbican(JSON.stringify(payload));
+                    signature = await complianceEngine._signWithAzureKeyVault(JSON.stringify(payload));
                 } catch (err) {
-                    logger.warn(`⚠️ Barbican Signing for SIEM failed (${err.message}). Falling back to local mock signature.`);
+                    logger.warn(`⚠️ Azure Key Vault Signing for SIEM failed (${err.message}). Falling back to local mock signature.`);
                     const crypto = await import('crypto');
-                    signature = crypto.createHmac('sha256', 'mock-barbican-hsm-secret').update(JSON.stringify(payload)).digest('base64');
+                    signature = crypto.createHmac('sha256', 'mock-azure-keyvault-secret').update(JSON.stringify(payload)).digest('base64');
                 }
             }
 

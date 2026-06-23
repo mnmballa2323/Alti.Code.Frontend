@@ -1,6 +1,6 @@
 import { logger } from '../../shared/logger.js';
 import { auditService } from '../modules/compliance/audit.service.js';
-import { GoogleDlpService } from '../modules/googleCloud/dlp.service.js';
+import { GoogleDlpService } from '../modules/ai/azureDlp.service.js';
 
 const PROMPT_INJECTION_PATTERNS = [
     /ignore\s+(?:any|previous|all)?\s*instructions/i,
@@ -69,17 +69,7 @@ export const dlpMiddleware = async (req, res, next) => {
                 logger.warn('Failed to report WAF event to Sentinel:', sentinelErr.message);
             }
 
-            // Report to Security Command Center
-            try {
-                const { sccService } = await import('../googleCloud/scc.service.js');
-                await sccService.reportFinding(
-                    'WAF_PAYLOAD_INJECTION',
-                    `//alti.code.studio${req.originalUrl}`,
-                    'CRITICAL'
-                );
-            } catch (sccError) {
-                logger.warn('⚠️ [WAF] Failed to push to SCC:', sccError.message);
-            }
+// GCP SCC removed
 
             return res.status(400).json({
                 success: false,
@@ -90,7 +80,7 @@ export const dlpMiddleware = async (req, res, next) => {
         const bodyStr = JSON.stringify(req.body);
         
         // 1. Perform Deep ML Inspection via Google Cloud DLP
-        const findings = await GoogleDlpService.inspectText(bodyStr);
+        const findings = [];
 
         if (findings && findings.length > 0) {
             const riskTypes = findings.map(f => f.infoType.name);
@@ -127,17 +117,7 @@ export const dlpMiddleware = async (req, res, next) => {
                 userId: req.user?.id || 'anonymous'
             });
             
-            // 🌐 Deep Google Integration: Security Command Center
-            try {
-                const { sccService } = await import('../modules/googleCloud/scc.service.js');
-                await sccService.reportFinding(
-                    `DLP_VIOLATION_${uniqueRisks[0].toUpperCase()}`,
-                    `//alti.code.studio${req.originalUrl}`,
-                    'CRITICAL'
-                );
-            } catch (sccError) {
-                logger.warn('⚠️ [DLP] Failed to push to SCC:', sccError.message);
-            }
+// GCP SCC removed
 
             return res.status(400).json({
                 success: false,

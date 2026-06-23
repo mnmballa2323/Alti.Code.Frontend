@@ -2703,14 +2703,11 @@ export default function Sidebar() {
                 {(() => {
                   const groups = [
                     {
-                      category: "Hyperscalers & Core Cloud",
+                      category: "Azure Sovereign Cloud",
                       providers: [
-                        "Amazon Web Services",
-                        "Google Cloud Platform",
-                        "Microsoft Azure",
-                        "Oracle Cloud",
-                        "IBM Cloud",
-                        "Alibaba Cloud",
+                        "Azure Cloud",
+                        "Azure Dedicated",
+                        "Azure Government",
                       ],
                     },
                     {
@@ -2725,8 +2722,6 @@ export default function Sidebar() {
                         "Railway",
                         "Porter",
                         "Zeet",
-                        "AWS Amplify",
-                        "Google Firebase",
                       ],
                     },
                     {
@@ -2765,7 +2760,7 @@ export default function Sidebar() {
                         "Cloudflare",
                         "Fastly",
                         "Akamai",
-                        "AWS CloudFront",
+                        "Azure Front Door",
                         "Edgio",
                         "Tailscale",
                         "Ngrok",
@@ -2776,17 +2771,17 @@ export default function Sidebar() {
                       providers: [
                         "Docker Hub",
                         "Kubernetes",
-                        "Amazon ECS",
-                        "Google Cloud Run",
+                        "Azure Container Apps",
+                        "Azure Kubernetes Service (AKS)",
                         "HashiCorp Nomad",
                       ],
                     },
                     {
                       category: "Serverless & Compute",
                       providers: [
-                        "AWS Lambda",
-                        "Google Cloud Functions",
-                        "Azure Functions",
+                        "Azure Functions (Commercial)",
+                        "Azure Functions (Dedicated)",
+                        "Azure Functions (Government)",
                         "Cloudflare Workers",
                         "Deno Deploy",
                       ],
@@ -2799,7 +2794,7 @@ export default function Sidebar() {
                         "Bitbucket Pipelines",
                         "CircleCI",
                         "Travis CI",
-                        "AWS CodePipeline",
+                        "Azure Pipelines",
                         "ArgoCD",
                         "Spinnaker",
                       ],
@@ -2809,8 +2804,8 @@ export default function Sidebar() {
                       providers: [
                         "Confluent",
                         "RabbitMQ Cloud",
-                        "Amazon SQS/SNS",
-                        "Google Cloud Pub/Sub",
+                        "Azure Service Bus",
+                        "Azure Event Grid",
                       ],
                     },
                   ];

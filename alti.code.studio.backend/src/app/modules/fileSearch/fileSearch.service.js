@@ -236,8 +236,8 @@ function validateMetadata(metadata) {
  */
 async function scrubQuery(text) {
     try {
-        const { GoogleDlpService } = await import('../googleCloud/dlp.service.js');
-        return await GoogleDlpService.redactText(text);
+        const { AzureDlpService } = await import('../ai/azureDlp.service.js');
+        return await AzureDlpService.redactText(text);
     } catch {
         // DLP unavailable — log once and pass through
         return text;

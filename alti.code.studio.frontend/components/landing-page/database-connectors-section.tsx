@@ -55,12 +55,12 @@ export default function DatabaseConnectorsSection() {
       ),
     },
     {
-      name: "DynamoDB",
+      name: "Cosmos DB",
       icon: (
         <img
-          alt="DynamoDB"
+          alt="Cosmos DB"
           className="w-8 h-8 object-contain"
-          src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/aws-dynamodb.svg"
+          src="https://cdn.simpleicons.org/azurecosmosdb"
         />
       ),
     },
@@ -75,12 +75,12 @@ export default function DatabaseConnectorsSection() {
       ),
     },
     {
-      name: "Firebase",
+      name: "Azure SQL",
       icon: (
         <img
-          alt="Firebase"
+          alt="Azure SQL"
           className="w-8 h-8 object-contain"
-          src="https://cdn.jsdelivr.net/gh/gilbarbara/logos@main/logos/firebase.svg"
+          src="https://cdn.simpleicons.org/microsoftazure"
         />
       ),
     },

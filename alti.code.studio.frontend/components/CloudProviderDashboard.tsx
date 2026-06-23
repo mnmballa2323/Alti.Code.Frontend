@@ -86,9 +86,9 @@ export default function CloudProviderDashboard({
       icon: Lock,
       items: [
         {
-          name: "AWS Admin User",
-          key: "AKIAIOSF...Z7E",
-          full: "AKIAIOSFODNN7EXAMPLE",
+          name: "Azure Tenant SPN",
+          key: "3b2e5a1c...f8a",
+          full: "3b2e5a1c-7d9e-4a6f-b2c4-d8f9a0e1b2c3",
           date: "Created Jan 15, 2026",
         },
       ],
@@ -99,9 +99,9 @@ export default function CloudProviderDashboard({
       icon: FileJson,
       items: [
         {
-          name: "GCP Vertex Engine",
-          key: "gcp-prod-ver...json",
-          full: '{"type": "service_account", "project_id": "production"}',
+          name: "Azure Gov SPN",
+          key: "azure-gov-spn...json",
+          full: '{"type": "service_principal", "tenant_id": "azure-sovereign-tenant"}',
           date: "Created Apr 10, 2026",
         },
       ],

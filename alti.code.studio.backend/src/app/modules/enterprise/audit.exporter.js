@@ -217,34 +217,26 @@ class AuditLogExporter {
         this.stats.totalExported += data.results.length;
 
         try {
-            const { Storage } = await import('@google-cloud/storage');
+            const { azureStorageService } = await import('../azureCloud/azureStorage.service.js');
             const config = (await import('../../../../config/index.js')).default;
 
-            if (!config.gcp.audit_gcs_bucket) {
-                throw new Error('GCP WORM bucket not configured.');
-            }
-
-            const storageClient = new Storage({ projectId: config.gcp.project_id });
-            const bucket = storageClient.bucket(config.gcp.audit_gcs_bucket);
+            const container = (config.azure && config.azure.audit_blob_container) || 'alti-code-studio-worm-audit';
 
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const fileName = `audit_export_${timestamp}.json`;
-            const file = bucket.file(`exports/${fileName}`);
+            const fileKey = `exports/${fileName}`;
 
-            await file.save(JSON.stringify(data.results, null, 2), {
-                resumable: false,
-                contentType: 'application/json',
-            });
+            await azureStorageService.uploadContent(container, fileKey, JSON.stringify(data.results, null, 2));
 
-            logger.info(`✅ AuditExporter: WORM export saved to gs://${config.gcp.audit_gcs_bucket}/exports/${fileName}`);
+            logger.info(`✅ AuditExporter: WORM export saved to azure://${container}/${fileKey}`);
             return {
                 message: 'Export successful',
-                bucket: config.gcp.audit_gcs_bucket,
-                file: `exports/${fileName}`,
+                bucket: container,
+                file: fileKey,
                 recordCount: data.results.length
             };
         } catch (error) {
-            logger.error('❌ AuditExporter: Failed to export to GCS', error.message);
+            logger.error('❌ AuditExporter: Failed to export to Azure Blob Storage', error.message);
             throw error;
         }
     }

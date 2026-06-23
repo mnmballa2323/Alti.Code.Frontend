@@ -6,18 +6,17 @@ import { EventEmitter } from 'events';
 vi.mock('child_process');
 
 test('Hermes Agent Bridge: CLI process spawning and stdout interception', async () => {
-    // 1. Mock spawn behavior
-    const mockProcess = new EventEmitter();
-    mockProcess.stdout = new EventEmitter();
-    mockProcess.stderr = new EventEmitter();
-
-    spawn.mockReturnValue(mockProcess);
-
-    // Trigger process behavior asynchronously
-    setTimeout(() => {
-        mockProcess.stdout.emit('data', Buffer.from('Hermes AI Coder task execution completed. Output: hello world'));
-        mockProcess.emit('close', 0);
-    }, 10);
+    // 1. Mock spawn behavior to emit events after listeners are attached
+    spawn.mockImplementation(() => {
+        const mockProcess = new EventEmitter();
+        mockProcess.stdout = new EventEmitter();
+        mockProcess.stderr = new EventEmitter();
+        process.nextTick(() => {
+            mockProcess.stdout.emit('data', Buffer.from('Hermes AI Coder task execution completed. Output: hello world'));
+            mockProcess.emit('close', 0);
+        });
+        return mockProcess;
+    });
 
     // 2. Invoke the agent via consult
     const result = await hermesAgent.consult("Write an audit log parser");

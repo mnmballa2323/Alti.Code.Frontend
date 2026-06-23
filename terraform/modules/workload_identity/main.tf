@@ -1,89 +1,69 @@
-# -------------------------------------------------------------
-# Workload Identity Federation for GitHub Actions
-# -------------------------------------------------------------
+# ==============================================================================
+# ALTI CODE STUDIO: Azure AD Federated Workload Identity Module
+# ==============================================================================
 
-resource "google_iam_workload_identity_pool" "github_pool" {
-  workload_identity_pool_id = "github-actions-pool"
-  display_name              = "GitHub Actions Pool"
-  description               = "Identity pool for GitHub Actions integrations"
-  disabled                  = false
-}
-
-resource "google_iam_workload_identity_pool_provider" "github_provider" {
-  workload_identity_pool_id          = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
-  workload_identity_pool_provider_id = "github-actions-provider"
-  display_name                       = "GitHub Actions Provider"
-  
-  attribute_mapping = {
-    "google.subject"             = "assertion.sub"
-    "attribute.actor"            = "assertion.actor"
-    "attribute.repository"       = "assertion.repository"
-    "attribute.repository_owner" = "assertion.repository_owner"
-  }
-
-  oidc {
-    issuer_uri = "https://token.actions.githubusercontent.com"
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
   }
 }
 
-# -------------------------------------------------------------
-# Service Account for CI/CD
-# -------------------------------------------------------------
-
-resource "google_service_account" "cicd_sa" {
-  account_id   = "github-actions-deployer"
-  display_name = "GitHub Actions Deployer"
+# ------------------------------------------------------------------------------
+# 1. User Assigned Managed Identity for GitHub Actions CI/CD
+# ------------------------------------------------------------------------------
+resource "azurerm_user_assigned_identity" "cicd_identity" {
+  name                = "alti-github-deployer-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
 }
 
-# Grant the Service Account permissions to push to Artifact Registry
-resource "google_project_iam_member" "artifact_registry_writer" {
-  project = var.project_id
-  role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+# ------------------------------------------------------------------------------
+# 2. Federated Identity Credentials mapping to GitHub Actions OIDC
+# ------------------------------------------------------------------------------
+resource "azurerm_federated_identity_credential" "github_federation" {
+  name                = "alti-github-federated-credential-${var.environment}"
+  resource_group_name = var.resource_group_name
+  audience            = ["api://AzureADTokenExchange"]
+  issuer              = "https://token.actions.githubusercontent.com"
+  parent_id           = azurerm_user_assigned_identity.cicd_identity.id
+  subject             = "repo:${var.github_repository}:environment:${var.environment}"
 }
 
-# Grant the Service Account permissions to interact with GKE (for ArgoCD sync triggers or direct applies if needed)
-resource "google_project_iam_member" "gke_developer" {
-  project = var.project_id
-  role    = "roles/container.developer"
-  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" {
+  type        = string
+  description = "Deployment environment (e.g. prod, staging)"
 }
 
-# Grant Vertex AI API Permissions
-resource "google_project_iam_member" "vertex_ai_user" {
-  project = var.project_id
-  role    = "roles/aiplatform.user"
-  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+variable "location" {
+  type        = string
+  description = "Azure region where resources will be created"
 }
 
-# -------------------------------------------------------------
-# Bind the GitHub Repository to the Service Account
-# -------------------------------------------------------------
-
-resource "google_service_account_iam_member" "workload_identity_user" {
-  service_account_id = google_service_account.cicd_sa.name
-  role               = "roles/iam.workloadIdentityUser"
-  # This matches specifically the Alti.Code.Studio repository
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
-}
-
-# -------------------------------------------------------------
-# Variables and Outputs
-# -------------------------------------------------------------
-
-variable "project_id" {
-  type = string
+variable "resource_group_name" {
+  type        = string
+  description = "Name of the resource group"
 }
 
 variable "github_repository" {
   type        = string
-  description = "The GitHub repository in format ORG/REPO (e.g., mnmballa2323/alti.code.studio)"
+  description = "The GitHub repository path in format ORG/REPO (e.g., mnmballa2323/alti.code.studio)"
 }
 
-output "workload_identity_provider" {
-  value = google_iam_workload_identity_pool_provider.github_provider.name
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "client_id" {
+  value       = azurerm_user_assigned_identity.cicd_identity.client_id
+  description = "Client ID of the User Assigned Identity for authentication"
 }
 
-output "service_account_email" {
-  value = google_service_account.cicd_sa.email
+output "principal_id" {
+  value       = azurerm_user_assigned_identity.cicd_identity.principal_id
+  description = "Principal ID of the User Assigned Identity for role assignments"
 }

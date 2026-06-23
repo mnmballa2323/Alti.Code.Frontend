@@ -4,27 +4,27 @@ import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
 import { selfExpandingSwarmService } from './self_expanding_swarm.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
-import { memorystoreService } from '../googleCloud/memorystore.service.js';
-import { GoogleSearchService } from '../googleSearch/googleSearch.service.js';
-import { spannerGraphService } from '../googleCloud/spanner_graph.service.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
-import { workflowService } from '../googleCloud/workflow.service.js';
+import { memorystoreService } from '../azureCloud/azureCache.service.js';
+import { AzureSearchService } from '../azureSearch/azureSearch.service.js';
+import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
+import { GoogleDlpService } from '../ai/azureDlp.service.js';
+import { workflowService } from '../azureCloud/azureWorkflow.service.js';
 import crypto from 'crypto';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import fs from 'fs';
 import path from 'path';
 
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 
 class CapabilityRouter {
     constructor() {
-        this.modelName = config.gcp.model_name || 'gemini-3.1-pro';
+        this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.5';
         this.isIndexed = false;
     }
 
     get model() {
         if (!this._model) {
-            this._model = GoogleGenAiService.getGenerativeModel(this.modelName);
+            this._model = AzureGenAiService.getGenerativeModel(this.modelName);
         }
         return this._model;
     }
@@ -225,15 +225,15 @@ class CapabilityRouter {
             candidateAgents = agentRegistry.list().slice(0, 15).map(a => `Agent Name: ${a.name}\nDescription: ${a.description}`);
         }
 
-        logger.info(`🔍 [CapabilityRouter] Grounding architectural query in real-time Google Search...`);
+        logger.info(`🔍 [CapabilityRouter] Grounding architectural query in real-time Azure search...`);
         let searchContext = "";
         try {
-            searchContext = await GoogleSearchService.getSearchContext(`software architecture best practices for: ${sanitizedQuery}`);
+            searchContext = await AzureSearchService.getSearchContext(`software architecture best practices for: ${sanitizedQuery}`);
         } catch (e) {
             logger.warn(`⚠️ [CapabilityRouter] Search grounding failed, proceeding with base model weights: ${e.message}`);
         }
 
-        logger.info(`🕸️ [CapabilityRouter] Calculating AST blast radius via Google Cloud Spanner Graph...`);
+        logger.info(`🕸️ [CapabilityRouter] Calculating AST blast radius via Azure Cosmos Graph...`);
         let astContext = "";
         try {
             // Extract a naive core entity from the query (in a production system, an NLP parser would isolate the exact domain)

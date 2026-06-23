@@ -1,6 +1,6 @@
-import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
-import { sccService } from '../googleCloud/scc.service.js';
+import { FirestoreSyncService } from '../azureCloud/azureCosmosDb.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { sccService } from '../azureCloud/azureServices.service.js';
 import { logger } from '../../../shared/logger.js';
 import * as tink from 'tink-crypto';
 
@@ -80,7 +80,7 @@ class SentinelService {
                         
                         Provide an immediate, actionable mitigation plan in exactly 3 bullet points.
                     `;
-                    const model = GoogleGenAiService.getGenerativeModel(GoogleGenAiService.PRIMARY_MODEL);
+                    const model = AzureGenAiService.getGenerativeModel(AzureGenAiService.PRIMARY_MODEL);
                     const result = await model.generateContent(prompt);
                     const mitigation = result.response.candidates[0].content.parts[0].text;
                     event.aiMitigationPlan = mitigation.trim();

@@ -1,21 +1,15 @@
 import express from 'express';
 import puppeteer from 'puppeteer-core';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { azureStorageService } from '../azureCloud/azureStorage.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 import config from '../../../../config/index.js';
 
-// Standalone express app for the Cloud Run scraping fleet
+// Standalone express app for the Azure Container Apps scraping fleet
 const app = express();
 app.use(express.json());
 
-const s3Client = new S3Client({
-  region: config.aws.region,
-  credentials: {
-    accessKeyId: config.aws.accessKeyId,
-    secretAccessKey: config.aws.secretAccessKey,
-  },
-});
+const azureStorage = azureStorageService;
 
 /**
  * The deep research headless scraper
@@ -51,23 +45,19 @@ app.post('/api/v1/research/scrape', async (req, res) => {
       return document.body.innerText;
     });
 
-    // Hash the URL for S3 key
+    // Hash the URL for storage blob name
     const urlHash = crypto.createHash('md5').update(url).digest('hex');
-    const s3Key = `research/${topicId || 'general'}/${urlHash}.txt`;
+    const containerName = config.azure?.researchContainer || 'alti-research-data';
+    const blobName = `research/${topicId || 'general'}/${urlHash}.txt`;
 
-    logger.info(`💾 [Deep Researcher] Pushing ${textContent.length} characters to AWS S3 Data Lake (Bucket: ${config.aws.researchBucket}, Key: ${s3Key})`);
+    logger.info(`💾 [Deep Researcher] Pushing ${textContent.length} characters to Azure Blob Storage (Container: ${containerName}, Blob: ${blobName})`);
 
-    await s3Client.send(new PutObjectCommand({
-      Bucket: config.aws.researchBucket,
-      Key: s3Key,
-      Body: textContent,
-      ContentType: 'text/plain'
-    }));
+    await azureStorage.uploadContent(containerName, blobName, textContent);
 
     res.status(200).json({ 
         success: true, 
-        message: 'Successfully scraped and ingested to S3',
-        s3Key,
+        message: 'Successfully scraped and ingested to Azure Blob Storage',
+        blobName,
         contentLength: textContent.length 
     });
 
@@ -82,7 +72,7 @@ app.post('/api/v1/research/scrape', async (req, res) => {
 const PORT = process.env.PORT || 8080;
 if (process.env.RUN_AS_WORKER === 'true') {
     app.listen(PORT, () => {
-        logger.info(`🚀 [Deep Researcher] Cloud Run Scraper Fleet Agent listening on port ${PORT}`);
+        logger.info(`🚀 [Deep Researcher] Azure Container Apps Scraper Fleet Agent listening on port ${PORT}`);
     });
 }
 

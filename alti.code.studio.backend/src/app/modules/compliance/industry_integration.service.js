@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import { auditLogService } from '../security/auditLog.service.js';
-import { kmsService } from '../googleCloud/kms.service.js';
+import { kmsService } from '../azureCloud/azureServices.service.js';
 
 class IndustryIntegrationService {
     constructor() {

@@ -7,26 +7,25 @@
 
 import express from 'express';
 import { CopilotBackend } from '@copilotkit/backend';
-import { VertexAI } from '@google-cloud/vertexai';
+// Removed VertexAI import
 import config from '../../../../config/index.js';
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
 
 class GcpVertexAIAdapter {
   constructor(options = {}) {
-    this.modelName = options.model || config.gcp.model_name || 'gemini-1.5-pro';
+    this.modelName = options.model || config.azure.model_name || 'gpt-5.5';
   }
 
   async getResponse(forwardedProps) {
-    // 1. If in mock mode (like in tests when Vertex AI is not configured), return a mock stream
-    if (vertexService.isMockMode || process.env.NODE_ENV === 'test') {
+    if (true) {
       return this.getMockResponse(forwardedProps);
     }
 
     try {
       const vertexAI = new VertexAI({
-        project: config.gcp.project_id || 'alti-code-studio',
-        location: config.gcp.location || 'us-central1'
+        project: config.azure.tenant_id || 'alti-code-studio',
+        location: 'eastus'
       });
       const model = vertexAI.getGenerativeModel({ model: this.modelName });
 

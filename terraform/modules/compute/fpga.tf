@@ -1,44 +1,81 @@
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
+# ==============================================================================
+# ALTI CODE STUDIO: Azure FPGA VM Provisioning Module
+# ==============================================================================
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
 }
 
-resource "aws_eks_node_group" "fpga_nodes" {
-  cluster_name    = var.cluster_name
-  node_group_name = "${var.cluster_name}-fpga-nodes"
-  node_role_arn   = aws_iam_role.fpga_node_role.arn
-  subnet_ids      = var.subnet_ids
+resource "azurerm_network_interface" "fpga_nic" {
+  name                = "alti-fpga-nic-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
 
-  # F1 instance types feature FPGAs
-  instance_types = ["f1.2xlarge"]
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
 
-  scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 1
+resource "azurerm_linux_virtual_machine" "fpga_node" {
+  name                = "alti-fpga-node-${var.environment}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  
+  # Standard_NP10s: FPGA-optimized VM featuring 1x Xilinx Alveo U250 FPGA
+  size                = "Standard_NP10s"
+  admin_username      = var.admin_username
+  network_interface_ids = [
+    azurerm_network_interface.fpga_nic.id,
+  ]
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file(var.ssh_public_key_path)
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 250
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   tags = {
-    Hardware = "FPGA"
-    Purpose  = "Crypto-Acceleration"
+    Hardware    = "FPGA"
+    Environment = var.environment
   }
 }
 
-variable "subnet_ids" {
-  type = list(string)
-}
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" { type = string }
+variable "location" { type = string }
+variable "resource_group_name" { type = string }
+variable "subnet_id" { type = string }
+variable "admin_username" { type = string }
+variable "ssh_public_key_path" { type = string }
 
-resource "aws_iam_role" "fpga_node_role" {
-  name = "${var.cluster_name}-fpga-node-role"
-
-  assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-    Version = "2012-10-17"
-  })
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "fpga_vm_id" {
+  value = azurerm_linux_virtual_machine.fpga_node.id
 }

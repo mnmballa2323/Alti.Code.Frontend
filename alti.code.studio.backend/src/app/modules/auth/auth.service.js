@@ -10,13 +10,13 @@ import httpStatus from 'http-status';
 import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { jwtHelpers } from '../../helpers/jwtHelpers.js';
-import { sendMailWithGoogleWorkspace } from '../../middlewares/sendEmail/sendMailWithGoogleWorkspace.js';
+import { sendMailWithAzureSMTP } from '../../middlewares/sendEmail/sendMailWithAzureSMTP.js';
 import { registrationOtpTemplate } from './auth.utils.js';
 import { logger } from '../../../shared/logger.js';
 import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres DAL
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
-import { authenticateKeystone } from './openstack.service.js';
+import { authenticateAzureAD } from './azureAd.service.js';
 import { totp } from '@inso/platform';
 
 const deleteUserAccountService = async userId => {
@@ -50,7 +50,7 @@ const registerService = async req => {
       if (process.env.NODE_ENV === 'development') {
         logger.info(`📧 [Development] Bypassed email sending. User registered: ${email}`);
       } else {
-        await sendMailWithGoogleWorkspace(mailData);
+        await sendMailWithAzureSMTP(mailData);
       }
     } catch (mailErr) {
       logger.error('⚠️ [Mailer] Failed to process registration email:', mailErr.message);
@@ -107,21 +107,21 @@ const loginService = async (email, password) => {
   }
 
   if (config.private_cloud_mode) {
-    const keystoneUser = await authenticateKeystone(email, password);
+    const azureUser = await authenticateAzureAD(email, password);
     let localUser = await UserRepository.findByEmail(email);
 
     if (!localUser) {
-      const defaultRole = keystoneUser.roles.includes('admin') ? 'admin' : 'user';
+      const defaultRole = azureUser.roles.includes('admin') ? 'admin' : 'user';
       try {
         localUser = await prisma.$transaction(async (tx) => {
-          const tenantName = `${keystoneUser.projectName || 'Workspace'} - ${keystoneUser.username}`;
+          const tenantName = `${azureUser.projectName || 'Workspace'} - ${azureUser.username}`;
           const tenant = await tx.tenant.create({
             data: { name: tenantName }
           });
           return tx.user.create({
             data: {
               email,
-              provider: 'openstack',
+              provider: 'azure',
               role: defaultRole,
               tenantId: tenant.id,
               tenantRole: 'owner'
@@ -129,14 +129,14 @@ const loginService = async (email, password) => {
           });
         });
       } catch (dbErr) {
-        logger.warn('⚠️ [Postgres Offline] Falling back to mock database for OpenStack user provisioning');
+        logger.warn('⚠️ [Postgres Offline] Falling back to mock database for Azure user provisioning');
         const mockUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
         const mockTenantId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
         localUser = {
           id: mockUserId,
           tenantId: mockTenantId,
           tenantRole: 'owner',
-          provider: 'openstack',
+          provider: 'azure',
           email,
           role: defaultRole
         };

@@ -1,4 +1,4 @@
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 
@@ -32,7 +32,7 @@ class WorkflowService {
 
         let compiledSteps = [];
         try {
-            const result = await GoogleGenAiService.generateContent(compilerPrompt, 'gemini-3.1-pro', 0.1);
+            const result = await AzureGenAiService.generateContent(compilerPrompt, 'gemini-3.1-pro', 0.1);
             const cleaned = result.content.replace(/^```json?\n?/m, '').replace(/\n?```$/m, '').trim();
             compiledSteps = JSON.parse(cleaned);
         } catch (e) {

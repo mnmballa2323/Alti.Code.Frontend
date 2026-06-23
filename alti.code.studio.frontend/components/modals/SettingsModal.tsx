@@ -40,9 +40,9 @@ const SettingsModal = () => {
     // Vault-bound credentials
     azureEndpoint,
     azureApiKey,
-    gcpProjectId,
-    gcpClientEmail,
-    gcpPrivateKey,
+    azureSovereignTenantId,
+    azureSovereignClientId,
+    azureSovereignClientSecret,
 
     setGeminiApiKey,
     setGithubToken,
@@ -51,9 +51,9 @@ const SettingsModal = () => {
     setOpenClawEnabled,
     setAzureEndpoint,
     setAzureApiKey,
-    setGcpProjectId,
-    setGcpClientEmail,
-    setGcpPrivateKey,
+    setAzureSovereignTenantId,
+    setAzureSovereignClientId,
+    setAzureSovereignClientSecret,
     setEditorFontSize,
     setEditorWordWrap,
     setEditorMinimap,
@@ -77,9 +77,9 @@ const SettingsModal = () => {
           if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
           if (keys.azureEndpoint) setAzureEndpoint(keys.azureEndpoint);
           if (keys.azureApiKey) setAzureApiKey(keys.azureApiKey);
-          if (keys.gcpProjectId) setGcpProjectId(keys.gcpProjectId);
-          if (keys.gcpClientEmail) setGcpClientEmail(keys.gcpClientEmail);
-          if (keys.gcpPrivateKey) setGcpPrivateKey(keys.gcpPrivateKey);
+          if (keys.azureSovereignTenantId) setAzureSovereignTenantId(keys.azureSovereignTenantId);
+          if (keys.azureSovereignClientId) setAzureSovereignClientId(keys.azureSovereignClientId);
+          if (keys.azureSovereignClientSecret) setAzureSovereignClientSecret(keys.azureSovereignClientSecret);
         }
       } catch (e) {
         console.error("Failed to load keys from Vault:", e);
@@ -94,9 +94,9 @@ const SettingsModal = () => {
     setGeminiApiKey,
     setAzureEndpoint,
     setAzureApiKey,
-    setGcpProjectId,
-    setGcpClientEmail,
-    setGcpPrivateKey,
+    setAzureSovereignTenantId,
+    setAzureSovereignClientId,
+    setAzureSovereignClientSecret,
   ]);
 
   const handleSave = async () => {
@@ -114,9 +114,9 @@ const SettingsModal = () => {
           geminiApiKey,
           azureEndpoint,
           azureApiKey,
-          gcpProjectId,
-          gcpClientEmail,
-          gcpPrivateKey,
+          azureSovereignTenantId,
+          azureSovereignClientId,
+          azureSovereignClientSecret,
         }),
       });
     } catch (e) {
@@ -310,31 +310,31 @@ const SettingsModal = () => {
                     <Divider className="my-2" />
 
                     <div className="text-xs font-semibold text-gray-400">
-                      Google Vertex AI (Enterprise)
+                      Azure Sovereign (IL6)
                     </div>
                     <Input
-                      label="GCP Project ID"
-                      placeholder="my-gcp-project-123"
+                      label="Tenant ID"
+                      placeholder="3b2e5a1c-7d9e-4a6f-b2c4-d8f9a0e1b2c3"
                       type="text"
-                      value={gcpProjectId}
+                      value={azureSovereignTenantId}
                       variant="bordered"
-                      onValueChange={setGcpProjectId}
+                      onValueChange={setAzureSovereignTenantId}
                     />
                     <Input
-                      label="GCP Client Email"
-                      placeholder="sa@my-gcp-project.iam.gserviceaccount.com"
+                      label="Client ID (SPN)"
+                      placeholder="9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
                       type="email"
-                      value={gcpClientEmail}
+                      value={azureSovereignClientId}
                       variant="bordered"
-                      onValueChange={setGcpClientEmail}
+                      onValueChange={setAzureSovereignClientId}
                     />
                     <Input
-                      label="GCP Private Key"
+                      label="Client Secret"
                       placeholder="-----BEGIN PRIVATE KEY-----..."
                       type="password"
-                      value={gcpPrivateKey}
+                      value={azureSovereignClientSecret}
                       variant="bordered"
-                      onValueChange={setGcpPrivateKey}
+                      onValueChange={setAzureSovereignClientSecret}
                     />
                   </div>
 

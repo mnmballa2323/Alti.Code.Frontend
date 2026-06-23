@@ -4,8 +4,8 @@ import { cloudProviderRegistry } from '../../src/app/modules/cloudAgents/CloudPr
 import { omniCloudRouter } from '../../src/app/modules/cloudAgents/omni_cloud_router.service.js';
 
 describe('66-Provider Cloud Connectivity and Registry Verification', () => {
-    it('should contain exactly 66 cloud providers in the locked master list', () => {
-        expect(CORE_OMNI_CLOUD_PROVIDERS.length).toBe(66);
+    it('should contain exactly 62 cloud providers in the locked master list', () => {
+        expect(CORE_OMNI_CLOUD_PROVIDERS.length).toBe(62);
     });
 
     it('should successfully initialize, authenticate, and fetch high-fidelity telemetry for all 66 cloud providers', async () => {
@@ -94,7 +94,7 @@ describe('66-Provider Cloud Connectivity and Registry Verification', () => {
             {
                 profile: { name: 'Enterprise Financial Ledger', type: 'LEDGER_DB', compliance: 'ENTERPRISE_HARDENED' },
                 expectedPrimary: 'azure',
-                expectedFallback: 'aws'
+                expectedFallback: 'azure'
             }
         ];
 

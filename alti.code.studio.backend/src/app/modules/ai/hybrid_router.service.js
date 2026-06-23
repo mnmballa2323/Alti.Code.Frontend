@@ -45,18 +45,13 @@ class HybridRouterService {
             }
         }
 
-        // Multi-Cloud Execution (Heavy Lifting & Marketplace Procurement Alignment)
-        let preferredProvider = 'gcp';
-        if (prompt.toLowerCase().includes('bedrock') || prompt.toLowerCase().includes('aws')) {
-            preferredProvider = 'aws';
-        } else if (prompt.toLowerCase().includes('azure') || prompt.toLowerCase().includes('foundry')) {
-            preferredProvider = 'azure';
-        }
+        // Sovereign Azure-Exclusive Execution (Heavy Lifting)
+        let preferredProvider = 'azure';
 
-        logger.info(`☁️ [HybridRouter] Task requires heavy intelligence. Routing to Multi-Cloud Inference System (Preferred: ${preferredProvider.toUpperCase()})...`);
+        logger.info(`☁️ [HybridRouter] Task requires heavy intelligence. Routing to Sovereign Azure OpenAI Foundry...`);
         const result = await multiCloudInferenceService.executeMultiCloudInference(prompt, 'jules', { 
             preferredProvider,
-            modelId: preferredProvider === 'gcp' ? 'gemini-3.1-pro' : (preferredProvider === 'aws' ? 'claude-5-sonnet' : 'gpt-5.5')
+            modelId: 'gpt-5.5'
         });
         return { content: result.content, venue: result.venue };
     }

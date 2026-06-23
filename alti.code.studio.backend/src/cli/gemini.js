@@ -13,17 +13,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Construct absolute path to service
-const servicePath = path.resolve(__dirname, '../app/modules/googleGenAi/googleGenAi.service.js');
+const servicePath = path.resolve(__dirname, '../app/modules/googleGenAi/azureGenAi.service.js');
 
 // Helper to load services
 const getServices = async () => {
     try {
-        const genAiModule = await import(pathToFileURL(path.resolve(__dirname, '../app/modules/googleGenAi/googleGenAi.service.js')));
+        const genAiModule = await import(pathToFileURL(path.resolve(__dirname, '../app/modules/googleGenAi/azureGenAi.service.js')));
         const deployModule = await import(pathToFileURL(path.resolve(__dirname, '../app/modules/googleCloud/uDeployment.service.js')));
         const spannerModule = await import(pathToFileURL(path.resolve(__dirname, '../app/modules/googleCloud/spanner_graph.service.js')));
         const fsModule = await import('fs/promises');
         return {
-            GoogleGenAiService: genAiModule.GoogleGenAiService,
+            AzureGenAiService: genAiModule.AzureGenAiService,
             uDeploymentService: deployModule.uDeploymentService,
             spannerGraphService: spannerModule.spannerGraphService,
             fs: fsModule
@@ -58,12 +58,12 @@ const main = async () => {
         return;
     }
 
-    const { GoogleGenAiService, uDeploymentService, spannerGraphService, fs } = await getServices();
+    const { AzureGenAiService, uDeploymentService, spannerGraphService, fs } = await getServices();
 
     if (command === 'ask') {
         if (!input) return console.error('❌ Error: Please provide a prompt.');
         try {
-            const result = await GoogleGenAiService.generateContent(input);
+            const result = await AzureGenAiService.generateContent(input);
             console.log('\n🌌 Gemini Response:\n\n', result.content);
         } catch (error) {
             console.error('❌ Error:', error.message);
@@ -71,7 +71,7 @@ const main = async () => {
     } else if (command === 'chat') {
         if (!input) return console.error('❌ Error: Please provide a message.');
         try {
-            const result = await GoogleGenAiService.chatSession([], input);
+            const result = await AzureGenAiService.chatSession([], input);
             console.log('\n💬 Chat Response:\n\n', result.response);
         } catch (error) {
             console.error('❌ Error:', error.message);

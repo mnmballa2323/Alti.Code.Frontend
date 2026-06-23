@@ -24,12 +24,12 @@ spec:
         args:
         - |
           echo "=================================================="
-          echo "  CHAOS ENGINEERING: AWS IMDS BLACKHOLE SIMULATOR "
+          echo "  CHAOS ENGINEERING: AZURE IMDS BLACKHOLE SIMULATOR "
           echo "=================================================="
           
-          # AWS EC2 instances use the Instance Metadata Service (IMDS) at 169.254.169.254
-          # to distribute temporary IAM role credentials (STS tokens) to applications.
-          # If the IMDS endpoint fails, AWS SDKs cannot refresh their credentials, 
+          # Azure VMs use the Instance Metadata Service (IMDS) at 169.254.169.254
+          # to distribute temporary managed identity credentials (OAuth access tokens) to applications.
+          # If the IMDS endpoint fails, Azure SDKs cannot refresh their credentials, 
           # leading to catastrophic AccessDenied (HTTP 403) errors across the entire stack.
           
           IMDS_IP="169.254.169.254"
@@ -37,17 +37,17 @@ spec:
           # Ensure iptables is installed in the alpine container
           apk add --no-cache iptables
           
-          echo "[CHAOS] INJECTING FAILURE: Blocking all routing to AWS IMDS ($IMDS_IP)..."
+          echo "[CHAOS] INJECTING FAILURE: Blocking all routing to Azure IMDS ($IMDS_IP)..."
           
           # Insert a DROP rule at the very top of the PREROUTING and OUTPUT chains
           iptables -I OUTPUT -d $IMDS_IP -j DROP
           iptables -I PREROUTING -d $IMDS_IP -j DROP
           
-          echo "[CHAOS] Network blackhole established! Applications cannot fetch new AWS credentials."
+          echo "[CHAOS] Network blackhole established! Applications cannot fetch new Azure credentials."
           echo "[CHAOS] Validating Application Resilience mechanisms:"
           echo "  1. Applications SHOULD have cached their STS credentials (typically valid for 1 hour)."
           echo "  2. Short-lived tasks attempting to boot will immediately crash with 'NoCredentialsError'."
-          echo "  3. Prometheus MUST alert on a sudden spike of 'AccessDenied' errors in the AWS API."
+          echo "  3. Prometheus MUST alert on a sudden spike of 'AccessDenied' errors in the Azure API."
           
           # Maintain the chaos state for 3 minutes to allow credential expirations and alerts
           echo "[CHAOS] Holding IMDS blackout for 3 minutes..."

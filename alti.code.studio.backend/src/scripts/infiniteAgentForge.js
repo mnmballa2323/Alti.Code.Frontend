@@ -24,7 +24,7 @@ const fallbackBrainstorm = () => {
         { name: "SeoBacklinkGenerator", desc: "Autonomously scours the web to build high-DR backlinks" },
         { name: "PayrollAccountant", desc: "Autonomously handles employee payroll and crypto disbursements" },
         { name: "SocialMediaManager", desc: "Autonomously creates and posts viral content to Twitter and LinkedIn" },
-        { name: "CloudCostDestroyer", desc: "Autonomously kills idle instances across AWS/GCP to save money" },
+        { name: "CloudCostDestroyer", desc: "Autonomously kills idle instances across Azure to save money" },
         { name: "BrandReputationGuard", desc: "Autonomously monitors Reddit and Twitter for brand sentiment" },
         { name: "ThreatIntelligenceHunter", desc: "Autonomously monitors the dark web for leaked company credentials" },
         { name: "AutomatedRecruiter", desc: "Autonomously sources, emails, and schedules interviews with top 1% engineers" },

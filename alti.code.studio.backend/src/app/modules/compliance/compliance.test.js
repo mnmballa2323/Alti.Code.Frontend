@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { industryComplianceService } from './industry_compliance.service.js';
 import { encryptionService } from '../security/encryption.service.js';
 import { auditLogService } from '../security/auditLog.service.js';
-import { kmsService } from '../googleCloud/kms.service.js';
+import { kmsService } from '../azureCloud/azureServices.service.js';
 import { ciceroLawEnforcementService } from './cicero_law_enforcement.service.js';
 import { azureLegalNoticeService } from './azure_legal_notice.service.js';
 import { ciceroLawEnforcementAgent } from '../agents/cicero_law_enforcement.agent.js';
@@ -295,6 +295,9 @@ describe('Industry Compliance Service Tests', () => {
         });
 
         it('should asynchronously queue the SLA compliance check job', async () => {
+            const { queueService } = await import('../queue/queue.service.js');
+            const mockAddJob = vi.spyOn(queueService, 'addJob').mockResolvedValue({ id: 'mock-job-id' });
+
             const payload = {
                 contractId: 'sovereign-contract-queue',
                 slaConditions: { minUptime: 0.99, maxLatencyMs: 100 },
@@ -305,8 +308,10 @@ describe('Industry Compliance Service Tests', () => {
 
             expect(result.success).toBe(true);
             expect(result.status).toBe('QUEUED');
-            expect(result.jobId).toBeDefined();
+            expect(result.jobId).toBe('mock-job-id');
             expect(result.message).toContain('queued asynchronously');
+
+            mockAddJob.mockRestore();
         });
 
         it('should route via compliance routes POST /legal/enforce successfully', async () => {

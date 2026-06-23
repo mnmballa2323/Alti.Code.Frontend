@@ -5,8 +5,6 @@ import { uiuxAgent } from './uiux.agent.js';
 import { optimizerAgent } from './optimizer.agent.js';
 import { refactorAgent } from './refactor.agent.js';
 import { dockerAgent } from './docker.agent.js';
-import { awsAgent } from './aws.agent.js';
-import { gcpAgent } from './gcp.agent.js';
 import { azureAgent } from './azure.agent.js';
 import { sqlAgent } from './sql.agent.js';
 import { qaAgent } from './qa.agent.js';
@@ -42,12 +40,6 @@ describe('The Grand Swarm Intelligence (Phase 32 & 33)', () => {
         // 5. Global IaC & Cloud Deployment
         const deployedIaC = await iacAgent.execute("Redis Cluster");
         expect(deployedIaC).toContain("Kubernetes cluster and Terraform");
-
-        const deployedAWS = await awsAgent.execute("Global Backend");
-        expect(deployedAWS).toContain("AWS Elastic Architecture");
-
-        const deployedGCP = await gcpAgent.execute("Frontend Assets");
-        expect(deployedGCP).toContain("GCP Serverless Architecture");
 
         const deployedAzure = await azureAgent.execute("Enterprise SQL");
         expect(deployedAzure).toContain("Azure Cloud Architecture");

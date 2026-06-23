@@ -2,7 +2,7 @@
 
 import { Input } from "@heroui/react";
 import { useState } from "react";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function RegisterPage() {
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
   const router = useRouter();
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,16 +35,6 @@ export default function RegisterPage() {
 
     const loading = toast.loading("Creating account...");
 
-    let recaptchaToken = "frontend-recaptcha-token-placeholder";
-
-    try {
-      if (executeRecaptcha) {
-        recaptchaToken = await executeRecaptcha("register");
-      }
-    } catch (err) {
-      console.warn("reCAPTCHA bypassed.");
-    }
-
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/auth/register`,
@@ -55,7 +45,6 @@ export default function RegisterPage() {
             email,
             password,
             confirmPassword,
-            recaptchaToken,
           }),
         },
       );

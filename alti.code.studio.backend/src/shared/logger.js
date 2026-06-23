@@ -41,7 +41,7 @@ if (process.env.LOKI_URL) {
   console.log('✅ Local Grafana Loki (Winston Transport) activated.');
 }
 
-// 🌐 Google Cloud Native Logging completely removed for pure air-gapped compliance.
+// 🌐 External Cloud Native Logging completely removed for pure air-gapped compliance.
 console.log('⚠️ Running in pure air-gapped enterprise mode. External cloud logging is disabled.');
 
 // Success logger

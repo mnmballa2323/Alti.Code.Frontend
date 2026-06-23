@@ -1,45 +1,81 @@
-variable "cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
+# ==============================================================================
+# ALTI CODE STUDIO: Azure GPU VM Provisioning Module
+# ==============================================================================
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
+    }
+  }
 }
 
-variable "subnet_ids" {
-  description = "List of subnet IDs for GPU nodes"
-  type        = list(string)
+resource "azurerm_network_interface" "gpu_nic" {
+  name                = "alti-gpu-nic-${var.environment}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = var.subnet_id
+    private_ip_address_allocation = "Dynamic"
+  }
 }
 
-resource "aws_eks_node_group" "gpu_nodes" {
-  cluster_name    = var.cluster_name
-  node_group_name = "${var.cluster_name}-gpu-nodes"
-  node_role_arn   = aws_iam_role.gpu_node_role.arn
-  subnet_ids      = var.subnet_ids
+resource "azurerm_linux_virtual_machine" "gpu_node" {
+  name                = "alti-gpu-node-${var.environment}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  
+  # Standard_NC6s_v3: GPU-optimized VM featuring 1x NVIDIA Tesla V100 GPU
+  size                = "Standard_NC6s_v3"
+  admin_username      = var.admin_username
+  network_interface_ids = [
+    azurerm_network_interface.gpu_nic.id,
+  ]
 
-  ami_type       = "AL2_x86_64_GPU"
-  instance_types = ["p3.2xlarge", "g4dn.xlarge"]
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file(var.ssh_public_key_path)
+  }
 
-  scaling_config {
-    desired_size = 1
-    max_size     = 3
-    min_size     = 0
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+    disk_size_gb         = 250
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts"
+    version   = "latest"
+  }
+
+  identity {
+    type = "SystemAssigned"
   }
 
   tags = {
-    Hardware = "GPU"
-    Purpose  = "Machine-Learning"
+    Hardware    = "GPU"
+    Environment = var.environment
   }
 }
 
-resource "aws_iam_role" "gpu_node_role" {
-  name = "${var.cluster_name}-gpu-node-role"
+# ------------------------------------------------------------------------------
+# Variables
+# ------------------------------------------------------------------------------
+variable "environment" { type = string }
+variable "location" { type = string }
+variable "resource_group_name" { type = string }
+variable "subnet_id" { type = string }
+variable "admin_username" { type = string }
+variable "ssh_public_key_path" { type = string }
 
-  assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-    Version = "2012-10-17"
-  })
+# ------------------------------------------------------------------------------
+# Outputs
+# ------------------------------------------------------------------------------
+output "gpu_vm_id" {
+  value = azurerm_linux_virtual_machine.gpu_node.id
 }

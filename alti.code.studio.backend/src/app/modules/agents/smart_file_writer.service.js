@@ -1,8 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { logger } from '../../../shared/logger.js';
-import { GcsService } from '../googleCloud/gcs.service.js';
-import { FirestoreSyncService } from '../googleCloud/firestoreSync.service.js';
+import { GcsService } from '../azureCloud/azureStorage.service.js';
+import { FirestoreSyncService } from '../azureCloud/azureCosmosDb.service.js';
 import { auditorAgent } from './auditor.agent.js';
 
 class SmartFileWriterService {

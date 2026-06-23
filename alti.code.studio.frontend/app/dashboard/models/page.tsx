@@ -74,20 +74,20 @@ const models = [
   },
   {
     id: 2,
-    name: "Claude Sonnet 4",
-    providedBy: "AWS Bedrock",
+    name: "Azure Gov GPT-4o",
+    providedBy: "Azure Government (IL5)",
     icon: Logo2,
     description:
-      "Exceptional at code comprehension, refactoring, and writing clean code.",
+      "Exceptional reasoning, security-cleared for IL5 data compliance, optimized for government workloads.",
   },
 
   {
     id: 3,
-    name: "Gemini 2.5 Pro",
-    providedBy: "Google",
+    name: "Azure Sovereign GPT-4",
+    providedBy: "Azure Sovereign (IL6)",
     icon: Logo1,
     description:
-      "Handles massive codebases with strong context for large multi-file projects.",
+      "Air-gapped security model designed for top-secret/IL6 workloads, high precision and compliance.",
   },
   {
     id: 4,

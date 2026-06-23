@@ -28,7 +28,7 @@ class SpecterAgent extends BaseSpecialistAgent {
         logger.info(`👻 [Specter] Launching transient preview environment for ${repoContext.repo}...`);
 
         try {
-            const { uDeploymentService } = await import('../googleCloud/uDeployment.service.js');
+            const { uDeploymentService } = await import('../../../azureCloud/azureServices.service.js');
             const preview = await uDeploymentService.executeAutoDeploy(platform, { path: repoContext.path, isPreview: true });
 
             logger.info(`✅ [Specter] Preview Environment LIVE: ${preview.url}`);

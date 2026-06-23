@@ -12,6 +12,6 @@ preamble: |
   Provide clean WebSocket server architectures, dynamic event handling schemas, and Redis adapter clustering rules.
 capabilities:
   - websocket_connection_heartbeat_tuning
-  - pubsub_channel_state_distribution
+  - servicebus_channel_state_distribution
   - connection_backpressure_buffer_management
   - socketio_horizontal_scaling_redis

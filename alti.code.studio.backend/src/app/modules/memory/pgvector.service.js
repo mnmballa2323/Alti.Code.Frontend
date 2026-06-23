@@ -1,5 +1,5 @@
 import prisma from '../../../config/prisma.js';
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PgVectorService {
@@ -42,7 +42,7 @@ class PgVectorService {
         for (const chunk of chunks) {
             try {
                 // Get 768-dimensional embedding from Vertex AI
-                const embedding = await vertexService.getEmbeddings(chunk);
+                const embedding = await azureSovereignCompatService.getEmbeddings(chunk);
                 const embeddingStr = `[${embedding.join(',')}]`;
 
                 // Insert into Prisma's AgentMemory table using raw SQL
@@ -69,7 +69,7 @@ class PgVectorService {
      */
     async searchMemory(query, userId, topK = 5) {
         try {
-            const embedding = await vertexService.getEmbeddings(query);
+            const embedding = await azureSovereignCompatService.getEmbeddings(query);
             const embeddingStr = `[${embedding.join(',')}]`;
 
             // Query AgentMemory using cosine distance (<=>)

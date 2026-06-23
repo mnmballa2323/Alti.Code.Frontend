@@ -100,20 +100,20 @@ export default function EnterpriseConnectorsSection() {
             duration={25}
             items={[
               <img
-                key="aws"
-                alt="AWS"
+                key="azure_gov"
+                alt="Azure Government (IL5)"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/aws.svg"
+                src="/assets/cloud-logos/azure.svg"
               />,
               <img
-                key="gcp"
-                alt="Google Cloud"
+                key="azure_sovereign"
+                alt="Azure Sovereign (IL6)"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/gcp.svg"
+                src="/assets/cloud-logos/azure.svg"
               />,
               <img
-                key="azure"
-                alt="Azure"
+                key="azure_commercial"
+                alt="Azure Commercial"
                 className="w-6 h-6 object-contain"
                 src="/assets/cloud-logos/azure.svg"
               />,

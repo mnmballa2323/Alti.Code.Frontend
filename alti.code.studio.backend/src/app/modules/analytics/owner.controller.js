@@ -17,9 +17,9 @@ export const OwnerController = {
                 systemSpendUSD: {
                     total: 12480.50,
                     byProvider: {
-                        azureOpenAI: 5410.20,
-                        gcpVertex: 4890.30,
-                        awsBedrock: 2180.00
+                        azureCommercial: 5410.20,
+                        azureIL5: 4890.30,
+                        azureIL6: 2180.00
                     },
                     monthlyTrend: [
                         { month: 'Jan', spend: 8900 },

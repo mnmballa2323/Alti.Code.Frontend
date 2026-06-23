@@ -5,16 +5,13 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 import { vectorStoreService } from './vector.store.js';
 import { magikaService } from '../agents/magika.service.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
-import { sccService } from '../googleCloud/scc.service.js';
-import { vertexVectorSearch } from '../googleCloud/vectorSearch.service.js';
-import { documentAiService } from '../googleCloud/document_ai.service.js';
-import { visionService } from '../googleCloud/vision.service.js';
-import { GcsService } from '../googleCloud/gcs.service.js';
+import { GoogleDlpService } from '../ai/azureDlp.service.js';
+import { sccService, vertexVectorSearch, documentAiService, visionService } from '../azureCloud/azureServices.service.js';
+import { GcsService } from '../azureCloud/azureStorage.service.js';
 import fs from 'fs';
 import path from 'path';
 import { AgentMemoryHooks } from './agentmemory.hooks.js';
@@ -80,7 +77,7 @@ class RagService {
             );
 
             // 2. Generate embedding and push to Vertex AI Vector Search (Matching Engine)
-            const embedding = await vertexService.getEmbeddings(sanitizedText);
+            const embedding = await azureSovereignCompatService.getEmbeddings(sanitizedText);
             await vertexVectorSearch.upsertEmbeddings([
               { id: docId, embedding },
             ]);
@@ -206,7 +203,7 @@ class RagService {
     // Run Vertex Vector Search and Gemini File Search in parallel
     const vectorPromise = (async () => {
       try {
-        const queryEmbedding = await vertexService.getEmbeddings(query);
+        const queryEmbedding = await azureSovereignCompatService.getEmbeddings(query);
         const neighbors = await vertexVectorSearch.queryContext(
           queryEmbedding,
           topK,
@@ -280,7 +277,7 @@ ${fileSearchContext}
 Query: ${query}`;
 
     try {
-      const response = await vertexService.generateContent(prompt);
+      const response = await azureSovereignCompatService.generateContent(prompt);
       return response;
     } catch (aiError) {
       logger.error(`RAG: AI synthesis failed. Error: ${aiError.message}`);

@@ -86,7 +86,7 @@ const initialSecrets: SecretEntry[] = [
     id: "sec-3",
     name: "Telepathy Inference",
     service: "API Key",
-    key: "gcp_vtx_781263871263871263",
+    key: "az_vtx_781263871263871263",
     lastUsed: "Just now",
   },
 ];
@@ -836,11 +836,9 @@ export default function VaultPage() {
                     <>
                       <Select
                         options={[
-                          "AWS",
-                          "GCP",
-                          "Azure",
-                          "DigitalOcean",
-                          "Oracle Cloud",
+                          "Azure Cloud",
+                          "Azure Dedicated",
+                          "Azure Government",
                           "Cloudflare",
                           "Other",
                         ]}
@@ -850,13 +848,9 @@ export default function VaultPage() {
                       />
                       <Field
                         placeholder={
-                          iamProvider === "AWS"
-                            ? "Access Key ID"
-                            : iamProvider === "GCP"
-                              ? "Service Account Email"
-                              : iamProvider === "Azure"
-                                ? "App (Client) ID"
-                                : "Key ID"
+                          iamProvider.startsWith("Azure")
+                            ? "App (Client) ID"
+                            : "Key ID"
                         }
                         value={iamKeyId}
                         onChange={setIamKeyId}
@@ -864,13 +858,9 @@ export default function VaultPage() {
                       <Field
                         revealable
                         placeholder={
-                          iamProvider === "AWS"
-                            ? "Secret Access Key"
-                            : iamProvider === "GCP"
-                              ? "Private Key JSON"
-                              : iamProvider === "Azure"
-                                ? "Client Secret"
-                                : "Secret Key"
+                          iamProvider.startsWith("Azure")
+                            ? "Client Secret"
+                            : "Secret Key"
                         }
                         revealed={showIamSecret}
                         value={iamSecret}

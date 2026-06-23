@@ -1,15 +1,15 @@
-import { VertexAI } from '@google-cloud/vertexai';
+// Removed VertexAI import
 
 import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 import { prisma } from '../../../config/prisma.js';
 import SubscriptionModel from '../payment/payment.model.js';
 import { VaultService } from '../vault/vault.service.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
+import { AzureDlpService } from '../ai/azureDlp.service.js';
 import { logger } from '../../../shared/logger.js';
 import ApiError from '../../../errors/ApiError.js';
 import httpStatus from 'http-status';
 import { RulesService } from '../rules/rules.service.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import { researchService } from '../research/research.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
@@ -115,6 +115,9 @@ const callWithRetry = async (fn, maxRetries = 2, delay = 1000) => {
 const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperature = 0.5, domain = 'Full Stack') => {
     logger.info(`🔀 [LlmGateway] Triage routing prompt to model: ${modelName} | Domain: ${domain}`);
 
+    let reply;
+    let usedModelName;
+
     // Fetch active subscription for model lock enforcement (Enterprise plan logic)
     let subscription = null;
     try {
@@ -130,62 +133,37 @@ const routeCompletion = async (userId, sessionId, rawPrompt, modelName, temperat
     }
 
     let actualModelName = modelName;
-    if (subscription && ['enterprise-aws', 'enterprise-gcp', 'enterprise-azure'].includes(subscription.plan_name)) {
-        logger.info(`🏢 [LlmGateway] Enforcing enterprise model vendor lock for plan: ${subscription.plan_name}`);
-        if (subscription.plan_name === 'enterprise-aws') {
-            // Must use AWS Bedrock only
-            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
-                actualModelName = 'anthropic.claude-5-sonnet-20241022-v2:0'; // Default AWS model
-                logger.info(`🏢 [LlmGateway] Enterprise AWS: Auto-routing overridden to default Bedrock model: ${actualModelName}`);
+    if (subscription && ['enterprise-azure-commercial', 'enterprise-azure-il5', 'enterprise-azure-il6', 'enterprise-azure'].includes(subscription.plan_name)) {
+        logger.info(`🏢 [LlmGateway] Enforcing Azure Sovereign exclusive mode for ${subscription.plan_name}`);
+        if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
+            if (subscription.plan_name === 'enterprise-azure-il6') {
+                actualModelName = 'azure/il6-gpt-5.5';
+            } else if (subscription.plan_name === 'enterprise-azure-il5') {
+                actualModelName = 'azure/il5-gpt-5.5';
             } else {
-                const isAwsModel = actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.');
-                if (!isAwsModel) {
-                    throw new ApiError(
-                        httpStatus.FORBIDDEN,
-                        `Security Enforcement: Your AWS Enterprise plan restricts you exclusively to AWS Bedrock models. Model '${actualModelName}' is blocked.`
-                    );
-                }
+                actualModelName = 'azure/gpt-5.5';
             }
-        } else if (subscription.plan_name === 'enterprise-gcp') {
-            // Must use GCP Vertex only
-            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
-                actualModelName = 'gemini-3.1-pro'; // Default GCP model
-                logger.info(`🏢 [LlmGateway] Enterprise GCP: Auto-routing overridden to default Vertex model: ${actualModelName}`);
-            } else {
-                const isGcpModel = actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/');
-                if (!isGcpModel) {
-                    throw new ApiError(
-                        httpStatus.FORBIDDEN,
-                        `Security Enforcement: Your GCP Enterprise plan restricts you exclusively to GCP Vertex AI models. Model '${actualModelName}' is blocked.`
-                    );
-                }
-            }
-        } else if (subscription.plan_name === 'enterprise-azure') {
-            // Must use Azure OpenAI only
-            if (!actualModelName || actualModelName === 'auto' || actualModelName === 'default') {
-                actualModelName = 'azure/gpt-5.5'; // Default Azure model
-                logger.info(`🏢 [LlmGateway] Enterprise Azure: Auto-routing overridden to default Azure OpenAI model: ${actualModelName}`);
-            } else {
-                const isAwsOrGcp = actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.') || actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/');
-                if (isAwsOrGcp) {
-                    throw new ApiError(
-                        httpStatus.FORBIDDEN,
-                        `Security Enforcement: Your Azure Enterprise plan restricts you exclusively to Azure OpenAI Foundry models. Model '${actualModelName}' is blocked.`
-                    );
-                }
+            logger.info(`🏢 [LlmGateway] Enterprise Azure: Auto-routing overridden to default Azure OpenAI model: ${actualModelName}`);
+        } else {
+            const isAzureOrLocal = actualModelName.startsWith('azure/') || actualModelName.startsWith('local/') || actualModelName === 'gpt-5.5';
+            if (!isAzureOrLocal) {
+                throw new ApiError(
+                    httpStatus.FORBIDDEN,
+                    `Security Enforcement: Your Azure Sovereign Enterprise plan restricts you exclusively to Azure OpenAI Foundry models. Model '${actualModelName}' is blocked.`
+                );
             }
         }
     }
 
-    // 🛡️ Sovereign Security Boundary: Scrub prompts through Google Cloud DLP
-    logger.info(`🛡️ [LlmGateway] Scrubbing raw prompt through Google Cloud DLP...`);
-    let scrubbedPrompt = await GoogleDlpService.redactText(rawPrompt);
+    // 🛡️ Sovereign Security Boundary
+    let scrubbedPrompt = rawPrompt;
 
     // Deep Research Interceptor
     if (actualModelName === 'Deep Research' || domain === 'Research') {
         logger.info(`🔬 [LlmGateway] Deep Research Interceptor: Initiating deep crawling pipeline...`);
         const researchResult = await researchService.executeDeepResearch(scrubbedPrompt, 'deep');
         const reply = researchResult.content;
+        let usedModelName = 'Deep Research';
         await saveChatResponse(userId, sessionId, rawPrompt, 'Deep Research', reply);
         return {
             reply,
@@ -208,7 +186,7 @@ User Query: "${scrubbedPrompt}"
 
 Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
 
-            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-3.1-pro', 0.1);
+            const classificationResult = await multiCloudInferenceService.executeMultiCloudInference(classificationPrompt, 'gateway_router', { modelId: 'gpt-5.5' });
             const decision = classificationResult.content.trim().toUpperCase();
             
             if (decision.includes('RAG')) {
@@ -219,7 +197,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
             } else if (decision.includes('CONSENSUS')) {
                 logger.info(`🤖 [LlmGateway] Master Router Decision: CONSENSUS (Complex logic). Triggering Tri-Brain Loop...`);
                 const consensus = await triBrainService.executeConsensusLoop(scrubbedPrompt);
-                const reply = `### 🧠 Tri-Cloud Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (AWS Bedrock)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (GCP Vertex)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure Foundry)**:\n${consensus.auditLog}`;
+                const reply = `### 🧠 Azure Tri-Zone Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (Azure Commercial)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (Azure IL5)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure IL6)**:\n${consensus.auditLog}`;
                 await saveChatResponse(userId, sessionId, rawPrompt, 'Tri-Brain Swarm', reply);
                 return { reply, sessionId, model: 'Tri-Brain Swarm', success: true };
             } else {
@@ -244,7 +222,7 @@ User Query: "${scrubbedPrompt}"
 
 Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a general chat, web search, or non-development question. Do not return any other text.`;
             
-            const classificationResult = await GoogleGenAiService.generateContent(classificationPrompt, 'gemini-3.1-pro', 0.1);
+            const classificationResult = await multiCloudInferenceService.executeMultiCloudInference(classificationPrompt, 'gateway_router', { modelId: 'gpt-5.5' });
             const decision = classificationResult.content.trim().toUpperCase();
             
             if (decision.includes('RAG')) {
@@ -307,86 +285,19 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     // Secure key loading from Vault
     const creds = await VaultService.getRawCredentials(userId);
 
-    let reply = '';
-    let usedModelName = actualModelName;
-
-    // 1. Google Gemini (Vertex AI natively or API Key fallback)
-    if (actualModelName.startsWith('gemini-') || actualModelName.startsWith('google/')) {
-        const geminiApiKey = creds.geminiApiKey || process.env.GEMINI_API_KEY;
-        const gcpProjectId = creds.gcpProjectId || process.env.GCP_PROJECT_ID;
-        const cleanModelName = actualModelName.replace(/^google\//, '');
-
-        try {
-            if (gcpProjectId && (creds.gcpPrivateKey || process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-                // Native GCP Vertex AI initialization
-                logger.info('🧠 [LlmGateway] Initializing Vertex AI client natively...');
-                const config = {
-                    project: gcpProjectId,
-                    location: 'us-central1'
-                };
-
-                if (creds.gcpClientEmail && creds.gcpPrivateKey) {
-                    let cleanPrivateKey = creds.gcpPrivateKey;
-                    if (typeof cleanPrivateKey === 'string') {
-                        cleanPrivateKey = cleanPrivateKey.replace(/\\n/g, '\n');
-                    }
-                    config.googleAuthOptions = {
-                        credentials: {
-                            client_email: creds.gcpClientEmail,
-                            private_key: cleanPrivateKey
-                        }
-                    };
-                }
-
-                const vertex = new VertexAI(config);
-                const model = vertex.getGenerativeModel({ model: cleanModelName });
-                const result = await callWithRetry(() => model.generateContent(finalPrompt));
-                const response = await result.response;
-                reply = response.candidates[0].content.parts[0].text;
-            } else {
-                throw new ApiError(
-                    httpStatus.BAD_REQUEST,
-                    'Google Vertex AI credentials (GCP Project ID and Private Key/Email) are missing in the secure Vault. Direct Gemini API Key connection is disabled.'
-                );
-            }
-        } catch (err) {
-            logger.error(`❌ [LlmGateway] Gemini/Vertex AI execution failed: ${sanitizeErrorMessage(err.message)}`);
-            throw new ApiError(
-                err.status || httpStatus.INTERNAL_SERVER_ERROR,
-                sanitizeErrorMessage(err.message)
-            );
-        }
-    }
-    // 2. AWS Bedrock Connection for Anthropic
-    else if (actualModelName.startsWith('claude-') || actualModelName.startsWith('sonnet-') || actualModelName.startsWith('anthropic.')) {
-        logger.info('🧠 [LlmGateway] Delegating AWS Bedrock inference to MultiCloudInferenceService...');
-        try {
-            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { 
-                preferredProvider: 'aws', 
-                modelId: actualModelName,
-                vaultCredentials: creds
-            });
-            reply = result.content;
-            usedModelName = result.model;
-        } catch (err) {
-            throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, sanitizeErrorMessage(err.message));
-        }
-    }
-    // 3. Azure OpenAI Foundry Proxy Connection (Enforced for all other models like GPT-4o, o1-pro)
-    else {
-        logger.info('🧠 [LlmGateway] Delegating Azure OpenAI inference to MultiCloudInferenceService...');
-        try {
-            const cleanModelName = actualModelName.replace(/^azure\//, '');
-            const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { 
-                preferredProvider: 'azure', 
-                modelId: cleanModelName,
-                vaultCredentials: creds
-            });
-            reply = result.content;
-            usedModelName = `azure/${result.model}`;
-        } catch (err) {
-            throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, sanitizeErrorMessage(err.message));
-        }
+    // Force Azure OpenAI Foundry Proxy Connection for all model requests (Sovereign Mode)
+    logger.info('🧠 [LlmGateway] Delegating inference strictly to Azure OpenAI (Sovereign mode)...');
+    try {
+        const cleanModelName = actualModelName.startsWith('azure/') ? actualModelName.replace(/^azure\//, '') : 'gpt-5.5';
+        const result = await multiCloudInferenceService.executeMultiCloudInference(finalPrompt, 'gateway', { 
+            preferredProvider: 'azure', 
+            modelId: cleanModelName,
+            vaultCredentials: creds
+        });
+        reply = result.content;
+        usedModelName = `azure/${result.model}`;
+    } catch (err) {
+        throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, sanitizeErrorMessage(err.message));
     }
 
     if (!reply) {

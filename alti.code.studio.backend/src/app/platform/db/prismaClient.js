@@ -6,7 +6,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import { logger } from '../../../shared/logger.js';
-import { memorystoreService } from '../../modules/googleCloud/memorystore.service.js';
+import { memorystoreService } from '../../modules/azureCloud/azureCache.service.js';
 import crypto from 'crypto';
 
 const basePrisma = new PrismaClient({

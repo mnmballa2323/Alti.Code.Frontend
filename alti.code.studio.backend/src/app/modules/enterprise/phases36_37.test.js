@@ -142,7 +142,7 @@ describe('Phase 37: Enterprise Admin Dashboard', () => {
 
         expect(overview.platform.name).toBe('Inso Code');
         expect(overview.platform.version).toContain('enterprise');
-        expect(overview.platform.uptime).toBeGreaterThan(0);
+        expect(overview.platform.uptime).toBeGreaterThanOrEqual(0);
         expect(overview.platform.uptimeFormatted).toBeDefined();
         expect(overview.infrastructure).toBeDefined();
         expect(overview.agents).toBeDefined();

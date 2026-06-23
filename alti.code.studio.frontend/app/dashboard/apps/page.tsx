@@ -64,10 +64,10 @@ const Badge = ({
 const apps = [
   {
     id: 1,
-    name: "Google Calendar",
+    name: "Outlook Calendar",
     icon: <Calendar className="w-8 h-8 text-blue-600" />,
     description:
-      "The Google Calendar API is a RESTful API that can be accessed through explicit HTTP calls. The API exposes most of the features available in the Google Calendar Web...",
+      "The Microsoft Graph Outlook Calendar API is a RESTful API that allows programmatic access to calendar data, events, and schedules. The API exposes all the features available in the Outlook Web application.",
 
     authType: "OAUTH2",
     bgColor: "bg-blue-50",
@@ -114,10 +114,10 @@ const apps = [
   },
   {
     id: 6,
-    name: "Google Sheets",
+    name: "Microsoft Excel",
     icon: <Sheet className="w-8 h-8 text-green-600" />,
     description:
-      "The Google Sheets API is a RESTful API that allows programmatic access to spreadsheet data and formatting. It supports CRUD operations, formulas, charts, and...",
+      "The Microsoft Graph Excel API is a RESTful API that allows programmatic access to spreadsheet data, tables, charts, and formatting in OneDrive, SharePoint, and Microsoft 365.",
 
     authType: "OAUTH2",
     bgColor: "bg-green-50",

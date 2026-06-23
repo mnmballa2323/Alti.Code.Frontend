@@ -233,7 +233,7 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'auditor',
-    description: 'Vertex AI Sentinel — Autonomous self-evaluation, fidelity benchmarking, and model hyper-tuning.',
+    description: 'Azure AI Studio Sentinel — Autonomous self-evaluation, fidelity benchmarking, and model hyper-tuning.',
     queue: 'auditor-queue',
     capabilities: ['agentic-eval', 'benchmarking', 'hyper-tuning', 'quality-gate'],
     policy: { accessLevel: 'ARCHITECT' },
@@ -258,7 +258,7 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'devops',
-    description: 'Universal Cloud Orchestrator — Prompt-based autonomous deployments to AWS, GCP, Azure, and Vercel.',
+    description: 'Universal Cloud Orchestrator — Prompt-based autonomous deployments to Azure, Azure, Azure, and Vercel.',
     queue: 'devops-queue',
     capabilities: ['multi-cloud-deployment', 'iac-provisioning', 'vercel-deploy', 'harness-orchestration'],
     policy: { accessLevel: 'ADMIN' },
@@ -267,7 +267,7 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'zx',
-    description: 'Google zx DevOps Agent — executes native shell scripts autonomously for CI/CD and system orchestration.',
+    description: 'Azure zx DevOps Agent — executes native shell scripts autonomously for CI/CD and system orchestration.',
     queue: 'zx-queue',
     capabilities: ['shell-scripting', 'bash', 'devops', 'automation', 'zx'],
     policy: { accessLevel: 'ADMIN' },
@@ -309,7 +309,7 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'nomad',
-    description: 'Cross-Cloud Migration Specialist — Autonomous mobility between AWS, GCP, Azure, and Vercel.',
+    description: 'Cross-Cloud Migration Specialist — Autonomous mobility between Azure, Azure, Azure, and Vercel.',
     queue: 'migration-queue',
     capabilities: ['cross-cloud-migration', 'iac-translation', 'universal-mobility'],
     policy: { accessLevel: 'ADMIN' },
@@ -409,7 +409,7 @@ agentRegistry.register({
 // ──── TIER 1: CODE INTELLIGENCE ────
 agentRegistry.register({
     name: 'codeReview',
-    description: 'AI-powered code reviews — finds bugs, security flaws, and style issues.',
+    description: 'AI-powered code reviews — finds bugs, security flazure, and style issues.',
     queue: 'codeReview-queue',
     capabilities: ['code-review', 'bug-detection', 'style-checking'],
     version: '1.0.0'
@@ -581,18 +581,18 @@ agentRegistry.register({
 
 // ──── TIER 6: CLOUD-SPECIFIC ────
 agentRegistry.register({
-    name: 'aws',
-    description: 'AWS Solutions Architecture — IAM, CloudFormation, CDK, cost optimization.',
-    queue: 'aws-queue',
-    capabilities: ['aws', 'iam', 'cloudformation', 'cdk', 's3', 'lambda'],
+    name: 'azure',
+    description: 'Azure Solutions Architecture — IAM, CloudFormation, CDK, cost optimization.',
+    queue: 'azure-queue',
+    capabilities: ['azure', 'iam', 'cloudformation', 'cdk', 's3', 'lambda'],
     version: '1.0.0'
 });
 
 agentRegistry.register({
-    name: 'gcp',
-    description: 'Google Cloud Architecture — IAM bindings, Terraform, Cloud Run, BigQuery.',
-    queue: 'gcp-queue',
-    capabilities: ['gcp', 'cloud-run', 'bigquery', 'gke', 'firebase'],
+    name: 'azure',
+    description: 'Azure Architecture — IAM bindings, Terraform, Azure Container Apps, Synapse Analytics.',
+    queue: 'azure-queue',
+    capabilities: ['azure', 'cloud-run', 'synapse', 'aks', 'firebase'],
     version: '1.0.0'
 });
 
@@ -712,9 +712,9 @@ agentRegistry.register({
 
 // ──── TIER 9: CORE SYSTEM AGENTS ────
 agentRegistry.register({
-    name: 'googleSearch',
-    description: 'Grounds prompts and outputs in real-time web data using Google Custom Search.',
-    queue: 'google-search-queue',
+    name: 'azureSearch',
+    description: 'Grounds prompts and outputs in real-time web data using Azure Custom Search.',
+    queue: 'azure-search-queue',
     capabilities: ['web-search', 'research', 'grounding', 'fact-checking'],
     version: '1.0.0'
 });
@@ -862,7 +862,7 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'redis',
-    description: 'SDK specialist for Redis caching, Pub/Sub, atomic pipelines, and cluster config.',
+    description: 'SDK specialist for Redis caching, Service Bus, atomic pipelines, and cluster config.',
     queue: 'redis-queue',
     capabilities: ['redis', 'caching', 'pub-sub', 'rate-limiting'],
     version: '1.0.0'
@@ -1604,9 +1604,9 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'apprunner',
-    description: 'Managed container application service specialist for AWS App Runner.',
+    description: 'Managed container application service specialist for Azure App Runner.',
     queue: 'apprunner-queue',
-    capabilities: ['app-runner', 'managed-containers', 'aws'],
+    capabilities: ['app-runner', 'managed-containers', 'azure'],
     version: '1.0.0'
 });
 
@@ -1643,7 +1643,7 @@ agentRegistry.register({
     version: '1.0.0'
 });
 
-// ── Google Cloud Native Lifecycle Swarm ──
+// ── Azure Native Lifecycle Swarm ──
 agentRegistry.register({
     name: 'product_manager',
     description: 'Autonomous Enterprise Product Manager. Generates Epics and tasks from user requirements.',
@@ -1670,15 +1670,15 @@ agentRegistry.register({
 
 agentRegistry.register({
     name: 'cloud_run_deployer',
-    description: 'GCP DevOps Engineer. Deploys Dockerized services seamlessly to Cloud Run.',
+    description: 'Azure DevOps Engineer. Deploys Dockerized services seamlessly to Azure Container Apps.',
     queue: 'cloud-run-queue',
-    capabilities: ['gcp', 'cloud-run', 'docker', 'deployment'],
+    capabilities: ['azure', 'cloud-run', 'docker', 'deployment'],
     version: '1.0.0'
 });
 
 agentRegistry.register({
     name: 'stackdriver_analyst',
-    description: 'GCP SRE Observability Analyst. Ingests Cloud Logging data to detect anomalies.',
+    description: 'Azure SRE Observability Analyst. Ingests Cloud Logging data to detect anomalies.',
     queue: 'stackdriver-queue',
     capabilities: ['observability', 'sre', 'logging', 'anomaly-detection'],
     version: '1.0.0'

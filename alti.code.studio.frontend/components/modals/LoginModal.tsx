@@ -3,7 +3,6 @@
 import { Checkbox, Input } from "@heroui/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import toast from "react-hot-toast";
 import { Icon } from "@iconify/react";
 
@@ -27,8 +26,6 @@ export function LoginModal() {
   const [mfaCode, setMfaCode] = useState("");
   const [isLoadingMfa, setIsLoadingMfa] = useState(false);
 
-  const { executeRecaptcha } = useGoogleReCaptcha();
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -38,14 +35,6 @@ export function LoginModal() {
 
     const loading = toast.loading("Logging in...");
     let recaptchaToken = "frontend-recaptcha-token-placeholder";
-
-    try {
-      if (executeRecaptcha) {
-        recaptchaToken = await executeRecaptcha("login");
-      }
-    } catch (e) {
-      console.warn("reCAPTCHA failed or invalid dummy key, bypassing...");
-    }
 
     try {
       const apiBaseUrl =

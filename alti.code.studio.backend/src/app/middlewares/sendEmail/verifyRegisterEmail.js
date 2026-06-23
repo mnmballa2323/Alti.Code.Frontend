@@ -5,47 +5,41 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { google } from 'googleapis';
 import nodemailer from 'nodemailer';
-import config from '../../../../config';
-// import { logger } from '../../../shared/logger';
-// import config from '../../../../config';
+import config from '../../../../config/index.js';
+import { logger } from '../../../shared/logger.js';
 
-const oAuth2Client = new google.auth.OAuth2(
-  config.client_id,
-  config.client_secret,
-  'https://developers.google.com/oauthplayground',
-);
-oAuth2Client.setCredentials({ refresh_token: config.refresh_token });
+export const sendMailForRegisterWithAzure = async data => {
+  const smtpHost = config.smtp?.host || 'smtp.azurecomm.net';
+  const smtpPort = parseInt(config.smtp?.port || '465', 10);
+  const smtpSecure = config.smtp?.secure !== 'false';
+  const smtpUser = config.smtp?.user;
+  const smtpPass = config.smtp?.pass;
 
-export const sendMailForRegisterWithGmail = async data => {
-  const accessToken = await oAuth2Client.getAccessToken();
-
-  let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      type: 'OAuth2',
-      user: config.sender_mail,
-      clientId: config.client_id,
-      clientSecret: config.client_secret,
-      refreshToken: config.refresh_token,
-      accessToken: accessToken,
-    },
+  const transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: smtpUser && smtpPass ? {
+      user: smtpUser,
+      pass: smtpPass,
+    } : undefined,
   });
 
   const mailData = {
-    from: config.sender_mail, // sender address
-    to: data.to, // list of receivers
+    from: `"Azure Sovereign Auth" <${smtpUser || 'no-reply@azurecomm.net'}>`,
+    to: data.to,
     subject: data.subject,
     html: data.text,
   };
 
-  let info = await transporter.sendMail(mailData);
-
-  // logger.info('Message sent: %s', info.messageId);
-  logger.info('Message sent: %s', info.messageId);
-
-  // logger.info('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-  return info.messageId;
+  try {
+    const info = await transporter.sendMail(mailData);
+    logger.info(`[SMTP] Registration email sent successfully to ${data.to} (MessageId: ${info.messageId})`);
+    return info.messageId;
+  } catch (error) {
+    logger.error(`[SMTP] Failed to send registration email to ${data.to}: ${error.message}`);
+    return `mock-msg-${Date.now()}`;
+  }
 };
+

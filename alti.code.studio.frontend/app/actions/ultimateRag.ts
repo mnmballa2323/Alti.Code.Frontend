@@ -1,8 +1,8 @@
 "use server";
 
 /**
- * Server Action: Triggers the backend's Ultimate Google RAG Sequence.
- * This connects the Next.js frontend to the multi-modal Vertex + Spanner + Gemini CLI orchestration loop.
+ * Server Action: Triggers the backend's Ultimate Azure RAG Sequence.
+ * This connects the Next.js frontend to the multi-modal Azure OpenAI + Cosmos DB + Azure CLI orchestration loop.
  */
 export async function queryUltimateRAG(
   query: string,

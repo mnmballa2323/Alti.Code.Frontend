@@ -304,10 +304,10 @@ class McpBridgeService extends EventEmitter {
       const resultStr = JSON.stringify(result);
       if (resultStr.length > 50000) {
         logger.warn(
-          `🗜️ [MCP] Tool payload is massive (${resultStr.length} bytes). Offloading to Google Cloud Storage...`,
+          `🗜️ [MCP] Tool payload is massive (${resultStr.length} bytes). Offloading to Azure Blob Storage...`,
         );
         try {
-          const { GcsService } = await import('../googleCloud/gcs.service.js');
+          const { GcsService } = await import('../azureCloud/azureStorage.service.js');
           const uri = await GcsService.uploadFile(
             'alti_swarm_artifacts',
             `mcp_payload_${Date.now()}.json`,
@@ -317,7 +317,7 @@ class McpBridgeService extends EventEmitter {
             _offloaded: true,
             uri: uri,
             summary:
-              'Result was too large to fit in your context window and was offloaded to GCS. Use your tools to read the URI if you absolutely need it.',
+              'Result was too large to fit in your context window and was offloaded to Azure Blob Storage. Use your tools to read the URI if you absolutely need it.',
           };
         } catch (e) {
           logger.error(

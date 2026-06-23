@@ -19,13 +19,12 @@ vi.mock('../../shared/memory.js', () => ({
 }));
 
 describe('DebugAgent — Autonomic Webhook Pipeline', () => {
-    it('should ingest a GCP Cloud Logging payload and trigger the debugger', async () => {
+    it('should ingest an Azure Monitor payload and trigger the debugger', async () => {
         const mockPayload = {
-            incident: {
-                incident_id: 'gcp-alert-999',
-                summary: 'TypeError: Cannot read properties of undefined (reading "length")',
-                condition: {
-                    conditionThreshold: { filter: 'severity=ERROR' }
+            data: {
+                essentials: {
+                    alertId: 'azure-alert-999',
+                    description: 'TypeError: Cannot read properties of undefined (reading "length")'
                 }
             }
         };
@@ -37,8 +36,8 @@ describe('DebugAgent — Autonomic Webhook Pipeline', () => {
         };
 
         observabilityService.ingestCloudAlert.mockReturnValue({
-            incidentId: 'gcp-alert-999',
-            errorLog: 'Filter Matched: severity=ERROR\\nSummary: TypeError',
+            incidentId: 'azure-alert-999',
+            errorLog: 'TypeError: Cannot read properties of undefined (reading "length")',
             stackTrace: 'No stack trace provided in alert payload.',
             rawPayload: mockPayload
         });
@@ -49,16 +48,16 @@ describe('DebugAgent — Autonomic Webhook Pipeline', () => {
 
         expect(observabilityService.ingestCloudAlert).toHaveBeenCalledWith(mockPayload);
         expect(DebugAgentService.analyzeError).toHaveBeenCalledWith(
-            'Filter Matched: severity=ERROR\\nSummary: TypeError',
+            'TypeError: Cannot read properties of undefined (reading "length")',
             'No stack trace provided in alert payload.',
-            'system-gcp-alert',
-            'gcp-alert-999'
+            'system-azure-alert',
+            'azure-alert-999'
         );
         expect(mockRes.status).toHaveBeenCalledWith(httpStatus.ACCEPTED);
         const jsonResponse = mockRes.json.mock.calls[0][0];
         expect(jsonResponse.success).toBe(true);
         expect(jsonResponse.message).toContain('Autonomic debugging initiated');
-        expect(jsonResponse.data.incidentId).toBe('gcp-alert-999');
+        expect(jsonResponse.data.incidentId).toBe('azure-alert-999');
     });
 });
 

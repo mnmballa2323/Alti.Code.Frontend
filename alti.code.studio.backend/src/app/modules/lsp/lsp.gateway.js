@@ -8,8 +8,7 @@
 import { WebSocketServer } from 'ws';
 import { logger } from '../../../shared/logger.js';
 import { swarmBrain } from '../agents/swarm_brain.js';
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
-import { dlpService } from '../googleCloud/dlp.service.js';
+import { dlpService } from '../ai/azureDlp.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
 import { TenantContainerOrchestrator } from '../sandbox/tenant_container_orchestrator.js';
 

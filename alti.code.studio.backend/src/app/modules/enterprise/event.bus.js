@@ -1,7 +1,7 @@
 /**
- * Copyright (c) 2024 Inso Code
+ * Copyright (c) 2026 Alti Code Studio
  * 
- * EVENT BUS — Google Cloud Pub/Sub Integration Layer
+ * EVENT BUS — Microsoft Azure Service Bus Integration Layer
  * 
  * All agent events flow through this bus:
  *   - Agent dispatched, completed, failed
@@ -13,15 +13,15 @@
  *   - Internal services (analytics, cost tracking)
  *   - External APIs (customer event listeners)
  * 
- * Production: Google Cloud Pub/Sub
+ * Production: Azure Service Bus / Event Grid
  * Development: In-memory event emitter
  */
 
 import { logger } from '../../../shared/logger.js';
-import { PubSub } from '@google-cloud/pubsub';
+import { azurePubSubService } from '../azureCloud/azurePubSub.service.js';
+import { webhookManager as webhookDispatcher } from './webhook.manager.js';
 
-const pubsub = new PubSub();
-const PROJECT_ID = process.env.GCP_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT;
+const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
 const TOPIC_NAME = 'alti-code-studio-events';
 
 // ── Event Types ──
@@ -65,15 +65,17 @@ class EventBus {
         /** @type {object[]} Event history for replay */
         this.eventLog = [];
         this.maxLogSize = 10000;
+        this.totalPublished = 0;
     }
 
     /**
-     * Publish an event to Google Cloud Pub/Sub (and local subscribers)
+     * Publish an event to Azure Service Bus (and local subscribers)
      * @param {string} eventType - One of EVENT_TYPES
      * @param {object} payload - Event data
      * @param {object} meta - { tenantId, userId, correlationId }
      */
     async publish(eventType, payload, meta = {}) {
+        this.totalPublished++;
         const event = {
             id: `evt_${Date.now()}_${Math.random().toString(36).substring(7)}`,
             type: eventType,
@@ -82,18 +84,16 @@ class EventBus {
             userId: meta.userId || 'system',
             correlationId: meta.correlationId || null,
             timestamp: new Date().toISOString(),
-            region: process.env.GCP_REGION || 'us-central1',
+            region: process.env.AZURE_REGION || 'eastus',
         };
 
-        // 1. Enterprise Streaming: Google Cloud Pub/Sub
+        // 1. Enterprise Streaming: Azure Service Bus / Event Grid
         if (PROJECT_ID) {
             try {
-                const topic = pubsub.topic(TOPIC_NAME);
-                const dataBuffer = Buffer.from(JSON.stringify(event));
-                const messageId = await topic.publishMessage({ data: dataBuffer, attributes: { type: eventType, tenantId: event.tenantId } });
-                logger.debug(`☁️ Pub/Sub: published ${eventType} [msg: ${messageId}]`);
+                const messageId = await azurePubSubService.publishEvent(TOPIC_NAME, event);
+                logger.debug(`☁️ Azure Service Bus: published ${eventType} [msg: ${messageId}]`);
             } catch (err) {
-                logger.warn(`⚠️ Pub/Sub publish failed (${err.message}). Falling back to local Map...`);
+                logger.warn(`⚠️ Azure Service Bus publish failed (${err.message}). Falling back to local Map...`);
             }
         }
 
@@ -139,108 +139,46 @@ class EventBus {
      * @returns {object[]}
      */
     query(filters = {}) {
-        let events = this.eventLog;
-        if (filters.type) events = events.filter(e => e.type === filters.type);
-        if (filters.tenantId) events = events.filter(e => e.tenantId === filters.tenantId);
-        if (filters.since) events = events.filter(e => e.timestamp >= filters.since);
-        if (filters.limit) events = events.slice(-filters.limit);
-        return events;
+        let results = [...this.eventLog];
+
+        if (filters.type) {
+            results = results.filter(e => e.type === filters.type);
+        }
+        if (filters.tenantId) {
+            results = results.filter(e => e.tenantId === filters.tenantId);
+        }
+        if (filters.correlationId) {
+            results = results.filter(e => e.correlationId === filters.correlationId);
+        }
+
+        return results;
+    }
+
+    /**
+     * Replay events to a specific handler
+     * @param {string} eventType
+     * @param {Function} handler
+     * @param {object} options
+     */
+    replay(eventType, handler, options = {}) {
+        const events = this.query({ type: eventType });
+        const limit = options.limit || events.length;
+        const targetEvents = events.slice(-limit);
+
+        for (const evt of targetEvents) {
+            handler(evt);
+        }
     }
 
     getStats() {
         return {
-            totalEvents: this.eventLog.length,
-            subscribers: Object.fromEntries(
-                Array.from(this.subscribers.entries()).map(([k, v]) => [k, v.length])
-            ),
+            totalPublished: this.totalPublished,
+            activeSubscribers: Array.from(this.subscribers.keys()).length,
+            logSize: this.eventLog.length,
         };
-    }
-}
-
-/**
- * Webhook Dispatcher — sends events to external services
- */
-class WebhookDispatcher {
-    constructor(eventBus) {
-        this.eventBus = eventBus;
-        /** @type {Map<string, object[]>} tenantId → webhook configs */
-        this.webhooks = new Map();
-        this.deliveryLog = [];
-    }
-
-    /**
-     * Register a webhook for a tenant
-     * @param {string} tenantId
-     * @param {object} config - { url, events, secret, headers }
-     */
-    register(tenantId, config) {
-        if (!this.webhooks.has(tenantId)) this.webhooks.set(tenantId, []);
-
-        const webhook = {
-            id: `wh_${Date.now()}_${Math.random().toString(36).substring(7)}`,
-            tenantId,
-            url: config.url,
-            events: config.events || ['*'],
-            secret: config.secret,
-            headers: config.headers || {},
-            active: true,
-            createdAt: new Date().toISOString(),
-        };
-
-        this.webhooks.get(tenantId).push(webhook);
-
-        // Subscribe to relevant events
-        for (const eventType of webhook.events) {
-            this.eventBus.subscribe(eventType, async (event) => {
-                if (event.tenantId === tenantId || event.tenantId === 'system') {
-                    await this._deliver(webhook, event);
-                }
-            });
-        }
-
-        logger.info(`🔗 WebhookDispatcher: Registered webhook for ${tenantId} → ${config.url}`);
-        return webhook;
-    }
-
-    /**
-     * Deliver an event to a webhook (with retry)
-     * @param {object} webhook
-     * @param {object} event
-     */
-    async _deliver(webhook, event) {
-        if (!webhook.active) return;
-
-        const delivery = {
-            webhookId: webhook.id,
-            eventId: event.id,
-            url: webhook.url,
-            status: 'pending',
-            attempts: 0,
-            timestamp: new Date().toISOString(),
-        };
-
-        try {
-            // In production, this would be a real HTTP POST
-            // For now, log the delivery
-            delivery.status = 'delivered';
-            delivery.attempts = 1;
-            logger.debug(`📤 Webhook: ${webhook.url} ← ${event.type}`);
-        } catch (err) {
-            delivery.status = 'failed';
-            delivery.error = err.message;
-            logger.error(`❌ Webhook delivery failed: ${webhook.url} — ${err.message}`);
-        }
-
-        this.deliveryLog.push(delivery);
-        if (this.deliveryLog.length > 5000) this.deliveryLog.shift();
-    }
-
-    /** List webhooks for a tenant */
-    list(tenantId) {
-        return this.webhooks.get(tenantId) || [];
     }
 }
 
 export const eventBus = new EventBus();
-export const webhookDispatcher = new WebhookDispatcher(eventBus);
-export { EVENT_TYPES };
+export const EVENT_BUS_TYPES = EVENT_TYPES;
+export { EVENT_TYPES, webhookDispatcher };

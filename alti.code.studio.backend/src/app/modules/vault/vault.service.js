@@ -16,64 +16,59 @@ const kekCache = new Map();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 /**
- * Resolves a Barbican master key to unwrap KEK, with fallback to derived mock key if offline.
+ * Resolves an Azure Key Vault master key to unwrap KEK, with fallback to derived mock key if offline.
  */
-const resolveBarbicanKey = async (customerKmsKeyArn, bypassCache = false) => {
+const resolveAzureKeyVaultKey = async (customerKmsKeyArn, bypassCache = false) => {
     if (!customerKmsKeyArn) return null;
 
     if (!bypassCache) {
         const cached = kekCache.get(customerKmsKeyArn);
         if (cached && cached.expiresAt > Date.now()) {
-            logger.info(`💾 [BYOK] Using cached Barbican KEK for ${customerKmsKeyArn}`);
+            logger.info(`💾 [BYOK] Using cached Azure Key Vault KEK for ${customerKmsKeyArn}`);
             return cached.key;
         }
     }
 
-    const isBarbicanConfigured = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
-    if (isBarbicanConfigured) {
+    const isKeyVaultConfigured = process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
+    if (isKeyVaultConfigured) {
         try {
-            const url = process.env.OS_KEY_MANAGER_URL || process.env.OS_BARBICAN_URL;
-            const secretId = customerKmsKeyArn.split('/').pop()?.replace('barbican:', '');
+            const url = process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
+            const secretId = customerKmsKeyArn.split('/').pop()?.replace('azure-keyvault:', '');
             
             const axios = (await import('axios')).default;
-            let token = process.env.OS_TOKEN;
-            if (!token && process.env.OS_AUTH_URL) {
-                const authResponse = await axios.post(`${process.env.OS_AUTH_URL}/v3/auth/tokens`, {
-                    auth: {
-                        identity: {
-                            methods: ['password'],
-                            password: {
-                                user: {
-                                    name: process.env.OS_USERNAME || 'admin',
-                                    domain: { name: process.env.OS_USER_DOMAIN_NAME || 'Default' },
-                                    password: process.env.OS_PASSWORD || 'password'
-                                }
-                            }
-                        },
-                        scope: {
-                            project: {
-                                name: process.env.OS_PROJECT_NAME || 'admin',
-                                domain: { name: process.env.OS_PROJECT_DOMAIN_NAME || 'Default' }
-                            }
-                        }
+            let token = process.env.AZURE_AD_TOKEN;
+            if (!token && process.env.AZURE_TENANT_ID && process.env.AZURE_CLIENT_ID && process.env.AZURE_CLIENT_SECRET) {
+                const tenantId = process.env.AZURE_TENANT_ID;
+                const clientId = process.env.AZURE_CLIENT_ID;
+                const clientSecret = process.env.AZURE_CLIENT_SECRET;
+                
+                const tokenResponse = await axios.post(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`, 
+                    new URLSearchParams({
+                        grant_type: 'client_credentials',
+                        client_id: clientId,
+                        client_secret: clientSecret,
+                        scope: 'https://vault.azure.net/.default'
+                    }).toString(),
+                    {
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                     }
-                });
-                token = authResponse.headers['x-subject-token'];
+                );
+                token = tokenResponse.data?.access_token;
             }
 
             if (token) {
                 const keyResponse = await axios.get(
-                    `${url}/v1/secrets/${secretId}/payload`,
+                    `${url}/secrets/${secretId}?api-version=7.4`,
                     {
                         headers: {
-                            'X-Auth-Token': token,
-                            'Accept': 'text/plain'
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
                         }
                     }
                 );
-                if (keyResponse.data) {
-                    logger.info(`🔑 [BYOK] Resolved Barbican KMS key payload for secret ${secretId}`);
-                    const resolvedKey = keyResponse.data.toString().trim();
+                if (keyResponse.data?.value) {
+                    logger.info(`🔑 [BYOK] Resolved Azure Key Vault KMS key payload for secret ${secretId}`);
+                    const resolvedKey = keyResponse.data.value.toString().trim();
                     kekCache.set(customerKmsKeyArn, {
                         key: resolvedKey,
                         expiresAt: Date.now() + CACHE_TTL
@@ -82,11 +77,11 @@ const resolveBarbicanKey = async (customerKmsKeyArn, bypassCache = false) => {
                 }
             }
         } catch (error) {
-            logger.warn(`⚠️ Barbican key retrieval failed (${error.message}). Falling back to local mock Barbican KEK.`);
+            logger.warn(`⚠️ Azure Key Vault key retrieval failed (${error.message}). Falling back to local mock Azure Key Vault KEK.`);
         }
-        // Local mock Barbican KEK derivation
-        const mockKek = crypto.createHmac('sha256', 'mock-barbican-kek-secret').update(customerKmsKeyArn).digest('hex');
-        const resolvedMockKey = `barbican-mock-kek:${mockKek}`;
+        // Local mock KEK derivation
+        const mockKek = crypto.createHmac('sha256', 'mock-azure-keyvault-kek-secret').update(customerKmsKeyArn).digest('hex');
+        const resolvedMockKey = `azure-keyvault-mock-kek:${mockKek}`;
         kekCache.set(customerKmsKeyArn, {
             key: resolvedMockKey,
             expiresAt: Date.now() + CACHE_TTL
@@ -152,7 +147,7 @@ const getRawCredentials = async (userId) => {
         });
         if (user?.tenant?.customerKmsKeyArn) {
             customerKmsKeyArn = user.tenant.customerKmsKeyArn;
-            tenantKmsKey = await resolveBarbicanKey(customerKmsKeyArn);
+            tenantKmsKey = await resolveAzureKeyVaultKey(customerKmsKeyArn);
         }
     } catch (err) {
         logger.warn(`⚠️ [VaultService] Failed to load tenant key for user ${targetUserId}: ${err.message}. Falling back to master key.`);
@@ -184,9 +179,9 @@ const getRawCredentials = async (userId) => {
         return await decryptAll(tenantKmsKey, true);
     } catch (error) {
         if (customerKmsKeyArn) {
-            logger.warn(`⚠️ Decryption failed (potential KEK rotation). Bypassing cache to pull fresh Barbican KEK...`);
+            logger.warn(`⚠️ Decryption failed (potential KEK rotation). Bypassing cache to pull fresh Azure Key Vault KEK...`);
             try {
-                tenantKmsKey = await resolveBarbicanKey(customerKmsKeyArn, true); // bypassCache = true
+                tenantKmsKey = await resolveAzureKeyVaultKey(customerKmsKeyArn, true); // bypassCache = true
                 return await decryptAll(tenantKmsKey, false);
             } catch (retryError) {
                 logger.error(`❌ Decryption retry failed even after KEK reload: ${retryError.message}`);
@@ -232,7 +227,7 @@ const updateCredentials = async (userId, keys) => {
             include: { tenant: true }
         });
         if (user?.tenant?.customerKmsKeyArn) {
-            tenantKmsKey = await resolveBarbicanKey(user.tenant.customerKmsKeyArn);
+            tenantKmsKey = await resolveAzureKeyVaultKey(user.tenant.customerKmsKeyArn);
         }
     } catch (err) {
         logger.warn(`⚠️ [VaultService] Failed to load tenant key for user ${targetUserId} during update: ${err.message}.`);

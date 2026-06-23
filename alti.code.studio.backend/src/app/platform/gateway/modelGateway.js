@@ -12,9 +12,9 @@
  * and includes transient error retries, DLP scrubbing, and context compression.
  */
 
-import { VertexAI } from '@google-cloud/vertexai';
+// Removed VertexAI import
 import { AzureOpenAI } from 'openai';
-import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk';
+// Removed Bedrock import
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
 import config from '../../../../config/index.js';
@@ -149,14 +149,23 @@ export const routePlatformCompletion = async ({
   if (scrubPrompt) {
     try {
       logger.info('🛡️ [Model Gateway] Redacting sensitive content via Google Cloud DLP...');
-      const { redactText } = await import('../../modules/googleCloud/dlp.service.js');
-      activePrompt = await redactText(activePrompt);
+      const { GoogleDlpService } = await import('../../modules/ai/azureDlp.service.js');
+      activePrompt = await GoogleDlpService.redactText(activePrompt);
     } catch (err) {
       logger.warn(`⚠️ [Model Gateway] Google Cloud DLP failed, falling back to original prompt: ${err.message}`);
     }
   }
 
-  logger.info(`🔀 [Model Gateway] Routing completion request | Provider: ${provider} | Model: ${model}`);
+  let activeProvider = provider.toLowerCase();
+  let activeModel = model;
+
+  if (activeProvider === 'gcp' || activeProvider === 'aws') {
+    logger.warn(`⚠️ [Model Gateway] Redirecting ${provider} request to Azure OpenAI (Sovereign Mode)...\n`);
+    activeProvider = 'azure';
+    activeModel = 'azure/gpt-5.5';
+  }
+
+  logger.info(`🔀 [Model Gateway] Routing completion request | Provider: ${activeProvider} | Model: ${activeModel}`);
 
   const startTime = Date.now();
   let success = true;
@@ -165,75 +174,7 @@ export const routePlatformCompletion = async ({
   let resultText = '';
 
   try {
-    switch (provider.toLowerCase()) {
-      case 'gcp': {
-        const projectId = config.gcp?.project_id || process.env.GCP_PROJECT_ID;
-        if (!projectId) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'GCP Project ID is not configured.');
-        }
-
-        const vertex = new VertexAI({
-          project: projectId,
-          location: config.gcp?.location || 'us-central1'
-        });
-
-        const vertexModel = vertex.getGenerativeModel({ 
-          model: model.replace(/^google\//, ''),
-          generationConfig: { temperature }
-        });
-
-        const response = await callWithRetry(() => vertexModel.generateContent(activePrompt));
-        const candidates = response?.response?.candidates;
-        if (!candidates || candidates.length === 0) {
-          throw new Error('Vertex AI returned empty response candidates.');
-        }
-
-        const usage = response?.response?.usageMetadata;
-        if (usage) {
-          tokensConsumed = usage.totalTokenCount || 0;
-        }
-
-        resultText = candidates[0].content.parts[0].text;
-        break;
-      }
-
-      case 'aws': {
-        const awsAccessKey = process.env.AWS_ACCESS_KEY_ID;
-        const awsSecretKey = process.env.AWS_SECRET_ACCESS_KEY;
-        const awsRegion = config.aws_region || process.env.AWS_REGION || 'us-east-1';
-
-        if (!awsAccessKey || !awsSecretKey) {
-          throw new ApiError(httpStatus.BAD_REQUEST, 'AWS Bedrock access credentials are missing.');
-        }
-
-        const bedrock = new AnthropicBedrock({
-          awsAccessKey,
-          awsSecretKey,
-          awsRegion,
-          timeout: 25 * 1000
-        });
-
-        // Map short names to full Bedrock resource IDs if necessary
-        let bedrockModelId = model;
-        if (model.startsWith('claude-3-5-sonnet')) {
-          bedrockModelId = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
-        }
-
-        const response = await callWithRetry(() => bedrock.messages.create({
-          model: bedrockModelId,
-          max_tokens: 4096,
-          temperature,
-          messages: [{ role: 'user', content: activePrompt }]
-        }));
-
-        if (response?.usage) {
-          tokensConsumed = (response.usage.input_tokens || 0) + (response.usage.output_tokens || 0);
-        }
-
-        resultText = response.content[0].text;
-        break;
-      }
-
+    switch (activeProvider) {
       case 'azure': {
         const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
         const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
@@ -249,7 +190,7 @@ export const routePlatformCompletion = async ({
           apiVersion: '2024-02-15-preview'
         });
 
-        const deploymentName = model.replace(/^azure\//, '');
+        const deploymentName = activeModel.replace(/^azure\//, '');
         const response = await callWithRetry(() => client.chat.completions.create({
           model: deploymentName,
           messages: [{ role: 'user', content: activePrompt }],

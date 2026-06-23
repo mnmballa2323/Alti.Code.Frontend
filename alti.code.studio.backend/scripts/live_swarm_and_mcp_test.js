@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { GoogleGenAiService } from '../src/app/modules/googleGenAi/googleGenAi.service.js';
+import { AzureGenAiService } from '../src/app/modules/googleGenAi/azureGenAi.service.js';
 import { agenticRouter } from '../src/app/modules/agents/agentic_router.service.js';
 import { mcpClientService } from '../src/app/modules/mcp/mcp.client.js';
 import { logger } from '../src/shared/logger.js';
@@ -40,7 +40,7 @@ async function runLiveVerification() {
 
         // Step 2: Trigger Live Chat Session Auto-Swarm Synthesis
         console.log("\n🔮 Step 1.2: Invoking Live Chat Session Execution with Auto-Swarm synthesis...");
-        const chatResponse = await GoogleGenAiService.chatSession(sampleHistory, complexPrompt);
+        const chatResponse = await AzureGenAiService.chatSession(sampleHistory, complexPrompt);
 
         console.log("\n✅ Master Synthesis Response Received!");
         console.log(`🤖 Responder Model: ${chatResponse.model}`);

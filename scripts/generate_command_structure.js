@@ -29,7 +29,7 @@ const generals = [
   { id: 'a11y-general', name: 'General of Accessibility', domain: 'a11y, WCAG Compliance, Screen Readers' },
   { id: 'performance-general', name: 'General of Performance', domain: 'Core Web Vitals, Memory Profiling' },
   { id: 'oss-general', name: 'General of Open Source Strategy', domain: 'Licensing, OSS Integration, Community' },
-  { id: 'cloud-arch-general', name: 'General of Multi-Cloud Architecture', domain: 'AWS, GCP, Azure, Enterprise Design' },
+  { id: 'cloud-arch-general', name: 'General of Azure Cloud Architecture', domain: 'Azure, Hybrid Cloud, Enterprise Design' },
   { id: 'design-general', name: 'General of UI/UX Design', domain: 'Figma, Tailwind, Design Systems' },
   { id: 'data-eng-general', name: 'General of Data Engineering', domain: 'ETL Pipelines, Kafka, Spark, Hadoop' },
   { id: 'quant-general', name: 'General of High-Frequency Systems', domain: 'Low-latency, Quant Trading, C++' },

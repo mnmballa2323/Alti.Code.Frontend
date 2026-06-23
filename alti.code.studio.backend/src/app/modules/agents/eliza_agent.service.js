@@ -6,7 +6,7 @@
  */
 
 import { logger } from '../../../shared/logger.js';
-import { vertexService } from '../ai/vertex.service.js';
+import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
 
 export class ElizaAgentService {
     /**
@@ -69,7 +69,7 @@ ${styleStr || 'Stay polite, concise, and helpful.'}`;
         const systemPrompt = this.formatSystemPrompt(character);
         const finalPrompt = `${systemPrompt}\n\nUser request: ${userPrompt}\n\nResponse:`;
         
-        return await vertexService.generateContent(finalPrompt);
+        return await azureSovereignCompatService.generateContent(finalPrompt);
     }
 }
 

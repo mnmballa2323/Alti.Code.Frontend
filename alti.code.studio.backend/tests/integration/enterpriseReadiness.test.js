@@ -33,9 +33,9 @@ describe('Enterprise Readiness: Isolation, Tracing & Sandboxing Integration Test
         });
 
       // Mock vertex embeddings call
-      const { vertexService } =
-        await import('../../src/app/modules/ai/vertex.service.js');
-      vi.spyOn(vertexService, 'getEmbeddings').mockResolvedValue([
+      const { azureSovereignCompatService } =
+        await import('../../src/app/modules/ai/azureSovereignCompat.service.js');
+      vi.spyOn(azureSovereignCompatService, 'getEmbeddings').mockResolvedValue([
         0.1, 0.2, 0.3,
       ]);
 

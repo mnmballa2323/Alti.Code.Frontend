@@ -1,5 +1,5 @@
-import { GoogleGenAiService } from '../googleGenAi/googleGenAi.service.js';
-import { GoogleDlpService } from '../googleCloud/dlp.service.js';
+import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { GoogleDlpService } from '../ai/azureDlp.service.js';
 import { logger } from '../../../shared/logger.js';
 import { AnthropicBedrock } from '@anthropic-ai/bedrock-sdk'; // Bedrock Wrapper
 import { AzureOpenAI } from 'openai'; // Azure Foundry Wrapper
@@ -141,7 +141,7 @@ ${graphContext}
         // Step 2: The QA Engineer (GCP Vertex / Gemini 3.1 Pro) writes exhaustive tests
         logger.info(`🧪 [Tri-Brain] Step 2: Gemini 3.1 Pro (GCP) writing integration tests...`);
         const qaPrompt = `You are the QA Engineer. Review the following code and write an exhaustive, edge-case heavy integration test suite for it.\n\nCode:\n${initialCode}`;
-        const qaResult = await GoogleGenAiService.generateContent(qaPrompt, 'gemini-3.1-pro', 0.1);
+        const qaResult = await AzureGenAiService.generateContent(qaPrompt, 'gemini-3.1-pro', 0.1);
         const testSuite = qaResult.content;
 
         // Step 3: The CISO Auditor (Azure Foundry / GPT-5.5) audits both
@@ -235,8 +235,8 @@ ${graphContext}
         
         if (clouds.length === 0) {
             logger.warn(`🚨 [Liquid Router] All clouds failed during fastInference. Falling back to Mock generator.`);
-            const { vertexService } = await import('../ai/vertex.service.js');
-            return vertexService.mockGenerate(prompt);
+            const { azureSovereignCompatService } = await import('../ai/azureSovereignCompat.service.js');
+            return azureSovereignCompatService.mockGenerate(prompt);
         }
 
         let selectedCloud = clouds[0];
@@ -270,7 +270,7 @@ ${graphContext}
                 });
                 resultText = result.choices[0].message.content;
             } else {
-                const result = await GoogleGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
+                const result = await AzureGenAiService.generateContent(prompt, 'gemini-3.1-pro', 0.2);
                 resultText = result.content;
             }
             

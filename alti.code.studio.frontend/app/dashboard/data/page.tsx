@@ -86,7 +86,7 @@ export default function DataPage() {
       syncTime: "5 mins ago",
     },
     {
-      name: "AWS S3 Buckets",
+      name: "Azure Blob Storage",
       status: "Syncing",
       icon: CloudLightning,
       syncTime: "In progress",
@@ -115,7 +115,7 @@ export default function DataPage() {
             Sovereign Data Hub
           </h1>
           <p className="text-gray-400 text-lg mt-2">
-            God-Tier Tri-Cloud Vector Ingestion & Real-Time Analytics
+            God-Tier Azure Sovereign Vector Ingestion & Real-Time Analytics
           </p>
         </header>
 

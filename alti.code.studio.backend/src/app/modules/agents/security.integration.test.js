@@ -31,12 +31,12 @@ describe('Modular Cybersecurity, DevSecOps & Defensive Auditing Declarative Agen
             expect(def.capabilities).toContain('xss_csrf_bypass_testing');
         });
 
-        it('should successfully parse and load Cryptographic Key & Secret Manager Sentinel', async () => {
+        it('should successfully parse and load Cryptographic Key & Key Vault Secrets Sentinel', async () => {
             const agentPath = path.join(SECURITY_DIR, 'security.kms_officer.agent.yaml');
             const def = parseYaml(await fs.readFile(agentPath, 'utf8'));
 
             expect(def.id).toBe('agent.security.kms_officer');
-            expect(def.name).toBe('Cryptographic Key & Secret Manager Sentinel');
+            expect(def.name).toBe('Cryptographic Key & Key Vault Secrets Sentinel');
             expect(def.capabilities).toContain('kms_cryptographic_key_rotation');
             expect(def.capabilities).toContain('envelope_encryption_wrapping');
         });
@@ -137,7 +137,7 @@ describe('Modular Cybersecurity, DevSecOps & Defensive Auditing Declarative Agen
 
             expect(strategy).toBe('Cybersecurity Swarm: Cryptographic Keys & Secrets');
             const agentIds = sequence.map(s => s.agentId);
-            expect(agentIds).toContain('Cryptographic Key & Secret Manager Sentinel');
+            expect(agentIds).toContain('Cryptographic Key & Key Vault Secrets Sentinel');
         });
 
         it('should route Zero-Trust keywords to the Zero-Trust network auditor agent', async () => {

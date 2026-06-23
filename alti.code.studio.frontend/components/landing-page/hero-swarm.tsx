@@ -42,7 +42,7 @@ export default function HeroSwarm() {
             </span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-500 font-medium text-center tracking-tight max-w-3xl">
-            Private Cloud Core. Single-Tenant Isolation. Tri-Cloud AI Compute.
+            Private Cloud Core. Single Tenant Isolation. Azure Sovereign Compute.
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export default function HeroSwarm() {
         <div className="mt-8 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4">
           <div className="flex flex-col items-center justify-center py-6 px-4">
             <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              3
+              2
             </span>
             <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
               Model Providers

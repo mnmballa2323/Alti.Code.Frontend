@@ -59,7 +59,7 @@ export default function DatabasePage({
                 <p className="text-sm text-default-500 mt-1">
                   Connect and manage your{" "}
                   {selectedDb ? selectedDb.name : "database"} resources using
-                  Google MCP Toolbox.
+                  Azure MCP Toolbox.
                 </p>
               </div>
             </div>

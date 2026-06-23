@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { industryIntegrationService } from './industry_integration.service.js';
 import { auditLogService } from '../security/auditLog.service.js';
-import { kmsService } from '../googleCloud/kms.service.js';
+import { kmsService } from '../azureCloud/azureServices.service.js';
 
 describe('Industry Integration & Interoperability Service Tests', () => {
     beforeEach(() => {

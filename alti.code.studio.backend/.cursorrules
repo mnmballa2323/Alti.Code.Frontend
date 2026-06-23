@@ -2,7 +2,7 @@
 
 ## Instructions (What to do)
 - Always use **PostgreSQL** via the **Prisma ORM** as the singular data foundation for the application.
-- Leverage **Google Cloud Native APIs** (Vertex AI, Cloud Storage, Pub/Sub, Cloud SQL pgvector) exclusively for infrastructure dependencies.
+- Leverage **Microsoft Azure Native APIs** (Azure OpenAI, Azure Blob Storage, Azure Service Bus, Azure Database for PostgreSQL Flexible Server) exclusively for infrastructure dependencies.
 - Write modern **Node.js (ES Modules)** using strictly typed or heavily JSDoc-commented JavaScript.
 - Use the established **Data Access Layer (DAL)** pattern (e.g., `UserRepository`) for database interactions instead of writing raw queries in services/controllers.
 - Utilize the global `logger` utility (`../../../shared/logger.js`) for all application logging and telemetry.
