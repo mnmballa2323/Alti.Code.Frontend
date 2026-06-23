@@ -33,7 +33,7 @@ resource "azurerm_linux_virtual_machine" "commercial_node" {
   name                = "alti-${var.customer_id}-commercial-node"
   resource_group_name = azurerm_resource_group.commercial_rg[0].name
   location            = azurerm_resource_group.commercial_rg[0].location
-  size                = "Standard_D8s_v5"
+  size                = var.vm_size_commercial
   admin_username      = "azureuser"
   network_interface_ids = [
     azurerm_network_interface.commercial_nic[0].id,
@@ -91,7 +91,7 @@ resource "azurerm_linux_virtual_machine" "government_node" {
   name                = "alti-${var.customer_id}-government-node"
   resource_group_name = azurerm_resource_group.government_rg[0].name
   location            = azurerm_resource_group.government_rg[0].location
-  size                = "Standard_D8s_v5"
+  size                = var.vm_size_government
   admin_username      = "govuser"
   network_interface_ids = [
     azurerm_network_interface.government_nic[0].id,
@@ -143,7 +143,7 @@ resource "azurerm_dedicated_host" "commercial_host" {
   location                = azurerm_resource_group.commercial_rg[0].location
   resource_group_name     = azurerm_resource_group.commercial_rg[0].name
   dedicated_host_group_id = azurerm_dedicated_host_group.commercial_host_group[0].id
-  sku_name                = "Dsv5-Type1"
+  sku_name                = var.dedicated_host_sku
   platform_fault_domain   = 0
 }
 
@@ -165,7 +165,7 @@ resource "azurerm_linux_virtual_machine" "dedicated_node" {
   name                = "alti-${var.customer_id}-dedicated-node"
   resource_group_name = azurerm_resource_group.commercial_rg[0].name
   location            = azurerm_resource_group.commercial_rg[0].location
-  size                = "Standard_D8s_v5"
+  size                = var.vm_size_dedicated
   admin_username      = "dedicateduser"
   network_interface_ids = [
     azurerm_network_interface.dedicated_nic[0].id,

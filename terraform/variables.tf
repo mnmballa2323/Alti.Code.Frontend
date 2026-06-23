@@ -131,4 +131,56 @@ variable "admin_source_ip_range" {
   default     = "*"
 }
 
+# ------------------------------------------------------------------------------
+# Resource Sizing & SKUs
+# ------------------------------------------------------------------------------
+variable "vm_size_commercial" {
+  description = "VM size for Commercial Cloud VM"
+  type        = string
+  default     = "Standard_D8s_v5"
+}
+
+variable "vm_size_dedicated" {
+  description = "VM size for Dedicated VM"
+  type        = string
+  default     = "Standard_D8s_v5"
+}
+
+variable "vm_size_government" {
+  description = "VM size for Government VM"
+  type        = string
+  default     = "Standard_D8s_v5"
+}
+
+variable "dedicated_host_sku" {
+  description = "The SKU for Azure Dedicated Host"
+  type        = string
+  default     = "Dsv5-Type1"
+}
+
+variable "pg_db_sku_name" {
+  description = "The SKU for PostgreSQL Flexible Server"
+  type        = string
+  default     = "GP_Standard_D4ds_v5"
+}
+
+variable "redis_cache_sku" {
+  description = "The SKU for Redis Cache (Basic, Standard, Premium)"
+  type        = string
+  default     = "Standard"
+}
+
+variable "redis_cache_capacity" {
+  description = "The capacity size for Redis Cache"
+  type        = number
+  default     = 1
+}
+
+variable "redis_cache_family" {
+  description = "The SKU family for Redis Cache (C for Basic/Standard, P for Premium)"
+  type        = string
+  default     = "C"
+}
+
+
 

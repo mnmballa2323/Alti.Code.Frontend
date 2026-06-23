@@ -26,7 +26,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
 
   storage_mb = 131072 # 128 GB
 
-  sku_name = "GP_Standard_D4ds_v5" # General Purpose VM instance
+  sku_name = var.db_sku_name
 
   backup_retention_days        = var.environment == "prod" ? 30 : 7
   geo_redundant_backup_enabled = var.environment == "prod" ? true : false
@@ -53,9 +53,9 @@ resource "azurerm_redis_cache" "cache" {
   name                = "alti-redis-${var.customer_id}-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
-  capacity            = 1
-  family              = "C"
-  sku_name            = "Standard"
+  capacity            = var.redis_capacity
+  family              = var.redis_family
+  sku_name            = var.redis_sku_name
   enable_non_ssl_port = false
   minimum_tls_version = "1.2"
 
@@ -102,6 +102,26 @@ variable "admin_password" {
   type        = string
   description = "PostgreSQL administrator login password"
   sensitive   = true
+}
+
+variable "db_sku_name" {
+  type        = string
+  description = "PostgreSQL Flexible Server SKU name"
+}
+
+variable "redis_sku_name" {
+  type        = string
+  description = "Redis Cache SKU name"
+}
+
+variable "redis_capacity" {
+  type        = number
+  description = "Redis Cache capacity size"
+}
+
+variable "redis_family" {
+  type        = string
+  description = "Redis Cache family"
 }
 
 # ------------------------------------------------------------------------------

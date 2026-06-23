@@ -268,6 +268,10 @@ module "database_commercial" {
   subnet_id           = azurerm_subnet.commercial_db_subnet[0].id
   admin_username      = var.pg_admin_username
   admin_password      = var.pg_admin_password
+  db_sku_name         = var.pg_db_sku_name
+  redis_sku_name      = var.redis_cache_sku
+  redis_capacity      = var.redis_cache_capacity
+  redis_family        = var.redis_cache_family
 }
 
 module "observability_commercial" {
@@ -312,6 +316,10 @@ module "database_government" {
   subnet_id           = azurerm_subnet.government_db_subnet[0].id
   admin_username      = var.pg_admin_username
   admin_password      = var.pg_admin_password
+  db_sku_name         = var.pg_db_sku_name
+  redis_sku_name      = var.redis_cache_sku
+  redis_capacity      = var.redis_cache_capacity
+  redis_family        = var.redis_cache_family
 }
 
 module "observability_government" {
