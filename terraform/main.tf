@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "commercial_nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+    source_address_prefix      = var.admin_source_ip_range
     destination_address_prefix = "*"
   }
 

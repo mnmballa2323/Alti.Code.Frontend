@@ -90,3 +90,10 @@ variable "enable_azure_government" {
   default     = false
 }
 
+variable "admin_source_ip_range" {
+  description = "The CIDR or IP range allowed to SSH into the commercial nodes (default permits all)"
+  type        = string
+  default     = "*"
+}
+
+

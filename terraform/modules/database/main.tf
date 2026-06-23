@@ -42,7 +42,7 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
 resource "azurerm_postgresql_flexible_server_database" "pentagidb" {
   name      = "pentagidb"
   server_id = azurerm_postgresql_flexible_server.postgres.id
-  colormap  = "SQL_Latin1_General_CP1_CI_AS"
+  collation = "en_US.utf8"
   charset   = "UTF8"
 }
 
