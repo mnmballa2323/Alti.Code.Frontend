@@ -56,21 +56,19 @@ export default function ModelProvidersSection() {
               className="relative flex flex-col justify-between p-8 rounded-[32px] border bg-gray-50 dark:bg-black/40 border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300"
             >
               <div className="flex flex-col gap-8">
-                {/* Header Row: Icon */}
-                <div className="flex items-center justify-between w-full">
-                  <div className="w-14 h-14 bg-white dark:bg-[#111] border border-gray-100 dark:border-gray-800 rounded-2xl flex items-center justify-center p-3 shadow-sm">
+                {/* Header Row: Icon, Title & Brand */}
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 bg-white dark:bg-[#111] border border-gray-100 dark:border-gray-800 rounded-2xl flex items-center justify-center p-3 shadow-sm flex-shrink-0">
                     {provider.icon}
                   </div>
-                </div>
-
-                {/* Title & Brand */}
-                <div className="flex flex-col gap-2">
-                  <h4 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white">
-                    {provider.name}
-                  </h4>
-                  <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-                    {provider.brand}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <h4 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white leading-tight">
+                      {provider.name}
+                    </h4>
+                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+                      {provider.brand}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Description */}
