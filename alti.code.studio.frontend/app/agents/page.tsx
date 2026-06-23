@@ -6,7 +6,6 @@ import { CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
-import AgentRightSidebar from "@/components/agent-right-sidebar";
 import { AppDispatch } from "@/store";
 
 // Mock Action Block component for UI demonstration
@@ -254,7 +253,6 @@ function AgentPageContent() {
                 </div>
               )}
             </div>
-            <AgentRightSidebar />
           </div>
         )}
       </div>
