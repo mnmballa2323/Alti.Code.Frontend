@@ -76,8 +76,8 @@ const initialSecrets: SecretEntry[] = [
     name: "Synapse Production Analytics",
     service: "Cloud IAM",
     key: JSON.stringify({
-      provider: "Azure",
-      keyId: "az_prod_eu_west",
+      provider: "GCP",
+      keyId: "gcp_prod_eu_west",
       secret: "98127398123",
     }),
     lastUsed: "1 hour ago",
@@ -836,9 +836,9 @@ export default function VaultPage() {
                     <>
                       <Select
                         options={[
-                          "Azure Cloud",
-                          "Azure Dedicated",
-                          "Azure Government",
+                          "Google Cloud Platform",
+                          "GCP Dedicated (Sovereign)",
+                          "GCP Government (FedRAMP)",
                           "Cloudflare",
                           "Other",
                         ]}
@@ -848,8 +848,8 @@ export default function VaultPage() {
                       />
                       <Field
                         placeholder={
-                          iamProvider.startsWith("Azure")
-                            ? "App (Client) ID"
+                          iamProvider.startsWith("Google") || iamProvider.startsWith("GCP")
+                            ? "Service Account Email"
                             : "Key ID"
                         }
                         value={iamKeyId}
@@ -858,8 +858,8 @@ export default function VaultPage() {
                       <Field
                         revealable
                         placeholder={
-                          iamProvider.startsWith("Azure")
-                            ? "Client Secret"
+                          iamProvider.startsWith("Google") || iamProvider.startsWith("GCP")
+                            ? "Private Key JSON"
                             : "Secret Key"
                         }
                         revealed={showIamSecret}
@@ -868,7 +868,7 @@ export default function VaultPage() {
                         onToggleReveal={() => setShowIamSecret(!showIamSecret)}
                       />
                       <Field
-                        placeholder="Region (e.g. us-east-1)"
+                        placeholder="Region (e.g. us-central1)"
                         value={iamRegion}
                         onChange={setIamRegion}
                       />

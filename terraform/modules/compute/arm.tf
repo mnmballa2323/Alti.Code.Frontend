@@ -1,65 +1,45 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure ARM64 VM Provisioning Module
+# ALTI CODE STUDIO: GCP ARM64 VM Provisioning Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
-resource "azurerm_network_interface" "arm_nic" {
-  name                = "alti-arm-nic-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
+resource "google_compute_instance" "arm_node" {
+  name         = "alti-arm-node-${var.environment}"
+  machine_type = "t2a-standard-4" # GCP ARM64 machine type (Ampere Altra)
+  zone         = var.zone
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "arm_node" {
-  name                = "alti-arm-node-${var.environment}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  
-  # Standard_D4ps_v5: Azure ARM64 (Ampere Altra) Virtual Machine size
-  size                = "Standard_D4ps_v5"
-  admin_username      = var.admin_username
-  network_interface_ids = [
-    azurerm_network_interface.arm_nic.id,
-  ]
-
-  admin_ssh_key {
-    username   = var.admin_username
-    public_key = file(var.ssh_public_key_path)
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts-arm64"
+      size  = 128
+      type  = "pd-ssd"
+    }
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 128
+  network_interface {
+    subnetwork = var.subnet_id
+    access_config {}
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-arm64" # Canonical Ubuntu build for ARM64
-    version   = "latest"
+  metadata = {
+    ssh-keys = "${var.admin_username}:${file(var.ssh_public_key_path)}"
   }
 
-  identity {
-    type = "SystemAssigned"
+  service_account {
+    scopes = ["cloud-platform"]
   }
 
-  tags = {
-    Architecture = "ARM64"
-    Environment  = var.environment
+  labels = {
+    architecture = "arm64"
+    environment  = var.environment
   }
 }
 
@@ -67,8 +47,18 @@ resource "azurerm_linux_virtual_machine" "arm_node" {
 # Variables
 # ------------------------------------------------------------------------------
 variable "environment" { type = string }
-variable "location" { type = string }
-variable "resource_group_name" { type = string }
+variable "zone" {
+  type    = string
+  default = "us-central1-a"
+}
+variable "location" {
+  type    = string
+  default = ""
+}
+variable "resource_group_name" {
+  type    = string
+  default = ""
+}
 variable "subnet_id" { type = string }
 variable "admin_username" { type = string }
 variable "ssh_public_key_path" { type = string }
@@ -77,5 +67,5 @@ variable "ssh_public_key_path" { type = string }
 # Outputs
 # ------------------------------------------------------------------------------
 output "arm_vm_id" {
-  value = azurerm_linux_virtual_machine.arm_node.id
+  value = google_compute_instance.arm_node.id
 }

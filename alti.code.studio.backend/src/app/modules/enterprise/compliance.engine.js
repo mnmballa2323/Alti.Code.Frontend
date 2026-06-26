@@ -23,7 +23,7 @@ import crypto from 'crypto';
 import mongoose from 'mongoose';
 import { AuditLog } from '../audit/audit.model.js';
 
-const KMS_KEY_NAME = process.env.AZURE_KEYVAULT_KEY_NAME || '';
+const KMS_KEY_NAME = process.env.GCP_KMS_KEY_NAME || '';
 
 // ── Data Classification Levels ──
 const DATA_CLASSES = {
@@ -80,8 +80,8 @@ const PII_PATTERNS = [
     classification: 'INTERNAL',
   },
   {
-    name: 'AWS Key',
-    pattern: /AKIA[0-9A-Z]{16}/g,
+    name: 'GCP Service Account Key',
+    pattern: /"private_key"\s*:\s*"-----BEGIN PRIVATE KEY-----/g,
     classification: 'TOP_SECRET',
   },
   {
@@ -175,7 +175,7 @@ class ComplianceEngine {
   }
 
   /**
-   * Local Llama Guard validation pipeline for Azure Stack sovereign clouds
+   * Local Llama Guard validation pipeline for GCP Sovereign clouds
    * @param {string} text - User prompt
    * @param {string} tenantRegion
    * @returns {Promise<object>} - { safe: boolean, reason: string|null }
@@ -183,13 +183,13 @@ class ComplianceEngine {
   async checkLlamaGuard(text, tenantRegion = 'us-central1') {
     if (
       process.env.AIR_GAPPED_MODE === 'true' ||
-      tenantRegion === 'private-azure'
+      tenantRegion === 'private-gcp'
     ) {
       try {
         const axios = (await import('axios')).default;
         const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
         logger.info(
-          `🛡️ DLP: Performing local Llama Guard safety check on private Azure Stack node`,
+          `🛡️ DLP: Performing local Llama Guard safety check on private Google Distributed Cloud node`,
         );
 
         const response = await axios.post(`${ollamaUrl}/api/generate`, {
@@ -419,54 +419,26 @@ class ComplianceEngine {
     return report;
   }
 
-  /** Sign with Azure Key Vault HSM */
-  async _signWithAzureKeyVault(data) {
-    const url =
-      process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
-    const keyId = process.env.AZURE_KEYVAULT_KEY_NAME || 'enterprise-audit-key';
+  /** Sign with GCP Cloud KMS HSM */
+  async _signWithGcpKms(data) {
+    const keyRing = process.env.GCP_KMS_KEY_RING;
+    const keyName = process.env.GCP_KMS_KEY_NAME || 'enterprise-audit-key';
+    const projectId = process.env.GCP_PROJECT_ID;
 
-    if (!url) {
-      throw new Error('AZURE_KEYVAULT_ENDPOINT is not configured');
+    if (!keyRing || !projectId) {
+      throw new Error('GCP_KMS_KEY_RING or GCP_PROJECT_ID is not configured');
     }
 
     const axios = (await import('axios')).default;
+    const token = process.env.GCP_ACCESS_TOKEN || 'mock-gcp-token';
 
-    let token = process.env.AZURE_AD_TOKEN;
-    if (
-      !token &&
-      process.env.AZURE_TENANT_ID &&
-      process.env.AZURE_CLIENT_ID &&
-      process.env.AZURE_CLIENT_SECRET
-    ) {
-      const tenantId = process.env.AZURE_TENANT_ID;
-      const clientId = process.env.AZURE_CLIENT_ID;
-      const clientSecret = process.env.AZURE_CLIENT_SECRET;
+    const digest = crypto.createHash('sha256').update(data).digest('base64');
+    const url = `https://cloudkms.googleapis.com/v1/projects/${projectId}/locations/global/keyRings/${keyRing}/cryptoKeys/${keyName}/cryptoKeyVersions/1:asymmetricSign`;
 
-      const tokenResponse = await axios.post(
-        `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
-        new URLSearchParams({
-          grant_type: 'client_credentials',
-          client_id: clientId,
-          client_secret: clientSecret,
-          scope: 'https://vault.azure.net/.default',
-        }).toString(),
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        },
-      );
-      token = tokenResponse.data?.access_token;
-    }
-
-    if (!token) {
-      throw new Error('Failed to obtain Azure AD Access Token');
-    }
-
-    const digest = crypto.createHash('sha256').update(data).digest();
     const signResponse = await axios.post(
-      `${url}/keys/${keyId}/sign?api-version=7.4`,
+      url,
       {
-        alg: 'RS256',
-        value: digest.toString('base64'),
+        digest: { sha256: digest },
       },
       {
         headers: {
@@ -476,83 +448,79 @@ class ComplianceEngine {
       },
     );
 
-    return signResponse.data?.value;
+    return signResponse.data?.signature;
   }
 
   /**
-   * Verify Azure Key Vault HSM Key Attestation (Pillar 20)
+   * Verify GCP KMS HSM Key Attestation
    * @param {string} keyId
    * @returns {Promise<object>} Attestation metadata
    */
-  async verifyAzureKeyVaultKeyAttestation(keyId) {
-    const url =
-      process.env.AZURE_KEYVAULT_ENDPOINT ||
-      process.env.AZURE_KEYVAULT_URL ||
-      'https://my-keyvault.vault.azure.net';
+  async verifyGcpKmsKeyAttestation(keyId) {
+    const keyRing = process.env.GCP_KMS_KEY_RING || 'global-keyring';
+    const projectId = process.env.GCP_PROJECT_ID || 'dummy-gcp-project';
 
     try {
       const axios = (await import('axios')).default;
-      let token = process.env.AZURE_AD_TOKEN || 'mock-token';
+      let token = process.env.GCP_ACCESS_TOKEN || 'mock-token';
 
-      if (process.env.AZURE_KEYVAULT_ENDPOINT && process.env.AZURE_CLIENT_ID) {
-        const response = await axios.get(
-          `${url}/keys/${keyId}?api-version=7.4`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
+      if (process.env.GCP_KMS_KEY_RING && process.env.GCP_PROJECT_ID) {
+        const url = `https://cloudkms.googleapis.com/v1/projects/${projectId}/locations/global/keyRings/${keyRing}/cryptoKeys/${keyId}`;
+        const response = await axios.get(url, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         return {
           keyId,
           attestationStatus: 'VERIFIED',
-          hsmVendor: 'Microsoft Azure HSM (nCipher)',
+          hsmVendor: 'Google Cloud HSM (Cavium)',
           firmwareVersion: '3.0.0',
-          attestationCertificateChain: response.data.certificate_chain || [
-            'AZURE_HSM_CERT_PEM_STRING',
+          attestationCertificateChain: response.data.attestation?.certChain || [
+            'GCP_HSM_CERT_PEM_STRING',
           ],
           verifiedAt: new Date().toISOString(),
         };
       }
     } catch (err) {
       logger.warn(
-        `⚠️ Azure Key Vault Key Attestation query failed for key ${keyId}: ${err.message}. Falling back to verified mock attestation...`,
+        `⚠️ GCP KMS Key Attestation query failed for key ${keyId}: ${err.message}. Falling back to verified mock attestation...`,
       );
     }
 
     return {
       keyId,
       attestationStatus: 'VERIFIED',
-      hsmVendor: 'Microsoft Azure HSM (nCipher)',
+      hsmVendor: 'Google Cloud HSM (Cavium)',
       firmwareVersion: '3.0.0',
       attestationCertificateChain: [
-        '-----BEGIN CERTIFICATE-----\nMIIB...[Azure HSM Root Certificate]...==\n-----END CERTIFICATE-----',
-        '-----BEGIN CERTIFICATE-----\nMIIB...[Azure Key Vault Intermediate CA Certificate]...==\n-----END CERTIFICATE-----',
+        '-----BEGIN CERTIFICATE-----\nMIIB...[GCP HSM Root Certificate]...==\n-----END CERTIFICATE-----',
+        '-----BEGIN CERTIFICATE-----\nMIIB...[GCP KMS Intermediate CA Certificate]...==\n-----END CERTIFICATE-----',
       ],
       verifiedAt: new Date().toISOString(),
     };
   }
 
-  /** True Cryptographic Signature (Azure Key Vault or HSM Asymmetric Sign) */
+  /** True Cryptographic Signature (GCP KMS or HSM Asymmetric Sign) */
   async _hash(data) {
-    const isKeyVaultConfigured =
-      process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
+    const isKmsConfigured =
+      process.env.GCP_KMS_KEY_RING && process.env.GCP_PROJECT_ID;
 
-    if (isKeyVaultConfigured) {
+    if (isKmsConfigured) {
       try {
-        const signature = await this._signWithAzureKeyVault(data);
+        const signature = await this._signWithGcpKms(data);
         if (signature) {
-          return `azure-keyvault-signed:${signature}`;
+          return `gcp-kms-signed:${signature}`;
         }
       } catch (error) {
         logger.warn(
-          `⚠️ Azure Key Vault Signing failed (${error.message}). Falling back to local mock signature...`,
+          `⚠️ GCP KMS Signing failed (${error.message}). Falling back to local mock signature...`,
         );
       }
       // Fallback mock sign method for local dev
       const hmac = crypto
-        .createHmac('sha256', 'mock-azure-keyvault-secret')
+        .createHmac('sha256', 'mock-gcp-kms-secret')
         .update(data)
         .digest('base64');
-      return `azure-keyvault-mock-signed:${hmac}`;
+      return `gcp-kms-mock-signed:${hmac}`;
     }
 
     if (!KMS_KEY_NAME) {
@@ -564,14 +532,14 @@ class ComplianceEngine {
       const hmac = crypto
         .createHmac(
           'sha256',
-          process.env.AZURE_KEYVAULT_SECRET || 'mock-azure-keyvault-secret',
+          process.env.GCP_KMS_SECRET || 'mock-gcp-kms-secret',
         )
         .update(data)
         .digest('base64');
-      return `azure-keyvault-signed:${hmac}`;
+      return `gcp-kms-signed:${hmac}`;
     } catch (error) {
       logger.warn(
-        `⚠️ Azure Key Vault Signing failed (${error.message}). Falling back to local SHA-256...`,
+        `⚠️ GCP KMS Signing failed (${error.message}). Falling back to local SHA-256...`,
       );
       return `sha256:${crypto.createHash('sha256').update(data).digest('hex')}`;
     }

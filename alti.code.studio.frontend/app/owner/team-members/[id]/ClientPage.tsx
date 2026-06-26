@@ -75,10 +75,10 @@ interface ProviderUsageData {
 }
 
 const initialUsageData: Record<string, ProviderUsageData> = {
-  azure: {
+  gcp: {
     models: [
       {
-        name: "Azure OpenAI GPT-5",
+        name: "GCP Vertex AI Gemini 2.0 Flash",
         version: "v5.5",
         isPrimary: true,
         inputTokens: 4120000,
@@ -149,7 +149,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gpt55-1",
+            id: "req-gemini20-1",
             timestamp: "Just now",
             promptSnippet:
               "Assemble dynamic view transitions layouts for admin routes...",
@@ -158,7 +158,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.151,
           },
           {
-            id: "req-gpt55-2",
+            id: "req-gemini20-2",
             timestamp: "18 mins ago",
             promptSnippet:
               "Optimize database connection pooling parameters for PostgreSQL...",
@@ -167,7 +167,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.092,
           },
           {
-            id: "req-gpt55-3",
+            id: "req-gemini20-3",
             timestamp: "1 hr ago",
             promptSnippet:
               "Translate system documentation translation assets for French localization...",
@@ -178,7 +178,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Azure OpenAI GPT-5 Pro",
+        name: "GCP Vertex AI Gemini 2.0 Pro",
         version: "v5.5 Pro",
         isPrimary: false,
         inputTokens: 950000,
@@ -249,7 +249,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gpt55pro-1",
+            id: "req-gemini20pro-1",
             timestamp: "45 mins ago",
             promptSnippet:
               "Form autofill handler autocomplete listeners implementation...",
@@ -258,7 +258,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.002,
           },
           {
-            id: "req-gpt55pro-2",
+            id: "req-gemini20pro-2",
             timestamp: "2 hrs ago",
             promptSnippet:
               "Sanitize HTML string utility function input checks...",
@@ -267,7 +267,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.001,
           },
           {
-            id: "req-gpt55pro-3",
+            id: "req-gemini20pro-3",
             timestamp: "5 hrs ago",
             promptSnippet: "Fetch user profile status header check values...",
             tokens: 350,
@@ -278,10 +278,10 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  azure_gov: {
+  gcp_gov: {
     models: [
       {
-        name: "Azure Gov GPT-4o",
+        name: "GCP Gov Gemini 1.5 Pro",
         version: "v4.6",
         isPrimary: true,
         inputTokens: 2450000,
@@ -352,7 +352,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-claude46-1",
+            id: "req-gemini15pro-1",
             timestamp: "2 mins ago",
             promptSnippet:
               "Explain clean architecture module dependencies in Kotlin KMP...",
@@ -361,7 +361,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0078,
           },
           {
-            id: "req-claude46-2",
+            id: "req-gemini15pro-2",
             timestamp: "12 mins ago",
             promptSnippet:
               "Refactor MonacoEditor.tsx component layout parameters...",
@@ -370,7 +370,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0142,
           },
           {
-            id: "req-claude46-3",
+            id: "req-gemini15pro-3",
             timestamp: "2 hrs ago",
             promptSnippet:
               "Parse incoming git diff layout representation regex helper...",
@@ -381,7 +381,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Azure Gov GPT-4o-Pro",
+        name: "GCP Gov Gemini 1.5 Flash",
         version: "v4.8",
         isPrimary: false,
         inputTokens: 320000,
@@ -452,7 +452,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-opus48-1",
+            id: "req-gemini15ultra-1",
             timestamp: "1 hr ago",
             promptSnippet:
               "Execute security scan rules auditor for Supabase postgres.sql...",
@@ -461,7 +461,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.185,
           },
           {
-            id: "req-opus48-2",
+            id: "req-gemini15ultra-2",
             timestamp: "4 hrs ago",
             promptSnippet:
               "Audit multi-agent coordination loop deadlocks and race conditions...",
@@ -473,10 +473,10 @@ const initialUsageData: Record<string, ProviderUsageData> = {
       },
     ],
   },
-  azure_sovereign: {
+  gcp_sovereign: {
     models: [
       {
-        name: "Azure Sovereign GPT-4",
+        name: "GCP Sovereign Gemini 1.5 Pro",
         version: "v3.5",
         isPrimary: true,
         inputTokens: 3100000,
@@ -547,7 +547,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gemini35-1",
+            id: "req-sovereign15pro-1",
             timestamp: "24 mins ago",
             promptSnippet:
               "Perform evolutionary conservation phyloP scores lookup UCSC...",
@@ -556,7 +556,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0182,
           },
           {
-            id: "req-gemini35-2",
+            id: "req-sovereign15pro-2",
             timestamp: "1 hr ago",
             promptSnippet:
               "Resolve biological ontology terms resolution lookup EBI OLS...",
@@ -567,7 +567,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         ],
       },
       {
-        name: "Azure Sovereign GPT-4 Pro",
+        name: "GCP Sovereign Gemini 1.5 Flash",
         version: "v3.1",
         isPrimary: false,
         inputTokens: 1100000,
@@ -638,7 +638,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
         },
         recentRequests: [
           {
-            id: "req-gemini31-1",
+            id: "req-sovereign15flash-1",
             timestamp: "5 mins ago",
             promptSnippet:
               "Lookup clinical evidence pathogen classification ClinVar...",
@@ -647,7 +647,7 @@ const initialUsageData: Record<string, ProviderUsageData> = {
             cost: 0.0001,
           },
           {
-            id: "req-gemini31-2",
+            id: "req-sovereign15flash-2",
             timestamp: "3 hrs ago",
             promptSnippet:
               "Check active server healthz ping route status check...",
@@ -662,9 +662,9 @@ const initialUsageData: Record<string, ProviderUsageData> = {
 };
 
 const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
-  azure: [
+  gcp: [
     {
-      name: "Azure Commercial GPT-4",
+      name: "GCP Commercial GPT-4",
       version: "v4.0",
       decommissionedDate: "March 15, 2026",
       tokensIn: "92.15M",
@@ -672,7 +672,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 1254.0,
     },
     {
-      name: "Azure Commercial GPT-3.5",
+      name: "GCP Commercial GPT-3.5",
       version: "v3.5",
       decommissionedDate: "November 20, 2025",
       tokensIn: "310.08M",
@@ -680,9 +680,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 900.24,
     },
   ],
-  azure_gov: [
+  gcp_gov: [
     {
-      name: "Azure Gov GPT-3.5 Sonnet",
+      name: "GCP Gov Gemini 1.0 Pro",
       version: "v3.5 (Legacy)",
       decommissionedDate: "December 10, 2025",
       tokensIn: "60.40M",
@@ -690,7 +690,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 255.6,
     },
     {
-      name: "Azure Gov GPT-3 Haiku",
+      name: "GCP Gov Gemini 1.0 Flash",
       version: "v3.0",
       decommissionedDate: "August 05, 2025",
       tokensIn: "240.10M",
@@ -698,9 +698,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 96.04,
     },
   ],
-  azure_sovereign: [
+  gcp_sovereign: [
     {
-      name: "Azure Sovereign GPT-3.5 Pro",
+      name: "GCP Sovereign Gemini 1.0 Pro",
       version: "v1.5",
       decommissionedDate: "February 28, 2026",
       tokensIn: "135.30M",
@@ -708,7 +708,7 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
       cost: 360.9,
     },
     {
-      name: "Azure Sovereign GPT-3.0 Pro",
+      name: "GCP Sovereign Gemini 1.0 Flash",
       version: "v1.0",
       decommissionedDate: "October 15, 2025",
       tokensIn: "210.05M",
@@ -902,8 +902,8 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
   const [activeProvider, setActiveProvider] = useState<
-    "azure_gov" | "azure_sovereign" | "azure"
-  >("azure");
+    "gcp_gov" | "gcp_sovereign" | "gcp"
+  >("gcp");
   const [modelTimeframes, setModelTimeframes] = useState<
     Record<string, "1D" | "1W" | "1M" | "1Y" | "All">
   >({});
@@ -1692,33 +1692,33 @@ export default function MemberDetailsPage() {
                   <div className="flex gap-2 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/50 dark:border-neutral-800 shrink-0 shadow-sm">
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                        activeProvider === "azure"
+                        activeProvider === "gcp"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
-                      onClick={() => setActiveProvider("azure")}
+                      onClick={() => setActiveProvider("gcp")}
                     >
-                      Azure Commercial
+                      GCP Commercial
                     </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                        activeProvider === "azure_gov"
+                        activeProvider === "gcp_gov"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
-                      onClick={() => setActiveProvider("azure_gov")}
+                      onClick={() => setActiveProvider("gcp_gov")}
                     >
-                      Azure Government (IL5)
+                      GCP Government (FedRAMP)
                     </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                        activeProvider === "azure_sovereign"
+                        activeProvider === "gcp_sovereign"
                           ? "bg-white dark:bg-[#161b22] text-blue-600 dark:text-blue-400 shadow-sm border border-neutral-200/40 dark:border-neutral-800/40"
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
-                      onClick={() => setActiveProvider("azure_sovereign")}
+                      onClick={() => setActiveProvider("gcp_sovereign")}
                     >
-                      Azure Sovereign (IL6)
+                      GCP Sovereign (Air-Gap)
                     </button>
                   </div>
                 </div>

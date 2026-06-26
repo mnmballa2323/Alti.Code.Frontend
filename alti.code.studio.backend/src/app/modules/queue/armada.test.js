@@ -197,7 +197,7 @@ describe('Capability-Based Agent Discovery', () => {
     const pythonAgents = agentRegistry.findByCapability('python');
     expect(pythonAgents.length).toBeGreaterThan(0);
 
-    const azureAgents = agentRegistry.findByCapability('azure');
-    expect(azureAgents.length).toBeGreaterThan(0);
+    const gcpAgents = agentRegistry.findByCapability('gcp');
+    expect(gcpAgents.length).toBeGreaterThan(0);
   });
 });

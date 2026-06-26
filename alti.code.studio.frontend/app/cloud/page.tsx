@@ -216,7 +216,7 @@ export default function CloudPage() {
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Sovereign AI Gateway (Azure OpenAI Gov IL5)",
+              name: "Sovereign AI Gateway (GCP Vertex AI Gov FedRAMP)",
               status: "Running",
               region: "usgovvirginia",
               cpu: "68%",
@@ -240,7 +240,7 @@ export default function CloudPage() {
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Sovereign AI Gateway (Azure OpenAI Dedicated IL2)",
+              name: "Sovereign AI Gateway (GCP Vertex AI Dedicated Sovereign)",
               status: "Running",
               region: "eastus2",
               cpu: "25%",
@@ -296,21 +296,21 @@ export default function CloudPage() {
         workloads = [
           {
             id: `vmss-${Math.floor(Math.random() * 10000)}`,
-            name: "AKS Workload Nodes (Gov)",
+            name: "GKE Workload Nodes (Gov)",
             status: "Running",
             region: "usgovarizona",
             cpu: "45%",
           },
           {
             id: `openai-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure OpenAI Government (IL5)",
+            name: "GCP Vertex AI Gov (FedRAMP)",
             status: "Running",
             region: "usgovvirginia",
             cpu: "68%",
           },
           {
             id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-            name: "CosmosDB Failover (IL5)",
+            name: "Cloud Spanner Failover (IL5)",
             status: "Running",
             region: "usgovtexas",
             cpu: "15%",
@@ -320,21 +320,21 @@ export default function CloudPage() {
         workloads = [
           {
             id: `vmss-${Math.floor(Math.random() * 10000)}`,
-            name: "AKS Dedicated Nodes",
+            name: "GKE Dedicated Nodes",
             status: "Running",
             region: "eastus2",
             cpu: "38%",
           },
           {
             id: `openai-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure OpenAI Dedicated",
+            name: "GCP Vertex AI Dedicated (Sovereign)",
             status: "Running",
             region: "eastus2",
             cpu: "25%",
           },
           {
             id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-            name: "CosmosDB Private Cluster",
+            name: "Cloud Spanner Private Cluster",
             status: "Running",
             region: "eastus2",
             cpu: "14%",

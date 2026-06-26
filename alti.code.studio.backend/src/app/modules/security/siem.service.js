@@ -34,22 +34,22 @@ class SiemService {
         details,
       };
 
-      // Sign the webhook payload if Azure Key Vault is configured
+      // Sign the webhook payload if GCP KMS is configured
       let signature = null;
-      const isKeyVaultConfigured =
-        process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
-      if (isKeyVaultConfigured) {
+      const isKmsConfigured =
+        process.env.GCP_KMS_KEY_RING && process.env.GCP_PROJECT_ID;
+      if (isKmsConfigured) {
         try {
-          signature = await complianceEngine._signWithAzureKeyVault(
+          signature = await complianceEngine._signWithGcpKms(
             JSON.stringify(payload),
           );
         } catch (err) {
           logger.warn(
-            `⚠️ Azure Key Vault Signing for SIEM failed (${err.message}). Falling back to local mock signature.`,
+            `⚠️ GCP KMS Signing for SIEM failed (${err.message}). Falling back to local mock signature.`,
           );
           const crypto = await import('crypto');
           signature = crypto
-            .createHmac('sha256', 'mock-azure-keyvault-secret')
+            .createHmac('sha256', 'mock-gcp-kms-secret')
             .update(JSON.stringify(payload))
             .digest('base64');
         }

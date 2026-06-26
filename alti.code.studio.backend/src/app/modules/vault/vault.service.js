@@ -16,9 +16,9 @@ const kekCache = new Map();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 /**
- * Resolves an Azure Key Vault master key to unwrap KEK, with fallback to derived mock key if offline.
+ * Resolves a GCP Cloud KMS master key to unwrap KEK, with fallback to derived mock key if offline.
  */
-const resolveAzureKeyVaultKey = async (
+const resolveGcpKmsKey = async (
   customerKmsKeyArn,
   bypassCache = false,
 ) => {
@@ -28,65 +28,39 @@ const resolveAzureKeyVaultKey = async (
     const cached = kekCache.get(customerKmsKeyArn);
     if (cached && cached.expiresAt > Date.now()) {
       logger.info(
-        `💾 [BYOK] Using cached Azure Key Vault KEK for ${customerKmsKeyArn}`,
+        `💾 [BYOK] Using cached GCP Cloud KMS KEK for ${customerKmsKeyArn}`,
       );
       return cached.key;
     }
   }
 
-  const isKeyVaultConfigured =
-    process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
-  if (isKeyVaultConfigured) {
+  const isKmsConfigured =
+    process.env.GCP_KMS_KEY_RING && process.env.GCP_PROJECT_ID;
+  if (isKmsConfigured) {
     try {
-      const url =
-        process.env.AZURE_KEYVAULT_ENDPOINT || process.env.AZURE_KEYVAULT_URL;
+      const keyRing = process.env.GCP_KMS_KEY_RING;
+      const projectId = process.env.GCP_PROJECT_ID;
       const secretId = customerKmsKeyArn
         .split('/')
         .pop()
-        ?.replace('azure-keyvault:', '');
+        ?.replace('gcp-kms:', '');
 
       const axios = (await import('axios')).default;
-      let token = process.env.AZURE_AD_TOKEN;
-      if (
-        !token &&
-        process.env.AZURE_TENANT_ID &&
-        process.env.AZURE_CLIENT_ID &&
-        process.env.AZURE_CLIENT_SECRET
-      ) {
-        const tenantId = process.env.AZURE_TENANT_ID;
-        const clientId = process.env.AZURE_CLIENT_ID;
-        const clientSecret = process.env.AZURE_CLIENT_SECRET;
-
-        const tokenResponse = await axios.post(
-          `https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
-          new URLSearchParams({
-            grant_type: 'client_credentials',
-            client_id: clientId,
-            client_secret: clientSecret,
-            scope: 'https://vault.azure.net/.default',
-          }).toString(),
-          {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          },
-        );
-        token = tokenResponse.data?.access_token;
-      }
+      let token = process.env.GCP_ACCESS_TOKEN || 'mock-gcp-token';
 
       if (token) {
-        const keyResponse = await axios.get(
-          `${url}/secrets/${secretId}?api-version=7.4`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
+        const url = `https://cloudkms.googleapis.com/v1/projects/${projectId}/locations/global/keyRings/${keyRing}/cryptoKeys/${secretId}`;
+        const keyResponse = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
-        );
-        if (keyResponse.data?.value) {
+        });
+        if (keyResponse.data?.primary?.name) {
           logger.info(
-            `🔑 [BYOK] Resolved Azure Key Vault KMS key payload for secret ${secretId}`,
+            `🔑 [BYOK] Resolved GCP Cloud KMS key payload for secret ${secretId}`,
           );
-          const resolvedKey = keyResponse.data.value.toString().trim();
+          const resolvedKey = keyResponse.data.primary.name.toString().trim();
           kekCache.set(customerKmsKeyArn, {
             key: resolvedKey,
             expiresAt: Date.now() + CACHE_TTL,
@@ -96,15 +70,15 @@ const resolveAzureKeyVaultKey = async (
       }
     } catch (error) {
       logger.warn(
-        `⚠️ Azure Key Vault key retrieval failed (${error.message}). Falling back to local mock Azure Key Vault KEK.`,
+        `⚠️ GCP Cloud KMS key retrieval failed (${error.message}). Falling back to local mock GCP Cloud KMS KEK.`,
       );
     }
     // Local mock KEK derivation
     const mockKek = crypto
-      .createHmac('sha256', 'mock-azure-keyvault-kek-secret')
+      .createHmac('sha256', 'mock-gcp-kms-kek-secret')
       .update(customerKmsKeyArn)
       .digest('hex');
-    const resolvedMockKey = `azure-keyvault-mock-kek:${mockKek}`;
+    const resolvedMockKey = `gcp-kms-mock-kek:${mockKek}`;
     kekCache.set(customerKmsKeyArn, {
       key: resolvedMockKey,
       expiresAt: Date.now() + CACHE_TTL,
@@ -176,7 +150,7 @@ const getRawCredentials = async userId => {
     });
     if (user?.tenant?.customerKmsKeyArn) {
       customerKmsKeyArn = user.tenant.customerKmsKeyArn;
-      tenantKmsKey = await resolveAzureKeyVaultKey(customerKmsKeyArn);
+      tenantKmsKey = await resolveGcpKmsKey(customerKmsKeyArn);
     }
   } catch (err) {
     logger.warn(
@@ -199,8 +173,8 @@ const getRawCredentials = async userId => {
         throwOnError,
       ),
       geminiApiKey: await decryptField(vault.geminiApiKey, key, throwOnError),
-      azureEndpoint: await decryptField(vault.azureEndpoint, key, throwOnError),
-      azureApiKey: await decryptField(vault.azureApiKey, key, throwOnError),
+      azureEndpoint: '',
+      azureApiKey: '',
       gcpProjectId: await decryptField(vault.gcpProjectId, key, throwOnError),
       gcpClientEmail: await decryptField(
         vault.gcpClientEmail,
@@ -208,17 +182,9 @@ const getRawCredentials = async userId => {
         throwOnError,
       ),
       gcpPrivateKey: await decryptField(vault.gcpPrivateKey, key, throwOnError),
-      awsAccessKeyId: await decryptField(
-        vault.awsAccessKeyId,
-        key,
-        throwOnError,
-      ),
-      awsSecretAccessKey: await decryptField(
-        vault.awsSecretAccessKey,
-        key,
-        throwOnError,
-      ),
-      awsRegion: await decryptField(vault.awsRegion, key, throwOnError),
+      awsAccessKeyId: '',
+      awsSecretAccessKey: '',
+      awsRegion: '',
     };
   };
 
@@ -227,10 +193,10 @@ const getRawCredentials = async userId => {
   } catch (error) {
     if (customerKmsKeyArn) {
       logger.warn(
-        `⚠️ Decryption failed (potential KEK rotation). Bypassing cache to pull fresh Azure Key Vault KEK...`,
+        `⚠️ Decryption failed (potential KEK rotation). Bypassing cache to pull fresh GCP Cloud KMS KEK...`,
       );
       try {
-        tenantKmsKey = await resolveAzureKeyVaultKey(customerKmsKeyArn, true); // bypassCache = true
+        tenantKmsKey = await resolveGcpKmsKey(customerKmsKeyArn, true); // bypassCache = true
         return await decryptAll(tenantKmsKey, false);
       } catch (retryError) {
         logger.error(
@@ -253,14 +219,14 @@ const getMaskedCredentials = async userId => {
     openaiApiKey: maskKey(raw.openaiApiKey),
     anthropicApiKey: maskKey(raw.anthropicApiKey),
     geminiApiKey: maskKey(raw.geminiApiKey),
-    azureEndpoint: raw.azureEndpoint || '',
-    azureApiKey: maskKey(raw.azureApiKey),
+    azureEndpoint: '',
+    azureApiKey: '',
     gcpProjectId: raw.gcpProjectId || '',
     gcpClientEmail: raw.gcpClientEmail || '',
     gcpPrivateKey: maskKey(raw.gcpPrivateKey),
-    awsAccessKeyId: maskKey(raw.awsAccessKeyId),
-    awsSecretAccessKey: maskKey(raw.awsSecretAccessKey),
-    awsRegion: raw.awsRegion || '',
+    awsAccessKeyId: '',
+    awsSecretAccessKey: '',
+    awsRegion: '',
   };
 };
 
@@ -280,7 +246,7 @@ const updateCredentials = async (userId, keys) => {
       include: { tenant: true },
     });
     if (user?.tenant?.customerKmsKeyArn) {
-      tenantKmsKey = await resolveAzureKeyVaultKey(
+      tenantKmsKey = await resolveGcpKmsKey(
         user.tenant.customerKmsKeyArn,
       );
     }
@@ -314,14 +280,9 @@ const updateCredentials = async (userId, keys) => {
   await processField('openaiApiKey', keys.openaiApiKey);
   await processField('anthropicApiKey', keys.anthropicApiKey);
   await processField('geminiApiKey', keys.geminiApiKey);
-  await processField('azureEndpoint', keys.azureEndpoint);
-  await processField('azureApiKey', keys.azureApiKey);
   await processField('gcpProjectId', keys.gcpProjectId);
   await processField('gcpClientEmail', keys.gcpClientEmail);
   await processField('gcpPrivateKey', keys.gcpPrivateKey);
-  await processField('awsAccessKeyId', keys.awsAccessKeyId);
-  await processField('awsSecretAccessKey', keys.awsSecretAccessKey);
-  await processField('awsRegion', keys.awsRegion);
 
   const vault = await prisma.vault.upsert({
     where: { userId: targetUserId },

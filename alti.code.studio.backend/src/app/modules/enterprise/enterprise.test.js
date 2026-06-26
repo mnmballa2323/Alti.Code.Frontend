@@ -475,61 +475,61 @@ describe('Phase 31: Compliance Engine — SOX / HIPAA / PCI-DSS / GDPR / FedRAMP
     expect(entry.timestamp).toBeDefined();
   });
 
-  it('should sign logs using Azure Key Vault HSM when configured', async () => {
+  it('should sign logs using GCP Cloud KMS HSM when configured', async () => {
     const { complianceEngine } = await import('./compliance.engine.js');
     const axios = await import('axios');
 
-    // Configure Barbican URL and credentials
-    process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
-    process.env.AZURE_KEYVAULT_KEY_NAME = 'test-audit-key-uuid';
-    process.env.AZURE_AD_TOKEN = 'test-keystone-token';
+    // Configure GCP Cloud KMS credentials
+    process.env.GCP_PROJECT_ID = 'dummy-gcp-project';
+    process.env.GCP_KMS_KEY_RING = 'global-keyring';
+    process.env.GCP_KMS_KEY_NAME = 'test-audit-key-uuid';
 
     const mockPost = vi.spyOn(axios.default, 'post').mockResolvedValue({
-      data: { value: 'mocked-azure-keyvault-signature-data' },
+      data: { signature: 'mocked-gcp-kms-signature-data' },
     });
 
     const entry = await complianceEngine.log({
-      action: 'BARBICAN_TEST',
+      action: 'GCP_KMS_TEST',
       actor: 'auditor@enterprise.com',
       tenantId: 'enterprise-tenant',
     });
 
     expect(entry.hash).toBe(
-      'azure-keyvault-signed:mocked-azure-keyvault-signature-data',
+      'gcp-kms-signed:mocked-gcp-kms-signature-data',
     );
     expect(mockPost).toHaveBeenCalled();
 
     // Clean up environment variables & mock
-    delete process.env.AZURE_KEYVAULT_ENDPOINT;
-    delete process.env.AZURE_KEYVAULT_KEY_NAME;
-    delete process.env.AZURE_AD_TOKEN;
+    delete process.env.GCP_PROJECT_ID;
+    delete process.env.GCP_KMS_KEY_RING;
+    delete process.env.GCP_KMS_KEY_NAME;
     mockPost.mockRestore();
   });
 
-  it('should fallback to local mock signature when Azure Key Vault API call fails', async () => {
+  it('should fallback to local mock signature when GCP Cloud KMS API call fails', async () => {
     const { complianceEngine } = await import('./compliance.engine.js');
     const axios = await import('axios');
 
-    process.env.AZURE_KEYVAULT_ENDPOINT = 'https://my-keyvault.vault.azure.net';
-    process.env.AZURE_KEYVAULT_KEY_NAME = 'test-audit-key-uuid';
-    process.env.AZURE_AD_TOKEN = 'test-keystone-token';
+    process.env.GCP_PROJECT_ID = 'dummy-gcp-project';
+    process.env.GCP_KMS_KEY_RING = 'global-keyring';
+    process.env.GCP_KMS_KEY_NAME = 'test-audit-key-uuid';
 
     const mockPost = vi
       .spyOn(axios.default, 'post')
-      .mockRejectedValue(new Error('HSM Timeout'));
+      .mockRejectedValue(new Error('KMS Timeout'));
 
     const entry = await complianceEngine.log({
-      action: 'BARBICAN_FALLBACK_TEST',
+      action: 'GCP_KMS_FALLBACK_TEST',
       actor: 'auditor@enterprise.com',
       tenantId: 'enterprise-tenant',
     });
 
-    expect(entry.hash).toContain('azure-keyvault-mock-signed:');
+    expect(entry.hash).toContain('gcp-kms-mock-signed:');
     mockPost.mockRestore();
 
-    delete process.env.AZURE_KEYVAULT_ENDPOINT;
-    delete process.env.AZURE_KEYVAULT_KEY_NAME;
-    delete process.env.AZURE_AD_TOKEN;
+    delete process.env.GCP_PROJECT_ID;
+    delete process.env.GCP_KMS_KEY_RING;
+    delete process.env.GCP_KMS_KEY_NAME;
   });
 
   it('should store audit logs in append-only WORM MongoDB collection when active', async () => {
@@ -957,17 +957,17 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       vi.restoreAllMocks();
     });
 
-    it('should encrypt and decrypt Vault credentials dynamically using Azure Key Vault KMS keys', async () => {
+    it('should encrypt and decrypt Vault credentials dynamically using GCP Cloud KMS keys', async () => {
       const { prisma } = await import('../../../config/prisma.js');
       const { VaultService } = await import('../vault/vault.service.js');
 
-      // Mock tenant with Azure Key Vault KEK
+      // Mock tenant with GCP KMS KEK
       vi.spyOn(prisma.user, 'findUnique').mockResolvedValue({
         id: 'byok-user-uuid',
         tenantId: 'byok-tenant-uuid',
         tenant: {
           id: 'byok-tenant-uuid',
-          customerKmsKeyArn: 'azure-keyvault:test-customer-kek-uuid',
+          customerKmsKeyArn: 'gcp-kms:test-customer-kek-uuid',
         },
       });
 
@@ -980,15 +980,15 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         return mockVaultRecord;
       });
 
-      // Mock Azure Key Vault API HTTP response
+      // Mock GCP Cloud KMS API HTTP response
       const axios = await import('axios');
       const mockGet = vi.spyOn(axios.default, 'get').mockResolvedValue({
-        data: 'my-azure-keyvault-payload-decrypted-kek-32bytes',
+        data: { primary: { name: 'my-gcp-kms-payload-decrypted-kek-32bytes' } },
       });
 
-      process.env.AZURE_KEYVAULT_ENDPOINT =
-        'https://my-keyvault.vault.azure.net';
-      process.env.AZURE_AD_TOKEN = 'mock-auth-token';
+      process.env.GCP_PROJECT_ID = 'dummy-gcp-project';
+      process.env.GCP_KMS_KEY_RING = 'global-keyring';
+      process.env.GCP_ACCESS_TOKEN = 'mock-auth-token';
 
       const rawKeys = {
         openaiApiKey: 'sk-1234567890abcdef',
@@ -999,7 +999,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       await VaultService.updateCredentials('byok-user-uuid', rawKeys);
 
       expect(mockGet).toHaveBeenCalledWith(
-        'https://my-keyvault.vault.azure.net/secrets/test-customer-kek-uuid?api-version=7.4',
+        'https://cloudkms.googleapis.com/v1/projects/dummy-gcp-project/locations/global/keyRings/global-keyring/cryptoKeys/test-customer-kek-uuid',
         expect.objectContaining({
           headers: expect.objectContaining({
             Authorization: 'Bearer mock-auth-token',
@@ -1016,8 +1016,9 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       expect(decrypted.openaiApiKey).toBe('sk-1234567890abcdef');
       expect(decrypted.anthropicApiKey).toBe('sk-ant-9876543210');
 
-      delete process.env.AZURE_KEYVAULT_ENDPOINT;
-      delete process.env.AZURE_AD_TOKEN;
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_KMS_KEY_RING;
+      delete process.env.GCP_ACCESS_TOKEN;
     });
 
     it('should propagate Vault credentials from llmGateway to MultiCloudInferenceService', async () => {
@@ -1130,12 +1131,12 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         tenantId: 'rotation-tenant-uuid',
         tenant: {
           id: 'rotation-tenant-uuid',
-          customerKmsKeyArn: 'azure-keyvault:test-rotated-kek-uuid',
+          customerKmsKeyArn: 'gcp-kms:test-rotated-kek-uuid',
         },
       });
 
       // Encrypt secret with NEW key
-      const newKey = 'my-new-azure-key-payload-32b';
+      const newKey = 'my-new-gcp-key-payload-32b';
       const secretValue = 'super-secret-key-data';
       const encryptedSecret = await encryptionService.encrypt(
         secretValue,
@@ -1148,10 +1149,10 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         openaiApiKey: encryptedSecret,
       });
 
-      // Configure Barbican URL
-      process.env.AZURE_KEYVAULT_ENDPOINT =
-        'https://my-keyvault.vault.azure.net';
-      process.env.AZURE_AD_TOKEN = 'mock-auth-token';
+      // Configure GCP KMS env vars
+      process.env.GCP_PROJECT_ID = 'dummy-gcp-project';
+      process.env.GCP_KMS_KEY_RING = 'global-keyring';
+      process.env.GCP_ACCESS_TOKEN = 'mock-auth-token';
 
       // First get resolves to oldKey (decryption will fail), second resolves to newKey (decryption succeeds)
       const oldKey = 'my-old-rotated-key-payload-32b';
@@ -1161,9 +1162,9 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         .mockImplementation(async () => {
           callCount++;
           if (callCount === 1) {
-            return { data: { value: oldKey } };
+            return { data: { primary: { name: oldKey } } };
           }
-          return { data: { value: newKey } };
+          return { data: { primary: { name: newKey } } };
         });
 
       const decrypted =
@@ -1174,8 +1175,9 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       // Verify it was fetched twice (first for cached value, second for bypass retry)
       expect(callCount).toBe(2);
 
-      delete process.env.AZURE_KEYVAULT_ENDPOINT;
-      delete process.env.AZURE_AD_TOKEN;
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_KMS_KEY_RING;
+      delete process.env.GCP_ACCESS_TOKEN;
     });
 
     it('should sign SIEM webhook payloads and attach X-Alti-Signature header', async () => {
@@ -1194,24 +1196,19 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         },
       ]);
 
-      // Mock axios.post to capture headers
+      // Configure GCP KMS to trigger signing
+      process.env.GCP_PROJECT_ID = 'test-gcp-project';
+      process.env.GCP_KMS_KEY_RING = 'test-keyring';
+      process.env.GCP_KMS_KEY_NAME = 'test-siem-key-uuid';
+      process.env.GCP_ACCESS_TOKEN = 'mock-gcp-token';
+
+      // Mock GCP KMS signature response and webhook post
       const mockPost = vi
         .spyOn(axios.default, 'post')
-        .mockResolvedValue({ status: 200 });
-
-      // Configure Barbican URL to trigger signing
-      process.env.AZURE_KEYVAULT_ENDPOINT =
-        'https://my-keyvault.vault.azure.net';
-      process.env.AZURE_KEYVAULT_KEY_NAME = 'test-siem-key-uuid';
-      process.env.AZURE_AD_TOKEN = 'mock-auth-token';
-
-      // Mock Azure Key Vault signature response
-      const mockSignPost = vi
-        .spyOn(axios.default, 'post')
-        .mockImplementation(async url => {
-          if (url.includes('/sign')) {
+        .mockImplementation(async (url) => {
+          if (url.includes(':asymmetricSign')) {
             return {
-              data: { value: 'mock-asymmetric-signature-from-keyvault' },
+              data: { signature: 'mock-asymmetric-signature-from-gcp-kms' },
             };
           }
           return { status: 200 };
@@ -1227,15 +1224,16 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         expect.any(Object),
         expect.objectContaining({
           headers: expect.objectContaining({
-            'X-Alti-Signature': 'mock-asymmetric-signature-from-keyvault',
+            'X-Alti-Signature': 'mock-asymmetric-signature-from-gcp-kms',
             Authorization: 'Bearer splunk-token',
           }),
         }),
       );
 
-      delete process.env.AZURE_KEYVAULT_ENDPOINT;
-      delete process.env.AZURE_KEYVAULT_KEY_NAME;
-      delete process.env.AZURE_AD_TOKEN;
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_KMS_KEY_RING;
+      delete process.env.GCP_KMS_KEY_NAME;
+      delete process.env.GCP_ACCESS_TOKEN;
     });
 
     it('should detect PKCS#11 bridge configuration and log active status', async () => {
@@ -1392,15 +1390,15 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       expect(tenant.vpnConfig).toEqual(config.vpnConfig);
     });
 
-    it('should verify Azure Key Vault key attestation and return validated HSM metadata', async () => {
+    it('should verify GCP KMS key attestation and return validated HSM metadata', async () => {
       const { complianceEngine } = await import('./compliance.engine.js');
 
       const attestation =
-        await complianceEngine.verifyAzureKeyVaultKeyAttestation('test-key-id');
+        await complianceEngine.verifyGcpKmsKeyAttestation('test-key-id');
 
       expect(attestation.keyId).toBe('test-key-id');
       expect(attestation.attestationStatus).toBe('VERIFIED');
-      expect(attestation.hsmVendor).toBe('Microsoft Azure HSM (nCipher)');
+      expect(attestation.hsmVendor).toBe('Google Cloud HSM (Cavium)');
       expect(attestation.attestationCertificateChain).toBeDefined();
       expect(attestation.verifiedAt).toBeDefined();
     });

@@ -120,53 +120,25 @@ describe('Platform Model Gateway', () => {
     process.env.AZURE_OPENAI_ENDPOINT = originalAzureEndpoint;
   });
 
-  it('should block direct integrations to openai or anthropic with FORBIDDEN exception', async () => {
-    await expect(
-      routePlatformCompletion({
-        provider: 'openai',
-        model: 'gpt-4o',
-        prompt: 'test',
-      }),
-    ).rejects.toThrow(
-      'Security Policy Exception: Direct API connections to OpenAI and Anthropic are blocked.',
-    );
-
-    await expect(
-      routePlatformCompletion({
-        provider: 'anthropic',
-        model: 'claude-3-5-sonnet',
-        prompt: 'test',
-      }),
-    ).rejects.toThrow(
-      'Security Policy Exception: Direct API connections to OpenAI and Anthropic are blocked.',
-    );
+  it('should block direct integrations to unauthorized providers with FORBIDDEN exception', async () => {
+    for (const provider of ['openai', 'anthropic', 'aws', 'azure']) {
+      await expect(
+        routePlatformCompletion({
+          provider,
+          model: 'gpt-4o',
+          prompt: 'test',
+        }),
+      ).rejects.toThrow(
+        'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
+      );
+    }
   });
 
-  it('should route Gemini completions successfully via GCP Vertex AI', async () => {
+  it('should route completions successfully via GCP Vertex AI (redirected to Azure OpenAI)', async () => {
     const reply = await routePlatformCompletion({
       provider: 'gcp',
       model: 'gemini-3.1-pro',
       prompt: 'Hello Gemini',
-    });
-
-    expect(reply).toBe('Azure OpenAI mock reply');
-  });
-
-  it('should route Claude completions successfully via AWS Bedrock', async () => {
-    const reply = await routePlatformCompletion({
-      provider: 'aws',
-      model: 'claude-3-5-sonnet',
-      prompt: 'Hello Claude',
-    });
-
-    expect(reply).toBe('Azure OpenAI mock reply');
-  });
-
-  it('should route GPT completions successfully via Azure OpenAI Foundry', async () => {
-    const reply = await routePlatformCompletion({
-      provider: 'azure',
-      model: 'azure/gpt-4o',
-      prompt: 'Hello GPT',
     });
 
     expect(reply).toBe('Azure OpenAI mock reply');
@@ -224,8 +196,8 @@ describe('Platform Model Gateway', () => {
       });
 
       await routePlatformCompletion({
-        provider: 'aws',
-        model: 'claude-3-5-sonnet',
+        provider: 'gcp',
+        model: 'gemini-3.1-pro',
         prompt: 'Clean prompt',
         scrubPrompt: true,
       });
@@ -323,55 +295,6 @@ describe('Platform Model Gateway', () => {
       );
     });
 
-    it('should fall back to estimated tokens when AWS response lacks usage metadata', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'AWS reply no metadata' } }],
-      });
-
-      const prompt = 'Hello Bedrock fallback';
-      const expectedTokens = Math.ceil(
-        (prompt.length + 'AWS reply no metadata'.length) / 4,
-      );
-
-      await routePlatformCompletion({
-        provider: 'aws',
-        model: 'claude-3-5-sonnet',
-        prompt,
-        productId: 'inso-code',
-        tenantId: 'tenant-999',
-      });
-
-      expect(mockRecordLlmCall).toHaveBeenCalledWith(
-        expect.objectContaining({
-          tokens: expectedTokens,
-        }),
-      );
-    });
-
-    it('should fall back to estimated tokens when Azure response lacks usage metadata', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'Azure reply no metadata' } }],
-      });
-
-      const prompt = 'Hello Azure fallback';
-      const expectedTokens = Math.ceil(
-        (prompt.length + 'Azure reply no metadata'.length) / 4,
-      );
-
-      await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
-        prompt,
-        productId: 'inso-code',
-        tenantId: 'tenant-999',
-      });
-
-      expect(mockRecordLlmCall).toHaveBeenCalledWith(
-        expect.objectContaining({
-          tokens: expectedTokens,
-        }),
-      );
-    });
   });
 
   describe('Phase 12: Product Token Limits, Scoping & Regional Metrics', () => {

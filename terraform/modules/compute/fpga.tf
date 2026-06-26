@@ -1,65 +1,45 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure FPGA VM Provisioning Module
+# ALTI CODE STUDIO: GCP FPGA VM (Emulator) Provisioning Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
-resource "azurerm_network_interface" "fpga_nic" {
-  name                = "alti-fpga-nic-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
+resource "google_compute_instance" "fpga_node" {
+  name         = "alti-fpga-node-${var.environment}"
+  machine_type = "n2-standard-4" # Standard VM representing FPGA Emulator
+  zone         = var.zone
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "fpga_node" {
-  name                = "alti-fpga-node-${var.environment}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  
-  # Standard_NP10s: FPGA-optimized VM featuring 1x Xilinx Alveo U250 FPGA
-  size                = "Standard_NP10s"
-  admin_username      = var.admin_username
-  network_interface_ids = [
-    azurerm_network_interface.fpga_nic.id,
-  ]
-
-  admin_ssh_key {
-    username   = var.admin_username
-    public_key = file(var.ssh_public_key_path)
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 250
+      type  = "pd-ssd"
+    }
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 250
+  network_interface {
+    subnetwork = var.subnet_id
+    access_config {}
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+  metadata = {
+    ssh-keys = "${var.admin_username}:${file(var.ssh_public_key_path)}"
   }
 
-  identity {
-    type = "SystemAssigned"
+  service_account {
+    scopes = ["cloud-platform"]
   }
 
-  tags = {
-    Hardware    = "FPGA"
-    Environment = var.environment
+  labels = {
+    hardware    = "fpga-emulator"
+    environment = var.environment
   }
 }
 
@@ -67,8 +47,18 @@ resource "azurerm_linux_virtual_machine" "fpga_node" {
 # Variables
 # ------------------------------------------------------------------------------
 variable "environment" { type = string }
-variable "location" { type = string }
-variable "resource_group_name" { type = string }
+variable "zone" {
+  type    = string
+  default = "us-central1-a"
+}
+variable "location" {
+  type    = string
+  default = ""
+}
+variable "resource_group_name" {
+  type    = string
+  default = ""
+}
 variable "subnet_id" { type = string }
 variable "admin_username" { type = string }
 variable "ssh_public_key_path" { type = string }
@@ -77,5 +67,5 @@ variable "ssh_public_key_path" { type = string }
 # Outputs
 # ------------------------------------------------------------------------------
 output "fpga_vm_id" {
-  value = azurerm_linux_virtual_machine.fpga_node.id
+  value = google_compute_instance.fpga_node.id
 }

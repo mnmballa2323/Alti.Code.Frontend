@@ -100,24 +100,13 @@ const getProviderRegion = provider => {
   if (provider === 'gcp') {
     return config.gcp?.location || 'us-central1';
   }
-  if (provider === 'aws') {
-    return config.aws_region || process.env.AWS_REGION || 'us-east-1';
-  }
-  if (provider === 'azure') {
-    const endpoint = process.env.AZURE_OPENAI_ENDPOINT || '';
-    const match = endpoint.match(/https:\/\/([^.]+)\.openai\.azure\.com/);
-    if (match && match[1]) {
-      return match[1];
-    }
-    return 'eastus2';
-  }
   return 'unknown';
 };
 
 /**
- * Routes text completion request to authorized Tri-Cloud endpoints
+ * Routes text completion request to authorized GCP Vertex AI endpoint (internally routed to Azure OpenAI)
  * @param {object} params
- * @param {string} params.provider - 'gcp' | 'aws' | 'azure'
+ * @param {string} params.provider - 'gcp'
  * @param {string} params.model - Specific model ID
  * @param {string} params.prompt - Input prompt
  * @param {number} [params.temperature] - Generation temperature
@@ -133,14 +122,14 @@ export const routePlatformCompletion = async ({
   productId = null,
   tenantId = null,
 }) => {
-  // Security validation: Block direct Anthropic or OpenAI API configurations
-  if (provider === 'openai' || provider === 'anthropic') {
+  // Security validation: Only allow GCP Vertex AI publicly
+  if (provider !== 'gcp') {
     logger.error(
-      `🚫 [Model Gateway] Blocked direct connection attempt to provider: ${provider}`,
+      `🚫 [Model Gateway] Blocked connection attempt to unauthorized provider: ${provider}`,
     );
     throw new ApiError(
       httpStatus.FORBIDDEN,
-      'Security Policy Exception: Direct API connections to OpenAI and Anthropic are blocked. Please use Azure OpenAI Foundry or AWS Bedrock.',
+      'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
     );
   }
 
@@ -181,7 +170,7 @@ export const routePlatformCompletion = async ({
   let activeProvider = provider.toLowerCase();
   let activeModel = model;
 
-  if (activeProvider === 'gcp' || activeProvider === 'aws') {
+  if (activeProvider === 'gcp') {
     logger.warn(
       `⚠️ [Model Gateway] Redirecting ${provider} request to Azure OpenAI (Sovereign Mode)...\n`,
     );
@@ -212,7 +201,7 @@ export const routePlatformCompletion = async ({
           );
         }
 
-        // Initialize Azure OpenAI client from @azure/openai
+        // Initialize Azure OpenAI client from openai
         const client = new AzureOpenAI({
           endpoint: azureEndpoint,
           apiKey: azureApiKey,
@@ -239,7 +228,7 @@ export const routePlatformCompletion = async ({
       default:
         throw new ApiError(
           httpStatus.BAD_REQUEST,
-          `Unsupported Tri-Cloud provider: "${provider}". Must be one of: gcp, aws, azure.`,
+          `Unsupported Cloud provider: "${provider}". Must be: gcp.`,
         );
     }
 
