@@ -58,6 +58,45 @@ class HealthCheckEngine {
     setTimeout(() => {
       this.ready = true;
     }, 0);
+
+    if (process.env.NODE_ENV !== 'test') {
+      this.intervalId = setInterval(() => {
+        this.runRealHealthChecks().catch(() => {});
+      }, 15000);
+      setTimeout(() => {
+        this.runRealHealthChecks().catch(() => {});
+      }, 1000);
+    }
+  }
+
+  async runRealHealthChecks() {
+    // 1. Check database (PostgreSQL)
+    try {
+      const { prisma } = await import('../../../config/prisma.js');
+      const start = Date.now();
+      await prisma.$queryRaw`SELECT 1`;
+      this.setDependencyStatus('database', 'HEALTHY', Date.now() - start);
+    } catch (err) {
+      this.setDependencyStatus('database', 'UNHEALTHY', 0);
+    }
+
+    // 2. Check cache (Redis/Memorystore)
+    if (process.env.DISABLE_REDIS === 'true') {
+      this.setDependencyStatus('cache', 'HEALTHY', 0);
+    } else {
+      try {
+        const { gcpCacheService } = await import('../gcpCloud/gcpCache.service.js');
+        if (gcpCacheService && gcpCacheService.publisher && gcpCacheService.publisher.status === 'ready') {
+          const start = Date.now();
+          await gcpCacheService.publisher.ping();
+          this.setDependencyStatus('cache', 'HEALTHY', Date.now() - start);
+        } else {
+          this.setDependencyStatus('cache', 'UNHEALTHY', 0);
+        }
+      } catch (err) {
+        this.setDependencyStatus('cache', 'UNHEALTHY', 0);
+      }
+    }
   }
 
   // ── Liveness Probe ──

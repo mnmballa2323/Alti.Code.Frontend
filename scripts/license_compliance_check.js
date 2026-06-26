@@ -13,8 +13,7 @@ const path = require('path');
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..');
 const BACKEND_DIRS = [
-    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend'),
-    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend.azure')
+    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend')
 ];
 
 const BLOCKED_KEYWORDS = [

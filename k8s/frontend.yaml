@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: registry.internal.libertycenterone.com/alti-frontend:latest
+        image: us-central1-docker.pkg.dev/alti-code-studio-production/alti-repo/alti-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
